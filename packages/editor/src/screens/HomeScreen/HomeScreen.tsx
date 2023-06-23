@@ -16,6 +16,7 @@ import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
 import OpenProject from './OpenProject'
+import { v4 as uuidv4 } from 'uuid'
 
 /**
  * StartScreen component. Displays an overlay with options to open or create new spells.
@@ -25,7 +26,6 @@ const StartScreen = (): JSX.Element => {
   const config = useConfig()
 
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
   const [deleteSpell] = useDeleteSpellMutation()
   const { data: spells } = useGetSpellsQuery({
@@ -44,6 +44,7 @@ const StartScreen = (): JSX.Element => {
 
     // Create new spell
     const response = (await newSpell({
+      id: uuidv4(),
       graph: spellData.graph,
       name: spellData.name,
       projectId: config.projectId,
@@ -80,14 +81,15 @@ const StartScreen = (): JSX.Element => {
    * Handles spell deletion.
    * @param spellName - The name of the spell to delete
    */
-  const onDelete = async (spellName): Promise<void> => {
+  const onDelete = async (spellName: string): Promise<void> => {
     try {
       await deleteSpell({ spellName, projectId: config.projectId })
-      const [tab] = tabs.filter(tab => tab.id === spellName)
+      const tab = tabs.find(tab => tab.id === spellName)
       if (tab) {
         dispatch(closeTab(tab.id))
         window.localStorage.removeItem(`zoomValues-${tab.id}`)
       }
+      setSelectedSpell("")
     } catch (err) {
       console.error('Error deleting spell', err)
     }

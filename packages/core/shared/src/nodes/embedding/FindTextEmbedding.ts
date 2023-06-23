@@ -2,7 +2,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import { embeddingSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -10,7 +10,8 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = 'Get a cached embedding for this exact string'
+const info =
+  'Takes a string input and searches the Events store for an event with matching content. Returns the embedding for the event if a match is found.'
 
 type InputReturn = {
   embedding: number[] | null
@@ -48,7 +49,7 @@ export class FindTextEmbedding extends MagickComponent<
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const success = new Rete.Output('success', 'Success', triggerSocket)
     const fail = new Rete.Output('failure', 'Failure', triggerSocket)
-    const out = new Rete.Output('embedding', 'Embedding', arraySocket)
+    const out = new Rete.Output('embedding', 'Embedding', embeddingSocket)
 
     return node
       .addInput(dataInput)
@@ -90,7 +91,7 @@ export class FindTextEmbedding extends MagickComponent<
         $limit: 1,
         getEmbedding: true,
         projectId: projectId,
-      }
+      },
     }
     const events = await app.service('events').find(params)
 
@@ -109,8 +110,9 @@ export class FindTextEmbedding extends MagickComponent<
         embedding = JSON.parse(JSON.stringify('[' + embedding + ']'))
       }
     }
+
     // Set the task closed state based on the presence of the embedding
-    if (embedding) {
+    if (embedding && embedding !== 'null') {
       this._task.closed = ['failure']
     } else {
       this._task.closed = ['success']

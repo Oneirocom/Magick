@@ -84,8 +84,7 @@ export class Respond extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
-    const { module, data } = context
-
+    const { agent, data } = context
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
         // event data is coming from the event socket
@@ -96,7 +95,7 @@ export class Respond extends MagickComponent<void> {
 
     const output = inputs.input.filter(Boolean)[0] as string
 
-    if (module.agent) {
+    if (agent) {
       const type = pluginManager.getInputTypes().find(type => {
         return type.name.includes(
           (event.connector as any).replace('Input - ', '')
@@ -104,17 +103,19 @@ export class Respond extends MagickComponent<void> {
       })
 
       const responseOutputType = type?.defaultResponseOutput
-      const out = module.agent.outputTypes.find(
-        t => t.name === responseOutputType
-      )
+      const out = agent.outputTypes.find(t => t.name === responseOutputType)
 
       if (out && out.handler) {
         out.handler({
           output,
-          agent: module.agent,
+          agent,
           event,
         })
+      } else {
+        console.warn('*** WARNING: No handler found')
       }
+    } else {
+      console.warn('*** WARNING: No agent found')
     }
 
     return {

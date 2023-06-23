@@ -14,11 +14,12 @@ import {
   WorkerData,
 } from '../../types'
 
+import { expandVector } from '../../functions/expandVector'
 import { pluginManager } from '../../plugin'
 
 /** Brief description of the component that this file exports. */
 const info =
-  'Create Text Embedding generates a vector embedding from the input text'
+  'Takes a string input and outputs the vector embedding for that string'
 
 type InputReturn = {
   embedding: number[]
@@ -176,8 +177,14 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       throw new Error(error)
     }
 
+    let embedding = result as number[]
+
+    if (embedding.length !== 1536) {
+      embedding = expandVector(embedding as number[], 1536)
+    }
+
     return {
-      embedding: result as number[],
+      embedding,
     }
   }
 }

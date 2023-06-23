@@ -9,10 +9,15 @@
   border-radius: 16px;
 }
 
+.frame-comment,
+.inline-comment {
+  background: rgb(70 47 186 / 20%);
+}
+
 .frame-comment:focus,
 .inline-comment:focus {
   outline: none;
-  border-color: #ffd92c;
+  border-color: rgba(88, 59, 234, 0.504);
 }
 
 .inline-comment {

@@ -34,7 +34,7 @@ export class MyNode extends Node {
    * @returns The JSX representation of the component.
    */
   render() {
-    const { node, bindSocket, bindControl } = this.props;
+    const { node, bindSocket, bindControl, editor } = this.props;
     const { outputs, controls, inputs, selected } = this.state;
     const name = node.displayName ? node.displayName : node.name;
     const fullName = node.data.name ?? name;
@@ -43,16 +43,28 @@ export class MyNode extends Node {
     const img_url = node.data.image;
     const html = node.data.func;
 
+    const handleMouseEnter = (socket) => {
+      socket.connections.forEach(connection => {
+        const el = editor.view.connections.get(connection).el
+        el.classList.add('selected')
+      })
+    }
+
+    const handleMouseLeave = (socket) => {
+      socket.connections.forEach(connection => {
+        const el = editor.view.connections.get(connection).el
+        el.classList.remove('selected')
+      })
+    }
+
     return (
       <div
-        className={`${css['node']} ${css[selected]} ${
-          css[hasError ? 'error' : '']
-        } ${css[hasSuccess ? 'success' : '']}`}
+        className={`${css['node']} ${css[selected]} ${css[hasError ? 'error' : '']
+          } ${css[hasSuccess ? 'success' : '']}`}
       >
         <div
-          className={`${css['node-id']} ${hasError ? css['error'] : ''} ${
-            hasSuccess ? css['success'] : ''
-          }`}
+          className={`${css['node-id']} ${hasError ? css['error'] : ''} ${hasSuccess ? css['success'] : ''
+            }`}
         >
           <p>{node.id}</p>
         </div>
@@ -74,12 +86,18 @@ export class MyNode extends Node {
             <div className={css['connection-container']}>
               {inputs.map(input => (
                 <div className={css['input']} key={input.key}>
-                  <Socket
-                    type="input"
-                    socket={input.socket}
-                    io={input}
-                    innerRef={bindSocket}
-                  />
+                  <div
+
+                    onMouseEnter={() => handleMouseEnter(input)}
+                    onMouseLeave={() => handleMouseLeave(input)}>
+                    <Socket
+                      type="input"
+                      socket={input.socket}
+                      io={input}
+                      innerRef={bindSocket}
+                    />
+
+                  </div>
                   {!input.showControl() && (
                     <div className="input-title">{input.name}</div>
                   )}
@@ -103,19 +121,21 @@ export class MyNode extends Node {
                       element.data = { ...element.data, hello: 'hello' };
                     })}
                   <div className="output-title">{output.name}</div>
-                  <Socket
-                    type="output"
-                    socket={output.socket}
-                    io={output}
-                    innerRef={bindSocket}
-                  />
+                  <div
+                    onMouseEnter={() => handleMouseEnter(output)}
+                    onMouseLeave={() => handleMouseLeave(output)}>
+                    <Socket
+                      type="output"
+                      socket={output.socket}
+                      io={output}
+                      innerRef={bindSocket}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
-        <div className={css['bottom-container']}>
-          {/* Controls */}
+
           {controls.map(control => (
             <Control
               className={css['control']}
@@ -125,7 +145,7 @@ export class MyNode extends Node {
             />
           ))}
         </div>
-      </div>
+      </div >
     );
   }
 }

@@ -1,45 +1,55 @@
 // DOCUMENTED
 import { createRoot } from 'react-dom/client'
-import { MagickIDE, AppConfig } from '@magickml/editor'
+import { MagickIDE } from '@magickml/editor'
+import { AppConfig } from '@magickml/client-core'
 import {
   DEFAULT_PROJECT_ID,
   API_ROOT_URL,
   TRUSTED_PARENT_URL,
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
-} from '@magickml/core'
+  DEFAULT_USER_TOKEN,
+  STANDALONE,
+} from '@magickml/config'
 import { PostHogProvider } from 'posthog-js/react'
+import { initLogger, getLogger } from '@magickml/core'
 
 import plugins from './plugins'
 
-console.log('plugins', plugins)
+initLogger({ name: "AIDE" })
+
+const logger = getLogger()
+
+logger.info('loaded with plugins %o', plugins)
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
-  const container = document.getElementById('root')
-  const root = createRoot(container) // createRoot(container!) if you use TypeScript
-  ;(window as any).root = root
+  if (STANDALONE) {
+    const container = document.getElementById('root')
+    const root = createRoot(container) // createRoot(container!) if you use TypeScript
+      ; (window as any).root = root
 
-  // Check URL parameters for projectId and apiUrl
-  const projectId =
-    new URLSearchParams(window.location.search).get('projectId') ??
-    DEFAULT_PROJECT_ID
+    // Check URL parameters for projectId and apiUrl
+    const projectId =
+      new URLSearchParams(window.location.search).get('projectId') ??
+      DEFAULT_PROJECT_ID
 
-  const apiUrl =
-    new URLSearchParams(window.location.search).get('apiUrl') ??
-    API_ROOT_URL ??
-    'http://localhost:3030'
+    const apiUrl =
+      new URLSearchParams(window.location.search).get('apiUrl') ??
+      API_ROOT_URL ??
+      'http://localhost:3030'
 
-  const config: AppConfig = {
-    apiUrl,
-    projectId,
-    token: '',
+    const config: AppConfig = {
+      apiUrl,
+      projectId,
+      token: DEFAULT_USER_TOKEN,
+    }
+
+    const Root = () => <MagickIDE config={config} />
+
+    root.render(<Root />)
   }
-
-  const Root = () => <MagickIDE config={config} />
-
-  root.render(<Root />)
 } else {
   /**
    * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
@@ -58,13 +68,15 @@ if (window === window.parent) {
         event.origin !== window.location.origin &&
         event.origin !== cloudUrl
       ) {
-        console.error('untrusted origin', event.origin)
-        console.error(
-          'cloudUrl is ',
-          cloudUrl,
-          'TRUSTED_PARENT_URL',
+        logger.error('untrusted origin %s', event.origin)
+        logger.error(
+          'cloudUrl is %s',
+          cloudUrl)
+        logger.error(
+          'TRUSTED_PARENT_URL is %s',
           TRUSTED_PARENT_URL
         )
+
         return
       }
 
@@ -74,9 +86,9 @@ if (window === window.parent) {
       // Initialize and render the MagickIDE when message type is 'INIT'
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
-        const { config } = payload
+        const { config } = payload as { config: AppConfig }
         const Root = () => {
-          if (POSTHOG_ENABLED === 'true') {
+          if (POSTHOG_ENABLED && config?.posthogEnabled) {
             return (
               <PostHogProvider
                 apiKey={POSTHOG_API_KEY}
@@ -93,7 +105,7 @@ if (window === window.parent) {
         }
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
-        ;(window as any).root = root
+          ; (window as any).root = root
         root.render(<Root />)
       }
     },

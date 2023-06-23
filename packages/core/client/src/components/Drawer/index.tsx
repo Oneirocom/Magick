@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 import AppsIcon from '@mui/icons-material/Apps'
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArticleIcon from '@mui/icons-material/Article'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
@@ -23,8 +22,8 @@ import {
 } from '../../contexts/ProjectWindowContext'
 import ProjectWindow from './ProjectWindow'
 import { SetAPIKeys } from './SetAPIKeys'
-import MagickLogo from './purple-logo-full.png'
-import MagickLogoSmall from './purple-logo-small.png'
+import MagickLogo from './logo-full.png'
+import MagickLogoSmall from './logo-small.png'
 
 // Constants
 const drawerWidth = 150
@@ -54,6 +53,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 // DrawerHeader component properties
 type HeaderProps = {
   open: boolean
+  theme?: Theme
 }
 
 /**
@@ -81,12 +81,12 @@ const StyledDrawer = styled(MuiDrawer, {
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
   ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
+    ...openedMixin(theme as Theme),
+    '& .MuiDrawer-paper': openedMixin(theme as Theme),
   }),
   ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
+    ...closedMixin(theme as Theme),
+    '& .MuiDrawer-paper': closedMixin(theme as Theme),
   }),
 }))
 
@@ -123,7 +123,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           minWidth: 0,
           mr: open ? 2 : 'auto',
           justifyContent: 'center',
-          color: active ? 'var(--glow)' : 'white',
+          color: active ? 'var(--primary)' : 'white',
         }}
       >
         <Icon />
@@ -229,7 +229,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, []);
+  }, [])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -239,25 +239,17 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           onClick={toggleDrawer}
           sx={{ justifyContent: openDrawer ? 'space-between' : 'flex-end' }}
         >
-          {
-            <img
-              style={{
-                marginLeft: openDrawer ? '.5em' : '.0em',
-                marginTop: '2em',
-                height: 16,
-                cursor: 'pointer',
-              }}
-              src={openDrawer ? MagickLogo : MagickLogoSmall}
-              onClick={toggleDrawer}
-              alt=""
-            />
-          }
-          {openDrawer && (
-            <ArrowBackIosIcon
-              fontSize="small"
-              style={{ marginLeft: '1rem', color: '#ccc', cursor: 'pointer' }}
-            />
-          )}
+          <img
+            style={{
+              marginLeft: openDrawer ? '.5em' : '.0em',
+              marginTop: '2em',
+              height: 16,
+              cursor: 'pointer',
+            }}
+            src={openDrawer ? MagickLogo : MagickLogoSmall}
+            onClick={toggleDrawer}
+            alt=""
+          />
         </DrawerHeader>
         <List
           sx={{

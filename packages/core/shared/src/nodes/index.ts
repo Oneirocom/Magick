@@ -2,15 +2,18 @@
 import { MagickComponent } from '../engine'
 import { pluginManager } from '../plugin'
 import { ArrayToJSON } from './array/ArrayToJSON'
+import { JSONToArray } from './array/JSONToArray'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
 import { RemapArray } from './array/RemapArray'
+import { ExtractFromArray } from './array/ExtractFromArray'
 import { BooleanVariable } from './boolean/BooleanVariable'
 import { IsVariableTrue } from './boolean/IsVariableTrue'
 import { LogicalOperator } from './boolean/LogicalOperator'
 import { Javascript } from './code/Javascript'
 import { Python } from './code/Python'
+import { DocumentToContent } from './document/DocumentToContent'
 import { GetDocuments } from './document/GetDocuments'
 import { StoreDocument } from './document/StoreDocument'
 import { CosineSimilarity } from './embedding/CosineSimilarity'
@@ -22,8 +25,8 @@ import { EventRecall } from './events/EventRecall'
 import { EventRestructureComponent } from './events/EventRestructure'
 import { EventStore } from './events/EventStore'
 import { EventsToConversation } from './events/EventsToConversation'
-import { JupyterNotebook } from './experimental/JupyterNotebook'
-import { TextToSpeech } from './experimental/textToSpeech'
+import { JupyterNotebook } from './io/JupyterNotebook'
+import { TextToSpeech } from './audio/TextToSpeech'
 import { BooleanGate } from './flow/BooleanGate'
 import { ExclusiveGate } from './flow/ExclusiveGate'
 import { IsNullOrUndefined } from './flow/IsNullOrUndefined'
@@ -37,8 +40,19 @@ import { Request } from './io/Request'
 import { Respond } from './io/Respond'
 import { Skill } from './io/Skill'
 import { SpellComponent } from './io/Spell'
+import { SpellByName } from './io/SpellByName'
 import { RunSpell } from './magick/runSpell'
+import { IsANumber } from './number/IsANumber'
+import { Equal } from './number/Equal'
+import { GreaterThan } from './number/GreaterThan'
+import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
+import { LessThan } from './number/LessThan'
+import { LessThanOrEqual } from './number/LessThanOrEqual'
+import { Multiply} from './number/Multiply'
+import { Divide } from './number/Divide'
+import { Add } from './number/Add'
+import { Subtract } from './number/Subtract'
 import { NumberVariable } from './number/NumberVariable'
 import { ComposeObject } from './object/ComposeObject'
 import { GetValuesFromObject } from './object/GetValuesFromObject'
@@ -59,12 +73,22 @@ import { CurrentTime } from './utility/CurrentTime'
 import { Echo } from './utility/Echo'
 import { ErrorNode } from './utility/Error'
 import { Log } from './utility/Log'
+import { ExtractRelationship } from './embedding/ExtractRelationship'
+import { Select } from './database/Select'
+import { Insert } from './database/Insert'
+import { Update } from './database/Update'
+import { Upsert } from './database/Upsert'
+import { Delete } from './database/Delete'
+import { SplitBySentence } from './text/SplitBySentence'
+import { Trim } from './text/Trim'
+import { GetLength } from './text/GetLength'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
   randomGate: () => new RandomGate(),
   cast: () => new Cast(),
   createEmbedding: () => new CreateTextEmbedding(),
+  extractRelationship: () => new ExtractRelationship(),
   inRange: () => new InRange(),
   javascript: () => new Javascript(),
   python: () => new Python(),
@@ -82,6 +106,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   stringEvaluator: () => new EvaluateText(),
   combineText: () => new CombineText(),
   textVariable: () => new TextVariable(),
+  documenttocontent: () => new DocumentToContent(),
   stringVariable: () => new StringVariable(),
   profanityFilter: () => new ProfanityFilter(),
   numberVariable: () => new NumberVariable(),
@@ -97,6 +122,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   composeObject: () => new ComposeObject(),
   joinListComponent: () => new JoinListComponent(),
   remapArray: () => new RemapArray(),
+  extractFromArray: () => new ExtractFromArray(),
   moduleComponent: () => new SpellComponent(),
   output: () => new Output(),
   switchGate: () => new SwitchGate(),
@@ -119,6 +145,26 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
   respond: () => new Respond(),
+  spellByName: () => new SpellByName(),
+  equal: () => new Equal(),
+  greaterThan: () => new GreaterThan(),
+  greaterThanOrEqual: () => new GreaterThanOrEqual(),
+  lessThan: () => new LessThan(),
+  lessThanOrEqual: () => new LessThanOrEqual(),
+  select: () => new Select(),
+  insert: () => new Insert(),
+  update: () => new Update(),
+  upsert: () => new Upsert(),
+  delete: () => new Delete(),
+  splitBySentence: () => new SplitBySentence(),
+  trim: () => new Trim(),
+  getLength: () => new GetLength(),
+  isANumber: () => new IsANumber(),
+  multiply: () => new Multiply(),
+  divide: () => new Divide(),
+  add: () => new Add(),
+  subtract: () => new Subtract(),
+  jsonToArray: () => new JSONToArray(),
 }
 
 /**

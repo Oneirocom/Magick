@@ -65,7 +65,6 @@ export const Panel: React.FC<{
   const inlineStyles: React.CSSProperties = {
     display: flexRow || flexColumn ? 'flex' : '',
     flexDirection: flexRow ? 'row' : 'column',
-    gap: gap,
     backgroundImage: backgroundImageURL ? backgroundImageURL : undefined,
     ...style,
   }

@@ -46,7 +46,7 @@ export const document = (app: Application) => {
         (context: HookContext) => {
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
-            context.params.query.$limit = 1
+            // context.params.query.$limit = 1
             context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
           }
           return context
@@ -64,6 +64,7 @@ export const document = (app: Application) => {
             [service.id]: id,
             ...data,
           }
+
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
             if (typeof embedding == 'string') embedding = JSON.parse(embedding)
@@ -73,7 +74,6 @@ export const document = (app: Application) => {
             context.data.embedding = pgvector.toSql(nullArray)
             return context
           }
-          return
         },
       ],
       patch: [

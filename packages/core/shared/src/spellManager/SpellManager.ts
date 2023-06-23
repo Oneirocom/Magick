@@ -1,7 +1,6 @@
 // import { Application } from '@magickml/server-core';
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
-import Agent from '../agents/Agent'
 
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
@@ -11,7 +10,7 @@ type SpellManagerArgs = {
   cache?: boolean
   app: Application
   watchSpells?: boolean
-  agent?: Agent
+  agent?: any
 }
 
 type RunArgs = {
@@ -27,7 +26,7 @@ export default class SpellManager {
   socket?: io.Socket
   cache: boolean
   app: Application
-  agent?: Agent
+  agent?: any
 
   constructor({
     socket = undefined,
@@ -53,6 +52,7 @@ export default class SpellManager {
   }
 
   getSpellRunner(spellId: string) {
+    // we want to track which spells are currently busy here.
     return this.spellRunnerMap.get(spellId)
   }
 
@@ -94,6 +94,7 @@ export default class SpellManager {
 
     await spellRunner.loadSpell(spell)
 
+    // maybe we make a map of maps here to keep track of the multiple instances of spells?
     this.spellRunnerMap.set(spell.id, spellRunner)
 
     return spellRunner
@@ -102,12 +103,18 @@ export default class SpellManager {
   async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
     const runner = this.getSpellRunner(spellId)
 
-    
     const result = await runner?.runComponent({
       inputs,
       secrets,
       publicVariables,
       app,
+      agent: this.agent,
+    })
+
+    this.agent?.publishEvent(`${spellId}:run`, {
+      inputs,
+      publicVariables,
+      result,
     })
 
     return result || {}

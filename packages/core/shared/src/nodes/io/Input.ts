@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { InputControl } from '../../dataControls/InputControl'
-import { SwitchControl } from '../../dataControls/SwitchControl'
 import { MagickComponent } from '../../engine'
 import { PluginIOType, pluginManager } from '../../plugin'
 import { DataControl } from '../../plugins/inspectorPlugin'
@@ -20,7 +19,7 @@ import {
 } from '../../types'
 
 /** Information about the InputComponent functionality */
-const info = `The input component allows you to pass a single value to your graph.  You can set a default value to fall back to if no value is provided at runtime.  You can also turn the input on to receive data from the playtest input.`
+const info = `The input component allows you to pass a single value to your graph and outputs an Event. The playtest window will pass values into your Input for easy testing.`
 
 type InputReturn = {
   output: unknown
@@ -62,9 +61,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
    * @returns {MagickNode} - The configured node
    */
   builder(node: MagickNode) {
-    if (node.data.useData === undefined) {
-      node.data.useData = true
-    }
     // Setup dynamic controls
     const inputName = {
       type: InputControl,
@@ -74,17 +70,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
       defaultValue: 'Default',
       onData: data => {
         node.data.name = `Input - ${data}`
-      },
-    }
-
-    const useData = {
-      type: SwitchControl,
-      name: 'Use Data',
-      label: 'Use Data',
-      dataKey: 'useData',
-      defaultValue: node.data.useData,
-      onData: data => {
-        configureNode()
       },
     }
 
@@ -103,7 +88,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     const defaultInputTypes = [
       {
         name: 'Default',
-        inspectorControls: [inputName, useData],
+        inspectorControls: [inputName],
         sockets: [],
       },
       {
@@ -142,40 +127,61 @@ export class InputComponent extends MagickComponent<InputReturn> {
     let lastInspectorControls: any[] | undefined = []
     let lastSockets: CompletionSocket[] | undefined = []
 
-    const handleSockets = sockets => {
+    const handleSockets = async sockets => {
       const connections = node.getConnections()
+      const connectionCache = new Map()
+
       if (sockets !== lastSockets) {
-        lastSockets?.forEach(socket => {
+        lastSockets?.map(socket => {
           if (node.outputs.has(socket.socket)) {
-            if (socket.socket === 'trigger') return
+            if (socket.socket === 'trigger') return socket
             connections.forEach(c => {
               if (c.output.key === socket.socket) {
+                // Save connections in the cache before removing them
+                connectionCache.set(socket.socket, c)
                 this.editor?.removeConnection(c)
               }
             })
             node.outputs.delete(socket.socket)
           }
+          return socket
         })
-        sockets.forEach(socket => {
+        node.update()
+        this.editor?.view.updateConnections({ node })
+        sockets.map(async socket => {
           if (node.outputs.has(socket.socket)) return
           if (node.data.inputType === 'Default') {
             if (socket.socket === 'trigger') return
-            // if socket is output and useData is false, don't add
-            if (socket.socket === 'output' && node.data.useData !== true) return
           }
-          node.addOutput(
-            new Rete.Output(socket.socket, socket.name, socket.type)
-          )
-        })
 
+          // Add output socket
+          const output = new Rete.Output(
+            socket.socket,
+            socket.name,
+            socket.type
+          )
+          node.addOutput(output)
+          node.update()
+
+          // Restore connection if types match or either type is "any"
+          const oldConnection = connectionCache.get(socket.socket)
+          if (
+            oldConnection &&
+            (oldConnection.input.socket === socket.type ||
+              oldConnection.input.socket === anySocket ||
+              socket.type === anySocket)
+          ) {
+            this.editor?.connect(output, oldConnection.input)
+          }
+        })
+        node.update()
+        this.editor?.view.updateConnections({ node })
         lastSockets = sockets
       }
     }
 
     const configureNode = () => {
       const inputType = node.data.inputType ?? ('Default' as string)
-
-      const connections = node.getConnections()
 
       const inputTypeData = inputTypes.find(v => v.name === inputType) ?? {
         inspectorControls: [],
@@ -190,7 +196,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         sockets.push(triggerOutput)
       }
 
-      if (inputType === 'Default' && node.data.useData === true) {
+      if (inputType === 'Default') {
         sockets.push(dataOutput)
       }
 
@@ -201,14 +207,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         if (!node.outputs.has('trigger')) {
           node.addOutput(new Rete.Output('trigger', 'trigger', triggerSocket))
         }
-        if (!node.data.useData && node.outputs.has('output')) {
-          connections.forEach(c => {
-            if (c.output.key === 'output') {
-              this.editor?.removeConnection(c)
-            }
-          })
-          node.outputs.delete('output')
-        } else if (node.data.useData === true && !node.outputs.has('output')) {
+        if (!node.outputs.has('output')) {
           node.addOutput(new Rete.Output('output', 'output', anySocket))
         }
       }

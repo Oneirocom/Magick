@@ -37,7 +37,7 @@ export class ErrorNode extends MagickComponent<Promise<WorkerReturn>> {
         },
       },
       'Utility',
-      'Throws an error.  Good for testing for errors.'
+      'Takes an input string message and throws an error in the console containing the message.'
     )
   }
 

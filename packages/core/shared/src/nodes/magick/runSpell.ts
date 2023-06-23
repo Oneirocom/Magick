@@ -39,7 +39,7 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Experimental',
+      'I/O',
       'Runs a given spell with arguments'
     )
   }
@@ -86,15 +86,15 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
     const spell = _inputs.spell[0] as SpellInterface
     const inputs = _inputs.inputs[0] as object
 
-    const { module, spellManager, app } = context
-    const { publicVariables, agent, secrets } = module
+    const { agent, module, spellManager, app } = context
+    const { publicVariables, secrets } = module
 
     const runComponentArgs = {
       spellId: spell.id,
       inputs: inputs as MagickSpellInput,
       runSubspell: false,
       // we can probably remove agent here since it is in the injected spellManager
-      agent: agent,
+      agent,
       secrets: agent?.secrets ?? secrets,
       app,
       publicVariables: agent?.publicVariables ?? publicVariables,

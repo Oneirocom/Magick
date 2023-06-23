@@ -1,5 +1,5 @@
-import { LoadingScreen } from '@magickml/client-core'
-import { EditorContext, GraphData, MagickEditor, Spell } from '@magickml/core'
+import { LoadingScreen, useFeathers } from '@magickml/client-core'
+import { EditorContext, GraphData, MagickEditor, SpellInterface } from '@magickml/core'
 import React, {
   createContext,
   useContext,
@@ -14,7 +14,6 @@ import { MyNode } from '../components/Node/Node'
 import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { spellApi } from '../state/api/spells'
-import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 
@@ -36,7 +35,7 @@ type EditorContextType = {
   buildEditor: (
     el: HTMLDivElement,
     // todo update this to use proper spell type
-    spell: Spell | undefined,
+    spell: SpellInterface | undefined,
     tab: MagickTab,
     reteInterface: EditorContext
   ) => void
@@ -79,8 +78,8 @@ const ChatProvider = ({ children }) => {
     const newEditor = await initEditor({
       container,
       pubSub,
+      context: magick,
       // calling magick during migration of screens
-      magick,
       tab,
       // MyNode is a custom default style for nodes
       node: MyNode,

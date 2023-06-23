@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import Rete from 'rete'
 import { hasBadWords } from 'expletives'
 
@@ -10,14 +10,18 @@ import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
  * Represents a profanity filter component.
  */
 export class ProfanityFilter extends MagickComponent<Promise<void>> {
-
   /**
    * Creates an instance of ProfanityFilter.
    */
   constructor() {
-    super('Profanity Filter', {
-      outputs: { true: 'option', false: 'option' }
-    }, 'Text', 'Does some basic checks')
+    super(
+      'Profanity Filter',
+      {
+        outputs: { true: 'option', false: 'option' },
+      },
+      'Text',
+      'Takes a string input and checks it against a set of profanity rules, then triggers the appropriate output.'
+    )
   }
 
   /**

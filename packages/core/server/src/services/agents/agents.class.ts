@@ -6,9 +6,19 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
+import { Queue } from 'bullmq'
+import { bullMQConnection } from '@magickml/config'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
+
+export type AgentRunData = {
+  agentId: string
+  content: string
+  channel: string
+  sender: string
+  client: string
+}
 
 /**
  * Default AgentService class.
@@ -20,8 +30,27 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
 export class AgentService<
   ServiceParams extends Params = AgentParams
 > extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
-  log(data) {
-    return data ? data : { message: 'No data' }
+  app: Application
+  runQueue: Queue
+
+  constructor(options: KnexAdapterOptions, app: Application) {
+    super(options)
+    this.app = app
+    this.runQueue = new Queue(`agent:run`, {
+      connection: bullMQConnection,
+    })
+  }
+
+  async run(data: AgentRunData) {
+    if (!data.agentId) throw new Error('agentId is required')
+    // probably need to authenticate the request here against project id
+    // add the job to the queueD
+    const job = await this.runQueue.add(data.agentId, {
+      ...data,
+    })
+
+    // return the job id
+    return { jobId: job.id }
   }
 }
 
@@ -36,5 +65,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
     name: 'agents',
+    multi: ['remove'],
   }
 }

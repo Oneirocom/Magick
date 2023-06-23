@@ -19,12 +19,25 @@ import React, { Component } from 'react';
  * @property {boolean} visibleSubitems - Whether the subitems are visible.
  */
 
+type ItemType = {
+  title: string
+  onClick: (args) => void
+  subitems: ItemType[]
+}
+
+
+type State =
+  {
+    visibleSubitems: boolean
+  }
+
+type Props = { item: ItemType, search?: string }
 /**
  * Class representing an item with optional subitems.
  * @class Item
  * @extends {Component<ItemProps, ItemState>}
  */
-class Item extends Component {
+class Item extends Component<Props, State> {
   static contextType = Context;
 
   /**
@@ -35,7 +48,7 @@ class Item extends Component {
     super(props);
     this.state = {
       visibleSubitems: false,
-    };
+    }
   }
 
   /**
@@ -45,7 +58,7 @@ class Item extends Component {
   onClick = (e) => {
     const {
       item: { onClick },
-    } = this.props;
+    } = this.props
 
     // Doing this for now since we will be converting to functional components
     // @ts-ignore
@@ -80,7 +93,7 @@ class Item extends Component {
           <div className={styles['subitems']}>
             {subitems.map((subitem) =>
               search !== '' &&
-              !subitem.title.toLowerCase().includes(search.toLowerCase()) ? null : (
+                !subitem.title.toLowerCase().includes(search.toLowerCase()) ? null : (
                 <Item key={subitem.title} item={subitem} />
               )
             )}

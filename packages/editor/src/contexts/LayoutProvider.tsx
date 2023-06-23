@@ -9,8 +9,8 @@ import {
   TabSetNode,
 } from 'flexlayout-react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { saveTabLayout } from '../state/tabs'
+import { useDispatch, useSelector } from 'react-redux'
+import { activeTabSelector, saveTabLayout } from '../state/tabs'
 
 // List of window types used to load components from data sent by rete
 const windowTypes: WindowTypes = {
@@ -96,12 +96,16 @@ const LayoutProvider = ({ children, tab }) => {
     if (!currentModel) return
 
     const rootNode = currentModel.getRoot()
+    // Note: For some reason we arent picking up the types for the flexlayout-react library properly
+    // However if you look at the source code for the library, you can see that the types are correct
+    //@ts-ignore
     const tabNode = new TabNode(currentModel, tabJson)
+    //@ts-ignore
     const tabSetNode = new TabSetNode(currentModel, {
       type: 'tabset',
       weight: 12,
     })
-
+    //@ts-ignore
     rootNode._addChild(tabSetNode)
 
     currentModel.doAction(
@@ -118,9 +122,12 @@ const LayoutProvider = ({ children, tab }) => {
   const createOrFocus = (componentName, title) => {
     if (!currentModelRef.current) return
 
+    // id map does exist
+    // @ts-ignore
     const component = Object.entries(currentModelRef.current._idMap).find(
       ([, value]) => {
-        return value._attributes?.component === componentName
+        // hacky typing
+        return (value as any)._attributes?.component === componentName
       }
     )
 
@@ -147,6 +154,7 @@ export const Layout = ({ json, factory, tab }) => {
   const dispatch = useDispatch()
   const { currentModel, createModel, setCurrentRef } = useLayout()
   const layoutRef = useRef(null)
+  const activeTab = useSelector(activeTabSelector)
 
   // Side effect for creating model if there is JSON data
   useEffect(() => {
@@ -176,13 +184,15 @@ export const Layout = ({ json, factory, tab }) => {
 
   // Rendering LayoutComponent
   return (
-    <LayoutComponent
-      onModelChange={onModelChange}
-      ref={layoutRef}
-      model={currentModel}
-      factory={factory}
-      font={{ size: '12px' }}
-    />
+    tab.id === activeTab.id && (
+      <LayoutComponent
+        onModelChange={onModelChange}
+        ref={layoutRef}
+        model={currentModel}
+        factory={factory}
+        font={{ size: '12px' }}
+      />
+    )
   )
 }
 

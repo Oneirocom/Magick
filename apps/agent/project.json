@@ -3,10 +3,14 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/agent/src",
   "projectType": "application",
-  "implicitDependencies": ["@magickml/server-core", "@magickml/core"],
+  "implicitDependencies": [
+    "@magickml/server-core",
+    "@magickml/core",
+    "@magickml/agents"
+  ],
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -17,7 +21,9 @@
         "inspect": true,
         "outputPath": "dist/apps/agent",
         "main": "apps/agent/src/index.ts",
-        "assets": ["apps/agent/src/certs"],
+        "assets": [
+          "apps/agent/src/certs"
+        ],
         "tsConfig": "apps/agent/tsconfig.app.json",
         "webpackConfig": "apps/agent/webpack.config.js"
       },
@@ -36,7 +42,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/js:node",
+      "executor": "@nx/js:node",
       "options": {
         "buildTarget": "@magickml/agent:build",
         "inspect": true,
@@ -49,7 +55,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": [
         "{options.outputFile}"
       ],
@@ -60,7 +66,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
         "{workspaceRoot}/coverage/{projectRoot}"
       ],

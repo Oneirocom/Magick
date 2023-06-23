@@ -25,7 +25,7 @@ export class GetValuesFromObject extends MagickComponent<void> {
         },
       } as TaskOptions,
       'Object',
-      'Destructure properties out of an object.'
+      'Takes an object input and outputs any number of named properties that are found in the object.'
     )
   }
 
@@ -62,7 +62,7 @@ export class GetValuesFromObject extends MagickComponent<void> {
    */
 
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
-    const object = inputs.object[0] as Record<string, unknown>
+    const object = inputs.object && inputs.object[0] as Record<string, unknown>
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {
       acc[key] = object[key]

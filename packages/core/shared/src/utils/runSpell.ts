@@ -15,6 +15,7 @@ export type RunSpellArgs = {
   secrets: Record<string, string>
   publicVariables?: Record<string, unknown>
   app?: any
+  agent?: any
 }
 
 /**
@@ -31,24 +32,31 @@ export const runSpell = async ({
   projectId,
   secrets,
   publicVariables,
-  app
-}: RunSpellArgs): Promise<{ outputs: Record<string, unknown>; name: string }> => {
+  app,
+  agent,
+}: RunSpellArgs): Promise<{
+  outputs: Record<string, unknown>
+  name: string
+}> => {
   // rewrite using fetch
   const spells = await app.service('spells').find({
     query: {
       id: spellId,
       projectId,
     },
-  });
+  })
 
   // Get the first spell
-  const spell = spells.data[0];
+  const spell = spells.data[0]
 
   console.log('spell', spell)
 
   // If the spell is not found, throw an error
   if (!spell?.graph) {
-    throw new SpellError('not-found', `Spell with id ${spellId} not found: ${spell}`);
+    throw new SpellError(
+      'not-found',
+      `Spell with id ${spellId} not found: ${spell}`
+    )
   }
 
   // Convert the graph of the spell
@@ -60,7 +68,9 @@ export const runSpell = async ({
   // Clone the spell to run
   const spellToRun = { ...spell } as SpellInterface
 
-  const spellManager = new SpellManager({ app })
+  console.log('RUNSPEL AGENT', agent)
+
+  const spellManager = new SpellManager({ app, agent })
 
   spellManager.load(spellToRun)
 

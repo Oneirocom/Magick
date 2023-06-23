@@ -12,7 +12,7 @@ import {
   ModuleComponent,
   ModuleContext,
   ModuleType,
-  ModuleWorkerOutput
+  ModuleWorkerOutput,
 } from '../../types'
 import { Module } from './module'
 
@@ -135,8 +135,12 @@ export class ModuleManager {
       return acc
     }, {} as Record<string, unknown>)
 
+    console.log(
+      '*** MODULE MANAGER: publicVariables are',
+      context.module.publicVariables
+    )
+
     module.read({
-      agent: context.module.agent,
       inputs: parsedInputs,
       secrets: context.module.secrets,
       publicVariables: context.module.publicVariables,

@@ -1,37 +1,48 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, Agent, IGNORE_AUTH } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
+import { API_ROOT_URL, PRODUCTION } from '@magickml/config'
+import {
+  Apps,
+  ChevronRight,
+  ExpandMore,
+  FileDownload,
+  FileUpload,
+  MenuBook,
+  MoreHoriz,
+  TextSnippet,
+} from '@mui/icons-material'
 import TreeItem from '@mui/lab/TreeItem'
 import TreeView from '@mui/lab/TreeView'
 import {
+  Box,
   Button,
+  Drawer,
+  IconButton,
   Menu,
   MenuItem,
   Typography,
-  Drawer,
-  IconButton,
-  Box,
 } from '@mui/material'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  Apps,
-  TextSnippet,
-  MoreHoriz,
-  MenuBook,
-  FileDownload,
-  FileUpload,
-  ExpandMore,
-  ChevronRight,
-} from '@mui/icons-material'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
+// todo better way to share these types
+// import { RootState } from 'packages/editor/src/state/store'
+// import { AgentData } from 'packages/core/server/src/services/agents/agents.schema'
+// import { DocumentData } from 'packages/core/server/src/services/documents/documents.schema'
 
 let isResizing = false
 const drawerMaxSize = 200
+
+type DataState = {
+  agents: any[]
+  spells: SpellInterface[]
+  documents: any[]
+}
 
 /**
  * ProjectWindow is a collapsible sidebar that shows a tree view of the project content.
@@ -41,14 +52,13 @@ const drawerMaxSize = 200
  * @param {boolean} props.openDrawer - Whether the drawer is open or not
  */
 const ProjectWindow = ({ openDrawer }) => {
-  const globalConfig = useSelector(state => state.globalConfig)
+  const globalConfig = useSelector((state: any) => state.globalConfig)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
-  const [data, setData] = useState({ agents: [], spells: [], documents: [] })
+  const [data, setData] = useState<DataState>({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
-  const headers = IGNORE_AUTH ? {} : { Authorization: `Bearer ${token}` }
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -63,7 +73,7 @@ const ProjectWindow = ({ openDrawer }) => {
    * @param {File} selectedFile - Selected file object
    */
   const loadFile = selectedFile => {
-    if (!token && !IGNORE_AUTH) {
+    if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
       })
@@ -72,21 +82,62 @@ const ProjectWindow = ({ openDrawer }) => {
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
-      const data = JSON.parse(event?.target?.result)
-
-      console.log('data', data)
+      const data = JSON.parse(event?.target?.result as string)
 
       delete data['id']
       axios({
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
         data: { ...data, projectId: globalConfig.projectId },
-        headers,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then(async res => {
           const res2 = await fetch(
             `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers }
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+          const json = await res2.json()
+          setData(json)
+        })
+        .catch(err => {
+          console.error('error is', err)
+        })
+    }
+    handleClose()
+  }
+
+  /**
+   * Replace all files with the uploaded project
+   *
+   * @param {File} selectedFile - Selected file object
+   */
+  const loadFileReplace = selectedFile => {
+    if (!token && PRODUCTION) {
+      enqueueSnackbar('You must be logged in to create a project', {
+        variant: 'error',
+      })
+      return
+    }
+    const fileReader = new FileReader()
+    fileReader.readAsText(selectedFile)
+    fileReader.onload = event => {
+      const data = JSON.parse(event?.target?.result as string)
+
+      delete data['id']
+      axios({
+        url: `${globalConfig.apiUrl}/projects`,
+        method: 'POST',
+        data: { ...data, projectId: globalConfig.projectId, replace: true },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(async res => {
+          const res2 = await fetch(
+            `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
           )
           const json = await res2.json()
           setData(json)
@@ -105,19 +156,21 @@ const ProjectWindow = ({ openDrawer }) => {
     const element = document.createElement('a')
 
     const exportData = data
-    exportData.agents.forEach((agent: Agent) => {
+    exportData.agents.forEach((agent: any) => {
       agent.secrets = {}
-
-      Object.keys(agent.data).forEach(key => {
-        if (
-          key.includes('api') ||
-          key.includes('token') ||
-          key.includes('secret')
-        ) {
-          delete agent.data[key]
-        }
-      })
     })
+
+    // traverse the entire exportData object and set all 'data' properties to {}
+    const traverse = obj => {
+      for (const prop in obj) {
+        if (prop.includes('token') || prop.includes('secret')) {
+          delete obj[prop]
+        } else if (typeof obj[prop] === 'object') {
+          traverse(obj[prop])
+        }
+      }
+    }
+    traverse(exportData)
 
     const file = new Blob([JSON.stringify(data, null, 4)], {
       type: 'text/plain',
@@ -129,7 +182,7 @@ const ProjectWindow = ({ openDrawer }) => {
     handleClose()
   }
 
-  const sidebarPanel = useRef('sidebarPanel')
+  const sidebarPanel = useRef<HTMLDivElement | null>(null)
   const cbHandleMouseMove = useCallback(handleMousemove, [])
   const cbHandleMouseUp = useCallback(handleMouseup, [])
 
@@ -143,16 +196,18 @@ const ProjectWindow = ({ openDrawer }) => {
   }
 
   function handleMousemove(e) {
-    if (!isResizing) {
+    if (!isResizing || !sidebarPanel.current) {
       return
     }
-
     const rightSide = document.getElementById('wrapper')
     const resizer = document.getElementById('resizer')
+
     const minWidth = 140
 
     if (e.clientX > minWidth && e.clientX < drawerMaxSize) {
       sidebarPanel.current.style.width = e.clientX + 'px'
+      if (!resizer) return
+      if (!rightSide) return
       resizer.style.left = e.clientX + 'px'
       rightSide.style.width = 100 + (drawerMaxSize - e.clientX) + '%'
     }
@@ -173,7 +228,7 @@ const ProjectWindow = ({ openDrawer }) => {
     const fetchData = async () => {
       const { data } = await axios.get(
         `${API_ROOT_URL}/projects?projectId=${globalConfig.projectId}`,
-        { headers }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       setData(data)
     }
@@ -235,7 +290,33 @@ const ProjectWindow = ({ openDrawer }) => {
                       }}
                     />
                   }
-                  innerText={'Import'}
+                  innerText={'Import (Add)'}
+                />
+              </MenuItem>
+              <MenuItem>
+                <FileInput
+                  loadFile={loadFileReplace}
+                  sx={{
+                    display: 'inline-block',
+                    minWidth: '0',
+                    padding: 0,
+                    margin: 0,
+                    color: 'rgba(255,255,255,.5)',
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    boxShadow: 'none',
+                    border: 0,
+                  }}
+                  Icon={
+                    <FileUpload
+                      style={{
+                        height: '1em',
+                        width: '1em',
+                        position: 'relative',
+                        top: '.25em',
+                      }}
+                    />
+                  }
+                  innerText={'Import (Replace)'}
                 />
               </MenuItem>
               <MenuItem>
@@ -304,7 +385,7 @@ const ProjectWindow = ({ openDrawer }) => {
                         key={index}
                         style={{ width: '100%' }}
                         nodeId={30 + index.toString()}
-                        label={document.content.slice(0, 12)}
+                        label={document?.content ? document.content.slice(0, 12) : "document"}
                         icon={<TextSnippet />}
                       />
                     ))}

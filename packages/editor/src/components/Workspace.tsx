@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { SpellInterface } from '@magickml/core'
 
-import { useConfig } from '@magickml/client-core'
+import { useConfig, useFeathers, usePubSub } from '@magickml/client-core'
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
 import { spellApi } from '../state/api/spells'
@@ -18,8 +18,6 @@ import Playtest from '../windows/PlaytestWindow'
 import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
 
-import { useFeathers } from '../../../core/client/src/providers/FeathersProvider'
-import { usePubSub } from '../../../core/client/src/providers/PubSubProvider'
 import { RootState } from '../state/store'
 
 /**
@@ -95,16 +93,16 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
   useEffect(() => {
     if (!client) return
-    ;(async () => {
-      if (!client || !tab || !tab.name) return
+      ; (async () => {
+        if (!client || !tab || !tab.name) return
 
-      // make sure to pass the projectId to the service call
-      await client.service('spell-runner').get(tab.id, {
-        query: {
-          projectId: config.projectId,
-        },
-      })
-    })()
+        // make sure to pass the projectId to the service call
+        await client.service('spell-runner').get(tab.id, {
+          query: {
+            projectId: config.projectId,
+          },
+        })
+      })()
   }, [client])
 
   const factory = tab => {

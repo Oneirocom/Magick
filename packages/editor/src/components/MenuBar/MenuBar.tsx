@@ -1,10 +1,9 @@
 // DOCUMENTED
-import { useProjectWindow } from '@magickml/client-core'
+import { useProjectWindow, usePubSub } from '@magickml/client-core'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { usePubSub } from '../../../../core/client/src/providers/PubSubProvider'
 import { useModal } from '../../contexts/ModalProvider'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
@@ -234,31 +233,31 @@ const MenuBar = () => {
       items: {
         new_spell: {
           onClick: onNew,
-          hotKey: 'option+n',
+          hotKey: 'alt+n, ctrl+n',
         },
         open_spell: {
           onClick: onOpen,
-          hotKey: 'option+o, ctrl+o',
+          hotKey: 'alt+o, ctrl+o',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'option+i, ctrl+i',
+          hotKey: 'alt+i, ctrl+i',
         },
         rename_spell: {
           onClick: onEdit,
-          hotKey: 'option+e, ctrl+e',
+          hotKey: 'alt+e, ctrl+e',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'option+s, ctrl+s',
+          hotKey: 'alt+s, ctrl+s',
         },
         save_a_copy: {
           onClick: onSaveAs,
-          hotKey: 'option+shift+s, ctrl+shift+s',
+          hotKey: 'alt+shift+s, ctrl+shift+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'option+shift+e, ctrl+shift+e',
+          hotKey: 'alt+shift+e, ctrl+shift+e',
         },
       },
     },
@@ -266,19 +265,19 @@ const MenuBar = () => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'option+z, ctrl+z',
+          hotKey: 'alt+z, ctrl+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'option+y, ctrl+y, option+shift+z, ctrl+shift+z',
+          hotKey: 'alt+y, ctrl+y, alt+shift+z, ctrl+shift+z',
         },
         copy: {
           onClick: onMultiSelectCopy,
-          hotKey: 'option+c, ctrl+c',
+          hotKey: 'alt+c, ctrl+c',
         },
         paste: {
           onClick: onMultiSelectPaste,
-          hotKey: 'option+v, ctrl+v',
+          hotKey: 'alt+v, ctrl+v',
         },
         delete: {
           onClick: onDelete,
@@ -294,23 +293,23 @@ const MenuBar = () => {
       items: {
         text_editor: {
           onClick: onTextEditorCreate,
-          hotKey: 'option+1, control+1',
+          hotKey: 'alt+1, control+1',
         },
         inspector: {
           onClick: onInspectorCreate,
-          hotKey: 'option+2, control+2',
+          hotKey: 'alt+2, control+2',
         },
         playtest: {
           onClick: onPlaytestCreate,
-          hotKey: 'option+3, control+3',
+          hotKey: 'alt+3, control+3',
         },
         console: {
           onClick: onConsole,
-          hotKey: 'option+4, control+4',
+          hotKey: 'alt+4, control+4',
         },
         project_window: {
           onClick: onProjectWindowCreate,
-          hotKey: 'option+5, control+5',
+          hotKey: 'alt+5, control+5',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -321,7 +320,7 @@ const MenuBar = () => {
         items: {
           'Auto Save': {
             onClick: toggleSave,
-            hotKey: 'option+shift+a',
+            hotKey: 'alt+shift+a',
             isActive: preferences.autoSave,
           },
         },
@@ -361,7 +360,7 @@ const MenuBar = () => {
     } else if (userAgent.indexOf('Linux') !== -1) {
       formattedCommand = formattedCommand.replace('option', 'alt')
     } else {
-      formattedCommand = formattedCommand.replace('option', '\u2325')
+      formattedCommand = formattedCommand.replace('alt', '\u2325')
     }
 
     formattedCommand = formattedCommand.replace('shift', '\u21E7')
@@ -406,7 +405,7 @@ const MenuBar = () => {
                     event.preventDefault()
                     item.onClick()
                   },
-                  { enableOnTags: ['INPUT'] },
+                  { enableOnFormTags: ['INPUT'] },
                   [item.onClick]
                 )
               }

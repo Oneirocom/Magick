@@ -2,7 +2,13 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, eventSocket, triggerSocket } from '../../sockets'
+import {
+  arraySocket,
+  embeddingSocket,
+  eventSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
 import {
   Event,
   GetEventArgs,
@@ -13,7 +19,8 @@ import {
   WorkerData,
 } from '../../types'
 
-const info = 'Event Recall is used to get conversation for an agent and user'
+const info =
+  'Searches for events in the Events store based on the Type property and returns an array of events limited by the Max Count property. The optional Embedding input will search for events based on the similarity of their stored embeddings. '
 
 /**
  * Type definition for the input events.
@@ -38,8 +45,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       'Event',
       info
     )
-
-    this.runFromCache = true
   }
 
   /**
@@ -49,10 +54,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
    */
   builder(node: MagickNode): MagickNode {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
     const out = new Rete.Output('events', 'Events', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const typeSocket = new Rete.Input('type', 'Type', stringSocket)
 
     const nameInput = new InputControl({
       dataKey: 'name',
@@ -82,6 +88,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       .addInput(embedding)
       .addOutput(dataOutput)
       .addOutput(out)
+      .addInput(typeSocket)
   }
 
   /**
@@ -106,6 +113,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
       return events
     }
+    const typeSocket = inputs['type'] && inputs['type'][0]
 
     const event = (inputs['event'] &&
       (inputs['event'][0] || inputs['event'])) as Event
@@ -131,13 +139,19 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     const typeData = (node.data as { type: string })?.type
     const type =
-      typeData !== undefined && typeData.length > 0
+      (typeSocket as string) ??
+      (typeData !== undefined && typeData.length > 0
         ? typeData.toLowerCase().trim()
-        : 'none'
-    const maxCountData =
-      (node?.data?.max_count as string) &&
-      (node?.data as { max_count: string })?.max_count
-    const limit = maxCountData ? parseInt(maxCountData) : 10
+        : 'none')
+
+    let max_count
+    if (typeof node.data.max_count === 'string') {
+      max_count = parseInt(node.data.max_count)
+    } else if (typeof node.data.max_count === 'number') {
+      max_count = node.data.max_count
+    } else {
+      max_count = 10
+    }
     const data = {
       type,
       observer,
@@ -147,7 +161,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       connector,
       channelType,
       projectId,
-      $limit: limit,
+      $limit: max_count ?? 1,
     }
 
     if (embedding) {

@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: var(--dark-1);
+  background-color: var(--dark-0);
   color: var(--dark-4);
   overflow: hidden;
   padding: 0;
@@ -14,50 +14,123 @@ body,
   height: 100%;
 }
 
+.expanding {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--extra-small);
+  width: var(--extra-small);
+  border-radius: 100%;
+  transition: transform 0.2s ease;
+}
+
+.expanding:hover {
+  transform: scale(1.5);
+}
+
 .socket.output.any-type,
-.socket.input.any-type {
+.socket.input.any-type,
+.expanding.any {
   background: #838383;
 }
 
+.any .main-path {
+  stroke: #838383 !important;
+}
+
 .socket.output.boolean,
-.socket.input.boolean {
-  background: #f54703;
+.socket.input.boolean,
+.expanding.boolean {
+  background: var(--red);
+}
+
+.boolean .main-path {
+  stroke: var(--red) !important;
 }
 
 .socket.output.string,
-.socket.input.string {
-  background: #f59403;
+.socket.input.string,
+.expanding.string {
+  background: var(--orange);
+}
+
+.string .main-path {
+  stroke: var(--orange) !important;
 }
 
 .socket.output.array,
-.socket.input.array {
-  background: #1290ce;
+.socket.input.array,
+.expanding.array {
+  background: var(--blue);
+}
+
+.array .main-path {
+  stroke: var(--blue) !important;
 }
 
 .socket.output.object,
-.socket.input.object {
-  background: #21b534;
+.socket.input.object,
+.expanding.object {
+  background: var(--green);
+}
+
+.object .main-path {
+  stroke: var(--green) !important;
 }
 
 .socket.output.number,
-.socket.input.number {
-  background: #fcbd03;
+.socket.input.number,
+.expanding.number {
+  background: var(--yellow);
+}
+
+.number .main-path {
+  stroke: var(--yellow) !important;
 }
 
 .socket.output.trigger,
-.socket.input.trigger {
-  background: var(--primary);
+.socket.input.trigger,
+.expanding.trigger {
+  background: var(--purple);
+}
+
+.trigger .main-path {
+  stroke: var(--purple) !important;
 }
 
 .socket.output.event,
-.socket.input.event {
-  background: #0e10a4;
+.socket.input.event,
+.expanding.event {
+  background: var(--deep-blue);
+}
+
+.event .main-path {
+  stroke: var(--deep-blue) !important;
+}
+
+.connection .main-path {
+  stroke-width: 2px !important;
+}
+
+.connection .main-path:hover {
+  stroke-width: 5px !important;
+  opacity: 1 !important;
+  /* stroke: var(--glow) !important; */
+}
+
+.selected .main-path {
+  stroke-width: 5px !important;
+}
+
+.transparent .main-path {
+  opacity: 0.5 !important;
 }
 
 .socket {
   height: var(--small);
   width: var(--small);
-  border: 1px solid var(--primary);
 }
 
 .socket.output {
@@ -70,21 +143,12 @@ body,
   left: -5px;
 }
 
-.socket:hover {
-  background-color: var(--dark-1);
-}
+/* .socket:hover {
+  background-color: var(--dark-0);
+} */
 
 .node.selected {
   background-color: #05c807 !important;
-}
-
-.connection .main-path {
-  stroke-width: 2px;
-  stroke: #9d12a4;
-  /* filter: drop-shadow(0px 1px 0px var(--dark-0))
-    drop-shadow(0px -1px 0px var(--dark-0))
-    drop-shadow(-1px 0px 0px var(--dark-0))
-    drop-shadow(1px 0px 0px var(--dark-0)); */
 }
 
 button {
@@ -92,12 +156,12 @@ button {
   color: #fff;
   border-radius: 4px;
   cursor: default;
-  background-color: var(--dark-3);
-  border: 1px solid var(--dark-4);
+  background-color: var(--dark-2);
+  border: 1px solid var(--dark-3);
   padding: 9px 16px;
   padding-left: var(--small);
   padding-right: var(--small);
-  font-family: 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
   font-size: 11px;
   text-transform: uppercase;
   box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
@@ -113,25 +177,26 @@ button.option {
 }
 
 button.primary {
-  background-color: var(--primary);
+  background-color: var(--primary-dark);
+  color: var(--dark-5);
 }
 
 button.list {
-  background-color: var(--dark-2);
+  background-color: var(--dark-1);
   padding: 3px;
   padding-left: var(--small);
   padding-right: var(--small);
 }
 
 button.small {
-  background-color: var(--dark-3s);
+  background-color: var(--dark-2);
   padding: 8px;
   padding-left: var(--small);
   padding-right: var(--small);
 }
 
 button.extra-small {
-  background-color: var(--dark-3);
+  background-color: var(--dark-2);
   padding: 4px;
   padding-left: var(--extraSmall);
   padding-right: var(--extraSmall);
@@ -151,7 +216,7 @@ button.disabled {
   box-shadow: none;
   pointer-events: none;
   opacity: 0.5;
-  background-color: var(--dark-2);
+  background-color: var(--dark-1);
 }
 
 .node.selected button {
@@ -160,11 +225,11 @@ button.disabled {
 
 .flexlayout__tab {
   overflow: hidden;
-  background-color: var(--dark-1) !important;
+  background-color: var(--dark-0) !important;
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
-  font-family: 'IBM Plex Mono';
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
 }
 
 .flexlayout__tabset {
@@ -184,7 +249,7 @@ button.disabled {
 
 .flexlayout__tabset_tabbar_inner_tab_container_top {
   border-top: none;
-  background-color: var(--dark-2);
+  background-color: var(--dark-1);
 }
 
 .flexlayout__tabset_tabbar_outer_top {
@@ -193,20 +258,20 @@ button.disabled {
 
 .flexlayout__tabset {
   font-size: 14px;
-  font-family: 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
 }
 
 .flexlayout__tab {
-  background-color: var(--dark-3);
+  background-color: var(--dark-2);
 }
 
 .flexlayout__tab_toolbar {
-  background-color: var(--dark-2);
+  background-color: var(--dark-1);
 }
 
 .flexlayout__tab_button {
   margin: 0;
-  background-color: var(--dark-3);
+  background-color: var(--dark-2);
   box-shadow: none;
   padding-left: var(--extraSmall);
   padding-right: var(--extraSmall);
@@ -231,14 +296,14 @@ button.disabled {
 }
 
 /* .view-line span {
-  font-family: 'IBM Plex Mono', sans-serif;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', sans-serif;
 } */
 
 input {
   box-sizing: border-box;
   padding: var(--extraSmall);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--dark-2);
+  background-color: var(--dark-1);
   padding-left: var(--small);
   padding-right: var(--small);
   color: #fff;
@@ -246,13 +311,13 @@ input {
   cursor: default;
   border: 1px solid var(--dark-4);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
   font-size: 11px;
   height: var(--c4);
 }
 
 input:focus-visible {
-  outline: 1px solid var(--glow);
+  outline: 1px solid var(--primary);
 }
 
 .App {
@@ -315,14 +380,14 @@ input:focus-visible {
 .form-item-label {
   display: block;
   margin-bottom: 0.5em;
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
 
-  color: var(--dark-5);
+  color: var(--dark-4);
 }
 
 .select {
   padding: 0.4em;
-  border: 1px solid var(--dark-4);
+  border: 1px solid var(--dark-3);
   border-radius: 4px;
 }
 
@@ -333,13 +398,13 @@ input:focus-visible {
   box-sizing: border-box;
   padding: var(--extraSmall);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--dark-2);
+  background-color: var(--dark-1);
   color: #fff;
   border-radius: 4px;
   cursor: default;
-  border: 1px solid var(--dark-4);
+  border: 1px solid var(--dark-3);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
   font-size: 11px;
   height: var(--c4);
 }
@@ -480,15 +545,17 @@ input:focus-visible {
 .input-title,
 .output-title,
 div.item {
-  font-family: 'IBM Plex Sans', 'IBM Plex Mono', sans-serif;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+    sans-serif;
 }
 
 .flexlayout__layout {
-  background-color: var(--dark-2) !important;
+  background-color: var(--dark-1) !important;
   color: var(--dark-4);
-  font-family: 'IBM Plex Mono';
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
 }
 
-.MuiInputBase-root input,  .MuiInputBase-multiline{
+.MuiInputBase-root input,
+.MuiInputBase-multiline {
   padding: 13px !important;
 }

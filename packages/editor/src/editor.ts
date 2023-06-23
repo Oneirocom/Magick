@@ -1,9 +1,11 @@
 // DOCUMENTED
-import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
+import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin from './plugins/contextMenu'
+import HighlightPlugin from './plugins/highlightPlugin'
+import ConnectionPlugin from './plugins/connectionPlugin'
 import {
   CachePlugin,
   OnSubspellUpdated,
@@ -38,6 +40,7 @@ import {
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
+import AutoArrangePlugin from './plugins/autoArrangePlugin'
 import { initSharedEngine, MagickEngine } from '@magickml/core'
 
 /**
@@ -92,6 +95,8 @@ export const initEditor = function ({
 
   editor.use(CachePlugin)
 
+  editor.use(HighlightPlugin)
+
   // History plugin for undo/redo
   editor.use(HistoryPlugin, { keyboard: false })
 
@@ -141,15 +146,27 @@ export const initEditor = function ({
 
   // Configure Area plugin
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.1, max: 1.5 },
+    scaleExtent: { min: 0.05, max: 2.0 },
     background,
     tab,
     snap: true,
   })
 
+  // Set up the CommentManager
+  const commentManager = new CommentManager(editor)
+
   // Use CommentPlugin
   editor.use(CommentPlugin, {
     margin: 30,
+    commentManager,
+  })
+
+  editor.use(AutoArrangePlugin, {
+    margin: { x: 50, y: 50 },
+    depth: 0,
+    arrangeHotkey: { key: '/', ctrl: true },
+    centerHotkey: { key: '.', ctrl: true },
+    commentManager,
   })
 
   editor.use(KeyCodePlugin)
@@ -182,6 +199,14 @@ export const initEditor = function ({
   // Event listeners
   editor.on('zoom', ({ source }) => {
     return source !== 'dblclick'
+  })
+
+  // Unselect all nodes when clicking off nodes
+  editor.on('click', () => {
+    const list = [...editor.selected.list]
+
+    editor.selected.clear()
+    list.map(node => (node.update ? node.update() : null))
   })
 
   editor.on(

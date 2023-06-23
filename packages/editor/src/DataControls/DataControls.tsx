@@ -13,6 +13,7 @@ import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
 import CheckBoxControl from './CheckBox'
+import { ControlData } from '@magickml/core'
 
 /**
  * Stub component for unknown control types.
@@ -40,18 +41,18 @@ const controlMap = {
   checkbox: CheckBoxControl,
 }
 
-type DataControl = {
-  component: string
-  dataKey: string
-  label: string
-  type: string
-  options?: any
-  name?: string
-  data: Record<string, any>
-}
+// type DataControl = {
+//   component: string
+//   dataKey: string
+//   label: string
+//   type: string
+//   options?: any
+//   name?: string
+//   data: Record<string, any>
+// }
 
 export type DataControlsProps = {
-  dataControls: { [key: string]: DataControl }
+  dataControls: { [key: string]: ControlData }
   updateData: Function
   updateControl: Function
   width: number

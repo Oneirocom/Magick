@@ -38,16 +38,16 @@ export default function ContextMenu({
    * This effect sets the focus on the search bar when the context menu is rendering.
    * It also clears the input value when the context menu is closed.
    */
-   
+
   useEffect(() => {
     if (visible) {
-      const searchbar = document?.querySelector('.context-menu-search-bar')
+      const searchbar = document?.querySelector('.context-menu-search-bar') as HTMLElement
       if (searchbar) searchbar.focus()
     } else {
       setSearch('')
     }
   }, [visible])
-  
+
   if (!visible) return null
 
   return (

@@ -49,7 +49,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       {
         outputs: { output: 'output', trigger: 'option' },
       },
-      'Experimental',
+      'I/O',
       info
     )
 
@@ -99,16 +99,13 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const task = inputs['task'] && (inputs['task'][0] as AgentTask)
     const content = inputs['content'] && (inputs['content'][0] as string)
 
-    console.log('******* CONTENT *******')
-    console.log(content)
-
     if (task) {
       task.eventData.content = content || task.eventData.content
     }
 
-    const { module, spellManager } = _context
+    const { module, spellManager, agent } = _context
 
-    const { agent, app, secrets } = module
+    const { app, secrets } = module
 
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
@@ -130,12 +127,9 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const spellId = firstSpell.id || firstSpell._id
 
-    console.log('spellId', spellId)
-    console.log('******* RAN SKILL *******')
-
     const { projectId } = _context
-    if (module.agent) {
-      const spellManager = module.agent.spellManager as SpellManager
+    if (agent) {
+      const spellManager = agent.spellManager as SpellManager
       const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {
@@ -166,7 +160,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
 
       const outputs = await spellManager.run(runComponentArgs as any)
-      console.log('outputs', outputs)
       // get the first value from outputs
       const output = Object.values(outputs)[0]
 

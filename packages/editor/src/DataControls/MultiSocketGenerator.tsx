@@ -10,12 +10,12 @@ import SingleElement from './SingleElement';
  */
 const SingleSocket = (props: {
   name: string;
-  delete: Function | null;
+  delete: (name: string) => void;
   type: string;
   last: boolean;
 }) => {
   return props.delete ? (
-    <SingleElement name={props.name} delete={props.delete} type={props.type} />
+    <SingleElement name={props.name} delete={props.delete} />
   ) : (
     <div style={{ marginTop: '10px', flex: 1, width: '100%' }}>
       <p style={{ display: 'inline' }}>{props.name}</p>

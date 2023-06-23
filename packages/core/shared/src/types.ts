@@ -24,8 +24,6 @@ import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
 import { SpellManager } from './spellManager'
 
-import Agent from './agents/Agent'
-
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
 export * from './schemas'
@@ -55,7 +53,7 @@ export type Document = {
 export type CreateDocumentArgs = Document
 
 export type GetDocumentArgs = Document & {
-  maxCount?: number
+  $limit?: number
 }
 
 type AgentTaskStatus = 'active' | 'completed' | 'canceled'
@@ -107,20 +105,6 @@ export type Event = {
   rawData?: string
 }
 
-export type SemanticSearch = {
-  concept?: string
-  positive?: string
-  negative?: string
-  distance?: number
-  positive_distance?: number
-  negative_distance?: number
-}
-
-export type QAArgs = {
-  question: string
-  agentId: string
-}
-
 export type CreateEventArgs = Event
 
 export type GetEventArgs = {
@@ -135,18 +119,30 @@ export type GetEventArgs = {
   connector?: string
   rawData?: string
   projectId?: string
-  maxCount?: number
+  $limit?: number
 }
 
 export type GetVectorEventArgs = {
   type: string
   entities: string[]
-  maxCount?: number
+  $limit?: number
 }
 
 export type EventResponse = Event[]
 
 export type OnSubspellUpdated = (spell: SpellInterface) => void
+
+export type ControlData = {
+  dataKey: string
+  name: string
+  component: string
+  data: ComponentData
+  options: Record<string, unknown>
+  id: string | null
+  icon: string
+  type: string
+  placeholder: string
+}
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tasks: Task[]
@@ -220,6 +216,7 @@ export type PubSubEvents = {
   DELETE_SUBSPELL: string
   OPEN_TAB: string
   TOGGLE_SNAP: string
+  RUN_AGENT: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $PLAYTEST_INPUT: (tabId: string) => string
@@ -235,10 +232,8 @@ export type PubSubEvents = {
   $SAVE_SPELL_DIFF: (tabId: string) => string
   $CREATE_MESSAGE_REACTION_EDITOR: (tabId: string) => string
   $CREATE_PLAYTEST: (tabId: string) => string
-  $CREATE_MEDIAWINDOW: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
-  $CREATE_PROJECT_WINDOW: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
   $RUN_SPELL: (tabId?: string) => string
@@ -250,6 +245,7 @@ export type PubSubEvents = {
   $MULTI_SELECT_COPY: (tabId: string) => string
   $MULTI_SELECT_PASTE: (tabId: string) => string
   $REFRESH_EVENT_TABLE: (tabId: string) => string
+  $RUN_AGENT: (tabId: string) => string
 }
 
 export interface PubSubContext {
@@ -351,24 +347,6 @@ export type ModuleType = {
   data: GraphData
   createdAt: string
   updatedAt: string
-}
-
-export type ModelCompletionOpts = {
-  model?: string
-  prompt?: string
-  maxTokens?: number
-  temperature?: number
-  topP?: number
-  n?: number
-  stream?: boolean
-  logprobs?: number
-  echo?: boolean
-  stop?: string | string[]
-  presencePenalty?: number
-  frequencyPenalty?: number
-  bestOf?: number
-  user?: string
-  logitBias?: { [token: string]: number }
 }
 
 export type Subspell = { name: string; id: string; data: GraphData }
@@ -503,13 +481,20 @@ export type MessagingWebhookBody = {
   To: string
 }
 
-export type CompletionType = 'image' | 'text' | 'audio'
+export type CompletionType = 'image' | 'text' | 'audio' | 'database'
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
 export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
 
 export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
+
+export type DatabaseCompletionSubtype =
+  | 'select'
+  | 'update'
+  | 'upsert'
+  | 'insert'
+  | 'delete'
 
 export type CompletionSocket = {
   socket: string
@@ -543,6 +528,7 @@ export type CompletionProvider = {
     | ImageCompletionSubtype
     | TextCompletionSubtype
     | AudioCompletionSubtype
+    | DatabaseCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs
@@ -610,10 +596,10 @@ export type ModuleContext = {
   context: EngineContext
   spellManager: SpellManager
   app: Application
+  agent?: any
   module: {
     secrets?: Record<string, string>
     publicVariables?: Record<string, string>
-    agent?: Agent
     app?: Application
     inputs: Record<string, unknown>
     outputs: Record<string, unknown>

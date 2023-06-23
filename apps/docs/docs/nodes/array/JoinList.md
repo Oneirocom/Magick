@@ -1,3 +1,3 @@
 # Join List
 
-The Join List component takes in an array, and will join each item in the array together with a seperator, defined in the components input field.
+Takes an input array and will join each item in the array into a single output string. The optional Separator property will separate each item in the array by the specified character or string.

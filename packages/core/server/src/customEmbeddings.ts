@@ -91,40 +91,35 @@ export class PluginEmbeddings extends Embeddings {
    * @returns {Promise<number[][]>}
    * @memberof PluginEmbeddings
    */
-  async embedDocumentsWithMeta(
-    document: string[],
-    params: EmbeddingArgs
-  ): Promise<number[][]> {
+  async embedDocumentsWithMeta(document, params) {
     if (!Array.isArray(document)) {
-      const wordsPerChunk = 8000
-      const strLength = (document as string).length
-      const output = []
-      for (let i = 0; i < strLength; i += wordsPerChunk) {
-        const chunk = (document as string).substring(i, i + wordsPerChunk)
-        output.push(chunk)
+      const wordsPerChunk = 8000;
+      const str = document as string;
+      const chunks = str.split('<<BREAK>>');
+      const output = [];
+      for (let i = 0; i < chunks.length; i++) {
+        const chunk = chunks[i];
+        const chunkLength = this.countWords(chunk);
+        const subChunks = [];
+        for (let j = 0; j < chunkLength; j += wordsPerChunk) {
+          const subChunk = chunk.substring(j, j + wordsPerChunk);
+          subChunks.push(subChunk);
+        }
+        output.push(subChunks);
       }
-      document = output
+      document = output.flat();
     }
-    // const subPrompts = chunkArray(
-    //   this.stripNewLines
-    //     ? document.map(t => t.replaceAll('\n', ' '))
-    //     : document,
-    //   this.batchSize
-    // )
-    const embeddings = []
-    for (let i = 0; i < document.length; i += 1) {
-      const input = document[i]
-      const response = await this.embeddingWithRetryWithMeta(
-        {
-          input: input as string,
-        },
-        params
-      )
-
-      embeddings.push(response.result)
+    
+    const embeddings = [];
+    for (let i = 0; i < document.length; i++) {
+      const input = document[i];
+      const response = await this.embeddingWithRetryWithMeta({ input: input as string }, params);
+      embeddings.push(response.result);
     }
-    return [embeddings, document]
+    
+    return [embeddings, document];
   }
+  
 
 
   /**
@@ -134,12 +129,13 @@ export class PluginEmbeddings extends Embeddings {
    * @returns {Promise<number[][]>}
    */
   async embeddingWithRetryWithMeta(embeddingObject, param: EmbeddingArgs) {
+    console.log(param)
     const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
     const provider = completionProviders.find(provider =>
       provider.models.includes(param.modelName)
     ) as CompletionProvider
     const handler = provider?.handler
-    let response
+    let response: any
     let retry = 0
     while (retry < 3) {
       try {
@@ -149,6 +145,7 @@ export class PluginEmbeddings extends Embeddings {
           outputs: undefined,
           context: { module: { secrets:JSON.parse(param["secrets"]) }, projectId: param.projectId },
         })
+        console.log(response.error)
         break
       } catch (e) {
         console.error(e)
@@ -158,6 +155,9 @@ export class PluginEmbeddings extends Embeddings {
     return response
   }
 
+  countWords(str) {
+    return str.trim().split(/\s+/).length;
+  }
   /**
    * Gets the embeddings for the given text.(Dummy Embeddings)
    * @param {string} words

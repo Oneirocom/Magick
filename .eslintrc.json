@@ -1,11 +1,7 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*",
-    "**/node_modules/**",
-    "**/*.d.ts"
-  ],
-  "plugins": ["@nrwl/nx"],
+  "ignorePatterns": ["!**/*", "**/node_modules/**", "**/*.d.ts"],
+  "plugins": ["@nx/eslint-plugin"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off"
   },
@@ -16,7 +12,7 @@
         "no-extra-semi": "off",
         "@typescript-eslint/no-extra-semi": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@nrwl/nx/enforce-module-boundaries": [
+        "@nx/enforce-module-boundaries": [
           "error",
           {
             "enforceBuildableLibDependency": true,
@@ -34,7 +30,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "extends": ["plugin:@nx/typescript"],
       "rules": {
         "@typescript-eslint/no-extra-semi": "off",
         "@typescript-eslint/no-explicit-any": "off",
@@ -44,7 +40,6 @@
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-unused-expressions": "off",
-        "@nrwl/nx/enforce-module-boundaries": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "no-extra-semi": "off",
         "react-hooks/exhaustive-deps": "off",
@@ -57,7 +52,7 @@
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
+      "extends": ["plugin:@nx/javascript"],
       "rules": {}
     },
     {

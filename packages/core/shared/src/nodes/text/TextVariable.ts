@@ -12,12 +12,17 @@ import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { anySocket } from '../../sockets'
-import { MagickNode, MagickWorkerInputs, MagickWorkerOutputs, WorkerData } from '../../types'
+import {
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  WorkerData,
+} from '../../types'
 
 /**
  * The text representing the TextVariable class.
  */
-const info = `Text Variable`
+const info = `Outputs a string specified in the text editor. Allows multi-line text (in contrast to the string variable which only allows a single line).`
 
 /**
  * The expected output of TextVariable class method builder.
@@ -34,11 +39,16 @@ export class TextVariable extends MagickComponent<InputReturn> {
    * Create a TextVariable.
    */
   constructor() {
-    super('Text Variable', {
-      outputs: {
-        output: 'output',
+    super(
+      'Text Variable',
+      {
+        outputs: {
+          output: 'output',
+        },
       },
-    }, 'Text', info)
+      'Text',
+      info
+    )
   }
 
   /**
@@ -79,12 +89,22 @@ export class TextVariable extends MagickComponent<InputReturn> {
    * @returns {InputReturn} - The outputs of the node. In this case, an object with the output
    * string.
    */
-  worker(node: WorkerData, _inputs: MagickWorkerInputs,
-    outputs: MagickWorkerOutputs, context: { module: { publicVariables: string } }) {
+  worker(
+    node: WorkerData,
+    _inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
+    context: { module: { publicVariables: string } }
+  ) {
     let text = node.data.fewshot as string
-    const publicVars = JSON.parse(context.module.publicVariables)
 
-    if(node?.data?.isPublic && publicVars[node.id]) {
+    let publicVars = context.module.publicVariables as {}
+
+    // if publicVars is a string, parse it into json
+    if (typeof publicVars === 'string') {
+      publicVars = JSON.parse(publicVars)
+    }
+
+    if (node?.data?.isPublic && publicVars[node.id]) {
       text = publicVars[node.id].value
     }
     return {

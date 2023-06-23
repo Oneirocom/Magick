@@ -36,6 +36,13 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
+    if (data.hasOwnProperty('secrets')) {
+      const {secrets, modelName, ...docData} = data as DocumentData & {secrets: string, modelName: string}
+
+      docdb.fromString(docData.content,docData,{modelName, projectId: docData?.projectId, secrets})
+
+      return docData;
+    }
     await docdb.from('documents').insert(data)
     return data
   }
@@ -45,8 +52,14 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: string): Promise<any> {
+  async remove(id: string, params): Promise<any> {
     const db = app.get('dbClient')
+
+    if(!id && params.projectId) {
+      // delete all documents of a project
+      return await db('documents').where('projectId', params.projectId).del()
+    }
+
     return await db('documents').where('id', id).del()
   }
 
@@ -72,20 +85,13 @@ export class DocumentService<
         })
         .select(
           db.raw(
-            `1 - (embedding <=> '${JSON.stringify(
+            `(embedding <=> '${JSON.stringify(
               params.query.embedding
-            )}') AS similarity`
-          )
-        )
-        .select(
-          db.raw(
-            `embedding <-> '${JSON.stringify(
-              params.query.embedding
-            )}' AS distance`
+            )}') AS distance`
           )
         )
         .orderBy('distance', 'asc')
-        .limit(10)
+        .limit(param.$limit)
       return { data: querys }
     }
     const res = await super.find(params)
@@ -102,8 +108,12 @@ export class DocumentService<
  */
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
     Model: app.get('dbClient'),
     name: 'documents',
+    multi: ['remove'],
   }
 }
