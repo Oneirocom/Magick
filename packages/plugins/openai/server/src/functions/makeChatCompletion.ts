@@ -111,6 +111,9 @@ export async function makeChatCompletion(
     const function_call =
       completion.data?.choices[0]?.message?.function_call?.arguments
 
+    console.log('completion.data', completion.data)
+    console.log('function_call', function_call)
+
     // Extract the result from the response
     const result =
       finishReason === 'function_call'

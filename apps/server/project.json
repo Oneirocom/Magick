@@ -7,7 +7,12 @@
     "@magickml/server-core",
     "@magickml/core",
     "@magickml/plugin-twitter-server",
+<<<<<<< Updated upstream
     "@magickml/plugin-discord-server"
+=======
+    "@magickml/plugin-discord-server",
+    "@magickml/plugin-openai-server"
+>>>>>>> Stashed changes
 ],
   "targets": {
     "build": {
