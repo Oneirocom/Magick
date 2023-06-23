@@ -131,40 +131,6 @@ export class Output extends MagickComponent<void> {
       event.connector
       || 'Default'
 
-<<<<<<< HEAD
-    if (agent) {
-      if (outputType && (outputType as string).includes('Default')) {
-        // If default handler, don't call the output type handler
-        // const type = pluginManager.getInputTypes().find(type => {
-        //   return type.name === event.connector?.replace('Input - ', '')
-        // })
-        // const responseOutputType = type?.defaultResponseOutput
-        // const out = module.agent.outputTypes.find(
-        //   t => t.name === responseOutputType
-        // )
-        // out.handler({
-        //   output,
-        //   agent: module.agent,
-        //   event,
-        // })
-      } else {
-        // Find the outputType in the outputTypes array
-        const t = agent.outputTypes.find(t => t.name === outputType)
-        // Find outputType in outputTypes where name is outputType
-        if (!t) {
-          console.error('output type is not defined', t)
-        } else if (!t.handler) {
-          console.error('output type handler is not defined', t)
-        } else {
-          t.handler({
-            output,
-            agent: agent,
-            event,
-          })
-        }
-      }
-    }
-=======
     // handle this being a subspell returning out
     if (outputType === 'Default') {
       // if event.type is playtest, stringify output
@@ -191,7 +157,6 @@ export class Output extends MagickComponent<void> {
     //       })
     //     }
     // }
->>>>>>> 554829a9dd3d6a2647a63452c8591c6644a4a506
 
     return {
       output,
