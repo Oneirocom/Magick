@@ -5,6 +5,8 @@
 export enum ChatModel {
   GPT4 = 'gpt-4',
   GPT35Turbo = 'gpt-3.5-turbo',
+  GPT4_0613 = 'gpt-4-0613',
+  GPT35Turbo_0613 = 'gpt-3.5-turbo-0613',
 }
 
 /**
@@ -48,7 +50,9 @@ export const COST_PER_TOKEN: CostPerToken<
   [TextModel.DAVINCI_001]: 0.02 / 1000,
   [ChatModel.GPT4]: 0.06 / 1000,
   [ChatModel.GPT35Turbo]: 0.002 / 1000,
-  [EmbeddingModel.ADA_002]: 0.0004 / 1000,
+  [ChatModel.GPT4_0613]: 0.06 / 1000,
+  [ChatModel.GPT35Turbo_0613]: 0.002 / 1000,
+  [EmbeddingModel.ADA_002]: 0.0001 / 1000,
   [EmbeddingModel.ADA_001]: 0.0004 / 1000,
 };
 
