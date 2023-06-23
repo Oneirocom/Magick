@@ -58,12 +58,10 @@ export const document = (app: Application) => {
 
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
-            console.log('searching by embedding')
             if (typeof embedding == 'string') embedding = JSON.parse(embedding)
             context.data.embedding = pgvector.toSql(embedding)
             return context
           } else {
-            console.log('searching by null array')
             context.data.embedding = pgvector.toSql(nullArray)
             return context
           }

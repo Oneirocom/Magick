@@ -68,7 +68,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
    */
   builder(node: MagickNode): MagickNode {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
-    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
     const out = new Rete.Output('events', 'Events', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -115,7 +114,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const lastMode = node.data.mode
     
     if(node.data.mode === RecallModes.MostRevelant || !node.data.mode) {
-      node.addInput(embedding)
+      node.addInput(new Rete.Input('embedding', 'Embedding', embeddingSocket))
     }
 
     // based on mode data we can show/hide the embedding input
@@ -126,12 +125,12 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           return;
         }
         // if the input is not already added, add it
-        if (!node.inputs.has('mode')) {
-          node.addInput(embedding)
+        if (!node.inputs.has('embedding')) {
+          node.addInput(new Rete.Input('embedding', 'Embedding', embeddingSocket))
         }
       } else {
         // if the input is already added, remove it
-        if (node.inputs.has('mode')) {
+        if (node.inputs.has('embedding')) {
           node.inputs.delete('embedding')
         }
       }
@@ -184,8 +183,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
 
     const {
-      observer,
-      sender,
       client,
       channel,
       connector,
@@ -211,10 +208,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     }
     const data = {
       type,
-      observer,
       client,
       entities,
-      sender,
       channel,
       connector,
       channelType,
@@ -227,7 +222,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       // no need to do anything, should just work
     } else if (filterBy === FilterTypes.AllInChannel) {
       // filter by observer but not sender
-      delete data['sender']
+      delete data['entities']
     } else if (filterBy === FilterTypes.AllFromSender) {
       // filter by sender but not channel
       delete data['channel']
@@ -236,11 +231,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       // filter by connector but not channel or sender
       delete data['channel']
       delete data['channelType']
-      delete data['sender']
+      delete data['entities']
     } else if (filterBy === FilterTypes.All) {
       // filter by all except sender, channel, and connector -- basically all for this observer
       delete data['channel']
-      delete data['sender']
+      delete data['entities']
       delete data['connector']
       delete data['channelType']
     }

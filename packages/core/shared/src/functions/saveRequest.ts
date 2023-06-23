@@ -47,6 +47,8 @@ export function saveRequest({
     model: model as any,
   }) : 0;
 
+  console.log('cost is', cost)
+
   // Calculate the request duration.
   const end = Date.now();
   const duration = end - startTime;
