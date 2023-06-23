@@ -231,15 +231,18 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     } else if (filterBy === FilterTypes.AllFromSender) {
       // filter by sender but not channel
       delete data['channel']
+      delete data['channelType']
     } else if (filterBy === FilterTypes.AllFromConnector) {
       // filter by connector but not channel or sender
       delete data['channel']
+      delete data['channelType']
       delete data['sender']
     } else if (filterBy === FilterTypes.All) {
       // filter by all except sender, channel, and connector -- basically all for this observer
       delete data['channel']
       delete data['sender']
       delete data['connector']
+      delete data['channelType']
     }
 
     if (embedding) {
