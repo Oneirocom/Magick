@@ -115,7 +115,10 @@ export async function makeChatCompletion(
     console.log('function_call', function_call)
 
     // Extract the result from the response
-    const result = completion.data?.choices[0]?.message?.content
+    const result =
+      finishReason === 'function_call'
+        ? function_call
+        : completion.data?.choices[0]?.message?.content
 
     // Log the usage of tokens
     const usage = completion.data.usage
@@ -143,11 +146,7 @@ export async function makeChatCompletion(
       return { success: true, result: function_call }
     }
 
-    if (
-      result &&
-      completion.data.choices &&
-      completion.data.choices.length > 0
-    ) {
+    if (result) {
       return { success: true, result }
     }
     return { success: false, error: 'No result' }

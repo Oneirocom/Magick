@@ -36,7 +36,7 @@ const textToSpeechControls = [
 
 // Object containing all input controls for different completion types
 const inspectorControls = {
-  text2speech: textToSpeechControls,
+  textToSpeech: textToSpeechControls,
 }
 
 // Creating a new elevenlabsPlugin instance

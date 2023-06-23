@@ -70,6 +70,7 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
+    console.log('Find: ', params.query)
     if (params.query.embedding) {
       const param = params.query
       const querys = await db('documents')

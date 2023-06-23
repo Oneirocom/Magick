@@ -15,18 +15,14 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  arraySocket,
+  booleanSocket,
 } from '@magickml/core'
-import { ChannelType } from '../types/ChannelType'
 
 /**
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  output: {
-    id: string,
-    name: string,
-  }[]
+  left: boolean
 }
 
 /**
@@ -34,20 +30,21 @@ type WorkerReturn = {
  * @category Discord
  * @remarks Must be paired with AgentExecutor.
  */
-export class DiscordListTextChannels extends MagickComponent<
+
+export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
   Promise<WorkerReturn>
 > {
   constructor() {
     super(
-      'Discord Text Channels',
+      'Leave Voice Channels In Server',
       {
         outputs: {
-          output: 'output',
           trigger: 'option',
+          left: 'output',
         },
       },
       'Discord',
-      'Gets the List of All text channels in a server'
+      'Leave any and all voice channels in a server'
     )
   }
 
@@ -59,14 +56,14 @@ export class DiscordListTextChannels extends MagickComponent<
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'Array', arraySocket)
+    const outp = new Rete.Output('left', 'Left', booleanSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
   }
 
   /**
-   * The worker function for the Discord List Text Channels node.
+   * The worker function for the Discord List Voice Channels node.
    * @param node - WorkerData object
    * @param inputs - MagicWorkerInputs object
    * @param _outputs - MagicWorkerOutputs object
@@ -81,10 +78,8 @@ export class DiscordListTextChannels extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
-      return {
-        output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
-      }
+      console.warn('Skipping node since there is no agent available')
+      return { left: false };
     }
 
     const event = // event data is inside a task?
@@ -100,29 +95,26 @@ export class DiscordListTextChannels extends MagickComponent<
 
     const channel = event.channel // channel in which the message was sent
 
-    // fetch the channel using its ID
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    async function leaveVoiceChannelInGuild(client, channelId) {
+      const channel = await client.channels.fetch(channelId);
+      const guild = channel.guild;
+      console.log('*** guild', guild)
+      const voice = client.voiceFunctions
+      console.log('*** voice', voice)
+      const { getVoiceConnection } = voice as any
+      console.log('*** getVoiceConnection', getVoiceConnection)
+      const connection = getVoiceConnection(guild.id, 'default_' + agent.id);
 
-    if (!fetchedChannel) {
-      throw new Error('Channel not found')
+      if(!connection)
+        return false
+      connection.destroy()
+      return true
     }
 
-    if (fetchedChannel.type !== ChannelType.GuildText) {
-      throw new Error('Event channel must be a text channel')
+    const left = await leaveVoiceChannelInGuild(discordClient, channel)
+
+    return {
+      left
     }
-
-    // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild;
-
-    // get the list of text channels
-    const textChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildText);
-
-    // return the list of text channels as an array
-    const textChannelArray = textChannels.map(channel => ({
-      id: channel.id,
-      name: channel.name,
-    }));
-
-    return { output: textChannelArray };
   }
 }

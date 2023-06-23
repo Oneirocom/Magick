@@ -9,7 +9,8 @@
     "@magickml/plugin-twitter-server",
     "@magickml/plugin-discord-server",
     "@magickml/plugin-openai-server"
-  ],  "targets": {
+  ],
+  "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
       "outputs": [

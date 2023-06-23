@@ -31,10 +31,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       name: 'Component Name',
     })
 
-    // checkbox for [must match] and [dont match]
-
-    // list of words to match beginning
-
     const matchBeginningString = new InputControl({
       dataKey: 'matchBeginningString',
       name: 'Match Beginning (, separated)',
@@ -93,10 +89,8 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     const matchBeginning =
       (inputs['matchBeginning'] as string[]) &&
       (inputs['matchBeginning'][0] as string)
-
     const matchEnd =
       (inputs['matchEnd'] as string[]) && (inputs['matchEnd'][0] as string)
-
     const matchAny =
       (inputs['matchAny'] as string[]) && (inputs['matchAny'][0] as string)
 
@@ -202,7 +196,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
     }
 
     this._task.closed =
-    !invalidated &&
-    isMatched ? ['false'] : ['true']
+      !invalidated &&
+        isMatched ? ['false'] : ['true']
   }
 }

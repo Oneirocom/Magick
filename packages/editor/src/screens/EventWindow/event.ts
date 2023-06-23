@@ -7,6 +7,7 @@ export interface Column {
     | 'content'
     | 'type'
     | 'channel'
+    | 'channelType'
     | 'observer'
     | 'date'
   label: string
@@ -23,6 +24,7 @@ export const columns: Column[] = [
   { id: 'type', label: 'Type', minWidth: 65 },
   { id: 'channel', label: 'Channel', minWidth: 65 },
   { id: 'observer', label: 'Observer', minWidth: 65 },
+  { id: 'channelType', label: 'Channel Type', minWidth: 65 },
   { id: 'date', label: 'Date', minWidth: 65 },
 ]
 
@@ -34,6 +36,7 @@ export interface EventData {
   content: string
   type: string
   channel: string
+  channelType: string
   observer: string
   date: string
 }

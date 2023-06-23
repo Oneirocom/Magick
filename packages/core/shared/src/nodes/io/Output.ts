@@ -112,7 +112,8 @@ export class Output extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
-    const { data, agent } = context
+    console.log('handling output node')
+    const { data } = context
 
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
@@ -122,12 +123,15 @@ export class Output extends MagickComponent<void> {
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    const output = inputs.input.filter(Boolean)[0] as string
-    const outputType =
-      (node.data.outputType !== 'Default' && node.data.outputType) ||
-      inputName?.replace('Input - ', '') ||
-      event.connector
+    const output = inputs.input[0] as string
 
+    const outputType =
+      (!(node.data.outputType as any)?.includes('Default') && node.data.outputType) ||
+      (!inputName?.includes('Default') && inputName?.replace('Input - ', '')) ||
+      event.connector
+      || 'Default'
+
+<<<<<<< HEAD
     if (agent) {
       if (outputType && (outputType as string).includes('Default')) {
         // If default handler, don't call the output type handler
@@ -160,6 +164,34 @@ export class Output extends MagickComponent<void> {
         }
       }
     }
+=======
+    // handle this being a subspell returning out
+    if (outputType === 'Default') {
+      // if event.type is playtest, stringify output
+      if (event.type === 'playtest') {
+        return { output: JSON.stringify(output) }
+      }
+      return { output }
+    }
+
+    // if (agent && !(node.data.outputType as any)?.includes('Default')) {
+    //   console.log('outputting, agent loop')
+    //     // Find the outputType in the outputTypes array
+    //     const t = agent.outputTypes.find(t => t.name === outputType)
+    //     // Find outputType in outputTypes where name is outputType
+    //     if (!t) {
+    //       console.error('output type is not defined', t)
+    //     } else if (!t.handler) {
+    //       console.error('output type handler is not defined', t)
+    //     } else {
+    //       t.handler({
+    //         output,
+    //         agent: agent,
+    //         event,
+    //       })
+    //     }
+    // }
+>>>>>>> 554829a9dd3d6a2647a63452c8591c6644a4a506
 
     return {
       output,

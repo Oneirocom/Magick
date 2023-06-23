@@ -149,6 +149,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
         embedding,
       },
     })
+    console.log('response.data', response.data)
     // Return the result for output
     return {
       documents: response.data as Document[]

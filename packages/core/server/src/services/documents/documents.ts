@@ -42,16 +42,7 @@ export const document = (app: Application) => {
         schemaHooks.resolveQuery(documentQueryResolver),
       ],
       find: [],
-      get: [
-        (context: HookContext) => {
-          const { getEmbedding } = context.params.query
-          if (getEmbedding) {
-            // context.params.query.$limit = 1
-            context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
-          }
-          return context
-        },
-      ],
+      get: [],
       // Optimize the create operation
       create: [
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
@@ -67,10 +58,12 @@ export const document = (app: Application) => {
 
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {
+            console.log('searching by embedding')
             if (typeof embedding == 'string') embedding = JSON.parse(embedding)
             context.data.embedding = pgvector.toSql(embedding)
             return context
           } else {
+            console.log('searching by null array')
             context.data.embedding = pgvector.toSql(nullArray)
             return context
           }
