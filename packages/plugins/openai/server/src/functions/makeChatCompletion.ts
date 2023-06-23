@@ -24,6 +24,7 @@ export async function makeChatCompletion(
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
+  const func = inputs['function']?.[0] as string
 
   // Get or set default settings
   const settings = {
@@ -70,6 +71,9 @@ export async function makeChatCompletion(
 
   // Update the settings messages
   settings.messages = messages
+  if(func && func !== '') {
+    settings.functions = [func]
+  }
 
   // Create request headers
   const headers = {
@@ -90,8 +94,11 @@ export async function makeChatCompletion(
       console.error('OpenAI Error', completion.data.error)
     }
 
+    const finishReason = completion.data?.choices[0]?.finish_reason
+    const function_call = completion.data?.choices[0]?.message?.function_call?.arguments
+
     // Extract the result from the response
-    const result = completion.data?.choices[0]?.message?.content
+    const result = finishReason === 'function_call' ? function_call : completion.data?.choices[0]?.message?.content
 
     // Log the usage of tokens
     const usage = completion.data.usage
@@ -115,10 +122,14 @@ export async function makeChatCompletion(
       nodeId: node.id,
     })
 
+
+    if(function_call) {
+      const function_result = function_call[0].value
+      return { success: true, result: function_result }
+    }
+
     if (
-      result &&
-      completion.data.choices &&
-      completion.data.choices.length > 0
+      result
     ) {
       return { success: true, result }
     }
