@@ -61,8 +61,8 @@ export class LessThan extends MagickComponent<void> {
    * @param inputs - The MagickWorkerInputs instance
    */
   worker(node: WorkerData, inputs: MagickWorkerInputs): void {
-    const value = (inputs['value'][0] as number) ?? (node.data.value as number)
-    const numberToTest = inputs['input'][0] as number
+    const value = (inputs['value']?.[0] as number) ?? (node.data.value as number)
+    const numberToTest = inputs['input']?.[0] as number
 
     if (numberToTest < value) {
       this._task.closed = ['false']

@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 interface Props {
   Icon: React.ReactNode; // Icon component to be rendered
   label: string; // Aria-label for the IconButton
-  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void; // Optional onClick handler
+  onClick?: (e) => void; // Optional onClick handler
   style?: React.CSSProperties; // Optional custom styles
 }
 
@@ -18,7 +18,7 @@ interface Props {
  * @param {Props} props - IconBtn component properties
  * @returns {React.ReactElement} - Rendered IconBtn component
  */
-export const IconBtn: React.FunctionComponent<Props> = (props: Props): React.ReactElement => {
+export const IconBtn: React.FunctionComponent<Props> = (props: Props): JSX.Element => {
   const { Icon, label, onClick, style } = props;
 
   return (

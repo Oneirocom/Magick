@@ -96,12 +96,16 @@ const LayoutProvider = ({ children, tab }) => {
     if (!currentModel) return
 
     const rootNode = currentModel.getRoot()
+    // Note: For some reason we arent picking up the types for the flexlayout-react library properly
+    // However if you look at the source code for the library, you can see that the types are correct
+    //@ts-ignore
     const tabNode = new TabNode(currentModel, tabJson)
+    //@ts-ignore
     const tabSetNode = new TabSetNode(currentModel, {
       type: 'tabset',
       weight: 12,
     })
-
+    //@ts-ignore
     rootNode._addChild(tabSetNode)
 
     currentModel.doAction(
@@ -118,9 +122,12 @@ const LayoutProvider = ({ children, tab }) => {
   const createOrFocus = (componentName, title) => {
     if (!currentModelRef.current) return
 
+    // id map does exist
+    // @ts-ignore
     const component = Object.entries(currentModelRef.current._idMap).find(
       ([, value]) => {
-        return value._attributes?.component === componentName
+        // hacky typing
+        return (value as any)._attributes?.component === componentName
       }
     )
 

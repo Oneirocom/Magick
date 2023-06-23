@@ -10,7 +10,7 @@ import React, { useRef } from 'react'
 import { OpenAI } from '../types/openai'
 import { Enforce, MimeTypes } from './useUploadFile'
 import Button from '@mui/material/Button'
-import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/core'
+import { DEFAULT_PROJECT_ID, API_ROOT_URL } from '@magickml/config'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import axios from 'axios'
 import { extractPromptsAndCompletions } from '../documents/documentLoader'
@@ -37,7 +37,7 @@ export default function GetRecordsButton({ enforce, purpose }: Props) {
   /**
    * Calls the upload function when the user selects a file
    */
-  async function onChange() {}
+  async function onChange() { }
 
   async function get_record(): Promise<void> {
     const projectId = DEFAULT_PROJECT_ID

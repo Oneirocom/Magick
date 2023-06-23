@@ -12,6 +12,7 @@ import { useLipSync } from '../../hooks/useLipSync'
 import { useAgentList } from '../../hooks/useAgentList'
 import { useZustand } from '../../store/useZustand'
 import { usePubSub } from '@magickml/client-core'
+import { nullEvent } from 'xstate/lib/actionTypes'
 
 const voices = {
   'Female 1': '1QnOliOAmerMUNuo2wXoH-YoainoSjZen',
@@ -65,7 +66,7 @@ const SpeechRecognition =
 
 export default function ChatBox() {
   const [micEnabled, setMicEnabled] = useState(false)
-  const [speechRecognition, setSpeechRecognition] = useState(false)
+  const [speechRecognition, setSpeechRecognition] = useState<typeof SpeechRecognition | null>(null)
   const { avatarVrm } = useZustand()
   const lipSync = useLipSync(avatarVrm)
   const agentList = useAgentList()

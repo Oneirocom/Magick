@@ -8,7 +8,7 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
@@ -195,8 +195,8 @@ function RequestTable({ requests, updateCallback }) {
     []
   )
 
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
-    setSortBy } =
+  // @ts-ignore
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter }, setSortBy } =
     useTable(
       {
         columns: defaultColumns,
