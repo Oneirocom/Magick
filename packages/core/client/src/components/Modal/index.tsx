@@ -24,7 +24,7 @@ interface Props {
   onClose: () => void
   handleAction?: () => void
   children?: React.ReactNode
-  showSaveBtn: boolean
+  showSaveBtn?: boolean
 }
 
 export const Modal = ({
@@ -34,7 +34,7 @@ export const Modal = ({
   submitText,
   title,
   children,
-  showSaveBtn=true,
+  showSaveBtn = true,
 }: Props) => {
   return (
     <Dialog

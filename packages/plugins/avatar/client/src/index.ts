@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 import AvatarIcon from '@mui/icons-material/AccountCircle'
 import App from './App'
 
 /**
- * This module provides an AvatarPlugin to be used 
+ * This module provides an AvatarPlugin to be used
  * with the @magickml/core client-side library.
  * @module AvatarPlugin
  */
@@ -29,7 +29,8 @@ const AvatarPlugin = new ClientPlugin({
     {
       path: '/avatar',
       component: App,
-    }
+      plugin: 'AvatarPlugin',
+    },
   ],
 })
 

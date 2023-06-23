@@ -1,12 +1,12 @@
 import { FC } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import styles from './styles.module.css';
-import { Spell } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
 
 interface Props {
-  spell: Spell;
-  spells: Spell[];
-  onSpellChange: (spell: Spell) => void;
+  spell: SpellInterface;
+  spells: SpellInterface[];
+  onSpellChange: (spell: SpellInterface) => void;
 }
 
 export const SpellSelect: FC<Props> = ({ spell, spells, onSpellChange }) => {
@@ -19,7 +19,7 @@ export const SpellSelect: FC<Props> = ({ spell, spells, onSpellChange }) => {
           placeholder="Select a model"
           value={spell?.id ?? spells[0]?.id}
           onChange={(e) => {
-            onSpellChange(spells.find((spell) => spell?.id === e.target.value) as Spell);
+            onSpellChange(spells.find((spell) => spell?.id === e.target.value) as SpellInterface);
           }}
         >
           {spells.map((spell) => (

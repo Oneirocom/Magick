@@ -6,11 +6,11 @@ import { ChatMessage } from "./ChatMessage";
 import { SpellSelect } from "./SpellSelect";
 import { Regenerate } from "./Regenerate";
 import chatStyles from './styles.module.css';
-import { Spell } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
 
 interface Props {
   conversation: Conversation;
-  spells: Spell[];
+  spells: SpellInterface[];
   messageIsStreaming: boolean;
   chatError: boolean;
   messageError: boolean;

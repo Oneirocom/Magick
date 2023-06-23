@@ -3,12 +3,12 @@ import { Button } from '@magickml/client-core'
 import styles from './styles.module.css';
 import magickCSS from '../../../Magick/magick.module.css'
 
-import { Spell } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
 import { Message } from "../../../../types";
 interface Props {
   messageIsStreaming: boolean;
   onSend: (message: Message) => void;
-  spell: Spell;
+  spell: SpellInterface;
   stopConversationRef: MutableRefObject<boolean>;
 }
 

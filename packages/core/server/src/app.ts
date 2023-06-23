@@ -15,11 +15,9 @@ import {
 import socketio from '@feathersjs/socketio'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import sync from 'feathers-sync'
-import {
-  configureManager,
-  globalsManager,
-  REDISCLOUD_URL,
-} from '@magickml/core'
+import { configureManager, globalsManager } from '@magickml/core'
+
+import { REDISCLOUD_URL } from '@magickml/config'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
@@ -73,9 +71,9 @@ export async function initApp() {
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
   // sync up messages between the app and the runner
-  logger.debug("checking for REDISCLOUD_URL")
+  logger.debug('checking for REDISCLOUD_URL')
   if (REDISCLOUD_URL) {
-    logger.info("SETTING UP REDIS")
+    logger.info('SETTING UP REDIS')
     app.configure(
       sync({
         uri: REDISCLOUD_URL,

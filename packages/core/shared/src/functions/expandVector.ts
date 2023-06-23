@@ -1,4 +1,4 @@
-export default function expandVector(
+export function expandVector(
   inputVector: number[],
   newLength: number
 ): number[] {
