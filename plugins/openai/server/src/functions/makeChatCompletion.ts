@@ -2,7 +2,7 @@
 import {
   ChatMessage,
   CompletionHandlerInputData,
-  saveRequest
+  saveRequest,
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
@@ -24,6 +24,7 @@ export async function makeChatCompletion(
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
+  let func = inputs['function']?.[0] as string
 
   // Get or set default settings
   const settings = {
@@ -70,12 +71,28 @@ export async function makeChatCompletion(
 
   // Update the settings messages
   settings.messages = messages
+  if (func && func !== '') {
+    // if func is a string, it's propbably an unescaped string of json
+    // first, check if it's json
+    if (func[0] === '{' && func[func.length - 1] === '}') {
+      try {
+        // then parse the json
+        func = JSON.parse(func)
+        console.log('parsed function', func)
+      } catch (e) {
+        console.error('Error parsing function', e)
+      }
+    }
+    settings.functions = [func]
+  }
 
   // Create request headers
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + context.module.secrets!['openai_api_key'],
   }
+
+  console.log('settings.functions', settings)
 
   try {
     const start = Date.now()
@@ -89,6 +106,13 @@ export async function makeChatCompletion(
     if (completion.data.error) {
       console.error('OpenAI Error', completion.data.error)
     }
+
+    const finishReason = completion.data?.choices[0]?.finish_reason
+    const function_call =
+      completion.data?.choices[0]?.message?.function_call?.arguments
+
+    console.log('completion.data', completion.data)
+    console.log('function_call', function_call)
 
     // Extract the result from the response
     const result = completion.data?.choices[0]?.message?.content
@@ -114,6 +138,10 @@ export async function makeChatCompletion(
       spell: context.currentSpell,
       nodeId: node.id,
     })
+
+    if (function_call) {
+      return { success: true, result: function_call }
+    }
 
     if (
       result &&
