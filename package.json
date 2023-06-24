@@ -42,10 +42,10 @@
   "dependencies": {
     "@atproto/api": "0.3.8",
     "@banana-dev/banana-dev": "4.0.0",
-    "@discordjs/opus": "^0.9.0",
+    "@discordjs/opus": "0.9.0",
     "@discordjs/voice": "0.16.0",
-    "@docusaurus/core": "^3.0.0-alpha.0",
-    "@docusaurus/preset-classic": "^3.0.0-alpha.0",
+    "@docusaurus/core": "2.4.1",
+    "@docusaurus/preset-classic": "2.4.1",
     "@emotion/styled": "11.11.0",
     "@esbuild-plugins/node-globals-polyfill": "0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "0.2.2",
@@ -64,7 +64,7 @@
     "@feathersjs/transport-commons": "5.0.5",
     "@feathersjs/typebox": "5.0.5",
     "@google-cloud/local-auth": "2.1.1",
-    "@google-cloud/speech": "^5.5.0",
+    "@google-cloud/speech": "5.5.0",
     "@google-cloud/text-to-speech": "4.2.2",
     "@koa/cors": "4.0.0",
     "@koa/router": "12.0.0",
@@ -126,6 +126,7 @@
     "filesize": "10.0.7",
     "flatted": "3.2.7",
     "flexlayout-react": "0.7.7",
+    "fs-blob-store": "6.0.0",
     "glob": "10.2.6",
     "googleapis": "118.0.0",
     "graphql": "16.6.0",
@@ -185,7 +186,7 @@
     "react-custom-scrollbars-2": "4.5.0",
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.3",
-    "react-github-custom-login": "^1.0.8",
+    "react-github-custom-login": "1.0.9",
     "react-hook-form": "7.43.9",
     "react-hotkeys-hook": "4.4.0",
     "react-icons": "4.8.0",
@@ -252,7 +253,7 @@
     "zustand": "4.3.8"
   },
   "peerDependencies": {
-    "@discordjs/opus": "^0.9.0",
+    "@discordjs/opus": "0.9.0",
     "jsdom": "21.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -266,7 +267,7 @@
     "@capacitor/cli": "5.0.4",
     "@capacitor/core": "5.0.4",
     "@capacitor/ios": "5.0.4",
-    "@docusaurus/module-type-aliases": "3.0.0-alpha.0",
+    "@docusaurus/module-type-aliases": "2.4.1",
     "@feathersjs/cli": "5.0.5",
     "@feathersjs/rest-client": "5.0.5",
     "@nx-plus/docusaurus": "15.0.0-rc.0",
@@ -372,6 +373,14 @@
         "react": "$react",
         "react-dom": "$react-dom"
       }
+    },
+    "@docusaurus/core": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@docusaurus/preset-classic": {
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   }
 }
