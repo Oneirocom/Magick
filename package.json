@@ -261,7 +261,7 @@
     "@babel/plugin-transform-typescript": "7.21.3",
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.21.5",
-    "@capacitor-community/electron": "^1.4.2",
+    "@capacitor-community/electron": "^4.1.2",
     "@capacitor/android": "5.0.4",
     "@capacitor/cli": "5.0.4",
     "@capacitor/core": "5.0.4",
