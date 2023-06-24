@@ -85,7 +85,6 @@ export class AgentManager {
       }
 
       const id = oldAgent.id
-      console.log('Agent has been updated, destroying old agent', id)
 
       const agent = this.agents[id]
       await agent.onDestroy()
