@@ -23,7 +23,7 @@ const secrets: PluginSecret[] = [
 const completionProviders: CompletionProvider[] = [
   {
     type: "audio",
-    subtype: "text2speech",
+    subtype: "textToSpeech",
     inputs: [
       {
         socket: "input",

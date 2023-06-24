@@ -483,11 +483,11 @@ export type MessagingWebhookBody = {
 
 export type CompletionType = 'image' | 'text' | 'audio' | 'database'
 
-export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
+export type ImageCompletionSubtype = 'textToimage' | 'image2image' | 'image2text'
 
 export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
 
-export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
+export type AudioCompletionSubtype = 'textTospeech' | 'textToaudio'
 
 export type DatabaseCompletionSubtype =
   | 'select'
