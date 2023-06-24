@@ -51,11 +51,9 @@ export const event = (app: Application) => {
       find: [],
       get: [
         (context: HookContext) => {
-          // Used by the "Find Text Embedding" node for getting cached embeddings
-          // We want to find an entry that has an embedding and is not null
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
-            context.params.query.$limit = 1
+            // context.params.query.$limit = 1
             context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
           }
           return context

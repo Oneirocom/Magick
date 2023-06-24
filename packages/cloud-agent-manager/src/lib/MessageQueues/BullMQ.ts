@@ -1,7 +1,6 @@
 import { Queue } from "bullmq"
 import pino from "pino"
-import { getLogger } from "@magickml/core"
-import { bullMQConnection } from '@magickml/config'
+import { bullMQConnection, getLogger } from "@magickml/core"
 
 import { MessageQueue, Job, JobType } from "../MessageQueue"
 

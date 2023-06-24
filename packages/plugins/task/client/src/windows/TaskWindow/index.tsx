@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import TaskTable from './TaskTable'
+import { method } from 'lodash'
 
 /**
  * Defines the properties of an task.
@@ -50,7 +51,10 @@ const TaskWindow = (): JSX.Element => {
         }
       )
 
+      console.log('tasks', response)
+
       const data = await response.json()
+      console.log('data', data)
       setTasks(data.data)
     } catch (error) {
       console.log(error)

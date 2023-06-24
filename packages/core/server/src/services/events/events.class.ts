@@ -44,55 +44,72 @@ export class EventService<
   // @ts-ignore
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
-
-    const entities = params?.query?.entities
-    // entities is an array of strings
-
-    const query = db.from('events').select('*')
-
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
       const dv = new DataView(ary_buf)
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
-
-      query.select(
-        db.raw(
-          `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
+      const param = params.query
+      const res = await db
+        .from('events')
+        .select('*')
+        .where({
+          ...(param.type && { type: param.type }),
+          ...(param.id && { id: param.id }),
+          ...(param.sender && { sender: param.sender }),
+          ...(param.client && { client: param.client }),
+          ...(param.channel && { channel: param.channel }),
+          ...(param.projectId && { projectId: param.projectId }),
+          ...(param.content && { content: param.content }),
+        })
+        .select(
+          db.raw(
+            `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
+          )
         )
-      )
-      query.orderBy('distance', 'asc')
-    } else {
-      // If not searching by embedding, perform a normal query
-      query.orderBy('date', 'desc')
+        .orderBy('distance', 'asc')
+        .limit(params.query['$limit'])
+
+      return { events: res }
     }
 
-    if (entities && entities.length > 0) {
-      // Safely check if all entities are included in the `entities` column
-      entities.forEach(entity => {
-        query.whereRaw(`'${entity}' = ANY (entities)`)
-      })
-    }
-
+    // If not searching by embedding, perform a normal query
     const param = params.query
-    if (param.type) query.where({ type: param.type })
-    if (param.id) query.where({ id: param.id })
-    if (param.client) query.where({ client: param.client })
-    if (param.channel) query.where({ channel: param.channel })
-    if (param.projectId) query.where({ projectId: param.projectId })
-    if (param.content && params.query.embedding)
-      query.where({ content: param.content })
 
-    query.limit(params.query['$limit'])
-
-    const res = await query
-
-    if (!params.query.embedding) {
-      res.reverse()
-    }
+    const res = await db
+      .from('events')
+      .select('*')
+      .where({
+        ...(param.type && { type: param.type }),
+        ...(param.id && { id: param.id }),
+        ...(param.sender && { sender: param.sender }),
+        ...(param.client && { client: param.client }),
+        ...(param.channel && { channel: param.channel }),
+        ...(param.projectId && { projectId: param.projectId }),
+      })
+      // get the newest events first
+      .orderBy('date', 'desc')
+      // limit the number of events returned
+      .limit(params.query['$limit'])
+      // reverse the order of the events so that the newest events are last
+      .then((res: any) => res.reverse())
 
     return { events: res as unknown as { data: Array<any> } }
+  }
+
+  /**
+   * Remove events.
+   * This function removes events from the database.
+   * @param {string[]} id - The ID of the event to remove.
+   * @returns {Promise<any>} - The removed event data.
+   */
+  // @ts-ignore
+  async remove(id: string): Promise<any> {
+    const ids = id.split('&')
+    const db = app.get('vectordb')
+    const res = await db.from('events').whereIn('id', ids).del()
+    return res
   }
 }
 
