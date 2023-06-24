@@ -22,7 +22,7 @@ import {
 } from 'react-table'
 import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
-import { Delete, Refresh, MoreHoriz } from '@mui/icons-material'
+import { Delete,Refresh, MoreHoriz } from '@mui/icons-material'
 import { TableComponent, useFeathers } from '@magickml/client-core'
 import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
@@ -113,25 +113,25 @@ function RequestTable({ requests, updateCallback }) {
     setSelectedRows([]);
   }
 
-  // Handle events deletion
-  const handleDeleteMany = async (event: any) => {
-    const isDeleted: Array<unknown> = await client.service('request').remove(null, {
-      query: {
-        id: {
-          $in: selectedRows
+    // Handle events deletion
+    const handleDeleteMany = async (event: any) => {
+      const isDeleted: Array<unknown> = await client.service('request').remove(null, {
+        query: {
+          id: {
+            $in: selectedRows
+          }
         }
+      })
+      if (isDeleted) {
+        enqueueSnackbar('Requests deleted', { variant: 'success' });
+        updateCallback();
+      } else {
+        enqueueSnackbar('Error deleting Requests', { variant: 'error' });
       }
-    })
-    if (isDeleted) {
-      enqueueSnackbar('Requests deleted', { variant: 'success' });
-      updateCallback();
-    } else {
-      enqueueSnackbar('Error deleting Requests', { variant: 'error' });
+    
+      // Clear the selected rows
+      setSelectedRows([]);
     }
-
-    // Clear the selected rows
-    setSelectedRows([]);
-  }
 
 
   const defaultColumns = useMemo(
@@ -206,7 +206,7 @@ function RequestTable({ requests, updateCallback }) {
       useGlobalFilter,
       useSortBy,
       usePagination
-    )
+    ) 
 
   // Handle page change
   const handlePageChange = (page: number) => {

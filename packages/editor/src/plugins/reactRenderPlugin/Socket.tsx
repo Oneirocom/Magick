@@ -29,18 +29,19 @@ export class Socket extends React.Component<SocketProps> {
    * Ref function that sets the ref to the inner div element.
    * @param el The DOM element.
    */
-  createRef = (el: HTMLDivElement | null, innerRef, type, io) => {
+  createRef = (el: HTMLDivElement | null) => {
+    const { innerRef, type, io } = this.props;
+
     el && innerRef(el, type, io);
   };
 
   render() {
-    const { socket, type, io, innerRef } = this.props;
-
+    const { socket, type } = this.props;
     return (
       <div
         className={`socket ${type} ${kebab(socket.name)}`}
         title={socket.name}
-        ref={(e) => this.createRef(e, innerRef, type, io)} // force update for new IO with a same key
+        ref={this.createRef} // force update for new IO with a same key
       >
         <div className={`expanding ${kebab(socket.name)}`}></div>
       </div>

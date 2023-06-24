@@ -120,7 +120,8 @@ const AgentDetails = ({
       if (
         key.includes('api') ||
         key.includes('token') ||
-        key.includes('secret')
+        key.includes('secret') ||
+        key.includes('password')
       ) {
         delete exportAgentData.data[key]
       }

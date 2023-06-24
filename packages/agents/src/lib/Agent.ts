@@ -11,7 +11,10 @@ import {
   SpellInterface,
   getLogger,
 } from '@magickml/core'
-import { PING_AGENT_TIME_MSEC, bullMQConnection } from '@magickml/config'
+import {
+  bullMQConnection,
+  PING_AGENT_TIME_MSEC
+} from '@magickml/config'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
 import { AgentManager } from './AgentManager'
@@ -76,7 +79,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
     this.spellManager = spellManager
     ;(async () => {
-      console.log('agentData', agentData)
       if (!agentData.rootSpell) {
         this.logger.warn('No root spell found for agent: %o', {
           id: this.id,

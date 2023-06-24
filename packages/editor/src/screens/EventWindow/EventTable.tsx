@@ -78,7 +78,6 @@ function EventTable({ events, updateCallback }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
-  const [currentPage, setCurrentPage] = useState(0)
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
@@ -178,9 +177,6 @@ function EventTable({ events, updateCallback }) {
       {
         columns: defaultColumns,
         data: events,
-        initialState : {
-          pageIndex: currentPage 
-        }
       },
       useFilters,
       useGlobalFilter,
@@ -216,7 +212,6 @@ function EventTable({ events, updateCallback }) {
   // // Handle pagination
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
-    setCurrentPage(pageIndex)
     gotoPage(pageIndex)
   }
 
@@ -251,15 +246,6 @@ function EventTable({ events, updateCallback }) {
     })
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
-
-    //navigate user to previous page if rows are empty
-    if (page.length === 1) {
-      const pageIndex = currentPage - 1
-      setCurrentPage(pageIndex)
-      gotoPage(pageIndex)
-    }
-
-
     // close the action menu
     handleActionClose()
     updateCallback()
@@ -270,8 +256,6 @@ function EventTable({ events, updateCallback }) {
     () => flatRows.map(row => row.original),
     [flatRows]
   )
-
-  
 
   // Render the table with useMemo
   return (
