@@ -12,7 +12,9 @@ import { useConfig } from '@magickml/client-core'
  */
 interface Props {
   data: Array<object>
-  selectedAgentData: object
+  selectedAgentData: {
+    id: string
+  }
   onLoadEnables: object
   setSelectedAgentData: (data: object) => void
   onCreateAgent: (data: any) => void

@@ -1,13 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { Spell } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
 
 import {
   useLazyGetSpellByIdQuery
 } from '../../../state/api/spells'
-import { useFeathers } from '../../../../../core/client/src/providers/FeathersProvider'
 
-import { useConfig } from '@magickml/client-core'
+import { useConfig, useFeathers } from '@magickml/client-core'
 
 const EventHandler = ({ pubSub, conversation }) => {
   const config = useConfig()
@@ -16,12 +15,14 @@ const EventHandler = ({ pubSub, conversation }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
+    // not sure why but typing for this is broken so using ts-ignore for now
+    // @ts-ignore
     spellName: conversation.name.split('--')[0],
     id: conversation.id,
     projectId: config.projectId,
   })
   // Spell ref because callbacks cant hold values from state without them
-  const spellRef = useRef<Spell | null>(null)
+  const spellRef = useRef<SpellInterface | null>(null)
 
   const FeathersContext = useFeathers()
   const client = FeathersContext.client

@@ -1,10 +1,9 @@
 // DOCUMENTED
-import { useProjectWindow } from '@magickml/client-core'
+import { useProjectWindow, usePubSub } from '@magickml/client-core'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { usePubSub } from '../../../../core/client/src/providers/PubSubProvider'
 import { useModal } from '../../contexts/ModalProvider'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'

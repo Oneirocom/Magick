@@ -12,14 +12,14 @@
 }
 
 .checkbox {
-  color: #ad3ab3 !important;
+  color: var(--primary) !important;
 }
 .selectedRow {
-  background: #690a6d !important;
+  background: var(--primary-dark) !important;
 }
 
 .tableCellHeader {
-  background: #39103f !important;
+  background: var(--primary-dark) !important;
   color: var(--dark-5) !important;
   span {
     font-weight: bold;

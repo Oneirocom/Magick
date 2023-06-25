@@ -1,7 +1,7 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import {
   Grid,
   IconButton,
@@ -235,7 +235,7 @@ function TaskTable({ tasks, updateCallback }) {
         <Button
           style={{
             display: 'inline',
-            backgroundColor: 'purple',
+            backgroundColor: 'var(--primary-dark)',
             border: 'none',
             color: 'white',
             marginRight: '.5em',
@@ -261,7 +261,7 @@ function TaskTable({ tasks, updateCallback }) {
             style={{
               textDecoration: 'none',
               display: 'inline',
-              backgroundColor: 'purple',
+              backgroundColor: 'var(--primary-dark)',
               color: 'white',
               border: 'none',
             }}

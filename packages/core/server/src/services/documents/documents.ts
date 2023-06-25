@@ -74,7 +74,6 @@ export const document = (app: Application) => {
             context.data.embedding = pgvector.toSql(nullArray)
             return context
           }
-          return
         },
       ],
       patch: [

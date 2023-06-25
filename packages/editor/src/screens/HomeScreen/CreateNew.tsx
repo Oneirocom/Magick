@@ -28,8 +28,8 @@ const customConfig = {
 }
 
 export type Template = {
-  label: string
-  bg: string
+  label?: string
+  bg?: string
   graph: GraphData
 }
 
@@ -40,7 +40,7 @@ const CreateNew = () => {
   const config = useConfig()
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
-    getTemplates().spells[0]
+    getTemplates().spells[0] as Template
   )
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -76,11 +76,11 @@ const CreateNew = () => {
         name,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      })
+      }) as any
 
       if ('error' in response) {
         if ('status' in response.error) {
-          const err = response.error
+          const err = response.error as any
           const errMsg = err.data.error.message
           setError(errMsg as string)
           enqueueSnackbar(`Error saving spell. ${errMsg}.`, {
@@ -125,11 +125,11 @@ const CreateNew = () => {
           flexWrap: 'wrap',
         }}
       >
-        {getTemplates().spells.map((template, i) => (
+        {(getTemplates().spells as Template[]).map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
-            template={{ ...template, bg: template.bg ?? emptyImg }}
+            template={{ ...template, bg: template?.bg ?? emptyImg }}
             key={i}
           />
         ))}
@@ -148,7 +148,7 @@ const CreateNew = () => {
           loading={loading}
           onClick={onCreate}
           variant="outlined"
-          sx={{ color: "#fff !important" }}
+          sx={{ color: "#fff !important", border: 'none !important' }}
         >
           CREATE
         </LoadingButton>

@@ -1,6 +1,7 @@
 // DOCUMENTED
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { audioSocket, eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
+import { handleVoiceResponse } from './connectors/discord-voice'
 
 import { getNodes } from '@magickml/plugin-discord-shared'
 type StartDiscordArgs = {
@@ -64,15 +65,11 @@ function getAgentMethods() {
  * @param args - An object containing the output, agent, and event.
  */
 async function handleResponse({ output, agent, event }) {
-  console.log('handleResponse', output, event)
   if (!output || output === '')
-    return agent.warn('No output to send to discord')
+    return agent.logger.warn('No output to send to discord')
 
-  if (event.channelType !== 'dm') {
     await agent?.discord?.sendMessageToChannel(event.channel, output)
-  } else {
-    await agent?.discord?.sendDMToUser(event.channel, output)
-  }
+
 }
 
 // Input socket configurations
@@ -95,6 +92,14 @@ const outputSockets = [
     socket: 'output',
     name: 'output',
     type: eventSocket,
+  },
+]
+
+const audioOutputSockets = [
+  {
+    socket: 'output',
+    name: 'output',
+    type: audioSocket,
   },
 ]
 
@@ -125,9 +130,9 @@ const DiscordPlugin = new ServerPlugin({
   outputTypes: [
     {
       name: 'Discord (Voice)',
-      sockets: outputSockets,
+      sockets: audioOutputSockets,
       handler: async ({ output, agent, event }) => {
-        await handleResponse({ output, agent, event })
+        await handleVoiceResponse({ output, agent, event })
       },
     },
     {
@@ -141,7 +146,6 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Text)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        // console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
     },
@@ -149,7 +153,6 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Image)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
-        // console.log('output is', output)
         await handleResponse({ output, agent, event })
       },
     },

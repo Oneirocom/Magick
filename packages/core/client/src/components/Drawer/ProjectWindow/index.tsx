@@ -1,7 +1,8 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { API_ROOT_URL, PRODUCTION } from '@magickml/core'
+import { SpellInterface } from '@magickml/core'
+import { API_ROOT_URL, PRODUCTION } from '@magickml/config'
 import {
   Apps,
   ChevronRight,
@@ -29,9 +30,19 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
+// todo better way to share these types
+// import { RootState } from 'packages/editor/src/state/store'
+// import { AgentData } from 'packages/core/server/src/services/agents/agents.schema'
+// import { DocumentData } from 'packages/core/server/src/services/documents/documents.schema'
 
 let isResizing = false
 const drawerMaxSize = 200
+
+type DataState = {
+  agents: any[]
+  spells: SpellInterface[]
+  documents: any[]
+}
 
 /**
  * ProjectWindow is a collapsible sidebar that shows a tree view of the project content.
@@ -41,11 +52,11 @@ const drawerMaxSize = 200
  * @param {boolean} props.openDrawer - Whether the drawer is open or not
  */
 const ProjectWindow = ({ openDrawer }) => {
-  const globalConfig = useSelector(state => state.globalConfig)
+  const globalConfig = useSelector((state: any) => state.globalConfig)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
-  const [data, setData] = useState({ agents: [], spells: [], documents: [] })
+  const [data, setData] = useState<DataState>({ agents: [], spells: [], documents: [] })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
 
@@ -183,7 +194,7 @@ const ProjectWindow = ({ openDrawer }) => {
     handleClose()
   }
 
-  const sidebarPanel = useRef('sidebarPanel')
+  const sidebarPanel = useRef<HTMLDivElement | null>(null)
   const cbHandleMouseMove = useCallback(handleMousemove, [])
   const cbHandleMouseUp = useCallback(handleMouseup, [])
 
@@ -197,16 +208,18 @@ const ProjectWindow = ({ openDrawer }) => {
   }
 
   function handleMousemove(e) {
-    if (!isResizing) {
+    if (!isResizing || !sidebarPanel.current) {
       return
     }
-
     const rightSide = document.getElementById('wrapper')
     const resizer = document.getElementById('resizer')
+
     const minWidth = 140
 
     if (e.clientX > minWidth && e.clientX < drawerMaxSize) {
       sidebarPanel.current.style.width = e.clientX + 'px'
+      if (!resizer) return
+      if (!rightSide) return
       resizer.style.left = e.clientX + 'px'
       rightSide.style.width = 100 + (drawerMaxSize - e.clientX) + '%'
     }
@@ -384,7 +397,7 @@ const ProjectWindow = ({ openDrawer }) => {
                         key={index}
                         style={{ width: '100%' }}
                         nodeId={30 + index.toString()}
-                        label={document.content.slice(0, 12)}
+                        label={document?.content ? document.content.slice(0, 12) : "document"}
                         icon={<TextSnippet />}
                       />
                     ))}

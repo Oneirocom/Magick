@@ -8,6 +8,7 @@ import css from './homeScreen.module.css'
 import SearchIcon from '@mui/icons-material/Search'
 import { IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { SpellInterface } from '@magickml/core'
 
 /**
  * @description AllProjects component props
@@ -115,7 +116,7 @@ const AllProjects: React.FC<AllProjectsProps> = ({
               .map((spell, i) => (
                 <ProjectRow
                   key={i}
-                  spell={spell}
+                  spell={spell as SpellInterface}
                   selectedSpell={selectedSpell}
                   label={spell.name}
                   onDelete={onDelete}
