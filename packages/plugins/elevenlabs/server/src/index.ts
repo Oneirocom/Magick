@@ -25,7 +25,7 @@ const { secrets } = shared
  */
 const completionHandlers = {
   audio: {
-    'text2speech': textToSpeech,
+    'textToSpeech': textToSpeech,
   },
 }
 
