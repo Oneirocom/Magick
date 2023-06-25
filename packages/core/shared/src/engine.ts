@@ -130,12 +130,13 @@ export const getTriggeredNode = (
   )
 }
 
-export type MagickComponentCategory =
+export type MagicComponentCategory =
   | 'Esoterica'
   | 'Object'
   | 'Number'
   | 'I/O'
   | 'Flow'
+  | 'Experimental'
   | 'Langchain'
   | 'Github'
   | 'Discord'
@@ -149,9 +150,11 @@ export type MagickComponentCategory =
   | 'Event'
   | 'Text'
   | 'Utility'
+  | 'Esoterica'
   | 'Ethereum'
   | 'Pinecone'
   | 'Search'
+  | 'Magick'
   | 'Audio'
   | 'Task'
   | 'Database'
@@ -166,7 +169,7 @@ export abstract class MagickComponent<
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
-  category: MagickComponentCategory
+  category: MagicComponentCategory
   info: string
   display?: boolean
   dev = false
@@ -184,7 +187,7 @@ export abstract class MagickComponent<
   constructor(
     name: string,
     task: TaskOptions,
-    category: MagickComponentCategory,
+    category: MagicComponentCategory,
     info: string
   ) {
     super(name)
