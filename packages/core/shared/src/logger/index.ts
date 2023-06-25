@@ -1,5 +1,5 @@
 import pino from 'pino'
-import { NODE_ENV } from '@magickml/core'
+import { NODE_ENV, PINO_LOG_LEVEL } from '@magickml/config'
 
 let logger: pino.Logger | null = null
 
@@ -15,7 +15,7 @@ export const initLogger = (opts: object = defaultLoggerOpts) => {
         },
       },
       ...opts,
-      level: 'info',
+      level: PINO_LOG_LEVEL,
     })
 
     return
@@ -25,9 +25,9 @@ export const initLogger = (opts: object = defaultLoggerOpts) => {
 }
 
 export const getLogger: () => pino.Logger = () => {
-  if (logger !== null) {
-    return logger
+  if (logger === null) {
+    initLogger()
   }
 
-  throw new Error('Logger not initialized. Please call initLogger() first.')
+  return logger as pino.Logger
 }

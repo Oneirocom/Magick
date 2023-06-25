@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react'
 
 import RequestTable from './RequestTable'
 
-import { API_ROOT_URL } from '@magickml/core'
-import { useConfig } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/config'
+import { LoadingScreen, useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 
 /**
@@ -21,11 +21,13 @@ const RequestWindow = () => {
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const [requests, setRequests] = useState(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   /**
    * A React side-effect hook that fetches requests.
    */
   useEffect(() => {
+    setLoading(true)
     fetchRequests()
   }, [])
 
@@ -52,7 +54,7 @@ const RequestWindow = () => {
         }
       )
       const data = await response.json()
-
+      setLoading(false)
       setRequests(data.data)
     } catch (error) {
       console.error('Error fetching requests:', error)
@@ -69,6 +71,7 @@ const RequestWindow = () => {
         overflow: 'scroll',
       }}
     >
+      {loading && <LoadingScreen />}
       {requests && (
         <RequestTable requests={requests} updateCallback={resetEvents} />
       )}

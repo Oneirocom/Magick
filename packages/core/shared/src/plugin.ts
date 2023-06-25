@@ -462,5 +462,5 @@ export class ServerPluginManager extends PluginManager {
 
 export const pluginManager: ClientPluginManager | ServerPluginManager =
   typeof window !== 'undefined'
-    ? new ClientPluginManager()
-    : new ServerPluginManager()
+    ? (new ClientPluginManager() as ClientPluginManager)
+    : (new ServerPluginManager() as ServerPluginManager)

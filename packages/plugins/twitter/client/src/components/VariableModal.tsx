@@ -24,7 +24,7 @@ const VariableModal = ({
   const handleOnChange = e => {
     const { name, value } = e.target
     if (name === 'twitter_feed_enable' || name === 'twitter_dms_enable')
-      setState({ ...state, [name]: e.target.checked ? 'on' : 'off' })
+      setState({ ...state, [name]: e.target.checked })
     else setState({ ...state, [name]: value })
   }
 
@@ -138,19 +138,19 @@ const VariableModal = ({
       <div style={{ position: 'relative' }}>
         <Switch
           label={'Enable Feed'}
-          checked={state.twitter_feed_enable === 'on'}
+          checked={state.twitter_feed_enable}
           name="twitter_feed_enable"
           onChange={handleOnChange}
         />
         <Switch
           label={'Enable DMs'}
-          checked={state.twitter_dms_enable === 'on'}
+          checked={state.twitter_dms_enable}
           name="twitter_dms_enable"
           onChange={handleOnChange}
         />
       </div>
 
-      {state.twitter_feed_enable === 'on' && (
+      {state.twitter_feed_enable && (
         <>
           <Grid container>
             <Grid item xs={12}>

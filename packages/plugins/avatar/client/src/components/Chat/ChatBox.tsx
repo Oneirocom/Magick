@@ -12,6 +12,7 @@ import { useLipSync } from '../../hooks/useLipSync'
 import { useAgentList } from '../../hooks/useAgentList'
 import { useZustand } from '../../store/useZustand'
 import { usePubSub } from '@magickml/client-core'
+import { nullEvent } from 'xstate/lib/actionTypes'
 
 const voices = {
   'Female 1': '1QnOliOAmerMUNuo2wXoH-YoainoSjZen',
@@ -65,7 +66,7 @@ const SpeechRecognition =
 
 export default function ChatBox() {
   const [micEnabled, setMicEnabled] = useState(false)
-  const [speechRecognition, setSpeechRecognition] = useState(false)
+  const [speechRecognition, setSpeechRecognition] = useState<typeof SpeechRecognition | null>(null)
   const { avatarVrm } = useZustand()
   const lipSync = useLipSync(avatarVrm)
   const agentList = useAgentList()
@@ -78,7 +79,7 @@ export default function ChatBox() {
   useEffect(() => {
     if (currentAgent) return
     if (agentList?.length > 0) {
-      setCurrentAgent(agentList[0].name)
+      setCurrentAgent(agentList[0])
     }
   }, [agentList])
 
@@ -152,12 +153,12 @@ export default function ChatBox() {
     handleUserChatInput(value)
   }
 
-  const printToConsole = useCallback((_text) => {
+  const printToConsole = useCallback((text) => {
     setWaitingForResponse(false)
-    setMessages(messages => [...messages, name + ': ' + _text])
+    setMessages(messages => [...messages, name + ': ' + text])
     try {
       // fetch the audio file from ttsEndpoint
-      const ttsEndpoint = 'https://ai-voice.webaverse.ai/tts?s=' + _text
+      const ttsEndpoint = 'https://ai-voice.webaverse.ai/tts?s=' + text
 
       fetch(ttsEndpoint).then(async response => {
         const blob = await response.blob()
@@ -167,8 +168,6 @@ export default function ChatBox() {
 
         lipSync.startFromAudioFile(arrayBuffer)
       })
-
-      // })
     } catch (error) {
       console.error(error)
     }
@@ -201,12 +200,13 @@ export default function ChatBox() {
       entities: ['user', 'assistant'],
     }
 
+
     const data = {
       id: 'avatar',
-      agentName: currentAgent,
+      agentName: currentAgent ? currentAgent.name : "lost agent name",
       projectId: config.projectId,
       sessionId,
-      agentId: 'e3390b6d-1b1f-435d-81bc-04b116762ba5',
+      agentId: currentAgent ? currentAgent.id : "lost agent id",
       inputs: {
         'Input - Default': toSend,
       },
@@ -214,31 +214,32 @@ export default function ChatBox() {
     }
 
     publish(RUN_AGENT, data)
-    console.log('ran agent', data)
   }
 
   useEffect(() => {
     if (!client) return
 
     client.service('agents').on('result', result => {
-      // right now this is a decent check to ensure the data is the right data. 
+      // right now this is a decent check to ensure the data is the right data.
       // May be able to do something better.
       if (result.sessionId !== sessionId) return
       // Would be good to use a different outpute here eventually.
       // Feels dirty to use the default output hard coded.
-      const output = result.data.result['Output - Default']
+      const outputs = result.data.result
+      const outputKeys = Object.keys(outputs)
+      const output = result.data.result[outputKeys[0]]
 
       printToConsole(output)
     })
 
   }, [client])
 
-  // useEffect(() => {
-  //   const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
+  useEffect(() => {
+    const unsubscribe = subscribe($PLAYTEST_PRINT('avatar'), printToConsole)
 
-  //   // Return a cleanup function.
-  //   return unsubscribe as () => void
-  // }, [subscribe, printToConsole, $PLAYTEST_PRINT])
+    // Return a cleanup function.
+    return unsubscribe as () => void
+  }, [subscribe, printToConsole, $PLAYTEST_PRINT])
 
   let hasSet = false
   useEffect(() => {
@@ -272,9 +273,15 @@ export default function ChatBox() {
             className={styles.agentSelector}
             name="agentList"
             id="agentList"
-            defaultValue={currentAgent}
+            defaultValue={currentAgent ? currentAgent.name : ""}
             onChange={e => {
-              setCurrentAgent(e.target.value)
+              const newAgent = agentList?.find(agent => {
+                if (agent.name === e.target.value) {
+                  return agent
+                }
+              })
+
+              newAgent && setCurrentAgent(newAgent)
             }}
           >
             {agentList?.map((agent, idx) => {
