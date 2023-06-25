@@ -147,7 +147,7 @@ const ProjectWindow = ({ openDrawer }) => {
         Authorization: `Bearer ${token}`,
       },
     })
-    loadFile(selectedFile, true)
+    loadFile(selectedFile)
   }
 
   /**
