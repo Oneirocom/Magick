@@ -72,7 +72,7 @@ const ProjectWindow = ({ openDrawer }) => {
    *
    * @param {File} selectedFile - Selected file object
    */
-  const loadFile = selectedFile => {
+  const loadFile = async (selectedFile) => {
     if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
@@ -81,29 +81,46 @@ const ProjectWindow = ({ openDrawer }) => {
     }
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
-    fileReader.onload = event => {
+    fileReader.onload = async event => {
       const data = JSON.parse(event?.target?.result as string)
 
       delete data['id']
-      axios({
+
+      // upload agents
+      await axios({
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
-        data: { ...data, projectId: globalConfig.projectId },
+        data: { ...{ agents: data.agents }, projectId: globalConfig.projectId },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then(async res => {
-          const res2 = await fetch(
-            `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          const json = await res2.json()
-          setData(json)
-        })
-        .catch(err => {
-          console.error('error is', err)
-        })
+
+      // upload spells
+      await axios({
+        url: `${globalConfig.apiUrl}/projects`,
+        method: 'POST',
+        data: { ...{ spells: data.spells }, projectId: globalConfig.projectId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      await axios({
+        url: `${globalConfig.apiUrl}/projects`,
+        method: 'POST',
+        data: { ...{ documents: data.documents }, projectId: globalConfig.projectId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      const res2 = await fetch(
+        `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      const json = await res2.json()
+      setData(json)
     }
     handleClose()
   }
@@ -113,40 +130,35 @@ const ProjectWindow = ({ openDrawer }) => {
    *
    * @param {File} selectedFile - Selected file object
    */
-  const loadFileReplace = selectedFile => {
-    if (!token && PRODUCTION) {
-      enqueueSnackbar('You must be logged in to create a project', {
-        variant: 'error',
-      })
-      return
-    }
-    const fileReader = new FileReader()
-    fileReader.readAsText(selectedFile)
-    fileReader.onload = event => {
-      const data = JSON.parse(event?.target?.result as string)
-
-      delete data['id']
-      axios({
-        url: `${globalConfig.apiUrl}/projects`,
-        method: 'POST',
-        data: { ...data, projectId: globalConfig.projectId, replace: true },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then(async res => {
-          const res2 = await fetch(
-            `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          const json = await res2.json()
-          setData(json)
-        })
-        .catch(err => {
-          console.error('error is', err)
-        })
-    }
-    handleClose()
+  const loadFileReplace = async selectedFile => {
+    // make a call to the agent service to delete all agents
+    await axios({
+      url: `${globalConfig.apiUrl}/agents`,
+      method: 'DELETE',
+      data: { projectId: globalConfig.projectId },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    // make a call to the spell service to delete all spells
+    await axios({
+      url: `${globalConfig.apiUrl}/spells`,
+      method: 'DELETE',
+      data: { projectId: globalConfig.projectId },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    // make a call to the document service to delete all documents
+    await axios({
+      url: `${globalConfig.apiUrl}/documents`,
+      method: 'DELETE',
+      data: { projectId: globalConfig.projectId },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    loadFile(selectedFile)
   }
 
   /**
