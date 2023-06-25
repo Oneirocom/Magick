@@ -488,7 +488,7 @@ export type ImageCompletionSubtype = 'textToimage' | 'image2image' | 'image2text
 
 export type TextCompletionSubtype = 'text' | 'embedding' | 'chat'
 
-export type AudioCompletionSubtype = 'textTospeech' | 'textToaudio'
+export type AudioCompletionSubtype = 'textToSpeech' | 'textToaudio'
 
 export type DatabaseCompletionSubtype =
   | 'select'
