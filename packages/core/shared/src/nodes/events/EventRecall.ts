@@ -119,7 +119,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
     // based on mode data we can show/hide the embedding input
     mode.onData = (value) => {
-      console.log('value is', value)
       if (value === RecallModes.MostRevelant) {
         if(lastMode === RecallModes.MostRevelant) {
           return;
