@@ -48,6 +48,7 @@ export type Document = {
   embedding?: number[]
   projectId?: string
   date?: string
+  distance?: number
 }
 
 export type CreateDocumentArgs = Document
