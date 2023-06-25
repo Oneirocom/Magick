@@ -55,6 +55,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
 
       const { app } = context.module
       if (!app) throw new Error('App is not defined, cannot delete event')
+      console.log('***** REMOVING EVENT', event.id)
       app.service('events').remove(event.id)
     } catch (e) {
       throw new Error(`Error deleting event: ${e}`)
