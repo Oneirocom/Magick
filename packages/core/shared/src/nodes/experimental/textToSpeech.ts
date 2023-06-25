@@ -53,7 +53,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders('audio', [
-      'textTospeech',
+      'textToSpeech',
     ]) as CompletionProvider[]
 
     // get the models from the completion providers and flatten into a single array
@@ -160,7 +160,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     }
   ) {
     const completionProviders = pluginManager.getCompletionProviders('audio', [
-      'textTospeech',
+      'textToSpeech',
     ]) as CompletionProvider[]
   
     const model = (node.data as { model: string }).model as string
