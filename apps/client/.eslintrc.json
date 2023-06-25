@@ -6,7 +6,8 @@
   "ignorePatterns": [
     "!**/*",
     "**/node_modules/**",
-    "src/plugins.ts"
+    "src/plugins.ts",
+    "electron"
   ],
   "overrides": [
     {
