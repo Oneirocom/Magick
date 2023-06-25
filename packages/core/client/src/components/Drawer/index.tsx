@@ -296,13 +296,6 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             text="Requests"
           />
           <Divider />
-          {/* <DrawerItem
-            active={location.pathname.includes('/chat')}
-            Icon={ChatIcon}
-            open={openDrawer}
-            onClick={onClick('/chat')}
-            text="Chat"
-          /> */}
           <PluginDrawerItems onClick={onClick} open={openDrawer} />
           <Divider />
           <DrawerItem
