@@ -1,0 +1,1590 @@
+{
+    "id": "9c4cb61f-f65b-437c-a9e3-5128eac75537",
+    "name": "Ethereum Demo",
+    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+    "hash": "a9d29ccb0df9d8b3c6bcdbafc5b76c4f",
+    "createdAt": "1687711809980",
+    "updatedAt": null,
+    "graph": {
+        "id": "demo@0.1.0",
+        "nodes": {
+            "232": {
+                "id": 232,
+                "data": {
+                    "name": "Input - Solidity",
+                    "text": {
+                        "id": "2eb64348-adee-4118-bcca-19697ca3a16a",
+                        "inputs": {},
+                        "secrets": {},
+                        "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
+                        "spellName": "Starter",
+                        "publicVariables": "[]"
+                    },
+                    "isInput": true,
+                    "outputs": [],
+                    "success": false,
+                    "useData": true,
+                    "inputName": "Solidity",
+                    "inputType": "Default",
+                    "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
+                    "useDefault": false,
+                    "dataControls": {
+                        "inputType": {
+                            "expanded": true
+                        },
+                        "useDefault": {
+                            "expanded": true
+                        },
+                        "defaultValue": {
+                            "expanded": true
+                        }
+                    },
+                    "defaultValue": "Hello world",
+                    "playtestToggle": {
+                        "outputs": [],
+                        "receivePlaytest": false
+                    }
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 234,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -208,
+                    -240
+                ],
+                "name": "Input"
+            },
+            "233": {
+                "id": 233,
+                "data": {
+                    "name": "Output",
+                    "error": false,
+                    "success": false,
+                    "isOutput": true,
+                    "socketKey": "0f17a35e-1380-428b-bc87-4a38d207fefc",
+                    "dataControls": {
+                        "name": {
+                            "expanded": true
+                        }
+                    },
+                    "sendToPlaytest": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 234,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 234,
+                                "output": "bytecode",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    496,
+                    -240
+                ],
+                "name": "Output"
+            },
+            "234": {
+                "id": 234,
+                "data": {
+                    "code": "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.1;\n\ncontract SimpleContract {\n\n    uint public myValue = 50;\n    string public myString = \"Hello World!\";\n\n    function setValue(uint _myValue) public {\n        myValue = _myValue;\n    }\n\n    function setString(string memory _myString) public {\n        myString = _myString;\n    }\n\n}\n",
+                    "success": false,
+                    "socketKey": "6c3011e6-dd25-4a72-b248-dce2f6711cdc",
+                    "optimization_enable": false,
+                    "optimization_number": 200
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 232,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 233,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "bytecode": {
+                        "connections": [
+                            {
+                                "node": 233,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "abi": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    144,
+                    -240
+                ],
+                "name": "PluginEthSolidity"
+            },
+            "247": {
+                "id": 247,
+                "data": {
+                    "name": "Input - Contract Read",
+                    "isInput": true,
+                    "success": false,
+                    "useData": true,
+                    "inputName": "Contract Read",
+                    "socketKey": "6889e7d6-ad1f-4295-8d6e-5f14e26d1e78"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -208,
+                    16
+                ],
+                "name": "Input"
+            },
+            "248": {
+                "id": 248,
+                "data": {
+                    "error": false,
+                    "success": false,
+                    "socketKey": "f3aca741-836a-4f7d-a002-1bc21a367ab2"
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 247,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "chain_id": {
+                        "connections": [
+                            {
+                                "node": 280,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "contract_address": {
+                        "connections": [
+                            {
+                                "node": 279,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "function_name": {
+                        "connections": [
+                            {
+                                "node": 281,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "function_args": {
+                        "connections": []
+                    },
+                    "contract_abi": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 249,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 249,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    16
+                ],
+                "name": "PluginEthContractRead"
+            },
+            "249": {
+                "id": 249,
+                "data": {
+                    "name": "Output - Default",
+                    "success": false,
+                    "isOutput": true,
+                    "socketKey": "a6887239-7b69-4f95-b7cb-d0d0b00273d4",
+                    "sendToPlaytest": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    496,
+                    16
+                ],
+                "name": "Output"
+            },
+            "250": {
+                "id": 250,
+                "data": {
+                    "name": "Input - Get ERC20 Token Balance",
+                    "isInput": true,
+                    "success": false,
+                    "useData": true,
+                    "inputName": "Get ERC20 Token Balance",
+                    "socketKey": "fa147bd0-135e-4439-9075-30d2976a4787"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 251,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -192,
+                    512
+                ],
+                "name": "Input"
+            },
+            "251": {
+                "id": 251,
+                "data": {
+                    "success": false,
+                    "socketKey": "976bd858-ed63-418e-9ed1-af7dfe2af954"
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 250,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "chain_id": {
+                        "connections": [
+                            {
+                                "node": 260,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "account_address": {
+                        "connections": [
+                            {
+                                "node": 259,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "token_address": {
+                        "connections": [
+                            {
+                                "node": 261,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 252,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 252,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    128,
+                    512
+                ],
+                "name": "PluginEthGetERC20TokenBalance"
+            },
+            "252": {
+                "id": 252,
+                "data": {
+                    "name": "Output - Default",
+                    "error": false,
+                    "success": false,
+                    "isOutput": true,
+                    "socketKey": "4c80a3ff-4772-4054-b02f-d8ebdbf6adce",
+                    "sendToPlaytest": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 251,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 251,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    448,
+                    512
+                ],
+                "name": "Output"
+            },
+            "253": {
+                "id": 253,
+                "data": {
+                    "name": "Input - Get Native Token Balance",
+                    "isInput": true,
+                    "success": false,
+                    "useData": true,
+                    "inputName": "Get Native Token Balance",
+                    "socketKey": "66a41fca-dc3c-4a05-aa53-f8f5493338ec"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 258,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -192,
+                    1056
+                ],
+                "name": "Input"
+            },
+            "255": {
+                "id": 255,
+                "data": {
+                    "name": "Output - Default",
+                    "error": false,
+                    "success": false,
+                    "isOutput": true,
+                    "socketKey": "53204faf-b1a1-4655-ad32-35b142d1ba43",
+                    "sendToPlaytest": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 258,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 258,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    464,
+                    1056
+                ],
+                "name": "Output"
+            },
+            "256": {
+                "id": 256,
+                "data": {
+                    "_var": "0xE8908a5C9CaA2a2d7d1F06c3dc6e4C65F6149037",
+                    "name": "Demo Address",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 258,
+                                "input": "account_address",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -192,
+                    1216
+                ],
+                "name": "String Variable"
+            },
+            "257": {
+                "id": 257,
+                "data": {
+                    "_var": "137",
+                    "name": "Polygon Chain ID",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 258,
+                                "input": "chain_id",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -192,
+                    1312
+                ],
+                "name": "Number Variable"
+            },
+            "258": {
+                "id": 258,
+                "data": {
+                    "error": false,
+                    "success": false,
+                    "socketKey": "45b984ad-4699-4330-97f3-787242337b12"
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 253,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "account_address": {
+                        "connections": [
+                            {
+                                "node": 256,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "chain_id": {
+                        "connections": [
+                            {
+                                "node": 257,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 255,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 255,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    128,
+                    1056
+                ],
+                "name": "PluginEthGetNativeTokenBalance"
+            },
+            "259": {
+                "id": 259,
+                "data": {
+                    "_var": "0xa6Cc3C2531FdaA6Ae1A3CA84c2855806728693e8",
+                    "name": "Uniswap Account LP: LINK-WETH",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 251,
+                                "input": "account_address",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -192,
+                    768
+                ],
+                "name": "String Variable"
+            },
+            "260": {
+                "id": 260,
+                "data": {
+                    "_var": "1",
+                    "name": "Ethereum Chain ID",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 251,
+                                "input": "chain_id",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -192,
+                    672
+                ],
+                "name": "Number Variable"
+            },
+            "261": {
+                "id": 261,
+                "data": {
+                    "_var": "0x514910771af9ca656af840dff83e8264ecf986ca",
+                    "name": "LINK Token Address",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 251,
+                                "input": "token_address",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -192,
+                    880
+                ],
+                "name": "String Variable"
+            },
+            "279": {
+                "id": 279,
+                "data": {
+                    "_var": "0x514910771af9ca656af840dff83e8264ecf986ca",
+                    "name": "LINK Token Contract",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "input": "contract_address",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    256
+                ],
+                "name": "String Variable"
+            },
+            "280": {
+                "id": 280,
+                "data": {
+                    "_var": "1",
+                    "name": "Ethereum Chain ID",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "input": "chain_id",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    160
+                ],
+                "name": "Number Variable"
+            },
+            "281": {
+                "id": 281,
+                "data": {
+                    "_var": "symbol",
+                    "success": false,
+                    "isPublic": false,
+                    "socketKey": null
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "input": "function_name",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    352
+                ],
+                "name": "String Variable"
+            },
+            "284": {
+                "id": 284,
+                "data": {
+                    "name": "Input - Contract Deploy",
+                    "isInput": true,
+                    "success": false,
+                    "useData": true,
+                    "inputName": "Contract Deploy",
+                    "socketKey": "b0bd2c85-19a5-48a7-b095-a6d585dcf870"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 286,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -192,
+                    1536
+                ],
+                "name": "Input"
+            },
+            "285": {
+                "id": 285,
+                "data": {
+                    "error": false,
+                    "socketKey": "a70ebcce-dbe0-4286-bc3d-5c7fee761e96"
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 286,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "bytecode": {
+                        "connections": [
+                            {
+                                "node": 286,
+                                "output": "bytecode",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "abi": {
+                        "connections": [
+                            {
+                                "node": 286,
+                                "output": "abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "chain_id": {
+                        "connections": [
+                            {
+                                "node": 298,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 287,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "contract": {
+                        "connections": []
+                    },
+                    "tx": {
+                        "connections": [
+                            {
+                                "node": 287,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    480,
+                    1536
+                ],
+                "name": "PluginEthContractDeploy"
+            },
+            "286": {
+                "id": 286,
+                "data": {
+                    "code": "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.1;\n\ncontract SimpleContract {\n\n    uint public myValue = 50;\n    string public myString = \"Hello World!\";\n\n    function setValue(uint _myValue) public {\n        myValue = _myValue;\n    }\n\n    function setString(string memory _myString) public {\n        myString = _myString;\n    }\n\n}\n",
+                    "success": false,
+                    "socketKey": "2eb7f395-4435-4804-b3c7-e208023b4844",
+                    "optimization_enable": false,
+                    "optimization_number": 200
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 284,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "bytecode": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "input": "bytecode",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "abi": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "input": "abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    1536
+                ],
+                "name": "PluginEthSolidity"
+            },
+            "287": {
+                "id": 287,
+                "data": {
+                    "name": "Output - Default",
+                    "isOutput": true,
+                    "socketKey": "57600423-46a6-4674-bd34-deda31fe6bde",
+                    "sendToPlaytest": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "output": "tx",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    816,
+                    1536
+                ],
+                "name": "Output"
+            },
+            "289": {
+                "id": 289,
+                "data": {
+                    "name": "Input - Contract Write",
+                    "isInput": true,
+                    "useData": true,
+                    "inputName": "Contract Write",
+                    "socketKey": "b8452ebf-b659-4371-bd8b-f1f3d816235f"
+                },
+                "inputs": {},
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 290,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    -192,
+                    1920
+                ],
+                "name": "Input"
+            },
+            "290": {
+                "id": 290,
+                "data": {
+                    "code": "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.1;\n\ncontract SimpleContract {\n\n    uint public myValue = 50;\n    string public myString = \"Hello World!\";\n\n    function setValue(uint _myValue) public {\n        myValue = _myValue;\n    }\n\n    function setString(string memory _myString) public {\n        myString = _myString;\n    }\n\n}\n",
+                    "socketKey": "83d4a5f5-9e1a-4742-95c8-5c97d8c645bc",
+                    "optimization_enable": false,
+                    "optimization_number": 200
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 289,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 295,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "bytecode": {
+                        "connections": [
+                            {
+                                "node": 295,
+                                "input": "bytecode",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "abi": {
+                        "connections": [
+                            {
+                                "node": 295,
+                                "input": "abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            },
+                            {
+                                "node": 291,
+                                "input": "contract_abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    1920
+                ],
+                "name": "PluginEthSolidity"
+            },
+            "291": {
+                "id": 291,
+                "data": {
+                    "socketKey": "c6480a9b-6369-431b-9811-87fd966602e0"
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 295,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "chain_id": {
+                        "connections": [
+                            {
+                                "node": 293,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "contract_address": {
+                        "connections": [
+                            {
+                                "node": 295,
+                                "output": "contract",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "function_name": {
+                        "connections": [
+                            {
+                                "node": 294,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "function_args": {
+                        "connections": [
+                            {
+                                "node": 297,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "contract_abi": {
+                        "connections": [
+                            {
+                                "node": 290,
+                                "output": "abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 292,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 292,
+                                "input": "input",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    816,
+                    1920
+                ],
+                "name": "PluginEthContractWrite"
+            },
+            "292": {
+                "id": 292,
+                "data": {
+                    "name": "Output - Default",
+                    "isOutput": true,
+                    "socketKey": "946efb41-b541-43d2-8f1b-cdd6c3618a3e",
+                    "sendToPlaytest": true
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "input": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "event": {
+                        "connections": []
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": []
+                    },
+                    "output": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    1152,
+                    1920
+                ],
+                "name": "Output"
+            },
+            "293": {
+                "id": 293,
+                "data": {
+                    "_var": "80001",
+                    "name": "Mumbai Chain ID",
+                    "success": false,
+                    "isPublic": false,
+                    "socketKey": null
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 295,
+                                "input": "chain_id",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            },
+                            {
+                                "node": 291,
+                                "input": "chain_id",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    2096
+                ],
+                "name": "Number Variable"
+            },
+            "294": {
+                "id": 294,
+                "data": {
+                    "_var": "setString",
+                    "success": false,
+                    "isPublic": false,
+                    "socketKey": null
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "input": "function_name",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    2192
+                ],
+                "name": "String Variable"
+            },
+            "295": {
+                "id": 295,
+                "data": {
+                    "error": false,
+                    "socketKey": "28892f61-c284-4530-a118-dd27303956d9"
+                },
+                "inputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 290,
+                                "output": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "bytecode": {
+                        "connections": [
+                            {
+                                "node": 290,
+                                "output": "bytecode",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "abi": {
+                        "connections": [
+                            {
+                                "node": 290,
+                                "output": "abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "chain_id": {
+                        "connections": [
+                            {
+                                "node": 293,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "outputs": {
+                    "trigger": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "input": "trigger",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "contract": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "input": "contract_address",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    },
+                    "tx": {
+                        "connections": []
+                    }
+                },
+                "position": [
+                    480,
+                    1920
+                ],
+                "name": "PluginEthContractDeploy"
+            },
+            "297": {
+                "id": 297,
+                "data": {
+                    "_var": "example",
+                    "keepEmpty": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "input": "function_args",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    2288
+                ],
+                "name": "Array Variable"
+            },
+            "298": {
+                "id": 298,
+                "data": {
+                    "_var": "80001",
+                    "name": "Mumbai Chain ID",
+                    "success": false,
+                    "isPublic": false,
+                    "socketKey": null
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "input": "chain_id",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    144,
+                    1712
+                ],
+                "name": "Number Variable"
+            }
+        },
+        "comments": []
+    }
+}

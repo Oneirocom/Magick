@@ -1,151 +1,102 @@
-// DOCUMENTED 
-/**
- * The Solidity interface represents the main data model schema.
- * @interface
- */
-export interface Solidity {
-  /** The id of the solidity code. */
-  id: string
-  /** The solidity code itself. */
-  code: string
-}
+// DOCUMENTED
+import { resolve } from "@feathersjs/schema";
+import { Type, getValidator, querySyntax } from "@feathersjs/typebox";
+import type { Static } from "@feathersjs/typebox";
+import type { HookContext } from "@magickml/server-core";
+import { dataValidator, queryValidator } from "@magickml/server-core";
 
 /**
- * soliditySchema defines the main data model schema using Typebox.
- * @const
- *
- * @type {import('@feathersjs/typebox').IBrand<Type.Object<Type.String, Type.String & import('@feathersjs/typebox').ITagged<Type.Object<Type.String>>>> & { $id: string; additionalProperties: false }}
+ * Solidity schema definition.
  */
 export const soliditySchema = Type.Object(
   {
     id: Type.String(),
     code: Type.String(),
   },
-  { $id: 'Solidity', additionalProperties: false }
-)
+  { $id: "Solidity", additionalProperties: false }
+);
 
 /**
- * getValidator returns a data validator from a schema.
- * @param {import('@feathersjs/typebox').IBrand<Type.Object>} schema - The schema used to validate.
- * @func
- * @return {*}  {import('ajv').ValidateFunction}
+ * Solidity type.
  */
-export function getValidator<T extends Type.Object>(
-  schema: T
-): import('ajv').ValidateFunction {
-  return dataValidator.compile(schema)
-}
+export type Solidity = Static<typeof soliditySchema>;
 
 /**
- * resolve returns a schema resolver for the given schema.
- * @template T
- * @param {import('@feathersjs/typebox').IBrand<Type.Object>} schema - The schema used to resolve.
- * @param {*} context
- * @func
- * @return {*} 
+ * Solidity data validator.
  */
-export function resolve<T extends Type.Object>(
-  schema: T,
-  context: any
-): any {
-  return dataValidator.resolve(schema, context)
-}
+export const solidityValidator = getValidator(soliditySchema, dataValidator);
 
 /**
- * solidityValidator validates the soliditySchema.
- *
- * @type {import('ajv').ValidateFunction}
+ * Solidity resolver.
  */
-export const solidityValidator = getValidator(soliditySchema)
+export const solidityResolver = resolve<Solidity, HookContext>({});
 
 /**
- * solidityResolver resolves the soliditySchema.
- *
- * @type {*}
+ * Solidity external resolver.
  */
-export const solidityResolver = resolve<Solidity>(soliditySchema, {})
+export const solidityExternalResolver = resolve<Solidity, HookContext>({});
 
-// Schema for creating new entries
 /**
- * solidityDataSchema defines a schema for creating new Solidity entries.
- *
- * @const
- * @type {*}
+ * Solidity data schema definition.
  */
-export const solidityDataSchema = Type.Pick(soliditySchema, [
-  'id',
-  'code',
-], {
-  $id: 'SolidityData'
-})
+export const solidityDataSchema = Type.Pick(soliditySchema, ["id", "code"], {
+  $id: "SolidityData",
+});
 
 /**
- * SolidityData represents the schema when creating new entries.
- *
- * @type {*}
+ * Solidity data type.
  */
-export type SolidityData = Static<typeof solidityDataSchema>
+export type SolidityData = Static<typeof solidityDataSchema>;
 
 /**
- * solidityDataValidator validates the SolidityData schema.
- *
- * @type {import('ajv').ValidateFunction}
+ * Solidity data validator.
  */
-export const solidityDataValidator = getValidator(solidityDataSchema)
+export const solidityDataValidator = getValidator(
+  solidityDataSchema,
+  dataValidator
+);
 
 /**
- * solidityDataResolver resolves the SolidityData schema.
- *
- * @type {*}
+ * Solidity data resolver.
  */
-export const solidityDataResolver = resolve<SolidityData, HookContext>({})
+export const solidityDataResolver = resolve<SolidityData, HookContext>({});
 
-// Schema for allowed query properties
 /**
- * solidityQueryProperties is a schema that defines the allowed query properties.
- *
- * @const
- * @type {*}
+ * Solidity query properties definition.
  */
-export const solidityQueryProperties = Type.Pick(soliditySchema, [
-  'id',
-  'code',
-])
+export const solidityQueryProperties = Type.Pick(soliditySchema, ["id", "code"]);
 
 /**
- * solidityQuerySchema is the schema for the allowed queries on Solidity.
- *
- * @const
- * @type {*}
+ * Solidity query schema definition.
  */
 export const solidityQuerySchema = Type.Intersect(
   [
     querySyntax(solidityQueryProperties),
-    Type.Object({
-      'id': Type.Optional(Type.String()),
-      'code': Type.String(),
-    }, { additionalProperties: false })
+    Type.Object(
+      {
+        id: Type.Optional(Type.String()),
+        code: Type.String(),
+      },
+      { additionalProperties: false }
+    ),
   ],
   { additionalProperties: false }
-)
+);
 
 /**
- * SolidityQuery represents the schema for allowed queries on Solidity.
- *
- * @type {*}
+ * Solidity query type.
  */
-export type SolidityQuery = Static<typeof solidityQuerySchema>
+export type SolidityQuery = Static<typeof solidityQuerySchema>;
 
 /**
- * solidityQueryValidator validates the SolidityQuery schema.
- *
- * @type {import('ajv').ValidateFunction}
+ * Solidity query validator.
  */
-export const solidityQueryValidator = getValidator(solidityQuerySchema)
+export const solidityQueryValidator = getValidator(
+  solidityQuerySchema,
+  queryValidator
+);
 
 /**
- * solidityQueryResolver resolves the SolidityQuery schema.
- *
- * @type {*}
+ * Solidity query resolver.
  */
-export const solidityQueryResolver = resolve<SolidityQuery, HookContext>({})
+export const solidityQueryResolver = resolve<SolidityQuery, HookContext>({});

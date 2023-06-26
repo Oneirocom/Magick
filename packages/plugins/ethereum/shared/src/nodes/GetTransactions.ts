@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * The lodash isEmpty function checks if the input variable is an empty object, collection, map, or set.
  * More information: https://lodash.com/docs/4.17.15#isEmpty
@@ -23,7 +23,7 @@ import {
 const info = `Check the recent transactions of an Ethereum wallet`
 
 // A custom return type related to the class GetRecentTxsFromWallet.
-type InputReturn = {
+type WorkerReturn = {
   output: string
 } | undefined
 
@@ -36,10 +36,10 @@ type InputReturn = {
  *
  * @returns a promise with a custom InputReturn type
  */
-export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>> {
+export class GetTransactions extends MagickComponent<Promise<WorkerReturn>> {
   // constructor with the initialization of the name, output(s), and context menu of the component.
   constructor() {
-    super('Get Recent Transactions', {
+    super('PluginEthGetTransactions', {
       outputs: {
         // custom output which is a string on this context.
         output: 'output',
@@ -55,13 +55,13 @@ export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>
     }
 
     // context menu and display name configuration.
-    this.contextMenuName = 'Get Recent Transactions'
-    this.displayName = 'Get Recent Transactions'
+    this.contextMenuName = 'Get Transactions'
+    this.displayName = 'Get Transactions'
   }
 
   // custom builder method that returns the created inputs and outputs of the node.
   builder(node: MagickNode) {
-    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
+    const addressInput = new Rete.Input('account_address', 'Account Address', numberSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
@@ -91,11 +91,11 @@ export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>
    * @returns a promise with a custom InputReturn type
    */
   async worker(
-    node: WorkerData, 
-    inputs: MagickWorkerInputs, 
-    outputs: MagickWorkerOutputs, 
+    node: WorkerData,
+    inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
-  ): Promise<InputReturn> {
+  ): Promise<WorkerReturn> {
     // The closed attribute of the _task property prevents workflow execution until its 'trigger' attribute is set.
     this._task.closed = ['trigger']
 

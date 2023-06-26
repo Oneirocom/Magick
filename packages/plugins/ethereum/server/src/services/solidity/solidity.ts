@@ -1,50 +1,40 @@
-// DOCUMENTED 
-/**
- * This file contains code related to SolidityService, a Feathers service for compiling Solidity contracts.
- *
- * For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
- */
-
-import { hooks as schemaHooks } from '@feathersjs/schema'
-import type { Application } from '@magickml/server-core'
-import { SolidityService, getOptions } from './solidity.class'
-
+// DOCUMENTED
+import { hooks as schemaHooks } from '@feathersjs/schema';
 import {
   solidityQueryValidator,
   solidityResolver,
   solidityExternalResolver,
   solidityQueryResolver,
-} from './solidity.schema'
+} from './solidity.schema';
+import type { Application } from '@magickml/server-core';
+import { SolidityService, getOptions } from './solidity.class';
+
+// Extend ServiceTypes interface to include SolidityService
+declare module '@magickml/server-core' {
+  interface ServiceTypes {
+    [solidityPath]: SolidityService;
+  }
+}
+
+// Export path, methods and other required elements
+export const solidityPath = 'solidity';
+export const solidityMethods = ['create'] as const;
+export * from './solidity.class';
+export * from './solidity.schema';
 
 /**
- * The path for accessing the Solidity service.
- */
-export const solidityPath = 'solidity'
-
-/**
- * The methods exposed by the Solidity service.
- */
-export const solidityMethods = ['create'] as const
-
-/**
- * This function registers the Solidity service and its hooks via `app.configure`.
- * 
- * @param app - The Feathers application.
+ * Plugin for adding SolidityService to an application.
+ * @param {Application} app - Application running the Service.
  */
 export const solidity = (app: Application): void => {
-  // Register our service on the Feathers application
+  // Initialize SolidityService in app
   app.use(
     solidityPath,
     new SolidityService(getOptions(app)),
-    {
-      // A list of all methods this service exposes externally
-      methods: solidityMethods,
-      // You can add additional custom events to be sent to clients here
-      events: [],
-    }
-  )
+    { methods: solidityMethods, events: [] }
+  );
 
-  // Initialize hooks
+  // Set hooks for SolidityService
   app.service(solidityPath).hooks({
     around: {
       all: [
@@ -65,8 +55,5 @@ export const solidity = (app: Application): void => {
     error: {
       all: [],
     },
-  })
-}
-
-export * from './solidity.class'
-export * from './solidity.schema'
+  });
+};
