@@ -6,7 +6,7 @@ import md5 from 'md5'
 import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 
 /**
  * Generate a random hash.

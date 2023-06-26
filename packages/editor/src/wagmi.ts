@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * All necessary modules and imports are listed at the start of the file.
  */
@@ -24,12 +24,16 @@ const { chains, provider, webSocketProvider } = configureChains(
   ],
   [
     publicProvider(),
+    // todo ask Alex to fix these TS errors
+    // @ts-ignore
     jsonRpcProvider({
       rpc: chain =>
         chain.id === polygonMumbai.id
           ? { http: 'https://rpc-mumbai.maticvigil.com' }
           : null,
     }),
+    // todo ask Alex to fix these TS errors
+    // @ts-ignore
     jsonRpcProvider({
       rpc: chain =>
         chain.id === polygonMumbai.id

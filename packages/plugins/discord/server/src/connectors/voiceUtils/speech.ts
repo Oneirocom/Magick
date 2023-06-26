@@ -26,9 +26,11 @@ const handleSpeakingEvent = ({
   connection: VoiceConnection
   speechOptions: SpeechOptions
 }) => {
+  console.log('handleSpeakingEvent')
   connection.receiver.speaking.on(
     'start',
     function handleSpeechEventOnConnectionReceiver(userId) {
+      console.log('handleSpeechEventOnConnectionReceiver', userId)
       // Ignore bots if ignoreBots option is true
       if (speechOptions.ignoreBots && client.users.cache.get(userId)?.bot) {
         return
@@ -48,10 +50,12 @@ const handleSpeakingEvent = ({
         )
         .on('data', (data: Uint8Array) => {
           bufferData.push(data)
+          console.log('buffering data')
         })
 
       // When the stream ends, create a voice message and emit the `speech` event
       opusStream.on('end', async () => {
+        console.log('ended')
         const user = client.users.cache.get(userId)
         if (!user) return
 

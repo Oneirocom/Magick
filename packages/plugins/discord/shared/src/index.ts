@@ -6,7 +6,8 @@ import { DiscordListTextChannels } from './nodes/DiscordListTextChannels';
 import { DiscordListVoiceChannels } from './nodes/DiscordListVoiceChannels';
 import { DiscordJoinVoice } from './nodes/DiscordJoinVoice';
 import { DiscordLeaveVoice } from './nodes/DiscordLeaveVoice';
-import { BabyAGI } from './nodes/BabyAGI';
+import { DiscordVoiceChannelForSender } from './nodes/DiscordVoiceChannelForSender';
+import { DiscordLeaveVoiceChannelsInServer } from './nodes/DiscordLeaveVoiceChannelsInServer'
 import { MagickComponent } from '@magickml/core';
 
 
@@ -15,8 +16,9 @@ export function getNodes(): MagickComponent<any>[] {
   DiscordJoinVoice as any,
   DiscordListTextChannels as any,
   DiscordListVoiceChannels as any,
-  BabyAGI as any,
   DiscordLeaveVoice as any,
+  DiscordVoiceChannelForSender as any,
+  DiscordLeaveVoiceChannelsInServer as any,
 ]
 }
 /**
@@ -24,7 +26,6 @@ export function getNodes(): MagickComponent<any>[] {
  */
 export default [
   DiscordJoinVoice,
-  BabyAGI,
   DiscordListTextChannels,
   DiscordListVoiceChannels,
 ];

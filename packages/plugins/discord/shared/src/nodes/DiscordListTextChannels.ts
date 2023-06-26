@@ -6,56 +6,27 @@
 
 import Rete from 'rete'
 import {
+  Event,
   MagickComponent,
-  stringSocket,
   triggerSocket,
+  eventSocket,
   MagickNode,
-  ModuleContext,
   WorkerData,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  ModuleContext,
+  arraySocket,
 } from '@magickml/core'
-
-async function discordTextChannels(context: ModuleContext): Promise<any> {
-  // const { projectId } = context
-  const { agent } = context
-  if (!agent) {
-    return 'Agent not found'
-  }
-  // @ts-ignore
-  if (!agent?.discord) {
-    return 'Discord agent not found'
-  }
-  // @ts-ignore
-  const { discord } = agent
-  if (!agent) {
-    return 'Agent not found'
-  }
-
-  let result = ''
-  //@ts-ignore
-  //Get the Guild ID
-
-  const channels = discord.client.channels.cache
-  // Check if channels is empty or not
-  if (channels.size === 0) {
-    return 'No channels found!'
-  } else {
-    // Loop through the channels and do something with them
-    const textChannels = channels.filter(channel => channel.type === 0)
-    const textChannelNames = textChannels.map(channel => channel.name)
-    result = '``` Text Channels\n'
-    textChannelNames.forEach(channel => {
-      result += `#${channel}\n`
-    })
-    result += '```'
-  }
-  return result
-}
+import { ChannelType } from '../types/ChannelType'
 
 /**
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  output: Record<string, any>
+  output: {
+    id: string,
+    name: string,
+  }[]
 }
 
 /**
@@ -86,31 +57,72 @@ export class DiscordListTextChannels extends MagickComponent<
    * @returns The node with its inputs and outputs.
    */
   builder(node: MagickNode) {
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'String', stringSocket)
+    const outp = new Rete.Output('output', 'Array', arraySocket)
+    const event = new Rete.Input('event', 'Event', eventSocket, true)
 
-    return node.addOutput(dataOutput).addOutput(outp)
+    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
   }
 
   /**
    * The worker function for the Discord List Text Channels node.
-   * @param node - The node being worked on.
-   * @param inputs - The inputs of the node.
-   * @param _outputs - The unused outputs of the node.
-   * @returns An object containing the tool properties.
+   * @param node - WorkerData object
+   * @param inputs - MagicWorkerInputs object
+   * @param _outputs - MagicWorkerOutputs object
+   * @param context - Module and EditorContext instances
+   * @returns output data
    */
-  async worker(node: WorkerData): Promise<WorkerReturn> {
-    const tool_desc = {
-      title: 'Discord List Text Channels',
-      body: 'Gets the List of text channels in a server',
-      id: node.id,
-      action: discordTextChannels.toString(),
-      function_name: 'discordTextChannels',
-      keyword: 'discord text channels',
+  async worker(
+    node: WorkerData,
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    context: ModuleContext
+  ): Promise<WorkerReturn> {
+    const { agent, data } = context
+    if (!agent || !agent?.discord) {
+      console.warn('sending default information since there is no agent available')
+      return {
+        output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
+      }
     }
 
-    return {
-      output: tool_desc,
+    const event = // event data is inside a task?
+      ((inputs.event?.[0] as any)?.eventData ||
+        // event data is coming from the event socket?
+        inputs.event?.[0] ||
+        // otherwise, get the input data from context
+        (Object.values(data)[0] as any)?.eventData ||
+        Object.values(data)[0]) as Event
+
+    // discordClient is a Discord.js client instance
+    const discordClient = agent.discord.client
+
+    const channel = event.channel // channel in which the message was sent
+
+    // fetch the channel using its ID
+    const fetchedChannel = await discordClient.channels.fetch(channel);
+
+    if (!fetchedChannel) {
+      throw new Error('Channel not found')
     }
+
+    if (fetchedChannel.type !== ChannelType.GuildText) {
+      throw new Error('Event channel must be a text channel')
+    }
+
+    // get the guild object from the fetched channel
+    const guild = fetchedChannel.guild;
+
+    // get the list of text channels
+    const textChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildText);
+
+    // return the list of text channels as an array
+    const textChannelArray = textChannels.map(channel => ({
+      id: channel.id,
+      name: channel.name,
+    }));
+
+    return { output: textChannelArray };
   }
 }

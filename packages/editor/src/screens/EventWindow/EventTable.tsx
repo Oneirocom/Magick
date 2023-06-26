@@ -1,7 +1,7 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { TableComponent } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -78,6 +78,7 @@ function EventTable({ events, updateCallback }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState(0)
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
@@ -172,18 +173,26 @@ function EventTable({ events, updateCallback }) {
   )
 
   // Initialize the table with hooks
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
-    setSortBy } =
+  const tableInstance =
     useTable(
       {
         columns: defaultColumns,
         data: events,
+        initialState: {
+          pageIndex: currentPage
+        }
       },
       useFilters,
       useGlobalFilter,
       useSortBy,
       usePagination
     )
+
+  // tableInstance as any here is a workaround for the type error
+  // for some reason the type of tableInstance is not being inferred correctly, and documentation sucks
+  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
+    setSortBy } = tableInstance as any
+
 
   // Function to handle sorting when a column header is clicked
   const handleSort = (column) => {
@@ -207,6 +216,7 @@ function EventTable({ events, updateCallback }) {
   // // Handle pagination
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
+    setCurrentPage(pageIndex)
     gotoPage(pageIndex)
   }
 
@@ -217,19 +227,34 @@ function EventTable({ events, updateCallback }) {
 
   // Handle events deletion
   const handleDeleteMany = async (event: any) => {
-    const ids = selectedRows.join('&')
+    const ids = selectedRows.join('&');
     const isDeleted = await fetch(`${API_ROOT_URL}/events/${ids}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
-    setSelectedRows([])
-    if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
-    // close the action menu
-    updateCallback()
-  }
+    });
+  
+    if (isDeleted) {
+      enqueueSnackbar('Events deleted', { variant: 'success' });
+      // Update the table data with the updated data from the server
+      updateCallback();
+      // Clear the selected rows
+      setSelectedRows([]);
+  
+      const updatedPageLength = page.length - selectedRows.length;
+      // Check if there are no more documents on the current page
+      if (updatedPageLength === 0 && currentPage > 0) {
+        const pageIndex = currentPage - 1;
+        setCurrentPage(pageIndex);
+        // Go to the previous page
+        gotoPage(pageIndex);
+      }
+    } else {
+      enqueueSnackbar('Error deleting Event', { variant: 'error' });
+    }
+  };
+  
 
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
@@ -241,6 +266,15 @@ function EventTable({ events, updateCallback }) {
     })
     if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+
+    //navigate user to previous page if rows are empty
+    if (page.length === 1) {
+      const pageIndex = currentPage - 1
+      setCurrentPage(pageIndex)
+      gotoPage(pageIndex)
+    }
+
+
     // close the action menu
     handleActionClose()
     updateCallback()
@@ -251,6 +285,8 @@ function EventTable({ events, updateCallback }) {
     () => flatRows.map(row => row.original),
     [flatRows]
   )
+
+  console.log(page.length)
 
   // Render the table with useMemo
   return (
