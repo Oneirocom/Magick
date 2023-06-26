@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { getLogger } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import Discord, {
   AttachmentBuilder,
@@ -7,18 +8,13 @@ import Discord, {
   Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
-
-let recognizeSpeech
+import { initSpeechClient, stopSpeechClient, recognizeSpeech } from './discord-voice'
 
 export class DiscordConnector {
+  logger = getLogger()
   client = Discord.Client as any
   agent: any
   spellRunner: any = null
-  use_voice = false
-  voice_provider!: string
-  voice_character!: string
-  voice_language_code!: string
-  voice_endpoint!: string
   guildId!: any
   message!: any
   constructor(options) {
@@ -26,19 +22,9 @@ export class DiscordConnector {
       agent,
       discord_api_key,
       spellRunner,
-      use_voice,
-      voice_provider,
-      voice_character,
-      voice_language_code,
-      voice_endpoint,
     } = options
     this.agent = agent
     this.spellRunner = spellRunner
-    this.use_voice = use_voice
-    this.voice_provider = voice_provider
-    this.voice_character = voice_character
-    this.voice_language_code = voice_language_code
-    this.voice_endpoint = voice_endpoint
 
     const token = discord_api_key
     if (!token) {
@@ -71,57 +57,26 @@ export class DiscordConnector {
 
       this.client.embed = embed
 
-      if (this.use_voice) {
-        const {
-          client,
-          agent,
-          spellRunner,
-          voice_provider,
-          voice_character,
-          voice_language_code,
-          voice_endpoint,
-        } = this
-        ;(async () => {
+      const {
+        client,
+        agent,
+        spellRunner,
+      } = this
+        ; (async () => {
           if (typeof window === 'undefined') {
-            const { initSpeechClient, recognizeSpeech: _recognizeSpeech } =
-              await import('./discord-voice')
-            recognizeSpeech = _recognizeSpeech
             this.client = initSpeechClient({
               client,
               agent,
               spellRunner,
-              voiceProvider: voice_provider,
-              voiceCharacter: voice_character,
-              languageCode: voice_language_code,
-              voice_endpoint,
             })
           }
         })()
-      }
-      this.client.on('joinvc', async textChannel => {
-        let connection
-        const { recognizeSpeech: _recognizeSpeech } = await import(
-          './discord-voice'
-        )
-        recognizeSpeech = _recognizeSpeech
-        if (this.use_voice) {
-          connection = recognizeSpeech(textChannel, this.client)
-          textChannel.send('Joined ' + textChannel.name)
-        } else {
-          textChannel.send('Voice is disabled')
-        }
-        return connection
+      this.client.on('joinvc', async voiceChannel => {
+        console.log('joinvc', voiceChannel)
+        return recognizeSpeech(voiceChannel, this.agent.id)
       })
-      this.client.on('leavevc', async (voiceChannel, textChannel) => {
-        const { stopSpeechClient: stopSpeechClient } = await import(
-          './discord-voice'
-        )
-        if (this.use_voice) {
-          stopSpeechClient(voiceChannel, this.client)
-          textChannel.send('Leaving  ' + voiceChannel.name)
-        } else {
-          textChannel.send('Voice is disabled')
-        }
+      this.client.on('leavevc', async (voiceChannel) => {
+        stopSpeechClient(voiceChannel, this.agent.id)
       })
 
       this.client.on('messageCreate', async message => {
@@ -136,13 +91,7 @@ export class DiscordConnector {
 
       // handle direct messages
       this.client.on('message', async message => {
-        console.log('message')
-        if (message.channel.type === 'dm') {
-          console.log('direct message', message)
-          this.messageCreate(message)
-        } else {
-          this.messageCreate(message)
-        }
+        this.messageCreate(message)
       })
 
       this.client.on(
@@ -159,18 +108,18 @@ export class DiscordConnector {
       })
 
       this.client.ws
-      ;(async () => {
-        try {
-          const login = await this.client.login(token)
-          agent.log('Discord client logged in', { login })
-        } catch (e) {
-          return agent.error('Error logging in discord client', e)
-        }
+        ; (async () => {
+          try {
+            const login = await this.client.login(token)
+            agent.log('Discord client logged in', { login })
+          } catch (e) {
+            return agent.error('Error logging in discord client', e)
+          }
 
-        this.client.on('error', err => {
-          agent.error('Discord client error', err)
-        })
-      })()
+          this.client.on('error', err => {
+            agent.error('Discord client error', err)
+          })
+        })()
     } catch (e) {
       agent.error('Error creating discord client', e)
     }
@@ -326,9 +275,11 @@ export class DiscordConnector {
       entities.push(this.client.user.username)
     }
 
-    const inputType = message.channel.type === 'dm' ? 'DM' : 'Text'
+    this.logger.info('handling message create: %s', message)
 
-    console.log(this.agent.name, ' - sending message on discord - ', content)
+    const inputType = message.guildId === null ? 'DM' : 'Text'
+
+    this.logger.info(this.agent.name, ' - sending message on discord - ', content)
     await this.spellRunner.runComponent({
       inputs: {
         [`Input - Discord (${inputType})`]: {
@@ -340,7 +291,7 @@ export class DiscordConnector {
           channel: message.channel.id,
           agentId: this.agent.id,
           entities: entities,
-          channelType: message.channel.type,
+          channelType: inputType,
           rawData: JSON.stringify(message),
         },
       },
@@ -361,12 +312,12 @@ export class DiscordConnector {
     if (!author) return
     if (!client || !client.user) return
     if (author.id === this.client.user.id) return
-    console.log('message deleted by', author.username, 'in', channel.id)
+    this.logger.info('message deleted by', author.username, 'in', channel.id)
   }
 
   //Event that is triggered when the discord client fully loaded
   ready = async () => {
-    console.log('client is ready')
+    this.logger.info('client is ready')
   }
 
   async sendImageToChannel(channelId: any, imageUri: any) {
@@ -376,61 +327,35 @@ export class DiscordConnector {
       const attachment = new AttachmentBuilder(buffer, { name: 'image.png' })
       await channel.send(attachment)
     } catch (error) {
-      console.error(`Error sending image to channel: ${error}`)
-    }
-  }
-
-  async sendDMToUser(userId: any, msg: any) {
-    try {
-      const user = await this.client.users.fetch(userId)
-      if (msg && msg !== '' && user && user !== undefined) {
-        console.log('**** SENDING DISCORD MESSAGE', msg)
-        // split msg into an array of messages that are less than 2000 characters
-        // if msg is an object, get the valuke of the first key
-        if (typeof msg === 'object') {
-          msg = Object.values(msg)[0]
-        }
-        const msgArray = msg.match(/.{1,2000}/g)
-        // send each message individually
-        msgArray.forEach(msg => {
-          user.send(msg)
-        })
-      } else {
-        console.error(
-          'could not send message to user: ' + userId,
-          'msg = ' + msg,
-          'user = ' + user
-        )
-      }
-    } catch (e) {
-      console.error(e)
+      this.logger.error(`Error sending image to channel: ${error}`)
     }
   }
 
   async sendMessageToChannel(channelId: any, msg: any) {
     try {
-      const channel = await this.client.channels.fetch(channelId)
-      if (msg && msg !== '' && channel && channel !== undefined) {
-        console.log('**** SENDING DISCORD MESSAGE', msg)
-        // split msg into an array of messages that are less than 2000 characters
-        // if msg is an object, get the valuke of the first key
-        if (typeof msg === 'object') {
-          msg = Object.values(msg)[0]
+      const channel = await this.client.channels.fetch(channelId);
+      if (msg && msg !== '' && channel && channel !== undefined) {  
+        const paragraphs = msg?.split(/\n{2,}/) ?? [];
+  
+        // Process each paragraph individually
+        for (const paragraph of paragraphs) {
+          // Split paragraph into chunks of 2000 characters or less
+          const chunks = paragraph.match(/.{1,2000}/gs) || [];
+  
+          // Send each chunk individually
+          for (const chunk of chunks) {
+            channel.send(chunk);
+          }
         }
-        const msgArray = msg.match(/.{1,2000}/g)
-        // send each message individually
-        msgArray.forEach(msg => {
-          channel.send(msg)
-        })
       } else {
-        console.error(
-          'could not send message to channel: ' + channelId,
-          'msg = ' + msg,
-          'channel = ' + channel
-        )
+        this.logger.error(
+          'Could not send message to channel: ' + channelId +'\n',
+          'msg = ' + msg +'\n',
+          'channel = ' + channel +'\n'
+        );
       }
     } catch (e) {
-      console.error(e)
+      this.logger.error(e);
     }
   }
 }

@@ -10,13 +10,20 @@ import styles from './datacontrols.module.css';
  * @property {string} type - The type of the element.
  * @property {(name: string) => void} delete - Function to handle deletion of the element.
  */
+type Props = {
+  name: string;
+  delete: (name: string) => void;
+  socketType?: string
+  type?: string
+};
 
 /**
- * `SingleElement` is a functional component that renders a single element with actions like delete.
- * @param {Props} props - The props needed for the SingleElement component.
+ * `SingleElement` renders a single line item of of a socket that has been added by the socket generator.
+ * TODO - Add support for selecting socket types here
+ *  @param {Props} props - The props needed for the SingleElement component.
  * @returns {JSX.Element} The rendered SingleElement component.
  */
-const SingleElement = ({ name, type, delete: handleDelete }: Props): JSX.Element => {
+const SingleElement = ({ name, delete: handleDelete }: Props): JSX.Element => {
   return (
     <div className={`${styles.flexCenterBtn} ${styles.inputContainer}`}>
       <div className={styles.flexCenterBtn}>

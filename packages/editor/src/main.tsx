@@ -16,10 +16,9 @@ import { client } from './wagmi'
 import AppProviders from './contexts/AppProviders'
 import { createStore } from './state/store'
 
-import { AppConfig } from '../../core/client/src/providers/ConfigProvider'
-
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AppConfig } from '@magickml/client-core'
 
 /**
  * Type definition for the props that can be passed to MagickIDE

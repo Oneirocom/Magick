@@ -103,7 +103,6 @@ export class EventStore extends MagickComponent<Promise<void>> {
     }
 
     const typeData = node?.data?.type as string
-    console.log('storing data for', typeData)
     const type =
       typeSocket ?? (typeData !== undefined && typeData.length > 0)
         ? typeData.toLowerCase().trim()
@@ -158,6 +157,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
     })
 
     if (embedding) data.embedding = embedding
+    else delete data.embedding
 
     if (content && content !== '') {
       const { app } = context.module

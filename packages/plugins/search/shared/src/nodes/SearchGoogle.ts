@@ -11,9 +11,9 @@ import {
   stringSocket,
   triggerSocket,
   MagickComponent,
-  API_ROOT_URL,
   WorkerData,
 } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -80,8 +80,6 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
     const response = await fetch(url)
 
     const json = await response.json()
-
-    console.log('json', json)
 
     const { summary, links } = json
 

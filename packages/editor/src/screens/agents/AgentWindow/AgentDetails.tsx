@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
@@ -321,7 +322,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: updateNeeded ? 'purple' : '#424242',
+              backgroundColor: updateNeeded ? 'var(--primary-dark)' : '#424242',
             }}
           >
             Update
@@ -330,7 +331,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: 'purple',
+              backgroundColor: 'var(--primary-dark)',
             }}
             onClick={() => exportAgent()}
           >
@@ -351,8 +352,8 @@ const AgentDetails = ({
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             )
-            const inputs = pluginManager.getInputByName()
-            const plugin_list = pluginManager.getPlugins()
+            const inputs = (pluginManager as ClientPluginManager).getInputByName()
+            const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
             for (const key of Object.keys(plugin_list)) {
               if (!newRootSpell) continue
               plugin_list[key] = validateSpellData(newRootSpell, inputs[key])
@@ -386,7 +387,7 @@ const AgentDetails = ({
         </select>
       </div>
       <div>
-        {pluginManager.getSecrets(true).map((value, index) => {
+        {(pluginManager as ClientPluginManager).getSecrets(true).map((value, index) => {
           return (
             <div key={value.name + index} style={{ marginBottom: '1em' }}>
               <div style={{ width: '100%', marginBottom: '1em' }}>
@@ -436,7 +437,7 @@ const AgentDetails = ({
           : styles.connectors
           }`}
       >
-        {pluginManager.getAgentComponents().map((value, index, array) => {
+        {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
           return (
             <RenderComp
               key={index}

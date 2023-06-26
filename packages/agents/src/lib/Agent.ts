@@ -10,9 +10,8 @@ import {
   AgentInterface,
   SpellInterface,
   getLogger,
-  PING_AGENT_TIME_MSEC,
-  bullMQConnection
 } from '@magickml/core'
+import { bullMQConnection, PING_AGENT_TIME_MSEC } from '@magickml/config'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
 import { AgentManager } from './AgentManager'
@@ -63,10 +62,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     // Set up the agent worker to handle incoming messages
     this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this), {
-      connection: bullMQConnection
+      connection: bullMQConnection,
     })
     this.queue = new BullMQ.Queue(`agent:run:result`, {
-      connection: bullMQConnection
+      connection: bullMQConnection,
     })
 
     const spellManager = new SpellManager({
@@ -77,7 +76,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
     this.spellManager = spellManager
     ;(async () => {
-      console.log('agentData', agentData)
       if (!agentData.rootSpell) {
         this.logger.warn('No root spell found for agent: %o', {
           id: this.id,
@@ -195,7 +193,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
   async runWorker(job) {
     // the job name is the agent id.  Only run if the agent id matches.
     if (this.id !== job.data.agentId) return
-
 
     const { data } = job
 

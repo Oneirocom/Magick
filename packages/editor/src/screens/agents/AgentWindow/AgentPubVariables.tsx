@@ -66,7 +66,7 @@ const AgentPubVariables = ({
               }}
             >
               <Grid item xs={1}>
-                <p style={{ marginRight: '20px' }}>{`${variable.name}: `}</p>
+                <p style={{  wordBreak: "break-all",whiteSpace: "normal", marginRight: '2px' }}>{`${variable.name}: `}</p>
               </Grid>
               <Grid item xs={8}>
                 {variable?.type?.includes('Boolean') ? (

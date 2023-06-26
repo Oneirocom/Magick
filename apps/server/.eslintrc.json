@@ -3,7 +3,9 @@
     "../../.eslintrc.json"
   ],
   "ignorePatterns": [
-    "!**/*"
+    "!**/*",
+    "**/node_modules/**",
+    "**/*.d.ts"
   ],
   "overrides": [
     {

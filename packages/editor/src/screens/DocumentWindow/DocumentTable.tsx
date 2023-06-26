@@ -1,7 +1,8 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { TableComponent } from '@magickml/client-core'
-import { API_ROOT_URL, CompletionProvider, pluginManager } from '@magickml/core'
+import { CompletionProvider, pluginManager } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -84,6 +85,7 @@ function DocumentTable({ documents, updateCallback }) {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [currentPage, setCurrentPage] = useState(0)
 
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
@@ -150,6 +152,9 @@ function DocumentTable({ documents, updateCallback }) {
       {
         columns: defaultColumns,
         data: documents,
+        initialState : {
+          pageIndex: currentPage 
+        }
       },
       useFilters,
       useGlobalFilter,
@@ -176,6 +181,7 @@ function DocumentTable({ documents, updateCallback }) {
   // // Handle pagination
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
+    setCurrentPage(pageIndex)
     gotoPage(pageIndex)
   }
 
@@ -195,6 +201,13 @@ function DocumentTable({ documents, updateCallback }) {
     })
     if (isDeleted) enqueueSnackbar('document deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting document', { variant: 'error' })
+
+    if (page.length === 1) {
+      const pageIndex = currentPage - 1
+      setCurrentPage(pageIndex)
+      gotoPage(pageIndex)
+    }
+
     // close the action menu
     handleActionClose()
     updateCallback()
