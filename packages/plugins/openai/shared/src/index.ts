@@ -6,6 +6,7 @@ import {
   PluginSecret,
   stringSocket,
 } from '@magickml/core'
+import { PRODUCTION } from '@magickml/config'
 
 /**
  * An array of PluginSecret objects containing information about API key secrets.
@@ -46,7 +47,6 @@ const completionProviders: CompletionProvider[] = [
       'text-davinci-001',
       'text-curie-001',
       'text-babbage-001',
-      'text-ada-001',
     ],
   },
   {
@@ -66,7 +66,7 @@ const completionProviders: CompletionProvider[] = [
         type: embeddingSocket,
       },
     ],
-    models: ['text-embedding-ada-002', 'text-embedding-ada-001'],
+    models: ['text-embedding-ada-002'],
   },
   {
     type: 'text',
@@ -100,7 +100,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: ['gpt-4', 'gpt-3.5-turbo'],
+    models: PRODUCTION ? ['gpt-3.5-turbo'] : ['gpt-3.5-turbo', 'gpt4'],
   },
 ]
 

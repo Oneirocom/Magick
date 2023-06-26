@@ -6,6 +6,7 @@ import {
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
+import { DEFAULT_OPENAI_KEY } from '@magickml/config'
 
 /**
  * Generate a completion text based on prior chat conversation input.
@@ -71,10 +72,14 @@ export async function makeChatCompletion(
   // Update the settings messages
   settings.messages = messages
 
+  const openaiKey = context.module.secrets!['openai_api_key']
+
+  const finalKey = openaiKey ? openaiKey : DEFAULT_OPENAI_KEY
+
   // Create request headers
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + context.module.secrets!['openai_api_key'],
+    Authorization: 'Bearer ' + finalKey,
   }
 
   try {
