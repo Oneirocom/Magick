@@ -61,3 +61,6 @@ data.json
 /logs
 docstore.json
 .vercel
+/test-results/
+/playwright-report/
+/playwright/.cache/

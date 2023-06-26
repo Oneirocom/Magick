@@ -286,6 +286,7 @@
     "@nx/webpack": "16.2.2",
     "@nx/workspace": "16.2.2",
     "@nxext/capacitor": "15.7.0",
+    "@playwright/test": "^1.35.1",
     "@pyodide/webpack-plugin": "1.1.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/commit-analyzer": "9.0.2",
