@@ -78,6 +78,7 @@ function RequestTable({ requests, updateCallback }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState(0)
 
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
@@ -107,6 +108,13 @@ function RequestTable({ requests, updateCallback }) {
 
     if (json) enqueueSnackbar('Request deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting Request', { variant: 'error' })
+
+    if (page.length === 1) {
+      const pageIndex = currentPage - 1
+      setCurrentPage(pageIndex)
+      gotoPage(pageIndex)
+    }
+
     // close the action menu
     handleActionClose()
     updateCallback()
@@ -114,24 +122,36 @@ function RequestTable({ requests, updateCallback }) {
   }
 
   // Handle events deletion
-  const handleDeleteMany = async (event: any) => {
-    const isDeleted: Array<unknown> = await client.service('request').remove(null, {
+  const handleDeleteMany = async (event) => {
+    const isDeleted = await client.service('request').remove(null, {
       query: {
         id: {
-          $in: selectedRows
-        }
-      }
-    })
+          $in: selectedRows,
+        },
+      },
+    });
+  
     if (isDeleted) {
       enqueueSnackbar('Requests deleted', { variant: 'success' });
+      // Update the table data with the updated data from the server
       updateCallback();
+      // Clear the selected rows
+      setSelectedRows([]);
+  
+      const updatedPageLength = page.length - selectedRows.length;
+      // Check if there are no more documents on the current page
+      if (updatedPageLength === 0 && currentPage > 0) {
+        const pageIndex = currentPage - 1;
+        setCurrentPage(pageIndex);
+        // Go to the previous page
+        gotoPage(pageIndex);
+      }
     } else {
       enqueueSnackbar('Error deleting Requests', { variant: 'error' });
     }
-
-    // Clear the selected rows
-    setSelectedRows([]);
-  }
+  };
+  
+  
 
 
   const defaultColumns = useMemo(
@@ -201,6 +221,9 @@ function RequestTable({ requests, updateCallback }) {
       {
         columns: defaultColumns,
         data: requests,
+        initialState : {
+          pageIndex: currentPage 
+        }
       },
       useFilters,
       useGlobalFilter,
@@ -211,6 +234,7 @@ function RequestTable({ requests, updateCallback }) {
   // Handle page change
   const handlePageChange = (page: number) => {
     const pageIndex = page - 1
+    setCurrentPage(pageIndex)
     gotoPage(pageIndex)
   }
 
@@ -292,6 +316,9 @@ function RequestTable({ requests, updateCallback }) {
 
     )
   })
+
+  
+      
 
 
   return (

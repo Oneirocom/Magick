@@ -36,7 +36,7 @@ export interface EventData {
   content: string
   type: string
   channel: string
-  channelType: string
+  channelType?: string
   observer: string
   date: string
 }
