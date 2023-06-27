@@ -25,6 +25,7 @@ export async function makeChatCompletion(
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
+  let func = inputs['function']?.[0] as string
 
   // Get or set default settings
   const settings = {
@@ -71,6 +72,20 @@ export async function makeChatCompletion(
 
   // Update the settings messages
   settings.messages = messages
+  if (func && func !== '') {
+    // if func is a string, it's propbably an unescaped string of json
+    // first, check if it's json
+    if (func[0] === '{' && func[func.length - 1] === '}') {
+      try {
+        // then parse the json
+        func = JSON.parse(func)
+        console.log('parsed function', func)
+      } catch (e) {
+        console.error('Error parsing function', e)
+      }
+    }
+    settings.functions = [func]
+  }
 
   const openaiKey = context.module.secrets!['openai_api_key']
 
@@ -95,8 +110,15 @@ export async function makeChatCompletion(
       console.error('OpenAI Error', completion.data.error)
     }
 
+    const finishReason = completion.data?.choices[0]?.finish_reason
+    const function_call =
+      completion.data?.choices[0]?.message?.function_call?.arguments
+
     // Extract the result from the response
-    const result = completion.data?.choices[0]?.message?.content
+    const result =
+      finishReason === 'function_call'
+        ? function_call
+        : completion.data?.choices[0]?.message?.content
 
     // Log the usage of tokens
     const usage = completion.data.usage
@@ -120,11 +142,11 @@ export async function makeChatCompletion(
       nodeId: node.id,
     })
 
-    if (
-      result &&
-      completion.data.choices &&
-      completion.data.choices.length > 0
-    ) {
+    if (function_call) {
+      return { success: true, result: function_call }
+    }
+
+    if (result) {
       return { success: true, result }
     }
     return { success: false, error: 'No result' }
