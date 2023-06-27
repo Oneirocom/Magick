@@ -69,6 +69,7 @@
   background: var(--dark-0);
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
   display: flex;
+  word-break: break-word;
 }
 .input,
 .output {
