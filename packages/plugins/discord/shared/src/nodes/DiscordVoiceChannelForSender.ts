@@ -15,18 +15,14 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  arraySocket,
+  stringSocket,
 } from '@magickml/core'
-import { ChannelType } from '../types/ChannelType'
 
 /**
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  output: {
-    id: string,
-    name: string,
-  }[]
+  output: string | number | null
 }
 
 /**
@@ -34,12 +30,12 @@ type WorkerReturn = {
  * @category Discord
  * @remarks Must be paired with AgentExecutor.
  */
-export class DiscordListTextChannels extends MagickComponent<
+export class DiscordVoiceChannelForSender extends MagickComponent<
   Promise<WorkerReturn>
 > {
   constructor() {
     super(
-      'Discord Text Channels',
+      'Get Voice Channel For Sender',
       {
         outputs: {
           output: 'output',
@@ -47,7 +43,7 @@ export class DiscordListTextChannels extends MagickComponent<
         },
       },
       'Discord',
-      'Gets the List of All text channels in a server'
+      'Gets the current voice channel of the message sender'
     )
   }
 
@@ -59,7 +55,7 @@ export class DiscordListTextChannels extends MagickComponent<
   builder(node: MagickNode) {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'Array', arraySocket)
+    const outp = new Rete.Output('output', 'Channel ID', stringSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
     return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
@@ -83,7 +79,7 @@ export class DiscordListTextChannels extends MagickComponent<
     if (!agent || !agent?.discord) {
       console.warn('sending default information since there is no agent available')
       return {
-        output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
+        output: null
       }
     }
 
@@ -95,34 +91,21 @@ export class DiscordListTextChannels extends MagickComponent<
         (Object.values(data)[0] as any)?.eventData ||
         Object.values(data)[0]) as Event
 
-    // discordClient is a Discord.js client instance
     const discordClient = agent.discord.client
 
-    const channel = event.channel // channel in which the message was sent
+    // get the username of the message sender
+    const username = event.sender
 
-    // fetch the channel using its ID
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    // get the user from the cache
+    const user = discordClient.users.cache.find(user => user.username === username)
 
-    if (!fetchedChannel) {
-      throw new Error('Channel not found')
-    }
+    // get the guild from the channel ID
+    const channel = await discordClient.channels.fetch(event.channel)
+    const guild = channel.guild
 
-    if (fetchedChannel.type !== ChannelType.GuildText) {
-      throw new Error('Event channel must be a text channel')
-    }
+    const member = await guild.members.fetch(user)
+    const voiceChannel = member.voice.channel
 
-    // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild;
-
-    // get the list of text channels
-    const textChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildText);
-
-    // return the list of text channels as an array
-    const textChannelArray = textChannels.map(channel => ({
-      id: channel.id,
-      name: channel.name,
-    }));
-
-    return { output: textChannelArray };
+    return { output: voiceChannel && voiceChannel.id };
   }
 }
