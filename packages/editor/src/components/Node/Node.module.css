@@ -47,7 +47,7 @@
 }
 .node-id {
   position: absolute;
-  top: 5px;
+  top: 8px;
   right: 10px;
   color: var(--dark-4);
 }
@@ -57,6 +57,10 @@
 .node-id.success {
   color: var(--green);
 }
+.node-title-container {
+  background: var(--dark-0);
+  border-bottom: 1px solid var(--dark-2);
+}
 .node-title {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
@@ -64,11 +68,10 @@
   letter-spacing: 0.1em;
   font-weight: 900;
   padding: var(--extraSmall);
-  border-bottom: 1px solid var(--dark-2);
   color: var(--glow);
-  background: var(--dark-0);
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
   display: flex;
+  width: 83%;
   word-break: break-word;
 }
 .input,
