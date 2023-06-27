@@ -87,6 +87,11 @@ const completionProviders: CompletionProvider[] = [
         name: 'Input',
         type: stringSocket,
       },
+      {
+        socket: 'function',
+        name: 'Function',
+        type: stringSocket,
+      }
     ],
     outputs: [
       {
@@ -100,7 +105,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: PRODUCTION ? ['gpt-3.5-turbo'] : ['gpt-3.5-turbo', 'gpt4'],
+    models: PRODUCTION ? ['gpt-3.5-turbo'] : ['gpt-3.5-turbo', 'gpt4', 'gpt-4-0613'],
   },
 ]
 
