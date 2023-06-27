@@ -53,7 +53,7 @@ export const event = (app: Application) => {
         (context: HookContext) => {
           const { getEmbedding } = context.params.query
           if (getEmbedding) {
-            // context.params.query.$limit = 1
+            context.params.query.$limit = 1
             context.params.query.embedding = { $ne: pgvector.toSql(nullArray) }
           }
           return context
