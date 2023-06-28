@@ -259,6 +259,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.4.4",
     "@babel/plugin-transform-typescript": "7.21.3",
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.21.5",
