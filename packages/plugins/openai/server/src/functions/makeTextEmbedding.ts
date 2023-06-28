@@ -6,6 +6,7 @@ import {
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
+import { DEFAULT_OPENAI_KEY } from '@magickml/config'
 
 /**
  * A function that makes a request to create a text embedding using OpenAI's
@@ -37,8 +38,7 @@ export async function makeTextEmbedding(
   }
 
   const apiKey =
-    (context?.module?.secrets && context?.module?.secrets['openai_api_key']) ||
-    null
+    (context?.module?.secrets && context?.module?.secrets['openai_api_key']) || DEFAULT_OPENAI_KEY
 
   if (!apiKey) {
     return {

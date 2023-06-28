@@ -138,6 +138,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       projectId,
       entities,
       embedding,
+      connector,
       agentId,
     } = eventValue as Event
     return {
@@ -151,6 +152,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
       projectId,
       entities,
       embedding,
+      connector,
       agentId,
       trigger: 'option',
     }

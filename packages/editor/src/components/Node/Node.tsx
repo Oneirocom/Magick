@@ -68,12 +68,14 @@ export class MyNode extends Node {
         >
           <p>{node.id}</p>
         </div>
-        <div className={css['node-title']}>
-          <Icon
-            name={componentCategories[node.category]}
-            style={{ marginRight: 'var(--extraSmall)' }}
-          />
-          {fullName}
+        <div className={css['node-title-container']}>
+          <div className={css['node-title']}>
+            <Icon
+              name={componentCategories[node.category]}
+              style={{ marginRight: 'var(--extraSmall)' }}
+            />
+            {fullName}
+          </div>
         </div>
         <div className={css['connections-container']}>
           {html !== undefined && (

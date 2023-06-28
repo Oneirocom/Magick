@@ -126,6 +126,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'data',
   'publicVariables',
   'secrets',
+  'image',
 ]);
 
 /**
