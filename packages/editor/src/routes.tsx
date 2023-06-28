@@ -21,7 +21,6 @@ import './design-globals/design-globals.css'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
-import Chat from './screens/Chat'
 
 /**
  * A component that renders the given component element with the given props.
@@ -77,7 +76,6 @@ const MyRoutes = () => (
         <Route path="/" element={<Magick />} />
         <Route path="/magick/*" element={<Magick />} />
         <Route path="/magick/:URI" element={<Magick />} />
-        <Route path="/chat/*" element={<Chat />} />
       </Route>
     </Route>
   </Routes>
