@@ -12,7 +12,7 @@ import { WagmiConfig } from 'wagmi'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import App from './App'
-import { client } from './wagmi'
+import { config as wagmiConfig } from './wagmi'
 import AppProviders from './contexts/AppProviders'
 import { createStore } from './state/store'
 
@@ -40,7 +40,7 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
       <Provider store={createStore(config)}>
         <AppProviders config={config}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <WagmiConfig client={client}>
+            <WagmiConfig config={wagmiConfig}>
               <App />
             </WagmiConfig>
           </LocalizationProvider>
