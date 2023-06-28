@@ -28,11 +28,11 @@ const completionProviders: CompletionProvider[] = [
     type: 'text',
     subtype: 'chat',
     inputs: [
-      {
-        socket: 'system',
-        name: 'System Directive',
-        type: stringSocket,
-      },
+      // {
+      //   socket: 'system',
+      //   name: 'System Directive',
+      //   type: stringSocket,
+      // },
       {
         socket: 'conversation',
         name: 'Conversation ',
