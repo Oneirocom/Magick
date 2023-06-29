@@ -27,6 +27,12 @@
   }
 }
 
+.expandCollapse {
+  box-shadow: none !important;
+  height: 2rem !important;
+  width: 2rem !important;
+}
+
 .tableCellBody {
   border-bottom: 1px solid var(--dark-3) !important;
   color: var(--dark-5) !important;
