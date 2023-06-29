@@ -38,11 +38,6 @@ const completionProviders: CompletionProvider[] = [
         name: 'Input',
         type: stringSocket,
       },
-      {
-        socket: 'function',
-        name: 'Function',
-        type: stringSocket,
-      },
     ],
     outputs: [
       {
