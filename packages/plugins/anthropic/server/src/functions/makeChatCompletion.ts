@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import Anthropic from '@anthropic-ai/sdk'
 

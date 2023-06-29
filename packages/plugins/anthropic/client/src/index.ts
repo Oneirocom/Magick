@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 /**
  * A plugin for interacting with anthropic's API.
  * @class
