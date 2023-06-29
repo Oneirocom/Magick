@@ -27,7 +27,6 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
       'Discord leave voice',
       {
         outputs: {
-          output: 'output',
           trigger: 'option',
         },
       },
@@ -64,12 +63,9 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
     context: ModuleContext
   ): Promise<void> {
     const { agent } = context
-    if (!agent) {
-      throw new Error('Agent not found')
-    }
-
-    if (!agent?.discord) {
-      throw new Error('Discord connector not found on agent, is Discord initialized?')
+    if (!agent || !agent?.discord) {
+      console.warn('Skipping node since there is no agent available')
+      return;
     }
 
     const channel = inputs.channel?.[0] as any
