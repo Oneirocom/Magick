@@ -10,7 +10,7 @@ sidebar_position: 1
 ## Apps
 ### Client
 @magickml/client (./apps/client)
-Frontend application. Everything the user sees in Magick IDE is exposed through the client, although most of the code lives in client-core and editor packages, as well as engine. Thin, mostly contains build settings and Capacitor configuration (for binary builds).
+Frontend application. Everything the user sees in Magick IDE is exposed through the client, although most of the code lives in client-core and editor packages, as well as engine. Thin, mostly contains build settings and entrypoint.
 
 ### Server
 @magickml/server (./apps/server)
