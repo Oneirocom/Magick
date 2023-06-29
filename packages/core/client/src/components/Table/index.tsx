@@ -146,6 +146,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 />
               </TableCell>
             ) : (headCell.id as any) === 'action' ||
+              (headCell.id as any) === 'collapse' ||
               (headCell.id as any) === 'select' ? (
               <span>{headCell.label} </span>
             ) : (
@@ -328,6 +329,7 @@ export const TableComponent = ({
                           <IconButton
                             aria-label={isExpanded ? 'Collapse' : 'Expand'}
                             size="small"
+                            className={styles.expandCollapse}
                             onClick={() => handleRowClick(row.id || row.row.id)}
                           >
                             {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
