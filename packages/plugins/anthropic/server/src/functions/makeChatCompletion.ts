@@ -1,6 +1,7 @@
 // UNDOCUMENTED
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import Anthropic from '@anthropic-ai/sdk'
+import { countTokens } from '@anthropic-ai/tokenizer'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -60,8 +61,11 @@ export async function makeChatCompletion(
   const conversationMessagesString =
     conversationMessages.join() + `${Anthropic.AI_PROMPT}`
 
+  const tokens = countTokens(conversationMessagesString)
+
   console.log('conversationMessagesString', conversationMessagesString)
   console.log('settings', settings)
+  console.log('tokens', tokens)
 
   if (!context.module.secrets) {
     throw new Error('ERROR: No secrets found')
@@ -90,10 +94,10 @@ export async function makeChatCompletion(
       statusCode: 200, // TODO: could improve, not returned
       status: 'success', // TODO: could improve, not returned
       model: model,
-      parameters: JSON.stringify(''),
+      parameters: JSON.stringify(settings),
       type: 'completion',
       provider: 'anthropic',
-      totalTokens: 0, // TODO: not provided yet but see here: https://github.com/anthropics/anthropic-sdk-typescript/issues/16#issuecomment-1611839136
+      totalTokens: tokens,
       hidden: false,
       processed: false,
       spell,
