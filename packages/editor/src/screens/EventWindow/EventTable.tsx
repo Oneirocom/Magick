@@ -222,12 +222,16 @@ function EventTable({ events, updateCallback }) {
 
   // Handle events deletion
   const handleDeleteMany = async (event: any) => {
-    const ids = selectedRows.join('&')
-    const isDeleted = await fetch(`${API_ROOT_URL}/events/${ids}`, {
+    const isDeleted = await fetch(`${API_ROOT_URL}/events`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        _id: {
+          $in: selectedRows
+        }
+      })
     })
     setSelectedRows([])
     if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
