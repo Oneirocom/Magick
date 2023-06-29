@@ -178,8 +178,8 @@ function EventTable({ events, updateCallback }) {
       {
         columns: defaultColumns,
         data: events,
-        initialState : {
-          pageIndex: currentPage 
+        initialState: {
+          pageIndex: currentPage
         }
       },
       useFilters,
@@ -227,19 +227,38 @@ function EventTable({ events, updateCallback }) {
 
   // Handle events deletion
   const handleDeleteMany = async (event: any) => {
-    const ids = selectedRows.join('&')
-    const isDeleted = await fetch(`${API_ROOT_URL}/events/${ids}`, {
+    const isDeleted = await fetch(`${API_ROOT_URL}/events`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
-    setSelectedRows([])
-    if (isDeleted) enqueueSnackbar('Events deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
-    // close the action menu
-    updateCallback()
-  }
+      body: JSON.stringify({
+        _id: {
+          $in: selectedRows
+        }
+      })
+    });
+  
+    if (isDeleted) {
+      enqueueSnackbar('Events deleted', { variant: 'success' });
+      // Update the table data with the updated data from the server
+      updateCallback();
+      // Clear the selected rows
+      setSelectedRows([]);
+  
+      const updatedPageLength = page.length - selectedRows.length;
+      // Check if there are no more documents on the current page
+      if (updatedPageLength === 0 && currentPage > 0) {
+        const pageIndex = currentPage - 1;
+        setCurrentPage(pageIndex);
+        // Go to the previous page
+        gotoPage(pageIndex);
+      }
+    } else {
+      enqueueSnackbar('Error deleting Event', { variant: 'error' });
+    }
+  };
+  
 
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
@@ -271,7 +290,7 @@ function EventTable({ events, updateCallback }) {
     [flatRows]
   )
 
-  
+  console.log(page.length)
 
   // Render the table with useMemo
   return (
