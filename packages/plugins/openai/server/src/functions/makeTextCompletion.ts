@@ -2,6 +2,7 @@
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
+import { DEFAULT_OPENAI_KEY } from '@magickml/config'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -50,11 +51,12 @@ export async function makeTextCompletion(
     throw new Error('ERROR: No secrets found')
   }
 
+  const openaiKey = context.module.secrets!['openai_api_key']
+
   // Set up headers for the API request.
   const headers = {
     'Content-Type': 'application/json',
-    Authorization:
-      'Bearer ' + (context.module.secrets['openai_api_key'] || null),
+    Authorization: 'Bearer ' + openaiKey ? DEFAULT_OPENAI_KEY : openaiKey,
   }
 
   // Make the API request and handle the response.

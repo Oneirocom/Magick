@@ -351,39 +351,41 @@ const AgentDetails = ({
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
-            )
-            const inputs = (pluginManager as ClientPluginManager).getInputByName()
-            const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
+            );
+            const inputs = (pluginManager as ClientPluginManager).getInputByName();
+            const plugin_list = (pluginManager as ClientPluginManager).getPlugins();
             for (const key of Object.keys(plugin_list)) {
-              if (!newRootSpell) continue
-              plugin_list[key] = validateSpellData(newRootSpell, inputs[key])
+              if (!newRootSpell) continue;
+              plugin_list[key] = validateSpellData(newRootSpell, inputs[key]);
             }
-            setEnable(plugin_list)
+            setEnable(plugin_list);
             enqueueSnackbar(
               'Greyed out components are not available because of the selected spell.',
               {
                 variant: 'info',
               }
-            )
+            );
             setSelectedAgentData({
               enabled: true,
               ...selectedAgentData,
-            })
-            updatePublicVar(newRootSpell)
-            setUpdateNeeded(true)
+            });
+            updatePublicVar(newRootSpell);
+            setUpdateNeeded(true);
           }}
         >
           <option disabled value={'default'}>
             Select Spell
           </option>
           {spellList?.length > 0 &&
-            spellList.map((spell, idx) => {
-              return (
-                <option value={spell.name} key={idx}>
-                  {spell.name}
-                </option>
-              )
-            })}
+            spellList
+              .sort((a, b) => a.name.localeCompare(b.name)) // Sort the spellList alphabetically by name
+              .map((spell, idx) => {
+                return (
+                  <option value={spell.name} key={idx}>
+                    {spell.name}
+                  </option>
+                );
+              })}
         </select>
       </div>
       <div>
