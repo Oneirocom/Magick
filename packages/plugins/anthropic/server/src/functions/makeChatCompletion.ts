@@ -61,11 +61,8 @@ export async function makeChatCompletion(
   const conversationMessagesString =
     conversationMessages.join() + `${Anthropic.AI_PROMPT}`
 
+  // Count the number of tokens in the prompt.
   const tokens = countTokens(conversationMessagesString)
-
-  console.log('conversationMessagesString', conversationMessagesString)
-  console.log('settings', settings)
-  console.log('tokens', tokens)
 
   if (!context.module.secrets) {
     throw new Error('ERROR: No secrets found')
