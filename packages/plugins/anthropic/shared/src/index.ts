@@ -2,11 +2,9 @@
 import {
   arraySocket,
   CompletionProvider,
-  embeddingSocket,
   PluginSecret,
   stringSocket,
 } from '@magickml/core'
-import { PRODUCTION } from '@magickml/config'
 
 /**
  * An array of PluginSecret objects containing information about API key secrets.
