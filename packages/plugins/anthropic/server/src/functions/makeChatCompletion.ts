@@ -19,8 +19,22 @@ export async function makeChatCompletion(
   const { node, inputs, context } = data
   const { projectId, currentSpell } = context
 
+  // get model
+  const model = node?.data?.model as string
+
   // Set the current spell for record keeping.
   const spell = currentSpell
+
+  // Get settings
+  const settings = {
+    model: node?.data?.model as string,
+    max_tokens_to_sample: parseInt(
+      (node?.data?.max_tokens_to_sample as string) ?? '300'
+    ),
+    temperature: parseFloat((node?.data?.temperature as string) ?? '0.7'),
+    top_k: parseInt((node?.data?.top_k as string) ?? '5'),
+    top_p: parseFloat((node?.data?.top_p as string) ?? '0.7'),
+  }
 
   // Get the input text prompt.
   const prompt = inputs['input'][0] as string
@@ -47,26 +61,7 @@ export async function makeChatCompletion(
     conversationMessages.join() + `${Anthropic.AI_PROMPT}`
 
   console.log('conversationMessagesString', conversationMessagesString)
-
-  // const requestData = {
-  //   model: node?.data?.model,
-  //   temperature: parseFloat((node?.data?.temperature as string) ?? '0'),
-  //   max_tokens: parseFloat((node?.data?.max_tokens as string) ?? '100'),
-  //   top_p: parseFloat((node?.data?.top_p as string) ?? '1.0'),
-  //   frequency_penalty: parseFloat(
-  //     (node?.data?.frequency_penalty as string) ?? '0.0'
-  //   ),
-  //   presence_penalty: parseFloat(
-  //     (node?.data?.presence_penalty as string) ?? '0.0'
-  //   ),
-  //   stop: node?.data?.stop,
-  // }
-
-  // Get the settings object, setting default values if necessary.
-  // const settings = requestData as any
-
-  // Add the prompt to the settings object.
-  // settings.prompt = prompt
+  console.log('settings', settings)
 
   if (!context.module.secrets) {
     throw new Error('ERROR: No secrets found')
@@ -82,14 +77,9 @@ export async function makeChatCompletion(
   try {
     const start = Date.now()
     const resp = await anthropic.completions.create({
-      // prompt: `${Anthropic.HUMAN_PROMPT} hello world ${Anthropic.AI_PROMPT} `,
       prompt: conversationMessagesString,
-      // stop_sequences: [HUMAN_PROMPT],
-      max_tokens_to_sample: 200,
-      model: 'claude-v1',
+      ...settings,
     })
-
-    const usage = 0
 
     // Save the request data for future reference.
     saveRequest({
@@ -97,13 +87,13 @@ export async function makeChatCompletion(
       requestData: JSON.stringify(''),
       responseData: JSON.stringify(resp),
       startTime: start,
-      statusCode: 0, // TODO:
-      status: 'success', // TODO
-      model: 'claude-v1', // TODO
+      statusCode: 200, // TODO: could improve, not returned
+      status: 'success', // TODO: could improve, not returned
+      model: model,
       parameters: JSON.stringify(''),
       type: 'completion',
-      provider: 'anthropic', // TODO
-      totalTokens: 0, // TODO
+      provider: 'anthropic',
+      totalTokens: 0, // TODO: not provided yet but see here: https://github.com/anthropics/anthropic-sdk-typescript/issues/16#issuecomment-1611839136
       hidden: false,
       processed: false,
       spell,

@@ -28,11 +28,6 @@ const completionProviders: CompletionProvider[] = [
     type: 'text',
     subtype: 'chat',
     inputs: [
-      // {
-      //   socket: 'system',
-      //   name: 'System Directive',
-      //   type: stringSocket,
-      // },
       {
         socket: 'conversation',
         name: 'Conversation ',
@@ -61,7 +56,12 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: ['claude', 'claude-instant'],
+    models: [
+      'claude-1',
+      'claude-1-100k',
+      'claude-instant-1',
+      'claude-instant-1-100k',
+    ],
   },
 ]
 
