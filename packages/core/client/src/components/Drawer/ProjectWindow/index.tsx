@@ -157,6 +157,16 @@ const ProjectWindow = ({ openDrawer }) => {
 
     const exportData = data
     exportData.agents.forEach((agent: any) => {
+      Object.keys(agent.data).forEach(key => {
+        if (
+          key.includes('api') ||
+          key.includes('token') ||
+          key.includes('secret') ||
+          key.includes('password')
+        ) {
+          delete agent.data[key]
+        }
+      })
       agent.secrets = {}
     })
 

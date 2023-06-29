@@ -50,6 +50,7 @@ export type SpellInterface = Static<typeof spellSchema>
  * @property {any} [data] - The data stored in the agent (optional).
  * @property {any} [publicVariables] - The public variables of the agent (optional).
  * @property {string} [secrets] - The secrets of the agent (optional).
+ * @property {string} [image] - The image of the agent (optional).
  */
 export const agentSchema = Type.Object(
   {
@@ -64,6 +65,7 @@ export const agentSchema = Type.Object(
     data: Type.Optional(Type.Any()),
     publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
+    image: Type.Optional(Type.String()),
   },
   {
     $id: 'Agent',

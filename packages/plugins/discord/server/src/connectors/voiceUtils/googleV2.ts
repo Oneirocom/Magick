@@ -22,7 +22,8 @@ function getGoogleRequestOptions(
   // Set default values
   let key = 'AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw';
   let lang = 'en-US';
-  let profanityFilter = '1';
+  let profanityFilter = '0';
+
 
   // Override default values if provided
   if (options) {

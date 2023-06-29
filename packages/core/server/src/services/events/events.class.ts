@@ -57,8 +57,10 @@ export class EventService<
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
 
-      query.whereRaw(
-        `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
+      query.select(
+        db.raw(
+          `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
+        )
       )
       query.orderBy('distance', 'asc')
     } else {
