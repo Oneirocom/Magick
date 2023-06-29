@@ -18,6 +18,27 @@ const chatCompletionControls = [
     icon: 'moon',
     defaultValue: 300,
   },
+  {
+    type: InputControl,
+    dataKey: 'temperature',
+    name: 'Temperature',
+    icon: 'moon',
+    defaultValue: 0.7,
+  },
+  {
+    type: InputControl,
+    dataKey: 'top_k',
+    name: 'Top k',
+    icon: 'moon',
+    defaultValue: 5,
+  },
+  {
+    type: InputControl,
+    dataKey: 'top_p',
+    name: 'Top p',
+    icon: 'moon',
+    defaultValue: 0.7,
+  },
 ]
 
 // Object containing all input controls for different completion types
