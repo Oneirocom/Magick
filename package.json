@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cross-env node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel",
     "start": "node scripts/start-server.js",
-    "start-server": "node dist/awpps/server/main.js",
+    "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
     "start-docs": "npx nx serve @magickml/docs",
     "migrate:make": "nx run @magickml/server:migrate:make",
