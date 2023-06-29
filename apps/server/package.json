@@ -26,7 +26,6 @@
     "migrate:make": "knex migrate:make"
   },
   "dependencies": {
-    "feathers-swagger": "^2.0.0",
     "knex": "^2.4.2"
   }
 }
