@@ -94,7 +94,7 @@ async function init() {
   })
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
-  app.use(koaBody({ multipart: true }))
+  app.use(koaBody({ multipart: true, jsonLimit: '50mb', formLimit: '50mb' }))
 
   /**
    * Creates a Koa route from the Route object passed in.
