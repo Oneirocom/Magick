@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 import {
   arraySocket,
   CompletionProvider,
