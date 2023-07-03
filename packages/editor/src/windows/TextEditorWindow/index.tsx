@@ -47,47 +47,48 @@ const TextEditor = props => {
     setCode(textEditorData.data)
   }, [textEditorData])
 
-  useEffect(() => {
-    if (!inspectorData?.data.inputs || !inspectorData?.data.inputs.length) {
-      if (inspectorData?.category === 'Text') {
-        setCode(inspectorData?.data?.fewshot)
-        return
-      }
-      if (Object.keys(textEditorData).length !== 0)
-        setCode(inspectorData?.data?.code)
-      return
-    }
-    const { language } = textEditorData.options || ('javascript' as any)
+  // useEffect(() => {
+  //   debugger
+  //   if (!inspectorData?.data.inputs || !inspectorData?.data.inputs.length) {
+  //     if (inspectorData?.category === 'Text') {
+  //       setCode(inspectorData?.data?.fewshot)
+  //       return
+  //     }
+  //     if (Object.keys(textEditorData).length !== 0)
+  //       setCode(inspectorData?.data?.code)
+  //     return
+  //   }
+  //   const { language } = textEditorData.options || ('javascript' as any)
 
-    const inputs: string[] = []
-    const textLines = (inspectorData?.data?.code as string)?.split('\n') ?? []
-    ;(inspectorData?.data.inputs as any).forEach((input: any) => {
-      inputs.push('  ' + input.socketKey + ',')
-    })
+  //   const inputs: string[] = []
+  //   const textLines = (inspectorData?.data?.code as string)?.split('\n') ?? []
+  //   ;(inspectorData?.data.inputs as any).forEach((input: any) => {
+  //     inputs.push('  ' + input.socketKey + ',')
+  //   })
 
-    // get the index of the first line that starts with function
-    const startIndex = textLines.findIndex(line => line.startsWith('function'))
-    // get the first line that starts with }
-    const endIndex = textLines.findIndex(line => line.startsWith('}'))
+  //   // get the index of the first line that starts with function
+  //   const startIndex = textLines.findIndex(line => line.startsWith('function'))
+  //   // get the first line that starts with }
+  //   const endIndex = textLines.findIndex(line => line.startsWith('}'))
 
-    if (startIndex === -1 || endIndex === -1) return
+  //   if (startIndex === -1 || endIndex === -1) return
 
-    // remove the lines in textLines starting at StartIndex and ending at EndIndex
-    // replace with the inputs
-    textLines.splice(startIndex + 1, endIndex - startIndex - 1, ...inputs)
+  //   // remove the lines in textLines starting at StartIndex and ending at EndIndex
+  //   // replace with the inputs
+  //   textLines.splice(startIndex + 1, endIndex - startIndex - 1, ...inputs)
 
-    // join the textLines array back into a string
-    const updatedText = textLines.join('\n')
-    const newTextEditorData = {
-      ...textEditorData,
-    }
-    if (language === 'javascript' || language === 'python') {
-      newTextEditorData.data = updatedText
-    }
+  //   // join the textLines array back into a string
+  //   const updatedText = textLines.join('\n')
+  //   const newTextEditorData = {
+  //     ...textEditorData,
+  //   }
+  //   if (language === 'javascript' || language === 'python') {
+  //     newTextEditorData.data = updatedText
+  //   }
 
-    setData(newTextEditorData)
-    setCode(updatedText)
-  }, [inspectorData, textEditorData])
+  //   setData(newTextEditorData)
+  //   setCode(updatedText)
+  // }, [inspectorData, textEditorData])
 
   // useEffect(() => {
   //   if (code === textEditorData?.data && !code) return
