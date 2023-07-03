@@ -143,7 +143,7 @@ export class ProjectsService {
     }
 
     // Map agents, documents, and spells with updated information for the new project
-    const mappedAgents = agents.map(agent => {
+    const mappedAgents = (agents ?? []).map(agent => {
       delete agent.id
       if (!agent.data) agent.data = '{}'
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
@@ -153,7 +153,7 @@ export class ProjectsService {
       return agent
     })
 
-    const mappedDocuments = documents.map(doc => {
+    const mappedDocuments = (documents ?? []).map(doc => {
       delete doc.id
       doc.projectId = projectId
       return doc
@@ -162,7 +162,7 @@ export class ProjectsService {
     // Create a key value of old IDs to new IDs for spells
     const spellKeys = {}
 
-    const mappedSpells = spells.map(spell => {
+    const mappedSpells = (spells ?? []).map(spell => {
       delete spell.updatedAt
 
       // generate new uuid
@@ -190,7 +190,8 @@ export class ProjectsService {
     const agentResponse: any[] = []
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
-        console.log('creating agent', agent)
+        // todo: clear this up so validation works
+        delete(agent.runState)
 
         const r = await app.service('agents').create(agent)
         agentResponse.push(r)
