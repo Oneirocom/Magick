@@ -2,7 +2,7 @@
 import { Tooltip } from '@magickml/client-core'
 import { pluginManager } from '@magickml/core'
 import { Clear } from '@mui/icons-material/'
-import { IconButton, Input } from '@mui/material'
+import { IconButton, Input, Button } from '@mui/material'
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
 import styles from './styles.module.scss'
@@ -29,7 +29,6 @@ const SettingsWindowChild = ({
   // const [copy, setCopy] = useState('Copy')
   const [clear, setClear] = useState('Clear')
   // Snackbar for showing notifications
-  const { enqueueSnackbar } = useSnackbar()
 
   return (
     <div className={styles['child']}>
@@ -44,10 +43,6 @@ const SettingsWindowChild = ({
         value={getKey(keyName) || ''}
         onChange={e => {
           setKey(keyName, e.target.value)
-          // Show success message
-          enqueueSnackbar(`${displayName.toLowerCase()} set successfully`, {
-            variant: 'success',
-          })
         }}
       />
       {getKey(keyName) && getKey(keyName) !== '' && (
@@ -90,6 +85,7 @@ const SettingsWindowChild = ({
           available here.
         </a>
       </div>
+
     </div>
   )
 }
@@ -102,6 +98,8 @@ const SettingsWindowChild = ({
 const SettingsWindow = () => {
   // State for nonce
   const [nonce, setNonce] = useState(0)
+  const { enqueueSnackbar } = useSnackbar()
+
 
   // Function to get service key from local storage
   const getKey = key => {
@@ -123,30 +121,77 @@ const SettingsWindow = () => {
     setNonce(nonce + 1)
   }
 
+  const handleSaveKey = () => {
+    const settings = pluginManager.getSecrets(true).reduce((acc, value) => {
+      const keyValue = getKey(value.key);
+      return { ...acc, [value.key]: keyValue };
+    }, {});
+
+    // Perform validation on the settings
+    const hasValue = Object.values(settings).some(value => value !== '');
+
+    if (!hasValue) {
+      // Show an error message if no setting has a value
+      enqueueSnackbar('Please fill in at least one setting', {
+        variant: 'error',
+      });
+      return;
+    }
+
+    localStorage.setItem('settings', JSON.stringify(settings));
+
+    pluginManager.getSecrets(true).forEach(value => {
+      const { name, displayName } = value;
+      const secretName = displayName || name;
+      const valueName = settings[value.key];
+
+      if (valueName) {
+        enqueueSnackbar(`${secretName.toLowerCase()} set successfully`, {
+          variant: 'success',
+        });
+      }
+    });
+  };
+
+
+
   const globalSecrets = pluginManager.getSecrets(true)
 
   return (
     nonce !== null && (
-      <div className={styles['settings-editor']}>
-        {globalSecrets.map((value, index) => {
-          return (
-            <SettingsWindowChild
-              key={value.key}
-              displayName={value.name}
-              keyName={value.key}
-              getUrl={value.getUrl}
-              setKey={setKey}
-              getKey={getKey}
-            />
-          )
-        })}
-        <div className={styles['child']}>
-          <p>
-            We do not keep your API keys. They are stored in your browser's
-            local storage.
-          </p>
+      <>
+        <div className={styles['settings-editor']}>
+          {globalSecrets.map((value, index) => {
+            return (
+              <SettingsWindowChild
+                key={value.key}
+                displayName={value.name}
+                keyName={value.key}
+                getUrl={value.getUrl}
+                setKey={setKey}
+                getKey={getKey}
+              />
+            )
+          })}
+          <div className={styles['child']}>
+            <p>
+              We do not keep your API keys. They are stored in your browser's
+              local storage.
+            </p>
+          </div>
+          <div>
+            <Button
+              onClick={handleSaveKey}
+              className={styles.btn}
+              variant="outlined"
+              style={{ marginLeft: '1rem' }}
+            >
+              Save
+            </Button>
+          </div>
         </div>
-      </div>
+
+      </>
     )
   )
 }
