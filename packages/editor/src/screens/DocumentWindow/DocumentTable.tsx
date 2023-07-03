@@ -229,48 +229,50 @@ function DocumentTable({ documents, updateCallback }) {
     date: new Date().toISOString(),
     embedding: '',
   })
-  // Handle save action
-  const handleSave = async (selectedModel) => {
-    // call documents endpoint
-    const result = await fetch(`${API_ROOT_URL}/documents`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        date: new Date().toISOString(),
-        ...newDocument,
-        projectId: config.projectId,
-        modelName: selectedModel.model,
-        secrets: localStorage.getItem('secrets'),
-      }),
-    })
-    // Check if the save operation was successful
-    if (result.ok) {
+// Handle save action
+const handleSave = async (selectedModel) => {
+  // call documents endpoint
+  const result = await fetch(`${API_ROOT_URL}/documents`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      date: new Date().toISOString(),
+      ...newDocument,
+      projectId: config.projectId,
+      modelName: selectedModel.model,
+      secrets: localStorage.getItem('secrets'),
+    }),
+  });
+  // Check if the save operation was successful
+  if (result.ok) {
+    // Reset newDocument
+    setNewDocument({
+      type: '',
+      content: '',
+      projectId: '',
+      date: '',
+      embedding: '',
+    });
+    enqueueSnackbar('Document saved successfully', { variant: 'success' });
 
-      // Trigger the updateCallback function to update the table
-      setTimeout(() => {
-        updateCallback(); // Trigger the updateCallback function after a delay
-      }, 2000);
 
+    // Close the modal by setting createMode to false after a delay
+    setTimeout(() => {
+      setCreateMode(false);
+    }, 2000);
 
-      setCreateMode(!createMode);
-
-      //Reset newDocument
-      setNewDocument({
-        type: '',
-        content: '',
-        projectId: '',
-        date: '',
-        embedding: '',
-      });
-
-      enqueueSnackbar('Document saved successfully', { variant: 'success' });
-    } else {
-      enqueueSnackbar('Error saving document', { variant: 'error' });
-    }
+    // Trigger the updateCallback function to update the table after a delay
+   
+      updateCallback();
+    
+  } else {
+    enqueueSnackbar('Error saving document', { variant: 'error' });
   }
+};
+
   // Show create modal
   const showCreateModal = () => {
     setCreateMode(true)
