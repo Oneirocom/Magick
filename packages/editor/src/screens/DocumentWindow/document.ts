@@ -1,6 +1,7 @@
 export interface Column {
     id:
       | 'action'
+      | 'collapse'
       | 'id'
       | 'type'
       | 'content'
@@ -13,6 +14,7 @@ export interface Column {
   
   export const columns: Column[] = [
     { id: 'action', label: 'Actions', minWidth: 10 },
+    { id: 'collapse', label: '', minWidth: 10 },
     { id: 'content', label: 'Content', minWidth: 65 },
     { id: 'type', label: 'Type', minWidth: 65 },
     { id: 'projectId', label: 'Project ID', minWidth: 65 },
