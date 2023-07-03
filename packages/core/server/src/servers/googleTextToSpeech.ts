@@ -4,7 +4,6 @@
  */
 import { TextToSpeechClient } from '@google-cloud/text-to-speech'
 import * as fs from 'fs'
-import util from 'util'
 
 let client: TextToSpeechClient
 
@@ -49,9 +48,23 @@ export async function tts(
     fs.unlinkSync(outputFile)
   }
 
+  function promisify(fn) {
+    return function (...args) {
+      return new Promise((resolve, reject) => {
+        fn(...args, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+  }  
+
   // Synthesize speech and write to a file
   const [response] = await client.synthesizeSpeech(ttsRequest)
-  const writeFile = util.promisify(fs.writeFile)
+  const writeFile = promisify(fs.writeFile)
   await writeFile(outputFile, response.audioContent as string, 'binary')
   
   return outputFile
