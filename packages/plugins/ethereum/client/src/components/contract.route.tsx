@@ -1,30 +1,19 @@
 // DOCUMENTED 
-import React, { FC } from 'react';
-import { useState, useEffect } from 'react';
-import {
-  useContract,
-  useConnect,
-  useDisconnect,
-  useAccount,
-  useNetwork,
-  useSigner,
-  useContractWrite,
-  usePrepareContractWrite,
-  useSwitchNetwork,
-  WagmiConfig,
-  configureChains,
-  createClient,
-} from 'wagmi';
-import { goerli, mainnet, polygonMumbai } from 'wagmi/chains';
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
-import { useParams } from 'react-router-dom';
-import contractABI from './contract.json';
 import { ethers } from 'ethers';
+import { FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  useAccount,
+  useConnect,
+  useContract,
+  useContractWrite,
+  useDisconnect,
+  useNetwork,
+  usePrepareContractWrite,
+  useSigner,
+  useSwitchNetwork
+} from 'wagmi';
+import contractABI from './contract.json';
 
 /**
  * ContractComponent to interact with Ethereum contracts

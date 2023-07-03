@@ -61,13 +61,3 @@ Postgres is a full SQL database that can be used for storing user data and proje
 ### PGVector
 Similarity search for Postgres. https://github.com/pgvector/pgvector
 In production we use pgvector for similarity search on events and documents.
-
-## Native Application
-
-### Capacitor
-Cross-platform native runtime. https://capacitorjs.com/
-Capacitor is a cross-platform native runtime that allows us to run the same code on iOS, Android and Electron. We use Capacitor to create the native Electron app, as well as to create the native Android and iOS apps. Capacitor also allows us to use native plugins.
-
-### Capacitor Community Electron
-Electron plugin for Capacitor. https://github.com/capacitor-community/electron
-Electron powers many apps built using web-technologies. Capacitor bridges electron to our web-native project, so we don't need to write any custom code for native apps.
