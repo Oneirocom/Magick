@@ -32,25 +32,8 @@ const MagickInterfaceProvider: React.FC<{
 }> = ({ children, tab }) => {
   const config = useConfig()
   const { events, publish, subscribe } = usePubSub()
-  const spellRef = useRef<SpellInterface | null>(null)
   const [_runSpell] = spellApi.useRunSpellMutation()
   const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
-  const { data: _spell } = spellApi.useGetSpellByIdQuery(
-    {
-      spellName: tab.name.split('--')[0],
-      id: tab.id,
-      projectId: config.projectId,
-    },
-    {
-      skip: !tab.name.split('--')[0],
-    }
-  )
-
-  // Update spellRef when new data is fetched
-  useEffect(() => {
-    if (!_spell) return
-    spellRef.current = _spell.data[0]
-  }, [_spell])
 
   // Destructure event types
   const {
