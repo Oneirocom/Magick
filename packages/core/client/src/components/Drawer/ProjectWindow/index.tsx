@@ -72,7 +72,7 @@ const ProjectWindow = ({ openDrawer }) => {
    *
    * @param {File} selectedFile - Selected file object
    */
-  const loadFile = selectedFile => {
+  const loadFile = async (selectedFile, replace) => {
     if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create a project', {
         variant: 'error',
@@ -81,29 +81,29 @@ const ProjectWindow = ({ openDrawer }) => {
     }
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
-    fileReader.onload = event => {
+    fileReader.onload = async event => {
       const data = JSON.parse(event?.target?.result as string)
 
       delete data['id']
-      axios({
+
+      console.log('agents', data.agents)
+
+      // upload agents
+      await axios({
         url: `${globalConfig.apiUrl}/projects`,
         method: 'POST',
-        data: { ...data, projectId: globalConfig.projectId },
+        data: { ...data, projectId: globalConfig.projectId, replace },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then(async res => {
-          const res2 = await fetch(
-            `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          const json = await res2.json()
-          setData(json)
-        })
-        .catch(err => {
-          console.error('error is', err)
-        })
+      
+      const res2 = await fetch(
+        `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      const json = await res2.json()
+      setData(json)
     }
     handleClose()
   }
@@ -113,40 +113,8 @@ const ProjectWindow = ({ openDrawer }) => {
    *
    * @param {File} selectedFile - Selected file object
    */
-  const loadFileReplace = selectedFile => {
-    if (!token && PRODUCTION) {
-      enqueueSnackbar('You must be logged in to create a project', {
-        variant: 'error',
-      })
-      return
-    }
-    const fileReader = new FileReader()
-    fileReader.readAsText(selectedFile)
-    fileReader.onload = event => {
-      const data = JSON.parse(event?.target?.result as string)
-
-      delete data['id']
-      axios({
-        url: `${globalConfig.apiUrl}/projects`,
-        method: 'POST',
-        data: { ...data, projectId: globalConfig.projectId, replace: true },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then(async res => {
-          const res2 = await fetch(
-            `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          const json = await res2.json()
-          setData(json)
-        })
-        .catch(err => {
-          console.error('error is', err)
-        })
-    }
-    handleClose()
+  const loadFileReplace = async selectedFile => {
+    loadFile(selectedFile, true)
   }
 
   /**

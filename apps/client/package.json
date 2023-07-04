@@ -7,8 +7,5 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
-  },
-  "devDependencies": {
-    "@capacitor/cli": "^3.6.0"
   }
 }
