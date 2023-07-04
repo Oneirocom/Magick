@@ -6,6 +6,20 @@ import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import styles from './styles.module.scss';
 
+
+
+/**
+ * This function component renders an input form for entering an API key and buttons to copy and clear the key.
+ *
+ * @param {Object} props - The properties of this component.
+ * @param {string} props.displayName - The display name for the service key.
+ * @param {string} props.keyName - The key name of the service key.
+ * @param {string} props.getUrl - The URL where the user can find the API key.
+ * @param {(key: string, value: string) => void} props.setKey - Function to set service key in local storage.
+ * @param {(key: string) => string} props.getKey - Function to get service key from local storage.
+ * @return {JSX.Element} The rendered component.
+ */
+
 const SettingsWindowChild = ({
   displayName,
   keyName,
