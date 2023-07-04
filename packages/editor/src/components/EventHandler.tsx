@@ -47,8 +47,17 @@ const EventHandler = ({ pubSub, tab }) => {
       id: tab.id,
       projectId: config.projectId,
     })
+  }, [config.projectId, getSpell, tab.id, tab.name])
+
+  useEffect(() => {
+    if (!spell) return
+    const oldSpell = JSON.stringify(spellRef.current)
+    const newSpell = JSON.stringify(spell?.data[0])
+    if (oldSpell === newSpell) return
+
     spellRef.current = spell?.data[0]
-  }, [config.projectId, getSpell, spell, tab.id, tab.name])
+  }, [spell])
+
 
   useEffect(() => {
     if (!client.io || !tab.id || !enqueueSnackbar) return
@@ -131,7 +140,7 @@ const EventHandler = ({ pubSub, tab }) => {
       variant: 'success',
     })
 
-    onProcess()
+    // onProcess()
   }
 
   /**
@@ -147,6 +156,8 @@ const EventHandler = ({ pubSub, tab }) => {
       ...currentSpell,
       ...update,
     }
+
+    spellRef.current = updatedSpell
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 
@@ -168,11 +179,11 @@ const EventHandler = ({ pubSub, tab }) => {
       })
 
       // refresh the spell after saving
-      getSpell({
-        spellName: tab.name,
-        id: tab.id,
-        projectId: config.projectId,
-      })
+      // getSpell({
+      //   spellName: tab.name,
+      //   id: tab.id,
+      //   projectId: config.projectId,
+      // })
 
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
@@ -187,7 +198,7 @@ const EventHandler = ({ pubSub, tab }) => {
       return
     }
 
-    onProcess()
+    // onProcess()
   }
 
   const createMessageReactionEditor = () => {
