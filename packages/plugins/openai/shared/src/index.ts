@@ -6,7 +6,8 @@ import {
   PluginSecret,
   stringSocket,
 } from '@magickml/core'
-import { PRODUCTION } from '@magickml/config'
+
+export const GPT4_MODELS = ['gpt4', 'gpt-4-0613']
 
 /**
  * An array of PluginSecret objects containing information about API key secrets.
@@ -105,7 +106,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: PRODUCTION ? ['gpt-3.5-turbo'] : ['gpt-3.5-turbo', 'gpt4', 'gpt-4-0613'],
+    models: ['gpt-3.5-turbo', ...GPT4_MODELS],
   },
 ]
 

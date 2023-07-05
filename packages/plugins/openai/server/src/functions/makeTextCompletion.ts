@@ -2,7 +2,8 @@
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
-import { DEFAULT_OPENAI_KEY } from '@magickml/config'
+import { DEFAULT_OPENAI_KEY, PRODUCTION } from '@magickml/config'
+import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -52,6 +53,13 @@ export async function makeTextCompletion(
   }
 
   const openaiKey = context.module.secrets!['openai_api_key']
+
+  if (PRODUCTION && GPT4_MODELS.includes(settings.model) && !openaiKey) {
+    return {
+      success: false,
+      error: 'OpenAI API key is required for GPT-4 models',
+    }
+  }
 
   // Set up headers for the API request.
   const headers = {
