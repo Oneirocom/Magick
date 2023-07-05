@@ -71,6 +71,7 @@
       "@magickml/plugin-cog-shared": [
         "packages/plugins/cog/shared/src/index.ts"
       ],
+
       "@magickml/plugin-database-client": [
         "packages/plugins/database/client/src/index.ts"
       ],
