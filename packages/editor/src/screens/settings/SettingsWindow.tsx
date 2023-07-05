@@ -108,7 +108,7 @@ const SettingsWindow = () => {
       return;
     }
 
-    localStorage.setItem('secrets', JSON.stringify(secretKeys));
+    window.localStorage.setItem('secrets', JSON.stringify(secretKeys));
 
     pluginManager.getSecrets(true).forEach((value) => {
       const { name, displayName }:any = value;
