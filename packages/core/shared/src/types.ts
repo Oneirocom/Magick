@@ -487,7 +487,7 @@ export type CompletionType = 'image' | 'text' | 'audio' | 'database' | 'search' 
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
-export type TextCompletionSubtype = 'text' | 'embedding' | 'chat' | 'typeChat'
+export type TextCompletionSubtype = 'text' | 'embedding' | 'chat' | 'typeChat' | 'json'
 
 export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
 

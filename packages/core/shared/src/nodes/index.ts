@@ -86,6 +86,7 @@ import { UUIDGenerator } from './text/GenerateUUID'
 import { TypeChat } from './text/TypeChat'
 import { CommandParser } from './flow/CommandParser'
 import { UploadBase64 } from './files/UploadBase64'
+import { Jsonformer } from './text/Jsonformer'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -169,6 +170,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   add: () => new Add(),
   subtract: () => new Subtract(),
   jsonToArray: () => new JSONToArray(),
+  jsonformer: () => new Jsonformer(),
   generateUUID: () => new UUIDGenerator(),
   typeChat: () => new TypeChat(),
   commandParser: () => new CommandParser(),
