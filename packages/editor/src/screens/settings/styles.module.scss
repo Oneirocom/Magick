@@ -1,5 +1,8 @@
 .settings-editor {
   width: 100%;
+  height: 100vh !important;
+  overflow: scroll !important;
+  padding: 1rem;
 }
 
 .settings-editor > .child {
@@ -38,4 +41,10 @@
 
 .info {
   margin-top: 1rem;
+}
+
+.btn {
+  background: var(--dark-3) !important;
+  color: var(--dark-5) !important;
+  border: 1px solid var(--dark-4) !important;
 }
