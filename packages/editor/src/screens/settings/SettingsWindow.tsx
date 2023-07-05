@@ -79,8 +79,8 @@ const SettingsWindow = () => {
 
   // State for keeping track of secret key values
   const [secretKeys, setSecretKeys] = useState(() => {
-    const keys = window.localStorage.getItem('secrets');
-    return keys ? JSON.parse(keys) : {};
+    const info = window.localStorage.getItem('secrets');
+    return info ? JSON.parse(info) : {};
   });
 
   // Function to get service key from local storage
