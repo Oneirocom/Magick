@@ -83,6 +83,7 @@ import { SplitBySentence } from './text/SplitBySentence'
 import { Trim } from './text/Trim'
 import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
+import { Jsonformer } from './text/Jsonformer'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -166,6 +167,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   add: () => new Add(),
   subtract: () => new Subtract(),
   jsonToArray: () => new JSONToArray(),
+  jsonformer: () => new Jsonformer(),
   generateUUID: () => new UUIDGenerator(),
 }
 
