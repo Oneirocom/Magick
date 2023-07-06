@@ -146,7 +146,7 @@ const SettingsWindow = () => {
             local storage.
           </p>
         </div>
-        <div>
+        <div className={styles.btn_container}>
           <Button
             onClick={handleSaveKey}
             className={styles.btn}
