@@ -16,6 +16,8 @@ import { initLogger, getLogger } from '@magickml/core'
 
 import plugins from './plugins'
 
+console.log("WE GET HERE!!!")
+
 initLogger({ name: "AIDE" })
 
 const logger = getLogger()
