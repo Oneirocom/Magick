@@ -8,9 +8,11 @@ import React from 'react'
 import './wdyr'
 import 'regenerator-runtime/runtime'
 import { Provider } from 'react-redux'
+import { WagmiConfig } from 'wagmi'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import App from './App'
+import { config as wagmiConfig } from './wagmi'
 import AppProviders from './contexts/AppProviders'
 import { createStore } from './state/store'
 
@@ -38,7 +40,9 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
       <Provider store={createStore(config)}>
         <AppProviders config={config}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <App />
+            <WagmiConfig config={wagmiConfig}>
+              <App />
+            </WagmiConfig>
           </LocalizationProvider>
         </AppProviders>
       </Provider>
