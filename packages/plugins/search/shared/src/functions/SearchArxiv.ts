@@ -2,6 +2,7 @@
 // modified from https://www.npmjs.com/package/arxiv-api
 import axios from 'axios'
 import _ from 'lodash'
+import util from 'util'
 import { parseString } from 'xml2js'
 
 /** Allowed prefixes and their meanings */
@@ -38,21 +39,7 @@ const SORT_ORDER = {
 
 export { PREFIXES, SEPARATORS, SORT_BY, SORT_ORDER }
 
-function promisify(fn) {
-  return function (...args) {
-    return new Promise((resolve, reject) => {
-      fn(...args, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
-  };
-}
-
-const parseStringPromisified = promisify(parseString)
+const parseStringPromisified = util.promisify(parseString)
 
 /**
  * Generate the arXiv URL for the search query
