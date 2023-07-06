@@ -11,6 +11,10 @@ import { visuallyHidden } from '@mui/utils'
 import styles from './index.module.scss'
 import { Box, Pagination } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
 
 
 interface Props {
@@ -142,6 +146,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 />
               </TableCell>
             ) : (headCell.id as any) === 'action' ||
+              (headCell.id as any) === 'collapse' ||
               (headCell.id as any) === 'select' ? (
               <span>{headCell.label} </span>
             ) : (
@@ -191,6 +196,8 @@ export const TableComponent = ({
   const [orderBy, setOrderBy] = React.useState<keyof Data>(
     fieldOrderBy ? fieldOrderBy : column[0].id
   )
+  const [expandedRows, setExpandedRows] = React.useState<string[]>([]);
+
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -245,18 +252,26 @@ export const TableComponent = ({
 
   const isSelected = (name: string) => selectedRows && selectedRows.indexOf(name) !== -1
 
-  function truncateText(text, maxLength) {
+  function truncateText(text, maxLength, isExpanded) {
     if (typeof text !== 'string' || text === undefined || typeof text === 'object') {
       return text;
     }
-    
-    if (text.length <= maxLength) {
+
+    if (text.length <= maxLength || isExpanded) {
       return text;
     }
-    
+
     return text.slice(0, maxLength) + '...';
   }
-  
+
+  const handleRowClick = (rowId: string) => {
+    if (expandedRows.includes(rowId)) {
+      setExpandedRows(expandedRows.filter(id => id !== rowId));
+    } else {
+      setExpandedRows([...expandedRows, rowId]);
+    }
+  };
+
 
   return (
     <React.Fragment>
@@ -293,8 +308,9 @@ export const TableComponent = ({
                 >
                   {column.map((column, index) => {
                     const value = row[column.id]
-                    
-                    const truncatedValue = truncateText(value, 100);
+
+                    const isExpanded = expandedRows.includes(row.id || row.row.id);
+                    const truncatedValue = truncateText(value, 100, isExpanded);
                     return (
                       <TableCell
                         key={index}
@@ -309,9 +325,18 @@ export const TableComponent = ({
                               'aria-labelledby': labelId,
                             }}
                           />
+                        ) : column.id === 'collapse' ? (
+                          <IconButton
+                            aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                            size="small"
+                            className={styles.expandCollapse}
+                            onClick={() => handleRowClick(row.id || row.row.id)}
+                          >
+                            {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                          </IconButton>
                         ) : (
-                          // value
-                          truncatedValue
+                          // Render truncatedValue or full value based on expansion state
+                          isExpanded ? value : truncatedValue
                         )}
                       </TableCell>
                     )

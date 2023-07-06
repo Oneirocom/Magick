@@ -5,7 +5,6 @@
  */
 
 import Koa from 'koa'
-import fetch from 'node-fetch'
 import { Route } from '../config/types'
 import { tts } from '../servers/googleTextToSpeech'
 import { tts_tiktalknet } from '../servers/tiktalknet'
