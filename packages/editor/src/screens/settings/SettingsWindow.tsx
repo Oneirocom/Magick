@@ -97,17 +97,6 @@ const SettingsWindow = () => {
   };
 
   const handleSaveKey = () => {
-    // Perform validation on the secretKeys object
-    const hasValue = Object.values(secretKeys).some((value) => value !== '');
-
-    if (!hasValue) {
-      // Show an error message if no setting has a value
-      enqueueSnackbar('Please fill in at least one setting', {
-        variant: 'error',
-      });
-      return;
-    }
-
     window.localStorage.setItem('secrets', JSON.stringify(secretKeys));
 
     pluginManager.getSecrets(true).forEach((value) => {
