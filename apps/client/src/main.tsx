@@ -25,7 +25,9 @@ logger.info('loaded with plugins %o', plugins)
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
+  logger.debug("not in iframe")
   if (STANDALONE) {
+    logger.debug("standalone")
     const container = document.getElementById('root')
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
       ; (window as any).root = root
@@ -60,6 +62,8 @@ if (window === window.parent) {
       // Remove possible trailing slash on only the end
       const cloudUrl = TRUSTED_PARENT_URL?.replace(/\/+$/, '')
 
+      logger.debug('iframe: received message %o', event)
+
       // Check for trusted origin
       if (
         TRUSTED_PARENT_URL &&
@@ -89,6 +93,7 @@ if (window === window.parent) {
         const { config } = payload as { config: AppConfig }
         const Root = () => {
           if (POSTHOG_ENABLED && config?.posthogEnabled) {
+            logger.debug('iframe: rendering with posthog')
             return (
               <PostHogProvider
                 apiKey={POSTHOG_API_KEY}
@@ -100,12 +105,15 @@ if (window === window.parent) {
               </PostHogProvider>
             )
           } else {
+            logger.debug('iframe: rendering without posthog')
             return <MagickIDE config={config} />
           }
         }
         const container = document.getElementById('root')
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
           ; (window as any).root = root
+
+        logger.debug('iframe: rendering root')
         root.render(<Root />)
       }
     },
