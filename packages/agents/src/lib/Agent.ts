@@ -61,6 +61,8 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     // Set up the agent worker to handle incoming messages
+    // todo this should be namespaces with the agent ID for easy access.
+    // We really will just need to create a more robust message bus for this.
     this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this), {
       connection: bullMQConnection,
     })
@@ -151,7 +153,8 @@ export class Agent extends RedisPubSub implements AgentInterface {
   publishEvent(event, message) {
     this.publish(`${this.channel}:${event}`, {
       ...message,
-      agent: this.id,
+      // make sure all events include the agent and project id
+      agentId: this.id,
       projectId: this.projectId,
     })
   }
@@ -159,10 +162,9 @@ export class Agent extends RedisPubSub implements AgentInterface {
   // sends a log event along the event stream
   log(message, data) {
     this.logger.info(`${message} ${JSON.stringify(data)}`)
-    this.publish(this.channel, {
-      agentId: this.id,
-      projectId: this.projectId,
-      type: 'log',
+
+    this.publishEvent('log', {
+      eventType: 'log',
       message,
       data,
     })
@@ -170,10 +172,9 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
   warn(message, data) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
-    this.publish(this.channel, {
-      agentId: this.id,
-      projectId: this.projectId,
-      type: 'warn',
+
+    this.publishEvent('log', {
+      eventType: 'warn',
       message,
       data,
     })
@@ -181,10 +182,9 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
   error(message, data = {}) {
     this.logger.error(`${message} %o`, { error: data })
-    this.publish(this.channel, {
-      agentId: this.id,
-      projectId: this.projectId,
-      type: 'error',
+
+    this.publishEvent('log', {
+      eventType: 'error',
       message,
       data: { error: data },
     })
