@@ -17,7 +17,8 @@ import {
   ModuleContext,
   arraySocket,
 } from '@magickml/core'
-import { Client, TextChannel, ChannelType } from 'discord.js'
+import type { Client, TextChannel } from 'discord.js'
+import { ChannelType } from '../types/ChannelType' //This is required because this is a shared module, the discord.js lib has dependencies that break on the client
 
 /**
  * The return type of the worker function.
