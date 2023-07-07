@@ -73,9 +73,17 @@ class SpellRunner {
     })
   }
 
-  emit(event, message) {
+  emit(_message) {
     if (!this.agent) return
-    this.agent.publishEvent(`spell:${this.currentSpell.id}:${event}`, message)
+
+    // make sure the message contains the spellId in case it is needed.
+    const message = {
+      ..._message,
+      spellId: this.currentSpell.id,
+    }
+
+    // to do we probably want these events to be constants somewhere
+    this.agent.publishEvent('spell', message)
   }
 
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
@@ -316,9 +324,8 @@ class SpellRunner {
       return this.outputData
     } catch (err) {
       this.logger.error('ERROR RUNNING SPELL, %o', err)
-      return {
-        Output: `Error running spell- ${err}`,
-      }
+
+      throw err
     }
   }
 }
