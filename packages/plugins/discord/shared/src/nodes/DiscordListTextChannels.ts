@@ -17,8 +17,7 @@ import {
   ModuleContext,
   arraySocket,
 } from '@magickml/core'
-import { ChannelType } from '../types/ChannelType'
-import { Client } from 'discord.js'
+import { Client, TextChannel, ChannelType } from 'discord.js'
 
 /**
  * The return type of the worker function.
@@ -131,11 +130,11 @@ export class DiscordListTextChannels extends MagickComponent<
     }
 
     // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild
+    const guild = (fetchedChannel as TextChannel).guild
 
     // get the list of text channels
-    const textChannels = guild.channels.cache.filter(
-      ch => ch.type === ChannelType.GuildText
+    const textChannels = guild.channels.cache.filter(ch =>
+      allowedChannelTypes.includes(ch.type)
     )
 
     // return the list of text channels as an array
