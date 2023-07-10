@@ -179,7 +179,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               open={open}
               onClick={onClick(item.path)}
               text={item.text}
-              tooltipText={item.text +" "+ "are the basic unit of work in MagickML."}
+              tooltipText={`${item.text} are the basic unit of work in MagickML.`}
             />
           </div>
         )
