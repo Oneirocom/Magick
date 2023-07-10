@@ -58,7 +58,7 @@ export class Inspector {
     this.info = component.info
   }
   // addede DataControl[]
-  _add(list: Map<string, DataControl>, control: DataControl , tooltip?: string) {
+  _add(list: Map<string, DataControl>, control: DataControl) {
     if (list.has(control.dataKey))
       return console.error(
         `Item with dataKey '${control.dataKey}' already been added to the inspector`
