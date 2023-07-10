@@ -58,7 +58,7 @@ export class Inspector {
     this.info = component.info
   }
   // addede DataControl[]
-  _add(list: Map<string, DataControl>, control: DataControl) {
+  _add(list: Map<string, DataControl>, control: DataControl , tooltip?: string) {
     if (list.has(control.dataKey))
       return console.error(
         `Item with dataKey '${control.dataKey}' already been added to the inspector`
@@ -77,6 +77,9 @@ export class Inspector {
     // If we gave a default value and there isnt already one on the node, add it.
     if (control.defaultValue !== null && !this.node.data[control.dataKey])
       this.node.data[control.dataKey] = control.defaultValue
+
+    // add tooltip to the control
+    control.tooltip = control.tooltip || control.name 
 
     list.set(control.dataKey, control)
   }
