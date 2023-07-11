@@ -20,6 +20,8 @@ export async function makeChatCompletion(
   success: boolean
   result?: string | null
   error?: string | null
+  model?: string
+  totalTokens?: number
 }> {
   const { node, inputs, context } = data
 
@@ -151,11 +153,21 @@ export async function makeChatCompletion(
     })
 
     if (function_call) {
-      return { success: true, result: function_call }
+      return {
+        success: true,
+        result: function_call,
+        model: settings.model,
+        totalTokens: usage.total_tokens,
+      }
     }
 
     if (result) {
-      return { success: true, result }
+      return {
+        success: true,
+        result: result,
+        model: settings.model,
+        totalTokens: usage.total_tokens,
+      }
     }
     return { success: false, error: 'No result' }
   } catch (err: any) {
