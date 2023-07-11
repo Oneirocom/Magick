@@ -16,6 +16,8 @@ import CheckBoxControl from './CheckBox'
 import { ControlData } from '@magickml/core'
 import {Tooltip } from '@mui/material'
 
+
+
 /**
  * Stub component for unknown control types.
  * @param props - The properties for the stub component.
@@ -96,6 +98,7 @@ const DataControls = ({
     <>
       {Object.entries(dataControls).map(([key, control]) => {
         // Default props to pass through to every data control
+
         const controlProps = {
           nodeId,
           width,
@@ -112,7 +115,6 @@ const DataControls = ({
         if (!Component) return null
 
         if (control.component === 'info' && !control?.data?.info) return null
-
         return (
           <div
             key={control.name + nodeId + key}
@@ -121,7 +123,7 @@ const DataControls = ({
               borderRadius: '5px',
             }}
           >
-            <Tooltip title={control.tooltip ? control.tooltip : control.name} placement="top">
+            <Tooltip title={control.tooltip ? control.tooltip : control.name} placement="top" >
 
             <p style={{ margin: 0, marginBottom: '10px' }}>
               {control.name || key}

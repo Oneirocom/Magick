@@ -20,7 +20,6 @@ import {
 
 /** Information about the InputComponent functionality */
 const info = `The input component allows you to pass a single value to your graph and outputs an Event. The playtest window will pass values into your Input for easy testing.`
-
 type InputReturn = {
   output: unknown
 }
@@ -42,7 +41,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
         },
       },
       'I/O',
-      info
+      info,
+    
     )
 
     this.module = {
@@ -71,6 +71,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       onData: data => {
         node.data.name = `Input - ${data}`
       },
+      tooltip: 'Tooltip text for Input Name',
     }
 
     const dataOutput = {
@@ -115,10 +116,11 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
     // Setup default controls
     const inputType = new DropdownControl({
-      name: 'Input Type',
+      name: 'Input Types',
       dataKey: 'inputType',
       values: inputTypes.map(v => v.name),
       defaultValue: inputTypes[0].name,
+      tooltip: 'Tooltip text for Input Types',
     })
 
     node.inspector.add(inputType)
