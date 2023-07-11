@@ -1,5 +1,8 @@
 import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2'
 import { DMEventV2 } from 'twitter-api-v2/dist/esm/types/v2/dm.v2.types'
+
+import { agentCommander } from '@magickml/agents'
+
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined
   twitterv2: TwitterApi | undefined
@@ -12,9 +15,8 @@ export class TwitterConnector {
   stream: any
   senderIds = {}
 
-  constructor({ spellRunner, agent }) {
+  constructor({ agent }) {
     agent.twitter = this
-    this.spellRunner = spellRunner
     const data = agent.data.data
     this.data = data
     this.agent = agent
@@ -222,7 +224,8 @@ export class TwitterConnector {
             )
           }
 
-          await this.spellRunner.runComponent({
+          agentCommander.runRootSpell({
+            agent: this.agent,
             inputs: {
               'Input - Twitter (Feed)': {
                 connector: 'Twitter (Feed)',
@@ -237,10 +240,6 @@ export class TwitterConnector {
                 rawData: tw,
               },
             },
-            agent: this.agent,
-            secrets: this.agent.secrets,
-            publicVariables: this.agent.publicVariables,
-            app: this.agent.app,
             runSubspell: true,
           })
           // }
@@ -314,7 +313,8 @@ export class TwitterConnector {
 
               entities.push(twitterUser)
 
-              await this.spellRunner.runComponent({
+              await agentCommander.runRootSpell({
+                agent: this.agent,
                 inputs: {
                   'Input - Twitter (DM)': {
                     connector: 'Twitter (DM)',
@@ -329,10 +329,8 @@ export class TwitterConnector {
                     rawData: JSON.stringify(event),
                   },
                 },
-                agent: this.agent,
                 secrets: this.agent.secrets,
                 publicVariables: this.agent.publicVariables,
-                app: this.agent.app,
                 runSubspell: true,
               })
             }
