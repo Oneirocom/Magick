@@ -100,3 +100,5 @@ export const bullMQConnection = {
 }
 
 export const PINO_LOG_LEVEL = getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
+
+export const OPENMETER_ENDPOINT = getVarForEnvironment('OPENMETER_ENDPOINT') || 'http://localhost:8888'
