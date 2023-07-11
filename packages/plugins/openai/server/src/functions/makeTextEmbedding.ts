@@ -26,6 +26,8 @@ export async function makeTextEmbedding(
   success: boolean
   result?: number[] | null
   error?: string | null
+  model?: string
+  totalTokens?: number
 }> {
   const { node, inputs, context } = data
 
@@ -38,7 +40,8 @@ export async function makeTextEmbedding(
   }
 
   const apiKey =
-    (context?.module?.secrets && context?.module?.secrets['openai_api_key']) || DEFAULT_OPENAI_KEY
+    (context?.module?.secrets && context?.module?.secrets['openai_api_key']) ||
+    DEFAULT_OPENAI_KEY
 
   if (!apiKey) {
     return {
@@ -86,7 +89,12 @@ export async function makeTextEmbedding(
       spell,
       nodeId: node.id,
     })
-    return { success: true, result: resp.data.data[0].embedding }
+    return {
+      success: true,
+      result: resp.data.data[0].embedding,
+      model: model,
+      totalTokens: resp.data.usage.total_tokens,
+    }
   } catch (err: any) {
     console.error('makeTextEmbedding error:', err)
     return { success: false, error: err.message }
