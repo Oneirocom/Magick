@@ -79,7 +79,7 @@ export class Inspector {
       this.node.data[control.dataKey] = control.defaultValue
 
     // add tooltip to the control
-    control.tooltip = control.tooltip || control.name 
+    control.tooltip = control.tooltip || ''
 
     list.set(control.dataKey, control)
   }
