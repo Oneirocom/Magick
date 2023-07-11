@@ -2,7 +2,6 @@
 import * as BullMQ from 'bullmq'
 import pino from 'pino'
 import _ from 'lodash'
-import { Application } from '@feathersjs/koa'
 import {
   SpellManager,
   SpellRunner,
@@ -27,12 +26,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
   secrets: any
   publicVariables: Record<string, string>
   data: AgentInterface
-  app: any
   spellManager: SpellManager
   projectId: string
   agentManager: AgentManager
   spellRunner?: SpellRunner
-  rootSpell: SpellInterface
   logger: pino.Logger = getLogger()
   worker: BullMQ.Worker
   queue: BullMQ.Queue
@@ -48,7 +45,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
   constructor(
     agentData: AgentInterface,
     agentManager: AgentManager,
-    app: Application
   ) {
     super()
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
@@ -58,13 +54,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
-    this.app = app
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     // Set up the agent worker to handle incoming messages
-    // todo this should be namespaces with the agent ID for easy access.
-    // We really will just need to create a more robust message bus for this.
-    this.worker = new BullMQ.Worker(`agent:run`, this.runWorker.bind(this), {
+    this.worker = new BullMQ.Worker(`agent:${this.id}:run`, this.runWorker.bind(this), {
       connection: bullMQConnection,
     })
     this.queue = new BullMQ.Queue(`agent:run:result`, {
@@ -116,7 +109,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
       this.updateInterval = setInterval(() => {
         // every second, update the agent, set pingedAt to now
-        this.app.service('agents').patch(this.id, {
+        app.service('agents').patch(this.id, {
           pingedAt: new Date().toISOString(),
         })
       }, PING_AGENT_TIME_MSEC)
@@ -189,7 +182,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
     })
   }
 
-  async runWorker(job) {
+  async runWorker(job: AgentJob) {
     // the job name is the agent id.  Only run if the agent id matches.
     if (this.id !== job.data.agentId) return
 
@@ -202,7 +195,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
       secrets: this.secrets,
       publicVariables: this.publicVariables,
       runSubspell: true,
-      app: this.app,
+      app,
     })
 
     await this.queue.add('agent:run:result', {
@@ -211,6 +204,14 @@ export class Agent extends RedisPubSub implements AgentInterface {
       originalData: data,
       result: output,
     })
+  }
+}
+
+export interface AgentJob {
+  data: {
+    inputs: MagickSpellInput
+    agentId: string
+    spellId: string
   }
 }
 
