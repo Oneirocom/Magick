@@ -163,7 +163,7 @@ export class AgentManager {
         ...agent,
         pingedAt: new Date().toISOString(),
       }
-      const agentInstance = new Agent(data, this, this.app)
+      const agentInstance = new Agent(data, this)
 
       // we need to wait for the agent to initialize before we can use its
       await agentInstance.initialize({})
