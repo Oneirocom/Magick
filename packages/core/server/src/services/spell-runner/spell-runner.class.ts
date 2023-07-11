@@ -133,19 +133,19 @@ export class SpellRunnerService<
       try {
         const updatedSpell = otJson0.type.apply(spell, diff)
 
-        spellManager.load(updatedSpell, true)
+        spellManager.load(updatedSpell)
         return updatedSpell
       } catch (e) {
         console.error(e)
         console.error('Error diffing spell. Recaching spell')
         app.service('spells').get(id, params)
-        spellManager.load(spell, true)
+        spellManager.load(spell)
         return spell
       }
     }
 
     if (spellUpdate) {
-      spellManager.load(spellUpdate, true)
+      spellManager.load(spellUpdate)
       return spellUpdate
     }
 

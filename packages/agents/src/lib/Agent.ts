@@ -10,11 +10,13 @@ import {
   AgentInterface,
   SpellInterface,
   getLogger,
+  MagickSpellInput,
 } from '@magickml/core'
 import { bullMQConnection, PING_AGENT_TIME_MSEC } from '@magickml/config'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 
 import { AgentManager } from './AgentManager'
+import { app } from '@magickml/server-core'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -53,7 +55,6 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
     this.data = agentData
-    this.rootSpell = agentData.rootSpell ?? {}
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
@@ -78,7 +79,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
     this.spellManager = spellManager
     ;(async () => {
-      if (!agentData.rootSpell) {
+      if (!agentData.rootSpellId) {
         this.logger.warn('No root spell found for agent: %o', {
           id: this.id,
           name: this.name,
@@ -86,17 +87,15 @@ export class Agent extends RedisPubSub implements AgentInterface {
         return
       }
       const spell = (
-        await this.app.service('spells').find({
+        await app.service('spells').find({
           query: {
             projectId: agentData.projectId,
-            id: agentData.rootSpell.id,
+            id: agentData.rootSpellId,
           },
         })
       ).data[0]
 
-      const override = _.isEqual(spell, agentData.rootSpell)
-
-      this.spellRunner = await spellManager.load(spell, override)
+      this.spellRunner = await spellManager.load(spell)
 
       const agentStartMethods = pluginManager.getAgentStartMethods()
 

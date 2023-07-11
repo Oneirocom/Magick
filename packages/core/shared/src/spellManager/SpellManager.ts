@@ -45,7 +45,7 @@ export default class SpellManager {
     if (watchSpells) {
       this.app.service('spells').on('updated', (spell: SpellInterface) => {
         if (this.hasSpellRunner(spell.id)) {
-          this.load(spell, true)
+          this.load(spell)
         }
       })
     }
@@ -75,14 +75,11 @@ export default class SpellManager {
     }
   }
 
-  async load(spell: SpellInterface, overload = false) {
+  async load(spell: SpellInterface) {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
       return
-    }
-    if (this.spellRunnerMap.has(spell.id) && !overload) {
-      return this.getSpellRunner(spell.id)
     }
 
     const spellRunner = new SpellRunner({
