@@ -130,10 +130,6 @@ export class AgentManager {
         this.logger.debug('Agent is disabled, skipping %s', agent.id)
         return
       }
-      if (!agent.rootSpell) {
-        this.logger.debug('Agent has no root spell, skipping %s', agent.id)
-        return
-      }
 
       const pingedAt = new Date(agent.pingedAt)
 
