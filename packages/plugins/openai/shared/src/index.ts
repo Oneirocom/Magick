@@ -7,7 +7,7 @@ import {
   stringSocket,
 } from '@magickml/core'
 
-export const GPT4_MODELS = ['gpt4', 'gpt-4-0613']
+export const GPT4_MODELS = ['gpt-4', 'gpt-4-0613']
 
 /**
  * An array of PluginSecret objects containing information about API key secrets.
@@ -92,7 +92,7 @@ const completionProviders: CompletionProvider[] = [
         socket: 'function',
         name: 'Function',
         type: stringSocket,
-      }
+      },
     ],
     outputs: [
       {
