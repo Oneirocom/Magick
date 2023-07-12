@@ -64,7 +64,7 @@ export async function makeTextCompletion(
   // Set up headers for the API request.
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + openaiKey ? openaiKey : DEFAULT_OPENAI_KEY,
+    Authorization: 'Bearer ' + (openaiKey ? openaiKey : DEFAULT_OPENAI_KEY),
   }
 
   // Make the API request and handle the response.
