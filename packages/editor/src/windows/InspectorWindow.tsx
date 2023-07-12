@@ -66,7 +66,7 @@ const Inspector = (props) => {
 
   const toolbar = (
     <>
-    <Tooltip title={inspectorData?.name} placement="top"> 
+    <Tooltip title={inspectorData?.name} placement="top-start"> 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
         <Icon
           name={componentCategories[inspectorData?.category || 0]}

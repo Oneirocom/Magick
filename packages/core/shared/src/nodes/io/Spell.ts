@@ -178,6 +178,7 @@ export class SpellComponent extends MagickComponent<
             name: data.name,
             dataKey: data.name,
             defaultValue: data.value,
+            tooltip:""
           })
           if (!node.inspector.dataControls.has(numberInputControl.dataKey)) {
             node.inspector.add(numberInputControl)
