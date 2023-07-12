@@ -19,8 +19,7 @@ import { createStore } from './state/store'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { AppConfig } from '@magickml/client-core'
-import { Widget } from 'react-chat-widget';
-import 'react-chat-widget/lib/styles.css';
+import { MagickmlChatbox } from '@magickml/chatbox'
 
 /**
  * Type definition for the props that can be passed to MagickIDE
@@ -37,12 +36,6 @@ export type MagickIDEProps = {
  * @returns {React.ReactElement} - A React component
  */
 export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
-
-  const handleNewUserMessage = (newMessage) => {
-    // Now send the message throught the backend API
-    console.log(`New message incoming! ${newMessage}`);
-  };
-
   return (
     <Router>
       <Provider store={createStore(config)}>
@@ -50,12 +43,7 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <WagmiConfig config={wagmiConfig}>
               <App />
-              <Widget
-                handleNewUserMessage={handleNewUserMessage}
-                // profileAvatar={logo}
-                title="Magick Bot"
-                subtitle="Welcome to Magick!"
-              />
+              <MagickmlChatbox />
             </WagmiConfig>
           </LocalizationProvider>
         </AppProviders>
