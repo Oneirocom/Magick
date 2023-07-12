@@ -16,12 +16,14 @@ export class CodeControl extends DataControl {
     dataKey,
     name,
     icon = 'feathers',
-    language = 'javascript'
+    language = 'javascript',
+    tooltip= ''
   }: {
     dataKey: string,
     name: string,
     icon?: string,
     language?: string
+    tooltip?: string
   }) {
     const options = {
       dataKey,
@@ -31,7 +33,8 @@ export class CodeControl extends DataControl {
       options: {
         editor: true,
         language
-      }
+      },
+      tooltip: tooltip,
     }
 
     super(options)

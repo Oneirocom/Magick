@@ -47,11 +47,13 @@ export class NumberVariable extends MagickComponent<InputReturn> {
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
+      tooltip:""
     })
     const name = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      
     })
 
     const _public = new BooleanControl({

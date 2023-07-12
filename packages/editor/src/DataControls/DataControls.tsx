@@ -123,7 +123,7 @@ const DataControls = ({
               borderRadius: '5px',
             }}
           >
-            <Tooltip title={control.tooltip ? control.tooltip : control.name} placement="top" >
+            <Tooltip title={control.tooltip ? control.tooltip : control.name} placement="top-start" arrow>
 
             <p style={{ margin: 0, marginBottom: '10px' }}>
               {control.name || key}

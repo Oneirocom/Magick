@@ -25,6 +25,7 @@ export class BooleanControl extends DataControl {
       icon: config.icon || 'hand', // Assign the icon property from the configuration object or default to 'hand'.
       type: 'boolean', // Set the control type to 'boolean'.
       defaultValue: config.defaultValue || false, // Assign the defaultValue property from the configuration object or default to 'false'.
+      tooltip: ''
     };
 
     super(options); // Call the super constructor with the options object.
