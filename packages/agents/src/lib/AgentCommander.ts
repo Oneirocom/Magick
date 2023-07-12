@@ -1,11 +1,8 @@
 import EventEmitter from "events"
 import { Agent } from "packages/core/server/src/services/agents/agents.schema"
 import type { AgentJob } from '@magickml/agents'
+import { type PubSub, type MessageQueue, RUN_JOB } from '@magickml/server-core'
 import { MagickSpellInput } from "@magickml/core"
-
-type PubSub = any
-type Reporter = any
-type MessageQueue = any
 
 type RunRootSpellArgs = {
     agent: Agent,
@@ -17,16 +14,23 @@ type RunRootSpellArgs = {
     spellId?: string
 }
 
+interface AgentCommanderArgs {
+    pubSub: PubSub
+    messageQueue: MessageQueue
+}
+
+
 export class AgentCommander extends EventEmitter {
     pubSub: PubSub
-    reporter: Reporter
-    messageQueue: any
+    messageQueue: MessageQueue
 
-    constructor() {
+    constructor({
+        pubSub,
+        messageQueue
+    }: AgentCommanderArgs) {
         super()
-        this.pubSub = new PubSub()
-        this.reporter = new Reporter()
-        this.messageQueue = new MessageQueue()
+        this.pubSub = pubSub
+        this.messageQueue = messageQueue
     }
 
     async runRootSpellWithResponse(args: RunRootSpellArgs) {
@@ -58,7 +62,7 @@ export class AgentCommander extends EventEmitter {
         publicVariables,
         spellId
     }: RunRootSpellArgs) {
-        await this.messageQueue(`agent:${agent.id}:run`, {
+        await this.messageQueue.addJob(RUN_JOB({ agentId: agent.id }), {
             data: {
                 agentId: agent.id,
                 spellId: spellId || agent.rootSpellId,
@@ -68,6 +72,6 @@ export class AgentCommander extends EventEmitter {
                 secrets,
                 publicVariables
             }
-        } as AgentJob)
+        })
     }
 }

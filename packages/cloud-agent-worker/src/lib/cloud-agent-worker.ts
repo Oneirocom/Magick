@@ -4,6 +4,9 @@ import { bullMQConnection } from '@magickml/config'
 import { app } from '@magickml/server-core'
 import { Agent, AgentManager } from '@magickml/agents'
 
+// I get that it's confusing extending AgentManager, but it's the best way to
+// get the functionality I want without having to rewrite a bunch of stuff.
+// Agent Managers just managed agents for a single instance of the server anyway
 export class CloudAgentWorker extends AgentManager {
   constructor() {
     super(app, false)
@@ -94,8 +97,9 @@ export class CloudAgentWorker extends AgentManager {
 
   async work() {
     this.logger.info('waiting for jobs')
+
     new Worker(
-      'agent:updates',
+      'agent:updated',
       async (job: Job) => {
         switch (job.name) {
           case 'agent:updated':
