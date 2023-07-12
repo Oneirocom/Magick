@@ -97,6 +97,7 @@ type DrawerItemProps = {
   Icon: React.ElementType
   open: boolean
   text: string
+  tooltip: string
   active: boolean
   onClick?: () => void
   tooltipText: string
@@ -179,7 +180,8 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               open={open}
               onClick={onClick(item.path)}
               text={item.text}
-              tooltipText={`${item.text} are the basic unit of work in MagickML.`}
+              tooltip='Avatar and Tasks Tooltip'
+              tooltipText={item.tooltip}
             />
           </div>
         )
@@ -277,6 +279,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/magick')}
             text="Spells"
+            tooltip="Spells Tooltip"
             tooltipText={drawerTooltipText.spells}
             
           />
@@ -286,6 +289,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/agents')}
             text="Agents"
+            tooltip="Agents Tooltip"
             tooltipText={drawerTooltipText.agents}
           />
           <DrawerItem
@@ -294,6 +298,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/documents')}
             text="Documents"
+            tooltip="Documents Tooltip"
             tooltipText={drawerTooltipText.documents}
           />
           <DrawerItem
@@ -302,6 +307,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/events')}
             text="Events"
+            tooltip="Events Tooltip"
             tooltipText={drawerTooltipText.events}
           />
           <DrawerItem
@@ -310,6 +316,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/requests')}
             text="Requests"
+            tooltip="Requests Tooltip"
             tooltipText={drawerTooltipText.requests}
           />
           <Divider />
@@ -321,6 +328,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/settings')}
             text="Settings"
+            tooltip="Settings Tooltip"
             tooltipText={drawerTooltipText.settings}
           />
           {!isAPIKeysSet && <SetAPIKeys />}
