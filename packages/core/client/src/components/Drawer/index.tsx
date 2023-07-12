@@ -24,6 +24,8 @@ import ProjectWindow from './ProjectWindow'
 import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './logo-full.png'
 import MagickLogoSmall from './logo-small.png'
+import { Tooltip } from '@mui/material';
+import {drawerTooltipText} from "./tooltiptext"
 
 // Constants
 const drawerWidth = 150
@@ -97,6 +99,7 @@ type DrawerItemProps = {
   text: string
   active: boolean
   onClick?: () => void
+  tooltipText: string
 }
 
 /**
@@ -108,8 +111,14 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   text,
   active,
   onClick,
+  tooltipText
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+     <Tooltip title={tooltipText} placement="right-start" 
+     
+     arrow 
+     >
+
     <ListItemButton
       sx={{
         minHeight: 48,
@@ -130,6 +139,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       </ListItemIcon>
       <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
     </ListItemButton>
+     </Tooltip>
   </ListItem>
 )
 
@@ -169,6 +179,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               open={open}
               onClick={onClick(item.path)}
               text={item.text}
+              tooltipText={`${item.text} are the basic unit of work in MagickML.`}
             />
           </div>
         )
@@ -266,6 +277,8 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/magick')}
             text="Spells"
+            tooltipText={drawerTooltipText.spells}
+            
           />
           <DrawerItem
             active={location.pathname === '/agents'}
@@ -273,6 +286,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/agents')}
             text="Agents"
+            tooltipText={drawerTooltipText.agents}
           />
           <DrawerItem
             active={location.pathname === '/documents'}
@@ -280,6 +294,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/documents')}
             text="Documents"
+            tooltipText={drawerTooltipText.documents}
           />
           <DrawerItem
             active={location.pathname === '/events'}
@@ -287,6 +302,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/events')}
             text="Events"
+            tooltipText={drawerTooltipText.events}
           />
           <DrawerItem
             active={location.pathname === '/requests'}
@@ -294,6 +310,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/requests')}
             text="Requests"
+            tooltipText={drawerTooltipText.requests}
           />
           <Divider />
           <PluginDrawerItems onClick={onClick} open={openDrawer} />
@@ -304,6 +321,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             open={openDrawer}
             onClick={onClick('/settings')}
             text="Settings"
+            tooltipText={drawerTooltipText.settings}
           />
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
