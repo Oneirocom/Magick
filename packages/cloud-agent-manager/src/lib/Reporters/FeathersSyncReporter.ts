@@ -1,5 +1,5 @@
 import { app, initApp } from '@magickml/server-core'
-import { Reporter } from '../Reporter'
+import { Reporter } from '.'
 import { EventEmitter } from 'events'
 
 export class FeathersSyncReporter implements Reporter {

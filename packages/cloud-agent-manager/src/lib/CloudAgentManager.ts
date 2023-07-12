@@ -1,9 +1,10 @@
 import pino from "pino"
 import { getLogger } from "@magickml/core"
-import { Reporter } from "./Reporter"
-import { MessageQueue } from "./MessageQueue"
+import { Reporter } from "./Reporters"
+import { MessageQueue } from "@magickml/server-core"
 
 interface CloudAgentManagerConstructor {
+    pubub: PubSub
     mq: MessageQueue
     agentStateReporter: Reporter
 }
@@ -20,7 +21,6 @@ export class CloudAgentManager {
 
     async run() {
         this.agentStateReporter.on('agent:updated', async (agent: any) => {
-            console.log(agent)
             this.logger.info(`Agent Updated: ${agent.id}`)
             const agentUpdatedAt = new Date(agent.updatedAt)
             await this.mq.addJob('agent:updated', {agentId: agent.id}, `agent-updated-${agent.id}-${agentUpdatedAt.getTime()}`)

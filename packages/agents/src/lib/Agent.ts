@@ -212,6 +212,10 @@ export interface AgentJob {
     inputs: MagickSpellInput
     agentId: string
     spellId: string
+    componentName: string
+    runSubspell: boolean
+    secrets: Record<string, string>
+    publicVariables: Record<string, unknown>
   }
 }
 
