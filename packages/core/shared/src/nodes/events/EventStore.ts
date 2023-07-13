@@ -45,6 +45,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       dataKey: 'name',
       name: 'Name',
       placeholder: 'Store Event',
+      tooltip: "Store Event input name"
     })
 
     const type = new InputControl({
@@ -52,6 +53,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
+      tooltip: "Store Event input type"
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
@@ -71,6 +73,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       dataKey: 'storeEventFor',
       values: storeEventForTypes,
       defaultValue: storeEventForTypes[0],
+      tooltip: "Choose Store Event For"
     })
 
     node.inspector.add(storeEventFor)

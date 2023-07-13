@@ -77,6 +77,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'name',
       name: 'Name',
       placeholder: 'Event Recall',
+      tooltip: "Event input name"
     })
 
     const type = new InputControl({
@@ -84,6 +85,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
+      tooltip: "Event input type"
     })
 
     const max_count = new InputControl({
@@ -91,6 +93,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
+      tooltip: "Event max count value"
     })
 
     // FilterTypes is an enum, so we can use Object.values to get the values
@@ -102,6 +105,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'mode',
       values: recallModes,
       defaultValue: recallModes[0],
+      tooltip: "Choose Event Mode name"
     })
 
     const filterBy = new DropdownControl({
@@ -109,6 +113,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'filterBy',
       values: filterTypes,
       defaultValue: filterTypes[0],
+      tooltip: "Filter Event type name"
     })
 
     const lastMode = node.data.mode
