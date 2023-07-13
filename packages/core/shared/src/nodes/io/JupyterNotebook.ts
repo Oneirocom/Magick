@@ -73,12 +73,14 @@ export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
+      tooltip: 'Enter component name'
     });
 
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       name: 'Input Sockets',
       ignored: ['trigger'],
+      tooltip: 'Add Input Socket'
     });
 
     // The URL of the Jupyter Server
@@ -86,6 +88,7 @@ export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>
       dataKey: 'url',
       name: 'Base URL',
       icon: 'moon',
+      tooltip: 'Enter Base url'
     });
 
     // To be supplied if Authorization is turned on on the server
@@ -93,6 +96,7 @@ export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>
       dataKey: 'Authorization',
       name: 'Authorization Header',
       icon: 'moon',
+      tooltip: 'Enter Authorization Header'
     });
 
     // Exact file name including the extension
@@ -100,6 +104,7 @@ export class JupyterNotebook extends MagickComponent<Promise<{ output: string }>
       dataKey: 'file_name',
       name: 'File Name',
       icon: 'moon',
+      tooltip: 'Enter file name'
     });
 
     node
