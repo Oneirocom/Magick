@@ -63,6 +63,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'model',
       values: models,
       defaultValue: models[0],
+      tooltip: 'Choose the model name'
     })
 
     node.inspector.add(modelName)
