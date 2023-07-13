@@ -48,6 +48,7 @@ export class ExtractFromArray extends MagickComponent<Promise<WorkerReturn>> {
     const values = new InputControl({
       dataKey: 'value',
       name: 'Value to Extract',
+      tooltip: 'This is a tooltip for value',
     })
 
     node.inspector.add(values)
