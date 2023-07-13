@@ -87,7 +87,7 @@ export class MyNode extends Node {
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
               {inputs.map(input => (
-                <Tooltip title={`Input:${input.name}`} placement="left">
+                <Tooltip title={`Input:${input.name}`} placement="left" enterDelay={500}>
 
                   <div className={css['input']} key={input.key}>
                     <div
@@ -125,7 +125,9 @@ export class MyNode extends Node {
                       element.data = { ...element.data, hello: 'hello' };
                     })}
                   <div className="output-title">{output.name}</div>
-                  <Tooltip title={`output: ${output.name}`} placement="right">
+                  <Tooltip title={`output: ${output.name}`} placement="right" 
+                  enterDelay={500}
+                  >
                     <div
                       onMouseEnter={() => handleMouseEnter(output)}
                       onMouseLeave={() => handleMouseLeave(output)}>
