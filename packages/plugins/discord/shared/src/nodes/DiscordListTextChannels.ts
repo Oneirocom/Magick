@@ -17,15 +17,16 @@ import {
   ModuleContext,
   arraySocket,
 } from '@magickml/core'
-import { ChannelType } from '../types/ChannelType'
+import type { Client, TextChannel } from 'discord.js'
+import { ChannelType } from '../types/ChannelType' //This is required because this is a shared module, the discord.js lib has dependencies that break on the client
 
 /**
  * The return type of the worker function.
  */
 type WorkerReturn = {
   output: {
-    id: string,
-    name: string,
+    id: string
+    name: string
   }[]
 }
 
@@ -62,7 +63,11 @@ export class DiscordListTextChannels extends MagickComponent<
     const outp = new Rete.Output('output', 'Array', arraySocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
+      .addInput(event)
   }
 
   /**
@@ -81,9 +86,14 @@ export class DiscordListTextChannels extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
+      console.warn(
+        'sending default information since there is no agent available'
+      )
       return {
-        output: [{"id":"1051457146388217900","name":"General"},{"id":"1119407851408986122","name":"voice2"}]
+        output: [
+          { id: '1051457146388217900', name: 'General' },
+          { id: '1119407851408986122', name: 'voice2' },
+        ],
       }
     }
 
@@ -96,33 +106,44 @@ export class DiscordListTextChannels extends MagickComponent<
         Object.values(data)[0]) as Event
 
     // discordClient is a Discord.js client instance
-    const discordClient = agent.discord.client
+    const discordClient = agent.discord.client as Client
 
     const channel = event.channel // channel in which the message was sent
 
+    if (!channel) {
+      throw new Error('Event had no channel')
+    }
+
     // fetch the channel using its ID
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    const fetchedChannel = await discordClient.channels.fetch(channel)
 
     if (!fetchedChannel) {
       throw new Error('Channel not found')
     }
 
-    if (fetchedChannel.type !== ChannelType.GuildText) {
+    const allowedChannelTypes = [
+      ChannelType.GuildText,
+      ChannelType.PublicThread,
+    ]
+
+    if (!allowedChannelTypes.includes(fetchedChannel.type)) {
       throw new Error('Event channel must be a text channel')
     }
 
     // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild;
+    const guild = (fetchedChannel as TextChannel).guild
 
     // get the list of text channels
-    const textChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildText);
+    const textChannels = guild.channels.cache.filter(ch =>
+      allowedChannelTypes.includes(ch.type)
+    )
 
     // return the list of text channels as an array
     const textChannelArray = textChannels.map(channel => ({
       id: channel.id,
       name: channel.name,
-    }));
+    }))
 
-    return { output: textChannelArray };
+    return { output: textChannelArray }
   }
 }

@@ -13,6 +13,7 @@ export type PluginDrawerItem = {
   path: string
   icon: FC
   text: string
+  tooltip: string
 }
 
 export type PluginClientRoute = {
