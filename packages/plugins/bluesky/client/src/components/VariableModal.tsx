@@ -1,6 +1,7 @@
 import { Modal } from '@magickml/client-core'
 import Grid from '@mui/material/Grid'
 import { useState } from 'react'
+import {Tooltip} from '@mui/material'
 
 const VariableModal = ({
   selectedAgentData,
@@ -51,7 +52,9 @@ const VariableModal = ({
       </Grid>
       <div style={{ marginBottom: '1em' }}>
         <div>
+          <Tooltip title="add your bluesky user identifier" placement='bottom' arrow>
           <span className="form-item-label">User Identifier</span>
+          </Tooltip>
           <input
             className="modal-element"
             type="text"
@@ -64,7 +67,9 @@ const VariableModal = ({
       </div>
       <div>
         <div style={{ marginBottom: '1em' }}>
+          <Tooltip title="add your bluesky password" placement='bottom' arrow>
           <span className="form-item-label">Password</span>
+          </Tooltip>
           <input
             className="modal-element"
             type="password"
