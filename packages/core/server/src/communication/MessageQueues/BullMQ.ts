@@ -1,23 +1,24 @@
-import { Queue } from "bullmq"
-import pino from "pino"
-import { getLogger } from "@magickml/core"
+import { Queue } from 'bullmq'
+import pino from 'pino'
+import { getLogger } from '@magickml/core'
 import { bullMQConnection } from '@magickml/config'
 
-import { MessageQueue, Job, JobType } from "../MessageQueue"
+import { MessageQueue } from '../MessageQueues'
+import { AgentJob } from '@magickml/agents'
 
 export class BullQueue implements MessageQueue {
     logger: pino.Logger = getLogger()
     queue: Queue
 
-    constructor(queue_name: string) {
-        this.queue = new Queue(queue_name, {
+    initialize(queueName: string): void {
+        this.queue = new Queue(queueName, {
             connection: bullMQConnection
         })
     }
 
-    async addJob(jobType: JobType, job: Job, jobId?: string) {
-        this.logger.info(`Adding job ${jobType} to queue ${this.queue.name}...`)
-        await this.queue.add(jobType, job, { jobId })
-        this.logger.info(`Added job ${jobType} to queue ${this.queue.name}`)
+    async addJob(jobName: string, job: AgentJob, jobId?: string) {
+        this.logger.info(`Adding job ${jobName} to queue ${this.queue.name}...`)
+        await this.queue.add(jobName, job, { jobId })
+        this.logger.info(`Added job ${jobName} to queue ${this.queue.name}`)
     }
 }
