@@ -1,8 +1,8 @@
 import { Worker, Job } from 'bullmq'
 import { bullMQConnection } from '@magickml/config'
 
-import { app } from '@magickml/server-core'
-import { Agent, AgentManager } from '@magickml/agents'
+import { BullMQWorker, RedisPubSubWrapper, app } from '@magickml/server-core'
+import { Agent, AgentManager, AgentUpdateJob } from '@magickml/agents'
 
 // I get that it's confusing extending AgentManager, but it's the best way to
 // get the functionality I want without having to rewrite a bunch of stuff.
@@ -37,8 +37,12 @@ export class CloudAgentWorker extends AgentManager {
       return
     }
 
-    const agent = new Agent(agentData, this, this.app)
-    await agent.initialize({})
+    const agent = new Agent(
+      agentData,
+      this,
+      new BullMQWorker(),
+      new RedisPubSubWrapper(),
+    )
 
     this.logger.debug(`Running agent add handlers for ${agentId}`)
     this.addHandlers.forEach(handler => {
@@ -103,7 +107,8 @@ export class CloudAgentWorker extends AgentManager {
       async (job: Job) => {
         switch (job.name) {
           case 'agent:updated':
-            this.agentUpdated(job.data.agentId)
+            console.log("BEN LOOK AT ME: ", job)
+            this.agentUpdated(job.data.data.agentId)
             break
           default:
             this.logger.error(

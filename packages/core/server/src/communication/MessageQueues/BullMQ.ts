@@ -1,4 +1,4 @@
-import { Queue } from 'bullmq'
+import BullMQ, { Queue } from 'bullmq'
 import pino from 'pino'
 import { getLogger } from '@magickml/core'
 import { bullMQConnection } from '@magickml/config'

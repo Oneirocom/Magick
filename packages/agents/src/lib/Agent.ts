@@ -185,7 +185,7 @@ export class Agent implements AgentInterface {
     })
   }
 
-  async runWorker(job: AgentJob) {
+  async runWorker(job: AgentRunJob) {
     // the job name is the agent id.  Only run if the agent id matches.
     if (this.id !== job.data.agentId) return
 
@@ -210,7 +210,7 @@ export class Agent implements AgentInterface {
   }
 }
 
-export interface AgentJob {
+export interface AgentRunJob {
   data: {
     inputs: MagickSpellInput
     agentId: string
@@ -221,6 +221,14 @@ export interface AgentJob {
     publicVariables: Record<string, unknown>
   }
 }
+
+export interface AgentUpdateJob {
+  data: {
+    agentId: string
+  }
+}
+
+export type AgentJob = AgentRunJob | AgentUpdateJob
 
 // Exporting Agent class as default
 export default Agent
