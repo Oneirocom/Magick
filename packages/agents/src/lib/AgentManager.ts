@@ -4,6 +4,7 @@ import _ from 'lodash'
 import pino from 'pino'
 import { getLogger } from '@magickml/core'
 import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC } from '@magickml/config'
+import { BullMQWorker, RedisPubSubWrapper } from '@magickml/server-core'
 
 /**
  * Class for managing agents.
@@ -163,10 +164,8 @@ export class AgentManager {
         ...agent,
         pingedAt: new Date().toISOString(),
       }
-      const agentInstance = new Agent(data, this)
+      const agentInstance = new Agent(data, this, new BullMQWorker(), new RedisPubSubWrapper())
 
-      // we need to wait for the agent to initialize before we can use its
-      await agentInstance.initialize({})
       this.agents[agent.id] = agentInstance
       this.currentAgents.push(agent)
 

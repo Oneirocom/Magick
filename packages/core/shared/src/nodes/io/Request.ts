@@ -6,7 +6,7 @@ import { API_ROOT_URL } from '@magickml/config'
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
-import { objectSocket, triggerSocket } from '../../sockets'
+import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -50,6 +50,11 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'output', objectSocket)
 
+    const headerInput = new Rete.Input('headers', 'Headers', objectSocket)
+    const urlInput = new Rete.Input('url', 'URL', stringSocket)
+    const paramsInput = new Rete.Input('params', 'Params', objectSocket)
+    const methodInput = new Rete.Input('method', 'Method', objectSocket)
+
     // Initialize controls used in the node
     const nameControl = new InputControl({
       dataKey: 'name',
@@ -72,7 +77,12 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     // Add inputs and outputs to the node and configure node inspector
-    node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    node
+      .addInput(dataInput)
+      .addInput(headerInput)
+      .addInput(urlInput)
+      .addInput(paramsInput)
+      .addOutput(dataOutput).addOutput(outp)
     node.inspector
       .add(nameControl)
       .add(headers)

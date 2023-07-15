@@ -1,5 +1,4 @@
 // DOCUMENTED
-import * as BullMQ from 'bullmq'
 import pino from 'pino'
 import _ from 'lodash'
 import {
@@ -7,20 +6,22 @@ import {
   SpellRunner,
   pluginManager,
   AgentInterface,
-  SpellInterface,
   getLogger,
   MagickSpellInput,
+  AGENT_RUN_RESULT,
+  AGENT_LOG,
+  AGENT_WARN,
+  AGENT_ERROR,
 } from '@magickml/core'
-import { bullMQConnection, PING_AGENT_TIME_MSEC } from '@magickml/config'
-import { RedisPubSub } from '@magickml/redis-pubsub'
+import { PING_AGENT_TIME_MSEC } from '@magickml/config'
 
 import { AgentManager } from './AgentManager'
-import { app } from '@magickml/server-core'
+import { app, type Worker, type PubSub } from '@magickml/server-core'
 
 /**
  * The Agent class that implements AgentInterface.
  */
-export class Agent extends RedisPubSub implements AgentInterface {
+export class Agent implements AgentInterface {
   name = ''
   id: any
   secrets: any
@@ -28,11 +29,13 @@ export class Agent extends RedisPubSub implements AgentInterface {
   data: AgentInterface
   spellManager: SpellManager
   projectId: string
+  rootSpellId: string
   agentManager: AgentManager
   spellRunner?: SpellRunner
   logger: pino.Logger = getLogger()
-  worker: BullMQ.Worker
-  queue: BullMQ.Queue
+  worker: Worker
+  pubsub: PubSub
+  ready = false
 
   outputTypes: any[] = []
   updateInterval: any
@@ -45,8 +48,9 @@ export class Agent extends RedisPubSub implements AgentInterface {
   constructor(
     agentData: AgentInterface,
     agentManager: AgentManager,
+    worker: Worker,
+    pubsub: PubSub,
   ) {
-    super()
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
     this.id = agentData.id
@@ -54,15 +58,14 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
+    this.rootSpellId = agentData.rootSpellId
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
     // Set up the agent worker to handle incoming messages
-    this.worker = new BullMQ.Worker(`agent:${this.id}:run`, this.runWorker.bind(this), {
-      connection: bullMQConnection,
-    })
-    this.queue = new BullMQ.Queue(`agent:run:result`, {
-      connection: bullMQConnection,
-    })
+    this.worker = worker
+    this.worker.initialize(this.id, this.runWorker.bind(this))
+
+    this.pubsub = pubsub
 
     const spellManager = new SpellManager({
       cache: false,
@@ -92,6 +95,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
       const agentStartMethods = pluginManager.getAgentStartMethods()
 
+      // Runs the agent start methods that were loaded from plugins
       for (const method of Object.keys(agentStartMethods)) {
         try {
           await agentStartMethods[method]({
@@ -114,6 +118,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
         })
       }, PING_AGENT_TIME_MSEC)
       this.logger.info('New agent created: %s | %s', this.name, this.id)
+      this.ready = true
     })()
   }
 
@@ -136,14 +141,9 @@ export class Agent extends RedisPubSub implements AgentInterface {
     this.log('destroyed agent', { id: this.id })
   }
 
-  // returns the channel for the agent
-  get channel() {
-    return `agent:${this.id}`
-  }
-
   // published an event to the agents event stream
   publishEvent(event, message) {
-    this.publish(`${this.channel}:${event}`, {
+    this.pubsub.publish(event, {
       ...message,
       // make sure all events include the agent and project id
       agentId: this.id,
@@ -154,9 +154,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
   // sends a log event along the event stream
   log(message, data) {
     this.logger.info(`${message} ${JSON.stringify(data)}`)
-
-    this.publishEvent('log', {
-      eventType: 'log',
+    this.publishEvent(AGENT_LOG(this.id), {
+      agentId: this.id,
+      projectId: this.projectId,
+      type: 'log',
       message,
       data,
     })
@@ -164,9 +165,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
   warn(message, data) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
-
-    this.publishEvent('log', {
-      eventType: 'warn',
+    this.publishEvent(AGENT_WARN(this.id), {
+      agentId: this.id,
+      projectId: this.projectId,
+      type: 'warn',
       message,
       data,
     })
@@ -174,9 +176,10 @@ export class Agent extends RedisPubSub implements AgentInterface {
 
   error(message, data = {}) {
     this.logger.error(`${message} %o`, { error: data })
-
-    this.publishEvent('log', {
-      eventType: 'error',
+    this.publishEvent(AGENT_ERROR(this.id), {
+      agentId: this.id,
+      projectId: this.projectId,
+      type: 'error',
       message,
       data: { error: data },
     })
@@ -198,7 +201,7 @@ export class Agent extends RedisPubSub implements AgentInterface {
       app,
     })
 
-    await this.queue.add('agent:run:result', {
+    this.publishEvent(AGENT_RUN_RESULT(this.id), {
       agentId: this.id,
       projectId: this.projectId,
       originalData: data,

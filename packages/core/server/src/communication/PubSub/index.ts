@@ -16,3 +16,5 @@ export abstract class PubSub extends EventEmitter {
         throw new Error('Method not implemented.');
     }
 }
+
+export * from './Redis'
