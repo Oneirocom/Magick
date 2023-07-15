@@ -1,5 +1,5 @@
 import { RedisPubSub } from '@magickml/redis-pubsub'
-import { PubSub } from '.'
+import { PubSub } from './PubSub'
 
 import { app } from '@magickml/server-core'
 
