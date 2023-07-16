@@ -16,7 +16,7 @@ import {
 import { PING_AGENT_TIME_MSEC } from '@magickml/config'
 
 import { AgentManager } from './AgentManager'
-import { app, type Worker, type PubSub } from '@magickml/server-core'
+import { app, type Job, type Worker, type PubSub } from '@magickml/server-core'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -185,7 +185,7 @@ export class Agent implements AgentInterface {
     })
   }
 
-  async runWorker(job: AgentRunJob) {
+  async runWorker(job: Job<AgentRunJob>) {
     // the job name is the agent id.  Only run if the agent id matches.
     if (this.id !== job.data.agentId) return
 
@@ -211,21 +211,17 @@ export class Agent implements AgentInterface {
 }
 
 export interface AgentRunJob {
-  data: {
-    inputs: MagickSpellInput
-    agentId: string
-    spellId: string
-    componentName: string
-    runSubspell: boolean
-    secrets: Record<string, string>
-    publicVariables: Record<string, unknown>
-  }
+  inputs: MagickSpellInput
+  agentId: string
+  spellId: string
+  componentName: string
+  runSubspell: boolean
+  secrets: Record<string, string>
+  publicVariables: Record<string, unknown>
 }
 
 export interface AgentUpdateJob {
-  data: {
-    agentId: string
-  }
+  agentId: string
 }
 
 export type AgentJob = AgentRunJob | AgentUpdateJob
