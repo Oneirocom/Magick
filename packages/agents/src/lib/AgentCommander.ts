@@ -62,15 +62,13 @@ export class AgentCommander extends EventEmitter {
         spellId
     }: RunRootSpellArgs) {
         await this.messageQueue.addJob(AGENT_RUN_JOB, {
-            data: {
-                agentId: agent.id,
-                spellId: spellId || agent.rootSpellId,
-                inputs,
-                componentName,
-                runSubspell,
-                secrets,
-                publicVariables
-            }
+            agentId: agent.id,
+            spellId: spellId || agent.rootSpellId,
+            inputs,
+            componentName,
+            runSubspell,
+            secrets,
+            publicVariables
         })
     }
 }

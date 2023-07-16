@@ -107,8 +107,8 @@ export class CloudAgentWorker extends AgentManager {
       async (job: Job) => {
         switch (job.name) {
           case 'agent:updated':
-            console.log("BEN LOOK AT ME: ", job)
-            this.agentUpdated(job.data.data.agentId)
+            const data = job.data as AgentUpdateJob
+            this.agentUpdated(data.agentId)
             break
           default:
             this.logger.error(

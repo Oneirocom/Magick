@@ -27,9 +27,7 @@ export class CloudAgentManager {
             this.logger.info(`Agent Updated: ${agent.id}`)
             const agentUpdatedAt = new Date(agent.updatedAt)
             await this.mq.addJob('agent:updated', {
-                data: {
-                    agentId: agent.id,
-                }
+                agentId: agent.id,
             }, `agent-updated-${agent.id}-${agentUpdatedAt.getTime()}`)
         })
     }
