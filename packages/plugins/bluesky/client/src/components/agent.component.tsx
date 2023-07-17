@@ -42,7 +42,7 @@ export const BlueskyAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <Tooltip title="Add ypur Bluesky settings" placement='left' arrow>
+        <Tooltip title="Add your Bluesky settings" placement='left' arrow>
           <h3>Bluesky</h3>
         </Tooltip>
         <div
