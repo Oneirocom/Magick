@@ -39,12 +39,16 @@ function install(
   const subscriptionMap = new Map()
 
   if (!server) {
+    // subscribe to the spell event on the client inside the components builder
     editor.on(
       'componentRegister',
       (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
         const builder = component.builder
 
+        // overwrite the base builder with one which subscribes to the event.
+        // Run the original builder at the end.
         component.builder = (node: MagickNode) => {
+          // get the current spell from the editor
           const currentSpell = editor.currentSpell
 
           // this is the shared event for the socket connection.
@@ -61,7 +65,8 @@ function install(
           // don't bother making a subscription if we already have one
           if (subscriptionMap.has(node.id)) return
 
-          client.service('agents').on('spell', (data: any) => {
+          // separate out the spell listener so we can unsubscribe later
+          const spellListener = (data: any) => {
             // extract the right data from the socket
             const { input, output, error, result, eventType } = data
 
@@ -90,17 +95,31 @@ function install(
               // note for later. output is a property from the output node and that is where it is defined
               editor.context.sendToPlaytest(output?.output as string)
             }
-          })
+          }
+
+          // subscribe the spell listener to the spell event
+          client.service('agents').on('spell', spellListener)
+
           // set the subscription into the map so we can destroy it later
-          // subscriptionMap.set(node.id, unsubscribe)
+          subscriptionMap.set(node.id, spellListener)
 
           // call the original builder now
           builder.call(component, node)
         }
-
-        // destroy the worker when the node is removed
       }
     )
+
+    // handle removing the subscription when the node is removed
+    editor.on('nodeRemoved', (node: MagickNode) => {
+      // get the spell listener from the map
+      const listener = subscriptionMap.get(node.id)
+
+      // unsubscribe the spell listener from the spell event
+      client.service('agents').off('spell', listener)
+
+      // delete the listener from the map
+      subscriptionMap.delete(node.id)
+    })
   }
 
   // if we are on the server, we want to emit the data to the client from the worker
