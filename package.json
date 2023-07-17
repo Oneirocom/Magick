@@ -4,6 +4,7 @@
   "license": "Apache 2.0",
   "scripts": {
     "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel --maxParallel=100",
+    "dev-nocache": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/agent --parallel --maxParallel=100 --skip-nx-cache",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-agent": "node dist/apps/agent/main.js",
