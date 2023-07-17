@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import styles from './magickml-chatbox.module.css'
 import { Widget } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
@@ -6,7 +7,9 @@ import 'react-chat-widget/lib/styles.css';
 export interface MagickmlChatboxProps {}
 
 export function MagickmlChatbox(props: MagickmlChatboxProps) {
-  
+
+  const showChatBoxFlag = useFeatureFlagEnabled('chat-exp-chatbox')
+
   const handleNewUserMessage = (newMessage) => {
     // Now send the message throught the backend API
     console.log(`New message incoming! ${newMessage}`);
@@ -14,12 +17,16 @@ export function MagickmlChatbox(props: MagickmlChatboxProps) {
 
   return (
     <div className={styles['container']}>
-      <Widget
-        handleNewUserMessage={handleNewUserMessage}
-        // profileAvatar={logo}
-        title="Magick Bot"
-        subtitle="Welcome to Magick!"
-      />
+      {
+        showChatBoxFlag ? (
+          <Widget
+            handleNewUserMessage={handleNewUserMessage}
+            // profileAvatar={logo}
+            title="Magick Bot"
+            subtitle="Welcome to Magick!"
+          />
+        ) : ''
+      }
     </div>
   )
 }
