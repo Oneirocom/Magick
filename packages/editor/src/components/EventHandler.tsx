@@ -198,7 +198,7 @@ const EventHandler = ({ pubSub, tab }) => {
       return
     }
 
-    // onProcess()
+    onProcess()
   }
 
   const createMessageReactionEditor = () => {
