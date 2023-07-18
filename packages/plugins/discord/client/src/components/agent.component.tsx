@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { debounce } from 'lodash'
+import { Tooltip } from "@mui/material"
 
 type PluginProps = {
   selectedAgentData: any
@@ -103,7 +104,9 @@ export const DiscordAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <h3>Discord</h3>
+        <Tooltip title="Add discord Api key here" placement='left' arrow>
+          <h3>Discord</h3>
+        </Tooltip>
         <div
           style={{
             display: 'flex',

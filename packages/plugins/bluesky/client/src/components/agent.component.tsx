@@ -4,6 +4,7 @@ import { debounce } from 'lodash'
 import { Switch } from '@magickml/client-core'
 import Button from '@mui/material/Button'
 import VariableModal from './VariableModal'
+import { Tooltip } from '@mui/material'
 export const BlueskyAgentWindow: FC<any> = props => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
@@ -41,7 +42,9 @@ export const BlueskyAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <h3>Bluesky</h3>
+        <Tooltip title="Add your Bluesky settings" placement='left' arrow>
+          <h3>Bluesky</h3>
+        </Tooltip>
         <div
           style={{
             display: 'flex',
