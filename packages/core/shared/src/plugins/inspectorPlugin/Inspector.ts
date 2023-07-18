@@ -78,6 +78,9 @@ export class Inspector {
     if (control.defaultValue !== null && !this.node.data[control.dataKey])
       this.node.data[control.dataKey] = control.defaultValue
 
+    // add tooltip to the control
+    control.tooltip = control.tooltip || ''
+
     list.set(control.dataKey, control)
   }
 

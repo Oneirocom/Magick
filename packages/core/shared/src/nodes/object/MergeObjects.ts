@@ -50,12 +50,14 @@ export class Merge extends MagickComponent<void> {
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Node name',
+      tooltip: 'Enter node name'
     })
 
     const socketGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       ignored: ['trigger', 'object'],
       name: 'Property Name',
+      tooltip: 'Add property name'
     })
 
     node

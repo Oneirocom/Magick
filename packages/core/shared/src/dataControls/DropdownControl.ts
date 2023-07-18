@@ -27,6 +27,7 @@ export class DropdownControl extends DataControl {
     icon = 'properties',
     write = true,
     ignored = [],
+    tooltip = '',
   }: {
     name: string
     dataKey: string
@@ -35,6 +36,7 @@ export class DropdownControl extends DataControl {
     icon?: string
     write?: boolean
     ignored?: string[]
+    tooltip?: string;
   }) {
     const options = {
       dataKey,
@@ -47,6 +49,7 @@ export class DropdownControl extends DataControl {
         values,
         ignored,
       },
+      tooltip: tooltip
     }
 
     super(options)

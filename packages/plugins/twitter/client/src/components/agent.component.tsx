@@ -2,6 +2,8 @@ import { Switch } from '@magickml/client-core'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import VariableModal from './VariableModal'
+import {Tooltip} from '@mui/material'
+
 export const TwitterAgentWindow: FC<any> = props => {
   props = props.props
   const { selectedAgentData, setSelectedAgentData, update } = props
@@ -36,7 +38,9 @@ export const TwitterAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
+        <Tooltip title="Add your twitter account details here" placement='left' arrow>
         <h3>Twitter</h3>
+        </Tooltip>
         <div
           style={{
             display: 'flex',

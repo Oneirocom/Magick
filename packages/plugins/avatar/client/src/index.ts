@@ -23,6 +23,7 @@ const AvatarPlugin = new ClientPlugin({
       path: '/avatar',
       icon: AvatarIcon,
       text: 'Avatar',
+      tooltip: 'Chat with your agents embodied with a 3D avatar'
     },
   ],
   clientRoutes: [

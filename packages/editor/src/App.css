@@ -559,3 +559,22 @@ div.item {
 .MuiInputBase-multiline {
   padding: 13px !important;
 }
+
+/* chatbox style */
+div.rcw-sender {
+  align-items: center;
+}
+
+button.rcw-picker-btn, 
+button.rcw-send {
+  background: transparent;
+  box-shadow: none;
+}
+
+button.rcw-launcher {
+  padding: 9px 13px;
+}
+
+button.rcw-launcher.rcw-hide-sm {
+  padding: 9px 20px;
+} 

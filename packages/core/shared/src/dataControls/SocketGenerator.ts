@@ -31,6 +31,7 @@ export class SocketGeneratorControl extends DataControl {
     icon = 'properties',
     connectionType,
     name: nameInput,
+    tooltip = '',
   }: {
     socketType?: SocketType,
     taskType?: TaskType,
@@ -38,6 +39,7 @@ export class SocketGeneratorControl extends DataControl {
     icon?: string,
     connectionType: 'input' | 'output',
     name: string
+    tooltip?: string,
   }) {
     super({
       dataKey: connectionType + 's',
@@ -50,6 +52,7 @@ export class SocketGeneratorControl extends DataControl {
         taskType,
         connectionType,
       },
+      tooltip: tooltip,
     });
 
     if(!connectionType || !(connectionType === 'input' || connectionType === 'output')) {
