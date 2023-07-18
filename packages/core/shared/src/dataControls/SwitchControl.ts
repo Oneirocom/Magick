@@ -32,12 +32,14 @@ export class SwitchControl extends DataControl {
     icon = 'hand',
     label = 'Toggle',
     defaultValue = {},
+    tooltip = '',
   }: {
     dataKey: string
     name: string
     icon?: string
     label: string
     defaultValue?: unknown
+    tooltip?: string
   }) {
     super({
       dataKey: dataKey,
@@ -48,6 +50,7 @@ export class SwitchControl extends DataControl {
       data: {
         label,
       },
+      tooltip: tooltip,
     })
   }
 

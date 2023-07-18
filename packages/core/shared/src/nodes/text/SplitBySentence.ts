@@ -93,6 +93,7 @@ export class SplitBySentence extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'stringMaxLength',
       name: 'Maximum String Length',
       defaultValue: 280,
+      tooltip:"Enter The maximum length of each string."
     })
 
     node.inspector.add(stringMaxLength)

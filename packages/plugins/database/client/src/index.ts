@@ -18,6 +18,7 @@ const selectControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
+    tooltip: 'Enter table here'
   },
 ]
 
@@ -28,6 +29,7 @@ const insertControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
+    tooltip: 'Enter table here'
   },
 ]
 
@@ -38,6 +40,7 @@ const updateControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
+    tooltip: 'Enter table here'
   },
 ]
 
@@ -48,6 +51,7 @@ const upsertControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
+    tooltip: 'Enter table here'
   },
   {
     type: InputControl,
@@ -55,6 +59,7 @@ const upsertControls = [
     name: 'On Conflict',
     icon: 'database',
     defaultValue: '',
+    tooltip: 'Enter On conflict'
   },
 ]
 
@@ -65,6 +70,7 @@ const deleteControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
+    tooltip: 'Enter table here'
   },
 ]
 

@@ -82,6 +82,7 @@ export class Output extends MagickComponent<void> {
       dataKey: 'outputType',
       values: values.map(v => v.name),
       defaultValue: values[0].name || 'Default',
+      tooltip: "Choose Output type"
     })
 
     outputType.onData = data => {

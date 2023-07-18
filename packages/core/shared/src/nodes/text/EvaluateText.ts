@@ -60,9 +60,10 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       dataKey: 'operationType',
       values: operationTypes,
       defaultValue: operationTypes[0],
+      tooltip: 'Choose operation type'
     })
 
-    const fewshotControl = new FewshotControl({})
+    const fewshotControl = new FewshotControl({tooltip: 'Open fewshot'})
 
     node.inspector.add(fewshotControl).add(operationType)
 

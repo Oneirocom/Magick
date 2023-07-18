@@ -50,12 +50,14 @@ export class Subtract extends MagickComponent<WorkerOutputs> {
       dataKey: 'firstNumber',
       name: 'First Number',
       defaultValue: 1,
+      tooltip: 'Enter the first number'
     })
 
     const inspectorEndNumSocket = new InputControl({
       dataKey: 'secondNumber',
       name: 'Second Number',
       defaultValue: 1,
+      tooltip: 'Enter the second number'
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)

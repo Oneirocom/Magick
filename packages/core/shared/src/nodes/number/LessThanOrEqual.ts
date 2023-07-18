@@ -35,6 +35,7 @@ export class LessThanOrEqual extends MagickComponent<void> {
       dataKey: 'value',
       name: 'Value',
       defaultValue: 0,
+      tooltip: 'Display the default value'
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
