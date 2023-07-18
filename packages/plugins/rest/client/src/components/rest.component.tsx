@@ -7,6 +7,8 @@ import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
 import { API_ROOT_URL } from '@magickml/config'
+import {Tooltip} from "@mui/material"
+
 
 /**
  * Generate a random hash.
@@ -74,7 +76,9 @@ export const RestAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
+        <Tooltip title="add your rest Api seetings here" placement='left' arrow >
         <h3>REST API</h3>
+        </Tooltip>
         <div
           style={{
             display: 'flex',
@@ -117,7 +121,9 @@ export const RestAgentWindow: FC<any> = props => {
           <div className="form-item">
             <Grid container>
               <Grid item xs={12}>
+                <Tooltip title="add your agentId here" placement='bottom' arrow >
                 <span className="form-item-label modal-element">Agent ID</span>
+                </Tooltip>
                 <Input
                   value={selectedAgentData.id}
                   readOnly
@@ -131,12 +137,14 @@ export const RestAgentWindow: FC<any> = props => {
                 />
               </Grid>
               <Grid item xs={12}>
+                <Tooltip title="add your api key here" placement='bottom' arrow >
                 <span
                   style={{ marginTop: '2em' }}
                   className="form-item-label modal-element"
                 >
                   API Key
                 </span>
+                </Tooltip>
                 <Input
                   value={selectedAgentData.data?.rest_api_key}
                   readOnly
@@ -152,12 +160,14 @@ export const RestAgentWindow: FC<any> = props => {
                 />
               </Grid>
               <Grid item xs={12}>
+                <Tooltip title="add your url here" placement='bottom' arrow >
                 <span
                   style={{ marginTop: '2em' }}
                   className="form-item-label modal-element"
                 >
                   URL
                 </span>
+                </Tooltip>
                 <Input
                   value={`${API_ROOT_URL}/api/${selectedAgentData.id}`}
                   readOnly
@@ -194,16 +204,21 @@ export const RestAgentWindow: FC<any> = props => {
                   >
                     {showGetExample ? 'Hide' : 'Show'}
                   </Button>
+                  <Tooltip title="Your Get url" placement='bottom' arrow >
+
                   <h4>GET Example</h4>
+                  </Tooltip>
                 </span>
                 {showGetExample && (
                   <div>
+                    
                     <span
                       style={{ marginTop: '1em' }}
                       className="form-item-label modal-element"
                     >
                       Fetch
                     </span>
+                   
                     <Input
                       value={`fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World')`}
                       readOnly
@@ -239,7 +254,9 @@ export const RestAgentWindow: FC<any> = props => {
                   >
                     {showPostExample ? 'Hide' : 'Show'}
                   </Button>
+                  <Tooltip title="Your Post url" placement='bottom' arrow >
                   <h4>POST Example</h4>
+                  </Tooltip>
                 </span>
                 {showPostExample && (
                   <div>
@@ -301,7 +318,9 @@ export const RestAgentWindow: FC<any> = props => {
                   >
                     {showPutExample ? 'Hide' : 'Show'}
                   </Button>
+                  <Tooltip title="Your Put url" placement='bottom' arrow >
                   <h4>PUT Example</h4>
+                  </Tooltip>
                 </span>
                 {showPutExample && (
                   <div>
@@ -367,7 +386,9 @@ export const RestAgentWindow: FC<any> = props => {
                   >
                     {showDeleteExample ? 'Hide' : 'Show'}
                   </Button>
+                  <Tooltip title="Your Delete url" placement='bottom' arrow >
                   <h4>DELETE Example</h4>
+                  </Tooltip>
                 </span>
                 {showDeleteExample && (
                   <div>
