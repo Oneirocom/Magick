@@ -5,6 +5,7 @@ import { MagickComponent } from '../../engine'
 import { ComponentData, ControlData, MagickNode } from '../../types'
 import { Inspector } from './Inspector'
 
+
 // Add TSDoc comment to the class.
 /**
  * A general class for the data controls.
@@ -27,6 +28,7 @@ export abstract class DataControl {
   placeholder: string
   data: ComponentData
   expanded?: boolean
+  tooltip?: string;
 
   // Add TSDoc comment to the constructor.
   /**
@@ -53,6 +55,7 @@ export abstract class DataControl {
     defaultValue = null,
     type = 'string',
     placeholder = '',
+    tooltip = '',
   }: {
     dataKey: string
     name: string
@@ -64,6 +67,7 @@ export abstract class DataControl {
     defaultValue?: unknown
     type?: string
     placeholder?: string
+    tooltip?: string
   }) {
     if (!dataKey) throw new Error('Data key is required')
     if (!name) throw new Error('Name is required')
@@ -80,6 +84,7 @@ export abstract class DataControl {
     this.type = type
     this.placeholder = placeholder
     this.data = data
+    this.tooltip = tooltip
   }
 
   // Add TSDoc comment to the method.
@@ -97,6 +102,7 @@ export abstract class DataControl {
       icon: this.icon,
       type: this.type,
       placeholder: this.placeholder,
+      tooltip: this.tooltip
     }
   }
 

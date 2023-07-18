@@ -68,23 +68,27 @@ export class Javascript extends MagickComponent<unknown> {
       connectionType: 'output',
       ignored: ['trigger'],
       name: 'Output Sockets',
+      tooltip: 'Add output sockets'
     })
 
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       ignored: ['trigger'],
       name: 'Input Sockets',
+      tooltip: 'Add input sockets'
     })
 
     const codeControl = new CodeControl({
       dataKey: 'code',
       name: 'Code',
       language: 'javascript',
+      tooltip: 'Open code editor'
     })
 
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
+      tooltip: 'Enter component name'
     })
 
     node.addOutput(dataOutput).addInput(dataInput)

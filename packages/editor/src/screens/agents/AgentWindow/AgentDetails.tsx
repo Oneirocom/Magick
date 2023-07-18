@@ -12,6 +12,7 @@ import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import validateSpellData from './spellValidator'
+import {tooltip_text} from "./tooltip_texts"
 
 /**
  * RenderComp renders the given component with the given props.
@@ -19,7 +20,9 @@ import validateSpellData from './spellValidator'
  * @param props - The properties of the component to render.
  */
 const RenderComp = (props: any) => {
-  return <props.element props={props} />
+  return (
+  <props.element props={props} />
+  )
 }
 
 interface AgentDetailsProps {
@@ -292,6 +295,9 @@ const AgentDetails = ({
                 ? 'Root Spell must be set before enabling the agent'
                 : ''
             }
+            
+            placement="right-start"
+            arrow
           >
             <span style={{ marginLeft: '20px' }}>
               <CustomizedSwitch
@@ -340,7 +346,9 @@ const AgentDetails = ({
         </div>
       </div>
       <div className="form-item agent-select">
+        <Tooltip title={tooltip_text.rootSpell} placement="right" arrow>
         <span className="form-item-label">Root Spell</span>
+        </Tooltip>
         <select
           style={{
             appearance: 'none',
@@ -390,11 +398,14 @@ const AgentDetails = ({
       </div>
       <div>
         {(pluginManager as ClientPluginManager).getSecrets(true).map((value, index) => {
+
           return (
             <div key={value.name + index} style={{ marginBottom: '1em' }}>
-              <div style={{ width: '100%', marginBottom: '1em' }}>
+             <Tooltip title={tooltip_text[value.name]} placement="right" arrow>
+             <div style={{ width: '100%', marginBottom: '1em' }}>
                 {value.name}
               </div>
+              </Tooltip>
               <Input
                 type="password"
                 name={value.key}
@@ -440,7 +451,10 @@ const AgentDetails = ({
           }`}
       >
         {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
+          console.log(value);
+          
           return (
+           <Tooltip title="kkkk"  arrow>
             <RenderComp
               key={index}
               enable={enable}
@@ -449,6 +463,8 @@ const AgentDetails = ({
               setSelectedAgentData={setSelectedAgentData}
               update={update}
             />
+            </Tooltip>
+            
           )
         })}
       </div>

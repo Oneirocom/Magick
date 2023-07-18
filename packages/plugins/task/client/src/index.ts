@@ -39,6 +39,7 @@ class TaskPlugin extends ClientPlugin {
           path: '/tasks',
           icon: AssignmentTurnedInIcon,
           text: 'Tasks',
+          tooltip: 'Objectives for agents to iterate through and complete'
         },
       ],
       clientRoutes: [

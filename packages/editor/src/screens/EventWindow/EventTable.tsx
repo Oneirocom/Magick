@@ -2,6 +2,7 @@
 // Import statements kept as-is
 import { TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/config'
+import { useFeathers  } from '@magickml/client-core'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -79,6 +80,8 @@ function EventTable({ events, updateCallback }) {
   const [selectedRow, setSelectedRow] = useState(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(0)
+
+  const { client: feathersClient } = useFeathers();
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
@@ -227,11 +230,11 @@ function EventTable({ events, updateCallback }) {
 
   // Handle events deletion
   const handleDeleteMany = async (event: any) => {
-    const ids = selectedRows.join('&');
-    const isDeleted = await fetch(`${API_ROOT_URL}/events/${ids}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const isDeleted = await feathersClient.service('events').remove(null, {
+      query: {
+        id: {
+          $in: selectedRows,
+        },
       },
     });
   

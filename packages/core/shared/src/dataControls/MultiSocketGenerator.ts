@@ -28,6 +28,7 @@ export class MultiSocketGeneratorControl extends DataControl {
     icon = 'properties',
     connectionType,
     name: nameInput,
+    tooltip = '',
   }: {
     socketTypes: string[];
     taskTypes: string[];
@@ -35,6 +36,7 @@ export class MultiSocketGeneratorControl extends DataControl {
     icon?: string;
     connectionType: 'input' | 'output';
     name: string;
+    tooltip?: string;
   }) {
     const name = nameInput || `${socketTypes.join('|')} ${connectionType}s`;
 
@@ -49,6 +51,7 @@ export class MultiSocketGeneratorControl extends DataControl {
         taskTypes,
         connectionType,
       },
+      tooltip: tooltip,
     };
 
     super(options);

@@ -6,7 +6,8 @@ import {
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
-import { DEFAULT_OPENAI_KEY } from '@magickml/config'
+import { DEFAULT_OPENAI_KEY, PRODUCTION } from '@magickml/config'
+import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
 
 /**
  * Generate a completion text based on prior chat conversation input.
@@ -88,6 +89,13 @@ export async function makeChatCompletion(
   }
 
   const openaiKey = context.module.secrets!['openai_api_key']
+
+  if (PRODUCTION && GPT4_MODELS.includes(settings.model) && !openaiKey) {
+    return {
+      success: false,
+      error: 'OpenAI API key is required for GPT-4 models',
+    }
+  }
 
   const finalKey = openaiKey ? openaiKey : DEFAULT_OPENAI_KEY
 

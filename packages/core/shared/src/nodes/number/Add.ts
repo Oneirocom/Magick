@@ -50,12 +50,14 @@ export class Add extends MagickComponent<WorkerOutputs> {
       dataKey: 'firstNumber',
       name: 'First Number',
       defaultValue: 1,
+      tooltip: 'Enter First Number'
     })
 
     const inspectorEndNumSocket = new InputControl({
       dataKey: 'secondNumber',
       name: 'Second Number',
       defaultValue: 1,
+      tooltip: 'Enter Second Number'
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
