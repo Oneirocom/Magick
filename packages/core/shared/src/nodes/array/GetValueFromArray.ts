@@ -49,6 +49,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'element',
       name: 'Element',
       defaultValue: 0,
+      tooltip: 'this is a element input',
     })
 
     node.inspector.add(element)

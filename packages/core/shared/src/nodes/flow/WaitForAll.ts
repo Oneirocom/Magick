@@ -40,6 +40,7 @@ export class WaitForAll extends MagickComponent<void> {
       connectionType: 'input',
       socketType: 'triggerSocket',
       name: 'Input Sockets',
+      tooltip: 'Add socket triggers'
     })
 
     node.inspector.add(inputGenerator)

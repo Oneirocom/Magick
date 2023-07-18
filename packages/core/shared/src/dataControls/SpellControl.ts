@@ -20,6 +20,7 @@ export class SpellControl extends DataControl {
     icon?: string
     write: boolean
     defaultValue?: string
+    tooltip?: string
   }) {
     const optionsWithDefaults = {
       dataKey: 'spell',
@@ -28,6 +29,7 @@ export class SpellControl extends DataControl {
       defaultValue: options.defaultValue || '',
       write: options.write,
       icon: options.icon || 'sieve',
+      tooltip: options.tooltip || '',
     }
     super(optionsWithDefaults);
   }

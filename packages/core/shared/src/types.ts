@@ -143,6 +143,7 @@ export type ControlData = {
   icon: string
   type: string
   placeholder: string
+  tooltip?: string
 }
 
 export class MagickEditor extends NodeEditor<EventsTypes> {

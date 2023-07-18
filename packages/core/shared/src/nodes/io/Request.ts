@@ -54,18 +54,21 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
+      tooltip: 'Enter Component name'
     })
-    const headers = new InputControl({ dataKey: 'headers', name: 'Headers' })
+    const headers = new InputControl({ dataKey: 'headers', name: 'Headers', tooltip: 'Headers for the input request' })
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       name: 'Body Inputs',
       ignored: ['trigger'],
+      tooltip: 'Add body inputs for the request'
     })
-    const url = new InputControl({ dataKey: 'url', name: 'URL', icon: 'moon' })
+    const url = new InputControl({ dataKey: 'url', name: 'URL', icon: 'moon', tooltip: 'url for the input request'})
     const method = new InputControl({
       dataKey: 'method',
       name: 'method',
       icon: 'moon',
+      tooltip: 'Method for the input request'
     })
 
     // Add inputs and outputs to the node and configure node inspector

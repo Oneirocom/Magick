@@ -55,12 +55,14 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'operationType',
       values: operationTypes,
       defaultValue: operationTypes[0],
+      tooltip:"this is an operation type dropdown"
     })
 
     const testt = new NumberControl({
       dataKey: 'testt',
       name: 'testt Type',
       icon: 'moon',
+      tooltip:"This is a number control"
     })
 
     node.inspector.add(operationType).add(testt)

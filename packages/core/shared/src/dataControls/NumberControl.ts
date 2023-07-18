@@ -12,7 +12,7 @@ export class NumberControl extends DataControl {
    * @param {Object} params - An object containing the key, name, icon,
    * defaultValue of the control.
    */
-  constructor({ dataKey, name, icon = 'hand', defaultValue = -1 }) {
+  constructor({ dataKey, name, icon = 'hand', defaultValue = -1, tooltip }) {
 
     super({
       dataKey: dataKey,
@@ -21,6 +21,7 @@ export class NumberControl extends DataControl {
       icon,
       type: 'number',
       defaultValue,
+      tooltip: tooltip,
     });
   }
 

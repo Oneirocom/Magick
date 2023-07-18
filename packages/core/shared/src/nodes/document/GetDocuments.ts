@@ -65,6 +65,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'document',
+      tooltip: 'Enter document type'
     })
 
     const max_count = new InputControl({
@@ -72,6 +73,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
+      tooltip: 'Enter max count'
     })
 
     // Save controls as inspector data for easy reference

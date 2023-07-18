@@ -66,6 +66,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'model',
       values: models,
       defaultValue: models[0],
+      tooltip: 'Choose model name'
     })
 
     node.inspector.add(modelName)

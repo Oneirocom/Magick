@@ -47,12 +47,14 @@ export class InRange extends MagickComponent<void> {
       dataKey: 'startNumber',
       name: 'Start Number',
       defaultValue: 10,
+      tooltip: 'Enter the start number'
     })
 
     const inspectorEndNumSocket = new InputControl({
       dataKey: 'endNumber',
       name: 'End Number',
       defaultValue: 100,
+      tooltip: 'Enter an end number'
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
