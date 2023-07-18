@@ -115,8 +115,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   tooltipText
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-     <Tooltip title={tooltipText} placement="right-start" 
-     
+     <Tooltip title={tooltipText} placement="top" 
+     enterDelay={500}
      arrow 
      >
 
