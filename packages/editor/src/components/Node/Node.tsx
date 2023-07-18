@@ -3,7 +3,7 @@ import { Node } from '../../plugins/reactRenderPlugin/Node';
 import { Socket } from '../../plugins/reactRenderPlugin/Socket';
 import { Control } from '../../plugins/reactRenderPlugin/Control';
 import { Upload } from '../../plugins/reactRenderPlugin/Upload';
-
+import { Tooltip } from '@mui/material';
 import { Icon, componentCategories } from '@magickml/client-core';
 import css from './Node.module.css';
 
@@ -87,30 +87,32 @@ export class MyNode extends Node {
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
               {inputs.map(input => (
-                <div className={css['input']} key={input.key}>
-                  <div
+                <Tooltip title={`Input:${input.name}`} placement="left" enterDelay={500}>
 
-                    onMouseEnter={() => handleMouseEnter(input)}
-                    onMouseLeave={() => handleMouseLeave(input)}>
-                    <Socket
-                      type="input"
-                      socket={input.socket}
-                      io={input}
-                      innerRef={bindSocket}
-                    />
+                  <div className={css['input']} key={input.key}>
+                    <div
+                      onMouseEnter={() => handleMouseEnter(input)}
+                      onMouseLeave={() => handleMouseLeave(input)}>
+                      <Socket
+                        type="input"
+                        socket={input.socket}
+                        io={input}
+                        innerRef={bindSocket}
+                      />
 
+                    </div>
+                    {!input.showControl() && (
+                      <div className="input-title">{input.name}</div>
+                    )}
+                    {input.showControl() && (
+                      <Control
+                        className="input-control"
+                        control={input.control}
+                        innerRef={bindControl}
+                      />
+                    )}
                   </div>
-                  {!input.showControl() && (
-                    <div className="input-title">{input.name}</div>
-                  )}
-                  {input.showControl() && (
-                    <Control
-                      className="input-control"
-                      control={input.control}
-                      innerRef={bindControl}
-                    />
-                  )}
-                </div>
+                </Tooltip>
               ))}
             </div>
           )}
@@ -123,16 +125,20 @@ export class MyNode extends Node {
                       element.data = { ...element.data, hello: 'hello' };
                     })}
                   <div className="output-title">{output.name}</div>
-                  <div
-                    onMouseEnter={() => handleMouseEnter(output)}
-                    onMouseLeave={() => handleMouseLeave(output)}>
-                    <Socket
-                      type="output"
-                      socket={output.socket}
-                      io={output}
-                      innerRef={bindSocket}
-                    />
-                  </div>
+                  <Tooltip title={`output: ${output.name}`} placement="right" 
+                  enterDelay={500}
+                  >
+                    <div
+                      onMouseEnter={() => handleMouseEnter(output)}
+                      onMouseLeave={() => handleMouseLeave(output)}>
+                      <Socket
+                        type="output"
+                        socket={output.socket}
+                        io={output}
+                        innerRef={bindSocket}
+                      />
+                    </div>
+                  </Tooltip>
                 </div>
               ))}
             </div>
