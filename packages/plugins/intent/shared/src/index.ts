@@ -1,17 +1,17 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Imports
  */
 
 import { MagickComponent } from '@magickml/core'
-import { GithubIssueSearch } from './nodes/GithubIssueSearch';
+import { IntentSearch } from './nodes/IntentSearch'
 
 /**
  * Export an array of all nodes used in the app.
  * @returns MagickComponent[]
  */
 export function getNodes(): (typeof MagickComponent<any>)[] {
-  return [GithubIssueSearch]
+  return [IntentSearch]
 }
 
-export default [GithubIssueSearch]
+export default [IntentSearch]
