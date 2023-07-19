@@ -111,11 +111,19 @@ export class Agent implements AgentInterface {
       const outputTypes = pluginManager.getOutputTypes()
       this.outputTypes = outputTypes
 
-      this.updateInterval = setInterval(() => {
+      this.updateInterval = setInterval(async () => {
         // every second, update the agent, set pingedAt to now
-        app.service('agents').patch(this.id, {
-          pingedAt: new Date().toISOString(),
-        })
+        try {
+          await app.service('agents').patch(this.id, {
+            pingedAt: new Date().toISOString(),
+          })
+        } catch(err) {
+          if (err.name === 'NotFound') {
+            this.logger.warn('Agent not found: %s', this.id)
+            app.get('agentCommander').removeAgent(this.id)
+            clearInterval(this.updateInterval)
+          }
+        }
       }, PING_AGENT_TIME_MSEC)
       this.logger.info('New agent created: %s | %s', this.name, this.id)
       this.ready = true
