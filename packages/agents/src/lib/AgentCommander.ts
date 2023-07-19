@@ -1,8 +1,8 @@
 import EventEmitter from "events"
-import { Agent } from "packages/core/server/src/services/agents/agents.schema"
+import type { Agent } from "packages/core/server/src/services/agents/agents.schema"
 import { type PubSub, type MessageQueue } from '@magickml/server-core'
-import { AGENT_RUN_JOB, AGENT_RUN_RESULT } from '@magickml/core'
-import { MagickSpellInput } from "@magickml/core"
+import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE } from '@magickml/core'
+import type { MagickSpellInput } from "@magickml/core"
 
 type RunRootSpellArgs = {
     agent: Agent,
@@ -33,9 +33,9 @@ export class AgentCommander extends EventEmitter {
         this.messageQueue.initialize(AGENT_RUN_JOB)
     }
 
-    async runRootSpellWithResponse(args: RunRootSpellArgs) {
+    async runSpellWithResponse(args: RunRootSpellArgs) {
         const { agent } = args
-        await this.runRootSpell(args);
+        await this.runSpell(args);
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -52,7 +52,7 @@ export class AgentCommander extends EventEmitter {
         })
     }
 
-    async runRootSpell({
+    async runSpell({
         agent,
         inputs,
         componentName,
@@ -70,5 +70,9 @@ export class AgentCommander extends EventEmitter {
             secrets,
             publicVariables
         })
+    }
+
+    async removeAgent(agentId: string) {
+        await this.pubSub.emit(AGENT_DELETE, agentId)
     }
 }

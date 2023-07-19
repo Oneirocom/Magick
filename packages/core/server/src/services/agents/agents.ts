@@ -6,7 +6,6 @@
 
 // Import necessary modules and functions
 import * as BullMQ from 'bullmq'
-import { bullMQConnection } from '@magickml/config'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { BadRequest } from '@feathersjs/errors'
 import {
@@ -89,7 +88,7 @@ export const agent = (app: Application) => {
       })
     },
     {
-      connection: bullMQConnection,
+      connection: app.get('redis'),
     }
   )
 

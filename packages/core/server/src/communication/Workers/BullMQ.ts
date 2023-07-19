@@ -1,6 +1,6 @@
 import { Job, Worker as BMQWorker } from 'bullmq'
+import { app } from '@magickml/server-core'
 import { Worker } from './Worker'
-import { bullMQConnection } from '@magickml/config'
 
 export class BullMQWorker extends Worker {
     worker: BMQWorker
@@ -11,7 +11,7 @@ export class BullMQWorker extends Worker {
 
     initialize(queueName: string, callback: (job: Job) => Promise<any>): void {
         this.worker = new BMQWorker(queueName, callback, {
-            connection: bullMQConnection
+            connection: app.get('redis')
         })
     }
 }

@@ -1,7 +1,7 @@
-import BullMQ, { Queue } from 'bullmq'
+import { Queue } from 'bullmq'
+import { app } from '@magickml/server-core'
 import pino from 'pino'
 import { getLogger } from '@magickml/core'
-import { bullMQConnection } from '@magickml/config'
 
 import { MessageQueue } from '../MessageQueues'
 import { AgentJob } from '@magickml/agents'
@@ -12,7 +12,7 @@ export class BullQueue implements MessageQueue {
 
     initialize(queueName: string): void {
         this.queue = new Queue(queueName, {
-            connection: bullMQConnection
+            connection: app.get('redis')
         })
     }
 
