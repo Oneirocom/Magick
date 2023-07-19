@@ -101,8 +101,8 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
     context: ModuleContext
   ): Promise<WorkerReturn> {
     const threshold =
-      (inputs['firstNumber'] && (inputs['firstNumber'][0] as number)) ??
-      (node.data.firstNumber as number)
+      (inputs['threshold'] && (inputs['threshold'][0] as number)) ??
+      (node.data.threshold as number)
 
     return {
       output: String(threshold),
