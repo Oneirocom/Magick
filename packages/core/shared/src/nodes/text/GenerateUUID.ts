@@ -7,7 +7,7 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid';
 import { MagickComponent } from '../../engine'
-import { stringSocket, triggerSocket } from '../../sockets'
+import { stringSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /**
