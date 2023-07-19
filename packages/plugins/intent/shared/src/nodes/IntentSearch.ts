@@ -4,8 +4,10 @@
  * @category Intent
  */
 import Rete from 'rete'
+import { InputControl } from '@magickml/core'
 import {
   MagickComponent,
+  numberSocket,
   stringSocket,
   triggerSocket,
   MagickNode,
@@ -23,7 +25,6 @@ import axios from 'axios'
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  object: []
   output: string
 }
 
@@ -60,10 +61,27 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
       triggerSocket,
       true
     )
+    const thresholdInput = new Rete.Input(
+      'threshold',
+      'Threshold',
+      numberSocket,
+      false
+    )
+
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const textOutput = new Rete.Output('output', 'String', stringSocket)
 
+    const threshold = new InputControl({
+      dataKey: 'threshold',
+      name: 'Threshold',
+      defaultValue: '',
+      tooltip: 'The similarity threshold allowed',
+    })
+
+    node.inspector.add(threshold)
+
     return node
+      .addInput(thresholdInput)
       .addInput(triggerInput)
       .addOutput(triggerOutput)
       .addOutput(textOutput)
@@ -82,23 +100,12 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<WorkerReturn> {
-    let query = ''
-    if (inputs && inputs.query) {
-      query = inputs.query[0] as string
-    }
-    const logger = getLogger()
-    let token = ''
-    if (context.module && context.module.secrets) {
-      logger.debug(context.module.secrets)
-      token = context.module.secrets['github_access_token']
-    }
-    logger.debug(token)
-
-    let result = [] as []
+    const threshold =
+      (inputs['firstNumber'] && (inputs['firstNumber'][0] as number)) ??
+      (node.data.firstNumber as number)
 
     return {
-      object: result,
-      output: JSON.stringify(result),
+      output: String(threshold),
     }
   }
 }
