@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 /*
  * Rete UUID Generator Component
  * This component generates a UUID v4.
@@ -39,7 +39,6 @@ export class UUIDGenerator extends MagickComponent<Promise<WorkerReturn>> {
       {
         outputs: {
           output: 'output',
-          trigger: 'option',
         },
       },
       'Text',
@@ -54,14 +53,10 @@ export class UUIDGenerator extends MagickComponent<Promise<WorkerReturn>> {
    */
   builder(node: MagickNode) {
     // Add sockets
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'output', stringSocket)
 
     // Add input and output sockets to the node
     return node
-      .addInput(dataInput)
-      .addOutput(dataOutput)
       .addOutput(outp)
   }
 
