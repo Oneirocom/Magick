@@ -1,6 +1,5 @@
 import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
-import { GithubAgentWindow } from './components/agent.component'
-import { getNodes } from '@magickml/plugin-github-shared'
+import { getNodes } from '@magickml/plugin-intent-shared'
 
 const inputSockets = [
   {
@@ -23,33 +22,9 @@ const outputSockets = [
   },
 ]
 
-const GithubPlugin = new ClientPlugin({
-  name: 'GithubPlugin',
+const IntentPlugin = new ClientPlugin({
+  name: 'IntentPlugin',
   nodes: getNodes(),
-  agentComponents: [GithubAgentWindow],
-  inputTypes: [
-    {
-      name: 'Github (Issue)',
-      sockets: inputSockets,
-      defaultResponseOutput: '',
-    },
-    {
-      name: 'Github (Pull Request)',
-      sockets: inputSockets,
-      defaultResponseOutput: '',
-    },
-    {
-      name: 'Github (Comment)',
-      sockets: inputSockets,
-      defaultResponseOutput: '',
-    },
-  ],
-  outputTypes: [
-    { name: 'Github (Issue Comment)', sockets: outputSockets },
-    { name: 'Github (Pull Request Comment)', sockets: outputSockets },
-    { name: 'Github (Comment Reply)', sockets: outputSockets },
-  ],
-  secrets: [],
 })
 
-export default GithubPlugin
+export default IntentPlugin
