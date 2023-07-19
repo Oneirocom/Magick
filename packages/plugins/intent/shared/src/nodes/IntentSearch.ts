@@ -1,7 +1,7 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
- * A component to process Github Issue.
- * @category Github
+ * A component to process Intent Search.
+ * @category Intent
  */
 import Rete from 'rete'
 import {
@@ -14,53 +14,16 @@ import {
   WorkerData,
   objectSocket,
   MagickWorkerOutputs,
-  getLogger
+  getLogger,
 } from '@magickml/core'
 
 import axios from 'axios'
-
-async function githubSearchIssue(
-  token: string,
-  query: string
-): Promise<any> {
-
-  if (token == undefined || token == '' || token[0] != 'g') {
-    return []
-  }
-  if (query == '') {
-    return []
-  }
-
-  const url = `https://api.github.com/search/issues?q=${query}`
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    Accept: 'application/vnd.github.v3+json',
-  }
-
-  const logger = getLogger()
-  return axios.get(url, { headers }).then(response => {
-    if (response.data.items) {
-      logger.debug('count: ' + response.data.items.length)
-
-      const res = response.data.items.map(item => ({
-        title: item.title,
-        body: item.body,
-        url: item.html_url,
-      }))
-      logger.debug(res)
-      return res
-    } else {
-      logger.error('error to get')
-      return []
-    }
-  })
-}
 
 /**
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  object: [],
+  object: []
   output: string
 }
 
@@ -69,10 +32,10 @@ type WorkerReturn = {
  * @category Utility
  * @remarks This component is useful for testing purposes.
  */
-export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
+export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super(
-      'Github Issue Search',
+      'Intent Search',
       {
         outputs: {
           output: 'output',
@@ -80,43 +43,44 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Github',
-      'Github Issue Search'
+      'Intent',
+      'Intent Search'
     )
   }
 
   /**
-   * The builder function for the GithubIssueSearch node.
+   * The builder function for the IntentSearch node.
    * @param node - The node being built.
    * @returns The node with its inputs and outputs.
    */
   builder(node: MagickNode) {
-    const triggerInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const queryInput = new Rete.Input('query', 'Query', stringSocket, true)
+    const triggerInput = new Rete.Input(
+      'trigger',
+      'Trigger',
+      triggerSocket,
+      true
+    )
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const issueOutput = new Rete.Output('object', 'Object', objectSocket)
     const textOutput = new Rete.Output('output', 'String', stringSocket)
 
     return node
       .addInput(triggerInput)
-      .addInput(queryInput)
       .addOutput(triggerOutput)
-      .addOutput(issueOutput)
       .addOutput(textOutput)
   }
 
   /**
-   * The worker function for the GithubIssueSearch node.
+   * The worker function for the IntentSearch node.
    * @param {WorkerData} node - The worker data.
    * @param {MagickWorkerInputs} inputs - Node inputs.
    * @param {MagickWorkerOutputs} _outputs - Node outputs.
-   * @returns An array containing the github issue
+   * @returns the intent
    */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: ModuleContext,
+    context: ModuleContext
   ): Promise<WorkerReturn> {
     let query = ''
     if (inputs && inputs.query) {
@@ -130,11 +94,11 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
     }
     logger.debug(token)
 
-    const result = await githubSearchIssue(token, query)
+    let result = [] as []
 
     return {
       object: result,
-      output: JSON.stringify(result)
+      output: JSON.stringify(result),
     }
   }
 }
