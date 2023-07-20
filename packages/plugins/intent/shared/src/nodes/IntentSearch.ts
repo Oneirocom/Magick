@@ -9,6 +9,7 @@ import {
   MagickComponent,
   numberSocket,
   stringSocket,
+  embeddingSocket,
   triggerSocket,
   MagickNode,
   MagickWorkerInputs,
@@ -67,6 +68,12 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
       numberSocket,
       false
     )
+    const embeddingInput = new Rete.Input(
+      'embedding',
+      'embedding',
+      embeddingSocket,
+      false
+    )
 
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const textOutput = new Rete.Output('output', 'String', stringSocket)
@@ -82,6 +89,7 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
 
     return node
       .addInput(thresholdInput)
+      .addInput(embeddingInput)
       .addInput(triggerInput)
       .addOutput(triggerOutput)
       .addOutput(textOutput)
@@ -100,12 +108,48 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<WorkerReturn> {
+    const { app } = context.module
+    if (!app) throw new Error('App not found in context')
+    const { projectId } = context
+
     const threshold =
       (inputs['threshold'] && (inputs['threshold'][0] as number)) ??
       (node.data.threshold as number)
 
+    let embedding = (
+      inputs['embedding'] ? inputs['embedding'][0] : null
+    ) as number[]
+
+    if (typeof embedding == 'string')
+      embedding = (embedding as string)
+        .replace('[', '')
+        .replace(']', '')
+        .split(',')
+        .map(parseFloat)
+
+    let type = 'Intent'
+
+    const response = await app.service('documents').find({
+      query: {
+        projectId,
+        type,
+        $limit: 1,
+        embedding,
+      },
+    })
+    let document = null
+    if (Array.isArray(response.data) && response.data.length > 0) {
+      document = response.data[0]
+    }
+
+    //@ts-ignore
+    let distance = document ? document?.distance : null
+    //@ts-ignore
+    console.log(document?.embedding)
+    console.log(embedding)
+
     return {
-      output: String(threshold),
+      output: String(distance),
     }
   }
 }
