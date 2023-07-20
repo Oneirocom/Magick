@@ -1,4 +1,4 @@
-import { sendMeteringEvent, MeteringEvent } from './meteringClient'
+import { sendMeteringEvent } from './meteringClient'
 
 type OpenAIMeterData = {
   projectId: string
