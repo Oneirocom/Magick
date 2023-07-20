@@ -55,7 +55,7 @@
     "@feathersjs/knex": "5.0.5",
     "@feathersjs/koa": "5.0.5",
     "@feathersjs/schema": "5.0.5",
-    "@feathersjs/socketio": "5.0.5",
+    "@feathersjs/socketio": "5.0.8",
     "@feathersjs/socketio-client": "5.0.5",
     "@feathersjs/transport-commons": "5.0.5",
     "@feathersjs/typebox": "5.0.5",
