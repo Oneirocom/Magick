@@ -350,7 +350,7 @@ export class SpellComponent extends MagickComponent<
           publicVariables: variables,
         }
 
-        const outputs = await spellManager.run(runComponentArgs)
+        const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
         const output = this.formatOutputs(node, outputs as any)
 
         return output

@@ -1,14 +1,14 @@
 import { CloudAgentWorker } from '@magickml/cloud-agent-worker'
 import { initLogger, getLogger } from '@magickml/core'
-import { initApp, app } from '@magickml/server-core'
+import { initApp } from '@magickml/server-core'
 import pluginExports from './plugins'
-import { REDISCLOUD_URL } from '@magickml/config'
 import { initAgentCommander } from '@magickml/agents'
 
 initLogger({ name: 'cloud-agent-worker' })
 const logger = getLogger()
 
 await initApp()
+
 await initAgentCommander()
 
 async function loadPlugins(): Promise<void> {
