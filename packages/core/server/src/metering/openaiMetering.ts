@@ -1,6 +1,7 @@
 import { sendEvent, Event } from './meteringClient'
 import { CompletionHandlerInputData } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
+import { OPENMETER_ENABLED } from '@magickml/config'
 
 /**
  * Sends a metering event to the OpenMeter server.
@@ -19,12 +20,13 @@ async function sendMeteringEvent(
     specversion: '1.0',
     id: uuidv4(),
     source: 'magick-cloud',
-    type: 'openai',
+    type: model,
     subject: projectId,
     time: new Date().toISOString(),
     data: {
       total_tokens: totalTokens.toString(),
       model,
+      project_id: projectId,
     },
   }
 
@@ -43,13 +45,12 @@ async function sendMeteringEvent(
  * @returns {Function} - The decorated handler function.
  */
 export function trackUsage(handler: Function) {
-  console.log('Tracking usage of OpenAI API')
   return async function (data: CompletionHandlerInputData) {
     // Run the original handler
     const result = await handler(data)
 
     // If the result is successful, send total tokens to metering endpoint
-    if (result.success) {
+    if (OPENMETER_ENABLED && result.success) {
       sendMeteringEvent(
         data.context.projectId,
         result.totalTokens,
