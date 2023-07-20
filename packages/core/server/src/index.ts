@@ -40,3 +40,6 @@ export * from './sockets/sockets';
 
 //Export the tiktalknet server
 export * from './servers/tiktalknet';
+
+// Export metering functions
+export * from './metering';

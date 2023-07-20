@@ -1,5 +1,5 @@
 import { sendEvent, Event } from './meteringClient'
-import { CompletionHandlerInputData } from '@magickml/core'
+import { CompletionHandlerInputData, getLogger } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
 import { OPENMETER_ENABLED } from '@magickml/config'
 
@@ -15,7 +15,10 @@ async function sendMeteringEvent(
   totalTokens: number,
   model: string
 ) {
-  console.log('Sending metering data to OpenMeter server')
+  if (!OPENMETER_ENABLED) {
+    return
+  }
+  const logger = getLogger()
   const event: Event = {
     specversion: '1.0',
     id: uuidv4(),
@@ -31,33 +34,21 @@ async function sendMeteringEvent(
   }
 
   try {
+    logger.info('Sending metering event: %o', event)
     await sendEvent(event)
-    console.log('Successfully sent metering data')
+    return true
   } catch (err) {
-    console.error('Failed to send metering data: ', err)
+    logger.error('Error sending metering event: %o', err)
+    return false
   }
 }
 
-/**
- * Tracks the usage of the OpenAI API by sending a metering event.
- *
- * @param {Function} handler - The handler function.
- * @returns {Function} - The decorated handler function.
- */
-export function trackUsage(handler: Function) {
-  return async function (data: CompletionHandlerInputData) {
-    // Run the original handler
-    const result = await handler(data)
+type OpenAIMeterData = {
+  projectId: string
+  totalTokens: number
+  model: string
+}
 
-    // If the result is successful, send total tokens to metering endpoint
-    if (OPENMETER_ENABLED && result.success) {
-      sendMeteringEvent(
-        data.context.projectId,
-        result.totalTokens,
-        result.model
-      )
-    }
-
-    return result
-  }
+export async function trackOpenAIUsage(data: OpenAIMeterData) {
+  return await sendMeteringEvent(data.projectId, data.totalTokens, data.model)
 }
