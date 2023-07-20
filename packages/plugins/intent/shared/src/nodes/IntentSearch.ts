@@ -108,9 +108,9 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<WorkerReturn> {
+    const { projectId } = context
     const { app } = context.module
     if (!app) throw new Error('App not found in context')
-    const { projectId } = context
 
     const threshold =
       (inputs['threshold'] && (inputs['threshold'][0] as number)) ??
@@ -128,7 +128,6 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
         .map(parseFloat)
 
     let type = 'Intent'
-
     const response = await app.service('documents').find({
       query: {
         projectId,
@@ -137,19 +136,19 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
         embedding,
       },
     })
-    let document = null
+
+    let intent: string = ''
+    let document: any = null
     if (Array.isArray(response.data) && response.data.length > 0) {
       document = response.data[0]
+      let distance = document ? document?.distance : null
+      if (distance && distance < threshold) {
+        intent = document?.metadata?.intent ?? ''
+      }
     }
 
-    //@ts-ignore
-    let distance = document ? document?.distance : null
-    //@ts-ignore
-    console.log(document?.embedding)
-    console.log(embedding)
-
     return {
-      output: String(distance),
+      output: intent,
     }
   }
 }
