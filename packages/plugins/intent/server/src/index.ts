@@ -29,27 +29,6 @@ function getAgentMethods() {
   }
 }
 
-const inputSockets = [
-  {
-    socket: 'output',
-    name: 'output',
-    type: eventSocket,
-  },
-  {
-    socket: 'trigger',
-    name: 'trigger',
-    type: triggerSocket,
-  },
-]
-
-const outputSockets = [
-  {
-    socket: 'output',
-    name: 'output',
-    type: eventSocket,
-  },
-]
-
 const IntentPlugin = new ServerPlugin({
   name: 'IntentPlugin',
   nodes: getNodes(),
