@@ -141,7 +141,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
 
       return {
         output: outputs,
@@ -159,7 +159,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
       }
 
-      const outputs = await spellManager.run(runComponentArgs as any)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs as any)
       // get the first value from outputs
       const output = Object.values(outputs)[0]
 

@@ -69,6 +69,6 @@ export class AgentCommander extends EventEmitter {
     }
 
     async removeAgent(agentId: string) {
-        await this.pubSub.emit(AGENT_DELETE, agentId)
+        this.pubSub.emit(AGENT_DELETE, agentId)
     }
 }

@@ -133,7 +133,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
       const output = Object.values(outputs as any)[0]
       return {
         output,
@@ -152,7 +152,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
 
       const spellRunner = await spellManager.loadById(spellId)
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
 
       // get the first value from outputs
       const output = Object.values(outputs as any)[0]
