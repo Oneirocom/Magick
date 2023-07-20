@@ -2,6 +2,7 @@
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from '@magickml/server-core'
+import { wordCount } from './shared'
 
 type ChatMessage = {
   author?: string
@@ -78,9 +79,6 @@ export async function makeChatCompletion(
         ? completionData.candidates[0].content
         : null
 
-    // Log the usage of tokens
-    // const usage = completionData.usage
-
     // Save the API request details
     saveRequest({
       projectId: context.projectId,
@@ -104,7 +102,8 @@ export async function makeChatCompletion(
     trackGoogleAIUsage({
       projectId: context.projectId,
       model: node?.data?.model as string,
-      count: 1,
+      callCount: 1,
+      wordCount: wordCount(result),
     })
 
     if (result) {
