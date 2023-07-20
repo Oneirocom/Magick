@@ -9,7 +9,6 @@ export * from './lib/AgentCommander'
 export const initAgentCommander = async () => {
     const agentCommander = new AgentCommander({
         pubSub: app.get('pubsub'),
-        messageQueue: new BullQueue()
     })
 
     app.set('agentCommander', agentCommander)

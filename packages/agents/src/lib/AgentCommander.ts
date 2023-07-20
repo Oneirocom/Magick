@@ -4,7 +4,7 @@ import { type PubSub, type MessageQueue } from '@magickml/server-core'
 import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE } from '@magickml/core'
 import type { MagickSpellInput } from "@magickml/core"
 
-type RunRootSpellArgs = {
+export type RunRootSpellArgs = {
     agent: Agent,
     inputs: MagickSpellInput
     componentName?: string
@@ -16,21 +16,16 @@ type RunRootSpellArgs = {
 
 interface AgentCommanderArgs {
     pubSub: PubSub
-    messageQueue: MessageQueue
 }
 
 export class AgentCommander extends EventEmitter {
     pubSub: PubSub
-    messageQueue: MessageQueue
 
     constructor({
         pubSub,
-        messageQueue
     }: AgentCommanderArgs) {
         super()
         this.pubSub = pubSub
-        this.messageQueue = messageQueue
-        this.messageQueue.initialize(AGENT_RUN_JOB)
     }
 
     async runSpellWithResponse(args: RunRootSpellArgs) {
@@ -46,6 +41,7 @@ export class AgentCommander extends EventEmitter {
                 if (result.error) {
                     reject(result.error)
                 } else {
+                    //TODO: unsubscribe here
                     resolve(result)
                 }
             })
@@ -61,7 +57,7 @@ export class AgentCommander extends EventEmitter {
         publicVariables,
         spellId
     }: RunRootSpellArgs) {
-        await this.messageQueue.addJob(AGENT_RUN_JOB, {
+        await this.pubSub.publish(AGENT_RUN_JOB(agent.id), JSON.stringify({
             agentId: agent.id,
             spellId: spellId || agent.rootSpellId,
             inputs,
@@ -69,7 +65,7 @@ export class AgentCommander extends EventEmitter {
             runSubspell,
             secrets,
             publicVariables
-        })
+        }))
     }
 
     async removeAgent(agentId: string) {

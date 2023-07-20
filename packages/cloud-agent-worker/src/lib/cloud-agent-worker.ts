@@ -1,9 +1,10 @@
 import { Worker, Job } from 'bullmq'
 
-import { BullMQWorker, type PubSub, RedisPubSubWrapper, app } from '@magickml/server-core'
-import { Agent, AgentManager, type AgentUpdateJob, type AgentRunJob } from '@magickml/agents'
+import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue } from '@magickml/server-core'
+import { Agent, AgentManager, type AgentUpdateJob, type AgentRunJob, RunRootSpellArgs } from '@magickml/agents'
 import { v4 as uuidv4 } from 'uuid'
-import { AGENT_DELETE } from '@magickml/core'
+import { AGENT_DELETE, AGENT_RUN_JOB } from '@magickml/core'
+import { RunComponentArgs } from 'packages/core/shared/src/spellManager/SpellRunner'
 
 export interface AgentListRecord {
   id: string
@@ -30,7 +31,7 @@ export class CloudAgentWorker extends AgentManager {
   }
 
   heartbeat() {
-    new Worker('cloud-agents:ping', async () => {
+    this.pubSub.subscribe('cloud-agents:ping', async () => {
       this.pubSub.publish('cloud-agents:pong', JSON.stringify({
         id: uuidv4(),
         currentAgents: Object.keys(this.currentAgents),
@@ -70,6 +71,27 @@ export class CloudAgentWorker extends AgentManager {
       new RedisPubSubWrapper(),
     )
 
+    const agentQueue = new BullQueue()
+    agentQueue.initialize(AGENT_RUN_JOB(agent.id))
+    this.pubSub.subscribe(AGENT_RUN_JOB(agent.id),
+      async (data: AgentRunJob) => {
+        if (data.agentId in this.currentAgents) {
+          this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
+          try {
+            await agentQueue.addJob(AGENT_RUN_JOB(agent.id), {
+              ...data,
+              agentId: data.agentId,
+            })
+          } catch (e) {
+            this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
+            throw e
+          }
+        } else {
+          throw new Error(`Agent ${data.agentId} not found on this worker`)
+        }
+      })
+
+
     this.logger.debug(`Running agent add handlers for ${agentId}`)
     this.addHandlers.forEach(handler => {
       handler({ agent, agentData })
@@ -93,7 +115,7 @@ export class CloudAgentWorker extends AgentManager {
   }
 
   async agentUpdated(agentId: string) {
-    this.logger.info(`Creating agent ${agentId}`)
+    this.logger.info(`Updating agent ${agentId}`)
     const agentDBResult = (
       await app.service('agents').find({
         query: {
@@ -108,8 +130,6 @@ export class CloudAgentWorker extends AgentManager {
     }
 
     const agent = agentDBResult[0]
-
-    console.log(this.currentAgents)
 
     // start or stop the agent if the enabled state changed
     if (agent.enabled && !this.currentAgents[agentId]) {
@@ -128,30 +148,6 @@ export class CloudAgentWorker extends AgentManager {
 
   async work() {
     this.logger.info('waiting for jobs')
-
-    new Worker(
-      'agent:run',
-      async (job: Job<AgentRunJob>) => {
-        if (job.data.agentId in this.currentAgents) {
-          this.logger.info(`Running spell ${job.data.spellId} for agent ${job.data.agentId}`)
-          try {
-            const agent = this.currentAgents[job.data.agentId] as Agent
-            const spellRunner = await agent.spellManager.loadById(job.data.spellId)
-
-            if (!spellRunner) {
-              throw new Error(`Spell ${job.data.spellId} not found on agent ${job.data.agentId}`)
-            }
-
-            await spellRunner.runComponent(job.data)
-          } catch (e) {
-            this.logger.error(`Error loading or running spell ${job.data.spellId} for agent ${job.data.agentId}`)
-            throw e
-          }
-        } else {
-          throw new Error(`Agent ${job.data.agentId} not found on this worker`)
-        }
-      }, { connection: app.get('redis') }
-    )
 
     new Worker(
       'agent:updated',
