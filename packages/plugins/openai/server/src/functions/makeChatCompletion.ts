@@ -8,6 +8,7 @@ import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 import { DEFAULT_OPENAI_KEY, PRODUCTION } from '@magickml/config'
 import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
+import { trackOpenAIUsage } from '@magickml/server-core'
 
 /**
  * Generate a completion text based on prior chat conversation input.
@@ -150,6 +151,13 @@ export async function makeChatCompletion(
       processed: false,
       spell: context.currentSpell,
       nodeId: node.id,
+    })
+
+    // Save to metering
+    trackOpenAIUsage({
+      projectId: context.projectId,
+      model: settings.model,
+      totalTokens: usage.total_tokens,
     })
 
     if (function_call) {
