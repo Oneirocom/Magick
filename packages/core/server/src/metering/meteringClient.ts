@@ -80,4 +80,4 @@ async function sendMeteringEvent(
   }
 }
 
-export { sendMeteringEvent, MeteringEvent, MeteringEventData }
+export { sendMeteringEvent, type MeteringEvent, type MeteringEventData }
