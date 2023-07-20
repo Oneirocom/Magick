@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
+import { trackGoogleAIUsage } from '@magickml/server-core'
 
 type ChatMessage = {
   author?: string
@@ -97,6 +98,13 @@ export async function makeChatCompletion(
       processed: false,
       spell: context.currentSpell,
       nodeId: node.id,
+    })
+
+    // Save metering event
+    trackGoogleAIUsage({
+      projectId: context.projectId,
+      model: node?.data?.model as string,
+      count: 1,
     })
 
     if (result) {
