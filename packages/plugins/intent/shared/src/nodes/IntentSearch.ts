@@ -74,7 +74,7 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
     const threshold = new InputControl({
       dataKey: 'threshold',
       name: 'Threshold',
-      defaultValue: '',
+      defaultValue: 0.5,
       tooltip: 'The similarity threshold allowed',
     })
 
