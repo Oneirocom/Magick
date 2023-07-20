@@ -25,10 +25,21 @@ import { SetAPIKeys } from './SetAPIKeys'
 import MagickLogo from './logo-full.png'
 import MagickLogoSmall from './logo-small.png'
 import { Tooltip } from '@mui/material';
-import {drawerTooltipText} from "./tooltiptext"
+import { drawerTooltipText } from "./tooltiptext"
+import TreeView from '@mui/lab/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
+import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
+import { SvgIconProps } from '@mui/material/SvgIcon';
+import Box from '@mui/material/Box';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined';
+import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined';
+import AgentMenu from './AgentMenu'
 
 // Constants
-const drawerWidth = 150
+const drawerWidth = 210
 
 // CSS mixins for open and close states
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -57,6 +68,13 @@ type HeaderProps = {
   open: boolean
   theme?: Theme
 }
+
+
+type StyledTreeItemProps = TreeItemProps & {
+  labelIcon: React.ElementType<SvgIconProps>;
+  labelText: string;
+  iconColor?: string;
+};
 
 /**
  * The DrawerHeader component style definition based on its open state property.
@@ -115,32 +133,32 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   tooltipText
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-     <Tooltip title={tooltipText} placement="top" 
-     enterDelay={500}
-     arrow 
-     >
-
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-      onClick={onClick}
+    <Tooltip title={tooltipText} placement="top"
+      enterDelay={500}
+      arrow
     >
-      <ListItemIcon
+
+      <ListItemButton
         sx={{
-          minWidth: 0,
-          mr: open ? 2 : 'auto',
-          justifyContent: 'center',
-          color: active ? 'var(--primary)' : 'white',
+          minHeight: 48,
+          justifyContent: open ? 'initial' : 'center',
+          px: 1,
         }}
+        onClick={onClick}
       >
-        <Icon />
-      </ListItemIcon>
-      <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-     </Tooltip>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            mr: open ? 2 : 'auto',
+            justifyContent: 'center',
+            color: active ? 'var(--primary)' : 'white',
+          }}
+        >
+          <Icon />
+        </ListItemIcon>
+        <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+      </ListItemButton>
+    </Tooltip>
   </ListItem>
 )
 
@@ -165,7 +183,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
     <>
       {drawerItems.map(item => {
         if (item.plugin !== lastPlugin) {
-          divider = true
+          divider = false
           lastPlugin = item.plugin
         } else {
           divider = false
@@ -193,6 +211,71 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
 type DrawerProps = {
   children: React.ReactNode
 }
+const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
+
+  [`& .${treeItemClasses.content}`]: {
+
+    borderTopRightRadius: theme.spacing(2),
+    borderBottomRightRadius: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    fontWeight: theme.typography.fontWeightMedium,
+    '&.Mui-expanded': {
+      fontWeight: theme.typography.fontWeightRegular,
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
+      color: 'var(--tree-view-color)',
+    },
+    [`& .${treeItemClasses.label}`]: {
+      fontWeight: 'inherit',
+      color: 'inherit',
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: 0,
+    [`& .${treeItemClasses.content}`]: {
+      paddingLeft: theme.spacing(2),
+      // Remove position and related properties here
+      position: 'static',
+      top: 'auto',
+      left: 'auto',
+    },
+  },
+}));
+
+
+function StyledTreeItem(props: StyledTreeItemProps) {
+
+  const {
+    labelIcon: LabelIcon,
+    labelText,
+    iconColor,
+    ...other
+  } = props;
+
+  return (
+    <StyledTreeItemRoot
+      label={
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            p: 0.5,
+            pr: 0,
+          }}
+        >
+          <Box component={LabelIcon} color={iconColor ? iconColor : "#F4CC22"} sx={{ mr: 1 }} />
+          <ListItemText primary={labelText}  sx={{  flexGrow: 1 }} />
+        </Box>
+      }
+      {...other}
+    />
+  );
+}
+
 
 /**
  * The main Drawer component that wraps around the application content.
@@ -247,60 +330,19 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
-        <DrawerHeader
+        {/* <DrawerHeader
           open={openDrawer}
           onClick={toggleDrawer}
           sx={{ justifyContent: openDrawer ? 'space-between' : 'flex-end' }}
-        >
-          <img
-            style={{
-              marginLeft: openDrawer ? '.5em' : '.0em',
-              marginTop: '2em',
-              height: 16,
-              cursor: 'pointer',
-            }}
-            src={openDrawer ? MagickLogo : MagickLogoSmall}
-            onClick={toggleDrawer}
-            alt=""
-          />
-        </DrawerHeader>
+        > */}
+          <AgentMenu />
+        {/* </DrawerHeader> */}
         <List
           sx={{
             padding: 0,
           }}
         >
-          <DrawerItem
-            active={
-              location.pathname.includes('/magick') ||
-              location.pathname.includes('/home') ||
-              location.pathname === '/'
-            }
-            Icon={AutoFixHighIcon}
-            open={openDrawer}
-            onClick={onClick('/magick')}
-            text="Spells"
-            tooltip="Spells Tooltip"
-            tooltipText={drawerTooltipText.spells}
-            
-          />
-          <DrawerItem
-            active={location.pathname === '/agents'}
-            Icon={AppsIcon}
-            open={openDrawer}
-            onClick={onClick('/agents')}
-            text="Agents"
-            tooltip="Agents Tooltip"
-            tooltipText={drawerTooltipText.agents}
-          />
-          <DrawerItem
-            active={location.pathname === '/documents'}
-            Icon={ArticleIcon}
-            open={openDrawer}
-            onClick={onClick('/documents')}
-            text="Documents"
-            tooltip="Documents Tooltip"
-            tooltipText={drawerTooltipText.documents}
-          />
+
           <DrawerItem
             active={location.pathname === '/events'}
             Icon={BoltIcon}
@@ -319,9 +361,9 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
             tooltip="Requests Tooltip"
             tooltipText={drawerTooltipText.requests}
           />
-          <Divider />
+
           <PluginDrawerItems onClick={onClick} open={openDrawer} />
-          <Divider />
+
           <DrawerItem
             active={location.pathname.includes('/settings')}
             Icon={SettingsIcon}
@@ -333,6 +375,74 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           />
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
+        <Divider />
+        <TreeView
+          aria-label="icon expansion"
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+          sx={{ height: 240, flexGrow: 1, maxWidth: 400, position: 'relative' }}
+          // multiSelect
+        >
+          <StyledTreeItem nodeId="1" labelText="Documents" labelIcon={FolderOpenOutlinedIcon}>
+            <StyledTreeItem nodeId="2" labelText="Uploaded books" labelIcon={FolderOpenOutlinedIcon}>
+              <StyledTreeItem
+                nodeId="3"
+                labelText="Promotions.txt"
+                labelIcon={DescriptionOutlinedIcon}
+                iconColor='#42B951'
+              />
+              <StyledTreeItem
+                nodeId="4"
+                labelText="tree-view.js"
+                labelIcon={DescriptionOutlinedIcon}
+                iconColor='#42B951'
+              />
+            </StyledTreeItem>
+            <StyledTreeItem nodeId="5" labelText="Gematria notes" labelIcon={FolderOpenOutlinedIcon}>
+              <StyledTreeItem
+                nodeId="6"
+                labelText="Promotions"
+                labelIcon={DescriptionOutlinedIcon}
+                iconColor='#42B951'
+              />
+              <StyledTreeItem
+                nodeId="7"
+                labelText="Promotions"
+                labelIcon={DescriptionOutlinedIcon}
+                iconColor='#42B951'
+              />
+            </StyledTreeItem>
+            <StyledTreeItem nodeId="8" labelText="Journal entires" labelIcon={FolderOpenOutlinedIcon}>
+              <StyledTreeItem
+                nodeId="9"
+                labelText="Promotions"
+                labelIcon={DescriptionOutlinedIcon}
+                iconColor='#42B951'
+              />
+              <StyledTreeItem
+                nodeId="10"
+                labelText="Promotions"
+                labelIcon={DescriptionOutlinedIcon}
+                iconColor='#42B951'
+              />
+            </StyledTreeItem>
+          </StyledTreeItem>
+          <StyledTreeItem nodeId="11" labelText="Spells & Prompts" labelIcon={FolderOpenOutlinedIcon}>
+            <StyledTreeItem
+              nodeId="12"
+              labelText="demo.spell"
+              labelIcon={StarBorderPurple500OutlinedIcon}
+              iconColor='#1BC5EB'
+            />
+             <StyledTreeItem
+              nodeId="12"
+              labelText="classifier.prompt"
+              labelIcon={HistoryEduOutlinedIcon}
+              iconColor='#9D12A4'
+            />
+            
+          </StyledTreeItem>
+        </TreeView>
       </StyledDrawer>
       {openProjectWindow && <ProjectWindow openDrawer={openProjectWindow} />}
       {children}
