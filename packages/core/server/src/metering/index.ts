@@ -3,6 +3,17 @@ import {
   MeteringEvent,
   MeteringEventData,
 } from './meteringClient'
-import { trackOpenAIUsage } from './openaiMetering'
+import {
+  trackOpenAIUsage,
+  trackCogUsage,
+  trackGoogleAIUsage,
+} from './openaiMetering'
 
-export { sendMeteringEvent, MeteringEvent, MeteringEventData, trackOpenAIUsage }
+export {
+  sendMeteringEvent,
+  MeteringEvent,
+  MeteringEventData,
+  trackOpenAIUsage,
+  trackCogUsage,
+  trackGoogleAIUsage,
+}
