@@ -45,7 +45,7 @@ class LoopManager {
     }
     const loopHandler = setInterval(async () => {
       console.log('running loop handler')
-      const resp = await spellRunner.runComponent({
+      const resp = await app.get('agentCommander').runSpell({
         inputs: {
           'Input - Loop In': {
             connector: 'Loop In',
@@ -62,7 +62,6 @@ class LoopManager {
         agent,
         secrets: agent.secrets,
         publicVariables: agent.publicVariables,
-        app,
       })
       console.log('output is', resp)
     }, loopInterval)

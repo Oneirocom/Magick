@@ -280,7 +280,8 @@ export class DiscordConnector {
     const inputType = message.guildId === null ? 'DM' : 'Text'
 
     this.logger.info(this.agent.name, ' - sending message on discord - ', content)
-    await this.spellRunner.runComponent({
+
+    app.get('agentCommander').runSpell({
       inputs: {
         [`Input - Discord (${inputType})`]: {
           connector: `Discord (${inputType})`,
@@ -299,7 +300,6 @@ export class DiscordConnector {
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,
       runSubspell: true,
-      app,
     })
   }
 

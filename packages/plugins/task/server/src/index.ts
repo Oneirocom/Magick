@@ -65,14 +65,13 @@ class TaskManager {
       // iterate over all tasks
       for (const task of taskArray) {
         console.log('Running task', task.id, task)
-        const resp = await spellRunner.runComponent({
+        const resp = await app.get('agentCommander').runSpell({
           inputs: {
             'Input - Task': task,
           },
           agent,
           secrets: agent.secrets,
           publicVariables: agent.publicVariables,
-          app,
         })
         console.log('output is', resp)
       }
