@@ -1,2 +1,3 @@
-web: npm run start
-worker: npm run start-agent
+server: npm run start-server
+worker: npm run start-cloud-agent-worker
+manager: npm run start-cloud-agent-manager
