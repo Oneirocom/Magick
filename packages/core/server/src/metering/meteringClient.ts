@@ -8,6 +8,7 @@ type Data = {
   total_tokens?: string
   duration_ms?: string
   model: string
+  project_id: string
 }
 
 /**
@@ -40,10 +41,8 @@ export async function sendEvent(event: Event): Promise<number> {
       event,
       { headers }
     )
-    console.log(`Status code: ${response.status}`)
     return response.status
   } catch (error) {
-    console.error(`Error: ${error}`)
     throw error
   }
 }
