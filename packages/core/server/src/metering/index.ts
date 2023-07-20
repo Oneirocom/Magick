@@ -11,8 +11,8 @@ import {
 
 export {
   sendMeteringEvent,
-  MeteringEvent,
-  MeteringEventData,
+  type MeteringEvent,
+  type MeteringEventData,
   trackOpenAIUsage,
   trackCogUsage,
   trackGoogleAIUsage,
