@@ -7,6 +7,7 @@ import {
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 import { DEFAULT_OPENAI_KEY } from '@magickml/config'
+import { trackOpenAIUsage } from '@magickml/server-core'
 
 /**
  * A function that makes a request to create a text embedding using OpenAI's
@@ -89,6 +90,14 @@ export async function makeTextEmbedding(
       spell,
       nodeId: node.id,
     })
+
+    // Save to metering
+    trackOpenAIUsage({
+      projectId: context.projectId,
+      model,
+      totalTokens: resp.data.usage.total_tokens,
+    })
+    
     return {
       success: true,
       result: resp.data.data[0].embedding,

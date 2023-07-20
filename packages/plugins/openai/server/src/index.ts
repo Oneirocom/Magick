@@ -16,7 +16,7 @@ import {
   makeTextCompletion,
   makeTextEmbedding,
 } from './functions'
-import { trackUsage } from '../../../../core/server/src/metering/openaiMetering'
+
 
 /**
  * The secrets used by the OpenAI API
@@ -28,9 +28,9 @@ const { secrets } = shared
  */
 const completionHandlers = {
   text: {
-    text: trackUsage(makeTextCompletion),
-    chat: trackUsage(makeChatCompletion),
-    embedding: trackUsage(makeTextEmbedding),
+    text: makeTextCompletion,
+    chat: makeChatCompletion,
+    embedding: makeTextEmbedding,
   },
 }
 
