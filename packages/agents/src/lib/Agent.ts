@@ -12,11 +12,12 @@ import {
   AGENT_LOG,
   AGENT_WARN,
   AGENT_ERROR,
+  AGENT_RUN_JOB,
 } from '@magickml/core'
 import { PING_AGENT_TIME_MSEC } from '@magickml/config'
 
 import { AgentManager } from './AgentManager'
-import { app, type Job, type Worker, type PubSub } from '@magickml/server-core'
+import { app, type Job, type Worker, type PubSub, BullQueue, MessageQueue } from '@magickml/server-core'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -34,6 +35,7 @@ export class Agent implements AgentInterface {
   spellRunner?: SpellRunner
   logger: pino.Logger = getLogger()
   worker: Worker
+  messageQueue: MessageQueue
   pubsub: PubSub
   ready = false
 
@@ -61,9 +63,13 @@ export class Agent implements AgentInterface {
     this.rootSpellId = agentData.rootSpellId
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
+
     // Set up the agent worker to handle incoming messages
     this.worker = worker
-    this.worker.initialize(this.id, this.runWorker.bind(this))
+    this.worker.initialize(AGENT_RUN_JOB(this.id), this.runWorker.bind(this))
+
+    this.messageQueue = new BullQueue()
+    this.messageQueue.initialize(AGENT_RUN_JOB(this.id))
 
     this.pubsub = pubsub
 
@@ -199,8 +205,10 @@ export class Agent implements AgentInterface {
 
     const { data } = job
 
+    const spellRunner = await this.spellManager.loadById(data.spellId)
+
     // Do we want a debug logger here?
-    const output = await this.spellRunner?.runComponent({
+    const output = await spellRunner.runComponent({
       ...data,
       agent: this,
       secrets: this.secrets,

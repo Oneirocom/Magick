@@ -111,7 +111,7 @@ export default class SpellManager {
   async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
     const runner = this.getSpellRunner(spellId)
 
-    const result = await runner?.runComponent({
+    const result = await app.get('agentCommander').runSpellWithResponse({
       inputs,
       secrets,
       publicVariables,
