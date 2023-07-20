@@ -1,4 +1,8 @@
-import { sendEvent } from './meteringClient'
+import {
+  sendMeteringEvent,
+  MeteringEvent,
+  MeteringEventData,
+} from './meteringClient'
 import { trackOpenAIUsage } from './openaiMetering'
 
-export { sendEvent, trackOpenAIUsage }
+export { sendMeteringEvent, MeteringEvent, MeteringEventData, trackOpenAIUsage }
