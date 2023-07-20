@@ -1,5 +1,6 @@
 import { BskyAgent, AppBskyNotificationGetUnreadCount } from '@atproto/api'
 import { app } from '@magickml/server-core'
+
 export class BlueskyConnector {
   bskyAgent: BskyAgent
   spellRunner
@@ -91,7 +92,7 @@ export class BlueskyConnector {
       console.log('author is', author)
       const entities = [author, this.data.bluesky_identifier]
       console.log('sending bsky input to spellrunner', entities)
-      const resp = await this.spellRunner.runComponent({
+      const resp = await app.get('agentCommander').runSpell({
         inputs: {
           [`Input - Bluesky (${type === 'reply' ? 'Reply' : 'Mention'})`]: {
             connector: `Bluesky (${type === 'reply' ? 'Reply' : 'Mention'})`,
@@ -109,7 +110,6 @@ export class BlueskyConnector {
         agent: this.agent,
         secrets: this.agent.secrets,
         publicVariables: this.agent.publicVariables,
-        app,
         runSubspell: true,
       })
       console.log('resp is', resp)
