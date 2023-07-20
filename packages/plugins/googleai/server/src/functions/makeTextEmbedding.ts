@@ -5,6 +5,7 @@ import {
   saveRequest,
 } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
+import { trackGoogleAIUsage } from '@magickml/server-core'
 
 /**
  * A function that makes a request to create a text embedding using GoogleAI's
@@ -85,6 +86,13 @@ export async function makeTextEmbedding(
       processed: false,
       spell: context.currentSpell,
       nodeId: node.id,
+    })
+
+    // Save metering event
+    trackGoogleAIUsage({
+      projectId: context.projectId,
+      model: node?.data?.model as string,
+      count: 1,
     })
 
     if (result) {

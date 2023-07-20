@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
+import { trackGoogleAIUsage } from '@magickml/server-core'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -84,6 +85,12 @@ export async function makeTextCompletion(
       processed: false,
       spell: context.currentSpell,
       nodeId: node.id,
+    })
+
+    trackGoogleAIUsage({
+      projectId: context.projectId,
+      model: node?.data?.model as string,
+      count: 1,
     })
 
     if (result) {
