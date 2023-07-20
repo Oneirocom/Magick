@@ -6,6 +6,7 @@ import {
 } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from '@magickml/server-core'
+import { wordCount } from './shared'
 
 /**
  * A function that makes a request to create a text embedding using GoogleAI's
@@ -28,7 +29,7 @@ export async function makeTextEmbedding(
 }> {
   const { node, inputs, context } = data
 
-  const input = inputs['input'] && inputs['input'][0]
+  const input = inputs['input'] && inputs['input'][0] as string
   if (!input) {
     return {
       success: false,
@@ -92,7 +93,8 @@ export async function makeTextEmbedding(
     trackGoogleAIUsage({
       projectId: context.projectId,
       model: node?.data?.model as string,
-      count: 1,
+      callCount: 1,
+      wordCount: wordCount(input),
     })
 
     if (result) {

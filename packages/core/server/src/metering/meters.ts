@@ -9,7 +9,8 @@ type OpenAIMeterData = {
 type GoogleAIMeterData = {
   projectId: string
   model: string
-  count: number
+  callCount: number
+  wordCount: number
 }
 
 type CogMeterData = {
@@ -30,7 +31,8 @@ export async function trackGoogleAIUsage(data: GoogleAIMeterData) {
   return await sendMeteringEvent({
     project_id: data.projectId,
     model: data.model,
-    count: data.count,
+    call_count: data.callCount,
+    word_count: data.wordCount,
   })
 }
 export async function trackCogUsage(data: CogMeterData) {

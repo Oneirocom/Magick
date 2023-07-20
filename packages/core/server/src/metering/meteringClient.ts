@@ -11,7 +11,8 @@ type MeteringEventData = {
   model: string
   total_tokens?: number
   duration_ms?: number
-  count?: number
+  call_count?: number
+  word_count?: number
 }
 
 /**
@@ -34,7 +35,7 @@ type MeteringEvent = {
  * @param {string} model - The model used for the completion.
  * @param {number} totalTokens - The total number of tokens, optional.
  * @param {number} durationMs - The duration in milliseconds, optional.
- * @param {number} count - The number of completions, optional.
+ * @param {number} callCount - The number of completions, optional.
  * @return {Promise<boolean>} Indicates whether the event was sent successfully.
  */
 async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
@@ -55,7 +56,7 @@ async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
       model: data.model,
       total_tokens: data.total_tokens,
       duration_ms: data.duration_ms,
-      count: data.count,
+      call_count: data.call_count,
     },
   }
 
