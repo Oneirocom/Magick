@@ -57,7 +57,7 @@
     "@feathersjs/schema": "5.0.5",
     "@feathersjs/socketio": "5.0.5",
     "@feathersjs/socketio-client": "5.0.5",
-    "@feathersjs/transport-commons": "5.0.5",
+    "@feathersjs/transport-commons": "5.0.8",
     "@feathersjs/typebox": "5.0.5",
     "@google-cloud/speech": "5.5.0",
     "@google-cloud/text-to-speech": "4.2.2",
