@@ -145,7 +145,7 @@ export class CloudAgentWorker extends AgentManager {
             await agentQueue.addJob(AGENT_RUN_JOB(agentId), {
               ...data,
               agentId: data.agentId,
-            })
+            }, data.jobId)
         } catch (e) {
             this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
             throw e

@@ -13,6 +13,7 @@ import {
   AGENT_WARN,
   AGENT_ERROR,
   AGENT_RUN_JOB,
+  MagickSpellOutput,
 } from '@magickml/core'
 import { PING_AGENT_TIME_MSEC } from '@magickml/config'
 
@@ -218,6 +219,7 @@ export class Agent implements AgentInterface {
     })
 
     this.publishEvent(AGENT_RUN_RESULT(this.id), {
+      jobId: job.data.jobId,
       agentId: this.id,
       projectId: this.projectId,
       originalData: data,
@@ -228,6 +230,7 @@ export class Agent implements AgentInterface {
 
 export interface AgentRunJob {
   inputs: MagickSpellInput
+  jobId: string
   agentId: string
   spellId: string
   componentName: string
@@ -235,6 +238,15 @@ export interface AgentRunJob {
   secrets: Record<string, string>
   publicVariables: Record<string, unknown>
 }
+
+export interface AgentResult {
+  jobId: string
+  agentId: string
+  projectId: string
+  originalData: AgentRunJob
+  result: MagickSpellOutput
+}
+
 
 export interface AgentUpdateJob {
   agentId: string
