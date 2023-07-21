@@ -125,7 +125,6 @@ export class PluginEmbeddings extends Embeddings {
    * @returns {Promise<number[][]>}
    */
   async embeddingWithRetryWithMeta(embeddingObject, param: EmbeddingArgs) {
-    debugger
     console.log(param)
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'embedding',
