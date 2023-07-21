@@ -9,7 +9,7 @@ import { initAgentCommander } from "@magickml/agents"
 function start() {
     logger.info("Starting cloud agent manager...")
     const manager = new CloudAgentManager({
-        mq: new BullQueue(),
+        newQueue: new BullQueue(),
         agentStateReporter: new PgNotifyReporter("agents", DATABASE_URL),
         pubSub: app.get('pubsub')
     });
