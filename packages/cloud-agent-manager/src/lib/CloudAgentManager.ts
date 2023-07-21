@@ -1,13 +1,14 @@
 import pino from "pino"
-import { diff } from "radash"
-import { getLogger } from "@magickml/core"
+import { diff, sleep } from "radash"
+import { AGENT_DELETE_JOB, AGENT_UPDATE_JOB, getLogger } from "@magickml/core"
 import type { Reporter } from "./Reporters"
 import { type PubSub, type MessageQueue, app } from "@magickml/server-core"
 import type { AgentListRecord } from '@magickml/cloud-agent-worker'
+import { Agent, AgentData } from "packages/core/server/src/services/agents/agents.schema"
 
 interface CloudAgentManagerConstructor {
     pubSub: PubSub
-    mq: MessageQueue
+    newQueue: MessageQueue
     agentStateReporter: Reporter
 }
 
@@ -15,17 +16,16 @@ type AgentList = Record<string, string[]>
 
 export class CloudAgentManager {
     logger: pino.Logger = getLogger()
-    mq: MessageQueue
+    newQueue: MessageQueue
     agentStateReporter: Reporter
     pubSub: PubSub
     workerToAgents: AgentList = {}
 
     constructor(args: CloudAgentManagerConstructor) {
-        this.mq = args.mq
-        this.mq.initialize('agent:updated')
+        this.newQueue = args.newQueue
+        this.newQueue.initialize('agent:new')
         this.agentStateReporter = args.agentStateReporter
         this.pubSub = app.get('pubsub')
-
 
         this.startup().then(() => this.heartbeat())
     }
@@ -39,20 +39,44 @@ export class CloudAgentManager {
             },
         })
 
+        this.logger.info(`Found ${enabledAgents.data.length} enabled agents`)
+        const agentPromises: Promise<any>[] = []
         for (const agent of enabledAgents.data) {
-            this.mq.addJob('agent:updated', {
+            this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
+            agentPromises.push(this.newQueue.addJob('agent:new', {
                 agentId: agent.id,
-            }, `agent-updated-${agent.id}-${new Date().getTime()}`)
+            }, `agent-new-${agent.id}`))
         }
+
+        await Promise.all(agentPromises)
     }
 
     async run() {
-        this.agentStateReporter.on('agent:updated', async (agent: any) => {
+        this.agentStateReporter.on('agent:updated', async (data: unknown) => {
+
+            // see the pg function "notify_agent_updated" in our migrations
+            const agent = data as Agent & { enabledChanged: boolean }
+
             this.logger.info(`Agent Updated: ${agent.id}`)
-            const agentUpdatedAt = new Date(agent.updatedAt)
-            await this.mq.addJob('agent:updated', {
-                agentId: agent.id,
-            }, `agent-updated-${agent.id}-${agentUpdatedAt.getTime()}`)
+            const agentUpdatedAt = agent.updatedAt ? new Date(agent.updatedAt) : new Date()
+
+            console.log('agent enabled changed', agent.enabledChanged)
+            console.log('agent enabled', agent.enabled)
+
+            if (agent.enabledChanged && agent.enabled) {
+                this.logger.info(`Agent ${agent.id} enabled, adding to cloud agent worker`)
+                await this.newQueue.addJob('agent:new', {
+                    agentId: agent.id,
+                }, `agent-new-${agent.id}-${agentUpdatedAt.getTime()}`)
+                this.logger.debug(`Agent create job for ${agent.id} added`)
+                return
+            }
+
+            this.pubSub.publish(AGENT_UPDATE_JOB(agent.id), JSON.stringify({ agentId: agent.id }))
+        })
+
+        this.agentStateReporter.on(AGENT_DELETE, async (data: unknown) => {
+            this.pubSub.publish(AGENT_DELETE_JOB(agent.id), JSON.stringify({ agentId: agent.id }))
         })
     }
 
@@ -79,9 +103,9 @@ export class CloudAgentManager {
 
                 for (const agent of agents.data) {
                     if (agent.enabled) {
-                        this.mq.addJob('agent:updated', {
+                        this.pubSub.publish('agent:updated', JSON.stringify({
                             agentId: agent.id,
-                        }, `agent-updated-${agent.id}-${new Date().getTime()}`)
+                        }))
                         agentsRestarted.push(agent.id)
                     }
                 }

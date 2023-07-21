@@ -1,3 +1,3 @@
 export interface Reporter {
-    on(event: string, callback: (state: string) => any): void
+    on(event: string, callback: (data: unknown) => any): void
 }

@@ -1,8 +1,9 @@
 import EventEmitter from "events"
 import type { Agent } from "packages/core/server/src/services/agents/agents.schema"
 import { type PubSub, type MessageQueue } from '@magickml/server-core'
-import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE } from '@magickml/core'
+import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE, getLogger } from '@magickml/core'
 import type { MagickSpellInput } from "@magickml/core"
+import type pino from "pino"
 
 export type RunRootSpellArgs = {
     agent: Agent,
@@ -20,6 +21,7 @@ interface AgentCommanderArgs {
 
 export class AgentCommander extends EventEmitter {
     pubSub: PubSub
+    logger: pino.Logger = getLogger()
 
     constructor({
         pubSub,
@@ -41,7 +43,7 @@ export class AgentCommander extends EventEmitter {
                 if (result.error) {
                     reject(result.error)
                 } else {
-                    //TODO: unsubscribe here
+                    this.pubSub.unsubscribe(AGENT_RUN_RESULT(agent.id))
                     resolve(result)
                 }
             })
@@ -57,6 +59,8 @@ export class AgentCommander extends EventEmitter {
         publicVariables,
         spellId
     }: RunRootSpellArgs) {
+        this.logger.debug(`Running Spell on Agent: ${agent.id}`)
+        this.logger.debug(AGENT_RUN_JOB(agent.id))
         await this.pubSub.publish(AGENT_RUN_JOB(agent.id), JSON.stringify({
             agentId: agent.id,
             spellId: spellId || agent.rootSpellId,

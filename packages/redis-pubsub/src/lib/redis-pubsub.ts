@@ -105,6 +105,16 @@ export class RedisPubSub extends EventEmitter {
     }
   }
 
+  async unsubscribe(channel) {
+    try {
+      await this.subscriber.unsubscribe(channel)
+      console.log(`Unsubscribed from the ${channel} channel.`)
+    } catch (err) {
+      console.error('Failed to unsubscribe from channel:', err)
+      return
+    }
+  }
+
   close(): void {
     this.client.quit()
     this.subscriber.quit()

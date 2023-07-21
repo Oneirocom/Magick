@@ -12,6 +12,11 @@ export abstract class PubSub extends EventEmitter {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async unsubscribe(channel: string): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async patternSubscribe(pattern: string, callback: Function): Promise<void> {
         throw new Error('Method not implemented.');
     }
