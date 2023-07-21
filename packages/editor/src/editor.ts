@@ -36,7 +36,6 @@ import {
   SocketOverridePlugin,
   SocketPlugin,
   SocketPluginArgs,
-  TaskPlugin,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'

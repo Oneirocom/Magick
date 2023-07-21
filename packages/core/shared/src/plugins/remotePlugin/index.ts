@@ -1,5 +1,4 @@
 import { WorkerOutputs } from 'rete/types/core/data'
-import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 
 import {

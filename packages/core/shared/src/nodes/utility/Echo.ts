@@ -6,7 +6,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { anySocket, stringSocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
