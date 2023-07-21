@@ -1,4 +1,4 @@
-import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
+import { ClientPlugin } from '@magickml/core'
 import { getNodes } from '@magickml/plugin-intent-shared'
 
 const IntentPlugin = new ClientPlugin({
