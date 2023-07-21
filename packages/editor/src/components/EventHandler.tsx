@@ -178,13 +178,6 @@ const EventHandler = ({ pubSub, tab }) => {
         id: currentSpell.id,
       })
 
-      // refresh the spell after saving
-      // getSpell({
-      //   spellName: tab.name,
-      //   id: tab.id,
-      //   projectId: config.projectId,
-      // })
-
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
           variant: 'error',
