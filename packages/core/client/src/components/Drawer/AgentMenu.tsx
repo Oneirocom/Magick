@@ -28,8 +28,8 @@ function AgentMenu() {
 
   const [open, setOpen] = React.useState(false);
   const [sopen, setSOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const anchorSRef = React.useRef(null);
+  const anchorRef = React.useRef<any>(null);
+  const anchorSRef = React.useRef<any>(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -57,7 +57,7 @@ function AgentMenu() {
   return (
     <div>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        <ListItem alignItems="flex-center">
+        <ListItem alignItems="center">
           <ListItemAvatar>
             <BorderedAvatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }} />
           </ListItemAvatar>

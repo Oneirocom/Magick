@@ -1,8 +1,5 @@
 // DOCUMENTED
 import { ClientPluginManager, pluginManager } from '@magickml/core'
-import AppsIcon from '@mui/icons-material/Apps'
-import ArticleIcon from '@mui/icons-material/Article'
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import BoltIcon from '@mui/icons-material/Bolt'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
@@ -22,21 +19,50 @@ import {
 } from '../../contexts/ProjectWindowContext'
 import ProjectWindow from './ProjectWindow'
 import { SetAPIKeys } from './SetAPIKeys'
-import MagickLogo from './logo-full.png'
-import MagickLogoSmall from './logo-small.png'
-import { Tooltip } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import { drawerTooltipText } from "./tooltiptext"
-import TreeView from '@mui/lab/TreeView';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
-import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
-import { SvgIconProps } from '@mui/material/SvgIcon';
-import Box from '@mui/material/Box';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined';
-import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined';
 import AgentMenu from './AgentMenu'
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { DndProvider } from "react-dnd";
+import {
+  Tree,
+  NodeModel,
+  MultiBackend,
+  getBackendOptions
+} from "@minoru/react-dnd-treeview";
+import SampleData from "./sampleData.json";
+import styles from "./menu.module.css";
+import { CustomNode } from "./CustomNode";
+import { createTheme } from "@mui/material/styles";
+import AddIcon from '@mui/icons-material/Add';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+
+
+
+const theme = createTheme({
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        "*": {
+          margin: 0,
+          padding: 0
+        },
+        "html, body, #root": {
+          height: "100%"
+        },
+        ul: {
+          listStyle: "none"
+        }
+      }
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: { verticalAlign: "middle" }
+      }
+    }
+  }
+});
 
 // Constants
 const drawerWidth = 210
@@ -69,26 +95,24 @@ type HeaderProps = {
   theme?: Theme
 }
 
-
-type StyledTreeItemProps = TreeItemProps & {
-  labelIcon: React.ElementType<SvgIconProps>;
-  labelText: string;
-  iconColor?: string;
+type CustomData = {
+  fileType: string;
+  fileSize: string;
 };
 
-/**
- * The DrawerHeader component style definition based on its open state property.
- */
-const DrawerHeader = styled('div', {
-  shouldForwardProp: prop => prop !== 'open',
-})<HeaderProps>(({ theme, open }) => ({
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  position: 'relative',
-  left: 3,
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
-}))
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 7,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: '#1BC5EB',
+  },
+}));
+
 
 /**
  * The StyledDrawer component style definition based on its open state property.
@@ -211,70 +235,10 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
 type DrawerProps = {
   children: React.ReactNode
 }
-const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-
-  [`& .${treeItemClasses.content}`]: {
-
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    '&.Mui-expanded': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-      color: 'var(--tree-view-color)',
-    },
-    [`& .${treeItemClasses.label}`]: {
-      fontWeight: 'inherit',
-      color: 'inherit',
-    },
-  },
-  [`& .${treeItemClasses.group}`]: {
-    marginLeft: 0,
-    [`& .${treeItemClasses.content}`]: {
-      paddingLeft: theme.spacing(2),
-      // Remove position and related properties here
-      position: 'static',
-      top: 'auto',
-      left: 'auto',
-    },
-  },
-}));
 
 
-function StyledTreeItem(props: StyledTreeItemProps) {
 
-  const {
-    labelIcon: LabelIcon,
-    labelText,
-    iconColor,
-    ...other
-  } = props;
 
-  return (
-    <StyledTreeItemRoot
-      label={
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            p: 0.5,
-            pr: 0,
-          }}
-        >
-          <Box component={LabelIcon} color={iconColor ? iconColor : "#F4CC22"} sx={{ mr: 1 }} />
-          <ListItemText primary={labelText}  sx={{  flexGrow: 1 }} />
-        </Box>
-      }
-      {...other}
-    />
-  );
-}
 
 
 /**
@@ -286,12 +250,9 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   const { openProjectWindow, openDrawer, setOpenDrawer, setOpenProjectWindow } =
     useProjectWindow()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
+  const [treeData, setTreeData] = useState<NodeModel[]>(SampleData);
+  const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree);
 
-  // Function to toggle drawer state
-  const toggleDrawer = () => {
-    if (!openDrawer) setOpenProjectWindow(false)
-    setOpenDrawer(!openDrawer)
-  }
 
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
@@ -330,13 +291,9 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
-        {/* <DrawerHeader
-          open={openDrawer}
-          onClick={toggleDrawer}
-          sx={{ justifyContent: openDrawer ? 'space-between' : 'flex-end' }}
-        > */}
-          <AgentMenu />
-        {/* </DrawerHeader> */}
+
+        <AgentMenu />
+
         <List
           sx={{
             padding: 0,
@@ -376,73 +333,56 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
         <Divider />
-        <TreeView
-          aria-label="icon expansion"
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-          sx={{ height: 240, flexGrow: 1, maxWidth: 400, position: 'relative' }}
-          // multiSelect
-        >
-          <StyledTreeItem nodeId="1" labelText="Documents" labelIcon={FolderOpenOutlinedIcon}>
-            <StyledTreeItem nodeId="2" labelText="Uploaded books" labelIcon={FolderOpenOutlinedIcon}>
-              <StyledTreeItem
-                nodeId="3"
-                labelText="Promotions.txt"
-                labelIcon={DescriptionOutlinedIcon}
-                iconColor='#42B951'
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+            <div className={styles.menu}>
+              <Tree
+                tree={treeData}
+                rootId={0}
+                render={(
+                  node: NodeModel<CustomData>,
+                  { depth, isOpen, onToggle }
+                ) => (
+                  <CustomNode
+                    node={node}
+                    depth={depth}
+                    isOpen={isOpen}
+                    onToggle={onToggle}
+                  />
+                )}
+                onDrop={handleDrop}
+                classes={{
+                  root: styles.treeRoot,
+                  draggingSource: styles.draggingSource,
+                  dropTarget: styles.dropTarget
+                }}
               />
-              <StyledTreeItem
-                nodeId="4"
-                labelText="tree-view.js"
-                labelIcon={DescriptionOutlinedIcon}
-                iconColor='#42B951'
-              />
-            </StyledTreeItem>
-            <StyledTreeItem nodeId="5" labelText="Gematria notes" labelIcon={FolderOpenOutlinedIcon}>
-              <StyledTreeItem
-                nodeId="6"
-                labelText="Promotions"
-                labelIcon={DescriptionOutlinedIcon}
-                iconColor='#42B951'
-              />
-              <StyledTreeItem
-                nodeId="7"
-                labelText="Promotions"
-                labelIcon={DescriptionOutlinedIcon}
-                iconColor='#42B951'
-              />
-            </StyledTreeItem>
-            <StyledTreeItem nodeId="8" labelText="Journal entires" labelIcon={FolderOpenOutlinedIcon}>
-              <StyledTreeItem
-                nodeId="9"
-                labelText="Promotions"
-                labelIcon={DescriptionOutlinedIcon}
-                iconColor='#42B951'
-              />
-              <StyledTreeItem
-                nodeId="10"
-                labelText="Promotions"
-                labelIcon={DescriptionOutlinedIcon}
-                iconColor='#42B951'
-              />
-            </StyledTreeItem>
-          </StyledTreeItem>
-          <StyledTreeItem nodeId="11" labelText="Spells & Prompts" labelIcon={FolderOpenOutlinedIcon}>
-            <StyledTreeItem
-              nodeId="12"
-              labelText="demo.spell"
-              labelIcon={StarBorderPurple500OutlinedIcon}
-              iconColor='#1BC5EB'
-            />
-             <StyledTreeItem
-              nodeId="12"
-              labelText="classifier.prompt"
-              labelIcon={HistoryEduOutlinedIcon}
-              iconColor='#9D12A4'
-            />
-            
-          </StyledTreeItem>
-        </TreeView>
+            </div>
+          </DndProvider>
+        </ThemeProvider>
+
+        <div className={styles.menu} style={{color:"#7D7D7D"}}>
+          <div className={styles.menuFlex}>
+            <AddIcon sx={{ mr: 1 }} />
+            <Typography variant="body1" >Notion</Typography>
+          </div>
+          <div className={styles.menuFlex}>
+            <AddIcon sx={{ mr: 1 }} />
+            <Typography variant="body1" >Google Drive</Typography>
+          </div>
+        </div>
+        <div className={styles.hideMenu}>
+
+        </div>
+        <div className={styles.credits}>
+          <div className={styles.menuFlex}>
+            <AutoAwesomeIcon sx={{ mr: 1 }} />
+            <Typography variant="body1" >MP</Typography>
+          </div>
+          <BorderLinearProgress variant="determinate" value={50} />
+          <p className={styles.creditCount}>300/500 monthly MP</p>
+        </div>
       </StyledDrawer>
       {openProjectWindow && <ProjectWindow openDrawer={openProjectWindow} />}
       {children}
