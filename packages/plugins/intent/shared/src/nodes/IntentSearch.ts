@@ -15,12 +15,8 @@ import {
   MagickWorkerInputs,
   ModuleContext,
   WorkerData,
-  objectSocket,
   MagickWorkerOutputs,
-  getLogger,
 } from '@magickml/core'
-
-import axios from 'axios'
 
 /**
  * The return type of the worker function.
@@ -108,7 +104,6 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<WorkerReturn> {
-    debugger
     const { projectId } = context
     const { app } = context.module
     if (!app) throw new Error('App not found in context')
@@ -128,8 +123,8 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
         .split(',')
         .map(parseFloat)
 
-    let metadata = { intent: { type: 'average' } }
-    let type = 'Intent'
+    const metadata = { intent: { type: 'average' } }
+    const type = 'Intent'
     const response = await app.service('documents').find({
       query: {
         projectId,
@@ -140,11 +135,11 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
       },
     })
 
-    let intent: string = ''
+    let intent = ''
     let document: any = null
     if (Array.isArray(response.data) && response.data.length > 0) {
       document = response.data[0]
-      let distance = document ? document?.distance : null
+      const distance = document ? document?.distance : null
       if (distance != null && distance < threshold) {
         intent = document?.metadata?.intent?.name ?? ''
       }
