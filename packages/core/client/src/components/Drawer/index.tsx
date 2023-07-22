@@ -37,32 +37,14 @@ import { createTheme } from "@mui/material/styles";
 import AddIcon from '@mui/icons-material/Add';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import Menu from '@mui/material/Menu';
+import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined';
+import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined';
 
 
 
-const theme = createTheme({
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        "*": {
-          margin: 0,
-          padding: 0
-        },
-        "html, body, #root": {
-          height: "100%"
-        },
-        ul: {
-          listStyle: "none"
-        }
-      }
-    },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: { verticalAlign: "middle" }
-      }
-    }
-  }
-});
 
 // Constants
 const drawerWidth = 210
@@ -164,7 +146,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
       <ListItemButton
         sx={{
-          minHeight: 48,
+          py: 0.5,
           justifyContent: open ? 'initial' : 'center',
           px: 1,
         }}
@@ -252,6 +234,10 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData);
   const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree);
+  // State to keep track of the anchor element of the menu and cursor position
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
 
 
   // Function to handle navigation based on location path
@@ -287,6 +273,32 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
+
+
+  // Function to handle the click event on the hideMenu div
+  const handleHideMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setMenuAnchorEl(event.currentTarget);
+    setCursorPosition({ x: event.clientX, y: event.clientY });
+  };
+
+  // Function to handle closing the menu
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  // Effect to add a click listener to the document to close the menu when clicked outside
+  useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (menuAnchorEl && !menuAnchorEl.contains(event.target as Node)) {
+        handleMenuClose();
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [menuAnchorEl]);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -332,11 +344,12 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           />
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
-        <Divider />
-        <ThemeProvider theme={theme}>
+        <Divider sx={{marginY:2}}/>
+        
+        <div className={styles.files}>
           <CssBaseline />
           <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-            <div className={styles.menu}>
+            <div>
               <Tree
                 tree={treeData}
                 rootId={0}
@@ -360,20 +373,59 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
               />
             </div>
           </DndProvider>
-        </ThemeProvider>
-
-        <div className={styles.menu} style={{color:"#7D7D7D"}}>
+        </div>
+        <div className={styles.menu} style={{ color: "#7D7D7D" }}>
           <div className={styles.menuFlex}>
             <AddIcon sx={{ mr: 1 }} />
-            <Typography variant="body1" >Notion</Typography>
+            <Typography variant="body1" >Notion (coming soon)</Typography>
           </div>
           <div className={styles.menuFlex}>
             <AddIcon sx={{ mr: 1 }} />
-            <Typography variant="body1" >Google Drive</Typography>
+            <Typography variant="body1" >Google Drive (coming soon)</Typography>
           </div>
         </div>
-        <div className={styles.hideMenu}>
-
+        <div
+          className={styles.hideMenu}
+          onClick={handleHideMenuClick}
+          style={{ cursor: 'pointer' }} // Add cursor style to indicate the clickable element
+        >
+          <Menu
+            anchorReference="anchorPosition"
+            anchorPosition={menuAnchorEl ? { top: cursorPosition.y, left: cursorPosition.x } : undefined}
+            open={Boolean(menuAnchorEl)}
+            onClose={handleMenuClose}
+            sx={
+              {
+                "& .MuiMenu-paper":
+                {
+                  background: "#2B2B30",
+                  width: "180px",
+                  shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  borderRadius: "0px",
+                },
+              }
+            }
+          >
+            <div className={styles.hideMenuItem}>
+              <FolderOpenOutlinedIcon sx={{ mr: 1 }} />
+              <Typography variant="body1" >New Folder</Typography>
+            </div>
+            <Divider />
+            <div className={styles.hideMenuItem}>
+              <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
+              <Typography variant="body1" >New Spell</Typography>
+            </div>
+            <Divider />
+            <div className={styles.hideMenuItem}>
+              <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
+              <Typography variant="body1" >New Prompt</Typography>
+            </div>
+            <Divider />
+            <div className={styles.hideMenuItem}>
+              <DescriptionOutlinedIcon sx={{ mr: 1 }} />
+              <Typography variant="body1" >New Document</Typography>
+            </div>
+          </Menu>
         </div>
         <div className={styles.credits}>
           <div className={styles.menuFlex}>
