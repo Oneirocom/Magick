@@ -37,6 +37,7 @@ ul ul ul li  {
 
 .credits{
   padding: 0 1rem;
+  margin-top: auto
 }
 
 .creditCount{
@@ -45,11 +46,28 @@ ul ul ul li  {
 }
 
 .hideMenu{
-  height: 10rem;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
   width: 100%;
 }
 .menuFlex{
   display: flex;
   margin-bottom: 1rem;
   align-items: center;
+}
+
+.hideMenuItem{
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  background-color: #2B2B30;
+}
+
+
+.files *{
+  padding: 0;
+  margin: 0;
+  /* margin-top: 0.8rem; */
 }

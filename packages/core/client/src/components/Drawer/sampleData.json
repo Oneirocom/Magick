@@ -12,12 +12,6 @@
     "text": "Uploaded books"
   },
   {
-    "id": 354,
-    "parent": 1,
-    "droppable": true,
-    "text": "Aploaded books"
-  },
-  {
     "id": 72,
     "parent": 3,
     "droppable": false,
