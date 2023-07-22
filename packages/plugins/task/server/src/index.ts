@@ -24,7 +24,7 @@ class TaskManager {
     console.log('new task manager created')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
-      this.addAgent({ spellRunner, agent, agentData })
+      this.addAgent({ _spellRunner: spellRunner, agent, agentData })
     )
     this.agentManager.registerRemoveAgentHandler(({ agent }) =>
       this.removeAgent({ agent })
@@ -37,7 +37,7 @@ class TaskManager {
    * @param {any} agent - Agent to add.
    * @param {any} agentData - Data for the agent.
    */
-  addAgent({ spellRunner, agent, agentData }) {
+  addAgent({ _spellRunner, agent, agentData }) {
     if (!agentData) return console.log('No data for this agent', agent.id)
     if (!agentData.data?.task_enabled)
       return console.log('Task is not enabled for this agent')

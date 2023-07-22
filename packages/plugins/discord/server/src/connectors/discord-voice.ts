@@ -23,7 +23,6 @@ export function initSpeechClient(options: {
   const {
     client,
     agent,
-    spellRunner,
   } = options
 
   // Add speech event to the client.
