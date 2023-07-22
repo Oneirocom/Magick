@@ -18,7 +18,7 @@ import {
 
 // Import types and classes
 import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './api.class'
+import { ApiService } from './api.class'
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {

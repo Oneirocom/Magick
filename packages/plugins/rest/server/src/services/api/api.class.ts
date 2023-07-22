@@ -25,8 +25,8 @@ export type ApiGetResponse = {
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
   implements ServiceInterface<Api, ApiData, ServiceParams, ApiPatch>
   {
-    async find(params: ServiceParams): Promise<object> {
-
+    async find(_params: ServiceParams): Promise<object> {
+      throw new Error('Method not implemented.')
     }
   }
 

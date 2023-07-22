@@ -1,10 +1,10 @@
 import pino from "pino"
-import { diff, sleep } from "radash"
-import { AGENT_DELETE_JOB, AGENT_UPDATE_JOB, getLogger } from "@magickml/core"
+import { diff } from "radash"
+import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB, getLogger } from "@magickml/core"
 import type { Reporter } from "./Reporters"
 import { type PubSub, type MessageQueue, app } from "@magickml/server-core"
 import type { AgentListRecord } from '@magickml/cloud-agent-worker'
-import { Agent, AgentData } from "packages/core/server/src/services/agents/agents.schema"
+import { Agent } from "packages/core/server/src/services/agents/agents.schema"
 
 interface CloudAgentManagerConstructor {
     pubSub: PubSub
@@ -76,6 +76,7 @@ export class CloudAgentManager {
         })
 
         this.agentStateReporter.on(AGENT_DELETE, async (data: unknown) => {
+            const agent = data as Agent
             this.pubSub.publish(AGENT_DELETE_JOB(agent.id), JSON.stringify({ agentId: agent.id }))
         })
     }

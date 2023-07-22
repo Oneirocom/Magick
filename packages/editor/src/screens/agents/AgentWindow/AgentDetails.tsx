@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { IconBtn, CustomizedSwitch, useFeathers } from '@magickml/client-core'
 import { ClientPluginManager, pluginManager } from '@magickml/core'
-import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
@@ -11,7 +10,6 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
-import validateSpellData from './spellValidator'
 import {tooltip_text} from "./tooltip_texts"
 
 /**
@@ -50,7 +48,7 @@ const AgentDetails = ({
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
-  const [enable, setEnable] = useState(onLoadEnables)
+  const [enable, _setEnable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
@@ -121,51 +119,6 @@ const AgentDetails = ({
           variant: 'error',
         })
       })
-  }
-
-  const isPublicVarsChanged = (old, newObj): boolean => {
-    // Get the keys of both objects
-    const oldObjKeys = Object.keys(old);
-    const newObjKeys = Object.keys(newObj);
-
-    // Check if the number of keys is different
-    if (oldObjKeys.length !== newObjKeys.length) {
-      return true;
-    }
-
-    // Compare property values
-    for (const prop in old) {
-      //Check if the value prop of inner object has changed
-      if (old[prop].value !== newObj[prop].value) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  const formatPublicVars = (nodes) => {
-    return Object.values(nodes)
-      // get the public nodes
-      .filter((node: { data }) => node?.data?.isPublic)
-      // map to an array of objects
-      .map((node: { data; id; name }) => {
-        return {
-          id: node?.id,
-          name: node?.data?.name,
-          value:
-            node?.data?.value ||
-            node?.data?.text ||
-            node?.data?.fewshot ||
-            node?.data?._var,
-          type: node?.name,
-        }
-      })
-      // map to an object with the id as the key
-      .reduce((acc, cur) => {
-        acc[cur.id] = cur
-        return acc
-      }, {})
   }
 
   const updatePublicVar = (spell) => {
