@@ -44,10 +44,14 @@ export const CustomNode: React.FC<Props> = (props) => {
         )}
       </div>
       <div>
+        {/* @ts-ignore */}
         <TypeIcon droppable={droppable} fileType={data ? data.fileType : props.node.fileType} />
       </div>
       <div className={styles.labelGridItem}>
-        <Typography variant="body1" style={{cursor:"pointer"}}>{props.node.text}</Typography>
+        <Typography variant="body1" sx={{
+          cursor: "pointer",
+          marginLeft: "8px",
+        }} >{props.node.text}</Typography>
       </div>
     </div>
   );

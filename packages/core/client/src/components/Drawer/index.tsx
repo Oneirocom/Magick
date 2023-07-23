@@ -146,7 +146,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
       <ListItemButton
         sx={{
-          py: 0.5,
+          py: 0.2,
           justifyContent: open ? 'initial' : 'center',
           px: 1,
         }}
@@ -301,11 +301,12 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   }, [menuAnchorEl]);
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
+    <div style={{ display: 'flex', height: '100%'}}>
       <StyledDrawer variant="permanent" open={openDrawer}>
 
-        <AgentMenu />
-
+       
+          <AgentMenu />
+       
         <List
           sx={{
             padding: 0,
@@ -344,8 +345,8 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
           />
           {!isAPIKeysSet && <SetAPIKeys />}
         </List>
-        <Divider sx={{marginY:2}}/>
-        
+        <Divider sx={{ marginY: 2 }} />
+
         <div className={styles.files}>
           <CssBaseline />
           <DndProvider backend={MultiBackend} options={getBackendOptions()}>
@@ -353,6 +354,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
               <Tree
                 tree={treeData}
                 rootId={0}
+                // @ts-ignore
                 render={(
                   node: NodeModel<CustomData>,
                   { depth, isOpen, onToggle }
