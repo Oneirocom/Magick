@@ -22,7 +22,7 @@ import { SetAPIKeys } from './SetAPIKeys'
 import { Tooltip, Typography } from '@mui/material';
 import { drawerTooltipText } from "./tooltiptext"
 import AgentMenu from './AgentMenu'
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import {
   Tree,
@@ -33,7 +33,6 @@ import {
 import SampleData from "./sampleData.json";
 import styles from "./menu.module.css";
 import { CustomNode } from "./CustomNode";
-import { createTheme } from "@mui/material/styles";
 import AddIcon from '@mui/icons-material/Add';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
