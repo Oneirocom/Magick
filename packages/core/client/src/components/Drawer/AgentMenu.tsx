@@ -2,134 +2,192 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import IconButton from '@mui/material/IconButton';
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
-
-
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-
 
 function AgentMenu() {
   const BorderedAvatar = styled(Avatar)`
     border: 1px solid lightseagreen;
   `;
 
-  const [open, setOpen] = React.useState(false);
-  const [sopen, setSOpen] = React.useState(false);
-  const anchorRef = React.useRef<any>(null);
-  const anchorSRef = React.useRef<any>(null);
+  const [openMenu1, setOpenMenu1] = React.useState(null);
+  const [openMenu2, setOpenMenu2] = React.useState(null);
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+  const handleToggleMenu1 = (event) => {
+    setOpenMenu1(event.currentTarget);
   };
 
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-    setOpen(false);
+  const handleCloseMenu1 = () => {
+    setOpenMenu1(null);
   };
 
-  const handleSClose = (event) => {
-    if (anchorSRef.current && anchorSRef.current.contains(event.target)) {
-      return;
-    }
-    setSOpen(false);
+  const handleToggleMenu2 = (event) => {
+    setOpenMenu2(event.currentTarget);
   };
 
-  const handleSToggle = () => {
-    setSOpen((prevOpen) => !prevOpen);
+  const handleCloseMenu2 = () => {
+    setOpenMenu2(null);
   };
 
+  // const styledDivider = styled(Divider)`
+  //   background-color: #2B2B30;
+  //   margin-top: 4px;
+  //   margin-bottom: 4px;
+  // `;
+
+  const StyledDivider = styled(Divider)(({ theme }) => ({
+    backgroundColor: "black",
+    marginTop: "4px",
+    marginBottom: "4px",
+  }));
 
   return (
     <div>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        <ListItem alignItems="center">
+        <ListItem
+          alignItems="center"
+          sx={{
+            px: 1,
+            py: 0,
+            width: 200,
+            justifyContent: 'space-between',
+          }}
+        >
           <ListItemAvatar>
-            <BorderedAvatar alt="Remy Sharp" src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg" sx={{ width: 30, height: 30 }} />
+            <BorderedAvatar
+              alt="Remy Sharp"
+              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
+              sx={{ width: 30, height: 30 }}
+            />
           </ListItemAvatar>
           <ListItemText primary="Agent name" />
           <IconButton
             aria-label="expand"
             size="small"
-            onClick={handleToggle}
-            ref={anchorRef}
-            edge="end"
+            onClick={handleToggleMenu1}
           >
-            <ExpandMoreIcon />
+            <ExpandMoreIcon sx={{ placeContent: 'end' }} />
           </IconButton>
         </ListItem>
       </List>
-      {/* select agent modal */}
+      {/* select agent modal 1 */}
       <Menu
-        id="positioned-demo-menu"
-        anchorEl={anchorRef.current}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="positioned-demo-button"
+        id="menu1"
+        anchorEl={openMenu1}
+        open={Boolean(openMenu1)}
+        onClose={handleCloseMenu1}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        
+        sx={{
+          '& .MuiMenu-paper': {
+            background: '#2B2B30',
+            width: '210px',
+            shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            borderRadius: '0px',
+            left: '0px !important',
+          },
+        }}
       >
+        <MenuItem
+          sx={{
+            px: 1,
+            py: 0,
+            width: 200,
+            justifyContent: 'space-between',
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+        >
+          <ListItemAvatar
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <BorderedAvatar
+              alt="Remy Sharp"
+              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
+              sx={{ width: 24, height: 24 }}
+            />
+            <ListItemText primary="Agent1" sx={{ ml: 2 }} />
+          </ListItemAvatar>
+          <ListItemIcon sx={{ placeContent: 'end' }}>
+            <MoreIcon
+              fontSize="small"
+              onClick={handleToggleMenu2}
+              aria-controls="menu2"
+              aria-haspopup="true"
+            />
+          </ListItemIcon>
+        </MenuItem>
+        <StyledDivider />
+        <MenuItem
+          sx={{
+            px: 1,
+            py: 0,
+            width: 200,
+            justifyContent: 'space-between',
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+        >
+          <ListItemAvatar
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <BorderedAvatar
+              alt="Remy Sharp"
+              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
+              sx={{ width: 24, height: 24 }}
+            />
+            <ListItemText primary="Agent1" sx={{ ml: 2 }} />
+          </ListItemAvatar>
+          <ListItemIcon sx={{ placeContent: 'end' }}>
+            <MoreIcon
+              fontSize="small"
+              onClick={handleToggleMenu2}
+              aria-controls="menu2"
+              aria-haspopup="true"
+            />
+          </ListItemIcon>
+        </MenuItem>
+        <StyledDivider />
         <MenuItem sx={{
           px: 1,
           py: 0,
-          width: 200,
-          justifyContent: 'space-between',
+          '&:hover, &:focus': {
+            background: 'none',
+            outline: 'none',
+          },
         }}>
-          <ListItemAvatar sx={{
-            display: 'flex',
-            alignItems: 'center',
-          }}>
-            <BorderedAvatar alt="Remy Sharp" src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg" sx={{ width: 24, height: 24 }} />
-            <ListItemText primary="Agent1" sx={{
-              ml: 2,
-            }} />
-          </ListItemAvatar>
-          <ListItemIcon >
-            <MoreIcon fontSize="small" onClick={handleSToggle}
-              ref={anchorSRef} />
-          </ListItemIcon>
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{
-          px: 1,
-          py: 0,
-          width: 200,
-          justifyContent: 'space-between',
-        }}>
-          <ListItemAvatar sx={{
-            display: 'flex',
-            alignItems: 'center',
-          }}>
-            <BorderedAvatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 24, height: 24 }} />
-            <ListItemText primary="Agent2" sx={{
-              ml: 2,
-            }} />
-          </ListItemAvatar>
-          <ListItemIcon >
-            <MoreIcon fontSize="small" onClick={handleSToggle}
-              ref={anchorSRef} />
-          </ListItemIcon>
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose}>
           <List sx={{
             px: 0,
             py: 0,
           }}>
             <ListItem
               sx={{
-
                 px: 0,
                 py: 0,
               }}
@@ -142,32 +200,42 @@ function AgentMenu() {
           </List>
         </MenuItem>
       </Menu>
-      {/* second mini menu */}
+      {/* select agent modal 2 */}
       <Menu
-        id="sub_menu"
-        anchorEl={anchorSRef.current}
-        open={sopen}
-        onClose={handleSClose}
-        aria-labelledby="sub_menu"
+        id="menu2"
+        anchorEl={openMenu2}
+        open={Boolean(openMenu2)}
+        onClose={handleCloseMenu2}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        sx={{
+          '& .MuiMenu-paper': {
+            background: '#2B2B30',
+            width: '170px',
+            shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            borderRadius: '0px',
+          },
+        }}
       >
-        <MenuItem sx={{ py: 0 , width:180 }}  >
-          Rename
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ py: 0 }} >
-          Delete
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ py: 0 }} >
-          Change Image
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ py: 0 }} >
-          Other Options
-        </MenuItem>
+        <MenuItem sx={{ py: 0}}>Rename</MenuItem>
+        <StyledDivider />
+        <MenuItem sx={{ py: 0 }}>Delete</MenuItem>
+        <StyledDivider />
+        <MenuItem sx={{ py: 0 }}>Change Image</MenuItem>
+        <StyledDivider />
+        <MenuItem sx={{ py: 0 }}>Other Options</MenuItem>
       </Menu>
     </div>
   );
 }
 
 export default AgentMenu;
+
+
+     
