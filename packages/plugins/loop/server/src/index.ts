@@ -2,7 +2,6 @@
 import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { app } from '@magickml/server-core'
 type StartLoopArgs = {
-  spellRunner: any
   agent: any
   agentManager: any
 }
@@ -16,9 +15,8 @@ class LoopManager {
   /**
    * Constructs a new LoopManager.
    * @param {any} agentManager - The agent manager to manage loops for.
-   * @param {any} spellRunner - The spell runner used for executing agent loops.
    */
-  constructor(agentManager, spellRunner) {
+  constructor(agentManager) {
     console.log('new loop manager created')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
@@ -31,7 +29,6 @@ class LoopManager {
 
   /**
    * Adds an agent to the loop manager.
-   * @param {any} spellRunner - The spell runner used for executing agent loops.
    * @param {any} agent - Agent to add.
    * @param {any} agentData - Data for the agent.
    */
@@ -88,8 +85,8 @@ class LoopManager {
 function getAgentMethods() {
   let loopManager: LoopManager | null = null
   return {
-    start: async ({ spellRunner, agent, agentManager }: StartLoopArgs) => {
-      if (!loopManager) loopManager = new LoopManager(agentManager, spellRunner)
+    start: async ({ agent, agentManager }: StartLoopArgs) => {
+      if (!loopManager) loopManager = new LoopManager(agentManager)
       loopManager.addAgent({ agent, agentData: agent.data })
     },
     stop: async ({ agent }) => {

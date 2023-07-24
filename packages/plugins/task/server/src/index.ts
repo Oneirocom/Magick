@@ -4,7 +4,6 @@ import { app } from '@magickml/server-core'
 import { getNodes } from '@magickml/plugin-task-shared'
 
 type StartTaskArgs = {
-  spellRunner: any
   agent: any
   agentManager: any
 }
@@ -18,9 +17,8 @@ class TaskManager {
   /**
    * Constructs a new TaskManager.
    * @param {any} agentManager - The agent manager to manage tasks for.
-   * @param {any} spellRunner - The spell runner used for executing agent tasks.
    */
-  constructor(agentManager, spellRunner) {
+  constructor(agentManager) {
     console.log('new task manager created')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
@@ -33,7 +31,6 @@ class TaskManager {
 
   /**
    * Adds an agent to the task manager.
-   * @param {any} spellRunner - The spell runner used for executing agent tasks.
    * @param {any} agent - Agent to add.
    * @param {any} agentData - Data for the agent.
    */
@@ -103,8 +100,8 @@ class TaskManager {
 function getAgentMethods() {
   let taskManager: TaskManager | null = null
   return {
-    start: async ({ spellRunner, agent, agentManager }: StartTaskArgs) => {
-      if (!taskManager) taskManager = new TaskManager(agentManager, spellRunner)
+    start: async ({ agent, agentManager }: StartTaskArgs) => {
+      if (!taskManager) taskManager = new TaskManager(agentManager)
       taskManager.addAgent({ agent, agentData: agent.data })
     },
     stop: async ({ agent }) => {
