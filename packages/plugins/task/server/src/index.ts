@@ -24,7 +24,7 @@ class TaskManager {
     console.log('new task manager created')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
-      this.addAgent({ _spellRunner: spellRunner, agent, agentData })
+      this.addAgent({ agent, agentData })
     )
     this.agentManager.registerRemoveAgentHandler(({ agent }) =>
       this.removeAgent({ agent })
@@ -105,7 +105,7 @@ function getAgentMethods() {
   return {
     start: async ({ spellRunner, agent, agentManager }: StartTaskArgs) => {
       if (!taskManager) taskManager = new TaskManager(agentManager, spellRunner)
-      taskManager.addAgent({ spellRunner, agent, agentData: agent.data })
+      taskManager.addAgent({ agent, agentData: agent.data })
     },
     stop: async ({ agent }) => {
       if (!taskManager) return console.error('Task Manager not initialized')

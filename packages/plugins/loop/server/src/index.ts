@@ -22,7 +22,7 @@ class LoopManager {
     console.log('new loop manager created')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
-      this.addAgent({ _spellRunner: spellRunner, agent, agentData })
+      this.addAgent({ agent, agentData })
     )
     this.agentManager.registerRemoveAgentHandler(({ agent }) =>
       this.removeAgent({ agent })
@@ -90,7 +90,7 @@ function getAgentMethods() {
   return {
     start: async ({ spellRunner, agent, agentManager }: StartLoopArgs) => {
       if (!loopManager) loopManager = new LoopManager(agentManager, spellRunner)
-      loopManager.addAgent({ spellRunner, agent, agentData: agent.data })
+      loopManager.addAgent({ agent, agentData: agent.data })
     },
     stop: async ({ agent }) => {
       if (!loopManager) return console.error('Loop Manager not initialized')
