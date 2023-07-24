@@ -12,6 +12,7 @@ import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
 import AgentManagerWindow from './screens/agents/AgentManagerWindow'
 import DocumentWindow from './screens/DocumentWindow'
+import IntentWindow from './screens/IntentWindow'
 import EventWindow from './screens/EventWindow'
 import RequestWindow from './screens/RequestWindow'
 import SettingsWindow from './screens/settings/SettingsWindow'
@@ -66,6 +67,7 @@ const MyRoutes = () => (
           )
         })}
       <Route path="/documents" element={<DocumentWindow />} />
+      <Route path="/intents" element={<IntentWindow />} />
       <Route path="/events" element={<EventWindow />} />
       <Route path="/requests" element={<RequestWindow />} />
       <Route path="/agents" element={<AgentManagerWindow />} />
