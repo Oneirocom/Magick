@@ -1,42 +1,42 @@
-import React from 'react';
-import { styled } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import React from 'react'
+import { styled } from '@mui/material/styles'
+import Avatar from '@mui/material/Avatar'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import MoreIcon from '@mui/icons-material/MoreVert'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import Divider from '@mui/material/Divider'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 function AgentMenu() {
   const BorderedAvatar = styled(Avatar)`
     border: 1px solid lightseagreen;
-  `;
+  `
 
-  const [openMenu1, setOpenMenu1] = React.useState(null);
-  const [openMenu2, setOpenMenu2] = React.useState(null);
+  const [openMenu1, setOpenMenu1] = React.useState(null)
+  const [openMenu2, setOpenMenu2] = React.useState(null)
 
-  const handleToggleMenu1 = (event) => {
-    setOpenMenu1(event.currentTarget);
-  };
+  const handleToggleMenu1 = event => {
+    setOpenMenu1(event.currentTarget)
+  }
 
   const handleCloseMenu1 = () => {
-    setOpenMenu1(null);
-  };
+    setOpenMenu1(null)
+  }
 
-  const handleToggleMenu2 = (event) => {
-    setOpenMenu2(event.currentTarget);
-  };
+  const handleToggleMenu2 = event => {
+    setOpenMenu2(event.currentTarget)
+  }
 
   const handleCloseMenu2 = () => {
-    setOpenMenu2(null);
-  };
+    setOpenMenu2(null)
+  }
 
   // const styledDivider = styled(Divider)`
   //   background-color: #2B2B30;
@@ -45,10 +45,10 @@ function AgentMenu() {
   // `;
 
   const StyledDivider = styled(Divider)(({ theme }) => ({
-    backgroundColor: "black",
-    marginTop: "4px",
-    marginBottom: "4px",
-  }));
+    backgroundColor: 'black',
+    marginTop: '4px',
+    marginBottom: '4px',
+  }))
 
   return (
     <div>
@@ -93,7 +93,6 @@ function AgentMenu() {
           vertical: 'top',
           horizontal: 'left',
         }}
-        
         sx={{
           '& .MuiMenu-paper': {
             background: '#2B2B30',
@@ -174,27 +173,33 @@ function AgentMenu() {
           </ListItemIcon>
         </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{
-          px: 1,
-          py: 0,
-          '&:hover, &:focus': {
-            background: 'none',
-            outline: 'none',
-          },
-        }}>
-          <List sx={{
-            px: 0,
+        <MenuItem
+          sx={{
+            px: 1,
             py: 0,
-          }}>
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+        >
+          <List
+            sx={{
+              px: 0,
+              py: 0,
+            }}
+          >
             <ListItem
               sx={{
                 px: 0,
                 py: 0,
               }}
             >
-              <AddCircleIcon sx={{
-                mr: 1,
-              }} />
+              <AddCircleIcon
+                sx={{
+                  mr: 1,
+                }}
+              />
               <ListItemText primary="Create New Agent" />
             </ListItem>
           </List>
@@ -223,7 +228,7 @@ function AgentMenu() {
           },
         }}
       >
-        <MenuItem sx={{ py: 0}}>Rename</MenuItem>
+        <MenuItem sx={{ py: 0 }}>Rename</MenuItem>
         <StyledDivider />
         <MenuItem sx={{ py: 0 }}>Delete</MenuItem>
         <StyledDivider />
@@ -232,10 +237,7 @@ function AgentMenu() {
         <MenuItem sx={{ py: 0 }}>Other Options</MenuItem>
       </Menu>
     </div>
-  );
+  )
 }
 
-export default AgentMenu;
-
-
-     
+export default AgentMenu
