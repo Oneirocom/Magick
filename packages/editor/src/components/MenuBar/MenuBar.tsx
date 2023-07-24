@@ -8,6 +8,8 @@ import { useModal } from '../../contexts/ModalProvider'
 import { toggleAutoSave } from '../../state/preferences'
 import { RootState } from '../../state/store'
 import { Tab, activeTabSelector, changeEditorLayout } from '../../state/tabs'
+import { Menu, MenuItem, IconButton } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 import css from './menuBar.module.css'
 
 /**
@@ -21,6 +23,9 @@ const MenuBar = () => {
   const dispatch = useDispatch()
   const activeTab = useSelector(activeTabSelector)
   const [snapEnabled, setSnapEnabled] = useState(true)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [hoveredMenu, setHoveredMenu] = useState<null | string>(null)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
 
@@ -471,21 +476,67 @@ const MenuBar = () => {
     // func()
   }
 
+  const handleMenuIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+    setIsMenuOpen(true)
+  }
+
+  const handleMenuClose = () => {
+    setIsMenuOpen(false)
+  }
+
+  const handleMenuHover = (menu: string) => {
+    setHoveredMenu(menu)
+  }
+
   return (
-    <ul className={css['menu-bar']}>
-      {Object.keys(menuBarItems).map((item, index) => (
-        <ListItem
-          item={menuBarItems[item]}
-          label={Object.keys(menuBarItems)[index]}
-          topLevel={true}
-          key={index}
-          hotKeyLabel={menuBarItems[item].hotKeyLabel}
-          onClick={() => {
-            handleClick(menuBarItems[item].onClick)
-          }}
-        />
-      ))}
-    </ul>
+    <>
+      <IconButton
+        onClick={handleMenuIconClick}
+        onMouseEnter={() => handleMenuHover('menu')}
+        onMouseLeave={() => handleMenuHover(null)}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Menu
+        id="menu-bar"
+        anchorEl={anchorEl}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+        onMouseEnter={() => handleMenuHover('menu')}
+        onMouseLeave={() => handleMenuHover(null)}
+      >
+        {Object.keys(menuBarItems).map((item, index) => (
+          <MenuItem key={index} onMouseEnter={() => handleMenuHover(item)}>
+            {Object.keys(menuBarItems)[index].toUpperCase()}{' '}
+            {/* Convert to uppercase */}
+            {hoveredMenu === item && (
+              <Menu
+                open
+                onClose={() => handleMenuHover(null)}
+                anchorReference="anchorPosition"
+                anchorPosition={{ top: 0, left: 240 }} // Adjust the left position to your preference
+              >
+                {Object.keys(menuBarItems[item].items).map(
+                  (subMenuKey, subIndex) => (
+                    <MenuItem
+                      key={subIndex}
+                      onClick={() => {
+                        menuBarItems[item].items[subMenuKey].onClick()
+                        handleMenuClose()
+                      }}
+                    >
+                      {subMenuKey.replace(/_/g, ' ').toUpperCase()}{' '}
+                      {/* Convert to uppercase */}
+                    </MenuItem>
+                  )
+                )}
+              </Menu>
+            )}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
   )
 }
 
