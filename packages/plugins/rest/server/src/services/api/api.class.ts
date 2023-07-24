@@ -24,11 +24,7 @@ export type ApiGetResponse = {
 }
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
   implements ServiceInterface<Api, ApiData, ServiceParams, ApiPatch>
-  {
-    async find(_params: ServiceParams): Promise<object> {
-      throw new Error('Method not implemented.')
-    }
-  }
+  {}
 
 /** Helper function to get options for the ApiService. */
 export const getOptions = (app: Application) => {

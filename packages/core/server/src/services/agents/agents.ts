@@ -27,6 +27,8 @@ import { v4 as uuidv4 } from 'uuid'
 export * from './agents.class'
 export * from './agents.schema'
 
+const AGENT_EVENTS = ['log', 'result', 'spell']
+
 /**
  * Configure the agent service by registering it, its hooks, and its options.
  * @param app - The Feathers application
