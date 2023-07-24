@@ -1,4 +1,3 @@
-import { BullQueue } from '@magickml/server-core';
 import { app } from '@magickml/server-core';
 import { AgentCommander } from './lib/AgentCommander';
 

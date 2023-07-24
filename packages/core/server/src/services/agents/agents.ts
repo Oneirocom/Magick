@@ -7,7 +7,6 @@
 // Import necessary modules and functions
 import * as BullMQ from 'bullmq'
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { BadRequest } from '@feathersjs/errors'
 import {
   agentDataValidator,
   agentPatchValidator,

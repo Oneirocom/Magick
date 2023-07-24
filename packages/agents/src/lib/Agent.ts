@@ -1,6 +1,5 @@
 // DOCUMENTED
 import pino from 'pino'
-import _ from 'lodash'
 import {
   SpellManager,
   SpellRunner,
