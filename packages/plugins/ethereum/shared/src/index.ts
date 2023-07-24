@@ -36,6 +36,7 @@ export const nativeNetworks: {
     chainId: number,
     defaultRpcs: { rpcHttp: string[] },
     explorer: { name: string, url: string, urlApi: string},
+    feeData: { gasLimit: number, gasPrice: number}
   },
 } = {
   1: {
@@ -52,6 +53,10 @@ export const nativeNetworks: {
       name: 'EtherScan',
       url: 'https://etherscan.io/',
       urlApi: 'https://api.etherscan.io/api',
+    },
+    feeData:{
+      gasLimit: 5000000,
+      gasPrice: 100000000000
     }
   },
   10: {
@@ -64,6 +69,10 @@ export const nativeNetworks: {
       name: 'Optimistic EtherScan',
       url: 'https://optimistic.etherscan.io/',
       urlApi: 'https://api-optimistic.etherscan.io/api',
+    },
+    feeData:{
+      gasLimit: 5000000,
+      gasPrice: 100000000000
     }
   },
   137: {
@@ -76,6 +85,10 @@ export const nativeNetworks: {
       name: 'PolygonScan',
       url: 'https://polygonscan.com/',
       urlApi: 'https://api.polygonscan.com/api',
+    },
+    feeData:{
+      gasLimit: 5000000,
+      gasPrice: 100000000000
     }
   },
   80001: {
@@ -88,6 +101,10 @@ export const nativeNetworks: {
       name: 'Mumbai PolygonScan',
       url: 'https://mumbai.polygonscan.com/',
       urlApi: 'https://api-testnet.polygonscan.com/api',
+    },
+    feeData:{
+      gasPrice: 100000000000,
+      gasLimit: 1000000
     }
   },
 };
