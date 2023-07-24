@@ -19,31 +19,30 @@ import {
 } from '../../contexts/ProjectWindowContext'
 import ProjectWindow from './ProjectWindow'
 import { SetAPIKeys } from './SetAPIKeys'
-import { Tooltip, Typography } from '@mui/material';
-import { drawerTooltipText } from "./tooltiptext"
+import { Tooltip, Typography } from '@mui/material'
+import { drawerTooltipText } from './tooltiptext'
 import AgentMenu from './AgentMenu'
-import { CssBaseline } from "@mui/material";
-import { DndProvider } from "react-dnd";
+import { CssBaseline } from '@mui/material'
+import { DndProvider } from 'react-dnd'
 import {
   Tree,
   NodeModel,
   MultiBackend,
-  getBackendOptions
-} from "@minoru/react-dnd-treeview";
-import SampleData from "./sampleData.json";
-import styles from "./menu.module.css";
-import { CustomNode } from "./CustomNode";
-import AddIcon from '@mui/icons-material/Add';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import Menu from '@mui/material/Menu';
-import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined';
-import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined';
-
-
-
+  getBackendOptions,
+} from '@minoru/react-dnd-treeview'
+import SampleData from './sampleData.json'
+import styles from './menu.module.css'
+import { CustomNode } from './CustomNode'
+import AddIcon from '@mui/icons-material/Add'
+import LinearProgress, {
+  linearProgressClasses,
+} from '@mui/material/LinearProgress'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import Menu from '@mui/material/Menu'
+import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
+import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 
 // Constants
 const drawerWidth = 210
@@ -77,23 +76,22 @@ type HeaderProps = {
 }
 
 type CustomData = {
-  fileType: string;
-  fileSize: string;
-};
-
+  fileType: string
+  fileSize: string
+}
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 7,
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    backgroundColor:
+      theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
     backgroundColor: '#1BC5EB',
   },
-}));
-
+}))
 
 /**
  * The StyledDrawer component style definition based on its open state property.
@@ -135,14 +133,10 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   text,
   active,
   onClick,
-  tooltipText
+  tooltipText,
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-    <Tooltip title={tooltipText} placement="top"
-      enterDelay={500}
-      arrow
-    >
-
+    <Tooltip title={tooltipText} placement="top" enterDelay={500} arrow>
       <ListItemButton
         sx={{
           py: 0.2,
@@ -203,7 +197,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               open={open}
               onClick={onClick(item.path)}
               text={item.text}
-              tooltip='Avatar and Tasks Tooltip'
+              tooltip="Avatar and Tasks Tooltip"
               tooltipText={item.tooltip}
             />
           </div>
@@ -217,11 +211,6 @@ type DrawerProps = {
   children: React.ReactNode
 }
 
-
-
-
-
-
 /**
  * The main Drawer component that wraps around the application content.
  */
@@ -231,13 +220,11 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   const { openProjectWindow, openDrawer, setOpenDrawer, setOpenProjectWindow } =
     useProjectWindow()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
-  const [treeData, setTreeData] = useState<NodeModel[]>(SampleData);
-  const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree);
+  const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
+  const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
   // State to keep track of the anchor element of the menu and cursor position
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-
-
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
 
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
@@ -273,45 +260,41 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
     }
   }, [])
 
-
   // Function to handle the click event on the hideMenu div
   const handleHideMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setMenuAnchorEl(event.currentTarget);
-    setCursorPosition({ x: event.clientX, y: event.clientY });
-  };
+    setMenuAnchorEl(event.currentTarget)
+    setCursorPosition({ x: event.clientX, y: event.clientY })
+  }
 
   // Function to handle closing the menu
   const handleMenuClose = () => {
-    setMenuAnchorEl(null);
-  };
+    setMenuAnchorEl(null)
+  }
 
   // Effect to add a click listener to the document to close the menu when clicked outside
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
       if (menuAnchorEl && !menuAnchorEl.contains(event.target as Node)) {
-        handleMenuClose();
+        handleMenuClose()
       }
-    };
+    }
 
-    document.addEventListener('click', handleDocumentClick);
+    document.addEventListener('click', handleDocumentClick)
     return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, [menuAnchorEl]);
+      document.removeEventListener('click', handleDocumentClick)
+    }
+  }, [menuAnchorEl])
 
   return (
-    <div style={{ display: 'flex', height: '100%'}}>
+    <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
+        <AgentMenu />
 
-       
-          <AgentMenu />
-       
         <List
           sx={{
             padding: 0,
           }}
         >
-
           <DrawerItem
             active={location.pathname === '/events'}
             Icon={BoltIcon}
@@ -369,20 +352,20 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
                 classes={{
                   root: styles.treeRoot,
                   draggingSource: styles.draggingSource,
-                  dropTarget: styles.dropTarget
+                  dropTarget: styles.dropTarget,
                 }}
               />
             </div>
           </DndProvider>
         </div>
-        <div className={styles.menu} style={{ color: "#7D7D7D" }}>
+        <div className={styles.menu} style={{ color: '#7D7D7D' }}>
           <div className={styles.menuFlex}>
             <AddIcon sx={{ mr: 1 }} />
-            <Typography variant="body1" >Notion (coming soon)</Typography>
+            <Typography variant="body1">Notion (coming soon)</Typography>
           </div>
           <div className={styles.menuFlex}>
             <AddIcon sx={{ mr: 1 }} />
-            <Typography variant="body1" >Google Drive (coming soon)</Typography>
+            <Typography variant="body1">Google Drive (coming soon)</Typography>
           </div>
         </div>
         <div
@@ -392,46 +375,47 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
         >
           <Menu
             anchorReference="anchorPosition"
-            anchorPosition={menuAnchorEl ? { top: cursorPosition.y, left: cursorPosition.x } : undefined}
+            anchorPosition={
+              menuAnchorEl
+                ? { top: cursorPosition.y, left: cursorPosition.x }
+                : undefined
+            }
             open={Boolean(menuAnchorEl)}
             onClose={handleMenuClose}
-            sx={
-              {
-                "& .MuiMenu-paper":
-                {
-                  background: "#2B2B30",
-                  width: "180px",
-                  shadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                  borderRadius: "0px",
-                },
-              }
-            }
+            sx={{
+              '& .MuiMenu-paper': {
+                background: '#2B2B30',
+                width: '180px',
+                shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                borderRadius: '0px',
+              },
+            }}
           >
             <div className={styles.hideMenuItem}>
               <FolderOpenOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1" >New Folder</Typography>
+              <Typography variant="body1">New Folder</Typography>
             </div>
             <Divider />
             <div className={styles.hideMenuItem}>
               <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1" >New Spell</Typography>
+              <Typography variant="body1">New Spell</Typography>
             </div>
             <Divider />
             <div className={styles.hideMenuItem}>
               <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1" >New Prompt</Typography>
+              <Typography variant="body1">New Prompt</Typography>
             </div>
             <Divider />
             <div className={styles.hideMenuItem}>
               <DescriptionOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1" >New Document</Typography>
+              <Typography variant="body1">New Document</Typography>
             </div>
           </Menu>
         </div>
         <div className={styles.credits}>
           <div className={styles.menuFlex}>
             <AutoAwesomeIcon sx={{ mr: 1 }} />
-            <Typography variant="body1" >MP</Typography>
+            <Typography variant="body1">MP</Typography>
           </div>
           <BorderLinearProgress variant="determinate" value={50} />
           <p className={styles.creditCount}>300/500 monthly MP</p>
