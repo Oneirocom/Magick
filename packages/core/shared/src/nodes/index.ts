@@ -83,6 +83,7 @@ import { SplitBySentence } from './text/SplitBySentence'
 import { Trim } from './text/Trim'
 import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
+import { FullTextSearch } from './document/FullTextSearch'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -143,6 +144,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
   skill: () => new Skill(),
+  fullTextSearch: () => new FullTextSearch(),
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
   respond: () => new Respond(),

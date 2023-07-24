@@ -21,7 +21,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   function handleFileUpload() {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = '.pdf,.doc,.docx,.doc,.xlsx,.xls,.ppt,.pptx'; // Specify the file formats to accept, if needed
+    inputElement.accept = '.pdf,.doc,.docx,.doc,.xlsx,.xls,.ppt,.pptx,.md'; // Specify the file formats to accept, if needed
     inputElement.click();
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files;
@@ -49,7 +49,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
 
   const handleSaveDocument = () => {
     setLoading(true);
-    if (newDocument.type) {
+    if (newDocument.type && newDocument.content && selectedModel) {
       handleSave(selectedModel);
       setLoading(false);
     } else {

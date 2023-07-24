@@ -64,7 +64,7 @@ export class PluginEmbeddings extends Embeddings {
 
   /**
    * Gets the embeddings for the given text.(Single String)
-   * To use when number of tokens in the text is less than 8000
+   * To use when number of tokens in the text is less than 100
    * @param {string} document
    * @param {EmbeddingArgs} param
    * @returns {Promise<number[]>}
@@ -85,7 +85,7 @@ export class PluginEmbeddings extends Embeddings {
 
   /**
    * Gets the embeddings for the given text.(Array of Strings)
-   * To use when number of tokens in the text is more than 8000
+   * To use when number of tokens in the text is more than 100
    * @param {string[] || string} document
    * @param {EmbeddingArgs} params
    * @returns {Promise<number[][]>}
@@ -93,24 +93,33 @@ export class PluginEmbeddings extends Embeddings {
    */
   async embedDocumentsWithMeta(document, params) {
     if (!Array.isArray(document)) {
-      const wordsPerChunk = 8000;
+      const wordsPerChunk = 2500;
+      const slidingWindowPercentage = 0.1; // 10% sliding window on each side
       const str = document as string;
       const chunks = str.split('<<BREAK>>');
       const output = [];
+      
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i];
         const chunkLength = this.countWords(chunk);
+        const windowSize = Math.floor(wordsPerChunk * slidingWindowPercentage);
         const subChunks = [];
+        
         for (let j = 0; j < chunkLength; j += wordsPerChunk) {
-          const subChunk = chunk.substring(j, j + wordsPerChunk);
+          const start = Math.max(j - windowSize, 0);
+          const end = Math.min(j + wordsPerChunk + windowSize, chunkLength);
+          const subChunk = chunk.substring(start, end);
           subChunks.push(subChunk);
         }
+        
         output.push(subChunks);
       }
+      
       document = output.flat();
     }
     
     const embeddings = [];
+    
     for (let i = 0; i < document.length; i++) {
       const input = document[i];
       const response = await this.embeddingWithRetryWithMeta({ input: input as string }, params);

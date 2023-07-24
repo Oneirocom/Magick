@@ -1,9 +1,9 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { TableComponent } from '@magickml/client-core'
-import { CompletionProvider, pluginManager } from '@magickml/core'
+import { TableComponent, useFeathers } from '@magickml/client-core'
+import { CompletionProvider, getLogger, pluginManager } from '@magickml/core'
 import { API_ROOT_URL } from '@magickml/config'
-import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
+import { Delete, MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {
   Button,
   Container,
@@ -31,6 +31,7 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
+import { set } from 'lodash'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -76,6 +77,7 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  */
 function DocumentTable({ documents, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
+  const { client: feathersClient } = useFeathers();
   const filteredProviders = pluginManager.getCompletionProviders('text', [
     'embedding',
   ]) as CompletionProvider[]
@@ -85,8 +87,9 @@ function DocumentTable({ documents, updateCallback }) {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(0)
-
+  const FeathersContext = useFeathers()
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -109,7 +112,10 @@ function DocumentTable({ documents, updateCallback }) {
         <>
           <IconButton
             aria-label="more"
-            onClick={document => handleActionClick(document, row)}
+            onClick={document => {
+              document.stopPropagation()
+              handleActionClick(document, row)
+            }}
             style={{ boxShadow: 'none' }}
           >
             <MoreHoriz />
@@ -190,15 +196,38 @@ function DocumentTable({ documents, updateCallback }) {
     setSelectedRow(null)
   }
 
+  // Handle multi document deletion
+  const handleDeleteMany = async (event: any) => {
+    const ids = selectedRows.join('&');
+    const client = FeathersContext.client;
+    selectedRows.forEach(async id => {
+      const isDel  = await client.service('documents').remove(id);
+      if (!isDel) {
+        enqueueSnackbar('Error deleting Event', { variant: 'error' });
+        return;
+      }
+      enqueueSnackbar('Documents deleted', { variant: 'success' });
+      // Update the table data with the updated data from the server
+      updateCallback();
+      // Clear the selected rows
+      setSelectedRows([]);
+  
+      const updatedPageLength = page.length - selectedRows.length;
+      // Check if there are no more documents on the current page
+      if (updatedPageLength === 0 && currentPage > 0) {
+        const pageIndex = currentPage - 1;
+        setCurrentPage(pageIndex);
+        // Go to the previous page
+        gotoPage(pageIndex);
+      }
+    });
+
+  };
   // Handle document deletion
   const handleDocumentDelete = async (document: any) => {
     console.log('deleting document', document)
-    const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const client = FeathersContext.client
+    const isDeleted = await client.service('documents').remove(selectedRow.id)
     if (isDeleted) enqueueSnackbar('document deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting document', { variant: 'error' })
 
@@ -218,9 +247,10 @@ function DocumentTable({ documents, updateCallback }) {
     () => flatRows.map(row => row.original),
     [flatRows]
   )
-
   // Create mode state
   const [createMode, setCreateMode] = useState(false)
+  // KB View
+  const [kbView, setKbView] = useState(false)
   // State for new document
   const [newDocument, setNewDocument] = useState({
     type: '',
@@ -231,46 +261,41 @@ function DocumentTable({ documents, updateCallback }) {
   })
 // Handle save action
 const handleSave = async (selectedModel) => {
-  // call documents endpoint
-  const result = await fetch(`${API_ROOT_URL}/documents`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      date: new Date().toISOString(),
-      ...newDocument,
-      projectId: config.projectId,
-      modelName: selectedModel.model,
-      secrets: localStorage.getItem('secrets'),
-    }),
-  });
-  // Check if the save operation was successful
-  if (result.ok) {
-    // Reset newDocument
-    setNewDocument({
-      type: '',
-      content: '',
-      projectId: '',
-      date: '',
-      embedding: '',
-    });
-    enqueueSnackbar('Document saved successfully', { variant: 'success' });
-
-
-    // Close the modal by setting createMode to false after a delay
-    setTimeout(() => {
-      setCreateMode(false);
-    }, 2000);
-
-    // Trigger the updateCallback function to update the table after a delay
-   
+  const client = FeathersContext.client
+  const data = {
+    projectId: config.projectId,
+    ...newDocument,
+    date: new Date().toISOString(),
+    modelName: selectedModel.model,
+    secrets: localStorage.getItem('secrets'),
+  }
+  try {
+    const create = await client.service('documents').create(data)
+    if (create){
+      setNewDocument({
+        type: '',
+        content: '',
+        projectId: '',
+        date: '',
+        embedding: '',
+      });
+      enqueueSnackbar('Document saved successfully', { variant: 'success' });
+      // Close the modal by setting createMode to false after a delay
+      setTimeout(() => {
+        setCreateMode(false);
+      }, 2000);
+  
+      // Trigger the updateCallback function to update the table after a delay
       updateCallback();
+    } else {
+      enqueueSnackbar('Error saving document', { variant: 'error' });
+    }
     
-  } else {
+  } catch(err) {
+    getLogger().error(err);
     enqueueSnackbar('Error saving document', { variant: 'error' });
   }
+
 };
 
   // Show create modal
@@ -278,6 +303,9 @@ const handleSave = async (selectedModel) => {
     setCreateMode(true)
   }
 
+  const showKBView = () => {
+    kbView ? setKbView(false) : setKbView(true)
+  }
   // trigger updateCallback when createMode changes
   useEffect(() => {
     if (!createMode) {
@@ -332,7 +360,17 @@ const handleSave = async (selectedModel) => {
               </CSVLink>
             </div>
           </div>
-          <div className={`${styles.flex} ${styles.flexEnd}`}>
+          <div className={styles.flex}>
+            <Button
+              className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
+                }`}
+              onClick={handleDeleteMany}
+              variant="outlined"
+              startIcon={<Delete />}
+              disabled={selectedRows.length === 0}
+            >
+              Delete Selected({selectedRows.length})
+            </Button>
             <div className={styles.flex}>
               <GlobalFilter
                 globalFilter={globalFilter}
@@ -341,16 +379,15 @@ const handleSave = async (selectedModel) => {
             </div>
           </div>
           <TableComponent
+            allowSort={true}
+            selectedRows={selectedRows}
+            setSelected={setSelectedRows}
             rows={rows}
-            page={page}
             count={pageOptions.length}
-            selectedRows={[]}
-            handleSorting={handleSort}
-            setSelected={() => {
-              console.log('set selected not implemented for this table')
-            }}
+            page={page}
             column={columns}
             handlePageChange={handlePageChange}
+            handleSorting={handleSort}
           />
           <ActionMenu
             anchorEl={anchorEl}

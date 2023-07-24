@@ -69,33 +69,44 @@ export class DocumentService<
    * @return {Promise<any>} The found documents
    */
   async find(params?: ServiceParams): Promise<any> {
-    const db = app.get('dbClient')
+    const db = app.get('dbClient');
     if (params.query.embedding) {
-      const param = params.query
+      const param = params.query;
+      const keywords = param.content ? param.content.split(' ') : [];
+  
       const querys = await db('documents')
         .select('*')
-        .where({
-          ...(param.type && { type: param.type }),
-          ...(param.id && { id: param.id }),
-          ...(param.sender && { sender: param.sender }),
-          ...(param.client && { client: param.client }),
-          ...(param.channel && { channel: param.channel }),
-          ...(param.projectId && { projectId: param.projectId }),
-          ...(param.content && { content: param.content }),
+        .where((builder) => {
+          builder.where({
+            ...(param.type && { type: param.type }),
+            ...(param.id && { id: param.id }),
+            ...(param.sender && { sender: param.sender }),
+            ...(param.client && { client: param.client }),
+            ...(param.channel && { channel: param.channel }),
+            ...(param.projectId && { projectId: param.projectId }),
+          });
+  
+          if (param.content) {
+            builder.where((innerBuilder) => {
+              keywords.forEach((keyword) => {
+                innerBuilder.orWhere('content', 'ILIKE', `%${keyword}%`);
+              });
+            });
+          }
         })
         .select(
           db.raw(
-            `(embedding <=> '${JSON.stringify(
-              params.query.embedding
-            )}') AS distance`
+            `(embedding <=> '${JSON.stringify(params.query.embedding)}') AS distance`
           )
         )
         .orderBy('distance', 'asc')
-        .limit(param.$limit)
-      return { data: querys }
+        .limit(param.$limit);
+  
+      return { data: querys };
     }
-    const res = await super.find(params)
-    return { data: (res as unknown as { data: Array<any> }).data }
+  
+    const res = await super.find(params);
+    return { data: (res as unknown as { data: Array<any> }).data };
   }
 }
 
