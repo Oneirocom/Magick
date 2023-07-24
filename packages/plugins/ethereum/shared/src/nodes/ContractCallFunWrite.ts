@@ -15,7 +15,7 @@ import {
 } from '@magickml/core';
 
 import * as ethers from 'ethers';
-import { nativeNetworks } from '@magickml/plugin-ethereum-shared'
+import { nativeNetworks } from '../';
 
 /** Call a write function from a contract */
 const info = 'Call a write function from a contract';
@@ -126,9 +126,11 @@ export class ContractCallFunWrite extends MagickComponent<Promise<WorkerReturn>>
     } else {
       result = await contract.functions[functionName]();
     }
+    // const res = await result.wait();
+    // console.log('res', res);
 
     return {
-      output: result.hash,
+      output: result,
     };
   }
 }

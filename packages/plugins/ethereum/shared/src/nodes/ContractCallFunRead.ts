@@ -13,7 +13,7 @@ import {
   MagickWorkerInputs,
 } from '@magickml/core';
 import * as ethers from 'ethers';
-import { nativeNetworks } from '@magickml/plugin-ethereum-shared'
+import { nativeNetworks } from '../';
 
 const info = 'Call an arbitrary function from a EVM contract';
 
@@ -115,7 +115,7 @@ export class ContractCallFunRead extends MagickComponent<Promise<WorkerReturn>> 
     }
 
     return {
-      output: result,
+      output: result[0],
     }
   }
 }

@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import Rete from 'rete';
 import { v4 as uuidv4 } from 'uuid';
 import * as ethers from 'ethers';
-import { nativeNetworks } from '@magickml/plugin-ethereum-shared';
+import { nativeNetworks } from '../index';
 
 import {
   anySocket,

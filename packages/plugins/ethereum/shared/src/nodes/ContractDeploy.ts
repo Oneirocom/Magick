@@ -125,14 +125,14 @@ export class ContractDeploy extends MagickComponent<Promise<WorkerReturn>> {
     const wallet = new ethers.Wallet(secrets.ethereum_private_key, provider);
     const factory = new ethers.ContractFactory(contractAbi, contractByteCode, wallet);
     const transactionDeploy = factory.getDeployTransaction();
-    const feeData = await wallet.getFeeData();
+    // const feeData = await wallet.getFeeData();
 
     const tx = await wallet.sendTransaction({
       data: transactionDeploy.data,
-      gasPrice: feeData.gasPrice ?? undefined,
-      gasLimit: 20000000,
+      gasPrice: nativeNetworks[chainId].feeData.gasPrice,
+      gasLimit: nativeNetworks[chainId].feeData.gasLimit,
     });
-    const contractAddress = await tx.wait();
+    // const contractAddress = await tx.wait();
 
     this._task.closed = [];
 
@@ -140,7 +140,7 @@ export class ContractDeploy extends MagickComponent<Promise<WorkerReturn>> {
     return {
       output: tx.hash,
       tx: tx.hash,
-      contract: contractAddress.contractAddress,
+      contract: "contractAddress.contractAddress",
     };
   }
 }

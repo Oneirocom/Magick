@@ -85,7 +85,7 @@ export class Solidity extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'optimization_number',
       name: 'Oprimization Number',
       defaultValue: 200,
-      tooltip: 'Input for number of optimizations'
+      tooltip: 'This is an input for optimizations number'
     });
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
