@@ -396,17 +396,27 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
               <Typography variant="body1">New Folder</Typography>
             </div>
             <Divider />
-            <div className={styles.hideMenuItem}>
+            <div
+              className={styles.hideMenuItem}
+              onClick={() => {
+                navigate('/magick')
+              }}
+            >
               <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
               <Typography variant="body1">New Spell</Typography>
             </div>
             <Divider />
             <div className={styles.hideMenuItem}>
               <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">New Prompt</Typography>
+              <Typography variant="body1"> New Prompt</Typography>
             </div>
             <Divider />
-            <div className={styles.hideMenuItem}>
+            <div
+              className={styles.hideMenuItem}
+              onClick={() => {
+                navigate('/documents')
+              }}
+            >
               <DescriptionOutlinedIcon sx={{ mr: 1 }} />
               <Typography variant="body1">New Document</Typography>
             </div>
