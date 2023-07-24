@@ -1,9 +1,9 @@
 {
-    "id": "9c4cb61f-f65b-437c-a9e3-5128eac75537",
+    "id": "591a67e2-44d7-460b-b847-be4fa9d6f1ec",
     "name": "Ethereum Demo",
     "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-    "hash": "a9d29ccb0df9d8b3c6bcdbafc5b76c4f",
-    "createdAt": "1687711809980",
+    "hash": "1e95f3c98b01a156c04f4eb39f5fa4f9",
+    "createdAt": "1687802468264",
     "updatedAt": null,
     "graph": {
         "id": "demo@0.1.0",
@@ -268,7 +268,15 @@
                         "connections": []
                     },
                     "contract_abi": {
-                        "connections": []
+                        "connections": [
+                            {
+                                "node": 301,
+                                "output": "output",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
                     }
                 },
                 "outputs": {
@@ -379,8 +387,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    512
+                    -208,
+                    640
                 ],
                 "name": "Input"
             },
@@ -461,8 +469,8 @@
                     }
                 },
                 "position": [
-                    128,
-                    512
+                    144,
+                    640
                 ],
                 "name": "PluginEthGetERC20TokenBalance"
             },
@@ -512,8 +520,8 @@
                     }
                 },
                 "position": [
-                    448,
-                    512
+                    496,
+                    640
                 ],
                 "name": "Output"
             },
@@ -545,8 +553,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    1056
+                    -208,
+                    1184
                 ],
                 "name": "Input"
             },
@@ -596,8 +604,8 @@
                     }
                 },
                 "position": [
-                    464,
-                    1056
+                    496,
+                    1184
                 ],
                 "name": "Output"
             },
@@ -624,8 +632,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    1216
+                    -208,
+                    1344
                 ],
                 "name": "String Variable"
             },
@@ -652,8 +660,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    1312
+                    -208,
+                    1440
                 ],
                 "name": "Number Variable"
             },
@@ -724,8 +732,8 @@
                     }
                 },
                 "position": [
-                    128,
-                    1056
+                    144,
+                    1184
                 ],
                 "name": "PluginEthGetNativeTokenBalance"
             },
@@ -752,8 +760,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    768
+                    -208,
+                    896
                 ],
                 "name": "String Variable"
             },
@@ -780,8 +788,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    672
+                    -208,
+                    800
                 ],
                 "name": "Number Variable"
             },
@@ -808,8 +816,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    880
+                    -208,
+                    1008
                 ],
                 "name": "String Variable"
             },
@@ -912,7 +920,7 @@
                     "trigger": {
                         "connections": [
                             {
-                                "node": 286,
+                                "node": 285,
                                 "input": "trigger",
                                 "data": {
                                     "hello": "hello"
@@ -925,8 +933,8 @@
                     }
                 },
                 "position": [
-                    -192,
-                    1536
+                    -208,
+                    1600
                 ],
                 "name": "Input"
             },
@@ -940,7 +948,7 @@
                     "trigger": {
                         "connections": [
                             {
-                                "node": 286,
+                                "node": 284,
                                 "output": "trigger",
                                 "data": {
                                     "hello": "hello"
@@ -951,8 +959,8 @@
                     "bytecode": {
                         "connections": [
                             {
-                                "node": 286,
-                                "output": "bytecode",
+                                "node": 302,
+                                "output": "output",
                                 "data": {
                                     "hello": "hello"
                                 }
@@ -962,8 +970,8 @@
                     "abi": {
                         "connections": [
                             {
-                                "node": 286,
-                                "output": "abi",
+                                "node": 303,
+                                "output": "output",
                                 "data": {
                                     "hello": "hello"
                                 }
@@ -1010,73 +1018,10 @@
                     }
                 },
                 "position": [
-                    480,
-                    1536
+                    144,
+                    1600
                 ],
                 "name": "PluginEthContractDeploy"
-            },
-            "286": {
-                "id": 286,
-                "data": {
-                    "code": "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.1;\n\ncontract SimpleContract {\n\n    uint public myValue = 50;\n    string public myString = \"Hello World!\";\n\n    function setValue(uint _myValue) public {\n        myValue = _myValue;\n    }\n\n    function setString(string memory _myString) public {\n        myString = _myString;\n    }\n\n}\n",
-                    "success": false,
-                    "socketKey": "2eb7f395-4435-4804-b3c7-e208023b4844",
-                    "optimization_enable": false,
-                    "optimization_number": 200
-                },
-                "inputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 284,
-                                "output": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "outputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 285,
-                                "input": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "bytecode": {
-                        "connections": [
-                            {
-                                "node": 285,
-                                "input": "bytecode",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "abi": {
-                        "connections": [
-                            {
-                                "node": 285,
-                                "input": "abi",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "position": [
-                    144,
-                    1536
-                ],
-                "name": "PluginEthSolidity"
             },
             "287": {
                 "id": 287,
@@ -1122,8 +1067,8 @@
                     }
                 },
                 "position": [
-                    816,
-                    1536
+                    496,
+                    1600
                 ],
                 "name": "Output"
             },
@@ -1132,6 +1077,7 @@
                 "data": {
                     "name": "Input - Contract Write",
                     "isInput": true,
+                    "success": false,
                     "useData": true,
                     "inputName": "Contract Write",
                     "socketKey": "b8452ebf-b659-4371-bd8b-f1f3d816235f"
@@ -1141,7 +1087,7 @@
                     "trigger": {
                         "connections": [
                             {
-                                "node": 290,
+                                "node": 291,
                                 "input": "trigger",
                                 "data": {
                                     "hello": "hello"
@@ -1154,90 +1100,23 @@
                     }
                 },
                 "position": [
-                    -192,
-                    1920
+                    -208,
+                    2080
                 ],
                 "name": "Input"
             },
-            "290": {
-                "id": 290,
+            "291": {
+                "id": 291,
                 "data": {
-                    "code": "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.1;\n\ncontract SimpleContract {\n\n    uint public myValue = 50;\n    string public myString = \"Hello World!\";\n\n    function setValue(uint _myValue) public {\n        myValue = _myValue;\n    }\n\n    function setString(string memory _myString) public {\n        myString = _myString;\n    }\n\n}\n",
-                    "socketKey": "83d4a5f5-9e1a-4742-95c8-5c97d8c645bc",
-                    "optimization_enable": false,
-                    "optimization_number": 200
+                    "error": false,
+                    "socketKey": "c6480a9b-6369-431b-9811-87fd966602e0",
+                    "success": false
                 },
                 "inputs": {
                     "trigger": {
                         "connections": [
                             {
                                 "node": 289,
-                                "output": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "outputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 295,
-                                "input": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "bytecode": {
-                        "connections": [
-                            {
-                                "node": 295,
-                                "input": "bytecode",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "abi": {
-                        "connections": [
-                            {
-                                "node": 295,
-                                "input": "abi",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            },
-                            {
-                                "node": 291,
-                                "input": "contract_abi",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "position": [
-                    144,
-                    1920
-                ],
-                "name": "PluginEthSolidity"
-            },
-            "291": {
-                "id": 291,
-                "data": {
-                    "socketKey": "c6480a9b-6369-431b-9811-87fd966602e0"
-                },
-                "inputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 295,
                                 "output": "trigger",
                                 "data": {
                                     "hello": "hello"
@@ -1259,8 +1138,8 @@
                     "contract_address": {
                         "connections": [
                             {
-                                "node": 295,
-                                "output": "contract",
+                                "node": 304,
+                                "output": "output",
                                 "data": {
                                     "hello": "hello"
                                 }
@@ -1292,8 +1171,8 @@
                     "contract_abi": {
                         "connections": [
                             {
-                                "node": 290,
-                                "output": "abi",
+                                "node": 339,
+                                "output": "output",
                                 "data": {
                                     "hello": "hello"
                                 }
@@ -1326,8 +1205,8 @@
                     }
                 },
                 "position": [
-                    816,
-                    1920
+                    144,
+                    2080
                 ],
                 "name": "PluginEthContractWrite"
             },
@@ -1337,7 +1216,8 @@
                     "name": "Output - Default",
                     "isOutput": true,
                     "socketKey": "946efb41-b541-43d2-8f1b-cdd6c3618a3e",
-                    "sendToPlaytest": true
+                    "sendToPlaytest": true,
+                    "success": false
                 },
                 "inputs": {
                     "trigger": {
@@ -1375,8 +1255,8 @@
                     }
                 },
                 "position": [
-                    1152,
-                    1920
+                    496,
+                    2080
                 ],
                 "name": "Output"
             },
@@ -1394,13 +1274,6 @@
                     "output": {
                         "connections": [
                             {
-                                "node": 295,
-                                "input": "chain_id",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            },
-                            {
                                 "node": 291,
                                 "input": "chain_id",
                                 "data": {
@@ -1411,8 +1284,8 @@
                     }
                 },
                 "position": [
-                    144,
-                    2096
+                    -208,
+                    2224
                 ],
                 "name": "Number Variable"
             },
@@ -1439,100 +1312,16 @@
                     }
                 },
                 "position": [
-                    144,
-                    2192
+                    -208,
+                    2416
                 ],
                 "name": "String Variable"
-            },
-            "295": {
-                "id": 295,
-                "data": {
-                    "error": false,
-                    "socketKey": "28892f61-c284-4530-a118-dd27303956d9"
-                },
-                "inputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 290,
-                                "output": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "bytecode": {
-                        "connections": [
-                            {
-                                "node": 290,
-                                "output": "bytecode",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "abi": {
-                        "connections": [
-                            {
-                                "node": 290,
-                                "output": "abi",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "chain_id": {
-                        "connections": [
-                            {
-                                "node": 293,
-                                "output": "output",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "outputs": {
-                    "trigger": {
-                        "connections": [
-                            {
-                                "node": 291,
-                                "input": "trigger",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "contract": {
-                        "connections": [
-                            {
-                                "node": 291,
-                                "input": "contract_address",
-                                "data": {
-                                    "hello": "hello"
-                                }
-                            }
-                        ]
-                    },
-                    "tx": {
-                        "connections": []
-                    }
-                },
-                "position": [
-                    480,
-                    1920
-                ],
-                "name": "PluginEthContractDeploy"
             },
             "297": {
                 "id": 297,
                 "data": {
                     "_var": "example",
+                    "success": false,
                     "keepEmpty": false
                 },
                 "inputs": {},
@@ -1550,8 +1339,8 @@
                     }
                 },
                 "position": [
-                    144,
-                    2288
+                    -208,
+                    2512
                 ],
                 "name": "Array Variable"
             },
@@ -1579,10 +1368,151 @@
                     }
                 },
                 "position": [
-                    144,
-                    1712
+                    -208,
+                    1936
                 ],
                 "name": "Number Variable"
+            },
+            "301": {
+                "id": 301,
+                "data": {
+                    "_var": "[{\"constant\": true, \"inputs\": [], \"name\": \"symbol\", \"outputs\": [{\"name\": \"\", \"type\": \"string\"}], \"payable\": false, \"stateMutability\": \"view\", \"type\": \"function\"}]",
+                    "name": "ERC20 ABI symbol",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 248,
+                                "input": "contract_abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    448
+                ],
+                "name": "String Variable"
+            },
+            "302": {
+                "id": 302,
+                "data": {
+                    "_var": "603260005560c0604052600c60809081526b48656c6c6f20576f726c642160a01b60a05260019061003090826100e2565b5034801561003d57600080fd5b506101a1565b634e487b7160e01b600052604160045260246000fd5b600181811c9082168061006d57607f821691505b60208210810361008d57634e487b7160e01b600052602260045260246000fd5b50919050565b601f8211156100dd57600081815260208120601f850160051c810160208610156100ba5750805b601f850160051c820191505b818110156100d9578281556001016100c6565b5050505b505050565b81516001600160401b038111156100fb576100fb610043565b61010f816101098454610059565b84610093565b602080601f831160018114610144576000841561012c5750858301515b600019600386901b1c1916600185901b1785556100d9565b600085815260208120601f198616915b8281101561017357888601518255948401946001909101908401610154565b50858210156101915787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b6103f5806101b06000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c806347f1aae714610051578063492bfa181461006d57806355241077146100825780637fcaf66614610097575b600080fd5b61005a60005481565b6040519081526020015b60405180910390f35b6100756100aa565b6040516100649190610148565b610095610090366004610196565b600055565b005b6100956100a53660046101c5565b610138565b600180546100b790610276565b80601f01602080910402602001604051908101604052809291908181526020018280546100e390610276565b80156101305780601f1061010557610100808354040283529160200191610130565b820191906000526020600020905b81548152906001019060200180831161011357829003601f168201915b505050505081565b600161014482826102ff565b5050565b600060208083528351808285015260005b8181101561017557858101830151858201604001528201610159565b506000604082860101526040601f19601f8301168501019250505092915050565b6000602082840312156101a857600080fd5b5035919050565b634e487b7160e01b600052604160045260246000fd5b6000602082840312156101d757600080fd5b813567ffffffffffffffff808211156101ef57600080fd5b818401915084601f83011261020357600080fd5b813581811115610215576102156101af565b604051601f8201601f19908116603f0116810190838211818310171561023d5761023d6101af565b8160405282815287602084870101111561025657600080fd5b826020860160208301376000928101602001929092525095945050505050565b600181811c9082168061028a57607f821691505b6020821081036102aa57634e487b7160e01b600052602260045260246000fd5b50919050565b601f8211156102fa57600081815260208120601f850160051c810160208610156102d75750805b601f850160051c820191505b818110156102f6578281556001016102e3565b5050505b505050565b815167ffffffffffffffff811115610319576103196101af565b61032d816103278454610276565b846102b0565b602080601f831160018114610362576000841561034a5750858301515b600019600386901b1c1916600185901b1785556102f6565b600085815260208120601f198616915b8281101561039157888601518255948401946001909101908401610372565b50858210156103af5787850151600019600388901b60f8161c191681555b5050505050600190811b0190555056fea2646970667358221220927de70116967aa085155d83ab0264a2683e1f6f9692ee9be4f2c5c8417cf5d964736f6c63430008130033",
+                    "name": "Contract Bytecode",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "input": "bytecode",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    1744
+                ],
+                "name": "String Variable"
+            },
+            "303": {
+                "id": 303,
+                "data": {
+                    "_var": "[ \t{ \t\t\"inputs\": [], \t\t\"name\": \"myString\", \t\t\"outputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"string\", \t\t\t\t\"name\": \"\", \t\t\t\t\"type\": \"string\" \t\t\t} \t\t], \t\t\"stateMutability\": \"view\", \t\t\"type\": \"function\" \t}, \t{ \t\t\"inputs\": [], \t\t\"name\": \"myValue\", \t\t\"outputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"uint256\", \t\t\t\t\"name\": \"\", \t\t\t\t\"type\": \"uint256\" \t\t\t} \t\t], \t\t\"stateMutability\": \"view\", \t\t\"type\": \"function\" \t}, \t{ \t\t\"inputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"string\", \t\t\t\t\"name\": \"_myString\", \t\t\t\t\"type\": \"string\" \t\t\t} \t\t], \t\t\"name\": \"setString\", \t\t\"outputs\": [], \t\t\"stateMutability\": \"nonpayable\", \t\t\"type\": \"function\" \t}, \t{ \t\t\"inputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"uint256\", \t\t\t\t\"name\": \"_myValue\", \t\t\t\t\"type\": \"uint256\" \t\t\t} \t\t], \t\t\"name\": \"setValue\", \t\t\"outputs\": [], \t\t\"stateMutability\": \"nonpayable\", \t\t\"type\": \"function\" \t} ]",
+                    "name": "Contract ABI",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 285,
+                                "input": "abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    1840
+                ],
+                "name": "String Variable"
+            },
+            "304": {
+                "id": 304,
+                "data": {
+                    "_var": "0x1e592181f159b53cbb251f1109f27817f32a1997",
+                    "name": "Demo Contract Address",
+                    "success": false,
+                    "isPublic": false
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "input": "contract_address",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    2320
+                ],
+                "name": "String Variable"
+            },
+            "339": {
+                "id": 339,
+                "data": {
+                    "_var": "[ \t{ \t\t\"inputs\": [], \t\t\"name\": \"myString\", \t\t\"outputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"string\", \t\t\t\t\"name\": \"\", \t\t\t\t\"type\": \"string\" \t\t\t} \t\t], \t\t\"stateMutability\": \"view\", \t\t\"type\": \"function\" \t}, \t{ \t\t\"inputs\": [], \t\t\"name\": \"myValue\", \t\t\"outputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"uint256\", \t\t\t\t\"name\": \"\", \t\t\t\t\"type\": \"uint256\" \t\t\t} \t\t], \t\t\"stateMutability\": \"view\", \t\t\"type\": \"function\" \t}, \t{ \t\t\"inputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"string\", \t\t\t\t\"name\": \"_myString\", \t\t\t\t\"type\": \"string\" \t\t\t} \t\t], \t\t\"name\": \"setString\", \t\t\"outputs\": [], \t\t\"stateMutability\": \"nonpayable\", \t\t\"type\": \"function\" \t}, \t{ \t\t\"inputs\": [ \t\t\t{ \t\t\t\t\"internalType\": \"uint256\", \t\t\t\t\"name\": \"_myValue\", \t\t\t\t\"type\": \"uint256\" \t\t\t} \t\t], \t\t\"name\": \"setValue\", \t\t\"outputs\": [], \t\t\"stateMutability\": \"nonpayable\", \t\t\"type\": \"function\" \t} ]",
+                    "name": "Contract ABI",
+                    "success": false,
+                    "isPublic": false,
+                    "socketKey": null
+                },
+                "inputs": {},
+                "outputs": {
+                    "output": {
+                        "connections": [
+                            {
+                                "node": 291,
+                                "input": "contract_abi",
+                                "data": {
+                                    "hello": "hello"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    -208,
+                    2608
+                ],
+                "name": "String Variable"
             }
         },
         "comments": []
