@@ -37,7 +37,7 @@ class TaskManager {
    * @param {any} agent - Agent to add.
    * @param {any} agentData - Data for the agent.
    */
-  addAgent({ _spellRunner, agent, agentData }) {
+  addAgent({ agent, agentData }) {
     if (!agentData) return console.log('No data for this agent', agent.id)
     if (!agentData.data?.task_enabled)
       return console.log('Task is not enabled for this agent')

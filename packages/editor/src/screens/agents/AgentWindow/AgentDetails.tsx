@@ -48,7 +48,7 @@ const AgentDetails = ({
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
-  const [enable, _setEnable] = useState(onLoadEnables)
+  const [enable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 

@@ -109,7 +109,7 @@ export default class SpellManager {
   }
 
   async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
-    const runner = this.getSpellRunner(spellId)
+    this.logger.error(`You should use the agent commander to run spells instead of the spellManager run function`)
 
     const result = await app.get('agentCommander').runSpellWithResponse({
       inputs,

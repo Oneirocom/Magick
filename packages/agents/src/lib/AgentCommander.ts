@@ -1,11 +1,11 @@
 import EventEmitter from "events"
 import type { Agent } from "packages/core/server/src/services/agents/agents.schema"
-import { type PubSub, type MessageQueue } from '@magickml/server-core'
+import { type PubSub } from '@magickml/server-core'
 import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE, getLogger } from '@magickml/core'
 import type { MagickSpellInput } from "@magickml/core"
 import { v4 as uuidv4 } from 'uuid'
 import type pino from "pino"
-import { AgentResult, AgentRunJob } from "./Agent"
+import { AgentResult } from "./Agent"
 
 export type RunRootSpellArgs = {
     agent: Agent,
