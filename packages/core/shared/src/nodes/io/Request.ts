@@ -53,7 +53,6 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     const headerInput = new Rete.Input('headers', 'Headers', objectSocket)
     const urlInput = new Rete.Input('url', 'URL', stringSocket)
     const paramsInput = new Rete.Input('params', 'Params', objectSocket)
-    const methodInput = new Rete.Input('method', 'Method', objectSocket)
 
     // Initialize controls used in the node
     const nameControl = new InputControl({
@@ -108,20 +107,23 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     // Extract node and input data
     const name = node.data.name as string
     node.name = name
+
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
     }, {} as Record<string, unknown>)
 
     // Parse headers or set an empty object if headers not provided
-    const headers =
-      node.data.headers && node.data.headers !== ''
-        ? JSON.parse((node.data.headers as string) ?? '{}')
-        : {}
+    const headers = inputs['headers'] ??
+      (
+        node.data.headers && node.data.headers !== ''
+          ? JSON.parse((node.data.headers as string) ?? '{}')
+          : {}
+      )
 
     // Fetch URL and method from the node data
-    let url = node?.data?.url as string
-    const method = (node?.data?.method as string)?.toLowerCase().trim()
+    let url = inputs["url"] as string ?? node?.data?.url as string
+    const method = inputs["method"] as string ?? (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
       url = url.replace('server', API_ROOT_URL as string)
     }
