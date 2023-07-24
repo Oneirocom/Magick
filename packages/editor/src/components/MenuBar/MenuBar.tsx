@@ -468,13 +468,14 @@ const MenuBar = () => {
    *
    * @param {() => void} func
    */
-  const handleClick = (func: () => void) => {
-    // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
-    // Keeping this intact just in case.
-    setMenuVisibility(!menuVisibility)
-    // No need for this
-    // func()
-  }
+  
+  // const handleClick = (func: () => void) => {
+  //   // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
+  //   // Keeping this intact just in case.
+  //   setMenuVisibility(!menuVisibility)
+  //   // No need for this
+  //   // func()
+  // }
 
   const handleMenuIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
