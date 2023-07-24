@@ -3,7 +3,6 @@ import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
-    arraySocket,
   documentSocket,
   embeddingSocket,
   stringSocket,

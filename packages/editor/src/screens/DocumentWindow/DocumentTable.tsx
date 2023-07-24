@@ -2,7 +2,6 @@
 // Import statements kept as-is
 import { TableComponent, useFeathers } from '@magickml/client-core'
 import { CompletionProvider, getLogger, pluginManager } from '@magickml/core'
-import { API_ROOT_URL } from '@magickml/config'
 import { Delete, MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -31,7 +30,6 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
-import { set } from 'lodash'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -77,14 +75,11 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  */
 function DocumentTable({ documents, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
-  const { client: feathersClient } = useFeathers();
   const filteredProviders = pluginManager.getCompletionProviders('text', [
     'embedding',
   ]) as CompletionProvider[]
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
-
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
@@ -198,7 +193,6 @@ function DocumentTable({ documents, updateCallback }) {
 
   // Handle multi document deletion
   const handleDeleteMany = async (event: any) => {
-    const ids = selectedRows.join('&');
     const client = FeathersContext.client;
     selectedRows.forEach(async id => {
       const isDel  = await client.service('documents').remove(id);
@@ -303,9 +297,6 @@ const handleSave = async (selectedModel) => {
     setCreateMode(true)
   }
 
-  const showKBView = () => {
-    kbView ? setKbView(false) : setKbView(true)
-  }
   // trigger updateCallback when createMode changes
   useEffect(() => {
     if (!createMode) {
