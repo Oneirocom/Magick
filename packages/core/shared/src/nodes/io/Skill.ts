@@ -2,7 +2,6 @@ import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { stringSocket, taskSocket, triggerSocket } from '../../sockets'
-import { SpellManager } from '../../spellManager'
 import {
   AgentTask,
   MagickNode,
