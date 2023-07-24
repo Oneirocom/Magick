@@ -17,7 +17,6 @@ import { useConfig } from '@magickml/client-core'
 import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
 import {
   TableInstance,
   useAsyncDebounce,
@@ -79,7 +78,6 @@ function DocumentTable({ documents, updateCallback }) {
     'embedding',
   ]) as CompletionProvider[]
   const config = useConfig()
-  const globalConfig = useSelector((state: any) => state.globalConfig)
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
@@ -243,8 +241,6 @@ function DocumentTable({ documents, updateCallback }) {
   )
   // Create mode state
   const [createMode, setCreateMode] = useState(false)
-  // KB View
-  const [kbView, setKbView] = useState(false)
   // State for new document
   const [newDocument, setNewDocument] = useState({
     type: '',
