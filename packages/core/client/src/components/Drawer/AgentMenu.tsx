@@ -38,12 +38,6 @@ function AgentMenu() {
     setOpenMenu2(null)
   }
 
-  // const styledDivider = styled(Divider)`
-  //   background-color: #2B2B30;
-  //   margin-top: 4px;
-  //   margin-bottom: 4px;
-  // `;
-
   const StyledDivider = styled(Divider)(({ theme }) => ({
     backgroundColor: 'black',
     marginTop: '4px',
