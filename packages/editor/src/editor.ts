@@ -36,7 +36,6 @@ import {
   SocketOverridePlugin,
   SocketPlugin,
   SocketPluginArgs,
-  TaskPlugin,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -183,9 +182,6 @@ export const initEditor = function ({
   if (client) {
     editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
-  } else {
-    editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
-    editor.use(TaskPlugin)
   }
 
   // Set up the SelectionPlugin
@@ -234,6 +230,7 @@ export const initEditor = function ({
 
   // Functions to load and run spells
   editor.loadSpell = async (spell: SpellInterface) => {
+    console.log('Loading spell in editor')
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))

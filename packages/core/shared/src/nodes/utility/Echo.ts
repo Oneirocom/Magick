@@ -6,7 +6,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { stringSocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -47,10 +47,10 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The node with its inputs and outputs.
    */
   builder(node: MagickNode) {
-    const inp = new Rete.Input('string', 'String', stringSocket)
+    const inp = new Rete.Input('source', 'Source', anySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const outp = new Rete.Output('output', 'String', stringSocket)
+    const outp = new Rete.Output('output', 'Output', anySocket)
 
     return node
       .addInput(dataInput)
@@ -71,7 +71,7 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs
   ): Promise<WorkerReturn> {
-    const input = inputs.string[0] as string
+    const input = inputs.source[0] as string
 
     return {
       output: input,
