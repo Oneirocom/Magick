@@ -133,7 +133,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { projectId } = _context
     if (agent) {
-      const spellManager = agent.spellManager as SpellManager
       const runComponentArgs = {
         inputs: {
           'Input - Default': task,
