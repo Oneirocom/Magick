@@ -6,7 +6,8 @@
   "implicitDependencies": [
     "@magickml/server-core",
     "@magickml/core",
-    "@magickml/agents"
+    "@magickml/agents",
+    "@magickml/plugin-*"
   ],
   "targets": {
     "build": {

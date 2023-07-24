@@ -43,6 +43,8 @@ const validateRootSpell = async (context: HookContext) => {
   return context
 }
 
+const AGENT_EVENTS = ['log', 'result', 'spell']
+
 /**
  * Configure the agent service by registering it, its hooks, and its options.
  * @param app - The Feathers application
@@ -51,19 +53,44 @@ export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
   app.use('agents', new AgentService(getOptions(app), app), {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'run'],
-    events: ['log', 'result'],
+    events: AGENT_EVENTS,
   })
 
   const pubSub = app.get<'pubsub'>('pubsub')
 
+  // this handles relaying all agent messages up to connected clients.
   pubSub.patternSubscribe('agent*', (message, channel) => {
-    app.service('agents').emit('log', {
+    // parse  the channel from agent:agentId:messageType
+    const agentId = channel.split(':')[1]
+
+    // parse the type of agent message
+    const messageType = channel.split(':')[2]
+
+    // check if message type is an agent event
+    if (!AGENT_EVENTS.includes(messageType)) {
+      // notify connected clients via log message that an unknown message type was received
+      app.service('agents').emit('log', {
+        channel,
+        agentId,
+        data: {
+          message: `Unknown message type ${messageType}`,
+        },
+      })
+    }
+
+    // this is where we relay messages up based upon the time.
+    // note for every custom type we need to add it to the above
+    // todo harder typing on all message transports
+    app.service('agents').emit(messageType, {
+      ...message,
+      messageType,
       channel,
-      projectId: message?.projectId,
-      data: message,
+      agentId,
     })
   })
 
+  // todo more predictable channel names and method for handling message queues
+  // similar to the above
   new BullMQ.Worker(
     'agent:run:result',
     async job => {
