@@ -35,7 +35,7 @@ const IntentWindow = (): JSX.Element => {
   const fetchIntents = async (): Promise<void> => {
     try {
       const response = await fetch(
-        `${API_ROOT_URL}/documents?projectId=${config.projectId}&metadata=${encodeURI("{ 'intent': { 'type': 'average' }}")}`,
+        `${API_ROOT_URL}/documents?projectId=${config.projectId}&metadata=${encodeURI('{"intent": { "type": "story" }}')}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,6 +44,11 @@ const IntentWindow = (): JSX.Element => {
       )
 
       const data = await response.json()
+
+      data.data = data.data.map(intent => {
+        return { ...intent, intent: intent.metadata.intent.name }
+      })
+
       setLoading(false)
       setIntents(data.data)
     } catch (error) {

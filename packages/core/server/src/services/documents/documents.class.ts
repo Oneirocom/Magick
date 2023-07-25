@@ -103,16 +103,20 @@ export class DocumentService<
               .orderBy('distance', 'asc')
         })
         .modify(function (queryBuilder) {
-          param.metadata &&
-            queryBuilder.whereRaw('metadata @> ?', [
-              JSON.stringify(param.metadata),
-            ])
+          if (param.metadata) {
+            let metadata =
+              typeof param.metadata == 'object'
+                ? JSON.stringify(param.metadata)
+                : param.metadata
+            queryBuilder.whereRaw('metadata @> ?', [metadata])
+          }
         })
         .limit(param.$limit)
 
       return { data: querys }
     }
 
+    params = { ...params, query: { ...params.query, metadata: '{}' } }
     const res = await super.find(params)
     return { data: (res as unknown as { data: Array<any> }).data }
   }
