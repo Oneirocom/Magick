@@ -1,5 +1,4 @@
-import { CloudAgentManager } from "@magickml/cloud-agent-manager"
-import { PgNotifyReporter } from "@magickml/cloud-agent-manager"
+import { CloudAgentManager, FeathersSyncReporter } from "@magickml/cloud-agent-manager"
 import { initLogger, getLogger } from "@magickml/core"
 import { app, BullQueue, initApp } from "@magickml/server-core"
 import { DATABASE_URL } from "@magickml/config"
@@ -10,7 +9,7 @@ function start() {
     logger.info("Starting cloud agent manager...")
     const manager = new CloudAgentManager({
         newQueue: new BullQueue(),
-        agentStateReporter: new PgNotifyReporter("agents", DATABASE_URL),
+        agentStateReporter: new FeathersSyncReporter(),
         pubSub: app.get('pubsub')
     });
 
