@@ -3,36 +3,36 @@ import { API_ROOT_URL } from '@magickml/config'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
-import IntentTable from './DocumentTable'
+import IntentTable from './IntentTable'
 
 
 /**
- * DocumentWindow component displays the documents of a project.
+ * IntentWindow component displays the intents of a project.
  * @returns JSX Element
  */
-const DocumentWindow = (): JSX.Element => {
+const IntentWindow = (): JSX.Element => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
-  const [documents, setDocuments] = useState<Document[] | null>(null)
+  const [intents, setIntents] = useState<Document[] | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     setLoading(true)
-    fetchDocuments()
+    fetchIntents()
   }, [])
 
   /**
    * Resets the events and fetches the updated events.
    */
-  const resetDocuments = async (): Promise<void> => {
-    await fetchDocuments()
+  const resetIntents = async (): Promise<void> => {
+    await fetchIntents()
   }
 
   /**
    * Fetches the events of the current project.
    */
-  const fetchDocuments = async (): Promise<void> => {
+  const fetchIntents = async (): Promise<void> => {
     try {
       const response = await fetch(
         `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
@@ -45,7 +45,7 @@ const DocumentWindow = (): JSX.Element => {
 
       const data = await response.json()
       setLoading(false)
-      setDocuments(data.data)
+      setIntents(data.data)
     } catch (error) {
       console.error('ERROR', error)
     }
@@ -62,9 +62,9 @@ const DocumentWindow = (): JSX.Element => {
       }}
     >
       {loading && <LoadingScreen />}
-      {documents && <IntentTable documents={documents} updateCallback={resetDocuments} />}
+      {intents && <IntentTable intents={intents} updateCallback={resetIntents} />}
     </div>
   )
 }
 
-export default DocumentWindow
+export default IntentWindow
