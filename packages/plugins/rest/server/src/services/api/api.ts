@@ -18,7 +18,7 @@ import {
 
 // Import types and classes
 import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './api.class'
+import { ApiService } from './api.class'
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
@@ -41,9 +41,8 @@ export * from './api.schema'
  */
 export const api = (app: Application) => {
   // Register our service on the Feathers application
-  app.use(apiPath, new ApiService(getOptions(app)), {
+  app.use(apiPath, new ApiService(), {
     // A list of all methods this service exposes externally
-    methods: apiMethods,
     // You can add additional custom events to be sent to clients here
     events: [],
   })

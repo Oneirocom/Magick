@@ -63,7 +63,7 @@ export async function runSpell(
   agent: any,
   app: Application
 ): Promise<any> {
-  const response = await spellrun.runComponent({
+  const response = await app.get('agentCommander').runSpell({
     inputs: {
       'Input - Discord (Text)': {
         connector: 'Discord (Text)',

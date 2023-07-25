@@ -1,4 +1,4 @@
-import { Reporter } from "../Reporter"
+import { Reporter } from "."
 import createSubscriber, { Subscriber } from "pg-listen"
 import { getLogger } from "@magickml/core"
 

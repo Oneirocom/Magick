@@ -100,6 +100,10 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { app, secrets } = module
 
+    if (!app) {
+      throw new Error('Feathers App not found in SpellByName node worker')
+    }
+
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
       query: {
@@ -122,7 +126,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { projectId } = _context
     if (agent) {
-      const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {
           'Input - Default': event,
@@ -133,7 +136,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
       const output = Object.values(outputs as any)[0]
       return {
         output,
@@ -152,7 +155,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
 
       const spellRunner = await spellManager.loadById(spellId)
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await spellRunner.runComponent(runComponentArgs)
 
       // get the first value from outputs
       const output = Object.values(outputs as any)[0]

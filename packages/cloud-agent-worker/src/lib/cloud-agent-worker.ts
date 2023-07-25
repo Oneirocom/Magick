@@ -1,12 +1,42 @@
 import { Worker, Job } from 'bullmq'
-import { bullMQConnection } from '@magickml/config'
 
-import { app } from '@magickml/server-core'
-import { Agent, AgentManager } from '@magickml/agents'
+import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue, MessageQueue } from '@magickml/server-core'
+import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
+import { v4 as uuidv4 } from 'uuid'
+import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_RUN_JOB, AGENT_UPDATE_JOB } from '@magickml/core'
 
+export interface AgentListRecord {
+  id: string
+  currentAgents: string[]
+}
+
+// I get that it's confusing extending AgentManager, but it's the best way to
+// get the functionality I want without having to rewrite a bunch of stuff.
+// Agent Managers just managed agents for a single instance of the server anyway
 export class CloudAgentWorker extends AgentManager {
+  pubSub: PubSub
+  subscriptions: Record<string, Function> = {}
+
   constructor() {
     super(app, false)
+
+    this.pubSub = app.get('pubsub')
+
+    this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
+      this.logger.info(`Agent ${agentId} deleted, removing from cloud agent worker`)
+      await this.removeAgent(agentId)
+    })
+
+    this.heartbeat()
+  }
+
+  heartbeat() {
+    this.pubSub.subscribe('cloud-agents:ping', async () => {
+      this.pubSub.publish('cloud-agents:pong', JSON.stringify({
+        id: uuidv4(),
+        currentAgents: Object.keys(this.currentAgents),
+      }))
+    })
   }
 
   async addAgent(agentId: string) {
@@ -34,8 +64,18 @@ export class CloudAgentWorker extends AgentManager {
       return
     }
 
-    const agent = new Agent(agentData, this, this.app)
-    await agent.initialize({})
+    const agent = new Agent(
+      agentData,
+      this,
+      new BullMQWorker(),
+      new RedisPubSubWrapper(),
+    )
+
+    const agentQueue = new BullQueue()
+    agentQueue.initialize(AGENT_RUN_JOB(agent.id))
+    this.listenForRun(agentQueue, agent.id)
+    this.listenForChanges(agentId)
+
 
     this.logger.debug(`Running agent add handlers for ${agentId}`)
     this.addHandlers.forEach(handler => {
@@ -45,7 +85,7 @@ export class CloudAgentWorker extends AgentManager {
     this.currentAgents[agentId] = agent
     this.logger.debug(`Finished running agent add handlers for ${agentId}`)
 
-    this.logger.info(`Created agent ${agentId}`)
+    this.logger.info(`Updated agent ${agentId}`)
   }
 
   async removeAgent(agentId: string) {
@@ -56,10 +96,14 @@ export class CloudAgentWorker extends AgentManager {
     })
 
     await this.currentAgents[agentId]?.onDestroy()
+    this.currentAgents[agentId] = null
+
+    this.pubSub.unsubscribe(AGENT_UPDATE_JOB(agentId))
+    this.pubSub.unsubscribe(AGENT_RUN_JOB(agentId))
   }
 
   async agentUpdated(agentId: string) {
-    this.logger.info(`Creating agent ${agentId}`)
+    this.logger.info(`Updating agent ${agentId}`)
     const agentDBResult = (
       await app.service('agents').find({
         query: {
@@ -69,49 +113,67 @@ export class CloudAgentWorker extends AgentManager {
     )?.data
 
     if (agentDBResult.length == 0 || !agentDBResult) {
-      this.logger.error(`Agent ${agentId} not found when creating agent`)
-      throw new Error(`Agent ${agentId} not found when creating agent`)
+      this.logger.error(`Agent ${agentId} not found when updating agent`)
+      throw new Error(`Agent ${agentId} not found when updating agent`)
     }
 
     const agent = agentDBResult[0]
 
-    if (agent.enabled) {
+    // start or stop the agent if the enabled state changed
+    if (agent.enabled && !this.currentAgents[agentId]) {
       await this.addAgent(agentId)
-      // TODO: care about runState for restarting agents
-      //   switch (agent.runState) {
-      //     case 'stopped':
-      //     case 'failed':
-      //       this.logger.info(`Starting agent ${agentId}`)
-      //       await app.service('agents').patch(agentId, {
-      //         runState: 'starting'
-      //       })
-      //     break;
-      //   }
-    } else {
+    }
+    if (!agent.enabled && this.currentAgents[agentId]) {
       await this.removeAgent(agentId)
     }
+
+    // update the agent's rootSpellId if it changed
+    // we may want to make this updating flow more robust in the future
+    if (this.currentAgents[agentId] && agent.rootSpellId != this.currentAgents[agentId].rootSpellId) {
+      this.currentAgents[agentId].rootSpellId = agent.rootSpellId
+    }
+  }
+
+  async listenForRun(agentQueue: MessageQueue, agentId: string) {
+    this.logger.debug(`Listening for run for agent ${agentId}`)
+    this.logger.debug(AGENT_RUN_JOB(agentId))
+    this.pubSub.subscribe(AGENT_RUN_JOB(agentId),
+      async (data: AgentRunJob) => {
+          this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
+          try {
+            await agentQueue.addJob(AGENT_RUN_JOB(agentId), {
+              ...data,
+              agentId: data.agentId,
+            }, data.jobId)
+        } catch (e) {
+            this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
+            throw e
+          }
+      })
+  }
+
+  async listenForChanges(agentId: string) {
+    this.pubSub.subscribe(AGENT_UPDATE_JOB(agentId), async () => {
+      this.logger.info(`Agent ${agentId} updated, updating agent`)
+      this.agentUpdated(agentId)
+    })
+    this.pubSub.subscribe(AGENT_DELETE_JOB(agentId), async () => {
+      this.logger.info(`Agent ${agentId} updated, updating agent`)
+      this.removeAgent(agentId)
+    })
   }
 
   async work() {
     this.logger.info('waiting for jobs')
+
     new Worker(
-      'agent:updates',
+      'agent:new',
       async (job: Job) => {
-        switch (job.name) {
-          case 'agent:updated':
-            this.agentUpdated(job.data.agentId)
-            break
-          default:
-            this.logger.error(
-              `Received unknown job ${job.name} from queue ${job.queueName}`
-            )
-            throw new Error(
-              `Received unknown job ${job.name} from queue ${job.queueName}`
-            )
-        }
+        this.logger.info(`Agent ${job.data.agentId} enabled, adding agent`)
+        this.agentUpdated(job.data.agentId)
       },
       {
-        connection: bullMQConnection,
+        connection: app.get('redis'),
       }
     )
   }
