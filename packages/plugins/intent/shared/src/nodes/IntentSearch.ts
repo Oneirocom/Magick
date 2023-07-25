@@ -123,12 +123,10 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
         .split(',')
         .map(parseFloat)
 
-    const metadata = { intent: { type: 'average' } }
-    const type = 'Intent'
+    const metadata = { intent: { type: 'story' } }
     const response = await app.service('documents').find({
       query: {
         projectId,
-        type,
         $limit: 1,
         embedding,
         metadata,
