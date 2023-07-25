@@ -54,16 +54,13 @@ export class CloudAgentManager {
     async run() {
         this.agentStateReporter.on('agent:updated', async (data: unknown) => {
 
-            // see the pg function "notify_agent_updated" in our migrations
-            const agent = data as Agent & { enabledChanged: boolean }
+            const agent = data as Agent
 
             this.logger.info(`Agent Updated: ${agent.id}`)
             const agentUpdatedAt = agent.updatedAt ? new Date(agent.updatedAt) : new Date()
 
-            console.log('agent enabled changed', agent.enabledChanged)
-            console.log('agent enabled', agent.enabled)
 
-            if (agent.enabledChanged && agent.enabled) {
+            if (agent.enabled) {
                 this.logger.info(`Agent ${agent.id} enabled, adding to cloud agent worker`)
                 await this.newQueue.addJob('agent:new', {
                     agentId: agent.id,

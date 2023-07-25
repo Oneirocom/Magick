@@ -121,6 +121,31 @@ const AgentDetails = ({
       })
   }
 
+
+  const formatPublicVars = (nodes) => {
+    return Object.values(nodes)
+      // get the public nodes
+      .filter((node: { data }) => node?.data?.isPublic)
+      // map to an array of objects
+      .map((node: { data; id; name }) => {
+        return {
+          id: node?.id,
+          name: node?.data?.name,
+          value:
+            node?.data?.value ||
+            node?.data?.text ||
+            node?.data?.fewshot ||
+            node?.data?._var,
+          type: node?.name,
+        }
+      })
+      // map to an object with the id as the key
+      .reduce((acc, cur) => {
+        acc[cur.id] = cur
+        return acc
+      }, {})
+  }
+
   const updatePublicVar = (spell) => {
     setSelectedAgentData({
       ...selectedAgentData,
