@@ -238,7 +238,10 @@ function IntentTable({ intents, updateCallback }) {
       },
       body: JSON.stringify({
         date: new Date().toISOString(),
-        ...newIntent,
+        type: newIntent.type,
+        content: newIntent.content,
+        embedding: newIntent.embedding,
+        metadata: `{"intent": {"name": "${newIntent.intent}", "type": "story"}}`,
         projectId: config.projectId,
         modelName: selectedModel.model,
         secrets: localStorage.getItem('secrets'),

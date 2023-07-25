@@ -9,7 +9,8 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
   const { enqueueSnackbar } = useSnackbar()
   const [newIntent, setIntent] = useState({
     type: '',
-    content: ''
+    content: '',
+    intent: ''
   });
 
   useEffect(() => {
@@ -94,6 +95,15 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
               required
             />
           </Grid>
+          <Grid item xs={6}>
+            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Intent</Typography>
+            <TextField
+              name="intent"
+              style={{ width: '100%', margin: '.5em' }}
+              onChange={(e) => setIntent({ ...newIntent, intent: e.target.value })}
+              required
+            />
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"}>Content</Typography>
@@ -106,11 +116,6 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
             multiline
             rows={5}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'}>
-            Add &lt;&lt;BREAK&gt;&gt; anywhere in your content to force a chunk break at this point
-          </Typography>
         </Grid>
       </Grid>
     </Modal>
