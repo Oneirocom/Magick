@@ -1,41 +1,20 @@
 import { Modal } from '@magickml/client-core';
-import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
+import { Backdrop, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
-import { convertFileToText } from './documentconvert';
-import styles from './index.module.scss';
 import { useSnackbar } from 'notistack'
 
-const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, providerList }) => {
+const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, providerList }) => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar()
-  const [newDocument, setDocument] = useState({
+  const [newIntent, setIntent] = useState({
     type: '',
     content: ''
   });
 
   useEffect(() => {
-    setNewDocument(newDocument);
-  }, [newDocument]);
-
-  function handleFileUpload() {
-    const inputElement = document.createElement('input');
-    inputElement.type = 'file';
-    inputElement.accept = '.pdf,.doc,.docx,.doc,.xlsx,.xls,.ppt,.pptx'; // Specify the file formats to accept, if needed
-    inputElement.click();
-    inputElement.addEventListener('change', async (event: Event) => {
-      const files = (event.target as HTMLInputElement).files;
-
-      if (files && files.length > 0) {
-        const uploadedFile = files[0];
-        setLoading(true);
-        const text = await convertFileToText(uploadedFile)
-        setLoading(false)
-        console.log(text)
-        setDocument({ ...newDocument, content: Array.isArray(text) ? text.join() : text })
-      }
-    });
-  }
+    setNewIntent(newIntent);
+  }, [newIntent]);
 
   const [selectedModel, setSelectedModel] = useState(null);
 
@@ -47,9 +26,9 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
     setSelectedModel({ model: selectedModelValue, object: selectedObject });
   };
 
-  const handleSaveDocument = () => {
+  const handleSaveIntent = () => {
     setLoading(true);
-    if (newDocument.type) {
+    if (newIntent.type) {
       handleSave(selectedModel);
       setLoading(false);
     } else {
@@ -57,29 +36,21 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
       enqueueSnackbar('Please fill in all required fields.', { variant: 'error' });
     }
   };
-  
+
   return (
     <Modal
       open={createMode}
       onClose={() => { setCreateMode(!createMode) }}
       submitText="Generate Embeddings and Save"
-      handleAction={handleSaveDocument}
+      handleAction={handleSaveIntent}
     >
       {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress color="secondary" /></Backdrop>}
       <Grid container>
 
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add documents</Typography>
+            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add intents</Typography>
           </Grid>
-          <Button
-            className={styles.btn}
-            variant="outlined"
-            style={{ marginLeft: '1rem' }}
-            onClick={handleFileUpload}
-          >
-            Upload
-          </Button>
         </Grid>
         <Grid
           item
@@ -119,7 +90,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
             <TextField
               name="type"
               style={{ width: '100%', margin: '.5em' }}
-              onChange={(e) => setDocument({ ...newDocument, type: e.target.value })}
+              onChange={(e) => setIntent({ ...newIntent, type: e.target.value })}
               required
             />
           </Grid>
@@ -129,8 +100,8 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
           <TextField
             name="Content"
             style={{ width: '100%', margin: '.5em' }}
-            value={newDocument.content}
-            onChange={(e) => setDocument({ ...newDocument, content: e.target.value })}
+            value={newIntent.content}
+            onChange={(e) => setIntent({ ...newIntent, content: e.target.value })}
             required
             multiline
             rows={5}
@@ -146,4 +117,4 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   );
 };
 
-export default DocumentModal;
+export default IntentModal;

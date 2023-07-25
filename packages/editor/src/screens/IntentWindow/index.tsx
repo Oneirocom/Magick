@@ -3,7 +3,7 @@ import { API_ROOT_URL } from '@magickml/config'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { LoadingScreen, useConfig } from '@magickml/client-core'
-import DocumentTable from './DocumentTable'
+import IntentTable from './DocumentTable'
 
 
 /**
@@ -62,7 +62,7 @@ const DocumentWindow = (): JSX.Element => {
       }}
     >
       {loading && <LoadingScreen />}
-      {documents && <DocumentTable documents={documents} updateCallback={resetDocuments} />}
+      {documents && <IntentTable documents={documents} updateCallback={resetDocuments} />}
     </div>
   )
 }
