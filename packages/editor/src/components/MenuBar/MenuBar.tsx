@@ -11,6 +11,10 @@ import { Tab, activeTabSelector, changeEditorLayout } from '../../state/tabs'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import css from './menuBar.module.css'
+import { styled } from '@mui/material/styles'
+import Divider from '@mui/material/Divider'
+import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined'
+import { CSSTransition } from 'react-transition-group'
 
 /**
  * MenuBar component
@@ -36,6 +40,9 @@ const MenuBar = () => {
   const { openModal } = useModal()
 
   const activeTabRef = useRef<Tab | null>(null)
+  const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
+    null
+  )
 
   useEffect(() => {
     if (!activeTab || !activeTab.name) return
@@ -468,14 +475,8 @@ const MenuBar = () => {
    *
    * @param {() => void} func
    */
-  
-  // const handleClick = (func: () => void) => {
-  //   // Initially intended to control the visibility with a state, but this triggers a re-render and hides the menu anyway! :D
-  //   // Keeping this intact just in case.
-  //   setMenuVisibility(!menuVisibility)
-  //   // No need for this
-  //   // func()
-  // }
+
+
 
   const handleMenuIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -488,6 +489,27 @@ const MenuBar = () => {
 
   const handleMenuHover = (menu: string) => {
     setHoveredMenu(menu)
+  }
+
+  const StyledDivider = styled(Divider)(({ theme }) => ({
+    backgroundColor: 'black',
+    //remove all mergin and padding
+    '& .MuiDivider-root': {
+      margin: '0px !important',
+      padding: '0px !important ',
+    },
+  }))
+
+  const handleMenuItemLeave = () => {
+    setHoveredMenu(null)
+  }
+
+  const handleMenuItemEnter = (
+    item: string,
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    setSubMenuAnchorEl(event.currentTarget) // Set anchor element for sub-menu
+    setHoveredMenu(item)
   }
 
   return (
@@ -506,35 +528,111 @@ const MenuBar = () => {
         onClose={handleMenuClose}
         onMouseEnter={() => handleMenuHover('menu')}
         onMouseLeave={() => handleMenuHover(null)}
+        sx={{
+          '& .MuiMenu-paper': {
+            background: '#2B2B30',
+            width: '180px',
+            shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            borderRadius: '0px',
+          },
+        }}
       >
         {Object.keys(menuBarItems).map((item, index) => (
-          <MenuItem key={index} onMouseEnter={() => handleMenuHover(item)}>
-            {Object.keys(menuBarItems)[index].toUpperCase()}{' '}
-            {/* Convert to uppercase */}
-            {hoveredMenu === item && (
-              <Menu
-                open
-                onClose={() => handleMenuHover(null)}
-                anchorReference="anchorPosition"
-                anchorPosition={{ top: 0, left: 240 }} // Adjust the left position to your preference
+          <>
+            <MenuItem
+              key={index}
+              sx={{ py: 0 }}
+              onMouseEnter={event => handleMenuItemEnter(item, event)} // Pass the event to handleMenuEnter
+              onMouseLeave={handleMenuItemLeave} // Handle mouse leave
+            >
+              <div className={css['menu-item']}>
+                <p>{Object.keys(menuBarItems)[index].toUpperCase()}</p>
+                <KeyboardArrowRightOutlinedIcon />
+              </div>
+              {/* {hoveredMenu === item && ( */}
+              <CSSTransition
+                in={hoveredMenu === item}
+                timeout={300}
+                classNames={{
+                  enter: css['menu-item-enter'],
+                  enterActive: css['menu-item-enter-active'],
+                  exit: css['menu-item-exit'],
+                  exitActive: css['menu-item-exit-active'],
+                }}
+                unmountOnExit
               >
-                {Object.keys(menuBarItems[item].items).map(
-                  (subMenuKey, subIndex) => (
-                    <MenuItem
-                      key={subIndex}
-                      onClick={() => {
-                        menuBarItems[item].items[subMenuKey].onClick()
-                        handleMenuClose()
-                      }}
-                    >
-                      {subMenuKey.replace(/_/g, ' ').toUpperCase()}{' '}
-                      {/* Convert to uppercase */}
-                    </MenuItem>
-                  )
-                )}
-              </Menu>
-            )}
-          </MenuItem>
+                <Menu
+                  id={`sub-menu-${item}`} // Unique ID for each sub-menu
+                  anchorEl={subMenuAnchorEl} // Use different anchor element for sub-menu
+                  open
+                  onClose={() => setHoveredMenu(null)} // Close the sub-menu when the user unhovers from the menu item
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  sx={{
+                    '& .MuiMenu-paper': {
+                      background: '#2B2B30',
+                      width: '180px',
+                      shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                      borderRadius: '0px',
+                    },
+                  }}
+                >
+                  {Object.keys(menuBarItems[item].items).map(
+                    (subMenuKey, subIndex) => (
+                      <MenuItem
+                        key={subIndex}
+                        onClick={e => {
+                          menuBarItems[item].items[subMenuKey].onClick(e)
+                          handleMenuClose()
+                          console.log('clicked')
+                        }}
+                      >
+                        <div className={css['menu-item']}>
+
+                          <p>
+                            {menuBarItems[item].items[subMenuKey].hasOwnProperty("isActive") && (
+                              <span
+                                className={
+                                  menuBarItems[item].items[subMenuKey]
+                                    .isActive
+                                    ? css['preference-active']
+                                    : css['preference-notActive']
+                                }
+                              >
+                                ●{' '}
+                              </span>
+                            )}
+                            {subMenuKey
+                              .replace(/_/g, ' ')
+                              .charAt(0)
+                              .toUpperCase() + subMenuKey.slice(1)}
+                          </p>
+
+                          {menuBarItems[item].items[subMenuKey].hotKey &&
+                            parseStringToUnicode(
+                              menuBarItems[item].items[subMenuKey].hotKey
+                                .split(',')[0]
+                                .charAt(0)
+                                .toUpperCase() +
+                              menuBarItems[item].items[subMenuKey].hotKey
+                                .split(',')[0]
+                                .slice(1)
+                            )}
+
+
+
+                        </div>
+                      </MenuItem>
+                    )
+                  )}
+                </Menu>
+              </CSSTransition>
+              {/* )} */}
+            </MenuItem>
+            <StyledDivider />
+          </>
         ))}
       </Menu>
     </>

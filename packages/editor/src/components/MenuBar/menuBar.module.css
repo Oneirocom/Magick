@@ -127,3 +127,10 @@ li.list-item:only-child {
 .menu-panel:hover {
   display: block;
 }
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+}
