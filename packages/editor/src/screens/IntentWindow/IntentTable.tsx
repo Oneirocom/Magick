@@ -28,9 +28,9 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import { DocumentData, columns } from './document'
+import { IntentData, columns } from './intent'
 import styles from './index.module.scss'
-import DocumentModal from './DocumentModal'
+import IntentModal from './IntentModal'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -50,7 +50,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
         setValue(e.target.value)
         onChange(e.target.value)
       }}
-      placeholder="Search Documents..."
+      placeholder="Search Intent..."
       className={styles.search}
     />
   )
@@ -70,11 +70,11 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
 }
 
 /**
- * DocumentsTable component for displaying documents in a table with sorting, filtering, and pagination.
- * @param {{ documents: any[], updateCallback: Function }} param0
+ * IntentTable component for displaying intent documents in a table with sorting, filtering, and pagination.
+ * @param {{ intents: any[], updateCallback: Function }} param0
  * @returns JSX.Element
  */
-function DocumentTable({ documents, updateCallback }) {
+function IntentTable({ intents, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()
   const filteredProviders = pluginManager.getCompletionProviders('text', [
     'embedding',
@@ -87,8 +87,8 @@ function DocumentTable({ documents, updateCallback }) {
   const [selectedRow, setSelectedRow] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
 
-  const handleActionClick = (document, row) => {
-    setAnchorEl(document.currentTarget)
+  const handleActionClick = (intent, row) => {
+    setAnchorEl(intent.currentTarget)
     setSelectedRow(row)
   }
 
@@ -96,20 +96,20 @@ function DocumentTable({ documents, updateCallback }) {
     row: any,
     content: string,
     type: string,
-    projectId: string,
+    intent: string,
     date: string
-  ): DocumentData => {
+  ): IntentData => {
     return {
       row,
       content,
       type,
-      projectId,
+      intent,
       date,
       action: (
         <>
           <IconButton
             aria-label="more"
-            onClick={document => handleActionClick(document, row)}
+            onClick={intent => handleActionClick(intent, row)}
             style={{ boxShadow: 'none' }}
           >
             <MoreHoriz />
@@ -132,8 +132,8 @@ function DocumentTable({ documents, updateCallback }) {
         disableSortBy: true,
       },
       {
-        Header: 'ProjectID',
-        accessor: 'projectId',
+        Header: 'Intent',
+        accessor: 'intent',
         disableSortBy: true,
       },
       {
@@ -151,9 +151,9 @@ function DocumentTable({ documents, updateCallback }) {
     useTable(
       {
         columns: defaultColumns,
-        data: documents,
-        initialState : {
-          pageIndex: currentPage 
+        data: intents,
+        initialState: {
+          pageIndex: currentPage
         }
       },
       useFilters,
@@ -190,17 +190,17 @@ function DocumentTable({ documents, updateCallback }) {
     setSelectedRow(null)
   }
 
-  // Handle document deletion
-  const handleDocumentDelete = async (document: any) => {
-    console.log('deleting document', document)
+  // Handle intent deletion
+  const handleIntentDelete = async (intent: any) => {
+    console.log('deleting intent', intent)
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    if (isDeleted) enqueueSnackbar('document deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting document', { variant: 'error' })
+    if (isDeleted) enqueueSnackbar('intent deleted', { variant: 'success' })
+    else enqueueSnackbar('Error deleting intent', { variant: 'error' })
 
     if (page.length === 1) {
       const pageIndex = currentPage - 1
@@ -221,57 +221,57 @@ function DocumentTable({ documents, updateCallback }) {
 
   // Create mode state
   const [createMode, setCreateMode] = useState(false)
-  // State for new document
-  const [newDocument, setNewDocument] = useState({
+  // State for new intent
+  const [newIntent, setNewIntent] = useState({
     type: '',
     content: '',
-    projectId: '',
+    intent: '',
     date: new Date().toISOString(),
     embedding: '',
   })
-// Handle save action
-const handleSave = async (selectedModel) => {
-  // call documents endpoint
-  const result = await fetch(`${API_ROOT_URL}/documents`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      date: new Date().toISOString(),
-      ...newDocument,
-      projectId: config.projectId,
-      modelName: selectedModel.model,
-      secrets: localStorage.getItem('secrets'),
-    }),
-  });
-  // Check if the save operation was successful
-  if (result.ok) {
-    // Reset newDocument
-    setNewDocument({
-      type: '',
-      content: '',
-      projectId: '',
-      date: '',
-      embedding: '',
+  // Handle save action
+  const handleSave = async (selectedModel) => {
+    // call documents endpoint
+    const result = await fetch(`${API_ROOT_URL}/documents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        date: new Date().toISOString(),
+        ...newIntent,
+        projectId: config.projectId,
+        modelName: selectedModel.model,
+        secrets: localStorage.getItem('secrets'),
+      }),
     });
-    enqueueSnackbar('Document saved successfully', { variant: 'success' });
+    // Check if the save operation was successful
+    if (result.ok) {
+      // Reset newIntent
+      setNewIntent({
+        type: '',
+        content: '',
+        intent: '',
+        date: '',
+        embedding: '',
+      });
+      enqueueSnackbar('Intent saved successfully', { variant: 'success' });
 
 
-    // Close the modal by setting createMode to false after a delay
-    setTimeout(() => {
-      setCreateMode(false);
-    }, 2000);
+      // Close the modal by setting createMode to false after a delay
+      setTimeout(() => {
+        setCreateMode(false);
+      }, 2000);
 
-    // Trigger the updateCallback function to update the table after a delay
-   
+      // Trigger the updateCallback function to update the table after a delay
+
       updateCallback();
-    
-  } else {
-    enqueueSnackbar('Error saving document', { variant: 'error' });
-  }
-};
+
+    } else {
+      enqueueSnackbar('Error saving intent', { variant: 'error' });
+    }
+  };
 
   // Show create modal
   const showCreateModal = () => {
@@ -286,11 +286,11 @@ const handleSave = async (selectedModel) => {
   }, [createMode]);
   return (
     <>{createMode && (
-      <DocumentModal
+      <IntentModal
         createMode={createMode}
         setCreateMode={setCreateMode}
         handleSave={handleSave}
-        setNewDocument={setNewDocument}
+        setNewIntent={setNewIntent}
         providerList={filteredProviders}
       />
     )}
@@ -298,7 +298,7 @@ const handleSave = async (selectedModel) => {
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
             <Typography variant="h4" className={styles.header}>
-              Documents
+              Intents
             </Typography>
             <div className={styles.flex}>
               <Button
@@ -320,7 +320,7 @@ const handleSave = async (selectedModel) => {
               >
                 Create New
               </Button>
-              <CSVLink data={originalRows} filename="documents.csv" target="_blank">
+              {/* <CSVLink data={originalRows} filename="documents.csv" target="_blank">
                 <Button
                   className={styles.btn}
                   variant="outlined"
@@ -329,7 +329,7 @@ const handleSave = async (selectedModel) => {
                 >
                   export
                 </Button>
-              </CSVLink>
+              </CSVLink> */}
             </div>
           </div>
           <div className={`${styles.flex} ${styles.flexEnd}`}>
@@ -355,7 +355,7 @@ const handleSave = async (selectedModel) => {
           <ActionMenu
             anchorEl={anchorEl}
             handleClose={handleActionClose}
-            handleDelete={handleDocumentDelete}
+            handleDelete={handleIntentDelete}
           />
         </Stack>
       </Container>
@@ -364,4 +364,4 @@ const handleSave = async (selectedModel) => {
   )
 }
 
-export default DocumentTable
+export default IntentTable
