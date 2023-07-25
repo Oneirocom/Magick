@@ -35,7 +35,7 @@ const IntentWindow = (): JSX.Element => {
   const fetchIntents = async (): Promise<void> => {
     try {
       const response = await fetch(
-        `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
+        `${API_ROOT_URL}/documents?projectId=${config.projectId}&metadata=${encodeURI("{ 'intent': { 'type': 'average' }}")}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
