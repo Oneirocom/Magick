@@ -16,8 +16,6 @@ import {
 import { useSnackbar } from 'notistack'
 import { useConfig } from '@magickml/client-core'
 import { useEffect, useMemo, useState } from 'react'
-import { CSVLink } from 'react-csv'
-import { FaFileCsv } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import {
   TableInstance,
