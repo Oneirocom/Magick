@@ -171,7 +171,7 @@ function IntentTable({ intents, updateCallback }) {
       el.original,
       el.original.content,
       el.original.type,
-      el.original.projectId,
+      el.original.intent,
       new Date(el.original.date).toLocaleDateString()
     )
   })
