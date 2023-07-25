@@ -23,6 +23,7 @@ import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
 import plugins from './plugins'
+import { initAgentCommander } from '@magickml/agents'
 
 initLogger({ name: 'server' })
 const logger = getLogger()
@@ -55,6 +56,7 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
  */
 async function init() {
   await initApp()
+  await initAgentCommander()
   // load plugins
   await (async () => {
     logger.info(

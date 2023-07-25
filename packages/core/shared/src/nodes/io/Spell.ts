@@ -343,14 +343,15 @@ export class SpellComponent extends MagickComponent<
           spellId: node.data.spellId as string,
           inputs: flattenedInputs,
           runSubspell: false,
-          // we can probably remove agent here since it is in the injected spellManager
           agent: agent,
           secrets: agent?.secrets ?? secrets,
           app,
           publicVariables: variables,
         }
 
-        const outputs = await spellManager.run(runComponentArgs)
+        const outputs = agent ? await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
+                              : await spellRunner.runComponent(runComponentArgs)
+
         const output = this.formatOutputs(node, outputs as any)
 
         return output

@@ -60,5 +60,5 @@ export const updateSpellInManager = async (context: HookContext) => {
 
   // We just store the result here of the update
   // This hook only runs after save spell calls, so there should always be a spell to load in
-  spellManager.load(context.result, true)
+  spellManager.load(context.result)
 }

@@ -6,9 +6,7 @@
 
 // Import necessary modules and functions
 import * as BullMQ from 'bullmq'
-import { bullMQConnection } from '@magickml/config'
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { BadRequest } from '@feathersjs/errors'
 import {
   agentDataValidator,
   agentPatchValidator,
@@ -28,20 +26,6 @@ import { v4 as uuidv4 } from 'uuid'
 // Re-export agents.class and agents.schema
 export * from './agents.class'
 export * from './agents.schema'
-
-/**
- * Validate that the rootSpell.id field is present.
- * @param context - The hook context
- */
-const validateRootSpell = async (context: HookContext) => {
-  if (
-    context.data.enabled &&
-    (!context.data.rootSpell || !context.data.rootSpell.id)
-  ) {
-    throw new BadRequest('Rootspell is required when agent is enabled')
-  }
-  return context
-}
 
 const AGENT_EVENTS = ['log', 'result', 'spell']
 
@@ -105,7 +89,7 @@ export const agent = (app: Application) => {
       })
     },
     {
-      connection: bullMQConnection,
+      connection: app.get('redis'),
     }
   )
 
@@ -128,7 +112,6 @@ export const agent = (app: Application) => {
       create: [
         schemaHooks.validateData(agentDataValidator),
         schemaHooks.resolveData(agentDataResolver),
-        validateRootSpell,
         async (context: HookContext) => {
           context.data.id = uuidv4()
           return context
@@ -137,7 +120,6 @@ export const agent = (app: Application) => {
       patch: [
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
-        validateRootSpell,
       ],
       update: [],
       remove: [],

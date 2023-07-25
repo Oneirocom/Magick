@@ -212,7 +212,7 @@ export class GithubConnector {
       title,
       body,
     ]
-    return this.spellRunner.runComponent({
+    return app.get('agentCommander').runSpell({
       inputs: {
         [`Input - Github (${pretext})`]: {
           connector: `Github (${pretext})`,
@@ -232,7 +232,6 @@ export class GithubConnector {
       agent: this.agent,
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,
-      app,
       runSubspell: true,
     })
   }

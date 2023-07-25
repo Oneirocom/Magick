@@ -7,7 +7,6 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import { Queue } from 'bullmq'
-import { bullMQConnection } from '@magickml/config'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -37,7 +36,7 @@ export class AgentService<
     super(options)
     this.app = app
     this.runQueue = new Queue(`agent:run`, {
-      connection: bullMQConnection,
+      connection: app.get('redis'),
     })
   }
 
