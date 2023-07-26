@@ -269,9 +269,10 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      return this.logger.error(
+      this.logger.error(
         'Infinite loop detected in SpellRunner. Exiting.'
       )
+      throw new Error('Infinite loop detected in SpellRunner. Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
@@ -292,8 +293,11 @@ class SpellRunner {
       componentName
     ) as unknown as ModuleComponent
 
-    if (!component.run)
-      return this.logger.error('Component does not have a run method')
+    if (!component.run) {
+      this.logger.error('Component does not have a run method')
+      throw new Error('Component does not have a run method')
+    }
+
 
     const firstInput = Object.keys(inputs)[0]
 
@@ -311,7 +315,10 @@ class SpellRunner {
     }
 
     // If we still don't have a triggered node, we should throw an error.
-    if (!triggeredNode) return this.logger.error('No triggered node found')
+    if (!triggeredNode) {
+      this.logger.error('No triggered node found')
+      throw new Error('No triggered node found')
+    }
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node

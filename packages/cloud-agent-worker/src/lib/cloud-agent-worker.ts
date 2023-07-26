@@ -169,7 +169,6 @@ export class CloudAgentWorker extends AgentManager {
     new Worker(
       'agent:new',
       async (job: Job) => {
-        this.logger.info(`Agent ${job.data.agentId} enabled, adding agent`)
         this.agentUpdated(job.data.agentId)
       },
       {

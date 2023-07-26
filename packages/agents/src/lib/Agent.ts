@@ -120,9 +120,7 @@ export class Agent implements AgentInterface {
       this.updateInterval = setInterval(async () => {
         // every second, update the agent, set pingedAt to now
         try {
-          await app.service('agents').patch(this.id, {
-            pingedAt: new Date().toISOString(),
-          })
+          await app.service('agents').ping(this.id)
         } catch(err) {
           if (err.name === 'NotFound') {
             this.logger.warn('Agent not found: %s', this.id)
