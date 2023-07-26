@@ -68,7 +68,8 @@ export const apiQuerySchema = Type.Intersect(
     querySyntax(apiQueryProperties),
     Type.Object(
       {
-        id: Type.Optional(Type.String()),
+        agentId: Type.String(),
+        spellId: Type.Optional(Type.String()),
         content: Type.String(),
         apiKey: Type.String(),
       },

@@ -1,4 +1,4 @@
-import { Application } from '@feathersjs/koa'
+import type { app as FeathersApp } from '@magickml/server-core'
 import pino from 'pino'
 import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
@@ -22,11 +22,11 @@ export type RunComponentArgs = {
   runSubspell?: boolean
   secrets?: Record<string, string>
   publicVariables?: Record<string, unknown>
-  app?: any
+  app?: typeof FeathersApp
 }
 
 type SpellRunnerConstructor = {
-  app: Application
+  app: typeof FeathersApp
   socket?: io.Socket
   agent?: any
   spellManager: SpellManager
@@ -39,7 +39,7 @@ class SpellRunner {
   module: Module
   ranSpells: string[] = []
   socket?: io.Socket | null = null
-  app: Application
+  app: typeof FeathersApp
   agent?: any
   spellManager: SpellManager
 
@@ -73,9 +73,17 @@ class SpellRunner {
     })
   }
 
-  emit(event, message) {
+  emit(_message) {
     if (!this.agent) return
-    this.agent.publishEvent(`spell:${this.currentSpell.id}:${event}`, message)
+
+    // make sure the message contains the spellId in case it is needed.
+    const message = {
+      ..._message,
+      spellId: this.currentSpell.id,
+    }
+
+    // to do we probably want these events to be constants somewhere
+    this.agent.publishEvent('spell', message)
   }
 
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
@@ -316,9 +324,8 @@ class SpellRunner {
       return this.outputData
     } catch (err) {
       this.logger.error('ERROR RUNNING SPELL, %o', err)
-      return {
-        Output: `Error running spell- ${err}`,
-      }
+
+      throw err
     }
   }
 }

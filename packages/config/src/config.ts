@@ -37,7 +37,8 @@ export const DEFAULT_USER_TOKEN =
 export const STANDALONE = getVarForEnvironment('STANDALONE') === 'true' || false
 export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
 export const DEFAULT_OPENAI_KEY = getVarForEnvironment('DEFAULT_OPENAI_KEY')
-export const DONT_CRASH_ON_ERROR = getVarForEnvironment('DONT_CRASH_ON_ERROR') === 'true'
+export const DONT_CRASH_ON_ERROR =
+  getVarForEnvironment('DONT_CRASH_ON_ERROR') === 'true'
 export const SERVER_PORT = getVarForEnvironment('PORT') || '3030'
 export const SERVER_HOST = getVarForEnvironment('HOST') || 'localhost'
 export const SPEECH_SERVER_URL =
@@ -100,3 +101,9 @@ export const bullMQConnection = {
 }
 
 export const PINO_LOG_LEVEL = getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
+
+export const OPENMETER_ENDPOINT =
+  getVarForEnvironment('OPENMETER_ENDPOINT') || 'http://localhost:8888'
+
+export const OPENMETER_ENABLED =
+  getVarForEnvironment('OPENMETER_ENABLED') === 'true'

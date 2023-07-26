@@ -17,6 +17,7 @@ import {
   makeTextEmbedding,
 } from './functions'
 
+
 /**
  * The secrets used by the OpenAI API
  */

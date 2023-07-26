@@ -72,6 +72,7 @@ export class MagickConsole {
   }
 
   formatMessage(_message: string, type: 'error' | 'log'): Message {
+    console.log('Sending message to debug', _message)
     return {
       from: this.node.name ?? this.component.name,
       nodeId: this.node.id,

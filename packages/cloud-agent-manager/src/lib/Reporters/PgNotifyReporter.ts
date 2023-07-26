@@ -1,4 +1,4 @@
-import { Reporter } from "../Reporter"
+import { Reporter } from "."
 import createSubscriber, { Subscriber } from "pg-listen"
 import { getLogger } from "@magickml/core"
 
@@ -29,7 +29,9 @@ export class PgNotifyReporter implements Reporter {
 
     on(event: string, callback: (...args: any) => any): void {
         this.subscriber.notifications.on(this.queueName, (payload) => {
+            this.logger.info(`Got postgres notification on ${this.queueName}`)
             if (payload?.eventName === event) {
+                this.logger.info(`Postgres notification was type ${event}`)
                 return callback(payload)
             }
         })

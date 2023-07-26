@@ -1,7 +1,6 @@
 // DOCUMENTED
-import { IconBtn, CustomizedSwitch } from '@magickml/client-core'
+import { IconBtn, CustomizedSwitch, useFeathers } from '@magickml/client-core'
 import { ClientPluginManager, pluginManager } from '@magickml/core'
-import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
@@ -11,7 +10,6 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
-import validateSpellData from './spellValidator'
 import {tooltip_text} from "./tooltip_texts"
 
 /**
@@ -50,13 +48,28 @@ const AgentDetails = ({
   const config = useConfig()
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
-  const [updateNeeded, setUpdateNeeded] = useState<boolean>(false)
-  const [enable, setEnable] = useState(onLoadEnables)
+  const [enable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const headers = STANDALONE
-    ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-    : { Authorization: `Bearer ${token}` }
+
+  const [rootSpell, setRootSpell] = useState<any>(null)
+  useEffect(() => {
+    if (spellList.length === 0) {
+      return;
+    }
+
+    // Fix for legacy agents with no root spell id
+    if (!selectedAgentData.rootSpellId && selectedAgentData.rootSpell) {
+      const rootSpell = spellList.find(spell => spell.id === selectedAgentData.rootSpell.id)
+      setRootSpell(rootSpell)
+      return;
+    }
+
+    const rootSpell = spellList.find(spell => spell.id === selectedAgentData.rootSpellId)
+    setRootSpell(rootSpell)
+  }, [selectedAgentData, spellList])
+
+  const { client } = useFeathers()
 
   /**
    * update agent data by agent id.
@@ -99,7 +112,6 @@ const AgentDetails = ({
 
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
-        setUpdateNeeded(false)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -109,62 +121,6 @@ const AgentDetails = ({
       })
   }
 
-  /**
-   * export the agent data to a file.
-   */
-  const exportAgent = () => {
-    const fileName = 'agent'
-
-    const exportAgentData = { ...selectedAgentData }
-
-    exportAgentData.secrets = {}
-
-    Object.keys(exportAgentData.data).forEach(key => {
-      if (
-        key.includes('api') ||
-        key.includes('token') ||
-        key.includes('secret')
-      ) {
-        delete exportAgentData.data[key]
-      }
-    })
-
-    const json = JSON.stringify(exportAgentData, null, 4)
-
-    const blob = new Blob([json], { type: 'application/json' })
-    const url = window.URL.createObjectURL(new Blob([blob]))
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', `${fileName}.agent.json`)
-    // Append to html link element page
-    document.body.appendChild(link)
-    // Start download
-    link.click()
-    if (!link.parentNode) return
-    // Clean up and remove the link
-    link.parentNode.removeChild(link)
-  }
-
-  const isPublicVarsChanged = (old, newObj): boolean => {
-    // Get the keys of both objects
-    const oldObjKeys = Object.keys(old);
-    const newObjKeys = Object.keys(newObj);
-
-    // Check if the number of keys is different
-    if (oldObjKeys.length !== newObjKeys.length) {
-      return true;
-    }
-
-    // Compare property values
-    for (const prop in old) {
-      //Check if the value prop of inner object has changed
-      if (old[prop].value !== newObj[prop].value) {
-        return true;
-      }
-    }
-
-    return false;
-  }
 
   const formatPublicVars = (nodes) => {
     return Object.values(nodes)
@@ -193,36 +149,33 @@ const AgentDetails = ({
   const updatePublicVar = (spell) => {
     setSelectedAgentData({
       ...selectedAgentData,
-      rootSpell: spell,
+      rootSpellId: spell.id,
       publicVariables: JSON.stringify(formatPublicVars(spell.graph.nodes)),
     })
   }
 
   useEffect(() => {
     ; (async () => {
-      await fetch(
-        `${config.apiUrl}/spells?projectId=${config.projectId}`,
-        { headers }
-      ).then(async res => {
-        const json = await res.json()
-        setSpellList(json.data)
-        if (selectedAgentData.rootSpell?.name) {
-          const rootSpell = json.data.find(
-            spell => spell.name === selectedAgentData.rootSpell?.name
-          )
+      try {
+        const spells = await client.service('spells').find({
+          query: {
+            projectId: config.projectId,
+          },
+        })
 
-          if (isPublicVarsChanged(JSON.parse(selectedAgentData.publicVariables), formatPublicVars(rootSpell.graph.nodes))) {
-            updatePublicVar(rootSpell)
-            setUpdateNeeded(true)
-          }
+        setSpellList(spells.data)
+
+        if (selectedAgentData.rootSpellId) {
+          const agentRootSpell = await client.service('spells').get(selectedAgentData.rootSpellId)
+
+          updatePublicVar(agentRootSpell)
         }
 
-      }).catch(err => {
+      } catch (err) {
         enqueueSnackbar(err.message, {
           variant: 'error',
         })
-      })
-
+      }
     })()
   }, [])
 
@@ -291,7 +244,7 @@ const AgentDetails = ({
           )}
           <Tooltip
             title={
-              !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+              !selectedAgentData.rootSpellId
                 ? 'Root Spell must be set before enabling the agent'
                 : ''
             }
@@ -310,7 +263,7 @@ const AgentDetails = ({
                   })
                 }}
                 disabled={
-                  !selectedAgentData.rootSpell || !selectedAgentData.rootSpell.id
+                  !selectedAgentData.rootSpellId
                 }
                 style={{
                   alignSelf: 'self-start',
@@ -324,24 +277,13 @@ const AgentDetails = ({
             onClick={() => {
               update(selectedAgentData?.id)
             }}
-            disabled={!updateNeeded}
-            style={{
-              margin: '1em',
-              color: 'white',
-              backgroundColor: updateNeeded ? 'var(--primary-dark)' : '#424242',
-            }}
-          >
-            Update
-          </Button>
-          <Button
             style={{
               margin: '1em',
               color: 'white',
               backgroundColor: 'var(--primary-dark)',
             }}
-            onClick={() => exportAgent()}
           >
-            Export
+            Update
           </Button>
         </div>
       </div>
@@ -354,31 +296,19 @@ const AgentDetails = ({
             appearance: 'none',
           }}
           name="rootSpell"
-          id="rootSpell"
-          value={selectedAgentData.rootSpell?.name || 'default'}
+          id="rootSpellId"
+          value={rootSpell?.name || 'default'}
           onChange={event => {
             const newRootSpell = spellList.find(
               spell => spell.name === event.target.value
             );
-            const inputs = (pluginManager as ClientPluginManager).getInputByName();
-            const plugin_list = (pluginManager as ClientPluginManager).getPlugins();
-            for (const key of Object.keys(plugin_list)) {
-              if (!newRootSpell) continue;
-              plugin_list[key] = validateSpellData(newRootSpell, inputs[key]);
-            }
-            setEnable(plugin_list);
-            enqueueSnackbar(
-              'Greyed out components are not available because of the selected spell.',
-              {
-                variant: 'info',
-              }
-            );
+
             setSelectedAgentData({
-              enabled: true,
               ...selectedAgentData,
+              rootSpellId: newRootSpell.id,
             });
+
             updatePublicVar(newRootSpell);
-            setUpdateNeeded(true);
           }}
         >
           <option disabled value={'default'}>
@@ -425,7 +355,6 @@ const AgentDetails = ({
                       [value.key]: event.target.value,
                     }),
                   })
-                  setUpdateNeeded(true)
                 }}
               />
             </div>
@@ -434,7 +363,6 @@ const AgentDetails = ({
       </div>
       {selectedAgentData.publicVariables && selectedAgentData.publicVariables !== '{}' && (
         <AgentPubVariables
-          setUpdateNeeded={setUpdateNeeded}
           setPublicVars={data => {
             setSelectedAgentData({
               ...selectedAgentData,
