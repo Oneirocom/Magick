@@ -28,7 +28,7 @@ export async function makeJsonformerCompletion(
 
   const schema = inputs['schema']?.[0] as any
   const schemaString = JSON.stringify(schema)
-  let prompt = inputs['prompt']?.[0] as string
+  const prompt = inputs['prompt']?.[0] as string
 
   // Get or set default settings
   // const settings = {
