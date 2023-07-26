@@ -88,7 +88,7 @@ const buildFeathersClient = async (config, token): Promise<any> => {
   configureCustomServices(app, socketClient)
 
   // No idea how to type feathers to add io properties to root client.
-  return app as any
+  return app
 }
 
 interface FeathersContext {
