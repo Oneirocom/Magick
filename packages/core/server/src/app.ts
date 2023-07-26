@@ -13,14 +13,16 @@ import {
   rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
+import Redis from 'ioredis'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import sync from 'feathers-sync'
 import { configureManager, globalsManager } from '@magickml/core'
 
-import { REDISCLOUD_URL } from '@magickml/config'
+import { REDISCLOUD_URL, bullMQConnection } from '@magickml/config'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
+import type { AgentCommander } from '@magickml/agents'
 import { logError } from './hooks'
 import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
@@ -41,7 +43,9 @@ declare module './declarations' {
     vectordb: PostgresVectorStoreCustom | any
     docdb: PostgresVectorStoreCustom | any
     pubsub: RedisPubSub
+    redis: Redis
     isAgent?: boolean
+    agentCommander: AgentCommander
   }
 }
 
@@ -71,23 +75,26 @@ export async function initApp() {
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
   // sync up messages between the app and the runner
-  logger.debug('checking for REDISCLOUD_URL')
-  if (REDISCLOUD_URL) {
-    logger.info('SETTING UP REDIS')
-    app.configure(
-      sync({
-        uri: REDISCLOUD_URL,
-        serialize: stringify,
-        deserialize: parse,
-      })
-    )
-
-    await pubsub.initialize({
-      url: REDISCLOUD_URL,
+  logger.info('SETTING UP REDIS')
+  app.configure(
+    sync({
+      uri: REDISCLOUD_URL,
+      serialize: stringify,
+      deserialize: parse,
     })
+  )
 
-    app.set('pubsub', pubsub)
-  }
+  await pubsub.initialize({
+    url: REDISCLOUD_URL,
+  })
+
+  app.set('pubsub', pubsub)
+
+  const redis = new Redis({
+    ...bullMQConnection,
+    maxRetriesPerRequest: null
+  })
+  app.set('redis', redis)
 
   // Configure app spell management settings
   app.configure(configureManager())

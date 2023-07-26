@@ -1,12 +1,8 @@
-import {
-  CompletionProvider,
-  pluginManager,
-  WorkerData,
-} from '@magickml/core'
+import { CompletionProvider, pluginManager, WorkerData } from '@magickml/core'
 
 import { Embeddings } from 'langchain/embeddings/base'
 
-export type EmbeddingArgs ={
+export type EmbeddingArgs = {
   modelName: string
   projectId: string
   secrets: string
@@ -14,9 +10,9 @@ export type EmbeddingArgs ={
 
 /**
  * Converts the Array into chunks of the given size.
- * @param arr 
- * @param chunkSize 
- * @returns 
+ * @param arr
+ * @param chunkSize
+ * @returns
  */
 export const chunkArray = (arr, chunkSize) =>
   arr.reduce((chunks, elem, index) => {
@@ -26,12 +22,11 @@ export const chunkArray = (arr, chunkSize) =>
     return chunks
   }, [])
 
-
 /**
  * A class for embedding text using a custom model.
  * This class extends the Embeddings class and provides a custom handler for embedding text.
  * @extends Embeddings
-  */
+ */
 export class PluginEmbeddings extends Embeddings {
   embedDocuments(): Promise<number[][]> {
     throw new Error('Please use embedDocumentsWithMeta instead.')
@@ -93,44 +88,47 @@ export class PluginEmbeddings extends Embeddings {
    */
   async embedDocumentsWithMeta(document, params) {
     if (!Array.isArray(document)) {
-      const wordsPerChunk = 8000;
-      const str = document as string;
-      const chunks = str.split('<<BREAK>>');
-      const output = [];
+      const wordsPerChunk = 8000
+      const str = document as string
+      const chunks = str.split('<<BREAK>>')
+      const output = []
       for (let i = 0; i < chunks.length; i++) {
-        const chunk = chunks[i];
-        const chunkLength = this.countWords(chunk);
-        const subChunks = [];
+        const chunk = chunks[i]
+        const chunkLength = this.countWords(chunk)
+        const subChunks = []
         for (let j = 0; j < chunkLength; j += wordsPerChunk) {
-          const subChunk = chunk.substring(j, j + wordsPerChunk);
-          subChunks.push(subChunk);
+          const subChunk = chunk.substring(j, j + wordsPerChunk)
+          subChunks.push(subChunk)
         }
-        output.push(subChunks);
+        output.push(subChunks)
       }
-      document = output.flat();
+      document = output.flat()
     }
-    
-    const embeddings = [];
-    for (let i = 0; i < document.length; i++) {
-      const input = document[i];
-      const response = await this.embeddingWithRetryWithMeta({ input: input as string }, params);
-      embeddings.push(response.result);
-    }
-    
-    return [embeddings, document];
-  }
-  
 
+    const embeddings = []
+    for (let i = 0; i < document.length; i++) {
+      const input = document[i]
+      const response = await this.embeddingWithRetryWithMeta(
+        { input: input as string },
+        params
+      )
+      embeddings.push(response.result)
+    }
+
+    return [embeddings, document]
+  }
 
   /**
    * Gets the embeddings using the Completion Provier, gets the model name and key through the params.
    * @param {} [projectId=DEFAULT_PROJECT_ID]
-   * @param 
+   * @param
    * @returns {Promise<number[][]>}
    */
   async embeddingWithRetryWithMeta(embeddingObject, param: EmbeddingArgs) {
     console.log(param)
-    const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
+    const completionProviders = pluginManager.getCompletionProviders('text', [
+      'embedding',
+    ])
     const provider = completionProviders.find(provider =>
       provider.models.includes(param.modelName)
     ) as CompletionProvider
@@ -140,10 +138,13 @@ export class PluginEmbeddings extends Embeddings {
     while (retry < 3) {
       try {
         response = await handler({
-          inputs: { input: embeddingObject['input'] },
+          inputs: { input: [embeddingObject['input']] },
           node: { data: { model: param.modelName } } as unknown as WorkerData,
           outputs: undefined,
-          context: { module: { secrets:JSON.parse(param["secrets"]) }, projectId: param.projectId },
+          context: {
+            module: { secrets: JSON.parse(param['secrets']) },
+            projectId: param.projectId,
+          },
         })
         console.log(response.error)
         break
@@ -156,14 +157,14 @@ export class PluginEmbeddings extends Embeddings {
   }
 
   countWords(str) {
-    return str.trim().split(/\s+/).length;
+    return str.trim().split(/\s+/).length
   }
   /**
    * Gets the embeddings for the given text.(Dummy Embeddings)
    * @param {string} words
    * @returns {Promise<number[]>}
    * @memberof PluginEmbeddings
-  */
+   */
   async get_embeddings(words: string[]): Promise<number[][]> {
     return words.map(word => {
       const vec = new Array(1536).fill(0)

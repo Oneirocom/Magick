@@ -37,11 +37,18 @@ export class DocumentService<
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
     if (data.hasOwnProperty('secrets')) {
-      const {secrets, modelName, ...docData} = data as DocumentData & {secrets: string, modelName: string}
+      const { secrets, modelName, ...docData } = data as DocumentData & {
+        secrets: string
+        modelName: string
+      }
 
-      docdb.fromString(docData.content,docData,{modelName, projectId: docData?.projectId, secrets})
+      docdb.fromString(docData.content, docData, {
+        modelName,
+        projectId: docData?.projectId,
+        secrets,
+      })
 
-      return docData;
+      return docData
     }
     await docdb.from('documents').insert(data)
     return data
@@ -55,7 +62,7 @@ export class DocumentService<
   async remove(id: string, params): Promise<any> {
     const db = app.get('dbClient')
 
-    if(!id && params.projectId) {
+    if (!id && params.projectId) {
       // delete all documents of a project
       return await db('documents').where('projectId', params.projectId).del()
     }
@@ -92,6 +99,13 @@ export class DocumentService<
         )
         .orderBy('distance', 'asc')
         .limit(param.$limit)
+        .modify(function (queryBuilder) {
+          param.metadata &&
+            queryBuilder.whereRaw('metadata @> ?', [
+              JSON.stringify(param.metadata),
+            ])
+        })
+
       return { data: querys }
     }
     const res = await super.find(params)

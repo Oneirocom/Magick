@@ -41,7 +41,6 @@ export type SpellInterface = Static<typeof spellSchema>
  *
  * @property {string} id - The agent's ID.
  * @property {string} projectId - The ID of the project that the agent belongs to.
- * @property {any} [rootSpell] - The root spell of the agent (optional).
  * @property {string} name - The name of the agent.
  * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
  * @property {string} runState - The run state of the agent.
@@ -56,7 +55,7 @@ export const agentSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
-    rootSpell: Type.Optional(Type.Any()), // TODO: type me!
+    rootSpellId: Type.String(),
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik

@@ -1,7 +1,9 @@
 // import { Application } from '@magickml/server-core';
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
+import { getLogger } from '@magickml/core'
 
+import { isEqual } from 'radash'
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
 
@@ -17,7 +19,7 @@ type RunArgs = {
   spellId: string
   inputs: MagickSpellInput
   secrets: Record<string, string>
-  publicVariables
+  publicVariables: Record<string, unknown>
   app: Application
 }
 
@@ -27,6 +29,7 @@ export default class SpellManager {
   cache: boolean
   app: Application
   agent?: any
+  logger = getLogger()
 
   constructor({
     socket = undefined,
@@ -45,14 +48,13 @@ export default class SpellManager {
     if (watchSpells) {
       this.app.service('spells').on('updated', (spell: SpellInterface) => {
         if (this.hasSpellRunner(spell.id)) {
-          this.load(spell, true)
+          this.load(spell)
         }
       })
     }
   }
 
   getSpellRunner(spellId: string) {
-    // we want to track which spells are currently busy here.
     return this.spellRunnerMap.get(spellId)
   }
 
@@ -65,24 +67,30 @@ export default class SpellManager {
   }
 
   async loadById(spellId: string) {
+    this.logger.debug(`Loading spell ${spellId}`)
     try {
       const spell = await this.app.service('spells').get(spellId)
 
+      if (
+        this.hasSpellRunner(spellId)
+        && isEqual(this.getSpellRunner(spellId)!.currentSpell.graph, spell.graph)
+      ) {
+        return this.getSpellRunner(spellId)
+      }
+
+      this.logger.debug(`Reloading spell ${spellId}`)
       return this.load(spell)
     } catch (error) {
-      console.error(`Error loading spell ${spellId}`, error)
+      this.logger.error(`Error loading spell ${spellId}`, error)
       return null
     }
   }
 
-  async load(spell: SpellInterface, overload = false) {
+  async load(spell: SpellInterface) {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
       return
-    }
-    if (this.spellRunnerMap.has(spell.id) && !overload) {
-      return this.getSpellRunner(spell.id)
     }
 
     const spellRunner = new SpellRunner({
@@ -101,9 +109,9 @@ export default class SpellManager {
   }
 
   async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
-    const runner = this.getSpellRunner(spellId)
+    this.logger.error(`You should use the agent commander to run spells instead of the spellManager run function`)
 
-    const result = await runner?.runComponent({
+    const result = await app.get('agentCommander').runSpellWithResponse({
       inputs,
       secrets,
       publicVariables,
