@@ -3,7 +3,7 @@
  * A plugin for interacting with cog's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin } from '@magickml/core'
 import shared from '@magickml/plugin-cog-shared'
 
 // Importing shared variables from plugin-cog-shared module

@@ -1,6 +1,5 @@
 // DOCUMENTED
 import {
-  ChatMessage,
   CompletionHandlerInputData,
 } from '@magickml/core'
 import Replicate from 'replicate'
