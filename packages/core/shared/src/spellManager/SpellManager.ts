@@ -108,16 +108,22 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async run({ spellId, inputs, secrets, publicVariables, app }: RunArgs) {
+  async run(runArgs: RunArgs) {
     this.logger.error(`You should use the agent commander to run spells instead of the spellManager run function`)
-
-    const result = await app.get('agentCommander').runSpellWithResponse({
-      inputs,
-      secrets,
-      publicVariables,
-      app,
-      agent: this.agent,
-    })
+    const { spellId, inputs, secrets, publicVariables, app } = runArgs;
+    let result: Record<string, unknown> | null = null;
+    if (this.agent) {
+      await app.get('agentCommander').runSpellWithResponse({
+        inputs,
+        secrets,
+        publicVariables,
+        app,
+        agent: this.agent,
+      })
+    } else {
+      const runner = this.getSpellRunner(spellId)
+      result = await runner?.runComponent(runArgs) ?? undefined
+    }
 
     this.agent?.publishEvent(`${spellId}:run`, {
       inputs,
