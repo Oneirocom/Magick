@@ -2,9 +2,7 @@
 import {
   ChatMessage,
   CompletionHandlerInputData,
-  saveRequest,
 } from '@magickml/core'
-import axios from 'axios'
 import Replicate from 'replicate'
 
 /**
@@ -19,7 +17,7 @@ export async function makeJsonformerCompletion(
   result?: string | null
   error?: string | null
 }> {
-  const { node, inputs, context } = data
+  const { inputs, context } = data
   const cogKey = context.module.secrets!['cog_api_key']
 
   const replicate = new Replicate({
@@ -43,15 +41,7 @@ export async function makeJsonformerCompletion(
   //   ),
   // } as any
 
-  // Initialize conversationMessages array
-  const conversationMessages: ChatMessage[] = []
-
-  // Get the user input
-  const input = inputs['input']?.[0] as string
-
   try {
-    const start = Date.now()
-
     const output = await replicate.run(
       'coffeeorgreentea/jsonformer:9f68cf07185e93bcee87e97f24bd50ec90c2acfb73779486b3e3ebf34e6bf6da',
       {
