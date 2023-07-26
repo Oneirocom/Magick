@@ -1,4 +1,4 @@
-import { getLogger } from '@magickml/core'
+import { AGENT_DELETE, getLogger } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import { Reporter } from '.'
 import { EventEmitter } from 'events'
@@ -16,6 +16,7 @@ export class FeathersSyncReporter implements Reporter {
         app.service('agents').on('patched', (agent: any) => {
             this.emitter.emit('agent:updated', agent)
         })
+        app.service('agents').on('deleted', (agent: any) => this.emitter.emit(AGENT_DELETE, agent))
         this.logger.info('FeathersSyncReporter initialized')
     }
 
