@@ -6,30 +6,30 @@
 // Import hooks from '@feathersjs/schema'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
-// Import API resolvers and validators
+// Import Intent resolvers and validators
 import {
-  apiDataResolver,
-  apiDataValidator,
-  apiExternalResolver,
-  apiQueryResolver,
-  apiQueryValidator,
-  apiResolver,
+  intentDataResolver,
+  intentDataValidator,
+  intentExternalResolver,
+  intentQueryResolver,
+  intentQueryValidator,
+  intentResolver,
 } from './intent.schema'
 
 // Import types and classes
 import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './intent.class'
+import { IntentService, getOptions } from './intent.class'
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
   interface ServiceTypes {
-    [apiPath]: ApiService
+    [intentPath]: IntentService
   }
 }
 
-// Constants for API path and methods
-export const apiPath = 'intent'
-export const apiMethods = ['get', 'create', 'remove'] as const
+// Constants for Intent path and methods
+export const intentPath = 'intent'
+export const intentMethods = ['get', 'create', 'remove'] as const
 
 // Export class and schema files
 export * from './intent.class'
@@ -41,34 +41,34 @@ export * from './intent.schema'
  */
 export const intent = (app: Application) => {
   // Register our service on the Feathers application
-  app.use(apiPath, new ApiService(getOptions(app)), {
+  app.use(intentPath, new IntentService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: apiMethods,
+    methods: intentMethods,
     // You can add additional custom events to be sent to clients here
     events: [],
   })
 
   // Initialize hooks
-  app.service(apiPath).hooks({
+  app.service(intentPath).hooks({
     around: {
       all: [
-        schemaHooks.resolveExternal(apiExternalResolver),
-        schemaHooks.resolveResult(apiResolver),
+        schemaHooks.resolveExternal(intentExternalResolver),
+        schemaHooks.resolveResult(intentResolver),
       ],
     },
     before: {
       all: [
-        schemaHooks.validateQuery(apiQueryValidator),
-        schemaHooks.resolveQuery(apiQueryResolver),
+        schemaHooks.validateQuery(intentQueryValidator),
+        schemaHooks.resolveQuery(intentQueryResolver),
       ],
       get: [],
       update: [
-        schemaHooks.validateData(apiDataValidator),
-        schemaHooks.resolveData(apiDataResolver),
+        schemaHooks.validateData(intentDataValidator),
+        schemaHooks.resolveData(intentDataResolver),
       ],
       create: [
-        schemaHooks.validateData(apiDataValidator),
-        schemaHooks.resolveData(apiDataResolver),
+        schemaHooks.validateData(intentDataValidator),
+        schemaHooks.resolveData(intentDataResolver),
       ],
       remove: [],
     },
