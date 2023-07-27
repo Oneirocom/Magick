@@ -59,8 +59,6 @@ const NewMenuBar = () => {
     TOGGLE_SNAP,
   } = events
 
-  const [menuVisibility, setMenuVisibility] = useState<boolean>(false)
-
   /**
    * Save handler
    */
