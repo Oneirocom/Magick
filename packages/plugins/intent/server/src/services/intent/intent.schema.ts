@@ -19,7 +19,7 @@ export const intentSchema = Type.Object(
     embedding: Type.Optional(Type.Any()),
     metadata: Type.Optional(Type.Any()),
   },
-  { $id: 'Intent', additionalProperties: false }
+  { $id: 'Intent' }
 )
 
 export type Intent = Static<typeof intentSchema>
@@ -35,7 +35,7 @@ export const intentDataSchema = Type.Pick(
   intentSchema,
   ['type', 'projectId', 'content', 'date', 'embedding', 'metadata'],
   {
-    $id: 'Intent',
+    $id: 'IntentData',
   }
 )
 

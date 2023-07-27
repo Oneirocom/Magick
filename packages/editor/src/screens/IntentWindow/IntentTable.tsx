@@ -230,7 +230,7 @@ function IntentTable({ intents, updateCallback }) {
   // Handle save action
   const handleSave = async (selectedModel) => {
     // call documents endpoint
-    const result = await fetch(`${API_ROOT_URL}/documents`, {
+    const result = await fetch(`${API_ROOT_URL}/intents`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

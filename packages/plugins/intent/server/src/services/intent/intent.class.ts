@@ -3,8 +3,7 @@
  * For more information about this file see
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
-import type { Id, Params, ServiceInterface } from '@feathersjs/feathers'
-import { Agent, AgentManager } from '@magickml/agents'
+import type { Params, ServiceInterface } from '@feathersjs/feathers'
 import { Application, app } from '@magickml/server-core'
 import type {
   Intent,
@@ -43,78 +42,39 @@ export class IntentService<ServiceParams extends IntentParams = IntentParams>
   constructor(public options: IntentServiceOptions) {}
 
   /**
-   * Handles the GET operation for the IntentService.
-   * @param id - The unique identifier for the resource.
-   * @param _params - Optional service parameters.
-   * @returns a Promise resolving to an IntentGetResponse or any error message.
-   */
-  async get(
-    id: Id,
-    _params?: ServiceParams
-  ): Promise<IntentGetResponse | any /* TODO: remove */> {
-    console.log('***** GET', id, _params)
-    const { intentKey, content } = _params?.query as any // TODO: why is this error
-    const app = this.options.app
-    console.log('app', app)
-
-    console.log('***** result', result)
-
-    return {
-      result,
-    }
-  }
-
-  /**
-   * Handles the CREATE operation for the ApiService.
-   * @param data - The data to create the new Api resource.
+   * Handles the CREATE operation for the IntentService.
+   * @param data - The data to create the new Intent resource.
    * @param params - Optional service parameters.
-   * @returns a Promise resolving to the created Api resources or error message.
+   * @returns a Promise resolving to the created Intent resources or error message.
    */
-  async create(data: ApiData, params?: ServiceParams): Promise<Api>
-  async create(data: ApiData[], params?: ServiceParams): Promise<Api[]>
-  async create(
-    data: ApiData | ApiData[]
-    // params: ServiceParams
-  ): Promise<Api | any /* TODO: type me */> {
-    return {
-      result,
+  async create(data: IntentData, params?: ServiceParams): Promise<Intent>
+  async create(data: IntentData[], params?: ServiceParams): Promise<Intent[]>
+  async create(data: IntentData | IntentData[]): Promise<Intent | any> {
+    //use text generation completion provider to create n variants
+
+    //for each variant:
+    //create a text embedding and save to documents
+    const docdb = app.get('docdb')
+    if (data.hasOwnProperty('secrets')) {
+      const { secrets, modelName, ...docData } = data as IntentData & {
+        secrets: string
+        modelName: string
+      }
+
+      docdb.fromString(docData.content, docData, {
+        modelName,
+        projectId: docData?.projectId,
+        secrets,
+      })
+
+      return docData
     }
-  }
-
-  /**
-   * Handles the UPDATE operation for the ApiService.
-   * @param id - The unique identifier for the resource to update.
-   * @param data - The data for the update.
-   * @returns a Promise resolving to the updated Api or error message.
-   */
-  async update(
-    id: Id,
-    data: ApiData
-    // _params?: ServiceParams
-  ): Promise<Api | any> {
-    const { content, apiKey } = data as any
-
-    return {
-      result,
-    }
-  }
-
-  /**
-   * Handles the REMOVE operation for the ApiService.
-   * @param id - The unique identifier for the resource to delete.
-   * @param _params - Optional service parameters.
-   * @returns a Promise resolving to the deleted Api or error message.
-   */
-  async remove(id: Id, _params?: ServiceParams): Promise<Intent | any> {
-    const { content, apiKey } = _params?.query as any
-
-    return {
-      result,
-    }
+    await docdb.from('documents').insert(data)
+    return data
   }
 }
 
-/** Helper function to get options for the ApiService. */
+/** Helper function to get options for the IntentService. */
 export const getOptions = (app: Application) => {
   return { app }
 }
