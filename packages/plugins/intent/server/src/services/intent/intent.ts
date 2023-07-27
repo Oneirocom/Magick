@@ -14,11 +14,11 @@ import {
   apiQueryResolver,
   apiQueryValidator,
   apiResolver,
-} from './api.schema'
+} from './intent.schema'
 
 // Import types and classes
 import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './api.class'
+import { ApiService, getOptions } from './intent.class'
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
@@ -28,18 +28,18 @@ declare module '@magickml/server-core' {
 }
 
 // Constants for API path and methods
-export const apiPath = 'api'
-export const apiMethods = ['get', 'create', 'update', 'remove'] as const
+export const apiPath = 'intent'
+export const apiMethods = ['get', 'create', 'remove'] as const
 
 // Export class and schema files
-export * from './api.class'
-export * from './api.schema'
+export * from './intent.class'
+export * from './intent.schema'
 
 /**
  * A configure function that registers the service and its hooks via `app.configure`
  * @param app - The Feathers application
  */
-export const api = (app: Application) => {
+export const intent = (app: Application) => {
   // Register our service on the Feathers application
   app.use(apiPath, new ApiService(getOptions(app)), {
     // A list of all methods this service exposes externally
