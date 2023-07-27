@@ -12,9 +12,7 @@ import { Menu, MenuItem, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import css from './menuBar.module.css'
 import { styled } from '@mui/material/styles'
-import Divider from '@mui/material/Divider'
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined'
-import { CSSTransition } from 'react-transition-group'
+import { NestedMenuItem } from 'mui-nested-menu';
 
 /**
  * MenuBar component
@@ -29,7 +27,6 @@ const MenuBar = () => {
   const [snapEnabled, setSnapEnabled] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [hoveredMenu, setHoveredMenu] = useState<null | string>(null)
   const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
     useProjectWindow()
 
@@ -40,9 +37,6 @@ const MenuBar = () => {
   const { openModal } = useModal()
 
   const activeTabRef = useRef<Tab | null>(null)
-  const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
-    null
-  )
 
   useEffect(() => {
     if (!activeTab || !activeTab.name) return
@@ -476,8 +470,6 @@ const MenuBar = () => {
    * @param {() => void} func
    */
 
-
-
   const handleMenuIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
     setIsMenuOpen(true)
@@ -487,12 +479,10 @@ const MenuBar = () => {
     setIsMenuOpen(false)
   }
 
-  const handleMenuHover = (menu: string) => {
-    setHoveredMenu(menu)
-  }
 
-  const StyledDivider = styled(Divider)(({ theme }) => ({
-    backgroundColor: 'black',
+
+  const NestedMenu = styled(NestedMenuItem)(({ theme }) => ({
+    backgroundColor: '#2B2B30',
     //remove all mergin and padding
     '& .MuiDivider-root': {
       margin: '0px !important',
@@ -500,25 +490,9 @@ const MenuBar = () => {
     },
   }))
 
-  const handleMenuItemLeave = () => {
-    setHoveredMenu(null)
-  }
-
-  const handleMenuItemEnter = (
-    item: string,
-    event: React.MouseEvent<HTMLElement>
-  ) => {
-    setSubMenuAnchorEl(event.currentTarget) // Set anchor element for sub-menu
-    setHoveredMenu(item)
-  }
-
   return (
     <>
-      <IconButton
-        onClick={handleMenuIconClick}
-        onMouseEnter={() => handleMenuHover('menu')}
-        onMouseLeave={() => handleMenuHover(null)}
-      >
+      <IconButton onClick={handleMenuIconClick}>
         <MenuIcon />
       </IconButton>
       <Menu
@@ -526,112 +500,82 @@ const MenuBar = () => {
         anchorEl={anchorEl}
         open={isMenuOpen}
         onClose={handleMenuClose}
-        onMouseEnter={() => handleMenuHover('menu')}
-        onMouseLeave={() => handleMenuHover(null)}
         sx={{
           '& .MuiMenu-paper': {
             background: '#2B2B30',
             width: '180px',
             shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-            borderRadius: '0px',
-          },
+
+          }
+
         }}
+        MenuListProps={{ sx: { py: 0 } }}
+        variant='menu'
       >
         {Object.keys(menuBarItems).map((item, index) => (
           <>
-            <MenuItem
+            <NestedMenu
               key={index}
-              sx={{ py: 0 }}
-              onMouseEnter={event => handleMenuItemEnter(item, event)} // Pass the event to handleMenuEnter
-              onMouseLeave={handleMenuItemLeave} // Handle mouse leave
+              parentMenuOpen={isMenuOpen}
+              label={Object.keys(menuBarItems)[index].toUpperCase()}
+              divider={true}
+              sx={{
+                '& .MuiMenu-paper': {
+                  background: '#2B2B30',
+                  width: '180px',
+                  shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+
+                }
+
+              }}
             >
-              <div className={css['menu-item']}>
-                <p>{Object.keys(menuBarItems)[index].toUpperCase()}</p>
-                <KeyboardArrowRightOutlinedIcon />
-              </div>
-              {/* {hoveredMenu === item && ( */}
-              <CSSTransition
-                in={hoveredMenu === item}
-                timeout={300}
-                classNames={{
-                  enter: css['menu-item-enter'],
-                  enterActive: css['menu-item-enter-active'],
-                  exit: css['menu-item-exit'],
-                  exitActive: css['menu-item-exit-active'],
-                }}
-                unmountOnExit
-              >
-                <Menu
-                  id={`sub-menu-${item}`} // Unique ID for each sub-menu
-                  anchorEl={subMenuAnchorEl} // Use different anchor element for sub-menu
-                  open
-                  onClose={() => setHoveredMenu(null)} // Close the sub-menu when the user unhovers from the menu item
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  sx={{
-                    '& .MuiMenu-paper': {
-                      background: '#2B2B30',
-                      width: '180px',
-                      shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                      borderRadius: '0px',
-                    },
-                  }}
-                >
-                  {Object.keys(menuBarItems[item].items).map(
-                    (subMenuKey, subIndex) => (
-                      <MenuItem
-                        key={subIndex}
-                        onClick={e => {
-                          menuBarItems[item].items[subMenuKey].onClick(e)
-                          handleMenuClose()
-                          console.log('clicked')
-                        }}
-                      >
-                        <div className={css['menu-item']}>
+              {Object.keys(menuBarItems[item].items).map(
+                (subMenuKey, subIndex) => (
+                  <MenuItem
+                    key={subIndex}
+                    onClick={e => {
+                      menuBarItems[item].items[subMenuKey].onClick(e)
+                      handleMenuClose()
 
-                          <p>
-                            {menuBarItems[item].items[subMenuKey].hasOwnProperty("isActive") && (
-                              <span
-                                className={
-                                  menuBarItems[item].items[subMenuKey]
-                                    .isActive
-                                    ? css['preference-active']
-                                    : css['preference-notActive']
-                                }
-                              >
-                                ●{' '}
-                              </span>
-                            )}
-                            {subMenuKey
-                              .replace(/_/g, ' ')
-                              .charAt(0)
-                              .toUpperCase() + subMenuKey.slice(1)}
-                          </p>
+                    }}
 
-                          {menuBarItems[item].items[subMenuKey].hotKey &&
-                            parseStringToUnicode(
-                              menuBarItems[item].items[subMenuKey].hotKey
-                                .split(',')[0]
-                                .charAt(0)
-                                .toUpperCase() +
-                              menuBarItems[item].items[subMenuKey].hotKey
-                                .split(',')[0]
-                                .slice(1)
-                            )}
+                  >
+                    <div className={css['menu-item']}>
+                      <p>
+                        {menuBarItems[item].items[subMenuKey].hasOwnProperty(
+                          'isActive'
+                        ) && (
+                            <span
+                              className={
+                                menuBarItems[item].items[subMenuKey].isActive
+                                  ? css['preference-active']
+                                  : css['preference-notActive']
+                              }
+                            >
+                              ●{' '}
+                            </span>
+                          )}
+                        {subMenuKey
+                          .replace(/_/g, ' ')
+                          .charAt(0)
+                          .toUpperCase() + subMenuKey.slice(1)}
+                      </p>
 
-
-
-                        </div>
-                      </MenuItem>
-                    )
-                  )}
-                </Menu>
-              </CSSTransition>
-              {/* )} */}
-            </MenuItem>
-            <StyledDivider />
+                      {menuBarItems[item].items[subMenuKey].hotKey &&
+                        parseStringToUnicode(
+                          menuBarItems[item].items[subMenuKey].hotKey
+                            .split(',')[0]
+                            .charAt(0)
+                            .toUpperCase() +
+                          menuBarItems[item].items[subMenuKey].hotKey
+                            .split(',')[0]
+                            .slice(1)
+                        )}
+                    </div>
+                  </MenuItem>
+                )
+              )}
+            </NestedMenu>
           </>
         ))}
       </Menu>
