@@ -23,7 +23,7 @@ export const intentSchema = Type.Object(
 )
 
 export type Intent = Static<typeof intentSchema>
-export const apiValidator = getValidator(intentSchema, dataValidator)
+export const intentValidator = getValidator(intentSchema, dataValidator)
 export const intentResolver = resolve<Intent, HookContext>({})
 
 export const intentExternalResolver = resolve<Intent, HookContext>({})
