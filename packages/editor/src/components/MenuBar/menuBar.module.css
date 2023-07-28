@@ -137,6 +137,6 @@ li.list-item:only-child {
 }
 
 .menu-bar-item {
-  background: red;
+  cursor: pointer;
   width: '180px';
 }
