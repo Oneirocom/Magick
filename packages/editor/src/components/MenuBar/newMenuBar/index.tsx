@@ -487,8 +487,6 @@ const NewMenuBar = () => {
         background: 'red',
       },
     },
-
-
   }))
 
   return (
@@ -506,7 +504,7 @@ const NewMenuBar = () => {
             background: '#2B2B30',
             width: '180px',
             shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-          }
+          },
         }}
         MenuListProps={{ sx: { py: 0 } }}
         variant="menu"
@@ -539,12 +537,14 @@ const NewMenuBar = () => {
                       padding: 0,
                     },
                   },
-                }
+                },
               }}
             >
               {Object.keys(menuBarItems[item].items).map(
                 (subMenuKey, subIndex) => {
-                  const hotKeyLabel = menuBarItems[item] ? menuBarItems[item].items[subMenuKey].hotKey : ''
+                  const hotKeyLabel = menuBarItems[item]
+                    ? menuBarItems[item].items[subMenuKey].hotKey
+                    : ''
                   // add useHotkeys for each sub-menu item
                   if (hotKeyLabel) {
                     useHotkeys(
@@ -566,33 +566,32 @@ const NewMenuBar = () => {
                         handleMenuClose()
                       }}
                       sx={{
-
                         '&:hover, &:focus': {
                           background: '#1BC5EB',
                           outline: 'none',
                         },
-
                       }}
                       divider={true}
-
                     >
                       <div className={css['menu-item']}>
                         <p>
                           {menuBarItems[item].items[subMenuKey].hasOwnProperty(
                             'isActive'
                           ) && (
-                              <span
-                                className={
-                                  menuBarItems[item].items[subMenuKey].isActive
-                                    ? css['preference-active']
-                                    : css['preference-notActive']
-                                }
-                              >
-                                ●{' '}
-                              </span>
-                            )}
-                          {subMenuKey.replace(/_/g, ' ').charAt(0).toUpperCase() +
-                            subMenuKey.slice(1)}
+                            <span
+                              className={
+                                menuBarItems[item].items[subMenuKey].isActive
+                                  ? css['preference-active']
+                                  : css['preference-notActive']
+                              }
+                            >
+                              ●{' '}
+                            </span>
+                          )}
+                          {subMenuKey
+                            .replace(/_/g, ' ')
+                            .charAt(0)
+                            .toUpperCase() + subMenuKey.slice(1)}
                         </p>
 
                         {hotKeyLabel &&
