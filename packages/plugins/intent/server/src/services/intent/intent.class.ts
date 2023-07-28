@@ -4,6 +4,8 @@
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
+import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
+import { KnexService } from '@feathersjs/knex'
 import { Application, app } from '@magickml/server-core'
 import type {
   Intent,
@@ -12,48 +14,26 @@ import type {
   IntentQuery,
 } from './intent.schema'
 
-export type { Intent, IntentData, IntentPatch, IntentQuery }
-
-/** Interface for Intent Service Options */
-export interface IntentServiceOptions {
-  app: Application
-}
-
 /** Type for Intent Params */
-export type IntentParams = Params<IntentQuery>
-
-/** Type for Intent GET Response */
-export type IntentGetResponse = {
-  result: Object
-}
+export type IntentParams = KnexAdapterParams<IntentQuery>
 
 /**
- * This is a skeleton for a custom service class. Remove or add the methods you need here.
- * Class to handle Intent services.
- * Implements ServiceInterface to integrate with FeathersJS.
+ * DocumentService class
+ * Implements the custom document service extending the base Knex service
+ * @extends {KnexService}
+ * @template ServiceParams {Params} Parameter type extended from base Params
  */
-export class IntentService<ServiceParams extends IntentParams = IntentParams>
-  implements ServiceInterface<Intent, IntentData, ServiceParams, IntentPatch>
-{
+export class IntentService<
+  ServiceParams extends Params = IntentParams
+> extends KnexService<Intent, IntentData, ServiceParams, IntentPatch> {
   /**
-   * Constructs an instance of IntentService.
-   * @param options - The options for the IntentService.
+   * Creates a new Intent
+   * @param data {DocumentData} The document data to create
+   * @return {Promise<any>} The created document
    */
-  constructor(public options: IntentServiceOptions) {}
-
-  /**
-   * Handles the CREATE operation for the IntentService.
-   * @param data - The data to create the new Intent resource.
-   * @param params - Optional service parameters.
-   * @returns a Promise resolving to the created Intent resources or error message.
-   */
-  async create(data: IntentData, params?: ServiceParams): Promise<Intent>
-  async create(data: IntentData[], params?: ServiceParams): Promise<Intent[]>
-  async create(data: IntentData | IntentData[]): Promise<Intent | any> {
-    //use text generation completion provider to create n variants
-
-    //for each variant:
-    //create a text embedding and save to documents
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  async create(data: IntentData): Promise<any> {
     const docdb = app.get('docdb')
     if (data.hasOwnProperty('secrets')) {
       const { secrets, modelName, ...docData } = data as IntentData & {
@@ -74,7 +54,21 @@ export class IntentService<ServiceParams extends IntentParams = IntentParams>
   }
 }
 
-/** Helper function to get options for the IntentService. */
-export const getOptions = (app: Application) => {
-  return { app }
+/**
+ * getOptions function
+ * Returns the options for the DocumentService
+ * @export
+ * @param {Application} app - The application instance
+ * @return {KnexAdapterOptions} - The options for the DocumentService
+ */
+export const getOptions = (app: Application): KnexAdapterOptions => {
+  return {
+    paginate: {
+      default: 1000,
+      max: 1000,
+    },
+    Model: app.get('dbClient'),
+    name: 'documents',
+    multi: ['remove'],
+  }
 }
