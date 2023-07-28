@@ -479,11 +479,16 @@ const NewMenuBar = () => {
 
   const NestedMenu = styled(NestedMenuItem)(({ theme }) => ({
     backgroundColor: '#2B2B30',
-    //remove all mergin and padding
-    '& .MuiDivider-root': {
-      margin: '0px !important',
-      padding: '0px !important ',
+    // change bg color of menu item
+    '& .MuiListItem-root': {
+      background: '#2B2B30',
+      color: '#FFFFFF',
+      '&:hover': {
+        background: 'red',
+      },
     },
+
+
   }))
 
   return (
@@ -501,7 +506,7 @@ const NewMenuBar = () => {
             background: '#2B2B30',
             width: '180px',
             shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-          },
+          }
         }}
         MenuListProps={{ sx: { py: 0 } }}
         variant="menu"
@@ -514,54 +519,90 @@ const NewMenuBar = () => {
               label={Object.keys(menuBarItems)[index].toUpperCase()}
               divider={true}
               sx={{
-                '& .MuiMenu-paper': {
-                  background: '#2B2B30',
-                  width: '180px',
-                  shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                '&:hover, &:focus': {
+                  background: '#1BC5EB',
+                  outline: 'none',
                 },
+              }}
+              MenuProps={{
+                sx: {
+                  '& .MuiMenu-paper': {
+                    background: '#2B2B30',
+                    width: '180px',
+                    shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                    paddingY: 0,
+                  },
+                  // remove menulist padding
+                  '& .MuiMenu-list': {
+                    padding: 0,
+                    '& .MuiListItem-root': {
+                      padding: 0,
+                    },
+                  },
+                }
               }}
             >
               {Object.keys(menuBarItems[item].items).map(
-                (subMenuKey, subIndex) => (
-                  <MenuItem
-                    key={subIndex}
-                    onClick={e => {
-                      menuBarItems[item].items[subMenuKey].onClick(e)
-                      handleMenuClose()
-                    }}
-                  >
-                    <div className={css['menu-item']}>
-                      <p>
-                        {menuBarItems[item].items[subMenuKey].hasOwnProperty(
-                          'isActive'
-                        ) && (
-                          <span
-                            className={
-                              menuBarItems[item].items[subMenuKey].isActive
-                                ? css['preference-active']
-                                : css['preference-notActive']
-                            }
-                          >
-                            ●{' '}
-                          </span>
-                        )}
-                        {subMenuKey.replace(/_/g, ' ').charAt(0).toUpperCase() +
-                          subMenuKey.slice(1)}
-                      </p>
+                (subMenuKey, subIndex) => {
+                  const hotKeyLabel = menuBarItems[item] ? menuBarItems[item].items[subMenuKey].hotKey : ''
+                  // add useHotkeys for each sub-menu item
+                  if (hotKeyLabel) {
+                    useHotkeys(
+                      menuBarItems[item].items[subMenuKey].hotKey,
+                      event => {
+                        event.preventDefault()
+                        menuBarItems[item].items[subMenuKey].onClick()
+                      },
+                      { enableOnFormTags: ['INPUT'] },
+                      [menuBarItems[item].items[subMenuKey].onClick]
+                    )
+                  }
 
-                      {menuBarItems[item].items[subMenuKey].hotKey &&
-                        parseStringToUnicode(
-                          menuBarItems[item].items[subMenuKey].hotKey
-                            .split(',')[0]
-                            .charAt(0)
-                            .toUpperCase() +
-                            menuBarItems[item].items[subMenuKey].hotKey
-                              .split(',')[0]
-                              .slice(1)
-                        )}
-                    </div>
-                  </MenuItem>
-                )
+                  return (
+                    <MenuItem
+                      key={subIndex}
+                      onClick={e => {
+                        menuBarItems[item].items[subMenuKey].onClick(e)
+                        handleMenuClose()
+                      }}
+                      sx={{
+
+                        '&:hover, &:focus': {
+                          background: '#1BC5EB',
+                          outline: 'none',
+                        },
+
+                      }}
+                      divider={true}
+
+                    >
+                      <div className={css['menu-item']}>
+                        <p>
+                          {menuBarItems[item].items[subMenuKey].hasOwnProperty(
+                            'isActive'
+                          ) && (
+                              <span
+                                className={
+                                  menuBarItems[item].items[subMenuKey].isActive
+                                    ? css['preference-active']
+                                    : css['preference-notActive']
+                                }
+                              >
+                                ●{' '}
+                              </span>
+                            )}
+                          {subMenuKey.replace(/_/g, ' ').charAt(0).toUpperCase() +
+                            subMenuKey.slice(1)}
+                        </p>
+
+                        {hotKeyLabel &&
+                          parseStringToUnicode(
+                            hotKeyLabel.slice(0, hotKeyLabel.indexOf(','))
+                          )}
+                      </div>
+                    </MenuItem>
+                  )
+                }
               )}
             </NestedMenu>
           </>
