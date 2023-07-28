@@ -1,13 +1,26 @@
 // DOCUMENTED
 import { resolve } from '@feathersjs/schema'
-import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import {
+  Type,
+  getValidator,
+  querySyntax,
+  getDataValidator,
+} from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '@magickml/server-core'
 import { dataValidator, queryValidator } from '@magickml/server-core'
 
 /**
- * Main data model schema
+ * Full data model schema for a document.
+ *
+ * @property {string} id - The document's ID.
+ * @property {string} [type] - The type of the document (optional).
+ * @property {string} [content] - The content of the document (optional).
+ * @property {string} projectId - The ID of the project that the document belongs to.
+ * @property {string} [date] - The date when the document was created (optional).
+ * @property {any} [embedding] - The embedding data of the document (optional).
+ * @property {any} [metadata] - The embedding data of the document (optional).
  */
 export const intentSchema = Type.Object(
   {
@@ -19,13 +32,11 @@ export const intentSchema = Type.Object(
     embedding: Type.Optional(Type.Any()),
     metadata: Type.Optional(Type.Any()),
   },
-  { $id: 'Intent' }
+  { $id: 'Intent', additionalProperties: false }
 )
 
 export type Intent = Static<typeof intentSchema>
-export const intentValidator = getValidator(intentSchema, dataValidator)
 export const intentResolver = resolve<Intent, HookContext>({})
-
 export const intentExternalResolver = resolve<Intent, HookContext>({})
 
 /**
@@ -40,7 +51,10 @@ export const intentDataSchema = Type.Pick(
 )
 
 export type IntentData = Static<typeof intentDataSchema>
-export const intentDataValidator = getValidator(intentDataSchema, dataValidator)
+export const intentDataValidator = getDataValidator(
+  intentDataSchema,
+  dataValidator
+)
 export const intentDataResolver = resolve<Intent, HookContext>({})
 
 /**
@@ -49,13 +63,14 @@ export const intentDataResolver = resolve<Intent, HookContext>({})
 export const intentPatchSchema = Type.Partial(intentSchema, {
   $id: 'IntentPatch',
 })
-
 export type IntentPatch = Static<typeof intentPatchSchema>
-export const intentPatchValidator = getValidator(
+export const intentPatchValidator = getDataValidator(
   intentPatchSchema,
   dataValidator
 )
 export const intentPatchResolver = resolve<Intent, HookContext>({})
+
+export const intentValidator = getValidator(intentSchema, dataValidator)
 
 /**
  * Schema for allowed query properties

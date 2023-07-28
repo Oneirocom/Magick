@@ -56,19 +56,14 @@ export const intent = (app: Application) => {
   app.service(intentPath).hooks({
     around: {
       all: [
-        schemaHooks.resolveExternal(intentExternalResolver),
-        schemaHooks.resolveResult(intentResolver),
+        // schemaHooks.resolveExternal(intentExternalResolver),
+        // schemaHooks.resolveResult(intentResolver),
       ],
     },
     before: {
       all: [
         schemaHooks.validateQuery(intentQueryValidator),
         schemaHooks.resolveQuery(intentQueryResolver),
-      ],
-      get: [],
-      update: [
-        schemaHooks.validateData(intentDataValidator),
-        schemaHooks.resolveData(intentDataResolver),
       ],
       create: [
         async (context: HookContext) => {
@@ -92,7 +87,6 @@ export const intent = (app: Application) => {
           }
         },
       ],
-      remove: [],
     },
     after: {
       all: [],
