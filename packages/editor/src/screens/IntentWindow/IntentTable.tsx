@@ -77,6 +77,10 @@ function IntentTable({ intents, updateCallback }) {
   const filteredProviders = pluginManager.getCompletionProviders('text', [
     'embedding',
   ]) as CompletionProvider[]
+  const chatProviders = pluginManager.getCompletionProviders('text', [
+    'text',
+    'chat',
+  ]) as CompletionProvider[]
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
@@ -226,9 +230,10 @@ function IntentTable({ intents, updateCallback }) {
     intent: '',
     date: new Date().toISOString(),
     embedding: '',
+    variations: 0
   })
   // Handle save action
-  const handleSave = async (selectedModel) => {
+  const handleSave = async (selectedModel, selectedChatModel) => {
     // call documents endpoint
     const result = await fetch(`${API_ROOT_URL}/intents`, {
       method: 'POST',
@@ -244,6 +249,8 @@ function IntentTable({ intents, updateCallback }) {
         metadata: `{"intent": {"name": "${newIntent.intent}", "type": "story"}}`,
         projectId: config.projectId,
         modelName: selectedModel.model,
+        variations: newIntent.variations,
+        chatModelName: selectedChatModel.model,
         secrets: localStorage.getItem('secrets'),
       }),
     });
@@ -256,6 +263,7 @@ function IntentTable({ intents, updateCallback }) {
         intent: '',
         date: '',
         embedding: '',
+        variations: 0
       });
       enqueueSnackbar('Intent saved successfully', { variant: 'success' });
 
@@ -293,6 +301,7 @@ function IntentTable({ intents, updateCallback }) {
         handleSave={handleSave}
         setNewIntent={setNewIntent}
         providerList={filteredProviders}
+        chatProviderList={chatProviders}
       />
     )}
       <Container className={styles.container} classes={{ root: styles.root }}>

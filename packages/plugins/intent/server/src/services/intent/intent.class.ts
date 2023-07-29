@@ -13,6 +13,7 @@ import type {
   IntentPatch,
   IntentQuery,
 } from './intent.schema'
+import { CompletionProvider, pluginManager } from '@magickml/core'
 
 /** Type for Intent Params */
 export type IntentParams = KnexAdapterParams<IntentQuery>
@@ -35,11 +36,26 @@ export class IntentService<
   // @ts-ignore
   async create(data: IntentData): Promise<any> {
     const docdb = app.get('docdb')
+
     if (data.hasOwnProperty('secrets')) {
-      const { secrets, modelName, ...docData } = data as IntentData & {
-        secrets: string
-        modelName: string
-      }
+      const { secrets, modelName, chatModelName, variations, ...docData } =
+        data as IntentData & {
+          secrets: string
+          modelName: string
+          chatModelName: string
+          variations: number
+        }
+
+      //call chat model and get n variations
+      // get completion providers for text and chat categories
+      const completionProviders = pluginManager.getCompletionProviders('text', [
+        'text',
+        'chat',
+      ]) as CompletionProvider[]
+      const provider = completionProviders.find(provider =>
+        provider.models.includes(chatModelName)
+      ) as CompletionProvider
+      const completionHandler = provider.handler
 
       docdb.fromString(docData.content, docData, {
         modelName,
@@ -49,6 +65,7 @@ export class IntentService<
 
       return docData
     }
+
     await docdb.from('documents').insert(data)
     return data
   }
