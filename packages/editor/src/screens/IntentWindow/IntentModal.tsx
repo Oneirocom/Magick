@@ -4,13 +4,14 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack'
 
-const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, providerList }) => {
+const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, providerList, chatProviderList }) => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar()
   const [newIntent, setIntent] = useState({
     type: '',
     content: '',
-    intent: ''
+    intent: '',
+    variations: 0
   });
 
   useEffect(() => {
@@ -27,10 +28,20 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
     setSelectedModel({ model: selectedModelValue, object: selectedObject });
   };
 
+  const [selectedChatModel, setSelectedChatModel] = useState(null);
+
+  const handleChatModelChange = (event) => {
+    const selectedChatModelValue = event.target.value;
+    const selectedObject = chatProviderList.find(
+      (provider) => provider.models.includes(selectedChatModelValue)
+    );
+    setSelectedChatModel({ model: selectedChatModelValue, object: selectedObject });
+  };
+
   const handleSaveIntent = () => {
     setLoading(true);
     if (newIntent.type) {
-      handleSave(selectedModel);
+      handleSave(selectedModel, selectedChatModel);
       setLoading(false);
     } else {
       setLoading(false);
@@ -68,7 +79,7 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
             />
           </Grid> */}
           <Grid item xs={6}>
-            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Select Model</Typography>
+            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Select Embedding Model</Typography>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -116,6 +127,40 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
             multiline
             rows={5}
           />
+        </Grid>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        style={{ display: "flex", gap: "5rem", alignItems: "center" }}>
+        <Grid item xs={6}>
+          <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Variations</Typography>
+          <TextField
+            name="intent"
+            style={{ width: '100%', margin: '.5em' }}
+            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+            onChange={(e) => setIntent({ ...newIntent, variations: parseInt(e.target.value) })}
+            required
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Select Variation Model</Typography>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={selectedChatModel?.model || ''}
+            label="ChatModel"
+            onChange={handleChatModelChange}
+            fullWidth
+          >
+            {chatProviderList.map((provider, index) =>
+              provider.models.map((model) => (
+                <MenuItem key={`${provider.subtype}-${index}`} value={model}>
+                  {model}
+                </MenuItem>
+              ))
+            )}
+          </Select>
         </Grid>
       </Grid>
     </Modal>
