@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A plugin for interacting with OpenAI's API.
  * @class
@@ -84,7 +84,7 @@ const chatCompletionControls = [
     name: 'Presence Penalty (0-2.0)',
     icon: 'moon',
     defaultValue: 0,
-  }
+  },
 ]
 
 // Object containing all input controls for different completion types
@@ -92,6 +92,7 @@ const inspectorControls = {
   text: textCompletionControls,
   chat: chatCompletionControls,
   embedding: [],
+  typeChat: [],
 }
 
 // Creating a new OpenAIPlugin instance
@@ -99,7 +100,7 @@ const OpenAIPlugin = new ClientPlugin({
   name: 'OpenAIPlugin',
   secrets, // API Key and Model ID secrets
   completionProviders: completionProviders.map(provider => {
-    // Adding custom input controls for each completion type 
+    // Adding custom input controls for each completion type
     return {
       ...provider,
       inspectorControls: inspectorControls[provider.subtype],
