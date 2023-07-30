@@ -3,6 +3,7 @@ import {
   arraySocket,
   CompletionProvider,
   embeddingSocket,
+  objectSocket,
   PluginSecret,
   stringSocket,
 } from '@magickml/core'
@@ -107,6 +108,40 @@ const completionProviders: CompletionProvider[] = [
       },
     ],
     models: ['gpt-3.5-turbo', ...GPT4_MODELS],
+  },
+  {
+    type: 'text',
+    subtype: 'typeChat',
+    inputs: [
+      {
+        socket: 'input',
+        name: 'Input',
+        type: stringSocket,
+      },
+      {
+        socket: 'schema',
+        name: 'Schema',
+        type: stringSocket,
+      },
+      {
+        socket: 'responseType',
+        name: 'Response Type',
+        type: stringSocket,
+      },
+    ],
+    outputs: [
+      {
+        socket: 'result',
+        name: 'Result',
+        type: objectSocket,
+      },
+      {
+        socket: 'error',
+        name: 'Error',
+        type: stringSocket,
+      },
+    ],
+    models: ['gpt-3.5-turbo'],
   },
 ]
 
