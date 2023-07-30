@@ -166,6 +166,7 @@
     "rete-connection-plugin": "0.9.0",
     "rollup-plugin-ignore": "1.0.10",
     "rollup-plugin-node-polyfills": "0.2.1",
+    "runtypes": "^6.7.0",
     "sanitize-filename": "^1.6.3",
     "sentence-splitter": "^4.2.1",
     "sepia-speechrecognition-polyfill": "1.0.0",
@@ -180,6 +181,7 @@
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "twitter-api-v2": "1.14.3",
+    "typechat": "^0.0.10",
     "typedoc": "0.24.7",
     "typedoc-plugin-markdown": "3.15.3",
     "unique-names-generator": "4.7.1",
@@ -191,6 +193,7 @@
     "wav": "1.0.2",
     "xlsx": "0.18.5",
     "xstate": "^4.37.2",
+    "yup": "^1.2.0",
     "zustand": "4.3.8"
   },
   "peerDependencies": {
