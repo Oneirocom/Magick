@@ -157,6 +157,7 @@ export type NodeCategory =
   | 'Database'
   | 'Github'
   | 'Intent'
+  | 'Weather'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<

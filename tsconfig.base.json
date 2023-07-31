@@ -207,6 +207,15 @@
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
       ],
+      "@magickml/plugin-weather-client": [
+        "packages/plugins/weather/client/src/index.ts"
+      ],
+      "@magickml/plugin-weather-server": [
+        "packages/plugins/weather/server/src/index.ts"
+      ],
+      "@magickml/plugin-weather-shared": [
+        "packages/plugins/weather/shared/src/index.ts"
+      ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
