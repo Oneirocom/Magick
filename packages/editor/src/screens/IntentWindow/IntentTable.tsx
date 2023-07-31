@@ -1,7 +1,7 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { TableComponent } from '@magickml/client-core'
-import { CompletionProvider, documentSchema, pluginManager } from '@magickml/core'
+import { CompletionProvider, pluginManager } from '@magickml/core'
 import { API_ROOT_URL } from '@magickml/config'
 import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {
@@ -214,12 +214,6 @@ function IntentTable({ intents, updateCallback }) {
     handleActionClose()
     updateCallback()
   }
-
-  // Get the original rows data
-  const originalRows = useMemo(
-    () => flatRows.map(row => row.original),
-    [flatRows]
-  )
 
   // Create mode state
   const [createMode, setCreateMode] = useState(false)
