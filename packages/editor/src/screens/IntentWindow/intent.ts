@@ -9,8 +9,8 @@ export const columns: Column[] = [
   { id: 'action', label: 'Actions', minWidth: 10 },
   { id: 'collapse', label: '', minWidth: 10 },
   { id: 'content', label: 'Content', minWidth: 65 },
-  { id: 'type', label: 'Type', minWidth: 65 },
   { id: 'intent', label: 'Intent', minWidth: 65 },
+  { id: 'type', label: 'Type', minWidth: 65 },
   { id: 'date', label: 'Date', minWidth: 65 },
 ]
 
