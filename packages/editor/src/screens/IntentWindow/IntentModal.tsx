@@ -28,20 +28,10 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
     setSelectedModel({ model: selectedModelValue, object: selectedObject });
   };
 
-  const [selectedChatModel, setSelectedChatModel] = useState(null);
-
-  const handleChatModelChange = (event) => {
-    const selectedChatModelValue = event.target.value;
-    const selectedObject = chatProviderList.find(
-      (provider) => provider.models.includes(selectedChatModelValue)
-    );
-    setSelectedChatModel({ model: selectedChatModelValue, object: selectedObject });
-  };
-
   const handleSaveIntent = () => {
     setLoading(true);
     if (newIntent.type) {
-      handleSave(selectedModel, selectedChatModel);
+      handleSave(selectedModel);
       setLoading(false);
     } else {
       setLoading(false);
@@ -142,25 +132,6 @@ const IntentModal = ({ createMode, setCreateMode, handleSave, setNewIntent, prov
             onChange={(e) => setIntent({ ...newIntent, variations: parseInt(e.target.value) })}
             required
           />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Select Variation Model</Typography>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedChatModel?.model || ''}
-            label="ChatModel"
-            onChange={handleChatModelChange}
-            fullWidth
-          >
-            {chatProviderList.map((provider, index) =>
-              provider.models.map((model) => (
-                <MenuItem key={`${provider.subtype}-${index}`} value={model}>
-                  {model}
-                </MenuItem>
-              ))
-            )}
-          </Select>
         </Grid>
       </Grid>
     </Modal>
