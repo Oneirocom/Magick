@@ -66,6 +66,7 @@ const DiscordPlugin = new ClientPlugin({
     { name: 'Discord (Voice)', sockets: inputSockets },
     { name: 'Discord (Text)', sockets: inputSockets },
     { name: 'Discord (DM)', sockets: inputSockets },
+    { name: 'Discord (Image)', sockets: inputSockets }, //WIP
   ],
   outputTypes: [
     { name: 'Discord (Voice)', sockets: outputSockets },

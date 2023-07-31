@@ -1,5 +1,10 @@
 // DOCUMENTED
-import { audioSocket, eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import {
+  audioSocket,
+  eventSocket,
+  ServerPlugin,
+  triggerSocket,
+} from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
 import { handleVoiceResponse } from './connectors/discord-voice'
 
@@ -68,8 +73,10 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return agent.logger.warn('No output to send to discord')
 
-    await agent?.discord?.sendMessageToChannel(event.channel, output)
-
+  if (typeof output === 'object' && Object.hasOwnProperty.call(output, 'url')) {
+    await agent?.discord?.sendImageToChannelByUrl(event.channel, output.url)
+  }
+  await agent?.discord?.sendMessageToChannel(event.channel, output)
 }
 
 // Input socket configurations
