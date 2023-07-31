@@ -34,6 +34,21 @@ export async function makeTextCompletion(
   const requestData = {
     prompt,
     model: model.replace('cohere-', ''),
+    num_generations: 1,
+    max_tokens: (node?.data?.max_tokens as number) ?? 20,
+    temperature: (node?.data?.temperature as number) ?? 0.75,
+    k: (node?.data?.k as number) ?? 0,
+    p: (node?.data?.p as number) ?? 0.75,
+    frequency_penalty: (node?.data?.frequency_penalty as number) ?? 0,
+    presence_penalty: (node?.data?.presence_penalty as number) ?? 0,
+    end_sequences: (node?.data?.end_sequences as string)
+      ? (node?.data?.end_sequences as string).split(',')
+      : [],
+    stop_sequences: (node?.data?.stop_sequences as string)
+      ? (node?.data?.stop_sequences as string).split(',')
+      : [],
+    return_likelihoods: (node?.data?.return_likelihoods as string) ?? 'NONE',
+    truncate: (node?.data?.truncate as string) ?? 'END',
   }
 
   // const requestData = {
@@ -66,15 +81,37 @@ export async function makeTextCompletion(
   // Make the API request and handle the response.
   try {
     const start = Date.now()
-    const generateResponse = await cohere.generate({
-      model: requestData.model,
-      prompt,
-      max_tokens: 50,
-      temperature: 1,
-      num_generations: 2,
-    })
+    const generateResponse = await cohere.generate(requestData as any)
 
-    console.log(generateResponse)
+    // Save the request data for future reference.
+    saveRequest({
+      projectId: projectId,
+      requestData: JSON.stringify(requestData),
+      responseData: JSON.stringify(generateResponse),
+      startTime: start,
+      statusCode: generateResponse.statusCode,
+      status: generateResponse.statusCode === 200 ? 'success' : 'error',
+      model: requestData.model,
+      parameters: JSON.stringify({
+        max_tokens: requestData.max_tokens,
+        temperature: requestData.temperature,
+        k: requestData.k,
+        p: requestData.p,
+        frequency_penalty: requestData.frequency_penalty,
+        presence_penalty: requestData.presence_penalty,
+        end_sequences: requestData.end_sequences,
+        stop_sequences: requestData.stop_sequences,
+        return_likelihoods: requestData.return_likelihoods,
+        truncate: requestData.truncate,
+      }),
+      type: 'completion',
+      provider: 'cohere',
+      totalTokens: 0,
+      hidden: false,
+      processed: false,
+      spell,
+      nodeId: node.id,
+    })
 
     // switch on status code
     switch (generateResponse.statusCode) {
@@ -110,39 +147,7 @@ export async function makeTextCompletion(
     return {
       success: true,
       result: generateResponse.body.generations[0].text,
-      results: generateResponse.body.generations.map(g => g.text),
     }
-    // const usage = resp.data.usage
-
-    // Save the request data for future reference.
-    // saveRequest({
-    //   projectId: projectId,
-    //   requestData: JSON.stringify(settings),
-    //   responseData: JSON.stringify(resp.data),
-    //   startTime: start,
-    //   statusCode: resp.status,
-    //   status: resp.statusText,
-    //   model: settings.model,
-    //   parameters: JSON.stringify(settings),
-    //   type: 'completion',
-    //   provider: 'cohere',
-    //   totalTokens: usage.total_tokens,
-    //   hidden: false,
-    //   processed: false,
-    //   spell,
-    //   nodeId: node.id as number,
-    // })
-
-    // Check if choices array is not empty, then return the result.
-    // if (resp.data.choices && resp.data.choices.length > 0) {
-    //   const choice = resp.data.choices[0]
-    //   return {
-    //     success: true,
-    //     result: choice.text,
-    //     model: settings.model,
-    //     totalTokens: usage.total_tokens,
-    //   }
-    // }
   } catch (err: any) {
     console.error(err)
     return { success: false, error: err.message }

@@ -40,11 +40,6 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
       {
-        socket: 'results',
-        name: 'Results',
-        type: arraySocket,
-      },
-      {
         socket: 'error',
         name: 'Error',
         type: stringSocket,
@@ -57,53 +52,53 @@ const completionProviders: CompletionProvider[] = [
       'cohere-base-light',
     ],
   },
-  {
-    type: 'text',
-    subtype: 'embedding',
-    inputs: [
-      {
-        socket: 'input',
-        name: 'Input',
-        type: stringSocket,
-      },
-    ],
-    outputs: [
-      {
-        socket: 'embedding',
-        name: 'Embedding',
-        type: embeddingSocket,
-      },
-    ],
-    models: [
-      'embed-english-v2.0',
-      'embed-english-light-v2.0',
-      'embed-multilingual-v2.0',
-    ],
-  },
-  {
-    type: 'text',
-    subtype: 'summarize',
-    inputs: [
-      {
-        socket: 'input',
-        name: 'Input',
-        type: stringSocket,
-      },
-    ],
-    outputs: [
-      {
-        socket: 'result',
-        name: 'Result',
-        type: stringSocket,
-      },
-      {
-        socket: 'error',
-        name: 'Error',
-        type: stringSocket,
-      },
-    ],
-    models: ['summarize-medium', 'summarize-xlarge'],
-  },
+  // {
+  //   type: 'text',
+  //   subtype: 'embedding',
+  //   inputs: [
+  //     {
+  //       socket: 'input',
+  //       name: 'Input',
+  //       type: stringSocket,
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       socket: 'embedding',
+  //       name: 'Embedding',
+  //       type: embeddingSocket,
+  //     },
+  //   ],
+  //   models: [
+  //     'embed-english-v2.0',
+  //     'embed-english-light-v2.0',
+  //     'embed-multilingual-v2.0',
+  //   ],
+  // },
+  // {
+  //   type: 'text',
+  //   subtype: 'summarize',
+  //   inputs: [
+  //     {
+  //       socket: 'input',
+  //       name: 'Input',
+  //       type: stringSocket,
+  //     },
+  //   ],
+  //   outputs: [
+  //     {
+  //       socket: 'result',
+  //       name: 'Result',
+  //       type: stringSocket,
+  //     },
+  //     {
+  //       socket: 'error',
+  //       name: 'Error',
+  //       type: stringSocket,
+  //     },
+  //   ],
+  //   models: ['summarize-medium', 'summarize-xlarge'],
+  // },
 ]
 
 export default {

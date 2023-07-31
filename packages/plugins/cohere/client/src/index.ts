@@ -18,13 +18,6 @@ const { secrets, completionProviders } = shared
 const textCompletionControls = [
   {
     type: NumberControl,
-    dataKey: 'num_generations',
-    name: 'Number of Generations',
-    icon: 'moon',
-    defaultValue: 1,
-  },
-  {
-    type: NumberControl,
     dataKey: 'max_tokens',
     name: 'Max Tokens',
     icon: 'moon',
@@ -100,7 +93,6 @@ const textCompletionControls = [
 // Object containing all input controls for different completion types
 const inspectorControls = {
   text: textCompletionControls,
-  embedding: [],
 }
 
 // Creating a new coherePlugin instance
