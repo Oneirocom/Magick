@@ -51,6 +51,12 @@ export class IntentService<
           variations: number
         }
 
+      docdb.fromString(docData.content, docData, {
+        modelName,
+        projectId: docData?.projectId,
+        secrets,
+      })
+
       if (variations > 0) {
         //call chat model and get n variations
         // get completion providers for text and chat categories
@@ -161,12 +167,6 @@ export class IntentService<
           )
         }
       }
-
-      docdb.fromString(docData.content, docData, {
-        modelName,
-        projectId: docData?.projectId,
-        secrets,
-      })
 
       return docData
     }
