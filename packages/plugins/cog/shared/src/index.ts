@@ -4,6 +4,8 @@ import {
   PluginSecret,
   stringSocket,
   objectSocket,
+  arraySocket,
+  numberSocket,
 } from '@magickml/core'
 
 /**
@@ -45,6 +47,35 @@ const completionProviders: CompletionProvider[] = [
       },
     ],
     models: ['dolly-v2-3B'],
+  },
+  {
+    type: 'image',
+    subtype: 'text2image',
+    inputs: [
+      {
+        socket: 'prompt',
+        name: 'Prompt',
+        type: stringSocket,
+      },
+      {
+        socket: 'negative_prompt',
+        name: 'Negative Prompt',
+        type: stringSocket,
+      },
+      {
+        socket: 'count',
+        name: 'Count',
+        type: numberSocket,
+      },
+    ],
+    outputs: [
+      {
+        socket: 'result',
+        name: 'Result',
+        type: arraySocket,
+      },
+    ],
+    models: ['stable-diffusion-2.1'],
   },
 ]
 

@@ -12,7 +12,8 @@
 import { ServerPlugin } from '@magickml/core'
 import shared from '@magickml/plugin-cog-shared'
 import {
-  makeJsonformerCompletion
+  makeJsonformerCompletion,
+  makeTextToImageCompletion
 } from './functions'
 
 /**
@@ -26,6 +27,9 @@ const { secrets } = shared
 const completionHandlers = {
   text: {
     json: makeJsonformerCompletion,
+  },
+  image: {
+    text2image: makeTextToImageCompletion,
   },
 }
 

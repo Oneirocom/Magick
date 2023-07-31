@@ -84,6 +84,7 @@ import { Trim } from './text/Trim'
 import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
 import { Jsonformer } from './text/Jsonformer'
+import { TextToImage } from './image/TextToImage'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -169,6 +170,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   jsonToArray: () => new JSONToArray(),
   jsonformer: () => new Jsonformer(),
   generateUUID: () => new UUIDGenerator(),
+  textToImage: () => new TextToImage(),
 }
 
 /**
