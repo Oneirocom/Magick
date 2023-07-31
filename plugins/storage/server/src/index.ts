@@ -29,7 +29,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds OpenAI completion functionality
+ * A server plugin for the @magickml/core that adds storage completion functionality
  */
 const StoragePlugin = new ServerPlugin({
   name: 'StoragePlugin',
