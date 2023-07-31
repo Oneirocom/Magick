@@ -87,6 +87,7 @@ import { TypeChat } from './text/TypeChat'
 import { CommandParser } from './flow/CommandParser'
 import { UploadBase64 } from './files/UploadBase64'
 import { Jsonformer } from './text/Jsonformer'
+import { TextToImage } from './image/TextToImage'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -175,6 +176,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   typeChat: () => new TypeChat(),
   commandParser: () => new CommandParser(),
   uploadBase64: () => new UploadBase64(),
+  textToImage: () => new TextToImage(),
 }
 
 /**

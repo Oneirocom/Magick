@@ -15,6 +15,7 @@ const textCompletionControls = []
 // Object containing all input controls for different completion types
 const inspectorControls = {
   text: textCompletionControls,
+  text2image: [],
 }
 
 // Creating a new cogPlugin instance
