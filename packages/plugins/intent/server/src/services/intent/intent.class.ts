@@ -158,7 +158,7 @@ export class IntentService<
           .map(val => val.substring(3))
 
         //create new document/embedding
-        for (let result of results) {
+        for (const result of results) {
           docdb.fromString(
             result,
             { ...docData, content: result },
