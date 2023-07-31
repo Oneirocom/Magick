@@ -7,7 +7,6 @@ import { task } from './tasks/tasks'
 import { document } from './documents/documents'
 import { projects } from './projects/projects'
 import { spellRunner } from './spell-runner/spell-runner'
-import { UploadService } from './Upload.class'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
@@ -29,9 +28,6 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(document)
   app.configure(spellRunner)
   app.configure(projects)
-
-  // Register custom upload service
-  app.use('upload' as any, new UploadService())
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better
