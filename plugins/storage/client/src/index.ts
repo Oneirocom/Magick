@@ -32,6 +32,13 @@ const uploadCompletionControls = [
     icon: 'moon',
     defaultValue: 'us-east-1',
   },
+  {
+    type: InputControl,
+    dataKey: 'fileExtension',
+    name: 'File Extension',
+    icon: 'moon',
+    defaultValue: '.png',
+  },
 ]
 
 // Object containing all input controls for different completion types

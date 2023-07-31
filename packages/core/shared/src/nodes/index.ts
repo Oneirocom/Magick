@@ -6,7 +6,6 @@ import { JSONToArray } from './array/JSONToArray'
 import { ArrayVariable } from './array/ArrayVariable'
 import { GetValueFromArray } from './array/GetValueFromArray'
 import { JoinListComponent } from './array/JoinList'
-import { Base64ToPNG } from './files/Base64ToPNG'
 import { RemapArray } from './array/RemapArray'
 import { ExtractFromArray } from './array/ExtractFromArray'
 import { BooleanVariable } from './boolean/BooleanVariable'
@@ -50,7 +49,7 @@ import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
 import { LessThan } from './number/LessThan'
 import { LessThanOrEqual } from './number/LessThanOrEqual'
-import { Multiply} from './number/Multiply'
+import { Multiply } from './number/Multiply'
 import { Divide } from './number/Divide'
 import { Add } from './number/Add'
 import { Subtract } from './number/Subtract'
@@ -86,6 +85,7 @@ import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
 import { TypeChat } from './text/TypeChat'
 import { CommandParser } from './flow/CommandParser'
+import { UploadBase64 } from './files/UploadBase64'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -146,7 +146,6 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   cosineSimilarity: () => new CosineSimilarity(),
   textToSpeech: () => new TextToSpeech(),
   skill: () => new Skill(),
-  base64topng: () => new Base64ToPNG(),
   runSpell: () => new RunSpell(),
   error: () => new ErrorNode(),
   respond: () => new Respond(),
@@ -173,6 +172,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   generateUUID: () => new UUIDGenerator(),
   typeChat: () => new TypeChat(),
   commandParser: () => new CommandParser(),
+  uploadBase64: () => new UploadBase64(),
 }
 
 /**
