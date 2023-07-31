@@ -233,7 +233,7 @@ function IntentTable({ intents, updateCallback }) {
     variations: 0
   })
   // Handle save action
-  const handleSave = async (selectedModel, selectedChatModel) => {
+  const handleSave = async (selectedModel) => {
     // call documents endpoint
     const result = await fetch(`${API_ROOT_URL}/intents`, {
       method: 'POST',
@@ -250,7 +250,7 @@ function IntentTable({ intents, updateCallback }) {
         projectId: config.projectId,
         modelName: selectedModel.model,
         variations: newIntent.variations,
-        chatModelName: selectedChatModel.model,
+        chatModelName: "gpt-3.5-turbo",
         secrets: localStorage.getItem('secrets'),
       }),
     });
