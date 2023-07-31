@@ -1,6 +1,6 @@
 {
   "name": "@magickml/plugin-storage-server",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "storage/server/src",
   "projectType": "library",
   "implicitDependencies": ["@magickml/core"],
