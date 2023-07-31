@@ -1,4 +1,4 @@
-// DOCUMENTED
+// UNDOCUMENTED
 /**
  * A plugin for the @magickml/core that adds storage functionality
  *
