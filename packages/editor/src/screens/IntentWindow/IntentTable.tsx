@@ -129,13 +129,13 @@ function IntentTable({ intents, updateCallback }) {
         disableSortBy: true,
       },
       {
-        Header: 'Type',
-        accessor: 'type',
+        Header: 'Intent',
+        accessor: 'intent',
         disableSortBy: true,
       },
       {
-        Header: 'Intent',
-        accessor: 'intent',
+        Header: 'Type',
+        accessor: 'type',
         disableSortBy: true,
       },
       {
