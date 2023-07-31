@@ -148,7 +148,7 @@ function IntentTable({ intents, updateCallback }) {
   )
 
   // Initialize the table with hooks
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
+  const { page, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
     setSortBy } =
     useTable(
       {
