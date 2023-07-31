@@ -25,6 +25,7 @@
   },
   "files": [],
   "include": [
-    "src"
+    "src",
+    "../../server-core/src/services/Upload.class.ts"
   ]
 }

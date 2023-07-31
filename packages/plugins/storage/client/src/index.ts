@@ -6,7 +6,7 @@
 import { ClientPlugin, InputControl } from '@magickml/core'
 import shared from '@magickml/plugin-storage-shared'
 
-// Importing shared variables from plugin-openai-shared module
+// Importing shared variables from plugin-storage-shared module
 const { secrets, completionProviders } = shared
 
 // Array of input controls for the upload completion type
