@@ -1,9 +1,7 @@
-// DOCUMENTED
+// UNDOCUMENTED
 import {
-  anySocket,
   arraySocket,
   CompletionProvider,
-  embeddingSocket,
   fileSocket,
   PluginSecret,
   stringSocket,
@@ -14,14 +12,14 @@ import {
  */
 const secrets: PluginSecret[] = [
   {
-    name: 'S3 Access Key (AWS)',
-    key: 'AWS_S3_ACCESS_KEY',
+    name: 'S3 Access Key',
+    key: 's3_access_key',
     global: true,
     getUrl: 'https://aws.com',
   },
   {
-    name: 'S3 Secret Key (AWS)',
-    key: 'AWS_S3_SECRET_KEY',
+    name: 'S3 Secret Key',
+    key: 's3_secret_key',
     global: true,
     getUrl: 'https://aws.com',
   },
@@ -36,32 +34,24 @@ const completionProviders: CompletionProvider[] = [
     subtype: 'upload',
     inputs: [
       {
-        socket: 'bucketName',
-        name: 'Bucket Name',
-        type: anySocket,
-      },
-      {
         socket: 'fileName',
         name: 'File Name',
-        type: anySocket,
+        type: stringSocket,
       },
       {
         socket: 'files',
-        name: 'Files',
-        type: anySocket,
+        name: 'Base64 Files',
+        type: arraySocket,
       },
     ],
     outputs: [
       {
-        socket: 'url',
-        name: 'URL',
-        type: stringSocket,
+        socket: 'urls',
+        name: 'URLs',
+        type: arraySocket,
       },
     ],
-    models: [
-      'AWS',
-      'Local (Local Dev)',
-    ],
+    models: ['AWS', 'Local'],
   },
   {
     type: 'storage',
