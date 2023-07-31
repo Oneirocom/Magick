@@ -7,14 +7,7 @@
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 // Import Intent resolvers and validators
-import {
-  intentDataResolver,
-  intentDataValidator,
-  intentExternalResolver,
-  intentQueryResolver,
-  intentQueryValidator,
-  intentResolver,
-} from './intent.schema'
+import { intentQueryResolver, intentQueryValidator } from './intent.schema'
 import { v4 as uuidv4 } from 'uuid'
 import pgvector from 'pgvector/pg'
 // Import types and classes

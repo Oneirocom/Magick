@@ -104,7 +104,7 @@ export class DocumentService<
         })
         .modify(function (queryBuilder) {
           if (param.metadata) {
-            let metadata =
+            const metadata =
               typeof param.metadata == 'object'
                 ? JSON.stringify(param.metadata)
                 : param.metadata

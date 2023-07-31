@@ -3,7 +3,7 @@
  * For more information about this file see
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
-import type { Params, ServiceInterface } from '@feathersjs/feathers'
+import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
 import { Application, app } from '@magickml/server-core'
@@ -43,12 +43,15 @@ export class IntentService<
     const docdb = app.get('docdb')
 
     if (data.hasOwnProperty('secrets')) {
-      let { secrets, modelName, chatModelName, variations, ...docData } =
+      let { variations } = data as IntentData & {
+        variations: number
+      }
+
+      const { secrets, modelName, chatModelName, ...docData } =
         data as IntentData & {
           secrets: string
           modelName: string
           chatModelName: string
-          variations: number
         }
 
       docdb.fromString(docData.content, docData, {
@@ -79,7 +82,7 @@ export class IntentService<
         }
 
         //mocking up a whole node >_>
-        let node: WorkerData = {
+        const node: WorkerData = {
           id: 7002,
           name: 'spell',
           inputs: {
@@ -123,14 +126,14 @@ export class IntentService<
           position: [272, 0],
         }
 
-        let inputs = {
+        const inputs = {
           input: [docData.content],
           system: [
             `You are a chat bot that takes an input sentence and responds with ${variations} variations that mean the same thing.`,
           ],
         }
-        let outputs: MagickWorkerOutputs = {}
-        let context = {
+        const outputs: MagickWorkerOutputs = {}
+        const context = {
           module: {
             secrets: JSON.parse(secrets),
           },
@@ -150,7 +153,7 @@ export class IntentService<
         }
 
         //split and remove numbers, for each:
-        let results: string[] = String(result)
+        const results: string[] = String(result)
           .split('\n')
           .map(val => val.substring(3))
 
