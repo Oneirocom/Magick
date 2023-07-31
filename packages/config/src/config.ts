@@ -119,3 +119,7 @@ export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
 export const AWS_BUCKET_NAME = getVarForEnvironment('AWS_BUCKET_NAME') || ''
 export const AWS_BUCKET_ENDPOINT =
   getVarForEnvironment('AWS_BUCKET_ENDPOINT') || ''
+export const LOCAL_STORAGE = getVarForEnvironment('LOCAL_STORAGE') === 'true'
+
+export const LOCAL_STORAGE_ENDPOINT =
+  getVarForEnvironment('LOCAL_STORAGE_ENDPOINT') || 'http://localhost:9444'
