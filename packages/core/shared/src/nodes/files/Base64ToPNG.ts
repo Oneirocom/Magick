@@ -2,17 +2,31 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import { documentSocket, imageSocket, stringSocket, triggerSocket } from '../../sockets'
-import { CompletionInspectorControls, CompletionProvider, CompletionSocket, MagickNode, MagickWorkerInputs, MagickWorkerOutputs, ModuleContext, WorkerData } from '../../types'
+import {
+  documentSocket,
+  imageSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
+import {
+  CompletionInspectorControls,
+  CompletionProvider,
+  CompletionSocket,
+  MagickNode,
+  MagickWorkerInputs,
+  MagickWorkerOutputs,
+  ModuleContext,
+  WorkerData,
+} from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { pluginManager } from '../../plugin'
+import { getLogger } from '../../logger'
 
 // Information about the component
-const info =
-  'Convert the base64 image into a PNG.'
+const info = 'Convert the base64 image into a PNG.'
 
 type WorkerReturn = {
-  url?: Object
+  urls: string[]
 }
 
 /**
@@ -25,7 +39,7 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       'Base64 To Image',
       {
         outputs: {
-          url: 'output',
+          urls: 'output',
           trigger: 'option',
         },
       },
@@ -40,27 +54,35 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The built node with the appropriate inputs and outputs.
    */
   builder(node: MagickNode) {
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const triggerInput = new Rete.Input(
+      'trigger',
+      'Trigger',
+      triggerSocket,
+      true
+    )
+    const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
     // get completion providers for text and chat categories
-    const completionProviders = pluginManager.getCompletionProviders('storage', [
-      'upload',
-    ]) as CompletionProvider[]
+    const completionProviders = pluginManager.getCompletionProviders(
+      'storage',
+      ['upload']
+    ) as CompletionProvider[]
 
     // get the models from the completion providers and flatten into a single array
-    const models = completionProviders.map(provider => provider.models).flat()
+    const storageProviders = completionProviders
+      .map(provider => provider.models)
+      .flat()
 
-    const modelName = new DropdownControl({
-      name: 'Model Name',
-      dataKey: 'model',
-      values: models,
-      defaultValue: models[0],
+    const storageProvider = new DropdownControl({
+      name: 'Storage Provider',
+      dataKey: 'storage',
+      values: storageProviders,
+      defaultValue: storageProviders[0],
     })
 
-    node.inspector.add(modelName)
+    node.inspector.add(storageProvider)
 
-    node.addInput(dataInput).addOutput(dataOutput)
+    node.addInput(triggerInput).addOutput(triggerOutput)
 
     let lastInputSockets: CompletionSocket[] | undefined = []
     let lastOutputSockets: CompletionSocket[] | undefined = []
@@ -122,12 +144,12 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       }
     }
 
-    modelName.onData = (value: string) => {
+    storageProvider.onData = (value: string) => {
       node.data.model = value
       configureNode()
     }
 
-    if (!node.data.model) node.data.model = models[0]
+    if (!node.data.model) node.data.model = storageProviders[0]
     configureNode()
     return node
   }
@@ -143,32 +165,29 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
     outputs: MagickWorkerOutputs,
     context: ModuleContext
   ): Promise<WorkerReturn> {
-    // Usage example
-    const bucketName = inputs['bucketName'][0] as unknown as string;
-    const fileName = inputs["fileName"][0] as unknown as string;
-    // get completion providers for text and chat categories
-    const completionProviders = pluginManager.getCompletionProviders('storage', [
-      'upload',
-    ]) as CompletionProvider[]
-    const model = (node.data as { model: string }).model as string
+    const logger = getLogger()
+
+    // get completion providers for storage and upload categories
+    const completionProviders = pluginManager.getCompletionProviders(
+      'storage',
+      ['upload']
+    ) as CompletionProvider[]
+    const storageProvider = (node.data as { model: string }).model as string
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
-      provider.models.includes(model)
+      provider.models.includes(storageProvider)
     ) as CompletionProvider
 
     const completionHandler = provider.handler
 
     if (!completionHandler) {
-      console.error('No completion handler found for provider', provider)
-      throw new Error('ERROR: Completion handler undefined')
+      logger.error('No completion handler found for provider', provider)
+      throw new Error('ERROR: Storage completion handler undefined')
     }
 
-    const base64Image = inputs['files'] as unknown as string
+    const base64Image = inputs['files'][0] as string
 
-    //const buffer = Buffer.from(base64Image, 'base64');
-    const buffer = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0));
-    node.data.fileName = fileName +"_converted.jpg"
-    node.data.bucketName = bucketName
+    const buffer = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0))
     node.data.file = buffer
     const { success, result, error } = await completionHandler({
       node,
@@ -176,11 +195,11 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       outputs,
       context,
     })
-    if (error) {
-      throw new Error(error)
+    if (!success) {
+      throw new Error('ERROR: ' + error)
     }
     return {
-      url: {url: result as string},
+      urls: result as string[],
     }
   }
 }
