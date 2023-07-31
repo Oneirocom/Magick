@@ -43,7 +43,7 @@ export class IntentService<
     const docdb = app.get('docdb')
 
     if (data.hasOwnProperty('secrets')) {
-      const { secrets, modelName, chatModelName, variations, ...docData } =
+      let { secrets, modelName, chatModelName, variations, ...docData } =
         data as IntentData & {
           secrets: string
           modelName: string
@@ -51,101 +51,116 @@ export class IntentService<
           variations: number
         }
 
-      //call chat model and get n variations
-      // get completion providers for text and chat categories
-      const completionProviders = pluginManager.getCompletionProviders('text', [
-        'text',
-        'chat',
-      ]) as CompletionProvider[]
-      const provider = completionProviders.find(provider =>
-        provider.models.includes(chatModelName)
-      ) as CompletionProvider
-      const completionHandler = provider.handler
+      if (variations > 0) {
+        //call chat model and get n variations
+        // get completion providers for text and chat categories
+        const completionProviders = pluginManager.getCompletionProviders(
+          'text',
+          ['text', 'chat']
+        ) as CompletionProvider[]
+        const provider = completionProviders.find(provider =>
+          provider.models.includes(chatModelName)
+        ) as CompletionProvider
+        const completionHandler = provider.handler
 
-      if (!completionHandler) {
-        console.error('No completion handler found for provider', provider)
-        throw new Error('ERROR: Completion handler undefined')
-      }
+        if (!completionHandler) {
+          console.error('No completion handler found for provider', provider)
+          throw new Error('ERROR: Completion handler undefined')
+        }
 
-      //mocking up a whole node >_>
-      let node: WorkerData = {
-        id: 7002,
-        name: 'spell',
-        inputs: {
-          input: {
-            connections: [
-              { output: 'output', node: 7004, data: { hello: 'hello' } },
-            ],
+        if (variations > 20) {
+          variations = 20
+        }
+
+        //mocking up a whole node >_>
+        let node: WorkerData = {
+          id: 7002,
+          name: 'spell',
+          inputs: {
+            input: {
+              connections: [
+                { output: 'output', node: 7004, data: { hello: 'hello' } },
+              ],
+            },
+            system: {
+              connections: [
+                { output: 'output', node: 7003, data: { hello: 'hello' } },
+              ],
+            },
+            trigger: {
+              connections: [
+                { output: 'trigger', node: 232, data: { hello: 'hello' } },
+              ],
+            },
           },
-          system: {
-            connections: [
-              { output: 'output', node: 7003, data: { hello: 'hello' } },
-            ],
+          outputs: {
+            trigger: {
+              connections: [
+                { input: 'trigger', node: 233, data: { hello: 'hello' } },
+              ],
+            },
+            result: {
+              connections: [
+                { input: 'input', node: 232, data: { hello: 'hello' } },
+              ],
+            },
           },
-          trigger: {
-            connections: [
-              { output: 'trigger', node: 232, data: { hello: 'hello' } },
-            ],
+          data: {
+            frequency_penalty: 0,
+            model: chatModelName,
+            presence_penalty: 0,
+            stopSequences: '',
+            temperature: 0.5,
+            top_k: 50,
+            top_p: 1,
           },
-        },
-        outputs: {
-          trigger: {
-            connections: [
-              { input: 'trigger', node: 233, data: { hello: 'hello' } },
-            ],
+          position: [272, 0],
+        }
+
+        let inputs = {
+          input: [docData.content],
+          system: [
+            `You are a chat bot that takes an input sentence and responds with ${variations} variations that mean the same thing.`,
+          ],
+        }
+        let outputs: MagickWorkerOutputs = {}
+        let context = {
+          module: {
+            secrets: JSON.parse(secrets),
           },
-          result: {
-            connections: [
-              { input: 'input', node: 232, data: { hello: 'hello' } },
-            ],
-          },
-        },
-        data: {
-          frequency_penalty: 0,
-          model: chatModelName,
-          presence_penalty: 0,
-          stopSequences: '',
-          temperature: 0.5,
-          top_k: 50,
-          top_p: 1,
-        },
-        position: [272, 0],
-      }
+          projectId: '',
+          currentSpell: '',
+        }
 
-      let inputs = { input: ['inputvalue'], system: ['prompt'] }
-      let outputs: MagickWorkerOutputs = {
-        // result: {
-        //   type: 'output',
-        //   key: 'result',
-        //   task: null
-        // },
-        // trigger: {
-        //   type: 'option',
-        //   key: 'trigger',
-        // },
-      }
-      let context = {
-        module: {
-          secrets: JSON.parse(secrets),
-        },
-        projectId: '',
-        currentSpell: '',
-      }
+        const { success, result, error } = await completionHandler({
+          node,
+          inputs,
+          outputs,
+          context,
+        })
+        console.log('result', result)
+        if (!success) {
+          throw new Error('ERROR: ' + error)
+        }
 
-      const { success, result, error } = await completionHandler({
-        node,
-        inputs,
-        outputs,
-        context,
-      })
-      console.log('result', result)
-      if (!success) {
-        throw new Error('ERROR: ' + error)
+        //split and remove numbers, for each:
+        let results: string[] = String(result)
+          .split('\n')
+          .map(val => val.substring(3))
+
+        //create new document/embedding
+        for (let result of results) {
+          docdb.fromString(
+            result,
+            { ...docData, content: result },
+            {
+              modelName,
+              projectId: docData?.projectId,
+              secrets,
+            }
+          )
+        }
       }
-
-      //split and remove numbers, for each:
-
-      //create new document/embedding
 
       docdb.fromString(docData.content, docData, {
         modelName,
