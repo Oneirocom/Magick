@@ -522,7 +522,7 @@ export type CompletionInspectorControls = {
 
 type HandlerResponse = {
   success: boolean
-  result: string | number[]
+  result: string | number[] | string[]
   error: string
 }
 
