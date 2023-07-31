@@ -13,7 +13,12 @@ import type {
   IntentPatch,
   IntentQuery,
 } from './intent.schema'
-import { CompletionProvider, pluginManager } from '@magickml/core'
+import {
+  CompletionProvider,
+  MagickWorkerOutputs,
+  WorkerData,
+  pluginManager,
+} from '@magickml/core'
 
 /** Type for Intent Params */
 export type IntentParams = KnexAdapterParams<IntentQuery>
@@ -56,6 +61,91 @@ export class IntentService<
         provider.models.includes(chatModelName)
       ) as CompletionProvider
       const completionHandler = provider.handler
+
+      if (!completionHandler) {
+        console.error('No completion handler found for provider', provider)
+        throw new Error('ERROR: Completion handler undefined')
+      }
+
+      //mocking up a whole node >_>
+      let node: WorkerData = {
+        id: 7002,
+        name: 'spell',
+        inputs: {
+          input: {
+            connections: [
+              { output: 'output', node: 7004, data: { hello: 'hello' } },
+            ],
+          },
+          system: {
+            connections: [
+              { output: 'output', node: 7003, data: { hello: 'hello' } },
+            ],
+          },
+          trigger: {
+            connections: [
+              { output: 'trigger', node: 232, data: { hello: 'hello' } },
+            ],
+          },
+        },
+        outputs: {
+          trigger: {
+            connections: [
+              { input: 'trigger', node: 233, data: { hello: 'hello' } },
+            ],
+          },
+          result: {
+            connections: [
+              { input: 'input', node: 232, data: { hello: 'hello' } },
+            ],
+          },
+        },
+        data: {
+          frequency_penalty: 0,
+          model: chatModelName,
+          presence_penalty: 0,
+          stopSequences: '',
+          temperature: 0.5,
+          top_k: 50,
+          top_p: 1,
+        },
+        position: [272, 0],
+      }
+
+      let inputs = { input: ['inputvalue'], system: ['prompt'] }
+      let outputs: MagickWorkerOutputs = {
+        // result: {
+        //   type: 'output',
+        //   key: 'result',
+        //   task: null
+        // },
+        // trigger: {
+        //   type: 'option',
+        //   key: 'trigger',
+        // },
+      }
+      let context = {
+        module: {
+          secrets: JSON.parse(secrets),
+        },
+        projectId: '',
+        currentSpell: '',
+      }
+
+      const { success, result, error } = await completionHandler({
+        node,
+        inputs,
+        outputs,
+        context,
+      })
+      console.log('result', result)
+      if (!success) {
+        throw new Error('ERROR: ' + error)
+      }
+
+      //split and remove numbers, for each:
+
+      //create new document/embedding
 
       docdb.fromString(docData.content, docData, {
         modelName,
