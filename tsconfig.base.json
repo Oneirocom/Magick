@@ -61,6 +61,15 @@
       "@magickml/plugin-bluesky-server": [
         "packages/plugins/bluesky/server/src/index.ts"
       ],
+      "@magickml/plugin-cohere-client": [
+        "packages/plugins/cohere/client/src/index.ts"
+      ],
+      "@magickml/plugin-cohere-server": [
+        "packages/plugins/cohere/server/src/index.ts"
+      ],
+      "@magickml/plugin-cohere-shared": [
+        "packages/plugins/cohere/shared/src/index.ts"
+      ],
       "@magickml/plugin-database-client": [
         "packages/plugins/database/client/src/index.ts"
       ],
