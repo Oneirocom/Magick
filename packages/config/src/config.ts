@@ -107,3 +107,8 @@ export const OPENMETER_ENDPOINT =
 
 export const OPENMETER_ENABLED =
   getVarForEnvironment('OPENMETER_ENABLED') === 'true'
+
+export const LOCAL_STORAGE = getVarForEnvironment('LOCAL_STORAGE') === 'true'
+
+export const LOCAL_STORAGE_ENDPOINT =
+  getVarForEnvironment('LOCAL_STORAGE_ENDPOINT') || 'http://localhost:9444'
