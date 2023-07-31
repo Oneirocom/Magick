@@ -17,7 +17,7 @@ interface UploadResult {
 }
 
 /**
- * Uploads a file to S3.
+ * Uploads a file to a storage provider.
  *
  * @param {CompletionHandlerInputData} data - The input data for the upload completion API.
  * @returns {Promise<UploadResult>} - A Promise resolving to the result of the completion API call.
@@ -26,7 +26,6 @@ export async function uploadFileToS3(
   data: CompletionHandlerInputData
 ): Promise<UploadResult> {
   const { node, inputs, context } = data
-  console.log('node', node)
   const logger = getLogger()
 
   if (!context.module.secrets) {
@@ -46,23 +45,39 @@ export async function uploadFileToS3(
     s3ForcePathStyle: LOCAL_STORAGE ? true : undefined, // Required for S3 Ninja
   })
 
-  const params = {
-    Bucket: node.data.bucketName as any,
-    Key: inputs['fileName'][0] as string,
-    Body: node.data.file as any,
-  }
+  const uploadedFilePaths: string[] = []
 
-  logger.info('Uploading file to S3', params)
-  return new Promise<UploadResult>((resolve, reject) => {
-    s3.putObject(params, function (putErr, putData) {
-      if (putErr) {
-        resolve({ success: false, error: putErr.message })
-      } else {
-        const filePath = LOCAL_STORAGE
-          ? `${LOCAL_STORAGE_ENDPOINT}/${params.Bucket}/${params.Key}`
-          : `https://s3.amazonaws.com/${node.data.bucketName}/${node.data.fileName}`
-        resolve({ success: true, result: [filePath] })
-      }
-    })
-  })
+  const files = node.data.files as Uint8Array[]
+
+  for (let i = 0; i < files.length; i++) {
+    const params = {
+      Bucket: node.data.bucketName as string,
+      Key: `${inputs['fileName'][0]}-${i + 1}${
+        node.data.fileExtension as string
+      }`,
+      Body: files[i],
+    }
+
+    logger.info('Uploading file to S3', params)
+
+    try {
+      await new Promise((resolve, reject) => {
+        s3.putObject(params, function (putErr, putData) {
+          if (putErr) {
+            logger.error('Error uploading file to S3', putErr)
+            reject(putErr)
+          } else {
+            const filePath = LOCAL_STORAGE
+              ? `${LOCAL_STORAGE_ENDPOINT}/${params.Bucket}/${params.Key}`
+              : `https://s3.amazonaws.com/${node.data.bucketName}/${params.Key}`
+            uploadedFilePaths.push(filePath)
+            resolve(putData)
+          }
+        })
+      })
+    } catch (putErr: any) {
+      return { success: false, error: putErr.message }
+    }
+  }
+  return { success: true, result: uploadedFilePaths }
 }

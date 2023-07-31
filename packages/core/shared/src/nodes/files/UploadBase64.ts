@@ -2,12 +2,7 @@
 import Rete from 'rete'
 
 import { MagickComponent } from '../../engine'
-import {
-  documentSocket,
-  imageSocket,
-  stringSocket,
-  triggerSocket,
-} from '../../sockets'
+import { triggerSocket } from '../../sockets'
 import {
   CompletionInspectorControls,
   CompletionProvider,
@@ -23,20 +18,37 @@ import { pluginManager } from '../../plugin'
 import { getLogger } from '../../logger'
 
 // Information about the component
-const info = 'Convert the base64 image into a PNG.'
+const info = 'Uploads base64 files to a storage provider.'
 
+/**
+ * Type definition for the worker return.
+ * @property urls - The urls of the uploaded files.
+ */
 type WorkerReturn = {
   urls: string[]
 }
 
 /**
- * EventsToConversation component, responsible for converting an array of events into a conversation string.
+ * Type definition for the worker data.
+ * @property data - The data for the worker.
+ * @property data.files - The files to upload.
+ * @property data.storage - The storage provider to use.
  */
-export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
+interface ExtendedWorkerData extends WorkerData {
+  data: {
+    files?: Uint8Array[]
+    storage: string
+  }
+}
+
+/**
+ * UploadBase64 component responsible for uploading base64 files to a storage provider.
+ */
+export class UploadBase64 extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     // Name of the component and its output sockets definition
     super(
-      'Base64 To Image',
+      'Upload Base64 Files',
       {
         outputs: {
           urls: 'output',
@@ -62,7 +74,7 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
     )
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    // get completion providers for text and chat categories
+    // get completion providers for the storage and upload completion types
     const completionProviders = pluginManager.getCompletionProviders(
       'storage',
       ['upload']
@@ -89,12 +101,12 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
     let lastInspectorControls: CompletionInspectorControls[] | undefined = []
 
     /**
-     * Configure the provided node according to the selected model and provider.
+     * Configure the provided node according to the selected storage provider.
      */
     const configureNode = () => {
-      const model = node.data.model as string
+      const storage = node.data.storage as string
       const provider = completionProviders.find(provider =>
-        provider.models.includes(model)
+        provider.models.includes(storage)
       ) as CompletionProvider
       const inspectorControls = provider.inspectorControls
       const inputSockets = provider.inputs
@@ -145,22 +157,22 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     storageProvider.onData = (value: string) => {
-      node.data.model = value
+      node.data.storage = value
       configureNode()
     }
 
-    if (!node.data.model) node.data.model = storageProviders[0]
+    if (!node.data.storage) node.data.storage = storageProviders[0]
     configureNode()
     return node
   }
   /**
-   * Worker method that performs the main logic of the component, converting base64URI to Image string.
+   * Worker method that performs the main logic of the component, uploading the base64 files to the selected storage provider.
    * @param node - The worker data for the current node.
    * @param inputs - The current inputs of the node.
    * @returns An object containing the resulting conversation string.
    */
   async worker(
-    node: WorkerData,
+    node: ExtendedWorkerData,
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
     context: ModuleContext
@@ -172,8 +184,8 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       'storage',
       ['upload']
     ) as CompletionProvider[]
-    const storageProvider = (node.data as { model: string }).model as string
-    // get the provider for the selected model
+    const storageProvider = node.data.storage as string
+    // get the provider for the selected storage provider
     const provider = completionProviders.find(provider =>
       provider.models.includes(storageProvider)
     ) as CompletionProvider
@@ -185,10 +197,16 @@ export class Base64ToPNG extends MagickComponent<Promise<WorkerReturn>> {
       throw new Error('ERROR: Storage completion handler undefined')
     }
 
-    const base64Image = inputs['files'][0] as string
+    node.data.files = []
+    const files = inputs['files'][0] as string[]
 
-    const buffer = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0))
-    node.data.file = buffer
+    // convert base64 files to Uint8Arrays
+    for (let i = 0; i < files.length; i++) {
+      const base64File = files[i]
+      const buffer = Uint8Array.from(atob(base64File), c => c.charCodeAt(0))
+      node.data.files.push(buffer)
+    }
+
     const { success, result, error } = await completionHandler({
       node,
       inputs,
