@@ -10,5 +10,4 @@ export const drawerTooltipText = {
   tasks: 'Objectives for agents to iterate through and complete.',
   avatar: 'Chat with your agents embodied with a 3D avatar.',
   settings: 'Global settings used in the Playtest window.',
-  intents: 'Create and manage intent stories for intent detection.',
 }
