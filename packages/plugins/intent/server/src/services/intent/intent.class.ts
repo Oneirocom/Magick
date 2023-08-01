@@ -43,15 +43,12 @@ export class IntentService<
     const docdb = app.get('docdb')
 
     if (data.hasOwnProperty('secrets')) {
-      let { variations } = data as IntentData & {
-        variations: number
-      }
-
-      const { secrets, modelName, chatModelName, ...docData } =
+      const { variations, secrets, modelName, chatModelName, ...docData } =
         data as IntentData & {
           secrets: string
           modelName: string
           chatModelName: string
+          variations: number
         }
 
       docdb.fromString(docData.content, docData, {
@@ -75,10 +72,6 @@ export class IntentService<
         if (!completionHandler) {
           console.error('No completion handler found for provider', provider)
           throw new Error('ERROR: Completion handler undefined')
-        }
-
-        if (variations > 20) {
-          variations = 20
         }
 
         //mocking up a whole node >_>
