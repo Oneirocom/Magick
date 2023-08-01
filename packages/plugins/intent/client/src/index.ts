@@ -1,10 +1,7 @@
 import { ClientPlugin } from '@magickml/core'
 import { getNodes } from '@magickml/plugin-intent-shared'
-
-const IntentPlugin = new ClientPlugin({
-  name: 'IntentPlugin',
-  nodes: getNodes(),
-})
+import MediationIcon from '@mui/icons-material/Mediation'
+import IntentWindow from './windows/IntentWindow'
 
 class TaskIntentPluginPlugin extends ClientPlugin {
   /**
@@ -20,20 +17,20 @@ class TaskIntentPluginPlugin extends ClientPlugin {
       drawerItems: [
         {
           path: '/intents',
-          icon: AssignmentTurnedInIcon,
-          text: 'Tasks',
-          tooltip: 'Objectives for agents to iterate through and complete',
+          icon: MediationIcon,
+          text: 'Intents',
+          tooltip: 'Create and manage intent stories for intent detection.',
         },
       ],
       clientRoutes: [
         {
           path: '/intents',
-          component: TaskWindow,
-          plugin: 'TaskPlugin',
+          component: IntentWindow,
+          plugin: 'IntentPlugin',
         },
       ],
     })
   }
 }
 
-export default new TaskPlugin()
+export default new TaskIntentPluginPlugin()
