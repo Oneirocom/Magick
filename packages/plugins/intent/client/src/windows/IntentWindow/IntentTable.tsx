@@ -243,7 +243,7 @@ function IntentTable({ intents, updateCallback }) {
         metadata: `{"intent": {"name": "${newIntent.intent}", "type": "story"}}`,
         projectId: config.projectId,
         modelName: selectedModel.model,
-        variations: newIntent.variations,
+        variations: newIntent.variations > 20 ? 20 : newIntent.variations,
         chatModelName: "gpt-3.5-turbo",
         secrets: localStorage.getItem('secrets'),
       }),
