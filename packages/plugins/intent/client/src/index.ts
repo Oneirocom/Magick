@@ -6,4 +6,34 @@ const IntentPlugin = new ClientPlugin({
   nodes: getNodes(),
 })
 
-export default IntentPlugin
+class TaskIntentPluginPlugin extends ClientPlugin {
+  /**
+   * Constructs a new instance of the `TaskPlugin` class.
+   */
+  constructor() {
+    super({
+      name: 'IntentPlugin',
+      agentComponents: [],
+      inputTypes: [],
+      spellTemplates: [],
+      nodes: getNodes(),
+      drawerItems: [
+        {
+          path: '/intents',
+          icon: AssignmentTurnedInIcon,
+          text: 'Tasks',
+          tooltip: 'Objectives for agents to iterate through and complete',
+        },
+      ],
+      clientRoutes: [
+        {
+          path: '/intents',
+          component: TaskWindow,
+          plugin: 'TaskPlugin',
+        },
+      ],
+    })
+  }
+}
+
+export default new TaskPlugin()
