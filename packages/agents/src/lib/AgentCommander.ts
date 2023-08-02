@@ -1,11 +1,11 @@
 import EventEmitter from "events"
-import type { Agent } from "packages/core/server/src/services/agents/agents.schema"
-import { type PubSub } from '@magickml/server-core'
+import type { Agent } from "@magickml/agents"
+import { type PubSub, type Job } from '@magickml/server-core'
 import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE, getLogger } from '@magickml/core'
 import type { MagickSpellInput } from "@magickml/core"
 import { v4 as uuidv4 } from 'uuid'
 import type pino from "pino"
-import { AgentResult } from "./Agent"
+import { AgentResult, AgentRunJob } from "./Agent"
 
 export type RunRootSpellArgs = {
     agent: Agent,
@@ -15,6 +15,9 @@ export type RunRootSpellArgs = {
     secrets?: Record<string, string>
     publicVariables?: Record<string, unknown>
     spellId?: string
+    isSubSpell?: boolean
+    currentJob?: Job<AgentRunJob>
+    subSpellDepth?: number
 }
 
 interface AgentCommanderArgs {
@@ -32,42 +35,42 @@ export class AgentCommander extends EventEmitter {
         this.pubSub = pubSub
     }
 
-    async runSpellWithResponse(args: RunRootSpellArgs) {
+    runSpellWithResponse(args: RunRootSpellArgs) {
         const { agent } = args
-        const jobId = await this.runSpell(args);
-
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject(new Error('Timeout'))
-            }, 1200000)
+            (async () => {
+                setTimeout(() => {
+                    reject(new Error('Timeout'))
+                }, 5000)
 
-            this.pubSub.subscribe(AGENT_RUN_RESULT(agent.id), (data: AgentResult) => {
-                if (data.result.error) {
-                    this.logger.error(data.result.error)
-                    throw new Error(`Error running spell on agent: ${data.result.error}`)
-                }
+                this.pubSub.subscribe(AGENT_RUN_RESULT(agent.id), (data: AgentResult) => {
+                    if (data.result.error) {
+                        this.logger.error(data.result.error)
+                        throw new Error(`Error running spell on agent: ${data.result.error}`)
+                    }
 
-                if (data.jobId === jobId) {
-                    this.pubSub.unsubscribe(AGENT_RUN_RESULT(agent.id))
-                    resolve(data.result)
-                }
-            })
+                    if (data.jobId === jobId) {
+                        this.pubSub.unsubscribe(AGENT_RUN_RESULT(agent.id))
+                        resolve(data.result)
+                    }
+                })
+
+                const jobId = await this.runSpell(args);
+            })()
         })
     }
 
-    async runSpell({
+    private runRootSpellArgsToString(jobId: string, {
         agent,
         inputs,
         componentName,
         runSubspell,
         secrets,
         publicVariables,
-        spellId
+        spellId,
+        subSpellDepth
     }: RunRootSpellArgs) {
-        this.logger.debug(`Running Spell on Agent: ${agent.id}`)
-        this.logger.debug(AGENT_RUN_JOB(agent.id))
-        const jobId = uuidv4()
-        await this.pubSub.publish(AGENT_RUN_JOB(agent.id), JSON.stringify({
+        return JSON.stringify({
             jobId,
             agentId: agent.id,
             spellId: spellId || agent.rootSpellId,
@@ -75,8 +78,24 @@ export class AgentCommander extends EventEmitter {
             componentName,
             runSubspell,
             secrets,
-            publicVariables
-        }))
+            publicVariables,
+            subSpellDepth
+        })
+    }
+
+    async runSubSpell(args: RunRootSpellArgs) {
+        const { agent } = args;
+        const jobId = uuidv4()
+        await this.pubSub.publish(AGENT_RUN_JOB(agent.id), this.runRootSpellArgsToString(jobId, args))
+        return jobId
+    }
+
+    async runSpell(args: RunRootSpellArgs) {
+        const { agent } = args;
+        this.logger.debug(`Running Spell on Agent: ${agent.id}`)
+        this.logger.debug(AGENT_RUN_JOB(agent.id))
+        const jobId = uuidv4()
+        await this.pubSub.publish(AGENT_RUN_JOB(agent.id), this.runRootSpellArgsToString(jobId, args))
         return jobId
     }
 
