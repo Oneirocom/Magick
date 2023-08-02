@@ -300,7 +300,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname === '/events'}
               Icon={BoltIcon}
               open={openDrawer}
-              onClick={onClick(`/magick/events-${encodeURIComponent(btoa("events"))}`)}
+              onClick={onClick('/events')}
               text="Events"
               tooltip="Events Tooltip"
               tooltipText={drawerTooltipText.events}
