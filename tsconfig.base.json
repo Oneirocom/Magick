@@ -178,6 +178,15 @@
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
       ],
+      "@magickml/plugin-xstate-server": [
+        "packages/plugins/xstate/server/src/index.ts"
+      ],
+      "@magickml/plugin-xstate-client": [
+        "packages/plugins/xstate/client/src/index.ts"
+      ],
+      "@magickml/plugin-xstate-shared": [
+        "packages/plugins/xstate/shared/src/index.ts"
+      ],
       "@magickml/plugin-intent-client": [
         "packages/plugins/intent/client/src/index.ts"
       ],
