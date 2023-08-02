@@ -328,9 +328,12 @@ export const TableComponent = ({
                         ) : column.id === 'collapse' ? (
                           <IconButton
                             aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                            size="small"
+                              size="medium"
                             className={styles.expandCollapse}
-                            onClick={() => handleRowClick(row.id || row.row.id)}
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                handleRowClick(row.id || row.row.id)
+                              }}
                           >
                             {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                           </IconButton>
