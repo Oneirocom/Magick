@@ -59,7 +59,7 @@ export const api = (app: Application) => {
     before: {
       all: [
         // get agent
-        async (context, next) => {
+        async (context) => {
           context.params.agent = await app.service('agents').get(context.params.query.agentId)
           if (!context.params.agent) {
             throw new Error('Invalid Agent ID')
@@ -70,7 +70,7 @@ export const api = (app: Application) => {
           }
         },
         // check apiKey
-        async (context, next) => {
+        async (context) => {
           const apiKey = context.params.query.apiKey
 
           if (apiKey !== context.params.agent.data.rest_api_key) {
@@ -83,12 +83,12 @@ export const api = (app: Application) => {
       ],
       get: [],
       update: [
-        // schemaHooks.validateData(apiDataValidator),
-        // schemaHooks.resolveData(apiDataResolver),
+        schemaHooks.validateData(apiDataValidator),
+        schemaHooks.resolveData(apiDataResolver),
       ],
       create: [
-        // schemaHooks.validateData(apiDataValidator),
-        // schemaHooks.resolveData(apiDataResolver),
+        schemaHooks.validateData(apiDataValidator),
+        schemaHooks.resolveData(apiDataResolver),
       ],
       remove: [],
     },

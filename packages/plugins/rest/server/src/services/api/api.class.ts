@@ -66,7 +66,6 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       }
     }
 
-    // GET
     async create(data: ApiData, params: ServiceParams): Promise<ApiResponse | ApiError> {
       const { spellId, content } = params.query as ApiData
 

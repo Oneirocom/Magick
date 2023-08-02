@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { resolve } from '@feathersjs/schema';
-import { Type, getValidator, querySyntax } from '@feathersjs/typebox';
+import { Type, getValidator } from '@feathersjs/typebox';
 import type { Static } from '@feathersjs/typebox';
 
 import type { HookContext } from '@magickml/server-core';
