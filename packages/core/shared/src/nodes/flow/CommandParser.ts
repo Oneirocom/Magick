@@ -73,7 +73,6 @@ export class CommandParser extends MagickComponent<Promise<WorkerReturn>> {
     )
 
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    // const output = new Rete.Output('result', 'Result', stringSocket)
     const commandOutput = new Rete.Output('command', 'Command', stringSocket)
     const argsOutput = new Rete.Output('args', 'Arguments', arraySocket)
     const isCommandOutput = new Rete.Output(
@@ -147,7 +146,7 @@ export class CommandParser extends MagickComponent<Promise<WorkerReturn>> {
     outputs: MagickWorkerOutputs
   ) {
     const input = inputs.command[0] as string
-    const commandList = inputs.commandList as string[]
+    const commandList = inputs.commandList[0] as string[]
 
     const useCheckList = (node?.data?.useCheckList as boolean) ?? false
 
