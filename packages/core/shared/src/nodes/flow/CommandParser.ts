@@ -146,8 +146,7 @@ export class CommandParser extends MagickComponent<Promise<WorkerReturn>> {
     outputs: MagickWorkerOutputs
   ) {
     const input = inputs.command[0] as string
-    const commandList = inputs.commandList[0] as string[]
-
+    const commandList = inputs?.commandList?.[0] as string[]
     const useCheckList = (node?.data?.useCheckList as boolean) ?? false
 
     return this.parseCommand(input, commandList, useCheckList)
