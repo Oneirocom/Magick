@@ -1,27 +1,29 @@
 export interface Column {
-    id:
-      | 'action'
-      | 'checkbox'
-      | 'provider'
-      | 'type'
-      | 'nodeId'
-      | 'cost'
-      | 'duration'
-      | 'status'
-      | 'statusCode'
-      | 'model'
-      | 'requestData'
-      | 'responseData'
-      | 'parameters'
-      | 'spell'
-    label: string
-    minWidth?: number
-    align?: 'right'
-  }
+  id:
+    | 'action'
+    | 'checkbox'
+    | 'collapse'
+    | 'provider'
+    | 'type'
+    | 'nodeId'
+    | 'cost'
+    | 'duration'
+    | 'status'
+    | 'statusCode'
+    | 'model'
+    | 'requestData'
+    | 'responseData'
+    | 'parameters'
+    | 'spell'
+  label: string
+  minWidth?: number
+  align?: 'right'
+}
   
   export const columns: Column[] = [
     { id: 'action', label: 'Actions', minWidth: 10 },
     { id: 'checkbox', label: '', minWidth: 10 },
+    { id: 'collapse', label: '', minWidth: 10 },
     { id: 'provider', label: 'Provider', minWidth: 65 },
     { id: 'type', label: 'Type', minWidth: 65 },
     { id: 'nodeId', label: 'Node ID', minWidth: 65 },
@@ -33,7 +35,7 @@ export interface Column {
     { id: 'requestData', label: 'Request Data', minWidth: 65 },
     { id: 'responseData', label: 'Response Data', minWidth: 65 },
     { id: 'parameters', label: 'Parameters', minWidth: 65 },
-    { id: 'spell', label: 'Spell', minWidth: 65  },
+    { id: 'spell', label: 'Spell', minWidth: 65 },
   ]
   
   export interface DocumentData {
