@@ -55,6 +55,35 @@ const completionProviders: CompletionProvider[] = [
     ],
     models: ['fakemodel'],
   },
+  {
+    type: 'weather',
+    subtype: 'forecast',
+    inputs: [
+      {
+        socket: 'city',
+        name: 'City',
+        type: stringSocket,
+      },
+      {
+        socket: 'state',
+        name: 'State',
+        type: stringSocket,
+      },
+      {
+        socket: 'country',
+        name: 'Country',
+        type: stringSocket,
+      },
+    ],
+    outputs: [
+      {
+        socket: 'result',
+        name: 'Result',
+        type: objectSocket,
+      },
+    ],
+    models: ['fakemodel'],
+  },
 ]
 
 export default {

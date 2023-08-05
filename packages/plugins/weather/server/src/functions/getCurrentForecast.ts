@@ -19,7 +19,7 @@ function generateWeatherApiUrlWithCoords(
   appId: string,
   units?: string
 ): string {
-  let url = `https://api.openweathermap.org/data/2.5/weather?lat=${encodeURIComponent(
+  let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${encodeURIComponent(
     lat
   )}&lon=${encodeURIComponent(lon)}&appid=${encodeURIComponent(appId)}`
   if (units) {
@@ -34,7 +34,7 @@ function generateWeatherApiUrlWithCoords(
  * @param {CompletionHandlerInputData} data - The input data for the completion API.
  * @returns {Promise<{success: boolean, result?: string | null, error?: string | null}>} - A Promise resolving to the result of the completion API call.
  */
-export async function getCurrentWeather(
+export async function getCurrentForecast(
   data: CompletionHandlerInputData
 ): Promise<{
   success: boolean
@@ -84,7 +84,7 @@ export async function getCurrentWeather(
     if (resp.status !== 200) {
       throw new Error('ERROR: ' + resp.statusText)
     }
-    return { success: true, result: resp.data }
+    return { success: true, result: resp.data.list }
   } catch (err: any) {
     console.error(err)
     return { success: false, error: err.message }

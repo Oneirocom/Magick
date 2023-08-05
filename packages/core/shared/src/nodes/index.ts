@@ -49,7 +49,7 @@ import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
 import { LessThan } from './number/LessThan'
 import { LessThanOrEqual } from './number/LessThanOrEqual'
-import { Multiply} from './number/Multiply'
+import { Multiply } from './number/Multiply'
 import { Divide } from './number/Divide'
 import { Add } from './number/Add'
 import { Subtract } from './number/Subtract'
@@ -84,6 +84,7 @@ import { Trim } from './text/Trim'
 import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
 import { GetCurrentWeather } from './weather/GetCurrentWeather'
+import { GetCurrentForecast } from './weather/GetCurrentForecast'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -169,6 +170,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   jsonToArray: () => new JSONToArray(),
   generateUUID: () => new UUIDGenerator(),
   getCurrentWeather: () => new GetCurrentWeather(),
+  getCurrentForecast: () => new GetCurrentForecast(),
 }
 
 /**

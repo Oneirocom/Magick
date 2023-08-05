@@ -12,6 +12,7 @@
 import { ServerPlugin } from '@magickml/core'
 import shared from '@magickml/plugin-weather-shared'
 import { getCurrentWeather } from './functions/getCurrentWeather'
+import { getCurrentForecast } from './functions/getCurrentForecast'
 
 
 /**
@@ -25,6 +26,7 @@ const { secrets } = shared
 const completionHandlers = {
   weather: {
     current: getCurrentWeather,
+    forecast: getCurrentForecast,
   },
 }
 

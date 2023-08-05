@@ -2,7 +2,7 @@
 import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
-import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
+import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   CompletionProvider,
   EngineContext,
@@ -13,10 +13,10 @@ import {
 } from '../../types'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 
-/** Information related to GetCurrentWeather */
-const info = 
-'Takes in a city, state, and country code and returns the current weather for that location.'
-
+/** Information related to GetCurrentForecast */
+const info =
+  'Takes in a city, state, and country code and returns the current weather for that location.'
+  
 /** Type definition for the worker return */
 type WorkerReturn = {
   result?: object
@@ -26,10 +26,10 @@ type WorkerReturn = {
  * GenerateText component responsible for generating text using any providers
  * available in Magick.
  */
-export class GetCurrentWeather extends MagickComponent<Promise<WorkerReturn>> {
+export class GetCurrentForecast extends MagickComponent<Promise<WorkerReturn>> {
   constructor() {
     super(
-      'Get Current Weather',
+      'Get Current Forecast',
       {
         outputs: {
           result: 'output',
@@ -57,7 +57,7 @@ export class GetCurrentWeather extends MagickComponent<Promise<WorkerReturn>> {
     const location = new Rete.Input('city', 'City', stringSocket)
     const stateCode = new Rete.Input('state', 'State Code', stringSocket)
     const countryCode = new Rete.Input('country', 'Country Code', stringSocket)
-    const out = new Rete.Output('result', 'Result', objectSocket)
+    const out = new Rete.Output('result', 'Result', arraySocket)
 
     const unitsControl = new DropdownControl({
       name: 'Units',
@@ -75,7 +75,6 @@ export class GetCurrentWeather extends MagickComponent<Promise<WorkerReturn>> {
       .addOutput(triggerOutput)
       .addOutput(out)
     node.inspector.add(unitsControl)
-
     return node
   }
 
@@ -101,7 +100,7 @@ export class GetCurrentWeather extends MagickComponent<Promise<WorkerReturn>> {
     // get completion providers for text and chat categories
     const completionProviders = pluginManager.getCompletionProviders(
       'weather',
-      ['current']
+      ['forecast']
     ) as CompletionProvider[]
 
     const provider = completionProviders[0]
