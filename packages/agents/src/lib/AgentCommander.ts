@@ -6,6 +6,7 @@ import type { MagickSpellInput } from "@magickml/core"
 import { v4 as uuidv4 } from 'uuid'
 import type pino from "pino"
 import { AgentResult, AgentRunJob } from "./Agent"
+import { AGENT_RESPONSE_TIMEOUT_MSEC } from "@magickml/config"
 
 export type RunRootSpellArgs = {
     agent: Agent,
@@ -41,7 +42,7 @@ export class AgentCommander extends EventEmitter {
             (async () => {
                 setTimeout(() => {
                     reject(new Error('Timeout'))
-                }, 5000)
+                }, AGENT_RESPONSE_TIMEOUT_MSEC)
 
                 this.pubSub.subscribe(AGENT_RUN_RESULT(agent.id), (data: AgentResult) => {
                     if (data.result.error) {
