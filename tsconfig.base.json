@@ -187,6 +187,12 @@
       "@magickml/plugin-intent-shared": [
         "packages/plugins/intent/shared/src/index.ts"
       ],
+      "@magickml/plugin-unstructured-server": [
+        "packages/plugins/unstructured/server/src/index.ts"
+      ],
+      "@magickml/plugin-unstructured-client": [
+        "packages/plugins/unstructured/client/src/index.ts"
+      ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
