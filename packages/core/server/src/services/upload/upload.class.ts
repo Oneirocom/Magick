@@ -28,6 +28,16 @@ export class UploadService {
    * @param params - The request parameters
    * @returns The metadata of the newly created or updated image
    */
+  async documents(body: any): Promise<any> {
+    return null
+  }
+
+  /**
+   * Creates a new entry in the image store or updates an existing one if the id already exists
+   * @param body - The request body
+   * @param params - The request parameters
+   * @returns The metadata of the newly created or updated image
+   */
   async create(body: any): Promise<any> {
     const img_body = {
       id: body['id'],
