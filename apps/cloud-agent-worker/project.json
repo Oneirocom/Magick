@@ -27,7 +27,9 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@magickml/cloud-agent-worker-app:build"
+        "buildTarget": "@magickml/cloud-agent-worker-app:build",
+        "port": 8089,
+        "inspect": true,
       },
       "configurations": {
         "development": {

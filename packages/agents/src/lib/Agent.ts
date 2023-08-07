@@ -211,7 +211,7 @@ export class Agent implements AgentInterface {
       agent: this,
       secrets: this.secrets,
       publicVariables: this.publicVariables,
-      runSubspell: true,
+      runSubspell: data.runSubspell,
       app,
     })
 

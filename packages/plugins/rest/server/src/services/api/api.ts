@@ -44,6 +44,7 @@ export const api = (app: Application) => {
   app.use(apiPath, new ApiService(), {
     // A list of all methods this service exposes externally
     // You can add additional custom events to be sent to clients here
+    methods: ['find', 'create'],
     events: [],
   })
 
@@ -57,6 +58,26 @@ export const api = (app: Application) => {
     },
     before: {
       all: [
+        // get agent
+        async (context) => {
+          context.params.agent = await app.service('agents').get(context.params.query.agentId)
+          if (!context.params.agent) {
+            throw new Error('Invalid Agent ID')
+          }
+
+          if (!context.params.agent.data.rest_enabled) {
+            throw new Error('Agent does not have REST API enabled')
+          }
+        },
+        // check apiKey
+        async (context) => {
+          const apiKey = context.params.query.apiKey
+
+          if (apiKey !== context.params.agent.data.rest_api_key) {
+            throw new Error('Invalid API Key')
+          }
+
+        },
         schemaHooks.validateQuery(apiQueryValidator),
         schemaHooks.resolveQuery(apiQueryResolver),
       ],
