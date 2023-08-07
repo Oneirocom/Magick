@@ -12,10 +12,10 @@ import {
   openTab,
   selectAllTabs,
 } from '../../state/tabs'
-import Events from "../EventWindow"
+import Events from '../EventWindow'
 import Requests from '../RequestWindow'
-import Settings from "../settings/SettingsWindow"
-import Documents from "../DocumentWindow"
+import Settings from '../settings/SettingsWindow'
+import Documents from '../DocumentWindow'
 
 /**
  * Magick component
@@ -23,13 +23,12 @@ import Documents from "../DocumentWindow"
  * @returns JSX.Element
  */
 
-
 const componentMapping = {
   Events,
   Requests,
   Settings,
   Documents,
-};
+}
 const Magick = ({ empty = false }): JSX.Element => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -56,7 +55,6 @@ const Magick = ({ empty = false }): JSX.Element => {
     }
 
     if (tabs.length === 0 && !activeTab && !URI) navigate('/home')
-
   }, [tabs, activeTab, URI, navigate])
 
   // Handle URI changes
@@ -71,16 +69,16 @@ const Magick = ({ empty = false }): JSX.Element => {
     if (isSpellNameTabPresent) dispatch(closeTab(spellNameTab[0].id))
     const Component = URI.split('-')[0]
     if (URI && Component in componentMapping) {
-      const existingTab = tabs.find((tab) => tab.URI === URI);
+      const existingTab = tabs.find(tab => tab.URI === URI)
       if (!existingTab) {
         dispatch(
           openTab({
             name: Component,
             componentType: Component, // Set the componentType as the URI for now, you can modify this as needed
             openNew: false,
-            type: "component"
+            type: 'component',
           })
-        );
+        )
       }
     } else {
       dispatch(
@@ -96,20 +94,14 @@ const Magick = ({ empty = false }): JSX.Element => {
   // Render loading screen if there's no active tab
   if (!activeTab) return <LoadingScreen />
 
-
-  const ComponentToRender = componentMapping[activeTab.componentType] || null;
-
-
-  console.log('activeTab', activeTab);
-  console.log('ComponentToRender', ComponentToRender);
+  const ComponentToRender = componentMapping[activeTab.componentType] || null
 
   return (
     <>
       <TabBar tabs={tabs} activeTab={activeTab} />
       <TabLayout>
-        {!empty
-          && (
-            <>
+        {!empty && (
+          <>
             {ComponentToRender ? (
               <ComponentToRender /> // Render the dynamically opened component if available
             ) : (

@@ -301,7 +301,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               Icon={BoltIcon}
               open={openDrawer}
               onClick={() => {
-                navigate(`/magick/Events-${encodeURIComponent(btoa("Events"))}`)
+                navigate(`/magick/Events-${encodeURIComponent(btoa('Events'))}`)
               }}
               text="Events"
               tooltip="Events Tooltip"
@@ -312,7 +312,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               Icon={StorageIcon}
               open={openDrawer}
               onClick={() => {
-                navigate(`/magick/Requests-${encodeURIComponent(btoa("Requests"))}`)
+                navigate(
+                  `/magick/Requests-${encodeURIComponent(btoa('Requests'))}`
+                )
               }}
               text="Requests"
               tooltip="Requests Tooltip"
@@ -326,7 +328,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               Icon={SettingsIcon}
               open={openDrawer}
               onClick={() => {
-                navigate(`/magick/Settings-${encodeURIComponent(btoa("Settings"))}`)
+                navigate(
+                  `/magick/Settings-${encodeURIComponent(btoa('Settings'))}`
+                )
               }}
               text="Settings"
               tooltip="Settings Tooltip"
@@ -423,7 +427,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               <div
                 className={styles.hideMenuItem}
                 onClick={() => {
-                  navigate(`/magick/Documents-${encodeURIComponent(btoa("Documents"))}`)
+                  navigate(
+                    `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
+                  )
                 }}
               >
                 <DescriptionOutlinedIcon sx={{ mr: 1 }} />
