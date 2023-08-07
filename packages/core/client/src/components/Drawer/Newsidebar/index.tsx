@@ -423,7 +423,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               <div
                 className={styles.hideMenuItem}
                 onClick={() => {
-                  navigate('/documents')
+                  navigate(`/magick/Documents-${encodeURIComponent(btoa("Documents"))}`)
                 }}
               >
                 <DescriptionOutlinedIcon sx={{ mr: 1 }} />
