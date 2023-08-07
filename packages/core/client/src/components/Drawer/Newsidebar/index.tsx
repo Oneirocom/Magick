@@ -300,7 +300,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname === '/events'}
               Icon={BoltIcon}
               open={openDrawer}
-              onClick={onClick('/events')}
+              onClick={() => {
+                navigate(`/magick/Events-${encodeURIComponent(btoa("Events"))}`)
+              }}
               text="Events"
               tooltip="Events Tooltip"
               tooltipText={drawerTooltipText.events}
@@ -309,7 +311,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname === '/requests'}
               Icon={StorageIcon}
               open={openDrawer}
-              onClick={onClick('/requests')}
+              onClick={() => {
+                navigate(`/magick/Requests-${encodeURIComponent(btoa("Requests"))}`)
+              }}
               text="Requests"
               tooltip="Requests Tooltip"
               tooltipText={drawerTooltipText.requests}
