@@ -10,5 +10,6 @@ export interface MessageQueue {
 export interface MessageWorker extends EventEmitter {}
 
 export interface Job<T> {
+    id?: string
     data: T
 }
