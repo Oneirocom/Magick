@@ -28,7 +28,7 @@ export interface Tab {
   URI: string
   active: boolean
   layoutJson: Record<string, unknown>
-  type?: string
+  type?: 'spell'
   spell?: string
   spellName: string
   module: string
@@ -83,7 +83,7 @@ const buildTab = (tab, properties = {}) => ({
   ...tab,
   id: encodedToId(tab.name),
   URI: encodeURIComponent(tab.name),
-  name: encodedToName(tab.name),
+  name: encodedToName(tab.name) || tab.name,
   layoutJson: workspaceMap[tab.workspace || 'default'],
   spell: tab?.spell || null,
   type: tab?.type,

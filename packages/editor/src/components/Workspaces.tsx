@@ -22,8 +22,9 @@ const Workspaces = ({ tabs, pubSub, activeTab }) => {
   return (
     <>
       {tabs.map((tab) => {
-        // TODO use a tab.fileType instead of tab.type
-        // This will allow us to begin to expand towards a file base approach to the application.
+        if (tab.type === "component") {
+          return null;
+        }
         const Workspace = workspaceMap[tab.type];
 
         const props = {
@@ -49,5 +50,6 @@ const Workspaces = ({ tabs, pubSub, activeTab }) => {
     </>
   );
 };
+
 
 export default Workspaces;
