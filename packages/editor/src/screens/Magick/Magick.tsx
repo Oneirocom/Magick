@@ -74,6 +74,7 @@ const Magick = ({ empty = false }): JSX.Element => {
             name: Component,
             componentType: Component, // Set the componentType as the URI for now, you can modify this as needed
             openNew: false,
+            type: "component"
           })
         );
       }
@@ -105,11 +106,11 @@ const Magick = ({ empty = false }): JSX.Element => {
         {!empty
           && (
             <>
-              {/* {ComponentToRender ? (
+            {ComponentToRender ? (
               <ComponentToRender /> // Render the dynamically opened component if available
-            ) : ( */}
+            ) : (
               <Workspaces tabs={tabs} pubSub={pubSub} activeTab={activeTab} />
-            {/* )} */}
+            )}
           </>
         )}
       </TabLayout>
