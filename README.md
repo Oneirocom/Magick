@@ -157,7 +157,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://twitter.com/codingsh"><img src="https://avatars.githubusercontent.com/u/57037080?v=4?s=100" width="100px;" alt="codingsh"/><br /><sub><b>codingsh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=developerfred" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/benbot"><img src="https://avatars.githubusercontent.com/u/1340967?v=4?s=100" width="100px;" alt="Ben Botwin"/><br /><sub><b>Ben Botwin</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=benbot" title="Code">💻</a> <a href="#platform-benbot" title="Packaging/porting to new platform">📦</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coffeeorgreentea"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="coffeeorgreentea"/><br /><sub><b>coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=coffeeorgreentea" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coffeeorgreentea"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="coffeeorgreentea"/><br /><sub><b>coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=coffeeorgreentea" title="Code">💻</a> <a href="#infra-coffeeorgreentea" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     </tr>
   </tbody>
 </table>
