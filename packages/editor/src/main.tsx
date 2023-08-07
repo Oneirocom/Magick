@@ -12,14 +12,14 @@ import { WagmiConfig } from 'wagmi'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import App from './App'
-import { client } from './wagmi'
+import { config as wagmiConfig } from './wagmi'
 import AppProviders from './contexts/AppProviders'
 import { createStore } from './state/store'
 
-import { AppConfig } from '../../core/client/src/providers/ConfigProvider'
-
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AppConfig } from '@magickml/client-core'
+import { MagickmlChatbox } from '@magickml/chatbox'
 
 /**
  * Type definition for the props that can be passed to MagickIDE
@@ -41,8 +41,9 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
       <Provider store={createStore(config)}>
         <AppProviders config={config}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <WagmiConfig client={client}>
+            <WagmiConfig config={wagmiConfig}>
               <App />
+              <MagickmlChatbox />
             </WagmiConfig>
           </LocalizationProvider>
         </AppProviders>

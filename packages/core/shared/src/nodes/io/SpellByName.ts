@@ -1,4 +1,3 @@
-import { EventData } from 'packages/core/server/src/services/events/events.schema'
 import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
@@ -48,7 +47,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       {
         outputs: { output: 'output', trigger: 'option' },
       },
-      'Experimental',
+      'I/O',
       info
     )
 
@@ -93,11 +92,17 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     _context: ModuleContext
   ) {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
-    const event = inputs['event'] && (inputs['event'][0] as EventData)
+
+    // todo should be better typed.  Removed 'EventData' to prevent circular dependency
+    const event = inputs['event'] && (inputs['event'][0] as any)
 
     const { agent, module, spellManager } = _context
 
     const { app, secrets } = module
+
+    if (!app) {
+      throw new Error('Feathers App not found in SpellByName node worker')
+    }
 
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
@@ -121,7 +126,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { projectId } = _context
     if (agent) {
-      const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {
           'Input - Default': event,
@@ -132,9 +136,8 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
       const output = Object.values(outputs as any)[0]
-
       return {
         output,
       }
@@ -151,9 +154,11 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
       }
 
-      const outputs = await spellManager.run(runComponentArgs as any)
+      const spellRunner = await spellManager.loadById(spellId)
+      const outputs = await spellRunner.runComponent(runComponentArgs)
+
       // get the first value from outputs
-      const output = Object.values(outputs)[0]
+      const output = Object.values(outputs as any)[0]
 
       return {
         output,

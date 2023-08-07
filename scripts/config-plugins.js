@@ -28,6 +28,7 @@ const fs  = require('fs');
 const pluginsJsPathClient = path.join(__dirname, '..', 'apps', 'client', 'src/plugins.ts');
 const pluginsJsPathServer = path.join(__dirname, '..', 'apps', 'server', 'src/plugins.ts');
 const pluginsJsPathAgent = path.join(__dirname, '..', 'apps', 'agent', 'src/plugins.ts');
+const pluginsJsPathCloudAgentWorker = path.join(__dirname, '..', 'apps', 'cloud-agent-worker', 'src/plugins.ts');
 
 function copyExamplePluginsJson() {
 
@@ -42,6 +43,7 @@ function copyExamplePluginsJson() {
 
   fs.writeFileSync(pluginsJsPathServer, importString);
   fs.writeFileSync(pluginsJsPathAgent, importString);
+  fs.writeFileSync(pluginsJsPathCloudAgentWorker, importString);
 
   importString = 'const plugins = {}\n';
   for (const plugin of clientPlugins) {

@@ -10,18 +10,17 @@ import MagickPageLayout from './layouts/MagickPageLayout/MagickPageLayout'
 import MainLayout from './layouts/MainLayout/MainLayout'
 import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
-import AgentManagerWindow from './windows/agents/AgentManagerWindow'
-import DocumentWindow from './windows/DocumentWindow'
-import EventWindow from './windows/EventWindow'
-import RequestWindow from './windows/RequestWindow'
-import SettingsWindow from './windows/settings/SettingsWindow'
+import AgentManagerWindow from './screens/agents/AgentManagerWindow'
+import DocumentWindow from './screens/DocumentWindow'
+import EventWindow from './screens/EventWindow'
+import RequestWindow from './screens/RequestWindow'
+import SettingsWindow from './screens/settings/SettingsWindow'
 // import ProjectWindow from './windows/ProjectWindow';
 import './App.css'
 import './design-globals/design-globals.css'
 
 import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
-import Chat from './screens/Chat'
 
 /**
  * A component that renders the given component element with the given props.
@@ -77,7 +76,6 @@ const MyRoutes = () => (
         <Route path="/" element={<Magick />} />
         <Route path="/magick/*" element={<Magick />} />
         <Route path="/magick/:URI" element={<Magick />} />
-        <Route path="/chat/*" element={<Chat />} />
       </Route>
     </Route>
   </Routes>

@@ -119,6 +119,7 @@ export class SpellComponent extends MagickComponent<
       name: 'Spell Select',
       write: false,
       defaultValue: (node.data.spell as string) || '',
+      tooltip: 'Select/Choose the created spell'
     })
 
     node.inspector.add(spellControl)
@@ -144,6 +145,7 @@ export class SpellComponent extends MagickComponent<
             dataKey: data.name,
             language: 'plaintext',
             defaultValue: publicVar || data.value || '',
+            tooltip: 'Directive for the spell'
           })
           if (!node.inspector.dataControls.has(fewshotInputControl.dataKey)) {
             node.inspector.add(fewshotInputControl)
@@ -178,6 +180,7 @@ export class SpellComponent extends MagickComponent<
             name: data.name,
             dataKey: data.name,
             defaultValue: data.value,
+            tooltip:""
           })
           if (!node.inspector.dataControls.has(numberInputControl.dataKey)) {
             node.inspector.add(numberInputControl)
@@ -316,22 +319,40 @@ export class SpellComponent extends MagickComponent<
 
     const publicVariables = getPublicVariables(node.data.graph)
 
-    console.log('node.data.publicVariables', node.data.publicVariables)
-
-    console.log('publicVariables', JSON.stringify(publicVariables))
-
     // for each public variable...
-    const output = {}
+    // todo switch to map
+    const variables = {}
 
     publicVariables.forEach((data: any) => {
       const key = data.id
       const nodeDataKey = data.data.name
       const value = node.data?.publicVariables?.[`${nodeDataKey}`]
-      output[key] = { value }
+      variables[key] = { value }
     })
 
-    const { agent, module, spellManager, app } = _context
+    const { module, spellManager, app, agent } = _context
     const { secrets } = module
+
+    const runComponentArgs = {
+      spellId: node.data.spellId as string,
+      inputs: flattenedInputs,
+      runSubspell: true,
+      agent: agent,
+      secrets: agent?.secrets ?? secrets,
+      app,
+      publicVariables: variables,
+    }
+
+    if (agent) {
+
+      const outputs = await app.get('agentCommander').runSpellWithResponse(
+        runComponentArgs
+      )
+
+      const output = this.formatOutputs(node, outputs)
+
+      return output
+    }
 
     if (spellManager) {
       const spellRunner = await spellManager.loadById(
@@ -339,18 +360,11 @@ export class SpellComponent extends MagickComponent<
       )
 
       if (spellRunner) {
-        const runComponentArgs = {
-          spellId: node.data.spellId as string,
-          inputs: flattenedInputs,
-          runSubspell: false,
-          // we can probably remove agent here since it is in the injected spellManager
-          agent: agent,
-          secrets: agent?.secrets ?? secrets,
-          app,
-          publicVariables: output,
-        }
-        const outputs = await spellManager.run(runComponentArgs)
-        return this.formatOutputs(node, outputs as any)
+        const outputs = await spellRunner.runComponent(runComponentArgs)
+
+        const output = this.formatOutputs(node, outputs as any)
+
+        return output
       } else {
         throw new Error('spell runner not found')
       }

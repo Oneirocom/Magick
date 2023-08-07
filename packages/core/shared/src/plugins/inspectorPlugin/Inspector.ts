@@ -7,6 +7,7 @@ import * as socketMap from '../../sockets'
 import {
   AsDataSocket,
   AsInputsAndOutputsData,
+  ControlData,
   DataSocketType,
   IRunContextEditor,
   MagickNode,
@@ -22,12 +23,12 @@ type InspectorConstructor = {
 }
 
 // todo improve this typing
-export type DataControlData = Record<string, DataControl>
+export type DataControlData = Record<string, ControlData>
 
 export type InspectorData = {
   name: string
   nodeId: number
-  dataControls: PubSubData
+  dataControls: DataControlData
   data: WorkerData
   category?: string
   info: string
@@ -76,6 +77,9 @@ export class Inspector {
     // If we gave a default value and there isnt already one on the node, add it.
     if (control.defaultValue !== null && !this.node.data[control.dataKey])
       this.node.data[control.dataKey] = control.defaultValue
+
+    // add tooltip to the control
+    control.tooltip = control.tooltip || ''
 
     list.set(control.dataKey, control)
   }
@@ -307,7 +311,7 @@ export class Inspector {
         acc[key] = { ...val.control, ...cachedControl }
         return acc
       },
-      {} as PubSubData
+      {} as Record<string, ControlData>
     )
 
     return {

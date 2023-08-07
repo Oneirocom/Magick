@@ -37,25 +37,18 @@ export class DocumentService<
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
     if (data.hasOwnProperty('secrets')) {
-      const {secrets, modelName, ...rest} = data as DocumentData & {secrets: string, modelName: string}
-      data = rest
-      /* const completionProviders = pluginManager.getCompletionProviders('text', ['embedding'])
-      const provider = completionProviders.find(provider =>
-        provider.models.includes(modelName)
-      ) as CompletionProvider
-      const handler = provider?.handler
-      
-      const {success, result, error} = await handler({
-        inputs: { input: context?.data?.content || "" },
-        node: { data: { model: modelName } } as unknown as WorkerData,
-        outputs: undefined,
-        context: { module: { secrets:JSON.parse(secrets) }, projectId: context.data.projectId },
+      const { secrets, modelName, ...docData } = data as DocumentData & {
+        secrets: string
+        modelName: string
+      }
+
+      docdb.fromString(docData.content, docData, {
+        modelName,
+        projectId: docData?.projectId,
+        secrets,
       })
-      embedding = result
-      console.log("embedding", embedding) */
-      
-      app.get("docdb").fromString(data.content,data,{modelName, projectId: data?.projectId, secrets})
-      return data;
+
+      return docData
     }
     await docdb.from('documents').insert(data)
     return data
@@ -66,8 +59,14 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: string): Promise<any> {
+  async remove(id: string, params): Promise<any> {
     const db = app.get('dbClient')
+
+    if (!id && params.projectId) {
+      // delete all documents of a project
+      return await db('documents').where('projectId', params.projectId).del()
+    }
+
     return await db('documents').where('id', id).del()
   }
 
@@ -78,7 +77,7 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    if (params.query.embedding) {
+    if (params.query.embedding || params.query.metadata) {
       const param = params.query
       const querys = await db('documents')
         .select('*')
@@ -91,17 +90,33 @@ export class DocumentService<
           ...(param.projectId && { projectId: param.projectId }),
           ...(param.content && { content: param.content }),
         })
-        .select(
-          db.raw(
-            `1 - (embedding <=> '${JSON.stringify(
-              params.query.embedding
-            )}') AS similarity`
-          )
-        )
-        .orderBy('similarity', 'asc')
-        .limit(param.maxCount)
+        .modify(function (queryBuilder) {
+          param.embedding &&
+            queryBuilder
+              .select(
+                db.raw(
+                  `(embedding <=> '${JSON.stringify(
+                    params.query.embedding
+                  )}') AS distance`
+                )
+              )
+              .orderBy('distance', 'asc')
+        })
+        .modify(function (queryBuilder) {
+          if (param.metadata) {
+            const metadata =
+              typeof param.metadata == 'object'
+                ? JSON.stringify(param.metadata)
+                : param.metadata
+            queryBuilder.whereRaw('metadata @> ?', [metadata])
+          }
+        })
+        .limit(param.$limit)
+
       return { data: querys }
     }
+
+    params = { ...params, query: { ...params.query, metadata: '{}' } }
     const res = await super.find(params)
     return { data: (res as unknown as { data: Array<any> }).data }
   }
@@ -122,5 +137,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'documents',
+    multi: ['remove'],
   }
 }

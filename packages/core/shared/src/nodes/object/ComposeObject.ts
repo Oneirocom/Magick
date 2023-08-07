@@ -50,6 +50,7 @@ export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
       connectionType: 'input',
       name: 'Input Sockets',
       ignored: ['trigger'],
+      tooltip: 'Add input sockets'
     })
 
     node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)

@@ -220,13 +220,23 @@
       ]
     },
     {
+      "login": "fire",
+      "name": "K. S. Ernest (iFire) Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32321?v=4",
+      "profile": "https://chibifire.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "coffeeorgreentea",
       "name": "coffeeorgreentea",
       "avatar_url": "https://avatars.githubusercontent.com/u/90069434?v=4",
       "profile": "https://github.com/coffeeorgreentea",
       "contributions": [
         "code",
-        "infra"
+        "infra",
+        "business"
       ]
     }
   ],

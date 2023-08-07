@@ -49,12 +49,14 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
       connectionType: 'input',
       name: 'Input Sockets',
       ignored: ['trigger'],
+      tooltip: 'Add your socket input'
     })
 
     const delimiter = new InputControl({
       dataKey: 'delimiter',
       name: 'Delimiter',
       icon: 'moon',
+      tooltip: 'Enter Delimiter'
     })
 
     node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
@@ -77,14 +79,13 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
     }, {} as Record<string, unknown>)
 
     let input = ''
-
     for (const x in inputs) {
       if (x !== 'trigger') {
         input += inputs[x]
       }
       // if this isn't the last input, add the delimiter
       if (x !== 'trigger' && x !== Object.keys(inputs).pop()) {
-        input += _node.data.delimiter
+        input += _node.data.delimiter ? _node.data.delimiter : ''
       }
     }
 

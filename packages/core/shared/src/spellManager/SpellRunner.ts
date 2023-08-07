@@ -1,9 +1,6 @@
-import { Application } from '@feathersjs/koa'
-import io from 'socket.io'
-import Agent from '../agents/Agent'
-
+import type { app as FeathersApp } from '@magickml/server-core'
 import pino from 'pino'
-import { getLogger } from '@magickml/core'
+import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
 import { getNodes } from '../nodes'
 import { Module } from '../plugins/modulePlugin/module'
@@ -16,21 +13,22 @@ import {
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
+import { getLogger } from '../logger'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
-  agent?: Agent
+  agent?: any
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
   publicVariables?: Record<string, unknown>
-  app?: any
+  app?: typeof FeathersApp
 }
 
 type SpellRunnerConstructor = {
-  app: Application
+  app: typeof FeathersApp
   socket?: io.Socket
-  agent?: Agent
+  agent?: any
   spellManager: SpellManager
 }
 
@@ -41,8 +39,8 @@ class SpellRunner {
   module: Module
   ranSpells: string[] = []
   socket?: io.Socket | null = null
-  app: Application
-  agent?: Agent
+  app: typeof FeathersApp
+  agent?: any
   spellManager: SpellManager
 
   log(message, data) {
@@ -67,6 +65,27 @@ class SpellRunner {
     })
   }
 
+  publish(event, message) {
+    if (!this.agent) return
+    this.agent.publishEvent(`spell:${this.currentSpell.id}`, {
+      ...message,
+      event,
+    })
+  }
+
+  emit(_message) {
+    if (!this.agent) return
+
+    // make sure the message contains the spellId in case it is needed.
+    const message = {
+      ..._message,
+      spellId: this.currentSpell.id,
+    }
+
+    // to do we probably want these events to be constants somewhere
+    this.agent.publishEvent('spell', message)
+  }
+
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
     this.agent = agent
     this.spellManager = spellManager
@@ -77,6 +96,7 @@ class SpellRunner {
       components: getNodes(),
       server: true,
       socket: socket || undefined,
+      emit: this.emit.bind(this),
     }) as MagickEngine
     this.app = app
 
@@ -242,7 +262,6 @@ class SpellRunner {
     inputs,
     componentName = 'Input',
     runSubspell = false,
-    agent,
     secrets,
     publicVariables,
     app,
@@ -250,7 +269,10 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      return this.logger.error('Infinite loop detected in SpellRunner. Exiting.')
+      this.logger.error(
+        'Infinite loop detected in SpellRunner. Exiting.'
+      )
+      throw new Error('Infinite loop detected in SpellRunner. Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
@@ -263,7 +285,6 @@ class SpellRunner {
     this.module.read({
       inputs: this._formatInputs(inputs),
       secrets,
-      agent,
       publicVariables,
       app,
     })
@@ -272,8 +293,11 @@ class SpellRunner {
       componentName
     ) as unknown as ModuleComponent
 
-    if (!component.run)
-      return this.logger.error('Component does not have a run method')
+    if (!component.run) {
+      this.logger.error('Component does not have a run method')
+      throw new Error('Component does not have a run method')
+    }
+
 
     const firstInput = Object.keys(inputs)[0]
 
@@ -291,7 +315,10 @@ class SpellRunner {
     }
 
     // If we still don't have a triggered node, we should throw an error.
-    if (!triggeredNode) return this.logger.error('No triggered node found')
+    if (!triggeredNode) {
+      this.logger.error('No triggered node found')
+      throw new Error('No triggered node found')
+    }
 
     // this running is where the main "work" happens.
     // I do wonder whether we could make this even more elegant by having the node
@@ -304,9 +331,8 @@ class SpellRunner {
       return this.outputData
     } catch (err) {
       this.logger.error('ERROR RUNNING SPELL, %o', err)
-      return {
-        Output: `Error running spell- ${err}`,
-      }
+
+      throw err
     }
   }
 }

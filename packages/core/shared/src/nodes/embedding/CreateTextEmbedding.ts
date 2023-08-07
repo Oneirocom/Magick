@@ -14,7 +14,7 @@ import {
   WorkerData,
 } from '../../types'
 
-import expandVector from '../../functions/expandVector'
+import { expandVector } from '../../functions/expandVector'
 import { pluginManager } from '../../plugin'
 
 /** Brief description of the component that this file exports. */
@@ -63,6 +63,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'model',
       values: models,
       defaultValue: models[0],
+      tooltip: 'Choose the model name'
     })
 
     node.inspector.add(modelName)

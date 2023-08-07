@@ -8,6 +8,10 @@
   color: white;
 }
 
+.label {
+  margin-right: var(--c0);
+}
+
 .input-container {
   margin-top: var(--c3);
 }
@@ -30,4 +34,8 @@
 }
 .delete-modal {
   width: 20rem;
+}
+
+.loginButton {
+  border: none !important;
 }

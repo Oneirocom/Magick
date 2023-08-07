@@ -49,21 +49,25 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      tooltip: 'This is an input for name',
     })
     const _var = new InputControl({
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
+      tooltip: 'This is an input value',
     })
     const splitter = new InputControl({
       dataKey: 'splitter',
       name: 'Splitter',
       icon: 'moon',
+      tooltip: 'This is an input splitter',
     })
     const keepEmpty = new BooleanControl({
       dataKey: 'keepEmpty',
       name: 'Keep Empty Values',
       icon: 'moon',
+      tooltip: 'This is an toggle to keep empty values',
     })
     node.inspector.add(name).add(_var).add(splitter).add(keepEmpty)
     return node.addOutput(out)
@@ -77,7 +81,8 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
   worker(node: WorkerData) {
     const _var = node?.data?._var as string
     const splitter = node?.data?.splitter as string
-    const keepEmpty = node?.data?.keepEmpty === 'true'
+    const keepEmpty = node?.data?.keepEmpty as boolean
+
     const res = !keepEmpty
       ? _var.split(splitter).filter(el => el.length > 0)
       : _var.split(splitter)

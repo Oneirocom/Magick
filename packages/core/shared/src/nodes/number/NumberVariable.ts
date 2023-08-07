@@ -47,16 +47,19 @@ export class NumberVariable extends MagickComponent<InputReturn> {
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
+      tooltip: 'Value for variable number'
     })
     const name = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      tooltip: 'Name for variable number'
     })
 
     const _public = new BooleanControl({
       dataKey: 'isPublic',
       name: 'isPublic',
+      tooltip: 'Switch isPublic'
     })
 
     node.inspector.add(name).add(_var).add(_public)
@@ -92,7 +95,7 @@ export class NumberVariable extends MagickComponent<InputReturn> {
     }
 
     return {
-      output: _var,
+      output: +_var,
     }
   }
 }

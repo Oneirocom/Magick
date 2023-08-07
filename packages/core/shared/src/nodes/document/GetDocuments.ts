@@ -2,16 +2,22 @@
 import Rete from 'rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
-import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
+import {
+  documentSocket,
+  embeddingSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
+  Document
 } from '../../types'
 
 const info =
-  'Gets Documents from the Documents store. The optional Type property will return only documents with the matching type, and the Max Count property will limit the number of documents returned. Documents are returned in order of similarity.'
+  'Gets Documents from the Documents store. The optional Type property will return only documents with the matching type, and the Max Count property will limit the number of documents returned. Documents are returned in order of distance.'
 
 /**
  * Defines the expected return type for the input data
@@ -46,8 +52,8 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
    */
   builder(node: MagickNode) {
     // Create input and output sockets
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
-    const out = new Rete.Output('documents', 'Documents', arraySocket)
+    const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
+    const out = new Rete.Output('documents', 'Documents', documentSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
@@ -59,6 +65,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'document',
+      tooltip: 'Enter document type'
     })
 
     const max_count = new InputControl({
@@ -66,6 +73,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
+      tooltip: 'Enter max count'
     })
 
     // Save controls as inspector data for easy reference
@@ -125,24 +133,27 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
         ? typeData.toLowerCase().trim()
         : 'none')
 
-    const maxCountData = nodeData.max_count as string
-    const maxCount = maxCountData ? parseInt(maxCountData) : 10
+    let max_count
+    if (typeof node.data.max_count === 'string') {
+      max_count = parseInt(node.data.max_count)
+    } else if (typeof node.data.max_count === 'number') {
+      max_count = node.data.max_count
+    } else {
+      max_count = 10
+    }
+
     // replace with feathers service call
     const response = await app.service('documents').find({
       query: {
         projectId,
         type,
-        maxCount,
+        $limit: max_count ?? 1,
         embedding,
       },
     })
-
-    // get the data from the response
-    let documents = response.data as Document[]
-    documents = documents.slice(0, maxCount)
     // Return the result for output
     return {
-      documents,
+      documents: response.data as Document[]
     }
   }
 }

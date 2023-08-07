@@ -1,6 +1,6 @@
 // DOCUMENTED
 
-import { API_ROOT_URL } from '@magickml/core'
+import { API_ROOT_URL } from '@magickml/config'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 

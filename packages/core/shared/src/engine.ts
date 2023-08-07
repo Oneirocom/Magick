@@ -9,6 +9,7 @@ import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
+import EmitPlugin, { EmitPluginArgs } from './plugins/emitPlugin'
 import { TaskOptions } from './plugins/taskPlugin/task'
 import {
   GraphData,
@@ -58,6 +59,7 @@ export type InitEngineArguments = {
   server: boolean
   throwError?: (message: unknown) => void
   socket?: io.Socket
+  emit?: EmitPluginArgs['emit']
 }
 
 // initSharedEngine function
@@ -67,6 +69,7 @@ export const initSharedEngine = ({
   server = false,
   throwError,
   socket,
+  emit,
 }: InitEngineArguments) => {
   const engine = new Rete.Engine(name) as MagickEngine
 
@@ -82,6 +85,13 @@ export const initSharedEngine = ({
       engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
         socket,
         server: true,
+      })
+    }
+
+    if (emit) {
+      engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
+        server: true,
+        emit,
       })
     }
     engine.use(TaskPlugin)
@@ -120,13 +130,15 @@ export const getTriggeredNode = (
   )
 }
 
-export type MagicComponentCategory =
+export type NodeCategory =
   | 'Esoterica'
   | 'Object'
   | 'Number'
   | 'I/O'
   | 'Flow'
   | 'Experimental'
+  | 'Langchain'
+  | 'Github'
   | 'Discord'
   | 'Embedding'
   | 'Document'
@@ -145,6 +157,9 @@ export type MagicComponentCategory =
   | 'Magick'
   | 'Audio'
   | 'Task'
+  | 'Database'
+  | 'Github'
+  | 'Intent'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<
@@ -155,7 +170,7 @@ export abstract class MagickComponent<
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
-  category: MagicComponentCategory
+  category: NodeCategory
   info: string
   display?: boolean
   dev = false
@@ -173,7 +188,7 @@ export abstract class MagickComponent<
   constructor(
     name: string,
     task: TaskOptions,
-    category: MagicComponentCategory,
+    category: NodeCategory,
     info: string
   ) {
     super(name)

@@ -20,12 +20,14 @@ export class ModelControl extends DataControl {
     defaultValue,
     icon = 'properties',
     write = true,
+    tooltip = '',
   }: {
     name: string;
     dataKey: string;
     defaultValue: string;
     icon?: string;
     write?: boolean;
+    tooltip?: string;
   }) {
     const options = {
       dataKey,
@@ -36,6 +38,7 @@ export class ModelControl extends DataControl {
       data: {
         defaultValue,
       },
+      tooltip: tooltip,
     };
 
     super(options);

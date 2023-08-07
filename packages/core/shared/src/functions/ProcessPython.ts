@@ -14,7 +14,7 @@ let pyodide
  * @param {any} data - Additional data to pass to the Python code.
  * @returns {Promise<any>} The result of the executed Python code.
  */
-export default async function runPython(code, entry, data) {
+export async function runPython(code, entry, data) {
   // Load Pyodide if not already loaded
   if (!pyodide) {
     pyodide = await loadPyodide({

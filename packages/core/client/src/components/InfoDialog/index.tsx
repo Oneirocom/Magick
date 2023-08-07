@@ -60,8 +60,8 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
  * @returns {JSX.Element} The info dialog component.
  */
 const InfoDialog = ({ title, body, style }): JSX.Element => {
-  const anchorRef = useRef(null);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const anchorRef = useRef<null | HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLDivElement>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -73,6 +73,7 @@ const InfoDialog = ({ title, body, style }): JSX.Element => {
   };
 
   useEffect(() => {
+    if (!anchorRef.current) return;
     anchorRef.current.click();
   }, []);
 

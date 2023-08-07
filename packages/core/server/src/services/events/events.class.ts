@@ -30,8 +30,8 @@ export class EventService<
    */
   // @ts-ignore
   async create(data: EventData): Promise<any> {
-    const cli = app.get('vectordb')
-    await cli.from('events').insert(data)
+    const db = app.get('vectordb')
+    await db.from('events').insert(data)
     return data
   }
 
@@ -43,78 +43,56 @@ export class EventService<
    */
   // @ts-ignore
   async find(params?: ServiceParams) {
-    const cli = app.get('dbClient')
+    const db = app.get('dbClient')
+
+    const entities = params?.query?.entities
+    // entities is an array of strings
+
+    const query = db.from('events').select('*')
+
     if (params.query.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
       const dv = new DataView(ary_buf)
       for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i))
       const f32_ary = new Float32Array(ary_buf)
-      const param = params.query
-      const querys = await cli
-        .from('events')
-        .select('*')
-        .where({
-          ...(param.type && { type: param.type }),
-          ...(param.id && { id: param.id }),
-          ...(param.sender && { sender: param.sender }),
-          ...(param.client && { client: param.client }),
-          ...(param.channel && { channel: param.channel }),
-          ...(param.projectId && { projectId: param.projectId }),
-          ...(param.content && { content: param.content }),
-        })
-        .select(
-          cli.raw(
-            `1 - (embedding <=> ${
-              "'[" + f32_ary.toString() + "]'"
-            }) AS similarity`
-          )
+
+      query.select(
+        db.raw(
+          `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
         )
-        .select(
-          cli.raw(
-            `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
-          )
-        )
-        .orderByRaw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"}`)
-
-      return { events: querys }
+      )
+      query.orderBy('distance', 'asc')
+    } else {
+      // If not searching by embedding, perform a normal query
+      query.orderBy('date', 'desc')
     }
 
-    const query = cli.from('events').select()
-
-    query.orderBy('date', 'desc')
-
-    if (params.query.content) {
-      query.where('content', params.query.content)
+    if (entities && entities.length > 0) {
+      // Safely check if all entities are included in the `entities` column
+      entities.forEach(entity => {
+        query.whereRaw(`'${entity}' = ANY (entities)`)
+      })
     }
 
-    if (params.query.projectId) {
-      query.where('projectId', params.query.projectId)
-    }
+    const param = params.query
+    if (param.type) query.where({ type: param.type })
+    if (param.id) query.where({ id: param.id })
+    if (param.client) query.where({ client: param.client })
+    if (param.channel) query.where({ channel: param.channel })
+    if (param.projectId) query.where({ projectId: param.projectId })
+    if (param.content && params.query.embedding)
+      query.where({ content: param.content })
 
-    if (params.query.type) {
-      query.where('type', params.query.type)
-    }
+    query.limit(params.query['$limit'])
 
-    if ('$limit' in params.query) {
-      query.limit(params.query['$limit'])
-    }
     const res = await query
-    return { events: res?.reverse() as unknown as { data: Array<any> } }
-  }
 
-  /**
-   * Remove events.
-   * This function removes events from the database.
-   * @param {string[]} id - The ID of the event to remove.
-   * @returns {Promise<any>} - The removed event data.
-   */
-  // @ts-ignore
-  async remove(id: string): Promise<any> {
-    const ids = id.split('&')
-    const cli = app.get('vectordb')
-    const res = await cli.from('events').whereIn('id', ids).del()
-    return res
+    if (!params.query.embedding) {
+      res.reverse()
+    }
+
+    return { events: res as unknown as { data: Array<any> } }
   }
 }
 
@@ -132,5 +110,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'events',
+    multi: ['remove'],
   }
 }

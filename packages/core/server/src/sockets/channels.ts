@@ -1,6 +1,7 @@
 // DOCUMENTED
-import '@feathersjs/transport-commons';
-import { Application } from '../declarations';
+import '@feathersjs/transport-commons'
+import { Application } from '../declarations'
+import { RealTimeConnection } from '@feathersjs/transport-commons'
 
 /**
  * Configure channels for real-time functionality.
@@ -16,11 +17,15 @@ export default function (app: Application): void {
    * Handle new real-time connections.
    * @param connection - The new real-time connection.
    */
-  app.on('connection', (connection: any): void => {
-    // Add the new connection to the anonymous channel
-    // we assume authenticated user here because they handshook to start
-    app.channel('authenticated').join(connection)
-  })
+  app.on(
+    'connection',
+    async (connection: RealTimeConnection): Promise<void> => {
+      // Add the new connection to the anonymous channel
+      // we assume authenticated user here because they handshook to start
+      app.channel('anonymous').join(connection)
+      // app.channel('authenticated').join(connection)
+    }
+  )
 
   /**
    * Handle user login events.
@@ -35,10 +40,9 @@ export default function (app: Application): void {
 
     // Remove the connection from the anonymous channel
     app.channel('anonymous').leave(connection)
-
-    // Add the connection to the authenticated user channel
     app.channel('authenticated').join(connection)
 
+    app.channel(authResult.project).join(connection)
     // Additional custom channels can be set up and joined here
   })
 
@@ -47,10 +51,21 @@ export default function (app: Application): void {
    * @param data - The event data.
    * @param hook - The hook context.
    */
-  app.publish(() => {
-    // Publish all events to the authenticated user channel
-    return app.channel('authenticated')
-  })
+  app.publish((data: any, context) => {
+    const projectId =
+      context.params?.projectId ||
+      context.result.projectId ||
+      context.data?.projectId ||
+      data.projectId
 
-  // Service-specific event publishers can be added here
+    // don't publish if we are an agent
+    if (app.get('isAgent')) return
+
+    // Lets not relay up all the patch events
+    if (context.method === 'patch') return
+
+    // Publish all events to the authenticated user channel
+    const channel = app.channel(projectId)
+    return channel
+  })
 }

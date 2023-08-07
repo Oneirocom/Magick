@@ -8,13 +8,13 @@ import { styled } from '@mui/material/styles';
 // Define a styled GreenSwitch component leveraging Material UI switch component
 const GreenSwitch = styled(MUISwitch)(({ theme }) => ({
   '& .MuiSwitch-switchBase.Mui-checked': {
-    color: 'var(--glow)',
+    color: 'var(--primary)',
     '&:hover': {
       backgroundColor: 'var(--glow-light)',
     },
   },
   '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: 'var( --glow-dark)',
+    backgroundColor: 'var( --primary-dark)',
   },
 }));
 

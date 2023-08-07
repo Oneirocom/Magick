@@ -1,0 +1,65 @@
+{
+  "name": "@magickml/cloud-agent-worker-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cloud-agent-worker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/cloud-agent-worker",
+        "main": "apps/cloud-agent-worker/src/main.ts",
+        "tsConfig": "apps/cloud-agent-worker/tsconfig.app.json",
+        "assets": ["apps/cloud-agent-worker/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/cloud-agent-worker/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@magickml/cloud-agent-worker-app:build",
+        "port": 8089,
+        "inspect": true,
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@magickml/cloud-agent-worker-app:build:development"
+        },
+        "production": {
+          "buildTarget": "@magickml/cloud-agent-worker-app:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/cloud-agent-worker/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
