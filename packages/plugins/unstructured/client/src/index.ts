@@ -1,7 +1,7 @@
 import { ClientPlugin } from '@magickml/core'
 import MediationIcon from '@mui/icons-material/Mediation'
 
-class TaskUnstructuredPluginPlugin extends ClientPlugin {
+class UnstructuredPlugin extends ClientPlugin {
   /**
    * Constructs a new instance of the `TaskPlugin` class.
    */
@@ -15,4 +15,4 @@ class TaskUnstructuredPluginPlugin extends ClientPlugin {
   }
 }
 
-export default new TaskUnstructuredPluginPlugin()
+export default new UnstructuredPlugin()
