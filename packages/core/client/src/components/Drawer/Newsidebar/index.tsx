@@ -325,7 +325,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname.includes('/settings')}
               Icon={SettingsIcon}
               open={openDrawer}
-              onClick={onClick('/settings')}
+              onClick={() => {
+                navigate(`/magick/Settings-${encodeURIComponent(btoa("Settings"))}`)
+              }}
               text="Settings"
               tooltip="Settings Tooltip"
               tooltipText={drawerTooltipText.settings}
