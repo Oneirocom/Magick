@@ -16,6 +16,8 @@ import pgvector from 'pgvector/pg'
 // Import types and classes
 import type { Application, HookContext } from '@magickml/server-core'
 import { UnstructuredService, getOptions } from './unstructured.class'
+import Koa from 'koa'
+import multer from 'koa-multer'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
@@ -47,6 +49,9 @@ export const unstructured = (app: Application) => {
     // You can add additional custom events to be sent to clients here
     events: [],
   })
+
+  const upload = multer()
+  app.use(unstructuredPath, upload.single('files'))
 
   // Initialize hooks
   app.service(unstructuredPath).hooks({
