@@ -13,6 +13,7 @@ export type PluginDrawerItem = {
   path: string
   icon: FC
   text: string
+  tooltip: string
 }
 
 export type PluginClientRoute = {
@@ -462,5 +463,5 @@ export class ServerPluginManager extends PluginManager {
 
 export const pluginManager: ClientPluginManager | ServerPluginManager =
   typeof window !== 'undefined'
-    ? new ClientPluginManager()
-    : new ServerPluginManager()
+    ? (new ClientPluginManager() as ClientPluginManager)
+    : (new ServerPluginManager() as ServerPluginManager)

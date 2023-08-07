@@ -35,7 +35,7 @@ export class SpellRunnerService<
     id: string,
     params?: SpellRunnerParams
   ): Promise<SpellInterface | void> {
-    if (!app.userSpellManagers) return null
+    if (!app.userSpellManagers) throw new Error('No user spell managers found')
     if (!params) return console.error('No params present in service')
     const { user, query } = params
 
@@ -49,7 +49,7 @@ export class SpellRunnerService<
     const spell = await getSpell({
       app,
       id: decodedId as string,
-      projectId: query.projectId,
+      projectId: query?.projectId,
     })
 
     // Load the spell into the spellManager. If there is no spell runner, we make one.
@@ -133,19 +133,19 @@ export class SpellRunnerService<
       try {
         const updatedSpell = otJson0.type.apply(spell, diff)
 
-        spellManager.load(updatedSpell, true)
+        spellManager.load(updatedSpell)
         return updatedSpell
       } catch (e) {
         console.error(e)
         console.error('Error diffing spell. Recaching spell')
         app.service('spells').get(id, params)
-        spellManager.load(spell, true)
+        spellManager.load(spell)
         return spell
       }
     }
 
     if (spellUpdate) {
-      spellManager.load(spellUpdate, true)
+      spellManager.load(spellUpdate)
       return spellUpdate
     }
 

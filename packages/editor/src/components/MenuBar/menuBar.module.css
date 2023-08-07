@@ -19,14 +19,14 @@ ul {
   justify-content: space-between;
 }
 .list-item:hover {
-  background-color: var(--primary);
+  background-color: #49545a;
 }
 
 /* Hide Dropdowns by Default */
 .menu-bar ul {
   display: none;
   position: absolute;
-  top: var(--c4); /* the height of the main nav */
+  top: 30px; /* the height of the main nav */
   transform: translateX(calc(var(--c7) * -1));
 }
 
@@ -85,7 +85,7 @@ li.list-item:only-child {
   padding: var(--extraSmall);
   padding-left: var(--small);
   padding-right: var(--small);
-  font-family: 'IBM Plex Mono';
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
   text-transform: uppercase;
   list-style: none;
 
@@ -105,7 +105,7 @@ li.list-item:only-child {
 .menu-panel .folder-arrow {
   display: inline-block;
   position: absolute;
-  top: 49%;
+  top: 50%;
   right: var(--small);
   transform: translateY(-50%);
 }
@@ -116,4 +116,27 @@ li.list-item:only-child {
 
 .preference-notActive {
   color: rgb(183, 0, 0);
+}
+
+/* //display manu-panel when you hover on menu-bar-item  and hide it when you hover out */
+.menu-bar-item:hover .menu-panel {
+  display: block;
+}
+/* // make sure menu-bar-item stays active when you hover on menu-panel and hide it when you hover out */
+
+.menu-panel:hover {
+  display: block;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  width: '180px';
+}
+
+.menu-bar-item {
+  cursor: pointer;
+  width: '180px';
 }

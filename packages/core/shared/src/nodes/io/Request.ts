@@ -1,12 +1,12 @@
 // DOCUMENTED
 import axios, { AxiosResponse } from 'axios'
 import Rete from 'rete'
-import { API_ROOT_URL } from '../../config'
+import { API_ROOT_URL } from '@magickml/config'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
-import { objectSocket, triggerSocket } from '../../sockets'
+import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -50,26 +50,38 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'output', objectSocket)
 
+    const headerInput = new Rete.Input('headers', 'Headers', objectSocket)
+    const urlInput = new Rete.Input('url', 'URL', stringSocket)
+    const paramsInput = new Rete.Input('params', 'Params', objectSocket)
+
     // Initialize controls used in the node
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Component Name',
+      tooltip: 'Enter Component name'
     })
-    const headers = new InputControl({ dataKey: 'headers', name: 'Headers' })
+    const headers = new InputControl({ dataKey: 'headers', name: 'Headers', tooltip: 'Headers for the input request' })
     const inputGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       name: 'Body Inputs',
       ignored: ['trigger'],
+      tooltip: 'Add body inputs for the request'
     })
-    const url = new InputControl({ dataKey: 'url', name: 'URL', icon: 'moon' })
+    const url = new InputControl({ dataKey: 'url', name: 'URL', icon: 'moon', tooltip: 'url for the input request'})
     const method = new InputControl({
       dataKey: 'method',
       name: 'method',
       icon: 'moon',
+      tooltip: 'Method for the input request'
     })
 
     // Add inputs and outputs to the node and configure node inspector
-    node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)
+    node
+      .addInput(dataInput)
+      .addInput(headerInput)
+      .addInput(urlInput)
+      .addInput(paramsInput)
+      .addOutput(dataOutput).addOutput(outp)
     node.inspector
       .add(nameControl)
       .add(headers)
@@ -95,20 +107,23 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     // Extract node and input data
     const name = node.data.name as string
     node.name = name
+
     const inputs = Object.entries(rawInputs).reduce((acc, [key, value]) => {
       acc[key] = value[0]
       return acc
     }, {} as Record<string, unknown>)
 
     // Parse headers or set an empty object if headers not provided
-    const headers =
-      node.data.headers && node.data.headers !== ''
-        ? JSON.parse((node.data.headers as string) ?? '{}')
-        : {}
+    const headers = inputs['headers'] ??
+      (
+        node.data.headers && node.data.headers !== ''
+          ? JSON.parse((node.data.headers as string) ?? '{}')
+          : {}
+      )
 
     // Fetch URL and method from the node data
-    let url = node?.data?.url as string
-    const method = (node?.data?.method as string)?.toLowerCase().trim()
+    let url = inputs["url"] as string ?? node?.data?.url as string
+    const method = inputs["method"] as string ?? (node?.data?.method as string)?.toLowerCase().trim()
     if (url.startsWith('server')) {
       url = url.replace('server', API_ROOT_URL as string)
     }

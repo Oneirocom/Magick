@@ -51,6 +51,7 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
       name: 'Separator',
       dataKey: 'separator',
       defaultValue: separator,
+      tooltip: 'this is a separator input ',
     })
     node.inspector.add(input)
 

@@ -9,8 +9,13 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from './TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
 import styles from './index.module.scss'
-import { Box } from '@mui/material'
+import { Box, Pagination } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
+
 
 interface Props {
   rows: any
@@ -25,7 +30,8 @@ interface Props {
   setSelected: (row: string[]) => void
   setSortField?: (fueld: string) => void
   setFieldOrder?: (order: string) => void
-  handlePageChange?: (e: unknown, newPage: number) => void
+  handlePageChange: (newPage: number) => void
+  handleSorting: (data: Object) => void
   handleRowsPerPageChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 interface Data {
@@ -85,6 +91,7 @@ function stableSort<T>(
 
 interface EnhancedTableProps {
   numSelected: number
+  handleSorting: (column: string) => void
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -105,9 +112,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     rowCount,
     columns,
     onRequestSort,
+    handleSorting
   } = props
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+      handleSorting(property)
       onRequestSort(event, property)
     }
 
@@ -137,6 +146,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 />
               </TableCell>
             ) : (headCell.id as any) === 'action' ||
+              (headCell.id as any) === 'collapse' ||
               (headCell.id as any) === 'select' ? (
               <span>{headCell.label} </span>
             ) : (
@@ -177,6 +187,7 @@ export const TableComponent = ({
   setFieldOrder,
   setSelected,
   handlePageChange,
+  handleSorting,
   handleRowsPerPageChange,
 }: Props) => {
   const [order, setOrder] = React.useState<Order>(
@@ -185,6 +196,8 @@ export const TableComponent = ({
   const [orderBy, setOrderBy] = React.useState<keyof Data>(
     fieldOrderBy ? fieldOrderBy : column[0].id
   )
+  const [expandedRows, setExpandedRows] = React.useState<string[]>([]);
+
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -207,7 +220,7 @@ export const TableComponent = ({
   }
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selectedRows?.indexOf(name) || -1
+    const selectedIndex = selectedRows?.indexOf(name)
     let newSelected: string[] = []
 
     if (selectedIndex === -1) {
@@ -239,6 +252,27 @@ export const TableComponent = ({
 
   const isSelected = (name: string) => selectedRows && selectedRows.indexOf(name) !== -1
 
+  function truncateText(text, maxLength, isExpanded) {
+    if (typeof text !== 'string' || text === undefined || typeof text === 'object') {
+      return text;
+    }
+
+    if (text.length <= maxLength || isExpanded) {
+      return text;
+    }
+
+    return text.slice(0, maxLength) + '...';
+  }
+
+  const handleRowClick = (rowId: string) => {
+    if (expandedRows.includes(rowId)) {
+      setExpandedRows(expandedRows.filter(id => id !== rowId));
+    } else {
+      setExpandedRows([...expandedRows, rowId]);
+    }
+  };
+
+
   return (
     <React.Fragment>
       <TableContainer>
@@ -248,6 +282,7 @@ export const TableComponent = ({
             order={order}
             orderBy={orderBy}
             onSelectAllClick={handleSelectAllClick}
+            handleSorting={handleSorting}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
             columns={column}
@@ -273,6 +308,9 @@ export const TableComponent = ({
                 >
                   {column.map((column, index) => {
                     const value = row[column.id]
+
+                    const isExpanded = expandedRows.includes(row.id || row.row.id);
+                    const truncatedValue = truncateText(value, 100, isExpanded);
                     return (
                       <TableCell
                         key={index}
@@ -287,8 +325,21 @@ export const TableComponent = ({
                               'aria-labelledby': labelId,
                             }}
                           />
+                        ) : column.id === 'collapse' ? (
+                          <IconButton
+                            aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                              size="medium"
+                            className={styles.expandCollapse}
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                handleRowClick(row.id || row.row.id)
+                              }}
+                          >
+                            {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                          </IconButton>
                         ) : (
-                          value
+                          // Render truncatedValue or full value based on expansion state
+                          isExpanded ? value : truncatedValue
                         )}
                       </TableCell>
                     )
@@ -299,15 +350,15 @@ export const TableComponent = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+      <div className={styles.paginationContainer}>
+        <Pagination
+          count={count}
+          onChange={(e, page) => handlePageChange(page)}
+          shape="rounded"
+          showFirstButton
+          showLastButton
+        />
+      </div>
     </React.Fragment>
   )
 }

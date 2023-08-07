@@ -12,7 +12,7 @@ import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
-import { AppConfig } from '../../../core/client/src/providers/ConfigProvider'
+import { AppConfig } from '@magickml/client-core'
 
 /**
  * Combine all reducers into the root reducer.
@@ -26,14 +26,14 @@ const rootReducer = combineReducers({
 })
 
 // Store instance placeholder
-let _store = null
+let _store: any = null
 
 /**
  * Create a new store with optional configuration.
  * @param config - Optional configuration for the store.
  * @returns The created store.
  */
-export const createStore = (config?: AppConfig) => {
+export const createStore = (config: AppConfig) => {
   if (_store) return _store
 
   const persistConfig = {

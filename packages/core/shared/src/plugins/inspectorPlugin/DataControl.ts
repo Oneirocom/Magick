@@ -1,32 +1,34 @@
-// DOCUMENTED 
-import { NodeEditor } from 'rete';
+// DOCUMENTED
+import { NodeEditor } from 'rete'
 
-import { MagickComponent } from '../../engine';
-import { ComponentData, MagickNode } from '../../types';
-import { Inspector } from './Inspector';
+import { MagickComponent } from '../../engine'
+import { ComponentData, ControlData, MagickNode } from '../../types'
+import { Inspector } from './Inspector'
+
 
 // Add TSDoc comment to the class.
 /**
  * A general class for the data controls.
  */
 export abstract class DataControl {
-  inspector: Inspector | null = null;
-  editor: NodeEditor | null = null;
-  node: MagickNode | null = null;
-  component: MagickComponent<unknown> | null = null;
-  id: string | null = null;
-  dataKey: string;
-  name: string;
-  defaultValue: unknown;
-  componentData: ComponentData;
-  componentKey: string;
-  options: Record<string, unknown>;
-  icon: string;
-  write: boolean;
-  type: string;
-  placeholder: string;
-  data: ComponentData;
-  expanded?: boolean;
+  inspector: Inspector | null = null
+  editor: NodeEditor | null = null
+  node: MagickNode | null = null
+  component: MagickComponent<unknown> | null = null
+  id: string | null = null
+  dataKey: string
+  name: string
+  defaultValue: unknown
+  componentData: ComponentData
+  componentKey: string
+  options: Record<string, unknown>
+  icon: string
+  write: boolean
+  type: string
+  placeholder: string
+  data: ComponentData
+  expanded?: boolean
+  tooltip?: string;
 
   // Add TSDoc comment to the constructor.
   /**
@@ -53,40 +55,43 @@ export abstract class DataControl {
     defaultValue = null,
     type = 'string',
     placeholder = '',
+    tooltip = '',
   }: {
-    dataKey: string;
-    name: string;
-    component: string;
-    data?: ComponentData;
-    options?: Record<string, unknown>;
-    write?: boolean;
-    icon?: string;
-    defaultValue?: unknown;
-    type?: string;
-    placeholder?: string;
+    dataKey: string
+    name: string
+    component: string
+    data?: ComponentData
+    options?: Record<string, unknown>
+    write?: boolean
+    icon?: string
+    defaultValue?: unknown
+    type?: string
+    placeholder?: string
+    tooltip?: string
   }) {
-    if (!dataKey) throw new Error('Data key is required');
-    if (!name) throw new Error('Name is required');
-    if (!component) throw new Error('Component name is required');
+    if (!dataKey) throw new Error('Data key is required')
+    if (!name) throw new Error('Name is required')
+    if (!component) throw new Error('Component name is required')
 
-    this.dataKey = dataKey;
-    this.name = name;
-    this.componentData = data;
-    this.componentKey = component;
-    this.options = options;
-    this.icon = icon;
-    this.write = write;
-    this.defaultValue = defaultValue;
-    this.type = type;
-    this.placeholder = placeholder;
-    this.data = data;
+    this.dataKey = dataKey
+    this.name = name
+    this.componentData = data
+    this.componentKey = component
+    this.options = options
+    this.icon = icon
+    this.write = write
+    this.defaultValue = defaultValue
+    this.type = type
+    this.placeholder = placeholder
+    this.data = data
+    this.tooltip = tooltip
   }
 
   // Add TSDoc comment to the method.
   /**
    * Serializer to easily extract the data control's information for publishing.
    */
-  get control() {
+  get control(): ControlData {
     return {
       dataKey: this.dataKey,
       name: this.name,
@@ -97,7 +102,8 @@ export abstract class DataControl {
       icon: this.icon,
       type: this.type,
       placeholder: this.placeholder,
-    };
+      tooltip: this.tooltip
+    }
   }
 
   // Add TSDoc comment to the method.
@@ -105,7 +111,7 @@ export abstract class DataControl {
    * Abstract method to execute when a control is added.
    */
   onAdd(): void | undefined {
-    return;
+    return
   }
 
   // Add TSDoc comment to the method.
@@ -113,7 +119,7 @@ export abstract class DataControl {
    * Abstract method to execute when a control is removed.
    */
   onRemove(): void | undefined {
-    return;
+    return
   }
 
   // Add TSDoc comment to the (optional) method.
@@ -121,5 +127,5 @@ export abstract class DataControl {
    * Abstract method to handle updating data (optional).
    * @param args - An array of unknown arguments
    */
-  onData?(...args: unknown[]): Promise<void> | void;
+  onData?(...args: unknown[]): Promise<void> | void
 }

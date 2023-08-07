@@ -8,6 +8,7 @@ import Router from '@koa/router'
 import { pluginManager } from '@magickml/core'
 import {
   apis,
+  initApp,
   app,
   Handler,
   initFileServer,
@@ -16,14 +17,20 @@ import {
   Route,
   spells
 } from '@magickml/server-core'
+import { initLogger, getLogger } from '@magickml/core'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
+import plugins from './plugins'
+import { initAgentCommander } from '@magickml/agents'
+
+initLogger({ name: 'server' })
+const logger = getLogger()
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
-  console.error('uncaughtException', err)
+  logger.error('uncaughtException %s', err)
 })
 
 process.on(
@@ -33,7 +40,7 @@ process.on(
       /* null */
     },
     p: Promise<any>
-  ) => console.error('Unhandled Rejection at: Promise ', p, reason)
+  ) => logger.error('Unhandled Rejection at: Promise %o with reason %s', p, reason)
 )
 
 // initialize server routes from the plugin manager
@@ -48,11 +55,12 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
  * form and multipart-json requests, and routes.
  */
 async function init() {
+  await initApp()
+  await initAgentCommander()
   // load plugins
   await (async () => {
-    const plugins = (await import('./plugins')).default
-    console.log(
-      'loaded plugins on server',
+    logger.info(
+      'loaded plugins on server %o',
       Object.values(plugins)
         .map((p: any) => p.name)
         .join(', ')
@@ -84,11 +92,11 @@ async function init() {
   app.use(cors(options))
 
   process.on('unhandledRejection', (err: Error) => {
-    console.error('Unhandled Rejection:' + err + ' - ' + err.stack)
+    logger.error('Unhandled Rejection:' + err + ' - ' + err.stack)
   })
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
-  app.use(koaBody({ multipart: true }))
+  app.use(koaBody({ multipart: true, jsonLimit: '200mb', formLimit: '200mb' }))
 
   /**
    * Creates a Koa route from the Route object passed in.
@@ -156,13 +164,11 @@ async function init() {
     }
   })
 
-  process.on('uncaughtException in Editor Server', console.error)
-
   // adding router middlewares to Koa app
   app.use(router.routes()).use(router.allowedMethods())
 
   app.listen(app.get('port'), () => {
-    console.log('Server started on port ', app.get('port'))
+    logger.info('Server started on port %s', app.get('port'))
   })
 }
 

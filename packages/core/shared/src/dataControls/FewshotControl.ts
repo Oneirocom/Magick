@@ -21,6 +21,7 @@ export class FewshotControl extends DataControl {
     dataKey = 'fewshot',
     name = 'fewshot',
     defaultValue = '',
+    tooltip=''
   }) {
     const options = {
       dataKey,
@@ -32,7 +33,8 @@ export class FewshotControl extends DataControl {
         language,
         wordWrap: true
       },
-      defaultValue
+      defaultValue,
+      tooltip: tooltip,
     }
 
     // Calls the constructor of parent class and passes the options object to it.

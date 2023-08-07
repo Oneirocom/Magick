@@ -3,12 +3,22 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
+import { app } from '@magickml/server-core'
 
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
+import { Queue } from 'bullmq'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
+
+export type AgentRunData = {
+  agentId: string
+  content: string
+  channel: string
+  sender: string
+  client: string
+}
 
 /**
  * Default AgentService class.
@@ -20,8 +30,39 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
 export class AgentService<
   ServiceParams extends Params = AgentParams
 > extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
-  log(data) {
-    return data ? data : { message: 'No data' }
+  app: Application
+  runQueue: Queue
+
+  constructor(options: KnexAdapterOptions, app: Application) {
+    super(options)
+    this.app = app
+    this.runQueue = new Queue(`agent:run`, {
+      connection: app.get('redis'),
+    })
+  }
+
+  // we use this ping to avoid firing a patched event on the agent
+  // every time the agent is pinged
+  async ping(agentId: string) {
+    const db = app.get('dbClient')
+    // knex query to update the pingedAt field of the agent with the given id
+    const query = await db('agents').where({ id: agentId }).update({
+      pingedAt: new Date().toISOString(),
+    })
+
+    return { data: query }
+  }
+
+  async run(data: AgentRunData) {
+    if (!data.agentId) throw new Error('agentId is required')
+    // probably need to authenticate the request here against project id
+    // add the job to the queueD
+    const job = await this.runQueue.add(data.agentId, {
+      ...data,
+    })
+
+    // return the job id
+    return { jobId: job.id }
   }
 }
 
@@ -36,5 +77,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
     name: 'agents',
+    multi: ['remove'],
   }
 }

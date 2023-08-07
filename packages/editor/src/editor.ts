@@ -1,10 +1,11 @@
 // DOCUMENTED
-import ConnectionPlugin from 'rete-connection-plugin'
 import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin from './plugins/contextMenu'
+import HighlightPlugin from './plugins/highlightPlugin'
+import ConnectionPlugin from './plugins/connectionPlugin'
 import {
   CachePlugin,
   OnSubspellUpdated,
@@ -35,7 +36,6 @@ import {
   SocketOverridePlugin,
   SocketPlugin,
   SocketPluginArgs,
-  TaskPlugin,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -94,6 +94,8 @@ export const initEditor = function ({
 
   editor.use(CachePlugin)
 
+  editor.use(HighlightPlugin)
+
   // History plugin for undo/redo
   editor.use(HistoryPlugin, { keyboard: false })
 
@@ -143,7 +145,7 @@ export const initEditor = function ({
 
   // Configure Area plugin
   editor.use(AreaPlugin, {
-    scaleExtent: { min: 0.1, max: 1.5 },
+    scaleExtent: { min: 0.05, max: 2.0 },
     background,
     tab,
     snap: true,
@@ -180,9 +182,6 @@ export const initEditor = function ({
   if (client) {
     editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
     editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
-  } else {
-    editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
-    editor.use(TaskPlugin)
   }
 
   // Set up the SelectionPlugin
@@ -196,6 +195,14 @@ export const initEditor = function ({
   // Event listeners
   editor.on('zoom', ({ source }) => {
     return source !== 'dblclick'
+  })
+
+  // Unselect all nodes when clicking off nodes
+  editor.on('click', () => {
+    const list = [...editor.selected.list]
+
+    editor.selected.clear()
+    list.map(node => (node.update ? node.update() : null))
   })
 
   editor.on(
@@ -223,6 +230,7 @@ export const initEditor = function ({
 
   // Functions to load and run spells
   editor.loadSpell = async (spell: SpellInterface) => {
+    console.log('Loading spell in editor')
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))

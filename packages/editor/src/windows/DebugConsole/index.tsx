@@ -55,8 +55,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @returns {string} Formatted error message.
    */
   const formatErrorMessage = (message): string =>
-    `> Node ${message.nodeId}: Error in ${message.from} component${
-      message.name ? ' ' + message.name : ''
+    `> Node ${message.nodeId}: Error in ${message.from} component${message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -66,8 +65,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @returns {string} Formatted log message.
    */
   const formatLogMessage = (message): string =>
-    `> Node ${message.nodeId}: Message from ${message.from} component ${
-      message.name ? ' ' + message.name : ''
+    `> Node ${message.nodeId}: Message from ${message.from} component ${message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -99,6 +97,7 @@ const DebugConsole = ({ tab }): JSX.Element => {
           enableClipboard={false}
           theme="twilight"
           collapsed={true}
+          style={{ overflow: 'auto' }}
         />
         <br />
       </div>
@@ -114,9 +113,9 @@ const DebugConsole = ({ tab }): JSX.Element => {
   const getMessage = _message => {
     const message = _message.content
       ? {
-          ..._message,
-          ...JSON.parse(_message.content),
-        }
+        ..._message,
+        ...JSON.parse(_message.content),
+      }
       : _message
 
     delete message.content
@@ -126,7 +125,6 @@ const DebugConsole = ({ tab }): JSX.Element => {
 
   // Callback function to print messages to the debugger.
   const printToDebugger = useCallback((_, message): void => {
-    console.log('MESSAGE', message)
     const terminal = terminalRef.current
     if (!terminal) return
 

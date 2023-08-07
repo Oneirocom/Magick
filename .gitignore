@@ -1,7 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 hnswlib.index
-database
 # compiled output
 /dist
 /tmp
@@ -45,7 +44,6 @@ Thumbs.db
 dev.db
 */**/dev.db
 
-package-lock.json
 yarn.lock
 
 /files/*
@@ -57,6 +55,7 @@ yarn.lock
 scripts/.cache
 
 apps/docs/build
+apps/docs/api/index.md
 data.json
 /logs
 docstore.json

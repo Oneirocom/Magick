@@ -1,32 +1,32 @@
-// DOCUMENTED 
-import { Node } from '../../plugins/reactRenderPlugin/Node';
-import { Socket } from '../../plugins/reactRenderPlugin/Socket';
-import { Control } from '../../plugins/reactRenderPlugin/Control';
-import { Upload } from '../../plugins/reactRenderPlugin/Upload';
-
-import { Icon, componentCategories } from '@magickml/client-core';
-import css from './Node.module.css';
+// DOCUMENTED
+import { Node } from '../../plugins/reactRenderPlugin/Node'
+import { Socket } from '../../plugins/reactRenderPlugin/Socket'
+import { Control } from '../../plugins/reactRenderPlugin/Control'
+import { Upload } from '../../plugins/reactRenderPlugin/Upload'
+import { Tooltip } from '@mui/material'
+import { Icon, componentCategories } from '@magickml/client-core'
+import css from './Node.module.css'
 
 /**
  * Custom Node component for rendering nodes with specific functionality.
  * Inherits from the base Node class.
  */
 export class MyNode extends Node {
-  declare props: any;
-  declare state: any;
+  declare props: any
+  declare state: any
 
   /**
    * Constructor for the MyNode component.
    * @param props - Properties that are passed to the component.
    */
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       outputs: [],
       controls: [],
       inputs: [],
       selected: false,
-    };
+    }
   }
 
   /**
@@ -34,14 +34,28 @@ export class MyNode extends Node {
    * @returns The JSX representation of the component.
    */
   render() {
-    const { node, bindSocket, bindControl } = this.props;
-    const { outputs, controls, inputs, selected } = this.state;
-    const name = node.displayName ? node.displayName : node.name;
-    const fullName = node.data.name ?? name;
-    const hasError = node.data.error;
-    const hasSuccess = node.data.success;
-    const img_url = node.data.image;
-    const html = node.data.func;
+    const { node, bindSocket, bindControl, editor } = this.props
+    const { outputs, controls, inputs, selected } = this.state
+    const name = node.displayName ? node.displayName : node.name
+    const fullName = node.data.name ?? name
+    const hasError = node.data.error
+    const hasSuccess = node.data.success
+    const img_url = node.data.image
+    const html = node.data.func
+
+    const handleMouseEnter = socket => {
+      socket.connections.forEach(connection => {
+        const el = editor.view.connections.get(connection).el
+        el.classList.add('selected')
+      })
+    }
+
+    const handleMouseLeave = socket => {
+      socket.connections.forEach(connection => {
+        const el = editor.view.connections.get(connection).el
+        el.classList.remove('selected')
+      })
+    }
 
     return (
       <div
@@ -56,12 +70,14 @@ export class MyNode extends Node {
         >
           <p>{node.id}</p>
         </div>
-        <div className={css['node-title']}>
-          <Icon
-            name={componentCategories[node.category]}
-            style={{ marginRight: 'var(--extraSmall)' }}
-          />
-          {fullName}
+        <div className={css['node-title-container']}>
+          <div className={css['node-title']}>
+            <Icon
+              name={componentCategories[node.category]}
+              style={{ marginRight: 'var(--extraSmall)' }}
+            />
+            {fullName}
+          </div>
         </div>
         <div className={css['connections-container']}>
           {html !== undefined && (
@@ -74,14 +90,25 @@ export class MyNode extends Node {
             <div className={css['connection-container']}>
               {inputs.map(input => (
                 <div className={css['input']} key={input.key}>
-                  <Socket
-                    type="input"
-                    socket={input.socket}
-                    io={input}
-                    innerRef={bindSocket}
-                  />
+                  <div
+                    onMouseEnter={() => handleMouseEnter(input)}
+                    onMouseLeave={() => handleMouseLeave(input)}
+                  >
+                    <Socket
+                      type="input"
+                      socket={input.socket}
+                      io={input}
+                      innerRef={bindSocket}
+                    />
+                  </div>
                   {!input.showControl() && (
-                    <div className="input-title">{input.name}</div>
+                    <Tooltip
+                      title={`Input:${input.name}`}
+                      placement="left"
+                      enterDelay={500}
+                    >
+                      <div className="input-title">{input.name}</div>
+                    </Tooltip>
                   )}
                   {input.showControl() && (
                     <Control
@@ -100,22 +127,32 @@ export class MyNode extends Node {
                 <div className={css['output']} key={output.key}>
                   {typeof output != 'undefined' &&
                     output.connections.forEach(element => {
-                      element.data = { ...element.data, hello: 'hello' };
+                      element.data = { ...element.data, hello: 'hello' }
                     })}
-                  <div className="output-title">{output.name}</div>
-                  <Socket
-                    type="output"
-                    socket={output.socket}
-                    io={output}
-                    innerRef={bindSocket}
-                  />
+                  <Tooltip
+                    title={`output: ${output.name}`}
+                    placement="right"
+                    enterDelay={500}
+                  >
+                    <div className="output-title">{output.name}</div>
+                  </Tooltip>
+
+                  <div
+                    onMouseEnter={() => handleMouseEnter(output)}
+                    onMouseLeave={() => handleMouseLeave(output)}
+                  >
+                    <Socket
+                      type="output"
+                      socket={output.socket}
+                      io={output}
+                      innerRef={bindSocket}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
-        <div className={css['bottom-container']}>
-          {/* Controls */}
+
           {controls.map(control => (
             <Control
               className={css['control']}
@@ -126,6 +163,6 @@ export class MyNode extends Node {
           ))}
         </div>
       </div>
-    );
+    )
   }
 }

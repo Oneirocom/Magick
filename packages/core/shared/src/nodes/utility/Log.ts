@@ -44,6 +44,7 @@ export class Log extends MagickComponent<void> {
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Log Name',
+      tooltip: 'Enter Log Name'
     })
 
     node.inspector.add(nameControl)

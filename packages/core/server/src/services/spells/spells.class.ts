@@ -77,5 +77,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'spells',
+    multi: ['remove'],
   }
 }

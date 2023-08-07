@@ -32,8 +32,10 @@ function install(editor: IRunContextEditor) {
     // If no node is currently selected, do nothing.
     if (!currentNode || editor.selected.list.length === 0) return
 
+    console.warn('The delete key has been temporary disabled')
+
     // Otherwise, remove the selected node from the editor.
-    editor.removeNode(currentNode)
+    // editor.removeNode(currentNode)
   })
 }
 

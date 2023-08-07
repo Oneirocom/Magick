@@ -23,6 +23,7 @@ export class InputControl extends DataControl {
     dataKey = '',
     name = '',
     icon = 'hand',
+    tooltip = '',
     defaultValue,
     placeholder,
   }: {
@@ -31,6 +32,7 @@ export class InputControl extends DataControl {
     icon?: string;
     defaultValue?: unknown;
     placeholder?: string;
+    tooltip?: string;
   }) {
     // Call super constructor with options and 'input' as the type of control
     super({
@@ -40,6 +42,7 @@ export class InputControl extends DataControl {
       defaultValue: defaultValue,
       icon: icon,
       placeholder: placeholder,
+      tooltip: tooltip,
     });
   }
 }

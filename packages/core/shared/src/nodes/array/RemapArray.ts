@@ -48,6 +48,7 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
     const values = new InputControl({
       dataKey: 'values',
       name: 'Values (, separated)',
+      tooltip:"this is an input for value"
     })
 
     node.inspector.add(values)

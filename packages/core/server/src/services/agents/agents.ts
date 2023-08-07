@@ -5,8 +5,8 @@
  */
 
 // Import necessary modules and functions
+import * as BullMQ from 'bullmq'
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { BadRequest } from '@feathersjs/errors'
 import {
   agentDataValidator,
   agentPatchValidator,
@@ -27,19 +27,7 @@ import { v4 as uuidv4 } from 'uuid'
 export * from './agents.class'
 export * from './agents.schema'
 
-/**
- * Validate that the rootSpell.id field is present.
- * @param context - The hook context
- */
-const validateRootSpell = async (context: HookContext) => {
-  if (
-    context.data.enabled &&
-    (!context.data.rootSpell || !context.data.rootSpell.id)
-  ) {
-    throw new BadRequest('Rootspell is required when agent is enabled')
-  }
-  return context
-}
+const AGENT_EVENTS = ['log', 'result', 'spell']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -47,15 +35,63 @@ const validateRootSpell = async (context: HookContext) => {
  */
 export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
-  app.use('agents', new AgentService(getOptions(app)), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'log'],
-    events: [],
+  app.use('agents', new AgentService(getOptions(app), app), {
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'run'],
+    events: AGENT_EVENTS,
   })
 
-  // app.service('agents').publish('log', (data, context) => {
-  //   // @ts-ignore
-  //   return app.channel(data.agentId)
-  // })
+  const pubSub = app.get<'pubsub'>('pubsub')
+
+  // this handles relaying all agent messages up to connected clients.
+  pubSub.patternSubscribe('agent*', (message, channel) => {
+    // parse  the channel from agent:agentId:messageType
+    const agentId = channel.split(':')[1]
+
+    // parse the type of agent message
+    const messageType = channel.split(':')[2]
+
+    // check if message type is an agent event
+    if (!AGENT_EVENTS.includes(messageType)) {
+      // notify connected clients via log message that an unknown message type was received
+      app.service('agents').emit('log', {
+        channel,
+        agentId,
+        data: {
+          message: `Unknown message type ${messageType}`,
+        },
+      })
+    }
+
+    // this is where we relay messages up based upon the time.
+    // note for every custom type we need to add it to the above
+    // todo harder typing on all message transports
+    app.service('agents').emit(messageType, {
+      ...message,
+      messageType,
+      channel,
+      agentId,
+    })
+  })
+
+  // todo more predictable channel names and method for handling message queues
+  // similar to the above
+  new BullMQ.Worker(
+    'agent:run:result',
+    async job => {
+      // we wil shuttle this message from here back up a socket to the client
+      const { agentId, projectId, originalData } = job.data
+      // emit custom events via the agent service
+      app.service('agents').emit('result', {
+        channel: `agent:${agentId}`,
+        sessionId: originalData.sessionId,
+        projectId,
+        data: job.data,
+      })
+    },
+    {
+      connection: app.get('redis'),
+    }
+  )
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
@@ -76,7 +112,6 @@ export const agent = (app: Application) => {
       create: [
         schemaHooks.validateData(agentDataValidator),
         schemaHooks.resolveData(agentDataResolver),
-        validateRootSpell,
         async (context: HookContext) => {
           context.data.id = uuidv4()
           return context
@@ -85,7 +120,6 @@ export const agent = (app: Application) => {
       patch: [
         schemaHooks.validateData(agentPatchValidator),
         schemaHooks.resolveData(agentPatchResolver),
-        validateRootSpell,
       ],
       update: [],
       remove: [],

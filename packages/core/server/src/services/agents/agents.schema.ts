@@ -35,7 +35,6 @@ export const agentDataSchema = Type.Pick(
   agentSchema,
   [
     'projectId',
-    'rootSpell',
     'name',
     'enabled',
     'updatedAt',
@@ -43,6 +42,7 @@ export const agentDataSchema = Type.Pick(
     'data',
     'publicVariables',
     'secrets',
+    'rootSpellId',
   ],
   { $id: 'AgentData' }
 );
@@ -55,14 +55,15 @@ export const agentPatchDataSchema = Type.Pick(
   [
     'id',
     'projectId',
-    'rootSpell',
     'name',
     'enabled',
+    'runState',
     'updatedAt',
     'pingedAt',
     'data',
     'publicVariables',
     'secrets',
+    'rootSpellId',
   ],
   { $id: 'AgentData', additionalProperties: true }
 );
@@ -116,14 +117,16 @@ export const agentPatchResolver = resolve<Agent, HookContext>({});
 export const agentQueryProperties = Type.Pick(agentSchema, [
   'id',
   'projectId',
-  'rootSpell',
   'enabled',
+  'runState',
   'name',
   'updatedAt',
   'pingedAt',
   'data',
   'publicVariables',
   'secrets',
+  'image',
+  'rootSpellId',
 ]);
 
 /**
@@ -155,4 +158,4 @@ export const agentQueryResolver = resolve<AgentQuery, HookContext>({});
 /**
  * JSON fields for agents
  */
-export const agentJsonFields = ['rootSpell', 'data'];
+export const agentJsonFields = ['data'];

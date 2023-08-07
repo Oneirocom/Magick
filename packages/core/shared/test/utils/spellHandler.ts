@@ -22,7 +22,7 @@ export const runTestSpell = async (
   await spellRunner.loadSpell(spell)
 
   // Get the outputs from running the spell
-  const outputs = await spellRunner.runComponent({ inputs })
+  const outputs = await app.get('agentCommander').runSpell({ inputs })
 
   // Return the outputs
   return outputs

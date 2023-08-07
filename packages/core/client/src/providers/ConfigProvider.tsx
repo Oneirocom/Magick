@@ -1,6 +1,6 @@
 // DOCUMENTED 
 // Import required dependencies
-import { DEFAULT_PROJECT_ID } from '@magickml/core';
+import { DEFAULT_PROJECT_ID } from '@magickml/config';
 import { createContext, useContext, useState } from 'react';
 
 // Define AppConfig type
@@ -8,6 +8,7 @@ export type AppConfig = {
   apiUrl: string;
   projectId: string;
   token: string;
+  posthogEnabled?: boolean;
 };
 
 // Define ConfigContext interface

@@ -13,6 +13,10 @@ import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
 import CheckBoxControl from './CheckBox'
+import { ControlData } from '@magickml/core'
+import {Tooltip } from '@mui/material'
+
+
 
 /**
  * Stub component for unknown control types.
@@ -40,18 +44,18 @@ const controlMap = {
   checkbox: CheckBoxControl,
 }
 
-type DataControl = {
-  component: string
-  dataKey: string
-  label: string
-  type: string
-  options?: any
-  name?: string
-  data: Record<string, any>
-}
+// type DataControl = {
+//   component: string
+//   dataKey: string
+//   label: string
+//   type: string
+//   options?: any
+//   name?: string
+//   data: Record<string, any>
+// }
 
 export type DataControlsProps = {
-  dataControls: { [key: string]: DataControl }
+  dataControls: { [key: string]: ControlData }
   updateData: Function
   updateControl: Function
   width: number
@@ -94,6 +98,7 @@ const DataControls = ({
     <>
       {Object.entries(dataControls).map(([key, control]) => {
         // Default props to pass through to every data control
+
         const controlProps = {
           nodeId,
           width,
@@ -110,7 +115,6 @@ const DataControls = ({
         if (!Component) return null
 
         if (control.component === 'info' && !control?.data?.info) return null
-
         return (
           <div
             key={control.name + nodeId + key}
@@ -119,9 +123,12 @@ const DataControls = ({
               borderRadius: '5px',
             }}
           >
+            <Tooltip title={control.tooltip ? control.tooltip : control.name} placement="top-start" arrow>
+
             <p style={{ margin: 0, marginBottom: '10px' }}>
               {control.name || key}
             </p>
+            </Tooltip>
             <Component key={nodeId + control.name} {...controlProps} />
           </div>
         )

@@ -1,58 +1,52 @@
-// DOCUMENTED 
+// DOCUMENTED
 // Imports core TypeBox, Feathers, and other necessary modules
-import { resolve } from '@feathersjs/schema';
+import { resolve } from '@feathersjs/schema'
 import {
   Type,
   getDataValidator,
   getValidator,
   querySyntax,
-} from '@feathersjs/typebox';
-import type { Static } from '@feathersjs/typebox';
+} from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
 
 // Imports custom module types for working with engineered documents
-import type { HookContext } from '../../declarations';
-import { dataValidator, queryValidator } from '../../config/validators';
-import { documentSchema } from '@magickml/core';
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../config/validators'
+import { documentSchema } from '@magickml/core'
 
 // Definitions for base document schema resolution
-export const documentResolver = resolve<Document, HookContext>({});
-export const documentExternalResolver = resolve<Document, HookContext>({});
+export const documentResolver = resolve<Document, HookContext>({})
+export const documentExternalResolver = resolve<Document, HookContext>({})
 
 /**
  * @description Schema for creating new entries
  */
 export const documentDataSchema = Type.Pick(
   documentSchema,
-  [
-    'type',
-    'projectId',
-    'content',
-    'date',
-    'embedding',
-  ],
+  ['type', 'projectId', 'content', 'date', 'embedding', 'metadata'],
   {
     $id: 'DocumentData',
   }
-);
-export type DocumentData = Static<typeof documentDataSchema>;
+)
+export type DocumentData = Static<typeof documentDataSchema>
 export const documentDataValidator = getDataValidator(
   documentDataSchema,
   dataValidator
-);
-export const documentDataResolver = resolve<Document, HookContext>({});
+)
+export const documentDataResolver = resolve<Document, HookContext>({})
 
 /**
  * @description Schema for updating existing entries
  */
 export const documentPatchSchema = Type.Partial(documentDataSchema, {
   $id: 'DocumentPatch',
-});
-export type DocumentPatch = Static<typeof documentPatchSchema>;
+})
+export type DocumentPatch = Static<typeof documentPatchSchema>
 export const documentPatchValidator = getDataValidator(
   documentPatchSchema,
   dataValidator
-);
-export const documentPatchResolver = resolve<Document, HookContext>({});
+)
+export const documentPatchResolver = resolve<Document, HookContext>({})
 
 /**
  * @description Schema for allowed query properties
@@ -64,7 +58,8 @@ export const documentQueryProperties = Type.Pick(documentSchema, [
   'content',
   'date',
   'embedding',
-]);
+  'metadata',
+])
 export const documentQuerySchema = Type.Intersect(
   [
     querySyntax(documentQueryProperties),
@@ -72,10 +67,10 @@ export const documentQuerySchema = Type.Intersect(
     Type.Object({}, { additionalProperties: false }),
   ],
   { additionalProperties: false }
-);
-export type DocumentQuery = Static<typeof documentQuerySchema>;
+)
+export type DocumentQuery = Static<typeof documentQuerySchema>
 export const documentQueryValidator = getValidator(
   documentQuerySchema,
   queryValidator
-);
-export const documentQueryResolver = resolve<DocumentQuery, HookContext>({});
+)
+export const documentQueryResolver = resolve<DocumentQuery, HookContext>({})
