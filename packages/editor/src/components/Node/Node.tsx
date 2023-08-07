@@ -6,6 +6,7 @@ import { Upload } from '../../plugins/reactRenderPlugin/Upload'
 import { Tooltip } from '@mui/material'
 import { Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
+import styled from '@emotion/styled'
 
 /**
  * Custom Node component for rendering nodes with specific functionality.
@@ -57,6 +58,10 @@ export class MyNode extends Node {
       })
     }
 
+    const StyledToolTip = styled(Tooltip)` 
+      pointer-events: none;
+    `; 
+
     return (
       <div
         className={`${css['node']} ${css[selected]} ${
@@ -102,13 +107,13 @@ export class MyNode extends Node {
                     />
                   </div>
                   {!input.showControl() && (
-                    <Tooltip
+                    <StyledToolTip
                       title={`Input:${input.name}`}
                       placement="left"
                       enterDelay={500}
                     >
                       <div className="input-title">{input.name}</div>
-                    </Tooltip>
+                    </StyledToolTip>
                   )}
                   {input.showControl() && (
                     <Control
@@ -129,13 +134,13 @@ export class MyNode extends Node {
                     output.connections.forEach(element => {
                       element.data = { ...element.data, hello: 'hello' }
                     })}
-                  <Tooltip
+                  <StyledToolTip
                     title={`output: ${output.name}`}
                     placement="right"
                     enterDelay={500}
                   >
                     <div className="output-title">{output.name}</div>
-                  </Tooltip>
+                  </StyledToolTip>
 
                   <div
                     onMouseEnter={() => handleMouseEnter(output)}
