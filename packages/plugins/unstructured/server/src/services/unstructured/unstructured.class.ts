@@ -19,6 +19,7 @@ import {
   WorkerData,
   pluginManager,
 } from '@magickml/core'
+import axios from 'axios'
 
 /** Type for Unstructured Params */
 export type UnstructuredParams = KnexAdapterParams<UnstructuredQuery>
@@ -45,6 +46,28 @@ export class UnstructuredService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: UnstructuredData): Promise<any> {
+    data
+    const body = {
+      strategy: 'auto',
+    }
+
+    const headers = {
+      accept: 'application/json',
+      'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+      'Content-Type': 'multipart/form-data',
+    }
+
+    const form = new FormData()
+
+    const completion = await axios.postForm(
+      `https://api.unstructured.io/general/v0.0.34/general`,
+      body,
+      { headers: headers }
+    )
+
+    if (completion.data.error) {
+      console.error('Unstructured.io Error', completion.data.error)
+    }
     return 'test'
   }
 }

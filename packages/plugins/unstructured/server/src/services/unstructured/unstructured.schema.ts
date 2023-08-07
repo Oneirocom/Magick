@@ -25,12 +25,7 @@ import { dataValidator, queryValidator } from '@magickml/server-core'
 export const unstructuredSchema = Type.Object(
   {
     id: Type.String(),
-    type: Type.Optional(Type.String()),
-    content: Type.Optional(Type.String()),
-    projectId: Type.String(),
-    date: Type.Optional(Type.String()),
-    embedding: Type.Optional(Type.Any()),
-    metadata: Type.Optional(Type.Any()),
+    files: Type.Any(),
   },
   { $id: 'Unstructured', additionalProperties: false }
 )
@@ -44,13 +39,9 @@ export const unstructuredExternalResolver = resolve<Unstructured, HookContext>(
 /**
  * Schema for creating new entries
  */
-export const unstructuredDataSchema = Type.Pick(
-  unstructuredSchema,
-  ['type', 'projectId', 'content', 'date', 'embedding', 'metadata'],
-  {
-    $id: 'UnstructuredData',
-  }
-)
+export const unstructuredDataSchema = Type.Pick(unstructuredSchema, ['files'], {
+  $id: 'UnstructuredData',
+})
 
 export type UnstructuredData = Static<typeof unstructuredDataSchema>
 export const unstructuredDataValidator = getDataValidator(
@@ -82,12 +73,7 @@ export const unstructuredValidator = getValidator(
  */
 export const unstructuredQueryProperties = Type.Pick(unstructuredSchema, [
   'id',
-  'type',
-  'projectId',
-  'content',
-  'date',
-  'embedding',
-  'metadata',
+  'files',
 ])
 
 export const unstructuredQuerySchema = Type.Intersect(
