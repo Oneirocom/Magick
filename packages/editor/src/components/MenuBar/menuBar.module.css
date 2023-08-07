@@ -19,7 +19,7 @@ ul {
   justify-content: space-between;
 }
 .list-item:hover {
-  background-color: var(--primary);
+  background-color: #49545a;
 }
 
 /* Hide Dropdowns by Default */

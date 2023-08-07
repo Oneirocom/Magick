@@ -518,7 +518,7 @@ const NewMenuBar = () => {
               divider={true}
               sx={{
                 '&:hover, &:focus': {
-                  background: '#1BC5EB',
+                  background: '#49545A',
                   outline: 'none',
                 },
               }}
@@ -567,7 +567,7 @@ const NewMenuBar = () => {
                       }}
                       sx={{
                         '&:hover, &:focus': {
-                          background: '#1BC5EB',
+                          background: '#49545A',
                           outline: 'none',
                         },
                       }}
