@@ -14,21 +14,6 @@ class TaskIntentPluginPlugin extends ClientPlugin {
       inputTypes: [],
       spellTemplates: [],
       nodes: getNodes(),
-      drawerItems: [
-        {
-          path: '/intents',
-          icon: MediationIcon,
-          text: 'Intents',
-          tooltip: 'Create and manage intent stories for intent detection.',
-        },
-      ],
-      clientRoutes: [
-        {
-          path: '/intents',
-          component: IntentWindow,
-          plugin: 'IntentPlugin',
-        },
-      ],
     })
   }
 }
