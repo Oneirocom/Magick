@@ -1,11 +1,9 @@
 import { ServerPlugin } from '@magickml/core'
-import { getNodes } from '@magickml/plugin-intent-shared'
-import { intent } from './services/intent/intent'
+import { unstructured } from './services/unstructured/unstructured'
 
-const IntentPlugin = new ServerPlugin({
-  name: 'IntentPlugin',
-  services: [intent],
-  nodes: getNodes(),
+const UnstructuredPlugin = new ServerPlugin({
+  name: 'UnstructuredPlugin',
+  services: [unstructured],
 })
 
-export default IntentPlugin
+export default UnstructuredPlugin

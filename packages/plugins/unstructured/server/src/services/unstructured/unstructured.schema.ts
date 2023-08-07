@@ -22,7 +22,7 @@ import { dataValidator, queryValidator } from '@magickml/server-core'
  * @property {any} [embedding] - The embedding data of the document (optional).
  * @property {any} [metadata] - The embedding data of the document (optional).
  */
-export const intentSchema = Type.Object(
+export const unstructuredSchema = Type.Object(
   {
     id: Type.String(),
     type: Type.Optional(Type.String()),
@@ -32,50 +32,55 @@ export const intentSchema = Type.Object(
     embedding: Type.Optional(Type.Any()),
     metadata: Type.Optional(Type.Any()),
   },
-  { $id: 'Intent', additionalProperties: false }
+  { $id: 'Unstructured', additionalProperties: false }
 )
 
-export type Intent = Static<typeof intentSchema>
-export const intentResolver = resolve<Intent, HookContext>({})
-export const intentExternalResolver = resolve<Intent, HookContext>({})
+export type Unstructured = Static<typeof unstructuredSchema>
+export const unstructuredResolver = resolve<Unstructured, HookContext>({})
+export const unstructuredExternalResolver = resolve<Unstructured, HookContext>(
+  {}
+)
 
 /**
  * Schema for creating new entries
  */
-export const intentDataSchema = Type.Pick(
-  intentSchema,
+export const unstructuredDataSchema = Type.Pick(
+  unstructuredSchema,
   ['type', 'projectId', 'content', 'date', 'embedding', 'metadata'],
   {
-    $id: 'IntentData',
+    $id: 'UnstructuredData',
   }
 )
 
-export type IntentData = Static<typeof intentDataSchema>
-export const intentDataValidator = getDataValidator(
-  intentDataSchema,
+export type UnstructuredData = Static<typeof unstructuredDataSchema>
+export const unstructuredDataValidator = getDataValidator(
+  unstructuredDataSchema,
   dataValidator
 )
-export const intentDataResolver = resolve<Intent, HookContext>({})
+export const unstructuredDataResolver = resolve<Unstructured, HookContext>({})
 
 /**
  * Schema for updating existing entries
  */
-export const intentPatchSchema = Type.Partial(intentSchema, {
-  $id: 'IntentPatch',
+export const unstructuredPatchSchema = Type.Partial(unstructuredSchema, {
+  $id: 'UnstructuredPatch',
 })
-export type IntentPatch = Static<typeof intentPatchSchema>
-export const intentPatchValidator = getDataValidator(
-  intentPatchSchema,
+export type UnstructuredPatch = Static<typeof unstructuredPatchSchema>
+export const unstructuredPatchValidator = getDataValidator(
+  unstructuredPatchSchema,
   dataValidator
 )
-export const intentPatchResolver = resolve<Intent, HookContext>({})
+export const unstructuredPatchResolver = resolve<Unstructured, HookContext>({})
 
-export const intentValidator = getValidator(intentSchema, dataValidator)
+export const unstructuredValidator = getValidator(
+  unstructuredSchema,
+  dataValidator
+)
 
 /**
  * Schema for allowed query properties
  */
-export const intentQueryProperties = Type.Pick(intentSchema, [
+export const unstructuredQueryProperties = Type.Pick(unstructuredSchema, [
   'id',
   'type',
   'projectId',
@@ -85,17 +90,20 @@ export const intentQueryProperties = Type.Pick(intentSchema, [
   'metadata',
 ])
 
-export const intentQuerySchema = Type.Intersect(
+export const unstructuredQuerySchema = Type.Intersect(
   [
-    querySyntax(intentQueryProperties),
+    querySyntax(unstructuredQueryProperties),
     Type.Object({}, { additionalProperties: false }),
   ],
   { additionalProperties: false }
 )
 
-export type IntentQuery = Static<typeof intentQuerySchema>
-export const intentQueryValidator = getValidator(
-  intentQuerySchema,
+export type UnstructuredQuery = Static<typeof unstructuredQuerySchema>
+export const unstructuredQueryValidator = getValidator(
+  unstructuredQuerySchema,
   queryValidator
 )
-export const intentQueryResolver = resolve<IntentQuery, HookContext>({})
+export const unstructuredQueryResolver = resolve<
+  UnstructuredQuery,
+  HookContext
+>({})
