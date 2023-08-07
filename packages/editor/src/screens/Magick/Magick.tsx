@@ -14,6 +14,8 @@ import {
 } from '../../state/tabs'
 import Events from "../EventWindow"
 import Requests from '../RequestWindow'
+import Settings from "../settings/SettingsWindow"
+import Documents from "../DocumentWindow"
 
 /**
  * Magick component
@@ -25,6 +27,8 @@ import Requests from '../RequestWindow'
 const componentMapping = {
   Events,
   Requests,
+  Settings,
+  Documents,
 };
 const Magick = ({ empty = false }): JSX.Element => {
   const dispatch = useDispatch()
