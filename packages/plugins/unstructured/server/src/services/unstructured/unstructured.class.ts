@@ -47,21 +47,18 @@ export class UnstructuredService<
   // @ts-ignore
   async create(data: UnstructuredData): Promise<any> {
     data
-    const body = {
-      strategy: 'auto',
-    }
 
     const headers = {
       accept: 'application/json',
       'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
-      'Content-Type': 'multipart/form-data',
     }
 
     const form = new FormData()
+    form.append('strategy', 'auto')
 
     const completion = await axios.postForm(
       `https://api.unstructured.io/general/v0.0.34/general`,
-      body,
+      form,
       { headers: headers }
     )
 

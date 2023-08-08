@@ -16,8 +16,7 @@ import pgvector from 'pgvector/pg'
 // Import types and classes
 import type { Application, HookContext } from '@magickml/server-core'
 import { UnstructuredService, getOptions } from './unstructured.class'
-import Koa from 'koa'
-import multer from 'koa-multer'
+import multer from '@koa/multer'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
@@ -42,31 +41,26 @@ export * from './unstructured.schema'
  * @param app - The Feathers application
  */
 export const unstructured = (app: Application) => {
+  let memoryStorage = multer.memoryStorage()
+  const multipartMiddleware = multer({ storage: memoryStorage })
   // Register our service on the Feathers application
   app.use(unstructuredPath, new UnstructuredService(getOptions(app)), {
     // A list of all methods this service exposes externally
     methods: unstructuredMethods,
     // You can add additional custom events to be sent to clients here
     events: [],
+    koa: {
+      before: [
+        multipartMiddleware.single('file'),
+        async (ctx, next) => {
+          if (ctx.request.files?.file instanceof Array) {
+            ctx.request.body.files = ctx.request.files?.file
+          } else {
+            ctx.request.body.files = [ctx.request.files?.file]
+          }
+          await next()
+        },
+      ],
+    },
   })
-
-  const upload = multer()
-  app.use(unstructuredPath, upload.single('files'))
-
-  // Initialize hooks
-  app.service(unstructuredPath).hooks({
-    around: {
-      all: [],
-    },
-    before: {
-      all: [],
-      create: [],
-    },
-    after: {
-      all: [],
-    },
-    error: {
-      all: [],
-    },
-  } as any) // TODO: fix me
 }
