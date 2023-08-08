@@ -16,19 +16,13 @@ import Events from '../EventWindow'
 import Requests from '../RequestWindow'
 import Settings from '../settings/SettingsWindow'
 import Documents from '../DocumentWindow'
-
+import { ClientPluginManager, pluginManager } from '@magickml/core'
 /**
  * Magick component
  * @param empty flag to control whether the workspaces should be rendered or not
  * @returns JSX.Element
  */
 
-const componentMapping = {
-  Events,
-  Requests,
-  Settings,
-  Documents,
-}
 const Magick = ({ empty = false }): JSX.Element => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -37,6 +31,30 @@ const Magick = ({ empty = false }): JSX.Element => {
   const pubSub = usePubSub()
   const { URI } = useParams()
   const { events, subscribe } = pubSub
+
+  const pluginComponents = []
+
+  ;(pluginManager as ClientPluginManager)
+    .getGroupedClientRoutes()
+    .forEach(plugin => {
+      plugin.routes.map(route => {
+        pluginComponents.push({
+          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+          component: route.component,
+        })
+      })
+    })
+
+  const componentMapping = {
+    Events,
+    Requests,
+    Settings,
+    Documents,
+    ...pluginComponents.reduce((acc, obj) => {
+      acc[obj.name] = obj.component
+      return acc
+    }, {}),
+  }
 
   // Subscribe to open tab events
   useEffect(() => {
