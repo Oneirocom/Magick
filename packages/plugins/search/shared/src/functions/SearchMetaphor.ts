@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { CompletionHandlerInputData } from '@magickml/core'
-import metaphor, { SearchResponse } from 'metaphor-node'
+import metaphor from 'metaphor-node'
 import { saveRequest } from '@magickml/core'
 
 /**
