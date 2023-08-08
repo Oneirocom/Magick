@@ -1,6 +1,8 @@
 // DOCUMENTED
 import { CompletionHandlerInputData } from '@magickml/core'
-import metaphor from 'metaphor-node'
+import metaphor, { SearchResponse } from 'metaphor-node'
+import { saveRequest } from '@magickml/core'
+
 /**
  * Makes an API request to an AI text completion service.
  *
@@ -18,7 +20,10 @@ export async function makeMetaphorSearch(
   totalTokens?: number
 }> {
   // Destructure necessary properties from the data object.
-  const { inputs, context } = data
+  const { inputs, context, node } = data
+  const { projectId, currentSpell } = context
+  // Set the current spell for record keeping.
+  const spell = currentSpell
   const query = inputs['query'][0] as string
 
   // get secret
@@ -28,7 +33,25 @@ export async function makeMetaphorSearch(
 
   try {
     const response = await client.search(query)
+    const start = Date.now()
 
+    saveRequest({
+      projectId: projectId,
+      requestData: JSON.stringify(query),
+      responseData: JSON.stringify(response),
+      startTime: start,
+      statusCode: response.results.length > 0 ? 200 : 404,
+      status: response.results.length > 0 ? 'success' : 'error',
+      model: 'metaphor',
+      parameters: JSON.stringify({}),
+      type: 'search',
+      provider: 'metaphor',
+      totalTokens: 0,
+      hidden: false,
+      processed: false,
+      spell,
+      nodeId: node.id as number,
+    })
     return {
       success: true,
       results: response.results,
