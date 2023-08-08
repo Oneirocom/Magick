@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "engines": {
-      "node": "18"
+    "node": "18"
   },
   "scripts": {
     "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
@@ -125,6 +125,7 @@
     "lodash": "4.17.21",
     "mammoth": "1.5.1",
     "md5": "2.3.0",
+    "metaphor-node": "^1.0.18",
     "mui-nested-menu": "^3.2.1",
     "ngrok": "^5.0.0-beta.2",
     "notistack": "3.0.1",
