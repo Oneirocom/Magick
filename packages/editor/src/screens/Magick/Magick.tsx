@@ -12,12 +12,17 @@ import {
   openTab,
   selectAllTabs,
 } from '../../state/tabs'
-
+import Events from '../EventWindow'
+import Requests from '../RequestWindow'
+import Settings from '../settings/SettingsWindow'
+import Documents from '../DocumentWindow'
+import { ClientPluginManager, pluginManager } from '@magickml/core'
 /**
  * Magick component
  * @param empty flag to control whether the workspaces should be rendered or not
  * @returns JSX.Element
  */
+
 const Magick = ({ empty = false }): JSX.Element => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -26,6 +31,30 @@ const Magick = ({ empty = false }): JSX.Element => {
   const pubSub = usePubSub()
   const { URI } = useParams()
   const { events, subscribe } = pubSub
+
+  const pluginComponents = []
+
+  ;(pluginManager as ClientPluginManager)
+    .getGroupedClientRoutes()
+    .forEach(plugin => {
+      plugin.routes.map(route => {
+        pluginComponents.push({
+          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+          component: route.component,
+        })
+      })
+    })
+
+  const componentMapping = {
+    Events,
+    Requests,
+    Settings,
+    Documents,
+    ...pluginComponents.reduce((acc, obj) => {
+      acc[obj.name] = obj.component
+      return acc
+    }, {}),
+  }
 
   // Subscribe to open tab events
   useEffect(() => {
@@ -56,24 +85,47 @@ const Magick = ({ empty = false }): JSX.Element => {
     const spellNameTab = tabs.filter(tab => tab.URI === URI)
     const isSpellNameTabPresent = spellNameTab.length
     if (isSpellNameTabPresent) dispatch(closeTab(spellNameTab[0].id))
-    dispatch(
-      openTab({
-        name: URI,
-        openNew: false,
-        type: 'spell',
-      })
-    )
+    const Component = URI.split('-')[0]
+    if (URI && Component in componentMapping) {
+      const existingTab = tabs.find(tab => tab.URI === URI)
+      if (!existingTab) {
+        dispatch(
+          openTab({
+            name: Component,
+            componentType: Component, // Set the componentType as the URI for now, you can modify this as needed
+            openNew: false,
+            type: 'component',
+          })
+        )
+      }
+    } else {
+      dispatch(
+        openTab({
+          name: URI,
+          openNew: false,
+          type: 'spell',
+        })
+      )
+    }
   }, [URI, activeTab, tabs, dispatch])
 
   // Render loading screen if there's no active tab
   if (!activeTab) return <LoadingScreen />
+
+  const ComponentToRender = componentMapping[activeTab.componentType] || null
 
   return (
     <>
       <TabBar tabs={tabs} activeTab={activeTab} />
       <TabLayout>
         {!empty && (
-          <Workspaces tabs={tabs} pubSub={pubSub} activeTab={activeTab} />
+          <>
+            {ComponentToRender ? (
+              <ComponentToRender /> // Render the dynamically opened component if available
+            ) : (
+              <Workspaces tabs={tabs} pubSub={pubSub} activeTab={activeTab} />
+            )}
+          </>
         )}
       </TabLayout>
     </>

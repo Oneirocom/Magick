@@ -32,6 +32,7 @@ export interface Tab {
   spell?: string
   spellName: string
   module: string
+  componentType?: string
 }
 
 // Entity adapter for tabs
@@ -82,7 +83,7 @@ const buildTab = (tab, properties = {}) => ({
   ...tab,
   id: encodedToId(tab.name),
   URI: encodeURIComponent(tab.name),
-  name: encodedToName(tab.name),
+  name: encodedToName(tab.name) || tab.name,
   layoutJson: workspaceMap[tab.workspace || 'default'],
   spell: tab?.spell || null,
   type: tab?.type,
@@ -112,6 +113,7 @@ export const tabSlice = createSlice({
         state,
         encodedToId(action.payload.name)
       )
+
       if (existingTab && !switchActive) return
 
       if (existingTab && !action.payload.openNew) {
@@ -124,7 +126,10 @@ export const tabSlice = createSlice({
         return
       }
 
-      const tab = buildTab(action.payload, { active: true })
+      const tab = buildTab(action.payload, {
+        active: true,
+        componentType: action.payload.componentType || 'DefaultComponent',
+      })
       tabAdapater.addOne(state, tab)
     },
     closeTab: tabAdapater.removeOne,
