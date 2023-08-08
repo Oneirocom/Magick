@@ -63,7 +63,6 @@ export class MyNode extends Node {
     }
     const StyleTooltip = styled(Tooltip)`
     pointer-events: none;
-    color:red
     `
     return (
       <div
