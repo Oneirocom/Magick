@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "engines": {
-      "node": "18"
+    "node": "18"
   },
   "scripts": {
     "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
@@ -88,6 +88,7 @@
     "@react-three/rapier": "1.0.0",
     "@react-three/xr": "5.5.0",
     "@reduxjs/toolkit": "1.9.5",
+    "@spotify/web-api-ts-sdk": "^1.1.0",
     "@types/dotenv-flow": "3.2.0",
     "@types/filesize": "5.0.0",
     "@types/pubsub-js": "1.8.3",
