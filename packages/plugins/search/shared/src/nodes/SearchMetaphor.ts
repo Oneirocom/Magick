@@ -8,7 +8,7 @@ import {
   WorkerData,
   MagickWorkerOutputs,
   ModuleContext,
-  anySocket,
+  arraySocket,
 } from '@magickml/core'
 
 import { makeMetaphorSearch } from '../functions/SearchMetaphor'
@@ -52,7 +52,7 @@ export class SearchMetaphor extends MagickComponent<Promise<WorkerReturn>> {
     const query = new Rete.Input('query', 'Query', stringSocket)
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const results = new Rete.Output('results', 'Results', anySocket)
+    const results = new Rete.Output('results', 'Results', arraySocket)
     const message = new Rete.Output('message', 'Message', stringSocket)
 
     return node
@@ -88,7 +88,7 @@ export class SearchMetaphor extends MagickComponent<Promise<WorkerReturn>> {
 
     return {
       results,
-      message: message,
+      message,
     }
   }
 }
