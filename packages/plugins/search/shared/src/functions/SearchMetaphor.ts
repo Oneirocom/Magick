@@ -32,7 +32,9 @@ export async function makeMetaphorSearch(
   const client = new metaphor(metaphorApiKey)
 
   try {
-    const response = await client.search(query)
+    const response = await client.search(query, {
+      useAutoprompt: true,
+    })
     const start = Date.now()
 
     saveRequest({
