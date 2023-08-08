@@ -130,6 +130,15 @@
       "@magickml/plugin-loop-server": [
         "packages/plugins/loop/server/src/index.ts"
       ],
+      "@magickml/plugin-metaphor-client": [
+        "packages/plugins/metaphor/client/src/index.ts"
+      ],
+      "@magickml/plugin-metaphor-server": [
+        "packages/plugins/metaphor/server/src/index.ts"
+      ],
+      "@magickml/plugin-metaphor-shared": [
+        "packages/plugins/metaphor/shared/src/index.ts"
+      ],
       "@magickml/plugin-openai-client": [
         "packages/plugins/openai/client/src/index.ts"
       ],
