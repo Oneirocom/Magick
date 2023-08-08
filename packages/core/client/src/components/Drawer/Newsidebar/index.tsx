@@ -175,6 +175,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
   open,
 }) => {
   const location = useLocation()
+  const navigate = useNavigate()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
   let lastPlugin: string | null = null
   let divider = false
@@ -195,7 +196,9 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               active={location.pathname.includes(item.path)}
               Icon={item.icon}
               open={open}
-              onClick={onClick(item.path)}
+              onClick={() => {
+                navigate(`/magick/${item.text}`)
+              }}
               text={item.text}
               tooltip="Avatar and Tasks Tooltip"
               tooltipText={item.tooltip}
