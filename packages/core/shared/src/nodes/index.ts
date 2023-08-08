@@ -89,6 +89,7 @@ import { UploadBase64 } from './files/UploadBase64'
 import { Jsonformer } from './text/Jsonformer'
 import { TextToImage } from './image/TextToImage'
 import { GetCurrentWeather } from './weather/GetCurrentWeather'
+import { ArrayToString } from './array/ArrayToString'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -179,6 +180,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   uploadBase64: () => new UploadBase64(),
   textToImage: () => new TextToImage(),
   getCurrentWeather: () => new GetCurrentWeather(),
+  arrayToString: () => new ArrayToString(),
 }
 
 /**
