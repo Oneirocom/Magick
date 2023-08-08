@@ -175,6 +175,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
   open,
 }) => {
   const location = useLocation()
+  const navigate = useNavigate()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
   let lastPlugin: string | null = null
   let divider = false
@@ -195,7 +196,9 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               active={location.pathname.includes(item.path)}
               Icon={item.icon}
               open={open}
-              onClick={onClick(item.path)}
+              onClick={() => {
+                navigate(`/magick/${item.text}`)
+              }}
               text={item.text}
               tooltip="Avatar and Tasks Tooltip"
               tooltipText={item.tooltip}
@@ -300,7 +303,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname === '/events'}
               Icon={BoltIcon}
               open={openDrawer}
-              onClick={onClick('/events')}
+              onClick={() => {
+                navigate(`/magick/Events-${encodeURIComponent(btoa('Events'))}`)
+              }}
               text="Events"
               tooltip="Events Tooltip"
               tooltipText={drawerTooltipText.events}
@@ -309,7 +314,11 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname === '/requests'}
               Icon={StorageIcon}
               open={openDrawer}
-              onClick={onClick('/requests')}
+              onClick={() => {
+                navigate(
+                  `/magick/Requests-${encodeURIComponent(btoa('Requests'))}`
+                )
+              }}
               text="Requests"
               tooltip="Requests Tooltip"
               tooltipText={drawerTooltipText.requests}
@@ -321,7 +330,11 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               active={location.pathname.includes('/settings')}
               Icon={SettingsIcon}
               open={openDrawer}
-              onClick={onClick('/settings')}
+              onClick={() => {
+                navigate(
+                  `/magick/Settings-${encodeURIComponent(btoa('Settings'))}`
+                )
+              }}
               text="Settings"
               tooltip="Settings Tooltip"
               tooltipText={drawerTooltipText.settings}
@@ -417,7 +430,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               <div
                 className={styles.hideMenuItem}
                 onClick={() => {
-                  navigate('/documents')
+                  navigate(
+                    `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
+                  )
                 }}
               >
                 <DescriptionOutlinedIcon sx={{ mr: 1 }} />
