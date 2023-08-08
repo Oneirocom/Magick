@@ -91,6 +91,7 @@
     "@react-three/rapier": "1.0.0",
     "@react-three/xr": "5.5.0",
     "@reduxjs/toolkit": "1.9.5",
+    "@spotify/web-api-ts-sdk": "^1.1.0",
     "@types/dotenv-flow": "3.2.0",
     "@types/filesize": "5.0.0",
     "@types/multer": "^1.4.7",

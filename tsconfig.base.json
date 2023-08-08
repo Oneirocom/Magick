@@ -192,6 +192,15 @@
       "@magickml/plugin-search-shared": [
         "packages/plugins/search/shared/src/index.ts"
       ],
+      "@magickml/plugin-spotify-client": [
+        "packages/plugins/spotify/client/src/index.ts"
+      ],
+      "@magickml/plugin-spotify-server": [
+        "packages/plugins/spotify/server/src/index.ts"
+      ],
+      "@magickml/plugin-spotify-shared": [
+        "packages/plugins/spotify/shared/src/index.ts"
+      ],
       "@magickml/plugin-task-client": [
         "packages/plugins/task/client/src/index.ts"
       ],
