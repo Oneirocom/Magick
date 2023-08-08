@@ -31,7 +31,7 @@ export async function spotifySearch(data: CompletionHandlerInputData): Promise<{
 
   try {
     const start = Date.now()
-    const response = await client.search(query, [searchType])
+    const response = await client.search(query, [searchType], undefined, 1)
 
     saveRequest({
       projectId: projectId,
