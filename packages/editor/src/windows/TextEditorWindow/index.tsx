@@ -1,4 +1,4 @@
-import { Button, Window } from '@magickml/client-core';
+import { Window } from '@magickml/client-core';
 import Editor from '@monaco-editor/react';
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'lodash';
