@@ -45,7 +45,7 @@ export class CloudAgentManager {
             this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
             agentPromises.push(this.newQueue.addJob('agent:new', {
                 agentId: agent.id,
-            }, `agent-new-${agent.id}`))
+            }, `agent-new-${agent.id}-${new Date().getTime()}}`))
         }
 
         await Promise.all(agentPromises)
@@ -58,7 +58,6 @@ export class CloudAgentManager {
 
             this.logger.info(`Agent Updated: ${agent.id}`)
             const agentUpdatedAt = agent.updatedAt ? new Date(agent.updatedAt) : new Date()
-
 
             if (agent.enabled) {
                 this.logger.info(`Agent ${agent.id} enabled, adding to cloud agent worker`)
@@ -115,7 +114,7 @@ export class CloudAgentManager {
         })
 
         setInterval(async () => {
-            this.logger.info('Heartbeat')
+            this.logger.trace('Heartbeat')
             this.pubSub.publish('cloud-agent-manager:ping', "")
         }, 1000 * 60 * 5)
     }
