@@ -26,6 +26,14 @@ export const document = (app: Application) => {
   app.use('documents', new DocumentService(getOptions(app)), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
     events: [],
+    koa: {
+      before: [
+        async (context, next) => {
+          console.log(context)
+          await next()
+        },
+      ],
+    },
   })
 
   // Initialize hooks
