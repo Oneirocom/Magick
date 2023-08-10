@@ -415,7 +415,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               <div
                 className={styles.hideMenuItem}
                 onClick={() => {
-                  navigate('/magick')
+                  navigate('/home/create-new')
                 }}
               >
                 <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
