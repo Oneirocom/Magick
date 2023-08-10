@@ -37,6 +37,7 @@ export async function insert(data: CompletionHandlerInputData): Promise<{
 
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify({
         table: table,
         data: dataToInsert,

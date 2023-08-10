@@ -628,6 +628,7 @@ export type MessagingRequest = unknown
 
 export type RequestPayload = {
   projectId: string
+  agentId: string
   requestData: string
   responseData?: string
   model: string

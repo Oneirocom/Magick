@@ -137,6 +137,7 @@ export async function makeChatCompletion(
     // Save the API request details
     saveRequest({
       projectId: context.projectId,
+      agentId: context.agent?.id || 'preview', // preview is for playtest
       requestData: JSON.stringify(settings),
       responseData: JSON.stringify(completion.data),
       startTime: start,

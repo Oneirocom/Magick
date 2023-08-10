@@ -29,7 +29,7 @@ export async function makeTextEmbedding(
 }> {
   const { node, inputs, context } = data
 
-  const input = inputs['input'] && inputs['input'][0] as string
+  const input = inputs['input'] && (inputs['input'][0] as string)
   if (!input) {
     return {
       success: false,
@@ -73,6 +73,7 @@ export async function makeTextEmbedding(
 
     saveRequest({
       projectId: context.projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(settings),
       responseData: JSON.stringify(completionData),
       startTime: start,
