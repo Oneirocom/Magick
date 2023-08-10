@@ -28,6 +28,7 @@ import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
+import fs from 'fs'
 
 //Vector DB Related Imports
 import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
@@ -70,7 +71,25 @@ export async function initApp() {
   app.use(cors({ origin: '*' }))
   app.use(errorHandler())
   app.use(parseAuthentication())
-  app.use(bodyParser({ jsonLimit: '200mb', formLimit: '200mb', multipart: true }))
+  app.use(
+    bodyParser({ jsonLimit: '200mb', formLimit: '800mb', multipart: true })
+  )
+  app.use(async (ctx, next) => {
+    let data: fs.ReadStream[] = []
+    if (ctx.request.files?.files instanceof Array) {
+      for (let file of ctx.request.files.files) {
+        data.push(fs.createReadStream((file as { filepath: string }).filepath))
+      }
+    } else {
+      data.push(
+        fs.createReadStream(
+          (ctx.request.files?.files as { filepath: string }).filepath
+        )
+      )
+    }
+    ctx.request.body.files = [data]
+    await next()
+  })
 
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
@@ -92,7 +111,7 @@ export async function initApp() {
 
   const redis = new Redis({
     ...bullMQConnection,
-    maxRetriesPerRequest: null
+    maxRetriesPerRequest: null,
   })
   app.set('redis', redis)
 
