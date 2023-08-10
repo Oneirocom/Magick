@@ -85,6 +85,7 @@ export async function makeChatCompletion(
     // Save the request data for future reference.
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(''),
       responseData: JSON.stringify(resp),
       startTime: start,

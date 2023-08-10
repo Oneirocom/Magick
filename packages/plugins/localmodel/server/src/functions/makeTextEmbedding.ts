@@ -59,6 +59,7 @@ export async function makeTextEmbedding(
     // Save request information
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(requestData),
       responseData: JSON.stringify(resp.data).slice(0, 10),
       startTime: start,

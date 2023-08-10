@@ -41,6 +41,7 @@ export async function upsert(data: CompletionHandlerInputData): Promise<{
 
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify({
         table: table,
         updates: updates,
