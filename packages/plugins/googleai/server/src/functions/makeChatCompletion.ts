@@ -82,6 +82,7 @@ export async function makeChatCompletion(
     // Save the API request details
     saveRequest({
       projectId: context.projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(settings),
       responseData: JSON.stringify(completionData),
       startTime: start,
