@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { calculateCompletionCost } from '../cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
@@ -26,6 +26,7 @@ import { RequestPayload } from '../types'
  */
 export function saveRequest({
   projectId,
+  agentId,
   requestData,
   responseData,
   model,
@@ -42,22 +43,26 @@ export function saveRequest({
   nodeId,
 }: RequestPayload) {
   // Calculate the request cost based on total tokens and model.
-  const cost = totalTokens !== undefined && totalTokens > 0 ? calculateCompletionCost({
-    totalTokens: totalTokens as number,
-    model: model as any,
-  }) : 0;
+  const cost =
+    totalTokens !== undefined && totalTokens > 0
+      ? calculateCompletionCost({
+          totalTokens: totalTokens as number,
+          model: model as any,
+        })
+      : 0
 
   // Calculate the request duration.
-  const end = Date.now();
-  const duration = end - startTime;
+  const end = Date.now()
+  const duration = end - startTime
 
   // Get Feathers app instance from globals manager.
-  const app = globalsManager.get('feathers') as any;
+  const app = globalsManager.get('feathers') as any
 
   // Save and create the request object in Feathers app.
   return app.service('request').create({
     id: v4(),
     projectId,
+    agentId,
     requestData,
     responseData,
     model,
@@ -73,5 +78,5 @@ export function saveRequest({
     // If spell is JSON, stringify it, otherwise keep the string value.
     spell: typeof spell === 'string' ? spell : JSON.stringify(spell),
     nodeId,
-  });
+  })
 }

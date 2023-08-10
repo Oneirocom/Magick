@@ -1,8 +1,5 @@
 // DOCUMENTED
-import {
-  CompletionHandlerInputData,
-  saveRequest,
-} from '@magickml/core'
+import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import {
   createLanguageModel,
   createJsonTranslator,
@@ -52,6 +49,7 @@ export async function makeTypeChatCompletion(
     // // Save the API request details
     saveRequest({
       projectId: context.projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify({
         input,
         model: modelName,
