@@ -13,6 +13,11 @@ import type {
   DocumentPatch,
   DocumentQuery,
 } from './documents.schema'
+import fs from 'fs'
+import axios from 'axios'
+import mime from 'mime-types'
+import { FormData, Blob } from 'formdata-node'
+import { PersistentFile } from 'formidable'
 
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
@@ -36,21 +41,40 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
-    if (data.hasOwnProperty('secrets')) {
-      const { secrets, modelName, ...docData } = data as DocumentData & {
-        secrets: string
-        modelName: string
-      }
-
-      docdb.fromString(docData.content, docData, {
-        modelName,
-        projectId: docData?.projectId,
-        secrets,
-      })
-
-      return docData
+    const { modelName, files, ...docData } = data as DocumentData & {
+      modelName: string
     }
-    await docdb.from('documents').insert(data)
+
+    const headers = {
+      accept: 'application/json',
+      'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+    }
+
+    const form = new FormData()
+    form.append('strategy', 'auto')
+    for (let file of files as {
+      filepath?: string
+      originalFilename?: string
+    }[]) {
+      const mimeType = mime.lookup(file.filepath)
+      const stream = fs.createReadStream(file.filepath)
+      form.append(
+        'files',
+        new Blob([new BlobWrapper(stream)], { type: mimeType }),
+        file.originalFilename
+      )
+    }
+
+    const completion = await axios.postForm(
+      `https://api.unstructured.io/general/v0.0.34/general`,
+      form,
+      { headers: headers }
+    )
+
+    if (completion.data.error) {
+      console.error('Unstructured.io Error', completion.data.error)
+    }
+    await docdb.from('documents').insert(docData)
     return data
   }
 
@@ -153,5 +177,21 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     Model: app.get('dbClient'),
     name: 'documents',
     multi: ['remove'],
+  }
+}
+
+class BlobWrapper {
+  #stream
+
+  constructor(stream) {
+    this.#stream = stream
+  }
+
+  stream() {
+    return this.#stream
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'Blob'
   }
 }
