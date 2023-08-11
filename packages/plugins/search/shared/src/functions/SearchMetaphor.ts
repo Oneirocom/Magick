@@ -39,6 +39,7 @@ export async function makeMetaphorSearch(
 
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(query),
       responseData: JSON.stringify(response),
       startTime: start,
