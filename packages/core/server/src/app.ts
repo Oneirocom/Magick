@@ -28,7 +28,6 @@ import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
-import fs from 'fs'
 
 //Vector DB Related Imports
 import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
@@ -75,19 +74,15 @@ export async function initApp() {
     bodyParser({ jsonLimit: '200mb', formLimit: '800mb', multipart: true })
   )
   app.use(async (ctx, next) => {
-    let data: fs.ReadStream[] = []
+    let data = []
     if (ctx.request.files?.files instanceof Array) {
       for (let file of ctx.request.files.files) {
-        data.push(fs.createReadStream((file as { filepath: string }).filepath))
+        data.push(file)
       }
     } else {
-      data.push(
-        fs.createReadStream(
-          (ctx.request.files?.files as { filepath: string }).filepath
-        )
-      )
+      data.push(ctx.request.files?.files)
     }
-    ctx.request.body.files = [data]
+    ctx.request.body.files = data
     await next()
   })
 
