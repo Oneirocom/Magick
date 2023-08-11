@@ -62,7 +62,7 @@ export class MyNode extends Node {
       })
     }
     const StyleTooltip = styled(Tooltip)`
-    pointer-events: none;
+    width: initial;
     `
     return (
       <div
@@ -112,7 +112,7 @@ export class MyNode extends Node {
                     <StyleTooltip
                       title={`Input:${input.name}`}
                       placement="left"
-                      enterDelay={500}
+                      enterNextDelay={2000} 
                     >
                       <div className="input-title">{input.name}</div>
                     </StyleTooltip>
@@ -139,7 +139,7 @@ export class MyNode extends Node {
                   <StyleTooltip
                     title={`output: ${output.name}`}
                     placement="right"
-                    enterDelay={500}
+                    enterNextDelay={2000} 
                   >
                     <div className="output-title">{output.name}</div>
                   </StyleTooltip>
