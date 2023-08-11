@@ -43,6 +43,9 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
+import { useConfig } from '@magickml/client-core'
+import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
+import { useSelector } from 'react-redux'
 
 // Constants
 const drawerWidth = 210
@@ -228,6 +231,10 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  const config = useConfig()
+  const [data, setData] = useState([])
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
 
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
@@ -247,6 +254,23 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
       setAPIKeysSet(secretHasBeenSet)
     }
   }, [])
+
+  useEffect(() => {
+    if (!config.apiUrl) return
+      ; (async () => {
+        const res = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: STANDALONE
+              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+              : { Authorization: `Bearer ${token}` },
+          }
+        )
+        const json = await res.json()
+        setData(json.data)
+        // setIsLoading(false)
+      })()
+  }, [config.apiUrl])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -292,7 +316,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
         <>
-          <AgentMenu />
+          <AgentMenu data={data} />
 
           <List
             sx={{

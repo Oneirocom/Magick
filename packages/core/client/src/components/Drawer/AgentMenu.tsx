@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Avatar from '@mui/material/Avatar'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -13,8 +13,10 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { useNavigate } from 'react-router-dom'
 
-function AgentMenu() {
+function AgentMenu({ data }) {
+  const navigate = useNavigate()
   const BorderedAvatar = styled(Avatar)`
     border: 1px solid lightseagreen;
   `
@@ -43,6 +45,9 @@ function AgentMenu() {
     marginTop: '4px',
     marginBottom: '4px',
   }))
+
+  const handleSelectAgent = agent => {
+  }
 
   return (
     <div>
@@ -97,84 +102,61 @@ function AgentMenu() {
           },
         }}
       >
+        {data?.map((agent, i) => {
+          return (
+            <>
+              <MenuItem
+                sx={{
+                  px: 1,
+                  py: 0,
+                  width: 200,
+                  justifyContent: 'space-between',
+                  '&:hover, &:focus': {
+                    background: 'none',
+                    outline: 'none',
+                  },
+                }}
+                key={i}
+                onClick={() => handleSelectAgent(agent)}
+              >
+                <ListItemAvatar
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <BorderedAvatar
+                    alt={agent?.name?.at(0) || 'A'}
+                    src={agent.image ? agent.name : (agent?.name?.at(0) || 'A')}
+                    sx={{ width: 24, height: 24 }}
+                  />
+                  <ListItemText primary={agent?.name} sx={{ ml: 2 }} />
+                </ListItemAvatar>
+                <ListItemIcon sx={{ placeContent: 'end' }}>
+                  <MoreIcon
+                    fontSize="small"
+                    onClick={handleToggleMenu2}
+                    aria-controls="menu2"
+                    aria-haspopup="true"
+                  />
+                </ListItemIcon>
+              </MenuItem>
+              <StyledDivider />
+            </>
+          )
+        })}
+
         <MenuItem
           sx={{
             px: 1,
             py: 0,
-            width: 200,
-            justifyContent: 'space-between',
             '&:hover, &:focus': {
               background: 'none',
               outline: 'none',
             },
           }}
-        >
-          <ListItemAvatar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <BorderedAvatar
-              alt="Remy Sharp"
-              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
-              sx={{ width: 24, height: 24 }}
-            />
-            <ListItemText primary="Agent1" sx={{ ml: 2 }} />
-          </ListItemAvatar>
-          <ListItemIcon sx={{ placeContent: 'end' }}>
-            <MoreIcon
-              fontSize="small"
-              onClick={handleToggleMenu2}
-              aria-controls="menu2"
-              aria-haspopup="true"
-            />
-          </ListItemIcon>
-        </MenuItem>
-        <StyledDivider />
-        <MenuItem
-          sx={{
-            px: 1,
-            py: 0,
-            width: 200,
-            justifyContent: 'space-between',
-            '&:hover, &:focus': {
-              background: 'none',
-              outline: 'none',
-            },
-          }}
-        >
-          <ListItemAvatar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <BorderedAvatar
-              alt="Remy Sharp"
-              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
-              sx={{ width: 24, height: 24 }}
-            />
-            <ListItemText primary="Agent1" sx={{ ml: 2 }} />
-          </ListItemAvatar>
-          <ListItemIcon sx={{ placeContent: 'end' }}>
-            <MoreIcon
-              fontSize="small"
-              onClick={handleToggleMenu2}
-              aria-controls="menu2"
-              aria-haspopup="true"
-            />
-          </ListItemIcon>
-        </MenuItem>
-        <StyledDivider />
-        <MenuItem
-          sx={{
-            px: 1,
-            py: 0,
-            '&:hover, &:focus': {
-              background: 'none',
-              outline: 'none',
-            },
+          onClick={() => {
+            navigate(`/magick/Agents-${encodeURIComponent(btoa('Agents'))}`)
           }}
         >
           <List
@@ -188,6 +170,7 @@ function AgentMenu() {
                 px: 0,
                 py: 0,
               }}
+
             >
               <AddCircleIcon
                 sx={{
