@@ -15,6 +15,7 @@ import {
   makeChatCompletion,
   makeTextCompletion,
   makeTextEmbedding,
+  makeTypeChatCompletion,
 } from './functions'
 
 
@@ -31,6 +32,7 @@ const completionHandlers = {
     text: makeTextCompletion,
     chat: makeChatCompletion,
     embedding: makeTextEmbedding,
+    typeChat: makeTypeChatCompletion,
   },
 }
 

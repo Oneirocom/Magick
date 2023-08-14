@@ -96,7 +96,7 @@ const TabBar = ({ tabs, activeTab }) => {
       </div>
       <div className={css['tabbar-section']}>
         {tabs &&
-          tabs.map((tab, i) => <Tab tab={tab} activeTab={activeTab} key={i} />)}
+          tabs.map((tab) => <Tab tab={tab} activeTab={activeTab} key={tab.id} />)}
       </div>
       <div className={css['tabbar-section']}>
         <CreateTab />

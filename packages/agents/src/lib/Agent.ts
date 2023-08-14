@@ -207,12 +207,12 @@ export class Agent implements AgentInterface {
 
     // Do we want a debug logger here?
     const output = await spellRunner.runComponent({
-      ...data,
       agent: this,
       secrets: this.secrets,
       publicVariables: this.publicVariables,
-      runSubspell: true,
+      runSubspell: data.runSubspell,
       app,
+      ...data,
     })
 
     this.publishEvent(AGENT_RUN_RESULT(this.id), {
