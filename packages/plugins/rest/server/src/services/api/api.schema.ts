@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import { resolve } from '@feathersjs/schema';
-import { Type, getValidator, querySyntax } from '@feathersjs/typebox';
+import { Type, getValidator } from '@feathersjs/typebox';
 import type { Static } from '@feathersjs/typebox';
 
 import type { HookContext } from '@magickml/server-core';
@@ -11,7 +11,8 @@ import { dataValidator, queryValidator } from '@magickml/server-core';
  */
 export const apiSchema = Type.Object(
   {
-    id: Type.String(),
+    spellId: Type.String(),
+    agentId: Type.String(),
     content: Type.String(),
     apiKey: Type.String(),
   },
@@ -30,7 +31,8 @@ export const apiExternalResolver = resolve<Api, HookContext>({});
 export const apiDataSchema = Type.Pick(
   apiSchema,
   [
-    'id',
+    'spellId',
+    'agentId',
     'content',
     'apiKey',
   ],
@@ -58,24 +60,19 @@ export const apiPatchResolver = resolve<Api, HookContext>({});
  * Schema for allowed query properties
  */
 export const apiQueryProperties = Type.Pick(apiSchema, [
-  'id',
+  'agentId',
+  'spellId',
   'content',
   'apiKey',
 ]);
 
-export const apiQuerySchema = Type.Intersect(
-  [
-    querySyntax(apiQueryProperties),
-    Type.Object(
-      {
-        agentId: Type.String(),
-        spellId: Type.Optional(Type.String()),
-        content: Type.String(),
-        apiKey: Type.String(),
-      },
-      { additionalProperties: false },
-    ),
-  ],
+export const apiQuerySchema = Type.Object(
+  {
+    agentId: Type.String(),
+    spellId: Type.Optional(Type.String()),
+    content: Type.String(),
+    apiKey: Type.String(),
+  },
   { additionalProperties: false },
 );
 

@@ -86,6 +86,7 @@ export type AgentInterface = AgentSchema
  * @property {string} projectId - The ID of the project that the document belongs to.
  * @property {string} [date] - The date when the document was created (optional).
  * @property {any} [embedding] - The embedding data of the document (optional).
+ * @property {any} [metadata] - The embedding data of the document (optional).
  */
 export const documentSchema = Type.Object(
   {
@@ -95,6 +96,7 @@ export const documentSchema = Type.Object(
     projectId: Type.String(),
     date: Type.Optional(Type.String()),
     embedding: Type.Optional(Type.Any()),
+    metadata: Type.Optional(Type.Any()),
   },
   {
     $id: 'Document',

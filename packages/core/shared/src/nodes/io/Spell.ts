@@ -333,24 +333,34 @@ export class SpellComponent extends MagickComponent<
     const { module, spellManager, app, agent } = _context
     const { secrets } = module
 
+    const runComponentArgs = {
+      spellId: node.data.spellId as string,
+      inputs: flattenedInputs,
+      runSubspell: true,
+      agent: agent,
+      secrets: agent?.secrets ?? secrets,
+      app,
+      publicVariables: variables,
+    }
+
+    if (agent) {
+
+      const outputs = await app.get('agentCommander').runSpellWithResponse(
+        runComponentArgs
+      )
+
+      const output = this.formatOutputs(node, outputs)
+
+      return output
+    }
+
     if (spellManager) {
       const spellRunner = await spellManager.loadById(
         node.data.spellId as string
       )
 
       if (spellRunner) {
-        const runComponentArgs = {
-          spellId: node.data.spellId as string,
-          inputs: flattenedInputs,
-          runSubspell: false,
-          agent: agent,
-          secrets: agent?.secrets ?? secrets,
-          app,
-          publicVariables: variables,
-        }
-
-        const outputs = agent ? await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
-                              : await spellRunner.runComponent(runComponentArgs)
+        const outputs = await spellRunner.runComponent(runComponentArgs)
 
         const output = this.formatOutputs(node, outputs as any)
 

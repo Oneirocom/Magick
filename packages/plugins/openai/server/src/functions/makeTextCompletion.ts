@@ -82,6 +82,7 @@ export async function makeTextCompletion(
     // Save the request data for future reference.
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(settings),
       responseData: JSON.stringify(resp.data),
       startTime: start,

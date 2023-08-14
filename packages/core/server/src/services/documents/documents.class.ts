@@ -77,7 +77,7 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    if (params.query.embedding) {
+    if (params.query.embedding || params.query.metadata) {
       const param = params.query
       const querys = await db('documents')
         .select('*')
@@ -90,24 +90,33 @@ export class DocumentService<
           ...(param.projectId && { projectId: param.projectId }),
           ...(param.content && { content: param.content }),
         })
-        .select(
-          db.raw(
-            `(embedding <=> '${JSON.stringify(
-              params.query.embedding
-            )}') AS distance`
-          )
-        )
-        .orderBy('distance', 'asc')
-        .limit(param.$limit)
         .modify(function (queryBuilder) {
-          param.metadata &&
-            queryBuilder.whereRaw('metadata @> ?', [
-              JSON.stringify(param.metadata),
-            ])
+          param.embedding &&
+            queryBuilder
+              .select(
+                db.raw(
+                  `(embedding <=> '${JSON.stringify(
+                    params.query.embedding
+                  )}') AS distance`
+                )
+              )
+              .orderBy('distance', 'asc')
         })
+        .modify(function (queryBuilder) {
+          if (param.metadata) {
+            const metadata =
+              typeof param.metadata == 'object'
+                ? JSON.stringify(param.metadata)
+                : param.metadata
+            queryBuilder.whereRaw('metadata @> ?', [metadata])
+          }
+        })
+        .limit(param.$limit)
 
       return { data: querys }
     }
+
+    params = { ...params, query: { ...params.query, metadata: '{}' } }
     const res = await super.find(params)
     return { data: (res as unknown as { data: Array<any> }).data }
   }
