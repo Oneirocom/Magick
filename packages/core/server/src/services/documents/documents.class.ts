@@ -16,8 +16,6 @@ import type {
 import fs from 'fs'
 import axios from 'axios'
 import mime from 'mime-types'
-import { FormData, Blob } from 'formdata-node'
-import { PersistentFile } from 'formidable'
 
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
@@ -47,7 +45,7 @@ export class DocumentService<
 
     const headers = {
       accept: 'application/json',
-      'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+      // 'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
     }
 
     const form = new FormData()
@@ -56,17 +54,18 @@ export class DocumentService<
       filepath?: string
       originalFilename?: string
     }[]) {
-      const mimeType = mime.lookup(file.filepath)
+      let mimeType = mime.lookup(file.originalFilename)
+      mimeType = mimeType ? mimeType : 'application/json'
       const stream = fs.createReadStream(file.filepath)
       form.append(
         'files',
-        new Blob([new BlobWrapper(stream)], { type: mimeType }),
+        new Blob([stream.read()], { type: mimeType }),
         file.originalFilename
       )
     }
 
-    const completion = await axios.postForm(
-      `https://api.unstructured.io/general/v0.0.34/general`,
+    const completion = await axios.post(
+      `http://0.0.0.0:8000/general/v0/general`,
       form,
       { headers: headers }
     )
