@@ -12,8 +12,9 @@ import {
   triggerSocket,
   MagickComponent,
   WorkerData,
+  MagickWorkerOutputs,
+  ModuleContext,
 } from '@magickml/core'
-import { API_ROOT_URL } from '@magickml/config'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
@@ -73,15 +74,16 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
    */
   async worker(
     _node: WorkerData,
-    inputs: MagickWorkerInputs
+    inputs: MagickWorkerInputs,
+    _outputs: MagickWorkerOutputs,
+    context: ModuleContext
   ): Promise<WorkerReturn> {
-    const url = `${API_ROOT_URL}/google-search?query=${inputs.query[0]}`
+    const { app } = context
+    const result = await app
+      .service('google-search')
+      .find({ query: { query: inputs.query[0] } })
 
-    const response = await fetch(url)
-
-    const json = await response.json()
-
-    const { summary, links } = json
+    const { summary, links } = result
 
     return {
       summary,

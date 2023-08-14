@@ -11,13 +11,14 @@ export class ArrayControl extends DataControl {
    * @param {string} data.name - The name of the control
    * @param {string} [data.icon = 'hand'] - The icon of the control
    */
-  constructor({ dataKey, name, icon = 'hand' }) {
+  constructor({ dataKey, name, icon = 'hand' ,tooltip}) {
     const options = {
       dataKey,
       name,
       component: 'input',
       icon,
       type: 'array',
+      tooltip: tooltip,
     }
 
     super(options)

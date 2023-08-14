@@ -23,7 +23,6 @@ export function initSpeechClient(options: {
   const {
     client,
     agent,
-    spellRunner,
   } = options
 
   // Add speech event to the client.
@@ -62,7 +61,8 @@ export function initSpeechClient(options: {
     console.log('msg is', msg)
 
     // Run spell and collect response.
-    await spellRunner.runComponent({
+    await app.get('agentCommander').runSpell({
+      agent,
       inputs: {
         'Input - Discord (Voice)': {
           connector: 'Discord (Voice)',
@@ -79,7 +79,6 @@ export function initSpeechClient(options: {
       },
       secrets: agent.secrets ?? {},
       publicVariables: agent.publicVariables ?? {},
-      app,
       runSubspell: true,
     })
     console.log('component ran')

@@ -18,7 +18,7 @@ import {
 
 // Import types and classes
 import type { Application } from '@magickml/server-core'
-import { ApiService, getOptions } from './api.class'
+import { ApiService } from './api.class'
 
 // Add this service to the service type index
 declare module '@magickml/server-core' {
@@ -41,10 +41,10 @@ export * from './api.schema'
  */
 export const api = (app: Application) => {
   // Register our service on the Feathers application
-  app.use(apiPath, new ApiService(getOptions(app)), {
+  app.use(apiPath, new ApiService(), {
     // A list of all methods this service exposes externally
-    methods: apiMethods,
     // You can add additional custom events to be sent to clients here
+    methods: ['find', 'create'],
     events: [],
   })
 
@@ -58,6 +58,26 @@ export const api = (app: Application) => {
     },
     before: {
       all: [
+        // get agent
+        async (context) => {
+          context.params.agent = await app.service('agents').get(context.params.query.agentId)
+          if (!context.params.agent) {
+            throw new Error('Invalid Agent ID')
+          }
+
+          if (!context.params.agent.data.rest_enabled) {
+            throw new Error('Agent does not have REST API enabled')
+          }
+        },
+        // check apiKey
+        async (context) => {
+          const apiKey = context.params.query.apiKey
+
+          if (apiKey !== context.params.agent.data.rest_api_key) {
+            throw new Error('Invalid API Key')
+          }
+
+        },
         schemaHooks.validateQuery(apiQueryValidator),
         schemaHooks.resolveQuery(apiQueryResolver),
       ],

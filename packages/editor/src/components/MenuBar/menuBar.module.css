@@ -19,7 +19,7 @@ ul {
   justify-content: space-between;
 }
 .list-item:hover {
-  background-color: var(--primary);
+  background-color: #49545a;
 }
 
 /* Hide Dropdowns by Default */
@@ -126,4 +126,17 @@ li.list-item:only-child {
 
 .menu-panel:hover {
   display: block;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  width: '180px';
+}
+
+.menu-bar-item {
+  cursor: pointer;
+  width: '180px';
 }

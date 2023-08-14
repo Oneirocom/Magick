@@ -45,6 +45,7 @@ export class GetValuesFromObject extends MagickComponent<void> {
       connectionType: 'output',
       name: 'Property Name',
       ignored: ['trigger'],
+      tooltip: 'Add property name'
     })
 
     node.addInput(dataInput).addInput(objectInput).addOutput(outputTrigger)

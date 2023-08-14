@@ -3,11 +3,11 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
+import { app } from '@magickml/server-core'
 
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import { Queue } from 'bullmq'
-import { bullMQConnection } from '@magickml/config'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -37,8 +37,20 @@ export class AgentService<
     super(options)
     this.app = app
     this.runQueue = new Queue(`agent:run`, {
-      connection: bullMQConnection,
+      connection: app.get('redis'),
     })
+  }
+
+  // we use this ping to avoid firing a patched event on the agent
+  // every time the agent is pinged
+  async ping(agentId: string) {
+    const db = app.get('dbClient')
+    // knex query to update the pingedAt field of the agent with the given id
+    const query = await db('agents').where({ id: agentId }).update({
+      pingedAt: new Date().toISOString(),
+    })
+
+    return { data: query }
   }
 
   async run(data: AgentRunData) {

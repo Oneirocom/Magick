@@ -19,6 +19,7 @@ import { createStore } from './state/store'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { AppConfig } from '@magickml/client-core'
+import { MagickmlChatbox } from '@magickml/chatbox'
 
 /**
  * Type definition for the props that can be passed to MagickIDE
@@ -42,6 +43,7 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <WagmiConfig config={wagmiConfig}>
               <App />
+              <MagickmlChatbox />
             </WagmiConfig>
           </LocalizationProvider>
         </AppProviders>

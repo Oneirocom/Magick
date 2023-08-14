@@ -45,6 +45,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'task',
+      tooltip: 'Add Task type'
     })
 
     const objective = new Rete.Input('objective', 'Objective', stringSocket)

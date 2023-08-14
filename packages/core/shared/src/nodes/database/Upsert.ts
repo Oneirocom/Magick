@@ -66,6 +66,7 @@ export class Upsert extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'db_provider',
       values: models,
       defaultValue: models[0],
+      tooltip: 'Choose the database provider'
     })
 
     node.inspector.add(modelName)

@@ -4,7 +4,6 @@ import { app } from '@magickml/server-core'
 import { getNodes } from '@magickml/plugin-task-shared'
 
 type StartTaskArgs = {
-  spellRunner: any
   agent: any
   agentManager: any
 }
@@ -18,13 +17,12 @@ class TaskManager {
   /**
    * Constructs a new TaskManager.
    * @param {any} agentManager - The agent manager to manage tasks for.
-   * @param {any} spellRunner - The spell runner used for executing agent tasks.
    */
-  constructor(agentManager, spellRunner) {
+  constructor(agentManager) {
     console.log('new task manager created')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
-      this.addAgent({ spellRunner, agent, agentData })
+      this.addAgent({ agent, agentData })
     )
     this.agentManager.registerRemoveAgentHandler(({ agent }) =>
       this.removeAgent({ agent })
@@ -33,11 +31,10 @@ class TaskManager {
 
   /**
    * Adds an agent to the task manager.
-   * @param {any} spellRunner - The spell runner used for executing agent tasks.
    * @param {any} agent - Agent to add.
    * @param {any} agentData - Data for the agent.
    */
-  addAgent({ spellRunner, agent, agentData }) {
+  addAgent({ agent, agentData }) {
     if (!agentData) return console.log('No data for this agent', agent.id)
     if (!agentData.data?.task_enabled)
       return console.log('Task is not enabled for this agent')
@@ -65,14 +62,13 @@ class TaskManager {
       // iterate over all tasks
       for (const task of taskArray) {
         console.log('Running task', task.id, task)
-        const resp = await spellRunner.runComponent({
+        const resp = await app.get('agentCommander').runSpell({
           inputs: {
             'Input - Task': task,
           },
           agent,
           secrets: agent.secrets,
           publicVariables: agent.publicVariables,
-          app,
         })
         console.log('output is', resp)
       }
@@ -104,9 +100,9 @@ class TaskManager {
 function getAgentMethods() {
   let taskManager: TaskManager | null = null
   return {
-    start: async ({ spellRunner, agent, agentManager }: StartTaskArgs) => {
-      if (!taskManager) taskManager = new TaskManager(agentManager, spellRunner)
-      taskManager.addAgent({ spellRunner, agent, agentData: agent.data })
+    start: async ({ agent, agentManager }: StartTaskArgs) => {
+      if (!taskManager) taskManager = new TaskManager(agentManager)
+      taskManager.addAgent({ agent, agentData: agent.data })
     },
     stop: async ({ agent }) => {
       if (!taskManager) return console.error('Task Manager not initialized')

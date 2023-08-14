@@ -4,6 +4,7 @@ import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 import { DEFAULT_OPENAI_KEY, PRODUCTION } from '@magickml/config'
 import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
+import { trackOpenAIUsage } from '@magickml/server-core'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -17,6 +18,8 @@ export async function makeTextCompletion(
   success: boolean
   result?: string | null
   error?: string | null
+  model?: string
+  totalTokens?: number
 }> {
   // Destructure necessary properties from the data object.
   const { node, inputs, context } = data
@@ -79,6 +82,7 @@ export async function makeTextCompletion(
     // Save the request data for future reference.
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(settings),
       responseData: JSON.stringify(resp.data),
       startTime: start,
@@ -95,11 +99,22 @@ export async function makeTextCompletion(
       nodeId: node.id as number,
     })
 
+    // Save to metering server
+    trackOpenAIUsage({
+      projectId,
+      model: settings.model,
+      totalTokens: usage.total_tokens,
+    })
+
     // Check if choices array is not empty, then return the result.
     if (resp.data.choices && resp.data.choices.length > 0) {
       const choice = resp.data.choices[0]
-      // console.log('choice', choice)
-      return { success: true, result: choice.text }
+      return {
+        success: true,
+        result: choice.text,
+        model: settings.model,
+        totalTokens: usage.total_tokens,
+      }
     }
     // If no choices were returned, return an error.
     return { success: false, error: 'No choices returned' }

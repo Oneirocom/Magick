@@ -1,5 +1,7 @@
 import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2'
 import { DMEventV2 } from 'twitter-api-v2/dist/esm/types/v2/dm.v2.types'
+import { app } from '@magickml/server-core'
+
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined
   twitterv2: TwitterApi | undefined
@@ -12,9 +14,8 @@ export class TwitterConnector {
   stream: any
   senderIds = {}
 
-  constructor({ spellRunner, agent }) {
+  constructor({ agent }) {
     agent.twitter = this
-    this.spellRunner = spellRunner
     const data = agent.data.data
     this.data = data
     this.agent = agent
@@ -90,68 +91,6 @@ export class TwitterConnector {
 
     console.log('twitterUser', data.twitter_userid)
 
-    // if (!this.twitterv1) {
-    //   return console.log('Twitter not initialized properly')
-    // }
-
-    // const stream = await this.twitterv1.v2.searchStream({
-    //   'tweet.fields': ['referenced_tweets', 'author_id'],
-    //   expansions: ['referenced_tweets.id'],
-    // })
-
-    // stream.autoReconnect = true
-    // stream.on(ETwitterStreamEvent.Data, async ev => {
-    //   console.log('*********** STREAM EVENT')
-    //   const tw = ev.includes as any
-    //   if (
-    //     ev.includes &&
-    //     tw.tweets[0].author_id == this.localUser.data.id &&
-    //     tw.tweets.length > 0 &&
-    //     ev.data.referenced_tweets &&
-    //     ev.data.referenced_tweets !== undefined &&
-    //     ev.data.author_id !== this.localUser.data.id &&
-    //     ev.data.text.startsWith('@' + this.localUser.data.username)
-    //   ) {
-    //     const data = ev.data as any
-    //     if (!this.twitterv2) {
-    //       return console.log('Twitter not initialized properly')
-    //     }
-    //     const author = await this.twitterv2.v2.user(data.author_id)
-    //     const entities = [author.data.name, twitterUser]
-
-    //     const input = ev.data.text.replace(
-    //       '@' + this.localUser.data.username,
-    //       ''
-    //     )
-
-    //     if (author === twitterUser) {
-    //       return console.warn(
-    //         'Bot was going to reply to self, ignoring tweet:',
-    //         input
-    //       )
-    //     }
-
-    //     const resp = await this.spellRunner.runComponent({
-    //       inputs: {
-    //         'Input - Twitter': {
-    //           content: input,
-    //           sender: author.data.username,
-    //           observer: twitterUser,
-    //           client: 'twitter',
-    //           channel: ev.data.id,
-    //           agentId: this.agent.id,
-    //           entities,
-    //           channelType: 'feed',
-    //         },
-    //       },
-    //       agent: this.agent,
-    //       secrets: this.agent.secrets,
-    //       publicVariables: this.agent.publicVariables,
-    //       runSubspell: true,
-    //     })
-    //   }
-    // })
-
     try {
       const client = this.twitterv2
       if (this.data.twitter_feed_enable) {
@@ -222,7 +161,8 @@ export class TwitterConnector {
             )
           }
 
-          await this.spellRunner.runComponent({
+          app.get('agentCommander').runSpell({
+            agent: this.agent,
             inputs: {
               'Input - Twitter (Feed)': {
                 connector: 'Twitter (Feed)',
@@ -237,10 +177,6 @@ export class TwitterConnector {
                 rawData: tw,
               },
             },
-            agent: this.agent,
-            secrets: this.agent.secrets,
-            publicVariables: this.agent.publicVariables,
-            app: this.agent.app,
             runSubspell: true,
           })
           // }
@@ -314,7 +250,8 @@ export class TwitterConnector {
 
               entities.push(twitterUser)
 
-              await this.spellRunner.runComponent({
+              await app.get('agentCommander').runSpell({
+                agent: this.agent,
                 inputs: {
                   'Input - Twitter (DM)': {
                     connector: 'Twitter (DM)',
@@ -329,10 +266,8 @@ export class TwitterConnector {
                     rawData: JSON.stringify(event),
                   },
                 },
-                agent: this.agent,
                 secrets: this.agent.secrets,
                 publicVariables: this.agent.publicVariables,
-                app: this.agent.app,
                 runSubspell: true,
               })
             }

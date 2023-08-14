@@ -64,14 +64,16 @@ export class TextVariable extends MagickComponent<InputReturn> {
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      tooltip: 'Enter name'
     })
 
     const _public = new BooleanControl({
       dataKey: 'isPublic',
       name: 'isPublic',
+      tooltip: 'Switch isPublic'
     })
 
-    const fewshotControl = new FewshotControl({})
+    const fewshotControl = new FewshotControl({tooltip: 'Open fewshot'})
 
     node.inspector.add(fewshotControl).add(name).add(_public)
 

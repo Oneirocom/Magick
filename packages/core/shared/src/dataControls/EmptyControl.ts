@@ -12,7 +12,7 @@ export class EmptyControl extends DataControl {
    * @param {string} dataKey - The key of the data that the control will interact with.
    * @param {array} ignored - The list of ignored values by the control.
    */
-  constructor({ dataKey, ignored = [] }) {
+  constructor({ dataKey, ignored = [],tooltip }) {
     const options = {
       dataKey: dataKey,
       name: 'empty',
@@ -20,6 +20,7 @@ export class EmptyControl extends DataControl {
       data: {
         ignored,
       },
+      tooltip: tooltip,
     }
 
     super(options)
