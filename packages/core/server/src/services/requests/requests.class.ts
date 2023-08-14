@@ -71,7 +71,7 @@ export class RequestService<
         db.raw('sum(cost) as total_cost'),
         db.raw('count(*) as total_requests')
       )
-      .where('agentId', `${agentId}`) // Replace 1 with the actual agentId
+      .where('agentId', `${agentId}`)
       .whereBetween('createdAt', [startOfMonth, endOfMonth])
 
     // The query to get the today's requests and costs series
@@ -95,6 +95,7 @@ export class RequestService<
     let spentToday = 0
     let requestsToday = 0
 
+    // Calculating and formatting monthly data
     result[0].forEach((row: RequestRow, index: number) => {
       spentToday += +row.total_cost
       requestsToday += +row.request_count
