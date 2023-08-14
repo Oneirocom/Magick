@@ -93,12 +93,13 @@ const config = {
             position: 'right',
             label: 'Developer Guides',
           },
-          {
-            type: 'doc',
-            docId: 'api/index',
-            position: 'right',
-            label: 'API Documentation',
-          },
+          // Will add this back when the api plugin is working again
+          // {
+          //   type: 'doc',
+          //   docId: 'api/index',
+          //   position: 'right',
+          //   label: 'API Documentation',
+          // },
         ],
       },
       footer: {

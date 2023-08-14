@@ -47,16 +47,19 @@ export class StringVariable extends MagickComponent<InputReturn> {
       dataKey: '_var',
       name: 'Value',
       icon: 'moon',
+      tooltip: 'Enter value'
     })
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      tooltip: 'Enter name'
     })
 
     const _public = new BooleanControl({
       dataKey: 'isPublic',
       name: 'isPublic',
+      tooltip: 'Switch isPublic'
     })
 
     node.inspector.add(nameControl).add(_var).add(_public)

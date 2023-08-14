@@ -15,7 +15,9 @@ import {
   makeChatCompletion,
   makeTextCompletion,
   makeTextEmbedding,
+  makeTypeChatCompletion,
 } from './functions'
+
 
 /**
  * The secrets used by the OpenAI API
@@ -30,6 +32,7 @@ const completionHandlers = {
     text: makeTextCompletion,
     chat: makeChatCompletion,
     embedding: makeTextEmbedding,
+    typeChat: makeTypeChatCompletion,
   },
 }
 

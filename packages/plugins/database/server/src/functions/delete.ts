@@ -48,6 +48,7 @@ export async function deleteRow(data: CompletionHandlerInputData): Promise<{
 
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify({
         table: table,
         condition: condition,

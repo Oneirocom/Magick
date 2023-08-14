@@ -2,6 +2,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 import { Modal, Switch } from '@magickml/client-core'
+import { Tooltip } from '@mui/material'
 
 /**
  * PluginProps type
@@ -87,7 +88,9 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
+        <Tooltip title="Add your loop settings" placement="left" arrow>
         <h3>Agent Update Loop</h3>
+        </Tooltip>
         <div
           style={{
             display: 'flex',
@@ -130,7 +133,9 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
         <Modal open={editMode} onClose={handleClose} handleAction={handleSave}>
           <div>
             <div>
+              <Tooltip title="add number of seconds to run the loop" placement="bottom" arrow>
               <span className="form-item-label">Loop Interval</span>
+              </Tooltip>
               <input
                 type="text"
                 pattern="[0-9]*"

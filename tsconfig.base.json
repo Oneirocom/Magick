@@ -24,6 +24,7 @@
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/agents": ["packages/agents/src/index.ts"],
+      "@magickml/chatbox": ["packages/magickml-chatbox/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/client-core": ["packages/core/client/src/index.ts"],
       "@magickml/cloud-agent-manager": [
@@ -60,15 +61,6 @@
       "@magickml/plugin-bluesky-server": [
         "packages/plugins/bluesky/server/src/index.ts"
       ],
-      "@magickml/plugin-github-client": [
-        "packages/plugins/github/client/src/index.ts"
-      ],
-      "@magickml/plugin-github-server": [
-        "packages/plugins/github/server/src/index.ts"
-      ],
-      "@magickml/plugin-github-shared": [
-        "packages/plugins/github/shared/src/index.ts"
-      ],
       "@magickml/plugin-database-client": [
         "packages/plugins/database/client/src/index.ts"
       ],
@@ -104,6 +96,15 @@
       ],
       "@magickml/plugin-ethereum-shared": [
         "packages/plugins/ethereum/shared/src/index.ts"
+      ],
+      "@magickml/plugin-github-client": [
+        "packages/plugins/github/client/src/index.ts"
+      ],
+      "@magickml/plugin-github-server": [
+        "packages/plugins/github/server/src/index.ts"
+      ],
+      "@magickml/plugin-github-shared": [
+        "packages/plugins/github/shared/src/index.ts"
       ],
       "@magickml/plugin-googleai-client": [
         "packages/plugins/googleai/client/src/index.ts"
@@ -176,6 +177,15 @@
       ],
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
+      ],
+      "@magickml/plugin-intent-client": [
+        "packages/plugins/intent/client/src/index.ts"
+      ],
+      "@magickml/plugin-intent-server": [
+        "packages/plugins/intent/server/src/index.ts"
+      ],
+      "@magickml/plugin-intent-shared": [
+        "packages/plugins/intent/shared/src/index.ts"
       ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],

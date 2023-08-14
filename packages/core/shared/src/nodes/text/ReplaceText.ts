@@ -59,16 +59,19 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      tooltip: 'Enter Replace Text name'
     })
     const match = new InputControl({
       dataKey: 'match',
       name: 'Match',
       icon: 'moon',
+      tooltip: 'Enter Replace Text match'
     })
     const replace = new InputControl({
       dataKey: 'replace',
       name: 'Replace',
       icon: 'moon',
+      tooltip: 'Enter Replace Text replace'
     })
 
     node.inspector.add(name).add(match).add(replace)

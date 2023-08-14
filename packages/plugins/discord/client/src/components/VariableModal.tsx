@@ -1,5 +1,6 @@
 import { Switch, Modal } from '@magickml/client-core'
 import { useState } from 'react'
+import { Tooltip } from '@mui/material'
 
 const VariableModal = ({
   selectedAgentData,
@@ -40,7 +41,9 @@ const VariableModal = ({
       <Modal open={editMode} onClose={setEditMode} showSaveBtn={true} handleAction={handleSave}>
         <div style={{ marginBottom: '1em' }}>
           <div>
+            <Tooltip title="add your api key here and save" placement='bottom' arrow >
             <span className="form-item-label">API Key</span>
+            </Tooltip>
             <input
               type="password"
               className="modal-element"

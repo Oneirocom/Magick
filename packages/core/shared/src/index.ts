@@ -51,3 +51,4 @@ export * from './logger'
 
 export * from './cost-calculator'
 export * from './functions'
+export * from './communication'

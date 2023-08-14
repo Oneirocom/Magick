@@ -46,6 +46,7 @@ export class ExclusiveGate extends MagickComponent<void> {
       socketTypes: ['triggerSocket', 'anySocket'],
       taskTypes: ['option', 'output'],
       name: 'Triggers',
+      tooltip: 'Add socket triggers'
     })
 
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)

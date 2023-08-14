@@ -52,15 +52,18 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
       name: 'Value',
       icon: 'moon',
       component: 'switch',
+      tooltip:"This is a toggle for value property"
     })
     const name = new InputControl({
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
+      tooltip: 'Tooltip text for Input Name',
     })
     const _public = new BooleanControl({
       dataKey: 'isPublic',
       name: 'isPublic',
+      tooltip: 'Make your variable public and globally accessible',
     })
 
     node.inspector.add(name).add(_var).add(_public)

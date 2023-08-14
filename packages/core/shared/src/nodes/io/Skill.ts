@@ -2,7 +2,6 @@ import Rete from 'rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { stringSocket, taskSocket, triggerSocket } from '../../sockets'
-import { SpellManager } from '../../spellManager'
 import {
   AgentTask,
   MagickNode,
@@ -107,6 +106,10 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { app, secrets } = module
 
+    if (!app) {
+      throw new Error('Feathers app not found in node skill')
+    }
+
     // call the spells service and find a spell where name is spellName and projectId is projectId
     const spell = await app?.service('spells').find({
       query: {
@@ -129,8 +132,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const { projectId } = _context
     if (agent) {
-      const spellManager = agent.spellManager as SpellManager
-      const spellRunner = await spellManager.loadById(spellId)
       const runComponentArgs = {
         inputs: {
           'Input - Default': task,
@@ -141,7 +142,7 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await spellRunner?.runComponent(runComponentArgs)
+      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
 
       return {
         output: outputs,

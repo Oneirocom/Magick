@@ -23,6 +23,7 @@ export class PlaytestControl extends DataControl {
     label = 'Toggle',
     defaultValue = {},
     ignored = [],
+    tooltip=''
   }) {
     const options = {
       dataKey, // shorthand object property assignment
@@ -34,6 +35,7 @@ export class PlaytestControl extends DataControl {
         label,
         ignored,
       },
+      tooltip: tooltip,
     };
 
     super(options); // call super constructor

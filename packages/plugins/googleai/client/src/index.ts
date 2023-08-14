@@ -17,6 +17,7 @@ const textCompletionControls = [
     name: 'Temperature (0-1.0)',
     icon: 'moon',
     defaultValue: 0.5,
+    tooltip: 'Change the Temperature'
   },
   {
     type: InputControl,
@@ -24,6 +25,7 @@ const textCompletionControls = [
     name: 'Top K (0-100)',
     icon: 'moon',
     defaultValue: 50,
+    tooltip: 'Change the top_k '
   },
   {
     type: InputControl,
@@ -31,6 +33,7 @@ const textCompletionControls = [
     name: 'Top P (0-1.0)',
     icon: 'moon',
     defaultValue: 1,
+    tooltip: 'Change the top_p'
   },
   {
     type: InputControl,
@@ -38,6 +41,7 @@ const textCompletionControls = [
     name: 'Stop Sequences (comma separated)',
     icon: 'moon',
     defaultValue: '',
+    tooltip: 'Add Stop Sequence'
   },
 ]
 

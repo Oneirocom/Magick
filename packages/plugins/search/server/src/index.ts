@@ -7,7 +7,7 @@ import { ServerPlugin } from '@magickml/core'
 /**
  * Nodes that are shared between search plugins
  */
-import { getNodes } from '@magickml/plugin-search-shared'
+import { getNodes, secrets } from '@magickml/plugin-search-shared'
 
 /**
  * Service for Google search functionality
@@ -21,6 +21,7 @@ const SearchPlugin = new ServerPlugin({
   name: 'SearchPlugin',
   nodes: getNodes(),
   services: [googleSearch],
+  secrets,
 })
 
 export default SearchPlugin

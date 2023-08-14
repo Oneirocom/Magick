@@ -82,6 +82,8 @@ import { Delete } from './database/Delete'
 import { SplitBySentence } from './text/SplitBySentence'
 import { Trim } from './text/Trim'
 import { GetLength } from './text/GetLength'
+import { UUIDGenerator } from './text/GenerateUUID'
+import { TypeChat } from './text/TypeChat'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -165,6 +167,8 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   add: () => new Add(),
   subtract: () => new Subtract(),
   jsonToArray: () => new JSONToArray(),
+  generateUUID: () => new UUIDGenerator(),
+  typeChat: () => new TypeChat(),
 }
 
 /**
