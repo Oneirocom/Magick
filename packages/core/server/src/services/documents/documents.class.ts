@@ -5,6 +5,7 @@
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
+import { FormData, File } from 'formdata-node'
 
 import { app } from '../../app'
 import type { Application } from '../../declarations'
@@ -39,13 +40,14 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
-    const { modelName, files, ...docData } = data as DocumentData & {
+    const { modelName, files, id, ...docData } = data as DocumentData & {
       modelName: string
+      id: string
     }
 
     const headers = {
       accept: 'application/json',
-      // 'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+      'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
     }
 
     const form = new FormData()
@@ -54,18 +56,18 @@ export class DocumentService<
       filepath?: string
       originalFilename?: string
     }[]) {
-      let mimeType = mime.lookup(file.originalFilename)
-      mimeType = mimeType ? mimeType : 'application/json'
-      const stream = fs.createReadStream(file.filepath)
+      // let mimeType = mime.lookup(file.originalFilename)
+      // mimeType = mimeType ? mimeType : 'application/json'
+      const readFile = fs.readFileSync(file.filepath) //TODO: make this more performant
       form.append(
         'files',
-        new Blob([stream.read()], { type: mimeType }),
+        new File([readFile], file.originalFilename),
         file.originalFilename
       )
     }
 
     const completion = await axios.post(
-      `http://0.0.0.0:8000/general/v0/general`,
+      `https://api.unstructured.io/general/v0.0.34/general`,
       form,
       { headers: headers }
     )
@@ -73,7 +75,42 @@ export class DocumentService<
     if (completion.data.error) {
       console.error('Unstructured.io Error', completion.data.error)
     }
-    await docdb.from('documents').insert(docData)
+
+    //iterate and format for document insert (api returns either an array or an array of arrays)
+    let elements: (typeof docData)[] = []
+    for (let i in completion.data) {
+      if (completion.data[i] instanceof Array) {
+        for (let j in completion.data[i]) {
+          let element = completion.data[i][j]
+          elements.push({
+            ...docData,
+            content: element.text,
+            metadata: {
+              elementNumber: j,
+              fileName: element.metadata.page_number,
+              pageNumber: element.metadata.page_number,
+              type: element.type,
+            },
+          })
+        }
+      } else {
+        let element = completion.data[i]
+        elements.push({
+          ...docData,
+          content: element.text,
+          metadata: {
+            elementNumber: i,
+            fileName: element.metadata.page_number,
+            pageNumber: element.metadata.page_number,
+            type: element.type,
+          },
+        })
+      }
+    }
+
+    for (let element of elements) {
+      await docdb.from('documents').insert(element)
+    }
     return data
   }
 
