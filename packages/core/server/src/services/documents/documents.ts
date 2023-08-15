@@ -48,13 +48,6 @@ export const document = (app: Application) => {
         // feathers hook to get the 'embedding' field from the request and make sure it is a valid pgvector (cast all to floats)
         async (context: HookContext) => {
           let { embedding } = context.data
-          const { data, service } = context
-          const id = uuidv4()
-          //Add UUID for events.
-          context.data = {
-            [service.id]: id,
-            ...data,
-          }
 
           // if embedding is not null and not null array, then cast to pgvector
           if (embedding && embedding.length > 0 && embedding[0] !== 0) {

@@ -16,6 +16,7 @@ import type {
 } from './documents.schema'
 import fs from 'fs'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 
 // Extended parameter type for DocumentService support
@@ -40,9 +41,9 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
-    const { modelName, files, id, ...docData } = data as DocumentData & {
+    const { modelName, files, ...docData } = data as DocumentData & {
       modelName: string
-      id: string
+      id?: string
     }
 
     const headers = {
@@ -66,52 +67,32 @@ export class DocumentService<
       )
     }
 
-    const completion = await axios.post(
+    const unstructured = await axios.post(
       `https://api.unstructured.io/general/v0.0.34/general`,
       form,
       { headers: headers }
     )
 
-    if (completion.data.error) {
-      console.error('Unstructured.io Error', completion.data.error)
+    if (unstructured.data.error) {
+      console.error('Unstructured.io Error', unstructured.data.error)
     }
 
     //iterate and format for document insert (api returns either an array or an array of arrays)
     let elements: (typeof docData)[] = []
-    for (let i in completion.data) {
-      if (completion.data[i] instanceof Array) {
-        for (let j in completion.data[i]) {
-          let element = completion.data[i][j]
-          elements.push({
-            ...docData,
-            content: element.text,
-            metadata: {
-              elementNumber: j,
-              fileName: element.metadata.page_number,
-              pageNumber: element.metadata.page_number,
-              type: element.type,
-            },
-          })
+    for (let i in unstructured.data) {
+      if (unstructured.data[i] instanceof Array) {
+        for (let j in unstructured.data[i]) {
+          elements.push(createElement(unstructured.data[i][j], docData, j))
         }
       } else {
-        let element = completion.data[i]
-        elements.push({
-          ...docData,
-          content: element.text,
-          metadata: {
-            elementNumber: i,
-            fileName: element.metadata.page_number,
-            pageNumber: element.metadata.page_number,
-            type: element.type,
-          },
-        })
+        elements.push(createElement(unstructured.data[i], docData, i))
       }
     }
 
     for (let element of elements) {
       await docdb.from('documents').insert(element)
     }
-    return data
+    return docData
   }
 
   /**
@@ -216,18 +197,16 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
   }
 }
 
-class BlobWrapper {
-  #stream
-
-  constructor(stream) {
-    this.#stream = stream
-  }
-
-  stream() {
-    return this.#stream
-  }
-
-  get [Symbol.toStringTag]() {
-    return 'Blob'
+const createElement = (element, docData, elementNumber) => {
+  return {
+    ...docData,
+    id: uuidv4(),
+    content: element.text,
+    metadata: {
+      elementNumber: elementNumber,
+      fileName: element.metadata.page_number,
+      pageNumber: element.metadata.page_number,
+      type: element.type,
+    },
   }
 }
