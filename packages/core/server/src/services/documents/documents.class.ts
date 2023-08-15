@@ -18,6 +18,7 @@ import fs from 'fs'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
+import { text } from 'body-parser'
 
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
@@ -40,58 +41,56 @@ export class DocumentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
+    // const docdb = app.get('docdb')
+    // if (data.hasOwnProperty('secrets')) {
+    //   const { secrets, modelName, ...docData } = data as DocumentData & {
+    //     secrets: string
+    //     modelName: string
+    //   }
+
+    //   docdb.fromString(docData.content, docData, {
+    //     modelName,
+    //     projectId: docData?.projectId,
+    //     secrets,
+    //   })
+
+    //   return docData
+    // }
+    // await docdb.from('documents').insert(data)
+    // return data
+
     const docdb = app.get('docdb')
-    const { modelName, files, ...docData } = data as DocumentData & {
+    const { modelName, secrets, files, ...docData } = data as DocumentData & {
       modelName: string
-      id?: string
+      secrets: string
     }
 
-    const headers = {
-      accept: 'application/json',
-      'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+    let elements = []
+    if (docData.content) {
+      elements = [
+        ...elements,
+        ...(await getUnstructuredData(
+          [{ text: docData.content, originalFilename: 'text.txt' }],
+          docData
+        )),
+      ]
     }
-
-    const form = new FormData()
-    form.append('strategy', 'auto')
-    for (let file of files as {
-      filepath?: string
-      originalFilename?: string
-    }[]) {
-      // let mimeType = mime.lookup(file.originalFilename)
-      // mimeType = mimeType ? mimeType : 'application/json'
-      const readFile = fs.readFileSync(file.filepath) //TODO: make this more performant
-      form.append(
-        'files',
-        new File([readFile], file.originalFilename),
-        file.originalFilename
-      )
-    }
-
-    const unstructured = await axios.post(
-      `https://api.unstructured.io/general/v0/general`,
-      form,
-      { headers: headers }
-    )
-
-    if (unstructured.data.error) {
-      console.error('Unstructured.io Error', unstructured.data.error)
-    }
-
-    //iterate and format for document insert (api returns either an array or an array of arrays)
-    let elements: (typeof docData)[] = []
-    for (let i in unstructured.data) {
-      if (unstructured.data[i] instanceof Array) {
-        for (let j in unstructured.data[i]) {
-          elements.push(createElement(unstructured.data[i][j], docData, j))
-        }
-      } else {
-        elements.push(createElement(unstructured.data[i], docData, i))
-      }
+    if (files && files.length > 0) {
+      elements = [...elements, ...(await getUnstructuredData(files, docData))]
     }
 
     for (let element of elements) {
-      await docdb.from('documents').insert(element)
+      if (data.hasOwnProperty('secrets')) {
+        docdb.fromString(element.content, element, {
+          modelName,
+          projectId: element.projectId,
+          secrets,
+        })
+      } else {
+        await docdb.from('documents').insert(element)
+      }
     }
+
     return docData
   }
 
@@ -195,6 +194,62 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     name: 'documents',
     multi: ['remove'],
   }
+}
+
+const getUnstructuredData = async (files, docData) => {
+  const headers = {
+    accept: 'application/json',
+    'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+  }
+
+  const form = new FormData()
+  form.append('strategy', 'auto')
+  for (let file of files as {
+    filepath?: string
+    originalFilename?: string
+    text?: string
+  }[]) {
+    // let mimeType = mime.lookup(file.originalFilename)
+    // mimeType = mimeType ? mimeType : 'application/json'
+    if (file.filepath) {
+      const readFile = fs.readFileSync(file.filepath) //TODO: make this more performant
+      form.append(
+        'files',
+        new File([readFile], file.originalFilename),
+        file.originalFilename
+      )
+    } else if (file.text) {
+      form.append(
+        'files',
+        new File([file.text], file.originalFilename),
+        file.originalFilename
+      )
+    }
+  }
+
+  const unstructured = await axios.post(
+    `https://api.unstructured.io/general/v0/general`,
+    form,
+    { headers: headers }
+  )
+
+  if (unstructured.data.error) {
+    console.error('Unstructured.io Error', unstructured.data.error)
+  }
+
+  //iterate and format for document insert (api returns either an array or an array of arrays)
+  let elements = []
+  for (let i in unstructured.data) {
+    if (unstructured.data[i] instanceof Array) {
+      for (let j in unstructured.data[i]) {
+        elements.push(createElement(unstructured.data[i][j], docData, j))
+      }
+    } else {
+      elements.push(createElement(unstructured.data[i], docData, i))
+    }
+  }
+
+  return elements
 }
 
 const createElement = (element, docData, elementNumber) => {
