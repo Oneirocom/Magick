@@ -74,15 +74,13 @@ export async function initApp() {
     bodyParser({ jsonLimit: '200mb', formLimit: '800mb', multipart: true })
   )
   app.use(async (ctx, next) => {
-    let data = []
-    if (ctx.request.files?.files instanceof Array) {
-      for (let file of ctx.request.files.files) {
-        data.push(file)
+    if (ctx.request.files?.files) {
+      if (ctx.request.files?.files instanceof Array) {
+        ctx.request.body.files = ctx.request.files?.files
+      } else {
+        ctx.request.body.files = [ctx.request.files?.files]
       }
-    } else {
-      data.push(ctx.request.files?.files)
     }
-    ctx.request.body.files = data
     await next()
   })
 

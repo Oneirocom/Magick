@@ -68,7 +68,7 @@ export class DocumentService<
     }
 
     const unstructured = await axios.post(
-      `https://api.unstructured.io/general/v0.0.34/general`,
+      `https://api.unstructured.io/general/v0/general`,
       form,
       { headers: headers }
     )
@@ -204,7 +204,7 @@ const createElement = (element, docData, elementNumber) => {
     content: element.text,
     metadata: {
       elementNumber: elementNumber,
-      fileName: element.metadata.page_number,
+      fileName: element.metadata.filename,
       pageNumber: element.metadata.page_number,
       type: element.type,
     },
