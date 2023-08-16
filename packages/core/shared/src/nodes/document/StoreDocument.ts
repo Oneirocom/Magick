@@ -20,13 +20,13 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
    */
   constructor() {
     super(
-      'Store Document',
+      'Store Knowledge',
       {
         outputs: {
           trigger: 'option',
         },
       },
-      'Document',
+      'Knowledge',
       'Store documents in the Documents store. Stores the content, embedding, and date from the inputs as well as an optional Type property.'
     )
   }
