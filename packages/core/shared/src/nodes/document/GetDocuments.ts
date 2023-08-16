@@ -32,14 +32,14 @@ type InputReturn = {
 export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super(
-      'Get Documents',
+      'Get Knowledge',
       {
         outputs: {
           documents: 'output',
           trigger: 'option',
         },
       },
-      'Document',
+      'Knowledge',
       info
     )
     // this.runFromCache = true
