@@ -116,9 +116,24 @@ export class DocumentService<
       return { data: querys }
     }
 
-    params = { ...params, query: { ...params.query, metadata: '{}' } }
-    const res = await super.find(params)
-    return { data: (res as unknown as { data: Array<any> }).data }
+    const param = params.query
+    const querys = await db('documents')
+      .select('*')
+      .where({
+        ...(param.type && { type: param.type }),
+        ...(param.id && { id: param.id }),
+        ...(param.sender && { sender: param.sender }),
+        ...(param.client && { client: param.client }),
+        ...(param.channel && { channel: param.channel }),
+        ...(param.projectId && { projectId: param.projectId }),
+        ...(param.content && { content: param.content }),
+      })
+      .modify(function (queryBuilder) {
+        queryBuilder.whereRaw("metadata->'intent' IS NULL")
+      })
+      .limit(param.$limit)
+
+    return { data: querys }
   }
 }
 
