@@ -53,7 +53,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   builder(node: MagickNode) {
     // Create input and output sockets
     const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
-    const out = new Rete.Output('documents', 'Documents', documentSocket)
+    const out = new Rete.Output('documents', 'Knowledge', documentSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
