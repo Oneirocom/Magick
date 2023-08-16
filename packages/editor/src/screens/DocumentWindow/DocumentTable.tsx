@@ -152,8 +152,8 @@ function DocumentTable({ documents, updateCallback }) {
       {
         columns: defaultColumns,
         data: documents,
-        initialState : {
-          pageIndex: currentPage 
+        initialState: {
+          pageIndex: currentPage
         }
       },
       useFilters,
@@ -228,50 +228,53 @@ function DocumentTable({ documents, updateCallback }) {
     projectId: '',
     date: new Date().toISOString(),
     embedding: '',
+    files: []
   })
-// Handle save action
-const handleSave = async (selectedModel) => {
-  // call documents endpoint
-  const result = await fetch(`${API_ROOT_URL}/documents`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      date: new Date().toISOString(),
-      ...newDocument,
-      projectId: config.projectId,
-      modelName: selectedModel.model,
-      secrets: localStorage.getItem('secrets'),
-    }),
-  });
-  // Check if the save operation was successful
-  if (result.ok) {
-    // Reset newDocument
-    setNewDocument({
-      type: '',
-      content: '',
-      projectId: '',
-      date: '',
-      embedding: '',
+  // Handle save action
+  const handleSave = async (selectedModel) => {
+    const { files, ...body } = newDocument
+    // call documents endpoint
+    const result = await fetch(`${API_ROOT_URL}/documents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        date: new Date().toISOString(),
+        ...body,
+        projectId: config.projectId,
+        modelName: selectedModel.model,
+        secrets: localStorage.getItem('secrets'),
+      }),
     });
-    enqueueSnackbar('Document saved successfully', { variant: 'success' });
+    // Check if the save operation was successful
+    if (result.ok) {
+      // Reset newDocument
+      setNewDocument({
+        type: '',
+        content: '',
+        projectId: '',
+        date: '',
+        embedding: '',
+        files: []
+      });
+      enqueueSnackbar('Document saved successfully', { variant: 'success' });
 
 
-    // Close the modal by setting createMode to false after a delay
-    setTimeout(() => {
-      setCreateMode(false);
-    }, 2000);
+      // Close the modal by setting createMode to false after a delay
+      setTimeout(() => {
+        setCreateMode(false);
+      }, 2000);
 
-    // Trigger the updateCallback function to update the table after a delay
-   
+      // Trigger the updateCallback function to update the table after a delay
+
       updateCallback();
-    
-  } else {
-    enqueueSnackbar('Error saving document', { variant: 'error' });
-  }
-};
+
+    } else {
+      enqueueSnackbar('Error saving document', { variant: 'error' });
+    }
+  };
 
   // Show create modal
   const showCreateModal = () => {
