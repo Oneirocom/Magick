@@ -21,7 +21,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   function handleFileUpload() {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = '.eml,.html,.json,.md,.msg,.rst,.rtf,.txt,.xml,.jpeg,.png.,csv,.doc,.docx,.epub,.odt,.pdf,.ppt,.pptx,.tsv,.xlsx'; // Specify the file formats to accept, if needed
+    inputElement.accept = '.eml,.html,.json,.md,.msg,.rst,.rtf,.txt,.xml,.jpeg,.jpg,.png,.csv,.doc,.docx,.epub,.odt,.pdf,.ppt,.pptx,.tsv,.xlsx'; // Specify the file formats to accept, if needed
     inputElement.click();
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files;
