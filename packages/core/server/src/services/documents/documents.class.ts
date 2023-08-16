@@ -41,24 +41,6 @@ export class DocumentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
-    // const docdb = app.get('docdb')
-    // if (data.hasOwnProperty('secrets')) {
-    //   const { secrets, modelName, ...docData } = data as DocumentData & {
-    //     secrets: string
-    //     modelName: string
-    //   }
-
-    //   docdb.fromString(docData.content, docData, {
-    //     modelName,
-    //     projectId: docData?.projectId,
-    //     secrets,
-    //   })
-
-    //   return docData
-    // }
-    // await docdb.from('documents').insert(data)
-    // return data
-
     const docdb = app.get('docdb')
     const { modelName, secrets, files, ...docData } = data as DocumentData & {
       modelName: string
