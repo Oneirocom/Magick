@@ -145,16 +145,6 @@ const SettingsWindow = () => {
             Save
           </Button>
         </div>
-        <div className={styles.btn_container}>
-          <Button
-            onClick={handleSaveKey}
-            className={styles.btn}
-            variant="outlined"
-            style={{ marginLeft: '1rem' }}
-          >
-            Save
-          </Button>
-        </div>
       </div>
     </>
   );
