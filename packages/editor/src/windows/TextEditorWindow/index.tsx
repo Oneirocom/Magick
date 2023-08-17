@@ -1,23 +1,24 @@
-import { Window } from '@magickml/client-core';
-import Editor from '@monaco-editor/react';
-import { useEffect, useRef, useState } from 'react';
-import { debounce } from 'lodash';
-import '../../screens/Magick/magick.module.css';
-import WindowMessage from '../../components/WindowMessage';
-import { TextEditorData, useInspector } from '../../contexts/InspectorProvider';
+import { Window } from '@magickml/client-core'
+import Editor from '@monaco-editor/react'
+import { useEffect, useRef, useState } from 'react'
+import '../../screens/Magick/magick.module.css'
+import WindowMessage from '../../components/WindowMessage'
+import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
+import { debounce } from '../../utils/debounce'
 
-const TextEditor = (props) => {
-  const [code, setCode] = useState<string | undefined>(undefined);
-  const [data, setData] = useState<TextEditorData | null>(null);
+const TextEditor = props => {
+  const [code, setCodeState] = useState<string | undefined>(undefined)
+  const [data, setData] = useState<TextEditorData | null>(null)
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
-  });
-  const codeRef = useRef<string>();
+  })
+  const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
+  const codeRef = useRef<string>()
 
-  const { textEditorData, saveTextEditor, inspectorData } = useInspector();
+  const { textEditorData, saveTextEditor, inspectorData } = useInspector()
 
-  const handleEditorWillMount = (monaco) => {
+  const handleEditorWillMount = monaco => {
     monaco.editor.defineTheme('sds-dark', {
       base: 'vs-dark',
       inherit: true,
@@ -26,54 +27,44 @@ const TextEditor = (props) => {
       colors: {
         'editor.background': '#272727',
       },
-    });
-  };
+    })
+  }
 
   useEffect(() => {
-    setData(textEditorData);
-    setCode(textEditorData.data);
-  }, [textEditorData]);
+    setData(textEditorData)
+    setCode(textEditorData.data)
+  }, [textEditorData])
 
-  useEffect(() => {
-    const saveWithDebounce = debounce(() => {
-      save(codeRef.current);
-    }, 1000); 
-
-    if (codeRef.current !== code) {
-      codeRef.current = code;
-      saveWithDebounce();
-    }
-  }, [code]);
-
-  const save = (newCode) => {
+  const save = debounce((code) => {
     const update = {
       ...data,
-      data: newCode,
-    };
-    setData(update);
-    saveTextEditor(update);
-  };
+      data: code,
+    }
+    setData(update)
+    saveTextEditor(update)
+  }, 1000); // Set the debounce delay as needed (in milliseconds)
 
-  const updateCode = (rawCode) => {
-    const code = rawCode.replace('\r\n', '\n');
-    setCode(code);
-  };
+  const updateCode = rawCode => {
+    if (!unSavedChanges) setUnSavedChanged(true)
+    const code = rawCode.replace('\r\n', '\n')
+    setCode(code)
+    codeRef.current = code; // Update codeRef immediately
+    save(code); // Call the debounced save function
+  }
 
-  const toolbar = (
-    <>
-      <div style={{ marginTop: 'var(--c1)' }}>
-        {textEditorData?.name && textEditorData?.name}
-      </div>
-    </>
-  );
+  const setCode = update => {
+    setCodeState(update)
+    codeRef.current = update
+  }
 
   if (!textEditorData?.control)
-    return <WindowMessage content="Select a node with a text field" />;
+    return <WindowMessage content="Select a node with a text field" />
 
   return (
-    <Window key={inspectorData?.nodeId} toolbar={toolbar}>
+    <Window key={inspectorData?.nodeId}>
       <Editor
         theme="sds-dark"
+        // height={height} // This seemed to have been causing issues.
         language={textEditorData?.options?.language}
         value={code}
         options={editorOptions}
@@ -82,7 +73,7 @@ const TextEditor = (props) => {
         beforeMount={handleEditorWillMount}
       />
     </Window>
-  );
-};
+  )
+}
 
-export default TextEditor;
+export default TextEditor
