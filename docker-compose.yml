@@ -4,7 +4,7 @@ services:
     image: redis:latest
     restart: always
     ports:
-      - "6379:6379"
+      - '6379:6379'
   postgres:
     restart: always
     image: ankane/pgvector:v0.4.1
@@ -12,9 +12,14 @@ services:
     environment:
       POSTGRES_DB: magick
       POSTGRES_USER: magick
-      POSTGRES_PASSWORD: magick_default_pw    
+      POSTGRES_PASSWORD: magick_default_pw
     ports:
       - '5432:5432'
 volumes:
   cache:
     driver: local
+
+networks:
+  default:
+    name: magick-network
+    external: true
