@@ -5,3 +5,14 @@
  * .container {
  * }
 */
+.defaultCloseButton {
+    height: fit-content;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.defaultCloseButton img {
+    margin-right: 0;
+}
