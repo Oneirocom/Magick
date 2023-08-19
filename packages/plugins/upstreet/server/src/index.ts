@@ -54,6 +54,46 @@ async function handleSpeak({ output, agent, event }) {
   }
 }
 
+async function handleEmote({ output, agent, event }) {
+  console.log('********* SENT EMOTE TO UPSTREET', agent.id, output, event)
+  console.log('event.channel is', event.channel)
+
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    await agent.upstreet.handleEmote(resp, event)
+  }
+}
+
+async function handleEmotion({ output, agent, event }) {
+  console.log('********* SENT EMOTION TO UPSTREET', agent.id, output, event)
+  console.log('event.channel is', event.channel)
+
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    await agent.upstreet.handleEmotion(resp, event)
+  }
+}
+
+async function handleMoveTo({ output, agent, event }) {
+  console.log('********* SENT MOVE TO TO UPSTREET', output, event)
+  console.log('event.channel is', event.channel)
+
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    await agent.upstreet.handleMoveTo(resp, event)
+  }
+}
+
+async function handleLookAt({ output, agent, event }) {
+  console.log('********* SENT LOOK AT TO UPSTREET', output, event)
+  console.log('event.channel is', event.channel)
+
+  const resp = output
+  if (resp && resp !== undefined && resp?.length > 0) {
+    await agent.upstreet.handleLookAt(resp, event)
+  }
+}
+
 const inputSockets = [
   {
     socket: 'output',
@@ -90,6 +130,34 @@ const UpstreetPlugin = new ServerPlugin({
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
         await handleSpeak({ output, agent, event })
+      },
+    },
+    {
+      name: 'Upstreet (Emote)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleEmote({ output, agent, event })
+      },
+    },
+    {
+      name: 'Upstreet (Emotion)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleEmotion({ output, agent, event })
+      },
+    },
+    {
+      name: 'Upstreet (Move To)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleMoveTo({ output, agent, event })
+      },
+    },
+    {
+      name: 'Upstreet (Look At)',
+      sockets: outputSockets,
+      handler: async ({ output, agent, event }) => {
+        await handleLookAt({ output, agent, event })
       },
     },
   ],
