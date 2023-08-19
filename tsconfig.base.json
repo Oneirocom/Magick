@@ -61,6 +61,12 @@
       "@magickml/plugin-bluesky-server": [
         "packages/plugins/bluesky/server/src/index.ts"
       ],
+      "@magickml/plugin-upstreet-client": [
+        "packages/plugins/upstreet/client/src/index.ts"
+      ],
+      "@magickml/plugin-upstreet-server": [
+        "packages/plugins/upstreet/server/src/index.ts"
+      ],
       "@magickml/plugin-database-client": [
         "packages/plugins/database/client/src/index.ts"
       ],

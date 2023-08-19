@@ -190,6 +190,7 @@
     "typedoc-plugin-markdown": "3.15.3",
     "unique-names-generator": "4.7.1",
     "unirest": "0.6.0",
+    "upstreet": "^1.13.3",
     "uuid": "9.0.0",
     "vite-tsconfig-paths": "4.2.0",
     "vm2": "3.9.19",
