@@ -154,7 +154,7 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -192,8 +192,9 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://twitter.com/codingsh"><img src="https://avatars.githubusercontent.com/u/57037080?v=4?s=100" width="100px;" alt="codingsh"/><br /><sub><b>codingsh</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=developerfred" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/benbot"><img src="https://avatars.githubusercontent.com/u/1340967?v=4?s=100" width="100px;" alt="Ben Botwin"/><br /><sub><b>Ben Botwin</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=benbot" title="Code">💻</a> <a href="#platform-benbot" title="Packaging/porting to new platform">📦</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coffeeorgreentea"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="coffeeorgreentea"/><br /><sub><b>coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=coffeeorgreentea" title="Code">💻</a> <a href="#infra-coffeeorgreentea" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://chibifire.com"><img src="https://avatars.githubusercontent.com/u/32321?v=4?s=100" width="100px;" alt="K. S. Ernest (iFire) Lee"/><br /><sub><b>K. S. Ernest (iFire) Lee</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=fire" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coffeeorgreentea"><img src="https://avatars.githubusercontent.com/u/90069434?v=4?s=100" width="100px;" alt="coffeeorgreentea"/><br /><sub><b>coffeeorgreentea</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=coffeeorgreentea" title="Code">💻</a> <a href="#infra-coffeeorgreentea" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#business-coffeeorgreentea" title="Business development">💼</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://knar.dev/"><img src="https://avatars.githubusercontent.com/u/4692561?v=4?s=100" width="100px;" alt="Knar"/><br /><sub><b>Knar</b></sub></a><br /><a href="https://github.com/Oneirocom/Magick/commits?author=Knar33" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
