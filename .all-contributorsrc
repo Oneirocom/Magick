@@ -238,6 +238,15 @@
         "infra",
         "business"
       ]
+    },
+    {
+      "login": "knar33",
+      "name": "Knar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4692561?v=4",
+      "profile": "https://github.com/knar33",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
