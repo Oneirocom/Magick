@@ -44,7 +44,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE,PRODUCTION } from '@magickml/config'
 import { useSelector } from 'react-redux'
 
 // Constants
@@ -241,6 +241,61 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     navigate(location)
   }
 
+  //create new default agent
+  const createNew = (data: {
+    projectId: string
+    rootSpell: string
+    enabled : boolean
+    name: string
+    updatedAt: string
+    secrets: string
+  }) => {
+    if (!token && PRODUCTION) {
+      return
+    }
+
+    fetch(`${config.apiUrl}/agents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ...data,
+        updatedAt: new Date().toISOString(),
+        pingedAt: new Date().toISOString(),
+      }),
+    })
+      .then(async res => {
+        const res2 = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: STANDALONE
+              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+              : { Authorization: `Bearer ${token}` },
+          }
+        )
+        const json = await res2.json()
+        setData(json.data)
+      })
+      .catch(err => {
+        console.error('error is', err)
+      })
+  }
+
+  const resetData = async () => {
+    const res = await fetch(
+      `${config.apiUrl}/agents?projectId=${config.projectId}`,
+      {
+        headers: STANDALONE
+          ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+          : { Authorization: `Bearer ${token}` }
+      }
+    )
+    const json = await res.json()
+    setData(json.data)
+  }
+
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
     if (secrets) {
@@ -267,10 +322,25 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
           }
         )
         const json = await res.json()
-        setData(json.data)
+        // if data.length === 0  create new agent
+        if (json.data.length === 0) {
+         await  createNew({
+            name: 'New Agent',
+            projectId: config.projectId,
+            enabled: false,
+            publicVariables: '{}',
+            secrets: '{}',
+          })
+        console.log("hekasdasdasd........>",json.data.length)
+          setData(json.data)
+        }else{
+          setData(json.data)
+        }
+
+       
         // setIsLoading(false)
       })()
-  }, [config.apiUrl])
+  }, [config?.apiUrl])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -316,7 +386,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
         <>
-          <AgentMenu data={data} />
+          <AgentMenu data={data} resetData={resetData}/>
 
           <List
             sx={{
