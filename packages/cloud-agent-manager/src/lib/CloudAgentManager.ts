@@ -27,7 +27,8 @@ export class CloudAgentManager {
         this.agentStateReporter = args.agentStateReporter
         this.pubSub = app.get('pubsub')
 
-        this.startup().then(() => this.heartbeat())
+        // Eventually we'll need this heartbeat to keep track of running agents on workers
+        // this.startup().then(() => this.heartbeat())
     }
 
     async startup() {
