@@ -14,7 +14,6 @@ const TextEditor = props => {
     minimap: { enabled: false },
   })
   const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
-  const codeRef = useRef<string>()
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
 
@@ -48,13 +47,11 @@ const TextEditor = props => {
     if (!unSavedChanges) setUnSavedChanged(true)
     const code = rawCode.replace('\r\n', '\n')
     setCode(code)
-    codeRef.current = code; // Update codeRef immediately
     save(code); // Call the debounced save function
   }
 
   const setCode = update => {
     setCodeState(update)
-    codeRef.current = update
   }
 
   if (!textEditorData?.control)
