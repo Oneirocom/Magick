@@ -48,6 +48,7 @@ export async function spotifyGetPlaybackState(
       processed: false,
       spell,
       nodeId: node.id as number,
+      agentId: context.agent?.id || 'preview',
     })
     return {
       success: true,
