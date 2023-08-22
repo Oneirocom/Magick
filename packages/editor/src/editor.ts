@@ -230,7 +230,6 @@ export const initEditor = function ({
 
   // Functions to load and run spells
   editor.loadSpell = async (spell: SpellInterface) => {
-    console.log('Loading spell in editor')
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
