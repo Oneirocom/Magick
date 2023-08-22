@@ -238,6 +238,24 @@
         "infra",
         "business"
       ]
+    },
+    {
+      "login": "Knar33",
+      "name": "Knar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4692561?v=4",
+      "profile": "https://knar.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "emmyn5600",
+      "name": "Emmy NSABIMANA ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55635977?v=4",
+      "profile": "https://github.com/Emmyn5600",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
