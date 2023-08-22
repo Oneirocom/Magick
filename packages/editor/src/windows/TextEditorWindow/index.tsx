@@ -1,6 +1,6 @@
-import { Button, Window } from '@magickml/client-core'
+import { Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../../screens/Magick/magick.module.css'
 import WindowMessage from '../../components/WindowMessage'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
@@ -13,7 +13,6 @@ const TextEditor = props => {
     wordWrap: 'on',
     minimap: { enabled: false },
   })
-  const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
 
@@ -44,7 +43,6 @@ const TextEditor = props => {
   }, 1000); // Set the debounce delay as needed (in milliseconds)
 
   const updateCode = rawCode => {
-    if (!unSavedChanges) setUnSavedChanged(true)
     const code = rawCode.replace('\r\n', '\n')
     setCodeState(code)
     save(code); // Call the debounced save function

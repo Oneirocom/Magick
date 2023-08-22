@@ -42,7 +42,7 @@ const InspectorProvider = ({ children, tab }) => {
 
   const [inspectorData, setInspectorData] = useState<InspectorData | null>(null)
   const [textEditorData, setTextEditorData] = useState({})
-  const { editor, serialize } = useEditor()
+  const { serialize } = useEditor()
   const SET_INSPECTOR = events.$INSPECTOR_SET(tab.id)
 
   // Subscribe to inspector changes
@@ -66,25 +66,10 @@ const InspectorProvider = ({ children, tab }) => {
             control: control,
             options: control.options,
           }
-          console.log("}}}}}}}}}}}}}}}}}}}}}}}}", textData)
-
           setTextEditorData(textData)
         }
       })
     })
-
-    return unsubscribe as () => void
-  }, [events, subscribe, publish, inspectorData])
-
-  // Subscribe to text editor changes
-  useEffect(() => {
-    const unsubscribe = subscribe(
-      events.$TEXT_EDITOR_SET(tab.id),
-      (event, data) => {
-        console.log(":::::::::::::::::::::::::::", data)
-        setTextEditorData(data)
-      }
-    )
 
     return unsubscribe as () => void
   }, [events, subscribe, publish, inspectorData])
