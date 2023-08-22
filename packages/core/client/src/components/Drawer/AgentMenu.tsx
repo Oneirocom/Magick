@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { styled } from '@mui/material/styles'
 import Avatar from '@mui/material/Avatar'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -15,15 +15,15 @@ import Divider from '@mui/material/Divider'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { useNavigate } from 'react-router-dom'
 import { IconBtn } from '@magickml/client-core'
-import { Close, Done, } from '@mui/icons-material'
-import styles from "./menu.module.css"
+import { Close, Done } from '@mui/icons-material'
+import styles from './menu.module.css'
 import { useConfig } from '@magickml/client-core'
 import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 
-function AgentMenu({ data,resetData }) {
+function AgentMenu({ data, resetData }) {
   const navigate = useNavigate()
   const [openMenu1, setOpenMenu1] = useState(null)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
@@ -34,10 +34,10 @@ function AgentMenu({ data,resetData }) {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
   const handleClose = () => {
     setOpenConfirm(false)
-
   }
 
   const onSubmit = () => {
@@ -45,11 +45,9 @@ function AgentMenu({ data,resetData }) {
     setOpenConfirm(false)
   }
 
-
   const BorderedAvatar = styled(Avatar)`
     border: 1px solid lightseagreen;
   `
-
 
   const handleToggleMenu1 = event => {
     setOpenMenu1(event.currentTarget)
@@ -66,7 +64,8 @@ function AgentMenu({ data,resetData }) {
 
   const handleCloseMenu2 = () => {
     setOpenMenu2(null)
-  }
+  };
+
   const update = (id: string, data = undefined) => {
     const _data = data || { ...selectedAgentData }
     id = id || _data.id
@@ -90,18 +89,15 @@ function AgentMenu({ data,resetData }) {
     })
       .then(res => {
         if (!res.ok) {
-          throw new Error(res.statusText);
+          throw new Error(res.statusText)
         }
-        return res.json();
+        return res.json()
       })
       .then(data => {
         enqueueSnackbar('Updated agent', {
           variant: 'success',
         })
         setSelectedAgentData(data)
-
-        // update data instead of refetching data to avoid agent window flashes
-        // updateData(data)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -115,20 +111,13 @@ function AgentMenu({ data,resetData }) {
       method: 'DELETE',
       headers: STANDALONE
         ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-        : { Authorization: `Bearer ${token}` }
+        : { Authorization: `Bearer ${token}` },
     })
       .then(async res => {
         res = await res.json()
-        // TODO: Handle internal error
-        // if (res === 'internal error') {
-        //   enqueueSnackbar('Server Error deleting agent with id: ' + id, {
-        //     variant: 'error',
-        //   })
-        // } else {
         enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
           variant: 'success',
         })
-        // }
         if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
       })
@@ -138,6 +127,31 @@ function AgentMenu({ data,resetData }) {
         })
       })
   }
+  const handleImageUpload = event => {
+    const file = event.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => { 
+        setSelectedAgentData({
+          ...selectedAgentData,
+          image: reader.result ,
+        })
+        console.log("agent" , selectedAgentData);
+        update(selectedAgentData.id)
+      }
+  
+      // reader.onload =(e: ProgressEvent<FileReader>) => {
+      //   setSelectedAgentData({
+      //     ...selectedAgentData,
+      //     image: e.target?.result as string,
+      //   })
+      //   console.log("agent" , selectedAgentData);
+        
+      //   update(selectedAgentData.id)
+      // }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const StyledDivider = styled(Divider)(({ theme }) => ({
     backgroundColor: 'black',
@@ -145,8 +159,7 @@ function AgentMenu({ data,resetData }) {
     marginBottom: '4px',
   }))
 
-  const handleSelectAgent = agent => {
-  }
+  const handleSelectAgent = agent => {}
 
   return (
     <div>
@@ -218,71 +231,69 @@ function AgentMenu({ data,resetData }) {
                 key={i}
                 onClick={() => handleSelectAgent(agent)}
               >
-                {
-                  editMode && selectedAgentData?.id === agent?.id ? (
-                    <>
-                      <input
-                        type="text"
-                        name="name"
-                        className={styles.inputEdit}
-                        value={selectedAgentData.name}
-                        onChange={e =>
-                          setSelectedAgentData({
-                            ...selectedAgentData,
-                            name: e.target.value,
-                          })
-                        }
-                        placeholder="Add new agent name here"
-                        onKeyDown={e => {
-                          if (e.key === 'Enter') {
-                            update(selectedAgentData.id)
-                            setEditMode(false)
-                            setOldName('')
-                          }
-                        }}
-                      />
-                      <IconBtn
-                        label={'Done'}
-                        Icon={<Done />}
-                        onClick={e => {
+                {editMode && selectedAgentData?.id === agent?.id ? (
+                  <>
+                    <input
+                      type="text"
+                      name="name"
+                      className={styles.inputEdit}
+                      value={selectedAgentData.name}
+                      onChange={e =>
+                        setSelectedAgentData({
+                          ...selectedAgentData,
+                          name: e.target.value,
+                        })
+                      }
+                      placeholder="Add new agent name here"
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
                           update(selectedAgentData.id)
                           setEditMode(false)
                           setOldName('')
-                        }}
-                      />
-                      <IconBtn
-                        label={'close'}
-                        Icon={<Close />}
-                        onClick={e => {
-                          setSelectedAgentData({ ...selectedAgentData, name: oldName })
-                          setOldName('')
-                          setEditMode(false)
-                        }}
-                      />
-                    </>
-                  ) : (
-
-                    <ListItemAvatar
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        }
                       }}
-                    >
-                      <BorderedAvatar
-                        alt={agent?.name?.at(0) || 'A'}
-                        src={agent.image ? agent.name : (agent?.name?.at(0) || 'A')}
-                        sx={{ width: 24, height: 24 }}
-                      />
-                      <ListItemText primary={agent?.name} sx={{ ml: 2 }} />
-                    </ListItemAvatar>
-                  )
-
-
-                }
+                    />
+                    <IconBtn
+                      label={'Done'}
+                      Icon={<Done />}
+                      onClick={e => {
+                        update(selectedAgentData.id)
+                        setEditMode(false)
+                        setOldName('')
+                      }}
+                    />
+                    <IconBtn
+                      label={'close'}
+                      Icon={<Close />}
+                      onClick={e => {
+                        setSelectedAgentData({
+                          ...selectedAgentData,
+                          name: oldName,
+                        })
+                        setOldName('')
+                        setEditMode(false)
+                      }}
+                    />
+                  </>
+                ) : (
+                  <ListItemAvatar
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <BorderedAvatar
+                      alt={agent?.name?.at(0) || 'A'}
+                      src={agent.image ? agent.name : agent?.name?.at(0) || 'A'}
+                      sx={{ width: 24, height: 24 }}
+                    />
+                    <ListItemText primary={agent?.name} sx={{ ml: 2 }} />
+                  </ListItemAvatar>
+                )}
                 <ListItemIcon sx={{ placeContent: 'end' }}>
                   <MoreIcon
                     fontSize="small"
-                    onClick={(event) => handleToggleMenu2(agent, event)}
+                    onClick={event => handleToggleMenu2(agent, event)}
                     aria-controls="menu2"
                     aria-haspopup="true"
                   />
@@ -317,7 +328,6 @@ function AgentMenu({ data,resetData }) {
                 px: 0,
                 py: 0,
               }}
-
             >
               <AddCircleIcon
                 sx={{
@@ -352,34 +362,58 @@ function AgentMenu({ data,resetData }) {
           },
         }}
       >
-        <MenuItem sx={{ py: 0 }}
+        <MenuItem
+          sx={{ py: 0 }}
           onClick={e => {
             setEditMode(true)
             setOldName(selectedAgentData.name)
             handleCloseMenu2()
           }}
-        >Rename</MenuItem>
+        >
+          Rename
+        </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{ py: 0 }}
+        <MenuItem
+          sx={{ py: 0 }}
           onClick={e => {
             setOpenConfirm(true)
             handleCloseMenu2()
-          }
-          }
-        >Delete</MenuItem>
+          }}
+        >
+          Delete
+        </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{ py: 0 }}>Change Image</MenuItem>
+        <MenuItem
+          sx={{ py: 0 }}
+          onClick={() => {
+            imageInputRef?.current?.click()
+            handleCloseMenu2()
+          }}
+        >
+          Change Image
+        </MenuItem>
         <StyledDivider />
         <MenuItem sx={{ py: 0 }}>Other Options</MenuItem>
       </Menu>
-      {selectedAgentData && (<Modal
-        open={openConfirm}
-        onClose={handleClose}
-        handleAction={onSubmit}
-        title={`Delete ${selectedAgentData ? selectedAgentData.name : ""}  agent`}
-        submitText="Confirm"
-        children="Do you want to delete this agent?"
-      />)}
+      {selectedAgentData && (
+        <Modal
+          open={openConfirm}
+          onClose={handleClose}
+          handleAction={onSubmit}
+          title={`Delete ${
+            selectedAgentData ? selectedAgentData.name : ''
+          }  agent`}
+          submitText="Confirm"
+          children="Do you want to delete this agent?"
+        />
+      )}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        style={{ display: 'none' }}
+        ref={imageInputRef}
+      />
     </div>
   )
 }

@@ -44,7 +44,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE,PRODUCTION } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
 import { useSelector } from 'react-redux'
 
 // Constants
@@ -244,10 +244,11 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   //create new default agent
   const createNew = (data: {
     projectId: string
-    rootSpell: string
-    enabled : boolean
+    rootSpell?: string
+    enabled: boolean
     name: string
-    updatedAt: string
+    updatedAt?: string
+    publicVariables: string
     secrets: string
   }) => {
     if (!token && PRODUCTION) {
@@ -289,7 +290,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
       {
         headers: STANDALONE
           ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-          : { Authorization: `Bearer ${token}` }
+          : { Authorization: `Bearer ${token}` },
       }
     )
     const json = await res.json()
@@ -312,34 +313,33 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
 
   useEffect(() => {
     if (!config.apiUrl) return
-      ; (async () => {
-        const res = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` },
-          }
-        )
-        const json = await res.json()
-        // if data.length === 0  create new agent
-        if (json.data.length === 0) {
-         await  createNew({
-            name: 'New Agent',
-            projectId: config.projectId,
-            enabled: false,
-            publicVariables: '{}',
-            secrets: '{}',
-          })
-        console.log("hekasdasdasd........>",json.data.length)
-          setData(json.data)
-        }else{
-          setData(json.data)
+    ;(async () => {
+      const res = await fetch(
+        `${config.apiUrl}/agents?projectId=${config.projectId}`,
+        {
+          headers: STANDALONE
+            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+            : { Authorization: `Bearer ${token}` },
         }
+      )
+      const json = await res.json()
+      // if data.length === 0  create new agent
+      if (json.data.length === 0) {
+        await createNew({
+          name: 'New Agent',
+          projectId: config.projectId,
+          enabled: false,
+          publicVariables: '{}',
+          secrets: '{}',
+        })
+        console.log('hekasdasdasd........>', json.data.length)
+        setData(json.data)
+      } else {
+        setData(json.data)
+      }
 
-       
-        // setIsLoading(false)
-      })()
+      // setIsLoading(false)
+    })()
   }, [config?.apiUrl])
 
   useEffect(() => {
@@ -386,7 +386,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
         <>
-          <AgentMenu data={data} resetData={resetData}/>
+          <AgentMenu data={data} resetData={resetData} />
 
           <List
             sx={{
