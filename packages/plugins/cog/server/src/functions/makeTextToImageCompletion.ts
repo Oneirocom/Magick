@@ -19,14 +19,14 @@ export async function makeTextToImageCompletion(
 
   const params = {
     model: node?.data?.model as string,
-    width: parseInt((node?.data?.width as string) ?? '768'),
-    height: parseInt((node?.data?.height as string) ?? '768'),
+    width: parseInt((node?.data?.width as string) ?? '1024'),
+    height: parseInt((node?.data?.height as string) ?? '1024'),
     // num_outputs: parseInt((node?.data?.num_outputs as string) ?? '4'),
     num_inference_steps: parseInt(
       (node?.data?.num_inference_steps as string) ?? '50'
     ),
     guidance_scale: parseFloat((node?.data?.guidance_scale as string) ?? '7.5'),
-    scheduler: node?.data?.scheduler ?? 'K_EULER',
+    scheduler: node?.data?.scheduler ?? 'DDIM',
   }
 
   console.log('Parameters:', JSON.stringify(params, null, 2)) // Debugging params
@@ -79,6 +79,7 @@ export async function makeTextToImageCompletion(
       processed: false,
       spell: context.currentSpell,
       nodeId: node.id,
+      agentId: context.agent?.id || 'preview',
     })
 
     const imgDatas: string[] = []
