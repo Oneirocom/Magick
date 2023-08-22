@@ -29,7 +29,14 @@ declare module '@magickml/server-core' {
 
 // Constants for API path and methods
 export const apiPath = 'api'
-export const apiMethods = ['get', 'create', 'update', 'remove'] as const
+export const apiMethods = [
+  'get',
+  'create',
+  'update',
+  'delete',
+  'patch',
+] as const
+
 
 // Export class and schema files
 export * from './api.class'
@@ -44,7 +51,7 @@ export const api = (app: Application) => {
   app.use(apiPath, new ApiService(), {
     // A list of all methods this service exposes externally
     // You can add additional custom events to be sent to clients here
-    methods: ['find', 'create'],
+    methods: ['find', 'create', 'update', 'remove'],
     events: [],
   })
 
@@ -60,7 +67,9 @@ export const api = (app: Application) => {
       all: [
         // get agent
         async (context) => {
-          context.params.agent = await app.service('agents').get(context.params.query.agentId)
+          context.params.agent = await app
+            .service('agents')
+            .get(context.params.query.agentId)
           if (!context.params.agent) {
             throw new Error('Invalid Agent ID')
           }
@@ -70,13 +79,12 @@ export const api = (app: Application) => {
           }
         },
         // check apiKey
-        async (context) => {
+        async context => {
           const apiKey = context.params.query.apiKey
 
           if (apiKey !== context.params.agent.data.rest_api_key) {
             throw new Error('Invalid API Key')
           }
-
         },
         schemaHooks.validateQuery(apiQueryValidator),
         schemaHooks.resolveQuery(apiQueryResolver),

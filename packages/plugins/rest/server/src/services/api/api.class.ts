@@ -5,7 +5,7 @@
  */
 import { Application, app } from '@magickml/server-core'
 import type { Agent } from '@magickml/agents'
-import type { Params, ServiceInterface } from '@feathersjs/feathers'
+import type { NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 
 export type { Api, ApiData, ApiPatch, ApiQuery }
@@ -28,78 +28,157 @@ export interface ApiError {
 }
 
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
-  implements ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
-  {
+  implements
+    ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
+{
+  // GET
+  async find(params: ServiceParams): Promise<ApiResponse | ApiError> {
+    const { spellId, content } = params.query as ApiData
 
-    // GET
-    async find(params: ServiceParams): Promise<ApiResponse | ApiError> {
-      const { spellId, content } = params.query as ApiData
+    const agentCommander = app.get('agentCommander')
 
-      const agentCommander = app.get('agentCommander')
+    // little hack since we dynamically add agents to the params in the hooks
+    const agent = (params as unknown as { agent: Agent }).agent
 
-      // little hack since we dynamically add agents to the params in the hooks
-      const agent = (params as unknown as { agent: Agent }).agent
+    const result = await agentCommander.runSpellWithResponse({
+      agent,
+      spellId,
+      inputs: {
+        [`Input - REST API (GET)`]: {
+          connector: 'REST API (GET)',
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channel: 'rest',
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channelType: 'GET',
+          rawData: '{}',
+        },
+        publicVariables: agent.publicVariables,
+        runSubspell: true,
+      },
+    })
 
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (GET)`]: {
-            connector: "REST API (GET)",
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'GET',
-            rawData: "{}"
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true
-        }
-      })
-
-      return {
-        result: result as object
-      }
-    }
-
-    async create(data: ApiData, params: ServiceParams): Promise<ApiResponse | ApiError> {
-      const { spellId, content } = params.query as ApiData
-
-      const agentCommander = app.get('agentCommander')
-
-      // little hack since we dynamically add agents to the params in the hooks
-      const agent = (params as unknown as { agent: Agent }).agent
-
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (POST)`]: {
-            connector: "REST API (POST)",
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'POST',
-            rawData: "{}"
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true
-        }
-      })
-
-      return {
-        result: result as object
-      }
+    return {
+      result: result as object,
     }
   }
+
+  async create(
+    data: ApiData,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { spellId, content } = params.query as ApiData
+
+    const agentCommander = app.get('agentCommander')
+
+    // little hack since we dynamically add agents to the params in the hooks
+    const agent = (params as unknown as { agent: Agent }).agent
+
+    const result = await agentCommander.runSpellWithResponse({
+      agent,
+      spellId,
+      inputs: {
+        [`Input - REST API (POST)`]: {
+          connector: 'REST API (POST)',
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channel: 'rest',
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channelType: 'POST',
+          rawData: '{}',
+        },
+        publicVariables: agent.publicVariables,
+        runSubspell: true,
+      },
+    })
+
+    return {
+      result: result as object,
+    }
+  }
+
+  async update(
+    id: NullableId,
+    data: ApiData,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { spellId, content } = params.query as ApiData
+
+    const agentCommander = app.get('agentCommander')
+
+    // little hack since we dynamically add agents to the params in the hooks
+    const agent = (params as unknown as { agent: Agent }).agent
+
+    const result = await agentCommander.runSpellWithResponse({
+      agent,
+      spellId,
+      inputs: {
+        [`Input - REST API (UPDATE)`]: {
+          connector: 'REST API (UPDATE)',
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channel: 'rest',
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channelType: 'UPDATE',
+          rawData: '{}',
+        },
+        publicVariables: agent.publicVariables,
+        runSubspell: true,
+      },
+    })
+
+    return {
+      result: result as object,
+    }
+  }
+
+  async remove(
+    id: NullableId,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { spellId, content } = params.query as ApiData
+
+    const agentCommander = app.get('agentCommander')
+
+    // little hack since we dynamically add agents to the params in the hooks
+    const agent = (params as unknown as { agent: Agent }).agent
+
+    const result = await agentCommander.runSpellWithResponse({
+      agent,
+      spellId,
+      inputs: {
+        [`Input - REST API (DELETE)`]: {
+          connector: 'REST API (DELETE)',
+          content,
+          sender: 'api',
+          observer: agent.name,
+          client: 'rest',
+          channel: 'rest',
+          agentId: agent.id,
+          entities: ['api', agent.name],
+          channelType: 'DELETE',
+          rawData: '{}',
+        },
+        publicVariables: agent.publicVariables,
+        runSubspell: true,
+      },
+    })
+
+    return {
+      result: result as object,
+    }
+  }
+  
+}
 
 /** Helper function to get options for the ApiService. */
 export const getOptions = (app: Application) => {
