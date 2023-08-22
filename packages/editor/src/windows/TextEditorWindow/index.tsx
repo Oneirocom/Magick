@@ -1,10 +1,9 @@
-import { Window } from '@magickml/client-core'
+import { Button, Window } from '@magickml/client-core'
 import Editor from '@monaco-editor/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import '../../screens/Magick/magick.module.css'
 import WindowMessage from '../../components/WindowMessage'
 import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
-import { debounce } from '../../utils/debounce'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
@@ -13,6 +12,8 @@ const TextEditor = props => {
     wordWrap: 'on',
     minimap: { enabled: false },
   })
+  const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
+  const codeRef = useRef<string>()
 
   const { textEditorData, saveTextEditor, inspectorData } = useInspector()
 
@@ -30,30 +31,66 @@ const TextEditor = props => {
 
   useEffect(() => {
     setData(textEditorData)
-    setCodeState(textEditorData?.data)
+    setCode(textEditorData.data)
   }, [textEditorData])
 
-  const save = debounce((code) => {
+  const save = code => {
     const update = {
       ...data,
       data: code,
     }
     setData(update)
     saveTextEditor(update)
-  }, 1000); // Set the debounce delay as needed (in milliseconds)
-
-  const updateCode = rawCode => {
-    const code = rawCode.replace('\r\n', '\n')
-    setCodeState(code)
-    save(code); // Call the debounced save function
   }
 
+  const onSave = () => {
+    setUnSavedChanged(false)
+    save(codeRef.current)
+  }
+
+  const updateCode = rawCode => {
+    if (!unSavedChanges) setUnSavedChanged(true)
+    const code = rawCode.replace('\r\n', '\n')
+    setCode(code)
+    const update = {
+      ...data,
+      data: code,
+    }
+    setData(update)
+  }
+
+  const setCode = update => {
+    setCodeState(update)
+    codeRef.current = update
+  }
+
+  const toolbar = (
+    <>
+      <div style={{ marginTop: 'var(--c1)' }}>
+        {textEditorData?.name && textEditorData?.name}
+      </div>
+      <Button onClick={onSave}>
+        SAVE
+        {unSavedChanges && (
+          <span
+            style={{
+              width: '6px',
+              height: '6px',
+              background: '#fff',
+              borderRadius: '50%',
+              marginLeft: '2px',
+            }}
+          />
+        )}
+      </Button>
+    </>
+  )
 
   if (!textEditorData?.control)
     return <WindowMessage content="Select a node with a text field" />
 
   return (
-    <Window key={inspectorData?.nodeId}>
+    <Window key={inspectorData?.nodeId} toolbar={toolbar}>
       <Editor
         theme="sds-dark"
         // height={height} // This seemed to have been causing issues.

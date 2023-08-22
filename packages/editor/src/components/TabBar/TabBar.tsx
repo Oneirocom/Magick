@@ -10,7 +10,7 @@ import css from './tabBar.module.css'
 import { closeTab, selectAllTabs } from '../../state/tabs'
 import { changeActive } from '../../state/tabs'
 import { RootState } from '../../state/store'
-import { Icon, usePubSub } from '@magickml/client-core'
+import { Icon } from '@magickml/client-core'
 
 /**
  * Tab Component
@@ -22,7 +22,6 @@ const Tab = ({ tab, activeTab }) => {
   const navigate = useNavigate()
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const active = tab.id === activeTab?.id
-  const { events, publish } = usePubSub()
 
   const title = `${tab.name.split('--')[0]}`
   const tabClass = classnames({
@@ -40,20 +39,19 @@ const Tab = ({ tab, activeTab }) => {
     const updatedTabs = tabs.map(t =>
       t.id === tab.id
         ? {
-          id: t.id,
-          changes: {
-            active: true,
-          },
-        }
+            id: t.id,
+            changes: {
+              active: true,
+            },
+          }
         : {
-          id: t.id,
-          changes: {
-            active: false,
-          },
-        }
+            id: t.id,
+            changes: {
+              active: false,
+            },
+          }
     )
     dispatch(changeActive(updatedTabs))
-    publish(events.$TEXT_EDITOR_CLEAR(tab.id))
     navigate(`/magick/${tab.URI}`)
   }
 
