@@ -2,6 +2,7 @@
 import { usePubSub } from '@magickml/client-core';
 import { InspectorData, SupportedLanguages } from '@magickml/core';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useEditor } from './EditorProvider';
 
 /**
  * TextEditorData represents the state and options for the text editor.
@@ -41,7 +42,7 @@ const InspectorProvider = ({ children, tab }) => {
 
   const [inspectorData, setInspectorData] = useState<InspectorData | null>(null)
   const [textEditorData, setTextEditorData] = useState({})
-
+  const { editor, serialize } = useEditor()
   const SET_INSPECTOR = events.$INSPECTOR_SET(tab.id)
 
   // Subscribe to inspector changes
@@ -54,7 +55,6 @@ const InspectorProvider = ({ children, tab }) => {
       setInspectorData(data)
 
       if (!data.dataControls) return
-
       // Handle components
       Object.entries(data.dataControls).forEach(([, control]) => {
         if (control?.options?.editor) {
@@ -66,6 +66,7 @@ const InspectorProvider = ({ children, tab }) => {
             control: control,
             options: control.options,
           }
+          console.log("}}}}}}}}}}}}}}}}}}}}}}}}", textData)
 
           setTextEditorData(textData)
         }
@@ -73,19 +74,20 @@ const InspectorProvider = ({ children, tab }) => {
     })
 
     return unsubscribe as () => void
-  }, [events, subscribe, publish])
+  }, [events, subscribe, publish, inspectorData])
 
   // Subscribe to text editor changes
   useEffect(() => {
     const unsubscribe = subscribe(
       events.$TEXT_EDITOR_SET(tab.id),
       (event, data) => {
+        console.log(":::::::::::::::::::::::::::", data)
         setTextEditorData(data)
       }
     )
 
     return unsubscribe as () => void
-  }, [events, subscribe, publish])
+  }, [events, subscribe, publish, inspectorData])
 
   // Subscribe to text editor clearing
   useEffect(() => {
@@ -113,6 +115,7 @@ const InspectorProvider = ({ children, tab }) => {
     }
 
     publish(events.$NODE_SET(tab.id, textData.nodeId), update)
+    publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
     if (inspectorData) {
       setInspectorData(update)
     }

@@ -7,7 +7,7 @@ import md5 from 'md5'
 
 import {
   useLazyGetSpellByIdQuery,
-  useSaveSpellMutation,
+  useSaveSpellMutation
 } from '../state/api/spells'
 import { useLayout } from '../contexts/LayoutProvider'
 import { useEditor } from '../contexts/EditorProvider'
@@ -29,6 +29,7 @@ const EventHandler = ({ pubSub, tab }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [saveSpellMutation] = useSaveSpellMutation()
+
   // TODO: is this a bug?
   const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
@@ -47,7 +48,7 @@ const EventHandler = ({ pubSub, tab }) => {
       id: tab.id,
       projectId: config.projectId,
     })
-  }, [config.projectId, getSpell, tab.id, tab.name])
+  }, [config.projectId, getSpell, tab.id, tab.name, tab])
 
   useEffect(() => {
     if (!spell) return
