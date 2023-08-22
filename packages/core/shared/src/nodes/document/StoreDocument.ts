@@ -27,7 +27,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
         },
       },
       'Knowledge',
-      'Store documents in the Documents store. Stores the content, embedding, and date from the inputs as well as an optional Type property.'
+      'Store Knowledge in the Knowledge store. Stores the content, embedding, and date from the inputs as well as an optional Type property.'
     )
   }
 
