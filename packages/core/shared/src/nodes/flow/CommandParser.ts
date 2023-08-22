@@ -14,6 +14,7 @@ import {
   WorkerData,
 } from '../../types'
 import { BooleanControl } from '../../dataControls/BooleanControl'
+import { InputControl } from '../../dataControls/InputControl'
 
 /** Information related to the CommandParser */
 const info =
@@ -97,8 +98,15 @@ export class CommandParser extends MagickComponent<Promise<WorkerReturn>> {
       tooltip: 'Use the command list to check if the command is valid.',
       defaultValue: true,
     })
+    const commandStarter = new InputControl({
+      dataKey: 'commandStarter',
+      name: 'Command Starter',
+      icon: 'moon',
+      tooltip: 'What characters to start your command with.',
+      defaultValue: '/',
+    })
 
-    node.inspector.add(useCheckList)
+    node.inspector.add(useCheckList).add(commandStarter)
 
     return node
   }
@@ -113,13 +121,14 @@ export class CommandParser extends MagickComponent<Promise<WorkerReturn>> {
   parseCommand(
     input: string,
     checkList: string[],
-    useCheckList: boolean
+    useCheckList: boolean,
+    commandStarter: string
   ): ParsedCommand {
     let isCommand = false
     let command = ''
     let args: string[] = []
 
-    if (input.startsWith('/')) {
+    if (input.startsWith(commandStarter)) {
       const inputArray = input.split(' ')
       command = inputArray[0].substring(1)
       args = inputArray.slice(1)
@@ -148,7 +157,8 @@ export class CommandParser extends MagickComponent<Promise<WorkerReturn>> {
     const input = inputs.command[0] as string
     const commandList = inputs?.commandList?.[0] as string[]
     const useCheckList = (node?.data?.useCheckList as boolean) ?? false
+    const commandStarter = (node?.data?.commandStarter as string) ?? '/'
 
-    return this.parseCommand(input, commandList, useCheckList)
+    return this.parseCommand(input, commandList, useCheckList, commandStarter)
   }
 }
