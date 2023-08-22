@@ -167,6 +167,7 @@
 div.item {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
+    font-size: 1.2rem !important;
 }
 
 .socket-wrapper {

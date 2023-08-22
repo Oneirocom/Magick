@@ -84,6 +84,7 @@ import { Trim } from './text/Trim'
 import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
 import { TypeChat } from './text/TypeChat'
+import { CommandParser } from './flow/CommandParser'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -169,6 +170,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   jsonToArray: () => new JSONToArray(),
   generateUUID: () => new UUIDGenerator(),
   typeChat: () => new TypeChat(),
+  commandParser: () => new CommandParser(),
 }
 
 /**
