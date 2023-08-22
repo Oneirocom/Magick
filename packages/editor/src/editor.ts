@@ -233,7 +233,6 @@ export const initEditor = function ({
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
-    console.log('Loading spell in editor###########################', graph)
     await engine.abort()
     editor.fromJSON(graph)
 
