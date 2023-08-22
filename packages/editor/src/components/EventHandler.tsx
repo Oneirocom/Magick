@@ -48,7 +48,7 @@ const EventHandler = ({ pubSub, tab }) => {
       id: tab.id,
       projectId: config.projectId,
     })
-  }, [config.projectId, getSpell, tab.id, tab.name, tab])
+  }, [config.projectId, getSpell, tab])
 
   useEffect(() => {
     if (!spell) return
