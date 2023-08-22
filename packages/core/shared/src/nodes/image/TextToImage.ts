@@ -11,8 +11,6 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   pluginManager,
-  SocketGeneratorControl,
-  stringSocket,
   triggerSocket,
   WorkerData,
 } from '@magickml/core'
@@ -66,13 +64,6 @@ export class TextToImage extends MagickComponent<Promise<WorkerReturn>> {
       values: models,
       defaultValue: models[0],
     })
-    const inputGenerator = new SocketGeneratorControl({
-      connectionType: 'input',
-      ignored: ['trigger'],
-      name: 'Input Sockets',
-      tooltip: 'Add input sockets',
-    })
-    node.inspector.add(inputGenerator)
 
     node.inspector.add(modelName)
 
@@ -141,23 +132,6 @@ export class TextToImage extends MagickComponent<Promise<WorkerReturn>> {
     modelName.onData = (value: string) => {
       node.data.model = value
       configureNode()
-    }
-    if (inputGenerator && typeof inputGenerator.onData === 'function') {
-      inputGenerator.onData(
-        (newSocketKey: string, socketType: typeof Rete.Socket) => {
-          if (newSocketKey && socketType) {
-            // Checking if the parameters are defined.
-            const newSocket = new Rete.Input(
-              newSocketKey,
-              'Dynamic Input',
-              stringSocket,
-              true
-            )
-            node.addInput(newSocket)
-            this.editor?.view.updateConnections({ node })
-          }
-        }
-      )
     }
 
     if (!node.data.model) node.data.model = models[0]
