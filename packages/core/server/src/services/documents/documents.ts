@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
-import { v4 as uuidv4 } from 'uuid'
 import { Application, HookContext } from '../../declarations'
 import { DocumentService, getOptions } from './documents.class'
 import {

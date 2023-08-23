@@ -17,8 +17,6 @@ import type {
 import fs from 'fs'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
-import mime from 'mime-types'
-import { text } from 'body-parser'
 
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
@@ -61,7 +59,7 @@ export class DocumentService<
       elements = [...elements, ...(await getUnstructuredData(files, docData))]
     }
 
-    for (let element of elements) {
+    for (const element of elements) {
       if (data.hasOwnProperty('secrets')) {
         await docdb.fromString(element.content, element, {
           modelName,
@@ -186,7 +184,7 @@ const getUnstructuredData = async (files, docData) => {
 
   const form = new FormData()
   form.append('strategy', 'auto')
-  for (let file of files as {
+  for (const file of files as {
     filepath?: string
     originalFilename?: string
     text?: string
@@ -222,10 +220,10 @@ const getUnstructuredData = async (files, docData) => {
   }
 
   //iterate and format for document insert (api returns either an array or an array of arrays)
-  let elements = []
-  for (let i in unstructured.data) {
+  const elements = []
+  for (const i in unstructured.data) {
     if (unstructured.data[i] instanceof Array) {
-      for (let j in unstructured.data[i]) {
+      for (const j in unstructured.data[i]) {
         elements.push(createElement(unstructured.data[i][j], docData, j))
       }
     } else {

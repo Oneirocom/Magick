@@ -235,14 +235,14 @@ function DocumentTable({ documents, updateCallback }) {
     const { files, ...body } = newDocument
     // call documents endpoint
 
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('date', new Date().toISOString())
     formData.append('projectId', config.projectId)
     formData.append('modelName', selectedModel.model)
     formData.append('secrets', localStorage.getItem('secrets'))
     formData.append('type', body.type)
     formData.append('content', body.content)
-    for (let file of files as File[]) {
+    for (const file of files as File[]) {
       formData.append('files', file, file.name)
     }
     const result = await fetch(`${API_ROOT_URL}/documents`, {
