@@ -325,15 +325,9 @@ class SpellRunner {
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     //
+    await component.run(triggeredNode as unknown as MagickNode, inputs)
 
-    try {
-      await component.run(triggeredNode as unknown as MagickNode, inputs)
-      return this.outputData
-    } catch (err) {
-      this.logger.error('ERROR RUNNING SPELL, %o', err)
-
-      throw err
-    }
+    return this.outputData
   }
 }
 
