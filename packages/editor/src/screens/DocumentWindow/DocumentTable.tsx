@@ -50,7 +50,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
         setValue(e.target.value)
         onChange(e.target.value)
       }}
-      placeholder="Search Documents..."
+      placeholder="Search Knowledge..."
       className={styles.search}
     />
   )
