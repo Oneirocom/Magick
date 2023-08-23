@@ -15,13 +15,7 @@ export function MagickmlChatbox(props: MagickmlChatboxProps) {
   const handleNewUserMessage = (newMessage) => {
     // Now send the message throught the backend API
     console.log(`New message incoming! ${newMessage}`);
-  };
-
-  const getCustomLauncher = (handleToggle) => {
-    // console.log('handleToggle = ', handleToggle.isWidgetOpened)
-    return <button className={styles['defaultCloseButton']} onClick={handleToggle}><img src={chatbot} alt=""/></button>
-  }
-    
+  };    
 
   return (
     <div className={styles['container']}>
@@ -29,14 +23,12 @@ export function MagickmlChatbox(props: MagickmlChatboxProps) {
         showChatBoxFlag ? (
           <Widget
             handleNewUserMessage={handleNewUserMessage}
-            // profileAvatar={defaultAvatar}
             titleAvatar={defaultAvatar}
             autofocus={true}
             title="Magick Bot"
             emojis="true"
             subtitle="Welcome to Magick!"
             showCloseButton={true}
-            // launcher={handleToggle => getCustomLauncher(handleToggle)}
             launcherOpenImg={chatbot}
             launcherCloseImg={chatbot}
           />
