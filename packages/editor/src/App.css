@@ -573,8 +573,57 @@ button.rcw-send {
 
 button.rcw-launcher {
   padding: 9px 13px;
+  padding-left: 0;
+  background-color: #000;
 }
 
-button.rcw-launcher.rcw-hide-sm {
-  padding: 9px 20px;
-} 
+button.rcw-launcher.rcw-hide-sm img{
+  width: 64px;
+}
+
+.rcw-conversation-container {
+  background-color: #18181D;
+  padding: 10px;
+}
+
+.rcw-conversation-container.active .rcw-header {
+  background-color: #18181D;
+}
+
+div.rcw-conversation-container.active div.rcw-header {
+  padding: 15px 0;
+  position: relative;
+}
+
+div.rcw-conversation-container img.avatar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 75px;
+  height: 75px;
+}
+
+div.rcw-conversation-container h4.rcw-title,
+div.rcw-conversation-container span {
+  margin-left: 30px;
+  padding: 0;
+}
+
+div.rcw-messages-container {
+  border-radius: 10px;
+  background-color: #101112;
+}
+
+div.rcw-sender {
+  background-color: transparent;
+  border-radius: 30px;
+  border: 1px solid var(--light-blue-grey, #BADDE4);
+  padding: 5px;
+  margin-top: 10px;
+}
+
+div.rcw-new-message {
+  background-color: transparent;
+  padding: 5px;
+}
+
