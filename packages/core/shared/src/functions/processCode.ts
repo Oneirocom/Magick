@@ -1,15 +1,15 @@
 // DOCUMENTED
 import { MagickWorkerInputs, SupportedLanguages, UnknownData } from '../types'
 import { runPython } from './ProcessPython'
-import ivm from 'isolated-vm'
-let vm2
+// import ivm from 'isolated-vm'
+let ivm
 
 /**
  * Dynamically import vm2 if process is not undefined.
  */
 if (typeof process !== 'undefined') {
   ;(async () => {
-    vm2 = await import('vm2')
+    ivm = await import('isolated-vm')
   })()
 }
 
