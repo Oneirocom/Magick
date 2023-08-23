@@ -118,7 +118,7 @@
     "formdata-node": "^4.4.1",
     "glob": "10.2.6",
     "handlebars": "4.7.7",
-    "isolated-vm": "^4.6.0",
+    "isolated-vm": "4.5.0",
     "jose": "4.14.4",
     "json0-ot-diff": "1.1.2",
     "knex": "2.4.2",
