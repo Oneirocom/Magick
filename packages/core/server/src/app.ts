@@ -71,7 +71,7 @@ export async function initApp() {
   app.use(errorHandler())
   app.use(parseAuthentication())
   app.use(
-    bodyParser({ jsonLimit: '200mb', formLimit: '800mb', multipart: true })
+    bodyParser({ jsonLimit: '200mb', formLimit: '256mb', multipart: true })
   )
   app.use(async (ctx, next) => {
     if (ctx.request.files?.files) {
