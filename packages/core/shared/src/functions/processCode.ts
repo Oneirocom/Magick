@@ -2,16 +2,16 @@
 import { MagickWorkerInputs, SupportedLanguages, UnknownData } from '../types'
 import { runPython } from './ProcessPython'
 // import ivm from 'isolated-vm'
-let ivm
+const ivm = require('isolated-vm')
 
 /**
  * Dynamically import vm2 if process is not undefined.
  */
-if (typeof process !== 'undefined') {
-  ;(async () => {
-    ivm = await import('isolated-vm')
-  })()
-}
+// if (typeof process !== 'undefined') {
+//   ;(async () => {
+//     ivm = await import('isolated-vm')
+//   })()
+// }
 
 /**
  * Process the code based on the given inputs.
