@@ -28,8 +28,8 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
 
       if (files && files.length > 0) {
         setLoading(true);
-        let newfiles = []
-        for (let file of files) {
+        const newfiles = []
+        for (const file of files) {
           newfiles.push(file)
         }
         setDocument({ ...newDocument, files: newfiles })
