@@ -181,7 +181,7 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
 const getUnstructuredData = async (files, docData) => {
   const headers = {
     accept: 'application/json',
-    'unstructured-api-key': 'gOjoJNgNz2kBUrntiWOxazgHYlI3nI',
+    'unstructured-api-key': process.env['UNSTRUCTURED_KEY'],
   }
 
   const form = new FormData()
@@ -210,9 +210,11 @@ const getUnstructuredData = async (files, docData) => {
   }
 
   const unstructured = await axios.post(
-    `https://api.unstructured.io/general/v0/general`,
+    process.env['UNSTRUCTURED_ENDPOINT'],
     form,
-    { headers: headers }
+    {
+      headers: headers,
+    }
   )
 
   if (unstructured.data.error) {
