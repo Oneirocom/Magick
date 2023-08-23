@@ -63,7 +63,7 @@ export class DocumentService<
 
     for (let element of elements) {
       if (data.hasOwnProperty('secrets')) {
-        docdb.fromString(element.content, element, {
+        await docdb.fromString(element.content, element, {
           modelName,
           projectId: element.projectId,
           secrets,
