@@ -292,8 +292,8 @@ export function OldSidebar({ children }: DrawerProps): JSX.Element {
             Icon={ArticleIcon}
             open={openDrawer}
             onClick={onClick('/documents')}
-            text="Documents"
-            tooltip="Documents Tooltip"
+            text="Knowledge"
+            tooltip="Knowledge Tooltip"
             tooltipText={drawerTooltipText.documents}
           />
           <DrawerItem
