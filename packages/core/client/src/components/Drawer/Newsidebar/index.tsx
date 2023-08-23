@@ -43,6 +43,7 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
+import fs from 'fs'
 
 // Constants
 const drawerWidth = 210
@@ -224,7 +225,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     useProjectWindow()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
-  const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
+  const [tree, setTree] = useState<any>(null)
+  const [loading, setLoading] = useState<Boolean>(false)
+  const handleDrop = (newTree: NodeModel[]) => setTree(newTree)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -288,6 +291,45 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     }
   }, [menuAnchorEl])
 
+  function addNewItem(id, parent, text, fileType) {
+ setLoading(true)
+    const newItem = {
+      id: id,
+      parent: parent.toString(),
+      droppable: false,
+      text: text,
+      fileType: fileType,
+    }
+
+    setTreeData(prevData => {
+      const updatedData = prevData.slice() // Create a copy of the existing data array
+
+      const parentIndex = updatedData.findIndex(item => item.id === parent)
+
+      if (parentIndex !== -1) {
+        updatedData.splice(parentIndex + 1, 0, newItem) // Insert new item after parent
+      }
+
+      return updatedData // Return the updated data
+    })
+
+    setLoading(false)
+  }
+ const fetchItems = ()=>{
+   const nums = [244, 422, 244, 232, 221, 5231]
+
+   nums.forEach((num, index) => {
+     addNewItem(num, 4, `New Gematria Note ${index + 1}`, 'txt')
+   })
+   setTree(treeData)
+ }
+  useEffect(() => {
+    fetchItems()
+  }, [])
+
+  console.log(">>>>>>>>>>>>>>>TreeData>>>>",treeData)
+  console.log(">>>>>>>>>>>>>>>Tree>>>>",tree)
+
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
@@ -342,36 +384,37 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
             {!isAPIKeysSet && <SetAPIKeys />}
           </List>
           <Divider sx={{ marginY: 2 }} />
-
-          <div className={styles.files}>
-            <CssBaseline />
-            <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-              <div>
-                <Tree
-                  tree={treeData}
-                  rootId={0}
-                  // @ts-ignore
-                  render={(
-                    node: NodeModel<CustomData>,
-                    { depth, isOpen, onToggle }
-                  ) => (
-                    <CustomNode
-                      node={node}
-                      depth={depth}
-                      isOpen={isOpen}
-                      onToggle={onToggle}
-                    />
-                  )}
-                  onDrop={handleDrop}
-                  classes={{
-                    root: styles.treeRoot,
-                    draggingSource: styles.draggingSource,
-                    dropTarget: styles.dropTarget,
-                  }}
-                />
-              </div>
-            </DndProvider>
-          </div>
+          {tree && (
+            <div className={styles.files}>
+              <CssBaseline />
+              <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+                <div>
+                  <Tree
+                    tree={treeData}
+                    rootId={0}
+                    // @ts-ignore
+                    render={(
+                      node: NodeModel<CustomData>,
+                      { depth, isOpen, onToggle }
+                    ) => (
+                      <CustomNode
+                        node={node}
+                        depth={depth}
+                        isOpen={isOpen}
+                        onToggle={onToggle}
+                      />
+                    )}
+                    onDrop={handleDrop}
+                    classes={{
+                      root: styles.treeRoot,
+                      draggingSource: styles.draggingSource,
+                      dropTarget: styles.dropTarget,
+                    }}
+                  />
+                </div>
+              </DndProvider>
+            </div>
+          )}
           <div className={styles.menu} style={{ color: '#7D7D7D' }}>
             <div className={styles.menuFlex}>
               <AddIcon sx={{ mr: 1 }} />
