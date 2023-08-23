@@ -58,15 +58,20 @@ export async function makeTextCompletion(
   // Make the API request and handle the response.
   try {
     const start = Date.now()
-    const resp = await axios.post(`${LOCALMODEL_ENPOINT}/completions`, settings, {
-      headers: headers,
-    })
+    const resp = await axios.post(
+      `${LOCALMODEL_ENPOINT}/completions`,
+      settings,
+      {
+        headers: headers,
+      }
+    )
 
     const usage = resp.data.usage
 
     // Save the request data for future reference.
     saveRequest({
       projectId: projectId,
+      agentId: context.agent?.id || 'preview',
       requestData: JSON.stringify(settings),
       responseData: JSON.stringify(resp.data),
       startTime: start,
@@ -83,7 +88,6 @@ export async function makeTextCompletion(
       nodeId: node.id as number,
     })
 
-    
     // Check if choices array is not empty, then return the result.
     if (resp.data.choices && resp.data.choices.length > 0) {
       const choice = resp.data.choices[0]
