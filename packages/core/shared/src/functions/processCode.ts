@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { MagickWorkerInputs, SupportedLanguages, UnknownData } from '../types'
 import { runPython } from './ProcessPython'
+import ivm from 'isolated-vm'
 let vm2
 
 /**
@@ -38,18 +39,39 @@ export async function processCode(
   )
 
   if (language === 'javascript') {
-    const { VM } = vm2
-    const vm = new VM()
+    const isolate = new ivm.Isolate({ memoryLimit: 32 }) // Create a new sandbox/isolate limited to 32MB
+    const context = isolate.createContextSync()
+    const jail = context.global //Will hold variables and functions required in the isolate
 
-    // Freeze the variables being injected into the VM
-    vm.freeze(data, 'data')
-    vm.freeze(flattenInputs, 'input')
+    jail.setSync('data', new ivm.Reference(data, { unsafeInherit: true }))
+    jail.setSync(
+      'input',
+      new ivm.Reference(flattenInputs, { unsafeInherit: true })
+    )
+    // const { VM } = vm2
+    // const vm = new VM()
+
+    // // Freeze the variables being injected into the VM
+    // vm.freeze(data, 'data')
+    // vm.freeze(flattenInputs, 'input')
 
     // Run the code
-    const codeToRun = `"use strict"; function runFn(input,data){ return (${code})(input,data)}; runFn(input,data);`
+    const codeToRun = `
+      "use strict"; 
+      function runFn(input,data){ 
+        return (${code})(input,data)
+      }; 
+      input = input.copySync();
+      data = data.copySync();
+      runFn(input,data);
+    `
 
     try {
-      const codeResult = vm.run(codeToRun)
+      const script = await isolate.compileScript(codeToRun)
+      const codeResult = await script.run(context).catch(err => {
+        console.error('Error in Isolate : ' + err)
+      })
+      // const codeResult = vm.run(codeToRun)
       console.log('CODE RESULT', codeResult)
       return codeResult
     } catch (err) {
