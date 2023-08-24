@@ -5,15 +5,6 @@ import { runPython } from './ProcessPython'
 const ivm = require('isolated-vm')
 
 /**
- * Dynamically import vm2 if process is not undefined.
- */
-// if (typeof process !== 'undefined') {
-//   ;(async () => {
-//     ivm = await import('isolated-vm')
-//   })()
-// }
-
-/**
  * Process the code based on the given inputs.
  * @param code - The code to process.
  * @param inputs - The input values for the code.
