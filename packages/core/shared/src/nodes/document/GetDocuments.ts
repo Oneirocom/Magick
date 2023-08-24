@@ -17,7 +17,7 @@ import {
 } from '../../types'
 
 const info =
-  'Gets Documents from the Documents store. The optional Type property will return only documents with the matching type, and the Max Count property will limit the number of documents returned. Documents are returned in order of distance.'
+  'Gets Knowledge from the Knowledge store. The optional Type property will return only knowledge with the matching type, and the Max Count property will limit the number of knowledge returned. Knowledge are returned in order of distance.'
 
 /**
  * Defines the expected return type for the input data
@@ -32,14 +32,14 @@ type InputReturn = {
 export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super(
-      'Get Documents',
+      'Get Knowledge',
       {
         outputs: {
           documents: 'output',
           trigger: 'option',
         },
       },
-      'Document',
+      'Knowledge',
       info
     )
     // this.runFromCache = true
@@ -53,7 +53,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   builder(node: MagickNode) {
     // Create input and output sockets
     const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
-    const out = new Rete.Output('documents', 'Documents', documentSocket)
+    const out = new Rete.Output('documents', 'Knowledge', documentSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
