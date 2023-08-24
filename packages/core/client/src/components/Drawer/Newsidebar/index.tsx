@@ -230,7 +230,6 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
   const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
   const [documents, setDocuments] = useState<Document[] | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
   const [spells, setSpells] = useState<any>(null)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
@@ -356,7 +355,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
         }
 
         const data = await response.json()
-        setLoading(false)
+ 
         setDocuments(data.data)
       } catch (error) {
         console.error('ERROR', error)
