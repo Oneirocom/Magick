@@ -43,14 +43,12 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
-import {
+import { useConfig, useFeathers } from '@magickml/client-core'
+import { API_ROOT_URL } from '@magickml/config'
+import { useSelector } from 'react-redux'
+// import { useGetSpellsQuery } from '../../../../../../editor/src/state/api/spells'
 
-  useGetSpellsQuery,
- 
-} from '../../../../../../editor/src/state/api/spells'
-import { useConfig } from '@magickml/client-core'
-
-
+// ../../../../../../editor/src/state/api/spells
 // Constants
 const drawerWidth = 210
 
@@ -233,13 +231,36 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
   const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
+  const [documents, setDocuments] = useState<Document[] | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
-  const { data: spells } = useGetSpellsQuery({
-    projectId: config.projectId,
-  })
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
+  const FeathersContext = useFeathers()
+  const client = FeathersContext.client
+  // const { data: spells } = useGetSpellsQuery({
+  //   projectId: config.projectId,
+  // })
+  const fetchDocuments = async (): Promise<void> => {
+    try {
+      const response = await fetch(
+        `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
 
+      const data = await response.json()
+      setLoading(false)
+      setDocuments(data.data)
+    } catch (error) {
+      console.error('ERROR', error)
+    }
+  }
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
     navigate(location)
@@ -299,6 +320,13 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     }
   }, [menuAnchorEl])
 
+  function truncateDocs(str, n) {
+    if (str.length > n) {
+      return str.substring(0, n) + '...';
+    }
+    return str;
+  }
+
   function addNewItem(id, parent, text, fileType) {
     const newItem = {
       id: id,
@@ -306,35 +334,57 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
       droppable: false,
       text: text,
       fileType: fileType,
-    };
+    }
 
     setTreeData(prevData => {
-      const updatedData = prevData.slice(); // Create a copy of the existing data array
+      const updatedData = prevData.slice() // Create a copy of the existing data array
 
-      const parentIndex = updatedData.findIndex(item => item.id === parent);
+      const parentIndex = updatedData.findIndex(item => item.id === parent)
 
       if (parentIndex !== -1) {
-        updatedData.splice(parentIndex + 1, 0, newItem); // Insert new item after parent
+        updatedData.splice(parentIndex + 1, 0, newItem) // Insert new item after parent
       }
 
-      return updatedData; // Return the updated data
-    });
-  }
-  useEffect(() => {
-    //add a loop to handle add data using addNewItem function
-    // Simulate adding multiple new items from nums array
-   
-    const nums = [243, 422, 244, 232, 221, 5231]
-
-    nums.forEach((num, index) => {
-      addNewItem(num, 4, `New Gematria Note ${index + 1}`, 'txt')
+      return updatedData // Return the updated data
     })
-    // update Tree with new data 
-    // setTreeData(prevData => [...prevData]);
+  }
 
-  }, [])
 
-  console.log(spells)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        setLoading(false);
+        setDocuments(data.data);
+      } catch (error) {
+        console.error('ERROR', error);
+      }
+    }
+
+    fetchData(); // Fetch documents from API
+  }, [config.projectId, token]);
+
+  useEffect(() => {
+  
+
+    // After fetching documents, let's assume the data is an array of documents
+    if (documents) {
+      documents.forEach((doc, index) => {
+        addNewItem( doc?.id, 3, truncateDocs(doc?.content,8),"txt" ); // Assuming you have an appropriate way to get the document title and fileType
+      });
+    }
+  }, [documents, loading]);
+
+  
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
