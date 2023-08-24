@@ -4,6 +4,7 @@ import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { TypeIcon } from './TypeIcon'
 import styles from './menu.module.css'
+import {useNavigate } from 'react-router-dom'
 
 type Props = {
   node: NodeModel<CustomData>
@@ -20,10 +21,19 @@ type CustomData = {
 export const CustomNode: React.FC<Props> = props => {
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
+  const navigate = useNavigate()
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
     props.onToggle(props.node.id)
+  }
+
+  const handleClick = ()=>{
+    if(props.node.fileType === "txt"){
+      navigate(
+        `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
+      )
+    }
   }
 
   return (
@@ -56,6 +66,7 @@ export const CustomNode: React.FC<Props> = props => {
             cursor: 'pointer',
             marginLeft: '8px',
           }}
+          onClick = {()=>handleClick()}
         >
           {props.node.text}
         </Typography>
