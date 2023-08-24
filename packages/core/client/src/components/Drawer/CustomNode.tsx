@@ -33,6 +33,8 @@ export const CustomNode: React.FC<Props> = props => {
       navigate(
         `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
       )
+    }else if (props.node.fileType === "spell") {
+      navigate(`/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`)
     }
   }
 
