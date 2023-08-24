@@ -101,6 +101,7 @@ type DrawerItemProps = {
   active: boolean
   onClick?: () => void
   tooltipText: string
+  cloudUrl?: string;
 }
 
 /**
@@ -113,6 +114,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   active,
   onClick,
   tooltipText,
+  cloudUrl,
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
     <Tooltip title={tooltipText} placement="top" enterDelay={500} arrow>
@@ -122,7 +124,23 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
-        onClick={onClick}
+        onClick={() => {
+          if (cloudUrl) {
+            window.location.href = cloudUrl;
+          } else {
+            return;
+          }
+          
+          // Post message to parent window on click
+          window.parent.postMessage({
+            active: active,
+            Icon: Icon,
+            open: open,
+            text: text,
+            tooltip: tooltipText,
+            cloudUrl: cloudUrl
+          }, '*');
+        }}
       >
         <ListItemIcon
           sx={{
@@ -265,6 +283,15 @@ export function OldSidebar({ children }: DrawerProps): JSX.Element {
             padding: 0,
           }}
         >
+          <DrawerItem
+            active={location.pathname.includes('/magic-logo-ide')}
+            Icon={MagickLogoSmall}
+            open={openDrawer}
+            text="Magic Logo IDE"
+            tooltip="Magic Logo IDE Tooltip"
+            tooltipText={drawerTooltipText.magicLogoIde}
+            cloudUrl="https://cloud.magickml.com/"
+          />
           <DrawerItem
             active={
               location.pathname.includes('/magick') ||
