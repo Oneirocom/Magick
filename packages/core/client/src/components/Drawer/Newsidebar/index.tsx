@@ -44,6 +44,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig, useFeathers } from '@magickml/client-core'
+import { useSnackbar } from 'notistack'
 import { API_ROOT_URL } from '@magickml/config'
 import { useSelector } from 'react-redux'
 // import { useGetSpellsQuery } from '../../../../../../editor/src/state/api/spells'
@@ -233,6 +234,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
   const [documents, setDocuments] = useState<Document[] | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [spells, setSpells] = useState<any>(null)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -240,27 +242,8 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   const token = globalConfig?.token
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
-  // const { data: spells } = useGetSpellsQuery({
-  //   projectId: config.projectId,
-  // })
-  const fetchDocuments = async (): Promise<void> => {
-    try {
-      const response = await fetch(
-        `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+  const { enqueueSnackbar } = useSnackbar()
 
-      const data = await response.json()
-      setLoading(false)
-      setDocuments(data.data)
-    } catch (error) {
-      console.error('ERROR', error)
-    }
-  }
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
     navigate(location)
@@ -322,9 +305,9 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
 
   function truncateDocs(str, n) {
     if (str.length > n) {
-      return str.substring(0, n) + '...';
+      return str.substring(0, n) + '...'
     }
-    return str;
+    return str
   }
 
   function addNewItem(id, parent, text, fileType) {
@@ -349,7 +332,6 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     })
   }
 
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -360,31 +342,48 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
+        )
+        const spellsResponse = await client.service('spells').find()
+        if ('error' in spellsResponse) {
+          enqueueSnackbar('Error fetching spells', {
+            variant: 'error',
+          })
+        } else {
+          const fetchedSpells = spellsResponse.data
+          setSpells(fetchedSpells)
+        }
 
-        const data = await response.json();
-        setLoading(false);
-        setDocuments(data.data);
+        const data = await response.json()
+        setLoading(false)
+        setDocuments(data.data)
       } catch (error) {
-        console.error('ERROR', error);
+        console.error('ERROR', error)
       }
     }
 
-    fetchData(); // Fetch documents from API
-  }, [config.projectId, token]);
+    fetchData() // Fetch documents from API
+  }, [config.projectId, token, client, enqueueSnackbar])
 
   useEffect(() => {
-  
-
-    // After fetching documents, let's assume the data is an array of documents
-    if (documents) {
-      documents.forEach((doc, index) => {
-        addNewItem( doc?.id, 3, truncateDocs(doc?.content,8),"txt" ); // Assuming you have an appropriate way to get the document title and fileType
-      });
+    if (!documents || !spells) {
+      return // Exit early if documents or spells are not available
     }
-  }, [documents, loading]);
 
-  
+    const addedSpellIds = new Set() // Keep track of added spell IDs
+
+    // Adding documents
+    documents.forEach((doc, index) => {
+      addNewItem(doc?.id, 3, truncateDocs(doc?.content, 8), 'txt')
+    })
+
+    // Adding spells without duplicates
+    spells.forEach((spell, index) => {
+      if (!addedSpellIds.has(spell.id)) {
+        addNewItem(spell.id, 6, spell.name, 'spell')
+        addedSpellIds.add(spell.id)
+      }
+    })
+  }, [documents, spells])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
