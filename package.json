@@ -131,7 +131,6 @@
     "metaphor-node": "^1.0.18",
     "mime-types": "^2.1.35",
     "mui-nested-menu": "^3.2.1",
-    "multer": "2.0.0-rc.4",
     "ngrok": "^5.0.0-beta.2",
     "notistack": "3.0.1",
     "nx-cloud": "16.0.5",
