@@ -68,10 +68,8 @@ export const apiQueryProperties = Type.Pick(apiSchema, [
 
 export const apiQuerySchema = Type.Object(
   {
-    agentId: Type.String(),
     spellId: Type.Optional(Type.String()),
     content: Type.String(),
-    apiKey: Type.String(),
   },
   { additionalProperties: false },
 );
