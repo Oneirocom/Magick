@@ -10,6 +10,66 @@ import { API_ROOT_URL } from '@magickml/config'
 import { Tooltip } from "@mui/material"
 
 
+const fetchGetExample = (selectedAgentData, content) =>`
+    fetch("${API_ROOT_URL}/api/${selectedAgentData.id}?content=${encodeURIComponent(content)}", {
+    method: 'GET',
+    headers: {
+        'Authorization': selectedAgentData.data?.rest_api_key
+    }
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+`;
+
+const fetchDeleteExample = (selectedAgentData, content) =>`
+    fetch("${API_ROOT_URL}/api/${selectedAgentData.id}?content=${encodeURIComponent(content)}", {
+    method: 'GET',
+    headers: {
+        'Authorization': selectedAgentData.data?.rest_api_key
+    }
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+`;
+
+const fetchPutExample = (selectedAgentData, content) => `
+    fetch("${API_ROOT_URL}/api/${selectedAgentData.id}", {
+    method: 'PUT',
+    headers: {
+        'Authorization': selectedAgentData.data?.rest_api_key,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ content })
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+`;
+
+const fetchPostExample = (selectedAgentData, content) => `
+    fetch("${API_ROOT_URL}/api", {
+    method: 'POST',
+    headers: {
+        'Authorization': selectedAgentData.data?.rest_api_key,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ content, agentId: selectedAgentData.id })
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+`;
+
 /**
  * Generate a random hash.
  * @returns {string} - A random hash generated using the md5 function.
@@ -169,7 +229,7 @@ export const RestAgentWindow: FC<any> = props => {
                                     </span>
                                 </Tooltip>
                                 <Input
-                                    value={`${API_ROOT_URL}/api/${selectedAgentData.id}`}
+                                    value={`${API_ROOT_URL}/api`}
                                     readOnly
                                     className="modal-element"
                                     style={{
@@ -220,8 +280,7 @@ export const RestAgentWindow: FC<any> = props => {
                                         </span>
 
                                         <Input
-                                            //TODO MAX UPDATE THIS TO BE BETTER
-                                            value={`fetch('${API_ROOT_URL}/api/?agentId=${selectedAgentData.id}&apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World')`}
+                                            value={fetchGetExample(selectedAgentData, "Hello, World")}
                                             readOnly
                                             className="modal-element"
                                             style={{
@@ -230,7 +289,7 @@ export const RestAgentWindow: FC<any> = props => {
                                             }}
                                             onClick={() => {
                                                 navigator.clipboard.writeText(
-                                                    `fetch('${API_ROOT_URL}/api/?agentId=${selectedAgentData.id}&apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World')`
+                                                    fetchGetExample(selectedAgentData, "Hello, World")
                                                 )
                                             }}
                                         />
@@ -268,13 +327,12 @@ export const RestAgentWindow: FC<any> = props => {
                                             Fetch
                                         </span>
                                         <Input
-                                            value={`fetch('${API_ROOT_URL}/api/?agentId=${selectedAgentData.id}&apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World')`
-                                            }
+                                            value={fetchPostExample(selectedAgentData, "Hello, World")}
                                             readOnly
                                             onClick={() => {
                                                 // copy the value of the input
                                                 navigator.clipboard.writeText(
-                                                    `${API_ROOT_URL}/api/?agentId=${selectedAgentData.id}&apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World`
+                                                    fetchPostExample(selectedAgentData, "Hello, World")
                                                 )
                                             }}
                                             className="modal-element"
@@ -317,22 +375,14 @@ export const RestAgentWindow: FC<any> = props => {
                                             Fetch
                                         </span>
                                         <Input
-                                            value={`fetch('${API_ROOT_URL}/api', {
-  method: 'PUT',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    id: '${selectedAgentData.id}',
-    apiKey: '${selectedAgentData.data?.rest_api_key}',
-    content: 'Hello World'
-  }),
-})`}
+                                            value={
+                                                fetchPutExample(selectedAgentData, "Hello, World")
+                                            }
                                             readOnly
                                             onClick={() => {
                                                 // copy the value of the input
                                                 navigator.clipboard.writeText(
-                                                    `fetch('${API_ROOT_URL}/api')`
+                                                    fetchPutExample(selectedAgentData, "Hello, World")
                                                 )
                                             }}
                                             className="modal-element"
@@ -375,35 +425,18 @@ export const RestAgentWindow: FC<any> = props => {
                                             Fetch
                                         </span>
                                         <Input
-                                            value={`fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World', {
-  method: 'DELETE',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    apiKey: '${selectedAgentData.data?.rest_api_key}',
-    content: 'Hello World' // optional
-  }),
-})`}
+                                            value={fetchDeleteExample(selectedAgentData, "Hello, World")}
                                             readOnly
+                                            onClick={() => {
+                                                // copy the value of the input
+                                                navigator.clipboard.writeText(
+                                                    fetchDeleteExample(selectedAgentData, "Hello, World")
+                                                )
+                                            }}
                                             className="modal-element"
                                             style={{
                                                 textDecoration: 'none',
                                                 border: 'none',
-                                            }}
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(
-                                                    `fetch('${API_ROOT_URL}/api/${selectedAgentData.id}?apiKey=${selectedAgentData.data?.rest_api_key}&content=Hello+World', {
-method: 'DELETE',
-headers: {
-  'Content-Type': 'application/json',
-},
-body: JSON.stringify({
-  apiKey: '${selectedAgentData.data?.rest_api_key}',
-  content: 'Hello World' // optional
-}),
-})`
-                                                )
                                             }}
                                         />
                                     </div>

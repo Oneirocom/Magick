@@ -5,8 +5,9 @@
  */
 import { Application, app } from '@magickml/server-core'
 import type { Agent } from '@magickml/agents'
-import type { NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
+import type { Params, ServiceInterface } from '@feathersjs/feathers'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
+import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 
 export type { Api, ApiData, ApiPatch, ApiQuery }
 
@@ -27,18 +28,37 @@ export interface ApiError {
   error: string
 }
 
+const getAgent = async (agentId: string, apiKey: string): Promise<Agent> => {
+  const agent = await app
+    .service('agents')
+    .get(agentId)
+  if (!agent) {
+    throw new NotFound('Agent not found with id ' + agentId);
+  }
+
+  if (!agent.data.rest_enabled) {
+    throw new BadRequest('Agent does not have REST API enabled')
+  }
+
+  if (apiKey !== agent.data.rest_api_key) {
+    throw new Error('Invalid API Key')
+  }
+
+  // Trust the types
+  return agent as unknown as Agent;
+}
+
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
   implements
     ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
 {
   // GET
-  async find(params: ServiceParams): Promise<ApiResponse | ApiError> {
+  async get(agentId: string, params: ServiceParams): Promise<ApiResponse | ApiError> {
     const { spellId, content } = params.query as ApiData
 
-    const agentCommander = app.get('agentCommander')
+    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
 
-    // little hack since we dynamically add agents to the params in the hooks
-    const agent = (params as unknown as { agent: Agent }).agent
+    const agentCommander = app.get('agentCommander')
 
     const result = await agentCommander.runSpellWithResponse({
       agent,
@@ -70,12 +90,11 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     data: ApiData,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = params.query as ApiData
+    const { spellId, content } = data;
+
+    const agent = await getAgent(data.agentId, (params?.headers && params.headers['authorization']) as string)
 
     const agentCommander = app.get('agentCommander')
-
-    // little hack since we dynamically add agents to the params in the hooks
-    const agent = (params as unknown as { agent: Agent }).agent
 
     const result = await agentCommander.runSpellWithResponse({
       agent,
@@ -104,16 +123,15 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   }
 
   async update(
-    id: NullableId,
+    agentId: string,
     data: ApiData,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = params.query as ApiData
+    const { spellId, content } = data
+
+    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
 
     const agentCommander = app.get('agentCommander')
-
-    // little hack since we dynamically add agents to the params in the hooks
-    const agent = (params as unknown as { agent: Agent }).agent
 
     const result = await agentCommander.runSpellWithResponse({
       agent,
@@ -142,15 +160,14 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   }
 
   async remove(
-    id: NullableId,
+    agentId: string,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
     const { spellId, content } = params.query as ApiData
 
-    const agentCommander = app.get('agentCommander')
+    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
 
-    // little hack since we dynamically add agents to the params in the hooks
-    const agent = (params as unknown as { agent: Agent }).agent
+    const agentCommander = app.get('agentCommander')
 
     const result = await agentCommander.runSpellWithResponse({
       agent,
