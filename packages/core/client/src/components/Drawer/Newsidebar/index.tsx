@@ -47,10 +47,7 @@ import { useConfig, useFeathers } from '@magickml/client-core'
 import { useSnackbar } from 'notistack'
 import { API_ROOT_URL } from '@magickml/config'
 import { useSelector } from 'react-redux'
-// import { useGetSpellsQuery } from '../../../../../../editor/src/state/api/spells'
 
-// ../../../../../../editor/src/state/api/spells
-// Constants
 const drawerWidth = 210
 
 // CSS mixins for open and close states
@@ -343,7 +340,12 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
             },
           }
         )
-        const spellsResponse = await client.service('spells').find()
+
+        const spellsResponse = await client.service('spells').find({
+          query: {
+            projectId: config.projectId,
+          },
+        })
         if ('error' in spellsResponse) {
           enqueueSnackbar('Error fetching spells', {
             variant: 'error',
@@ -362,7 +364,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
     }
 
     fetchData() // Fetch documents from API
-  }, [config.projectId, token, client, enqueueSnackbar])
+  }, [config.projectId, token, client])
 
   useEffect(() => {
     if (!documents || !spells) {

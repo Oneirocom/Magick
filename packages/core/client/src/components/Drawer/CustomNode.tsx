@@ -4,7 +4,7 @@ import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { TypeIcon } from './TypeIcon'
 import styles from './menu.module.css'
-import {useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   node: NodeModel<CustomData>
@@ -28,13 +28,13 @@ export const CustomNode: React.FC<Props> = props => {
     props.onToggle(props.node.id)
   }
 
-  const handleClick = ()=>{
-    if(props.node.fileType === "txt"){
+  const handleClick = () => {
+    if (props.node.fileType === 'txt') {
+      navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
+    } else if (props.node.fileType === 'spell') {
       navigate(
-        `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
+        `/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`
       )
-    }else if (props.node.fileType === "spell") {
-      navigate(`/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`)
     }
   }
 
@@ -68,7 +68,7 @@ export const CustomNode: React.FC<Props> = props => {
             cursor: 'pointer',
             marginLeft: '8px',
           }}
-          onClick = {()=>handleClick()}
+          onClick={() => handleClick()}
         >
           {props.node.text}
         </Typography>
