@@ -90,7 +90,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     data: ApiData,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = data;
+    const { content } = data;
+    const spellId = data?.spellId
 
     const agent = await getAgent(data.agentId, (params?.headers && params.headers['authorization']) as string)
 
@@ -127,7 +128,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
     data: ApiData,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = data
+    const { content } = data
+    const spellId = data?.spellId
 
     const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
 
