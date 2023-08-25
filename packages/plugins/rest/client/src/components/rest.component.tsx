@@ -14,7 +14,7 @@ const fetchGetExample = (selectedAgentData, content) =>`
     fetch("${API_ROOT_URL}/api/${selectedAgentData.id}?content=${encodeURIComponent(content)}", {
     method: 'GET',
     headers: {
-        'Authorization': selectedAgentData.data?.rest_api_key
+        'Authorization': ${selectedAgentData.data?.rest_api_key}
     }
     })
     .then(response => response.json())
@@ -28,7 +28,7 @@ const fetchDeleteExample = (selectedAgentData, content) =>`
     fetch("${API_ROOT_URL}/api/${selectedAgentData.id}?content=${encodeURIComponent(content)}", {
     method: 'GET',
     headers: {
-        'Authorization': selectedAgentData.data?.rest_api_key
+        'Authorization': ${selectedAgentData.data?.rest_api_key}
     }
     })
     .then(response => response.json())
@@ -42,10 +42,10 @@ const fetchPutExample = (selectedAgentData, content) => `
     fetch("${API_ROOT_URL}/api/${selectedAgentData.id}", {
     method: 'PUT',
     headers: {
-        'Authorization': selectedAgentData.data?.rest_api_key,
+        'Authorization': ${selectedAgentData.data?.rest_api_key},
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ content })
+    body: JSON.stringify({ content: "Hello, world" })
     })
     .then(response => response.json())
     .then(data => console.log(data))
@@ -58,10 +58,10 @@ const fetchPostExample = (selectedAgentData, content) => `
     fetch("${API_ROOT_URL}/api", {
     method: 'POST',
     headers: {
-        'Authorization': selectedAgentData.data?.rest_api_key,
+        'Authorization': ${selectedAgentData.data?.rest_api_key},
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ content, agentId: selectedAgentData.id })
+    body: JSON.stringify({ content: "Hellom world", agentId: ${selectedAgentData.id} })
     })
     .then(response => response.json())
     .then(data => console.log(data))
