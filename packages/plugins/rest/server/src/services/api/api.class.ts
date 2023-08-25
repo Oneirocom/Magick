@@ -53,8 +53,8 @@ const getAgent = async (agentId: string, apiKey: string): Promise<Agent> => {
 
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
   implements
-    ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
-{
+ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
+  {
   logger: pino.Logger = getLogger()
 
   // GET
@@ -87,55 +87,58 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
         }
       })
 
-        return {
-          result: result as object
-        }
-      } catch (err) {
-        this.logger.error("Error in ApiService.get: %s", err)
-        throw new GeneralError({
-          error: err
-        })
+      return {
+        result: result as object
       }
+    } catch (err) {
+      this.logger.error("Error in ApiService.get: %s", err)
+      throw new GeneralError({
+        error: err
+      })
     }
+  }
 
-    async create(data: ApiData, params: ServiceParams): Promise<ApiResponse | ApiError> {
-      const { spellId, content } = params.query as ApiData
+  async create(
+    data: ApiData,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { content } = data;
+    const spellId = data?.spellId
 
-      const agentCommander = app.get('agentCommander')
+    const agent = await getAgent(data.agentId, (params?.headers && params.headers['authorization']) as string)
 
-      // little hack since we dynamically add agents to the params in the hooks
-      const agent = (params as unknown as { agent: Agent }).agent
+    const agentCommander = app.get('agentCommander')
 
-      try {
-        const result = await agentCommander.runSpellWithResponse({
-          agent,
-          spellId,
-          inputs: {
-            [`Input - REST API (POST)`]: {
-              connector: "REST API (POST)",
-              content,
-              sender: 'api',
-              observer: agent.name,
-              client: 'rest',
-              channel: 'rest',
-              agentId: agent.id,
-              entities: ['api', agent.name],
-              channelType: 'POST',
-              rawData: "{}"
-            },
-            publicVariables: agent.publicVariables,
-            runSubspell: true
-          }
-        })
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (POST)`]: {
+            connector: 'REST API (POST)',
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'POST',
+            rawData: '{}',
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true,
+        },
+      })
 
-        return {
-          result: result as object
-        }
-      } catch (err) {
-        this.logger.error("Error in ApiService.create: %s", err)
-        throw new GeneralError({
-          error: err
-        })
+      return {
+        result: result as object,
+      }
+    } catch (err) {
+      this.logger.error('Error in ApiService.create: %s', err)
+      throw new GeneralError({
+        error: err,
+      })
     }
   }
 
