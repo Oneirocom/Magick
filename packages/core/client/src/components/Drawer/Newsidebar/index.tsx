@@ -436,7 +436,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
                 }}
               >
                 <DescriptionOutlinedIcon sx={{ mr: 1 }} />
-                <Typography variant="body1">New Document</Typography>
+                <Typography variant="body1">New Knowledge</Typography>
               </div>
             </Menu>
           </div>

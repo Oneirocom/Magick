@@ -1,10 +1,12 @@
 .settings-editor {
   width: 100%;
   height: 100vh !important;
+  overflow: auto;
+  padding: 2em;
 }
 
 .settings-editor > .child {
-  padding: 1.1em;
+  margin-bottom: 2em;
   width: 100%;
 }
 
