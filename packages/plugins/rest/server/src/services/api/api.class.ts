@@ -6,8 +6,11 @@
 import { Application, app } from '@magickml/server-core'
 import type { Agent } from '@magickml/agents'
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
+import { GeneralError } from '@feathersjs/errors'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
+import { pino } from 'pino'
+import { getLogger } from '@magickml/core'
 
 export type { Api, ApiData, ApiPatch, ApiQuery }
 
@@ -50,8 +53,10 @@ const getAgent = async (agentId: string, apiKey: string): Promise<Agent> => {
 
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
   implements
-    ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
-{
+ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
+  {
+  logger: pino.Logger = getLogger()
+
   // GET
   async get(agentId: string, params: ServiceParams): Promise<ApiResponse | ApiError> {
     const { spellId, content } = params.query as ApiData
@@ -60,29 +65,36 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
 
     const agentCommander = app.get('agentCommander')
 
-    const result = await agentCommander.runSpellWithResponse({
-      agent,
-      spellId,
-      inputs: {
-        [`Input - REST API (GET)`]: {
-          connector: 'REST API (GET)',
-          content,
-          sender: 'api',
-          observer: agent.name,
-          client: 'rest',
-          channel: 'rest',
-          agentId: agent.id,
-          entities: ['api', agent.name],
-          channelType: 'GET',
-          rawData: '{}',
-        },
-        publicVariables: agent.publicVariables,
-        runSubspell: true,
-      },
-    })
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (GET)`]: {
+            connector: "REST API (GET)",
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'GET',
+            rawData: "{}"
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true
+        }
+      })
 
-    return {
-      result: result as object,
+      return {
+        result: result as object
+      }
+    } catch (err) {
+      this.logger.error("Error in ApiService.get: %s", err)
+      throw new GeneralError({
+        error: err
+      })
     }
   }
 
@@ -97,29 +109,36 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
 
     const agentCommander = app.get('agentCommander')
 
-    const result = await agentCommander.runSpellWithResponse({
-      agent,
-      spellId,
-      inputs: {
-        [`Input - REST API (POST)`]: {
-          connector: 'REST API (POST)',
-          content,
-          sender: 'api',
-          observer: agent.name,
-          client: 'rest',
-          channel: 'rest',
-          agentId: agent.id,
-          entities: ['api', agent.name],
-          channelType: 'POST',
-          rawData: '{}',
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (POST)`]: {
+            connector: 'REST API (POST)',
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'POST',
+            rawData: '{}',
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true,
         },
-        publicVariables: agent.publicVariables,
-        runSubspell: true,
-      },
-    })
+      })
 
-    return {
-      result: result as object,
+      return {
+        result: result as object,
+      }
+    } catch (err) {
+      this.logger.error('Error in ApiService.create: %s', err)
+      throw new GeneralError({
+        error: err,
+      })
     }
   }
 
@@ -135,29 +154,36 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
 
     const agentCommander = app.get('agentCommander')
 
-    const result = await agentCommander.runSpellWithResponse({
-      agent,
-      spellId,
-      inputs: {
-        [`Input - REST API (UPDATE)`]: {
-          connector: 'REST API (UPDATE)',
-          content,
-          sender: 'api',
-          observer: agent.name,
-          client: 'rest',
-          channel: 'rest',
-          agentId: agent.id,
-          entities: ['api', agent.name],
-          channelType: 'UPDATE',
-          rawData: '{}',
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (UPDATE)`]: {
+            connector: 'REST API (UPDATE)',
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'UPDATE',
+            rawData: '{}',
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true,
         },
-        publicVariables: agent.publicVariables,
-        runSubspell: true,
-      },
-    })
+      })
 
-    return {
-      result: result as object,
+      return {
+        result: result as object,
+      }
+    } catch (err) {
+      this.logger.error('Error in ApiService.update: %s', err)
+      throw new GeneralError({
+        error: err,
+      })
     }
   }
 
@@ -171,29 +197,36 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
 
     const agentCommander = app.get('agentCommander')
 
-    const result = await agentCommander.runSpellWithResponse({
-      agent,
-      spellId,
-      inputs: {
-        [`Input - REST API (DELETE)`]: {
-          connector: 'REST API (DELETE)',
-          content,
-          sender: 'api',
-          observer: agent.name,
-          client: 'rest',
-          channel: 'rest',
-          agentId: agent.id,
-          entities: ['api', agent.name],
-          channelType: 'DELETE',
-          rawData: '{}',
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (DELETE)`]: {
+            connector: 'REST API (DELETE)',
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'DELETE',
+            rawData: '{}',
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true,
         },
-        publicVariables: agent.publicVariables,
-        runSubspell: true,
-      },
-    })
+      })
 
-    return {
-      result: result as object,
+      return {
+        result: result as object,
+      }
+    } catch (err) {
+      this.logger.error("Error in ApiService.remove: %s", err)
+      throw new GeneralError({
+        error: err,
+      })
     }
   }
   
