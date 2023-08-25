@@ -64,10 +64,6 @@ export const api = (app: Application) => {
       ],
     },
     before: {
-      all: [
-        schemaHooks.validateQuery(apiQueryValidator),
-        schemaHooks.resolveQuery(apiQueryResolver),
-      ],
       get: [
         schemaHooks.validateQuery(apiQueryValidator),
         schemaHooks.resolveQuery(apiQueryResolver),
@@ -80,7 +76,10 @@ export const api = (app: Application) => {
         schemaHooks.validateData(apiDataValidator),
         schemaHooks.resolveData(apiDataResolver),
       ],
-      remove: [],
+      remove: [
+        schemaHooks.validateQuery(apiQueryValidator),
+        schemaHooks.resolveQuery(apiQueryResolver),
+      ],
     },
     after: {
       all: [],
