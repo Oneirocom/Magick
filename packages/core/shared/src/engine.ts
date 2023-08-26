@@ -141,7 +141,7 @@ export type NodeCategory =
   | 'Github'
   | 'Discord'
   | 'Embedding'
-  | 'Knowledge'
+  | 'Document'
   | 'Code'
   | 'Boolean'
   | 'Array'

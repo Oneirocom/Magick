@@ -25,17 +25,21 @@ export const apiResolver = resolve<Api, HookContext>({});
 
 export const apiExternalResolver = resolve<Api, HookContext>({});
 
-export const apiDataSchema = Type.Object(
-  {
-    spellId: Type.Optional(Type.String()),
-    agentId: Type.String(),
-    content: Type.String(),
-  },
+/**
+ * Schema for creating new entries
+ */
+export const apiDataSchema = Type.Pick(
+  apiSchema,
+  [
+    'spellId',
+    'agentId',
+    'content',
+    'apiKey',
+  ],
   {
     $id: 'ApiData',
   },
 );
-
 
 export type ApiData = Static<typeof apiDataSchema>;
 export const apiDataValidator = getValidator(apiDataSchema, dataValidator);
@@ -64,8 +68,10 @@ export const apiQueryProperties = Type.Pick(apiSchema, [
 
 export const apiQuerySchema = Type.Object(
   {
+    agentId: Type.String(),
     spellId: Type.Optional(Type.String()),
     content: Type.String(),
+    apiKey: Type.String(),
   },
   { additionalProperties: false },
 );

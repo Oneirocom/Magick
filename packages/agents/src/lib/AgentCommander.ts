@@ -1,7 +1,7 @@
 import EventEmitter from "events"
 import type { Agent } from "@magickml/agents"
 import { type PubSub, type Job } from '@magickml/server-core'
-import { AGENT_RUN_JOB, AGENT_RUN_ERROR, AGENT_RUN_RESULT, AGENT_DELETE, getLogger } from '@magickml/core'
+import { AGENT_RUN_JOB, AGENT_RUN_RESULT, AGENT_DELETE, getLogger } from '@magickml/core'
 import type { MagickSpellInput } from "@magickml/core"
 import { v4 as uuidv4 } from 'uuid'
 import type pino from "pino"
@@ -44,32 +44,19 @@ export class AgentCommander extends EventEmitter {
                     reject(new Error('Timeout'))
                 }, AGENT_RESPONSE_TIMEOUT_MSEC)
 
-                let jobId = null;
-
-                const agentMessageName = AGENT_RUN_RESULT(agent.id);
-
-                this.pubSub.subscribe(agentMessageName, (data: AgentResult) => {
+                this.pubSub.subscribe(AGENT_RUN_RESULT(agent.id), (data: AgentResult) => {
                     if (data.result.error) {
                         this.logger.error(data.result.error)
                         throw new Error(`Error running spell on agent: ${data.result.error}`)
                     }
 
                     if (data.jobId === jobId) {
-                        this.pubSub.unsubscribe(agentMessageName)
+                        this.pubSub.unsubscribe(AGENT_RUN_RESULT(agent.id))
                         resolve(data.result)
                     }
                 })
 
-                const agentErrorName = AGENT_RUN_ERROR(agent.id);
-                this.pubSub.subscribe(agentErrorName, (data: AgentResult) => {
-                    if (data.jobId === jobId) {
-                        this.pubSub.unsubscribe(agentErrorName)
-                        this.pubSub.unsubscribe(agentMessageName)
-                        reject(`Error running spell on agent: ${data.result.error}`)
-                    }
-                })
-
-                jobId = await this.runSpell(args);
+                const jobId = await this.runSpell(args);
             })()
         })
     }

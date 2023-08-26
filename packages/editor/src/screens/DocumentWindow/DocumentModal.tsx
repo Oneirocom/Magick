@@ -70,7 +70,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
 
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add Knowledge</Typography>
+            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add documents</Typography>
           </Grid>
           <Button
             className={styles.btn}
@@ -115,7 +115,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
             </Select>
           </Grid>
           <Grid item xs={6}>
-            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Group</Typography>
+            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Type</Typography>
             <TextField
               name="type"
               style={{ width: '100%', margin: '.5em' }}

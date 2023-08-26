@@ -8,7 +8,6 @@ import {
   getLogger,
   MagickSpellInput,
   AGENT_RUN_RESULT,
-  AGENT_RUN_ERROR,
   AGENT_LOG,
   AGENT_WARN,
   AGENT_ERROR,
@@ -206,35 +205,23 @@ export class Agent implements AgentInterface {
 
     const spellRunner = await this.spellManager.loadById(data.spellId)
 
-    try {
-      this.logger.debug({ spellId: data.spellId, agent: { name: this.name, id: this.id } }, "Running agent's spell")
-      const output = await spellRunner.runComponent({
-        agent: this,
-        secrets: this.secrets,
-        publicVariables: this.publicVariables,
-        runSubspell: data.runSubspell,
-        app,
-        ...data,
-      })
+    // Do we want a debug logger here?
+    const output = await spellRunner.runComponent({
+      agent: this,
+      secrets: this.secrets,
+      publicVariables: this.publicVariables,
+      runSubspell: data.runSubspell,
+      app,
+      ...data,
+    })
 
-      this.publishEvent(AGENT_RUN_RESULT(this.id), {
-        jobId: job.data.jobId,
-        agentId: this.id,
-        projectId: this.projectId,
-        originalData: data,
-        result: output,
-      })
-    } catch (err) {
-      this.logger.error({ spellId: data.spellId, agent: { name: this.name, id: this.id } }, 'Error running agent spell: %o', err)
-
-      this.publishEvent(AGENT_RUN_ERROR(this.id), {
-        jobId: job.data.jobId,
-        agentId: this.id,
-        projectId: this.projectId,
-        originalData: data,
-        result: { "error": err.message },
-      })
-    }
+    this.publishEvent(AGENT_RUN_RESULT(this.id), {
+      jobId: job.data.jobId,
+      agentId: this.id,
+      projectId: this.projectId,
+      originalData: data,
+      result: output,
+    })
   }
 }
 
