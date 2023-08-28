@@ -31,6 +31,7 @@ function AgentMenu({ data, resetData }) {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
   const [selectedAgentData, setSelectedAgentData] = useState<any>(null)
+  const [currentAgent, setCurrentAgent] = useState<any>(null)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
@@ -159,7 +160,10 @@ function AgentMenu({ data, resetData }) {
     marginBottom: '4px',
   }))
 
-  const handleSelectAgent = agent => {}
+  const handleSelectAgent = agent => {
+    setCurrentAgent(agent)
+    // navigate(`/magick/${agent.rootSpellId}-${encodeURIComponent(btoa(agent.rootSpell))}`)
+  }
 
   return (
     <div>
@@ -175,12 +179,18 @@ function AgentMenu({ data, resetData }) {
         >
           <ListItemAvatar>
             <BorderedAvatar
-              alt="Remy Sharp"
-              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
-              sx={{ width: 30, height: 30 }}
+              alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
+              src={
+                currentAgent && currentAgent.image
+                  ? currentAgent.name
+                  : currentAgent?.name?.at(0) || 'A'
+              }
+              sx={{ width: 24, height: 24 }}
             />
           </ListItemAvatar>
-          <ListItemText primary="Agent name" />
+          <ListItemText
+            primary={currentAgent ? currentAgent?.name : 'New agent'}
+          />
           <IconButton
             aria-label="expand"
             size="small"
@@ -215,7 +225,10 @@ function AgentMenu({ data, resetData }) {
         }}
       >
         {data?.map((agent, i) => {
-          const primaryText = selectedAgentData?.id === agent.id ? selectedAgentData.name : agent?.name;
+          const primaryText =
+            selectedAgentData?.id === agent.id
+              ? selectedAgentData.name
+              : agent?.name
           return (
             <>
               <MenuItem
@@ -364,7 +377,8 @@ function AgentMenu({ data, resetData }) {
         }}
       >
         <MenuItem
-         sx={{ py: 0 ,
+          sx={{
+            py: 0,
             '&:hover, &:focus': {
               background: 'none',
               outline: 'none',
@@ -380,7 +394,8 @@ function AgentMenu({ data, resetData }) {
         </MenuItem>
         <StyledDivider />
         <MenuItem
-          sx={{ py: 0 ,
+          sx={{
+            py: 0,
             '&:hover, &:focus': {
               background: 'none',
               outline: 'none',
@@ -395,7 +410,8 @@ function AgentMenu({ data, resetData }) {
         </MenuItem>
         <StyledDivider />
         <MenuItem
-         sx={{ py: 0 ,
+          sx={{
+            py: 0,
             '&:hover, &:focus': {
               background: 'none',
               outline: 'none',
@@ -410,7 +426,8 @@ function AgentMenu({ data, resetData }) {
         </MenuItem>
         <StyledDivider />
         <MenuItem
-         sx={{ py: 0 ,
+          sx={{
+            py: 0,
             '&:hover, &:focus': {
               background: 'none',
               outline: 'none',
