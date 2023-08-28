@@ -30,7 +30,7 @@ function AgentMenu({ data, resetData }) {
   const [openMenu2, setOpenMenu2] = useState(null)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
-  const [selectedAgentData, setSelectedAgentData] = useState<any>()
+  const [selectedAgentData, setSelectedAgentData] = useState<any>(null)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
@@ -64,7 +64,7 @@ function AgentMenu({ data, resetData }) {
 
   const handleCloseMenu2 = () => {
     setOpenMenu2(null)
-  };
+  }
 
   const update = (id: string, data = undefined) => {
     const _data = data || { ...selectedAgentData }
@@ -131,22 +131,22 @@ function AgentMenu({ data, resetData }) {
     const file = event.target.files[0]
     if (file) {
       const reader = new FileReader()
-      reader.onloadend = () => { 
+      reader.onloadend = () => {
         setSelectedAgentData({
           ...selectedAgentData,
-          image: reader.result ,
+          image: reader.result,
         })
-        console.log("agent" , selectedAgentData);
+        console.log('agent', selectedAgentData)
         update(selectedAgentData.id)
       }
-  
+
       // reader.onload =(e: ProgressEvent<FileReader>) => {
       //   setSelectedAgentData({
       //     ...selectedAgentData,
       //     image: e.target?.result as string,
       //   })
       //   console.log("agent" , selectedAgentData);
-        
+
       //   update(selectedAgentData.id)
       // }
       reader.readAsDataURL(file)
@@ -215,6 +215,7 @@ function AgentMenu({ data, resetData }) {
         }}
       >
         {data?.map((agent, i) => {
+          const primaryText = selectedAgentData?.id === agent.id ? selectedAgentData.name : agent?.name;
           return (
             <>
               <MenuItem
@@ -287,7 +288,7 @@ function AgentMenu({ data, resetData }) {
                       src={agent.image ? agent.name : agent?.name?.at(0) || 'A'}
                       sx={{ width: 24, height: 24 }}
                     />
-                    <ListItemText primary={agent?.name} sx={{ ml: 2 }} />
+                    <ListItemText primary={primaryText} sx={{ ml: 2 }} />
                   </ListItemAvatar>
                 )}
                 <ListItemIcon sx={{ placeContent: 'end' }}>
@@ -363,7 +364,12 @@ function AgentMenu({ data, resetData }) {
         }}
       >
         <MenuItem
-          sx={{ py: 0 }}
+         sx={{ py: 0 ,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
           onClick={e => {
             setEditMode(true)
             setOldName(selectedAgentData.name)
@@ -374,7 +380,12 @@ function AgentMenu({ data, resetData }) {
         </MenuItem>
         <StyledDivider />
         <MenuItem
-          sx={{ py: 0 }}
+          sx={{ py: 0 ,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
           onClick={e => {
             setOpenConfirm(true)
             handleCloseMenu2()
@@ -384,7 +395,12 @@ function AgentMenu({ data, resetData }) {
         </MenuItem>
         <StyledDivider />
         <MenuItem
-          sx={{ py: 0 }}
+         sx={{ py: 0 ,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
           onClick={() => {
             imageInputRef?.current?.click()
             handleCloseMenu2()
@@ -393,7 +409,19 @@ function AgentMenu({ data, resetData }) {
           Change Image
         </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{ py: 0 }}>Other Options</MenuItem>
+        <MenuItem
+         sx={{ py: 0 ,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+          onClick={() => {
+            navigate(`/magick/Agents-${encodeURIComponent(btoa('Agents'))}`)
+          }}
+        >
+          Other Options
+        </MenuItem>
       </Menu>
       {selectedAgentData && (
         <Modal
