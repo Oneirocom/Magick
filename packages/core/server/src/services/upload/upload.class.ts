@@ -2,6 +2,7 @@ import { BadRequest } from '@feathersjs/errors'
 import AWS from 'aws-sdk'
 import multer from 'multer'
 import multerS3 from 'multer-s3'
+import { GlobalConfigInstance } from 'aws-sdk/lib/config'
 
 export class UploadService {
   s3: AWS.S3
@@ -14,7 +15,10 @@ export class UploadService {
       secretAccessKey: process.env.AWS_SECRET_KEY,
       region: process.env.AWS_REGION,
     })
-    this.s3 = new AWS.S3()
+    this.s3 = new AWS.S3({
+      endpoint: process.env.AWS_BUCKET_ENDPOINT,
+      s3ForcePathStyle: true,
+    })
 
     // Set up multer to upload files to S3
     this.uploader = multer({
