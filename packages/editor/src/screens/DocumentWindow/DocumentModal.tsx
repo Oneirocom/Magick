@@ -70,7 +70,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
 
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add Knowledge</Typography>
+            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add Document</Typography>
           </Grid>
           <Button
             className={styles.btn}
