@@ -5,7 +5,7 @@
  */
 import { Outlet } from 'react-router-dom'
 import ModalProvider from '../../contexts/ModalProvider'
-import { DrawerProvider } from '@magickml/client-core'
+import { DrawerProvider, TreeDataProvider } from '@magickml/client-core'
 
 /**
  * Main layout component.
@@ -15,9 +15,11 @@ import { DrawerProvider } from '@magickml/client-core'
 const MainLayout = (): JSX.Element => {
   return (
     <ModalProvider>
-      <DrawerProvider>
-        <Outlet />
-      </DrawerProvider>
+      <TreeDataProvider>
+        <DrawerProvider>
+          <Outlet />
+        </DrawerProvider>
+      </TreeDataProvider>
     </ModalProvider>
   )
 }
