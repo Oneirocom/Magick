@@ -305,7 +305,7 @@ function DocumentTable({ documents, updateCallback }) {
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
             <Typography variant="h4" className={styles.header}>
-            Documents
+              Documents
             </Typography>
             <div className={styles.flex}>
               <Button
