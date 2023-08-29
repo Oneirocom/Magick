@@ -70,7 +70,19 @@ export async function initApp() {
   app.use(cors({ origin: '*' }))
   app.use(errorHandler())
   app.use(parseAuthentication())
-  app.use(bodyParser({ jsonLimit: '200mb', formLimit: '200mb', multipart: true }))
+  app.use(
+    bodyParser({ jsonLimit: '200mb', formLimit: '256mb', multipart: true })
+  )
+  app.use(async (ctx, next) => {
+    if (ctx.request.files?.files) {
+      if (ctx.request.files?.files instanceof Array) {
+        ctx.request.body.files = ctx.request.files?.files
+      } else {
+        ctx.request.body.files = [ctx.request.files?.files]
+      }
+    }
+    await next()
+  })
 
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
@@ -92,7 +104,7 @@ export async function initApp() {
 
   const redis = new Redis({
     ...bullMQConnection,
-    maxRetriesPerRequest: null
+    maxRetriesPerRequest: null,
   })
   app.set('redis', redis)
 
