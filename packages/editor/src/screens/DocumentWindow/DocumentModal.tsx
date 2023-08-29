@@ -2,7 +2,6 @@ import { Modal } from '@magickml/client-core';
 import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
-import { convertFileToText } from './documentconvert';
 import styles from './index.module.scss';
 import { useSnackbar } from 'notistack'
 
@@ -11,7 +10,8 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   const { enqueueSnackbar } = useSnackbar()
   const [newDocument, setDocument] = useState({
     type: '',
-    content: ''
+    content: '',
+    files: []
   });
 
   useEffect(() => {
@@ -21,18 +21,19 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   function handleFileUpload() {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = '.pdf,.doc,.docx,.doc,.xlsx,.xls,.ppt,.pptx'; // Specify the file formats to accept, if needed
+    inputElement.accept = '.eml,.html,.json,.md,.msg,.rst,.rtf,.txt,.xml,.jpeg,.jpg,.png,.csv,.doc,.docx,.epub,.odt,.pdf,.ppt,.pptx,.tsv,.xlsx'; // Specify the file formats to accept, if needed
     inputElement.click();
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files;
 
       if (files && files.length > 0) {
-        const uploadedFile = files[0];
         setLoading(true);
-        const text = await convertFileToText(uploadedFile)
+        const newfiles = []
+        for (const file of files) {
+          newfiles.push(file)
+        }
+        setDocument({ ...newDocument, files: newfiles })
         setLoading(false)
-        console.log(text)
-        setDocument({ ...newDocument, content: Array.isArray(text) ? text.join() : text })
       }
     });
   }
@@ -57,7 +58,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
       enqueueSnackbar('Please fill in all required fields.', { variant: 'error' });
     }
   };
-  
+
   return (
     <Modal
       open={createMode}
