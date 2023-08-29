@@ -17,6 +17,7 @@ import {
   ProjectWindowProvider,
   useProjectWindow,
 } from '../../../contexts/ProjectWindowContext'
+import { useTreeData } from '../../../contexts/TreeDataProvider'
 import ProjectWindow from '../ProjectWindow'
 import { SetAPIKeys } from '../SetAPIKeys'
 import { Tooltip, Typography } from '@mui/material'
@@ -30,7 +31,6 @@ import {
   MultiBackend,
   getBackendOptions,
 } from '@minoru/react-dnd-treeview'
-import SampleData from '../sampleData.json'
 import styles from '../menu.module.css'
 import { CustomNode } from '../CustomNode'
 import AddIcon from '@mui/icons-material/Add'
@@ -43,10 +43,6 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
-import { useConfig, useFeathers } from '@magickml/client-core'
-import { useSnackbar } from 'notistack'
-import { API_ROOT_URL } from '@magickml/config'
-import { useSelector } from 'react-redux'
 
 const drawerWidth = 210
 
@@ -220,25 +216,19 @@ type DrawerProps = {
 /**
  * The main Drawer component that wraps around the application content.
  */
-export function NewSidebar({ children }: DrawerProps): JSX.Element {
+export function NewSidebar(DrawerProps): JSX.Element {
   const location = useLocation()
-  const config = useConfig()
   const navigate = useNavigate()
   const { openProjectWindow, openDrawer, setOpenDrawer, setOpenProjectWindow } =
     useProjectWindow()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
-  const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
-  const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
-  const [documents, setDocuments] = useState<Document[] | null>(null)
-  const [spells, setSpells] = useState<any>(null)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
-  const FeathersContext = useFeathers()
-  const client = FeathersContext.client
-  const { enqueueSnackbar } = useSnackbar()
+  const { treeData, setTreeData } = useTreeData()
+  const handleDrop = (newTree: NodeModel[]) => {
+    setTreeData(newTree)
+  }
 
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
@@ -298,93 +288,6 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
       document.removeEventListener('click', handleDocumentClick)
     }
   }, [menuAnchorEl])
-
-  function truncateDocs(str, n) {
-    if (str.length > n) {
-      return str.substring(0, n) + '...'
-    }
-    return str
-  }
-
-  function addNewItem(id, parent, text, fileType) {
-    const newItem = {
-      id: id,
-      parent: parent,
-      droppable: false,
-      text: text,
-      fileType: fileType,
-    }
-
-    setTreeData(prevData => {
-      const updatedData = prevData.slice() // Create a copy of the existing data array
-
-      const parentIndex = updatedData.findIndex(item => item.id === parent)
-
-      if (parentIndex !== -1) {
-        updatedData.splice(parentIndex + 1, 0, newItem) // Insert new item after parent
-      }
-
-      return updatedData // Return the updated data
-    })
-  }
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-
-        const spellsResponse = await client.service('spells').find({
-          query: {
-            projectId: config.projectId,
-          },
-        })
-        if ('error' in spellsResponse) {
-          enqueueSnackbar('Error fetching spells', {
-            variant: 'error',
-          })
-        } else {
-          const fetchedSpells = spellsResponse.data
-          setSpells(fetchedSpells)
-        }
-
-        const data = await response.json()
- 
-        setDocuments(data.data)
-      } catch (error) {
-        console.error('ERROR', error)
-      }
-    }
-
-    fetchData() // Fetch documents from API
-  }, [config.projectId, token, client])
-
-  useEffect(() => {
-    if (!documents || !spells) {
-      return // Exit early if documents or spells are not available
-    }
-
-    const addedSpellIds = new Set() // Keep track of added spell IDs
-
-    // Adding documents
-    documents.forEach((doc, index) => {
-      addNewItem(doc?.id, 3, truncateDocs(doc?.content, 8), 'txt')
-    })
-
-    // Adding spells without duplicates
-    spells.forEach((spell, index) => {
-      if (!addedSpellIds.has(spell.id)) {
-        addNewItem(spell.id, 6, spell.name, 'spell')
-        addedSpellIds.add(spell.id)
-      }
-    })
-  }, [documents, spells])
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
