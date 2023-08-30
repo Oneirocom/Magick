@@ -332,7 +332,6 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
           publicVariables: '{}',
           secrets: '{}',
         })
-        console.log('hekasdasdasd........>', json.data.length)
         setData(json.data)
       } else {
         setData(json.data)

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react';
 import { styled } from '@mui/material/styles'
 import Avatar from '@mui/material/Avatar'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -71,10 +71,13 @@ function AgentMenu({ data, resetData }) {
     setOpenMenu1(null)
   }
 
-  const handleToggleMenu2 = (agent, event) => {
-    setOpenMenu2(event.currentTarget)
-    setSelectedAgentData(agent)
-  }
+  const handleToggleMenu2 = useCallback(
+    (agent, event) => {
+      setOpenMenu2(event.currentTarget);
+      setSelectedAgentData(agent);
+    },
+    [] // No external dependencies, so this callback won't change
+  );
 
   const handleCloseMenu2 = () => {
     setOpenMenu2(null)
@@ -111,6 +114,7 @@ function AgentMenu({ data, resetData }) {
         enqueueSnackbar('Updated agent', {
           variant: 'success',
         })
+        resetData()
         setSelectedAgentData(data)
       })
       .catch(e => {
@@ -173,6 +177,9 @@ function AgentMenu({ data, resetData }) {
     marginBottom: '4px',
   }))
 
+
+
+  
   const handleSelectAgent = (agent: Agent) => {
     setCurrentAgent(agent);
   
