@@ -52,8 +52,6 @@ const AgentDetails = ({
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
 
-  console.log("******************", selectedAgentData)
-
   const [rootSpell, setRootSpell] = useState<any>(null)
   useEffect(() => {
     if (spellList.length === 0) {
