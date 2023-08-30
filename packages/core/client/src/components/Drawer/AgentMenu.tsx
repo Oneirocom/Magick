@@ -24,6 +24,17 @@ import { Modal } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 
+interface Spell {
+  id: number;
+  name: string;
+  // Add other relevant properties
+}
+
+interface Agent {
+  rootSpellId: number;
+  // Add other relevant properties
+}
+
 function AgentMenu({ data, resetData }) {
   const navigate = useNavigate()
   const [openMenu1, setOpenMenu1] = useState(null)
@@ -36,7 +47,7 @@ function AgentMenu({ data, resetData }) {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
-  const spellList = useSpellList()
+  const spellList: Spell[] = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
 
   const handleClose = () => {
@@ -162,7 +173,7 @@ function AgentMenu({ data, resetData }) {
     marginBottom: '4px',
   }))
 
-  const handleSelectAgent = agent => {
+  const handleSelectAgent = (agent: Agent) => {
     setCurrentAgent(agent);
   
     if (spellList) {
@@ -177,13 +188,13 @@ function AgentMenu({ data, resetData }) {
         const url = `/magick/${agent.rootSpellId}-${encodedSpellName}`;
         
         // Navigate to the URL
-        navigate(url); // Assuming navigate is a valid function for navigation
+        navigate(url);
       }
     }
   };
   
 
-  console.log(spellList)
+  
 
   return (
     <div>
