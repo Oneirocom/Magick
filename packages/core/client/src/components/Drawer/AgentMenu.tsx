@@ -191,6 +191,7 @@ function AgentMenu({ data, resetData }) {
         navigate(url);
       }
     }
+    handleCloseMenu1()
   };
   
 
@@ -274,7 +275,7 @@ function AgentMenu({ data, resetData }) {
                   },
                 }}
                 key={i}
-                onClick={() => handleSelectAgent(agent)}
+                
               >
                 {editMode && selectedAgentData?.id === agent?.id ? (
                   <>
@@ -328,11 +329,11 @@ function AgentMenu({ data, resetData }) {
                     }}
                   >
                     <BorderedAvatar
-                      alt={agent?.name?.at(0) || 'A'}
-                      src={agent.image ? agent.name : agent?.name?.at(0) || 'A'}
+                      alt={primaryText.at(0) || 'A'}
+                      src={agent.image ? agent.name : primaryText.at(0) || 'A'}
                       sx={{ width: 24, height: 24 }}
                     />
-                    <ListItemText primary={primaryText} sx={{ ml: 2 }} />
+                    <ListItemText onClick={() => handleSelectAgent(agent)} primary={primaryText} sx={{ ml: 2 }} />
                   </ListItemAvatar>
                 )}
                 <ListItemIcon sx={{ placeContent: 'end' }}>
