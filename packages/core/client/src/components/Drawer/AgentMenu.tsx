@@ -22,6 +22,7 @@ import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
+import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 
 function AgentMenu({ data, resetData }) {
   const navigate = useNavigate()
@@ -35,6 +36,7 @@ function AgentMenu({ data, resetData }) {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
+  const spellList = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
 
   const handleClose = () => {
@@ -161,9 +163,27 @@ function AgentMenu({ data, resetData }) {
   }))
 
   const handleSelectAgent = agent => {
-    setCurrentAgent(agent)
-    // navigate(`/magick/${agent.rootSpellId}-${encodeURIComponent(btoa(agent.rootSpell))}`)
-  }
+    setCurrentAgent(agent);
+  
+    if (spellList) {
+      // Find a spell with the same ID as agent.rootSpellId
+      const matchingSpell = spellList.find(spell => spell.id === agent.rootSpellId);
+  
+      if (matchingSpell) {
+        const spellName = matchingSpell.name;
+  
+        // Construct the URL
+        const encodedSpellName = encodeURIComponent(btoa(spellName));
+        const url = `/magick/${agent.rootSpellId}-${encodedSpellName}`;
+        
+        // Navigate to the URL
+        navigate(url); // Assuming navigate is a valid function for navigation
+      }
+    }
+  };
+  
+
+  console.log(spellList)
 
   return (
     <div>
