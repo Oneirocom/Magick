@@ -14,6 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useTreeData } from '../../contexts/TreeDataProvider'
 
 
 
@@ -193,6 +194,7 @@ export const TableComponent = ({
   const [order, setOrder] = React.useState<Order>(
     fieldOrder === 'desc' ? 'desc' : 'asc'
   )
+  const { openDoc } = useTreeData()
   const [orderBy, setOrderBy] = React.useState<keyof Data>(
     fieldOrderBy ? fieldOrderBy : column[0].id
   )
@@ -250,6 +252,13 @@ export const TableComponent = ({
   //   setPage(0)
   // }
 
+  React.useEffect(() => {
+    if (openDoc) {
+      
+      handleRowClick(openDoc)
+    }
+  }, [openDoc])
+
   const isSelected = (name: string) => selectedRows && selectedRows.indexOf(name) !== -1
 
   function truncateText(text, maxLength, isExpanded) {
@@ -266,12 +275,14 @@ export const TableComponent = ({
 
   const handleRowClick = (rowId: string) => {
     if (expandedRows.includes(rowId)) {
-      setExpandedRows(expandedRows.filter(id => id !== rowId));
+      // If the clicked row is already expanded, close it
+      setExpandedRows([]);
     } else {
-      setExpandedRows([...expandedRows, rowId]);
+      // If the clicked row is not expanded, close all other rows and expand the clicked row
+      setExpandedRows([rowId]);
     }
   };
-
+  
 
   return (
     <React.Fragment>

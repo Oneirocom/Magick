@@ -5,6 +5,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { TypeIcon } from './TypeIcon'
 import styles from './menu.module.css'
 import { useNavigate } from 'react-router-dom'
+import { useTreeData } from '../../contexts/TreeDataProvider'
 
 type Props = {
   node: NodeModel<CustomData>
@@ -22,6 +23,7 @@ export const CustomNode: React.FC<Props> = props => {
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
   const navigate = useNavigate()
+  const { setOpenDoc} = useTreeData()
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -30,6 +32,7 @@ export const CustomNode: React.FC<Props> = props => {
 
   const handleClick = () => {
     if (props.node.fileType === 'txt') {
+      setOpenDoc(props.node.id)
       navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
     } else if (props.node.fileType === 'spell') {
       navigate(
