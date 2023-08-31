@@ -97,6 +97,7 @@ export const documentSchema = Type.Object(
     date: Type.Optional(Type.String()),
     embedding: Type.Optional(Type.Any()),
     metadata: Type.Optional(Type.Any()),
+    files: Type.Optional(Type.Any()),
   },
   {
     $id: 'Document',
