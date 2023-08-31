@@ -6,12 +6,16 @@ import { Upload } from '../../plugins/reactRenderPlugin/Upload'
 import { Tooltip } from '@mui/material'
 import { Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 
 /**
  * Custom Node component for rendering nodes with specific functionality.
  * Inherits from the base Node class.
  */
+
+
+
+
 export class MyNode extends Node {
   declare props: any
   declare state: any
@@ -57,11 +61,9 @@ export class MyNode extends Node {
         el.classList.remove('selected')
       })
     }
-
-    const StyledToolTip = styled(Tooltip)` 
-      pointer-events: none;
-    `; 
-
+    const StyleTooltip = styled(Tooltip)`
+    width: initial;
+    `
     return (
       <div
         className={`${css['node']} ${css[selected]} ${
@@ -107,13 +109,13 @@ export class MyNode extends Node {
                     />
                   </div>
                   {!input.showControl() && (
-                    <StyledToolTip
+                    <StyleTooltip
                       title={`Input:${input.name}`}
                       placement="left"
-                      enterDelay={500}
+                      enterNextDelay={2000} 
                     >
                       <div className="input-title">{input.name}</div>
-                    </StyledToolTip>
+                    </StyleTooltip>
                   )}
                   {input.showControl() && (
                     <Control
@@ -134,13 +136,13 @@ export class MyNode extends Node {
                     output.connections.forEach(element => {
                       element.data = { ...element.data, hello: 'hello' }
                     })}
-                  <StyledToolTip
+                  <StyleTooltip
                     title={`output: ${output.name}`}
                     placement="right"
-                    enterDelay={500}
+                    enterNextDelay={2000} 
                   >
                     <div className="output-title">{output.name}</div>
-                  </StyledToolTip>
+                  </StyleTooltip>
 
                   <div
                     onMouseEnter={() => handleMouseEnter(output)}

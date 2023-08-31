@@ -27,7 +27,7 @@ export class CloudAgentManager {
         this.agentStateReporter = args.agentStateReporter
         this.pubSub = app.get('pubsub')
 
-        this.startup().then(() => this.heartbeat())
+        this.startup()
     }
 
     async startup() {
@@ -77,6 +77,7 @@ export class CloudAgentManager {
         })
     }
 
+    // Eventually we'll need this heartbeat to keep track of running agents on workers
     async heartbeat() {
         this.pubSub.subscribe('cloud-agent-manager:pong', async (list) => {
             const listData = JSON.parse(list) as AgentListRecord
