@@ -71,14 +71,6 @@ const fetchPostExample = (selectedAgentData, content) => `
 `;
 
 /**
- * Generate a random hash.
- * @returns {string} - A random hash generated using the md5 function.
- */
-const randomHash = (): string => {
-    return md5(Math.random().toString())
-}
-
-/**
  * RestAgentWindow component enables users to control the REST API settings.
  * @param {object} props - Props for the RestAgentWindow component.
  * @returns {JSX.Element} - RestAgentWindow component.
@@ -110,18 +102,6 @@ export const RestAgentWindow: FC<any> = props => {
             setDisable(false)
         }
     }, [props.enable, selectedAgentData])
-
-    useEffect(() => {
-        if (!selectedAgentData.data?.rest_api_key) {
-            setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                    ...selectedAgentData.data,
-                    rest_api_key: randomHash(),
-                },
-            })
-        }
-    }, [selectedAgentData.data])
 
     return (
         <>
