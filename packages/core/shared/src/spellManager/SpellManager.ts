@@ -24,7 +24,7 @@ type RunArgs = {
 }
 
 export default class SpellManager {
-  spellRunnerMap: Map<string, SpellRunner> = new Map()
+  spellRunnerMap: Map<string, SpellRunner[]> = new Map()
   socket?: io.Socket
   cache: boolean
   app: Application
@@ -54,8 +54,8 @@ export default class SpellManager {
     }
   }
 
-  getSpellRunner(spellId: string) {
-    return this.spellRunnerMap.get(spellId)
+  getReadySpellRunner(spellId: string) {
+    return this.spellRunnerMap.get(spellId)?.find((runner) => !runner.isBusy())
   }
 
   hasSpellRunner(spellId: string) {
@@ -73,9 +73,9 @@ export default class SpellManager {
 
       if (
         this.hasSpellRunner(spellId)
-        && isEqual(this.getSpellRunner(spellId)!.currentSpell.graph, spell.graph)
+        && isEqual(this.getReadySpellRunner(spellId)!.currentSpell.graph, spell.graph)
       ) {
-        return this.getSpellRunner(spellId)
+        return this.getReadySpellRunner(spellId)
       }
 
       this.logger.debug(`Reloading spell ${spellId}`)
@@ -102,8 +102,7 @@ export default class SpellManager {
 
     await spellRunner.loadSpell(spell)
 
-    // maybe we make a map of maps here to keep track of the multiple instances of spells?
-    this.spellRunnerMap.set(spell.id, spellRunner)
+    this.spellRunnerMap.get(spell.id)?.push(spellRunner)
 
     return spellRunner
   }
@@ -121,7 +120,7 @@ export default class SpellManager {
         agent: this.agent,
       })
     } else {
-      const runner = this.getSpellRunner(spellId)
+      const runner = this.getReadySpellRunner(spellId)
       result = await runner?.runComponent(runArgs) ?? undefined
     }
 
