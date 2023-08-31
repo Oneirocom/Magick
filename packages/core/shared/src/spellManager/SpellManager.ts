@@ -102,7 +102,12 @@ export default class SpellManager {
 
     await spellRunner.loadSpell(spell)
 
-    this.spellRunnerMap.get(spell.id)?.push(spellRunner)
+    const spellRunnerList = this.spellRunnerMap.get(spell.id)
+    if (spellRunnerList) {
+      spellRunnerList.push(spellRunner)
+    } else {
+      this.spellRunnerMap.set(spell.id, [spellRunner])
+    }
 
     return spellRunner
   }
