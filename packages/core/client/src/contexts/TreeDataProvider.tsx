@@ -7,18 +7,21 @@ import { useSelector } from 'react-redux'
 import SampleData from './data/sampleData.json'
 
 interface TreeDataContextType {
-  treeData: NodeModel[];
-  setTreeData: React.Dispatch<React.SetStateAction<NodeModel[]>>;
-  isAdded: boolean;
-  setIsAdded: React.Dispatch<React.SetStateAction<boolean>>; // Add this line
+  treeData: NodeModel[]
+  setTreeData: React.Dispatch<React.SetStateAction<NodeModel[]>>
+  isAdded: boolean
+  setIsAdded: React.Dispatch<React.SetStateAction<boolean>>
+  docState: boolean
+  setDocState: React.Dispatch<React.SetStateAction<boolean>>
 }
-
 
 const TreeDataContext = createContext<TreeDataContextType>({
   treeData: [],
   setTreeData: () => {},
   isAdded: false,
-  setIsAdded: ()=>{}
+  setIsAdded: () => {},
+  docState: false,
+  setDocState: () => {},
 })
 
 export const useTreeData = () => useContext(TreeDataContext)
@@ -38,7 +41,8 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   const [isAdded, setIsAdded] = useState(false)
-  const [addedSpellIds, setAddedSpellIds] = useState(new Set());
+  const [addedSpellIds, setAddedSpellIds] = useState(new Set())
+  const [docState, setDocState] = useState(false)
 
   function truncateDocs(str, n) {
     if (str.length > n) {
@@ -69,97 +73,109 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     })
   }
 
+  const fetchData = async () => {
+    //first initialize states to null
+    setDocuments(null)
+    setSpells(null)
+    try {
+      // Fetch your data here...
+      const response = await fetch(
+        `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
 
-
-const fetchData = async () => {
-  try {
-    // Fetch your data here...
-    const response = await fetch(
-      `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const spellsResponse = await client.service('spells').find({
+        query: {
+          projectId: config.projectId,
         },
+      })
+
+      if ('error' in spellsResponse) {
+        enqueueSnackbar('Error fetching spells', {
+          variant: 'error',
+        })
+      } else {
+        const fetchedSpells = spellsResponse.data
+        setSpells(fetchedSpells)
       }
-    );
 
-    const spellsResponse = await client.service('spells').find({
-      query: {
-        projectId: config.projectId,
-      },
-    });
+      const data = await response.json()
 
-    if ('error' in spellsResponse) {
-      enqueueSnackbar('Error fetching spells', {
-        variant: 'error',
-      });
-    } else {
-      const fetchedSpells = spellsResponse.data;
-      setSpells(fetchedSpells);
+      setDocuments(data.data)
+    } catch (error) {
+      console.error('ERROR', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData() // Fetch data initially
+  }, [config.projectId, token, client])
+
+  useEffect(() => {
+    if (isAdded || docState) {
+      console.log(docState)
+
+      fetchData() // Fetch data again when isAdded is set to true
+      setIsAdded(false) // Reset isAdded after fetching
+      setDocState(false)
+    }
+  }, [isAdded, docState])
+
+  useEffect(() => {
+    if (!documents || !spells) {
+      return // Exit early if documents or spells are not available
     }
 
-    const data = await response.json();
+    //  console.log("Spells===>>>",spells);
 
-    setDocuments(data.data);
-  } catch (error) {
-    console.error('ERROR', error);
-  }
-};
-
-useEffect(() => {
-  fetchData(); // Fetch data initially
-}, [config.projectId, token, client]);
-
-useEffect(() => {
-  if (isAdded) {
-    console.log(isAdded);
-    
-    fetchData(); // Fetch data again when isAdded is set to true
-    setIsAdded(false); // Reset isAdded after fetching
-  }
-}, [isAdded]);
-
-useEffect(() => {
-  if (!documents || !spells) {
-    return; // Exit early if documents or spells are not available
-  }
-  
-
-//  console.log("Spells===>>>",spells);
-  
-
-  // Function to add new item to the tree data while avoiding duplication
-  const addNewItemWithoutDuplication = (id, parent, text, fileType) => {
-    if (!addedSpellIds.has(id)) {
-      console.log(id, parent, text, fileType)
-      addNewItem(id, parent, text, fileType); // Add the new item
-      setAddedSpellIds(prevIds => new Set(prevIds).add(id)); // Update addedSpellIds
+    // Function to add new item to the tree data while avoiding duplication
+    const addNewItemWithoutDuplication = (id, parent, text, fileType) => {
+      if (!addedSpellIds.has(id)) {
+        console.log(id, parent, text, fileType)
+        addNewItem(id, parent, text, fileType) // Add the new item
+        setAddedSpellIds(prevIds => new Set(prevIds).add(id)) // Update addedSpellIds
+      }
     }
-  };
 
-  // Adding documents
-  documents.forEach((doc, index) => {
-    addNewItemWithoutDuplication(doc?.id, 3, truncateDocs(doc?.content, 8), 'txt');
-  });
+    // Adding documents
+    documents.forEach((doc, index) => {
+      console.log(doc)
 
-  // Adding spells without duplicates
-  spells.forEach((spell, index) => {
-    // console.log(spell);
-  
-    addNewItemWithoutDuplication(spell.id, 6, spell.name, 'spell');
-  });
-  // setAddedSpellIds(new Set());
-}, [documents, spells, addedSpellIds]);
- 
+      addNewItemWithoutDuplication(
+        doc?.id,
+        3,
+        truncateDocs(doc?.content, 8),
+        'txt'
+      )
+    })
 
+    // Adding spells without duplicates
+    spells.forEach((spell, index) => {
+      // console.log(spell);
 
-//  console.log(isAdded);
-  
+      addNewItemWithoutDuplication(spell.id, 6, spell.name, 'spell')
+    })
+    // setAddedSpellIds(new Set());
+  }, [documents, spells, addedSpellIds])
+
+  //  console.log(isAdded);
 
   return (
-    <TreeDataContext.Provider value={{ treeData, setTreeData, isAdded, setIsAdded }}>.     
-      {children}
+    <TreeDataContext.Provider
+      value={{
+        treeData,
+        setTreeData,
+        isAdded,
+        setIsAdded,
+        docState,
+        setDocState,
+      }}
+    >
+      .{children}
     </TreeDataContext.Provider>
   )
 }
-

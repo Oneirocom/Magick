@@ -87,7 +87,7 @@ function DocumentTable({ documents, updateCallback }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
-  const { setIsAdded } = useTreeData();
+  const { setDocState } = useTreeData();
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -201,8 +201,8 @@ function DocumentTable({ documents, updateCallback }) {
       },
     })
     if (isDeleted){
-      setIsAdded(true);
       enqueueSnackbar('document deleted', { variant: 'success' })
+      setDocState(true);
     } 
     else enqueueSnackbar('Error deleting document', { variant: 'error' })
 
@@ -252,7 +252,6 @@ const handleSave = async (selectedModel) => {
   });
   // Check if the save operation was successful
   if (result.ok) {
-    setIsAdded(true);
     // Reset newDocument
     setNewDocument({
       type: '',
@@ -262,11 +261,12 @@ const handleSave = async (selectedModel) => {
       embedding: '',
     });
     enqueueSnackbar('Document saved successfully', { variant: 'success' });
-
-
+    
+    
     // Close the modal by setting createMode to false after a delay
     setTimeout(() => {
       setCreateMode(false);
+      setDocState(true);
     }, 2000);
 
     // Trigger the updateCallback function to update the table after a delay
