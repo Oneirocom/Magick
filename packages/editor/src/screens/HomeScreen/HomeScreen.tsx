@@ -3,7 +3,6 @@ import { LoadingScreen } from '@magickml/client-core'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-
 import { useConfig } from '@magickml/client-core'
 import {
   useDeleteSpellMutation,
@@ -33,7 +32,7 @@ const StartScreen = (): JSX.Element => {
     projectId: config.projectId,
   })
   const [newSpell] = useNewSpellMutation()
-  const { setIsAdded,setDeletedSpell } = useTreeData();
+  const { setIsAdded, setToDelete } = useTreeData();
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
 
   /**
@@ -86,7 +85,7 @@ const StartScreen = (): JSX.Element => {
     try {
       await deleteSpell({ spellName, projectId: config.projectId })
       setIsAdded(true);
-      setDeletedSpell(spellName);
+      setToDelete(spellName);
       const tab = tabs.find(tab => tab.id === spellName)
       if (tab) {
         dispatch(closeTab(tab.id))

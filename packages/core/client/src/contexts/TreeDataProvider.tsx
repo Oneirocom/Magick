@@ -13,6 +13,17 @@ interface TreeDataContextType {
   setIsAdded: React.Dispatch<React.SetStateAction<boolean>>
   docState: boolean
   setDocState: React.Dispatch<React.SetStateAction<boolean>>
+  toDelete: null
+  setToDelete: React.Dispatch<React.SetStateAction<null>>
+}
+interface Document {
+  id: string;
+  content: string;
+}
+
+interface Spell {
+  id: string;
+  name: string;
 }
 
 const TreeDataContext = createContext<TreeDataContextType>({
@@ -22,6 +33,8 @@ const TreeDataContext = createContext<TreeDataContextType>({
   setIsAdded: () => {},
   docState: false,
   setDocState: () => {},
+  toDelete: null,
+  setToDelete: () => {},
 })
 
 export const useTreeData = () => useContext(TreeDataContext)
@@ -33,7 +46,7 @@ type Props = {
 export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
   const [documents, setDocuments] = useState<Document[] | null>(null)
-  const [spells, setSpells] = useState<any>(null)
+  const [spells, setSpells] = useState<Spell[] | null>(null)
   const { enqueueSnackbar } = useSnackbar()
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
@@ -41,8 +54,9 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   const [isAdded, setIsAdded] = useState(false)
-  const [addedSpellIds, setAddedSpellIds] = useState(new Set())
+  const [addedItemIds, setAddedItemIds] = useState<string[]>([])
   const [docState, setDocState] = useState(false)
+  const [toDelete, setToDelete] = useState(null)
 
   function truncateDocs(str, n) {
     if (str.length > n) {
@@ -117,34 +131,34 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
 
   useEffect(() => {
     if (isAdded || docState) {
-      console.log(docState)
+      if (toDelete !== null) {
+        // Remove deleted ID from addedItemIds
+        setAddedItemIds(prevIds => prevIds.filter(item => item !== toDelete))
+        // Find and remove the item with the matching ID from treeData
+        setTreeData(prevData => prevData.filter(item => item.id !== toDelete))
+        setToDelete(null) // Reset toDelete after removing ID
+      }
 
-      fetchData() // Fetch data again when isAdded is set to true
+      fetchData() // Fetch data again when isAdded or docState is true
       setIsAdded(false) // Reset isAdded after fetching
       setDocState(false)
     }
-  }, [isAdded, docState])
+  }, [isAdded, docState, toDelete])
 
   useEffect(() => {
     if (!documents || !spells) {
       return // Exit early if documents or spells are not available
     }
 
-    //  console.log("Spells===>>>",spells);
-
     // Function to add new item to the tree data while avoiding duplication
     const addNewItemWithoutDuplication = (id, parent, text, fileType) => {
-      if (!addedSpellIds.has(id)) {
-        console.log(id, parent, text, fileType)
+      if (!addedItemIds.includes(id)) {
         addNewItem(id, parent, text, fileType) // Add the new item
-        setAddedSpellIds(prevIds => new Set(prevIds).add(id)) // Update addedSpellIds
+        setAddedItemIds(prevIds => [...prevIds, id]) // Update addedItemIds
       }
     }
-
     // Adding documents
     documents.forEach((doc, index) => {
-      console.log(doc)
-
       addNewItemWithoutDuplication(
         doc?.id,
         3,
@@ -152,17 +166,11 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         'txt'
       )
     })
-
     // Adding spells without duplicates
     spells.forEach((spell, index) => {
-      // console.log(spell);
-
       addNewItemWithoutDuplication(spell.id, 6, spell.name, 'spell')
     })
-    // setAddedSpellIds(new Set());
-  }, [documents, spells, addedSpellIds])
-
-  //  console.log(isAdded);
+  }, [documents, spells, addedItemIds])
 
   return (
     <TreeDataContext.Provider
@@ -173,9 +181,16 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         setIsAdded,
         docState,
         setDocState,
+        toDelete,
+        setToDelete,
       }}
-    >
-      .{children}
+    >{children}
     </TreeDataContext.Provider>
   )
 }
+
+
+
+
+
+
