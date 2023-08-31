@@ -87,7 +87,7 @@ function DocumentTable({ documents, updateCallback }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
-  const { setDocState } = useTreeData();
+  const { setDocState,setToDelete } = useTreeData();
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -193,7 +193,7 @@ function DocumentTable({ documents, updateCallback }) {
 
   // Handle document deletion
   const handleDocumentDelete = async (document: any) => {
-    console.log('deleting document', document)
+    
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
@@ -202,6 +202,7 @@ function DocumentTable({ documents, updateCallback }) {
     })
     if (isDeleted){
       enqueueSnackbar('document deleted', { variant: 'success' })
+      setToDelete(selectedRow.id)
       setDocState(true);
     } 
     else enqueueSnackbar('Error deleting document', { variant: 'error' })

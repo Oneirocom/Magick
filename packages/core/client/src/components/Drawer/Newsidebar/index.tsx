@@ -225,7 +225,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
-  const { treeData, setTreeData } = useTreeData()
+  const { treeData, setTreeData, isAdded } = useTreeData()
   const handleDrop = (newTree: NodeModel[]) => {
     setTreeData(newTree)
   }
