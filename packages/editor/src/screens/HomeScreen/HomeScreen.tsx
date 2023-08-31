@@ -17,6 +17,7 @@ import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
 import OpenProject from './OpenProject'
 import { v4 as uuidv4 } from 'uuid'
+import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
 
 /**
  * StartScreen component. Displays an overlay with options to open or create new spells.
@@ -32,7 +33,7 @@ const StartScreen = (): JSX.Element => {
     projectId: config.projectId,
   })
   const [newSpell] = useNewSpellMutation()
-
+  const { setIsAdded,setDeletedSpell } = useTreeData();
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
 
   /**
@@ -84,6 +85,8 @@ const StartScreen = (): JSX.Element => {
   const onDelete = async (spellName: string): Promise<void> => {
     try {
       await deleteSpell({ spellName, projectId: config.projectId })
+      setIsAdded(true);
+      setDeletedSpell(spellName);
       const tab = tabs.find(tab => tab.id === spellName)
       if (tab) {
         dispatch(closeTab(tab.id))

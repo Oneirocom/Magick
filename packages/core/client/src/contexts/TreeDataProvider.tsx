@@ -7,13 +7,18 @@ import { useSelector } from 'react-redux'
 import SampleData from './data/sampleData.json'
 
 interface TreeDataContextType {
-  treeData: NodeModel[]
-  setTreeData: React.Dispatch<React.SetStateAction<NodeModel[]>>
+  treeData: NodeModel[];
+  setTreeData: React.Dispatch<React.SetStateAction<NodeModel[]>>;
+  isAdded: boolean;
+  setIsAdded: React.Dispatch<React.SetStateAction<boolean>>; // Add this line
 }
+
 
 const TreeDataContext = createContext<TreeDataContextType>({
   treeData: [],
   setTreeData: () => {},
+  isAdded: false,
+  setIsAdded: ()=>{}
 })
 
 export const useTreeData = () => useContext(TreeDataContext)
@@ -32,6 +37,8 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const token = globalConfig?.token
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
+  const [isAdded, setIsAdded] = useState(false)
+  const [addedSpellIds, setAddedSpellIds] = useState(new Set());
 
   function truncateDocs(str, n) {
     if (str.length > n) {
@@ -62,67 +69,97 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     })
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
 
-        const spellsResponse = await client.service('spells').find({
-          query: {
-            projectId: config.projectId,
-          },
-        })
-        if ('error' in spellsResponse) {
-          enqueueSnackbar('Error fetching spells', {
-            variant: 'error',
-          })
-        } else {
-          const fetchedSpells = spellsResponse.data
-          setSpells(fetchedSpells)
-        }
 
-        const data = await response.json()
-
-        setDocuments(data.data)
-      } catch (error) {
-        console.error('ERROR', error)
+const fetchData = async () => {
+  try {
+    // Fetch your data here...
+    const response = await fetch(
+      `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
+
+    const spellsResponse = await client.service('spells').find({
+      query: {
+        projectId: config.projectId,
+      },
+    });
+
+    if ('error' in spellsResponse) {
+      enqueueSnackbar('Error fetching spells', {
+        variant: 'error',
+      });
+    } else {
+      const fetchedSpells = spellsResponse.data;
+      setSpells(fetchedSpells);
     }
 
-    fetchData() // Fetch documents from API
-  }, [config.projectId, token, client])
+    const data = await response.json();
 
-  useEffect(() => {
-    if (!documents || !spells) {
-      return // Exit early if documents or spells are not available
+    setDocuments(data.data);
+  } catch (error) {
+    console.error('ERROR', error);
+  }
+};
+
+useEffect(() => {
+  fetchData(); // Fetch data initially
+}, [config.projectId, token, client]);
+
+useEffect(() => {
+  if (isAdded) {
+    console.log(isAdded);
+    
+    fetchData(); // Fetch data again when isAdded is set to true
+    setIsAdded(false); // Reset isAdded after fetching
+  }
+}, [isAdded]);
+
+useEffect(() => {
+  if (!documents || !spells) {
+    return; // Exit early if documents or spells are not available
+  }
+  
+
+//  console.log("Spells===>>>",spells);
+  
+
+  // Function to add new item to the tree data while avoiding duplication
+  const addNewItemWithoutDuplication = (id, parent, text, fileType) => {
+    if (!addedSpellIds.has(id)) {
+      console.log(id, parent, text, fileType)
+      addNewItem(id, parent, text, fileType); // Add the new item
+      setAddedSpellIds(prevIds => new Set(prevIds).add(id)); // Update addedSpellIds
     }
+  };
 
-    const addedSpellIds = new Set() // Keep track of added spell IDs
+  // Adding documents
+  documents.forEach((doc, index) => {
+    addNewItemWithoutDuplication(doc?.id, 3, truncateDocs(doc?.content, 8), 'txt');
+  });
 
-    // Adding documents
-    documents.forEach((doc, index) => {
-      addNewItem(doc?.id, 3, truncateDocs(doc?.content, 8), 'txt')
-    })
+  // Adding spells without duplicates
+  spells.forEach((spell, index) => {
+    // console.log(spell);
+  
+    addNewItemWithoutDuplication(spell.id, 6, spell.name, 'spell');
+  });
+  // setAddedSpellIds(new Set());
+}, [documents, spells, addedSpellIds]);
+ 
 
-    // Adding spells without duplicates
-    spells.forEach((spell, index) => {
-      if (!addedSpellIds.has(spell.id)) {
-        addNewItem(spell.id, 6, spell.name, 'spell')
-        addedSpellIds.add(spell.id)
-      }
-    })
-  }, [documents, spells])
+
+//  console.log(isAdded);
+  
 
   return (
-    <TreeDataContext.Provider value={{ treeData, setTreeData }}>
+    <TreeDataContext.Provider value={{ treeData, setTreeData, isAdded, setIsAdded }}>.     
       {children}
     </TreeDataContext.Provider>
   )
 }
+
