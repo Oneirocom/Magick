@@ -42,6 +42,7 @@ class SpellRunner {
   app: typeof FeathersApp
   agent?: any
   spellManager: SpellManager
+  busy = false
 
   log(message, data) {
     this.logger.info(`${message} %o`, data)
@@ -252,6 +253,10 @@ class SpellRunner {
     await this.engine.process(graph as GraphData, null, this.context)
   }
 
+  isBusy() {
+    return this.busy
+  }
+
   /**
    * Main spell runner for now. Processes inputs, gets the right component that starts the
    * running.  Would be even better if we just took a node identifier, got its
@@ -266,6 +271,7 @@ class SpellRunner {
     publicVariables,
     app,
   }: RunComponentArgs) {
+    this.busy = true
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
@@ -327,6 +333,7 @@ class SpellRunner {
     //
     await component.run(triggeredNode as unknown as MagickNode, inputs)
 
+    this.busy = false
     return this.outputData
   }
 }

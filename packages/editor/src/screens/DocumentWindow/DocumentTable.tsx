@@ -51,7 +51,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
         setValue(e.target.value)
         onChange(e.target.value)
       }}
-      placeholder="Search Knowledge..."
+      placeholder="Search Documents..."
       className={styles.search}
     />
   )
@@ -311,7 +311,7 @@ function DocumentTable({ documents, updateCallback }) {
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
             <Typography variant="h4" className={styles.header}>
-              Knowledge
+            Documents
             </Typography>
             <div className={styles.flex}>
               <Button
