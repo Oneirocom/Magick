@@ -53,6 +53,7 @@
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
   overflow-y: hidden;
   display: flex;
+  white-space: pre-line;
 }
 
 .playtest-output ul {
