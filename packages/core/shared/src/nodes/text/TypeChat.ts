@@ -74,6 +74,7 @@ export class TypeChat extends MagickComponent<Promise<WorkerReturn>> {
       name: 'Response Type',
       dataKey: 'responseType',
       tooltip: 'Enter response type from your schema',
+      defaultValue: 'Cart',
     })
 
     const fewshotControl = new FewshotControl({
