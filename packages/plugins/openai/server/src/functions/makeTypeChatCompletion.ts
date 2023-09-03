@@ -22,8 +22,8 @@ export async function makeTypeChatCompletion(
 }> {
   const { node, inputs, context } = data
   const input = inputs['input']?.[0] as string
-  const schema = inputs['schema']?.[0] as string
-  const responseType = inputs['responseType']?.[0] as string
+  const schema = node?.data?.schema as string
+  const responseType = node?.data?.responseType as string
   const modelName = node?.data?.model as string
 
   const openaiKey = context.module.secrets!['openai_api_key']
