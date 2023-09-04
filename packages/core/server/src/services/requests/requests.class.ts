@@ -100,6 +100,8 @@ export class RequestService<
       .groupByRaw('EXTRACT(EPOCH FROM "createdAt")')
       .orderBy('timestamp')
 
+    // todo fizx this type error.
+    // @ts-ignore
     const result = (await Promise.all([query, monthQuery])) as Array<
       Array<RequestRow>
     >

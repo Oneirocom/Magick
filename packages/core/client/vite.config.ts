@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin'
 
 import { join } from 'path'
 import dts from 'vite-plugin-dts'
@@ -44,6 +44,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
+      //@ts-ignore
       plugins: [rollupNodePolyFill()],
       // External packages that should not be bundled into your library.
       external: [],
@@ -76,6 +77,3 @@ export default defineConfig({
     },
   },
 })
-
-
-
