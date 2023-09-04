@@ -116,7 +116,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
             </Select>
           </Grid>
           <Grid item xs={6}>
-            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Group</Typography>
+            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Type</Typography>
             <TextField
               name="type"
               style={{ width: '100%', margin: '.5em' }}
