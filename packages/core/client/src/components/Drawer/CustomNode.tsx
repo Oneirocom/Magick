@@ -47,9 +47,8 @@ export const CustomNode: React.FC<Props> = props => {
       style={{ paddingInlineStart: indent }}
     >
       <div
-        className={`${styles.expandIconWrapper} ${
-          props.isOpen ? styles.isOpen : ''
-        }`}
+        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
+          }`}
       >
         {props.node.droppable && (
           <div onClick={handleToggle}>
@@ -61,6 +60,8 @@ export const CustomNode: React.FC<Props> = props => {
         {/* @ts-ignore */}
         <TypeIcon
           droppable={droppable}
+          // TODO fix the node filetype here
+          // @ts-ignore
           fileType={data ? data.fileType : props.node.fileType}
         />
       </div>

@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
-import {tooltip_text} from "./tooltip_texts"
+import { tooltip_text } from "./tooltip_texts"
 
 /**
  * RenderComp renders the given component with the given props.
@@ -19,7 +19,7 @@ import {tooltip_text} from "./tooltip_texts"
  */
 const RenderComp = (props: any) => {
   return (
-  <props.element props={props} />
+    <props.element props={props} />
   )
 }
 
@@ -122,8 +122,10 @@ const AgentDetails = ({
   }
 
 
-  const formatPublicVars = (nodes) => {
-    return Object.values(nodes)
+  const formatPublicVars = (_nodes) => {
+    // todo could type this better
+    const nodes = Object.values(_nodes) as any[]
+    return nodes
       // get the public nodes
       .filter((node: { data }) => node?.data?.isPublic)
       // map to an array of objects
@@ -172,9 +174,11 @@ const AgentDetails = ({
         }
 
       } catch (err) {
-        enqueueSnackbar(err.message, {
-          variant: 'error',
-        })
+        if (err instanceof Error) {
+          enqueueSnackbar(err.message, {
+            variant: 'error',
+          })
+        }
       }
     })()
   }, [])
@@ -248,7 +252,7 @@ const AgentDetails = ({
                 ? 'Root Spell must be set before enabling the agent'
                 : ''
             }
-            
+
             placement="right-start"
             arrow
           >
@@ -289,7 +293,7 @@ const AgentDetails = ({
       </div>
       <div className="form-item agent-select">
         <Tooltip title={tooltip_text.rootSpell} placement="right" arrow>
-        <span className="form-item-label">Root Spell</span>
+          <span className="form-item-label">Root Spell</span>
         </Tooltip>
         <select
           style={{
@@ -331,10 +335,10 @@ const AgentDetails = ({
 
           return (
             <div key={value.name + index} style={{ marginBottom: '1em' }}>
-             <Tooltip title={tooltip_text[value.name]} placement="right" arrow>
-             <div style={{ width: '100%', marginBottom: '1em' }}>
-                {value.name}
-              </div>
+              <Tooltip title={tooltip_text[value.name]} placement="right" arrow>
+                <div style={{ width: '100%', marginBottom: '1em' }}>
+                  {value.name}
+                </div>
               </Tooltip>
               <Input
                 type="password"
@@ -369,6 +373,8 @@ const AgentDetails = ({
               publicVariables: JSON.stringify(data),
             })
           }}
+          // todo we need to decide if we need to handle this.
+          setUpdateNeeded={() => { }}
           publicVars={JSON.parse(selectedAgentData.publicVariables)}
         />
       )}
@@ -380,19 +386,19 @@ const AgentDetails = ({
       >
         {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
           console.log(value);
-          
+
           return (
-           <Tooltip title="kkkk"  arrow>
-            <RenderComp
-              key={index}
-              enable={enable}
-              element={value}
-              selectedAgentData={selectedAgentData}
-              setSelectedAgentData={setSelectedAgentData}
-              update={update}
-            />
+            <Tooltip title="kkkk" arrow>
+              <RenderComp
+                key={index}
+                enable={enable}
+                element={value}
+                selectedAgentData={selectedAgentData}
+                setSelectedAgentData={setSelectedAgentData}
+                update={update}
+              />
             </Tooltip>
-            
+
           )
         })}
       </div>
