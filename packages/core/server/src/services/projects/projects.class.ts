@@ -18,6 +18,7 @@ interface CreateData {
  */
 export interface ProjectParams extends Params {
   user: any // Add specific type if possible
+  query: any
 }
 
 /**
@@ -32,7 +33,7 @@ export class ProjectsService {
    * @returns - An object containing the agents, spells and documents of the project
    */
   async find(
-    params?: ProjectParams
+    params: ProjectParams
   ): Promise<{ agents: any; spells: any; documents: any }> {
     const { query } = params
     const projectId = query.projectId
@@ -48,7 +49,7 @@ export class ProjectsService {
     const omitEmbeddings = query?.omitEmbeddings
 
     // Prepare the promises for fetching agents, spells, and documents
-    const fetchPromises = []
+    const fetchPromises = [] as any[]
 
     if (returnAgents || returnAll) {
       fetchPromises.push(
@@ -177,13 +178,12 @@ export class ProjectsService {
 
     // interate through all spells and replace the UUID of any Spell Nodes with the new UUID
     mappedSpells.forEach(spell => {
-      Object.values(spell.graph.nodes).forEach(
-        (node: { name: string; data: { spellId: string } }) => {
-          if (node.name === 'Spell') {
-            node.data.spellId = spellKeys[node.data.spellId]
-          }
+      const nodes = Object.values(spell.graph.nodes) as any[]
+      nodes.forEach(node => {
+        if (node.name === 'Spell') {
+          node.data.spellId = spellKeys[node.data.spellId]
         }
-      )
+      })
     })
 
     // Create and store new agents, documents, and spells
@@ -191,7 +191,7 @@ export class ProjectsService {
     if (mappedAgents.length > 0) {
       mappedAgents.forEach(async agent => {
         // todo: clear this up so validation works
-        delete(agent.runState)
+        delete agent.runState
 
         const r = await app.service('agents').create(agent)
         agentResponse.push(r)

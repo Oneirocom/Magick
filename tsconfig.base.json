@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "strict": true,
     "typeRoots": [
       "./packages/@types",
       "./node_modules/@types",
