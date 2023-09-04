@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 import { join } from 'path'
 import dts from 'vite-plugin-dts'
@@ -19,9 +19,7 @@ export default defineConfig({
       skipDiagnostics: true,
     }),
 
-    viteTsConfigPaths({
-      root: '../../../',
-    }),
+    nxViteTsPaths(),
   ],
 
   // Uncomment this if you are using workers.
