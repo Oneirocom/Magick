@@ -45,7 +45,7 @@ export class DocumentService<
       secrets: string
     }
 
-    let elements = []
+    let elements = [] as any[]
     if (docData.content) {
       elements = [
         ...elements,
@@ -79,7 +79,7 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: string, params): Promise<any> {
+  async remove(id: any, params): Promise<any> {
     const db = app.get('dbClient')
 
     if (!id && params.projectId) {
@@ -97,8 +97,12 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    if (params.query.embedding || params.query.metadata) {
+    if (
+      (params && params?.query?.embedding) ||
+      (params && params?.query?.metadata)
+    ) {
       const param = params.query
+
       const querys = await db('documents')
         .select('*')
         .where({
@@ -116,7 +120,7 @@ export class DocumentService<
               .select(
                 db.raw(
                   `(embedding <=> '${JSON.stringify(
-                    params.query.embedding
+                    param.query.embedding
                   )}') AS distance`
                 )
               )
@@ -136,7 +140,12 @@ export class DocumentService<
       return { data: querys }
     }
 
-    const param = params.query
+    const param = params?.query
+
+    if (!param) {
+      return await db('documents').select('*').limit(100)
+    }
+
     const querys = await db('documents')
       .select('*')
       .where({
@@ -186,7 +195,7 @@ const getUnstructuredData = async (files, docData) => {
   form.append('strategy', 'auto')
   for (const file of files as {
     filepath?: string
-    originalFilename?: string
+    originalFilename: string
     text?: string
   }[]) {
     // let mimeType = mime.lookup(file.originalFilename)
@@ -208,7 +217,7 @@ const getUnstructuredData = async (files, docData) => {
   }
 
   const unstructured = await axios.post(
-    process.env['UNSTRUCTURED_ENDPOINT'],
+    process.env['UNSTRUCTURED_ENDPOINT'] as string,
     form,
     {
       headers: headers,
@@ -220,7 +229,7 @@ const getUnstructuredData = async (files, docData) => {
   }
 
   //iterate and format for document insert (api returns either an array or an array of arrays)
-  const elements = []
+  const elements = [] as any[]
   for (const i in unstructured.data) {
     if (unstructured.data[i] instanceof Array) {
       for (const j in unstructured.data[i]) {

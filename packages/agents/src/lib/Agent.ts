@@ -262,7 +262,9 @@ export class Agent implements AgentInterface {
         agentId: this.id,
         projectId: this.projectId,
         originalData: data,
-        result: { error: err?.message },
+        result: {
+          error: err instanceof Error ? err.message : 'Error running agent',
+        },
       })
     }
   }
