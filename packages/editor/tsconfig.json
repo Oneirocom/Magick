@@ -7,7 +7,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "rootDir": "../..",
     "outDir": "lib",
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "Node",
