@@ -3,10 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/client/src",
   "projectType": "application",
-  "implicitDependencies": [
-    "@magickml/editor",
-    "@magickml/core"
-  ],
+  "implicitDependencies": ["@magickml/editor", "@magickml/core"],
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
@@ -67,7 +64,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/apps/client"],
+      "outputs": ["{workspaceRoot}/coverage/apps/client"],
       "options": {
         "jestConfig": "apps/client/jest.config.ts",
         "passWithNoTests": true

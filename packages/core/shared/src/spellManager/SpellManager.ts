@@ -55,7 +55,7 @@ export default class SpellManager {
   }
 
   getReadySpellRunner(spellId: string) {
-    return this.spellRunnerMap.get(spellId)?.find((runner) => !runner.isBusy())
+    return this.spellRunnerMap.get(spellId)?.find(runner => !runner.isBusy())
   }
 
   hasSpellRunner(spellId: string) {
@@ -72,8 +72,11 @@ export default class SpellManager {
       const spell = await this.app.service('spells').get(spellId)
 
       if (
-        this.hasSpellRunner(spellId)
-        && isEqual(this.getReadySpellRunner(spellId)!.currentSpell.graph, spell.graph)
+        this.hasSpellRunner(spellId) &&
+        isEqual(
+          this.getReadySpellRunner(spellId)!.currentSpell.graph,
+          spell.graph
+        )
       ) {
         return this.getReadySpellRunner(spellId)
       }
@@ -113,9 +116,11 @@ export default class SpellManager {
   }
 
   async run(runArgs: RunArgs) {
-    this.logger.error(`You should use the agent commander to run spells instead of the spellManager run function`)
-    const { spellId, inputs, secrets, publicVariables, app } = runArgs;
-    let result: Record<string, unknown> | null = null;
+    this.logger.error(
+      `You should use the agent commander to run spells instead of the spellManager run function`
+    )
+    const { spellId, inputs, secrets, publicVariables, app } = runArgs
+    let result: Record<string, unknown> | null = null
     if (this.agent) {
       await app.get('agentCommander').runSpellWithResponse({
         inputs,
@@ -126,7 +131,7 @@ export default class SpellManager {
       })
     } else {
       const runner = this.getReadySpellRunner(spellId)
-      result = await runner?.runComponent(runArgs) ?? undefined
+      result = (await runner?.runComponent(runArgs)) ?? null
     }
 
     this.agent?.publishEvent(`${spellId}:run`, {

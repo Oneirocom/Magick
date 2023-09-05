@@ -25,10 +25,6 @@ export type ExtendedEmbeddings = Embeddings & {
  * @extends {PostgresVectorStore}
  */
 export class PostgresVectorStoreCustom extends SupabaseVectorStore {
-  client: any
-  tableName: string
-  queryName: string
-
   constructor(embeddings: ExtendedEmbeddings, args: Record<string, any>) {
     super(embeddings, args as any)
 
