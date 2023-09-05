@@ -1,4 +1,3 @@
-import { WorkerOutputs } from 'rete/types/core/data'
 import { MagickComponent } from '../../engine'
 
 import {
