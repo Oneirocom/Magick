@@ -17,7 +17,7 @@ import {
 } from '../../types'
 
 const info =
-  'Gets Documents from the Documents store. The optional Type property will return only documents with the matching type, and the Max Count property will limit the number of documents returned. Documents are returned in order of distance.'
+  'Gets Documents from the Documents store. The optional Type property will return only Documents with the matching type, and the Max Count property will limit the number of Documents returned. Documents are returned in order of distance.'
 
 /**
  * Defines the expected return type for the input data
@@ -39,7 +39,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
           trigger: 'option',
         },
       },
-      'Document',
+      'Documents',
       info
     )
     // this.runFromCache = true

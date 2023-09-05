@@ -31,6 +31,7 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
+import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -86,7 +87,7 @@ function DocumentTable({ documents, updateCallback }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
-
+  const { setDocState,setToDelete } = useTreeData();
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -152,8 +153,8 @@ function DocumentTable({ documents, updateCallback }) {
       {
         columns: defaultColumns,
         data: documents,
-        initialState : {
-          pageIndex: currentPage 
+        initialState: {
+          pageIndex: currentPage
         }
       },
       useFilters,
@@ -192,14 +193,18 @@ function DocumentTable({ documents, updateCallback }) {
 
   // Handle document deletion
   const handleDocumentDelete = async (document: any) => {
-    console.log('deleting document', document)
+    
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    if (isDeleted) enqueueSnackbar('document deleted', { variant: 'success' })
+    if (isDeleted){
+      enqueueSnackbar('document deleted', { variant: 'success' })
+      setToDelete(selectedRow.id)
+      setDocState(true);
+    } 
     else enqueueSnackbar('Error deleting document', { variant: 'error' })
 
     if (page.length === 1) {
@@ -228,50 +233,58 @@ function DocumentTable({ documents, updateCallback }) {
     projectId: '',
     date: new Date().toISOString(),
     embedding: '',
+    files: []
   })
-// Handle save action
-const handleSave = async (selectedModel) => {
-  // call documents endpoint
-  const result = await fetch(`${API_ROOT_URL}/documents`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      date: new Date().toISOString(),
-      ...newDocument,
-      projectId: config.projectId,
-      modelName: selectedModel.model,
-      secrets: localStorage.getItem('secrets'),
-    }),
-  });
-  // Check if the save operation was successful
-  if (result.ok) {
-    // Reset newDocument
-    setNewDocument({
-      type: '',
-      content: '',
-      projectId: '',
-      date: '',
-      embedding: '',
+  // Handle save action
+  const handleSave = async (selectedModel) => {
+    const { files, ...body } = newDocument
+    // call documents endpoint
+
+    const formData = new FormData();
+    formData.append('date', new Date().toISOString())
+    formData.append('projectId', config.projectId)
+    formData.append('modelName', selectedModel.model)
+    formData.append('secrets', localStorage.getItem('secrets'))
+    formData.append('type', body.type)
+    formData.append('content', body.content)
+    for (const file of files as File[]) {
+      formData.append('files', file, file.name)
+    }
+    const result = await fetch(`${API_ROOT_URL}/documents`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
     });
-    enqueueSnackbar('Document saved successfully', { variant: 'success' });
+    // Check if the save operation was successful
+    if (result.ok) {
+      // Reset newDocument
+      setNewDocument({
+        type: '',
+        content: '',
+        projectId: '',
+        date: '',
+        embedding: '',
+        files: []
+      });
+      enqueueSnackbar('Document saved successfully', { variant: 'success' });
 
 
-    // Close the modal by setting createMode to false after a delay
-    setTimeout(() => {
-      setCreateMode(false);
-    }, 2000);
+      // Close the modal by setting createMode to false after a delay
+      setTimeout(() => {
+        setDocState(true);
+        setCreateMode(false);
+      }, 2000);
 
-    // Trigger the updateCallback function to update the table after a delay
-   
+      // Trigger the updateCallback function to update the table after a delay
+
       updateCallback();
-    
-  } else {
-    enqueueSnackbar('Error saving document', { variant: 'error' });
-  }
-};
+
+    } else {
+      enqueueSnackbar('Error saving document', { variant: 'error' });
+    }
+  };
 
   // Show create modal
   const showCreateModal = () => {
@@ -298,7 +311,7 @@ const handleSave = async (selectedModel) => {
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
             <Typography variant="h4" className={styles.header}>
-              Documents
+            Documents
             </Typography>
             <div className={styles.flex}>
               <Button

@@ -17,6 +17,7 @@ import {
   ProjectWindowProvider,
   useProjectWindow,
 } from '../../../contexts/ProjectWindowContext'
+import { useTreeData } from '../../../contexts/TreeDataProvider'
 import ProjectWindow from '../ProjectWindow'
 import { SetAPIKeys } from '../SetAPIKeys'
 import { Tooltip, Typography } from '@mui/material'
@@ -30,7 +31,6 @@ import {
   MultiBackend,
   getBackendOptions,
 } from '@minoru/react-dnd-treeview'
-import SampleData from '../sampleData.json'
 import styles from '../menu.module.css'
 import { CustomNode } from '../CustomNode'
 import AddIcon from '@mui/icons-material/Add'
@@ -47,7 +47,6 @@ import { useConfig } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
 import { useSelector } from 'react-redux'
 
-// Constants
 const drawerWidth = 210
 
 // CSS mixins for open and close states
@@ -220,14 +219,12 @@ type DrawerProps = {
 /**
  * The main Drawer component that wraps around the application content.
  */
-export function NewSidebar({ children }: DrawerProps): JSX.Element {
+export function NewSidebar(DrawerProps): JSX.Element {
   const location = useLocation()
   const navigate = useNavigate()
   const { openProjectWindow, openDrawer, setOpenDrawer, setOpenProjectWindow } =
     useProjectWindow()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
-  const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
-  const handleDrop = (newTree: NodeModel[]) => setTreeData(newTree)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -235,6 +232,10 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
   const [data, setData] = useState([])
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
+  const { treeData, setTreeData} = useTreeData()
+  const handleDrop = (newTree: NodeModel[]) => {
+    setTreeData(newTree)
+  }
 
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {

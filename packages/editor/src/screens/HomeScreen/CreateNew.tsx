@@ -19,6 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'
 import { v4 as uuidv4 } from 'uuid'
+import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -49,6 +50,7 @@ const CreateNew = () => {
   const [newSpell] = spellApi.useNewSpellMutation()
   const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
+  const { setIsAdded } = useTreeData();
 
   /**
    * Handle creation process of a new spell.
@@ -76,7 +78,7 @@ const CreateNew = () => {
         name,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      }) as any
+      }) as any 
 
       if ('error' in response) {
         if ('status' in response.error) {
@@ -90,7 +92,9 @@ const CreateNew = () => {
         }
       }
       setLoading(false)
+      setIsAdded(true)
       navigate(`/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))}`)
+
     } catch (err) {
       console.error('ERROR!', err)
     }
