@@ -4,7 +4,6 @@ import { MagickComponent } from '../../engine'
 import {
   IRunContextEditor,
   MagickNode,
-  MagickWorkerInputs,
   ModuleContext,
   SpellInterface,
 } from '../../types'
@@ -26,6 +25,7 @@ function install(
   { server = false, client, emit }: RemotePluginArgs
 ) {
   const subscriptionMap = new Map()
+  const consoleMap = new Map()
 
   if (!server) {
     // subscribe to the spell event on the client inside the components builder
@@ -43,25 +43,35 @@ function install(
           // this is the shared event for the socket connection.
           const event = `${currentSpell.id}-${node.id}`
 
-          // create a new console for the node
-          node.console = new MagickConsole({
-            node: node as unknown as MagickNode,
-            component,
-            editor,
-            server,
-          })
-
           // don't bother making a subscription if we already have one
           if (subscriptionMap.has(node.id)) return
 
           // separate out the spell listener so we can unsubscribe later
           const spellListener = (data: any) => {
-            console.log('************RAN SPELL LISTENER')
             // extract the right data from the socket
             const { input, output, error, result, eventType } = data
 
             // make sure we are only handling the events for this node
             if (eventType !== event) return
+
+            console.log('************RAN SPELL LISTENER')
+
+            if (!consoleMap.has(node.id)) {
+              // create a new console for the node
+              // we need to make the console here because the editor needs to have all the nodes
+              node.console = new MagickConsole({
+                node: node as unknown as MagickNode,
+                component,
+                editor,
+                server,
+              })
+
+              // add the console to the map so we can access it later
+              consoleMap.set(node.id, node.console)
+            } else {
+              // get the console from the map
+              node.console = consoleMap.get(node.id)
+            }
 
             // make sure errors are handled in the flow.
             if (error) {
@@ -109,6 +119,8 @@ function install(
 
       // delete the listener from the map
       subscriptionMap.delete(node.id)
+      // delete the console from the map
+      consoleMap.delete(node.id)
     })
   }
 
@@ -131,6 +143,7 @@ function install(
           const eventType = `${context.currentSpell.id}-${node.id}`
 
           if (server) {
+            console.log('**************SENDING SERVER EVENT')
             try {
               const result = await worker.apply(component, [
                 node,
