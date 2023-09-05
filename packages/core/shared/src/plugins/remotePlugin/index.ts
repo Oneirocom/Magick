@@ -140,7 +140,6 @@ function install(
           const eventType = `${context.currentSpell.id}-${node.id}`
 
           if (server) {
-            console.log('**************SENDING SERVER EVENT')
             try {
               const result = await worker.apply(component, [
                 node,
