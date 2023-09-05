@@ -47,6 +47,7 @@ function install(
 
           // separate out the spell listener so we can unsubscribe later
           const spellListener = (data: any) => {
+            console.log('************RAN SPELL LISTENER')
             // extract the right data from the socket
             const { input, output, error, result, eventType } = data
 
