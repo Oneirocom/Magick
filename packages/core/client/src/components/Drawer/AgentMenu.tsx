@@ -152,6 +152,7 @@ function AgentMenu({ data, resetData }) {
         })
       })
   }
+
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -159,37 +160,50 @@ function AgentMenu({ data, resetData }) {
     if (!file) {
       return
     }
-    const formData = new FormData();
-    formData.append('file', file);
-    try {
-      fetch(`${API_ROOT_URL}/agentImage`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      })
-        .then(res => {
-          if (!res.ok) {
-            throw new Error(res.statusText)
-          }
-          return res
+    // Create a FileReader instance
+    const reader = new FileReader()
+    // Read the file as a data URL
+    reader.readAsDataURL(file)
+    // Handle the load event
+    reader.onload = () => {
+      // Get the base64 string from the result
+      const base64:any = reader.result
+      // Remove the data URL prefix
+      const base64String = base64.replace(/^data:.+;base64,/, '')
+      try {
+        fetch(`${API_ROOT_URL}/agentImage`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ file: base64String }),
         })
-        .then(data => {
-          enqueueSnackbar('Updated agent', {
-            variant: 'success',
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(res.statusText)
+            }
+            return res
           })
-          resetData()
-          setSelectedAgentData(data)
-        })
-        .catch(e => {
-          enqueueSnackbar(e, {
-            variant: 'error',
+          .then(data => {
+            enqueueSnackbar('Updated agent', {
+              variant: 'success',
+            })
+            resetData()
+            setSelectedAgentData(data)
           })
-        })
-    } catch (error) {
-      console.log(`Error uploading file: ${error}`)
+          .catch(e => {
+            enqueueSnackbar(e, {
+              variant: 'error',
+            })
+          })
+      } catch (error) {
+        console.log(`Error uploading file: ${error}`)
+      }
+    }
+    // Handle the error event
+    reader.onerror = error => {
+      console.log(`Error reading file: ${error}`)
     }
   }
 
