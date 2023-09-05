@@ -7,9 +7,7 @@ import io from 'socket.io'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import EmitPlugin, { EmitPluginArgs } from './plugins/emitPlugin'
 import { TaskOptions } from './plugins/taskPlugin/task'
 import {
   GraphData,
@@ -21,6 +19,7 @@ import {
   UnknownData,
   WorkerData,
 } from './types'
+import RemotePlugin, { RemotePluginArgs } from './plugins/remotePlugin'
 
 // WorkerOutputs interface
 interface WorkerOutputs {
@@ -59,7 +58,7 @@ export type InitEngineArguments = {
   server: boolean
   throwError?: (message: unknown) => void
   socket?: io.Socket
-  emit?: EmitPluginArgs['emit']
+  emit?: RemotePluginArgs['emit']
 }
 
 // initSharedEngine function
@@ -81,19 +80,16 @@ export const initSharedEngine = ({
     engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
       engine,
     })
-    if (socket) {
-      engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
-        socket,
-        server: true,
-      })
-    }
 
     if (emit) {
-      engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
+      // Using new remote plugin. Sockets being depricated soon.
+      console.log('USING NEW REMOTE PLUGIN')
+      engine.use<Plugin, RemotePluginArgs>(RemotePlugin, {
         server: true,
         emit,
       })
     }
+
     engine.use(TaskPlugin)
   }
 

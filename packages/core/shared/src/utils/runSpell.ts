@@ -79,7 +79,7 @@ export const runSpell = async ({
     spellId: spellToRun.id,
     inputs: formattedInputs as Record<string, any>,
     secrets,
-    publicVariables,
+    publicVariables: publicVariables || {},
     app,
   })) as Record<string, unknown>
 
