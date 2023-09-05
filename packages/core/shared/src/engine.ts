@@ -21,6 +21,7 @@ import {
   UnknownData,
   WorkerData,
 } from './types'
+import RemotePlugin, { RemotePluginArgs } from './plugins/remotePlugin'
 
 // WorkerOutputs interface
 interface WorkerOutputs {
@@ -59,7 +60,7 @@ export type InitEngineArguments = {
   server: boolean
   throwError?: (message: unknown) => void
   socket?: io.Socket
-  emit?: EmitPluginArgs['emit']
+  emit?: RemotePluginArgs['emit']
 }
 
 // initSharedEngine function
@@ -81,6 +82,17 @@ export const initSharedEngine = ({
     engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
       engine,
     })
+
+    if (emit) {
+      // Using new remote plugin. Sockets being depricated soon.
+      console.log('USING NEW REMOTE PLUGIN')
+      engine.use<Plugin, RemotePluginArgs>(RemotePlugin, {
+        server: true,
+        emit,
+      })
+    }
+
+    // Sockets being depricated soon
     if (socket) {
       engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
         socket,
@@ -88,12 +100,12 @@ export const initSharedEngine = ({
       })
     }
 
-    if (emit) {
-      engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
-        server: true,
-        emit,
-      })
-    }
+    // if (emit) {
+    //   engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
+    //     server: true,
+    //     emit,
+    //   })
+    // }
     engine.use(TaskPlugin)
   }
 
