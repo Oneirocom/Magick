@@ -41,8 +41,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         },
       },
       'I/O',
-      info,
-    
+      info
     )
 
     this.module = {
@@ -255,14 +254,14 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { data }: { data: string | undefined }
+    { data }: { data: Record<string, unknown> }
   ) {
     node.data.isInput = true
     // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data)) {
+    if (data && !isEmpty(data) && node.data.name) {
       this._task.closed = []
 
-      const output = Object.values(data)[0] as string
+      const output = data[node.data.name]
 
       return {
         output,
