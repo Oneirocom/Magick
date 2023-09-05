@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
-import {tooltip_text} from "./tooltip_texts"
+import { tooltip_text } from "./tooltip_texts"
+import { extractPublicVariables } from './utils'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -19,7 +20,7 @@ import {tooltip_text} from "./tooltip_texts"
  */
 const RenderComp = (props: any) => {
   return (
-  <props.element props={props} />
+    <props.element props={props} />
   )
 }
 
@@ -109,7 +110,6 @@ const AgentDetails = ({
           variant: 'success',
         })
         setSelectedAgentData(data)
-
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
       })
@@ -121,41 +121,16 @@ const AgentDetails = ({
       })
   }
 
-
-  const formatPublicVars = (nodes) => {
-    return Object.values(nodes)
-      // get the public nodes
-      .filter((node: { data }) => node?.data?.isPublic)
-      // map to an array of objects
-      .map((node: { data; id; name }) => {
-        return {
-          id: node?.id,
-          name: node?.data?.name,
-          value:
-            node?.data?.value ||
-            node?.data?.text ||
-            node?.data?.fewshot ||
-            node?.data?._var,
-          type: node?.name,
-        }
-      })
-      // map to an object with the id as the key
-      .reduce((acc, cur) => {
-        acc[cur.id] = cur
-        return acc
-      }, {})
-  }
-
   const updatePublicVar = (spell) => {
     setSelectedAgentData({
       ...selectedAgentData,
       rootSpellId: spell.id,
-      publicVariables: JSON.stringify(formatPublicVars(spell.graph.nodes)),
+      publicVariables: JSON.stringify(extractPublicVariables(spell)),
     })
   }
 
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       try {
         const spells = await client.service('spells').find({
           query: {
@@ -165,9 +140,8 @@ const AgentDetails = ({
 
         setSpellList(spells.data)
 
-        if (selectedAgentData.rootSpellId) {
+        if (selectedAgentData.rootSpellId && !selectedAgentData.publicVariables) {
           const agentRootSpell = await client.service('spells').get(selectedAgentData.rootSpellId)
-
           updatePublicVar(agentRootSpell)
         }
 
@@ -177,6 +151,7 @@ const AgentDetails = ({
         })
       }
     })()
+
   }, [])
 
   return (
@@ -248,7 +223,7 @@ const AgentDetails = ({
                 ? 'Root Spell must be set before enabling the agent'
                 : ''
             }
-            
+
             placement="right-start"
             arrow
           >
@@ -289,7 +264,7 @@ const AgentDetails = ({
       </div>
       <div className="form-item agent-select">
         <Tooltip title={tooltip_text.rootSpell} placement="right" arrow>
-        <span className="form-item-label">Root Spell</span>
+          <span className="form-item-label">Root Spell</span>
         </Tooltip>
         <select
           style={{
@@ -331,10 +306,10 @@ const AgentDetails = ({
 
           return (
             <div key={value.name + index} style={{ marginBottom: '1em' }}>
-             <Tooltip title={tooltip_text[value.name]} placement="right" arrow>
-             <div style={{ width: '100%', marginBottom: '1em' }}>
-                {value.name}
-              </div>
+              <Tooltip title={tooltip_text[value.name]} placement="right" arrow>
+                <div style={{ width: '100%', marginBottom: '1em' }}>
+                  {value.name}
+                </div>
               </Tooltip>
               <Input
                 type="password"
@@ -369,7 +344,9 @@ const AgentDetails = ({
               publicVariables: JSON.stringify(data),
             })
           }}
+          update={update}
           publicVars={JSON.parse(selectedAgentData.publicVariables)}
+          selectedAgent={selectedAgentData}
         />
       )}
       <div
@@ -379,10 +356,7 @@ const AgentDetails = ({
           }`}
       >
         {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
-          console.log(value);
-          
           return (
-           <Tooltip title="kkkk"  arrow>
             <RenderComp
               key={index}
               enable={enable}
@@ -391,8 +365,6 @@ const AgentDetails = ({
               setSelectedAgentData={setSelectedAgentData}
               update={update}
             />
-            </Tooltip>
-            
           )
         })}
       </div>
