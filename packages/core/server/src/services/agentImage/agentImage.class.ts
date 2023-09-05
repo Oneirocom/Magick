@@ -1,5 +1,11 @@
 import AWS from 'aws-sdk'
-
+import {
+  AWS_BUCKET_NAME,
+  AWS_ACCESS_KEY,
+  AWS_REGION,
+  AWS_SECRET_KEY,
+  AWS_BUCKET_ENDPOINT,
+} from '@magickml/config'
 
 type AgentImageData = {
   image: string
@@ -9,17 +15,17 @@ type AgentImageData = {
 export class AgentImageService {
   s3: AWS.S3
   uploader: any
-  bucketName: string = process.env.AWS_BUCKET_NAME || 'BUCKET_NAME'
+  bucketName: string = AWS_BUCKET_NAME
 
   constructor() {
     // Set up AWS S3
     AWS.config.update({
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
-      region: process.env.AWS_REGION,
+      accessKeyId: AWS_ACCESS_KEY,
+      secretAccessKey: AWS_SECRET_KEY,
+      region: AWS_REGION,
     })
     this.s3 = new AWS.S3({
-      endpoint: process.env.AWS_BUCKET_ENDPOINT,
+      endpoint: AWS_BUCKET_ENDPOINT,
       s3ForcePathStyle: true,
     })
   }
@@ -41,12 +47,10 @@ export class AgentImageService {
 
     try {
       const response = await this.s3.putObject(s3Params).promise()
-      console.log('S3 upload response', response)
       return {
-        message: 'File uploaded successfully.',
+        message: JSON.stringify(response),
       }
     } catch (error) {
-      console.error('Error uploading to S3:', error)
       throw new Error('Failed to upload image to S3.')
     }
   }
