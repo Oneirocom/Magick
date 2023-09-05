@@ -54,8 +54,6 @@ function install(
             // make sure we are only handling the events for this node
             if (eventType !== event) return
 
-            console.log('************RAN SPELL LISTENER')
-
             if (!consoleMap.has(node.id)) {
               // create a new console for the node
               // we need to make the console here because the editor needs to have all the nodes
@@ -143,7 +141,6 @@ function install(
           const eventType = `${context.currentSpell.id}-${node.id}`
 
           if (server) {
-            console.log('**************SENDING SERVER EVENT')
             try {
               const result = await worker.apply(component, [
                 node,
