@@ -21,7 +21,7 @@ import { useConfig } from '@magickml/client-core'
 import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from '@magickml/config'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 
 interface Spell {
@@ -98,7 +98,6 @@ function AgentMenu({ data, resetData }) {
       return
     }
 
-
     // Avoid server-side validation error
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
@@ -153,29 +152,44 @@ function AgentMenu({ data, resetData }) {
         })
       })
   }
-  const handleImageUpload = event => {
-    const file = event.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setSelectedAgentData({
-          ...selectedAgentData,
-          image: reader.result,
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      fetch(`${API_ROOT_URL}/agentImage`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(res.statusText)
+          }
+          return res
         })
-        console.log('agent', selectedAgentData)
-        update(selectedAgentData.id)
-      }
-
-      // reader.onload =(e: ProgressEvent<FileReader>) => {
-      //   setSelectedAgentData({
-      //     ...selectedAgentData,
-      //     image: e.target?.result as string,
-      //   })
-      //   console.log("agent" , selectedAgentData);
-
-      //   update(selectedAgentData.id)
-      // }
-      reader.readAsDataURL(file)
+        .then(data => {
+          enqueueSnackbar('Updated agent', {
+            variant: 'success',
+          })
+          resetData()
+          setSelectedAgentData(data)
+        })
+        .catch(e => {
+          enqueueSnackbar(e, {
+            variant: 'error',
+          })
+        })
+    } catch (error) {
+      console.log(`Error uploading file: ${error}`)
     }
   }
 
