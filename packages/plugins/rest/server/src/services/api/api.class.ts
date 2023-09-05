@@ -6,7 +6,11 @@
 import { Application, app } from '@magickml/server-core'
 import type { Agent } from '@magickml/agents'
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
+import { GeneralError } from '@feathersjs/errors'
 import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
+import { BadRequest, NotFound } from '@feathersjs/errors/lib'
+import { pino } from 'pino'
+import { getLogger } from '@magickml/core'
 
 export type { Api, ApiData, ApiPatch, ApiQuery }
 
@@ -27,19 +31,41 @@ export interface ApiError {
   error: string
 }
 
+const getAgent = async (agentId: string, apiKey: string): Promise<Agent> => {
+  const agent = await app
+    .service('agents')
+    .get(agentId)
+  if (!agent) {
+    throw new NotFound('Agent not found with id ' + agentId);
+  }
+
+  if (!agent.data.rest_enabled) {
+    throw new BadRequest('Agent does not have REST API enabled')
+  }
+
+  if (apiKey !== agent.data.rest_api_key) {
+    throw new Error('Invalid API Key')
+  }
+
+  // Trust the types
+  return agent as unknown as Agent;
+}
+
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
-  implements ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
+  implements
+ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
   {
+  logger: pino.Logger = getLogger()
 
-    // GET
-    async find(params: ServiceParams): Promise<ApiResponse | ApiError> {
-      const { spellId, content } = params.query as ApiData
+  // GET
+  async get(agentId: string, params: ServiceParams): Promise<ApiResponse | ApiError> {
+    const { spellId, content } = params.query as ApiData
 
-      const agentCommander = app.get('agentCommander')
+    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
 
-      // little hack since we dynamically add agents to the params in the hooks
-      const agent = (params as unknown as { agent: Agent }).agent
+    const agentCommander = app.get('agentCommander')
 
+    try {
       const result = await agentCommander.runSpellWithResponse({
         agent,
         spellId,
@@ -64,22 +90,32 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
       return {
         result: result as object
       }
+    } catch (err) {
+      this.logger.error("Error in ApiService.get: %s", err)
+      throw new GeneralError({
+        error: err
+      })
     }
+  }
 
-    async create(data: ApiData, params: ServiceParams): Promise<ApiResponse | ApiError> {
-      const { spellId, content } = params.query as ApiData
+  async create(
+    data: ApiData,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { content } = data;
+    const spellId = data?.spellId
 
-      const agentCommander = app.get('agentCommander')
+    const agent = await getAgent(data.agentId, (params?.headers && params.headers['authorization']) as string)
 
-      // little hack since we dynamically add agents to the params in the hooks
-      const agent = (params as unknown as { agent: Agent }).agent
+    const agentCommander = app.get('agentCommander')
 
+    try {
       const result = await agentCommander.runSpellWithResponse({
         agent,
         spellId,
         inputs: {
           [`Input - REST API (POST)`]: {
-            connector: "REST API (POST)",
+            connector: 'REST API (POST)',
             content,
             sender: 'api',
             observer: agent.name,
@@ -88,18 +124,113 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
             agentId: agent.id,
             entities: ['api', agent.name],
             channelType: 'POST',
-            rawData: "{}"
+            rawData: '{}',
           },
           publicVariables: agent.publicVariables,
-          runSubspell: true
-        }
+          runSubspell: true,
+        },
       })
 
       return {
-        result: result as object
+        result: result as object,
       }
+    } catch (err) {
+      this.logger.error('Error in ApiService.create: %s', err)
+      throw new GeneralError({
+        error: err,
+      })
     }
   }
+
+  async update(
+    agentId: string,
+    data: ApiData,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { content } = data
+    const spellId = data?.spellId
+
+    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+
+    const agentCommander = app.get('agentCommander')
+
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (UPDATE)`]: {
+            connector: 'REST API (UPDATE)',
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'UPDATE',
+            rawData: '{}',
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true,
+        },
+      })
+
+      return {
+        result: result as object,
+      }
+    } catch (err) {
+      this.logger.error('Error in ApiService.update: %s', err)
+      throw new GeneralError({
+        error: err,
+      })
+    }
+  }
+
+  async remove(
+    agentId: string,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { spellId, content } = params.query as ApiData
+
+    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+
+    const agentCommander = app.get('agentCommander')
+
+    try {
+      const result = await agentCommander.runSpellWithResponse({
+        agent,
+        spellId,
+        inputs: {
+          [`Input - REST API (DELETE)`]: {
+            connector: 'REST API (DELETE)',
+            content,
+            sender: 'api',
+            observer: agent.name,
+            client: 'rest',
+            channel: 'rest',
+            agentId: agent.id,
+            entities: ['api', agent.name],
+            channelType: 'DELETE',
+            rawData: '{}',
+          },
+          publicVariables: agent.publicVariables,
+          runSubspell: true,
+        },
+      })
+
+      return {
+        result: result as object,
+      }
+    } catch (err) {
+      this.logger.error("Error in ApiService.remove: %s", err)
+      throw new GeneralError({
+        error: err,
+      })
+    }
+  }
+  
+}
 
 /** Helper function to get options for the ApiService. */
 export const getOptions = (app: Application) => {

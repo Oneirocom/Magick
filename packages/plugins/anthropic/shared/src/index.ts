@@ -54,6 +54,7 @@ const completionProviders: CompletionProvider[] = [
       'claude-1-100k',
       'claude-instant-1',
       'claude-instant-1-100k',
+      'claude-2',
     ],
   },
 ]
