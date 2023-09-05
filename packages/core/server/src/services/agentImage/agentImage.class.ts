@@ -1,11 +1,15 @@
-import { BadRequest } from '@feathersjs/errors'
 import AWS from 'aws-sdk'
-import multer from 'multer'
-import multerS3 from 'multer-s3'
+
+
+type AgentImageData = {
+  image: string
+  agentId: string
+}
 
 export class AgentImageService {
   s3: AWS.S3
   uploader: any
+  bucketName: string = process.env.AWS_BUCKET_NAME || 'BUCKET_NAME'
 
   constructor() {
     // Set up AWS S3
@@ -18,36 +22,32 @@ export class AgentImageService {
       endpoint: process.env.AWS_BUCKET_ENDPOINT,
       s3ForcePathStyle: true,
     })
-
-    // Set up multer to upload files to S3
-    this.uploader = multer({
-      storage: multerS3({
-        s3: this.s3,
-        bucket: process.env.AWS_BUCKET_NAME,
-        acl: 'public-read', // we may need to adjust this
-        metadata: function (req, file, cb) {
-          cb(null, { fieldName: file.fieldname })
-        },
-        key: function (req, file, cb) {
-          cb(null, Date.now().toString() + '-' + file.originalname)
-        },
-      }),
-    })
   }
 
-  async create(data: any) {
-    // Upload to S3
-    return new Promise((resolve, reject) => {
-      this.uploader.single('file')(data, {}, (error: any, result: any) => {
-        if (error) {
-          reject(new BadRequest('Error uploading file.', error))
-        } else {
-          resolve({
-            message: 'File uploaded successfully.',
-            fileUrl: result.location,
-          })
-        }
-      })
-    })
+  async create(data: AgentImageData) {
+    const { image, agentId } = data
+    const buffer = Buffer.from(
+      image.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
+    )
+
+    const s3Params = {
+      Bucket: this.bucketName,
+      Key: `agents/${agentId}.jpg`,
+      Body: buffer,
+      ContentEncoding: 'base64',
+      ContentType: 'image/jpeg',
+    }
+
+    try {
+      const response = await this.s3.putObject(s3Params).promise()
+      console.log('S3 upload response', response)
+      return {
+        message: 'File uploaded successfully.',
+      }
+    } catch (error) {
+      console.error('Error uploading to S3:', error)
+      throw new Error('Failed to upload image to S3.')
+    }
   }
 }
