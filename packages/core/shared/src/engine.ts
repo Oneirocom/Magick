@@ -7,9 +7,7 @@ import io from 'socket.io'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import EmitPlugin, { EmitPluginArgs } from './plugins/emitPlugin'
 import { TaskOptions } from './plugins/taskPlugin/task'
 import {
   GraphData,
@@ -89,14 +87,6 @@ export const initSharedEngine = ({
       engine.use<Plugin, RemotePluginArgs>(RemotePlugin, {
         server: true,
         emit,
-      })
-    }
-
-    // Sockets being depricated soon
-    if (socket) {
-      engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
-        socket,
-        server: true,
       })
     }
 
