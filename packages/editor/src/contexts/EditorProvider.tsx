@@ -53,7 +53,7 @@ type EditorContextType = {
     reteInterface: EditorContext
   ) => void
   setEditor: (editor: any) => void
-  getNodeMap: () => Map<string, Component>
+  getNodeMap: () => Map<string, Component> | null
   getNodes: () => any
   setContainer: (container: HTMLDivElement) => void
   undo: () => void
@@ -91,6 +91,7 @@ const EditorProvider = ({ children }) => {
   }
 
   const buildEditor = async (container, _spell, tab, context) => {
+    const spell = JSON.parse(JSON.stringify(_spell ?? '{}'))
     const newEditor = await initEditor({
       container,
       pubSub,
@@ -98,10 +99,10 @@ const EditorProvider = ({ children }) => {
       tab,
       node: MyNode,
       client,
+      spell
     })
 
     setEditor(newEditor)
-    const spell = JSON.parse(JSON.stringify(_spell ?? '{}'))
     newEditor.loadSpell(spell)
   }
 
@@ -192,7 +193,7 @@ const RawEditor = ({ tab, children }) => {
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   const activeTab = useSelector(activeTabSelector)
-  const reteInterface = useMagickInterface()
+  const reteInterface = useMagickInterface() as EditorContext
 
   useEffect(() => {
     if (!tab || loaded) return
@@ -203,7 +204,7 @@ const RawEditor = ({ tab, children }) => {
     })
   }, [tab])
 
-  if (isLoading && tab.id === activeTab.id) return <LoadingScreen />
+  if (isLoading && tab.id === activeTab?.id) return <LoadingScreen />
 
   return (
     <>
