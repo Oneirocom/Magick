@@ -90,12 +90,6 @@ export const initSharedEngine = ({
       })
     }
 
-    // if (emit) {
-    //   engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
-    //     server: true,
-    //     emit,
-    //   })
-    // }
     engine.use(TaskPlugin)
   }
 
