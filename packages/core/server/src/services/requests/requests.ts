@@ -4,7 +4,6 @@
  * @see https://dove.feathersjs.com/guides/cli/service.html
  */
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { Params } from '@feathersjs/feathers'
 import {
   requestDataValidator,
   requestPatchValidator,
