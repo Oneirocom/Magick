@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react'
 import { styled } from '@mui/material/styles'
 import Avatar from '@mui/material/Avatar'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -25,13 +25,13 @@ import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 
 interface Spell {
-  id: number;
-  name: string;
+  id: number
+  name: string
   // Add other relevant properties
 }
 
 interface Agent {
-  rootSpellId: number;
+  rootSpellId: number
   // Add other relevant properties
 }
 
@@ -73,11 +73,11 @@ function AgentMenu({ data, resetData }) {
 
   const handleToggleMenu2 = useCallback(
     (agent, event) => {
-      setOpenMenu2(event.currentTarget);
-      setSelectedAgentData(agent);
+      setOpenMenu2(event.currentTarget)
+      setSelectedAgentData(agent)
     },
     [] // No external dependencies, so this callback won't change
-  );
+  )
 
   const handleCloseMenu2 = () => {
     setOpenMenu2(null)
@@ -177,32 +177,28 @@ function AgentMenu({ data, resetData }) {
     marginBottom: '4px',
   }))
 
-
-
-  
   const handleSelectAgent = (agent: Agent) => {
-    setCurrentAgent(agent);
-  
+    setCurrentAgent(agent)
+
     if (spellList) {
       // Find a spell with the same ID as agent.rootSpellId
-      const matchingSpell = spellList.find(spell => spell.id === agent.rootSpellId);
-  
+      const matchingSpell = spellList.find(
+        spell => spell.id === agent.rootSpellId
+      )
+
       if (matchingSpell) {
-        const spellName = matchingSpell.name;
-  
+        const spellName = matchingSpell.name
+
         // Construct the URL
-        const encodedSpellName = encodeURIComponent(btoa(spellName));
-        const url = `/magick/${agent.rootSpellId}-${encodedSpellName}`;
-        
+        const encodedSpellName = encodeURIComponent(btoa(spellName))
+        const url = `/magick/${agent.rootSpellId}-${encodedSpellName}`
+
         // Navigate to the URL
-        navigate(url);
+        navigate(url)
       }
     }
     handleCloseMenu1()
-  };
-  
-
-  
+  }
 
   return (
     <div>
@@ -282,7 +278,6 @@ function AgentMenu({ data, resetData }) {
                   },
                 }}
                 key={i}
-                
               >
                 {editMode && selectedAgentData?.id === agent?.id ? (
                   <>
@@ -340,7 +335,11 @@ function AgentMenu({ data, resetData }) {
                       src={agent.image ? agent.name : primaryText.at(0) || 'A'}
                       sx={{ width: 24, height: 24 }}
                     />
-                    <ListItemText onClick={() => handleSelectAgent(agent)} primary={primaryText} sx={{ ml: 2 }} />
+                    <ListItemText
+                      onClick={() => handleSelectAgent(agent)}
+                      primary={primaryText}
+                      sx={{ ml: 2 }}
+                    />
                   </ListItemAvatar>
                 )}
                 <ListItemIcon sx={{ placeContent: 'end' }}>
@@ -439,9 +438,13 @@ function AgentMenu({ data, resetData }) {
               background: 'none',
               outline: 'none',
             },
+            color:`${selectedAgentData && (selectedAgentData.name === 'Default Agent' ? 'grey' : 'white')}`,
+            cursor:`${selectedAgentData && (selectedAgentData.name === 'Default Agent' ? 'not-allowed' : 'pointer')}`,
           }}
           onClick={e => {
-            setOpenConfirm(true)
+            if (selectedAgentData.name !== "Default Agent"){
+              setOpenConfirm(true)
+            }
             handleCloseMenu2()
           }}
         >
@@ -479,7 +482,7 @@ function AgentMenu({ data, resetData }) {
           Other Options
         </MenuItem>
       </Menu>
-      {selectedAgentData && (
+      {selectedAgentData  && (
         <Modal
           open={openConfirm}
           onClose={handleClose}
