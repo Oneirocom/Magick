@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import Avatar from '@mui/material/Avatar'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -90,6 +90,14 @@ function AgentMenu({ data, resetData }) {
       delete _data.id
       delete _data?.dirty
     }
+
+    if (_data['rootSpellId'] === null) {
+      enqueueSnackbar('Root spell Is Missing', {
+        variant: 'error',
+      })
+      return
+    }
+
 
     // Avoid server-side validation error
     _data.enabled = _data.enabled ? true : false
@@ -199,6 +207,17 @@ function AgentMenu({ data, resetData }) {
     }
     handleCloseMenu1()
   }
+
+  // Set currentAgent based on data prop
+  useEffect(() => {
+    if (data && data.length > 0) {
+      // Check if 'Default Agent' exists in data
+      const defaultAgent = data.find(agent => agent.name === 'Default Agent')
+
+      // Set currentAgent to 'Default Agent' if it exists, otherwise choose the first agent
+      setCurrentAgent(defaultAgent || data[0])
+    }
+  }, [data])
 
   return (
     <div>
@@ -438,11 +457,19 @@ function AgentMenu({ data, resetData }) {
               background: 'none',
               outline: 'none',
             },
-            color:`${selectedAgentData && (selectedAgentData.name === 'Default Agent' ? 'grey' : 'white')}`,
-            cursor:`${selectedAgentData && (selectedAgentData.name === 'Default Agent' ? 'not-allowed' : 'pointer')}`,
+            color: `${
+              selectedAgentData &&
+              (selectedAgentData.name === 'Default Agent' ? 'grey' : 'white')
+            }`,
+            cursor: `${
+              selectedAgentData &&
+              (selectedAgentData.name === 'Default Agent'
+                ? 'not-allowed'
+                : 'pointer')
+            }`,
           }}
           onClick={e => {
-            if (selectedAgentData.name !== "Default Agent"){
+            if (selectedAgentData.name !== 'Default Agent') {
               setOpenConfirm(true)
             }
             handleCloseMenu2()
@@ -482,7 +509,7 @@ function AgentMenu({ data, resetData }) {
           Other Options
         </MenuItem>
       </Menu>
-      {selectedAgentData  && (
+      {selectedAgentData && (
         <Modal
           open={openConfirm}
           onClose={handleClose}
