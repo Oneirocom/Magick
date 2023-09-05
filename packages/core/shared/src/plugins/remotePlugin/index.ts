@@ -10,20 +10,10 @@ import {
 } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
-export type SocketPluginArgs = {
+export type RemotePluginArgs = {
   server?: boolean
   client?: any
   emit?: (message: Record<string, unknown>) => void
-}
-
-export type SocketData = {
-  result: unknown
-  output?: WorkerOutputs
-  input?: MagickWorkerInputs
-  error?: {
-    message: string
-    stack: string
-  }
 }
 
 export interface RemoteIRunContextEditor extends IRunContextEditor {
@@ -33,14 +23,14 @@ export interface RemoteIRunContextEditor extends IRunContextEditor {
 function install(
   editor: RemoteIRunContextEditor,
   // Need to better type the feathers client here
-  { server = false, client, emit }: SocketPluginArgs
+  { server = false, client, emit }: RemotePluginArgs
 ) {
   const subscriptionMap = new Map()
 
   if (!server) {
     // subscribe to the spell event on the client inside the components builder
     editor.on(
-      'componentRegister',
+      'componentregister',
       (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
         const builder = component.builder
 
@@ -66,6 +56,7 @@ function install(
 
           // separate out the spell listener so we can unsubscribe later
           const spellListener = (data: any) => {
+            console.log('************RAN SPELL LISTENER')
             // extract the right data from the socket
             const { input, output, error, result, eventType } = data
 
@@ -109,7 +100,7 @@ function install(
     )
 
     // handle removing the subscription when the node is removed
-    editor.on('nodeRemoved', (node: MagickNode) => {
+    editor.on('noderemoved', (node: MagickNode) => {
       // get the spell listener from the map
       const listener = subscriptionMap.get(node.id)
 
