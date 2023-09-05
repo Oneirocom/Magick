@@ -89,7 +89,11 @@ export const initEditor = function ({
   editor.tab = tab
   editor.currentSpell = spell
 
-  // cache a nodes IO for use later
+  // Initialize plugins
+  // if (client) {
+  //   editor.use(SocketOverridePlugin)
+  // }
+
   editor.use(CachePlugin)
 
   // handles highlighting nodes and connections on click

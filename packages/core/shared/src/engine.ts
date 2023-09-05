@@ -90,6 +90,20 @@ export const initSharedEngine = ({
       })
     }
 
+    // Sockets being depricated soon
+    if (socket) {
+      engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
+        socket,
+        server: true,
+      })
+    }
+
+    // if (emit) {
+    //   engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
+    //     server: true,
+    //     emit,
+    //   })
+    // }
     engine.use(TaskPlugin)
   }
 
