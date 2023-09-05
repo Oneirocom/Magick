@@ -85,9 +85,10 @@ function DocumentTable({ documents, updateCallback }) {
   const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedRow, setSelectedRow] = useState(null)
+  // todo better typing here for the row
+  const [selectedRow, setSelectedRow] = useState<any>(null)
   const [currentPage, setCurrentPage] = useState(0)
-  const { setDocState,setToDelete } = useTreeData();
+  const { setDocState, setToDelete } = useTreeData();
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -149,11 +150,13 @@ function DocumentTable({ documents, updateCallback }) {
   // Initialize the table with hooks
   const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
     setSortBy } =
-    useTable(
+    useTable<any>(
       {
         columns: defaultColumns,
         data: documents,
         initialState: {
+          // todo we need to pass a proper generic into the useTable hook to fix this type error
+          // @ts-ignore
           pageIndex: currentPage
         }
       },
@@ -193,18 +196,18 @@ function DocumentTable({ documents, updateCallback }) {
 
   // Handle document deletion
   const handleDocumentDelete = async (document: any) => {
-    
+    if (!selectedRow) return
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    if (isDeleted){
+    if (isDeleted) {
       enqueueSnackbar('document deleted', { variant: 'success' })
       setToDelete(selectedRow.id)
       setDocState(true);
-    } 
+    }
     else enqueueSnackbar('Error deleting document', { variant: 'error' })
 
     if (page.length === 1) {
@@ -244,7 +247,7 @@ function DocumentTable({ documents, updateCallback }) {
     formData.append('date', new Date().toISOString())
     formData.append('projectId', config.projectId)
     formData.append('modelName', selectedModel.model)
-    formData.append('secrets', localStorage.getItem('secrets'))
+    formData.append('secrets', localStorage.getItem('secrets') || '')
     formData.append('type', body.type)
     formData.append('content', body.content)
     for (const file of files as File[]) {
@@ -311,7 +314,7 @@ function DocumentTable({ documents, updateCallback }) {
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
             <Typography variant="h4" className={styles.header}>
-            Documents
+              Documents
             </Typography>
             <div className={styles.flex}>
               <Button

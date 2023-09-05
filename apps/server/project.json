@@ -7,7 +7,7 @@
     "@magickml/server-core",
     "@magickml/core",
     "@magickml/plugin-*"
-],
+  ],
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
@@ -21,7 +21,9 @@
         "inspect": true,
         "outputPath": "dist/apps/server",
         "main": "apps/server/src/index.ts",
-        "assets": ["apps/server/src/certs"],
+        "assets": [
+          "apps/server/src/certs"
+        ],
         "tsConfig": "apps/server/tsconfig.app.json",
         "webpackConfig": "apps/server/webpack.config.js"
       },

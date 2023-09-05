@@ -76,7 +76,8 @@ function RequestTable({ requests, updateCallback }) {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedRow, setSelectedRow] = useState(null)
+  // todo better typing of this row state
+  const [selectedRow, setSelectedRow] = useState<any>(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -130,14 +131,14 @@ function RequestTable({ requests, updateCallback }) {
         },
       },
     });
-  
+
     if (isDeleted) {
       enqueueSnackbar('Requests deleted', { variant: 'success' });
       // Update the table data with the updated data from the server
       updateCallback();
       // Clear the selected rows
       setSelectedRows([]);
-  
+
       const updatedPageLength = page.length - selectedRows.length;
       // Check if there are no more documents on the current page
       if (updatedPageLength === 0 && currentPage > 0) {
@@ -150,8 +151,8 @@ function RequestTable({ requests, updateCallback }) {
       enqueueSnackbar('Error deleting Requests', { variant: 'error' });
     }
   };
-  
-  
+
+
 
 
   const defaultColumns = useMemo(
@@ -221,8 +222,10 @@ function RequestTable({ requests, updateCallback }) {
       {
         columns: defaultColumns,
         data: requests,
-        initialState : {
-          pageIndex: currentPage 
+        initialState: {
+          // todo need to pass generic into useTable to fix this type error
+          // @ts-ignore
+          pageIndex: currentPage
         }
       },
       useFilters,
@@ -317,8 +320,8 @@ function RequestTable({ requests, updateCallback }) {
     )
   })
 
-  
-      
+
+
 
 
   return (
