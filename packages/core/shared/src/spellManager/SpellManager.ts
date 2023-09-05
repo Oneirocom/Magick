@@ -129,16 +129,16 @@ export default class SpellManager {
         app,
         agent: this.agent,
       })
+
+      this.agent?.publishEvent(`${spellId}:run`, {
+        inputs,
+        publicVariables,
+        result,
+      })
     } else {
       const runner = this.getReadySpellRunner(spellId)
       result = (await runner?.runComponent(runArgs)) ?? null
     }
-
-    this.agent?.publishEvent(`${spellId}:run`, {
-      inputs,
-      publicVariables,
-      result,
-    })
 
     return result || {}
   }
