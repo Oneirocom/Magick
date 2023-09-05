@@ -32,6 +32,16 @@ import getNodeMenu from './node-menu'
  */
 import IMenu from './menu'
 
+export type ContextMenuOptions = {
+  searchBar?: boolean
+  searchKeep?: (item: any) => boolean
+  delay?: number
+  items?: Record<string, any>
+  nodeItems?: Record<string, any>
+  allocate?: (components: any) => any[] | null
+  rename?: (component: any) => string
+}
+
 /**
  * Installs the context menu.
  *
@@ -56,7 +66,7 @@ function install(
     nodeItems = {},
     allocate = components => [],
     rename = component => component.name,
-  }
+  }: ContextMenuOptions
 ) {
   // Bind 'hidecontextmenu' to the editor.
   editor.bind('hidecontextmenu')
