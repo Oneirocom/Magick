@@ -326,7 +326,7 @@ export function NewSidebar({ children }: DrawerProps): JSX.Element {
       // if data.length === 0  create new agent
       if (json.data.length === 0) {
         await createNew({
-          name: 'New Agent',
+          name: "Default Agent",
           projectId: config.projectId,
           enabled: false,
           publicVariables: '{}',
