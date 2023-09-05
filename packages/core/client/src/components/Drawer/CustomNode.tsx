@@ -23,7 +23,7 @@ export const CustomNode: React.FC<Props> = props => {
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
   const navigate = useNavigate()
-  const { setOpenDoc} = useTreeData()
+  const { setOpenDoc } = useTreeData()
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -31,10 +31,13 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleClick = () => {
-    if (props.node.fileType === 'txt') {
+    if (!props.node.data) return
+    if (props.node?.data.fileType === 'txt') {
+      // todo fix this typing
+      // @ts-ignore
       setOpenDoc(props.node.id)
       navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
-    } else if (props.node.fileType === 'spell') {
+    } else if (props.node?.data.fileType === 'spell') {
       navigate(
         `/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`
       )
