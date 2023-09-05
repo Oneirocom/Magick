@@ -35,9 +35,6 @@ import {
   MultiSocketGenerator,
   NodeClickPlugin,
   SocketGeneratorPlugin,
-  SocketOverridePlugin,
-  SocketPlugin,
-  SocketPluginArgs,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
