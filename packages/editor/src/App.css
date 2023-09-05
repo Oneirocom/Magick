@@ -381,8 +381,7 @@ input:focus-visible {
   display: block;
   margin-bottom: 0.5em;
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
-
-  color: var(--dark-4);
+  color: #fff;
 }
 
 .select {

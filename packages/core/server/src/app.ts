@@ -173,6 +173,11 @@ export async function initApp() {
             return next()
           }
 
+          // if the route is to the slack service, skip auth
+          if (context.path === 'slack') {
+            return next()
+          }
+
           if (context.path !== 'authentication') {
             return authenticate('jwt')(context, next)
           }

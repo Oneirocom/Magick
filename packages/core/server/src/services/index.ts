@@ -37,6 +37,7 @@ export const services = async (app: Application): Promise<void> => {
 
   // Configure services provided by plugins
   pluginManager.getServices().forEach(service => {
+    console.log('service', service[1])
     app.configure(service[1])
   })
 }
