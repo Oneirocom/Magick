@@ -32,7 +32,7 @@ import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
 import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
-
+import DocContentModal from './DocContentModal'
 /**
  * GlobalFilter component for applying search filter on the whole table.
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
@@ -83,11 +83,12 @@ function DocumentTable({ documents, updateCallback }) {
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-
+  const [document , setDocument] = useState(null)
+  const [contentModal, setContentModal] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
   const [currentPage, setCurrentPage] = useState(0)
-  const { setDocState,setToDelete } = useTreeData();
+  const { setDocState,setToDelete ,  openDoc } = useTreeData();
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -291,12 +292,42 @@ function DocumentTable({ documents, updateCallback }) {
     setCreateMode(true)
   }
 
+  const handleFindDoc = (doc) => {
+   //fetch the document 
+    fetch(`${API_ROOT_URL}/documents/${doc}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => res.json())
+      .then((res) => {
+        setDocument(res.content)
+        setContentModal(true)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+
   // trigger updateCallback when createMode changes
   useEffect(() => {
     if (!createMode) {
       updateCallback();
     }
   }, [createMode]);
+
+  useEffect(() => {
+    if (openDoc) {
+      handleFindDoc(openDoc)
+      console.log(openDoc);
+      
+    }
+  }, [openDoc])
+
+  console.log(document);
+
   return (
     <>{createMode && (
       <DocumentModal
@@ -307,6 +338,13 @@ function DocumentTable({ documents, updateCallback }) {
         providerList={filteredProviders}
       />
     )}
+      {contentModal && document  && (
+        <DocContentModal
+          contentModal={contentModal}
+          setContentModal={setContentModal}
+          document={document}
+        />
+      )}
       <Container className={styles.container} classes={{ root: styles.root }}>
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
