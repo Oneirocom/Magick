@@ -21,7 +21,6 @@ import ReactRenderPlugin, {
 } from './plugins/reactRenderPlugin'
 
 import {
-  ConsolePlugin,
   EditorContext,
   getNodes,
   HistoryPlugin,
@@ -137,7 +136,6 @@ export const initEditor = function ({
 
   // Setup additional plugins
   editor.use(MultiCopyPlugin)
-  editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
   editor.use(InspectorPlugin)
