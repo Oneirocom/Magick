@@ -119,7 +119,7 @@ export class SpellComponent extends MagickComponent<
       name: 'Spell Select',
       write: false,
       defaultValue: (node.data.spell as string) || '',
-      tooltip: 'Select/Choose the created spell'
+      tooltip: 'Select/Choose the created spell',
     })
 
     node.inspector.add(spellControl)
@@ -145,7 +145,7 @@ export class SpellComponent extends MagickComponent<
             dataKey: data.name,
             language: 'plaintext',
             defaultValue: publicVar || data.value || '',
-            tooltip: 'Directive for the spell'
+            tooltip: 'Directive for the spell',
           })
           if (!node.inspector.dataControls.has(fewshotInputControl.dataKey)) {
             node.inspector.add(fewshotInputControl)
@@ -180,7 +180,7 @@ export class SpellComponent extends MagickComponent<
             name: data.name,
             dataKey: data.name,
             defaultValue: data.value,
-            tooltip:""
+            tooltip: '',
           })
           if (!node.inspector.dataControls.has(numberInputControl.dataKey)) {
             node.inspector.add(numberInputControl)
@@ -344,10 +344,9 @@ export class SpellComponent extends MagickComponent<
     }
 
     if (agent) {
-
-      const outputs = await app.get('agentCommander').runSpellWithResponse(
-        runComponentArgs
-      )
+      const outputs = await app
+        .get('agentCommander')
+        .runSpellWithResponse(runComponentArgs)
 
       const output = this.formatOutputs(node, outputs)
 
