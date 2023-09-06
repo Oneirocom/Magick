@@ -12,13 +12,25 @@ import { MagickComponent } from '../../engine'
 import { Task, TaskSocketInfo } from './task'
 
 function install(editor: MagickEditor) {
-  editor.on('componentregister', (_component: Component) => {
-    editor.tasks = []
+  const taskStore = {}
 
+  function getTask(nodeId) {
+    return taskStore[nodeId]
+  }
+
+  function getTasks() {
+    return taskStore
+  }
+
+  editor.getTask = getTask
+  editor.getTasks = getTasks
+
+  editor.on('componentregister', (_component: Component) => {
     const component = _component as unknown as MagickComponent<unknown>
 
     if (!component.task)
       return console.error('Task plugin requires a task property in component')
+
     if (component.task.outputs.constructor !== Object)
       return console.error(
         'The "outputs" field must be an object whose keys correspond to the Output\'s keys'
@@ -44,6 +56,7 @@ function install(editor: MagickEditor) {
 
     const taskWorker = component.worker
     const taskOptions = component.task
+
     component.worker = (
       node: WorkerData,
       inputs: MagickWorkerInputs,
@@ -51,6 +64,13 @@ function install(editor: MagickEditor) {
       context: ModuleContext,
       ...rest
     ) => {
+      // Dynamically add the tasks output options from the node
+      const taskOutputs = addTaskOutputs(node)
+      const allOutputs = {
+        ...taskOutputs,
+        ...taskOptions.outputs,
+      }
+
       // Task caller is what actually gets run once the task runs itself.  It is called inside the run function.
       const taskCaller = async (
         _ctx: unknown,
@@ -58,11 +78,7 @@ function install(editor: MagickEditor) {
         data: NodeData,
         socketInfo: TaskSocketInfo | string | null
       ) => {
-        component._task = task
-        // TODO: might change this interface, since we swap out data for outputs here, which just feels wrong.
-        // TODO: Also improve typing of TaskWorker when done
-
-        // todo we need to handle errors properly at the task module level so they are passed out and to the agent properly.
+        // runs the original worker function to get the value
         const result = await taskWorker.call(
           component,
           node,
@@ -76,27 +92,21 @@ function install(editor: MagickEditor) {
         return result as Record<string, unknown> | null
       }
 
-      const task = new Task(inputs, component, node, taskCaller)
+      // Create the main task
+      const task = new Task(inputs, component, node, taskCaller, getTask)
 
-      component.nodeTaskMap[node.id] = task
-      if (taskOptions.init) taskOptions.init(task, node)
+      console.log('TASK', task)
 
-      // Since some outputs are generated dynamically based on data stored in the node
-      // we need to add those as outputs to the taskOptions when we set up the allowed outputs of the task.
-      // We do this here because this worker is the one run on process to set up the task runflow
-      // And it pauses after this until the task run function is called.
-      const taskOutputs = addTaskOutputs(node)
-      const allOutputs = {
-        ...taskOutputs,
-        ...taskOptions.outputs,
-      }
+      // add the task to the task store
+      taskStore[node.id] = task
 
+      // Make sure all outputs are added
       Object.keys(allOutputs).forEach(key => {
-        outputs[key] = { type: taskOptions.outputs[key], key, task }
+        outputs[key] = { type: taskOptions.outputs[key], key, nodeId: node.id }
       })
 
-      // Probably need to reset this when spells change
-      editor.tasks.push(task)
+      // init the task on the components task options if needed
+      if (taskOptions.init) taskOptions.init(task, node)
 
       return task
     }
