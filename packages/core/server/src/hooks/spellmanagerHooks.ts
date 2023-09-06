@@ -47,10 +47,14 @@ export const updateSpellInManager = async (context: HookContext) => {
   // We do this because the id comes from different places in sockets vs rest
   const id = dataId || contextId
 
+  if (!user || !app.userSpellManagers) return
+
   // Get the user's spellManagerApp
   const spellManager = app.userSpellManagers.get(user.id.toString())
   const decodedId =
     (id as string).length > 36 ? (id as string).slice(0, 36) : (id as string)
+
+  if (!spellManager) return
 
   const spellRunner = spellManager.getReadySpellRunner(decodedId)
 

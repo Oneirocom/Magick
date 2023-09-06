@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 
-import viteTsConfigPaths from 'vite-tsconfig-paths'
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import dts from 'vite-plugin-dts'
 import { joinPathFragments } from '@nx/devkit'
 
@@ -15,9 +15,7 @@ export default defineConfig({
       skipDiagnostics: true,
     }),
 
-    viteTsConfigPaths({
-      root: '../../',
-    }),
+    nxViteTsPaths(),
   ],
 
   // Uncomment this if you are using workers.

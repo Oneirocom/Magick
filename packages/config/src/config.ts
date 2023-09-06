@@ -108,4 +108,13 @@ export const OPENMETER_ENDPOINT =
 export const OPENMETER_ENABLED =
   getVarForEnvironment('OPENMETER_ENABLED') === 'true'
 
-export const AGENT_RESPONSE_TIMEOUT_MSEC = Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
+export const AGENT_RESPONSE_TIMEOUT_MSEC =
+  Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
+
+// S3 storage
+export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
+export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
+export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
+export const AWS_BUCKET_NAME = getVarForEnvironment('AWS_BUCKET_NAME') || ''
+export const AWS_BUCKET_ENDPOINT =
+  getVarForEnvironment('AWS_BUCKET_ENDPOINT') || ''

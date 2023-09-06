@@ -85,6 +85,8 @@ const StartScreen = (): JSX.Element => {
     try {
       await deleteSpell({ spellName, projectId: config.projectId })
       setIsAdded(true);
+      // TODO fix this typing
+      // @ts-ignore
       setToDelete(spellName);
       const tab = tabs.find(tab => tab.id === spellName)
       if (tab) {

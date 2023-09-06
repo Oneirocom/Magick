@@ -29,7 +29,7 @@
       "options": {
         "buildTarget": "@magickml/cloud-agent-worker-app:build",
         "port": 8089,
-        "inspect": true,
+        "inspect": true
       },
       "configurations": {
         "development": {

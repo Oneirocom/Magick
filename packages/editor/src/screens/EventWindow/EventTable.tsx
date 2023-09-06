@@ -2,7 +2,7 @@
 // Import statements kept as-is
 import { TableComponent } from '@magickml/client-core'
 import { API_ROOT_URL } from '@magickml/config'
-import { useFeathers  } from '@magickml/client-core'
+import { useFeathers } from '@magickml/client-core'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -77,7 +77,8 @@ function EventTable({ events, updateCallback }) {
   const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedRow, setSelectedRow] = useState(null)
+  // todo need better typing for the row here
+  const [selectedRow, setSelectedRow] = useState<any>(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -182,6 +183,8 @@ function EventTable({ events, updateCallback }) {
         columns: defaultColumns,
         data: events,
         initialState: {
+          // todo we need to pass ageneric into useTable to fix this type error
+          // @ts-ignore
           pageIndex: currentPage
         }
       },
@@ -237,14 +240,14 @@ function EventTable({ events, updateCallback }) {
         },
       },
     });
-  
+
     if (isDeleted) {
       enqueueSnackbar('Events deleted', { variant: 'success' });
       // Update the table data with the updated data from the server
       updateCallback();
       // Clear the selected rows
       setSelectedRows([]);
-  
+
       const updatedPageLength = page.length - selectedRows.length;
       // Check if there are no more documents on the current page
       if (updatedPageLength === 0 && currentPage > 0) {
@@ -257,7 +260,7 @@ function EventTable({ events, updateCallback }) {
       enqueueSnackbar('Error deleting Event', { variant: 'error' });
     }
   };
-  
+
 
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
