@@ -189,7 +189,7 @@ export type GetSpell = ({
 }: {
   spellName: string
   projectId: string
-}) => Promise<SpellInterface>
+}) => Promise<SpellInterface | null>
 
 export type ProcessCode = (
   code: unknown,
@@ -285,7 +285,7 @@ export interface EditorContext extends EngineContext {
   ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
-  sendToDebug: (message: unknown) => void
+  sendToDebug: PublishEditorEvent
   onInspector: OnInspector
   onPlaytest: OnEditor
   onDebug: OnDebug
