@@ -35,7 +35,6 @@
   padding: 1.6rem;
 }
 
-
 .modalContent {
   background-color: #343437;
   width: 100%;
@@ -44,5 +43,9 @@
   border-radius: 0.5rem;
 }
 .modalTitle {
- text-align: center;
+  text-align: center;
+}
+
+.loader {
+  color: var(--primary-dark) !important;
 }
