@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { config } from 'dotenv-flow'
 import { importMetaEnv } from './import-meta-env'
+import { v4 } from 'uuid'
 
 // Load environment variables
 config({
@@ -108,4 +109,7 @@ export const OPENMETER_ENDPOINT =
 export const OPENMETER_ENABLED =
   getVarForEnvironment('OPENMETER_ENABLED') === 'true'
 
-export const AGENT_RESPONSE_TIMEOUT_MSEC = Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
+export const AGENT_RESPONSE_TIMEOUT_MSEC =
+  Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
+
+export const CLOUD_AGENT_KEY = getVarForEnvironment('CLOUD_AGENT_KEY') || v4()

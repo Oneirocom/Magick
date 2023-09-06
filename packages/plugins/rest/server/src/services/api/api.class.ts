@@ -11,6 +11,7 @@ import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
+import { CLOUD_AGENT_KEY } from '@magickml/config'
 
 export type { Api, ApiData, ApiPatch, ApiQuery }
 
@@ -31,37 +32,52 @@ export interface ApiError {
   error: string
 }
 
-const getAgent = async (agentId: string, apiKey: string): Promise<Agent> => {
-  const agent = await app
-    .service('agents')
-    .get(agentId)
+const getAgent = async (
+  agentId: string,
+  apiKey: string,
+  isCloud: boolean
+): Promise<Agent> => {
+  const agent = await app.service('agents').get(agentId)
   if (!agent) {
-    throw new NotFound('Agent not found with id ' + agentId);
+    throw new NotFound('Agent not found with id ' + agentId)
   }
 
-  if (!agent.data.rest_enabled) {
-    throw new BadRequest('Agent does not have REST API enabled')
-  }
+  if (isCloud) {
+    if (apiKey !== CLOUD_AGENT_KEY) {
+      throw new BadRequest('Invalid API KEY')
+    }
+  } else {
+    if (!agent.data.rest_enabled) {
+      throw new BadRequest('Agent does not have REST API enabled')
+    }
 
-  if (apiKey !== agent.data.rest_api_key) {
-    throw new Error('Invalid API Key')
+    if (apiKey !== agent.data.rest_api_key) {
+      throw new Error('Invalid API Key')
+    }
   }
 
   // Trust the types
-  return agent as unknown as Agent;
+  return agent as unknown as Agent
 }
 
 export class ApiService<ServiceParams extends ApiParams = ApiParams>
   implements
-ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
-  {
+    ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
+{
   logger: pino.Logger = getLogger()
 
   // GET
-  async get(agentId: string, params: ServiceParams): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = params.query as ApiData
+  async get(
+    agentId: string,
+    params: ServiceParams
+  ): Promise<ApiResponse | ApiError> {
+    const { spellId, content, isCloud } = params.query as ApiData
 
-    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -71,7 +87,7 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
         spellId,
         inputs: {
           [`Input - REST API (GET)`]: {
-            connector: "REST API (GET)",
+            connector: 'REST API (GET)',
             content,
             sender: 'api',
             observer: agent.name,
@@ -80,20 +96,20 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
             agentId: agent.id,
             entities: ['api', agent.name],
             channelType: 'GET',
-            rawData: "{}"
+            rawData: '{}',
           },
           publicVariables: agent.publicVariables,
-          runSubspell: true
-        }
+          runSubspell: true,
+        },
       })
 
       return {
-        result: result as object
+        result: result as object,
       }
     } catch (err) {
-      this.logger.error("Error in ApiService.get: %s", err)
+      this.logger.error('Error in ApiService.get: %s', err)
       throw new GeneralError({
-        error: err
+        error: err,
       })
     }
   }
@@ -102,10 +118,14 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
     data: ApiData,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { content } = data;
+    const { content, isCloud } = data
     const spellId = data?.spellId
 
-    const agent = await getAgent(data.agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      data.agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -147,10 +167,14 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
     data: ApiData,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { content } = data
+    const { content, isCloud } = data
     const spellId = data?.spellId
 
-    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -191,9 +215,13 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
     agentId: string,
     params: ServiceParams
   ): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = params.query as ApiData
+    const { spellId, content, isCloud } = params.query as ApiData
 
-    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -223,13 +251,12 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error("Error in ApiService.remove: %s", err)
+      this.logger.error('Error in ApiService.remove: %s', err)
       throw new GeneralError({
         error: err,
       })
     }
   }
-  
 }
 
 /** Helper function to get options for the ApiService. */
