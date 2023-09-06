@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { app } from '@magickml/server-core'
 import { SpellRunner } from '../../src/spellManager'
 import { MagickSpellInput, SpellInterface } from '../../src/types'
 
@@ -22,6 +23,9 @@ export const runTestSpell = async (
   await spellRunner.loadSpell(spell)
 
   // Get the outputs from running the spell
+
+  // TODO fix this.  We need to pass an agent into runspell for it to work
+  //@ts-ignore
   const outputs = await app.get('agentCommander').runSpell({ inputs })
 
   // Return the outputs

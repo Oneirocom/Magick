@@ -9,7 +9,7 @@ import {
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
   DEFAULT_USER_TOKEN,
-    STANDALONE,
+  STANDALONE,
 } from '@magickml/config'
 import { PostHogProvider } from 'posthog-js/react'
 import { initLogger, getLogger } from '@magickml/core'
@@ -28,7 +28,7 @@ if (window === window.parent) {
   logger.info("not in iframe")
   if (STANDALONE) {
     logger.info("standalone")
-    const container = document.getElementById('root')
+    const container = document.getElementById('root') as Element
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
       ; (window as any).root = root
 
@@ -62,8 +62,6 @@ if (window === window.parent) {
     event => {
       // Remove possible trailing slash on only the end
       const cloudUrl = TRUSTED_PARENT_URL?.replace(/\/+$/, '')
-
-      logger.info('iframe: received message %o', event)
 
       // Check for trusted origin
       if (
@@ -110,7 +108,7 @@ if (window === window.parent) {
             return <MagickIDE config={config} />
           }
         }
-        const container = document.getElementById('root')
+        const container = document.getElementById('root') as Element
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
           ; (window as any).root = root
 

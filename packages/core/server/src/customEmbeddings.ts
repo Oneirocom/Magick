@@ -34,11 +34,8 @@ export class PluginEmbeddings extends Embeddings {
   embedQuery(): Promise<number[]> {
     throw new Error('Please use embedQueryWithMeta instead.')
   }
-  completionProviders: CompletionProvider[]
   stripNewLines: any
-  modelName: string
-  batchSize: number
-  caller: any
+  declare caller: any
   key: any
   secrets: any
   constructor(params) {
@@ -91,11 +88,11 @@ export class PluginEmbeddings extends Embeddings {
       const wordsPerChunk = 8000
       const str = document as string
       const chunks = str.split('<<BREAK>>')
-      const output = []
+      const output = [] as string[][]
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i]
         const chunkLength = this.countWords(chunk)
-        const subChunks = []
+        const subChunks = [] as string[]
         for (let j = 0; j < chunkLength; j += wordsPerChunk) {
           const subChunk = chunk.substring(j, j + wordsPerChunk)
           subChunks.push(subChunk)
@@ -105,7 +102,7 @@ export class PluginEmbeddings extends Embeddings {
       document = output.flat()
     }
 
-    const embeddings = []
+    const embeddings = [] as any
     for (let i = 0; i < document.length; i++) {
       const input = document[i]
       const response = await this.embeddingWithRetryWithMeta(
@@ -125,7 +122,7 @@ export class PluginEmbeddings extends Embeddings {
    * @returns {Promise<number[][]>}
    */
   async embeddingWithRetryWithMeta(embeddingObject, param: EmbeddingArgs) {
-    console.log(param)
+    // console.log(param)
     const completionProviders = pluginManager.getCompletionProviders('text', [
       'embedding',
     ])
@@ -133,6 +130,13 @@ export class PluginEmbeddings extends Embeddings {
       provider.models.includes(param.modelName)
     ) as CompletionProvider
     const handler = provider?.handler
+
+    if (!handler) {
+      throw new Error(
+        `No handler found for model ${param.modelName} in plugin ${provider?.pluginName}`
+      )
+    }
+
     let response: any
     let retry = 0
     while (retry < 3) {
@@ -140,7 +144,7 @@ export class PluginEmbeddings extends Embeddings {
         response = await handler({
           inputs: { input: [embeddingObject['input']] },
           node: { data: { model: param.modelName } } as unknown as WorkerData,
-          outputs: undefined,
+          outputs: {},
           context: {
             module: { secrets: JSON.parse(param['secrets']) },
             projectId: param.projectId,
