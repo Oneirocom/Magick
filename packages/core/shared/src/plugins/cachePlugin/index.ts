@@ -1,15 +1,11 @@
-// DOCUMENTED 
-import { Component, Control } from 'rete';
+// DOCUMENTED
+import { Component, Control } from 'rete'
 
-import { MagickComponent } from '../../engine';
-import {
-  MagickEditor,
-  MagickNode,
-  WorkerData,
-} from '../../types';
+import { MagickComponent } from '../../engine'
+import { MagickEditor, MagickNode, WorkerData } from '../../types'
 
-import { Task } from '../taskPlugin';
-import { RunButtonControl } from './RunLastArguments';
+import { Task } from '../taskPlugin'
+import { RunButtonControl } from './RunLastArguments'
 
 /**
  * Installs the cache plugin to the provided editor.
@@ -18,11 +14,11 @@ import { RunButtonControl } from './RunLastArguments';
  */
 function install(editor: MagickEditor): void {
   editor.on('componentregister', (_component: Component) => {
-    const component = _component as MagickComponent<unknown>;
-    const originalWorker = component.worker;
-    const originalBuilder = component.builder;
+    const component = _component as MagickComponent<unknown>
+    const originalWorker = component.worker
+    const originalBuilder = component.builder
 
-    component.cache = {};
+    component.cache = {}
 
     /**
      * Worker wrapper function. Caches the arguments passed to the worker for later use.
@@ -40,10 +36,16 @@ function install(editor: MagickEditor): void {
         outputs,
         context,
         ...args,
-      };
+      }
 
-      return originalWorker.apply(component, [node, inputs, outputs, context, ...args]);
-    };
+      return originalWorker.apply(component, [
+        node,
+        inputs,
+        outputs,
+        context,
+        ...args,
+      ])
+    }
 
     /**
      * Builder wrapper function. Adds a run button to the component if the 'runFromCache' property is true.
@@ -57,11 +59,11 @@ function install(editor: MagickEditor): void {
          * @returns {Promise<unknown> | null} The result of the worker or null if the data is not cached.
          */
         const run = async (node: WorkerData) => {
-          const cache = component.cache[node.id] as { inputs; outputs; context };
+          const cache = component.cache[node.id] as { inputs; outputs; context }
 
-          if (!cache) return null;
+          if (!cache) return null
 
-          const { inputs, outputs, context } = cache;
+          const { inputs, outputs, context } = cache
 
           // Run the original worker and get the task.
           const task = (await originalWorker.apply(component, [
@@ -69,27 +71,27 @@ function install(editor: MagickEditor): void {
             inputs,
             outputs,
             context,
-          ])) as Task;
+          ])) as Task
 
           // Run the task's worker and return the result.
-          const value = await task.worker(node, inputs, outputs, context);
-          return value;
-        };
+          const value = await task.worker(node, inputs, outputs, context)
+          return value
+        }
 
-        const runControl = new RunButtonControl({ key: 'runControl', run });
+        const runControl = new RunButtonControl({ key: 'runControl', run })
 
         // Add the run control to the node.
-        _node.addControl(runControl as Control);
+        _node.addControl(runControl as Control)
       }
 
-      return originalBuilder.call(component, _node);
-    };
-  });
+      return originalBuilder.call(component, _node)
+    }
+  })
 }
 
 const defaultExport = {
   name: 'cachePlugin',
   install,
-};
+}
 
-export default defaultExport;
+export default defaultExport
