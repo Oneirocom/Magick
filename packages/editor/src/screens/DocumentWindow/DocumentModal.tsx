@@ -48,10 +48,10 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
     setSelectedModel({ model: selectedModelValue, object: selectedObject });
   };
 
-  const handleSaveDocument = () => {
+  const handleSaveDocument = async () => {
     setLoading(true);
     if (newDocument.type) {
-      handleSave(selectedModel);
+      await handleSave(selectedModel);
       setLoading(false);
     } else {
       setLoading(false);
@@ -66,7 +66,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
       submitText="Generate Embeddings and Save"
       handleAction={handleSaveDocument}
     >
-      {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress color="secondary" /></Backdrop>}
+      {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress className={styles.loader} /></Backdrop>}
       <Grid container>
 
         <Grid container direction="row" justifyContent="space-between">

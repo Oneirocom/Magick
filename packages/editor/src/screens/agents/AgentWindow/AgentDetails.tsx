@@ -13,6 +13,7 @@ import styles from './index.module.scss'
 import { tooltip_text } from "./tooltip_texts"
 import { extractPublicVariables } from './utils'
 
+
 /**
  * RenderComp renders the given component with the given props.
  *
@@ -146,9 +147,11 @@ const AgentDetails = ({
         }
 
       } catch (err) {
-        enqueueSnackbar(err.message, {
-          variant: 'error',
-        })
+        if (err instanceof Error) {
+          enqueueSnackbar(err.message, {
+            variant: 'error',
+          })
+        }
       }
     })()
 
