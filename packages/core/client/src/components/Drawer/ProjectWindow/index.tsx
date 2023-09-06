@@ -97,7 +97,7 @@ const ProjectWindow = ({ openDrawer }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      
+
       const res2 = await fetch(
         `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -247,6 +247,8 @@ const ProjectWindow = ({ openDrawer }) => {
             <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
               <MenuItem>
                 <FileInput
+                  // todo fix this typing issue
+                  // @ts-ignore
                   loadFile={loadFile}
                   sx={{
                     display: 'inline-block',

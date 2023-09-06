@@ -50,7 +50,7 @@ export class EventService<
 
     const query = db.from('events').select('*')
 
-    if (params.query.embedding) {
+    if (params?.query?.embedding) {
       const blob = atob(params.query.embedding)
       const ary_buf = new ArrayBuffer(blob.length)
       const dv = new DataView(ary_buf)
@@ -58,9 +58,7 @@ export class EventService<
       const f32_ary = new Float32Array(ary_buf)
 
       query.select(
-        db.raw(
-          `embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`
-        )
+        db.raw(`embedding <-> ${"'[" + f32_ary.toString() + "]'"} AS distance`)
       )
       query.orderBy('distance', 'asc')
     } else {
@@ -75,20 +73,25 @@ export class EventService<
       })
     }
 
-    const param = params.query
+    const param = params?.query
+
+    if (!param) {
+      return await db('events').select('*').limit(100)
+    }
+
     if (param.type) query.where({ type: param.type })
     if (param.id) query.where({ id: param.id })
     if (param.client) query.where({ client: param.client })
     if (param.channel) query.where({ channel: param.channel })
     if (param.projectId) query.where({ projectId: param.projectId })
-    if (param.content && params.query.embedding)
+    if (param.content && param.embedding)
       query.where({ content: param.content })
 
-    query.limit(params.query['$limit'])
+    query.limit(param.query['$limit'])
 
     const res = await query
 
-    if (!params.query.embedding) {
+    if (!param.query.embedding) {
       res.reverse()
     }
 
