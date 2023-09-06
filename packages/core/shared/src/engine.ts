@@ -13,7 +13,6 @@ import {
   GraphData,
   MagickEditor,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   ModuleOptions,
   UnknownData,
@@ -28,7 +27,8 @@ interface WorkerOutputs {
 
 // MagickEngine interface extends Engine
 export interface MagickEngine extends Engine {
-  tasks: Task[]
+  getTask: (nodeId: number) => Task
+  getTasks: () => Record<string, Task>
   moduleManager: ModuleManager
 }
 
@@ -90,12 +90,6 @@ export const initSharedEngine = ({
       })
     }
 
-    // if (emit) {
-    //   engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
-    //     server: true,
-    //     emit,
-    //   })
-    // }
     engine.use(TaskPlugin)
   }
 
@@ -168,7 +162,7 @@ export abstract class MagickComponent<
   WorkerReturnType
 > extends MagickEngineComponent<WorkerReturnType> {
   task: TaskOptions
-  _task: MagickTask
+  _task: Task
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
@@ -184,8 +178,7 @@ export abstract class MagickComponent<
   contextMenuName: string | undefined
   workspaceType: 'spell' | null | undefined
   displayName: string | undefined
-
-  nodeTaskMap: Record<number, MagickTask> = {}
+  engine: MagickEngine | null = null
 
   constructor(
     name: string,
@@ -199,7 +192,7 @@ export abstract class MagickComponent<
     this.info = info
     this.cache = {}
 
-    this._task = {} as MagickTask
+    this._task = {} as Task
   }
 
   abstract builder(
@@ -211,12 +204,12 @@ export abstract class MagickComponent<
     return node
   }
 
-  async run(node: NodeData, data = {}) {
+  async run(node: NodeData, data = {}, engine: MagickEngine) {
     if (!node || node === undefined) {
       return console.error('node is undefined')
     }
 
-    const task = this.nodeTaskMap[node?.id]
+    const task = engine.getTask(node?.id)
 
     if (!data || Object.keys(data).length === 0) {
       return console.error('data is undefined')
