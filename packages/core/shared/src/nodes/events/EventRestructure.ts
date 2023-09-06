@@ -16,13 +16,7 @@ import {
   stringSocket,
   triggerSocket,
 } from '../../sockets'
-import {
-  Event,
-  MagickNode,
-  MagickTask,
-  MagickWorkerInputs,
-  WorkerData,
-} from '../../types'
+import { Event, MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /** Component information */
 const info =
@@ -35,9 +29,6 @@ const info =
 export class EventRestructureComponent extends MagickComponent<
   Promise<{ output: Event }>
 > {
-  // Node task map
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   /**
    * Initializes a new EventRestructureComponent.
    */
@@ -49,9 +40,6 @@ export class EventRestructureComponent extends MagickComponent<
         outputs: {
           output: 'output',
           trigger: 'option',
-        },
-        init: (task = {} as Task, node: NodeData) => {
-          this.nodeTaskMap[node.id] = task
         },
       },
       'Event',
