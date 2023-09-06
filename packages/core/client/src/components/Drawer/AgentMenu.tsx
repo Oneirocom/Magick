@@ -276,11 +276,6 @@ function AgentMenu({ data, resetData }) {
           <ListItemAvatar>
             <BorderedAvatar
               alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
-              // src={
-              //   currentAgent && currentAgent.image
-              //     ? currentAgent.name
-              //     : currentAgent?.name?.at(0) || 'A'
-              // }
               src={
                 currentAgent && currentAgent.image
                   ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${currentAgent.image}`
