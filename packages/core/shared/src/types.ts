@@ -16,7 +16,7 @@ import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
+import { Task, TaskOutputTypes, TaskStore } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 
 import { DataControl } from './plugins/inspectorPlugin'
@@ -147,7 +147,8 @@ export type ControlData = {
 }
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
-  declare tasks: Task[]
+  declare getTask: (nodeId: number) => Task
+  declare getTasks: () => TaskStore
   declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
   declare context: EditorContext
@@ -438,13 +439,13 @@ export type NewSpellArgs = {
 export type MagickReteInput = {
   type: TaskOutputTypes
   outputData: unknown
-  task: MagickTask
+  nodeId: number
   key: string
 }
 
 export type TaskOutput = {
   type: TaskOutputTypes
-  task: MagickTask
+  task: Task
   key: string
 }
 
@@ -655,15 +656,11 @@ export type RequestData = {
 }
 
 export type AppService = (app: FeathersApplication) => void
+
+// todo this is deprecated and needs to be checked and removed
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }
-  init?: (task?: MagickTask, node?: MagickNode) => void
-  onRun?: (
-    node: NodeData,
-    task: Task,
-    data: unknown,
-    socketInfo: TaskSocketInfo
-  ) => void
+  init?: (task?: Task, node?: MagickNode) => void
 }
 
 export interface ModuleOptions {
