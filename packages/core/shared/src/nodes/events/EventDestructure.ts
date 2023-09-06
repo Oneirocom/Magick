@@ -2,9 +2,7 @@
 import Rete from 'rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData } from 'rete/types/core/data'
 import { MagickComponent } from '../../engine'
-import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
   embeddingSocket,
