@@ -6,6 +6,7 @@ import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import {
   GraphData,
+  MagickComponent,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
@@ -155,8 +156,9 @@ export class ModuleManager {
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
-      const component = engine?.components.get('Input') as ModuleComponent
-      await component?.run(triggeredNode)
+      const component = engine?.components.get(
+        'Input'
+      ) as MagickComponent<unknown>
     }
     // gather the outputs
     module.write(outputs)
