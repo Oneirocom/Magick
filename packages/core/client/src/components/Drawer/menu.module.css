@@ -71,3 +71,7 @@ ul ul ul li  {
   margin: 0;
   /* margin-top: 0.8rem; */
 }
+
+.inputEdit{
+  width: 134px !important;
+}

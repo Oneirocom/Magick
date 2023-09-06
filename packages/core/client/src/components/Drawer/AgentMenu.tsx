@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import Avatar from '@mui/material/Avatar'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -13,14 +13,55 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { useNavigate } from 'react-router-dom'
+import { IconBtn } from '@magickml/client-core'
+import { Close, Done } from '@mui/icons-material'
+import styles from './menu.module.css'
+import { useConfig } from '@magickml/client-core'
+import { enqueueSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
+import { Modal } from '@magickml/client-core'
+import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from '@magickml/config'
+import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 
-function AgentMenu() {
+interface Spell {
+  id: number
+  name: string
+  // Add other relevant properties
+}
+
+interface Agent {
+  rootSpellId: number
+  // Add other relevant properties
+}
+
+function AgentMenu({ data, resetData }) {
+  const navigate = useNavigate()
+  const [openMenu1, setOpenMenu1] = useState(null)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+  const [openMenu2, setOpenMenu2] = useState(null)
+  const [editMode, setEditMode] = useState<boolean>(false)
+  const [oldName, setOldName] = useState<string>('')
+  const [selectedAgentData, setSelectedAgentData] = useState<any>(null)
+  const [currentAgent, setCurrentAgent] = useState<any>(null)
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
+  const config = useConfig()
+  const spellList: Spell[] = useSpellList()
+  const imageInputRef = useRef<HTMLInputElement>(null)
+
+  const handleClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const onSubmit = () => {
+    handleDelete(selectedAgentData.id)
+    setOpenConfirm(false)
+  }
+
   const BorderedAvatar = styled(Avatar)`
     border: 1px solid lightseagreen;
   `
-
-  const [openMenu1, setOpenMenu1] = React.useState(null)
-  const [openMenu2, setOpenMenu2] = React.useState(null)
 
   const handleToggleMenu1 = event => {
     setOpenMenu1(event.currentTarget)
@@ -30,12 +71,154 @@ function AgentMenu() {
     setOpenMenu1(null)
   }
 
-  const handleToggleMenu2 = event => {
-    setOpenMenu2(event.currentTarget)
-  }
+  const handleToggleMenu2 = useCallback(
+    (agent, event) => {
+      setOpenMenu2(event.currentTarget)
+      setSelectedAgentData(agent)
+    },
+    [] // No external dependencies, so this callback won't change
+  )
 
   const handleCloseMenu2 = () => {
     setOpenMenu2(null)
+  }
+
+  const update = (id: string, data = undefined) => {
+    const _data = data || { ...selectedAgentData }
+    id = id || _data.id
+    if (_data['id']) {
+      delete _data.id
+      delete _data?.dirty
+    }
+
+    if (_data['rootSpellId'] === null) {
+      enqueueSnackbar('Root spell Is Missing', {
+        variant: 'error',
+      })
+      return
+    }
+
+    // Avoid server-side validation error
+    _data.enabled = _data.enabled ? true : false
+    _data.updatedAt = new Date().toISOString()
+    _data.secrets = _data.secrets ? _data.secrets : '{}'
+
+    fetch(`${config.apiUrl}/agents/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(_data),
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+        return res.json()
+      })
+      .then(data => {
+        enqueueSnackbar('Updated agent', {
+          variant: 'success',
+        })
+        resetData()
+        setSelectedAgentData(data)
+      })
+      .catch(e => {
+        console.error('ERROR', e)
+        enqueueSnackbar(e, {
+          variant: 'error',
+        })
+      })
+  }
+  const handleDelete = (id: string) => {
+    fetch(`${config.apiUrl}/agents/` + id, {
+      method: 'DELETE',
+      headers: STANDALONE
+        ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+        : { Authorization: `Bearer ${token}` },
+    })
+      .then(async res => {
+        res = await res.json()
+        enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
+          variant: 'success',
+        })
+        if (selectedAgentData.id === id) setSelectedAgentData(undefined)
+        resetData()
+      })
+      .catch(e => {
+        enqueueSnackbar('Server Error deleting entity with id: ' + id, {
+          variant: 'error',
+        })
+      })
+  }
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+    if (selectedAgentData.rootSpellId === null) {
+      enqueueSnackbar('Root spell Is Missing', {
+        variant: 'error',
+      })
+      return
+    }
+    // Create a FileReader instance
+    const reader = new FileReader()
+    // Read the file as a data URL
+    reader.readAsDataURL(file)
+    // Handle the load event
+    reader.onload = () => {
+      // Get the base64 string from the result
+      const base64: any = reader.result
+      // Remove the data URL prefix
+      try {
+        // Update the image property in selectedAgentData before uploading
+        const updatedAgentData = {
+          ...selectedAgentData,
+          image: `${selectedAgentData.id}.jpg`,
+        }
+
+        fetch(`${API_ROOT_URL}/agentImage`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            image: base64,
+            agentId: selectedAgentData.id,
+          }),
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(res.statusText)
+            }
+            return res
+          })
+          .then(data => {
+            update(updatedAgentData.id, updatedAgentData)
+            enqueueSnackbar('Updated Agent Image', {
+              variant: 'success',
+            })
+            resetData()
+          })
+          .catch(e => {
+            enqueueSnackbar(e, {
+              variant: 'error',
+            })
+          })
+      } catch (error) {
+        console.log(`Error uploading file: ${error}`)
+      }
+    }
+    // Handle the error event
+    reader.onerror = error => {
+      console.log(`Error reading file: ${error}`)
+    }
   }
 
   const StyledDivider = styled(Divider)(({ theme }) => ({
@@ -43,6 +226,40 @@ function AgentMenu() {
     marginTop: '4px',
     marginBottom: '4px',
   }))
+
+  const handleSelectAgent = (agent: Agent) => {
+    setCurrentAgent(agent)
+
+    if (spellList) {
+      // Find a spell with the same ID as agent.rootSpellId
+      const matchingSpell = spellList.find(
+        spell => spell.id === agent.rootSpellId
+      )
+
+      if (matchingSpell) {
+        const spellName = matchingSpell.name
+
+        // Construct the URL
+        const encodedSpellName = encodeURIComponent(btoa(spellName))
+        const url = `/magick/${agent.rootSpellId}-${encodedSpellName}`
+
+        // Navigate to the URL
+        navigate(url)
+      }
+    }
+    handleCloseMenu1()
+  }
+
+  // Set currentAgent based on data prop
+  useEffect(() => {
+    if (data && data.length > 0) {
+      // Check if 'Default Agent' exists in data
+      const defaultAgent = data.find(agent => agent.name === 'Default Agent')
+
+      // Set currentAgent to 'Default Agent' if it exists, otherwise choose the first agent
+      setCurrentAgent(defaultAgent || data[0])
+    }
+  }, [data])
 
   return (
     <div>
@@ -58,12 +275,18 @@ function AgentMenu() {
         >
           <ListItemAvatar>
             <BorderedAvatar
-              alt="Remy Sharp"
-              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
-              sx={{ width: 30, height: 30 }}
+              alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
+              src={
+                currentAgent && currentAgent.image
+                  ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${currentAgent.image}`
+                  : currentAgent?.name?.at(0) || 'A'
+              }
+              sx={{ width: 24, height: 24 }}
             />
           </ListItemAvatar>
-          <ListItemText primary="Agent name" />
+          <ListItemText
+            primary={currentAgent ? currentAgent?.name : 'New agent'}
+          />
           <IconButton
             aria-label="expand"
             size="small"
@@ -97,84 +320,118 @@ function AgentMenu() {
           },
         }}
       >
+        {data?.map((agent, i) => {
+          const primaryText =
+            selectedAgentData?.id === agent.id
+              ? selectedAgentData.name
+              : agent?.name
+          return (
+            <>
+              <MenuItem
+                sx={{
+                  px: 1,
+                  py: 0,
+                  width: 200,
+                  justifyContent: 'space-between',
+                  '&:hover, &:focus': {
+                    background: 'none',
+                    outline: 'none',
+                  },
+                }}
+                key={i}
+              >
+                {editMode && selectedAgentData?.id === agent?.id ? (
+                  <>
+                    <input
+                      type="text"
+                      name="name"
+                      className={styles.inputEdit}
+                      value={selectedAgentData.name}
+                      onChange={e =>
+                        setSelectedAgentData({
+                          ...selectedAgentData,
+                          name: e.target.value,
+                        })
+                      }
+                      placeholder="Add new agent name here"
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          update(selectedAgentData.id)
+                          setEditMode(false)
+                          setOldName('')
+                        }
+                      }}
+                    />
+                    <IconBtn
+                      label={'Done'}
+                      Icon={<Done />}
+                      onClick={e => {
+                        update(selectedAgentData.id)
+                        setEditMode(false)
+                        setOldName('')
+                      }}
+                    />
+                    <IconBtn
+                      label={'close'}
+                      Icon={<Close />}
+                      onClick={e => {
+                        setSelectedAgentData({
+                          ...selectedAgentData,
+                          name: oldName,
+                        })
+                        setOldName('')
+                        setEditMode(false)
+                      }}
+                    />
+                  </>
+                ) : (
+                  <ListItemAvatar
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <BorderedAvatar
+                      alt={primaryText.at(0) || 'A'}
+                      src={
+                        agent.image
+                          ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
+                          : primaryText.at(0) || 'A'
+                      }
+                      sx={{ width: 24, height: 24 }}
+                    />
+                    <ListItemText
+                      onClick={() => handleSelectAgent(agent)}
+                      primary={primaryText}
+                      sx={{ ml: 2 }}
+                    />
+                  </ListItemAvatar>
+                )}
+                <ListItemIcon sx={{ placeContent: 'end' }}>
+                  <MoreIcon
+                    fontSize="small"
+                    onClick={event => handleToggleMenu2(agent, event)}
+                    aria-controls="menu2"
+                    aria-haspopup="true"
+                  />
+                </ListItemIcon>
+              </MenuItem>
+              <StyledDivider />
+            </>
+          )
+        })}
+
         <MenuItem
           sx={{
             px: 1,
             py: 0,
-            width: 200,
-            justifyContent: 'space-between',
             '&:hover, &:focus': {
               background: 'none',
               outline: 'none',
             },
           }}
-        >
-          <ListItemAvatar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <BorderedAvatar
-              alt="Remy Sharp"
-              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
-              sx={{ width: 24, height: 24 }}
-            />
-            <ListItemText primary="Agent1" sx={{ ml: 2 }} />
-          </ListItemAvatar>
-          <ListItemIcon sx={{ placeContent: 'end' }}>
-            <MoreIcon
-              fontSize="small"
-              onClick={handleToggleMenu2}
-              aria-controls="menu2"
-              aria-haspopup="true"
-            />
-          </ListItemIcon>
-        </MenuItem>
-        <StyledDivider />
-        <MenuItem
-          sx={{
-            px: 1,
-            py: 0,
-            width: 200,
-            justifyContent: 'space-between',
-            '&:hover, &:focus': {
-              background: 'none',
-              outline: 'none',
-            },
-          }}
-        >
-          <ListItemAvatar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <BorderedAvatar
-              alt="Remy Sharp"
-              src="https://c4.wallpaperflare.com/wallpaper/452/586/387/artwork-fantasy-art-wizard-books-skull-hd-wallpaper-preview.jpg"
-              sx={{ width: 24, height: 24 }}
-            />
-            <ListItemText primary="Agent1" sx={{ ml: 2 }} />
-          </ListItemAvatar>
-          <ListItemIcon sx={{ placeContent: 'end' }}>
-            <MoreIcon
-              fontSize="small"
-              onClick={handleToggleMenu2}
-              aria-controls="menu2"
-              aria-haspopup="true"
-            />
-          </ListItemIcon>
-        </MenuItem>
-        <StyledDivider />
-        <MenuItem
-          sx={{
-            px: 1,
-            py: 0,
-            '&:hover, &:focus': {
-              background: 'none',
-              outline: 'none',
-            },
+          onClick={() => {
+            navigate(`/magick/Agents-${encodeURIComponent(btoa('Agents'))}`)
           }}
         >
           <List
@@ -222,14 +479,101 @@ function AgentMenu() {
           },
         }}
       >
-        <MenuItem sx={{ py: 0 }}>Rename</MenuItem>
+        <MenuItem
+          sx={{
+            py: 0,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+          onClick={e => {
+            setEditMode(true)
+            setOldName(selectedAgentData.name)
+            handleCloseMenu2()
+          }}
+        >
+          Rename
+        </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{ py: 0 }}>Delete</MenuItem>
+        <MenuItem
+          sx={{
+            py: 0,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+            color: `${
+              selectedAgentData &&
+              (selectedAgentData.name === 'Default Agent' ? 'grey' : 'white')
+            }`,
+            cursor: `${
+              selectedAgentData &&
+              (selectedAgentData.name === 'Default Agent'
+                ? 'not-allowed'
+                : 'pointer')
+            }`,
+          }}
+          onClick={e => {
+            if (selectedAgentData.name !== 'Default Agent') {
+              setOpenConfirm(true)
+            }
+            handleCloseMenu2()
+          }}
+        >
+          Delete
+        </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{ py: 0 }}>Change Image</MenuItem>
+        <MenuItem
+          sx={{
+            py: 0,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+          onClick={() => {
+            imageInputRef?.current?.click()
+            handleCloseMenu2()
+          }}
+        >
+          Change Image
+        </MenuItem>
         <StyledDivider />
-        <MenuItem sx={{ py: 0 }}>Other Options</MenuItem>
+        <MenuItem
+          sx={{
+            py: 0,
+            '&:hover, &:focus': {
+              background: 'none',
+              outline: 'none',
+            },
+          }}
+          onClick={() => {
+            navigate(`/magick/Agents-${encodeURIComponent(btoa('Agents'))}`)
+          }}
+        >
+          Other Options
+        </MenuItem>
       </Menu>
+      {selectedAgentData && (
+        <Modal
+          open={openConfirm}
+          onClose={handleClose}
+          handleAction={onSubmit}
+          title={`Delete ${
+            selectedAgentData ? selectedAgentData.name : ''
+          }  agent`}
+          submitText="Confirm"
+          children="Do you want to delete this agent?"
+        />
+      )}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        style={{ display: 'none' }}
+        ref={imageInputRef}
+      />
     </div>
   )
 }
