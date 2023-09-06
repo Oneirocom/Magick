@@ -26,6 +26,7 @@ import MagickLogo from '../logo-full.png'
 import MagickLogoSmall from '../logo-small.png'
 import { Tooltip } from '@mui/material'
 import { drawerTooltipText } from '../tooltiptext'
+import { STANDALONE } from '@magickml/config'
 
 // Constants
 const drawerWidth = 150
@@ -201,9 +202,13 @@ export function OldSidebar({ children }: DrawerProps): JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
 
   // Function to toggle drawer state
-  const toggleDrawer = () => {
-    if (!openDrawer) setOpenProjectWindow(false)
-    setOpenDrawer(!openDrawer)
+  const onMagickLogoClick = () => {
+    if (!STANDALONE) {
+      if (!openDrawer) setOpenProjectWindow(false)
+      setOpenDrawer(!openDrawer)
+    } else {
+      window.parent.postMessage({ type: 'redirect', href: '/projects' }, '*')
+    }
   }
 
   // Function to handle navigation based on location path
@@ -245,7 +250,7 @@ export function OldSidebar({ children }: DrawerProps): JSX.Element {
       <StyledDrawer variant="permanent" open={openDrawer}>
         <DrawerHeader
           open={openDrawer}
-          onClick={toggleDrawer}
+          onClick={onMagickLogoClick}
           sx={{ justifyContent: openDrawer ? 'space-between' : 'flex-end' }}
         >
           <img
@@ -256,7 +261,6 @@ export function OldSidebar({ children }: DrawerProps): JSX.Element {
               cursor: 'pointer',
             }}
             src={openDrawer ? MagickLogo : MagickLogoSmall}
-            onClick={toggleDrawer}
             alt=""
           />
         </DrawerHeader>
