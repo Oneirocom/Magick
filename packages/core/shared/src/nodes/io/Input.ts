@@ -12,7 +12,6 @@ import { anySocket, triggerSocket } from '../../sockets'
 import {
   CompletionSocket,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
@@ -28,8 +27,6 @@ type InputReturn = {
  * InputComponent is a MagickComponent that handles user input
  */
 export class InputComponent extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   constructor() {
     // Name of the component
     super(
@@ -41,8 +38,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
         },
       },
       'I/O',
-      info,
-    
+      info
     )
 
     this.module = {
