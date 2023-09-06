@@ -203,7 +203,7 @@ export function OldSidebar({ children }: DrawerProps): JSX.Element {
 
   // Function to toggle drawer state
   const onMagickLogoClick = () => {
-    if (!STANDALONE) {
+    if (STANDALONE) {
       if (!openDrawer) setOpenProjectWindow(false)
       setOpenDrawer(!openDrawer)
     } else {
