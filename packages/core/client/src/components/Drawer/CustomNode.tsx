@@ -31,13 +31,12 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleClick = () => {
-    if (!props.node.data) return
-    if (props.node?.data.fileType === 'txt') {
-      // todo fix this typing
+    if (!props.node) return
+    if (props.node.fileType === 'txt') {
       // @ts-ignore
       setOpenDoc(props.node.id)
       navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
-    } else if (props.node?.data.fileType === 'spell') {
+    } else if (props.node.fileType === 'spell') {
       navigate(
         `/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`
       )
