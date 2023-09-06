@@ -11,7 +11,7 @@ import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
-import { CLOUD_AGENT_KEY } from '@magickml/config'
+import { CLOUD_AGENT_KEY, STANDALONE } from '@magickml/config'
 
 export type { Api, ApiData, ApiPatch, ApiQuery }
 
@@ -42,7 +42,7 @@ const getAgent = async (
     throw new NotFound('Agent not found with id ' + agentId)
   }
 
-  if (isCloud) {
+  if (!STANDALONE && isCloud) {
     if (apiKey !== CLOUD_AGENT_KEY) {
       throw new BadRequest('Invalid API KEY')
     }
