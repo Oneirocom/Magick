@@ -160,6 +160,12 @@ function AgentMenu({ data, resetData }) {
     if (!file) {
       return
     }
+    if (selectedAgentData.rootSpellId === null) {
+      enqueueSnackbar('Root spell Is Missing', {
+        variant: 'error',
+      })
+      return
+    }
     // Create a FileReader instance
     const reader = new FileReader()
     // Read the file as a data URL
@@ -167,17 +173,25 @@ function AgentMenu({ data, resetData }) {
     // Handle the load event
     reader.onload = () => {
       // Get the base64 string from the result
-      const base64:any = reader.result
+      const base64: any = reader.result
       // Remove the data URL prefix
-      const base64String = base64.replace(/^data:.+;base64,/, '')
       try {
+        // Update the image property in selectedAgentData before uploading
+        const updatedAgentData = {
+          ...selectedAgentData,
+          image: `${selectedAgentData.id}.jpg`,
+        }
+
         fetch(`${API_ROOT_URL}/agentImage`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ file: base64String }),
+          body: JSON.stringify({
+            image: base64,
+            agentId: selectedAgentData.id,
+          }),
         })
           .then(res => {
             if (!res.ok) {
@@ -186,11 +200,11 @@ function AgentMenu({ data, resetData }) {
             return res
           })
           .then(data => {
-            enqueueSnackbar('Updated agent', {
+            update(updatedAgentData.id, updatedAgentData)
+            enqueueSnackbar('Updated Agent Image', {
               variant: 'success',
             })
             resetData()
-            setSelectedAgentData(data)
           })
           .catch(e => {
             enqueueSnackbar(e, {
@@ -262,9 +276,14 @@ function AgentMenu({ data, resetData }) {
           <ListItemAvatar>
             <BorderedAvatar
               alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
+              // src={
+              //   currentAgent && currentAgent.image
+              //     ? currentAgent.name
+              //     : currentAgent?.name?.at(0) || 'A'
+              // }
               src={
                 currentAgent && currentAgent.image
-                  ? currentAgent.name
+                  ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${currentAgent.image}`
                   : currentAgent?.name?.at(0) || 'A'
               }
               sx={{ width: 24, height: 24 }}
@@ -379,7 +398,11 @@ function AgentMenu({ data, resetData }) {
                   >
                     <BorderedAvatar
                       alt={primaryText.at(0) || 'A'}
-                      src={agent.image ? agent.name : primaryText.at(0) || 'A'}
+                      src={
+                        agent.image
+                          ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
+                          : primaryText.at(0) || 'A'
+                      }
                       sx={{ width: 24, height: 24 }}
                     />
                     <ListItemText
