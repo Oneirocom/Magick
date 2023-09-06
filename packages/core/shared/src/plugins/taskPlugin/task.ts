@@ -10,7 +10,7 @@ type TaskRef = {
 
 export type TaskSocketInfo = {
   targetSocket: string | null
-  targetNode: NodeData | null
+  targetNode: number | null
 }
 
 export type TaskOptions = {
@@ -30,7 +30,7 @@ type RunOptions = {
   needReset?: boolean
   garbage?: Task[]
   fromSocket?: string
-  fromNode?: NodeData
+  fromNode?: number
   fromTask?: Task
 }
 
@@ -45,7 +45,7 @@ type TaskWorker = (
   socketInfo: TaskSocketInfo | string | null
 ) => Promise<Record<string, unknown> | null>
 export class Task {
-  node: NodeData
+  nodeId: number
   inputs: MagickWorkerInputs
   component: MagickComponent<unknown>
   worker: TaskWorker
@@ -61,7 +61,6 @@ export class Task {
     worker: TaskWorker,
     getTask: (nodeId: number) => Task
   ) {
-    this.node = node
     this.inputs = inputs as MagickWorkerInputs
     this.component = component
     this.worker = worker
@@ -70,6 +69,7 @@ export class Task {
     this.closed = []
     this.getTask = getTask
     this.initializeNextTasks()
+    this.nodeId = node.id
   }
 
   private initializeNextTasks() {
@@ -79,7 +79,7 @@ export class Task {
           const task = this.getTask(workerInput.nodeId)
           task.next.push({
             key: workerInput.key,
-            nodeId: this.node.id,
+            nodeId: this.nodeId,
           })
         }
       )
@@ -132,11 +132,11 @@ export class Task {
 
       const task = this.getTask(con.nodeId)
       if (task.outputData) return true
-      if (task.node.id === fromNode.id) return true
+      if (task.nodeId === fromNode.id) return true
       if (task.component.name === 'Spell') return false
 
       // return true if the input is from a triggerless component
-      if (!task.node.outputs.trigger) return true
+      // if (!task.node.outputs.trigger) return true
       // TODO: check if default should be false
       return false
     }
@@ -171,7 +171,7 @@ export class Task {
             .map(async (con: MagickReteInput) => {
               const task = this.getTask(con.nodeId)
               // if the task has come from a node with output data that is not the calling node, use that data
-              if (task.outputData && task.node.id !== fromNode?.id) {
+              if (task.outputData && task.nodeId !== fromNode) {
                 return (task.outputData as Record<string, unknown>)[con.key]
               }
 
@@ -179,7 +179,7 @@ export class Task {
                 needReset: false,
                 garbage,
                 propagate: false,
-                fromNode: this.node,
+                fromNode: this.nodeId,
               })
 
               return (task.outputData as Record<string, unknown>)[con.key]
@@ -220,7 +220,7 @@ export class Task {
             needReset: false,
             garbage,
             fromSocket: con.key,
-            fromNode: this.node,
+            fromNode: this.nodeId,
             fromTask: this,
           })
         })
@@ -247,20 +247,20 @@ export class Task {
         )
       })
 
-    const task = new Task(
-      inputs,
-      this.component,
-      this.node,
-      this.worker,
-      this.getTask
-    )
+    // const task = new Task(
+    //   inputs,
+    //   this.component,
+    //   this.node,
+    //   this.worker,
+    //   this.getTask
+    // )
 
     // manually add a copies of follow tasks
-    task.next = this.next.map(n => ({
-      key: n.key,
-      nodeId: n.nodeId,
-    }))
+    // task.next = this.next.map(n => ({
+    //   key: n.key,
+    //   nodeId: n.nodeId,
+    // }))
 
-    return task
+    return {}
   }
 }

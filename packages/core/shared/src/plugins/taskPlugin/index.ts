@@ -95,7 +95,7 @@ function install(editor: MagickEditor) {
       // Create the main task
       const task = new Task(inputs, component, node, taskCaller, getTask)
 
-      console.log('TASK', task)
+      console.log('LOADING TASK', task)
 
       // add the task to the task store
       taskStore[node.id] = task
@@ -106,9 +106,9 @@ function install(editor: MagickEditor) {
       })
 
       // init the task on the components task options if needed
-      if (taskOptions.init) taskOptions.init(task, node)
+      if (taskOptions.init) taskOptions.init(task as any, node)
 
-      return task
+      // return task
     }
   })
 }
