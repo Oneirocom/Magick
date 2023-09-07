@@ -62,16 +62,6 @@
       "@magickml/plugin-bluesky-server": [
         "packages/plugins/bluesky/server/src/index.ts"
       ],
-      "@magickml/plugin-cog-client": [
-        "packages/plugins/cog/client/src/index.ts"
-      ],
-      "@magickml/plugin-cog-server": [
-        "packages/plugins/cog/server/src/index.ts"
-      ],
-      "@magickml/plugin-cog-shared": [
-        "packages/plugins/cog/shared/src/index.ts"
-      ],
-
       "@magickml/plugin-database-client": [
         "packages/plugins/database/client/src/index.ts"
       ],
@@ -98,15 +88,6 @@
       ],
       "@magickml/plugin-elevenlabs-shared": [
         "packages/plugins/elevenlabs/shared/src/index.ts"
-      ],
-      "@magickml/plugin-storage-server": [
-        "packages/plugins/storage/server/src/index.ts"
-      ],
-      "@magickml/plugin-storage-shared": [
-        "packages/plugins/storage/shared/src/index.ts"
-      ],
-      "@magickml/plugin-storage-client": [
-        "packages/plugins/storage/client/src/index.ts"
       ],
       "@magickml/plugin-ethereum-client": [
         "packages/plugins/ethereum/client/src/index.ts"
@@ -192,15 +173,6 @@
       "@magickml/plugin-search-shared": [
         "packages/plugins/search/shared/src/index.ts"
       ],
-      "@magickml/plugin-spotify-client": [
-        "packages/plugins/spotify/client/src/index.ts"
-      ],
-      "@magickml/plugin-spotify-server": [
-        "packages/plugins/spotify/server/src/index.ts"
-      ],
-      "@magickml/plugin-spotify-shared": [
-        "packages/plugins/spotify/shared/src/index.ts"
-      ],
       "@magickml/plugin-task-client": [
         "packages/plugins/task/client/src/index.ts"
       ],
@@ -215,15 +187,6 @@
       ],
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
-      ],
-      "@magickml/plugin-weather-client": [
-        "packages/plugins/weather/client/src/index.ts"
-      ],
-      "@magickml/plugin-weather-server": [
-        "packages/plugins/weather/server/src/index.ts"
-      ],
-      "@magickml/plugin-weather-shared": [
-        "packages/plugins/weather/shared/src/index.ts"
       ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],

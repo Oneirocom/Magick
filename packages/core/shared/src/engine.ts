@@ -139,7 +139,6 @@ export type NodeCategory =
   | 'Embedding'
   | 'Documents'
   | 'Code'
-  | 'Files'
   | 'Boolean'
   | 'Array'
   | 'Image'
@@ -157,8 +156,6 @@ export type NodeCategory =
   | 'Database'
   | 'Github'
   | 'Intent'
-  | 'Weather'
-  | 'Music'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<
