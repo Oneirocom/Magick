@@ -9,7 +9,7 @@ import { dataValidator, queryValidator } from '@magickml/server-core'
 /**
  * Main data model schema
  */
-export const apiSchema = Type.Object(
+export const agentHttpSchema = Type.Object(
   {
     spellId: Type.String(),
     agentId: Type.String(),
@@ -17,16 +17,16 @@ export const apiSchema = Type.Object(
     apiKey: Type.String(),
     isCloud: Type.Optional(Type.Boolean()),
   },
-  { $id: 'Api', additionalProperties: false }
+  { $id: 'AgentHttp', additionalProperties: false }
 )
 
-export type Api = Static<typeof apiSchema>
-export const apiValidator = getValidator(apiSchema, dataValidator)
-export const apiResolver = resolve<Api, HookContext>({})
+export type AgentHttp = Static<typeof agentHttpSchema>
+export const agentHttpValidator = getValidator(agentHttpSchema, dataValidator)
+export const agentHttpResolver = resolve<AgentHttp, HookContext>({})
 
-export const apiExternalResolver = resolve<Api, HookContext>({})
+export const agentHttpExternalResolver = resolve<AgentHttp, HookContext>({})
 
-export const apiDataSchema = Type.Object(
+export const agentHttpDataSchema = Type.Object(
   {
     spellId: Type.Optional(Type.String()),
     agentId: Type.String(),
@@ -34,29 +34,35 @@ export const apiDataSchema = Type.Object(
     isCloud: Type.Optional(Type.Boolean()),
   },
   {
-    $id: 'ApiData',
+    $id: 'AgentHttpData',
   }
 )
 
-export type ApiData = Static<typeof apiDataSchema>
-export const apiDataValidator = getValidator(apiDataSchema, dataValidator)
-export const apiDataResolver = resolve<Api, HookContext>({})
+export type AgentHttpData = Static<typeof agentHttpDataSchema>
+export const agentHttpDataValidator = getValidator(
+  agentHttpDataSchema,
+  dataValidator
+)
+export const agentHttpDataResolver = resolve<AgentHttp, HookContext>({})
 
 /**
  * Schema for updating existing entries
  */
-export const apiPatchSchema = Type.Partial(apiSchema, {
-  $id: 'ApiPatch',
+export const agentHttpPatchSchema = Type.Partial(agentHttpSchema, {
+  $id: 'AgentHttpPatch',
 })
 
-export type ApiPatch = Static<typeof apiPatchSchema>
-export const apiPatchValidator = getValidator(apiPatchSchema, dataValidator)
-export const apiPatchResolver = resolve<Api, HookContext>({})
+export type AgentHttpPatch = Static<typeof agentHttpPatchSchema>
+export const agentHttpPatchValidator = getValidator(
+  agentHttpPatchSchema,
+  dataValidator
+)
+export const agentHttpPatchResolver = resolve<AgentHttp, HookContext>({})
 
 /**
  * Schema for allowed query properties
  */
-export const apiQueryProperties = Type.Pick(apiSchema, [
+export const agentHttpQueryProperties = Type.Pick(agentHttpSchema, [
   'agentId',
   'spellId',
   'content',
@@ -64,7 +70,7 @@ export const apiQueryProperties = Type.Pick(apiSchema, [
   'isCloud',
 ])
 
-export const apiQuerySchema = Type.Object(
+export const agentHttpQuerySchema = Type.Object(
   {
     spellId: Type.Optional(Type.String()),
     content: Type.String(),
@@ -72,6 +78,9 @@ export const apiQuerySchema = Type.Object(
   { additionalProperties: false }
 )
 
-export type ApiQuery = Static<typeof apiQuerySchema>
-export const apiQueryValidator = getValidator(apiQuerySchema, queryValidator)
-export const apiQueryResolver = resolve<ApiQuery, HookContext>({})
+export type AgentHttpQuery = Static<typeof agentHttpQuerySchema>
+export const agentHttpQueryValidator = getValidator(
+  agentHttpQuerySchema,
+  queryValidator
+)
+export const agentHttpQueryResolver = resolve<AgentHttpQuery, HookContext>({})
