@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete, { Node, Engine } from 'rete'
+import Rete, { Node, Engine } from '@magickml/rete'
 import { NodeData } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'

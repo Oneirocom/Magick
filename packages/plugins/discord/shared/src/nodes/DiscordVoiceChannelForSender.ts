@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   Event,
   MagickComponent,
@@ -58,7 +58,11 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
     const outp = new Rete.Output('output', 'Channel ID', stringSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
+      .addInput(event)
   }
 
   /**
@@ -77,9 +81,11 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
+      console.warn(
+        'sending default information since there is no agent available'
+      )
       return {
-        output: null
+        output: null,
       }
     }
 
@@ -97,7 +103,9 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
     const username = event.sender
 
     // get the user from the cache
-    const user = discordClient.users.cache.find(user => user.username === username)
+    const user = discordClient.users.cache.find(
+      user => user.username === username
+    )
 
     // get the guild from the channel ID
     const channel = await discordClient.channels.fetch(event.channel)
@@ -106,6 +114,6 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
     const member = await guild.members.fetch(user)
     const voiceChannel = member.voice.channel
 
-    return { output: voiceChannel && voiceChannel.id };
+    return { output: voiceChannel && voiceChannel.id }
   }
 }

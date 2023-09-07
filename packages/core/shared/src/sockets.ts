@@ -1,4 +1,4 @@
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 // TODO: fix this very unmaintainable mapping
 // this is a hack and only temporary until we have a rete schema migration system set up
@@ -37,7 +37,7 @@ export type SocketType =
   | 'documentSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
-  'Any': 'anySocket',
+  Any: 'anySocket',
   Number: 'numberSocket',
   Boolean: 'booleanSocket',
   Array: 'arraySocket',

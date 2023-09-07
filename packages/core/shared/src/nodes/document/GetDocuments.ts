@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
@@ -13,7 +13,7 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
-  Document
+  Document,
 } from '../../types'
 
 const info =
@@ -65,7 +65,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'document',
-      tooltip: 'Enter document type'
+      tooltip: 'Enter document type',
     })
 
     const max_count = new InputControl({
@@ -73,7 +73,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
-      tooltip: 'Enter max count'
+      tooltip: 'Enter max count',
     })
 
     // Save controls as inspector data for easy reference
@@ -153,7 +153,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     })
     // Return the result for output
     return {
-      documents: response.data as Document[]
+      documents: response.data as Document[],
     }
   }
 }

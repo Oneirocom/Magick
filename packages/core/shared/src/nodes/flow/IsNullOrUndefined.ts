@@ -4,7 +4,7 @@
  * @class
  * @extends {MagickComponent}
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'

@@ -216,7 +216,6 @@ export class Task {
         // pass the socket that is being calledikno
         .map(async con => {
           const task = this.getTask(con.nodeId)
-          debugger
           return await task.run(data, {
             needReset: false,
             garbage,
