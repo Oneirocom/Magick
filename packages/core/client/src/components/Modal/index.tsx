@@ -58,7 +58,7 @@ export const Modal = ({
           <Button
             onClick={() => {
               handleAction()
-              
+
             }}
             className={styles.btnAction}
           >

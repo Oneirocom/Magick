@@ -87,11 +87,11 @@ export class EventService<
     if (param.content && param.embedding)
       query.where({ content: param.content })
 
-    query.limit(param.query['$limit'])
+    query.limit(param['$limit'])
 
     const res = await query
 
-    if (!param.query.embedding) {
+    if (!param.embedding) {
       res.reverse()
     }
 

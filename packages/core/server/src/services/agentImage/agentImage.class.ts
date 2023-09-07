@@ -1,53 +1,57 @@
-import { BadRequest } from '@feathersjs/errors'
 import AWS from 'aws-sdk'
-import multer from 'multer'
-import multerS3 from 'multer-s3'
+import {
+  AWS_BUCKET_NAME,
+  AWS_ACCESS_KEY,
+  AWS_REGION,
+  AWS_SECRET_KEY,
+  AWS_BUCKET_ENDPOINT,
+} from '@magickml/config'
+
+type AgentImageData = {
+  image: string
+  agentId: string
+}
 
 export class AgentImageService {
   s3: AWS.S3
   uploader: any
+  bucketName: string = AWS_BUCKET_NAME
 
   constructor() {
     // Set up AWS S3
     AWS.config.update({
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
-      region: process.env.AWS_REGION,
+      accessKeyId: AWS_ACCESS_KEY,
+      secretAccessKey: AWS_SECRET_KEY,
+      region: AWS_REGION,
     })
     this.s3 = new AWS.S3({
-      endpoint: process.env.AWS_BUCKET_ENDPOINT,
+      endpoint: AWS_BUCKET_ENDPOINT,
       s3ForcePathStyle: true,
-    })
-
-    // Set up multer to upload files to S3
-    this.uploader = multer({
-      storage: multerS3({
-        s3: this.s3,
-        bucket: process.env.AWS_BUCKET_NAME,
-        acl: 'public-read', // we may need to adjust this
-        metadata: function (req, file, cb) {
-          cb(null, { fieldName: file.fieldname })
-        },
-        key: function (req, file, cb) {
-          cb(null, Date.now().toString() + '-' + file.originalname)
-        },
-      }),
     })
   }
 
-  async create(data: any) {
-    // Upload to S3
-    return new Promise((resolve, reject) => {
-      this.uploader.single('file')(data, {}, (error: any, result: any) => {
-        if (error) {
-          reject(new BadRequest('Error uploading file.', error))
-        } else {
-          resolve({
-            message: 'File uploaded successfully.',
-            fileUrl: result.location,
-          })
-        }
-      })
-    })
+  async create(data: AgentImageData) {
+    const { image, agentId } = data
+    const buffer = Buffer.from(
+      image.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
+    )
+
+    const s3Params = {
+      Bucket: this.bucketName,
+      Key: `agents/${agentId}.jpg`,
+      Body: buffer,
+      ContentEncoding: 'base64',
+      ContentType: 'image/jpeg',
+    }
+
+    try {
+      const response = await this.s3.putObject(s3Params).promise()
+      return {
+        message: JSON.stringify(response),
+      }
+    } catch (error) {
+      throw new Error('Failed to upload image to S3.')
+    }
   }
 }
