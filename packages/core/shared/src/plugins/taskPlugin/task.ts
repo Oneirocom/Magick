@@ -57,7 +57,7 @@ export class Task {
   constructor(
     inputs: MagickWorkerInputs,
     component: MagickComponent<unknown>,
-    node: NodeData,
+    nodeId: number,
     worker: TaskWorker,
     getTask: (nodeId: number) => Task
   ) {
@@ -67,7 +67,7 @@ export class Task {
     this.next = []
     this.outputData = null
     this.closed = []
-    this.nodeId = node.id
+    this.nodeId = nodeId
     this.getTask = getTask
     this.initializeNextTasks()
   }
@@ -247,19 +247,21 @@ export class Task {
         )
       })
 
-    // const task = new Task(
-    //   inputs,
-    //   this.component,
-    //   this.node,
-    //   this.worker,
-    //   this.getTask
-    // )
+    // todo this may cause issues if we need a whole new copy of the node it references
+    // right now it is just a reference to the node
+    const task = new Task(
+      inputs,
+      this.component,
+      this.nodeId,
+      this.worker,
+      this.getTask
+    )
 
     // manually add a copies of follow tasks
-    // task.next = this.next.map(n => ({
-    //   key: n.key,
-    //   nodeId: n.nodeId,
-    // }))
+    task.next = this.next.map(n => ({
+      key: n.key,
+      nodeId: n.nodeId,
+    }))
 
     return {}
   }
