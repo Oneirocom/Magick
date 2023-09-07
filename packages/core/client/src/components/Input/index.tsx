@@ -12,9 +12,8 @@ export const Input = ({
   type,
   name,
   placeHolder,
-  onChange = e => {
-    /* null */
-  },
+  onChange,
+  onKeyDown,
   multiline = false,
   style = {},
   ...props
@@ -24,12 +23,14 @@ export const Input = ({
   name?: string
   placeHolder?: string
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onKeyDown?: (event: React.KeyboardEvent<HTMLTextAreaElement> | React.KeyboardEvent<HTMLDivElement> | React.KeyboardEvent<HTMLInputElement>) => void
   multiline?: boolean
   style?: React.CSSProperties
 }) => {
   // Render the TextField component with the given props.
   return (
     <TextField
+      onKeyDown={onKeyDown}
       classes={{ root: styles.root }} // Add custom styles to the TextField root.
       style={style} // Apply any given inline styles.
       name={name}
