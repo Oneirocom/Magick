@@ -12,11 +12,8 @@ export const Input = ({
   type,
   name,
   placeHolder,
-  onChange = e => {
-    /* null */
-  },
-  onKeyDown = e => {
-  },
+  onChange,
+  onKeyDown,
   multiline = false,
   style = {},
   ...props
