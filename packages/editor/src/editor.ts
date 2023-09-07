@@ -89,13 +89,9 @@ export const initEditor = function ({
   editor.tab = tab
   editor.currentSpell = spell
 
-  // Initialize plugins
-  // if (client) {
-  //   editor.use(SocketOverridePlugin)
-  // }
-
   editor.use(CachePlugin)
 
+  // handles highlighting nodes and connections on click
   editor.use(HighlightPlugin)
 
   // History plugin for undo/redo

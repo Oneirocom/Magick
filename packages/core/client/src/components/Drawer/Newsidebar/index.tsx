@@ -43,6 +43,9 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
+import { useConfig } from '@magickml/client-core'
+import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
+import { useSelector } from 'react-redux'
 
 const drawerWidth = 210
 
@@ -225,6 +228,10 @@ export function NewSidebar(DrawerProps): JSX.Element {
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  const config = useConfig()
+  const [data, setData] = useState([])
+  const globalConfig = useSelector((state: any) => state.globalConfig)
+  const token = globalConfig?.token
   const { treeData, setTreeData} = useTreeData()
   const handleDrop = (newTree: NodeModel[]) => {
     setTreeData(newTree)
@@ -233,6 +240,62 @@ export function NewSidebar(DrawerProps): JSX.Element {
   // Function to handle navigation based on location path
   const onClick = (location: string) => () => {
     navigate(location)
+  }
+
+  //create new default agent
+  const createNew = (data: {
+    projectId: string
+    rootSpell?: string
+    enabled: boolean
+    name: string
+    updatedAt?: string
+    publicVariables: string
+    secrets: string
+  }) => {
+    if (!token && PRODUCTION) {
+      return
+    }
+
+    fetch(`${config.apiUrl}/agents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ...data,
+        updatedAt: new Date().toISOString(),
+        pingedAt: new Date().toISOString(),
+      }),
+    })
+      .then(async res => {
+        const res2 = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: STANDALONE
+              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+              : { Authorization: `Bearer ${token}` },
+          }
+        )
+        const json = await res2.json()
+        setData(json.data)
+      })
+      .catch(err => {
+        console.error('error is', err)
+      })
+  }
+
+  const resetData = async () => {
+    const res = await fetch(
+      `${config.apiUrl}/agents?projectId=${config.projectId}`,
+      {
+        headers: STANDALONE
+          ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+          : { Authorization: `Bearer ${token}` },
+      }
+    )
+    const json = await res.json()
+    setData(json.data)
   }
 
   useEffect(() => {
@@ -248,6 +311,36 @@ export function NewSidebar(DrawerProps): JSX.Element {
       setAPIKeysSet(secretHasBeenSet)
     }
   }, [])
+
+  useEffect(() => {
+    if (!config.apiUrl) return
+    ;(async () => {
+      const res = await fetch(
+        `${config.apiUrl}/agents?projectId=${config.projectId}`,
+        {
+          headers: STANDALONE
+            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+            : { Authorization: `Bearer ${token}` },
+        }
+      )
+      const json = await res.json()
+      // if data.length === 0  create new agent
+      if (json.data.length === 0) {
+        await createNew({
+          name: "Default Agent",
+          projectId: config.projectId,
+          enabled: false,
+          publicVariables: '{}',
+          secrets: '{}',
+        })
+        setData(json.data)
+      } else {
+        setData(json.data)
+      }
+
+      // setIsLoading(false)
+    })()
+  }, [config?.apiUrl])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -293,7 +386,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
     <div style={{ display: 'flex', height: '100%' }}>
       <StyledDrawer variant="permanent" open={openDrawer}>
         <>
-          <AgentMenu />
+          <AgentMenu data={data} resetData={resetData} />
 
           <List
             sx={{

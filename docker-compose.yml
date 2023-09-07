@@ -15,6 +15,14 @@ services:
       POSTGRES_PASSWORD: magick_default_pw
     ports:
       - '5432:5432'
+  ninja:
+    container_name: s3-ninja
+    image: scireum/s3-ninja
+    restart: always
+    ports:
+      - 9444:9000
+    volumes:
+      - ./data:/opt/s3ninja/data
 volumes:
   cache:
     driver: local

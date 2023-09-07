@@ -65,6 +65,7 @@ export const documentSocket = new Rete.Socket('Document')
 export const embeddingSocket = new Rete.Socket('Embedding')
 export const taskSocket = new Rete.Socket('Task')
 export const imageSocket = new Rete.Socket('Image')
+export const fileSocket = new Rete.Socket('File')
 
 const sockets = [
   numberSocket,
