@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -41,7 +41,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       dataKey: 'name',
       name: 'Input name',
       placeholder: 'Conversation',
-      tooltip: 'Enter input name'
+      tooltip: 'Enter input name',
     })
 
     const type = new InputControl({
@@ -49,7 +49,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-      tooltip: 'Enter input type'
+      tooltip: 'Enter input type',
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)

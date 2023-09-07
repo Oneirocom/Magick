@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -35,7 +35,7 @@ export class GreaterThanOrEqual extends MagickComponent<void> {
       dataKey: 'value',
       name: 'Value',
       defaultValue: 0,
-      tooltip: 'Display default value'
+      tooltip: 'Display default value',
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -62,7 +62,8 @@ export class GreaterThanOrEqual extends MagickComponent<void> {
    * @param inputs - The MagickWorkerInputs instance
    */
   worker(node: WorkerData, inputs: MagickWorkerInputs): void {
-    const value = (inputs['value']?.[0] as number) ?? (node.data.value as number)
+    const value =
+      (inputs['value']?.[0] as number) ?? (node.data.value as number)
     const numberToTest = inputs['input']?.[0] as number
 
     if (numberToTest >= value) {

@@ -52,14 +52,14 @@ export class Task {
 
   async run(
     data: any,
-    needReset: boolean = true,
+    needReset = true,
     garbage: Task[] = [],
-    propagate: boolean = true
+    propagate = true
   ): Promise<void> {
     if (needReset) garbage.push(this)
 
     if (!this.outputData) {
-      var inputs: { [key: string]: any[] } = {}
+      const inputs: { [key: string]: any[] } = {}
 
       await Promise.all(
         this.getInputs('output').map(async key => {
@@ -87,7 +87,7 @@ export class Task {
     if (needReset) garbage.map(t => t.reset())
   }
 
-  clone(root: boolean = true, oldTask?: Task, newTask?: Task): Task {
+  clone(root = true, oldTask?: Task, newTask?: Task): Task {
     const inputs = { ...this.inputs }
 
     if (root)
@@ -95,7 +95,7 @@ export class Task {
       this.getInputs('option').map(key => delete inputs[key])
     // replace old tasks with new copies
     else
-      Object.keys(inputs).map(key => {
+      Object.keys(inputs).forEach(key => {
         inputs[key] = inputs[key].map(con => ({
           ...con,
           task: con.task === oldTask ? newTask! : con.task,

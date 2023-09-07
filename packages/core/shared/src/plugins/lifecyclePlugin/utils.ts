@@ -1,4 +1,4 @@
-import { NodeEditor } from 'rete'
+import { NodeEditor } from '@magickml/rete'
 
 import {
   OnCreated,

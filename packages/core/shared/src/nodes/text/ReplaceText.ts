@@ -4,7 +4,7 @@
  * This component replaces a string with another in the input.
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -59,19 +59,19 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
-      tooltip: 'Enter Replace Text name'
+      tooltip: 'Enter Replace Text name',
     })
     const match = new InputControl({
       dataKey: 'match',
       name: 'Match',
       icon: 'moon',
-      tooltip: 'Enter Replace Text match'
+      tooltip: 'Enter Replace Text match',
     })
     const replace = new InputControl({
       dataKey: 'replace',
       name: 'Replace',
       icon: 'moon',
-      tooltip: 'Enter Replace Text replace'
+      tooltip: 'Enter Replace Text replace',
     })
 
     node.inspector.add(name).add(match).add(replace)
@@ -101,7 +101,7 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
    * @param rawInputs {MagickWorkerInputs} The raw inputs to the component.
    */
   async worker(node: WorkerData, rawInputs: MagickWorkerInputs) {
-    const input = rawInputs['input'] && rawInputs['input'][0] as string
+    const input = rawInputs['input'] && (rawInputs['input'][0] as string)
 
     const match = ((rawInputs['match'] && rawInputs['match'][0]) ||
       node?.data?.match) as string

@@ -1,4 +1,4 @@
-import { Component } from 'rete'
+import { Component } from '@magickml/rete'
 import { NodeData, WorkerOutputs } from 'rete/types/core/data'
 
 import {

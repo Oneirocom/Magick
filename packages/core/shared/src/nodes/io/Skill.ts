@@ -1,4 +1,4 @@
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { stringSocket, taskSocket, triggerSocket } from '../../sockets'
@@ -142,7 +142,9 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
+      const outputs = await app
+        .get('agentCommander')
+        .runSpellWithResponse(runComponentArgs)
 
       return {
         output: outputs,

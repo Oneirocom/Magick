@@ -2,7 +2,7 @@
 /**
  * Represents a Rete object-to-JSON conversion component.
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
