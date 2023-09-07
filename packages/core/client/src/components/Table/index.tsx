@@ -14,6 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useTreeData } from '../../contexts'
 
 
 
@@ -199,7 +200,7 @@ export const TableComponent = ({
     fieldOrderBy ? fieldOrderBy : column[0].id
   )
   const [expandedRows, setExpandedRows] = React.useState<string[]>([]);
-
+  const { openDoc } = useTreeData()
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
