@@ -49,7 +49,7 @@ import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
 import { LessThan } from './number/LessThan'
 import { LessThanOrEqual } from './number/LessThanOrEqual'
-import { Multiply } from './number/Multiply'
+import { Multiply} from './number/Multiply'
 import { Divide } from './number/Divide'
 import { Add } from './number/Add'
 import { Subtract } from './number/Subtract'
@@ -85,11 +85,6 @@ import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
 import { TypeChat } from './text/TypeChat'
 import { CommandParser } from './flow/CommandParser'
-import { UploadBase64 } from './files/UploadBase64'
-import { Jsonformer } from './text/Jsonformer'
-import { TextToImage } from './image/TextToImage'
-import { GetCurrentWeather } from './weather/GetCurrentWeather'
-import { ArrayToString } from './array/ArrayToString'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -173,14 +168,9 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   add: () => new Add(),
   subtract: () => new Subtract(),
   jsonToArray: () => new JSONToArray(),
-  jsonformer: () => new Jsonformer(),
   generateUUID: () => new UUIDGenerator(),
   typeChat: () => new TypeChat(),
   commandParser: () => new CommandParser(),
-  uploadBase64: () => new UploadBase64(),
-  textToImage: () => new TextToImage(),
-  getCurrentWeather: () => new GetCurrentWeather(),
-  arrayToString: () => new ArrayToString(),
 }
 
 /**
