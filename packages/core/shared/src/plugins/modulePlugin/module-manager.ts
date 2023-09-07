@@ -6,7 +6,6 @@ import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
 import {
   GraphData,
-  MagickComponent,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
