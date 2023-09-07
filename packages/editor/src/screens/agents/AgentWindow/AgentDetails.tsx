@@ -12,10 +12,6 @@ import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import { tooltip_text } from "./tooltip_texts"
 import { extractPublicVariables } from './utils'
-<<<<<<< HEAD
-=======
-
->>>>>>> 310e2cf9d185d933325a12eba12d0b5530ad9521
 
 /**
  * RenderComp renders the given component with the given props.
