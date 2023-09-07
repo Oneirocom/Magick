@@ -36,7 +36,7 @@ async function geocodeLocation(
   state?: string,
   country?: string
 ): Promise<number[]> {
-  let coords: number[] = []
+  const coords: number[] = []
   let apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
     city
   )}`
