@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { config } from 'dotenv-flow'
 import { importMetaEnv } from './import-meta-env'
+import { v4 } from 'uuid'
 
 // Load environment variables
 config({
@@ -110,7 +111,8 @@ export const OPENMETER_ENABLED =
 export const AGENT_RESPONSE_TIMEOUT_MSEC =
   Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
 
-// S3 storage
+export const CLOUD_AGENT_KEY = getVarForEnvironment('CLOUD_AGENT_KEY') || v4()
+
 export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
 export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
 export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
