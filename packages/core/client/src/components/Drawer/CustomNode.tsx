@@ -7,8 +7,11 @@ import styles from './menu.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '../../contexts/TreeDataProvider'
 
+
+type ExtendedNodeModel = NodeModel & CustomData;
+
 type Props = {
-  node: NodeModel<CustomData>
+  node: ExtendedNodeModel
   depth: number
   isOpen: boolean
   onToggle: (id: NodeModel['id']) => void
@@ -32,12 +35,9 @@ export const CustomNode: React.FC<Props> = props => {
 
   const handleClick = () => {
     if (!props.node) return
-    // @ts-ignore
     if (props.node.fileType === 'txt') {
-      // @ts-ignore
       setOpenDoc(props.node.id)
       navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
-      // @ts-ignore
     } else if (props.node.fileType === 'spell') {
       navigate(
         `/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`
@@ -51,9 +51,8 @@ export const CustomNode: React.FC<Props> = props => {
       style={{ paddingInlineStart: indent }}
     >
       <div
-        className={`${styles.expandIconWrapper} ${
-          props.isOpen ? styles.isOpen : ''
-        }`}
+        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
+          }`}
       >
         {props.node.droppable && (
           <div onClick={handleToggle}>
@@ -62,11 +61,8 @@ export const CustomNode: React.FC<Props> = props => {
         )}
       </div>
       <div>
-        {/* @ts-ignore */}
         <TypeIcon
           droppable={droppable}
-          // TODO fix the node filetype here
-          // @ts-ignore
           fileType={data ? data.fileType : props.node.fileType}
         />
       </div>
