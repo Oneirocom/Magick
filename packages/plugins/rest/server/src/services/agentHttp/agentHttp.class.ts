@@ -12,7 +12,7 @@ import type {
   AgentHttpData,
   AgentHttpPatch,
   AgentHttpQuery,
-} from './AgentHttp.schema'
+} from './agentHttp.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
