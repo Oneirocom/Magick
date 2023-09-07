@@ -82,7 +82,6 @@ export const initSharedEngine = ({
     })
 
     if (emit) {
-      // Using new remote plugin. Sockets being depricated soon.
       engine.use<Plugin, RemotePluginArgs>(RemotePlugin, {
         server: true,
         emit,
@@ -138,6 +137,7 @@ export type NodeCategory =
   | 'Embedding'
   | 'Documents'
   | 'Code'
+  | 'Files'
   | 'Boolean'
   | 'Array'
   | 'Image'
@@ -155,6 +155,8 @@ export type NodeCategory =
   | 'Database'
   | 'Github'
   | 'Intent'
+  | 'Weather'
+  | 'Music'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<
