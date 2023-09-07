@@ -182,8 +182,6 @@ export const initEditor = function ({
   // Initialize additional plugins
   if (client) {
     editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
-    // editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
-    console.log('USING NEW REMOTE PLUGIN')
     editor.use<Plugin, RemotePluginArgs>(RemotePlugin, { client })
   }
 
