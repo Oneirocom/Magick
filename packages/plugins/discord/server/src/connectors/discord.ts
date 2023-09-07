@@ -320,18 +320,6 @@ export class DiscordConnector {
     this.logger.info('client is ready')
   }
 
-  async sendImageToChannelByUrl(channelId: any, url: any) {
-    const channel = await this.client.channels.fetch(channelId)
-    try {
-      const attachment = new AttachmentBuilder(url);
-      channel.send({ content: "I sent you a photo!", files: [attachment] })
-    }catch (e) {
-      console.error(e)
-    }
-    
-  }
-
-
   async sendImageToChannel(channelId: any, imageUri: any) {
     try {
       const channel = await this.client.channels.fetch(channelId)
