@@ -36,6 +36,9 @@ function install(editor: MagickEditor) {
         'The "outputs" field must be an object whose keys correspond to the Output\'s keys'
       )
 
+    // @ts-ignore
+    console.log('Editor data', editor.data)
+
     const addTaskOutputs = (node: NodeData) => {
       const outputs = node.data.outputs as []
       let taskOutputs = {}
@@ -93,9 +96,7 @@ function install(editor: MagickEditor) {
       }
 
       // Create the main task
-      const task = new Task(inputs, component, node, taskCaller, getTask)
-
-      console.log('LOADING TASK', task)
+      const task = new Task(inputs, component, node.id, taskCaller, getTask)
 
       // add the task to the task store
       taskStore[node.id] = task
@@ -107,8 +108,6 @@ function install(editor: MagickEditor) {
 
       // init the task on the components task options if needed
       if (taskOptions.init) taskOptions.init(task as any, node)
-
-      // return task
     }
   })
 }
