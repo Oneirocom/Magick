@@ -14,7 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useTreeData } from '../../contexts/TreeDataProvider'
+
 
 
 
@@ -194,7 +194,7 @@ export const TableComponent = ({
   const [order, setOrder] = React.useState<Order>(
     fieldOrder === 'desc' ? 'desc' : 'asc'
   )
-  const { openDoc } = useTreeData()
+
   const [orderBy, setOrderBy] = React.useState<keyof Data>(
     fieldOrderBy ? fieldOrderBy : column[0].id
   )
