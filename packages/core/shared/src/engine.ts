@@ -67,7 +67,6 @@ export const initSharedEngine = ({
   components,
   server = false,
   throwError,
-  socket,
   emit,
 }: InitEngineArguments) => {
   const engine = new Rete.Engine(name) as MagickEngine
@@ -137,7 +136,6 @@ export type NodeCategory =
   | 'Embedding'
   | 'Documents'
   | 'Code'
-  | 'Files'
   | 'Boolean'
   | 'Array'
   | 'Image'
@@ -155,8 +153,6 @@ export type NodeCategory =
   | 'Database'
   | 'Github'
   | 'Intent'
-  | 'Weather'
-  | 'Music'
 
 // MagickComponent abstract class
 export abstract class MagickComponent<
