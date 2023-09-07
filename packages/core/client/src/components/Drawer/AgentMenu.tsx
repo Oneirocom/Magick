@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from '@magickml/config'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
+import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
 
 interface Spell {
   id: number
@@ -49,6 +50,7 @@ function AgentMenu({ data, resetData }) {
   const config = useConfig()
   const spellList: Spell[] = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
+  const { agentUpdate } = useTreeData()
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -261,6 +263,12 @@ function AgentMenu({ data, resetData }) {
     }
   }, [data])
 
+  useEffect(() => {
+    if (agentUpdate) {
+      
+      resetData()
+    }
+  }, [agentUpdate])
   return (
     <div>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>

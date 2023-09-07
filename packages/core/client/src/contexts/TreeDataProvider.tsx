@@ -17,6 +17,8 @@ interface TreeDataContextType {
   setToDelete: React.Dispatch<React.SetStateAction<null>>
   openDoc:null
   setOpenDoc: React.Dispatch<React.SetStateAction<null>>
+  agentUpdate: boolean
+  setAgentUpdate: React.Dispatch<React.SetStateAction<boolean>>
 
 }
 interface Document {
@@ -40,6 +42,8 @@ const TreeDataContext = createContext<TreeDataContextType>({
   setToDelete: () => {},
   openDoc: null,
   setOpenDoc: () => {},
+  agentUpdate: false,
+  setAgentUpdate: () => {},
 })
 
 export const useTreeData = () => useContext(TreeDataContext)
@@ -63,6 +67,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const [docState, setDocState] = useState(false)
   const [toDelete, setToDelete] = useState(null)
   const [openDoc, setOpenDoc] = useState(null)
+  const [agentUpdate, setAgentUpdate] = useState(false)
 
   function truncateDocs(str, n) {
     if (str.length > n) {
@@ -191,6 +196,8 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         setToDelete,
         openDoc,
         setOpenDoc,
+        agentUpdate,
+        setAgentUpdate,
       }}
     >{children}
     </TreeDataContext.Provider>
