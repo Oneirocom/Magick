@@ -36,9 +36,6 @@ function install(editor: MagickEditor) {
         'The "outputs" field must be an object whose keys correspond to the Output\'s keys'
       )
 
-    // @ts-ignore
-    console.log('Editor data', editor.data)
-
     const addTaskOutputs = (node: NodeData) => {
       const outputs = node.data.outputs as []
       let taskOutputs = {}
