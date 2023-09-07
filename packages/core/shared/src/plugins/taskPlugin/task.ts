@@ -67,9 +67,9 @@ export class Task {
     this.next = []
     this.outputData = null
     this.closed = []
+    this.nodeId = node.id
     this.getTask = getTask
     this.initializeNextTasks()
-    this.nodeId = node.id
   }
 
   private initializeNextTasks() {
@@ -216,6 +216,7 @@ export class Task {
         // pass the socket that is being calledikno
         .map(async con => {
           const task = this.getTask(con.nodeId)
+          debugger
           return await task.run(data, {
             needReset: false,
             garbage,
