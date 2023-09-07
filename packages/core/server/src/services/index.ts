@@ -30,7 +30,6 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(spellRunner)
   app.configure(projects)
   app.configure(agentImage)
-
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better
   await new Promise(resolve => setTimeout(resolve, 1))
