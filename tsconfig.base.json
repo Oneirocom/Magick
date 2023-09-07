@@ -190,6 +190,7 @@
       ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/rete": ["packages/rete/src/index.ts"],
+      "rete": ["packages/rete/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"]
