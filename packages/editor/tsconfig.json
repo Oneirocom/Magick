@@ -4,13 +4,10 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "rootDir": "../..",
     "outDir": "lib",
+    "strict": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "Node",
@@ -19,12 +16,13 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client"]
   },
   "files": [],
   "include": [
-    "src"
-, "../core/client/src/providers/ConfigProvider.tsx", "../core/client/src/providers/PubSubProvider.tsx", "../core/client/src/providers/FeathersProvider.tsx"  ]
+    "src",
+    "../core/client/src/providers/ConfigProvider.tsx",
+    "../core/client/src/providers/PubSubProvider.tsx",
+    "../core/client/src/providers/FeathersProvider.tsx"
+  ]
 }

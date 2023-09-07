@@ -31,7 +31,7 @@ export default function ContextMenu({
   args: any
   onClose: () => void
   type?: string
-}): JSX.Element {
+}): JSX.Element | null {
   const [search, setSearch] = useState<string>('')
   const searchbarRef = useRef(null)
   /**

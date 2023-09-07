@@ -86,7 +86,7 @@ function IntentTable({ intents, updateCallback }) {
   const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRow, setSelectedRow] = useState<any>(null)
   const [currentPage, setCurrentPage] = useState(0)
 
   const handleActionClick = (intent, row) => {
@@ -155,6 +155,8 @@ function IntentTable({ intents, updateCallback }) {
         columns: defaultColumns,
         data: intents,
         initialState: {
+          // todo needto add proper generic to useTable to fix this
+          // @ts-ignore
           pageIndex: currentPage
         }
       },
@@ -194,7 +196,7 @@ function IntentTable({ intents, updateCallback }) {
 
   // Handle intent deletion
   const handleIntentDelete = async (intent: any) => {
-    console.log('deleting intent', intent)
+    if (!selectedRow) return
     const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
       method: 'DELETE',
       headers: {

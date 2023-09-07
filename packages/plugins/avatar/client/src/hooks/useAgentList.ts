@@ -9,7 +9,7 @@ export const useAgentList = () => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
-  const [agentList, setAgentList] = useState([])
+  const [agentList, setAgentList] = useState<any[]>([])
 
   useEffect(() => {
     ;(async () => {
