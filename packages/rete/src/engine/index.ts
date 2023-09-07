@@ -141,13 +141,13 @@ export class Engine extends Context<EventsTypes> {
   private async processNode(node: EngineNode) {
     if (this.state === State.ABORT || !node) return null
 
-    // await this.lock(node);
+    await this.lock(node)
 
     if (!node.outputData) {
       node.outputData = await this.processWorker(node)
     }
 
-    // this.unlock(node);
+    this.unlock(node)
     return node.outputData
   }
 
