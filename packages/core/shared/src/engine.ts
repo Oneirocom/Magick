@@ -83,7 +83,6 @@ export const initSharedEngine = ({
 
     if (emit) {
       // Using new remote plugin. Sockets being depricated soon.
-      console.log('USING NEW REMOTE PLUGIN')
       engine.use<Plugin, RemotePluginArgs>(RemotePlugin, {
         server: true,
         emit,
