@@ -4,14 +4,19 @@ import {
   Koa,
 } from '@feathersjs/koa'
 import PubSub from 'pubsub-js'
-import { Connection, Input, Node, NodeEditor, Output, Socket } from 'rete'
 import {
+  Connection,
+  Input,
+  Node,
+  NodeEditor,
+  Output,
+  Socket,
   Data,
   InputsData,
   NodeData,
   OutputsData,
   WorkerOutputs,
-} from 'rete/types/core/data'
+} from '@magickml/rete'
 import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
@@ -20,7 +25,6 @@ import { Task, TaskOutputTypes, TaskStore } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 
 import { DataControl } from './plugins/inspectorPlugin'
-import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
 import { SpellManager } from './spellManager'
 

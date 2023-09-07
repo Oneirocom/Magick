@@ -3,7 +3,7 @@
  * @fileoverview The Destructure component allows you to destructure properties out of an object.
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'
@@ -45,7 +45,7 @@ export class GetValuesFromObject extends MagickComponent<void> {
       connectionType: 'output',
       name: 'Property Name',
       ignored: ['trigger'],
-      tooltip: 'Add property name'
+      tooltip: 'Add property name',
     })
 
     node.addInput(dataInput).addInput(objectInput).addOutput(outputTrigger)
@@ -63,7 +63,8 @@ export class GetValuesFromObject extends MagickComponent<void> {
    */
 
   worker(node: WorkerData, inputs: MagickWorkerInputs) {
-    const object = inputs.object && inputs.object[0] as Record<string, unknown>
+    const object =
+      inputs.object && (inputs.object[0] as Record<string, unknown>)
 
     const output = Object.keys(node.outputs).reduce((acc, key) => {
       acc[key] = object[key]

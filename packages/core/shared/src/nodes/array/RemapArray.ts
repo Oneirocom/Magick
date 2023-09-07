@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
@@ -48,7 +48,7 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
     const values = new InputControl({
       dataKey: 'values',
       name: 'Values (, separated)',
-      tooltip:"this is an input for value"
+      tooltip: 'this is an input for value',
     })
 
     node.inspector.add(values)

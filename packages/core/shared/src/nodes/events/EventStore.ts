@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
@@ -20,7 +20,7 @@ import { DropdownControl } from '../../dataControls/DropdownControl'
 
 enum StoreEventForTypes {
   Sender = 'Sender (User)',
-  Observer = 'Observer (Agent)'
+  Observer = 'Observer (Agent)',
 }
 /**
  * Information about the EventStore class
@@ -45,7 +45,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       dataKey: 'name',
       name: 'Name',
       placeholder: 'Store Event',
-      tooltip: "Store Event input name"
+      tooltip: 'Store Event input name',
     })
 
     const type = new InputControl({
@@ -53,7 +53,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-      tooltip: "Store Event input type"
+      tooltip: 'Store Event input type',
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)
@@ -73,7 +73,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
       dataKey: 'storeEventFor',
       values: storeEventForTypes,
       defaultValue: storeEventForTypes[0],
-      tooltip: "Choose Store Event For"
+      tooltip: 'Choose Store Event For',
     })
 
     node.inspector.add(storeEventFor)
@@ -176,7 +176,7 @@ export class EventStore extends MagickComponent<Promise<void>> {
 
     const storeEventFor = node?.data?.storeEventFor as string
     if (storeEventFor === StoreEventForTypes.Observer) {
-      data.sender = data.observer;
+      data.sender = data.observer
     } else if (storeEventFor === StoreEventForTypes.Sender) {
       // do nothing
     }

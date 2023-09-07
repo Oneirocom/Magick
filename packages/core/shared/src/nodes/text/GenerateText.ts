@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
@@ -66,7 +66,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'model',
       values: models,
       defaultValue: models[0],
-      tooltip: 'Choose model name'
+      tooltip: 'Choose model name',
     })
 
     node.inspector.add(modelName)
@@ -170,7 +170,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
 
     const model = (node.data as { model: string }).model as string
     // get the provider for the selected model
-    console.log("model", model)
+    console.log('model', model)
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
     ) as CompletionProvider
@@ -187,7 +187,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       outputs,
       context,
     })
-    console.log("result", result)
+    console.log('result', result)
     if (!success) {
       throw new Error('ERROR: ' + error)
     }

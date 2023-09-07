@@ -15,7 +15,7 @@ import {
   WorkerData,
   Event,
 } from '@magickml/core'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 /**
  * Information about the CreateTask class
@@ -45,7 +45,7 @@ export class CreateTask extends MagickComponent<Promise<{ task: AgentTask }>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'task',
-      tooltip: 'Add Task type'
+      tooltip: 'Add Task type',
     })
 
     const objective = new Rete.Input('objective', 'Objective', stringSocket)
