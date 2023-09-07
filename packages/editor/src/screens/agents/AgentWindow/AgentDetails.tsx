@@ -146,9 +146,11 @@ const AgentDetails = ({
         }
 
       } catch (err) {
-        enqueueSnackbar(err.message, {
-          variant: 'error',
-        })
+        if (err instanceof Error) {
+          enqueueSnackbar(err.message, {
+            variant: 'error',
+          })
+        }
       }
     })()
 

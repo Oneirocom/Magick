@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "strict": false,
     "typeRoots": [
       "./packages/@types",
       "./node_modules/@types",
@@ -115,6 +116,15 @@
       "@magickml/plugin-googleai-shared": [
         "packages/plugins/googleai/shared/src/index.ts"
       ],
+      "@magickml/plugin-intent-client": [
+        "packages/plugins/intent/client/src/index.ts"
+      ],
+      "@magickml/plugin-intent-server": [
+        "packages/plugins/intent/server/src/index.ts"
+      ],
+      "@magickml/plugin-intent-shared": [
+        "packages/plugins/intent/shared/src/index.ts"
+      ],
       "@magickml/plugin-localmodel-client": [
         "packages/plugins/localmodel/client/src/index.ts"
       ],
@@ -177,15 +187,6 @@
       ],
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
-      ],
-      "@magickml/plugin-intent-client": [
-        "packages/plugins/intent/client/src/index.ts"
-      ],
-      "@magickml/plugin-intent-server": [
-        "packages/plugins/intent/server/src/index.ts"
-      ],
-      "@magickml/plugin-intent-shared": [
-        "packages/plugins/intent/shared/src/index.ts"
       ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],

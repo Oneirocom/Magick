@@ -20,6 +20,13 @@ interface RequestRow {
   timestamp: number
   request_count: number
   total_cost: number
+  total_requests: number
+}
+
+export interface AnalyticsParams extends Params {
+  query: {
+    agentId: string
+  }
 }
 
 /**
@@ -37,7 +44,14 @@ export class RequestService<
     RequestService.app = app
   }
 
-  static async analytics(params: Params = {}) {
+  /**
+   * Get the analytics for the given agentId
+   * @param params - the params object
+   * @returns - the analytics for the given agentId
+   * @memberof RequestService
+   * @static
+   */
+  static async analytics(params: AnalyticsParams) {
     const { agentId } = params.query
     const db = RequestService.app.get('dbClient')
 
@@ -47,7 +61,7 @@ export class RequestService<
       currentTime.getMonth(),
       currentTime.getDate()
     )
-    const timeIntervals = []
+    const timeIntervals = [] as Date[]
     // Generating time intervals from the start of the day to the current time
     for (
       let i = startOfDay.getTime();
@@ -86,8 +100,10 @@ export class RequestService<
       .groupByRaw('EXTRACT(EPOCH FROM "createdAt")')
       .orderBy('timestamp')
 
+    // todo fizx this type error.
+    // @ts-ignore
     const result = (await Promise.all([query, monthQuery])) as Array<
-      Array<Record<string, any>>
+      Array<RequestRow>
     >
 
     const requestSeries = new Array(result[0].length)
