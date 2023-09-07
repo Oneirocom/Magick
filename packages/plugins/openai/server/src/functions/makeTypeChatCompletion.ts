@@ -33,6 +33,8 @@ export async function makeTypeChatCompletion(
     OPENAI_MODEL: modelName,
   }
 
+  console.log('Parameters:', JSON.stringify(modelConfig, null, 2)) // Debugging params
+
   const model: TypeChatLanguageModel = createLanguageModel(modelConfig)
 
   const translator = createJsonTranslator(model, schema, responseType)
@@ -45,6 +47,8 @@ export async function makeTypeChatCompletion(
       console.log('response', response)
       throw new Error('TypeChat call failed')
     }
+
+    console.log('response', response)
 
     // // Save the API request details
     saveRequest({

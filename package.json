@@ -42,7 +42,7 @@
     "@types/react": "18.0.2"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "0.5.0",
+    "@anthropic-ai/sdk": "^0.5.0",
     "@anthropic-ai/tokenizer": "0.0.4",
     "@atproto/api": "0.3.8",
     "@aws-sdk/client-s3": "^3.400.0",
@@ -68,6 +68,7 @@
     "@feathersjs/transport-commons": "5.0.8",
     "@feathersjs/typebox": "5.0.8",
     "@google-cloud/speech": "5.5.0",
+    "@google-cloud/storage": "^6.11.0",
     "@google-cloud/text-to-speech": "4.2.2",
     "@koa/cors": "4.0.0",
     "@koa/multer": "^3.0.2",
@@ -90,6 +91,7 @@
     "@react-three/rapier": "1.0.0",
     "@react-three/xr": "5.5.0",
     "@reduxjs/toolkit": "1.9.5",
+    "@spotify/web-api-ts-sdk": "^1.1.0",
     "@types/dotenv-flow": "3.2.0",
     "@types/filesize": "5.0.0",
     "@types/multer": "^1.4.7",
@@ -175,6 +177,7 @@
     "redux": "4.2.1",
     "redux-persist": "6.0.0",
     "regenerator-runtime": "0.13.11",
+    "replicate": "^0.12.3",
     "rete": "github:Oneirocom/rete",
     "rete-connection-plugin": "0.9.0",
     "rollup-plugin-ignore": "1.0.10",
