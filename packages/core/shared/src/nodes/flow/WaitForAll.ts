@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
@@ -40,7 +40,7 @@ export class WaitForAll extends MagickComponent<void> {
       connectionType: 'input',
       socketType: 'triggerSocket',
       name: 'Input Sockets',
-      tooltip: 'Add socket triggers'
+      tooltip: 'Add socket triggers',
     })
 
     node.inspector.add(inputGenerator)

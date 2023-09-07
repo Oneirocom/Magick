@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   Event,
   MagickComponent,
@@ -24,8 +24,8 @@ import { ChannelType } from '../types/ChannelType'
  */
 type WorkerReturn = {
   output: {
-    id: string,
-    name: string,
+    id: string
+    name: string
   }[]
 }
 
@@ -62,7 +62,11 @@ export class DiscordListVoiceChannels extends MagickComponent<
     const outp = new Rete.Output('output', 'Array', arraySocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
+      .addInput(event)
   }
 
   /**
@@ -81,17 +85,21 @@ export class DiscordListVoiceChannels extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
+      console.warn(
+        'sending default information since there is no agent available'
+      )
       return {
         output: [
-          { id: "1051457146388217900", name: "General" },
-          { id: "1119407851408986122", name:"voice2"}
-        ]
+          { id: '1051457146388217900', name: 'General' },
+          { id: '1119407851408986122', name: 'voice2' },
+        ],
       }
     }
 
     if (!agent?.discord) {
-      throw new Error('Discord connector not found on agent, is Discord initialized?')
+      throw new Error(
+        'Discord connector not found on agent, is Discord initialized?'
+      )
     }
 
     const event = // event data is inside a task?
@@ -108,7 +116,7 @@ export class DiscordListVoiceChannels extends MagickComponent<
     const channel = event.channel // channel in which the message was sent
 
     // fetch the channel using its ID
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    const fetchedChannel = await discordClient.channels.fetch(channel)
 
     if (!fetchedChannel) {
       throw new Error('Channel not found')
@@ -119,17 +127,19 @@ export class DiscordListVoiceChannels extends MagickComponent<
     }
 
     // get the guild object from the fetched channel
-    const guild = fetchedChannel.guild;
+    const guild = fetchedChannel.guild
 
     // get the list of text channels
-    const voiceChannels = guild.channels.cache.filter(ch => ch.type === ChannelType.GuildVoice);
+    const voiceChannels = guild.channels.cache.filter(
+      ch => ch.type === ChannelType.GuildVoice
+    )
     const mappedChannels = voiceChannels.map(channel => ({
       id: channel.id,
       name: channel.name,
     }))
 
     return {
-      output: mappedChannels
-    };
+      output: mappedChannels,
+    }
   }
 }

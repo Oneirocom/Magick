@@ -1,4 +1,4 @@
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -201,8 +201,6 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       }
     }
 
-    this._task.closed =
-    !invalidated &&
-    isMatched ? ['false'] : ['true']
+    this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
   }
 }

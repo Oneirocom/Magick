@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { Data } from 'rete/types/core/data'
 import { BooleanControl } from '../../dataControls/BooleanControl'

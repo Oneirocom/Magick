@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { isEmpty } from 'lodash'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
@@ -12,7 +12,6 @@ import { anySocket, triggerSocket } from '../../sockets'
 import {
   CompletionSocket,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
@@ -28,8 +27,6 @@ type InputReturn = {
  * InputComponent is a MagickComponent that handles user input
  */
 export class InputComponent extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   constructor() {
     // Name of the component
     super(

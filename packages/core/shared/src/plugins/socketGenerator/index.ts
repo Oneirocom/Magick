@@ -1,4 +1,4 @@
-import Rete, { Input, Output } from 'rete'
+import Rete, { Input, Output } from '@magickml/rete'
 
 import { AsDataSocket, IRunContextEditor, MagickNode } from '../../types'
 import * as sockets from '../../sockets'
