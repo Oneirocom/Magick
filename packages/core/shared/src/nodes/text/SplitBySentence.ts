@@ -3,8 +3,8 @@
  * Split a long body of text into multiple strings, each of which is no longer than the specified length.
  * @category Text
  */
-import Rete from 'rete'
-import { split } from 'sentence-splitter';
+import Rete from '@magickml/rete'
+import { split } from 'sentence-splitter'
 
 import { MagickComponent } from '../../engine'
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
@@ -26,38 +26,38 @@ type WorkerReturn = {
 const info =
   'Split a long body of text into multiple strings, each of which is no longer than the specified length.'
 
-  function splitStringIntoSentences(input: string, maxLength: number): string[] {
-    // split the string into sentences
-    const sentences = split(input);
-  
-    // array to hold the resulting strings
-    const strings: string[] = [];
-  
-    sentences.forEach(sentence => {
-      // convert sentence object to string
-      let sentenceStr = sentence.filter(token => token.type === 'Sentence');
-  
-      // if the sentence length is less than the maxLength, add it to the strings array
-      if(sentenceStr.length <= maxLength) {
-        strings.push(sentenceStr);
-      } else {
-        // if the sentence length is greater than maxLength, split it into multiple strings
-        while(sentenceStr.length > maxLength) {
-          // add a substring of maxLength to the strings array
-          strings.push(sentenceStr.substr(0, maxLength));
-          // remove the added substring from the sentence
-          sentenceStr = sentenceStr.substr(maxLength);
-        }
-        // add the remaining part of the sentence to the strings array
-        if(sentenceStr.length > 0) {
-          strings.push(sentenceStr);
-        }
+function splitStringIntoSentences(input: string, maxLength: number): string[] {
+  // split the string into sentences
+  const sentences = split(input)
+
+  // array to hold the resulting strings
+  const strings: string[] = []
+
+  sentences.forEach(sentence => {
+    // convert sentence object to string
+    let sentenceStr = sentence.filter(token => token.type === 'Sentence')
+
+    // if the sentence length is less than the maxLength, add it to the strings array
+    if (sentenceStr.length <= maxLength) {
+      strings.push(sentenceStr)
+    } else {
+      // if the sentence length is greater than maxLength, split it into multiple strings
+      while (sentenceStr.length > maxLength) {
+        // add a substring of maxLength to the strings array
+        strings.push(sentenceStr.substr(0, maxLength))
+        // remove the added substring from the sentence
+        sentenceStr = sentenceStr.substr(maxLength)
       }
-    });
-  
-    // return the array of strings
-    return strings;
-  }
+      // add the remaining part of the sentence to the strings array
+      if (sentenceStr.length > 0) {
+        strings.push(sentenceStr)
+      }
+    }
+  })
+
+  // return the array of strings
+  return strings
+}
 
 /**
  * Split a long body of text into multiple strings, each of which is no longer than the specified length.
@@ -93,7 +93,7 @@ export class SplitBySentence extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'stringMaxLength',
       name: 'Maximum String Length',
       defaultValue: 280,
-      tooltip:"Enter The maximum length of each string."
+      tooltip: 'Enter The maximum length of each string.',
     })
 
     node.inspector.add(stringMaxLength)

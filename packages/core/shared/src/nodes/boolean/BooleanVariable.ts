@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { InputControl } from '../../dataControls/InputControl'
 import { booleanSocket } from '../../sockets'
@@ -52,7 +52,7 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
       name: 'Value',
       icon: 'moon',
       component: 'switch',
-      tooltip:"This is a toggle for value property"
+      tooltip: 'This is a toggle for value property',
     })
     const name = new InputControl({
       dataKey: 'name',

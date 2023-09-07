@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
@@ -47,7 +47,7 @@ export class SwitchGate extends MagickComponent<void> {
       socketType: 'triggerSocket',
       taskType: 'option',
       name: 'Output Sockets',
-      tooltip: 'Add output sockets'
+      tooltip: 'Add output sockets',
     })
 
     const input = new Rete.Input('input', 'Input', anySocket)
