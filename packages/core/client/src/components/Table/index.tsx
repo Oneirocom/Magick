@@ -254,7 +254,7 @@ export const TableComponent = ({
 
   React.useEffect(() => {
     if (openDoc) {
-      
+
       handleRowClick(openDoc)
     }
   }, [openDoc])
@@ -273,16 +273,16 @@ export const TableComponent = ({
     return text.slice(0, maxLength) + '...';
   }
 
-  const handleRowClick = (rowId: string) => {
-    if (expandedRows.includes(rowId)) {
+  const handleRowClick = (rowId: string | number) => {
+    if (expandedRows.includes(rowId.toString())) {
       // If the clicked row is already expanded, close it
       setExpandedRows([]);
     } else {
       // If the clicked row is not expanded, close all other rows and expand the clicked row
-      setExpandedRows([rowId]);
+      setExpandedRows([rowId.toString()]);
     }
   };
-  
+
 
   return (
     <React.Fragment>
@@ -339,12 +339,12 @@ export const TableComponent = ({
                         ) : column.id === 'collapse' ? (
                           <IconButton
                             aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                              size="medium"
+                            size="medium"
                             className={styles.expandCollapse}
-                              onClick={(event) => {
-                                event.stopPropagation()
-                                handleRowClick(row.id || row.row.id)
-                              }}
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              handleRowClick(row.id || row.row.id)
+                            }}
                           >
                             {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                           </IconButton>

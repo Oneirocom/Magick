@@ -18,8 +18,8 @@ type Props = {
 }
 
 type CustomData = {
-  fileType: string
-  fileSize: string
+  fileType?: string
+  fileSize?: string
 }
 
 export const CustomNode: React.FC<Props> = props => {
