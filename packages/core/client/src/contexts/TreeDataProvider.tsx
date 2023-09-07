@@ -15,20 +15,19 @@ interface TreeDataContextType {
   setDocState: React.Dispatch<React.SetStateAction<boolean>>
   toDelete: null
   setToDelete: React.Dispatch<React.SetStateAction<null>>
-  openDoc:null
+  openDoc: null
   setOpenDoc: React.Dispatch<React.SetStateAction<null>>
   agentUpdate: boolean
   setAgentUpdate: React.Dispatch<React.SetStateAction<boolean>>
-
 }
 interface Document {
-  id: string;
-  content: string;
+  id: string
+  content: string
 }
 
 interface Spell {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 const TreeDataContext = createContext<TreeDataContextType>({
@@ -199,13 +198,8 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         agentUpdate,
         setAgentUpdate,
       }}
-    >{children}
+    >
+      {children}
     </TreeDataContext.Provider>
   )
 }
-
-
-
-
-
-

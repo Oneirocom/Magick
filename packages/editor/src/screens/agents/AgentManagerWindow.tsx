@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
-import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
+import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
 
 // todo - improve agent typing by pulling from feathers types
 type AgentData = {
@@ -27,7 +27,7 @@ const AgentManagerWindow = () => {
   const [enable, setEnable] = useState({})
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const { setAgentUpdate } = useTreeData();
+  const { setAgentUpdate } = useTreeData()
 
   /**
    * @description Reset the data and fetch the latest info from the server.
@@ -40,7 +40,7 @@ const AgentManagerWindow = () => {
       {
         headers: STANDALONE
           ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-          : { Authorization: `Bearer ${token}` }
+          : { Authorization: `Bearer ${token}` },
       }
     )
     const json = await res.json()
@@ -178,7 +178,7 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
-          
+
           resetData()
         }
       })
@@ -199,7 +199,7 @@ const AgentManagerWindow = () => {
       method: 'DELETE',
       headers: STANDALONE
         ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-        : { Authorization: `Bearer ${token}` }
+        : { Authorization: `Bearer ${token}` },
     })
       .then(async res => {
         res = await res.json()
@@ -212,7 +212,7 @@ const AgentManagerWindow = () => {
         enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
           variant: 'success',
         })
-       
+
         // }
         if (selectedAgentData.id === id) setSelectedAgentData(undefined)
         resetData()
@@ -228,29 +228,29 @@ const AgentManagerWindow = () => {
   useEffect(() => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
-      ; (async () => {
-        const res = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` }
-          }
-        )
-        const json = await res.json()
-        setData(json.data)
-        setIsLoading(false)
-      })()
-  }, [config.apiUrl])
-
-  useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {
           headers: STANDALONE
             ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-            : { Authorization: `Bearer ${token}` }
+            : { Authorization: `Bearer ${token}` },
+        }
+      )
+      const json = await res.json()
+      setData(json.data)
+      setIsLoading(false)
+    })()
+  }, [config.apiUrl])
+
+  useEffect(() => {
+    ;(async () => {
+      const res = await fetch(
+        `${config.apiUrl}/agents?projectId=${config.projectId}`,
+        {
+          headers: STANDALONE
+            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+            : { Authorization: `Bearer ${token}` },
         }
       )
       const json = await res.json()

@@ -31,7 +31,7 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
-import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
+import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -88,7 +88,7 @@ function DocumentTable({ documents, updateCallback }) {
   // todo better typing here for the row
   const [selectedRow, setSelectedRow] = useState<any>(null)
   const [currentPage, setCurrentPage] = useState(0)
-  const { setDocState, setToDelete } = useTreeData();
+  const { setDocState, setToDelete } = useTreeData()
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
     setSelectedRow(row)
@@ -148,29 +148,36 @@ function DocumentTable({ documents, updateCallback }) {
   )
 
   // Initialize the table with hooks
-  const { page, flatRows, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
-    setSortBy } =
-    useTable<any>(
-      {
-        columns: defaultColumns,
-        data: documents,
-        initialState: {
-          // todo we need to pass a proper generic into the useTable hook to fix this type error
-          // @ts-ignore
-          pageIndex: currentPage
-        }
+  const {
+    page,
+    flatRows,
+    pageOptions,
+    gotoPage,
+    setGlobalFilter,
+    state: { sortBy, globalFilter },
+    setSortBy,
+  } = useTable<any>(
+    {
+      columns: defaultColumns,
+      data: documents,
+      initialState: {
+        // todo we need to pass a proper generic into the useTable hook to fix this type error
+        // @ts-ignore
+        pageIndex: currentPage,
       },
-      useFilters,
-      useGlobalFilter,
-      useSortBy,
-      usePagination
-    ) as TableInstance & any //TODO: FIX Type
+    },
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  ) as TableInstance & any //TODO: FIX Type
 
   // Function to handle sorting when a column header is clicked
-  const handleSort = (column) => {
-    const isAsc = sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc;
-    setSortBy([{ id: column, desc: isAsc ? isAsc : false }]);
-  };
+  const handleSort = column => {
+    const isAsc =
+      sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc
+    setSortBy([{ id: column, desc: isAsc ? isAsc : false }])
+  }
 
   const rows = page.map(el => {
     return createData(
@@ -197,18 +204,20 @@ function DocumentTable({ documents, updateCallback }) {
   // Handle document deletion
   const handleDocumentDelete = async (document: any) => {
     if (!selectedRow) return
-    const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const isDeleted = await fetch(
+      `${API_ROOT_URL}/documents/${selectedRow.id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     if (isDeleted) {
       enqueueSnackbar('document deleted', { variant: 'success' })
       setToDelete(selectedRow.id)
-      setDocState(true);
-    }
-    else enqueueSnackbar('Error deleting document', { variant: 'error' })
+      setDocState(true)
+    } else enqueueSnackbar('Error deleting document', { variant: 'error' })
 
     if (page.length === 1) {
       const pageIndex = currentPage - 1
@@ -236,14 +245,14 @@ function DocumentTable({ documents, updateCallback }) {
     projectId: '',
     date: new Date().toISOString(),
     embedding: '',
-    files: []
+    files: [],
   })
   // Handle save action
-  const handleSave = async (selectedModel) => {
+  const handleSave = async selectedModel => {
     const { files, ...body } = newDocument
     // call documents endpoint
 
-    const formData = new FormData();
+    const formData = new FormData()
     formData.append('date', new Date().toISOString())
     formData.append('projectId', config.projectId)
     formData.append('modelName', selectedModel.model)
@@ -259,7 +268,7 @@ function DocumentTable({ documents, updateCallback }) {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
-    });
+    })
     // Check if the save operation was successful
     if (result.ok) {
       // Reset newDocument
@@ -269,25 +278,23 @@ function DocumentTable({ documents, updateCallback }) {
         projectId: '',
         date: '',
         embedding: '',
-        files: []
-      });
-      enqueueSnackbar('Document saved successfully', { variant: 'success' });
-
+        files: [],
+      })
+      enqueueSnackbar('Document saved successfully', { variant: 'success' })
 
       // Close the modal by setting createMode to false after a delay
       setTimeout(() => {
-        setDocState(true);
-        setCreateMode(false);
-      }, 2000);
+        setDocState(true)
+        setCreateMode(false)
+      }, 2000)
 
       // Trigger the updateCallback function to update the table after a delay
 
-      updateCallback();
-
+      updateCallback()
     } else {
-      enqueueSnackbar('Error saving document', { variant: 'error' });
+      enqueueSnackbar('Error saving document', { variant: 'error' })
     }
-  };
+  }
 
   // Show create modal
   const showCreateModal = () => {
@@ -297,19 +304,20 @@ function DocumentTable({ documents, updateCallback }) {
   // trigger updateCallback when createMode changes
   useEffect(() => {
     if (!createMode) {
-      updateCallback();
+      updateCallback()
     }
-  }, [createMode]);
+  }, [createMode])
   return (
-    <>{createMode && (
-      <DocumentModal
-        createMode={createMode}
-        setCreateMode={setCreateMode}
-        handleSave={handleSave}
-        setNewDocument={setNewDocument}
-        providerList={filteredProviders}
-      />
-    )}
+    <>
+      {createMode && (
+        <DocumentModal
+          createMode={createMode}
+          setCreateMode={setCreateMode}
+          handleSave={handleSave}
+          setNewDocument={setNewDocument}
+          providerList={filteredProviders}
+        />
+      )}
       <Container className={styles.container} classes={{ root: styles.root }}>
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
@@ -336,7 +344,11 @@ function DocumentTable({ documents, updateCallback }) {
               >
                 Create New
               </Button>
-              <CSVLink data={originalRows} filename="documents.csv" target="_blank">
+              <CSVLink
+                data={originalRows}
+                filename="documents.csv"
+                target="_blank"
+              >
                 <Button
                   className={styles.btn}
                   variant="outlined"
@@ -376,7 +388,6 @@ function DocumentTable({ documents, updateCallback }) {
         </Stack>
       </Container>
     </>
-
   )
 }
 

@@ -265,7 +265,6 @@ function AgentMenu({ data, resetData }) {
 
   useEffect(() => {
     if (agentUpdate) {
-      
       resetData()
     }
   }, [agentUpdate])
