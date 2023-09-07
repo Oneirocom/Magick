@@ -4,7 +4,7 @@ import {
   EditorContext,
   GraphData,
   MagickEditor,
-  SpellInterface,
+  SpellInterface
 } from '@magickml/core'
 import React, {
   createContext,
@@ -14,7 +14,6 @@ import React, {
   useState,
 } from 'react'
 import { useSelector } from 'react-redux'
-import { Component } from 'rete/types/engine'
 
 import { useConfig, usePubSub } from '@magickml/client-core'
 import { MyNode } from '../components/Node/Node'
@@ -24,6 +23,7 @@ import { spellApi } from '../state/api/spells'
 import { activeTabSelector } from '../state/tabs'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
+import { EngineComponent } from '@magickml/rete'
 
 /**
  * MagickTab type definition.
@@ -53,7 +53,7 @@ type EditorContextType = {
     reteInterface: EditorContext
   ) => void
   setEditor: (editor: any) => void
-  getNodeMap: () => Map<string, Component> | null
+  getNodeMap: () => Map<string, EngineComponent> | null
   getNodes: () => any
   setContainer: (container: HTMLDivElement) => void
   undo: () => void

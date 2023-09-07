@@ -1,5 +1,5 @@
 import { MagickEditor } from '@magickml/core'
-import { Connection } from 'rete'
+import { Connection } from '@magickml/rete'
 
 export const removeClassFromNodeConnections = (
   editor: MagickEditor,

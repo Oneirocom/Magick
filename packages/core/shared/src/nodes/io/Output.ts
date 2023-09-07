@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
@@ -82,7 +82,7 @@ export class Output extends MagickComponent<void> {
       dataKey: 'outputType',
       values: values.map(v => v.name),
       defaultValue: values[0].name || 'Default',
-      tooltip: "Choose Output type"
+      tooltip: 'Choose Output type',
     })
 
     outputType.onData = data => {
