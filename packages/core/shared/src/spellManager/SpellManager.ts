@@ -48,7 +48,7 @@ export default class SpellManager {
     if (watchSpells) {
       this.app.service('spells').on('updated', (spell: SpellInterface) => {
         if (this.hasSpellRunner(spell.id)) {
-          this.load(spell)
+          this.updateSpell(spell)
         }
       })
     }
@@ -115,10 +115,28 @@ export default class SpellManager {
     return spellRunner
   }
 
+  async updateSpell(spell: SpellInterface) {
+    const spellRunner = this.getReadySpellRunner(spell.id)
+    if (!spellRunner) {
+      this.logger.error(`No spell runner found for spell ${spell.id}`)
+      return
+    }
+
+    // we need to go through every spellRunner and update it
+    // todo monitor this for performance.  Might be easier to nuke the spellRunners and create a new one
+    const spellRunnerList = this.spellRunnerMap.get(spell.id)
+    if (spellRunnerList) {
+      spellRunnerList.forEach(async runner => {
+        await runner.loadSpell(spell)
+      })
+    }
+  }
+
   async run(runArgs: RunArgs) {
     this.logger.error(
       `You should use the agent commander to run spells instead of the spellManager run function`
     )
+
     const { spellId, inputs, secrets, publicVariables, app } = runArgs
     let result: Record<string, unknown> | null = null
     if (this.agent) {

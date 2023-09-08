@@ -30,7 +30,7 @@ type RunOptions = {
   needReset?: boolean
   garbage?: Task[]
   fromSocket?: string
-  fromNode?: number
+  fromNodeId?: number
   fromTask?: Task
 }
 
@@ -110,11 +110,11 @@ export class Task {
     return input
   }
 
-  getInputByNodeId(node, fromSocket): string | null {
+  getInputByNodeId(nodeId, fromSocket): string | null {
     let value: null | string = null
     Object.entries(this.inputs).forEach(([key, input]) => {
       const found = input.find(
-        (con: any) => con && con.nodeId === node.id
+        (con: any) => con && con.nodeId === nodeId
       ) as any
 
       if (found) {
@@ -125,14 +125,14 @@ export class Task {
     return value
   }
 
-  private filterNextTasks(fromNode) {
+  private filterNextTasks(fromNodeId) {
     return (con: MagickReteInput) => {
       // only filter inputs to remove ones that are not the origin if a task option is true
-      if (!this.component.task.runOneInput || !fromNode) return true
+      if (!this.component.task.runOneInput || !fromNodeId) return true
 
       const task = this.getTask(con.nodeId)
       if (task.outputData) return true
-      if (task.nodeId === fromNode.id) return true
+      if (task.nodeId === fromNodeId) return true
       if (task.component.name === 'Spell') return false
 
       // return true if the input is from a triggerless component
@@ -153,7 +153,7 @@ export class Task {
       garbage = [] as Task[],
       propagate = true,
       fromSocket,
-      fromNode,
+      fromNodeId,
       // fromTask,z
     } = options
 
@@ -167,11 +167,11 @@ export class Task {
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
-            .filter(this.filterNextTasks(fromNode))
+            .filter(this.filterNextTasks(fromNodeId))
             .map(async (con: MagickReteInput) => {
               const task = this.getTask(con.nodeId)
               // if the task has come from a node with output data that is not the calling node, use that data
-              if (task.outputData && task.nodeId !== fromNode) {
+              if (task.outputData && task.nodeId !== fromNodeId) {
                 return (task.outputData as Record<string, unknown>)[con.key]
               }
 
@@ -179,7 +179,7 @@ export class Task {
                 needReset: false,
                 garbage,
                 propagate: false,
-                fromNode: this.nodeId,
+                fromNodeId: this.nodeId,
               })
 
               return (task.outputData as Record<string, unknown>)[con.key]
@@ -195,9 +195,9 @@ export class Task {
       // this is mainly used currently by the module plugin to know where the run signal should go to.
       const socketInfo = {
         targetSocket: fromSocket
-          ? this.getInputByNodeId(fromNode, fromSocket)
+          ? this.getInputByNodeId(fromNodeId, fromSocket)
           : null,
-        targetNode: fromNode ? fromNode : null,
+        targetNode: fromNodeId ? fromNodeId : null,
       }
 
       // the main output data of the task, which is gathered up when the next node gets this nodes value
@@ -220,7 +220,7 @@ export class Task {
             needReset: false,
             garbage,
             fromSocket: con.key,
-            fromNode: this.nodeId,
+            fromNodeId: this.nodeId,
             fromTask: this,
           })
         })
