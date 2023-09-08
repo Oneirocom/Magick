@@ -125,21 +125,16 @@ export class Task {
     return value
   }
 
-  private filterNextTasks(fromNodeId) {
-    return (con: MagickReteInput) => {
-      // only filter inputs to remove ones that are not the origin if a task option is true
-      if (!this.component.task.runOneInput || !fromNodeId) return true
+  private filterNextTasks(con) {
+    const task = this.getTask(con.nodeId)
+    // if (task.outputData) return true
+    // if (task.nodeId === fromNodeId) return true
+    if (task.component.name === 'Spell') return false
 
-      const task = this.getTask(con.nodeId)
-      if (task.outputData) return true
-      if (task.nodeId === fromNodeId) return true
-      if (task.component.name === 'Spell') return false
-
-      // return true if the input is from a triggerless component
-      // if (!task.node.outputs.trigger) return true
-      // TODO: check if default should be false
-      return false
-    }
+    // return true if the input is from a triggerless component
+    // if (!task.node.outputs.trigger) return true
+    // TODO: check if default should be false
+    return true
   }
 
   reset() {
@@ -167,8 +162,12 @@ export class Task {
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
-            .filter(this.filterNextTasks(fromNodeId))
+            .filter(con => {
+              debugger
+              return this.filterNextTasks(con)
+            })
             .map(async (con: MagickReteInput) => {
+              console.log('CONNECTIOn', con)
               const task = this.getTask(con.nodeId)
               // if the task has come from a node with output data that is not the calling node, use that data
               if (task.outputData && task.nodeId !== fromNodeId) {
