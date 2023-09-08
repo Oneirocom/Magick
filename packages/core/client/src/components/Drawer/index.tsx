@@ -15,7 +15,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
   const showSideBarFlag = useFeatureFlagEnabled('ide-new-sidebar')
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
+    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
       {showSideBarFlag ? (
         <NewSidebar children={children} />
       ) : (
