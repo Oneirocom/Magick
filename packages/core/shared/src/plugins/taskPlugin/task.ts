@@ -162,10 +162,7 @@ export class Task {
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
-            .filter(con => {
-              debugger
-              return this.filterNextTasks(con)
-            })
+            .filter(this.filterNextTasks)
             .map(async (con: MagickReteInput) => {
               console.log('CONNECTIOn', con)
               const task = this.getTask(con.nodeId)
