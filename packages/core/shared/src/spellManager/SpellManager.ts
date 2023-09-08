@@ -117,8 +117,10 @@ export default class SpellManager {
 
   async updateSpell(spell: SpellInterface) {
     const spellRunner = this.getReadySpellRunner(spell.id)
+
     if (!spellRunner) {
-      this.logger.error(`No spell runner found for spell ${spell.id}`)
+      this.logger.warn(`No spell runner found for spell ${spell.id}`)
+      await this.load(spell)
       return
     }
 
