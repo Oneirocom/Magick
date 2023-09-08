@@ -62,7 +62,7 @@ function AgentMenu({ data, resetData }) {
   }
 
   const BorderedAvatar = styled(Avatar)`
-    border: 1px solid lightseagreen;
+    border: 1px solid #BADDE4;
   `
 
   const handleToggleMenu1 = event => {
