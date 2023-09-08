@@ -106,8 +106,8 @@ export const spell = (app: Application) => {
     after: {
       all: [],
       create: [],
-      patch: [checkForSpellInManager, updateSpellInManager],
-      saveDiff: [checkForSpellInManager, updateSpellInManager],
+      patch: [checkForSpellInManager],
+      saveDiff: [checkForSpellInManager],
     },
     error: {
       all: [],
