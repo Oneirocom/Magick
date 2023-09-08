@@ -2,6 +2,7 @@ import React from 'react'
 import Typography from '@mui/material/Typography'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import AddIcon from '@mui/icons-material/Add'
 import { TypeIcon } from './TypeIcon'
 import styles from './menu.module.css'
 import { useNavigate } from 'react-router-dom'
@@ -44,14 +45,18 @@ export const CustomNode: React.FC<Props> = props => {
     }
   }
 
+  const handleOpenSpell = () => {
+    navigate('/home/create-new')
+  }
   return (
     <div
       className={`tree-node ${styles.root}`}
       style={{ paddingInlineStart: indent }}
     >
       <div
-        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
-          }`}
+        className={`${styles.expandIconWrapper} ${
+          props.isOpen ? styles.isOpen : ''
+        }`}
       >
         {props.node.droppable && (
           <div onClick={handleToggle}>
@@ -79,6 +84,16 @@ export const CustomNode: React.FC<Props> = props => {
         >
           {props.node.text}
         </Typography>
+      </div>
+      <div
+        className={`${styles.expandIconWrapper} 
+          }`}
+      >
+        {props.node.text === 'Spells & Prompts' && (
+          <div onClick={() => handleOpenSpell()}>
+            <AddIcon />
+          </div>
+        )}
       </div>
     </div>
   )
