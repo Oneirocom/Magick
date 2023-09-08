@@ -27,6 +27,7 @@ export const checkForSpellInManager = async (context: HookContext) => {
   const decodedId =
     (id as string).length > 36 ? (id as string).slice(0, 36) : (id as string)
 
+  // load the spell if there isnt ones
   if (!spellManager.hasSpellRunner(decodedId)) {
     const spell = await getSpell({ app, id: decodedId, projectId })
     await spellManager.load(spell as SpellInterface)
@@ -64,5 +65,5 @@ export const updateSpellInManager = async (context: HookContext) => {
 
   // We just store the result here of the update
   // This hook only runs after save spell calls, so there should always be a spell to load in
-  spellManager.load(context.result)
+  spellManager.updateSpell(context.result)
 }
