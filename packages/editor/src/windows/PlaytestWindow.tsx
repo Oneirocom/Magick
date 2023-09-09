@@ -24,16 +24,95 @@ import {
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
 
+  const [history, setHistory] = useState<string[]>([])
+
   // Trigger 'onSend' when 'return' key is pressed on the input.
   useHotkeys(
     'enter',
     () => {
       if (ref.current !== document.activeElement) return
-      props.onSend()
+      onSend()
     },
     { enableOnFormTags: ['INPUT'] },
     [props, ref]
   )
+
+  // Use up and down arrows to move through history and set valye of input.
+  useHotkeys(
+    'up',
+    () => {
+      if (ref.current !== document.activeElement) return
+      if (history.length === 0) return
+      const last = history[history.length - 1]
+
+      // handle case where user is moving up more than one
+      if (ref.current.value !== '') {
+        const index = history.indexOf(ref.current.value)
+        if (index === -1) {
+
+          // if the current value is not in the history, add it to the history
+          setHistory([...history, ref.current.value])
+        } else if (index === 0) {
+
+          // if the current value is the first item in the history, do nothing
+          return
+        } else {
+
+          // if the current value is in the history, move up one
+          ref.current.value = history[index - 1]
+          props.onChange({ target: { value: history[index - 1] } })
+          return
+        }
+      }
+
+      ref.current.value = last
+      props.onChange({ target: { value: last } })
+    },
+    { enableOnFormTags: ['INPUT'] },
+    [props, ref, history]
+  )
+
+  // handle down arrow moving through list
+  useHotkeys(
+    'down',
+    () => {
+      if (ref.current !== document.activeElement) return
+      if (history.length === 0) return
+
+      // handle case where user is moving down more than one
+      if (ref.current.value !== '') {
+        const index = history.indexOf(ref.current.value)
+        if (index === -1) {
+
+          // if the current value is not in the history, add it to the history
+          setHistory([...history, ref.current.value])
+        } else if (index === history.length - 1) {
+
+          // handle user moving down back into an empty input
+          ref.current.value = ''
+          // if the current value is the last item in the history, do nothing
+          return
+        } else {
+          // if the current value is in the history, move down one
+          ref.current.value = history[index + 1]
+          props.onChange({ target: { value: history[index + 1] } })
+          return
+        }
+      }
+
+      ref.current.value = ''
+      props.onChange({ target: { value: '' } })
+    },
+    { enableOnFormTags: ['INPUT'] },
+    [props, ref, history]
+  )
+
+  // function to call onSend  after storing user input in history
+  const onSend = () => {
+    const newHistory = [...history, ref.current.value]
+    setHistory(newHistory as [])
+    props.onSend()
+  }
 
   return (
     <div className={css['playtest-input']}>
@@ -47,7 +126,7 @@ const Input = props => {
       <Button
         className="small"
         style={{ cursor: 'pointer' }}
-        onClick={props.onSend}
+        onClick={onSend}
       >
         Send
       </Button>
