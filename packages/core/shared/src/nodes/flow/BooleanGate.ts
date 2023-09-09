@@ -1,20 +1,24 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This component represents a boolean gate. It takes a boolean input, and depending on whether the value is true or false will only trigger one output or the other.
  */
-import Rete from 'rete';
-import { MagickComponent } from '../../engine';
-import { booleanSocket, triggerSocket } from '../../sockets';
-import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types';
+import Rete from '@magickml/rete'
+import { MagickComponent } from '../../engine'
+import { booleanSocket, triggerSocket } from '../../sockets'
+import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
-const info = `The boolean gate takes a boolean input, and depending on whether the value is true or false will only trigger one output or the other.`;
+const info = `The boolean gate takes a boolean input, and depending on whether the value is true or false will only trigger one output or the other.`
 
 export class BooleanGate extends MagickComponent<void> {
-
   constructor() {
-    super('Boolean Gate', {
-      outputs: { true: 'option', false: 'option' },
-    }, 'Flow', info);
+    super(
+      'Boolean Gate',
+      {
+        outputs: { true: 'option', false: 'option' },
+      },
+      'Flow',
+      info
+    )
   }
 
   /**
@@ -23,16 +27,16 @@ export class BooleanGate extends MagickComponent<void> {
    * @returns the node object with the inputs and outputs added to it.
    */
   builder(node: MagickNode) {
-    const bool = new Rete.Input('boolean', 'Boolean', booleanSocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const isTrue = new Rete.Output('true', 'True', triggerSocket);
-    const isFalse = new Rete.Output('false', 'False', triggerSocket);
+    const bool = new Rete.Input('boolean', 'Boolean', booleanSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const isTrue = new Rete.Output('true', 'True', triggerSocket)
+    const isFalse = new Rete.Output('false', 'False', triggerSocket)
 
     return node
       .addInput(dataInput)
       .addInput(bool)
       .addOutput(isTrue)
-      .addOutput(isFalse);
+      .addOutput(isFalse)
   }
 
   /**
@@ -42,12 +46,12 @@ export class BooleanGate extends MagickComponent<void> {
    * @param inputs - the inputs for the worker node.
    */
   worker(_node: WorkerData, inputs: MagickWorkerInputs) {
-    const isTrue = inputs['boolean'][0];
+    const isTrue = inputs['boolean'][0]
 
     if (isTrue) {
-      this._task.closed = ['false'];
+      this._task.closed = ['false']
     } else {
-      this._task.closed = ['true'];
+      this._task.closed = ['true']
     }
   }
 }

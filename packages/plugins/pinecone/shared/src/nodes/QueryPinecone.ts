@@ -1,5 +1,5 @@
-// DOCUMENTED 
-import Rete from 'rete';
+// DOCUMENTED
+import Rete from '@magickml/rete'
 
 import {
   arraySocket,
@@ -11,16 +11,16 @@ import {
   MagickNodeData,
   stringSocket,
   triggerSocket,
-} from '@magickml/core';
+} from '@magickml/core'
 
-import { PineconeClient } from '@pinecone-database/pinecone';
+import { PineconeClient } from '@pinecone-database/pinecone'
 
-const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`;
+const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 
 type WorkerReturn = {
-  result?: any[];
-  error?: string;
-};
+  result?: any[]
+  error?: string
+}
 
 /**
  * QueryPinecone class which extends the MagickComponent.
@@ -41,7 +41,7 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
       },
       'Pinecone',
       info
-    );
+    )
   }
 
   /**
@@ -50,33 +50,33 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The assembled MagickNode instance.
    */
   builder(node: MagickNode): MagickNode {
-    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket);
-    const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket);
-    const result = new Rete.Output('result', 'Result', arraySocket);
-    const error = new Rete.Output('error', 'Error', stringSocket);
+    const embedding = new Rete.Input('embedding', 'Embedding', arraySocket)
+    const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
+    const result = new Rete.Output('result', 'Result', arraySocket)
+    const error = new Rete.Output('error', 'Error', stringSocket)
 
     const input = new InputControl({
       dataKey: 'environment',
       name: 'Environment',
       icon: 'moon',
       placeholder: '',
-    });
+    })
 
     const index = new InputControl({
       dataKey: 'index',
       name: 'Index',
       icon: 'moon',
       placeholder: '',
-    });
-    node.inspector.add(input).add(index);
+    })
+    node.inspector.add(input).add(index)
 
     return node
       .addInput(triggerIn)
       .addInput(embedding)
       .addOutput(triggerOut)
       .addOutput(result)
-      .addOutput(error);
+      .addOutput(error)
   }
 
   /**
@@ -93,42 +93,43 @@ export class QueryPinecone extends MagickComponent<Promise<WorkerReturn>> {
     _outputs: MagickWorkerOutputs,
     context: any
   ) {
-    const pinecone = new PineconeClient();
+    const pinecone = new PineconeClient()
 
     if (!context.module.secrets['pinecone_api_key']) {
-      console.log('No Pinecode API key found');
-      return { error: 'No Pinecode API key found' };
+      console.log('No Pinecode API key found')
+      return { error: 'No Pinecode API key found' }
     }
-    const environment = (node.data as { environment: string }).environment;
+    const environment = (node.data as { environment: string }).environment
 
-    console.log('inputs', inputs);
+    console.log('inputs', inputs)
 
-    const embedding = inputs['embedding'] && inputs['embedding'][0] as Array<number>;
+    const embedding =
+      inputs['embedding'] && (inputs['embedding'][0] as Array<number>)
 
     await pinecone.init({
       environment,
       apiKey: context.module.secrets['pinecone_api_key'],
-    });
+    })
 
-    const index = (node.data as { index: string }).index;
+    const index = (node.data as { index: string }).index
 
-    const pineconeIndex = pinecone.Index(index);
+    const pineconeIndex = pinecone.Index(index)
 
-    console.log('embedding is', embedding);
+    console.log('embedding is', embedding)
 
     const queryRequest = {
       vector: embedding,
       topK: 3,
       includeValues: true,
       includeMetadata: true,
-    };
+    }
 
-    const queryResponse = await pineconeIndex.query({ queryRequest });
+    const queryResponse = await pineconeIndex.query({ queryRequest })
 
-    console.log('queryResponse', JSON.stringify(queryResponse));
+    console.log('queryResponse', JSON.stringify(queryResponse))
 
     return {
       result: queryResponse?.matches ?? [],
-    };
+    }
   }
 }

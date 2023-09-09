@@ -1,5 +1,5 @@
 // UNDOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
@@ -66,7 +66,7 @@ export class Update extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'db_provider',
       values: models,
       defaultValue: models[0],
-      tooltip: 'Choose the database provider'
+      tooltip: 'Choose the database provider',
     })
 
     node.inspector.add(modelName)

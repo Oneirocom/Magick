@@ -1,10 +1,9 @@
 // DOCUMENTED
-import { NodeEditor } from 'rete'
+import { NodeEditor } from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { ComponentData, ControlData, MagickNode } from '../../types'
 import { Inspector } from './Inspector'
-
 
 // Add TSDoc comment to the class.
 /**
@@ -28,7 +27,7 @@ export abstract class DataControl {
   placeholder: string
   data: ComponentData
   expanded?: boolean
-  tooltip?: string;
+  tooltip?: string
 
   // Add TSDoc comment to the constructor.
   /**
@@ -102,7 +101,7 @@ export abstract class DataControl {
       icon: this.icon,
       type: this.type,
       placeholder: this.placeholder,
-      tooltip: this.tooltip
+      tooltip: this.tooltip,
     }
   }
 

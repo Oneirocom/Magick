@@ -4,7 +4,7 @@
  * This component replaces a string with another in the input.
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -78,30 +78,30 @@ export class RegularExpression extends MagickComponent<Promise<WorkerReturn>> {
   }
 
   /**
-  * Worker function for the component.
-  * Performs the string replacement operation.
-  * @param node {WorkerData} The node data.
-  * @param rawInputs {MagickWorkerInputs} The raw inputs to the component.
-  */
+   * Worker function for the component.
+   * Performs the string replacement operation.
+   * @param node {WorkerData} The node data.
+   * @param rawInputs {MagickWorkerInputs} The raw inputs to the component.
+   */
   async worker(node: WorkerData, rawInputs: MagickWorkerInputs) {
-    const input = rawInputs['input'] && rawInputs['input'][0] as string;
-    const match = node.data.rule as any;
-  
-    let replacedInput = input;
-  
+    const input = rawInputs['input'] && (rawInputs['input'][0] as string)
+    const match = node.data.rule as any
+
+    let replacedInput = input
+
     // Check if the input and match are defined
-    if(input && match){
+    if (input && match) {
       // Create a regex object
-      const regex = new RegExp(match, 'g');
-  
+      const regex = new RegExp(match, 'g')
+
       // Use the replace function to replace all matching substrings
-      replacedInput = input.replace(regex, '');
+      replacedInput = input.replace(regex, '')
     } else {
-      throw new Error('Input and match must be defined');
+      throw new Error('Input and match must be defined')
     }
-  
+
     return {
-      output: replacedInput
+      output: replacedInput,
     }
   }
 }

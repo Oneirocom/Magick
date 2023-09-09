@@ -63,6 +63,7 @@ function AgentMenu({ data, resetData }) {
 
   const BorderedAvatar = styled(Avatar)`
     border: 1px solid #BADDE4;
+    ${STANDALONE && 'cursor: pointer;'}
   `
 
   const handleToggleMenu1 = event => {
@@ -268,6 +269,12 @@ function AgentMenu({ data, resetData }) {
       resetData()
     }
   }, [agentUpdate])
+  const redirectToCloudAgents = () => {
+    if (STANDALONE) {
+      window.parent.postMessage({ type: 'redirect', href: '/agents' }, '*')
+    }
+  }
+
   return (
     <div>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -280,7 +287,7 @@ function AgentMenu({ data, resetData }) {
             justifyContent: 'space-between',
           }}
         >
-          <ListItemAvatar>
+          <ListItemAvatar onClick={redirectToCloudAgents}>
             <BorderedAvatar
               alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
               src={

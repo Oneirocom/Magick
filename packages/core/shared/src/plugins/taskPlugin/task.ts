@@ -1,18 +1,16 @@
 import { NodeData } from 'rete/types/core/data'
 
-import { MagickReteInput, MagickTask, MagickWorkerInputs } from '../../types'
+import { MagickReteInput, MagickWorkerInputs } from '../../types'
 import { MagickComponent } from '../../engine'
 
 type TaskRef = {
   key: string
-  task: MagickTask
-  run?: (data: unknown, options: RunOptions) => void
-  next?: TaskRef[]
+  nodeId: number
 }
 
 export type TaskSocketInfo = {
   targetSocket: string | null
-  targetNode: NodeData | null
+  targetNode: number | null
 }
 
 export type TaskOptions = {
@@ -32,11 +30,13 @@ type RunOptions = {
   needReset?: boolean
   garbage?: Task[]
   fromSocket?: string
-  fromNode?: NodeData
+  fromNodeId?: number
   fromTask?: Task
 }
 
 export type TaskOutputTypes = 'option' | 'output'
+
+export type TaskStore = Record<string, Task>
 
 type TaskWorker = (
   _ctx: unknown,
@@ -45,32 +45,42 @@ type TaskWorker = (
   socketInfo: TaskSocketInfo | string | null
 ) => Promise<Record<string, unknown> | null>
 export class Task {
-  node: NodeData
+  nodeId: number
   inputs: MagickWorkerInputs
   component: MagickComponent<unknown>
   worker: TaskWorker
   next: TaskRef[]
   outputData: Record<string, unknown> | null
   closed: string[]
+  getTask: (nodeId: number) => Task
 
   constructor(
     inputs: MagickWorkerInputs,
     component: MagickComponent<unknown>,
-    node: NodeData,
-    worker: TaskWorker
+    nodeId: number,
+    worker: TaskWorker,
+    getTask: (nodeId: number) => Task
   ) {
-    this.node = node
     this.inputs = inputs as MagickWorkerInputs
     this.component = component
     this.worker = worker
     this.next = []
     this.outputData = null
     this.closed = []
+    this.nodeId = nodeId
+    this.getTask = getTask
+    this.initializeNextTasks()
+  }
 
+  private initializeNextTasks() {
     this.getInputs('option').forEach((key: string) => {
       ;(this.inputs[key] as MagickReteInput[]).forEach(
         (workerInput: MagickReteInput) => {
-          workerInput.task.next.push({ key: workerInput.key, task: this })
+          const task = this.getTask(workerInput.nodeId)
+          task.next.push({
+            key: workerInput.key,
+            nodeId: this.nodeId,
+          })
         }
       )
     })
@@ -100,39 +110,32 @@ export class Task {
     return input
   }
 
-  getInputByNodeId(node, fromSocket): string | null {
+  getInputByNodeId(nodeId, fromSocket): string | null {
     let value: null | string = null
     Object.entries(this.inputs).forEach(([key, input]) => {
-      const found = (input as MagickReteInput[]).find(
-        (con: MagickReteInput) => con && con.task.node.id === node.id
-      ) as {
-        key: string
-        task: { closed: string[] }
-      }
+      const found = input.find(
+        (con: any) => con && con.nodeId === nodeId
+      ) as any
+
       if (found) {
-        if (found?.task && found.key === fromSocket) value = key
+        if (found.key === fromSocket) value = key
       }
     })
 
     return value
   }
 
-  // getInputFromConnection(socketKey: string) {
-  //   let input: null | any = null
-  //   Object.entries(this.inputs).forEach(([key, value]) => {
-  //     const val = value.find((con: any) => con && con.key === socketKey) as {
-  //       task: { closed: string[] }
-  //     }
-  //     if (val) {
-  //       if (val && val.task && val.task.closed.length > 0) {
-  //         input = key
-  //         return
-  //       }
-  //     }
-  //   })
+  private filterNextTasks(con) {
+    const task = this.getTask(con.nodeId)
+    // if (task.outputData) return true
+    // if (task.nodeId === fromNodeId) return true
+    if (task.component.name === 'Spell') return false
 
-  //   return input
-  // }
+    // return true if the input is from a triggerless component
+    // if (!task.node.outputs.trigger) return true
+    // TODO: check if default should be false
+    return true
+  }
 
   reset() {
     this.outputData = null
@@ -145,69 +148,36 @@ export class Task {
       garbage = [] as Task[],
       propagate = true,
       fromSocket,
-      fromNode,
-      // fromTask,
+      fromNodeId,
+      // fromTask,z
     } = options
 
     // garbage means that the nodes output value will be reset after it is all done.
     if (needReset) garbage.push(this)
 
-    // This would be a great place to run an animation showing the signal flow.
-    // Just needto figure out how to change the folow of the connection attached to a socket on the fly.
-    // And animations should follow the flow of the data, not the main IO paths
-
     // Only run the worker if the outputData isnt already populated.
     if (!this.outputData) {
       const inputs = {} as Record<string, unknown[]>
 
-      /*
-        This is where we are populating all the input values to be passed into the worker. We are getting all the input connections that are connected as outputs (ie have values)
-        We filter out all connections which did not come from the previou node.  This is to hgelp support multiple inputs properly, otherwise we actually back propagate along every input and run it, whichI think is unwanted behaviour.
-
-        After we have filtered these out, we need to run the task, which triggers that nodes worker.  After the worker runs, the task has populated output data, which we take and we associate with the tasks input values, which are subsequently
-        passed to the nodes worker for processing.
-
-        We assume here that his nodes worker does not need to access ALL values simultaneously, but is only interested in one. There is a task option which enables this functionality just in case we have use cases that don't want this behaviour.
-      */
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
-            .filter((con: MagickReteInput) => {
-              // only filter inputs to remove ones that are not the origin if a task option is true
-              if (!this.component.task.runOneInput || !fromNode) return true
-              if (con.task.outputData) return true
-              if (con.task.node.id === fromNode.id) return true
-              if (con.task.component.name === 'Spell') return false
-
-              // return true if the input is from a triggerless component
-              if (!con.task.node.outputs.trigger) return true
-              // TODO: check if default should be false
-              return false
-            })
+            .filter(this.filterNextTasks.bind(this))
             .map(async (con: MagickReteInput) => {
+              const task = this.getTask(con.nodeId)
               // if the task has come from a node with output data that is not the calling node, use that data
-              if (con.task.outputData && con.task.node.id !== fromNode?.id) {
-                const outputData = con.task.outputData as Record<
-                  string,
-                  unknown
-                >
-
-                return outputData[con.key]
+              if (task.outputData && task.nodeId !== fromNodeId) {
+                return (task.outputData as Record<string, unknown>)[con.key]
               }
 
-              await con.task.run(data, {
+              await task.run(data, {
                 needReset: false,
                 garbage,
                 propagate: false,
-                fromNode: this.node,
+                fromNodeId: this.nodeId,
               })
 
-              const outputData = con.task.outputData as unknown as Record<
-                string,
-                unknown
-              >
-
-              return outputData[con.key]
+              return (task.outputData as Record<string, unknown>)[con.key]
             })
 
           const magickWorkerinputs = await Promise.all(inputPromises)
@@ -220,42 +190,39 @@ export class Task {
       // this is mainly used currently by the module plugin to know where the run signal should go to.
       const socketInfo = {
         targetSocket: fromSocket
-          ? this.getInputByNodeId(fromNode, fromSocket)
+          ? this.getInputByNodeId(fromNodeId, fromSocket)
           : null,
-        targetNode: fromNode ? fromNode : null,
+        targetNode: fromNodeId ? fromNodeId : null,
       }
 
       // the main output data of the task, which is gathered up when the next node gets this nodes value
       this.outputData = await this.worker(this, inputs, data, socketInfo)
 
-      // an onRun option in case a task whats to do something when the task is run.
-      if (this.component.task.onRun)
-        this.component.task.onRun(this.node, this, data, socketInfo)
-
-      // this is what propagates the the run command to the next nodes in the chain
-      // this makes use of the 'next' nodes.  It also will filter out any connectios which the task has closed.
-      // it is this functionality that lets us control which direction the run signal flows.
-      if (propagate)
-        await Promise.all(
-          this.next
-            .filter(con => !this.closed.includes(con.key))
-            // pass the socket that is being calledikno
-            .map(async con => {
-              return await con.task.run(data, {
-                needReset: false,
-                garbage,
-                fromSocket: con.key,
-                fromNode: this.node,
-                fromTask: this,
-              })
-            })
-        )
+      if (propagate) await this.propagateRun(data, garbage)
     }
 
     if (needReset) garbage.map(t => t.reset())
   }
 
-  clone(root = true, oldTask: MagickTask, newTask: MagickTask) {
+  private async propagateRun(data, garbage) {
+    await Promise.all(
+      this.next
+        .filter(con => !this.closed.includes(con.key))
+        // pass the socket that is being calledikno
+        .map(async con => {
+          const task = this.getTask(con.nodeId)
+          return await task.run(data, {
+            needReset: false,
+            garbage,
+            fromSocket: con.key,
+            fromNodeId: this.nodeId,
+            fromTask: this,
+          })
+        })
+    )
+  }
+
+  clone(root = true, oldTask: Task, newTask: Task) {
     const inputs = Object.assign({}, this.inputs) as MagickWorkerInputs
 
     if (root)
@@ -265,21 +232,32 @@ export class Task {
     else
       Object.keys(inputs).forEach((key: string) => {
         inputs[key] = (inputs[key] as MagickReteInput[]).map(
-          (con: MagickReteInput) => ({
-            ...con,
-            task: con.task === oldTask ? newTask : (con.task as MagickTask),
-          })
+          (con: MagickReteInput) => {
+            const task = this.getTask(con.nodeId)
+            return {
+              ...con,
+              task: task === oldTask ? newTask : (task as Task),
+            }
+          }
         )
       })
 
-    const task = new Task(inputs, this.component, this.node, this.worker)
+    // todo this may cause issues if we need a whole new copy of the node it references
+    // right now it is just a reference to the node
+    const task = new Task(
+      inputs,
+      this.component,
+      this.nodeId,
+      this.worker,
+      this.getTask
+    )
 
     // manually add a copies of follow tasks
     task.next = this.next.map(n => ({
       key: n.key,
-      task: n.task.clone(false, this, task),
+      nodeId: n.nodeId,
     }))
 
-    return task
+    return {}
   }
 }

@@ -35,7 +35,7 @@ const handleSockets = (app: any) => {
       socket.feathers.user = user
 
       // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
-      const spellManager = new SpellManager({ socket, app })
+      const spellManager = new SpellManager({ socket, app, watchSpells: true })
 
       app.userSpellManagers.set(user.id, spellManager)
 

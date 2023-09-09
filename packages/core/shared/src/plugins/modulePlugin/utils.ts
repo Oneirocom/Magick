@@ -1,4 +1,4 @@
-import { Input, NodeEditor, Output } from 'rete'
+import { Input, NodeEditor, Output } from '@magickml/rete'
 
 import {
   DataSocketType,

@@ -10,8 +10,9 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
-import { tooltip_text } from './tooltip_texts'
 import { useTreeData } from '../../../../../core/client/src/contexts/TreeDataProvider'
+import { tooltip_text } from "./tooltip_texts"
+import { extractPublicVariables } from './utils'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -115,6 +116,7 @@ const AgentDetails = ({
         })
         setSelectedAgentData(data)
         setAgentUpdate(true)
+
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
       })
@@ -125,6 +127,7 @@ const AgentDetails = ({
         })
       })
   }
+
 
   const formatPublicVars = _nodes => {
     // todo could type this better
@@ -155,15 +158,22 @@ const AgentDetails = ({
   }
 
   const updatePublicVar = spell => {
+
+  const updatePublicVar = (spell) => {
+
     setSelectedAgentData({
       ...selectedAgentData,
       rootSpellId: spell.id,
-      publicVariables: JSON.stringify(formatPublicVars(spell.graph.nodes)),
+      publicVariables: JSON.stringify(extractPublicVariables(spell)),
     })
   }
 
   useEffect(() => {
+
     ;(async () => {
+
+    (async () => {
+
       try {
         const spells = await client.service('spells').find({
           query: {
@@ -173,11 +183,15 @@ const AgentDetails = ({
 
         setSpellList(spells.data)
 
+
         if (selectedAgentData.rootSpellId) {
           const agentRootSpell = await client
             .service('spells')
             .get(selectedAgentData.rootSpellId)
 
+
+        if (selectedAgentData.rootSpellId && !selectedAgentData.publicVariables) {
+          const agentRootSpell = await client.service('spells').get(selectedAgentData.rootSpellId)
           updatePublicVar(agentRootSpell)
         }
       } catch (err) {
@@ -188,6 +202,7 @@ const AgentDetails = ({
         }
       }
     })()
+
   }, [])
 
   return (
@@ -373,6 +388,7 @@ const AgentDetails = ({
             )
           })}
       </div>
+
       {selectedAgentData.publicVariables &&
         selectedAgentData.publicVariables !== '{}' && (
           <AgentPubVariables
@@ -387,6 +403,20 @@ const AgentDetails = ({
             publicVars={JSON.parse(selectedAgentData.publicVariables)}
           />
         )}
+
+      {selectedAgentData.publicVariables && selectedAgentData.publicVariables !== '{}' && (
+        <AgentPubVariables
+          setPublicVars={data => {
+            setSelectedAgentData({
+              ...selectedAgentData,
+              publicVariables: JSON.stringify(data),
+            })
+          }}
+          update={update}
+          publicVars={JSON.parse(selectedAgentData.publicVariables)}
+          selectedAgent={selectedAgentData}
+        />
+      )}
       <div
         className={`${
           selectedAgentData.publicVariables !== '{}'
@@ -412,6 +442,18 @@ const AgentDetails = ({
               </Tooltip>
             )
           })}
+        {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
+          return (
+            <RenderComp
+              key={index}
+              enable={enable}
+              element={value}
+              selectedAgentData={selectedAgentData}
+              setSelectedAgentData={setSelectedAgentData}
+              update={update}
+            />
+          )
+        })}
       </div>
     </div>
   )

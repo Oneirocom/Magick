@@ -19,6 +19,8 @@ interface TreeDataContextType {
   setOpenDoc: React.Dispatch<React.SetStateAction<null>>
   agentUpdate: boolean
   setAgentUpdate: React.Dispatch<React.SetStateAction<boolean>>
+  openDoc: string | number
+  setOpenDoc: React.Dispatch<React.SetStateAction<string | number>>
 }
 interface Document {
   id: string
@@ -32,17 +34,20 @@ interface Spell {
 
 const TreeDataContext = createContext<TreeDataContextType>({
   treeData: [],
-  setTreeData: () => {},
+  setTreeData: () => { },
   isAdded: false,
-  setIsAdded: () => {},
+  setIsAdded: () => { },
   docState: false,
-  setDocState: () => {},
+  setDocState: () => { },
   toDelete: null,
   setToDelete: () => {},
   openDoc: null,
   setOpenDoc: () => {},
   agentUpdate: false,
   setAgentUpdate: () => {},
+  setToDelete: () => { },
+  openDoc: '',
+  setOpenDoc: () => { },
 })
 
 export const useTreeData = () => useContext(TreeDataContext)
@@ -67,6 +72,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const [toDelete, setToDelete] = useState(null)
   const [openDoc, setOpenDoc] = useState(null)
   const [agentUpdate, setAgentUpdate] = useState(false)
+  const [openDoc, setOpenDoc] = useState<string | number>('')
 
   function truncateDocs(str, n) {
     if (str.length > n) {

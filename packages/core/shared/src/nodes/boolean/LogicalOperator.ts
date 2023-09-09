@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { NumberControl } from '../../dataControls/NumberControl'
 import { MagickComponent } from '../../engine'
@@ -55,14 +55,14 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
       dataKey: 'operationType',
       values: operationTypes,
       defaultValue: operationTypes[0],
-      tooltip:"this is an operation type dropdown"
+      tooltip: 'this is an operation type dropdown',
     })
 
     const testt = new NumberControl({
       dataKey: 'testt',
       name: 'testt Type',
       icon: 'moon',
-      tooltip:"This is a number control"
+      tooltip: 'This is a number control',
     })
 
     node.inspector.add(operationType).add(testt)
