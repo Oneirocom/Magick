@@ -103,6 +103,8 @@ export class DocumentService<
     ) {
       const param = params.query
 
+      console.log('param!!!!!!!', param)
+
       const querys = await db('documents')
         .select('*')
         .where({
@@ -120,7 +122,7 @@ export class DocumentService<
               .select(
                 db.raw(
                   `(embedding <=> '${JSON.stringify(
-                    param.query.embedding
+                    param.embedding
                   )}') AS distance`
                 )
               )
