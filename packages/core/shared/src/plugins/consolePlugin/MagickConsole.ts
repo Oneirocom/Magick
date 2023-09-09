@@ -103,8 +103,7 @@ export class MagickConsole {
 
     const message =
       typeof _message !== 'string' ? JSON.stringify(_message) : _message
-    if (this.node.data.debug)
-      this.sendToDebug(this.formatMessage(message, 'log'))
+    if (this.node.data.log) this.sendToDebug(this.formatMessage(message, 'log'))
     if (isOutputError(_message)) {
       this.renderError()
     } else {
