@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { useConfig } from '@magickml/client-core'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
+import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
 
 // todo - improve agent typing by pulling from feathers types
 type AgentData = {
@@ -26,12 +27,15 @@ const AgentManagerWindow = () => {
   const [enable, setEnable] = useState({})
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
+  const { setAgentUpdate } = useTreeData()
+
 
   /**
    * @description Reset the data and fetch the latest info from the server.
    */
   const resetData = async () => {
     setIsLoading(true)
+    setAgentUpdate(false)
     const res = await fetch(
       `${config.apiUrl}/agents?projectId=${config.projectId}`,
       {
@@ -43,6 +47,7 @@ const AgentManagerWindow = () => {
     const json = await res.json()
     setData(json.data)
     setIsLoading(false)
+    setAgentUpdate(true)
     if (!json.data || !json.data[0]) return
     const spellAgent = json.data[0]?.rootSpell ?? {}
     const inputs = (pluginManager as ClientPluginManager).getInputByName()
@@ -78,6 +83,7 @@ const AgentManagerWindow = () => {
     updatedAt: string
     secrets: string
   }) => {
+    setAgentUpdate(false)
     if (!token && PRODUCTION) {
       enqueueSnackbar('You must be logged in to create an agent', {
         variant: 'error',
@@ -108,6 +114,7 @@ const AgentManagerWindow = () => {
         )
         const json = await res2.json()
         setData(json.data)
+        setAgentUpdate(true)
       })
       .catch(err => {
         console.error('error is', err)
