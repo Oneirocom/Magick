@@ -12,6 +12,7 @@ import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import { tooltip_text } from "./tooltip_texts"
 import { extractPublicVariables } from './utils'
+import { useTreeData } from '../../../../../core/client/src/contexts/TreeDataProvider'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -52,6 +53,7 @@ const AgentDetails = ({
   const [enable] = useState(onLoadEnables)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
+  const { setAgentUpdate } = useTreeData()
 
   const [rootSpell, setRootSpell] = useState<any>(null)
   useEffect(() => {
@@ -79,6 +81,7 @@ const AgentDetails = ({
    * @param data - Data to update.
    */
   const update = (id: string, data = undefined) => {
+    setAgentUpdate(false)
     const _data = data || { ...selectedAgentData }
     id = id || _data.id
     if (_data['id']) {
@@ -109,6 +112,7 @@ const AgentDetails = ({
         enqueueSnackbar('Updated agent', {
           variant: 'success',
         })
+        setAgentUpdate(true)
         setSelectedAgentData(data)
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
