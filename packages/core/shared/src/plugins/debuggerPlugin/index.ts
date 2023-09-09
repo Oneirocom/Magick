@@ -9,10 +9,10 @@ function install(editor: IRunContextEditor) {
     // we are going to override the default builder with our own, and will invoke the original builder inside it.
     component.builder = (node: MagickNode) => {
       const switchControl = new SwitchControl({
-        dataKey: 'debug',
-        name: 'debug',
+        dataKey: 'log',
+        name: 'Log',
         icon: 'bug',
-        label: 'Debug',
+        label: 'Log',
         defaultValue: false,
       })
 
