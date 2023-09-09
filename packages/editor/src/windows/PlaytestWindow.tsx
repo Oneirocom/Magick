@@ -124,7 +124,7 @@ const Input = props => {
         placeholder="Type play test input here"
       ></input>
       <Button
-        className="small"
+        className={`small ${css['playtest-input-send']}`}
         style={{ cursor: 'pointer' }}
         onClick={onSend}
       >
