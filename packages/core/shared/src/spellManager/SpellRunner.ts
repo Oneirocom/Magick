@@ -14,6 +14,7 @@ import {
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
+import { NodeData } from 'rete/types/core/data'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
@@ -230,7 +231,7 @@ class SpellRunner {
    * it for the next run.
    */
   private _resetTasks(): void {
-    this.engine.tasks.forEach(t => t.reset())
+    Object.values(this.engine.getTasks()).forEach(t => t.reset())
   }
 
   /**
@@ -336,7 +337,7 @@ class SpellRunner {
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     //
-    await component.run(triggeredNode as unknown as MagickNode, inputs)
+    await component.run(triggeredNode as NodeData, inputs, this.engine)
 
     this.busy = false
     return this.outputData

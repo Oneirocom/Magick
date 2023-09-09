@@ -72,8 +72,6 @@ async function handleResponse({ output, agent, event }) {
 
 }
 
-
-
 // Input socket configurations
 const inputSockets = [
   {

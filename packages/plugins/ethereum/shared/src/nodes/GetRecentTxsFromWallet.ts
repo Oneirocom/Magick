@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * The lodash isEmpty function checks if the input variable is an empty object, collection, map, or set.
  * More information: https://lodash.com/docs/4.17.15#isEmpty
  */
 import { isEmpty } from 'lodash'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -23,9 +23,11 @@ import {
 const info = `Check the recent transactions of an Ethereum wallet`
 
 // A custom return type related to the class GetRecentTxsFromWallet.
-type InputReturn = {
-  output: string
-} | undefined
+type InputReturn =
+  | {
+      output: string
+    }
+  | undefined
 
 /**
  * GetRecentTxsFromWallet is a custom component that returns the recent transactions of a specified wallet address.
@@ -36,17 +38,24 @@ type InputReturn = {
  *
  * @returns a promise with a custom InputReturn type
  */
-export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>> {
+export class GetRecentTxsFromWallet extends MagickComponent<
+  Promise<InputReturn>
+> {
   // constructor with the initialization of the name, output(s), and context menu of the component.
   constructor() {
-    super('Get Recent Transactions', {
-      outputs: {
-        // custom output which is a string on this context.
-        output: 'output',
-        // definitions of the trigger that can activate the component.
-        trigger: 'option',
+    super(
+      'Get Recent Transactions',
+      {
+        outputs: {
+          // custom output which is a string on this context.
+          output: 'output',
+          // definitions of the trigger that can activate the component.
+          trigger: 'option',
+        },
       },
-    }, 'Ethereum', info)
+      'Ethereum',
+      info
+    )
 
     // module property definition, it has a nodetype and a socket.
     this.module = {
@@ -61,7 +70,11 @@ export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>
 
   // custom builder method that returns the created inputs and outputs of the node.
   builder(node: MagickNode) {
-    const addressInput = new Rete.Input('address', 'Wallet Address', numberSocket)
+    const addressInput = new Rete.Input(
+      'address',
+      'Wallet Address',
+      numberSocket
+    )
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
@@ -91,9 +104,9 @@ export class GetRecentTxsFromWallet extends MagickComponent<Promise<InputReturn>
    * @returns a promise with a custom InputReturn type
    */
   async worker(
-    node: WorkerData, 
-    inputs: MagickWorkerInputs, 
-    outputs: MagickWorkerOutputs, 
+    node: WorkerData,
+    inputs: MagickWorkerInputs,
+    outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ): Promise<InputReturn> {
     // The closed attribute of the _task property prevents workflow execution until its 'trigger' attribute is set.

@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import React from 'react';
-import { Control } from 'rete';
+import { Control } from '@magickml/rete';
 
 /**
  * React component for the run button.

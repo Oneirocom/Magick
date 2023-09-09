@@ -1,6 +1,6 @@
 // DOCUMENTED
 import Handlebars from 'handlebars'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
@@ -55,13 +55,13 @@ export class TextTemplate extends MagickComponent<Promise<WorkerReturn>> {
       connectionType: 'input',
       ignored: ['trigger'],
       name: 'Input Sockets',
-      tooltip: 'Add input sockets'
+      tooltip: 'Add input sockets',
     })
 
     const fewshotControl = new FewshotControl({
       name: 'Prompt Template',
       language: 'handlebars',
-      tooltip: 'Open prompt template'
+      tooltip: 'Open prompt template',
     })
 
     node.inspector.add(inputGenerator).add(fewshotControl)

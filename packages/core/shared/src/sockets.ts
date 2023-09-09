@@ -1,4 +1,4 @@
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 // TODO: fix this very unmaintainable mapping
 // this is a hack and only temporary until we have a rete schema migration system set up
@@ -37,7 +37,7 @@ export type SocketType =
   | 'documentSocket'
 
 export const socketNameMap: Record<SocketNameType, SocketType> = {
-  'Any': 'anySocket',
+  Any: 'anySocket',
   Number: 'numberSocket',
   Boolean: 'booleanSocket',
   Array: 'arraySocket',
@@ -65,7 +65,6 @@ export const documentSocket = new Rete.Socket('Document')
 export const embeddingSocket = new Rete.Socket('Embedding')
 export const taskSocket = new Rete.Socket('Task')
 export const imageSocket = new Rete.Socket('Image')
-export const fileSocket = new Rete.Socket('File')
 
 const sockets = [
   numberSocket,

@@ -1,22 +1,22 @@
-// DOCUMENTED 
-import { Node, NodeEditor } from 'rete';
-import Action from '../action';
+// DOCUMENTED
+import { Node, NodeEditor } from '@magickml/rete'
+import Action from '../action'
 
 /**
  * Base class for actions related to Node operations
  */
 abstract class NodeAction extends Action {
-  protected editor: NodeEditor;
-  protected node: Node;
+  protected editor: NodeEditor
+  protected node: Node
 
   /**
    * @param editor Instance of NodeEditor
    * @param node Node instance
    */
   constructor(editor: NodeEditor, node: Node) {
-    super();
-    this.editor = editor;
-    this.node = node;
+    super()
+    this.editor = editor
+    this.node = node
   }
 }
 
@@ -28,14 +28,14 @@ export class AddNodeAction extends NodeAction {
    * Undo the action by removing the node.
    */
   undo() {
-    this.editor.removeNode(this.node);
+    this.editor.removeNode(this.node)
   }
 
   /**
    * Redo the action by adding the node.
    */
   redo() {
-    this.editor.addNode(this.node);
+    this.editor.addNode(this.node)
   }
 }
 
@@ -47,14 +47,14 @@ export class RemoveNodeAction extends NodeAction {
    * Undo the action by adding the node.
    */
   undo() {
-    this.editor.addNode(this.node);
+    this.editor.addNode(this.node)
   }
 
   /**
    * Redo the action by removing the node.
    */
   redo() {
-    this.editor.removeNode(this.node);
+    this.editor.removeNode(this.node)
   }
 }
 
@@ -62,8 +62,8 @@ export class RemoveNodeAction extends NodeAction {
  * DragNode action class
  */
 export class DragNodeAction extends NodeAction {
-  prev: {x: number, y: number};
-  new: {x: number, y: number};
+  prev: { x: number; y: number }
+  new: { x: number; y: number }
 
   /**
    * @param editor Instance of NodeEditor
@@ -71,10 +71,10 @@ export class DragNodeAction extends NodeAction {
    * @param prev Previous position as [number, number]
    */
   constructor(editor: NodeEditor, node: Node, prev: [number, number]) {
-    super(editor, node);
+    super(editor, node)
 
-    this.prev = {x : prev[0], y: prev[1]}
-    this.new = {x : node.position[0], y: node.position[1]}
+    this.prev = { x: prev[0], y: prev[1] }
+    this.new = { x: node.position[0], y: node.position[1] }
   }
 
   /**
@@ -82,25 +82,25 @@ export class DragNodeAction extends NodeAction {
    * @param position Position with x and y coordinates.
    */
   private _translate(position: { x: number; y: number }) {
-    const node = this.editor.view.nodes.get(this.node);
+    const node = this.editor.view.nodes.get(this.node)
     if (node === undefined) {
-      return console.error('Node not found in editor view');
+      return console.error('Node not found in editor view')
     }
-    node.translate(position.x, position.y);
+    node.translate(position.x, position.y)
   }
 
   /**
    * Undo the action by updating the position to previous.
    */
   undo() {
-    this._translate(this.prev);
+    this._translate(this.prev)
   }
 
   /**
    * Redo the action by updating the position to new.
    */
   redo() {
-    this._translate(this.new);
+    this._translate(this.new)
   }
 
   /**
@@ -108,6 +108,6 @@ export class DragNodeAction extends NodeAction {
    * @param Node Node instance
    */
   update(node: Node) {
-    this.new = {x : node.position[0], y: node.position[1]}
+    this.new = { x: node.position[0], y: node.position[1] }
   }
 }

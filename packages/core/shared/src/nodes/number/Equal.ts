@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -35,7 +35,7 @@ export class Equal extends MagickComponent<void> {
       dataKey: 'value',
       name: 'Value',
       defaultValue: 0,
-      tooltip: 'Display default value'
+      tooltip: 'Display default value',
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)

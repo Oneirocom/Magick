@@ -1,4 +1,4 @@
-import { NodeView } from 'rete/types/view/node'
+import { NodeView } from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { IRunContextEditor, MagickNode, PubSubData } from '../../types'
 

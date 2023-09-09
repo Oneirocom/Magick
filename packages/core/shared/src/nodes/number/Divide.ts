@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -50,14 +50,14 @@ export class Divide extends MagickComponent<WorkerOutputs> {
       dataKey: 'firstNumber',
       name: 'First Number',
       defaultValue: 1,
-      tooltip: 'Enter First Number'
+      tooltip: 'Enter First Number',
     })
 
     const inspectorEndNumSocket = new InputControl({
       dataKey: 'secondNumber',
       name: 'Second Number',
       defaultValue: 1,
-      tooltip: 'Enter Second Number'
+      tooltip: 'Enter Second Number',
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -85,11 +85,11 @@ export class Divide extends MagickComponent<WorkerOutputs> {
     const secondNumber =
       (inputs['secondNumber'] && (inputs['secondNumber'][0] as number)) ??
       (node.data.secondNumber as number)
-      
-    const result = firstNumber / secondNumber as number
+
+    const result = (firstNumber / secondNumber) as number
 
     return {
-      result
+      result,
     }
   }
 }

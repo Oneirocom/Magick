@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A component to process Github Issue.
  * @category Github
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   MagickComponent,
   stringSocket,
@@ -14,16 +14,12 @@ import {
   WorkerData,
   objectSocket,
   MagickWorkerOutputs,
-  getLogger
+  getLogger,
 } from '@magickml/core'
 
 import axios from 'axios'
 
-async function githubSearchIssue(
-  token: string,
-  query: string
-): Promise<any> {
-
+async function githubSearchIssue(token: string, query: string): Promise<any> {
   if (token == undefined || token == '' || token[0] != 'g') {
     return []
   }
@@ -60,7 +56,7 @@ async function githubSearchIssue(
  * The return type of the worker function.
  */
 type WorkerReturn = {
-  object: [],
+  object: []
   output: string
 }
 
@@ -91,7 +87,12 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
    * @returns The node with its inputs and outputs.
    */
   builder(node: MagickNode) {
-    const triggerInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const triggerInput = new Rete.Input(
+      'trigger',
+      'Trigger',
+      triggerSocket,
+      true
+    )
     const queryInput = new Rete.Input('query', 'Query', stringSocket, true)
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const issueOutput = new Rete.Output('object', 'Object', objectSocket)
@@ -116,7 +117,7 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
-    context: ModuleContext,
+    context: ModuleContext
   ): Promise<WorkerReturn> {
     let query = ''
     if (inputs && inputs.query) {
@@ -134,7 +135,7 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
 
     return {
       object: result,
-      output: JSON.stringify(result)
+      output: JSON.stringify(result),
     }
   }
 }

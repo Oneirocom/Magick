@@ -4,23 +4,27 @@ import {
   Koa,
 } from '@feathersjs/koa'
 import PubSub from 'pubsub-js'
-import { Connection, Input, Node, NodeEditor, Output, Socket } from 'rete'
 import {
+  Connection,
+  Input,
+  Node,
+  NodeEditor,
+  Output,
+  Socket,
   Data,
   InputsData,
   NodeData,
   OutputsData,
   WorkerOutputs,
-} from 'rete/types/core/data'
+} from '@magickml/rete'
 import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import { Task, TaskOutputTypes } from './plugins/taskPlugin/task'
+import { Task, TaskOutputTypes, TaskStore } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 
 import { DataControl } from './plugins/inspectorPlugin'
-import { TaskSocketInfo } from './plugins/taskPlugin/task'
 import { SpellInterface } from './schemas'
 import { SpellManager } from './spellManager'
 
@@ -147,7 +151,8 @@ export type ControlData = {
 }
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
-  declare tasks: Task[]
+  declare getTask: (nodeId: number) => Task
+  declare getTasks: () => TaskStore
   declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
   declare context: EditorContext
@@ -438,13 +443,13 @@ export type NewSpellArgs = {
 export type MagickReteInput = {
   type: TaskOutputTypes
   outputData: unknown
-  task: MagickTask
+  nodeId: number
   key: string
 }
 
 export type TaskOutput = {
   type: TaskOutputTypes
-  task: MagickTask
+  task: Task
   key: string
 }
 
@@ -483,16 +488,15 @@ export type MessagingWebhookBody = {
   To: string
 }
 
-export type CompletionType = 'image' | 'text' | 'audio' | 'database' | 'search' | 'storage' | 'weather'
+export type CompletionType = 'image' | 'text' | 'audio' | 'database' | 'search'
 
 export type ImageCompletionSubtype = 'text2image' | 'image2image' | 'image2text'
 
-export type TextCompletionSubtype = 'text' | 'embedding' | 'chat' | 'typeChat' | 'json'
+export type TextCompletionSubtype = 'text' | 'embedding' | 'chat' | 'typeChat'
 
 export type AudioCompletionSubtype = 'text2speech' | 'text2audio'
 
 export type SearchCompletionSubtype = 'search'
-export type StorageCompletionSubtype = 'upload' | 'download'
 
 export type DatabaseCompletionSubtype =
   | 'select'
@@ -500,8 +504,6 @@ export type DatabaseCompletionSubtype =
   | 'upsert'
   | 'insert'
   | 'delete'
-
-export type WeatherCompletionSubtype = 'forecast' | 'current'
 
 export type CompletionSocket = {
   socket: string
@@ -524,7 +526,7 @@ export type CompletionInspectorControls = {
 
 type HandlerResponse = {
   success: boolean
-  result: string | number[] | string[]
+  result: string | number[]
   error: string
 }
 
@@ -537,8 +539,6 @@ export type CompletionProvider = {
     | AudioCompletionSubtype
     | DatabaseCompletionSubtype
     | SearchCompletionSubtype
-    | StorageCompletionSubtype
-    | WeatherCompletionSubtype
   handler?: (attrs: {
     node: WorkerData
     inputs: MagickWorkerInputs
@@ -660,15 +660,11 @@ export type RequestData = {
 }
 
 export type AppService = (app: FeathersApplication) => void
+
+// todo this is deprecated and needs to be checked and removed
 export interface MagickTask extends Task {
   outputs?: { [key: string]: string }
-  init?: (task?: MagickTask, node?: MagickNode) => void
-  onRun?: (
-    node: NodeData,
-    task: Task,
-    data: unknown,
-    socketInfo: TaskSocketInfo
-  ) => void
+  init?: (task?: Task, node?: MagickNode) => void
 }
 
 export interface ModuleOptions {

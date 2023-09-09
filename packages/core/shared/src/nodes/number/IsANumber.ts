@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -51,9 +51,9 @@ export class IsANumber extends MagickComponent<void> {
   worker(node: WorkerData, inputs: MagickWorkerInputs): void {
     const numberToTest = inputs['input'][0] as any
 
-    const isAnObject = typeof numberToTest === 'object';
+    const isAnObject = typeof numberToTest === 'object'
 
-    const isANumber = !isAnObject && !isNaN(Number.parseFloat(numberToTest));
+    const isANumber = !isAnObject && !isNaN(Number.parseFloat(numberToTest))
 
     if (isANumber) {
       this._task.closed = ['false']

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MultiSocketGeneratorControl } from '../../dataControls/MultiSocketGenerator'
 import { MagickComponent } from '../../engine'
@@ -46,7 +46,7 @@ export class ExclusiveGate extends MagickComponent<void> {
       socketTypes: ['triggerSocket', 'anySocket'],
       taskTypes: ['option', 'output'],
       name: 'Triggers',
-      tooltip: 'Add socket triggers'
+      tooltip: 'Add socket triggers',
     })
 
     const triggerOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
