@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket } from '../../sockets'
@@ -75,7 +75,7 @@ export class ExtractFromArray extends MagickComponent<Promise<WorkerReturn>> {
     const input = inputs.input[0] as Record<string, unknown>
 
     // get values
-    const value = (node.data.value as string).trim();
+    const value = (node.data.value as string).trim()
 
     if (!input) return { output: [] }
 

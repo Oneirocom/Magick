@@ -1,5 +1,5 @@
-import { Emitter, Connection } from 'rete'
-import { EventsTypes } from 'rete/types/events'
+import { Emitter, Connection } from '@magickml/rete'
+import { EventsTypes } from './events'
 
 function toTrainCase(str: string) {
   return str.toLowerCase().replace(/ /g, '-')

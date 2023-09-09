@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { hasBadWords } from 'expletives'
 
 import { MagickComponent } from '../../engine'

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
 import { objectSocket, triggerSocket } from '../../sockets'
@@ -50,7 +50,7 @@ export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
       connectionType: 'input',
       name: 'Input Sockets',
       ignored: ['trigger'],
-      tooltip: 'Add input sockets'
+      tooltip: 'Add input sockets',
     })
 
     node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)

@@ -1,8 +1,7 @@
-import {Input, Output, Connection } from 'rete'
+import { Input, Output, Connection } from '@magickml/rete'
 import { IRunContextEditor, MagickNode } from '../../types'
 
 function install(editor: IRunContextEditor) {
-
   editor.bind('multiselectcopy')
   editor.bind('multiselectpaste')
 
@@ -21,18 +20,29 @@ function install(editor: IRunContextEditor) {
     if (!editor.selected.list.length) return
 
     const copiedNodes: MagickNode[] = []
-    editor.selected.each((node) => {
+    editor.selected.each(node => {
       copiedNodes.push(node as MagickNode)
     })
 
-    const connections: Connection[] = copiedNodes.map(item => item.getConnections())
+    const connections: Connection[] = copiedNodes
+      .map(item => item.getConnections())
       .reduce((acc, value) => acc.concat(value))
 
     // Store this array instead because JSON.stringify() cannot store deep object params
     const connectedNodePairs = connections.map(i => {
-      return { 
-        input: { key: i.input.key, name: i.input.name, socketName: i.input.socket.name, node: i.input.node }, 
-        output: { key: i.output.key, name: i.output.name, socketName: i.output.socket.name, node: i.output.node } 
+      return {
+        input: {
+          key: i.input.key,
+          name: i.input.name,
+          socketName: i.input.socket.name,
+          node: i.input.node,
+        },
+        output: {
+          key: i.output.key,
+          name: i.output.name,
+          socketName: i.output.socket.name,
+          node: i.output.node,
+        },
       }
     })
 
@@ -52,38 +62,40 @@ function install(editor: IRunContextEditor) {
     if (!parsedNodes.length) return
 
     // get the last copied node's clientXY position
-    const [nodeX, nodeY] = parsedNodes[parsedNodes?.length-1].position
+    const [nodeX, nodeY] = parsedNodes[parsedNodes?.length - 1].position
 
     // get diffX/diffY correlated with the nodeX/nodeY above
     // used to create positions of copy nodes later
-    const posDiff: Array<{diffX: number, diffY: number}> = []
+    const posDiff: Array<{ diffX: number; diffY: number }> = []
     parsedNodes.forEach(node => {
       const [x, y] = node.position
       posDiff.push({ diffX: x - nodeX, diffY: y - nodeY })
-    });
-    
+    })
+
     // Call the main function after preprocessing
-    pasteNodesAndConnections(editor, parsedNodes, mouse, posDiff);
+    pasteNodesAndConnections(editor, parsedNodes, mouse, posDiff)
   })
 }
 
-const createConnections = async(editor, nodeMapping) => {    
+const createConnections = async (editor, nodeMapping) => {
   const pairs = await localStorage.getItem('connectedNodePairs')
   if (!pairs) return
   const parsedPairs = JSON.parse(pairs)
 
   // filter the repeated connections and get the unique ones
   const uniqueConns = parsedPairs.filter((value, index, self) => {
-    return index === self.findIndex(t => {
-      const condition = (
-        t.input.key === value.input.key
-        && t.output.key === value.output.key
-        && t.input.node.id === value.input.node.id
-        && t.output.node.id === value.output.node.id
-      )
+    return (
+      index ===
+      self.findIndex(t => {
+        const condition =
+          t.input.key === value.input.key &&
+          t.output.key === value.output.key &&
+          t.input.node.id === value.input.node.id &&
+          t.output.node.id === value.output.node.id
 
-      return condition
-    })
+        return condition
+      })
+    )
   })
 
   // loop through the old connections
@@ -97,31 +109,29 @@ const createConnections = async(editor, nodeMapping) => {
     // Proceed if the two nodes were the selected ones only
     if (inputNode && outputNode) {
       // create a new Connection
-      editor.connect(outputNode.outputs.get(output.key) as Output, inputNode.inputs.get(input.key) as Input)
+      editor.connect(
+        outputNode.outputs.get(output.key) as Output,
+        inputNode.inputs.get(input.key) as Input
+      )
     }
   }
-  
+
   // clear the data
   localStorage.removeItem('selectedNodes')
   localStorage.removeItem('connectedNodePairs')
-}  
+}
 
 const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
   // Create a map of the cloned nodes to store the mapping between the original and cloned nodes.
   let cloneNodesMap = {}
 
   // Loop through each node in the list of copied nodes.
-  let i = 0;
+  let i = 0
   for await (const node of jsonNodes) {
     // Extract the necessary information for recreating the node.
-    const {
-      name,
-      id,
-      position,
-      ...params
-    } = node
+    const { name, id, position, ...params } = node
 
-    const {diffX, diffY} = posDiff[i]
+    const { diffX, diffY } = posDiff[i]
 
     // Get the component from the editor components registry.
     const component = editor.components.get(name)
@@ -130,14 +140,14 @@ const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
     const cloneItem = await createNode(component, {
       ...params,
       x: mouse.x + diffX,
-      y: mouse.y + diffY
+      y: mouse.y + diffY,
     })
 
     // addNode to the EditorView so it can trigger necessary things
     await editor.addNode(cloneItem)
 
     // Store the mapping between the original and cloned nodes.
-    cloneNodesMap = {...cloneNodesMap, [id]: cloneItem}
+    cloneNodesMap = { ...cloneNodesMap, [id]: cloneItem }
 
     i++
   }
@@ -146,7 +156,7 @@ const pasteNodesAndConnections = async (editor, jsonNodes, mouse, posDiff) => {
   // 1000 milis is a random number. Assume that user will copy a large amounts of nodes
   setTimeout(() => {
     // Create the connections for the cloned nodes.
-    createConnections(editor, cloneNodesMap);
+    createConnections(editor, cloneNodesMap)
   }, 1000)
 }
 
@@ -157,7 +167,7 @@ export async function createNode(
   const node = await component.createNode(data)
 
   node.position = [x, y]
-  
+
   return node
 }
 

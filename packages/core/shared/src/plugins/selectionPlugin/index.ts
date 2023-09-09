@@ -1,4 +1,4 @@
-import { NodeEditor } from 'rete'
+import { NodeEditor } from '@magickml/rete'
 
 declare module 'rete/types/events' {
   interface EventsTypes {
@@ -171,7 +171,7 @@ function install(editor: NodeEditor, params: Cfg) {
 
     canvas.style.pointerEvents = 'none'
     Array.from(canvas.querySelectorAll('path')).forEach(item => {
-       (item as SVGElement).style.pointerEvents = 'none'
+      ;(item as SVGElement).style.pointerEvents = 'none'
     })
 
     cleanSelectionArea(selectionArea)
@@ -189,7 +189,7 @@ function install(editor: NodeEditor, params: Cfg) {
 
     canvas.style.pointerEvents = 'auto'
     Array.from(canvas.querySelectorAll('path')).forEach(item => {
-       (item as SVGElement).style.pointerEvents = 'auto'
+      ;(item as SVGElement).style.pointerEvents = 'auto'
     })
 
     cleanSelectionArea(selectionArea)
@@ -206,9 +206,9 @@ function install(editor: NodeEditor, params: Cfg) {
     editor.selected.list = []
 
     selectedNodes.forEach(node => {
-      const payload = { node, accumulate };
+      const payload = { node, accumulate }
 
-      editor.trigger('selectnode', payload);
+      editor.trigger('selectnode', payload)
     })
   }
 

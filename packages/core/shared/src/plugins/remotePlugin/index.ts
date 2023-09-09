@@ -98,7 +98,8 @@ function install(
           client.service('agents').on('spell', spellListener)
 
           // set the subscription into the map so we can destroy it later
-          subscriptionMap.set(node.id, spellListener)
+          if (!subscriptionMap.has(node.id))
+            subscriptionMap.set(node.id, spellListener)
 
           // call the original builder now
           builder.call(component, node)
