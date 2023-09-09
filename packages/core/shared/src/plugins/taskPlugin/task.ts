@@ -162,9 +162,8 @@ export class Task {
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
-            .filter(this.filterNextTasks)
+            .filter(this.filterNextTasks.bind(this))
             .map(async (con: MagickReteInput) => {
-              console.log('CONNECTIOn', con)
               const task = this.getTask(con.nodeId)
               // if the task has come from a node with output data that is not the calling node, use that data
               if (task.outputData && task.nodeId !== fromNodeId) {
