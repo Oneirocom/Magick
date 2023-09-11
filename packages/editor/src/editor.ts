@@ -15,6 +15,7 @@ import {
   RemotePluginArgs,
   SelectionPlugin,
   SpellInterface,
+  DebuggerPlugin,
 } from '@magickml/core'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
@@ -128,6 +129,7 @@ export const initEditor = function ({
   })
 
   // Setup additional plugins
+  editor.use(DebuggerPlugin)
   editor.use(MultiCopyPlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
@@ -145,7 +147,7 @@ export const initEditor = function ({
     scaleExtent: { min: 0.05, max: 2.0 },
     background,
     tab,
-    snap: true,
+    snap: false,
   })
 
   // Set up the CommentManager
