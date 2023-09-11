@@ -95,6 +95,9 @@ function install(editor: MagickEditor) {
       // Create the main task
       const task = new Task(inputs, component, node.id, taskCaller, getTask)
 
+      // adding task to the node so sockets can be closed
+      node._task = task
+
       // add the task to the task store
       taskStore[node.id] = task
 

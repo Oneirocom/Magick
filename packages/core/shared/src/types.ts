@@ -409,6 +409,7 @@ export type WorkerData = NodeData & {
   spell?: string
   data?: MagickNodeData
   console?: MagickConsole
+  _task?: Task
   [key: string]: unknown
 }
 
