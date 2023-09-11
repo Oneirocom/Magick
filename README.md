@@ -26,11 +26,9 @@
 - Powerful graph-based IDE for complex data pipelines
 - Graphs can be embedded in subgraphs and shared for rapid community development
 
-## 🔮 Magick: Enchanting AI App Development Made Easy
+## 🔮 Magick: Automate, Build, and Bring Your Ideas to Life with AI.
 
-With Magick, you can unleash the power of AI without needing to know how to code. Using our intuitive environment, you can seamlessly connect to popular services and explore a world of pre-built nodes and connectors to bring your vision to life.
-
-`Powerful enough for wizards. Easy enough for mere mortals.`
+With Magick, you can unleash the power of AI without needing to know how to code everytbing in a command line interface. Using our visual node based environment, you can connect to popular services and explore a world of pre-built nodes and connectors to bring your vision to life.
 
 <p align="center"><img src="apps/docs/readme-files/ui.png" /></p>
 
@@ -42,17 +40,73 @@ With Magick, you can unleash the power of AI without needing to know how to code
   ▶️ <strong>Click the image above to watch the <a href="https://www.youtube.com/watch?v=Xy7tMmKluvE" target="_blank">video</a></strong>
 </p>
 
+## Core Concepts
+
+### Spells
+
+A spell is a pipeline that describes data moving from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". 
+Spell is not a machine learning term. 
+
+We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
+
+### Nodes
+
+**At the core, Magick is a system for taking in data, doing stuff to it, and then sending the final data out.**
+
+This "stuff" is called a "transformation", the data transforms from one thing into the next. The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. 
+
+We call the black box where the transformstion takes place a "node". Nodes are the building blocks of Magick.
+
+### Creating Nodes
+
+Nodes are created in the composer window of the "Spells" tab. You can right-click in the composer and add nodes from the context menu. You can also drag and drop nodes from the "Nodes" tab into the composer. Nodes can be dragged and dropped around the composer to re-arrange them.
+
+Nodes can be deleted by right-clicking on them and selecting "Delete".
+
+### Node Types
+
+- Input Node
+- Prompt Template
+- Code Node: Lets you define both inputs and outputs.
+- Generator Node: Lets you define your own input sockets and then work with that data inside of the node.
+- Wait For All Node: Used to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
+- ...and lots more! (if you have suggestions for any, do let us know)
+
+
+### Inputs and Outputs
+
+All nodes have some inputs and/or outputs, although they don't necessarily have to have both. Inputs and outputs are visually displayed as sockets. The color of the socket determines the type of data it can receive, with "gray" being the default untyped or "any" type.
+
+### Sockets
+
+Data passed into sockets is available to the node. It can process that data, do something to it, and return the result to the output socket. Some nodes (like Generator node) let you define your own input sockets and then work with that data inside of the node. Some nodes (like the Code node) let you define both inputs and outputs.
+
+### Triggers
+
+Triggers tell nodes to start asynchronous tasks. Some nodes can process data without needing a trigger, but most nodes need triggers. Triggers can be emitted from one socket out to more than one input, however the order of execution is not guaranteed. You can use the "Wait For All" node to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once
+
 <hr />
 
-# Installation
+# ⚙️ Installation
 
 ## 📚 [Documentation / Guide](https://magick-docs.vercel.app/)
 
-Local development is straightforward. You will need git, node.js 18+ installed, and Docker installed and running.
+### Prerequisites
 
-The easiest way to get up and running with Docker is to use Docker Desktop, found [here](https://www.docker.com/products/docker-desktop/). Simply run through the installation instructions and ensure it is running.
+Before you start, ensure you have the following software installed on your machine:
 
-Next, run the following commands:
+- **git**: Version control system, required for cloning the repository. 
+  - [Download git](https://git-scm.com/downloads)
+- **node.js 18+**: JavaScript runtime, needed for running the application.
+  - [Download Node.js](https://nodejs.org/en/download/)
+- **Docker**: Enables you to run the project within containers for easier setup and distribution.
+  - [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+Follow the respective installation guides to set up each piece of software. 
+
+Once installed, proceed to set up Magick.
+
+### Next, run the following commands:
 
 ```
 git clone https://github.com/Oneirocom/Magick
@@ -63,7 +117,7 @@ npm run dev
 
 ## Setup
 
-First, clone and set up Magick
+Clone and set up Magick
 
 ```
 git clone https://github.com/Oneirocom/Magick
@@ -116,40 +170,6 @@ npm run migrate
 Developing locally, it can be very helpful to have google chrome accept all self signed cetificates coming from localhost. To do this, simply paste the following snippet into chromes URL bar and enable the feature:
 
 `chrome://flags/#allow-insecure-localhost`
-
-## Core Concepts
-
-### Spells
-
-A spell is a pipeline that describes data moving from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". Spell is not a machine learning term. We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
-
-### Nodes
-
-At the core, Magick is a system for taking in data, doing stuff to it, and then sending the final data out. This "stuff" is called a "transformation", the data transforms from one thing into the next. The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. We call the black box where the transformstion takes place a "node". Nodes are the building blocks of Magick.
-
-### Creating Nodes
-
-Nodes are created in the composer window of the "Spells" tab. You can right-click in the composer and add nodes from the context menu. You can also drag and drop nodes from the "Nodes" tab into the composer. Nodes can be dragged and dropped around the composer to re-arrange them. Nodes can be deleted by right-clicking on them and selecting "Delete".
-
-### Node Types
-
-- Input Node
-- Prompt Template
-- Code Node: Lets you define both inputs and outputs.
-- Generator Node: Lets you define your own input sockets and then work with that data inside of the node.
-- Wait For All Node: Used to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
-
-### Inputs and Outputs
-
-All nodes have some inputs and/or outputs, although they don't necessarily have to have both. Inputs and outputs are visually displayed as sockets. The color of the socket determines the type of data it can receive, with "gray" being the default untyped or "any" type.
-
-### Sockets
-
-Data passed into sockets is available to the node, it can process that data, do something to it, and return the result to the output socket. Some nodes (like Generator node) let you define your own input sockets and then work with that data inside of the node. Some nodes (like the Code node) let you define both inputs and outputs.
-
-### Triggers
-
-Triggers tell nodes to start asynchronous tasks. Some nodes can process data without needing a trigger, but most nodes need triggers. Triggers can be emitted from one socket out to more than one input, however the order of execution is not guaranteed. You can use the "Wait For All" node to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once
 
 ## Contributors
 
