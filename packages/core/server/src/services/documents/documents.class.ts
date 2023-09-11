@@ -233,8 +233,12 @@ const getUnstructuredData = async (files, docData) => {
   //iterate and format for document insert (api returns either an array or an array of arrays)
   const elements = [] as any[]
   for (const i in unstructured.data) {
+    // check for empty array
+    if (!unstructured.data[i] && unstructured.data[i] < 0) continue
     if (unstructured.data[i] instanceof Array) {
       for (const j in unstructured.data[i]) {
+        // check for undefined
+        if (!unstructured.data[i][j]) continue
         elements.push(createElement(unstructured.data[i][j], docData, j))
       }
     } else {
