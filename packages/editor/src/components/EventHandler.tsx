@@ -235,8 +235,6 @@ const EventHandler = ({ pubSub, tab }) => {
   const onProcess = () => {
     const editor = getEditor()
     if (!editor) return
-
-    editor.runProcess()
   }
 
   /**
