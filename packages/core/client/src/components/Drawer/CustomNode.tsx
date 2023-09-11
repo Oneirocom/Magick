@@ -8,16 +8,19 @@ import styles from './menu.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '../../contexts/TreeDataProvider'
 
+
+type ExtendedNodeModel = NodeModel & CustomData;
+
 type Props = {
-  node: NodeModel<CustomData>
+  node: ExtendedNodeModel
   depth: number
   isOpen: boolean
   onToggle: (id: NodeModel['id']) => void
 }
 
 type CustomData = {
-  fileType: string
-  fileSize: string
+  fileType?: string
+  fileSize?: string
 }
 
 export const CustomNode: React.FC<Props> = props => {
@@ -32,13 +35,11 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleClick = () => {
-    if (!props.node.data) return
-    if (props.node?.data.fileType === 'txt') {
-      // todo fix this typing
-      // @ts-ignore
+    if (!props.node) return
+    if (props.node.fileType === 'txt') {
       setOpenDoc(props.node.id)
       navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
-    } else if (props.node?.data.fileType === 'spell') {
+    } else if (props.node.fileType === 'spell') {
       navigate(
         `/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`
       )
@@ -65,11 +66,8 @@ export const CustomNode: React.FC<Props> = props => {
         )}
       </div>
       <div>
-        {/* @ts-ignore */}
         <TypeIcon
           droppable={droppable}
-          // TODO fix the node filetype here
-          // @ts-ignore
           fileType={data ? data.fileType : props.node.fileType}
         />
       </div>

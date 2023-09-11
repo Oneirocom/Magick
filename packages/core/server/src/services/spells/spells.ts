@@ -6,10 +6,7 @@
 // Imports
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import type { Application } from '../../declarations'
-import {
-  checkForSpellInManager,
-  updateSpellInManager,
-} from '../../hooks/spellmanagerHooks'
+import { checkForSpellInManager } from '../../hooks/spellmanagerHooks'
 import { jsonResolver } from '../utils'
 import { SpellService, getOptions } from './spells.class'
 import {
@@ -106,8 +103,8 @@ export const spell = (app: Application) => {
     after: {
       all: [],
       create: [],
-      patch: [checkForSpellInManager, updateSpellInManager],
-      saveDiff: [checkForSpellInManager, updateSpellInManager],
+      patch: [checkForSpellInManager],
+      saveDiff: [checkForSpellInManager],
     },
     error: {
       all: [],
