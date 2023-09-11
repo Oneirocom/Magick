@@ -45,13 +45,13 @@ export class BooleanGate extends MagickComponent<void> {
    * @param _node - the worker node to execute.
    * @param inputs - the inputs for the worker node.
    */
-  worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+  worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const isTrue = inputs['boolean'][0]
 
     if (isTrue) {
-      this._task.closed = ['false']
+      if (node?._task) node._task.closed = ['false']
     } else {
-      this._task.closed = ['true']
+      if (node?._task) node._task.closed = ['true']
     }
   }
 }

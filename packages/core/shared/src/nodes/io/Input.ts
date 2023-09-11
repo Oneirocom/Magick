@@ -256,7 +256,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node.data.isInput = true
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data) && node.data.name) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
 
       const output = data[node.data.name]
 
@@ -265,7 +265,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
       }
     }
 
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     if (Object.values(outputs.output).length > 0) {
       return { output: Object.values(outputs)[0] }
