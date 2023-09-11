@@ -49,7 +49,7 @@ export class IsVariableTrue extends MagickComponent<void> {
    * @param _node - The worker node.
    * @param inputs - The inputs of the worker node.
    */
-  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['input'][0]
     const type = typeof action
     let is = false
@@ -62,6 +62,6 @@ export class IsVariableTrue extends MagickComponent<void> {
       is = action === 1
     }
 
-    this._task.closed = is ? ['false'] : ['true']
+    if (node?._task) node._task.closed = is ? ['false'] : ['true']
   }
 }
