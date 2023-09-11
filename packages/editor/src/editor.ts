@@ -237,11 +237,7 @@ export const initEditor = function ({
     editor.fromJSON(graph)
 
     editor.view.resize()
-    editor.runProcess()
     editor.currentSpell = spell
   }
-
-  // Start the engine off on first load
-  editor.runProcess()
   return editor
 }
