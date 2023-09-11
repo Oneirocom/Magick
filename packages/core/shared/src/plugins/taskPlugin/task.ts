@@ -125,11 +125,16 @@ export class Task {
     return value
   }
 
-  private filterNextTasks(con) {
+  private filterOutputConnections(con, fromNodeId: number | undefined) {
     const task = this.getTask(con.nodeId)
+    if (this.component.task.runOneInput && fromNodeId) {
+      if (task.nodeId === fromNodeId) return true
+      if (task.outputData) return true
+      return false
+    }
     // if (task.outputData) return true
     // if (task.nodeId === fromNodeId) return true
-    if (task.component.name === 'Spell') return false
+    // if (task.component.name === 'Spell') return false
 
     // return true if the input is from a triggerless component
     // if (!task.node.outputs.trigger) return true
@@ -162,7 +167,10 @@ export class Task {
       await Promise.all(
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
-            .filter(this.filterNextTasks.bind(this))
+            .filter(con => {
+              this.filterOutputConnections.bind(this)
+              return this.filterOutputConnections(con, fromNodeId)
+            })
             .map(async (con: MagickReteInput) => {
               const task = this.getTask(con.nodeId)
               // if the task has come from a node with output data that is not the calling node, use that data
@@ -207,7 +215,9 @@ export class Task {
   private async propagateRun(data, garbage) {
     await Promise.all(
       this.next
-        .filter(con => !this.closed.includes(con.key))
+        .filter(con => {
+          return !this.closed.includes(con.key)
+        })
         // pass the socket that is being calledikno
         .map(async con => {
           const task = this.getTask(con.nodeId)
