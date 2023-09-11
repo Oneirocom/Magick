@@ -56,9 +56,9 @@ export class IsANumber extends MagickComponent<void> {
     const isANumber = !isAnObject && !isNaN(Number.parseFloat(numberToTest))
 
     if (isANumber) {
-      this._task.closed = ['false']
+      if (node?._task) node._task.closed = ['false']
     } else {
-      this._task.closed = ['true']
+      if (node?._task) node._task.closed = ['true']
     }
   }
 }

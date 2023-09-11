@@ -141,7 +141,7 @@ export class DeployContract extends MagickComponent<Promise<InputReturn>> {
     _outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     const defaultNetwork = {
       name: 'maticmaticmum',
@@ -205,7 +205,7 @@ export class DeployContract extends MagickComponent<Promise<InputReturn>> {
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
 
       return {
         output: data,
