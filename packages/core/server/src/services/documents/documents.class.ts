@@ -60,6 +60,7 @@ export class DocumentService<
     }
 
     for (const element of elements) {
+      if (!element.content) continue
       if (data.hasOwnProperty('secrets')) {
         await docdb.fromString(element.content, element, {
           modelName,
