@@ -14,6 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useTreeData } from '../../contexts'
 
 
 
@@ -199,7 +200,7 @@ export const TableComponent = ({
     fieldOrderBy ? fieldOrderBy : column[0].id
   )
   const [expandedRows, setExpandedRows] = React.useState<string[]>([]);
-
+  const { openDoc } = useTreeData()
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -252,7 +253,12 @@ export const TableComponent = ({
   //   setPage(0)
   // }
 
+  React.useEffect(() => {
+    if (openDoc) {
 
+      handleRowClick(openDoc)
+    }
+  }, [openDoc])
 
   const isSelected = (name: string) => selectedRows && selectedRows.indexOf(name) !== -1
 
@@ -268,16 +274,16 @@ export const TableComponent = ({
     return text.slice(0, maxLength) + '...';
   }
 
-  const handleRowClick = (rowId: string) => {
-    if (expandedRows.includes(rowId)) {
+  const handleRowClick = (rowId: string | number) => {
+    if (expandedRows.includes(rowId.toString())) {
       // If the clicked row is already expanded, close it
       setExpandedRows([]);
     } else {
       // If the clicked row is not expanded, close all other rows and expand the clicked row
-      setExpandedRows([rowId]);
+      setExpandedRows([rowId.toString()]);
     }
   };
-  
+
 
   return (
     <React.Fragment>
@@ -334,12 +340,12 @@ export const TableComponent = ({
                         ) : column.id === 'collapse' ? (
                           <IconButton
                             aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                              size="medium"
+                            size="medium"
                             className={styles.expandCollapse}
-                              onClick={(event) => {
-                                event.stopPropagation()
-                                handleRowClick(row.id || row.row.id)
-                              }}
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              handleRowClick(row.id || row.row.id)
+                            }}
                           >
                             {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                           </IconButton>
