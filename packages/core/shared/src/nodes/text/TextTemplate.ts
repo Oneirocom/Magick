@@ -37,6 +37,8 @@ export class TextTemplate extends MagickComponent<Promise<WorkerReturn>> {
       info
     )
 
+    this.common = true
+
     // this.runFromCache = true;
   }
 

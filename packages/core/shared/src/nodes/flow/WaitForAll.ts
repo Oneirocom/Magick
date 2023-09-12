@@ -23,6 +23,8 @@ export class WaitForAll extends MagickComponent<void> {
       'Flow',
       info
     )
+
+    this.common = true
   }
 
   // Add documentation for node

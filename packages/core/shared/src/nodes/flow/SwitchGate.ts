@@ -31,6 +31,8 @@ export class SwitchGate extends MagickComponent<void> {
       'Flow',
       info
     )
+
+    this.common = true
   }
 
   node = {}

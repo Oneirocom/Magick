@@ -30,6 +30,10 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
       'Storage/Events',
       info
     )
+
+    this.displayName = 'Events to String'
+
+    this.common = true
   }
 
   /**

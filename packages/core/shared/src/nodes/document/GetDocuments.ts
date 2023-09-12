@@ -42,6 +42,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       'Storage/Documents',
       info
     )
+    this.common = true
     // this.runFromCache = true
   }
 
