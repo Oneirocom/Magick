@@ -37,7 +37,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
           trigger: 'option',
         },
       },
-      'I/O',
+      'IO',
       info
     )
 

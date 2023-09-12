@@ -33,7 +33,7 @@ export class Respond extends MagickComponent<void> {
           trigger: 'option',
         },
       },
-      'I/O',
+      'IO',
       info
     )
   }
