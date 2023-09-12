@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * @description Creates a main menu class as a subclass of ReactMenu
  * @returns {MainMenu} A class representing the main menu
@@ -17,7 +17,7 @@ export default function () {
      * @constructor
      * @param {Object} editor - The editor instance being used with the menu
      * @param {Object} props - Additional props for the menu
-     * @param {Object} tree - The tree object representing the components in the editor 
+     * @param {Object} tree - The tree object representing the components in the editor
      * @param {Array} tree.items - The array of components registered in the editor
      * @param {Function} tree.allocate - A function for allocating space for new components in the tree
      * @param {Function} tree.rename - A function for renaming components in the tree
@@ -48,6 +48,17 @@ export default function () {
       // Event listener for when a new component is registered, adds a menu item for the new component
       editor.on('componentregister', component => {
         const path = allocate(component)
+
+        if (component.common) {
+          // add the component to a menu with the category of common
+          this.addItem(
+            rename(component),
+            async () => {
+              editor.addNode(await createNode(component, initialPosition))
+            },
+            ['Common']
+          )
+        }
 
         if (Array.isArray(path))
           // add to the menu if path is array
