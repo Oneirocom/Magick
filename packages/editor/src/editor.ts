@@ -223,16 +223,15 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    await engine.process(editor.toJSON(), null, {
-      context: context,
-      currentSpell: editor.currentSpell,
-    })
+    // await engine.process(editor.toJSON(), null, {
+    //   context: context,
+    //   currentSpell: editor.currentSpell,
+    // })
     if (callback) callback()
   }
 
-  // Functions to load and run spells
+  // Functions tAgentMenuo load and run spells
   editor.loadSpell = async (spell: SpellInterface) => {
-    console.log('Loading spell in editor')
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
@@ -240,11 +239,7 @@ export const initEditor = function ({
     editor.fromJSON(graph)
 
     editor.view.resize()
-    editor.runProcess()
     editor.currentSpell = spell
   }
-
-  // Start the engine off on first load
-  editor.runProcess()
   return editor
 }

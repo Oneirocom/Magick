@@ -15,10 +15,8 @@ import whyDidYouRender from '@welldone-software/why-did-you-render'
 function enableWhyDidYouRender(React: any): void {
   // If in development
   if (NODE_ENV === 'development') {
-    console.log('running WDYR!')
-    whyDidYouRender(React, {
-      trackAllPureComponents: false,
-    })
+    console.log('*******************running WDYR!')
+    whyDidYouRender(React)
   }
 }
 
