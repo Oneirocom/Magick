@@ -34,6 +34,8 @@ export class StringVariable extends MagickComponent<InputReturn> {
       'Data/Variables',
       info
     )
+
+    this.common = true
   }
 
   /**

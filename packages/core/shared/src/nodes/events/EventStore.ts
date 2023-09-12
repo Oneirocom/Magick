@@ -39,6 +39,8 @@ export class EventStore extends MagickComponent<Promise<void>> {
       'Storage/Events',
       info
     )
+
+    this.common = true
   }
 
   /**

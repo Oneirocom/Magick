@@ -41,6 +41,8 @@ export class TypeChat extends MagickComponent<Promise<WorkerReturn>> {
       'Data/Text',
       info
     )
+
+    this.common = true
   }
 
   /**

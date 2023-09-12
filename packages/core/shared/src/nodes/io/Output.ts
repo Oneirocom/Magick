@@ -48,6 +48,8 @@ export class Output extends MagickComponent<void> {
       info
     )
 
+    this.common = true
+
     this.module = {
       nodeType: 'output',
       socket: anySocket,
