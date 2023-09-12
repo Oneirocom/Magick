@@ -168,8 +168,7 @@ export class Task {
         this.getInputs('output').map(async key => {
           const inputPromises = (this.inputs[key] as MagickReteInput[])
             .filter(con => {
-              this.filterOutputConnections.bind(this)
-              return this.filterOutputConnections(con, fromNodeId)
+              return this.filterOutputConnections.call(this, con, fromNodeId)
             })
             .map(async (con: MagickReteInput) => {
               const task = this.getTask(con.nodeId)
