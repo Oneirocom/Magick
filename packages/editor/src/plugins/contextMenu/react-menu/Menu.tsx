@@ -22,6 +22,7 @@ function flattenItems(items, search) {
   if (!items || items.length === 0) return [];
 
   let flatList = [];
+  let seenTitles = new Set(); // to track seen titles
 
   flatList = items.reduce((acc, item) => {
     if (!item.subitems) return [...acc, item];
@@ -42,6 +43,16 @@ function flattenItems(items, search) {
     flatList = flatList.filter(item =>
       item.title.toLowerCase().includes(search.toLowerCase())
     );
+
+    // Remove duplicates
+    flatList = flatList.filter(item => {
+      const titleSegment = item.title.split('/').pop().toLowerCase();
+      if (seenTitles.has(titleSegment)) {
+        return false;  // this title is a duplicate
+      }
+      seenTitles.add(titleSegment);
+      return true;  // keep this item
+    });
   }
 
 
