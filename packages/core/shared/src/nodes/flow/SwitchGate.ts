@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
@@ -47,7 +47,7 @@ export class SwitchGate extends MagickComponent<void> {
       socketType: 'triggerSocket',
       taskType: 'option',
       name: 'Output Sockets',
-      tooltip: 'Add output sockets'
+      tooltip: 'Add output sockets',
     })
 
     const input = new Rete.Input('input', 'Input', anySocket)
@@ -78,16 +78,18 @@ export class SwitchGate extends MagickComponent<void> {
     const nodeOutputs = node.data.outputs as DataSocketType[]
 
     // Close all outputs
-    this._task.closed = ['default', ...nodeOutputs.map(out => out.name)]
+    if (node?._task) {
+      node._task.closed = ['default', ...nodeOutputs.map(out => out.name)]
 
-    if (this._task.closed.includes(input)) {
-      // If the outputs closed have the incoming text, filter closed outputs to not include it
-      this._task.closed = this._task.closed.filter(output => output !== input)
-    } else {
-      // Otherwise, open up the default output
-      this._task.closed = this._task.closed.filter(
-        output => output !== 'default'
-      )
+      if (node._task.closed.includes(input)) {
+        // If the outputs closed have the incoming text, filter closed outputs to not include it
+        node._task.closed = node._task.closed.filter(output => output !== input)
+      } else {
+        // Otherwise, open up the default output
+        node._task.closed = node._task.closed.filter(
+          output => output !== 'default'
+        )
+      }
     }
   }
 }

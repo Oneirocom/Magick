@@ -24,16 +24,95 @@ import {
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
 
+  const [playtestCache, setPlaytestCache] = useState<string[]>([])
+
   // Trigger 'onSend' when 'return' key is pressed on the input.
   useHotkeys(
     'enter',
     () => {
       if (ref.current !== document.activeElement) return
-      props.onSend()
+      onSend()
     },
     { enableOnFormTags: ['INPUT'] },
     [props, ref]
   )
+
+  // Use up and down arrows to move through history and set valye of input.
+  useHotkeys(
+    'up',
+    () => {
+      if (ref.current !== document.activeElement) return
+      if (playtestCache.length === 0) return
+      const last = playtestCache[playtestCache.length - 1]
+
+      // handle case where user is moving up more than one
+      if (ref.current.value !== '') {
+        const index = playtestCache.indexOf(ref.current.value)
+        if (index === -1) {
+
+          // if the current value is not in the playtestCache, add it to the playtestCache
+          setPlaytestCache([...playtestCache, ref.current.value])
+        } else if (index === 0) {
+
+          // if the current value is the first item in the playtestCache, do nothing
+          return
+        } else {
+
+          // if the current value is in the playtestCache, move up one
+          ref.current.value = playtestCache[index - 1]
+          props.onChange({ target: { value: playtestCache[index - 1] } })
+          return
+        }
+      }
+
+      ref.current.value = last
+      props.onChange({ target: { value: last } })
+    },
+    { enableOnFormTags: ['INPUT'] },
+    [props, ref, playtestCache]
+  )
+
+  // handle down arrow moving through list
+  useHotkeys(
+    'down',
+    () => {
+      if (ref.current !== document.activeElement) return
+      if (playtestCache.length === 0) return
+
+      // handle case where user is moving down more than one
+      if (ref.current.value !== '') {
+        const index = playtestCache.indexOf(ref.current.value)
+        if (index === -1) {
+
+          // if the current value is not in the playtestCache, add it to the playtestCache
+          setPlaytestCache([...playtestCache, ref.current.value])
+        } else if (index === playtestCache.length - 1) {
+
+          // handle user moving down back into an empty input
+          ref.current.value = ''
+          // if the current value is the last item in the playtestCache, do nothing
+          return
+        } else {
+          // if the current value is in the playtestCache, move down one
+          ref.current.value = playtestCache[index + 1]
+          props.onChange({ target: { value: playtestCache[index + 1] } })
+          return
+        }
+      }
+
+      ref.current.value = ''
+      props.onChange({ target: { value: '' } })
+    },
+    { enableOnFormTags: ['INPUT'] },
+    [props, ref, playtestCache]
+  )
+
+  // function to call onSend  after storing user input in playtestCache
+  const onSend = () => {
+    const newHistory = [...playtestCache, ref.current.value]
+    setPlaytestCache(newHistory as [])
+    props.onSend()
+  }
 
   return (
     <div className={css['playtest-input']}>
@@ -45,9 +124,9 @@ const Input = props => {
         placeholder="Type play test input here"
       ></input>
       <Button
-        className="small"
+        className={`small ${css['playtest-input-send']}`}
         style={{ cursor: 'pointer' }}
-        onClick={props.onSend}
+        onClick={onSend}
       >
         Send
       </Button>
@@ -67,6 +146,11 @@ const defaultPlaytestData = {
   entities: ['user', 'assistant'],
 }
 
+type Message = {
+  sender: string
+  content: string
+}
+
 /**
  * Playtest component - The main component for handling playtesting functionality.
  */
@@ -75,7 +159,7 @@ const Playtest = ({ tab }) => {
   const { inspectorData } = useInspector()
 
   const scrollbars = useRef<any>()
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState<Message[]>([])
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
 
@@ -107,8 +191,14 @@ const Playtest = ({ tab }) => {
       // check if _text is a string
       if (typeof _text !== 'string')
         return console.warn('could not split text, not a string', _text)
-      const text = `Agent: ` + _text?.split('\n')
-      const newHistory = [...history, text]
+      const text = `Agent: ` + _text
+
+      const newMessage: Message = {
+        sender: 'agent',
+        content: text,
+      }
+
+      const newHistory = [...history, newMessage]
       setHistory(newHistory as [])
     },
     [history]
@@ -202,7 +292,12 @@ const Playtest = ({ tab }) => {
 
   // Send playtest input to the system.
   const onSend = async () => {
-    const newHistory = [...history, `You: ${value}`]
+    const newMessage: Message = {
+      sender: 'user',
+      content: `You: ${value}`
+
+    }
+    const newHistory = [...history, newMessage]
     setHistory(newHistory as [])
 
     let toSend = value
@@ -352,6 +447,18 @@ const Playtest = ({ tab }) => {
       })
   }
 
+  const UserMessage = ({ message }) => (
+    <div className={css['playtest-user-message']}>
+      <div className={css['playtest-user-message-content']}>{message}</div>
+    </div>
+  )
+
+  const AgentMessage = ({ message }) => (
+    <div className={css['playtest-agent-message']}>
+      <div className={css['playtest-agent-message-content']}>{message}</div>
+    </div>
+  )
+
   return (
     <Window toolbar={toolbar}>
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
@@ -383,8 +490,22 @@ const Playtest = ({ tab }) => {
         <div className={css['playtest-output']}>
           <Scrollbars ref={ref => (scrollbars.current = ref)}>
             <ul>
-              {history.map((printItem: string, key: any) => {
-                return <li key={key}>{printItem}</li>
+              {history.map((printItem: Message, key: any) => {
+                if (printItem.sender === 'user') {
+                  return (
+                    <li key={key}>
+                      <UserMessage message={printItem.content} />
+                    </li>
+                  )
+                } else if (printItem.sender === 'agent') {
+                  return (
+                    <li key={key}>
+                      <AgentMessage message={printItem.content} />
+                    </li>
+                  )
+                } else {
+                  return null
+                }
               })}
             </ul>
           </Scrollbars>

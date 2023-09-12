@@ -2,7 +2,6 @@ import { Modal } from '@magickml/client-core';
 import { Backdrop, Button, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
-import { convertFileToText } from './documentconvert';
 import styles from './index.module.scss';
 import { useSnackbar } from 'notistack'
 
@@ -11,7 +10,8 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   const { enqueueSnackbar } = useSnackbar()
   const [newDocument, setDocument] = useState({
     type: '',
-    content: ''
+    content: '',
+    files: []
   });
 
   useEffect(() => {
@@ -21,18 +21,19 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
   function handleFileUpload() {
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = '.pdf,.doc,.docx,.doc,.xlsx,.xls,.ppt,.pptx'; // Specify the file formats to accept, if needed
+    inputElement.accept = '.eml,.html,.json,.md,.msg,.rst,.rtf,.txt,.xml,.jpeg,.jpg,.png,.csv,.doc,.docx,.epub,.odt,.pdf,.ppt,.pptx,.tsv,.xlsx'; // Specify the file formats to accept, if needed
     inputElement.click();
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files;
 
       if (files && files.length > 0) {
-        const uploadedFile = files[0];
         setLoading(true);
-        const text = await convertFileToText(uploadedFile)
+        const newfiles = []
+        for (const file of files) {
+          newfiles.push(file)
+        }
+        setDocument({ ...newDocument, files: newfiles })
         setLoading(false)
-        console.log(text)
-        setDocument({ ...newDocument, content: Array.isArray(text) ? text.join() : text })
       }
     });
   }
@@ -47,17 +48,17 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
     setSelectedModel({ model: selectedModelValue, object: selectedObject });
   };
 
-  const handleSaveDocument = () => {
+  const handleSaveDocument = async () => {
     setLoading(true);
     if (newDocument.type) {
-      handleSave(selectedModel);
+      await handleSave(selectedModel);
       setLoading(false);
     } else {
       setLoading(false);
       enqueueSnackbar('Please fill in all required fields.', { variant: 'error' });
     }
   };
-  
+
   return (
     <Modal
       open={createMode}
@@ -65,12 +66,12 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
       submitText="Generate Embeddings and Save"
       handleAction={handleSaveDocument}
     >
-      {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress color="secondary" /></Backdrop>}
+      {loading && <Backdrop open={loading} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}><CircularProgress className={styles.loader} /></Backdrop>}
       <Grid container>
 
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add Knowledge</Typography>
+            <Typography variant={'h5'} fontWeight={"bold"} style={{ margin: '0.5rem' }}>Add Document</Typography>
           </Grid>
           <Button
             className={styles.btn}
@@ -115,7 +116,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
             </Select>
           </Grid>
           <Grid item xs={6}>
-            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Group</Typography>
+            <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'} fontWeight={"bold"} >Type</Typography>
             <TextField
               name="type"
               style={{ width: '100%', margin: '.5em' }}

@@ -1,29 +1,17 @@
-import { WorkerOutputs } from 'rete/types/core/data'
 import { MagickComponent } from '../../engine'
 
 import {
   IRunContextEditor,
   MagickNode,
-  MagickWorkerInputs,
   ModuleContext,
   SpellInterface,
 } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 
-export type SocketPluginArgs = {
+export type RemotePluginArgs = {
   server?: boolean
   client?: any
   emit?: (message: Record<string, unknown>) => void
-}
-
-export type SocketData = {
-  result: unknown
-  output?: WorkerOutputs
-  input?: MagickWorkerInputs
-  error?: {
-    message: string
-    stack: string
-  }
 }
 
 export interface RemoteIRunContextEditor extends IRunContextEditor {
@@ -33,14 +21,15 @@ export interface RemoteIRunContextEditor extends IRunContextEditor {
 function install(
   editor: RemoteIRunContextEditor,
   // Need to better type the feathers client here
-  { server = false, client, emit }: SocketPluginArgs
+  { server = false, client, emit }: RemotePluginArgs
 ) {
   const subscriptionMap = new Map()
+  const consoleMap = new Map()
 
   if (!server) {
     // subscribe to the spell event on the client inside the components builder
     editor.on(
-      'componentRegister',
+      'componentregister',
       (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
         const builder = component.builder
 
@@ -53,14 +42,6 @@ function install(
           // this is the shared event for the socket connection.
           const event = `${currentSpell.id}-${node.id}`
 
-          // create a new console for the node
-          node.console = new MagickConsole({
-            node: node as unknown as MagickNode,
-            component,
-            editor,
-            server,
-          })
-
           // don't bother making a subscription if we already have one
           if (subscriptionMap.has(node.id)) return
 
@@ -71,6 +52,23 @@ function install(
 
             // make sure we are only handling the events for this node
             if (eventType !== event) return
+
+            if (!consoleMap.has(node.id)) {
+              // create a new console for the node
+              // we need to make the console here because the editor needs to have all the nodes
+              node.console = new MagickConsole({
+                node: node as unknown as MagickNode,
+                component,
+                editor,
+                server,
+              })
+
+              // add the console to the map so we can access it later
+              consoleMap.set(node.id, node.console)
+            } else {
+              // get the console from the map
+              node.console = consoleMap.get(node.id)
+            }
 
             // make sure errors are handled in the flow.
             if (error) {
@@ -100,7 +98,8 @@ function install(
           client.service('agents').on('spell', spellListener)
 
           // set the subscription into the map so we can destroy it later
-          subscriptionMap.set(node.id, spellListener)
+          if (!subscriptionMap.has(node.id))
+            subscriptionMap.set(node.id, spellListener)
 
           // call the original builder now
           builder.call(component, node)
@@ -109,7 +108,7 @@ function install(
     )
 
     // handle removing the subscription when the node is removed
-    editor.on('nodeRemoved', (node: MagickNode) => {
+    editor.on('noderemoved', (node: MagickNode) => {
       // get the spell listener from the map
       const listener = subscriptionMap.get(node.id)
 
@@ -118,6 +117,8 @@ function install(
 
       // delete the listener from the map
       subscriptionMap.delete(node.id)
+      // delete the console from the map
+      consoleMap.delete(node.id)
     })
   }
 

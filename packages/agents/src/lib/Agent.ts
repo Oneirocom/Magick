@@ -8,6 +8,7 @@ import {
   getLogger,
   MagickSpellInput,
   AGENT_RUN_RESULT,
+  AGENT_RUN_ERROR,
   AGENT_LOG,
   AGENT_WARN,
   AGENT_ERROR,
@@ -17,7 +18,14 @@ import {
 import { PING_AGENT_TIME_MSEC } from '@magickml/config'
 
 import { AgentManager } from './AgentManager'
-import { app, type Job, type Worker, type PubSub, BullQueue, MessageQueue } from '@magickml/server-core'
+import {
+  app,
+  type Job,
+  type Worker,
+  type PubSub,
+  BullQueue,
+  MessageQueue,
+} from '@magickml/server-core'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -51,7 +59,7 @@ export class Agent implements AgentInterface {
     agentData: AgentInterface,
     agentManager: AgentManager,
     worker: Worker,
-    pubsub: PubSub,
+    pubsub: PubSub
   ) {
     this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
     this.publicVariables = agentData.publicVariables
@@ -60,7 +68,7 @@ export class Agent implements AgentInterface {
     this.agentManager = agentManager
     this.name = agentData.name ?? 'agent'
     this.projectId = agentData.projectId
-    this.rootSpellId = agentData.rootSpellId
+    this.rootSpellId = agentData.rootSpellId as string
 
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
 
@@ -121,8 +129,8 @@ export class Agent implements AgentInterface {
         // every second, update the agent, set pingedAt to now
         try {
           await app.service('agents').ping(this.id)
-        } catch(err) {
-          if (err.name === 'NotFound') {
+        } catch (err) {
+          if (err instanceof Error && err?.name === 'NotFound') {
             this.logger.warn('Agent not found: %s', this.id)
             app.get('agentCommander').removeAgent(this.id)
             clearInterval(this.updateInterval)
@@ -205,23 +213,60 @@ export class Agent implements AgentInterface {
 
     const spellRunner = await this.spellManager.loadById(data.spellId)
 
-    // Do we want a debug logger here?
-    const output = await spellRunner.runComponent({
-      agent: this,
-      secrets: this.secrets,
-      publicVariables: this.publicVariables,
-      runSubspell: data.runSubspell,
-      app,
-      ...data,
-    })
+    // Handle the case where we don't get a sepllRunner
+    if (!spellRunner) {
+      this.logger.error(
+        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
+        'Spell not found'
+      )
+      this.publishEvent(AGENT_RUN_ERROR(this.id), {
+        jobId: job.data.jobId,
+        agentId: this.id,
+        projectId: this.projectId,
+        originalData: data,
+        result: { error: 'Spell not found' },
+      })
+      return
+    }
 
-    this.publishEvent(AGENT_RUN_RESULT(this.id), {
-      jobId: job.data.jobId,
-      agentId: this.id,
-      projectId: this.projectId,
-      originalData: data,
-      result: output,
-    })
+    try {
+      this.logger.debug(
+        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
+        "Running agent's spell"
+      )
+      const output = await spellRunner.runComponent({
+        ...data,
+        agent: this,
+        secrets: this.secrets,
+        publicVariables: this.publicVariables,
+        runSubspell: data.runSubspell,
+        app,
+      })
+
+      this.publishEvent(AGENT_RUN_RESULT(this.id), {
+        jobId: job.data.jobId,
+        agentId: this.id,
+        projectId: this.projectId,
+        originalData: data,
+        result: output,
+      })
+    } catch (err) {
+      this.logger.error(
+        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
+        'Error running agent spell: %o',
+        err
+      )
+
+      this.publishEvent(AGENT_RUN_ERROR(this.id), {
+        jobId: job.data.jobId,
+        agentId: this.id,
+        projectId: this.projectId,
+        originalData: data,
+        result: {
+          error: err instanceof Error ? err.message : 'Error running agent',
+        },
+      })
+    }
   }
 }
 
@@ -243,7 +288,6 @@ export interface AgentResult {
   originalData: AgentRunJob
   result: MagickSpellOutput
 }
-
 
 export interface AgentUpdateJob {
   agentId: string

@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { isEmpty } from 'lodash'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 import { API_ROOT_URL } from '@magickml/config'
 
@@ -144,7 +144,7 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     const server = `${API_ROOT_URL}/solidity`
 
@@ -167,7 +167,7 @@ export class CompileContract extends MagickComponent<Promise<InputReturn>> {
     const contract = result.output.contracts['code.sol']['SimpleContract']
 
     if (data && !isEmpty(data)) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
 
       return {
         output: data,

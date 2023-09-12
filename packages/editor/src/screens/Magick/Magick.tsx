@@ -16,6 +16,7 @@ import Events from '../EventWindow'
 import Requests from '../RequestWindow'
 import Settings from '../settings/SettingsWindow'
 import Documents from '../DocumentWindow'
+import Agents from '../agents/AgentManagerWindow';
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 /**
  * Magick component
@@ -50,6 +51,7 @@ const Magick = ({ empty = false }): JSX.Element => {
     Requests,
     Settings,
     Documents,
+    Agents,
     ...pluginComponents.reduce((acc, obj) => {
       acc[obj.name] = obj.component
       return acc

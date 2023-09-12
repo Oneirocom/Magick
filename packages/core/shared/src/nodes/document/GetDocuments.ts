@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
@@ -13,11 +13,11 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
-  Document
+  Document,
 } from '../../types'
 
 const info =
-  'Gets Knowledge from the Knowledge store. The optional Type property will return only knowledge with the matching type, and the Max Count property will limit the number of knowledge returned. Knowledge are returned in order of distance.'
+  'Gets Documents from the Documents store. The optional Type property will return only Documents with the matching type, and the Max Count property will limit the number of Documents returned. Documents are returned in order of distance.'
 
 /**
  * Defines the expected return type for the input data
@@ -32,14 +32,14 @@ type InputReturn = {
 export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   constructor() {
     super(
-      'Get Knowledge',
+      'Get Documents',
       {
         outputs: {
           documents: 'output',
           trigger: 'option',
         },
       },
-      'Knowledge',
+      'Documents',
       info
     )
     // this.runFromCache = true
@@ -53,7 +53,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
   builder(node: MagickNode) {
     // Create input and output sockets
     const embedding = new Rete.Input('embedding', 'Embedding', embeddingSocket)
-    const out = new Rete.Output('documents', 'Knowledge', documentSocket)
+    const out = new Rete.Output('documents', 'Documents', documentSocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
@@ -65,7 +65,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'document',
-      tooltip: 'Enter document type'
+      tooltip: 'Enter document type',
     })
 
     const max_count = new InputControl({
@@ -73,7 +73,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
-      tooltip: 'Enter max count'
+      tooltip: 'Enter max count',
     })
 
     // Save controls as inspector data for easy reference
@@ -153,7 +153,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
     })
     // Return the result for output
     return {
-      documents: response.data as Document[]
+      documents: response.data as Document[],
     }
   }
 }

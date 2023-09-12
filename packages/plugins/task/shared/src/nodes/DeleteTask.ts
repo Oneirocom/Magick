@@ -7,7 +7,7 @@ import {
   taskSocket,
   triggerSocket,
 } from '@magickml/core'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 const info = 'Delete a task.'
 

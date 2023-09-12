@@ -125,7 +125,7 @@ export class SpellRunnerService<
 
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
 
-    const spellRunner = spellManager.getSpellRunner(decodedId)
+    const spellRunner = spellManager.getReadySpellRunner(decodedId)
     if (!spellRunner) return console.error('No spell runner found!')
 
     if (diff) {

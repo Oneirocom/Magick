@@ -1,4 +1,4 @@
-import { Engine, Socket } from 'rete'
+import { Engine, Socket } from '@magickml/rete'
 import { Socket as SocketType } from 'rete/types'
 import { NodeData } from 'rete/types/core/data'
 
@@ -9,7 +9,6 @@ import {
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
-  ModuleComponent,
   ModuleContext,
   ModuleType,
   ModuleWorkerOutput,
@@ -155,8 +154,6 @@ export class ModuleManager {
       )
       if (!triggeredNode) throw new Error('Triggered node not found')
       // todo need to remember to update this if/when componnet name changes
-      const component = engine?.components.get('Input') as ModuleComponent
-      await component?.run(triggeredNode)
     }
     // gather the outputs
     module.write(outputs)

@@ -14,6 +14,7 @@ import {
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
+import { NodeData } from 'rete/types/core/data'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
@@ -42,6 +43,7 @@ class SpellRunner {
   app: typeof FeathersApp
   agent?: any
   spellManager: SpellManager
+  busy = false
 
   log(message, data) {
     this.logger.info(`${message} %o`, data)
@@ -74,16 +76,24 @@ class SpellRunner {
   }
 
   emit(_message) {
-    if (!this.agent) return
-
-    // make sure the message contains the spellId in case it is needed.
+    // same message emitted from server or agent
     const message = {
       ..._message,
+      // make sure the message contains the spellId in case it is needed.
       spellId: this.currentSpell.id,
+      projectId: this.currentSpell.projectId,
     }
 
-    // to do we probably want these events to be constants somewhere
-    this.agent.publishEvent('spell', message)
+    if (!this.agent) {
+      // if we aren't in an agent, we are on the server.
+      // Emit the event directly via the agent service
+      this.app.service('agents').emit('spell', message)
+    } else {
+      // handle the case of the emit being run on an agent not the server
+      console.log('emitting from new!!!!')
+      // to do we probably want these events to be constants somewhere
+      this.agent.publishEvent('spell', message)
+    }
   }
 
   constructor({ app, socket, agent, spellManager }: SpellRunnerConstructor) {
@@ -221,7 +231,7 @@ class SpellRunner {
    * it for the next run.
    */
   private _resetTasks(): void {
-    this.engine.tasks.forEach(t => t.reset())
+    Object.values(this.engine.getTasks()).forEach(t => t.reset())
   }
 
   /**
@@ -252,6 +262,10 @@ class SpellRunner {
     await this.engine.process(graph as GraphData, null, this.context)
   }
 
+  isBusy() {
+    return this.busy
+  }
+
   /**
    * Main spell runner for now. Processes inputs, gets the right component that starts the
    * running.  Would be even better if we just took a node identifier, got its
@@ -266,12 +280,11 @@ class SpellRunner {
     publicVariables,
     app,
   }: RunComponentArgs) {
+    this.busy = true
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      this.logger.error(
-        'Infinite loop detected in SpellRunner. Exiting.'
-      )
+      this.logger.error('Infinite loop detected in SpellRunner. Exiting.')
       throw new Error('Infinite loop detected in SpellRunner. Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
@@ -297,7 +310,6 @@ class SpellRunner {
       this.logger.error('Component does not have a run method')
       throw new Error('Component does not have a run method')
     }
-
 
     const firstInput = Object.keys(inputs)[0]
 
@@ -325,15 +337,10 @@ class SpellRunner {
     // subscribe to a run pubsub and then we just use that.  This would treat running
     // from a trigger in node like any other data stream. Or even just pass in socket IO.
     //
+    await component.run(triggeredNode as NodeData, inputs, this.engine)
 
-    try {
-      await component.run(triggeredNode as unknown as MagickNode, inputs)
-      return this.outputData
-    } catch (err) {
-      this.logger.error('ERROR RUNNING SPELL, %o', err)
-
-      throw err
-    }
+    this.busy = false
+    return this.outputData
   }
 }
 

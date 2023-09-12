@@ -1,6 +1,6 @@
 // DOCUMENTED 
 import React, { useState, useEffect } from 'react';
-import { Control } from 'rete';
+import { Control } from '@magickml/rete';
 import { MagickEditor } from '../types';
 
 /**

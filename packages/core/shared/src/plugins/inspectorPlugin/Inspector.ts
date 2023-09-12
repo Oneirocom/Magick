@@ -1,5 +1,5 @@
 import deepEqual from 'deep-equal'
-import Rete, { Input, Output } from 'rete'
+import Rete, { Input, Output } from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MagickComponent } from '../../engine'

@@ -1,8 +1,8 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Imports Required for the Plugin
  */
-import { NodeEditor } from 'rete'
+import { NodeEditor } from '@magickml/rete'
 
 import {
   OnCreated,
@@ -14,7 +14,6 @@ import {
 } from './interfaces'
 import { getHook } from './utils'
 
-
 /**
  * @function install
  * @description Function to install the lifecycle hooks plugin to the rete editor instance
@@ -22,19 +21,22 @@ import { getHook } from './utils'
  */
 function install(editor: NodeEditor) {
   editor.on('nodecreated', node => {
-    getHook<OnCreated>(editor, node.name, 'created')(node);
-  });
+    getHook<OnCreated>(editor, node.name, 'created')(node)
+  })
 
   editor.on('noderemoved', node => {
-    getHook<OnDestroyed>(editor, node.name, 'destroyed')(node);
-  });
+    getHook<OnDestroyed>(editor, node.name, 'destroyed')(node)
+  })
 
   editor.on('connectioncreate', ({ input, output }) => {
-    const isInputNodeValid = getHook<OnConnect>(editor, input.node?.name, 'onconnect')(input) !== false;
-    const isOutputNodeValid = getHook<OnConnect>(editor, output.node?.name, 'onconnect')(output) !== false;
+    const isInputNodeValid =
+      getHook<OnConnect>(editor, input.node?.name, 'onconnect')(input) !== false
+    const isOutputNodeValid =
+      getHook<OnConnect>(editor, output.node?.name, 'onconnect')(output) !==
+      false
 
-    return isInputNodeValid && isOutputNodeValid;
-  });
+    return isInputNodeValid && isOutputNodeValid
+  })
 
   editor.on('connectioncreated', connection => {
     getHook<OnConnected>(
@@ -48,23 +50,25 @@ function install(editor: NodeEditor) {
       connection.output.node?.name,
       'connected'
     )(connection)
-  });
+  })
 
   editor.on('connectionremove', connection => {
-    const isInputNodeValid = getHook<OnDisconnect>(
+    const isInputNodeValid =
+      getHook<OnDisconnect>(
         editor,
         connection.input.node?.name,
         'ondisconnect'
-      )(connection) !== false;
-    
-    const isOutputNodeValid = getHook<OnDisconnect>(
+      )(connection) !== false
+
+    const isOutputNodeValid =
+      getHook<OnDisconnect>(
         editor,
         connection.output.node?.name,
         'ondisconnect'
-      )(connection) !== false;
-    
-    return isInputNodeValid && isOutputNodeValid;
-  });
+      )(connection) !== false
+
+    return isInputNodeValid && isOutputNodeValid
+  })
 
   editor.on('connectionremoved', connection => {
     getHook<OnDisconnected>(
@@ -77,8 +81,8 @@ function install(editor: NodeEditor) {
       editor,
       connection.output.node?.name,
       'disconnected'
-    )(connection);
-  });
+    )(connection)
+  })
 }
 
 /**
