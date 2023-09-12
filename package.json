@@ -190,7 +190,7 @@
     "styled-components": "5.3.11",
     "swr": "2.1.5",
     "tesseract.js": "4.0.6",
-    "three": "^0.154.0",
+    "three": "^0.150.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "twitter-api-v2": "1.14.3",

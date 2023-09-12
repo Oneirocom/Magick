@@ -140,7 +140,7 @@
 }
 
 .speaker input {
-  background-color: #301934;
+  background-color: var(--primary-darkest);
   /* color: #fff; */
   border: none;
   padding: 0.5em;
