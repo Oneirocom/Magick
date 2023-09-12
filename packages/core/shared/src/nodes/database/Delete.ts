@@ -38,7 +38,7 @@ export class Delete extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Memory/Database',
+      'Storage/Database',
       info
     )
   }
@@ -54,7 +54,7 @@ export class Delete extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for delete categories
     const completionProviders = pluginManager.getCompletionProviders(
-      'Memory/Database',
+      'Storage/Database',
       ['delete']
     ) as CompletionProvider[]
 
@@ -164,7 +164,7 @@ export class Delete extends MagickComponent<Promise<WorkerReturn>> {
   ) {
     // get completion providers for delete category
     const completionProviders = pluginManager.getCompletionProviders(
-      'Memory/Database',
+      'Storage/Database',
       ['delete']
     ) as CompletionProvider[]
 

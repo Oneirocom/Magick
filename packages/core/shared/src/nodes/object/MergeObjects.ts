@@ -27,7 +27,7 @@ export class Merge extends MagickComponent<void> {
           object: 'output',
         },
       },
-      'Object',
+      'Data/Object',
       info
     )
   }

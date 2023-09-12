@@ -28,7 +28,7 @@ export class ArrayToJSON extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Data/Data Structures',
+      'Data/Arrays',
       info
     )
   }

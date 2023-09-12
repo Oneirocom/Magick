@@ -33,7 +33,7 @@ export class TextTemplate extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
 

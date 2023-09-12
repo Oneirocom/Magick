@@ -34,7 +34,7 @@ export class JSONToArray extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Data/Data Structures',
+      'Data/Arrays',
       info
     )
   }

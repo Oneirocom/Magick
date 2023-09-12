@@ -39,7 +39,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
           trigger: 'option',
         },
       },
-      'Documents',
+      'Storage/Documents',
       info
     )
     // this.runFromCache = true

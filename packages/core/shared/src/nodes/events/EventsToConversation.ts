@@ -27,7 +27,7 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
   }

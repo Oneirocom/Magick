@@ -38,7 +38,7 @@ export class Select extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Memory/Database',
+      'Storage/Database',
       info
     )
   }
@@ -54,7 +54,7 @@ export class Select extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for select categories
     const completionProviders = pluginManager.getCompletionProviders(
-      'Memory/Database',
+      'Storage/Database',
       ['select']
     ) as CompletionProvider[]
 
@@ -164,7 +164,7 @@ export class Select extends MagickComponent<Promise<WorkerReturn>> {
   ) {
     // get completion providers for select category
     const completionProviders = pluginManager.getCompletionProviders(
-      'Memory/Database',
+      'Storage/Database',
       ['select']
     ) as CompletionProvider[]
 

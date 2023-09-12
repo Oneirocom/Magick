@@ -52,7 +52,7 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
           sender: 'output',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
   }

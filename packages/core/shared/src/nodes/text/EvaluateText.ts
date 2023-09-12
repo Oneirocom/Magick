@@ -27,7 +27,7 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option', output: 'output' },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }

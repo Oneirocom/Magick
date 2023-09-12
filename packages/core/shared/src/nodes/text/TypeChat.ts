@@ -38,7 +38,7 @@ export class TypeChat extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }
