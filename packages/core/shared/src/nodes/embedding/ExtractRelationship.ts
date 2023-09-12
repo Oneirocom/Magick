@@ -31,7 +31,7 @@ export class ExtractRelationship extends MagickComponent<Promise<InputReturn>> {
           embedding: 'output',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       info
     )
   }

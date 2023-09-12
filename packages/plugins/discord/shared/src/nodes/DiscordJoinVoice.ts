@@ -31,7 +31,7 @@ export class DiscordJoinVoice extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Joins the vc of the user who triggered the command'
     )
   }

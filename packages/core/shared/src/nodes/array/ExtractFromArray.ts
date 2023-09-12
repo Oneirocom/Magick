@@ -29,7 +29,7 @@ export class ExtractFromArray extends MagickComponent<Promise<WorkerReturn>> {
     super(
       'Extract From Array',
       { outputs: { output: 'output', trigger: 'option' } },
-      'Array',
+      'Data/Arrays',
       info
     )
   }

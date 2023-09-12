@@ -38,9 +38,11 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'AI/LLM',
       info
     )
+
+    this.common = true
   }
 
   /**

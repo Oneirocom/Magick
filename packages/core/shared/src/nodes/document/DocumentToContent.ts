@@ -27,9 +27,10 @@ export class DocumentToContent extends MagickComponent<WorkerReturn> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
+    this.common = true
   }
 
   /**

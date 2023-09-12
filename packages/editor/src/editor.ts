@@ -124,7 +124,10 @@ export const initEditor = function ({
 
       if (component.hide) return null
       if (workspaceType && workspaceType !== tabType) return null
-      return [component.category]
+
+      const path = component.category.split('/')
+
+      return path
     },
   })
 

@@ -20,7 +20,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }

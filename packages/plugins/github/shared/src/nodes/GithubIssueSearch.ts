@@ -76,7 +76,7 @@ export class GithubIssueSearch extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Github',
+      'Integrations/Github',
       'Github Issue Search'
     )
   }

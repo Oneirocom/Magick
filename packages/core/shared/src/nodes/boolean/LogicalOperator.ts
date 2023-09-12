@@ -30,7 +30,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
       {
         outputs: { true: 'option', false: 'option', error: 'output' },
       },
-      'Boolean',
+      'Flow',
       info
     )
   }
