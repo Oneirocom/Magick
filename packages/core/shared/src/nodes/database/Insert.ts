@@ -38,7 +38,7 @@ export class Insert extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Database',
+      'Memory/Database',
       info
     )
   }
@@ -54,7 +54,7 @@ export class Insert extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for insert categories
     const completionProviders = pluginManager.getCompletionProviders(
-      'database',
+      'Memory/Database',
       ['insert']
     ) as CompletionProvider[]
 
@@ -164,7 +164,7 @@ export class Insert extends MagickComponent<Promise<WorkerReturn>> {
   ) {
     // get completion providers for insert category
     const completionProviders = pluginManager.getCompletionProviders(
-      'database',
+      'Memory/Database',
       ['insert']
     ) as CompletionProvider[]
 

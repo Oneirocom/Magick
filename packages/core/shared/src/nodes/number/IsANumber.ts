@@ -18,7 +18,7 @@ export class IsANumber extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Number',
+      'Flow',
       info
     )
   }

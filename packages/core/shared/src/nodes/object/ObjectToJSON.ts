@@ -30,7 +30,7 @@ export class ObjectToJSON extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Object',
+      'Data/Data Structures',
       info
     )
   }

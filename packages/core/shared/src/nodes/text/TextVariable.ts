@@ -46,7 +46,7 @@ export class TextVariable extends MagickComponent<InputReturn> {
           output: 'output',
         },
       },
-      'Text',
+      'Data/Variables',
       info
     )
   }

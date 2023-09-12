@@ -63,7 +63,7 @@ export class JupyterNotebook extends MagickComponent<
           trigger: 'option',
         },
       },
-      'IO',
+      'Invoke/Networking',
       info
     )
   }

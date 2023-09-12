@@ -34,7 +34,7 @@ export class Request extends MagickComponent<Promise<WorkerReturn>> {
     super(
       'Request',
       { outputs: { output: 'output', trigger: 'option' } },
-      'IO',
+      'Invoke/Async',
       info
     )
   }

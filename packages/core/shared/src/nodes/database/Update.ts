@@ -38,7 +38,7 @@ export class Update extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Database',
+      'Memory/Database',
       info
     )
   }
@@ -54,7 +54,7 @@ export class Update extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for update categories
     const completionProviders = pluginManager.getCompletionProviders(
-      'database',
+      'Memory/Database',
       ['update']
     ) as CompletionProvider[]
 
@@ -164,7 +164,7 @@ export class Update extends MagickComponent<Promise<WorkerReturn>> {
   ) {
     // get completion providers for update category
     const completionProviders = pluginManager.getCompletionProviders(
-      'database',
+      'Memory/Database',
       ['update']
     ) as CompletionProvider[]
 
