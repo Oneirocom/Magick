@@ -11,7 +11,6 @@ import { useConfig } from '@magickml/client-core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import { tooltip_text } from "./tooltip_texts"
-import { extractPublicVariables } from './utils'
 import { useTreeData } from '../../../../../core/client/src/contexts/TreeDataProvider'
 
 /**
@@ -114,6 +113,7 @@ const AgentDetails = ({
         })
         setAgentUpdate(true)
         setSelectedAgentData(data)
+
         // update data instead of refetching data to avoid agent window flashes
         updateData(data)
       })
@@ -125,16 +125,43 @@ const AgentDetails = ({
       })
   }
 
+
+  const formatPublicVars = (_nodes) => {
+    // todo could type this better
+    const nodes = Object.values(_nodes) as any[]
+    return nodes
+      // get the public nodes
+      .filter((node: { data }) => node?.data?.isPublic)
+      // map to an array of objects
+      .map((node: { data; id; name }) => {
+        return {
+          id: node?.id,
+          name: node?.data?.name,
+          value:
+            node?.data?.value ||
+            node?.data?.text ||
+            node?.data?.fewshot ||
+            node?.data?._var,
+          type: node?.name,
+        }
+      })
+      // map to an object with the id as the key
+      .reduce((acc, cur) => {
+        acc[cur.id] = cur
+        return acc
+      }, {})
+  }
+
   const updatePublicVar = (spell) => {
     setSelectedAgentData({
       ...selectedAgentData,
       rootSpellId: spell.id,
-      publicVariables: JSON.stringify(extractPublicVariables(spell)),
+      publicVariables: JSON.stringify(formatPublicVars(spell.graph.nodes)),
     })
   }
 
   useEffect(() => {
-    (async () => {
+    ; (async () => {
       try {
         const spells = await client.service('spells').find({
           query: {
@@ -144,8 +171,9 @@ const AgentDetails = ({
 
         setSpellList(spells.data)
 
-        if (selectedAgentData.rootSpellId && !selectedAgentData.publicVariables) {
+        if (selectedAgentData.rootSpellId) {
           const agentRootSpell = await client.service('spells').get(selectedAgentData.rootSpellId)
+
           updatePublicVar(agentRootSpell)
         }
 
@@ -157,7 +185,6 @@ const AgentDetails = ({
         }
       }
     })()
-
   }, [])
 
   return (
@@ -350,9 +377,9 @@ const AgentDetails = ({
               publicVariables: JSON.stringify(data),
             })
           }}
-          update={update}
+          // todo we need to decide if we need to handle this.
+          setUpdateNeeded={() => { }}
           publicVars={JSON.parse(selectedAgentData.publicVariables)}
-          selectedAgent={selectedAgentData}
         />
       )}
       <div
@@ -362,15 +389,20 @@ const AgentDetails = ({
           }`}
       >
         {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
+          console.log(value);
+
           return (
-            <RenderComp
-              key={index}
-              enable={enable}
-              element={value}
-              selectedAgentData={selectedAgentData}
-              setSelectedAgentData={setSelectedAgentData}
-              update={update}
-            />
+            <Tooltip title="kkkk" arrow>
+              <RenderComp
+                key={index}
+                enable={enable}
+                element={value}
+                selectedAgentData={selectedAgentData}
+                setSelectedAgentData={setSelectedAgentData}
+                update={update}
+              />
+            </Tooltip>
+
           )
         })}
       </div>
