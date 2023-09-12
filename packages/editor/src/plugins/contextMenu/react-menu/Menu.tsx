@@ -22,7 +22,7 @@ function flattenItems(items, search) {
   if (!items || items.length === 0) return [];
 
   let flatList = [];
-  let seenTitles = new Set(); // to track seen titles
+  const seenTitles = new Set(); // to track seen titles
 
   flatList = items.reduce((acc, item) => {
     if (!item.subitems) return [...acc, item];
@@ -93,7 +93,7 @@ export default function ContextMenu({
 
   if (!visible) return null
 
-  let displayedItems = search ? flattenItems(items, search) : items;
+  const displayedItems = search ? flattenItems(items, search) : items;
 
   console.log('DISPLAYED', displayedItems)
 
