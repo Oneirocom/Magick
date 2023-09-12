@@ -30,6 +30,7 @@ export class DocumentToContent extends MagickComponent<WorkerReturn> {
       'Storage/Events',
       info
     )
+    this.common = true
   }
 
   /**
