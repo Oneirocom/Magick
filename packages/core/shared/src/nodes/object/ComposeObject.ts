@@ -31,7 +31,7 @@ export class ComposeObject extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Object',
+      'Data/Data Structures',
       info
     )
   }

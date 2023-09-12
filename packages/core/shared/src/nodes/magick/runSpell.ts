@@ -39,7 +39,7 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'IO',
+      'Invoke/Spells',
       'Runs a given spell with arguments'
     )
   }

@@ -47,7 +47,7 @@ export class DiscordListTextChannels extends MagickComponent<
           trigger: 'option',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Gets the List of All text channels in a server'
     )
   }

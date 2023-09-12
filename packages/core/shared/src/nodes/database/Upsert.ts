@@ -38,7 +38,7 @@ export class Upsert extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Database',
+      'Memory/Database',
       info
     )
   }
@@ -54,7 +54,7 @@ export class Upsert extends MagickComponent<Promise<WorkerReturn>> {
 
     // get completion providers for upsert categories
     const completionProviders = pluginManager.getCompletionProviders(
-      'database',
+      'Memory/Database',
       ['upsert']
     ) as CompletionProvider[]
 
@@ -164,7 +164,7 @@ export class Upsert extends MagickComponent<Promise<WorkerReturn>> {
   ) {
     // get completion providers for upsert category
     const completionProviders = pluginManager.getCompletionProviders(
-      'database',
+      'Memory/Database',
       ['upsert']
     ) as CompletionProvider[]
 

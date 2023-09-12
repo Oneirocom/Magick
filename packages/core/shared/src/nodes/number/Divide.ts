@@ -22,7 +22,7 @@ export class Divide extends MagickComponent<WorkerOutputs> {
       {
         outputs: { trigger: 'option', result: 'output' },
       },
-      'Number',
+      'Arithmetic/Arithmetic',
       info
     )
   }
