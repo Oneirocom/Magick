@@ -127,7 +127,7 @@ export type NodeCategory =
   | 'Esoterica'
   | 'Object'
   | 'Number'
-  | 'I/O'
+  | 'IO'
   | 'Flow'
   | 'Experimental'
   | 'Langchain'
@@ -163,13 +163,14 @@ export abstract class MagickComponent<
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
-  category: NodeCategory
+  category: string
   info: string
   display?: boolean
   dev = false
   hide = false
   runFromCache = false
   deprecated? = false
+  common? = false
   onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
@@ -177,12 +178,7 @@ export abstract class MagickComponent<
   displayName: string | undefined
   engine: MagickEngine | null = null
 
-  constructor(
-    name: string,
-    task: TaskOptions,
-    category: NodeCategory,
-    info: string
-  ) {
+  constructor(name: string, task: TaskOptions, category: string, info: string) {
     super(name)
     this.task = task
     this.category = category

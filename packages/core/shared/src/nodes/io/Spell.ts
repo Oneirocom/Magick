@@ -65,7 +65,7 @@ export class SpellComponent extends MagickComponent<
       {
         outputs: { trigger: 'option' },
       },
-      'I/O',
+      'IO',
       info
     )
 
