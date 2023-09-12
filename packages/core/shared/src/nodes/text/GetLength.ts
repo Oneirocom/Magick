@@ -35,7 +35,7 @@ export class GetLength extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       'Get the length of the input string.'
     )
   }

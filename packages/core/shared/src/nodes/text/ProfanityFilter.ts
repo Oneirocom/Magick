@@ -19,7 +19,7 @@ export class ProfanityFilter extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Text',
+      'Data/Text',
       'Takes a string input and checks it against a set of profanity rules, then triggers the appropriate output.'
     )
   }

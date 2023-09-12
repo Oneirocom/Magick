@@ -41,7 +41,7 @@ export class UUIDGenerator extends MagickComponent<Promise<WorkerReturn>> {
           output: 'output',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }

@@ -41,7 +41,7 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Intent',
+      'AI/Intent',
       'Intent Search'
     )
   }

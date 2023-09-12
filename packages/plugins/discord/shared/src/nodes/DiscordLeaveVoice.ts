@@ -30,7 +30,7 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Leaves the vc of the user who triggered the command'
     )
   }
