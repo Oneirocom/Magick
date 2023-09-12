@@ -26,7 +26,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Documents',
+      'Storage/Documents',
       'Store Documents in the Documents store. Stores the content, embedding, and date from the inputs as well as an optional Type property.'
     )
   }

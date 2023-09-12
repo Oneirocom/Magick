@@ -33,7 +33,12 @@ const info =
  */
 export class EventStore extends MagickComponent<Promise<void>> {
   constructor() {
-    super('Store Event', { outputs: { trigger: 'option' } }, 'Event', info)
+    super(
+      'Store Event',
+      { outputs: { trigger: 'option' } },
+      'Storage/Events',
+      info
+    )
   }
 
   /**
