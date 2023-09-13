@@ -37,6 +37,21 @@ const EventWindow = (): JSX.Element => {
     await fetchEvents()
   }
 
+  function reverseRows(arr) {
+    
+    let len = arr.length
+   
+    for (let i = 0; i < len / 2; i++) {
+      
+      let temp = {}
+      Object.assign(temp, arr[i])
+      Object.assign(arr[i], arr[len - i - 1])
+      Object.assign(arr[len - i - 1], temp)
+    }
+
+    return arr
+  }
+
   /**
    * Fetches the events of the current project.
    */
@@ -52,7 +67,7 @@ const EventWindow = (): JSX.Element => {
       )
 
       const data = await response.json()
-      setEvents(data.events)
+      setEvents(reverseRows(data.events))
       setLoading(false)
     } catch (error) {
       console.error('ERROR', error)
