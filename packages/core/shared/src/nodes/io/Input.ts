@@ -260,7 +260,15 @@ export class InputComponent extends MagickComponent<InputReturn> {
     if (data && !isEmpty(data) && node.data.name) {
       if (node?._task) node._task.closed = []
 
-      const output = data[node.data.name]
+      let output = data[node.data.name]
+      if (output === undefined && node.data.name === "Input - Default") {
+        output = Object.values(data)[0]
+      }
+
+      if (!output) {
+        this.logger.error('No input recieved in input node for ' + node.data.name)
+        throw new Error("No input recieved")
+      }
 
       return {
         output,
