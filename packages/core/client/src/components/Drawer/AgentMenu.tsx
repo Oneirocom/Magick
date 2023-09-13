@@ -532,7 +532,7 @@ function AgentMenu({ data, resetData }) {
             }`,
           }}
           onClick={e => {
-            if (selectedAgentData.default) {
+            if (!selectedAgentData.default) {
               setOpenConfirm(true)
             }
             handleCloseMenu2()
