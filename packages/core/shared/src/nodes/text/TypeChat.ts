@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
@@ -38,9 +38,11 @@ export class TypeChat extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
+
+    this.common = true
   }
 
   /**

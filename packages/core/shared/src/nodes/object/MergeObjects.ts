@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
@@ -27,7 +27,7 @@ export class Merge extends MagickComponent<void> {
           object: 'output',
         },
       },
-      'Object',
+      'Data/Object',
       info
     )
   }
@@ -50,14 +50,14 @@ export class Merge extends MagickComponent<void> {
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Node name',
-      tooltip: 'Enter node name'
+      tooltip: 'Enter node name',
     })
 
     const socketGenerator = new SocketGeneratorControl({
       connectionType: 'input',
       ignored: ['trigger', 'object'],
       name: 'Property Name',
-      tooltip: 'Add property name'
+      tooltip: 'Add property name',
     })
 
     node

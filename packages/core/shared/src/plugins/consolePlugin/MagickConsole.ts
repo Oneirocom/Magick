@@ -1,6 +1,6 @@
-import { NodeView } from 'rete/types/view/node'
+import { NodeView } from '@magickml/rete'
 import { MagickComponent } from '../../engine'
-import { IRunContextEditor, MagickNode } from '../../types'
+import { IRunContextEditor, MagickNode, PubSubData } from '../../types'
 
 type ConsoleConstructor = {
   component: MagickComponent<unknown>
@@ -72,7 +72,6 @@ export class MagickConsole {
   }
 
   formatMessage(_message: string, type: 'error' | 'log'): Message {
-    console.log('Sending message to debug', _message)
     return {
       from: this.node.name ?? this.component.name,
       nodeId: this.node.id,
@@ -104,7 +103,8 @@ export class MagickConsole {
 
     const message =
       typeof _message !== 'string' ? JSON.stringify(_message) : _message
-    this.sendToDebug(this.formatMessage(message, 'log'))
+    if (this.node.data.log || isOutputError(_message))
+      this.sendToDebug(this.formatMessage(message, 'log'))
     if (isOutputError(_message)) {
       this.renderError()
     } else {
@@ -129,7 +129,7 @@ export class MagickConsole {
     console.log('Success', result)
   }
 
-  sendToDebug(message: unknown) {
+  sendToDebug(message: PubSubData) {
     if (this.editor && this.editor.context && this.editor.context.sendToDebug)
       this.editor.context.sendToDebug(message)
   }

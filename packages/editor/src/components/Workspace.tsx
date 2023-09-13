@@ -58,7 +58,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
     const unsubscribe = editor.on('nodecreated noderemoved', (node: any) => {
       if (!spellRef.current) return
-      if (node.category !== 'I/O') return
+      if (node.category !== 'IO') return
       const spell = {
         ...spellRef.current,
         graph: editor.toJSON(),

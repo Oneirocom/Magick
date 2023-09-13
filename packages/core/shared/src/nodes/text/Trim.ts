@@ -3,7 +3,7 @@
  * A simple rete component that returns the same output as the input.
  * @category Utility
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
@@ -36,7 +36,7 @@ export class Trim extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       'Trim any whitespace from beginning and end of a string.'
     )
   }

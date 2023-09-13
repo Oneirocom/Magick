@@ -3,7 +3,7 @@
  * A component to process Intent Search.
  * @category Intent
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '@magickml/core'
 import {
   MagickComponent,
@@ -41,7 +41,7 @@ export class IntentSearch extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Intent',
+      'AI/Intent',
       'Intent Search'
     )
   }

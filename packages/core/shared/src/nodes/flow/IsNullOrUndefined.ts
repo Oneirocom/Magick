@@ -4,7 +4,7 @@
  * @class
  * @extends {MagickComponent}
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -51,13 +51,13 @@ export class IsNullOrUndefined extends MagickComponent<Promise<void>> {
    * @param {WorkerData} _node - The node.
    * @param {MagickWorkerInputs} inputs - Inputs to check.
    */
-  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['input'] && (inputs['input'][0] as string)
     const isNull =
       action === null || action === undefined || action.length <= 0
         ? true
         : false
 
-    this._task.closed = isNull ? ['false'] : ['true']
+    if (node?._task) node._task.closed = isNull ? ['false'] : ['true']
   }
 }

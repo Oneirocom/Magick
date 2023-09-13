@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, triggerSocket, anySocket } from '../../sockets'
@@ -30,7 +30,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Array',
+      'Data/Arrays',
       'Takes an input array and outputs the value in that array whose key matches the key specified in the Element property.'
     )
   }
@@ -40,7 +40,7 @@ export class GetValueFromArray extends MagickComponent<Promise<WorkerReturn>> {
    * @param node - The Magick node to add the sockets to.
    */
   builder(node: MagickNode) {
-    const inp = new Rete.Input('array', 'Array', arraySocket)
+    const inp = new Rete.Input('array', 'Data/Arrays', arraySocket)
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'Value', anySocket)

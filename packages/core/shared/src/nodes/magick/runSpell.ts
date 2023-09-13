@@ -3,7 +3,7 @@
  * A simple rete component that returns the same output as the input.
  * @category Utility
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
@@ -39,7 +39,7 @@ export class RunSpell extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'I/O',
+      'Invoke/Spells',
       'Runs a given spell with arguments'
     )
   }

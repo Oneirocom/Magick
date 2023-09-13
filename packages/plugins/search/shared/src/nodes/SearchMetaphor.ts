@@ -1,4 +1,4 @@
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -38,7 +38,7 @@ export class SearchMetaphor extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Search',
+      'Invoke/Search',
       info
     )
   }

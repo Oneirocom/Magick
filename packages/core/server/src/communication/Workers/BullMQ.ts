@@ -3,14 +3,20 @@ import { type Job, app } from '@magickml/server-core'
 import { Worker } from './Worker'
 
 export class BullMQWorker extends Worker {
-    worker: BMQWorker
+  declare worker: BMQWorker
 
-    constructor() {
-        super()
-    }
+  constructor() {
+    super()
+  }
 
-    initialize(queueName: string, callback: (job: Job<any>) => Promise<any>): void {
-        const connection = app.get('redis')
-        this.worker = new BMQWorker(queueName, callback, { connection, concurrency: 10 })
-    }
+  initialize(
+    queueName: string,
+    callback: (job: Job<any>) => Promise<any>
+  ): void {
+    const connection = app.get('redis')
+    this.worker = new BMQWorker(queueName, callback, {
+      connection,
+      concurrency: 10,
+    })
+  }
 }

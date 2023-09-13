@@ -3,22 +3,25 @@ import { Plugin } from 'rete/types/core/plugin'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
-import ContextMenuPlugin from './plugins/contextMenu'
+import ContextMenuPlugin, { ContextMenuOptions } from './plugins/contextMenu'
 import HighlightPlugin from './plugins/highlightPlugin'
 import ConnectionPlugin from './plugins/connectionPlugin'
 import {
   CachePlugin,
+  Cfg,
   OnSubspellUpdated,
   PubSubContext,
+  RemotePlugin,
+  RemotePluginArgs,
   SelectionPlugin,
   SpellInterface,
+  DebuggerPlugin,
 } from '@magickml/core'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
 
 import {
-  ConsolePlugin,
   EditorContext,
   getNodes,
   HistoryPlugin,
@@ -33,9 +36,6 @@ import {
   MultiSocketGenerator,
   NodeClickPlugin,
   SocketGeneratorPlugin,
-  SocketOverridePlugin,
-  SocketPlugin,
-  SocketPluginArgs,
 } from '@magickml/core'
 
 import AreaPlugin from './plugins/areaPlugin'
@@ -64,6 +64,7 @@ export const initEditor = function ({
   tab,
   node,
   client,
+  spell,
 }: {
   container: any
   pubSub: PubSubContext
@@ -71,6 +72,7 @@ export const initEditor = function ({
   tab: any
   node: any
   client?: any
+  spell: SpellInterface
 }) {
   // Clear editor instance if it exists for the given tab ID
   if (editorTabMap[tab.id]) editorTabMap[tab.id].clear()
@@ -86,14 +88,11 @@ export const initEditor = function ({
   editor.pubSub = pubSub
   editor.context = context
   editor.tab = tab
-
-  // Initialize plugins
-  if (client) {
-    editor.use(SocketOverridePlugin)
-  }
+  editor.currentSpell = spell
 
   editor.use(CachePlugin)
 
+  // handles highlighting nodes and connections on click
   editor.use(HighlightPlugin)
 
   // History plugin for undo/redo
@@ -105,7 +104,7 @@ export const initEditor = function ({
     component: node as any,
   })
   editor.use(LifecyclePlugin)
-  editor.use(ContextMenuPlugin, {
+  editor.use<Plugin, ContextMenuOptions>(ContextMenuPlugin, {
     searchBar: false,
     delay: 0,
     rename(component: { contextMenuName: any; name: any }) {
@@ -125,13 +124,16 @@ export const initEditor = function ({
 
       if (component.hide) return null
       if (workspaceType && workspaceType !== tabType) return null
-      return [component.category]
+
+      const path = component.category.split('/')
+
+      return path
     },
   })
 
   // Setup additional plugins
+  editor.use(DebuggerPlugin)
   editor.use(MultiCopyPlugin)
-  editor.use(ConsolePlugin)
   editor.use(SocketGeneratorPlugin)
   editor.use(MultiSocketGenerator)
   editor.use(InspectorPlugin)
@@ -148,7 +150,7 @@ export const initEditor = function ({
     scaleExtent: { min: 0.05, max: 2.0 },
     background,
     tab,
-    snap: true,
+    snap: false,
   })
 
   // Set up the CommentManager
@@ -181,11 +183,11 @@ export const initEditor = function ({
   // Initialize additional plugins
   if (client) {
     editor.use<Plugin, ModulePluginArgs>(ModulePlugin, { engine })
-    editor.use<Plugin, SocketPluginArgs>(SocketPlugin, { client })
+    editor.use<Plugin, RemotePluginArgs>(RemotePlugin, { client })
   }
 
   // Set up the SelectionPlugin
-  editor.use(SelectionPlugin, { enabled: true })
+  editor.use<Plugin, Cfg>(SelectionPlugin, { enabled: true })
 
   // Register components for editor
   components.forEach((c: any) => {
@@ -221,16 +223,15 @@ export const initEditor = function ({
 
   editor.runProcess = async callback => {
     await engine.abort()
-    await engine.process(editor.toJSON(), null, {
-      context: context,
-      currentSpell: editor.currentSpell,
-    })
+    // await engine.process(editor.toJSON(), null, {
+    //   context: context,
+    //   currentSpell: editor.currentSpell,
+    // })
     if (callback) callback()
   }
 
-  // Functions to load and run spells
+  // Functions tAgentMenuo load and run spells
   editor.loadSpell = async (spell: SpellInterface) => {
-    console.log('Loading spell in editor')
     if (!spell) return console.error('No spell to load')
     const _graph = spell.graph
     const graph = JSON.parse(JSON.stringify(_graph))
@@ -238,11 +239,7 @@ export const initEditor = function ({
     editor.fromJSON(graph)
 
     editor.view.resize()
-    editor.runProcess()
     editor.currentSpell = spell
   }
-
-  // Start the engine off on first load
-  editor.runProcess()
   return editor
 }

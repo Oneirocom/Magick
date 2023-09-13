@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -19,7 +19,7 @@ export class InRange extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Number',
+      'Flow',
       info
     )
   }
@@ -47,14 +47,14 @@ export class InRange extends MagickComponent<void> {
       dataKey: 'startNumber',
       name: 'Start Number',
       defaultValue: 10,
-      tooltip: 'Enter the start number'
+      tooltip: 'Enter the start number',
     })
 
     const inspectorEndNumSocket = new InputControl({
       dataKey: 'endNumber',
       name: 'End Number',
       defaultValue: 100,
-      tooltip: 'Enter an end number'
+      tooltip: 'Enter an end number',
     })
 
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
@@ -97,9 +97,9 @@ export class InRange extends MagickComponent<void> {
     }
 
     if (numberToTest >= startRange && numberToTest <= endRange) {
-      this._task.closed = ['false']
+      if (node?._task) node._task.closed = ['false']
     } else {
-      this._task.closed = ['true']
+      if (node?._task) node._task.closed = ['true']
     }
   }
 }

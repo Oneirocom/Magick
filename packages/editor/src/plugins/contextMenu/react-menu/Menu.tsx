@@ -17,6 +17,49 @@ import Item from './Item'
 import Context from './context'
 import { useEffect, useRef, useState } from 'react'
 
+function flattenItems(items, search) {
+  // Break out of recursion if there are no items
+  if (!items || items.length === 0) return [];
+
+  let flatList = [];
+  const seenTitles = new Set(); // to track seen titles
+
+  flatList = items.reduce((acc, item) => {
+    if (!item.subitems) return [...acc, item];
+    if (item.subitems.length === 0) return [...acc, item];
+    // Flatten subitems
+    if (item.subitems) {
+      return [...acc, item, ...flattenItems(item.subitems, search)];
+    }
+  }, []);
+
+  // Filter the flat list if there is a search term
+  if (search) {
+    flatList.map(item => {
+      item.title = item.title.split('/').pop();
+      return item;
+    });
+
+    flatList = flatList.filter(item =>
+      item.title.toLowerCase().includes(search.toLowerCase())
+    );
+
+    // Remove duplicates
+    flatList = flatList.filter(item => {
+      const titleSegment = item.title.split('/').pop().toLowerCase();
+      if (seenTitles.has(titleSegment)) {
+        return false;  // this title is a duplicate
+      }
+      seenTitles.add(titleSegment);
+      return true;  // keep this item
+    });
+  }
+
+
+
+  return flatList;
+}
+
 export default function ContextMenu({
   items,
   position: [x, y],
@@ -31,7 +74,7 @@ export default function ContextMenu({
   args: any
   onClose: () => void
   type?: string
-}): JSX.Element {
+}): JSX.Element | null {
   const [search, setSearch] = useState<string>('')
   const searchbarRef = useRef(null)
   /**
@@ -50,6 +93,10 @@ export default function ContextMenu({
 
   if (!visible) return null
 
+  const displayedItems = search ? flattenItems(items, search) : items;
+
+  console.log('DISPLAYED', displayedItems)
+
   return (
     <Context.Provider value={{ args, onClose }}>
       <div
@@ -67,21 +114,21 @@ export default function ContextMenu({
           />
         )}
         <div className={styles['context-menu-inner']}>
-          {items?.map(item => {
+          {displayedItems?.map((item, i) => {
             if (search === '')
-              return <Item item={item} key={item.title} search={search} />
+              return <Item item={item} key={item.title + i} search={search} />
 
-            const subitems = item.subitems.map(subItem => {
+            const subitems = item?.subitems && item?.subitems.map(subItem => {
               return subItem.title
             })
 
             if (
               item.title.toLowerCase().includes(search.toLowerCase()) ||
-              subitems.some(subItem =>
+              (subitems && subitems.some(subItem =>
                 subItem.toLowerCase().includes(search.toLowerCase())
-              )
+              ))
             )
-              return <Item item={item} key={item.title} search={search} />
+              return <Item item={item} key={item.title + i} search={search} />
 
             return null
           })}

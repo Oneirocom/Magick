@@ -5,7 +5,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
@@ -46,7 +46,7 @@ export class TextVariable extends MagickComponent<InputReturn> {
           output: 'output',
         },
       },
-      'Text',
+      'Data/Variables',
       info
     )
   }
@@ -64,16 +64,16 @@ export class TextVariable extends MagickComponent<InputReturn> {
       dataKey: 'name',
       name: 'Name',
       icon: 'moon',
-      tooltip: 'Enter name'
+      tooltip: 'Enter name',
     })
 
     const _public = new BooleanControl({
       dataKey: 'isPublic',
       name: 'isPublic',
-      tooltip: 'Switch isPublic'
+      tooltip: 'Switch isPublic',
     })
 
-    const fewshotControl = new FewshotControl({tooltip: 'Open fewshot'})
+    const fewshotControl = new FewshotControl({ tooltip: 'Open fewshot' })
 
     node.inspector.add(fewshotControl).add(name).add(_public)
 

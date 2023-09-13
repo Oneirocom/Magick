@@ -32,6 +32,16 @@ import getNodeMenu from './node-menu'
  */
 import IMenu from './menu'
 
+export type ContextMenuOptions = {
+  searchBar?: boolean
+  searchKeep?: (item: any) => boolean
+  delay?: number
+  items?: Record<string, any>
+  nodeItems?: Record<string, any>
+  allocate?: (components: any) => any[] | null
+  rename?: (component: any) => string
+}
+
 /**
  * Installs the context menu.
  *
@@ -56,7 +66,7 @@ function install(
     nodeItems = {},
     allocate = components => [],
     rename = component => component.name,
-  }
+  }: ContextMenuOptions
 ) {
   // Bind 'hidecontextmenu' to the editor.
   editor.bind('hidecontextmenu')
@@ -96,6 +106,14 @@ function install(
       mainMenu.items.sort((a, b) =>
         a.title > b.title ? 1 : b.title > a.title ? -1 : 0
       )
+
+    if (mainMenu && mainMenu.items.some(item => item.title === 'Common')) {
+      const commonItem = mainMenu.items.find(item => item.title === 'Common')
+      mainMenu.items = [
+        commonItem,
+        ...mainMenu.items.filter(item => item.title !== 'Common'),
+      ]
+    }
 
     // Get the x and y coordinates of the click.
     const [x, y] = [e.clientX, e.clientY]

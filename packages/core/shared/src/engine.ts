@@ -1,26 +1,25 @@
 // DOCUMENTED
-import Rete, { Node, Engine } from 'rete'
+import Rete, { Node, Engine } from '@magickml/rete'
 import { NodeData } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
+import { getLogger } from '@magickml/core'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
-import SocketPlugin, { SocketPluginArgs } from './plugins/socketPlugin'
 import TaskPlugin, { Task } from './plugins/taskPlugin'
-import EmitPlugin, { EmitPluginArgs } from './plugins/emitPlugin'
 import { TaskOptions } from './plugins/taskPlugin/task'
 import {
   GraphData,
   MagickEditor,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   ModuleOptions,
   UnknownData,
   WorkerData,
 } from './types'
+import RemotePlugin, { RemotePluginArgs } from './plugins/remotePlugin'
 
 // WorkerOutputs interface
 interface WorkerOutputs {
@@ -29,7 +28,8 @@ interface WorkerOutputs {
 
 // MagickEngine interface extends Engine
 export interface MagickEngine extends Engine {
-  tasks: Task[]
+  getTask: (nodeId: number) => Task
+  getTasks: () => Record<string, Task>
   moduleManager: ModuleManager
 }
 
@@ -59,7 +59,7 @@ export type InitEngineArguments = {
   server: boolean
   throwError?: (message: unknown) => void
   socket?: io.Socket
-  emit?: EmitPluginArgs['emit']
+  emit?: RemotePluginArgs['emit']
 }
 
 // initSharedEngine function
@@ -68,7 +68,6 @@ export const initSharedEngine = ({
   components,
   server = false,
   throwError,
-  socket,
   emit,
 }: InitEngineArguments) => {
   const engine = new Rete.Engine(name) as MagickEngine
@@ -81,19 +80,14 @@ export const initSharedEngine = ({
     engine.use<Plugin, ModulePluginArgs>(ModulePlugin, {
       engine,
     })
-    if (socket) {
-      engine.use<Plugin, SocketPluginArgs>(SocketPlugin, {
-        socket,
-        server: true,
-      })
-    }
 
     if (emit) {
-      engine.use<Plugin, EmitPluginArgs>(EmitPlugin, {
+      engine.use<Plugin, RemotePluginArgs>(RemotePlugin, {
         server: true,
         emit,
       })
     }
+
     engine.use(TaskPlugin)
   }
 
@@ -134,7 +128,7 @@ export type NodeCategory =
   | 'Esoterica'
   | 'Object'
   | 'Number'
-  | 'I/O'
+  | 'IO'
   | 'Flow'
   | 'Experimental'
   | 'Langchain'
@@ -166,38 +160,34 @@ export abstract class MagickComponent<
   WorkerReturnType
 > extends MagickEngineComponent<WorkerReturnType> {
   task: TaskOptions
-  _task: MagickTask
+  _task: Task
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
-  category: NodeCategory
+  category: string
   info: string
   display?: boolean
   dev = false
   hide = false
   runFromCache = false
   deprecated? = false
+  common? = false
   onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
   workspaceType: 'spell' | null | undefined
   displayName: string | undefined
+  engine: MagickEngine | null = null
+  logger = getLogger()
 
-  nodeTaskMap: Record<number, MagickTask> = {}
-
-  constructor(
-    name: string,
-    task: TaskOptions,
-    category: NodeCategory,
-    info: string
-  ) {
+  constructor(name: string, task: TaskOptions, category: string, info: string) {
     super(name)
     this.task = task
     this.category = category
     this.info = info
     this.cache = {}
 
-    this._task = {} as MagickTask
+    this._task = {} as Task
   }
 
   abstract builder(
@@ -209,12 +199,12 @@ export abstract class MagickComponent<
     return node
   }
 
-  async run(node: NodeData, data = {}) {
+  async run(node: NodeData, data = {}, engine: MagickEngine) {
     if (!node || node === undefined) {
       return console.error('node is undefined')
     }
 
-    const task = this.nodeTaskMap[node?.id]
+    const task = engine.getTask(node?.id)
 
     if (!data || Object.keys(data).length === 0) {
       return console.error('data is undefined')

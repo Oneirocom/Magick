@@ -23,7 +23,7 @@ export const documentExternalResolver = resolve<Document, HookContext>({})
  */
 export const documentDataSchema = Type.Pick(
   documentSchema,
-  ['type', 'projectId', 'content', 'date', 'embedding', 'metadata'],
+  ['type', 'projectId', 'content', 'date', 'embedding', 'metadata', 'files'],
   {
     $id: 'DocumentData',
   }
@@ -59,6 +59,7 @@ export const documentQueryProperties = Type.Pick(documentSchema, [
   'date',
   'embedding',
   'metadata',
+  'files',
 ])
 export const documentQuerySchema = Type.Intersect(
   [

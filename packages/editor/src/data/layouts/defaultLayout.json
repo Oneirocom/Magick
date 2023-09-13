@@ -25,19 +25,6 @@
                 "component": "inspector"
               }
             ]
-          },
-          {
-            "type": "tabset",
-            "id": "#746d3ea2-45b9-4904-933c-85ee787c4014",
-            "weight": 42.630937880633375,
-            "children": [
-              {
-                "type": "tab",
-                "id": "#b5ca119e-6c2f-4ae7-b2c3-42cc2cee3a60",
-                "name": "Project Window",
-                "component": "project"
-              }
-            ]
           }
         ]
       },

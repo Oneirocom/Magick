@@ -4,7 +4,7 @@ import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '@magickml/server-core'
-
+import md5 from 'md5';
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import { Queue } from 'bullmq'
@@ -64,6 +64,26 @@ export class AgentService<
     // return the job id
     return { jobId: job.id }
   }
+
+  async create(
+    data: AgentData | AgentData[] | any
+  ): Promise<Agent | Agent[] | any> {
+
+    // ADDING REST API KEY TO AGENT's DATA
+    if (data.data) {
+      data.data = JSON.stringify({
+        ...JSON.parse(data.data),
+        rest_api_key: md5(Math.random().toString()),
+      })
+    } else {
+      data.data = JSON.stringify({
+        rest_enabled: true,
+        rest_api_key: md5(Math.random().toString()),
+      })
+    }
+
+    return await super.create(data)
+  }
 }
 
 /**
@@ -80,3 +100,4 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     multi: ['remove'],
   }
 }
+

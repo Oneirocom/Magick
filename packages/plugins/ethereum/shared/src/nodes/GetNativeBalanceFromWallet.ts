@@ -1,7 +1,7 @@
-// DOCUMENTED 
-import { isEmpty } from 'lodash';
-import Rete from 'rete';
-import { v4 as uuidv4 } from 'uuid';
+// DOCUMENTED
+import { isEmpty } from 'lodash'
+import Rete from '@magickml/rete'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   anySocket,
@@ -15,72 +15,81 @@ import {
   numberSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core';
+} from '@magickml/core'
 
-const info = `Check the balance of an ethereum wallet`;
+const info = `Check the balance of an ethereum wallet`
 
-type InputReturn = {
-  output: string;
-} | undefined;
+type InputReturn =
+  | {
+      output: string
+    }
+  | undefined
 
 /**
  * A class representing a component to get native balance from wallet in Ethereum.
- * 
+ *
  * @extends MagickComponent
  */
-export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputReturn>> {
+export class GetNativeBalanceFromWallet extends MagickComponent<
+  Promise<InputReturn>
+> {
   constructor() {
     // Name of the component
-    super('Check Eth Balance', {
-      outputs: {
-        output: 'output',
-        trigger: 'option',
+    super(
+      'Check Eth Balance',
+      {
+        outputs: {
+          output: 'output',
+          trigger: 'option',
+        },
       },
-    }, 'Ethereum', info);
-	
+      'Ethereum',
+      info
+    )
+
     this.module = {
       nodeType: 'triggerIn',
       socket: anySocket,
-    };
+    }
 
-    this.contextMenuName = 'Check Eth Balance';
-    this.displayName = 'Check Eth Balance';
+    this.contextMenuName = 'Check Eth Balance'
+    this.displayName = 'Check Eth Balance'
   }
 
   // Log when the component is destroyed
   destroyed(node: MagickNode) {
-    console.log('destroyed', node.id);
+    console.log('destroyed', node.id)
   }
 
   builder(node: MagickNode) {
     // Module components need to have a socket key.
     // ToDo: Add this somewhere automated? Maybe wrap the modules builder in the plugin
-    node.data.socketKey = node?.data?.socketKey || uuidv4();
+    node.data.socketKey = node?.data?.socketKey || uuidv4()
 
     const rpcHttpControl = new InputControl({
       dataKey: 'rpc_http',
       name: 'RPC Endpoint',
-    });
+    })
 
     const chainIdControl = new DropdownControl({
       name: 'Chain',
       dataKey: 'chain_id',
       values: ['1', '11155111', '5', '137', '80001'],
       defaultValue: '80001',
-    });
+    })
 
-    node.inspector.add(rpcHttpControl).add(chainIdControl);
+    node.inspector.add(rpcHttpControl).add(chainIdControl)
 
-    const addressInput = new Rete.Input('address', 'Address', stringSocket);
-    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true);
-    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket);
+    const addressInput = new Rete.Input('address', 'Address', stringSocket)
+    const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const rpcHttpInput = new Rete.Input(
       'rpc_http',
       'RPC HTTP Endpoint',
       stringSocket
-    );
-    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket);
-    const balanceOutput = new Rete.Output('output', 'Output', stringSocket);
+    )
+    const chainIdInput = new Rete.Input('chain_id', 'Chain ID', numberSocket)
+    const balanceOutput = new Rete.Output('output', 'Output', stringSocket)
 
     return node
       .addInput(dataInput)
@@ -88,7 +97,7 @@ export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputRet
       .addInput(rpcHttpInput)
       .addInput(chainIdInput)
       .addOutput(dataOutput)
-      .addOutput(balanceOutput);
+      .addOutput(balanceOutput)
   }
 
   /**
@@ -105,17 +114,17 @@ export class GetNativeBalanceFromWallet extends MagickComponent<Promise<InputRet
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger'];
-    console.log('********* processing input to ethereum input *********');
-    console.log(data);
+    if (node?._task) node._task.closed = ['trigger']
+    console.log('********* processing input to ethereum input *********')
+    console.log(data)
 
     // Handle data subscription. If there is data, this is from playtest
     if (data && !isEmpty(data)) {
-      this._task.closed = [];
+      if (node?._task) node._task.closed = []
 
       return {
         output: data,
-      };
+      }
     }
   }
 }

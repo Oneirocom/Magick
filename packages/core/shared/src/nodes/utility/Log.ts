@@ -2,7 +2,7 @@
 /**
  * Logs a value to the console.
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -44,7 +44,7 @@ export class Log extends MagickComponent<void> {
     const nameControl = new InputControl({
       dataKey: 'name',
       name: 'Log Name',
-      tooltip: 'Enter Log Name'
+      tooltip: 'Enter Log Name',
     })
 
     node.inspector.add(nameControl)

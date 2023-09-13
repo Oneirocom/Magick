@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   Event,
   MagickComponent,
@@ -42,7 +42,7 @@ export class DiscordListTextChannels extends MagickComponent<
           trigger: 'option',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Gets the List of All text channels in a server'
     )
   }
@@ -58,7 +58,11 @@ export class DiscordListTextChannels extends MagickComponent<
     const outp = new Rete.Output('output', 'Array', stringSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
+      .addInput(event)
   }
 
   /**
@@ -77,9 +81,11 @@ export class DiscordListTextChannels extends MagickComponent<
   ): Promise<WorkerReturn> {
     const { agent, data } = context
     if (!agent || !agent?.discord) {
-      console.warn('sending default information since there is no agent available')
+      console.warn(
+        'sending default information since there is no agent available'
+      )
       return {
-        output: "General"
+        output: 'General',
       }
     }
 
@@ -95,10 +101,10 @@ export class DiscordListTextChannels extends MagickComponent<
 
     const channel = event.channel
 
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    const fetchedChannel = await discordClient.channels.fetch(channel)
 
-    const name = fetchedChannel.name;
+    const name = fetchedChannel.name
 
-    return { output: name };
+    return { output: name }
   }
 }

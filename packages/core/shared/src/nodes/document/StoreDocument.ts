@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
@@ -26,9 +26,11 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Documents',
+      'Storage/Documents',
       'Store Documents in the Documents store. Stores the content, embedding, and date from the inputs as well as an optional Type property.'
     )
+
+    this.common = true
   }
 
   /**
@@ -41,7 +43,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       dataKey: 'name',
       name: 'Input name',
       placeholder: 'Conversation',
-      tooltip: 'Enter input name'
+      tooltip: 'Enter input name',
     })
 
     const type = new InputControl({
@@ -49,7 +51,7 @@ export class StoreDocument extends MagickComponent<Promise<void>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-      tooltip: 'Enter input type'
+      tooltip: 'Enter input type',
     })
 
     const contentInput = new Rete.Input('content', 'Content', stringSocket)

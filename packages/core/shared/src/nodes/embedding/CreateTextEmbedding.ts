@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
@@ -38,9 +38,11 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
           embedding: 'output',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       info
     )
+
+    this.common = true
   }
 
   /**
@@ -63,7 +65,7 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'model',
       values: models,
       defaultValue: models[0],
-      tooltip: 'Choose the model name'
+      tooltip: 'Choose the model name',
     })
 
     node.inspector.add(modelName)

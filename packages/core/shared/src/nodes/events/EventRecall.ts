@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import {
@@ -35,12 +35,12 @@ enum FilterTypes {
   AllInChannel = 'All In Channel',
   AllFromSender = 'All From Sender (No DMs)',
   AllFromConnector = 'All From Connector',
-  All = 'All'
+  All = 'All',
 }
 
 enum RecallModes {
   MostRecent = 'Most Recent',
-  MostRevelant = 'Most Relevant (Use Embedding)'
+  MostRevelant = 'Most Relevant (Use Embedding)',
 }
 
 /**
@@ -56,9 +56,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
+
+    this.common = true
   }
 
   /**
@@ -77,7 +79,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'name',
       name: 'Name',
       placeholder: 'Event Recall',
-      tooltip: "Event input name"
+      tooltip: 'Event input name',
     })
 
     const type = new InputControl({
@@ -85,7 +87,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       name: 'Type',
       icon: 'moon',
       placeholder: 'conversation',
-      tooltip: "Event input type"
+      tooltip: 'Event input type',
     })
 
     const max_count = new InputControl({
@@ -93,7 +95,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       name: 'Max Count',
       icon: 'moon',
       defaultValue: '6',
-      tooltip: "Event max count value"
+      tooltip: 'Event max count value',
     })
 
     // FilterTypes is an enum, so we can use Object.values to get the values
@@ -105,7 +107,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'mode',
       values: recallModes,
       defaultValue: recallModes[0],
-      tooltip: "Choose Event Mode name"
+      tooltip: 'Choose Event Mode name',
     })
 
     const filterBy = new DropdownControl({
@@ -113,24 +115,26 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       dataKey: 'filterBy',
       values: filterTypes,
       defaultValue: filterTypes[0],
-      tooltip: "Filter Event type name"
+      tooltip: 'Filter Event type name',
     })
 
     const lastMode = node.data.mode
-    
-    if(node.data.mode === RecallModes.MostRevelant || !node.data.mode) {
+
+    if (node.data.mode === RecallModes.MostRevelant || !node.data.mode) {
       node.addInput(new Rete.Input('embedding', 'Embedding', embeddingSocket))
     }
 
     // based on mode data we can show/hide the embedding input
-    mode.onData = (value) => {
+    mode.onData = value => {
       if (value === RecallModes.MostRevelant) {
-        if(lastMode === RecallModes.MostRevelant) {
-          return;
+        if (lastMode === RecallModes.MostRevelant) {
+          return
         }
         // if the input is not already added, add it
         if (!node.inputs.has('embedding')) {
-          node.addInput(new Rete.Input('embedding', 'Embedding', embeddingSocket))
+          node.addInput(
+            new Rete.Input('embedding', 'Embedding', embeddingSocket)
+          )
         }
       } else {
         // if the input is already added, remove it
@@ -139,8 +143,13 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
         }
       }
     }
-    
-    node.inspector.add(nameInput).add(type).add(max_count).add(filterBy).add(mode)
+
+    node.inspector
+      .add(nameInput)
+      .add(type)
+      .add(max_count)
+      .add(filterBy)
+      .add(mode)
 
     return node
       .addInput(dataInput)
@@ -173,7 +182,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       return events
     }
     const typeSocket = inputs['type'] && inputs['type'][0]
-    
+
     const event = (inputs['event'] &&
       (inputs['event'][0] || inputs['event'])) as Event
     let embedding = (inputs['embedding'] ? inputs['embedding'][0] : null) as
@@ -186,14 +195,8 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       embedding = (embedding as string)?.split(',')
     }
 
-    const {
-      client,
-      channel,
-      connector,
-      channelType,
-      projectId,
-      entities,
-    } = event
+    const { client, channel, connector, channelType, projectId, entities } =
+      event
 
     const typeData = (node.data as { type: string })?.type
     const type =

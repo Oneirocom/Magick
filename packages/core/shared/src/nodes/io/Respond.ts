@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { MagickComponent } from '../../engine'
@@ -33,7 +33,7 @@ export class Respond extends MagickComponent<void> {
           trigger: 'option',
         },
       },
-      'I/O',
+      'IO',
       info
     )
   }
