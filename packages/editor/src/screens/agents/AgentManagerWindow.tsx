@@ -27,7 +27,7 @@ const AgentManagerWindow = () => {
   const [enable, setEnable] = useState({})
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const { setAgentUpdate } = useTreeData()
+  const { setAgentUpdate,agentUpdate } = useTreeData()
 
 
   /**
@@ -35,7 +35,6 @@ const AgentManagerWindow = () => {
    */
   const resetData = async () => {
     setIsLoading(true)
-    setAgentUpdate(false)
     const res = await fetch(
       `${config.apiUrl}/agents?projectId=${config.projectId}`,
       {
@@ -47,7 +46,6 @@ const AgentManagerWindow = () => {
     const json = await res.json()
     setData(json.data)
     setIsLoading(false)
-    setAgentUpdate(true)
     if (!json.data || !json.data[0]) return
     const spellAgent = json.data[0]?.rootSpell ?? {}
     const inputs = (pluginManager as ClientPluginManager).getInputByName()
@@ -158,6 +156,7 @@ const AgentManagerWindow = () => {
    * @param {any} _data The new data to update the agent.
    */
   const update = (id: string, _data: any) => {
+    setAgentUpdate(false)
     fetch(`${config.apiUrl}/agents/${id}`, {
       method: 'PATCH',
       headers: {
@@ -179,6 +178,7 @@ const AgentManagerWindow = () => {
           enqueueSnackbar('Updated agent', {
             variant: 'success',
           })
+          setAgentUpdate(true)
           resetData()
         }
       })
@@ -195,6 +195,7 @@ const AgentManagerWindow = () => {
    * @param {string} id The agent ID to delete.
    */
   const handleDelete = (id: string) => {
+    setAgentUpdate(false)
     fetch(`${config.apiUrl}/agents/` + id, {
       method: 'DELETE',
       headers: STANDALONE
@@ -214,6 +215,7 @@ const AgentManagerWindow = () => {
         })
         // }
         if (selectedAgentData.id === id) setSelectedAgentData(undefined)
+        setAgentUpdate(true)
         resetData()
       })
       .catch(e => {
@@ -263,6 +265,12 @@ const AgentManagerWindow = () => {
       setEnable(plugin_list)
     })()
   }, [])
+  
+  useEffect(() => {
+    if (agentUpdate) {
+      resetData()
+    }
+  }, [agentUpdate])
 
   // Render the component.
   return isLoading ? (
