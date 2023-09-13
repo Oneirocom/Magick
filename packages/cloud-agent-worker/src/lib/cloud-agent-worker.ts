@@ -20,6 +20,7 @@ export class CloudAgentWorker extends AgentManager {
   constructor() {
     super(app, false)
 
+
     this.pubSub = app.get('pubsub')
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
@@ -73,7 +74,7 @@ export class CloudAgentWorker extends AgentManager {
 
     const agentQueue = new BullQueue()
     agentQueue.initialize(AGENT_RUN_JOB(agent.id))
-    this.listenForRun(agentQueue, agent.id)
+    this.listenForRun(agent.id)
     this.listenForChanges(agentId)
 
 
@@ -134,17 +135,21 @@ export class CloudAgentWorker extends AgentManager {
     }
   }
 
-  async listenForRun(agentQueue: MessageQueue, agentId: string) {
+  async listenForRun(agentId: string) {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
     this.pubSub.subscribe(AGENT_RUN_JOB(agentId),
       async (data: AgentRunJob) => {
-          this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
-          try {
-            await agentQueue.addJob(AGENT_RUN_JOB(agentId), {
-              ...data,
-              agentId: data.agentId,
-            }, data.jobId)
+        this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
+        try {
+          const agent = this.currentAgents[agentId]
+
+          if (!agent) {
+            this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
+            throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
+          }
+
+          agent?.runWorker({ data: { ...data, agentId } })
         } catch (e) {
             this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
             throw e
