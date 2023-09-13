@@ -31,5 +31,19 @@ export async function down(knex: Knex): Promise<void> {
     table.specificType('embedding', 'vector(1536)')
   })
 
+  await knex.from('documents').update({
+    content: knex('embeddings')
+      .select('content')
+      .where('documentId', knex.raw('??', ['documents.id']))
+      .limit(1)
+  })
+
+  await knex.from('documents').update({
+    embedding: knex('embeddings')
+      .select('embedding')
+      .where('documentId', knex.raw('??', ['documents.id']))
+      .limit(1)
+  })
+
   await knex.schema.dropTable('embeddings')
 }
