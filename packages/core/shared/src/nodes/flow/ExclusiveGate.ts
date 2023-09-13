@@ -33,6 +33,8 @@ export class ExclusiveGate extends MagickComponent<void> {
       'Flow',
       info
     )
+
+    this.common = true
   }
 
   /**

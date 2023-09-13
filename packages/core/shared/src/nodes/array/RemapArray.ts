@@ -29,7 +29,7 @@ export class RemapArray extends MagickComponent<Promise<WorkerReturn>> {
     super(
       'Remap Array',
       { outputs: { output: 'output', trigger: 'option' } },
-      'Array',
+      'Data/Arrays',
       info
     )
   }

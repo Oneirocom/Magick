@@ -20,7 +20,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
   }

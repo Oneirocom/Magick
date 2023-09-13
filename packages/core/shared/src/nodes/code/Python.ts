@@ -50,7 +50,7 @@ export class Python extends MagickComponent<unknown> {
           trigger: 'option',
         },
       },
-      'Code',
+      'Invoke/Languages',
       info
     )
     // this.runFromCache = true;

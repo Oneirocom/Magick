@@ -19,7 +19,7 @@ export class InRange extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Number',
+      'Flow',
       info
     )
   }

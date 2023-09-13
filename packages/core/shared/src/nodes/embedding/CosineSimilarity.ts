@@ -31,7 +31,7 @@ export class CosineSimilarity extends MagickComponent<
           trigger: 'option',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       'Takes two embedding inputs and returns the cosine similarity between them.'
     )
   }

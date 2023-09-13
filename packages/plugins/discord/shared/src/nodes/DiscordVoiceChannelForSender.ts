@@ -42,7 +42,7 @@ export class DiscordVoiceChannelForSender extends MagickComponent<
           trigger: 'option',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Gets the current voice channel of the message sender'
     )
   }

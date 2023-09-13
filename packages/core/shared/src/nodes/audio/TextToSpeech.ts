@@ -37,7 +37,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Audio',
+      'AI/Audio',
       info
     )
   }
