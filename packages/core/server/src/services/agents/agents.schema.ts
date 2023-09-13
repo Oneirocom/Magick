@@ -43,6 +43,7 @@ export const agentDataSchema = Type.Pick(
     'publicVariables',
     'secrets',
     'rootSpellId',
+    'default',
   ],
   { $id: 'AgentData' }
 )
@@ -119,6 +120,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'secrets',
   'image',
   'rootSpellId',
+  'default',
 ])
 
 /**
