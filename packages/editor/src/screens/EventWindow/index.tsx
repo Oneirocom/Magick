@@ -39,11 +39,11 @@ const EventWindow = (): JSX.Element => {
 
   function reverseRows(arr) {
     
-    let len = arr.length
+    const len = arr.length
    
     for (let i = 0; i < len / 2; i++) {
       
-      let temp = {}
+      const temp = {}
       Object.assign(temp, arr[i])
       Object.assign(arr[i], arr[len - i - 1])
       Object.assign(arr[len - i - 1], temp)
