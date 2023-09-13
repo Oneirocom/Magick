@@ -3,21 +3,23 @@ import { Knex } from 'knex'
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('embeddings', (table) => {
     table.increments('id').primary()
-    table.string('documentId').notNullable()
-    table.text('content').notNullable()
+    table.text('documentId')
+    table.text('content')
     table.specificType('embedding', 'vector(1536)')
     table.integer('index')
   })
 
   await knex
+    .from(knex.raw('?? (??, ??, ??, ??)', ['embeddings', 'documentId', 'content', 'embedding', 'index']))
     .insert(
       knex
         .select(
-          knex.raw(`content, embedding, COALESCE(metadata->>'elementNumber', 0) as index, id as documentId`)
+          knex.raw(
+            `id as documentId, content, embedding, COALESCE(CAST(metadata->>'elementNumber' AS INTEGER), 0) as index`
+          )
         )
         .from('documents')
     )
-    .into('embeddings')
 
   await knex.schema.alterTable('documents', (table) => {
     table.dropColumn('content')
