@@ -4,6 +4,7 @@ import { NodeData } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
+import { getLogger } from '@magickml/core'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
@@ -177,6 +178,7 @@ export abstract class MagickComponent<
   workspaceType: 'spell' | null | undefined
   displayName: string | undefined
   engine: MagickEngine | null = null
+  logger = getLogger()
 
   constructor(name: string, task: TaskOptions, category: string, info: string) {
     super(name)
