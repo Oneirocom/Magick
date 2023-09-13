@@ -232,7 +232,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const [data, setData] = useState([])
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const { treeData, setTreeData} = useTreeData()
+  const { treeData, setTreeData,
+    setAgentUpdate} = useTreeData()
   const handleDrop = (newTree: NodeModel[]) => {
     setTreeData(newTree)
   }
@@ -251,6 +252,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
     updatedAt?: string
     publicVariables: string
     secrets: string
+    default: boolean
   }) => {
     if (!token && PRODUCTION) {
       return
@@ -296,6 +298,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
     )
     const json = await res.json()
     setData(json.data)
+    setAgentUpdate(true)
   }
 
   useEffect(() => {
@@ -332,6 +335,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
           enabled: false,
           publicVariables: '{}',
           secrets: '{}',
+          default: true,
         })
         setData(json.data)
       } else {
