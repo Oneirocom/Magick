@@ -72,18 +72,22 @@ export const Select = ({
       boxShadow: '0px 5px 5px rgba(0,0,0,0.3)',
       border: '1px solid var(--dark-3)',
     }),
-    menuPortal: () => ({
+    menuPortal: base => ({
+      ...base,
+      zIndex: 9999,
       height: 'var(--c2)',
     }),
     clearIndicator: () => ({
-      backgroundColor: 'var(--primary)',
+      backgroundColor: 'var(--dark-3)',
     }),
     option: (provided, state) => ({
+      ...provided,
+      color: '#fff',  // explicitly setting the color to white
       appearance: 'none',
       padding: 'var(--extraSmall)',
       paddingLeft: nested ? 'var(--large)' : 'var(--small)',
       paddingRight: 'var(--small)',
-      backgroundColor: state.isFocused ? 'var(--primary)' : 'transparent',
+      backgroundColor: state.isFocused ? 'var(--dark-3)' : 'transparent',
       fontFamily: 'IBM Plex Mono',
     }),
     input: () => ({
@@ -144,7 +148,8 @@ export const Select = ({
           {creatable && (
             <Creatable
               isClearable
-              maxMenuHeight={150}
+              menuPortalTarget={document.body}
+              maxMenuHeight={500}
               options={options}
               onChange={onChange}
               styles={styles}
@@ -159,7 +164,8 @@ export const Select = ({
           )}
           {!creatable && (
             <ReactSelect
-              maxMenuHeight={150}
+              menuPortalTarget={document.body}
+              maxMenuHeight={500}
               options={options}
               onChange={onChange}
               styles={styles}

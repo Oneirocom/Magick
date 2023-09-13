@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { isEmpty } from 'lodash'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
@@ -12,7 +12,6 @@ import { anySocket, triggerSocket } from '../../sockets'
 import {
   CompletionSocket,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
@@ -28,8 +27,6 @@ type InputReturn = {
  * InputComponent is a MagickComponent that handles user input
  */
 export class InputComponent extends MagickComponent<InputReturn> {
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   constructor() {
     // Name of the component
     super(
@@ -40,15 +37,16 @@ export class InputComponent extends MagickComponent<InputReturn> {
           trigger: 'option',
         },
       },
-      'I/O',
-      info,
-    
+      'IO',
+      info
     )
 
     this.module = {
       nodeType: 'input',
       socket: anySocket,
     }
+
+    this.common = true
 
     this.contextMenuName = 'Input'
     this.displayName = 'Input'
@@ -255,21 +253,29 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node: WorkerData,
     _inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
-    { data }: { data: string | undefined }
+    { data }: { data: Record<string, unknown> }
   ) {
     node.data.isInput = true
     // handle data subscription.  If there is data, this is from playtest
-    if (data && !isEmpty(data)) {
-      this._task.closed = []
+    if (data && !isEmpty(data) && node.data.name) {
+      if (node?._task) node._task.closed = []
 
-      const output = Object.values(data)[0] as string
+      let output = data[node.data.name]
+      if (output === undefined && node.data.name === "Input - Default") {
+        output = Object.values(data)[0]
+      }
+
+      if (!output) {
+        this.logger.error('No input recieved in input node for ' + node.data.name)
+        throw new Error("No input recieved")
+      }
 
       return {
         output,
       }
     }
 
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     if (Object.values(outputs.output).length > 0) {
       return { output: Object.values(outputs)[0] }

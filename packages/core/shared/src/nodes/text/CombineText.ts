@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
@@ -31,7 +31,7 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }
@@ -49,14 +49,14 @@ export class CombineText extends MagickComponent<Promise<WorkerReturn>> {
       connectionType: 'input',
       name: 'Input Sockets',
       ignored: ['trigger'],
-      tooltip: 'Add your socket input'
+      tooltip: 'Add your socket input',
     })
 
     const delimiter = new InputControl({
       dataKey: 'delimiter',
       name: 'Delimiter',
       icon: 'moon',
-      tooltip: 'Enter Delimiter'
+      tooltip: 'Enter Delimiter',
     })
 
     node.addInput(dataInput).addOutput(dataOutput).addOutput(outp)

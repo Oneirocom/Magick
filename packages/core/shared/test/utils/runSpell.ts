@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { GraphData, SpellInterface } from '../../src/types'
 import { SpellRunner } from '../../src/spellManager'
+import { app } from '@magickml/server-core'
 
 /**
  * Type definition for arguments passed to the runSpell function.
@@ -38,7 +39,9 @@ export const runSpell = async ({
   await spellRunner.loadSpell(spell)
 
   // Get the outputs from running the spell
+  // @ts-ignore
   const outputs = await app.get('agentCommander').runSpellWithResponse({
+    // TODO fix this.  We need to pass an agent into runspell for it to work
     inputs: formattedInputs,
   })
 

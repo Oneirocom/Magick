@@ -1,14 +1,12 @@
-import { Connection, Input, Output } from 'rete';
+import { Connection, Input, Output } from '@magickml/rete'
 
-declare module 'rete/types/events' {
-    interface EventsTypes {
-        connectionpath: {
-            points: number[],
-            connection: Connection,
-            d: string
-        },
-        connectiondrop: Input | Output
-        connectionpick: Input | Output
-        resetconnection: void
-    }
+export interface EventsTypes {
+  connectionpath: {
+    points: number[]
+    connection: Connection
+    d: string
+  }
+  connectiondrop: Input | Output
+  connectionpick: Input | Output
+  resetconnection: void
 }

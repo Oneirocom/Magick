@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { embeddingSocket, triggerSocket } from '../../sockets'
@@ -31,7 +31,7 @@ export class ExtractRelationship extends MagickComponent<Promise<InputReturn>> {
           embedding: 'output',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       info
     )
   }
@@ -91,39 +91,45 @@ export class ExtractRelationship extends MagickComponent<Promise<InputReturn>> {
     context?: any
   ): Promise<InputReturn> {
     // Parsing JSON if inputs are strings
-    const combinedEmbedding = typeof inputs['combinedEmbedding'][0] === 'string' ? JSON.parse(inputs['combinedEmbedding'][0]) : inputs['combinedEmbedding'][0];
-    const embedding1 = typeof inputs['embedding1'][0] === 'string' ? JSON.parse(inputs['embedding1'][0]) : inputs['embedding1'][0];
-    const embedding2 = typeof inputs['embedding2'][0] === 'string' ? JSON.parse(inputs['embedding2'][0]) : inputs['embedding2'][0];
-  
+    const combinedEmbedding =
+      typeof inputs['combinedEmbedding'][0] === 'string'
+        ? JSON.parse(inputs['combinedEmbedding'][0])
+        : inputs['combinedEmbedding'][0]
+    const embedding1 =
+      typeof inputs['embedding1'][0] === 'string'
+        ? JSON.parse(inputs['embedding1'][0])
+        : inputs['embedding1'][0]
+    const embedding2 =
+      typeof inputs['embedding2'][0] === 'string'
+        ? JSON.parse(inputs['embedding2'][0])
+        : inputs['embedding2'][0]
+
     function relationExtractionByCombinedVectorSubtraction(
       combined,
       emb1,
       emb2
     ) {
       // Ensure the embeddings have the same dimensions
-      if (
-        combined.length !== emb1.length ||
-        combined.length !== emb2.length
-      ) {
+      if (combined.length !== emb1.length || combined.length !== emb2.length) {
         throw new Error('Embeddings must have the same dimensions.')
       }
-  
+
       // Perform vector subtraction
       const relationshipEmbedding = combined.map(
         (value, index) => value - (emb1[index] + emb2[index])
       )
-  
+
       return relationshipEmbedding
     }
-  
+
     const embedding = relationExtractionByCombinedVectorSubtraction(
       combinedEmbedding,
       embedding1,
       embedding2
     )
-    
+
     return {
       embedding,
     }
-  }  
+  }
 }

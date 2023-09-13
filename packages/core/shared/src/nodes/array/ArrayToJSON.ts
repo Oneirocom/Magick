@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { arraySocket, stringSocket, triggerSocket } from '../../sockets'
@@ -28,7 +28,7 @@ export class ArrayToJSON extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Array',
+      'Data/Arrays',
       info
     )
   }

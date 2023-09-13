@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'
@@ -27,7 +27,7 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option', output: 'output' },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }
@@ -60,10 +60,10 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       dataKey: 'operationType',
       values: operationTypes,
       defaultValue: operationTypes[0],
-      tooltip: 'Choose operation type'
+      tooltip: 'Choose operation type',
     })
 
-    const fewshotControl = new FewshotControl({tooltip: 'Open fewshot'})
+    const fewshotControl = new FewshotControl({ tooltip: 'Open fewshot' })
 
     node.inspector.add(fewshotControl).add(operationType)
 
@@ -127,6 +127,6 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
         break
     }
 
-    this._task.closed = is ? ['false'] : ['true']
+    if (node?._task) node._task.closed = is ? ['false'] : ['true']
   }
 }

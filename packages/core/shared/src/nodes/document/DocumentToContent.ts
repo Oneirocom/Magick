@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { documentSocket, stringSocket, triggerSocket } from '../../sockets'
@@ -27,9 +27,10 @@ export class DocumentToContent extends MagickComponent<WorkerReturn> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
+    this.common = true
   }
 
   /**

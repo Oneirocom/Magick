@@ -3,7 +3,7 @@
  * Computes the cosine similarity between two embeddings.
  */
 import similarity from 'compute-cosine-similarity'
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { embeddingSocket, numberSocket, triggerSocket } from '../../sockets'
 import {
@@ -31,7 +31,7 @@ export class CosineSimilarity extends MagickComponent<
           trigger: 'option',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       'Takes two embedding inputs and returns the cosine similarity between them.'
     )
   }

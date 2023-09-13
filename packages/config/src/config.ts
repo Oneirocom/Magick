@@ -31,9 +31,7 @@ export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
   getVarForEnvironment('PROJECT_ID') || 'bb1b3d24-84e0-424e-b4f1-57603f307a89'
 export const DEFAULT_USER_ID = getVarForEnvironment('USER_ID') || '1234567890'
-export const DEFAULT_USER_TOKEN =
-  getVarForEnvironment('DUMMY_TOKEN') ||
-  'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..SUWUnYMxRTxIgGD1.lCzhMnTVeWOBFBzDs4_ft6UCZIVhfk9VSw18-SNzSJjXB4yqwi7z3XJEO9FwbSybFkAjSoFHwYnizYhDsrouDn1xLS7Dqzwnn4I-V1-L0mXcmKXRAS8D1PQzR88CDsk-LIqkcZkkxQ8aoGmyVcKwAmlnAdYpPUEbJ7E3DEBCvA4UbY1iqdYmCWdD7NWeR_IDsWFMKP3jEqp3HPMJbbTitCb1_W-G0gnZ6cokK_JH9tpgbjAoWe0KRQB2Dr3B22-1qa9cPV8W13she2q_RR6SeTAM9iqwzufvuIu2b3Lu0fypQpcV4JyrwCawkZcjsdGQqateftfAQNYzUeSXVzZdWSZJOwHtDHpIMKh_SugqS3ASNrN2gqUEwvY2SOe60h__2ljLsSc.9qWEv3VNEKFpc6zmJv4n0A'
+export const DEFAULT_USER_TOKEN = getVarForEnvironment('DUMMY_TOKEN') || 'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..SUWUnYMxRTxIgGD1.lCzhMnTVeWOBFBzDs4_ft6UCZIVhfk9VSw18-SNzSJjXB4yqwi7z3XJEO9FwbSybFkAjSoFHwYnizYhDsrouDn1xLS7Dqzwnn4I-V1-L0mXcmKXRAS8D1PQzR88CDsk-LIqkcZkkxQ8aoGmyVcKwAmlnAdYpPUEbJ7E3DEBCvA4UbY1iqdYmCWdD7NWeR_IDsWFMKP3jEqp3HPMJbbTitCb1_W-G0gnZ6cokK_JH9tpgbjAoWe0KRQB2Dr3B22-1qa9cPV8W13she2q_RR6SeTAM9iqwzufvuIu2b3Lu0fypQpcV4JyrwCawkZcjsdGQqateftfAQNYzUeSXVzZdWSZJOwHtDHpIMKh_SugqS3ASNrN2gqUEwvY2SOe60h__2ljLsSc.9qWEv3VNEKFpc6zmJv4n0A'
 export const STANDALONE = getVarForEnvironment('STANDALONE') === 'true' || false
 export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
 export const DEFAULT_OPENAI_KEY = getVarForEnvironment('DEFAULT_OPENAI_KEY')
@@ -108,4 +106,19 @@ export const OPENMETER_ENDPOINT =
 export const OPENMETER_ENABLED =
   getVarForEnvironment('OPENMETER_ENABLED') === 'true'
 
-export const AGENT_RESPONSE_TIMEOUT_MSEC = Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
+export const AGENT_RESPONSE_TIMEOUT_MSEC =
+  Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
+
+// S3 storage
+export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
+export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
+export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
+export const AWS_BUCKET_NAME = getVarForEnvironment('AWS_BUCKET_NAME') || ''
+export const AWS_BUCKET_ENDPOINT =
+  getVarForEnvironment('AWS_BUCKET_ENDPOINT') || ''
+
+// Feature flags
+export const FEATURE_FLAGS = {
+  // Enable the new editor
+  SHOW_SIDEBAR: getVarForEnvironment('SHOW_SIDEBAR') === 'true' || false,
+}

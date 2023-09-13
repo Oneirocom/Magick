@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'
@@ -21,7 +21,7 @@ export class IsVariableTrue extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Boolean',
+      'Flow',
       'Takes an input and triggers one of two output triggers based on the truthiness of the input. Boolean is checked as true or false, strings are checked as "true", numbers are checked as 0 or 1+, and undefined or null are checked as false'
     )
   }
@@ -49,7 +49,7 @@ export class IsVariableTrue extends MagickComponent<void> {
    * @param _node - The worker node.
    * @param inputs - The inputs of the worker node.
    */
-  async worker(_node: WorkerData, inputs: MagickWorkerInputs) {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs) {
     const action = inputs['input'][0]
     const type = typeof action
     let is = false
@@ -62,6 +62,6 @@ export class IsVariableTrue extends MagickComponent<void> {
       is = action === 1
     }
 
-    this._task.closed = is ? ['false'] : ['true']
+    if (node?._task) node._task.closed = is ? ['false'] : ['true']
   }
 }

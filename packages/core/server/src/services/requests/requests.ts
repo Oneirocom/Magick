@@ -4,7 +4,6 @@
  * @see https://dove.feathersjs.com/guides/cli/service.html
  */
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { Params } from '@feathersjs/feathers'
 import {
   requestDataValidator,
   requestPatchValidator,
@@ -17,7 +16,7 @@ import {
 } from './requests.schema'
 
 import type { Application } from '../../declarations'
-import { RequestService, getOptions } from './requests.class'
+import { AnalyticsParams, RequestService, getOptions } from './requests.class'
 
 // Exporting all functions and classes to be used by other modules
 export * from './requests.class'
@@ -79,7 +78,7 @@ export const request = (app: Application): void => {
 }
 
 export const getAgentAnalytics = () => {
-  return async (param: Params) => await RequestService.analytics(param)
+  return async (param: AnalyticsParams) => await RequestService.analytics(param)
 }
 
 // Add this service to the service type index

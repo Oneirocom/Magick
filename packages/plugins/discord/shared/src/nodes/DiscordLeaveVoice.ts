@@ -3,7 +3,7 @@
  * A simple rete component that is paired with AgentExectuor to Leave the voice channel when triggered
  * @category Discord
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   MagickComponent,
   stringSocket,
@@ -30,7 +30,7 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Leaves the vc of the user who triggered the command'
     )
   }
@@ -49,13 +49,13 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
   }
 
   /**
-     * The worker function for the Discord List Voice Channels node.
-     * @param node - WorkerData object
-     * @param inputs - MagicWorkerInputs object
-     * @param _outputs - MagicWorkerOutputs object
-     * @param context - Module and EditorContext instances
-     * @returns output data
-     */
+   * The worker function for the Discord List Voice Channels node.
+   * @param node - WorkerData object
+   * @param inputs - MagicWorkerInputs object
+   * @param _outputs - MagicWorkerOutputs object
+   * @param context - Module and EditorContext instances
+   * @returns output data
+   */
   async worker(
     node: WorkerData,
     inputs: MagickWorkerInputs,
@@ -65,7 +65,7 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
     const { agent } = context
     if (!agent || !agent?.discord) {
       console.warn('Skipping node since there is no agent available')
-      return;
+      return
     }
 
     const channel = inputs.channel?.[0] as any
@@ -74,7 +74,7 @@ export class DiscordLeaveVoice extends MagickComponent<Promise<void>> {
     const discordClient = agent.discord.client
 
     // fetch the channel using its ID
-    const fetchedChannel = await discordClient.channels.fetch(channel);
+    const fetchedChannel = await discordClient.channels.fetch(channel)
 
     if (!fetchedChannel) {
       throw new Error('Channel not found')

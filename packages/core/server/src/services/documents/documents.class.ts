@@ -5,6 +5,7 @@
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
+import { FormData, File } from 'formdata-node'
 
 import { app } from '../../app'
 import type { Application } from '../../declarations'
@@ -13,6 +14,9 @@ import type {
   DocumentPatch,
   DocumentQuery,
 } from './documents.schema'
+import fs from 'fs'
+import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
@@ -36,22 +40,39 @@ export class DocumentService<
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
     const docdb = app.get('docdb')
-    if (data.hasOwnProperty('secrets')) {
-      const { secrets, modelName, ...docData } = data as DocumentData & {
-        secrets: string
-        modelName: string
-      }
-
-      docdb.fromString(docData.content, docData, {
-        modelName,
-        projectId: docData?.projectId,
-        secrets,
-      })
-
-      return docData
+    const { modelName, secrets, files, ...docData } = data as DocumentData & {
+      modelName: string
+      secrets: string
     }
-    await docdb.from('documents').insert(data)
-    return data
+
+    let elements = [] as any[]
+    if (docData.content) {
+      elements = [
+        ...elements,
+        ...(await getUnstructuredData(
+          [{ text: docData.content, originalFilename: 'text.txt' }],
+          docData
+        )),
+      ]
+    }
+    if (files && files.length > 0) {
+      elements = [...elements, ...(await getUnstructuredData(files, docData))]
+    }
+
+    for (const element of elements) {
+      if (!element.content) continue
+      if (data.hasOwnProperty('secrets')) {
+        await docdb.fromString(element.content, element, {
+          modelName,
+          projectId: element.projectId,
+          secrets,
+        })
+      } else {
+        await docdb.from('documents').insert(element)
+      }
+    }
+
+    return docData
   }
 
   /**
@@ -59,7 +80,7 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: string, params): Promise<any> {
+  async remove(id: any, params): Promise<any> {
     const db = app.get('dbClient')
 
     if (!id && params.projectId) {
@@ -77,8 +98,14 @@ export class DocumentService<
    */
   async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
-    if (params.query.embedding || params.query.metadata) {
+    if (
+      (params && params?.query?.embedding) ||
+      (params && params?.query?.metadata)
+    ) {
       const param = params.query
+
+      console.log('param!!!!!!!', param)
+
       const querys = await db('documents')
         .select('*')
         .where({
@@ -96,7 +123,7 @@ export class DocumentService<
               .select(
                 db.raw(
                   `(embedding <=> '${JSON.stringify(
-                    params.query.embedding
+                    param.embedding
                   )}') AS distance`
                 )
               )
@@ -116,7 +143,12 @@ export class DocumentService<
       return { data: querys }
     }
 
-    const param = params.query
+    const param = params?.query
+
+    if (!param) {
+      return await db('documents').select('*').limit(100)
+    }
+
     const querys = await db('documents')
       .select('*')
       .where({
@@ -153,5 +185,81 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     Model: app.get('dbClient'),
     name: 'documents',
     multi: ['remove'],
+  }
+}
+
+const getUnstructuredData = async (files, docData) => {
+  const headers = {
+    accept: 'application/json',
+    'unstructured-api-key': process.env['UNSTRUCTURED_KEY'],
+  }
+
+  const form = new FormData()
+  form.append('strategy', 'auto')
+  for (const file of files as {
+    filepath?: string
+    originalFilename: string
+    text?: string
+  }[]) {
+    // let mimeType = mime.lookup(file.originalFilename)
+    // mimeType = mimeType ? mimeType : 'application/json'
+    if (file.filepath) {
+      const readFile = fs.readFileSync(file.filepath) //TODO: make this more performant
+      form.append(
+        'files',
+        new File([readFile], file.originalFilename),
+        file.originalFilename
+      )
+    } else if (file.text) {
+      form.append(
+        'files',
+        new File([file.text], file.originalFilename),
+        file.originalFilename
+      )
+    }
+  }
+
+  const unstructured = await axios.post(
+    process.env['UNSTRUCTURED_ENDPOINT'] as string,
+    form,
+    {
+      headers: headers,
+    }
+  )
+
+  if (unstructured.data.error) {
+    console.error('Unstructured.io Error', unstructured.data.error)
+  }
+
+  //iterate and format for document insert (api returns either an array or an array of arrays)
+  const elements = [] as any[]
+  for (const i in unstructured.data) {
+    // check for empty array
+    if (!unstructured.data[i] && unstructured.data[i] < 0) continue
+    if (unstructured.data[i] instanceof Array) {
+      for (const j in unstructured.data[i]) {
+        // check for undefined
+        if (!unstructured.data[i][j]) continue
+        elements.push(createElement(unstructured.data[i][j], docData, j))
+      }
+    } else {
+      elements.push(createElement(unstructured.data[i], docData, i))
+    }
+  }
+
+  return elements
+}
+
+const createElement = (element, docData, elementNumber) => {
+  return {
+    ...docData,
+    id: uuidv4(),
+    content: element.text,
+    metadata: {
+      elementNumber: elementNumber,
+      fileName: element.metadata.filename,
+      pageNumber: element.metadata.page_number,
+      type: element.type,
+    },
   }
 }

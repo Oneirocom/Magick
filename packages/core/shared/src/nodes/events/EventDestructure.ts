@@ -1,10 +1,8 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { NodeData } from 'rete/types/core/data'
 import { MagickComponent } from '../../engine'
-import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
   embeddingSocket,
@@ -15,7 +13,6 @@ import {
 import {
   Event,
   MagickNode,
-  MagickTask,
   MagickWorkerInputs,
   MagickWorkerOutputs,
   WorkerData,
@@ -32,8 +29,6 @@ const info = `Takes an event input and splits it up into its individual componen
  * Class to destructure an event object
  */
 export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   /**
    * EventDestructureComponent constructor
    */
@@ -56,13 +51,12 @@ export class EventDestructureComponent extends MagickComponent<Promise<Event>> {
           projectId: 'output',
           sender: 'output',
         },
-        init: (task = {} as Task, node: NodeData) => {
-          this.nodeTaskMap[node.id] = task
-        },
       },
-      'Event',
+      'Storage/Events',
       info
     )
+
+    this.common = true
   }
 
   /**

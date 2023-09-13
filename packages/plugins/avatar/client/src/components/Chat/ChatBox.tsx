@@ -74,7 +74,7 @@ export default function ChatBox() {
 
   const { client } = useFeathers()
 
-  const [currentAgent, setCurrentAgent] = useState(null)
+  const [currentAgent, setCurrentAgent] = useState<any>(null)
 
   useEffect(() => {
     if (currentAgent) return
@@ -102,7 +102,7 @@ export default function ChatBox() {
 
   const [input, setInput] = React.useState('')
 
-  const [messages, setMessages] = React.useState([])
+  const [messages, setMessages] = React.useState<any[]>([])
   const handleChange = async event => {
     event.preventDefault()
     setInput(event.target.value)
@@ -165,6 +165,8 @@ export default function ChatBox() {
 
         // convert the blob to an array buffer
         const arrayBuffer = await blob.arrayBuffer()
+
+        if (!lipSync) return
 
         lipSync.startFromAudioFile(arrayBuffer)
       })
@@ -317,9 +319,9 @@ export default function ChatBox() {
           >
             {/* Disabled until state error is fixed */}
             <button
-              type="icon"
+              // type="icon"
               className={styles.mic}
-              size={32}
+              // size={32}
               onClick={() => (!micEnabled ? startSpeech() : stopSpeech())}
             >
               {!micEnabled ? <Mic /> : <MicOff />}
@@ -335,7 +337,7 @@ export default function ChatBox() {
             // disabled={waitingForResponse}
             />
             <button
-              size={14}
+              // size={14}
               onSubmit={handleSubmit}
               className={styles.sendButton}
               type="submit"

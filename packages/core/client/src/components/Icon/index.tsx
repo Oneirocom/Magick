@@ -98,7 +98,7 @@ const icons = {
 // Categories for components and data controls
 export const componentCategories = {
   'AI/ML': 'play-print',
-  'I/O': 'water',
+  'IO': 'water',
   Logic: 'switch',
   State: 'state',
   Module: 'cup',

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { arraySocket, stringSocket } from '../../sockets'
@@ -25,7 +25,7 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
           trigger: 'option',
         },
       },
-      'Array',
+      'Data/Arrays',
       info
     )
   }

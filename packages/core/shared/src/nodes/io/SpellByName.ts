@@ -1,4 +1,4 @@
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
@@ -47,7 +47,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       {
         outputs: { output: 'output', trigger: 'option' },
       },
-      'I/O',
+      'Invoke/Spells',
       info
     )
 
@@ -136,7 +136,9 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await app.get('agentCommander').runSpellWithResponse(runComponentArgs)
+      const outputs = await app
+        .get('agentCommander')
+        .runSpellWithResponse(runComponentArgs)
       const output = Object.values(outputs as any)[0]
       return {
         output,
@@ -155,6 +157,11 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       }
 
       const spellRunner = await spellManager.loadById(spellId)
+
+      if (!spellRunner) {
+        throw new Error(`Spell runner for ${spellName} not found`)
+      }
+
       const outputs = await spellRunner.runComponent(runComponentArgs)
 
       // get the first value from outputs

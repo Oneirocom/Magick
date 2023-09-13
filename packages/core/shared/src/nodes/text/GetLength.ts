@@ -3,7 +3,7 @@
  * Get the length of the input string.
  * @category Text
  */
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 
 import { MagickComponent } from '../../engine'
 import { numberSocket, stringSocket, triggerSocket } from '../../sockets'
@@ -35,7 +35,7 @@ export class GetLength extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       'Get the length of the input string.'
     )
   }

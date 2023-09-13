@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import {
   Event,
   MagickComponent,
@@ -43,7 +43,7 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
           left: 'output',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Leave any and all voice channels in a server'
     )
   }
@@ -59,7 +59,11 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
     const outp = new Rete.Output('left', 'Left', booleanSocket)
     const event = new Rete.Input('event', 'Event', eventSocket, true)
 
-    return node.addInput(dataInput).addOutput(dataOutput).addOutput(outp).addInput(event)
+    return node
+      .addInput(dataInput)
+      .addOutput(dataOutput)
+      .addOutput(outp)
+      .addInput(event)
   }
 
   /**
@@ -79,7 +83,7 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
     const { agent, data } = context
     if (!agent || !agent?.discord) {
       console.warn('Skipping node since there is no agent available')
-      return { left: false };
+      return { left: false }
     }
 
     const event = // event data is inside a task?
@@ -96,17 +100,16 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
     const channel = event.channel // channel in which the message was sent
 
     async function leaveVoiceChannelInGuild(client, channelId) {
-      const channel = await client.channels.fetch(channelId);
-      const guild = channel.guild;
+      const channel = await client.channels.fetch(channelId)
+      const guild = channel.guild
       console.log('*** guild', guild)
       const voice = client.voiceFunctions
       console.log('*** voice', voice)
       const { getVoiceConnection } = voice as any
       console.log('*** getVoiceConnection', getVoiceConnection)
-      const connection = getVoiceConnection(guild.id, 'default_' + agent.id);
+      const connection = getVoiceConnection(guild.id, 'default_' + agent.id)
 
-      if(!connection)
-        return false
+      if (!connection) return false
       connection.destroy()
       return true
     }
@@ -114,7 +117,7 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
     const left = await leaveVoiceChannelInGuild(discordClient, channel)
 
     return {
-      left
+      left,
     }
   }
 }

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { objectSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
@@ -20,7 +20,7 @@ export class EventDelete extends MagickComponent<Promise<void>> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
   }

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
 import { triggerSocket } from '../../sockets'
@@ -74,13 +74,16 @@ export class RandomGate extends MagickComponent<void> {
     const nodeOutputs = node.data.outputs as Array<{ name: string }>
 
     // close all outputs
-    this._task.closed = [...nodeOutputs.map(out => out.name)]
-    if (this._task.closed.includes(randomName)) {
-      // If the outputs closed has the incoming trigger, filter closed outputs to not include it
-      this._task.closed = this._task.closed.filter(
-        output => output !== randomName
-      )
-      console.log('this._task.closed', this._task.closed)
+    if (node?._task) {
+      if (node._task.closed.includes(randomName)) {
+        // If the outputs closed has the incoming trigger, filter closed outputs to not include it
+        node._task.closed = node._task.closed.filter(
+          output => output !== randomName
+        )
+        console.log('if (node?._task) node._task.closed', node._task.closed)
+      }
+
+      node._task.closed = [...nodeOutputs.map(out => out.name)]
     }
   }
 }

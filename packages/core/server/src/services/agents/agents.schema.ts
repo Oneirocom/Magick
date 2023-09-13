@@ -1,32 +1,32 @@
-// DOCUMENTED 
+// DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema';
+import { resolve } from '@feathersjs/schema'
 import {
   Type,
   getDataValidator,
   getValidator,
   querySyntax,
-} from '@feathersjs/typebox';
-import type { Static } from '@feathersjs/typebox';
+} from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
 
-import type { HookContext } from '../../declarations';
-import { dataValidator, queryValidator } from '../../config/validators';
-import { agentSchema } from '@magickml/core';
+import type { HookContext } from '../../declarations'
+import { dataValidator, queryValidator } from '../../config/validators'
+import { agentSchema } from '@magickml/core'
 
 /**
  * Agent type
  */
-export type Agent = Static<typeof agentSchema>;
+export type Agent = Static<typeof agentSchema>
 
 /**
  * Agent resolver
  */
-export const agentResolver = resolve<Agent, HookContext>({});
+export const agentResolver = resolve<Agent, HookContext>({})
 
 /**
  * External agent resolver
  */
-export const agentExternalResolver = resolve<Agent, HookContext>({});
+export const agentExternalResolver = resolve<Agent, HookContext>({})
 
 /**
  * Agent data schema for creating new entries
@@ -43,9 +43,10 @@ export const agentDataSchema = Type.Pick(
     'publicVariables',
     'secrets',
     'rootSpellId',
+    'default',
   ],
   { $id: 'AgentData' }
-);
+)
 
 /**
  * Agent patch data schema for creating new entries
@@ -54,8 +55,8 @@ export const agentPatchDataSchema = Type.Pick(
   agentSchema,
   [
     'id',
-    'projectId',
     'name',
+    'projectId',
     'enabled',
     'runState',
     'updatedAt',
@@ -63,15 +64,14 @@ export const agentPatchDataSchema = Type.Pick(
     'data',
     'publicVariables',
     'secrets',
-    'rootSpellId',
   ],
-  { $id: 'AgentData', additionalProperties: true }
-);
+  { $id: 'AgentPatch', additionalProperties: true }
+)
 
 /**
  * Agent data type
  */
-export type AgentData = Static<typeof agentDataSchema>;
+export type AgentData = Static<typeof agentDataSchema>
 
 /**
  * Agent data validator
@@ -79,37 +79,30 @@ export type AgentData = Static<typeof agentDataSchema>;
 export const agentDataValidator = getDataValidator(
   agentDataSchema,
   dataValidator
-);
+)
 
 /**
  * Agent data resolver
  */
-export const agentDataResolver = resolve<Agent, HookContext>({});
-
-/**
- * Agent patch schema for updating existing entries
- */
-export const agentPatchSchema = Type.Partial(agentPatchDataSchema, {
-  $id: 'AgentPatch',
-});
+export const agentDataResolver = resolve<Agent, HookContext>({})
 
 /**
  * Agent patch type
  */
-export type AgentPatch = Static<typeof agentPatchSchema>;
+export type AgentPatch = Static<typeof agentPatchDataSchema>
 
 /**
  * Agent patch validator
  */
 export const agentPatchValidator = getDataValidator(
-  agentPatchSchema,
+  agentPatchDataSchema,
   dataValidator
-);
+)
 
 /**
  * Agent patch resolver
  */
-export const agentPatchResolver = resolve<Agent, HookContext>({});
+export const agentPatchResolver = resolve<Agent, HookContext>({})
 
 /**
  * Agent allowed query properties
@@ -127,7 +120,8 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'secrets',
   'image',
   'rootSpellId',
-]);
+  'default',
+])
 
 /**
  * Agent query schema
@@ -135,12 +129,12 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
 export const agentQuerySchema = Type.Intersect(
   [querySyntax(agentQueryProperties)],
   { additionalProperties: false }
-);
+)
 
 /**
  * Agent query type
  */
-export type AgentQuery = Static<typeof agentQuerySchema>;
+export type AgentQuery = Static<typeof agentQuerySchema>
 
 /**
  * Agent query validator
@@ -148,14 +142,14 @@ export type AgentQuery = Static<typeof agentQuerySchema>;
 export const agentQueryValidator = getValidator(
   agentQuerySchema,
   queryValidator
-);
+)
 
 /**
  * Agent query resolver
  */
-export const agentQueryResolver = resolve<AgentQuery, HookContext>({});
+export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
 
 /**
  * JSON fields for agents
  */
-export const agentJsonFields = ['data'];
+export const agentJsonFields = ['data']

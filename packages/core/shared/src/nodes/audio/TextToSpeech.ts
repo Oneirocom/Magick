@@ -1,5 +1,5 @@
 // UNDOCUMENTED
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
 import { pluginManager } from '../../plugin'
@@ -37,7 +37,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Audio',
+      'AI/Audio',
       info
     )
   }
@@ -162,32 +162,32 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     const completionProviders = pluginManager.getCompletionProviders('audio', [
       'textToSpeech',
     ]) as CompletionProvider[]
-  
+
     const model = (node.data as { model: string }).model as string
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
     ) as CompletionProvider
-  
+
     const completionHandler = provider.handler
-  
+
     if (!completionHandler) {
       console.error('No completion handler found for provider', provider)
       throw new Error('ERROR: Completion handler undefined')
     }
-  
+
     const { success, result, error } = await completionHandler({
       node,
       inputs,
       outputs,
       context,
     })
-  
+
     if (!success) {
       throw new Error('ERROR: ' + error)
     }
 
-    const audio = result  
-  
+    const audio = result
+
     return {
       result: audio,
     }

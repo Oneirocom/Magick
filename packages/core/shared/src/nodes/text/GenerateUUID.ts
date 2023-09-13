@@ -4,8 +4,8 @@
  * This component generates a UUID v4.
  */
 
-import Rete from 'rete'
-import { v4 as uuidv4 } from 'uuid';
+import Rete from '@magickml/rete'
+import { v4 as uuidv4 } from 'uuid'
 import { MagickComponent } from '../../engine'
 import { stringSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
@@ -41,7 +41,7 @@ export class UUIDGenerator extends MagickComponent<Promise<WorkerReturn>> {
           output: 'output',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }
@@ -56,8 +56,7 @@ export class UUIDGenerator extends MagickComponent<Promise<WorkerReturn>> {
     const outp = new Rete.Output('output', 'output', stringSocket)
 
     // Add input and output sockets to the node
-    return node
-      .addOutput(outp)
+    return node.addOutput(outp)
   }
 
   /**

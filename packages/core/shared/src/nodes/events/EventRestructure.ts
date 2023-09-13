@@ -5,24 +5,16 @@
  * @version 1.0.0
  */
 
-import Rete from 'rete'
+import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
-import { NodeData } from 'rete/types/core/data'
 import { MagickComponent } from '../../engine'
-import { Task } from '../../plugins/taskPlugin/task'
 import {
   arraySocket,
   eventSocket,
   stringSocket,
   triggerSocket,
 } from '../../sockets'
-import {
-  Event,
-  MagickNode,
-  MagickTask,
-  MagickWorkerInputs,
-  WorkerData,
-} from '../../types'
+import { Event, MagickNode, MagickWorkerInputs, WorkerData } from '../../types'
 
 /** Component information */
 const info =
@@ -35,9 +27,6 @@ const info =
 export class EventRestructureComponent extends MagickComponent<
   Promise<{ output: Event }>
 > {
-  // Node task map
-  nodeTaskMap: Record<number, MagickTask> = {}
-
   /**
    * Initializes a new EventRestructureComponent.
    */
@@ -50,11 +39,8 @@ export class EventRestructureComponent extends MagickComponent<
           output: 'output',
           trigger: 'option',
         },
-        init: (task = {} as Task, node: NodeData) => {
-          this.nodeTaskMap[node.id] = task
-        },
       },
-      'Event',
+      'Storage/Events',
       info
     )
   }
