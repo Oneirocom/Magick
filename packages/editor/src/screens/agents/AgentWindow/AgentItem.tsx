@@ -21,8 +21,8 @@ const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
 
   // Conditionally render the delete button only if the agent's name is not "Default Agent"
   const renderDeleteButton = () => {
-    if (agent.name !== 'Default Agent') {
-      return (
+    if (!agent.default) {
+      return ( 
         <IconBtn
           label={'delete'}
           Icon={<Icon name="trash" size={20} />}
