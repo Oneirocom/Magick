@@ -35,7 +35,7 @@ export class BooleanVariable extends MagickComponent<InputReturn> {
           output: 'output',
         },
       },
-      'Boolean',
+      'Data/Variables',
       info
     )
   }

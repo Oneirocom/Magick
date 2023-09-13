@@ -107,6 +107,14 @@ function install(
         a.title > b.title ? 1 : b.title > a.title ? -1 : 0
       )
 
+    if (mainMenu && mainMenu.items.some(item => item.title === 'Common')) {
+      const commonItem = mainMenu.items.find(item => item.title === 'Common')
+      mainMenu.items = [
+        commonItem,
+        ...mainMenu.items.filter(item => item.title !== 'Common'),
+      ]
+    }
+
     // Get the x and y coordinates of the click.
     const [x, y] = [e.clientX, e.clientY]
 

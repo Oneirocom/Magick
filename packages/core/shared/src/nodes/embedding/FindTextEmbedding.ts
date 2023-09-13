@@ -33,7 +33,7 @@ export class FindTextEmbedding extends MagickComponent<
           success: 'option',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       info
     )
   }

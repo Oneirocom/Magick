@@ -37,7 +37,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
           trigger: 'option',
         },
       },
-      'I/O',
+      'IO',
       info
     )
 
@@ -45,6 +45,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
       nodeType: 'input',
       socket: anySocket,
     }
+
+    this.common = true
 
     this.contextMenuName = 'Input'
     this.displayName = 'Input'

@@ -19,7 +19,7 @@ export class LessThan extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Number',
+      'Arithmetic/Comparisons',
       info
     )
   }

@@ -34,7 +34,7 @@ export class ParseJSON extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Object',
+      'Data/Object',
       info
     )
   }
