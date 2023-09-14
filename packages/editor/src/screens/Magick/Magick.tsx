@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
 import Workspaces from '../../components/Workspaces'
-import { RootState } from '../../../../core/shared/src/state/store'
+import { RootState } from '@magickml/core'
 import {
   activeTabSelector,
   closeTab,
   openTab,
   selectAllTabs,
-} from '../../../../core/shared/src/state/tabs'
+} from '@magickml/core'
 import Events from '../EventWindow'
 import Requests from '../RequestWindow'
 import Settings from '../settings/SettingsWindow'
@@ -35,16 +35,16 @@ const Magick = ({ empty = false }): JSX.Element => {
 
   const pluginComponents = []
 
-  ;(pluginManager as ClientPluginManager)
-    .getGroupedClientRoutes()
-    .forEach(plugin => {
-      plugin.routes.map(route => {
-        pluginComponents.push({
-          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-          component: route.component,
+    ; (pluginManager as ClientPluginManager)
+      .getGroupedClientRoutes()
+      .forEach(plugin => {
+        plugin.routes.map(route => {
+          pluginComponents.push({
+            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+            component: route.component,
+          })
         })
       })
-    })
 
   const componentMapping = {
     Events,

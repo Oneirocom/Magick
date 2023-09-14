@@ -10,13 +10,13 @@ import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
 import { usePubSub } from '@magickml/client-core'
 import css from '../screens/Magick/magick.module.css'
-import { spellApi } from '../../../core/shared/src/state/api/spells'
-import { useAppSelector } from '../../../core/shared/src/state/hooks'
+import { spellApi } from '@magickml/core'
+import { useAppSelector } from '@magickml/core'
 import {
   addLocalState,
   selectStateBytabId,
-  upsertLocalState,
-} from '../../../core/shared/src/state/localState'
+  upsertLocalState
+} from '@magickml/core'
 
 /**
  * Input component - Receives and sends playtest input.
