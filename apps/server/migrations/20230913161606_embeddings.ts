@@ -3,7 +3,7 @@ import { Knex } from 'knex'
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('embeddings', (table) => {
     table.increments('id').primary()
-    table.text('documentId')
+    table.uuid('documentId')
     table.text('content')
     table.specificType('embedding', 'vector(1536)')
     table.integer('index')
