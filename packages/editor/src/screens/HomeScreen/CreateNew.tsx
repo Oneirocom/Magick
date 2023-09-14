@@ -14,7 +14,7 @@ import {
 } from 'unique-names-generator'
 import TemplatePanel from '../../components/TemplatePanel'
 import { useConfig } from '@magickml/client-core'
-import { spellApi } from '../../state/api/spells'
+import { spellApi } from '../../../../core/shared/src/state/api/spells'
 import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'

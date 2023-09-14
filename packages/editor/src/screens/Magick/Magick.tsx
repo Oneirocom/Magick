@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
 import Workspaces from '../../components/Workspaces'
-import { RootState } from '../../state/store'
+import { RootState } from '../../../../core/shared/src/state/store'
 import {
   activeTabSelector,
   closeTab,
   openTab,
   selectAllTabs,
-} from '../../state/tabs'
+} from '../../../../core/shared/src/state/tabs'
 import Events from '../EventWindow'
 import Requests from '../RequestWindow'
 import Settings from '../settings/SettingsWindow'

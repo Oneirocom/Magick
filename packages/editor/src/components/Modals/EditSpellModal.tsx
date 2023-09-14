@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-import { closeTab, openTab } from '../../state/tabs'
+import { closeTab, openTab } from '../../../../core/shared/src/state/tabs'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { spellApi } from '../../state/api/spells'
+import { spellApi } from '../../../../core/shared/src/state/api/spells'
 
 /**
  * Represents a modal to edit spells.

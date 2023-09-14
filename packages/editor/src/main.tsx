@@ -14,7 +14,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import App from './App'
 import { config as wagmiConfig } from './wagmi'
 import AppProviders from './contexts/AppProviders'
-import { createStore } from './state/store'
+import { createStore } from '../../core/shared/src/state/store'
 
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'

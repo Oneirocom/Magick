@@ -8,9 +8,9 @@ import {
   useDeleteSpellMutation,
   useGetSpellsQuery,
   useNewSpellMutation,
-} from '../../state/api/spells'
-import { RootState } from '../../state/store'
-import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
+} from '../../../../core/shared/src/state/api/spells'
+import { RootState } from '../../../../core/shared/src/state/store'
+import { closeTab, openTab, selectAllTabs } from '../../../../core/shared/src/state/tabs'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
