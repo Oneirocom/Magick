@@ -5,9 +5,9 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../../contexts/ModalProvider'
-import { toggleAutoSave } from '../../../state/preferences'
-import { RootState } from '../../../state/store'
-import { Tab, activeTabSelector, changeEditorLayout } from '../../../state/tabs'
+import { toggleAutoSave } from '../../../../../core/shared/src/state/preferences'
+import { RootState } from '../../../../../core/shared/src/state/store'
+import { Tab, activeTabSelector, changeEditorLayout } from '../../../../../core/shared/src/state/tabs'
 import css from '../menuBar.module.css'
 
 /**

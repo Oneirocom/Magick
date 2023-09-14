@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import MenuBar from '../MenuBar/MenuBar'
 import CreateTab from './CreateTab'
 import css from './tabBar.module.css'
-import { closeTab, selectAllTabs } from '../../state/tabs'
-import { changeActive } from '../../state/tabs'
-import { RootState } from '../../state/store'
+import { closeTab, selectAllTabs } from '../../../../core/shared/src/state/tabs'
+import { changeActive } from '../../../../core/shared/src/state/tabs'
+import { RootState } from '../../../../core/shared/src/state/store'
 import { Icon } from '@magickml/client-core'
 
 /**
