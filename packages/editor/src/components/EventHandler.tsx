@@ -8,7 +8,7 @@ import md5 from 'md5'
 import {
   useLazyGetSpellByIdQuery,
   useSaveSpellMutation,
-} from '../../../core/shared/src/state/api/spells'
+} from '@magickml/core'
 import { useLayout } from '../contexts/LayoutProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
