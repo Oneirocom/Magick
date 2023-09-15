@@ -29,6 +29,17 @@
       "port": 7777
     },
     {
+      "name": "CloudAgentWorker",
+      "type": "node",
+      "request": "attach",
+      "port": 8089,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
       "name": "Server",
       "type": "node",
       "request": "attach",
