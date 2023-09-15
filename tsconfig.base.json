@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "resolveJsonModule": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
