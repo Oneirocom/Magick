@@ -19,11 +19,10 @@ import { useConfig, usePubSub } from '@magickml/client-core'
 import { MyNode } from '../components/Node/Node'
 import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
-import { spellApi } from '@magickml/core'
-import { activeTabSelector } from '@magickml/core'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 import { EngineComponent } from '@magickml/rete'
+import { activeTabSelector, spellApi } from '@magickml/state'
 
 /**
  * MagickTab type definition.

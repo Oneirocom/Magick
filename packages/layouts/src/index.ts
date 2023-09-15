@@ -1,1 +1,1 @@
-export * from './lib/layouts'
+export * from './main'

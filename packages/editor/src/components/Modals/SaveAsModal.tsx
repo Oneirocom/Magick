@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { spellApi } from '@magickml/core'
 import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
@@ -10,6 +9,7 @@ import { getTemplates } from '@magickml/client-core'
 import { useConfig } from '@magickml/client-core'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
+import { spellApi } from '@magickml/state'
 
 // Initial graph for the spell
 const defaultGraph = getTemplates().spells[0].graph

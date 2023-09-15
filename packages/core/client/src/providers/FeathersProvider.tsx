@@ -54,7 +54,7 @@ const configureCustomServices = (
   })
 
   app.use('agents', socketClient.service('agents'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'log', 'run'],
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'log', 'run', 'subscribe'],
     events: ['log', 'result'],
   })
   app.use('request', socketClient.service('request'), {

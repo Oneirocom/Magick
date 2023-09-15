@@ -14,12 +14,12 @@ import {
 } from 'unique-names-generator'
 import TemplatePanel from '../../components/TemplatePanel'
 import { useConfig } from '@magickml/client-core'
-import { spellApi } from '@magickml/core'
 import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'
 import { v4 as uuidv4 } from 'uuid'
 import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
+import { spellApi } from '@magickml/state'
 
 // Custom configuration for unique name generator
 const customConfig = {

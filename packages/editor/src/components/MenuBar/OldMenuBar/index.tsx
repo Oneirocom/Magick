@@ -5,10 +5,8 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../../contexts/ModalProvider'
-import { toggleAutoSave } from '@magickml/core'
-import { RootState } from '@magickml/core'
-import { Tab, activeTabSelector, changeEditorLayout } from '@magickml/core'
 import css from '../menuBar.module.css'
+import { RootState, Tab, activeTabSelector, changeEditorLayout, toggleAutoSave } from '@magickml/state'
 
 /**
  * MenuBar component

@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "noImplicitAny": false,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "target": "esnext",
     "module": "esnext",
     "lib": ["es2021", "dom"],
@@ -19,9 +19,10 @@
     "esModuleInterop": true,
     "strict": false,
     "typeRoots": [
-      "./packages/@types",
+      "packages/@types",
       "./node_modules/@types",
-      "./node_modules"
+      "./node_modules",
+      "/node_modules/@types"
     ],
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
