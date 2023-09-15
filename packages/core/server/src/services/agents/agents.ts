@@ -74,44 +74,44 @@ export const agent = (app: Application) => {
   const pubSub = app.get<'pubsub'>('pubsub')
 
   // this handles relaying all agent messages up to connected clients.
-  pubSub.patternSubscribe('agent*', (message, channel) => {
-    if (app.get('environment') !== 'server') return
-    // parse  the channel from agent:agentId:messageType
-    const agentId = channel.split(':')[1]
+  // Only subscribe on the main server not any workers.
+  if (app.get('environment') === 'server')
+    pubSub.patternSubscribe('agent*', (message, channel) => {
+      // parse  the channel from agent:agentId:messageType
+      const agentId = channel.split(':')[1]
 
-    // parse the type of agent message
-    const messageType = channel.split(':')[2]
+      // parse the type of agent message
+      const messageType = channel.split(':')[2]
 
-    // check if message type is an agent event
-    if (!AGENT_EVENTS.includes(messageType)) {
-      // notify connected clients via log message that an unknown message type was received
-      app.service('agents').emit('log', {
+      // check if message type is an agent event
+      if (!AGENT_EVENTS.includes(messageType)) {
+        // notify connected clients via log message that an unknown message type was received
+        app.service('agents').emit('log', {
+          channel,
+          agentId,
+          data: {
+            message: `Unknown message type ${messageType}`,
+          },
+        })
+      }
+
+      // remove unwanted properties from the message
+      // embeddings and spells are large data packages we don't need on the client
+      const cleanMessage = removeUnwantedProperties(message, [
+        'embedding',
+        'spell',
+      ])
+
+      // this is where we relay messages up based upon the time.
+      // note for every custom type we need to add it to the above
+      // todo harder typing on all message transports
+      app.service('agents').emit(messageType, {
+        ...cleanMessage,
+        messageType,
         channel,
         agentId,
-        project: agentId,
-        data: {
-          message: `Unknown message type ${messageType} on channel ${channel}`,
-        },
       })
-    }
-
-    // remove unwanted properties from the message
-    // embeddings and spells are large data packages we don't need on the client
-    const cleanMessage = removeUnwantedProperties(message, [
-      // 'embedding',
-      'spell',
-    ])
-
-    // this is where we relay messages up based upon the time.
-    // note for every custom type we need to add it to the above
-    // todo harder typing on all message transports
-    app.service('agents').emit(messageType, {
-      ...cleanMessage,
-      messageType,
-      channel,
-      agentId,
     })
-  })
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
