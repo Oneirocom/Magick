@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Represents a data control for an array
  */
@@ -11,7 +11,7 @@ export class ArrayControl extends DataControl {
    * @param {string} data.name - The name of the control
    * @param {string} [data.icon = 'hand'] - The icon of the control
    */
-  constructor({ dataKey, name, icon = 'hand' ,tooltip}) {
+  constructor({ dataKey, name, icon = 'hand', tooltip }) {
     const options = {
       dataKey,
       name,
@@ -28,7 +28,7 @@ export class ArrayControl extends DataControl {
    * Returns the data of the control
    * @returns {void}
    */
-  onData() {
+  override onData() {
     return
   }
 }

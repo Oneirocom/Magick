@@ -1,15 +1,15 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This class represents a boolean control for data manipulation.
  * It extends the DataControl class from the inspectorPlugin module.
  * @extends DataControl
  */
-import { DataControl } from '../plugins/inspectorPlugin';
+import { DataControl } from '../plugins/inspectorPlugin'
 
 export class BooleanControl extends DataControl {
   /**
    * Creates an instance of BooleanControl.
-   * @param {object} config - The configuration object for this control. 
+   * @param {object} config - The configuration object for this control.
    * It should contain the following properties:
    *      @param {string} dataKey - The key of the data the control will manipulate.
    *      @param {string} name - The name of the control to be shown in the inspector UI.
@@ -26,17 +26,17 @@ export class BooleanControl extends DataControl {
       icon: config.icon || 'hand', // Assign the icon property from the configuration object or default to 'hand'.
       type: 'boolean', // Set the control type to 'boolean'.
       defaultValue: config.defaultValue || false, // Assign the defaultValue property from the configuration object or default to 'false'.
-      tooltip: config.tooltip
-    };
+      tooltip: config.tooltip,
+    }
 
-    super(options); // Call the super constructor with the options object.
+    super(options) // Call the super constructor with the options object.
   }
 
   /**
    * This function is called when new data is set to the control. It does not perform any action
    * except returning control to the parent component.
    */
-  onData() {
-    return;
+  override onData() {
+    return
   }
-} 
+}

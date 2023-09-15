@@ -1,5 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
+import { activeTabSelector, saveTabLayout } from '@magickml/state'
 import {
   Actions,
   DockLocation,
@@ -10,7 +11,6 @@ import {
 } from 'flexlayout-react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { activeTabSelector, saveTabLayout } from '@magickml/core'
 
 // List of window types used to load components from data sent by rete
 const windowTypes: WindowTypes = {

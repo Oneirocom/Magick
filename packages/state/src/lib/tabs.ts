@@ -1,23 +1,11 @@
 // DOCUMENTED
+import { getWorkspaceLayout } from '@magickml/layouts'
 import {
   createDraftSafeSelector,
   createEntityAdapter,
   createSlice,
 } from '@reduxjs/toolkit'
-
-import defaultJson from '../data/layouts/defaultLayout.json'
-import fullScreen from '../data/layouts/fullScreenLayout.json'
-import promptEngineering from '../data/layouts/promptEngineeringLayout.json'
-import troubleShooting from '../data/layouts/troubleshootingLayout.json'
 import { RootState } from './store'
-
-// Workspace map for initializing tabs with layout data
-export const workspaceMap = {
-  default: defaultJson,
-  fullScreen,
-  promptEngineering,
-  troubleShooting,
-}
 
 /**
  * Tab interface representing a tab object
@@ -84,7 +72,7 @@ const buildTab = (tab, properties = {}) => ({
   id: encodedToId(tab.name) || tab.name,
   URI: encodeURIComponent(tab.name) || tab.name,
   name: encodedToName(tab.name) || tab.name,
-  layoutJson: workspaceMap[tab.workspace || 'default'],
+  layoutJson: getWorkspaceLayout(tab.workspace),
   spell: tab?.spell || null,
   type: tab?.type,
   module: tab?.moduleName || null,
@@ -145,7 +133,7 @@ export const tabSlice = createSlice({
     changeEditorLayout: (state, action) => {
       tabAdapater.updateOne(state, {
         id: action.payload.tabId,
-        changes: { layoutJson: workspaceMap[action.payload.layout] },
+        changes: { layoutJson: getWorkspaceLayout(action.payload.layout) },
       })
     },
   },

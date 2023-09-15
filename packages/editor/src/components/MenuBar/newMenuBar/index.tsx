@@ -5,14 +5,12 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../../contexts/ModalProvider'
-import { toggleAutoSave } from '@magickml/core'
-import { RootState } from '@magickml/core'
-import { Tab, activeTabSelector, changeEditorLayout } from '@magickml/core'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import css from '../menuBar.module.css'
 import { styled } from '@mui/material/styles'
 import { NestedMenuItem } from 'mui-nested-menu'
+import { RootState, Tab, activeTabSelector, changeEditorLayout, toggleAutoSave } from '@magickml/state'
 
 /**
  * MenuBar component

@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A subclass of DataControl that represents a control for editing code.
  */
@@ -17,11 +17,11 @@ export class CodeControl extends DataControl {
     name,
     icon = 'feathers',
     language = 'javascript',
-    tooltip= ''
+    tooltip = '',
   }: {
-    dataKey: string,
-    name: string,
-    icon?: string,
+    dataKey: string
+    name: string
+    icon?: string
     language?: string
     tooltip?: string
   }) {
@@ -32,7 +32,7 @@ export class CodeControl extends DataControl {
       icon,
       options: {
         editor: true,
-        language
+        language,
       },
       tooltip: tooltip,
     }
@@ -45,7 +45,7 @@ export class CodeControl extends DataControl {
    * Since this is a CodeControl, it doesn't really handle data.
    * @return Always returns undefined.
    */
-  onData() {
+  override onData() {
     return undefined
   }
 }
