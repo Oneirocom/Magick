@@ -7,6 +7,7 @@ import { app } from '@magickml/server-core'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
+import { Queue } from 'bullmq'
 import { RunRootSpellArgs } from '@magickml/agents'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
