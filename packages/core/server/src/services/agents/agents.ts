@@ -58,7 +58,7 @@ const AGENT_EVENTS = ['log', 'result', 'spell', 'run']
 export const agent = (app: Application) => {
   // Register the agent service on the Feathers application
   app.use('agents', new AgentService(getOptions(app), app), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'run'],
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'run', 'ping'],
     events: AGENT_EVENTS,
   })
 
