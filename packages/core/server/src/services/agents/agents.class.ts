@@ -61,6 +61,25 @@ export class AgentService<
     return { response }
   }
 
+  async subscribe(agentId: string, params: ServiceParams) {
+    // check for socket io
+    if (!params.provider)
+      throw new Error('subscribe is only available via socket io')
+
+    // get the socket from the params
+    const connection = params.connection
+    const oldAgentChannel = app.channels.filter(channel =>
+      agentId.match(/agent:/)
+    )[0]
+    // leave the old channel
+    app.channel(oldAgentChannel).leave(connection)
+
+    // join the new channel
+    app.channel(`agent:${agentId}`).join(connection)
+
+    return true
+  }
+
   async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
