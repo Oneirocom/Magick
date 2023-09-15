@@ -31,7 +31,6 @@ import { useSelector } from 'react-redux'
 import FileInput from '../../FileInput/FileInput'
 import styles from './index.module.scss'
 // todo better way to share these types
-// import { RootState } from 'packages/editor/src/state/store'
 // import { AgentData } from 'packages/core/server/src/services/agents/agents.schema'
 // import { DocumentData } from 'packages/core/server/src/services/documents/documents.schema'
 

@@ -8,9 +8,9 @@ import {
   useDeleteSpellMutation,
   useGetSpellsQuery,
   useNewSpellMutation,
-} from '../../state/api/spells'
-import { RootState } from '../../state/store'
-import { closeTab, openTab, selectAllTabs } from '../../state/tabs'
+} from '@magickml/core'
+import { RootState } from '@magickml/core'
+import { closeTab, openTab, selectAllTabs } from '@magickml/core'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'

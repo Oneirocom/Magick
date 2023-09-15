@@ -1,6 +1,6 @@
 import { Worker, Job } from 'bullmq'
 
-import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue, MessageQueue } from '@magickml/server-core'
+import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue } from '@magickml/server-core'
 import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
 import { v4 as uuidv4 } from 'uuid'
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_RUN_JOB, AGENT_UPDATE_JOB } from '@magickml/core'
