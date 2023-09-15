@@ -80,6 +80,8 @@ export class AgentCommander extends EventEmitter {
           }
         })
 
+        console.log('running spell with response')
+        debugger
         jobId = await this.runSpell(args)
       })()
     })
