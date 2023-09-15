@@ -11,15 +11,7 @@ export async function up(knex: Knex): Promise<void> {
 
   await knex
     .from(knex.raw('?? (??, ??, ??, ??)', ['embeddings', 'documentId', 'content', 'embedding', 'index']))
-    .insert(
-      knex
-        .select(
-          knex.raw(
-            `id as documentId, content, embedding, COALESCE(CAST(metadata->>'elementNumber' AS INTEGER), 0) as index`
-          )
-        )
-        .from('documents')
-    )
+    .insert(knex.select(knex.raw(`id as documentId, content, embedding, 0 as index`)).from('documents'))
 
   await knex.schema.alterTable('documents', (table) => {
     table.dropColumn('content')
