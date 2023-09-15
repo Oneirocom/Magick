@@ -19,7 +19,7 @@ import { Close, Done } from '@mui/icons-material'
 import styles from './menu.module.css'
 import { useConfig } from '@magickml/client-core'
 import { enqueueSnackbar } from 'notistack'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from '@magickml/config'
 
@@ -29,6 +29,7 @@ import { useFeathers } from '../../providers/FeathersProvider'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
 import { AgentInterface, SpellInterface } from '@magickml/core'
+import { setCurrentAgentId } from '@magickml/state'
 
 interface Spell {
   id: number
@@ -52,12 +53,16 @@ function AgentMenu({ data, resetData }) {
   const spellList: SpellInterface[] = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
   const { agentUpdate, setAgentUpdate } = useTreeData()
+  const dispatch = useDispatch()
 
   const setCurrentAgent = useCallback(
     (agent: AgentInterface) => {
       // Subscribe to agent service
       client.service('agents').subscribe(agent.id)
       _setCurrentAgent(agent)
+
+      // store this current agent in the global state for use in the editor
+      dispatch(setCurrentAgentId(agent.id))
     },
     []
   )
