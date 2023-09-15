@@ -56,9 +56,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
+
+    this.common = true
   }
 
   /**

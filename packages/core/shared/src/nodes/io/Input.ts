@@ -37,7 +37,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
           trigger: 'option',
         },
       },
-      'I/O',
+      'IO',
       info
     )
 
@@ -45,6 +45,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
       nodeType: 'input',
       socket: anySocket,
     }
+
+    this.common = true
 
     this.contextMenuName = 'Input'
     this.displayName = 'Input'
@@ -256,16 +258,24 @@ export class InputComponent extends MagickComponent<InputReturn> {
     node.data.isInput = true
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data) && node.data.name) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
 
-      const output = data[node.data.name]
+      let output = data[node.data.name]
+      if (output === undefined && node.data.name === "Input - Default") {
+        output = Object.values(data)[0]
+      }
+
+      if (!output) {
+        this.logger.error('No input recieved in input node for ' + node.data.name)
+        throw new Error("No input recieved")
+      }
 
       return {
         output,
       }
     }
 
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     if (Object.values(outputs.output).length > 0) {
       return { output: Object.values(outputs)[0] }

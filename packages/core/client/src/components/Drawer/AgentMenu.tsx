@@ -50,7 +50,7 @@ function AgentMenu({ data, resetData }) {
   const config = useConfig()
   const spellList: Spell[] = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
-  const { agentUpdate } = useTreeData()
+  const { agentUpdate,setAgentUpdate } = useTreeData()
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -87,6 +87,7 @@ function AgentMenu({ data, resetData }) {
   }
 
   const update = (id: string, data = undefined) => {
+    setAgentUpdate(false)
     const _data = data || { ...selectedAgentData }
     id = id || _data.id
     if (_data['id']) {
@@ -126,6 +127,7 @@ function AgentMenu({ data, resetData }) {
         })
         resetData()
         setSelectedAgentData(data)
+        setAgentUpdate(true)
       })
       .catch(e => {
         console.error('ERROR', e)
@@ -257,7 +259,7 @@ function AgentMenu({ data, resetData }) {
   useEffect(() => {
     if (data && data.length > 0) {
       // Check if 'Default Agent' exists in data
-      const defaultAgent = data.find(agent => agent.name === 'Default Agent')
+      const defaultAgent = data.find(agent => agent.default)
 
       // Set currentAgent to 'Default Agent' if it exists, otherwise choose the first agent
       setCurrentAgent(defaultAgent || data[0])
@@ -520,17 +522,17 @@ function AgentMenu({ data, resetData }) {
             },
             color: `${
               selectedAgentData &&
-              (selectedAgentData.name === 'Default Agent' ? 'grey' : 'white')
+              (selectedAgentData.default  ? 'grey' : 'white')
             }`,
             cursor: `${
               selectedAgentData &&
-              (selectedAgentData.name === 'Default Agent'
+              (selectedAgentData.default
                 ? 'not-allowed'
                 : 'pointer')
             }`,
           }}
           onClick={e => {
-            if (selectedAgentData.name !== 'Default Agent') {
+            if (!selectedAgentData.default) {
               setOpenConfirm(true)
             }
             handleCloseMenu2()

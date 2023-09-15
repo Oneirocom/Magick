@@ -41,7 +41,7 @@ export class SearchGoogle extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Search',
+      'Invoke/Search',
       info
     )
   }

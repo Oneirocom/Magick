@@ -31,6 +31,8 @@ export class SwitchGate extends MagickComponent<void> {
       'Flow',
       info
     )
+
+    this.common = true
   }
 
   node = {}
@@ -78,16 +80,18 @@ export class SwitchGate extends MagickComponent<void> {
     const nodeOutputs = node.data.outputs as DataSocketType[]
 
     // Close all outputs
-    this._task.closed = ['default', ...nodeOutputs.map(out => out.name)]
+    if (node?._task) {
+      node._task.closed = ['default', ...nodeOutputs.map(out => out.name)]
 
-    if (this._task.closed.includes(input)) {
-      // If the outputs closed have the incoming text, filter closed outputs to not include it
-      this._task.closed = this._task.closed.filter(output => output !== input)
-    } else {
-      // Otherwise, open up the default output
-      this._task.closed = this._task.closed.filter(
-        output => output !== 'default'
-      )
+      if (node._task.closed.includes(input)) {
+        // If the outputs closed have the incoming text, filter closed outputs to not include it
+        node._task.closed = node._task.closed.filter(output => output !== input)
+      } else {
+        // Otherwise, open up the default output
+        node._task.closed = node._task.closed.filter(
+          output => output !== 'default'
+        )
+      }
     }
   }
 }

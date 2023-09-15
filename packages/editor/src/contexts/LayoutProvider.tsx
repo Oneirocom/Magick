@@ -10,7 +10,7 @@ import {
 } from 'flexlayout-react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { activeTabSelector, saveTabLayout } from '../state/tabs'
+import { activeTabSelector, saveTabLayout } from '@magickml/core'
 
 // List of window types used to load components from data sent by rete
 const windowTypes: WindowTypes = {

@@ -7,7 +7,7 @@ import { SpellInterface } from '@magickml/core'
 import { useConfig, useFeathers, usePubSub } from '@magickml/client-core'
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
-import { spellApi } from '../state/api/spells'
+import { spellApi } from '@magickml/core'
 import { debounce } from '../utils/debounce'
 import EventHandler from './EventHandler'
 
@@ -17,8 +17,8 @@ import Playtest from '../windows/PlaytestWindow'
 
 import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
+import { RootState } from '@magickml/core'
 
-import { RootState } from '../state/store'
 
 /**
  * Workspace component that handles different tabs and their layouts.
@@ -58,7 +58,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
 
     const unsubscribe = editor.on('nodecreated noderemoved', (node: any) => {
       if (!spellRef.current) return
-      if (node.category !== 'I/O') return
+      if (node.category !== 'IO') return
       const spell = {
         ...spellRef.current,
         graph: editor.toJSON(),

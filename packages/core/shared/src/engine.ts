@@ -4,6 +4,7 @@ import { NodeData } from 'rete/types/core/data'
 import { Plugin } from 'rete/types/core/plugin'
 import io from 'socket.io'
 
+import { getLogger } from '@magickml/core'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
@@ -127,7 +128,7 @@ export type NodeCategory =
   | 'Esoterica'
   | 'Object'
   | 'Number'
-  | 'I/O'
+  | 'IO'
   | 'Flow'
   | 'Experimental'
   | 'Langchain'
@@ -163,26 +164,23 @@ export abstract class MagickComponent<
   cache: UnknownData
   editor: MagickEditor | null = null
   data: unknown = {}
-  category: NodeCategory
+  category: string
   info: string
   display?: boolean
   dev = false
   hide = false
   runFromCache = false
   deprecated? = false
+  common? = false
   onDoubleClick?: (node: MagickNode) => void
   declare module: ModuleOptions
   contextMenuName: string | undefined
   workspaceType: 'spell' | null | undefined
   displayName: string | undefined
   engine: MagickEngine | null = null
+  logger = getLogger()
 
-  constructor(
-    name: string,
-    task: TaskOptions,
-    category: NodeCategory,
-    info: string
-  ) {
+  constructor(name: string, task: TaskOptions, category: string, info: string) {
     super(name)
     this.task = task
     this.category = category

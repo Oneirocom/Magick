@@ -38,9 +38,11 @@ export class CreateTextEmbedding extends MagickComponent<Promise<InputReturn>> {
           embedding: 'output',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       info
     )
+
+    this.common = true
   }
 
   /**

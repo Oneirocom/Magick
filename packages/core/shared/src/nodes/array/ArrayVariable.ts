@@ -33,7 +33,7 @@ export class ArrayVariable extends MagickComponent<InputReturn> {
           output: 'output',
         },
       },
-      'Array',
+      'Data/Variables',
       info
     )
   }

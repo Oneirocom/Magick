@@ -12,7 +12,13 @@ import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
-import { AppConfig } from '@magickml/client-core'
+
+export type AppConfig = {
+  apiUrl: string
+  projectId: string
+  token: string
+  posthogEnabled?: boolean
+}
 
 /**
  * Combine all reducers into the root reducer.

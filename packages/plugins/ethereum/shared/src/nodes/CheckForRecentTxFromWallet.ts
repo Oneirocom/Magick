@@ -104,11 +104,11 @@ export class CheckForRecentTxFromWallet extends MagickComponent<
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ): Promise<InputReturn> {
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     // handle data subscription.  If there is data, this is from playtest
     if (data && !isEmpty(data)) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
 
       return {
         output: data,

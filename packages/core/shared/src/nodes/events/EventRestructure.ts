@@ -40,7 +40,7 @@ export class EventRestructureComponent extends MagickComponent<
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
   }

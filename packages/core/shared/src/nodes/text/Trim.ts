@@ -36,7 +36,7 @@ export class Trim extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       'Trim any whitespace from beginning and end of a string.'
     )
   }

@@ -33,7 +33,7 @@ export class FindTextEmbedding extends MagickComponent<
           success: 'option',
         },
       },
-      'Embedding',
+      'AI/Embeddings',
       info
     )
   }
@@ -113,9 +113,9 @@ export class FindTextEmbedding extends MagickComponent<
 
     // Set the task closed state based on the presence of the embedding
     if (embedding && embedding !== 'null') {
-      this._task.closed = ['failure']
+      if (node?._task) node._task.closed = ['failure']
     } else {
-      this._task.closed = ['success']
+      if (node?._task) node._task.closed = ['success']
     }
 
     return {

@@ -19,7 +19,7 @@ export class Equal extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Number',
+      'Arithmetic/Comparisons',
       info
     )
   }
@@ -66,9 +66,9 @@ export class Equal extends MagickComponent<void> {
     const numberToTest = inputs['input'][0] as number
 
     if (numberToTest === value) {
-      this._task.closed = ['false']
+      if (node?._task) node._task.closed = ['false']
     } else {
-      this._task.closed = ['true']
+      if (node?._task) node._task.closed = ['true']
     }
   }
 }

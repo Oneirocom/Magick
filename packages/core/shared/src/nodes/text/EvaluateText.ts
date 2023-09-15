@@ -27,7 +27,7 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option', output: 'output' },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }
@@ -127,6 +127,6 @@ export class EvaluateText extends MagickComponent<Promise<void>> {
         break
     }
 
-    this._task.closed = is ? ['false'] : ['true']
+    if (node?._task) node._task.closed = is ? ['false'] : ['true']
   }
 }
