@@ -10,7 +10,8 @@ import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/client-core'
-import { useLazyGetSpellByIdQuery, useSaveSpellMutation } from '@magickml/state'
+import { useLazyGetSpellByIdQuery, useSaveSpellMutation, RootState } from '@magickml/state'
+import { useSelector } from 'react-redux'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -24,6 +25,8 @@ const EventHandler = ({ pubSub, tab }) => {
   // only using this to handle events, so not rendering anything with it.
   const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
+
+  const { currentAgentId } = useSelector((state: RootState) => state.globalConfig)
 
   const [saveSpellMutation] = useSaveSpellMutation()
   // TODO: is this a bug?
@@ -326,9 +329,17 @@ const EventHandler = ({ pubSub, tab }) => {
    * @param {object} event - The run Spell event object
    * @param {object} data - The data object for running the spell
    */
-  const runSpell = async (event, data) => {
+  const runSpell = async (event, _data) => {
     // run the spell in the spell runner service
-    client.service('spell-runner').create(data)
+    const data = {
+      spell: spellRef.current,
+      agentId: currentAgentId,
+      projectId: config.projectId,
+      ..._data
+    }
+    console.log('DATA', data)
+    const response = await client.service('agents').run(data)
+    console.log("RESOPONSE!", response)
   }
 
   const handlerMap = {
