@@ -5,18 +5,21 @@ import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
 import { usePubSub } from '@magickml/client-core'
 import css from '../screens/Magick/magick.module.css'
-import { addLocalState, selectStateBytabId, spellApi, upsertLocalState, useAppSelector } from '@magickml/state'
+import { RootState, addLocalState, selectStateBytabId, spellApi, upsertLocalState, useAppSelector } from '@magickml/state'
 
 /**
  * Input component - Receives and sends playtest input.
  */
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
+  const { currentAgentid } = useSelector<RootState>(
+    state => state.globalConfig
+  ) as any
 
   const [playtestCache, setPlaytestCache] = useState<string[]>([])
 
@@ -30,6 +33,11 @@ const Input = props => {
     { enableOnFormTags: ['INPUT'] },
     [props, ref]
   )
+
+  // console log current agent id on change
+  useEffect(() => {
+    console.log('current agent id', currentAgentid)
+  }, [currentAgentid])
 
   // Use up and down arrows to move through history and set valye of input.
   useHotkeys(
