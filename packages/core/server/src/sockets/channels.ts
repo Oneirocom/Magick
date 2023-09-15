@@ -98,8 +98,8 @@ export default function (app: Application): void {
       context.data?.agentId ||
       data.agentId
 
-    // don't publish if we are an agent
-    if (app.get('isAgent')) return
+    // Block publishing unless we are on the main server
+    if (app.get('environment') !== 'server') return
 
     // Lets not relay up all the patch events
     if (context.method === 'patch' || !projectId) return
