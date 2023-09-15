@@ -167,7 +167,7 @@ export class Output extends MagickComponent<void> {
         } else if (!t.handler) {
           this.logger.error({ outputType, finalType: t }, 'Output type is not defined')
         } else {
-          t.handler({
+          await t.handler({
             output,
             agent: agent,
             event,
