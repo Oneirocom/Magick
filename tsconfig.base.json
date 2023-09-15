@@ -39,6 +39,7 @@
       "@magickml/core": ["packages/core/shared/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/editor": ["packages/editor/src/index.ts"],
+      "@magickml/layouts": ["packages/layouts/src/index.ts"],
       "@magickml/plugin-anthropic-client": [
         "packages/plugins/anthropic/client/src/index.ts"
       ],
@@ -193,6 +194,7 @@
       "@magickml/rete": ["packages/rete/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
+      "@magickml/state": ["packages/state/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/ui": ["packages/ui/src/index.ts"],
       "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
