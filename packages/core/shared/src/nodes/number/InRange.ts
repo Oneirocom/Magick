@@ -19,7 +19,7 @@ export class InRange extends MagickComponent<void> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Number',
+      'Flow',
       info
     )
   }
@@ -97,9 +97,9 @@ export class InRange extends MagickComponent<void> {
     }
 
     if (numberToTest >= startRange && numberToTest <= endRange) {
-      this._task.closed = ['false']
+      if (node?._task) node._task.closed = ['false']
     } else {
-      this._task.closed = ['true']
+      if (node?._task) node._task.closed = ['true']
     }
   }
 }

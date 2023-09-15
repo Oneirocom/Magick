@@ -31,9 +31,10 @@ export class NumberVariable extends MagickComponent<InputReturn> {
           output: 'output',
         },
       },
-      'Number',
+      'Data/Variables',
       info
     )
+    this.common = true
   }
 
   /**

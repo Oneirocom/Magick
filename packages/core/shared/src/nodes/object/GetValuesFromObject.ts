@@ -24,7 +24,7 @@ export class GetValuesFromObject extends MagickComponent<void> {
           trigger: 'option',
         },
       } as TaskOptions,
-      'Object',
+      'Data/Object',
       'Takes an object input and outputs any number of named properties that are found in the object.'
     )
   }

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
 import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
-// import { RootState } from 'packages/editor/src/state/store'
 
 export const useSpellList = () => {
   // todo  using any here for now until we find a better solution for sharing this without circular dependencies

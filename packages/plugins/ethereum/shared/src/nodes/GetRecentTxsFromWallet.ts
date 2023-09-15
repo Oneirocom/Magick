@@ -110,11 +110,11 @@ export class GetRecentTxsFromWallet extends MagickComponent<
     { data }: { data: string | undefined }
   ): Promise<InputReturn> {
     // The closed attribute of the _task property prevents workflow execution until its 'trigger' attribute is set.
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
 
     // This block of code checks whether data exists and is not empty. If there is any data, it gets returned.
     if (data && !isEmpty(data)) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
       return {
         output: data,
       }

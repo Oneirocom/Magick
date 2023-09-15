@@ -19,7 +19,7 @@ export class ProfanityFilter extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Text',
+      'Data/Text',
       'Takes a string input and checks it against a set of profanity rules, then triggers the appropriate output.'
     )
   }
@@ -43,12 +43,12 @@ export class ProfanityFilter extends MagickComponent<Promise<void>> {
 
   /**
    * Filters profanity.
-   * @param _node - The worker data.
+   * @param node - The worker data.
    * @param inputs - The inputs.
    */
-  async worker(_node: WorkerData, inputs: MagickWorkerInputs): Promise<void> {
+  async worker(node: WorkerData, inputs: MagickWorkerInputs): Promise<void> {
     const text = inputs['string'][0] as string
     const isProfane = hasBadWords(text)
-    this._task.closed = isProfane ? ['false'] : ['true']
+    if (node?._task) node._task.closed = isProfane ? ['false'] : ['true']
   }
 }

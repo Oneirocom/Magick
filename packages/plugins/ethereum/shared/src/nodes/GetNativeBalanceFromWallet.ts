@@ -114,13 +114,13 @@ export class GetNativeBalanceFromWallet extends MagickComponent<
     outputs: MagickWorkerOutputs,
     { data }: { data: string | undefined }
   ) {
-    this._task.closed = ['trigger']
+    if (node?._task) node._task.closed = ['trigger']
     console.log('********* processing input to ethereum input *********')
     console.log(data)
 
     // Handle data subscription. If there is data, this is from playtest
     if (data && !isEmpty(data)) {
-      this._task.closed = []
+      if (node?._task) node._task.closed = []
 
       return {
         output: data,

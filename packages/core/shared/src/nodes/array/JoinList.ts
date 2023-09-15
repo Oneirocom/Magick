@@ -25,7 +25,7 @@ export class JoinListComponent extends MagickComponent<WorkerReturn> {
           trigger: 'option',
         },
       },
-      'Array',
+      'Data/Arrays',
       info
     )
   }

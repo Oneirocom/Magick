@@ -1,5 +1,6 @@
 // DOCUMENTED
 import { useFeatureFlagEnabled } from 'posthog-js/react'
+import { FEATURE_FLAGS } from '@magickml/config'
 import { ProjectWindowProvider } from '../../contexts/ProjectWindowContext'
 import { OldSidebar } from './OldSidebar'
 import { NewSidebar } from './Newsidebar'
@@ -16,7 +17,7 @@ export function Drawer({ children }: DrawerProps): JSX.Element {
 
   return (
     <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
-      {showSideBarFlag ? (
+      {showSideBarFlag || FEATURE_FLAGS.SHOW_SIDEBAR ? (
         <NewSidebar children={children} />
       ) : (
         <OldSidebar children={children} />

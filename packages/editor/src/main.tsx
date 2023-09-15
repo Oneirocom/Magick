@@ -14,11 +14,11 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import App from './App'
 import { config as wagmiConfig } from './wagmi'
 import AppProviders from './contexts/AppProviders'
-import { createStore } from './state/store'
 
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { AppConfig } from '@magickml/client-core'
+import { createStore } from '@magickml/core'
 import { MagickmlChatbox } from '@magickml/chatbox'
 
 /**

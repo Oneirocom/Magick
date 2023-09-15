@@ -46,7 +46,7 @@ export class Javascript extends MagickComponent<unknown> {
           trigger: 'option',
         },
       },
-      'Code',
+      'Invoke/Languages',
       info
     )
     // this.runFromCache = true
@@ -132,7 +132,7 @@ export class Javascript extends MagickComponent<unknown> {
       return value
     } catch (err) {
       // close the data socket so it doesnt error out
-      this._task.closed = ['data']
+      if (node?._task) node._task.closed = ['data']
       return console.error(err)
     }
   }

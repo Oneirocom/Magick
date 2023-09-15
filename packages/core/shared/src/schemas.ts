@@ -65,6 +65,7 @@ export const agentSchema = Type.Object(
     publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
     image: Type.Optional(Type.String()),
+    default: Type.Optional(Type.Boolean()),
   },
   {
     $id: 'Agent',

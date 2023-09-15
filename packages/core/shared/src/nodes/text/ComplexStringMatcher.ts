@@ -20,7 +20,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       {
         outputs: { true: 'option', false: 'option' },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }
@@ -201,6 +201,7 @@ export class ComplexStringMatcher extends MagickComponent<Promise<void>> {
       }
     }
 
-    this._task.closed = !invalidated && isMatched ? ['false'] : ['true']
+    if (node?._task)
+      node._task.closed = !invalidated && isMatched ? ['false'] : ['true']
   }
 }

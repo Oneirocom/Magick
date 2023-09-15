@@ -43,7 +43,7 @@ export class DiscordLeaveVoiceChannelsInServer extends MagickComponent<
           left: 'output',
         },
       },
-      'Discord',
+      'Integrations/Discord',
       'Leave any and all voice channels in a server'
     )
   }

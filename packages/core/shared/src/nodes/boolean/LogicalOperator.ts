@@ -30,7 +30,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
       {
         outputs: { true: 'option', false: 'option', error: 'output' },
       },
-      'Boolean',
+      'Flow',
       info
     )
   }
@@ -107,7 +107,7 @@ export class LogicalOperator extends MagickComponent<Promise<WorkerReturn>> {
       error = (e as Error).message
     }
 
-    this._task.closed = is ? ['false'] : ['true']
+    if (node?._task) node._task.closed = is ? ['false'] : ['true']
     return {
       error: error,
     }

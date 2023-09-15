@@ -2,17 +2,14 @@
 import { Grid } from '@mui/material'
 import styles from '../AgentWindowStyle.module.css'
 import { Input, Switch } from '@magickml/client-core'
-import { useEffect, useState } from 'react'
-import { NodeDataWithType } from './utils'
 
 /**
  * Interface for Props.
  */
 interface Props {
   publicVars: any
-  selectedAgent: any
   setPublicVars: (data: any) => void
-  update: (id: string, data?: any) => void
+  setUpdateNeeded: (data: boolean) => void
 }
 
 /**
@@ -23,42 +20,28 @@ interface Props {
 const AgentPubVariables = ({
   publicVars,
   setPublicVars,
-  update, selectedAgent
+  setUpdateNeeded,
 }: Props) => {
-  const [publicVariables, setPublicVariables] = useState<NodeDataWithType[]>([]);
+  /**
+   * Handle changes to public variables.
+   * @param variable - variable object
+   * @param event - DOM event
+   */
 
-  useEffect(() => {
-    if (publicVars)
-      setPublicVariables(publicVars);
-  }, [setPublicVariables, publicVars]);
-
-  const updatePubVariables = async (
-    event:
-      | React.KeyboardEvent<HTMLTextAreaElement> | React.KeyboardEvent<HTMLDivElement>
-      | React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      await update(selectedAgent.id);
-    }
-  };
-
-  const handleInputChange = async (
-    index: number,
-    type: string,
-    value?: any
-  ) => {
-    const newVariables = [...publicVariables];
-    if (type === 'text' || type === 'string') {
-      newVariables[index].stringValue = value;
-    } else {
-      newVariables[index]._var = !newVariables[index]._var;
-      newVariables[index].boolValue = !newVariables[index].boolValue;
-      await update(selectedAgent.id, { ...selectedAgent, publicVariables: JSON.stringify(newVariables) })
-    }
-    setPublicVariables(newVariables);
-    setPublicVars(newVariables);
-  };
+  const onChangeHandler = (variable, event) => {
+    // Update the public variables data
+    setPublicVars({
+      ...publicVars,
+      [variable.id]: {
+        ...variable,
+        value:
+          event.target.checked === undefined
+            ? event.target.value
+            : event.target.checked
+      },
+    })
+    setUpdateNeeded(true)
+  }
 
   return (
     <div className={styles.agentPubVars}>
@@ -72,34 +55,35 @@ const AgentPubVariables = ({
           marginBottom: '10px',
         }}
       >
-        {publicVariables.map((variable, index) => {
+        {Object.values(publicVars).map((variable: any) => {
           return (
             <Grid
               container
-              key={variable.name + index}
+              key={variable.id}
               style={{
                 alignItems: 'center',
                 marginBottom: '10px',
               }}
             >
-              <Grid item xs={2}>
-                <p style={{ wordBreak: "break-all", whiteSpace: "normal", marginRight: '2px' }}>{`${variable.name}: `}</p>
+              <Grid item xs={1}>
+                <p style={{  wordBreak: "break-all",whiteSpace: "normal", marginRight: '2px' }}>{`${variable.name}: `}</p>
               </Grid>
               <Grid item xs={8}>
-                {variable.type === 'boolean' ? (
+                {variable?.type?.includes('Boolean') ? (
                   <Switch
                     label={''}
-                    checked={variable.boolValue}
-                    onChange={() => handleInputChange(index, 'bool')}
+                    checked={variable.value}
+                    onChange={e => {
+                      onChangeHandler(variable, e)
+                    }}
                   />
                 ) : (
                   <Input
                     style={{ width: '100%', padding: '13px !important' }}
-                    value={variable.stringValue}
+                    value={variable.value}
                     type="text"
-                    onKeyDown={(e) => updatePubVariables(e)}
                     onChange={e => {
-                      handleInputChange(index, 'text', e.target.value)
+                      onChangeHandler(variable, e)
                     }}
                     name={variable.name}
                     placeHolder={'Add new value here'}

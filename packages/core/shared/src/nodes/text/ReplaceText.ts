@@ -43,7 +43,7 @@ export class ReplaceText extends MagickComponent<Promise<WorkerReturn>> {
           trigger: 'option',
         },
       },
-      'Text',
+      'Data/Text',
       info
     )
   }

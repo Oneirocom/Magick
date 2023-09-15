@@ -56,7 +56,7 @@ export const updateSpellInManager = async (context: HookContext) => {
     (id as string).length > 36 ? (id as string).slice(0, 36) : (id as string)
 
   if (!spellManager) return
-
+  
   const spellRunner = spellManager.getReadySpellRunner(decodedId)
 
   if (!spellRunner) return

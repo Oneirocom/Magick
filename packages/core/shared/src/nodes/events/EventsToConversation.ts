@@ -27,9 +27,13 @@ export class EventsToConversation extends MagickComponent<WorkerReturn> {
           trigger: 'option',
         },
       },
-      'Event',
+      'Storage/Events',
       info
     )
+
+    this.displayName = 'Events to String'
+
+    this.common = true
   }
 
   /**
