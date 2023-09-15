@@ -7,10 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import MenuBar from '../MenuBar/MenuBar'
 import CreateTab from './CreateTab'
 import css from './tabBar.module.css'
-import { closeTab, selectAllTabs } from '@magickml/core'
-import { changeActive } from '@magickml/core'
-import { RootState } from '@magickml/core'
 import { Icon } from '@magickml/client-core'
+import { RootState, changeActive, closeTab, selectAllTabs } from '@magickml/state'
 
 /**
  * Tab Component

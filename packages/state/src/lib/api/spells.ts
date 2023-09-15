@@ -2,7 +2,6 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
-import { SpellInterface } from '@magickml/core'
 import md5 from 'md5'
 
 /**
@@ -18,7 +17,7 @@ export interface Diff {
  */
 export interface PatchArgs {
   spellName: string
-  update: Partial<SpellInterface>
+  update: Partial<any>
 }
 
 /**
@@ -35,7 +34,7 @@ export interface SpellData {
   limit: number
   skip: number
   total: number
-  data: SpellInterface[]
+  data: any[]
 }
 
 /**
@@ -138,7 +137,7 @@ export const spellApi = rootApi.injectEndpoints({
         }
 
         return baseQuery(baseQueryOptions) as QueryReturnValue<
-          Partial<SpellInterface>,
+          Partial<any>,
           FetchBaseQueryError,
           unknown
         >

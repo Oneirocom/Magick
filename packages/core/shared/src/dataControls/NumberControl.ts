@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A custom control class for number inputs that extends the DataControl class
  * from the inspectorPlugin module.
  */
-import { DataControl } from '../plugins/inspectorPlugin';
+import { DataControl } from '../plugins/inspectorPlugin'
 
 export class NumberControl extends DataControl {
   /**
@@ -13,7 +13,6 @@ export class NumberControl extends DataControl {
    * defaultValue of the control.
    */
   constructor({ dataKey, name, icon = 'hand', defaultValue = -1, tooltip }) {
-
     super({
       dataKey: dataKey,
       name: name,
@@ -22,7 +21,7 @@ export class NumberControl extends DataControl {
       type: 'number',
       defaultValue,
       tooltip: tooltip,
-    });
+    })
   }
 
   /**
@@ -30,7 +29,7 @@ export class NumberControl extends DataControl {
    *
    * @returns {void}
    */
-  onData() {
-    return;
+  override onData() {
+    return
   }
 }

@@ -4,19 +4,13 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useConfig } from '@magickml/client-core'
-import {
-  useDeleteSpellMutation,
-  useGetSpellsQuery,
-  useNewSpellMutation,
-} from '@magickml/core'
-import { RootState } from '@magickml/core'
-import { closeTab, openTab, selectAllTabs } from '@magickml/core'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'
 import OpenProject from './OpenProject'
 import { v4 as uuidv4 } from 'uuid'
 import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
+import { RootState, closeTab, openTab, selectAllTabs, useDeleteSpellMutation, useGetSpellsQuery, useNewSpellMutation } from '@magickml/state'
 
 /**
  * StartScreen component. Displays an overlay with options to open or create new spells.
