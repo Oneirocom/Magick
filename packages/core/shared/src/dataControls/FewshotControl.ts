@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A class that extends `DataControl` to create a custom control for fewshot data.
  * @extends DataControl
  */
-import { DataControl } from '../plugins/inspectorPlugin';
+import { DataControl } from '../plugins/inspectorPlugin'
 
 export class FewshotControl extends DataControl {
   /**
@@ -21,7 +21,7 @@ export class FewshotControl extends DataControl {
     dataKey = 'fewshot',
     name = 'fewshot',
     defaultValue = '',
-    tooltip=''
+    tooltip = '',
   }) {
     const options = {
       dataKey,
@@ -31,21 +31,21 @@ export class FewshotControl extends DataControl {
       options: {
         editor: true,
         language,
-        wordWrap: true
+        wordWrap: true,
       },
       defaultValue,
       tooltip: tooltip,
     }
 
     // Calls the constructor of parent class and passes the options object to it.
-    super(options);
+    super(options)
   }
 
   /**
    * Returns data for the control.
    * @returns {void}
    */
-  onData() {
-    return;
+  override onData() {
+    return
   }
 }

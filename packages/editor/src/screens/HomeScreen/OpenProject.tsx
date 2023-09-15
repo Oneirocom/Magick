@@ -5,11 +5,10 @@ import { useNavigate } from 'react-router-dom'
 
 import packageJson from '../../../package.json'
 import FileInput from '../../components/FileInput'
-import { RootState } from '@magickml/core'
-import { selectAllTabs } from '@magickml/core'
 import ProjectRow from '../../components/ProjectRow'
 import css from './homeScreen.module.css'
 import banner from './banner.png'
+import { RootState, selectAllTabs } from '@magickml/state'
 
 const version = packageJson.version
 

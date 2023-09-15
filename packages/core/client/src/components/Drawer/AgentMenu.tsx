@@ -22,8 +22,13 @@ import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from '@magickml/config'
+
+import { useFeathers } from '../../providers/FeathersProvider'
+
+// todo fix this import
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
+import { AgentInterface, SpellInterface } from '@magickml/core'
 
 interface Spell {
   id: number
@@ -31,26 +36,31 @@ interface Spell {
   // Add other relevant properties
 }
 
-interface Agent {
-  rootSpellId: number
-  // Add other relevant properties
-}
-
 function AgentMenu({ data, resetData }) {
   const navigate = useNavigate()
+  const { client } = useFeathers()
   const [openMenu1, setOpenMenu1] = useState(null)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
   const [openMenu2, setOpenMenu2] = useState(null)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
   const [selectedAgentData, setSelectedAgentData] = useState<any>(null)
-  const [currentAgent, setCurrentAgent] = useState<any>(null)
+  const [currentAgent, _setCurrentAgent] = useState<AgentInterface | null>(null)
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
-  const spellList: Spell[] = useSpellList()
+  const spellList: SpellInterface[] = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
   const { agentUpdate, setAgentUpdate } = useTreeData()
+
+  const setCurrentAgent = useCallback(
+    (agent: AgentInterface) => {
+      // Subscribe to agent service
+      client.service('agents').subscribe(agent.id)
+      _setCurrentAgent(agent)
+    },
+    []
+  )
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -232,7 +242,7 @@ function AgentMenu({ data, resetData }) {
     marginBottom: '4px',
   }))
 
-  const handleSelectAgent = (agent: Agent) => {
+  const handleSelectAgent = (agent: AgentInterface) => {
     setCurrentAgent(agent)
 
     if (spellList) {
@@ -262,7 +272,7 @@ function AgentMenu({ data, resetData }) {
       const defaultAgent = data.find(agent => agent.default)
 
       // Set currentAgent to 'Default Agent' if it exists, otherwise choose the first agent
-      setCurrentAgent(defaultAgent || data[0])
+      setCurrentAgent((defaultAgent || data[0]) as AgentInterface)
     }
   }, [data])
 

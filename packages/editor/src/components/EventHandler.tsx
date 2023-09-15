@@ -5,15 +5,12 @@ import { GraphData, SpellInterface } from '@magickml/core'
 
 import md5 from 'md5'
 
-import {
-  useLazyGetSpellByIdQuery,
-  useSaveSpellMutation,
-} from '@magickml/core'
 import { useLayout } from '../contexts/LayoutProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/client-core'
+import { useLazyGetSpellByIdQuery, useSaveSpellMutation } from '@magickml/state'
 
 /**
  * Event Handler component for handling various events in the editor
