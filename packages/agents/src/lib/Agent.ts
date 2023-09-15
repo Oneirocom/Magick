@@ -221,13 +221,16 @@ export class Agent implements AgentInterface {
   }
 
   async runWorker(job: Job<AgentRunJob>) {
+    console.log('RUNNING WORKER!', job)
     // the job name is the agent id.  Only run if the agent id matches.
     this.logger.debug('running worker', { id: this.id, data: job.data })
     if (this.id !== job.data.agentId) return
 
     const { data } = job
 
-    const spellRunner = await this.spellManager.loadById(data.spellId)
+    const spellRunner = await this.spellManager.loadById(
+      data.spellId || this.rootSpellId
+    )
 
     // Handle the case where we don't get a sepllRunner
     if (!spellRunner) {
@@ -271,6 +274,7 @@ export class Agent implements AgentInterface {
         result: output,
       })
     } catch (err) {
+      console.log('ERROR', err)
       this.logger.error(
         { spellId: data.spellId, agent: { name: this.name, id: this.id } },
         'Error running agent spell: %o',
