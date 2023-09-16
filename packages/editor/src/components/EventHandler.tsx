@@ -332,14 +332,12 @@ const EventHandler = ({ pubSub, tab }) => {
   const runSpell = async (event, _data) => {
     // run the spell in the spell runner service
     const data = {
-      spell: spellRef.current,
+      spellId: spellRef.current.id,
       agentId: currentAgentId,
       projectId: config.projectId,
       ..._data
     }
-    console.log('DATA', data)
     const response = await client.service('agents').run(data)
-    console.log("RESOPONSE!", response)
   }
 
   const handlerMap = {
