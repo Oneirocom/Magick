@@ -8,6 +8,7 @@ import {
   BullQueue,
 } from '@magickml/server-core'
 import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
+import { v4 as uuidv4 } from 'uuid'
 import {
   AGENT_DELETE,
   AGENT_DELETE_JOB,
@@ -47,6 +48,18 @@ export class CloudAgentWorker extends AgentManager {
 
     this.addAgent = this.addAgent.bind(this)
     this.updateAgents = this.updateAgents.bind(this)
+  }
+
+  heartbeat() {
+    this.pubSub.subscribe('cloud-agents:ping', async () => {
+      this.pubSub.publish(
+        'cloud-agents:pong',
+        JSON.stringify({
+          id: uuidv4(),
+          currentAgents: Object.keys(this.currentAgents),
+        })
+      )
+    })
   }
 
   async addAgent(agentId: string) {
