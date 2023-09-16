@@ -34,11 +34,6 @@ const Input = props => {
     [props, ref]
   )
 
-  // console log current agent id on change
-  useEffect(() => {
-    console.log('current agent id', currentAgentid)
-  }, [currentAgentid])
-
   // Use up and down arrows to move through history and set valye of input.
   useHotkeys(
     'up',
@@ -385,9 +380,9 @@ const Playtest = ({ tab }) => {
       secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
     }
 
-    publish($RUN_SPELL(tab.id), data)
-
     setValue('')
+
+    publish($RUN_SPELL(tab.id), data)
   }
 
   // Update state when playtest data is changed.
