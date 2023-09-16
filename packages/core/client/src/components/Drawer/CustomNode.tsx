@@ -11,10 +11,16 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone'
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
-import { useConfig, useFeathers } from '@magickml/client-core'
-import { closeTab, selectAllTabs } from '../../../../../editor/src/state/tabs'
+import { useFeathers } from '@magickml/client-core'
+import {
+  RootState,
+  closeTab,
+  selectAllTabs,
+  spellApi,
+  openTab,
+} from '@magickml/core'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../../../../editor/src/state/store'
+import { useSnackbar } from 'notistack'
 
 type ExtendedNodeModel = NodeModel & CustomData
 
@@ -34,14 +40,17 @@ export const CustomNode: React.FC<Props> = props => {
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
   const navigate = useNavigate()
-  const { setOpenDoc, setToDelete,setIsAdded } = useTreeData()
-  // State variables for the custom context menu
+  const { setOpenDoc, setToDelete, setIsAdded } = useTreeData()
+  const { enqueueSnackbar } = useSnackbar()
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [isContextMenuOpen, setContextMenuOpen] = useState(false)
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const dispatch = useDispatch()
+  const [isRenaming, setIsRenaming] = useState(false)
+  const [newName, setNewName] = useState(props.node.text)
+  const [patchSpell] = spellApi.usePatchSpellMutation()
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -76,19 +85,21 @@ export const CustomNode: React.FC<Props> = props => {
     // Open the custom context menu
     setContextMenuOpen(true)
   }
-  const handleDeleteSpell = async (e) => {
-    if (!props.node) return
+  const handleDeleteSpell = async e => {
     e.stopPropagation()
-   
+    e.preventDefault()
+    if (!props.node) return
+
     try {
       if (props.node.fileType === 'spell') {
         const spell: any = props.node.id
+        navigate('/magick')
         await client.service('spells').remove(props.node.id)
         const tab = tabs.find(tab => tab.id === props.node.id)
         if (tab) {
+          console.log('tab', tab)
           dispatch(closeTab(tab.id))
           window.localStorage.removeItem(`zoomValues-${tab.id}`)
-          navigate('/magick')
         }
         setToDelete(spell)
         setIsAdded(true)
@@ -97,6 +108,49 @@ export const CustomNode: React.FC<Props> = props => {
     } catch (err) {
       console.error('Error deleting spell', err)
     }
+  }
+
+  const handleRenameStart = () => {
+    setIsRenaming(true)
+    setContextMenuOpen(false)
+  }
+
+  const handleRenameSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleRename()
+    }
+  }
+
+  const handleRename = async () => {
+    if (!props.node || !newName.trim()) return
+
+    const response: any = await patchSpell({
+      id: props.node.id,
+      update: {
+        name: newName,
+      },
+    })
+
+    if (response.error) {
+      enqueueSnackbar('Error saving spell', {
+        variant: 'error',
+      })
+      return
+    }
+
+    enqueueSnackbar('Spell saved', { variant: 'success' })
+
+    dispatch(closeTab(props.node.id))
+    dispatch(
+      openTab({
+        name: props.node.id + '-' + encodeURIComponent(btoa(newName)),
+        spellName: newName,
+        type: 'spell',
+      })
+    )
+
+    setIsRenaming(false)
   }
 
   return (
@@ -122,17 +176,28 @@ export const CustomNode: React.FC<Props> = props => {
         />
       </div>
       <div className={styles.labelGridItem}>
-        <Typography
-          variant="body1"
-          sx={{
-            cursor: 'pointer',
-            marginLeft: '8px',
-          }}
-          onClick={handleClick}
-          onContextMenu={handleContextMenu}
-        >
-          {props.node.text}
-        </Typography>
+        {isRenaming ? (
+          <input
+            type="text"
+            value={newName}
+            onChange={e => setNewName(e.target.value)}
+            onBlur={handleRename}
+            onKeyDown={handleRenameSubmit}
+          />
+        ) : (
+          <Typography
+            variant="body1"
+            sx={{
+              cursor: 'pointer',
+              marginLeft: '8px',
+            }}
+            onClick={handleClick}
+            onContextMenu={handleContextMenu}
+            onDoubleClick={handleRenameStart}
+          >
+            {props.node.text}
+          </Typography>
+        )}
       </div>
       <div
         className={`${styles.expandIconWrapper} 
@@ -164,12 +229,12 @@ export const CustomNode: React.FC<Props> = props => {
       >
         <MenuItem
           className={styles.hideMenuItem}
-          onClick={(e) => handleDeleteSpell(e)}
+          onClick={e => handleDeleteSpell(e)}
         >
           <DeleteOutlineTwoToneIcon sx={{ mr: 1 }} />
           <Typography variant="body1">Delete</Typography>
         </MenuItem>
-        <MenuItem className={styles.hideMenuItem}>
+        <MenuItem className={styles.hideMenuItem} onClick={handleRenameStart}>
           <DriveFileRenameOutlineTwoToneIcon sx={{ mr: 1 }} />
           <Typography variant="body1">Rename</Typography>
         </MenuItem>
