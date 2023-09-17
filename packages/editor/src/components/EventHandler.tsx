@@ -335,6 +335,7 @@ const EventHandler = ({ pubSub, tab }) => {
       spellId: spellRef.current.id,
       agentId: currentAgentId,
       projectId: config.projectId,
+      isPlaytest: true,
       ..._data
     }
     const response = await client.service('agents').run(data)
