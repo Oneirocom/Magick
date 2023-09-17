@@ -617,6 +617,7 @@ export type ModuleContext = {
     inputs: Record<string, unknown>
     outputs: Record<string, unknown>
     sessionId?: string
+    isPlaytest?: boolean
   }
   projectId: string
   currentSpell: Spell

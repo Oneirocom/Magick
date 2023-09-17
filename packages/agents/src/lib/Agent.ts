@@ -221,7 +221,6 @@ export class Agent implements AgentInterface {
   }
 
   async runWorker(job: Job<AgentRunJob>) {
-    console.log('RUNNING WORKER!', job)
     // the job name is the agent id.  Only run if the agent id matches.
     this.logger.debug('running worker', { id: this.id, data: job.data })
     if (this.id !== job.data.agentId) return
@@ -264,6 +263,7 @@ export class Agent implements AgentInterface {
         publicVariables: this.publicVariables,
         runSubspell: data.runSubspell,
         app: this.app,
+        isPlaytest: data.isPlaytest,
       })
 
       this.publishEvent(AGENT_RUN_RESULT(this.id), {
@@ -304,6 +304,7 @@ export interface AgentRunJob {
   runSubspell: boolean
   secrets: Record<string, string>
   publicVariables: Record<string, unknown>
+  isPlaytest?: boolean
 }
 
 export interface AgentResult {

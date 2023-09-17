@@ -27,6 +27,7 @@ export type RunRootSpellArgs = {
   currentJob?: Job<AgentRunJob>
   subSpellDepth?: number
   sessionId?: string
+  isPlaytest?: boolean
 }
 
 interface AgentCommanderArgs {
@@ -80,8 +81,6 @@ export class AgentCommander extends EventEmitter {
           }
         })
 
-        console.log('running spell with response')
-        debugger
         jobId = await this.runSpell(args)
       })()
     })
@@ -99,6 +98,7 @@ export class AgentCommander extends EventEmitter {
       spellId,
       subSpellDepth,
       sessionId,
+      isPlaytest = false,
     }: RunRootSpellArgs
   ) {
     return JSON.stringify({
@@ -112,6 +112,7 @@ export class AgentCommander extends EventEmitter {
       publicVariables,
       subSpellDepth,
       sessionId,
+      isPlaytest,
     })
   }
 

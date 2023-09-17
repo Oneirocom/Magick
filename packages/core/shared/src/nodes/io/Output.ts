@@ -122,7 +122,7 @@ export class Output extends MagickComponent<void> {
       console.error('No input provided to output component')
       return { output: '' }
     }
-    const { data, agent } = context
+    const { data, agent, module } = context
 
     const event = // event data is inside a task
       ((inputs.event?.[0] as any)?.eventData ||
@@ -139,7 +139,8 @@ export class Output extends MagickComponent<void> {
       event.connector
 
     // handle this being a subspell returning out
-    if (outputType === 'Subspell') {
+    // or if this is coming from playest, just return the output
+    if (outputType === 'Subspell' || module.isPlaytest) {
       return { output }
     }
 

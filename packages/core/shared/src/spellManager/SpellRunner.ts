@@ -20,6 +20,7 @@ import { AGENT_SPELL } from '../communication/agentEventTypes'
 
 export type RunComponentArgs = {
   sessionId?: string
+  isPlaytest?: boolean
   inputs: MagickSpellInput
   agent?: any
   componentName?: string
@@ -303,6 +304,7 @@ class SpellRunner {
     publicVariables,
     sessionId,
     app,
+    isPlaytest = false,
   }: RunComponentArgs) {
     this.busy = true
     // This should break us out of an infinite loop if we have circular spell dependencies.
@@ -325,6 +327,7 @@ class SpellRunner {
         publicVariables,
         app,
         sessionId,
+        isPlaytest,
       })
 
       const component = this._getComponent(
