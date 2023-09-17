@@ -12,6 +12,7 @@ export class Module {
   inputs: Record<string, unknown>
   outputs: Record<string, unknown>
   sessionId?: string
+  isPlaytest: boolean
   app?: any // set to App, but move App to engine first
   constructor() {
     this.inputs = {}
@@ -19,14 +20,23 @@ export class Module {
     this.secrets = {}
     this.publicVariables = {}
     this.app = null
+    this.isPlaytest = false
   }
 
-  read({ inputs, secrets, publicVariables, app, sessionId }: ReadArgs) {
+  read({
+    inputs,
+    secrets,
+    publicVariables,
+    app,
+    sessionId,
+    isPlaytest = false,
+  }) {
     this.inputs = inputs
     this.secrets = secrets || ({} as Record<string, string>)
     this.publicVariables = publicVariables || ({} as Record<string, unknown>)
     this.app = app
     this.sessionId = sessionId
+    this.isPlaytest = isPlaytest
   }
 
   write(outputs: Record<string, unknown>) {
