@@ -37,20 +37,7 @@ const EventWindow = (): JSX.Element => {
     await fetchEvents()
   }
 
-  function reverseRows(arr) {
-    
-    const len = arr.length
-   
-    for (let i = 0; i < len / 2; i++) {
-      
-      const temp = {}
-      Object.assign(temp, arr[i])
-      Object.assign(arr[i], arr[len - i - 1])
-      Object.assign(arr[len - i - 1], temp)
-    }
 
-    return arr
-  }
 
   /**
    * Fetches the events of the current project.
