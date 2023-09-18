@@ -49,7 +49,7 @@ function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
   return result
 }
 
-const AGENT_EVENTS = ['log', 'result', 'spell', 'run']
+const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -65,6 +65,7 @@ export const agent = (app: Application) => {
       'patch',
       'remove',
       'run',
+      'command',
       'ping',
       'subscribe',
     ],
