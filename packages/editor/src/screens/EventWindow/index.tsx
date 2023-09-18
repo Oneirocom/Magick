@@ -37,8 +37,6 @@ const EventWindow = (): JSX.Element => {
     await fetchEvents()
   }
 
-
-
   /**
    * Fetches the events of the current project.
    */
