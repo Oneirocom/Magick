@@ -7,8 +7,7 @@ import { app } from '@magickml/server-core'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
-import { Queue } from 'bullmq'
-import { RunRootSpellArgs } from '@magickml/agents'
+import { AgentCommandData, RunRootSpellArgs } from '@magickml/agents'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -48,6 +47,18 @@ export class AgentService<
     })
 
     return { data: query }
+  }
+
+  /**
+   * Executes a command on the agent.
+   * @param data - The data required to execute the command.
+   * @returns An object containing the response from the agent.
+   */
+  async command(data: AgentCommandData) {
+    const agentCommander = this.app.get('agentCommander')
+    const response = await agentCommander.command(data)
+
+    return { response }
   }
 
   async run(data: Omit<RunRootSpellArgs, 'agent'>) {
