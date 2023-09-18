@@ -13,12 +13,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { CSSObject, Theme, styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-  ProjectWindowProvider,
-  useProjectWindow,
-} from '../../../contexts/ProjectWindowContext'
 import { useTreeData } from '../../../contexts/TreeDataProvider'
-import ProjectWindow from '../ProjectWindow'
 import { SetAPIKeys } from '../SetAPIKeys'
 import { Tooltip, Typography } from '@mui/material'
 import { drawerTooltipText } from '../tooltiptext'
@@ -65,10 +60,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(3)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(5)} + 1px)`,
-  },
+  width: '0px'
 })
 
 // DrawerHeader component properties
@@ -114,6 +106,7 @@ const StyledDrawer = styled(MuiDrawer, {
     '& .MuiDrawer-paper': closedMixin(theme as Theme),
   }),
 }))
+
 
 // DrawerItem component properties
 type DrawerItemProps = {
@@ -222,9 +215,8 @@ type DrawerProps = {
 export function NewSidebar(DrawerProps): JSX.Element {
   const location = useLocation()
   const navigate = useNavigate()
-  const { openProjectWindow, openDrawer, setOpenDrawer, setOpenProjectWindow } =
-    useProjectWindow()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState<boolean>(true)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -349,8 +341,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === 'b' && event.ctrlKey) {
-        setOpenProjectWindow(prevState => !prevState)
-        setOpenDrawer(false)
+        setOpenDrawer(openDrawer => !openDrawer)
       }
     }
 
@@ -548,15 +539,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
           </div>
         </>
       </StyledDrawer>
-      {openProjectWindow && <ProjectWindow openDrawer={openProjectWindow} />}
     </div>
   )
 }
 
 export const DrawerProvider = ({ children }: DrawerProps) => {
   return (
-    <ProjectWindowProvider>
-      <NewSidebar> {children}</NewSidebar>
-    </ProjectWindowProvider>
+    <NewSidebar> {children}</NewSidebar>
   )
 }
