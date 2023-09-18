@@ -7,6 +7,7 @@ import {
   AGENT_RUN_RESULT,
   AGENT_DELETE,
   getLogger,
+  AGENT_COMMAND_JOB,
 } from '@magickml/core'
 import type { MagickSpellInput } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
@@ -28,6 +29,12 @@ export type RunRootSpellArgs = {
   subSpellDepth?: number
   sessionId?: string
   isPlaytest?: boolean
+}
+
+export interface AgentCommandData {
+  agentId: string
+  command: string
+  data: Record<string, any>
 }
 
 interface AgentCommanderArgs {
@@ -164,6 +171,23 @@ export class AgentCommander extends EventEmitter {
     await this.pubSub.publish(
       AGENT_RUN_JOB(id),
       this.runRootSpellArgsToString(jobId, args)
+    )
+    return jobId
+  }
+
+  async command(args: AgentCommandData) {
+    const { agentId, command, data } = args
+    if (!agentId) throw new Error('agentId is required')
+
+    const jobId = uuidv4()
+    await this.pubSub.publish(
+      AGENT_COMMAND_JOB(agentId),
+      JSON.stringify({
+        jobId,
+        agentId,
+        command,
+        data,
+      })
     )
     return jobId
   }
