@@ -39,7 +39,7 @@ export class DocumentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
-    const docdb = app.get('docdb')
+    const embeddingdb = app.get('embeddingdb')
     const { modelName, secrets, files, ...docData } = data as DocumentData & {
       modelName: string
       secrets: string
@@ -61,14 +61,19 @@ export class DocumentService<
 
     for (const element of elements) {
       if (!element.content) continue
-      if (data.hasOwnProperty('secrets')) {
-        await docdb.fromString(element.content, element, {
-          modelName,
-          projectId: element.projectId,
-          secrets,
-        })
-      } else {
-        await docdb.from('documents').insert(element)
+      //create document
+      await embeddingdb.from('documents').insert(element)
+      //create embeddings
+      for (let embedding of element.embeddings) {
+        if (data.hasOwnProperty('secrets')) {
+          await embeddingdb.fromString(embedding.content, embedding, {
+            modelName,
+            projectId: element.projectId,
+            secrets,
+          })
+        } else {
+          await embeddingdb.from('embeddings').insert(embedding)
+        }
       }
     }
 
@@ -247,15 +252,25 @@ const getUnstructuredData = async (files, docData) => {
 }
 
 const createElement = (element, docData) => {
+  let documentId = uuidv4()
+  let embeddings = []
+  for (let i in element) {
+    embeddings.push({
+      id: uuidv4(),
+      documentId,
+      index: i,
+      content: element.text,
+    })
+  }
   return {
     ...docData,
-    id: uuidv4(),
-    content: element.text,
+    id: documentId,
     metadata: {
-      elementNumber: 0,
       fileName: element.metadata.filename,
+      fileType: element.metadata.filetype,
       pageNumber: element.metadata.page_number,
       type: element.type,
     },
+    embeddings,
   }
 }
