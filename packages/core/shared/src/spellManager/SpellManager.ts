@@ -45,13 +45,12 @@ export default class SpellManager {
     this.agent = agent
 
     // this will keep the spells in sync with the server
-    if (watchSpells) {
-      this.app.service('spells').on('updated', (spell: SpellInterface) => {
-        if (this.hasSpellRunner(spell.id)) {
-          this.updateSpell(spell)
-        }
-      })
-    }
+    this.app.service('spells').on('updated', (spell: SpellInterface) => {
+      if (!watchSpells) return
+      if (this.hasSpellRunner(spell.id)) {
+        this.updateSpell(spell)
+      }
+    })
   }
 
   getReadySpellRunner(spellId: string) {
