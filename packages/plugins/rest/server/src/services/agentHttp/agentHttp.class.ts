@@ -7,28 +7,33 @@ import { Application, app } from '@magickml/server-core'
 import type { Agent } from '@magickml/agents'
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
-import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
+import type {
+  AgentHttp,
+  AgentHttpData,
+  AgentHttpPatch,
+  AgentHttpQuery,
+} from './agentHttp.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
 import { CLOUD_AGENT_KEY, STANDALONE } from '@magickml/config'
 
-export type { Api, ApiData, ApiPatch, ApiQuery }
+export type { AgentHttp, AgentHttpData, AgentHttpPatch, AgentHttpQuery }
 
-/** Interface for API Service Options */
-export interface ApiServiceOptions {
+/** Interface for AgentHttp Service Options */
+export interface AgentHttpServiceOptions {
   app: Application
 }
 
-/** Type for API Params */
-export type ApiParams = Params<ApiQuery>
+/** Type for AgentHttp Params */
+export type AgentHttpParams = Params<AgentHttpQuery>
 
-/** Type for API GET Response */
-export interface ApiResponse {
+/** Type for AgentHttp GET Response */
+export interface AgentHttpResponse {
   result: Object
 }
 
-export interface ApiError {
+export interface AgentHttpError {
   error: string
 }
 
@@ -60,9 +65,15 @@ const getAgent = async (
   return agent as unknown as Agent
 }
 
-export class ApiService<ServiceParams extends ApiParams = ApiParams>
-  implements
-    ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
+export class AgentHttpService<
+  ServiceParams extends AgentHttpParams = AgentHttpParams
+> implements
+    ServiceInterface<
+      AgentHttpResponse | AgentHttpError,
+      AgentHttpData,
+      ServiceParams,
+      AgentHttpPatch
+    >
 {
   logger: pino.Logger = getLogger()
 
@@ -70,8 +81,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   async get(
     agentId: string,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { spellId, content, isCloud } = params.query as ApiData
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { spellId, content } = params.query as AgentHttpData
 
     const agent = await getAgent(
       agentId,
@@ -107,7 +118,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error('Error in ApiService.get: %s', err)
+      this.logger.error('Error in AgentHttpService.get: %s', err)
       throw new GeneralError({
         error: err,
       })
@@ -115,10 +126,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   }
 
   async create(
-    data: ApiData,
+    data: AgentHttpData,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { content, isCloud } = data
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { content } = data
     const spellId = data?.spellId
 
     const agent = await getAgent(
@@ -155,7 +166,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error('Error in ApiService.create: %s', err)
+      this.logger.error('Error in AgentHttpService.create: %s', err)
       throw new GeneralError({
         error: err,
       })
@@ -164,10 +175,10 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
 
   async update(
     agentId: string,
-    data: ApiData,
+    data: AgentHttpData,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { content, isCloud } = data
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { content } = data
     const spellId = data?.spellId
 
     const agent = await getAgent(
@@ -204,7 +215,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error('Error in ApiService.update: %s', err)
+      this.logger.error('Error in AgentHttpService.update: %s', err)
       throw new GeneralError({
         error: err,
       })
@@ -214,8 +225,8 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   async remove(
     agentId: string,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { spellId, content, isCloud } = params.query as ApiData
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { spellId, content } = params.query as AgentHttpData
 
     const agent = await getAgent(
       agentId,
@@ -251,7 +262,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error('Error in ApiService.remove: %s', err)
+      this.logger.error('Error in AgentHttpService.remove: %s', err)
       throw new GeneralError({
         error: err,
       })
@@ -259,7 +270,7 @@ export class ApiService<ServiceParams extends ApiParams = ApiParams>
   }
 }
 
-/** Helper function to get options for the ApiService. */
+/** Helper function to get options for the AgentHttpService. */
 export const getOptions = (app: Application) => {
   return { app }
 }
