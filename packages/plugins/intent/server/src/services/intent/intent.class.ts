@@ -40,7 +40,7 @@ export class IntentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: IntentData): Promise<any> {
-    const docdb = app.get('docdb')
+    const embeddingdb = app.get('embeddingdb')
 
     if (data.hasOwnProperty('secrets')) {
       const { variations, secrets, modelName, chatModelName, ...docData } =
@@ -51,7 +51,7 @@ export class IntentService<
           variations: number
         }
 
-      docdb.fromString(docData.content, docData, {
+      embeddingdb.fromString(docData.content, docData, {
         modelName,
         projectId: docData?.projectId,
         secrets,
@@ -152,7 +152,7 @@ export class IntentService<
 
         //create new document/embedding
         for (const result of results) {
-          docdb.fromString(
+          embeddingdb.fromString(
             result,
             { ...docData, content: result },
             {
@@ -167,7 +167,7 @@ export class IntentService<
       return docData
     }
 
-    await docdb.from('documents').insert(data)
+    await embeddingdb.from('documents').insert(data)
     return data
   }
 }
