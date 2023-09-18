@@ -60,11 +60,10 @@ export class DocumentService<
     }
 
     for (const element of elements) {
-      if (!element.content) continue
-      //create document
       await embeddingdb.from('documents').insert(element)
       //create embeddings
       for (let embedding of element.embeddings) {
+        if (!embedding.content) continue
         if (data.hasOwnProperty('secrets')) {
           await embeddingdb.fromString(embedding.content, embedding, {
             modelName,
@@ -238,14 +237,12 @@ const getUnstructuredData = async (files, docData) => {
 
   //iterate and format for document insert (api returns either an array or an array of arrays)
   const elements = [] as any[]
-  for (const i in unstructured.data) {
-    // check for empty array
-    if (!unstructured.data[i] && unstructured.data[i] < 0) continue
-    if (unstructured.data[i] instanceof Array) {
+  if (unstructured.data[0] instanceof Array) {
+    for (const i in unstructured.data) {
       elements.push(createElement(unstructured.data[i], docData))
-    } else {
-      elements.push(createElement([unstructured.data[i]], docData))
     }
+  } else {
+    elements.push(createElement(unstructured.data, docData))
   }
 
   return elements
@@ -253,23 +250,23 @@ const getUnstructuredData = async (files, docData) => {
 
 const createElement = (element, docData) => {
   let documentId = uuidv4()
-  let embeddings = []
+  let embeddings: any[] = []
   for (let i in element) {
     embeddings.push({
       id: uuidv4(),
       documentId,
       index: i,
-      content: element.text,
+      content: element[i].text,
     })
   }
   return {
-    ...docData,
+    date: docData.date,
+    type: docData.type,
+    projectId: docData.projectId,
     id: documentId,
     metadata: {
-      fileName: element.metadata.filename,
-      fileType: element.metadata.filetype,
-      pageNumber: element.metadata.page_number,
-      type: element.type,
+      fileName: element[0].metadata.filename,
+      fileType: element[0].metadata.filetype,
     },
     embeddings,
   }
