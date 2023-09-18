@@ -88,7 +88,11 @@ function install(
 
             // todo might need to not hardcode the output to "output"
             // could be more elegant
-            if (node.data.sendToPlaytest && output?.output) {
+            if (
+              node.data.sendToPlaytest &&
+              output?.output &&
+              !data.fromPlaytest
+            ) {
               // note for later. output is a property from the output node and that is where it is defined
               editor.context.sendToPlaytest(output?.output as string)
             }
