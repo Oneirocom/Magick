@@ -237,26 +237,22 @@ const getUnstructuredData = async (files, docData) => {
     // check for empty array
     if (!unstructured.data[i] && unstructured.data[i] < 0) continue
     if (unstructured.data[i] instanceof Array) {
-      for (const j in unstructured.data[i]) {
-        // check for undefined
-        if (!unstructured.data[i][j]) continue
-        elements.push(createElement(unstructured.data[i][j], docData, j))
-      }
+      elements.push(createElement(unstructured.data[i], docData))
     } else {
-      elements.push(createElement(unstructured.data[i], docData, i))
+      elements.push(createElement([unstructured.data[i]], docData))
     }
   }
 
   return elements
 }
 
-const createElement = (element, docData, elementNumber) => {
+const createElement = (element, docData) => {
   return {
     ...docData,
     id: uuidv4(),
     content: element.text,
     metadata: {
-      elementNumber: elementNumber,
+      elementNumber: 0,
       fileName: element.metadata.filename,
       pageNumber: element.metadata.page_number,
       type: element.type,
