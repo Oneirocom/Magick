@@ -25,6 +25,7 @@ import {
   Application,
 } from '@magickml/server-core'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
+import { CommandHub } from './CommandHub'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -46,6 +47,7 @@ export class Agent implements AgentInterface {
   pubsub: PubSub
   ready = false
   app: Application
+  commandHub: CommandHub
 
   outputTypes: any[] = []
   updateInterval: any
@@ -75,6 +77,8 @@ export class Agent implements AgentInterface {
 
     this.messageQueue = new BullQueue()
     this.messageQueue.initialize(AGENT_RUN_JOB(this.id))
+
+    this.commandHub = new CommandHub(this, this.worker)
 
     this.pubsub = pubsub
 
