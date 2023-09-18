@@ -67,7 +67,7 @@ const EventWindow = (): JSX.Element => {
       )
 
       const data = await response.json()
-      setEvents(reverseRows(data.events))
+      setEvents(data.events)
       setLoading(false)
     } catch (error) {
       console.error('ERROR', error)
