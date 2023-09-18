@@ -154,8 +154,8 @@ export async function initApp() {
   })
   const embeddingdb = new PostgresVectorStoreCustom(embeddings, {
     client: app.get('dbClient'),
-    tableName: 'documents',
-    queryName: 'match_documents',
+    tableName: 'embeddings',
+    queryName: 'match_embeddings',
   })
   app.set('vectordb', vectordb)
   app.set('embeddingdb', embeddingdb)

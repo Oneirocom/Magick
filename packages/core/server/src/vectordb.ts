@@ -29,8 +29,8 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
     super(embeddings, args as any)
 
     this.client = args.client
-    this.tableName = args.tableName || 'documents'
-    this.queryName = args.queryName || 'match_documents'
+    this.tableName = args.tableName || 'embeddings'
+    this.queryName = args.queryName || 'match_embeddings'
   }
 
   /**
