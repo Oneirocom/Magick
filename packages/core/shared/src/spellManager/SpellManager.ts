@@ -23,55 +23,112 @@ type RunArgs = {
   app: Application
 }
 
+/**
+ * SpellManager class manages the spells and their runners.
+ */
 export default class SpellManager {
+  /**
+   * Map of spell runners for each spell id.
+   */
   spellRunnerMap: Map<string, SpellRunner[]> = new Map()
+
+  /**
+   * Socket instance for communication.
+   */
   socket?: io.Socket
+
+  /**
+   * Flag to enable/disable caching.
+   */
   cache: boolean
+
+  /**
+   * Application instance.
+   */
   app: Application
+
+  /**
+   * Agent instance.
+   */
   agent?: any
+
+  /**
+   * Flag to enable/disable watching spells.
+   */
+  watchSpells = false
+
+  /**
+   * Logger instance.
+   */
   logger = getLogger()
 
+  /**
+   * Creates an instance of SpellManager.
+   * @param {SpellManagerArgs} args - Arguments for SpellManager.
+   */
   constructor({
     socket = undefined,
     cache = false,
     agent = undefined,
     app,
-    // ensures that the spells are kept in sync with the server
     watchSpells = false,
   }: SpellManagerArgs) {
     this.socket = socket
     this.app = app
     this.cache = cache
     this.agent = agent
+    this.watchSpells = watchSpells
 
     // this will keep the spells in sync with the server
     this.app.service('spells').on('updated', (spell: SpellInterface) => {
-      if (!watchSpells) return
+      if (!this.watchSpells) return
       if (this.hasSpellRunner(spell.id)) {
         this.updateSpell(spell)
       }
     })
   }
 
+  /**
+   * Cleans up the SpellManager instance.
+   */
   onDestroy() {
     this.clear()
 
     if (this.socket) {
       this.socket.disconnect()
     }
-
     //
     // this.app.service('spells').removeListener('updated')
   }
 
-  getReadySpellRunner(spellId: string) {
+  /**
+   * Returns a ready spell runner for the given spell id.
+   * @param {string} spellId - Id of the spell.
+   * @returns {SpellRunner | undefined} - Ready spell runner instance.
+   */
+  getReadySpellRunner(spellId: string): SpellRunner | undefined {
     return this.spellRunnerMap.get(spellId)?.find(runner => !runner.isBusy())
   }
 
-  hasSpellRunner(spellId: string) {
+  /**
+   * Toggles the watchSpells flag.
+   */
+  toggleLive() {
+    this.watchSpells = !this.watchSpells
+  }
+
+  /**
+   * Checks if the spell runner exists for the given spell id.
+   * @param {string} spellId - Id of the spell.
+   * @returns {boolean} - True if spell runner exists, false otherwise.
+   */
+  hasSpellRunner(spellId: string): boolean {
     return this.spellRunnerMap.has(spellId)
   }
 
+  /**
+   * Clears the spell runner map.
+   */
   clear() {
     this.spellRunnerMap = new Map()
   }
@@ -105,7 +162,12 @@ export default class SpellManager {
     }
   }
 
-  async load(spell: SpellInterface) {
+  /**
+   * Loads the spell runner for the given spell.
+   * @param {SpellInterface} spell - Spell instance.
+   * @returns {Promise<SpellRunner | null>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
+   */
+  async load(spell: SpellInterface): Promise<SpellRunner | undefined> {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
@@ -131,7 +193,12 @@ export default class SpellManager {
     return spellRunner
   }
 
-  async updateSpell(spell: SpellInterface) {
+  /**
+   * Updates the spell runner for the given spell.
+   * @param {SpellInterface} spell - Spell instance.
+   * @returns {Promise<void>} - Promise that resolves when the spell runner is updated.
+   */
+  async updateSpell(spell: SpellInterface): Promise<void> {
     const spellRunner = this.getReadySpellRunner(spell.id)
 
     if (!spellRunner) {
@@ -150,7 +217,12 @@ export default class SpellManager {
     }
   }
 
-  async run(runArgs: RunArgs) {
+  /**
+   * Runs the spell with the given arguments.
+   * @param {RunArgs} runArgs - Arguments for running the spell.
+   * @returns {Promise<Record<string, unknown>>} - Promise that resolves with the result of running the spell.
+   */
+  async run(runArgs: RunArgs): Promise<Record<string, unknown>> {
     this.logger.error(
       `You should use the agent commander to run spells instead of the spellManager run function`
     )
