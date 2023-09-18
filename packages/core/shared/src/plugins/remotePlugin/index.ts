@@ -91,7 +91,7 @@ function install(
             if (
               node.data.sendToPlaytest &&
               output?.output &&
-              !data.fromPlaytest
+              data.fromPlaytest
             ) {
               // note for later. output is a property from the output node and that is where it is defined
               editor.context.sendToPlaytest(output?.output as string)
