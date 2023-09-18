@@ -97,7 +97,6 @@ export const CustomNode: React.FC<Props> = props => {
         await client.service('spells').remove(props.node.id)
         const tab = tabs.find(tab => tab.id === props.node.id)
         if (tab) {
-          console.log('tab', tab)
           dispatch(closeTab(tab.id))
           window.localStorage.removeItem(`zoomValues-${tab.id}`)
         }
@@ -124,7 +123,7 @@ export const CustomNode: React.FC<Props> = props => {
 
   const handleRename = async () => {
     if (!props.node || !newName.trim()) return
-
+    const spell: any = props.node.id
     const response: any = await patchSpell({
       id: props.node.id,
       update: {
@@ -149,7 +148,8 @@ export const CustomNode: React.FC<Props> = props => {
         type: 'spell',
       })
     )
-
+    setToDelete(spell)
+    setIsAdded(true)
     setIsRenaming(false)
   }
 
