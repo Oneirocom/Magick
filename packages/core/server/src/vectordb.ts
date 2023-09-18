@@ -77,29 +77,12 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
     metadata: any[],
     args: EmbeddingArgs
   ): Promise<any> {
-    if (text.length > 8000 || text.includes('<<BREAK>>')) {
-      const [vectors, split_docs] = await (
-        this.embeddings as ExtendedEmbeddings
-      ).embedDocumentsWithMeta(text, args)
-      vectors.forEach(async (vector, index) => {
-        if (vector.length !== 1536) {
-          vector = expandVector(vector as number[], 1536)
-        }
-        metadata['id'] = uuidv4()
-        metadata['content'] = split_docs[index]
-        await this.addEvents({
-          array: [{ ...metadata, embedding: JSON.stringify(vector) }],
-        })
-      })
-      return
-    }
     let vector = await (
       this.embeddings as ExtendedEmbeddings
     ).embedQueryWithMeta(text, args)
     if (vector.length !== 1536) {
       vector = expandVector(vector as number[], 1536)
     }
-    metadata['id'] = uuidv4()
     const insert_data = [
       {
         embedding: vector,
