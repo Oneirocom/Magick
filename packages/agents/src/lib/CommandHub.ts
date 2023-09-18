@@ -2,14 +2,14 @@ import { type Worker } from '@magickml/server-core'
 import Agent from './Agent'
 import { AGENT_COMMAND_JOB } from '@magickml/core'
 
-interface CommandListener<T> {
+export interface CommandListener<T> {
   callback: (data: T) => void
 }
 
 /**
  * CommandHub class that handles incoming commands and publishes events to listeners.
  */
-class CommandHub {
+export class CommandHub {
   /**
    * The agent instance.
    */
@@ -125,5 +125,3 @@ class CommandHub {
     }
   }
 }
-
-export { CommandHub, CommandListener, Agent }
