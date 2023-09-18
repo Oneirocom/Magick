@@ -43,7 +43,7 @@ const TreeDataContext = createContext<TreeDataContextType>({
   openDoc: '',
   setOpenDoc: () => { },
   agentUpdate: false,
-  setAgentUpdate: () => {},
+  setAgentUpdate: () => { },
 })
 
 export const useTreeData = () => useContext(TreeDataContext)
@@ -173,7 +173,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
       addNewItemWithoutDuplication(
         doc?.id,
         3,
-        truncateDocs(doc?.content, 8),
+        '',
         'txt'
       )
     })
