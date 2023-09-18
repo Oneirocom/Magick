@@ -44,10 +44,10 @@ export class Agent implements AgentInterface {
   logger: pino.Logger = getLogger()
   worker: Worker
   messageQueue: MessageQueue
+  commandHub: CommandHub
   pubsub: PubSub
   ready = false
   app: Application
-  commandHub: CommandHub
 
   outputTypes: any[] = []
   updateInterval: any
@@ -77,54 +77,22 @@ export class Agent implements AgentInterface {
 
     this.messageQueue = new BullQueue()
     this.messageQueue.initialize(AGENT_RUN_JOB(this.id))
+    this.pubsub = pubsub
 
     this.commandHub = new CommandHub(this, this.worker)
 
-    this.pubsub = pubsub
-
-    const spellManager = new SpellManager({
+    this.spellManager = new SpellManager({
       cache: false,
       agent: this,
       app,
     })
-
-    this.spellManager = spellManager
     ;(async () => {
-      if (!agentData.rootSpellId) {
-        this.logger.warn('No root spell found for agent: %o', {
-          id: this.id,
-          name: this.name,
-        })
-        return
-      }
-      const spell = (
-        await app.service('spells').find({
-          query: {
-            projectId: agentData.projectId,
-            id: agentData.rootSpellId,
-          },
-        })
-      ).data[0]
+      // initialize the plugins
+      await this.initializePlugins()
 
-      this.spellRunner = await spellManager.load(spell)
-
-      const agentStartMethods = pluginManager.getAgentStartMethods()
-
-      // Runs the agent start methods that were loaded from plugins
-      for (const method of Object.keys(agentStartMethods)) {
-        try {
-          await agentStartMethods[method]({
-            agentManager,
-            agent: this,
-            spellRunner: this.spellRunner,
-          })
-        } catch (err) {
-          this.error('Error in agent start method', { method, err })
-        }
-      }
-
-      const outputTypes = pluginManager.getOutputTypes()
-      this.outputTypes = outputTypes
+      // initialize the core commands
+      // These are used to remotely control the agent
+      this.initializeCoreCommands()
 
       this.logger.info('New agent created: %s | %s', this.name, this.id)
       this.ready = true
@@ -143,6 +111,58 @@ export class Agent implements AgentInterface {
     this.projectId = data.projectId
     this.rootSpellId = data.rootSpellId as string
     this.logger.info('Updated agent: %s | %s', this.name, this.id)
+  }
+  /*
+   * Initializes the plugins for the Agent.
+   * If no root spell is found, logs a warning and returns.
+   * Loads the root spell and sets the spellRunner.
+   * Runs the agent start methods that were loaded from plugins.
+   * Sets the outputTypes for the Agent.
+   */
+  private async initializePlugins() {
+    if (!this.data.rootSpellId) {
+      this.logger.warn('No root spell found for agent: %o', {
+        id: this.id,
+        name: this.name,
+      })
+      return
+    }
+    const spell = (
+      await app.service('spells').find({
+        query: {
+          projectId: this.data.projectId,
+          id: this.data.rootSpellId,
+        },
+      })
+    ).data[0]
+
+    this.spellRunner = await this.spellManager.load(spell)
+
+    const agentStartMethods = pluginManager.getAgentStartMethods()
+
+    // Runs the agent start methods that were loaded from plugins
+    for (const method of Object.keys(agentStartMethods)) {
+      try {
+        await agentStartMethods[method]({
+          agentManager: this.agentManager,
+          agent: this,
+          spellRunner: this.spellRunner,
+        })
+      } catch (err) {
+        this.error('Error in agent start method', { method, err })
+      }
+    }
+
+    const outputTypes = pluginManager.getOutputTypes()
+    this.outputTypes = outputTypes
+  }
+
+  private initializeCoreCommands() {
+    this.commandHub.registerDomain('agent', 'core', {
+      toggleLive: async (data: any) => {
+        this.spellManager.toggleLive()
+      },
+    })
   }
 
   /**
