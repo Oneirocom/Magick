@@ -72,6 +72,14 @@ export class CommandHub {
   }
 
   /**
+   * Returns an array of all the event names registered in the eventMap object.
+   * @returns {string[]} An array of all the event names registered in the eventMap object.
+   */
+  listAllEvents() {
+    return Object.keys(this.eventMap)
+  }
+
+  /**
    * Registers a plugin with the given name and actions.
    * @param pluginName - The name of the plugin.
    * @param actions - An object containing the actions to register.
@@ -80,9 +88,23 @@ export class CommandHub {
     pluginName: string,
     actions: { [key: string]: (data: any) => void }
   ) {
-    for (const action of Object.keys(actions)) {
-      const eventType = `plugin:${pluginName}:${action}`
-      this.on(eventType, { callback: actions[action] })
+    this.registerDomain('plugin', pluginName, actions)
+  }
+
+  /**
+   * Registers a list of commands for the given domain and subdomain.
+   * @param domain - The domain to register the commands for.
+   * @param subdomain - The subdomain to register the commands for.
+   * @param commands - An object containing the commands to register.
+   */
+  registerDomain(
+    domain: string,
+    subdomain: string,
+    commands: { [key: string]: (data: any) => void }
+  ) {
+    for (const command of Object.keys(commands)) {
+      const eventType = `${domain}:${subdomain}:${command}`
+      this.on(eventType, { callback: commands[command] })
     }
   }
 
