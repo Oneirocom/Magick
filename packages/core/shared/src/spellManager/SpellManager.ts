@@ -53,6 +53,17 @@ export default class SpellManager {
     })
   }
 
+  onDestroy() {
+    this.clear()
+
+    if (this.socket) {
+      this.socket.disconnect()
+    }
+
+    //
+    // this.app.service('spells').removeListener('updated')
+  }
+
   getReadySpellRunner(spellId: string) {
     return this.spellRunnerMap.get(spellId)?.find(runner => !runner.isBusy())
   }
