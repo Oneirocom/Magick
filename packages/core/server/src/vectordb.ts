@@ -92,7 +92,7 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
         },
       },
     ]
-    await this.addEvents({
+    await this.insertData({
       array: [{ ...metadata, embedding: JSON.stringify(vector) }],
     })
     return insert_data
@@ -103,7 +103,7 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
    * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
-  async addEvents(documents: { array: any[] }): Promise<void> {
+  async insertData(documents: { array: any[] }): Promise<void> {
     documents.array.forEach(async element => {
       const res = await this.client(this.tableName).insert(element)
       if (res.error) {
