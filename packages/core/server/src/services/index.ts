@@ -6,7 +6,6 @@ import { event } from './events/events'
 import { task } from './tasks/tasks'
 import { document } from './documents/documents'
 import { projects } from './projects/projects'
-import { spellRunner } from './spell-runner/spell-runner'
 import { agentImage } from './agentImage/agentImage'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
@@ -27,7 +26,6 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(event)
   app.configure(task)
   app.configure(document)
-  app.configure(spellRunner)
   app.configure(projects)
   app.configure(agentImage)
 
