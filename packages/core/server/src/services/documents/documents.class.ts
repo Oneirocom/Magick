@@ -89,10 +89,17 @@ export class DocumentService<
     const db = app.get('dbClient')
 
     if (!id && params.projectId) {
+      await db('embeddings')
+        .whereRaw(
+          '"documentId" in (select id from documents where projectId = $)',
+          params.projectId
+        )
+        .del()
       // delete all documents of a project
       return await db('documents').where('projectId', params.projectId).del()
     }
 
+    await db('embeddings').where('documentId', id).del()
     return await db('documents').where('id', id).del()
   }
 
