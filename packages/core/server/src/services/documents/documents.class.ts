@@ -60,7 +60,8 @@ export class DocumentService<
     }
 
     for (const element of elements) {
-      await embeddingdb.from('documents').insert(element)
+      let { embeddings, ...document } = element
+      await embeddingdb.from('documents').insert(document)
       //create embeddings
       for (let embedding of element.embeddings) {
         if (!embedding.content) continue
@@ -253,7 +254,6 @@ const createElement = (element, docData) => {
   let embeddings: any[] = []
   for (let i in element) {
     embeddings.push({
-      id: uuidv4(),
       documentId,
       index: i,
       content: element[i].text,
