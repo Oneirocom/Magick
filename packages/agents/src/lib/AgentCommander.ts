@@ -7,7 +7,8 @@ import {
   AGENT_RUN_RESULT,
   AGENT_DELETE,
   getLogger,
-  AGENT_COMMAND_JOB,
+  AGENT_COMMAND,
+  AGENT_COMMAND_PROJECT,
 } from '@magickml/core'
 import type { MagickSpellInput } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
@@ -32,7 +33,8 @@ export type RunRootSpellArgs = {
 }
 
 export interface AgentCommandData {
-  agentId: string
+  agentId?: string
+  projectId?: string
   command: string
   data: Record<string, any>
 }
@@ -175,13 +177,30 @@ export class AgentCommander extends EventEmitter {
     return jobId
   }
 
+  /**
+   * Sends a command to an agent or project for execution.
+   * @param args - An object containing the agent ID, project ID, command, and data.
+   * @returns A unique job ID for the command.
+   * @throws An error if agentId or projectId is missing.
+   */
   async command(args: AgentCommandData) {
-    const { agentId, command, data } = args
-    if (!agentId) throw new Error('agentId is required')
+    const { agentId, command, data, projectId } = args
+
+    const event = agentId
+      ? AGENT_COMMAND(agentId)
+      : projectId
+      ? AGENT_COMMAND_PROJECT(projectId)
+      : null
+
+    if (!event) throw new Error('Agent ID or project ID is required')
+
+    this.logger.debug(
+      'AgentCommander sending event ${event} to agent ${agentId}'
+    )
 
     const jobId = uuidv4()
     await this.pubSub.publish(
-      AGENT_COMMAND_JOB(agentId),
+      event,
       JSON.stringify({
         jobId,
         agentId,
