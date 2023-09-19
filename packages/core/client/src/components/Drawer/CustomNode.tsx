@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem'
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone'
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
 import { useFeathers } from '@magickml/client-core'
+import { Modal } from '@magickml/client-core';
 import {
   RootState,
   closeTab,
@@ -51,11 +52,17 @@ export const CustomNode: React.FC<Props> = props => {
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState(props.node.text)
   const [patchSpell] = spellApi.usePatchSpellMutation()
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+  // const [spellToDelete, setSpellToDelete] = useState<string>('');
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
     props.onToggle(props.node.id)
   }
+
+  const handleClose = () => {
+    setOpenConfirm(false);
+  };
 
   const handleClick = () => {
     if (!props.node) return
@@ -85,9 +92,12 @@ export const CustomNode: React.FC<Props> = props => {
     // Open the custom context menu
     setContextMenuOpen(true)
   }
-  const handleDeleteSpell = async e => {
-    e.stopPropagation()
-    e.preventDefault()
+
+  const handleConfirmDelete = () => {
+    handleDeleteSpell()
+  }
+
+  const handleDeleteSpell = async () => {
     if (!props.node) return
 
     try {
@@ -122,7 +132,11 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleRename = async () => {
-    if (!props.node || !newName.trim()) return
+    if (!props.node || !newName.trim() || props.node.text === newName) {
+      setIsRenaming(false)
+      return
+    }
+
     const spell: any = props.node.id
     const response: any = await patchSpell({
       id: props.node.id,
@@ -153,15 +167,21 @@ export const CustomNode: React.FC<Props> = props => {
     setIsRenaming(false)
   }
 
+  React.useEffect(() => {
+    if (isRenaming) {
+      const renameInput = document?.querySelector('.rename-input') as HTMLElement
+      if (renameInput) renameInput.focus()
+    }
+  }, [isRenaming])
+
   return (
     <div
       className={`tree-node ${styles.root}`}
       style={{ paddingInlineStart: indent }}
     >
       <div
-        className={`${styles.expandIconWrapper} ${
-          props.isOpen ? styles.isOpen : ''
-        }`}
+        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
+          }`}
       >
         {props.node.droppable && (
           <div onClick={handleToggle}>
@@ -179,6 +199,7 @@ export const CustomNode: React.FC<Props> = props => {
         {isRenaming ? (
           <input
             type="text"
+            className='rename-input'
             value={newName}
             onChange={e => setNewName(e.target.value)}
             onBlur={handleRename}
@@ -229,7 +250,10 @@ export const CustomNode: React.FC<Props> = props => {
       >
         <MenuItem
           className={styles.hideMenuItem}
-          onClick={e => handleDeleteSpell(e)}
+          onClick={e => {
+            e.stopPropagation();
+            setOpenConfirm(true);
+          }}
         >
           <DeleteOutlineTwoToneIcon sx={{ mr: 1 }} />
           <Typography variant="body1">Delete</Typography>
@@ -239,6 +263,12 @@ export const CustomNode: React.FC<Props> = props => {
           <Typography variant="body1">Rename</Typography>
         </MenuItem>
       </Menu>
+      <Modal open={openConfirm}
+        onClose={handleClose}
+        handleAction={handleConfirmDelete}
+        title={`Delete ${props.node.text} spell`}
+        submitText="Confirm"
+        children="Do you want to delete this spell?" />
     </div>
   )
 }
