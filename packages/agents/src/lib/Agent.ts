@@ -218,7 +218,7 @@ export class Agent implements AgentInterface {
   }
 
   // sends a log event along the event stream
-  log(message, data) {
+  log(message, data = {}) {
     this.logger.info(`${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_LOG(this.id), {
       agentId: this.id,
@@ -229,7 +229,7 @@ export class Agent implements AgentInterface {
     })
   }
 
-  warn(message, data) {
+  warn(message, data = {}) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_LOG(this.id), {
       agentId: this.id,
