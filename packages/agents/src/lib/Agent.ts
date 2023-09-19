@@ -302,7 +302,6 @@ export class Agent implements AgentInterface {
         agentId: this.id,
         projectId: this.projectId,
         originalData: data,
-        fromPlaytest: data.isPlaytest,
         result: output,
       })
     } catch (err) {
@@ -318,7 +317,6 @@ export class Agent implements AgentInterface {
         agentId: this.id,
         projectId: this.projectId,
         originalData: data,
-        fromPlaytest: data.isPlaytest,
         result: {
           error: err instanceof Error ? err.message : 'Error running agent',
         },
