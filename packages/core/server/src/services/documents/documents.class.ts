@@ -112,13 +112,14 @@ export class DocumentService<
       console.log('param!!!!!!!', param)
 
       const querys = await db('documents')
+        .joinRaw(
+          'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+        )
+        // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
         .select('*')
         .where({
           ...(param.type && { type: param.type }),
-          ...(param.id && { id: param.id }),
-          ...(param.sender && { sender: param.sender }),
-          ...(param.client && { client: param.client }),
-          ...(param.channel && { channel: param.channel }),
+          ...(param.id && { 'documents.id': param.id }),
           ...(param.projectId && { projectId: param.projectId }),
           ...(param.content && { content: param.content }),
         })
@@ -151,17 +152,24 @@ export class DocumentService<
     const param = params?.query
 
     if (!param) {
-      return await db('documents').select('*').limit(100)
+      return await db('documents')
+        .joinRaw(
+          'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+        )
+        // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
+        .select('*')
+        .limit(100)
     }
 
     const querys = await db('documents')
+      .joinRaw(
+        'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+      )
+      // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
       .select('*')
       .where({
         ...(param.type && { type: param.type }),
-        ...(param.id && { id: param.id }),
-        ...(param.sender && { sender: param.sender }),
-        ...(param.client && { client: param.client }),
-        ...(param.channel && { channel: param.channel }),
+        ...(param.id && { 'documents.id': param.id }),
         ...(param.projectId && { projectId: param.projectId }),
         ...(param.content && { content: param.content }),
       })
