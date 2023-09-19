@@ -79,7 +79,7 @@ export class Agent implements AgentInterface {
     this.messageQueue.initialize(AGENT_RUN_JOB(this.id))
     this.pubsub = pubsub
 
-    this.commandHub = new CommandHub(this, this.worker)
+    this.commandHub = new CommandHub(this, this.pubsub)
 
     this.spellManager = new SpellManager({
       cache: false,
@@ -157,10 +157,17 @@ export class Agent implements AgentInterface {
     this.outputTypes = outputTypes
   }
 
+  /**
+   * Initializes the core commands for the agent.
+   * Registers the 'toggleLive' command with the command hub.
+   *
+   * @returns void
+   */
+
   private initializeCoreCommands() {
     this.commandHub.registerDomain('agent', 'core', {
       toggleLive: async (data: any) => {
-        this.spellManager.toggleLive()
+        this.spellManager.toggleLive(data)
       },
     })
   }
