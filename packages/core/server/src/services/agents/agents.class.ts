@@ -84,13 +84,35 @@ export class AgentService<
     if (!connection) throw new Error('connection is required')
 
     const oldAgentChannel = app.channels.filter(channel =>
-      agentId.match(/agent:/)
+      channel.match(/agent:/)
     )[0]
-    // leave the old channel
-    app.channel(oldAgentChannel).leave(connection)
+
+    if (oldAgentChannel) {
+      const oldAgentId = oldAgentChannel.split(':')[1]
+      // leave the old channel
+      app.channel(oldAgentChannel).leave(connection)
+
+      // turn off the old agent
+      this.command({
+        agentId: oldAgentId,
+        command: 'agent:core:toggleLive',
+        data: {
+          live: false,
+        },
+      })
+    }
 
     // join the new channel
     app.channel(`agent:${agentId}`).join(connection)
+
+    // turn on the new agent
+    this.command({
+      agentId,
+      command: 'agent:core:toggleLive',
+      data: {
+        live: true,
+      },
+    })
 
     return true
   }
