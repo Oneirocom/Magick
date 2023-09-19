@@ -89,20 +89,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
     })
   }, [tab])
 
-  useEffect(() => {
-    if (!client) return
-      ; (async () => {
-        if (!client || !tab || !tab.name) return
-
-        // make sure to pass the projectId to the service call
-        await client.service('spell-runner').get(tab.id, {
-          query: {
-            projectId: config.projectId,
-          },
-        })
-      })()
-  }, [client])
-
   const factory = tab => {
     return node => {
       const props = {
