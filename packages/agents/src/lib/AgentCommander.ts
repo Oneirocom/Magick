@@ -195,7 +195,7 @@ export class AgentCommander extends EventEmitter {
     if (!event) throw new Error('Agent ID or project ID is required')
 
     this.logger.debug(
-      'AgentCommander sending event ${event} to agent ${agentId}'
+      `AgentCommander sending event ${event} to agent ${agentId}`
     )
 
     const jobId = uuidv4()
