@@ -80,12 +80,15 @@ export default class SpellManager {
     this.watchSpells = watchSpells
 
     // this will keep the spells in sync with the server
-    this.app.service('spells').on('updated', (spell: SpellInterface) => {
-      if (!this.watchSpells) return
-      if (this.hasSpellRunner(spell.id)) {
-        this.updateSpell(spell)
-      }
-    })
+    this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
+  }
+
+  watchSpellHandler(spell: SpellInterface) {
+    if (!this.watchSpells) return
+    if (this.hasSpellRunner(spell.id)) {
+      this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
+      this.updateSpell(spell)
+    }
   }
 
   /**
@@ -98,7 +101,7 @@ export default class SpellManager {
       this.socket.disconnect()
     }
     //
-    // this.app.service('spells').removeListener('updated')
+    this.app.service('spells').removeListener('updated', this.watchSpellHandler)
   }
 
   /**
@@ -113,8 +116,10 @@ export default class SpellManager {
   /**
    * Toggles the watchSpells flag.
    */
-  toggleLive() {
-    this.watchSpells = !this.watchSpells
+  toggleLive(data) {
+    this.agent.log(`Toggling watchSpells to ${data.isLive}`)
+    const { isLive } = data
+    this.watchSpells = isLive ? isLive : !this.watchSpells
   }
 
   /**
