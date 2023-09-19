@@ -88,11 +88,8 @@ function install(
 
             // todo might need to not hardcode the output to "output"
             // could be more elegant
-            if (
-              node.data.sendToPlaytest &&
-              output?.output &&
-              data.fromPlaytest
-            ) {
+            // also make sure the data originated from the playtest before showing in playtest.
+            if (node.data.sendToPlaytest && output?.output && data.isPlaytest) {
               // note for later. output is a property from the output node and that is where it is defined
               editor.context.sendToPlaytest(output?.output as string)
             }
@@ -143,6 +140,8 @@ function install(
         ) => {
           // this is the shared event type for the relayed connection.
           const eventType = `${context.currentSpell.id}-${node.id}`
+          // get the current spell from the editor
+          const isPlaytest = context.module.isPlaytest
 
           if (server) {
             try {
@@ -166,6 +165,7 @@ function install(
                 name: node.data.name,
                 output: result,
                 input: inputs,
+                isPlaytest,
               })
 
               return result
@@ -179,6 +179,7 @@ function install(
                 name: node.data.name,
                 outputType: node.data.outputType || null,
                 sessionId: context.module.sessionId || null,
+                isPlaytest,
                 error: {
                   message: err.message,
                   stack: err.stack,
