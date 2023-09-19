@@ -152,8 +152,8 @@ const LayoutProvider = ({ children, tab }) => {
 // Layout component
 export const Layout = ({ json, factory, tab }) => {
   const dispatch = useDispatch()
-  const { currentModel, createModel, setCurrentRef } = useLayout()
   const layoutRef = useRef(null)
+  const { currentModel, createModel, setCurrentRef } = useLayout()
   const activeTab = useSelector(activeTabSelector)
 
   // Side effect for creating model if there is JSON data
