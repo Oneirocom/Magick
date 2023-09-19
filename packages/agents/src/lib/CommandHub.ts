@@ -1,6 +1,6 @@
-import { type Worker } from '@magickml/server-core'
+import { type PubSub } from '@magickml/server-core'
 import Agent from './Agent'
-import { AGENT_COMMAND_JOB } from '@magickml/core'
+import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from '@magickml/core'
 
 export interface CommandListener<T> {
   callback: (data: T) => void
@@ -21,44 +21,55 @@ export class CommandHub {
   /**
    * The worker instance.
    */
-  private worker: Worker
+  private pubsub: PubSub
 
   /**
    * Creates a new CommandHub instance.
    * @param agent - The agent instance.
    * @param worker - The worker instance.
    */
-  constructor(agent: Agent, worker: Worker) {
+  constructor(agent: Agent, pubsub: PubSub) {
     this.agent = agent
 
     // Generate queue name
-    const queueName = AGENT_COMMAND_JOB(this.agent.id)
+    const agentCommandEventName = AGENT_COMMAND(this.agent.id)
+    const agentProjectEvent = AGENT_COMMAND_PROJECT(this.agent.projectId)
 
     // Initialize the worker
-    this.worker = worker
-    // set the worker listenening to the queue
-    this.worker.initialize(queueName, this.handleIncomingCommand.bind(this))
+    this.pubsub = pubsub
+
+    // Subscribe to the queue
+    this.pubsub.subscribe(
+      agentCommandEventName,
+      this.handleIncomingCommand.bind(this)
+    )
+
+    // Subscribe to the project queue so we can command all agents in a project
+    this.pubsub.subscribe(
+      agentProjectEvent,
+      this.handleIncomingCommand.bind(this)
+    )
   }
 
-  /**
-   * Handles incoming commands and publishes events to listeners.
+  /**EventHandles incoming commands and publishes events to listeners.
    * @param job - The job data.
    */
   private async handleIncomingCommand(job: any) {
-    const { commandId, eventType } = job.data
+    this.agent.log(`Received command: ${job.command}`)
+    const { command } = job
 
-    if (!commandId) {
-      this.agent.error('Received command without a commandId')
+    // if (!commandId) {
+    //   this.agent.error('Received command without a commandId')
+    //   // Log this to your error handling mechanism
+    //   return
+    // }
+
+    if (!this.validateEventType(command)) {
+      this.agent.error(`Invalid event type received: ${command}`)
       // Log this to your error handling mechanism
       return
     }
-
-    if (!this.validateEventType(eventType)) {
-      this.agent.error(`Invalid event type received: ${eventType}`)
-      // Log this to your error handling mechanism
-      return
-    }
-    this.publish(eventType, job.data)
+    this.publish(command, job.data)
   }
 
   /**
