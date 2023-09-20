@@ -21,6 +21,8 @@ import { v4 as uuidv4 } from 'uuid'
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
 
+const embeddingSize = 1000
+
 /**
  * DocumentService class
  * Implements the custom document service extending the base Knex service
@@ -255,10 +257,12 @@ const getUnstructuredData = async (files, docData) => {
   const elements = [] as any[]
   if (unstructured.data[0] instanceof Array) {
     for (const i in unstructured.data) {
-      elements.push(createElement(unstructured.data[i], docData))
+      let document = chunkEmbeddings(unstructured.data[i], embeddingSize)
+      elements.push(createElement(document, docData))
     }
   } else {
-    elements.push(createElement(unstructured.data, docData))
+    let document = chunkEmbeddings(unstructured.data, embeddingSize)
+    elements.push(createElement(document, docData))
   }
 
   return elements
@@ -285,4 +289,8 @@ const createElement = (element, docData) => {
     },
     embeddings,
   }
+}
+
+const chunkEmbeddings(element, chunkSize) {
+  
 }
