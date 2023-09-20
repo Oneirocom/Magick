@@ -265,6 +265,12 @@ class SpellRunner {
   isBusy() {
     return this.busy
   }
+  error(message: string, error: unknown | null = null) {
+    this.busy = false
+    this.logger.error(message, error)
+    if (error) throw error
+    throw new Error(message)
+  }
 
   /**
    * Main spell runner for now. Processes inputs, gets the right component that starts the
@@ -284,63 +290,71 @@ class SpellRunner {
     // This should break us out of an infinite loop if we have circular spell dependencies.
     if (runSubspell && this.ranSpells.includes(this.currentSpell.name)) {
       this._clearRanSpellCache()
-      this.logger.error('Infinite loop detected in SpellRunner. Exiting.')
-      throw new Error('Infinite loop detected in SpellRunner. Exiting.')
+      this.error('Infinite loop detected in SpellRunner. Exiting.')
     }
     // Set the current spell into the cache of spells that have run now.
     if (runSubspell) this.ranSpells.push(this.currentSpell.name)
 
-    this._clearRanSpellCache()
-    // ensure we run from a clean slate
-    this._resetTasks()
+    try {
+      this._clearRanSpellCache()
+      // ensure we run from a clean slate
+      this._resetTasks()
 
-    // load the inputs into module memory
-    this.module.read({
-      inputs: this._formatInputs(inputs),
-      secrets,
-      publicVariables,
-      app,
-    })
+      // load the inputs into module memory
+      this.module.read({
+        inputs: this._formatInputs(inputs),
+        secrets,
+        publicVariables,
+        app,
+      })
 
-    const component = this._getComponent(
-      componentName
-    ) as unknown as ModuleComponent
+      const component = this._getComponent(
+        componentName
+      ) as unknown as ModuleComponent
 
-    if (!component.run) {
-      this.logger.error('Component does not have a run method')
-      throw new Error('Component does not have a run method')
+      if (!component.run) {
+        this.error('Component does not have a run method')
+      }
+
+      const firstInput = Object.keys(inputs)[0]
+
+      this.logger.info('firstInput: %o', firstInput)
+
+      // Checking for the triggered node for the connection type
+      let triggeredNode = this._getTriggeredNodeByName(firstInput)
+
+      // If there isn't one, we should
+      if (!triggeredNode) {
+        this.logger.warn(
+          `No trigger found for ${firstInput}.  Using default trigger.`
+        )
+        triggeredNode = this._getTriggeredNodeByName('Input - Default')
+      }
+
+      // If we still don't have a triggered node, we should throw an error.
+      if (!triggeredNode) {
+        this.error('No triggered node found')
+      }
+
+      // This is a failsafe to ensure that we don't have agents hanging around that are still running
+      // A run shouldnt take this long.  This is a hacl but we are replacing all this soon.
+      setTimeout(() => {
+        this.busy = false
+      }, 10000)
+
+      // this running is where the main "work" happens.
+      // I do wonder whether we could make this even more elegant by having the node
+      // subscribe to a run pubsub and then we just use that.  This would treat running
+      // from a trigger in node like any other data stream. Or even just pass in socket IO.
+      //
+
+      await component.run(triggeredNode as NodeData, inputs, this.engine)
+
+      this.busy = false
+      return this.outputData
+    } catch (error) {
+      this.error(`Error loading spell ${this.currentSpell.id}`, error)
     }
-
-    const firstInput = Object.keys(inputs)[0]
-
-    this.logger.info('firstInput: %o', firstInput)
-
-    // Checking for the triggered node for the connection type
-    let triggeredNode = this._getTriggeredNodeByName(firstInput)
-
-    // If there isn't one, we should
-    if (!triggeredNode) {
-      this.logger.warn(
-        `No trigger found for ${firstInput}.  Using default trigger.`
-      )
-      triggeredNode = this._getTriggeredNodeByName('Input - Default')
-    }
-
-    // If we still don't have a triggered node, we should throw an error.
-    if (!triggeredNode) {
-      this.logger.error('No triggered node found')
-      throw new Error('No triggered node found')
-    }
-
-    // this running is where the main "work" happens.
-    // I do wonder whether we could make this even more elegant by having the node
-    // subscribe to a run pubsub and then we just use that.  This would treat running
-    // from a trigger in node like any other data stream. Or even just pass in socket IO.
-    //
-    await component.run(triggeredNode as NodeData, inputs, this.engine)
-
-    this.busy = false
-    return this.outputData
   }
 }
 
