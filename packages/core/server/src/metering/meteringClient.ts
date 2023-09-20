@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { OPENMETER_ENDPOINT, OPENMETER_ENABLED } from '@magickml/config'
+import {
+  OPENMETER_ENDPOINT,
+  OPENMETER_ENABLED,
+  OPENMETER_TOKEN,
+  OPENMETER_SOURCE,
+} from '@magickml/config'
 import { getLogger } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -9,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 type MeteringEventData = {
   project_id: string
   model: string
+  type: string
   total_tokens?: number
   duration_ms?: number
   call_count?: number
@@ -25,7 +31,7 @@ type MeteringEvent = {
   time: string
   source: string
   subject: string
-  data: MeteringEventData
+  data: any
 }
 
 /**
@@ -33,6 +39,7 @@ type MeteringEvent = {
  *
  * @param {string} projectId - The id of the project.
  * @param {string} model - The model used for the completion.
+ * @param {string} type - The type of the event.
  * @param {number} totalTokens - The total number of tokens, optional.
  * @param {number} durationMs - The duration in milliseconds, optional.
  * @param {number} callCount - The number of completions, optional.
@@ -47,15 +54,15 @@ async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
   const event: MeteringEvent = {
     specversion: '1.0',
     id: uuidv4(),
-    source: 'magick-cloud',
-    type: data.model,
+    source: OPENMETER_SOURCE,
+    type: data.type,
     subject: data.project_id,
     time: new Date().toISOString(),
     data: {
       project_id: data.project_id,
       model: data.model,
       total_tokens: data.total_tokens,
-      duration_ms: data.duration_ms,
+      execution_time: data.duration_ms,
       call_count: data.call_count,
     },
   }
@@ -63,15 +70,11 @@ async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
   const headers = {
     Expect: '',
     'Content-Type': 'application/cloudevents+json',
+    Authorization: `Bearer ${OPENMETER_TOKEN}`,
   }
 
   try {
-    logger.info('Sending metering event: %o', event)
-    const response = await axios.post(
-      `${OPENMETER_ENDPOINT}/api/v1alpha1/events`,
-      event,
-      { headers }
-    )
+    const response = await axios.post(OPENMETER_ENDPOINT, event, { headers })
     return response.status === 200
   } catch (err) {
     logger.error('Error sending metering event: %o', err)
