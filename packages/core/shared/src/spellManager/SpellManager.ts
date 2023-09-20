@@ -66,13 +66,19 @@ export default class SpellManager {
     this.spellRunnerMap = new Map()
   }
 
-  async loadById(spellId: string) {
+  /**
+   * Loads the spell runner for the given spell id.
+   * @param {string} spellId - Id of the spell.
+   * @returns {Promise<SpellRunner | undefined>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
+   */
+  async loadById(spellId: string): Promise<SpellRunner | undefined> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
       const spell = await this.app.service('spells').get(spellId)
 
       if (
         this.hasSpellRunner(spellId) &&
+        this.getReadySpellRunner(spellId) &&
         isEqual(
           this.getReadySpellRunner(spellId)!.currentSpell.graph,
           spell.graph
@@ -85,7 +91,7 @@ export default class SpellManager {
       return this.load(spell)
     } catch (error) {
       this.logger.error(`Error loading spell ${spellId}`, error)
-      return null
+      return
     }
   }
 
@@ -156,7 +162,16 @@ export default class SpellManager {
         result,
       })
     } else {
-      const runner = this.getReadySpellRunner(spellId)
+      let runner = this.getReadySpellRunner(spellId)
+
+      if (!runner) {
+        this.logger.warn('Running without an agent is deprecated.')
+        this.logger.warn(
+          `No spell runner found for spell ${spellId}.  Loading a new one.`
+        )
+        runner = await this.loadById(spellId)
+      }
+
       result = (await runner?.runComponent(runArgs)) ?? null
     }
 
