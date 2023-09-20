@@ -107,6 +107,10 @@ export const OPENMETER_ENDPOINT =
 export const OPENMETER_ENABLED =
   getVarForEnvironment('OPENMETER_ENABLED') === 'true'
 
+export const OPENMETER_TOKEN = getVarForEnvironment('OPENMETER_TOKEN') || ''
+
+export const OPENMETER_SOURCE = getVarForEnvironment('OPENMETER_SOURCE') || 'cloud-dev'
+
 export const AGENT_RESPONSE_TIMEOUT_MSEC =
   Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
 

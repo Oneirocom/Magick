@@ -4,6 +4,7 @@ type OpenAIMeterData = {
   projectId: string
   model: string
   totalTokens: number
+  userId: string
 }
 
 type GoogleAIMeterData = {
@@ -11,19 +12,23 @@ type GoogleAIMeterData = {
   model: string
   callCount: number
   wordCount: number
+  userId: string
 }
 
 type CogMeterData = {
   projectId: string
   model: string
   durationMs: number
+  userId: string
 }
 
 export async function trackOpenAIUsage(data: OpenAIMeterData) {
+  console.log('trackOpenAIUsage', data)
   return await sendMeteringEvent({
     project_id: data.projectId,
     model: data.model,
     total_tokens: data.totalTokens,
+    type: 'token_usage',
   })
 }
 
@@ -33,6 +38,7 @@ export async function trackGoogleAIUsage(data: GoogleAIMeterData) {
     model: data.model,
     call_count: data.callCount,
     word_count: data.wordCount,
+    type: 'token_usage',
   })
 }
 export async function trackCogUsage(data: CogMeterData) {
@@ -40,5 +46,6 @@ export async function trackCogUsage(data: CogMeterData) {
     project_id: data.projectId,
     model: data.model,
     duration_ms: data.durationMs,
+    type: 'duration',
   })
 }
