@@ -59,7 +59,7 @@ export async function makeChatCompletion(
 
   // combine all messages into one string and append the AI prompt to the end
   const conversationMessagesString =
-    conversationMessages.join() + `${Anthropic.AI_PROMPT}`
+    '\n\nHuman: ' + conversationMessages.join() + `${Anthropic.AI_PROMPT}`
 
   // Count the number of tokens in the prompt.
   const tokens = countTokens(conversationMessagesString)
