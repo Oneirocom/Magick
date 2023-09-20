@@ -75,6 +75,7 @@ export class PluginEmbeddings extends Embeddings {
     return data.result
   }
 
+  //TODO: Remove tis function at some point, we are doing this chunking elsewhere in the code
   /**
    * Gets the embeddings for the given text.(Array of Strings)
    * To use when number of tokens in the text is more than 8000

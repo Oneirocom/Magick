@@ -257,11 +257,11 @@ const getUnstructuredData = async (files, docData) => {
   const elements = [] as any[]
   if (unstructured.data[0] instanceof Array) {
     for (const i in unstructured.data) {
-      let document = chunkEmbeddings(unstructured.data[i], embeddingSize)
+      let document = chunkEmbeddings(unstructured.data[i], embeddingSize, '\n')
       elements.push(createElement(document, docData))
     }
   } else {
-    let document = chunkEmbeddings(unstructured.data, embeddingSize)
+    let document = chunkEmbeddings(unstructured.data, embeddingSize, '\n')
     elements.push(createElement(document, docData))
   }
 
@@ -291,6 +291,26 @@ const createElement = (element, docData) => {
   }
 }
 
-const chunkEmbeddings(element, chunkSize) {
-  
+//chunky
+const chunkEmbeddings = (elements, chunkSize, separator) => {
+  let chunks: string[] = []
+  let chunk = ''
+  for (let element of elements) {
+    let text = element.text
+    for (let char of text) {
+      if (chunk.length < chunkSize) {
+        chunk += char
+      } else {
+        chunks.push(chunk)
+        chunk = char
+      }
+    }
+    if (chunk.length > 0) {
+      chunk += separator
+    }
+  }
+  if (chunk.length > 0) {
+    chunks.push(chunk)
+  }
+  return chunks
 }
