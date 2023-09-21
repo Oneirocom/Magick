@@ -242,6 +242,7 @@ export type PubSubEvents = {
   $CREATE_PLAYTEST: (tabId: string) => string
   $CREATE_INSPECTOR: (tabId: string) => string
   $CREATE_TEXT_EDITOR: (tabId: string) => string
+  $CREATE_AGENT_CONTROLS: (tabId: string) => string
   $CREATE_DEBUG_CONSOLE: (tabId: string) => string
   $CREATE_CONSOLE: (tabId: string) => string
   $RUN_SPELL: (tabId?: string) => string
