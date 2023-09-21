@@ -1,5 +1,4 @@
 import pino from 'pino'
-import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 import { NODE_ENV, PINO_LOG_LEVEL } from '@magickml/config'
 
 let logger: pino.Logger | null = null
@@ -26,15 +25,7 @@ export const initLogger = (opts: object = defaultLoggerOpts) => {
     return
   }
 
-    logger = pino({
-        ...opts,
-        transport: {
-            targets: [
-                getPinoTransport('info')
-            ]
-        },
-        level: 'info',
-    })
+    logger = pino(opts)
 }
 
 export const getLogger: () => pino.Logger = () => {

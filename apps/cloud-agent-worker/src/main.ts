@@ -4,8 +4,21 @@ import { initApp } from '@magickml/server-core'
 import pluginExports from './plugins'
 import { initAgentCommander } from '@magickml/agents'
 import { DONT_CRASH_ON_ERROR, PRODUCTION } from "@magickml/config"
+import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
-initLogger({ name: 'cloud-agent-worker' })
+if (PRODUCTION) {
+	initLogger({
+		name: 'cloud-agent-worker',
+		transport: {
+			targets: [
+				getPinoTransport('info')
+			]
+		},
+		level: 'info',
+	})
+} else {
+	initLogger({ name: 'cloud-agent-worker' })
+}	
 const logger = getLogger()
 
 await initApp()
