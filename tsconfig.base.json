@@ -143,6 +143,9 @@
       "@magickml/plugin-loop-server": [
         "packages/plugins/loop/server/src/index.ts"
       ],
+      "@magickml/plugin-loop-shared": [
+        "packages/plugins/loop/shared/src/index.ts"
+      ],
       "@magickml/plugin-openai-client": [
         "packages/plugins/openai/client/src/index.ts"
       ],
