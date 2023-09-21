@@ -137,6 +137,7 @@ export const AWS_BUCKET_ENDPOINT =
 export const FEATURE_FLAGS = {
   // Enable the new editor
   SHOW_SIDEBAR: getVarForEnvironment('SHOW_SIDEBAR') === 'true' || false,
+  SHOW_NAVBAR: getVarForEnvironment('SHOW_NAVBAR') === 'true' || false,
 }
 
 export const HEARTBEAT_MSEC =
