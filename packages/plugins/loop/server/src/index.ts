@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { app } from '@magickml/server-core'
+import { LoopHandler } from './loopHandler'
 type StartLoopArgs = {
   agent: any
   agentManager: any
@@ -11,6 +12,7 @@ type StartLoopArgs = {
  */
 class LoopManager {
   agentManager: any
+  loopHandlers: Map<any, LoopHandler> // Store loop handlers
 
   /**
    * Constructs a new LoopManager.
@@ -25,6 +27,7 @@ class LoopManager {
     this.agentManager.registerRemoveAgentHandler(({ agent }) =>
       this.removeAgent({ agent })
     )
+    this.loopHandlers = new Map()
   }
 
   /**
@@ -36,11 +39,13 @@ class LoopManager {
     if (!agentData) return console.log('No data for this agent', agent.id)
     if (!agentData.data?.loop_enabled)
       return console.log('Loop is not enabled for this agent')
+
     const loopInterval = parseInt(agentData.data.loop_interval) * 1000
     if (!loopInterval) {
       return console.error('Loop Interval must be a number greater than 0')
     }
-    const loopHandler = setInterval(async () => {
+
+    const loopHandler = new LoopHandler(async () => {
       console.log('running loop handler')
       const resp = await app.get('agentCommander').runSpell({
         inputs: {
@@ -64,6 +69,9 @@ class LoopManager {
       })
       console.log('output is', resp)
     }, loopInterval)
+
+    this.loopHandlers.set(agent.id, loopHandler)
+
     agent.loopHandler = loopHandler
     console.log('Added agent to loop', agent.id)
   }
@@ -76,7 +84,29 @@ class LoopManager {
     const _agent = this.agentManager.getAgent({ agent })
     if (!_agent || !agent.loopHandler) return
     clearInterval(agent.loopHandler)
+    this.loopHandlers.delete(agent.id)
     delete agent.loopHandler
+  }
+
+  startLoop(_, agentId) {
+    const loopHandler = this.loopHandlers.get(agentId)
+    if (loopHandler) {
+      loopHandler.resume() // Assumes loopHandler has a resume method
+    }
+  }
+
+  stopLoop(_, agentId) {
+    const loopHandler = this.loopHandlers.get(agentId)
+    if (loopHandler) {
+      loopHandler.pause() // Assumes loopHandler has a pause method
+    }
+  }
+
+  stepLoop(_, agentId) {
+    const loopHandler = this.loopHandlers.get(agentId)
+    if (loopHandler) {
+      loopHandler.step() // Assumes loopHandler has a step method
+    }
   }
 }
 
