@@ -19,6 +19,7 @@ import {
   selectAllTabs,
   spellApi,
   openTab,
+  activeTabSelector,
 } from '@magickml/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
@@ -53,7 +54,7 @@ export const CustomNode: React.FC<Props> = props => {
   const [newName, setNewName] = useState(props.node.text)
   const [patchSpell] = spellApi.usePatchSpellMutation()
   const [openConfirm, setOpenConfirm] = useState<boolean>(false);
-  // const [spellToDelete, setSpellToDelete] = useState<string>('');
+  const activeTab = useSelector(activeTabSelector)
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -167,6 +168,12 @@ export const CustomNode: React.FC<Props> = props => {
     setIsRenaming(false)
   }
 
+  const setClassSelectedFile = () => {
+    if (activeTab?.name === 'Documents') return
+
+    return activeTab?.name === props.node.text ? styles.isSelected : ''
+  }
+
   React.useEffect(() => {
     if (isRenaming) {
       const renameInput = document?.querySelector('.rename-input') as HTMLElement
@@ -215,6 +222,7 @@ export const CustomNode: React.FC<Props> = props => {
             onClick={handleClick}
             onContextMenu={handleContextMenu}
             onDoubleClick={handleRenameStart}
+            className={setClassSelectedFile()}
           >
             {props.node.text}
           </Typography>
