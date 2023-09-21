@@ -103,6 +103,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $CREATE_INSPECTOR,
     $CREATE_CONSOLE,
     $CREATE_TEXT_EDITOR,
+    $CREATE_AGENT_CONTROLS,
     $EXPORT,
     $CLOSE_EDITOR,
     $PROCESS,
@@ -208,6 +209,13 @@ const EventHandler = ({ pubSub, tab }) => {
    */
   const createPlaytest = () => {
     createOrFocus(windowTypes.PLAYTEST, 'Playtest')
+  }
+
+  /**
+   * Create a new agent controls window or focus on the existing one
+   */
+  const createAgentControls = () => {
+    createOrFocus(windowTypes.AGENT_CONTROLS, 'Agent Controls')
   }
 
   /**
@@ -347,6 +355,7 @@ const EventHandler = ({ pubSub, tab }) => {
     [$CREATE_PLAYTEST(tab.id)]: createPlaytest,
     [$CREATE_INSPECTOR(tab.id)]: createInspector,
     [$CREATE_TEXT_EDITOR(tab.id)]: createTextEditor,
+    [$CREATE_AGENT_CONTROLS(tab.id)]: createAgentControls,
     [$CREATE_CONSOLE(tab.id)]: createConsole,
     [$EXPORT(tab.id)]: onExport,
     [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
