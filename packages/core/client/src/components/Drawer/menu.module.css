@@ -79,11 +79,12 @@ ul ul ul li {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
+  left: 5px;
   right: 0;
   bottom: 0;
   background-color: rgba(0, 225, 239, 0.2);
   pointer-events: none;
-  width: 130%;
+  width: 120%;
   border: 1px solid var(--primary);
+  border-radius: 8px;
 }
