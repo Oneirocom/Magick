@@ -17,6 +17,7 @@ import Playtest from '../windows/PlaytestWindow'
 import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
 import { RootState, spellApi } from '@magickml/state'
+import AgentControls from '../windows/AgentControlWindow'
 
 /**
  * Workspace component that handles different tabs and their layouts.
@@ -107,6 +108,9 @@ const Workspace = ({ tab, tabs, pubSub }) => {
           return <EditorWindow {...props} />
         case 'debugConsole':
           return <DebugConsole {...props} />
+        case 'agentControls':
+          console.log("AGENT CONTORLS")
+          return <AgentControls {...props} />
         default:
           return <p></p>
       }
