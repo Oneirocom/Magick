@@ -39,6 +39,7 @@ export const events: PubSubEvents = {
   $CREATE_MESSAGE_REACTION_EDITOR: tabId =>
     `createMessageReactionEditor:${tabId}`,
   $CREATE_PLAYTEST: tabId => `createPlaytest:${tabId}`,
+  $CREATE_AGENT_CONTROLS: tabId => `createAgentControls:${tabId}`,
   $CREATE_INSPECTOR: tabId => `createInspector:${tabId}`,
   $CREATE_TEXT_EDITOR: tabId => `createTextEditor:${tabId}`,
   // $CREATE_PROJECT_WINDOW: tabId => `createProjectWindow:${tabId}`,
