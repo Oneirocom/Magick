@@ -47,6 +47,7 @@ const NewMenuBar = () => {
     $CREATE_PLAYTEST,
     $CREATE_INSPECTOR,
     $CREATE_TEXT_EDITOR,
+    $CREATE_AGENT_CONTROLS,
     $CREATE_CONSOLE,
     $EXPORT,
     $UNDO,
@@ -123,6 +124,13 @@ const NewMenuBar = () => {
     publish($CREATE_INSPECTOR(activeTabRef.current.id))
   }
 
+  /**
+   * Agent control creation handler
+   */
+  const onAgentControlCreate = () => {
+    if (!activeTabRef.current) return
+    publish($CREATE_AGENT_CONTROLS(activeTabRef.current.id))
+  }
   /**
    * Text editor creation handler
    */
@@ -309,9 +317,9 @@ const NewMenuBar = () => {
           onClick: onConsole,
           hotKey: 'alt+4, control+4',
         },
-        project_window: {
-          onClick: onProjectWindowCreate,
-          hotKey: 'alt+5, control+5',
+        agent_controls: {
+          onClick: onAgentControlCreate,
+          hotKey: 'alt+6, control+6',
         },
         snap: {
           onClick: toggleSnapFunction,
@@ -328,22 +336,22 @@ const NewMenuBar = () => {
         },
       },
     },
-    layout: {
-      items: {
-        default: {
-          onClick: changeLayout,
-        },
-        full_screen: {
-          onClick: changeLayout,
-        },
-        prompt_engineering: {
-          onClick: changeLayout,
-        },
-        trouble_shooting: {
-          onClick: changeLayout,
-        },
-      },
-    },
+    // layout: {
+    //   items: {
+    //     default: {
+    //       onClick: changeLayout,
+    //     },
+    //     full_screen: {
+    //       onClick: changeLayout,
+    //     },
+    //     prompt_engineering: {
+    //       onClick: changeLayout,
+    //     },
+    //     trouble_shooting: {
+    //       onClick: changeLayout,
+    //     },
+    //   },
+    // },
   }
 
   /**
