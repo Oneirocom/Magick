@@ -3,7 +3,7 @@ import Agent from './Agent'
 import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from '@magickml/core'
 
 export interface CommandListener<T> {
-  callback: (data: T) => void
+  callback: (data: T, agent: Agent) => void
 }
 
 /**
@@ -154,7 +154,7 @@ export class CommandHub {
   private publish(eventType: string, data: any) {
     const listeners = this.eventMap[eventType]
     if (listeners) {
-      listeners.forEach(listener => listener.callback(data))
+      listeners.forEach(listener => listener.callback(data, this.agent))
     }
   }
 }
