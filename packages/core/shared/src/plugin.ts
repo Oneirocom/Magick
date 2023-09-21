@@ -1,6 +1,7 @@
 import { FC, LazyExoticComponent } from 'react'
 import { MagickComponentArray } from './engine'
 import { CompletionProvider, Route, SpellInterface } from './types'
+import { Agent } from '@magickml/agents'
 
 export type PluginSecret = {
   name: string
@@ -23,6 +24,20 @@ export type PluginClientRoute = {
   plugin: string
 }
 
+export type Command = {
+  name: string
+  description: string
+  command: string
+  icon: string
+}
+
+export type PluginClientCommandList = Record<string, Command>
+
+export type PluginServerCommandList = Record<
+  string,
+  (data: any, agent: Agent) => void
+>
+
 export type PluginServerRoute = Route
 
 export type PluginIOType = {
@@ -40,6 +55,7 @@ type PluginConstuctor = {
   outputTypes?: PluginIOType[]
   secrets?: PluginSecret[]
   completionProviders?: CompletionProvider[]
+  agentCommands?: PluginServerCommandList
 }
 class Plugin {
   name: string
@@ -72,6 +88,7 @@ export class ClientPlugin extends Plugin {
   clientPageLayout?: PageLayout
   clientRoutes?: Array<PluginClientRoute>
   spellTemplates?: SpellInterface[]
+  agentCommands?: PluginClientCommandList
   projectTemplates?: any[]
   constructor({
     name,
@@ -83,6 +100,7 @@ export class ClientPlugin extends Plugin {
     clientRoutes = [],
     drawerItems = [],
     secrets = [],
+    agentCommands = {},
     completionProviders = [],
     spellTemplates = [],
     projectTemplates = [],
@@ -117,6 +135,7 @@ export type ServerInits = Record<string, ServerInit>
 export class ServerPlugin extends Plugin {
   services: ((app: any) => void)[]
   serverInit?: ServerInit
+  agentCommands?: PluginServerCommandList
   agentMethods?: {
     start: (args) => Promise<void> | void
     stop: (args) => Promise<void> | void
@@ -137,6 +156,7 @@ export class ServerPlugin extends Plugin {
         /* null */
       },
     },
+    agentCommands = {},
     serverRoutes = [],
     secrets = [],
     completionProviders = [],
@@ -272,6 +292,17 @@ export class ClientPluginManager extends PluginManager {
       })
     })
     return agentComp
+  }
+
+  getAgentCommands() {
+    let commands: PluginClientCommandList = {}
+
+    this.pluginList.forEach(plugin => {
+      if (plugin.agentCommands) {
+        commands = { ...commands, ...plugin.agentCommands }
+      }
+    })
+    return commands
   }
 
   getSpellTemplates() {
@@ -434,6 +465,16 @@ export class ServerPluginManager extends PluginManager {
       })
     })
     return serviceList
+  }
+
+  getAgentCommands() {
+    let commands = {}
+
+    this.pluginList.forEach(plugin => {
+      if (plugin.agentCommands) {
+        commands = { ...commands, ...plugin.agentCommands }
+      }
+    })
   }
 
   getServerInits() {
