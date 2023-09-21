@@ -20,6 +20,7 @@ const windowTypes: WindowTypes = {
   PLAYTEST: 'playtest',
   CONSOLE: 'debugConsole',
   PROJECT: 'project',
+  AGENT_CONTROLS: 'agentControls',
 }
 
 type WindowType =
@@ -30,6 +31,7 @@ type WindowType =
   | 'debugConsole'
   | 'settings'
   | 'project'
+  | 'agentControls'
 
 type WindowTypes = Record<string, WindowType>
 
