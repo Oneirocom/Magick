@@ -66,7 +66,7 @@ export class DocumentService<
       await embeddingdb.from('documents').insert(document)
       //create embeddings
       for (let embedding of element.embeddings) {
-        if (!embedding.content) continue
+        if (!embedding.content || embedding.content?.length === 0) continue
         if (data.hasOwnProperty('secrets')) {
           await embeddingdb.fromString(embedding.content, embedding, {
             modelName,
@@ -291,18 +291,18 @@ const createElement = (element, docData) => {
   }
 }
 
-//chunky
+//chunks an array of unstructured.io results into larger chunks and breaks down larger results to fit into the chunk. Doesn't stop mid-word and separates existing chunks using separator
 const chunkEmbeddings = (elements, chunkSize, separator) => {
-  let chunks: string[] = []
+  let chunks: any[] = []
   let chunk = ''
   for (let element of elements) {
     let text = element.text
     for (let char of text) {
-      if (chunk.length < chunkSize) {
+      if (chunk.length < chunkSize || char !== ' ') {
         chunk += char
       } else {
         chunks.push(chunk)
-        chunk = char
+        chunk = ''
       }
     }
     if (chunk.length > 0) {
@@ -312,5 +312,7 @@ const chunkEmbeddings = (elements, chunkSize, separator) => {
   if (chunk.length > 0) {
     chunks.push(chunk)
   }
-  return chunks
+  return chunks.map(chunk => {
+    return { ...elements[0], text: chunk }
+  })
 }
