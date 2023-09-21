@@ -24,8 +24,22 @@ import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
 import plugins from './plugins'
 import { initAgentCommander } from '@magickml/agents'
+import { getPinoTransport } from '@hyperdx/node-opentelemetry'
+import { PRODUCTION } from '@magickml/config'
 
-initLogger({ name: 'server' })
+if (PRODUCTION) {
+	initLogger({
+		name: 'cloud-agent-worker',
+		transport: {
+			targets: [
+				getPinoTransport('info')
+			]
+		},
+		level: 'info',
+	})
+} else {
+	initLogger({ name: 'cloud-agent-worker' })
+}	
 const logger = getLogger()
 
 // log handle errors
