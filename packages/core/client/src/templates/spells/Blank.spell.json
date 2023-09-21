@@ -1,47 +1,21 @@
 {
-    "id": "18b2a361-976d-4bbe-96d3-1b16f7e339bc",
+    "id": "ee0cd8da-85a6-484d-90d4-b85b652d8063",
     "name": "Blank",
-    "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-    "hash": "92b878d95596c95c23f85aadaf2b2972",
-    "createdAt": "1679555834490",
-    "updatedAt": "1679555877912",
+    "projectId": "clmp2r33q0003vyxy4dh2uz8e",
+    "hash": "c8a6becf74079c8ec523e38a21565171",
+    "createdAt": "1695319385395",
+    "updatedAt": "1695319412520",
     "graph": {
         "id": "demo@0.1.0",
         "nodes": {
-            "232": {
-                "id": 232,
+            "524": {
+                "id": 524,
                 "data": {
+                    "log": false,
                     "name": "Input - Default",
-                    "text": {
-                        "id": "2eb64348-adee-4118-bcca-19697ca3a16a",
-                        "inputs": {},
-                        "secrets": {},
-                        "projectId": "bb1b3d24-84e0-424e-b4f1-57603f307a89",
-                        "spellName": "Starter",
-                        "publicVariables": "[]"
-                    },
                     "isInput": true,
-                    "outputs": [],
-                    "success": false,
-                    "socketKey": "9d61118c-3c5a-4379-9dae-41965e56207f",
-                    "useDefault": false,
-                    "dataControls": {
-                        "inputType": {
-                            "expanded": true
-                        },
-                        "useDefault": {
-                            "expanded": true
-                        },
-                        "defaultValue": {
-                            "expanded": true
-                        }
-                    },
-                    "defaultValue": "Hello world",
-                    "playtestToggle": {
-                        "outputs": [],
-                        "receivePlaytest": false
-                    },
-                    "inputType": "Default"
+                    "inputName": "Default",
+                    "socketKey": "5bd194d8-0cb0-4f2f-aaec-f706e941b300"
                 },
                 "inputs": {},
                 "outputs": {
@@ -53,23 +27,19 @@
                     }
                 },
                 "position": [
-                    null,
-                    null
+                    -206,
+                    -2.5
                 ],
                 "name": "Input"
             },
-            "233": {
-                "id": 233,
+            "525": {
+                "id": 525,
                 "data": {
-                    "name": "Output",
-                    "success": false,
-                    "socketKey": "0f17a35e-1380-428b-bc87-4a38d207fefc",
-                    "dataControls": {
-                        "name": {
-                            "expanded": true
-                        }
-                    },
-                    "isOutput": true
+                    "log": false,
+                    "name": "Output - Default",
+                    "isOutput": true,
+                    "socketKey": "4495a612-83a1-4dc8-8868-baaecd23c6ff",
+                    "sendToPlaytest": true
                 },
                 "inputs": {
                     "trigger": {
@@ -91,8 +61,8 @@
                     }
                 },
                 "position": [
-                    362.62010216732943,
-                    -4.0314502120781155
+                    206,
+                    2.5
                 ],
                 "name": "Output"
             }
