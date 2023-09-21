@@ -4,7 +4,6 @@ type OpenAIMeterData = {
   projectId: string
   model: string
   totalTokens: number
-  userId?: string
 }
 
 type GoogleAIMeterData = {
@@ -12,14 +11,12 @@ type GoogleAIMeterData = {
   model: string
   callCount: number
   wordCount: number
-  userId?: string
 }
 
 type CogMeterData = {
   projectId: string
   model: string
   durationMs: number
-  userId?: string
 }
 
 export async function trackOpenAIUsage(data: OpenAIMeterData) {
