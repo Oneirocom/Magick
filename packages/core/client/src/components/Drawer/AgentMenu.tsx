@@ -50,7 +50,7 @@ function AgentMenu({ data, resetData }) {
   const config = useConfig()
   const spellList: Spell[] = useSpellList()
   const imageInputRef = useRef<HTMLInputElement>(null)
-  const { agentUpdate,setAgentUpdate } = useTreeData()
+  const { agentUpdate, setAgentUpdate } = useTreeData()
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -520,16 +520,14 @@ function AgentMenu({ data, resetData }) {
               background: 'none',
               outline: 'none',
             },
-            color: `${
-              selectedAgentData &&
-              (selectedAgentData.default  ? 'grey' : 'white')
-            }`,
-            cursor: `${
-              selectedAgentData &&
+            color: `${selectedAgentData &&
+              (selectedAgentData.default ? 'grey' : 'white')
+              }`,
+            cursor: `${selectedAgentData &&
               (selectedAgentData.default
                 ? 'not-allowed'
                 : 'pointer')
-            }`,
+              }`,
           }}
           onClick={e => {
             if (!selectedAgentData.default) {
@@ -537,6 +535,8 @@ function AgentMenu({ data, resetData }) {
             }
             handleCloseMenu2()
           }}
+
+          disabled={data.length === 1}
         >
           Delete
         </MenuItem>
@@ -577,9 +577,8 @@ function AgentMenu({ data, resetData }) {
           open={openConfirm}
           onClose={handleClose}
           handleAction={onSubmit}
-          title={`Delete ${
-            selectedAgentData ? selectedAgentData.name : ''
-          }  agent`}
+          title={`Delete ${selectedAgentData ? selectedAgentData.name : ''
+            }  agent`}
           submitText="Confirm"
           children="Do you want to delete this agent?"
         />
