@@ -96,6 +96,10 @@ export class MagickConsole {
     this.node.data.success = true
     this.updateNodeView()
     this.node.data.success = false
+    setTimeout(() => {
+      this.updateNodeView()
+      // todo we could make this timeout configurable
+    }, 500)
   }
 
   log(_message: unknown) {
