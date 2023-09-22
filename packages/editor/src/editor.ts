@@ -240,5 +240,16 @@ export const initEditor = function ({
     editor.view.resize()
     editor.currentSpell = spell
   }
+
+  editor.resetHighlights = () => {
+    const nodeValues = Array.from(editor.view.nodes)
+    nodeValues.forEach(([, n]) => {
+      n.node.data.error = false
+      n.node.data.success = false
+      n.onStart()
+      n.node.update()
+    })
+    editor.isHighlighted = false
+  }
   return editor
 }

@@ -1,10 +1,15 @@
 import { NodeView } from '@magickml/rete'
 import { MagickComponent } from '../../engine'
-import { IRunContextEditor, MagickNode, PubSubData } from '../../types'
+import {
+  IRunContextEditor,
+  MagickEditor,
+  MagickNode,
+  PubSubData,
+} from '../../types'
 
 type ConsoleConstructor = {
   component: MagickComponent<unknown>
-  editor: IRunContextEditor
+  editor: MagickEditor
   node: MagickNode
   server: boolean
   throwError?: (error: unknown) => void
@@ -33,7 +38,7 @@ function isOutputError(value: unknown): value is OutputError {
 }
 export class MagickConsole {
   node: MagickNode
-  editor: IRunContextEditor
+  editor: MagickEditor
   component: MagickComponent<unknown>
   nodeView?: NodeView
   isServer: boolean
@@ -67,8 +72,10 @@ export class MagickConsole {
 
   updateNodeView() {
     if (!this.nodeView) return
+    console.log('Updating node view in console', this.nodeView)
     this.nodeView.onStart()
     this.nodeView.node.update()
+    this.editor.isHighlighted = true
   }
 
   formatMessage(_message: string, type: 'error' | 'log'): Message {
