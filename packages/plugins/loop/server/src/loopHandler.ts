@@ -13,6 +13,10 @@ export class LoopHandler {
     }, delay)
   }
 
+  destroy() {
+    clearInterval(this.interval)
+  }
+
   pause() {
     this.isPaused = true
   }
