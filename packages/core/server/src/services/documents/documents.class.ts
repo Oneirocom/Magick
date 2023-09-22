@@ -101,6 +101,7 @@ export class DocumentService<
       return await db('documents').where('projectId', params.projectId).del()
     }
 
+    //TODO: make this a single transaction
     await db('embeddings').where('documentId', id).del()
     return await db('documents').where('id', id).del()
   }
@@ -125,7 +126,11 @@ export class DocumentService<
           'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
         )
         // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
-        .select('*')
+        .select(
+          db.raw(
+            'documents.id as id, documents.type, documents."projectId", documents.date, documents.metadata, embeddings.id as embeddingId, embeddings.content, embeddings.embedding, embeddings.index'
+          )
+        )
         .where({
           ...(param.type && { type: param.type }),
           ...(param.id && { 'documents.id': param.id }),
@@ -166,7 +171,11 @@ export class DocumentService<
           'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
         )
         // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
-        .select('*')
+        .select(
+          db.raw(
+            'documents.id as id, documents.type, documents."projectId", documents.date, documents.metadata, embeddings.id as embeddingId, embeddings.content, embeddings.embedding, embeddings.index'
+          )
+        )
         .limit(100)
     }
 
@@ -175,7 +184,11 @@ export class DocumentService<
         'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
       )
       // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
-      .select('*')
+      .select(
+        db.raw(
+          'documents.id as id, documents.type, documents."projectId", documents.date, documents.metadata, embeddings.id as embeddingId, embeddings.content, embeddings.embedding, embeddings.index'
+        )
+      )
       .where({
         ...(param.type && { type: param.type }),
         ...(param.id && { 'documents.id': param.id }),
