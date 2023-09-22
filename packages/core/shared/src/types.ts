@@ -152,8 +152,10 @@ export type ControlData = {
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
   declare tabMap: Record<string, MagickEditor>
+  isHighlighted = false
   declare getTask: (nodeId: number) => Task
   declare getTasks: () => TaskStore
+  declare resetHighlights: () => void
   declare currentSpell: SpellInterface
   declare pubSub: PubSubContext
   declare context: EditorContext
@@ -228,6 +230,7 @@ export type PubSubEvents = {
   SEND_COMMAND: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
+  $RESET_HIGHLIGHTS: (tabId: string) => string
   $PLAYTEST_INPUT: (tabId: string) => string
   $PLAYTEST_PRINT: (tabId: string) => string
   $DEBUG_PRINT: (tabId: string) => string
