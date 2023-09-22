@@ -4,6 +4,7 @@ import { MagickComponent } from '../../engine'
 
 import {
   IRunContextEditor,
+  MagickEditor,
   MagickNode,
   MagickWorkerInputs,
   ModuleContext,
@@ -93,7 +94,7 @@ function install(
           node.console = new MagickConsole({
             node: node as unknown as MagickNode,
             component,
-            editor,
+            editor: editor as MagickEditor,
             server,
           })
 

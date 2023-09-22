@@ -2,6 +2,7 @@ import { MagickComponent } from '../../engine'
 
 import {
   IRunContextEditor,
+  MagickEditor,
   MagickNode,
   ModuleContext,
   SpellInterface,
@@ -19,7 +20,7 @@ export interface RemoteIRunContextEditor extends IRunContextEditor {
 }
 
 function install(
-  editor: RemoteIRunContextEditor,
+  _editor: RemoteIRunContextEditor,
   // Need to better type the feathers client here
   { server = false, client, emit }: RemotePluginArgs
 ) {
@@ -28,9 +29,10 @@ function install(
 
   if (!server) {
     // subscribe to the spell event on the client inside the components builder
-    editor.on(
+    _editor.on(
       'componentregister',
       (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
+        const editor = _editor as MagickEditor
         const builder = component.builder
 
         // overwrite the base builder with one which subscribes to the event.
@@ -59,7 +61,7 @@ function install(
               node.console = new MagickConsole({
                 node: node as unknown as MagickNode,
                 component,
-                editor,
+                editor: editor as MagickEditor,
                 server,
               })
 
@@ -109,7 +111,7 @@ function install(
     )
 
     // handle removing the subscription when the node is removed
-    editor.on('noderemoved', (node: MagickNode) => {
+    _editor.on('noderemoved', (node: MagickNode) => {
       // get the spell listener from the map
       const listener = subscriptionMap.get(node.id)
 
@@ -126,7 +128,7 @@ function install(
   // if we are on the server, we want to emit the data to the client from the worker
   // the event is relayed through a channel matcher for the type of agent event and relayed.
   if (server && emit) {
-    editor.on(
+    _editor.on(
       'componentregister',
       (component: MagickComponent<Promise<{ output: unknown } | void>>) => {
         const worker = component.worker
