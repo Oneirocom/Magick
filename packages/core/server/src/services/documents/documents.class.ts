@@ -51,11 +51,14 @@ export class DocumentService<
     if (docData.content) {
       elements = [
         ...elements,
-        ...chunkEmbeddings(
-          [{ text: docData.content }],
-          embeddingSize,
-          '\n'
-        ).map(embedding => createElement(embedding, docData)),
+        createElement(
+          chunkEmbeddings(
+            [{ text: docData.content, metadata: {} }],
+            embeddingSize,
+            '\n'
+          ),
+          docData
+        ),
       ]
     }
     if (files && files.length > 0) {
