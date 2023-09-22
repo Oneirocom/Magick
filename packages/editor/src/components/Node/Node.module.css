@@ -9,8 +9,9 @@
   }
 }
 .node {
-  animation: nodeGenesis 0.2s ease;
-  transition: background-color 0.05s ease;
+  animation: nodeGenesis 0.5s ease;
+  transition: background-color 0.05s ease, border 0.2s ease,
+    outline-color 0.2s ease;
   min-width: var(--c30);
   width: var(--c30);
   border-radius: var(--extraSmall);
@@ -19,6 +20,7 @@
   background-color: #0011168f;
   color: var(--glow);
   resize: both;
+
   /* backdrop-filter: blur(3px); */
 }
 .node:hover {
@@ -36,8 +38,9 @@
   /* backdrop-filter: blur(15px); */
 }
 .node.success {
-  outline-color: var(--green) !important;
-  border: 2px solid var(--green);
+  outline-color: var(--glow) !important;
+  border: 2px solid var(--glow);
+  transition: border 0.2s ease, outline-color 0.2s ease;
 }
 .node-depricated {
   position: absolute;
@@ -167,7 +170,7 @@
 div.item {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
-    font-size: 1.2rem !important;
+  font-size: 1.2rem !important;
 }
 
 .socket-wrapper {
