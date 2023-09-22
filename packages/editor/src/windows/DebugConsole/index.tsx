@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'
 import { useEditor } from '../../contexts/EditorProvider'
+import { useSelector } from 'react-redux'
+import { RootState } from '@magickml/state'
 
 /**
  * The type for debug messages.
@@ -28,6 +30,10 @@ const DebugConsole = ({ tab }): JSX.Element => {
   const { centerNode } = useEditor()
   const { publish, subscribe, events } = usePubSub()
   const { $TRIGGER, $DEBUG_PRINT } = events
+
+  const { currentAgentId } = useSelector<RootState>(
+    state => state.globalConfig
+  ) as any
 
   const terminalRef = useRef<Terminal>()
 
@@ -168,6 +174,18 @@ const DebugConsole = ({ tab }): JSX.Element => {
       usage: 'trigger <nodeId>',
       fn: trigger,
     },
+    command: {
+      description: 'Send a command to the agent',
+      usage: 'command <command>',
+      fn: function (command: string) {
+        publish(events.SEND_COMMAND, {
+          agentId: currentAgentId,
+          command,
+        })
+        return `Sent agent command ${command} to agent ${currentAgentId}`
+      }
+
+    }
   }
 
   return (
