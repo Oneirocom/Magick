@@ -90,6 +90,9 @@ export class Agent implements AgentInterface {
       // initialize the plugins
       await this.initializePlugins()
 
+      // initialize the plugin commands
+      this.initializePluginCommands()
+
       // initialize the core commands
       // These are used to remotely control the agent
       this.initializeCoreCommands()
@@ -155,6 +158,14 @@ export class Agent implements AgentInterface {
 
     const outputTypes = pluginManager.getOutputTypes()
     this.outputTypes = outputTypes
+  }
+
+  private initializePluginCommands() {
+    this.log('Initializing plugin commands')
+    const pluginCommands = pluginManager.getAgentCommands()
+    for (const pluginName of Object.keys(pluginCommands)) {
+      this.commandHub.registerPlugin(pluginName, pluginCommands[pluginName])
+    }
   }
 
   /**
