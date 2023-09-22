@@ -2,6 +2,7 @@
 import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import { LoopHandler } from './loopHandler'
+import { Agent } from '@magickml/agents'
 type StartLoopArgs = {
   agent: any
   agentManager: any
@@ -142,10 +143,28 @@ const inputSockets = [
   },
 ]
 
+type AgentWithLoop = Agent & {
+  loopHandler: LoopHandler
+}
+
 const LoopPlugin = new ServerPlugin({
   name: 'LoopPlugin',
   agentMethods: getAgentMethods(),
   inputTypes: [{ name: 'Loop In', sockets: inputSockets }],
+  agentCommands: {
+    start: (data, agent) => {
+      ;(agent as AgentWithLoop).log('starting loop')
+      ;(agent as AgentWithLoop).loopHandler.resume()
+    },
+    stop: (data, agent) => {
+      ;(agent as AgentWithLoop).log('stopping loop')
+      ;(agent as AgentWithLoop).loopHandler.pause()
+    },
+    step: (data, agent) => {
+      ;(agent as AgentWithLoop).log('stepping through loop')
+      ;(agent as AgentWithLoop).loopHandler.step()
+    },
+  },
 })
 
 export default LoopPlugin
