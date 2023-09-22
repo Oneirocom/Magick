@@ -1,8 +1,14 @@
 // DOCUMENTED
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import {
+  eventSocket,
+  getLogger,
+  ServerPlugin,
+  triggerSocket,
+} from '@magickml/core'
 import { app } from '@magickml/server-core'
 import { LoopHandler } from './loopHandler'
 import { Agent } from '@magickml/agents'
+import pino from 'pino'
 type StartLoopArgs = {
   agent: any
   agentManager: any
@@ -14,19 +20,20 @@ type StartLoopArgs = {
 class LoopManager {
   agentManager: any
   loopHandlers: Map<any, LoopHandler> // Store loop handlers
+  logger: pino.Logger = getLogger()
 
   /**
    * Constructs a new LoopManager.
    * @param {any} agentManager - The agent manager to manage loops for.
    */
   constructor(agentManager) {
-    console.log('new loop manager created')
+    this.logger.debug('Creating new LoopManager')
     this.agentManager = agentManager
     this.agentManager.registerAddAgentHandler(({ agent, agentData }) =>
       this.addAgent({ agent, agentData })
     )
-    this.agentManager.registerRemoveAgentHandler(({ agent }) =>
-      this.removeAgent({ agent })
+    this.agentManager.registerRemoveAgentHandler(agent =>
+      this.removeAgent(agent.id)
     )
     this.loopHandlers = new Map()
   }
@@ -81,12 +88,15 @@ class LoopManager {
    * Removes an agent from the loop manager.
    * @param {any} agent - Agent to remove.
    */
-  removeAgent({ agent }) {
-    const _agent = this.agentManager.getAgent({ agent })
-    if (!_agent || !agent.loopHandler) return
-    clearInterval(agent.loopHandler)
+  removeAgent(agentId) {
+    const agent = this.agentManager.getAgent(agentId) as AgentWithLoop
+    if (!agent || !agent.loopHandler) return
+    const loopHandler = this.loopHandlers.get(agent.id)
+    if (!loopHandler) return
+    loopHandler.destroy()
     this.loopHandlers.delete(agent.id)
-    delete agent.loopHandler
+    // @ts-ignore
+    delete agent?.loopHandler
   }
 
   startLoop(_, agentId) {
