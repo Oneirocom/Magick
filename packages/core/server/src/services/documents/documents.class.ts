@@ -51,10 +51,11 @@ export class DocumentService<
     if (docData.content) {
       elements = [
         ...elements,
-        ...(await getUnstructuredData(
-          [{ text: docData.content, originalFilename: 'text.txt' }],
-          docData
-        )),
+        ...chunkEmbeddings(
+          [{ text: docData.content }],
+          embeddingSize,
+          '\n'
+        ).map(embedding => createElement(embedding, docData)),
       ]
     }
     if (files && files.length > 0) {
@@ -297,8 +298,8 @@ const createElement = (element, docData) => {
     projectId: docData.projectId,
     id: documentId,
     metadata: {
-      fileName: element[0].metadata.filename,
-      fileType: element[0].metadata.filetype,
+      fileName: element[0].metadata?.filename,
+      fileType: element[0].metadata?.filetype,
     },
     embeddings,
   }
