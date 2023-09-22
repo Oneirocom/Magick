@@ -115,6 +115,7 @@ export class CommandHub {
   ) {
     for (const command of Object.keys(commands)) {
       const eventType = `${domain}:${subdomain}:${command}`
+      this.agent.log(`Registering event type: ${eventType}`)
       this.on(eventType, { callback: commands[command] })
     }
   }
