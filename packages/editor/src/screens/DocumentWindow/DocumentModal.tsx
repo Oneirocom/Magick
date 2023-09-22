@@ -137,11 +137,6 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
             rows={5}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'}>
-            Add &lt;&lt;BREAK&gt;&gt; anywhere in your content to force a chunk break at this point
-          </Typography>
-        </Grid>
       </Grid>
     </Modal>
   );
