@@ -31,11 +31,15 @@ export type Command = {
   icon: string
 }
 
+export type ExtendableAgent = Agent & {
+  [key: string]: any
+}
+
 export type PluginClientCommandList = Record<string, Command>
 
 export type PluginServerCommandList = Record<
   string,
-  (data: any, agent: Agent) => void
+  (data: any, agent: ExtendableAgent) => void
 >
 
 export type PluginServerRoute = Route
@@ -177,6 +181,7 @@ export class ServerPlugin extends Plugin {
       secrets,
       completionProviders,
     })
+    this.agentCommands = agentCommands
     this.services = services
     this.nodes = nodes
     this.agentMethods = agentMethods
@@ -468,13 +473,15 @@ export class ServerPluginManager extends PluginManager {
   }
 
   getAgentCommands() {
-    let commands = {}
+    const commands = {}
 
     this.pluginList.forEach(plugin => {
       if (plugin.agentCommands) {
-        commands = { ...commands, ...plugin.agentCommands }
+        commands[plugin.name] = plugin.agentCommands
       }
     })
+
+    return commands
   }
 
   getServerInits() {
