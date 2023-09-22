@@ -23,6 +23,7 @@ export const events: PubSubEvents = {
   OPEN_TAB: 'openTab',
   TOGGLE_SNAP: 'toggleSnap',
   RUN_AGENT: 'runAgent',
+  SEND_COMMAND: 'sendCommand',
   $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
   $PLAYTEST_INPUT: tabId => `playtestInput:${tabId}`,
@@ -82,12 +83,19 @@ export const PubSubProvider = ({ children }) => {
     if (!client) return
 
     // temporary subscription to run the agent
-    PubSub.subscribe(events.RUN_AGENT, (event, data) => {
+    const unsubscribeRun = subscribe(events.RUN_AGENT, (event, data) => {
       client.service('agents').run(data)
     })
 
+    const unsubscribeCommand = subscribe(events.SEND_COMMAND, (event, data) => {
+      console.log("SENDING COMMAND DATA", data)
+      client.service('agents').command(data)
+    })
+
+
     return () => {
-      PubSub.clearAllSubscriptions()
+      unsubscribeRun()
+      unsubscribeCommand()
     }
   }, [client])
 
