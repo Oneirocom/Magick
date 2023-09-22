@@ -225,6 +225,7 @@ export type PubSubEvents = {
   OPEN_TAB: string
   TOGGLE_SNAP: string
   RUN_AGENT: string
+  SEND_COMMAND: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $PLAYTEST_INPUT: (tabId: string) => string
