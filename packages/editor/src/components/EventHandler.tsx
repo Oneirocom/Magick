@@ -108,6 +108,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $CLOSE_EDITOR,
     $PROCESS,
     $RUN_SPELL,
+    $RESET_HIGHLIGHTS
   } = events
 
   /**
@@ -349,6 +350,11 @@ const EventHandler = ({ pubSub, tab }) => {
     const response = await client.service('agents').run(data)
   }
 
+  const resetHighlights = () => {
+    const editor = getEditor() as Record<string, any>
+    editor.resetHighlights()
+  }
+
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$CREATE_MESSAGE_REACTION_EDITOR(tab.id)]: createMessageReactionEditor,
@@ -367,6 +373,7 @@ const EventHandler = ({ pubSub, tab }) => {
     [$PROCESS(tab.id)]: onProcess,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
     [$RUN_SPELL(tab.id)]: runSpell,
+    [$RESET_HIGHLIGHTS(tab.id)]: resetHighlights,
   }
 
   useEffect(() => {
