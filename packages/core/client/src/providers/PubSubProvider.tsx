@@ -46,6 +46,7 @@ export const events: PubSubEvents = {
   // $CREATE_PROJECT_WINDOW: tabId => `createProjectWindow:${tabId}`,
   $CREATE_DEBUG_CONSOLE: tabId => `createDebugConsole:${tabId}`,
   $CREATE_CONSOLE: tabId => `createDebugConsole:${tabId}`,
+  $RESET_HIGHLIGHTS: tabId => `resetHighlights:${tabId}`,
   $RUN_SPELL: tabId => `runSpell:${tabId}`,
   $RUN_AGENT: tabId => `runAgent:${tabId}`,
   $PROCESS: tabId => `process:${tabId}`,
