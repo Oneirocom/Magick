@@ -370,7 +370,7 @@ function AgentMenu({ data, resetData }) {
                     outline: 'none',
                   },
                 }}
-                key={i}
+                key={i + agent.id}
               >
                 {editMode && selectedAgentData?.id === agent?.id ? (
                   <>
