@@ -27,27 +27,6 @@ export interface Tab {
 const tabAdapater = createEntityAdapter<Tab>()
 const tabSelectors = tabAdapater.getSelectors()
 
-// Initial State for tabs
-const initialState = tabAdapater.getInitialState()
-
-/**
- * Selects the active tab from the given tabs array.
- */
-const _activeTabSelector = createDraftSafeSelector(
-  tabSelectors.selectAll,
-  tabs => {
-    return Object.values(tabs).find(tab => tab?.active)
-  }
-)
-
-/**
- * Selects the tab with the specified UUID from the given tabs array.
- */
-const selectTabBySpellUUID = createDraftSafeSelector(
-  [state => tabSelectors.selectAll(state), (_, id) => id],
-  (tabs, id) => Object.values(tabs).find(tab => tab.id === id)
-)
-
 /**
  * Decodes a URI-encoded string and returns the decoded name portion.
  */
@@ -79,51 +58,51 @@ const buildTab = (tab, properties = {}) => ({
   ...properties,
 })
 
+export type AdditionalState = {
+  activeTabId: string | null
+}
+
 /**
  * Tab slice containing reducer and actions for managing tabs.
  */
 export const tabSlice = createSlice({
   name: 'tabs',
-  initialState,
+  initialState: tabAdapater.getInitialState<AdditionalState>({
+    activeTabId: null,
+  }),
   reducers: {
-    // Opens a tab, either creating a new one or switching to the existing tab
+    //   Opens a tab, either creating a new one or switching to the existing tab
     openTab: (state, action) => {
       const switchActive =
         'switchActive' in action.payload ? action.payload.switchActive : true
-      const activeTab = _activeTabSelector(state) as Tab
-      if (activeTab && switchActive)
-        tabAdapater.updateOne(state, {
-          id: activeTab.id,
-          changes: { active: false },
-        })
 
-      const existingTab = selectTabBySpellUUID(
-        state,
-        encodedToId(action.payload.name)
-      )
-
-      if (existingTab && !switchActive) return
-
-      if (existingTab && !action.payload.openNew) {
-        tabAdapater.updateOne(state, {
-          id: existingTab.id,
-          changes: {
-            active: switchActive,
-          },
-        })
-        return
-      }
-
-      const tab = buildTab(action.payload, {
-        active: true,
+      const newTab = buildTab(action.payload, {
         componentType: action.payload.componentType || 'DefaultComponent',
       })
-      tabAdapater.addOne(state, tab)
+
+      tabAdapater.addOne(state, newTab)
+
+      if (switchActive) {
+        state.activeTabId = newTab.id
+      }
     },
-    closeTab: tabAdapater.removeOne,
+    closeTab: (state, action) => {
+      // if there are other tabs, grab the next one to be active
+      if (state.ids.length > 1) {
+        const nextTab = state.ids.find(id => id !== action.payload)
+        const tab = nextTab ? state.entities[nextTab] : null
+
+        state.activeTabId = tab ? tab.id : null
+      } else {
+        state.activeTabId = null
+      }
+      tabAdapater.removeOne(state, action.payload)
+    },
     switchTab: tabAdapater.updateOne,
     clearTabs: tabAdapater.removeAll,
-    changeActive: tabAdapater.updateMany,
+    changeActive: (state, action) => {
+      state.activeTabId = action.payload
+    },
     saveTabLayout: (state, action) => {
       tabAdapater.updateOne(state, {
         id: action.payload.tabId,
@@ -149,6 +128,19 @@ export const {
   changeActive,
   changeEditorLayout,
 } = tabSlice.actions
+
+/**
+ * Selects the active tab from the given tabs array.
+ */
+const _activeTabSelector = createDraftSafeSelector(
+  [state => tabSelectors.selectAll(state), state => state.activeTabId],
+  (tabs, activeTabId) => {
+    const activeTab = tabs.find(tab => tab.id === activeTabId)
+    return activeTab
+  }
+)
+
+export const activeTabIdSelector = (state: RootState) => state.tabs.activeTabId
 
 // Export selectors
 export const activeTabSelector = (state: RootState) =>
