@@ -22,7 +22,7 @@ import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 import { EngineComponent } from '@magickml/rete'
-import { activeTabSelector, spellApi } from '@magickml/state'
+import { spellApi } from '@magickml/state'
 
 /**
  * MagickTab type definition.
@@ -191,7 +191,6 @@ const RawEditor = ({ tab, children }) => {
     spellApi.useLazyGetSpellByIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
-  const activeTab = useSelector(activeTabSelector)
   const reteInterface = useMagickInterface() as EditorContext
 
   useEffect(() => {
@@ -203,7 +202,7 @@ const RawEditor = ({ tab, children }) => {
     })
   }, [tab])
 
-  if (isLoading && tab.id === activeTab?.id) return <LoadingScreen />
+  if (isLoading) return <LoadingScreen />
 
   return (
     <>
