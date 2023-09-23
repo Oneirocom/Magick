@@ -1,6 +1,9 @@
 // DOCUMENTED 
+import { memo, useEffect } from 'react';
+import isEqual from 'lodash/isEqual';
 import WorkspaceProvider from '../contexts/WorkspaceProvider';
 import Composer from './Workspace';
+import { Tab } from '@magickml/state';
 
 /**
  * A mapping of workspace types to their respective components.
@@ -10,46 +13,48 @@ const workspaceMap = {
   module: Composer,
 };
 
-/**
- * The Workspaces component displays a collection of workspaces, only showing the active one.
- *
- * @param tabs - An array of tabs.
- * @param pubSub - An instance of a publish-subscribe pattern.
- * @param activeTab - An object representing the active tab.
- * @returns A JSX element containing the active workspace.
- */
-const Workspaces = ({ tabs, pubSub, activeTab }) => {
+type WorkspaceProps = {
+  pubSub: any;  // You might want to provide a more detailed type based on your usage.
+  tab: Tab
+};
+
+const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
+  // const { active, ...tabWithoutActive } = tab;
+  const Workspace = workspaceMap[tab.type];
+  const props = {
+    pubSub,
+    tab
+  };
+
+  if (!Workspace) {
+    return null;
+  }
+
+  return (
+    <div
+      key={tab.name}
+      style={{
+        visibility: tab.id !== activeTabId ? 'hidden' : undefined,
+        height: '100%',
+      }}
+    >
+      <WorkspaceProvider {...props}>
+        <Workspace {...props} />;
+      </WorkspaceProvider>
+    </div>
+  )
+}
+
+const Workspaces = ({ tabs, pubSub, activeTabId }) => {
+
   return (
     <>
       {tabs.map((tab) => {
-        if (tab.type === "component") {
-          return null;
-        }
-        const Workspace = workspaceMap[tab.type];
-
-        const props = {
-          tabs,
-          pubSub,
-          tab,
-        };
-
-        return (
-          <div
-            key={tab.name}
-            style={{
-              visibility: tab.id !== activeTab.id ? 'hidden' : undefined,
-              height: '100%',
-            }}
-          >
-            <WorkspaceProvider {...props}>
-              <Workspace {...props} />
-            </WorkspaceProvider>
-          </div>
-        );
+        console.log("TAB!", tab)
+        return <WorkspaceComponent key={tab.id} tab={tab} pubSub={pubSub} activeTabId={activeTabId} />;
       })}
     </>
   );
 };
-
 
 export default Workspaces;

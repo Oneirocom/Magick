@@ -18,14 +18,15 @@ import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
 import { RootState, spellApi } from '@magickml/state'
 import AgentControls from '../windows/AgentControlWindow'
+import isEqual from 'lodash/isEqual'
 
 /**
  * Workspace component that handles different tabs and their layouts.
  * Each workspace corresponds to a different tab.
- * @param {{tab: object, tabs: object[], pubSub: object}} props
+ * @param {{tab: object, pubSub: object}} props
  * @returns {JSX.Element}
  */
-const Workspace = ({ tab, tabs, pubSub }) => {
+const Workspace = ({ tab, pubSub }) => {
   const config = useConfig()
   const spellRef = useRef<SpellInterface>()
   const { events, publish } = usePubSub()
@@ -109,7 +110,6 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         case 'debugConsole':
           return <DebugConsole {...props} />
         case 'agentControls':
-          console.log("AGENT CONTORLS")
           return <AgentControls {...props} />
         default:
           return <p></p>
@@ -130,5 +130,6 @@ const Wrapped = props => {
 }
 
 export default React.memo(Wrapped, (prevProps, nextProps) => {
-  return prevProps.tab.id !== nextProps.tab.id
+  return true
+  return isEqual(prevProps, nextProps)
 })
