@@ -15,17 +15,16 @@ import { RootState, changeActive, closeTab, selectAllTabs } from '@magickml/stat
  * @param {Object} tab - tab object containing { id, name, URI }
  * @param {Object} activeTab - currently active tab
  */
-const Tab = ({ tab, activeTab }) => {
+const Tab = ({ tab, activeTabId }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
-  const active = tab.id === activeTab?.id
+  const isActive = tab.id === activeTabId
 
   const title = `${tab.name.split('--')[0]}`
   const tabClass = classnames({
     [css['tabbar-tab']]: true,
-    [css['active']]: active,
-    [css['inactive']]: !active,
+    [css['active']]: isActive,
+    [css['inactive']]: !isActive,
   })
 
   /**
@@ -33,24 +32,8 @@ const Tab = ({ tab, activeTab }) => {
    */
   const onClick = () => {
     // This avoid unnecessary rendering and loading of spell when the same tab is clicked
-    if (tab.id === activeTab.id) return
-    const updatedTabs = tabs.map(t =>
-      t.id === tab.id
-        ? {
-          id: t.id,
-          changes: {
-            active: true,
-          },
-        }
-        : {
-          id: t.id,
-          changes: {
-            active: false,
-          },
-        }
-    )
-    dispatch(changeActive(updatedTabs))
-    navigate(`/magick/${tab.URI}`)
+    if (tab.id === activeTabId) return
+    dispatch(changeActive(tab.id))
   }
 
   /**
@@ -86,7 +69,7 @@ const Tab = ({ tab, activeTab }) => {
  * @param {Array} tabs - array of tab objects containing { id, name, URI }
  * @param {Object} activeTab - currently active tab
  */
-const TabBar = ({ tabs, activeTab }) => {
+const TabBar = ({ tabs, activeTabId }) => {
   return (
     <div className={css['th-tabbar']}>
       <div className={css['tabbar-section']}>
@@ -94,7 +77,7 @@ const TabBar = ({ tabs, activeTab }) => {
       </div>
       <div className={css['tabbar-section']}>
         {tabs &&
-          tabs.map((tab) => <Tab tab={tab} activeTab={activeTab} key={tab.id} />)}
+          tabs.map((tab) => <Tab tab={tab} activeTabId={activeTabId} key={tab.id} />)}
       </div>
       <div className={css['tabbar-section']}>
         <CreateTab />
