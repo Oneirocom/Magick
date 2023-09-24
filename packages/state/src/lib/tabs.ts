@@ -87,7 +87,9 @@ export const tabSlice = createSlice({
     closeTab: (state, action) => {
       // if there are other tabs, grab the next one to be active
       if (state.ids.length > 1) {
-        const nextTab = state.ids.find(id => id !== action.payload)
+        // grab the closest tab to the one which was closed based on proximity in the array
+        const nextTab = state.ids[state.ids.indexOf(action.payload) - 1]
+
         const tab = nextTab ? state.entities[nextTab] : null
 
         state.activeTabId = tab ? tab.id : null
