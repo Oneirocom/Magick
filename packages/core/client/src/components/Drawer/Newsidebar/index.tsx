@@ -40,7 +40,8 @@ import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurpl
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { openTab } from '@magickml/state'
 
 const drawerWidth = 210
 
@@ -169,6 +170,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
   onClick,
   open,
 }) => {
+  const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
@@ -192,7 +194,12 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               Icon={item.icon}
               open={open}
               onClick={() => {
-                navigate(`/magick/${item.text}`)
+                dispatch(openTab({
+                  name: item.text,
+                  type: item.text,
+                  switchActive: true,
+                  id: item.text,
+                }))
               }}
               text={item.text}
               tooltip="Avatar and Tasks Tooltip"
@@ -215,6 +222,7 @@ type DrawerProps = {
 export function NewSidebar(DrawerProps): JSX.Element {
   const location = useLocation()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   const [openDrawer, setOpenDrawer] = useState<boolean>(true)
   // State to keep track of the anchor element of the menu and cursor position
@@ -393,7 +401,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
               Icon={BoltIcon}
               open={openDrawer}
               onClick={() => {
-                navigate(`/magick/Events-${encodeURIComponent(btoa('Events'))}`)
+                dispatch(openTab({
+                  name: 'Events',
+                  type: 'Events',
+                  switchActive: true,
+                  id: 'events',
+                }))
               }}
               text="Events"
               tooltip="Events Tooltip"
@@ -404,9 +417,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
               Icon={StorageIcon}
               open={openDrawer}
               onClick={() => {
-                navigate(
-                  `/magick/Requests-${encodeURIComponent(btoa('Requests'))}`
-                )
+                dispatch(openTab({
+                  name: 'Requests',
+                  type: 'Requests',
+                  switchActive: true,
+                  id: 'requests',
+                }))
               }}
               text="Requests"
               tooltip="Requests Tooltip"
@@ -420,9 +436,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
               Icon={SettingsIcon}
               open={openDrawer}
               onClick={() => {
-                navigate(
-                  `/magick/Settings-${encodeURIComponent(btoa('Settings'))}`
-                )
+                dispatch(openTab({
+                  name: 'Settings',
+                  type: 'Settings',
+                  switchActive: true,
+                  id: 'settings',
+                }))
               }}
               text="Settings"
               tooltip="Settings Tooltip"
