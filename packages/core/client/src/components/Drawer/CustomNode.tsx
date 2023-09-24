@@ -39,6 +39,7 @@ type CustomData = {
 }
 
 export const CustomNode: React.FC<Props> = props => {
+  const dispatch = useDispatch()
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
   const navigate = useNavigate()
@@ -49,7 +50,6 @@ export const CustomNode: React.FC<Props> = props => {
   const FeathersContext = useFeathers()
   const client = FeathersContext.client
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
-  const dispatch = useDispatch()
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState(props.node.text)
   const [patchSpell] = spellApi.usePatchSpellMutation()
@@ -69,11 +69,21 @@ export const CustomNode: React.FC<Props> = props => {
     if (!props.node) return
     if (props.node.fileType === 'txt') {
       setOpenDoc(props.node.id)
-      navigate(`/magick/Documents-${encodeURIComponent(btoa('Documents'))}`)
+      dispatch(openTab({
+        id: "Documents",
+        name: 'Documents',
+        type: 'Documents',
+        switchActive: true
+      }))
     } else if (props.node.fileType === 'spell') {
-      navigate(
-        `/magick/${props.node.id}-${encodeURIComponent(btoa(props.node.text))}`
-      )
+      console.log('Open spell', props.node)
+
+      dispatch(openTab({
+        id: props.node.id,
+        name: props.node.text,
+        spellName: props.node.text,
+        type: 'spell',
+      }))
     }
   }
 
@@ -164,7 +174,8 @@ export const CustomNode: React.FC<Props> = props => {
   
     dispatch(
       openTab({
-        name: props.node.id + '-' + encodeURIComponent(btoa(newName)),
+        id: props.node.id,
+        name: newName,
         spellName: newName,
         type: 'spell',
       })
