@@ -56,13 +56,14 @@ const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
     return null;
   }
 
-  console.log(componentMapping)
+  const isActive = tab.id === activeTabId
 
   return (
     <div
       key={tab.name}
       style={{
-        visibility: tab.id !== activeTabId ? 'hidden' : undefined,
+        visibility: !isActive ? 'hidden' : undefined,
+        height: !isActive ? 0 : undefined,
         position: 'absolute',
         top: 0,
         left: 0,
