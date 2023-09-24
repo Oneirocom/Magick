@@ -76,9 +76,7 @@ export const tabSlice = createSlice({
       const switchActive =
         'switchActive' in action.payload ? action.payload.switchActive : true
 
-      const newTab = buildTab(action.payload, {
-        componentType: action.payload.componentType || 'DefaultComponent',
-      })
+      const newTab = buildTab(action.payload)
 
       tabAdapater.addOne(state, newTab)
 
