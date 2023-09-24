@@ -48,7 +48,7 @@ const encodedToId = (uri: string) => {
  */
 const buildTab = (tab, properties = {}) => ({
   ...tab,
-  id: encodedToId(tab.name) || tab.name,
+  id: tab.id || encodedToId(tab.name) || tab.name,
   URI: encodeURIComponent(tab.name) || tab.name,
   name: encodedToName(tab.name) || tab.name,
   layoutJson: getWorkspaceLayout(tab.workspace),
