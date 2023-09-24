@@ -5,11 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
 import Workspaces from '../../components/Workspaces'
-import Events from '../EventWindow'
-import Requests from '../RequestWindow'
-import Settings from '../settings/SettingsWindow'
-import Documents from '../DocumentWindow'
-import Agents from '../agents/AgentManagerWindow';
+
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 import { RootState, activeTabIdSelector, activeTabSelector, changeActive, openTab, selectAllTabs } from '@magickml/state'
 /**
@@ -39,18 +35,6 @@ const Magick = ({ empty = false }): JSX.Element => {
         })
       })
 
-  const componentMapping = {
-    Events,
-    Requests,
-    Settings,
-    Documents,
-    Agents,
-    ...pluginComponents.reduce((acc, obj) => {
-      acc[obj.name] = obj.component
-      return acc
-    }, {}),
-  }
-
   // Subscribe to open tab events
   useEffect(() => {
     if (!subscribe || !events || !dispatch) return
@@ -73,21 +57,13 @@ const Magick = ({ empty = false }): JSX.Element => {
   // Render loading screen if there's no active tab
   if (!activeTabId) return <LoadingScreen />
 
-  const ComponentToRender = componentMapping[activeTab.componentType] || null
-
   return (
     <>
       <TabBar tabs={tabs} activeTabId={activeTabId} />
       <TabLayout>
-        {!empty && (
-          <>
-            {ComponentToRender ? (
-              <ComponentToRender /> // Render the dynamically opened component if available
-            ) : (
-              <Workspaces tabs={tabs} pubSub={pubSub} activeTabId={activeTabId} />
-            )}
-          </>
-        )}
+        {!empty &&
+          <Workspaces tabs={tabs} pubSub={pubSub} activeTabId={activeTabId} />
+        }
       </TabLayout>
     </>
   )
