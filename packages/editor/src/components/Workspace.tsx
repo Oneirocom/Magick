@@ -129,7 +129,4 @@ const Wrapped = props => {
   return <Workspace {...props} />
 }
 
-export default React.memo(Wrapped, (prevProps, nextProps) => {
-  return true
-  return isEqual(prevProps, nextProps)
-})
+export default React.memo(Wrapped)
