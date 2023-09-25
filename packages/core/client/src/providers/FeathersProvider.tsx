@@ -70,15 +70,12 @@ const configureCustomServices = (
  * @returns Feathers client
  */
 const buildFeathersClient = async (config, token): Promise<any> => {
-  const socket = io(config.apiUrl, {
-    // Send the authorization header in the initial connection request
-    transportOptions: {
-      polling: {
-        extraHeaders: {
-          authorization: `Bearer ${token}`,
-        },
-      },
+  const socket = io(`${config.apiUrl}?token=${token}`, {
+    transports: ['websocket'],
+    extraHeaders: {
+      Authorization: `Bearer ${token}`
     },
+    withCredentials: true,
   })
   const app = feathers<ServiceTypes>()
   const socketClient = socketio(socket, { timeout: 10000 })
