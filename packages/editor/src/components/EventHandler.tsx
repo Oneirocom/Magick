@@ -157,14 +157,16 @@ const EventHandler = ({ pubSub, tab }) => {
       ...update,
     }
 
-    spellRef.current = updatedSpell
-
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     // no point saving if nothing has changed
-    if (jsonDiff.length === 0) return
+    if (jsonDiff.length === 0) {
+      console.warn('No changes to save')
+      return
+    }
     // While Importing spell, the graph is first created, then the imported graph is loaded
-    // This might be causing issue at the server end.
+    // This might be causing issue at the server end.import { GlobalConfig } from '../../../../dist/packages/editor/state/globalConfig.d';
+
     if (updatedSpell.graph.nodes.length === 0) return
 
     updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
@@ -178,6 +180,8 @@ const EventHandler = ({ pubSub, tab }) => {
         id: currentSpell.id,
       })
 
+      spellRef.current = diffResponse
+
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
           variant: 'error',
@@ -190,8 +194,6 @@ const EventHandler = ({ pubSub, tab }) => {
       })
       return
     }
-
-    onProcess()
   }
 
   const createMessageReactionEditor = () => {
