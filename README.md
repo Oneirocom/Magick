@@ -1,4 +1,4 @@
-<p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
+<p align="center"><img src="apps/docs/readme-files/magick-github-banner.png" /></p>
 
 <p align="center">
   <a href="https://discord.gg/magickml">
@@ -248,6 +248,6 @@ The original source code was made by the following contributors to Thoth, which 
 
 We are building Magick as a community in the open on Discord. If you are interested in contributing to the project, we'd love to have you.
 
-Join us here: https://discord.gg/magickml
+Join us here: https://bit.ly/magickdiscordgh
 
 <p align="center"><img src="apps/docs/readme-files/wizard.png" /></p>
