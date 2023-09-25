@@ -1,8 +1,8 @@
 <p align="center"><img src="apps/docs/readme-files/magick-github-banner.png" /></p>
 
 <p align="center">
-  <a href="https://discord.gg/magickml">
-    <img src="https://dcbadge.vercel.app/api/server/magickml?style=social" alt="Join Discord" />
+  <a href="https://bit.ly/magickdiscordgh">
+    <img src="https://dcbadge.vercel.app/api/server/tacYgMnuzP?style=social" alt="Join Discord" />
   </a>
   <a href="https://twitter.com/magickml">
     <img src="https://img.shields.io/twitter/follow/magickml?style=social" alt="Follow on Twitter" />
