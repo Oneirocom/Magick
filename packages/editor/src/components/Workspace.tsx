@@ -45,7 +45,7 @@ const Workspace = ({ tab, tabs, pubSub }) => {
         if (tab.type === 'spell' && spellRef.current) {
           publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
         }
-      }, 2000) // debounce for 2000 ms
+      }, 1000) // debounce for 2000 ms
     )
 
     return () => {
