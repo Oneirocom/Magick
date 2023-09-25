@@ -135,7 +135,6 @@ export async function initApp() {
           origin: '*',
           methods: ['GET', 'POST', 'OPTIONS'],
           allowedHeaders: ['Authorization'],
-          credentials: true,
         },
         transports: ['websocket'],
       },
@@ -171,6 +170,13 @@ export async function initApp() {
         async (context: HookContext, next) => {
           // if the route is to the api service, skip auth
           if (context.path === 'api') {
+            return next()
+          }
+
+          const socket = context.params.connection
+          // if we are on a socket and there is a user, skip auth
+          if (socket && socket.user) {
+            context.params.user = socket.user
             return next()
           }
 
