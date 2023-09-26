@@ -13,7 +13,6 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
-import { useNavigate } from 'react-router-dom'
 import { IconBtn } from '@magickml/client-core'
 import { Close, Done } from '@mui/icons-material'
 import styles from './menu.module.css'
@@ -29,7 +28,7 @@ import { useFeathers } from '../../providers/FeathersProvider'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
 import { AgentInterface, SpellInterface } from '@magickml/core'
-import { setCurrentAgentId } from '@magickml/state'
+import { openTab, setCurrentAgentId } from '@magickml/state'
 
 interface Spell {
   id: number
@@ -38,7 +37,6 @@ interface Spell {
 }
 
 function AgentMenu({ data, resetData }) {
-  const navigate = useNavigate()
   const { client } = useFeathers()
   const [openMenu1, setOpenMenu1] = useState(null)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
@@ -259,12 +257,12 @@ function AgentMenu({ data, resetData }) {
       if (matchingSpell) {
         const spellName = matchingSpell.name
 
-        // Construct the URL
-        const encodedSpellName = encodeURIComponent(btoa(spellName))
-        const url = `/magick/${agent.rootSpellId}-${encodedSpellName}`
-
-        // Navigate to the URL
-        navigate(url)
+        dispatch(openTab({
+          id: agent.rootSpellId,
+          name: spellName,
+          spellName: spellName,
+          type: 'spell',
+        }))
       }
     }
     handleCloseMenu1()
@@ -463,7 +461,12 @@ function AgentMenu({ data, resetData }) {
             },
           }}
           onClick={() => {
-            navigate(`/magick/Agents-${encodeURIComponent(btoa('Agents'))}`)
+            dispatch(openTab({
+              id: "Agents",
+              name: 'Agents',
+              type: 'Agents',
+              switchActive: true
+            }))
           }}
         >
           <List
@@ -581,7 +584,12 @@ function AgentMenu({ data, resetData }) {
             },
           }}
           onClick={() => {
-            navigate(`/magick/Agents-${encodeURIComponent(btoa('Agents'))}`)
+            dispatch(openTab({
+              id: "Agents",
+              name: 'Agents',
+              type: 'Agents',
+              switchActive: true
+            }))
           }}
         >
           Other Options
