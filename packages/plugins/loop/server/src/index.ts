@@ -89,6 +89,7 @@ class LoopManager {
    * @param {any} agent - Agent to remove.
    */
   removeAgent(agentId) {
+    this.logger.debug(`Removing agent ${agentId} from loop manager`)
     const agent = this.agentManager.getAgent(agentId) as AgentWithLoop
     if (!agent || !agent.loopHandler) return
     const loopHandler = this.loopHandlers.get(agent.id)

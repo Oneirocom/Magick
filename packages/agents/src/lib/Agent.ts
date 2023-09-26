@@ -143,6 +143,8 @@ export class Agent implements AgentInterface {
 
     const agentStartMethods = pluginManager.getAgentStartMethods()
 
+    this.logger.debug('Initializing plugins on agent %s', this.id)
+
     // Runs the agent start methods that were loaded from plugins
     for (const method of Object.keys(agentStartMethods)) {
       try {
@@ -161,7 +163,6 @@ export class Agent implements AgentInterface {
   }
 
   private initializePluginCommands() {
-    this.log('Initializing plugin commands')
     const pluginCommands = pluginManager.getAgentCommands()
     for (const pluginName of Object.keys(pluginCommands)) {
       this.commandHub.registerPlugin(pluginName, pluginCommands[pluginName])
@@ -183,13 +184,8 @@ export class Agent implements AgentInterface {
     })
   }
 
-  /**
-   * Clean up resources when the instance is destroyed.
-   */
-  async onDestroy() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval)
-    }
+  removePlugins() {
+    this.logger.debug('Removing all plugins on agent %s', this.id)
     const agentStopMethods = pluginManager.getAgentStopMethods()
     if (agentStopMethods)
       for (const method of Object.keys(agentStopMethods)) {
@@ -199,6 +195,16 @@ export class Agent implements AgentInterface {
           spellRunner: this.spellRunner,
         })
       }
+  }
+
+  /**
+   * Clean up resources when the instance is destroyed.
+   */
+  async onDestroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval)
+    }
+    this.removePlugins()
     this.log('destroyed agent', { id: this.id })
   }
 
