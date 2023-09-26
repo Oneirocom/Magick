@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { saveTabLayout } from '@magickml/state'
+import { activeTabSelector, saveTabLayout } from '@magickml/state'
 import {
   Actions,
   DockLocation,
@@ -155,11 +155,8 @@ const LayoutProvider = ({ children, tab }) => {
 export const Layout = ({ json, factory, tab }) => {
   const dispatch = useDispatch()
   const layoutRef = useRef(null)
-<<<<<<< HEAD
   const { currentModel, createModel, setCurrentRef } = useLayout()
   const activeTab = useSelector(activeTabSelector)
-=======
->>>>>>> ac7d545f (Fix all usages of active tab and remove all use of navigate)
 
   // Side effect for creating model if there is JSON data
   useEffect(() => {
