@@ -55,7 +55,9 @@ export class CommandHub {
    * @param job - The job data.
    */
   private async handleIncomingCommand(job: any) {
-    this.agent.log(`Received command: ${job.command}`)
+    this.agent.log(
+      `Received command: ${job.command} with data: ${JSON.stringify(job.data)}`
+    )
     const { command } = job
 
     // if (!commandId) {
