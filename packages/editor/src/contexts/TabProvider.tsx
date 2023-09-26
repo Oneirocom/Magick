@@ -3,11 +3,21 @@ import {
   DockviewApi,
   DockviewReact, DockviewReadyEvent, IDockviewPanelProps, SerializedDockview,
 } from 'dockview';
+import { usePubSub } from "@magickml/client-core";
+import Composer from "../screens/Composer";
+import WorkspaceProvider from "./WorkspaceProvider";
+import { getWorkspaceLayout } from "@magickml/layouts";
 
+// we will move this out into the layouts package
 function loadDefaultLayout(api: DockviewApi) {
   api.addPanel({
     id: 'panel_1',
     component: 'default',
+    params: {
+      spellId: 'root',
+      spellName: 'root',
+      type: 'spell',
+    }
   });
 
   api.addPanel({
@@ -21,7 +31,47 @@ function loadDefaultLayout(api: DockviewApi) {
   });
 }
 
+const components = {
+  default: (props: IDockviewPanelProps<{ title: string }>) => {
+    return (
+      <div
+        style={{
+          height: '100%',
+          padding: '20px',
+          background: 'var(--dv-group-view-background-color)',
+        }}
+      >
+        {JSON.stringify(props.params)}
+      </div>
+    );
+  },
+  spell: (props: IDockviewPanelProps<{ tab: Tab, pubSub: any }>) => {
+    const pubSub = usePubSub()
+    return (
+      <WorkspaceProvider tab={props.params.tab}
+        pubSub={pubSub}>
+        <div style={{ position: 'relative', height: '100%' }}>
+          <Composer
+            tab={props.params.tab}
+            pubSub={pubSub}
+          />
+
+        </div>
+      </WorkspaceProvider>
+    );
+  }
+}
+
 type DockviewTheme = 'dockview-theme-abyss'
+
+type Tab = {
+  id: string
+  name: string
+  spellName?: string
+  type: string
+  workspace?: string
+  switchActive?: boolean
+}
 
 type DocviewContext = {
   theme: DockviewTheme,
@@ -31,19 +81,25 @@ type DocviewContext = {
   getLayout: () => SerializedDockview | null,
   setLayout: (layout: SerializedDockview) => void
 
+  // IMPLEMENT THESE
+  openTab: (tab: Tab) => void
+  closeTab?: (tab: any) => void
+  switchTab?: (tab: any) => void
 }
 
 const TAB_LAYOUT_KEY = 'tab-layout'
+
 
 // Creating the context
 const Context = createContext<DocviewContext>(undefined!)
 
 // Helper hook to use Layout context
-export const useLayout = () => useContext(Context)
+export const useTabLayout = () => useContext(Context)
 
 export const TabProvider = ({ children }) => {
   const [theme, setTheme] = useState<DockviewTheme>('dockview-theme-abyss')
   const [api, setApi] = useState<DockviewApi>();
+  const pubSub = usePubSub()
 
   const getLayout = () => {
     const layout = localStorage.getItem(TAB_LAYOUT_KEY)
@@ -72,19 +128,34 @@ export const TabProvider = ({ children }) => {
 
   }, [api]);
 
+  const openTab = (_tab: Tab) => {
+    const tab = {
+      ..._tab,
+      layoutJson: getWorkspaceLayout(_tab?.workspace),
+    }
+    api.addPanel({
+      id: tab.name,
+      component: tab.type,
+      params: {
+        tab
+      }
+    });
+  }
+
   const publicInterface = {
     theme,
     setTheme,
     api,
     setApi,
     getLayout,
-    setLayout
+    setLayout,
+    openTab
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
 
 export const TabLayout = ({ children }) => {
-  const { theme, setTheme, setApi, api, setLayout, getLayout } = useLayout()
+  const { theme, setTheme, setApi, api, setLayout, getLayout } = useTabLayout()
 
   const onReady = (event: DockviewReadyEvent) => {
 
@@ -109,20 +180,4 @@ export const TabLayout = ({ children }) => {
     className={theme}
     components={components}
   />)
-}
-
-const components = {
-  default: (props: IDockviewPanelProps<{ title: string }>) => {
-    return (
-      <div
-        style={{
-          height: '100%',
-          padding: '20px',
-          background: 'var(--dv-group-view-background-color)',
-        }}
-      >
-        {props.params.title}
-      </div>
-    );
-  }
 }

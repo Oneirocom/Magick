@@ -9,8 +9,6 @@ import { useEffect } from 'react'
 import { useConfig } from '@magickml/client-core'
 import { openTab, spellApi, useAppDispatch } from '@magickml/state'
 
-// Default graph for spells
-const defaultGraph = getTemplates().spells[0].graph
 
 /**
  * Component that renders the Select element for selecting and creating modules.
@@ -30,6 +28,9 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const [newSpell] = spellApi.useNewSpellMutation()
   const { enqueueSnackbar } = useSnackbar()
   const { dataKey } = control
+
+  // Default graph for spells
+  const defaultGraph = getTemplates().spells[0].graph
 
   // Handle what happens when a new spell is selected and fetched
   useEffect(() => {
