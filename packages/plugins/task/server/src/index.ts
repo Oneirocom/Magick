@@ -88,7 +88,7 @@ class TaskManager {
    * @param {any} agent - Agent to remove.
    */
   removeAgent({ agent }) {
-    const _agent = this.agentManager.getAgent({ agent })
+    const _agent = this.agentManager.getAgent(agent.id)
     if (!_agent || !agent?.taskHandler) return
     clearInterval(agent.taskHandler)
     delete agent.taskHandler
