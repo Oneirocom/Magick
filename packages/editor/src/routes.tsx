@@ -10,6 +10,7 @@ import MagickPageLayout from './layouts/MagickPageLayout/MagickPageLayout'
 import MainLayout from './layouts/MainLayout/MainLayout'
 import HomeScreen from './screens/HomeScreen/HomeScreen'
 import Magick from './screens/Magick/Magick'
+import MagickV2 from './screens/MagickV2'
 import AgentManagerWindow from './screens/agents/AgentManagerWindow'
 import DocumentWindow from './screens/DocumentWindow'
 import EventWindow from './screens/EventWindow'
@@ -72,8 +73,9 @@ const MyRoutes = () => (
       <Route path="/settings" element={<SettingsWindow />} />
 
       <Route element={<MagickPageLayout />}>
+        <Route path="/magickV2" element={<MagickV2 />} />
         <Route path="/home/*" element={<HomeScreen />} />
-        <Route path="/" element={<Magick />} />
+        <Route path="/" element={<MagickV2 />} />
         <Route path="/magick/*" element={<Magick />} />
         <Route path="/magick/:URI" element={<Magick />} />
       </Route>
