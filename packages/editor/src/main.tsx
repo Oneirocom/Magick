@@ -3,6 +3,7 @@
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE
  */
+import 'dockview/dist/styles/dockview.css';
 import React from 'react'
 
 import './wdyr'
