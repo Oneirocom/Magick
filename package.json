@@ -119,6 +119,7 @@
     "deep-equal": "2.2.1",
     "diff-match-patch": "1.0.5",
     "discord.js": "^14.13.0",
+    "dockview": "^1.8.3",
     "docusaurus-plugin-typedoc": "0.19.2",
     "dotenv-flow": "3.2.0",
     "emoji-dictionary": "1.0.11",
