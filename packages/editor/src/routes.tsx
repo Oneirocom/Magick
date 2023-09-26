@@ -40,6 +40,7 @@ const RenderComp = (props: { element: React.ElementType }) => {
  */
 const MyRoutes = () => (
   <Routes>
+    <Route path="/" element={<MagickV2 />} />
     <Route element={<MainLayout />}>
       {(pluginManager as ClientPluginManager)
         .getGroupedClientRoutes()
