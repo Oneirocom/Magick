@@ -5,18 +5,15 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 
-import defaultJson from '../data/layouts/defaultLayout.json'
-import fullScreen from '../data/layouts/fullScreenLayout.json'
-import promptEngineering from '../data/layouts/promptEngineeringLayout.json'
-import troubleShooting from '../data/layouts/troubleshootingLayout.json'
-import { RootState } from './store'
+import { getWorkspaceLayout } from '@magickml/layouts'
+import { RootState } from '@magickml/state'
 
 // Workspace map for initializing tabs with layout data
 export const workspaceMap = {
-  default: defaultJson,
-  fullScreen,
-  promptEngineering,
-  troubleShooting,
+  default: getWorkspaceLayout('defaultJson'),
+  fullScreen: getWorkspaceLayout('fullScreen'),
+  promptEngineering: getWorkspaceLayout('promptEngineering'),
+  troubleShooting: getWorkspaceLayout('troubleShooting'),
 }
 
 /**
