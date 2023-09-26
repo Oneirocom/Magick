@@ -13,9 +13,23 @@ const handleSockets = (app: any) => {
      */
     io.on('connection', async function (socket: any) {
       //   // Use a custom header for the handshake.
-      const token = socket?.handshake?.query?.token
+      let token = socket?.handshake?.query?.token
+
       if (!token) {
-        return console.error(
+        // check for token in auth header
+        const rawToken = socket?.handshake?.headers?.authorization
+
+        // parse token
+        if (rawToken) {
+          token = rawToken.split(' ')[1]
+        }
+
+        if (!token)
+          return console.error(
+            'No token provided in handshake query. Socket connection failed.'
+          )
+
+        throw new Error(
           'No token provided in handshake query. Socket connection failed.'
         )
       }
