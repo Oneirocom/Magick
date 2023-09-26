@@ -9,7 +9,7 @@
   }
 }
 .node {
-  animation: nodeGenesis 0.5s ease;
+  /* animation: nodeGenesis 0.5s ease; */
   transition: background-color 0.05s ease, border 0.2s ease,
     outline-color 0.2s ease;
   min-width: var(--c30);
