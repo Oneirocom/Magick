@@ -14,10 +14,10 @@ body,
   height: 100%;
 }
 
-/* Overrides tabs in dockview  */
+/* Overrides tabs in dockview 
 .tab-layout .tabs-and-actions-container {
   margin-left: 50px !important;
-}
+} */
 
 .expanding {
   position: absolute;

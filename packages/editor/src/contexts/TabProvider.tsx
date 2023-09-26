@@ -5,9 +5,15 @@ import {
 } from 'dockview';
 import { usePubSub } from "@magickml/client-core";
 import Composer from "../screens/Composer";
-import WorkspaceProvider from "./WorkspaceProvider";
+import Events from '../screens/EventWindow'
+import Requests from '../screens/RequestWindow'
+import Settings from '../screens/settings/SettingsWindow'
+import Documents from '../screens/DocumentWindow'
+import Agents from '../screens/agents/AgentManagerWindow';
 import { getWorkspaceLayout } from "@magickml/layouts";
 import NewMenuBar from "../components/MenuBar/newMenuBar";
+import { ClientPluginManager, pluginManager } from "@magickml/core";
+
 
 // we will move this out into the layouts package
 function loadDefaultLayout(api: DockviewApi) {
@@ -32,40 +38,51 @@ function loadDefaultLayout(api: DockviewApi) {
   });
 }
 
-const components = {
-  default: (props: IDockviewPanelProps<{ title: string }>) => {
-    return (
-      <div
-        style={{
-          height: '100%',
-          padding: '20px',
-          background: 'var(--dv-group-view-background-color)',
-        }}
-      >
-        {JSON.stringify(props.params)}
-      </div>
-    );
-  },
-  spell: (props: IDockviewPanelProps<{ tab: Tab, pubSub: any }>) => {
-    const pubSub = usePubSub()
-    return (
-      <WorkspaceProvider tab={props.params.tab}
-        pubSub={pubSub}>
-        <div style={{ position: 'relative', height: '100%' }}>
-          <Composer
-            tab={props.params.tab}
-            pubSub={pubSub}
-          />
+const getComponents = () => {
+  const pluginComponents = [];
 
+  (pluginManager as ClientPluginManager)
+    .getGroupedClientRoutes()
+    .forEach(plugin => {
+      plugin.routes.map(route => {
+        pluginComponents.push({
+          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+          component: route.component,
+        })
+      })
+    })
+
+  console.log('pluginComponents', pluginComponents)
+  return {
+    Events,
+    Requests,
+    Settings,
+    Documents,
+    Agents,
+    ...pluginComponents.reduce((acc, obj) => {
+      acc[obj.name] = obj.component
+      return acc
+    }, {}),
+    spell: Composer,
+    default: (props: IDockviewPanelProps<{ title: string }>) => {
+      return (
+        <div
+          style={{
+            height: '100%',
+            padding: '20px',
+            background: 'var(--dv-group-view-background-color)',
+          }}
+        >
+          {JSON.stringify(props.params)}
         </div>
-      </WorkspaceProvider>
-    );
+      );
+    },
   }
 }
 
 type DockviewTheme = 'dockview-theme-abyss'
 
-type Tab = {
+export type Tab = {
   id: string
   name: string
   spellName?: string
@@ -177,18 +194,11 @@ export const TabLayout = ({ children }) => {
   };
 
   return (
-    <>
-      <NewMenuBar style={{
-        width: 50,
-        position: "absolute",
-        zIndex: 50
 
-      }} />
-      <DockviewReact
-        onReady={onReady}
-        className={`tab-layout ${theme}`}
-        components={components}
-      />
-    </>
+    <DockviewReact
+      onReady={onReady}
+      className={`tab-layout ${theme}`}
+      components={getComponents()}
+    />
   )
 }

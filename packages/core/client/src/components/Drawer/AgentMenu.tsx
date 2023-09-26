@@ -27,6 +27,7 @@ import { useFeathers } from '../../providers/FeathersProvider'
 // todo fix this import
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
+import NewMenuBar from '../../../../../editor/src/components/MenuBar/newMenuBar'
 import { AgentInterface, SpellInterface } from '@magickml/core'
 import { openTab, setCurrentAgentId } from '@magickml/state'
 
@@ -303,6 +304,7 @@ function AgentMenu({ data, resetData }) {
             justifyContent: 'space-between',
           }}
         >
+          <NewMenuBar />
           <ListItemAvatar onClick={redirectToCloudAgents}>
             <BorderedAvatar
               alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
