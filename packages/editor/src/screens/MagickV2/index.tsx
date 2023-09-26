@@ -1,14 +1,12 @@
-import { TabLayout, TabProvider } from "../../contexts/TabProvider";
+import { TabLayout } from "../../contexts/TabProvider";
 
 const MagickV2 = () => {
 
   return (
-    <TabProvider>
-      <TabLayout>
-        <h1>MagickV2</h1>
+    <TabLayout>
+      <h1>MagickV2</h1>
+    </TabLayout>
 
-      </TabLayout>
-    </TabProvider>
   );
 };
 

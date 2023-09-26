@@ -41,7 +41,9 @@ import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig } from '@magickml/client-core'
 import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
 import { useDispatch, useSelector } from 'react-redux'
-import { openTab } from '@magickml/state'
+
+// todo FIX THIS IMPORT
+import { useTabLayout } from '../../../../../../editor/src/contexts/TabProvider'
 
 const drawerWidth = 210
 
@@ -170,6 +172,7 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
   onClick,
   open,
 }) => {
+  const { openTab } = useTabLayout()
   const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
@@ -194,12 +197,12 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
               Icon={item.icon}
               open={open}
               onClick={() => {
-                dispatch(openTab({
+                openTab({
                   name: item.text,
                   type: item.text,
                   switchActive: true,
                   id: item.text,
-                }))
+                })
               }}
               text={item.text}
               tooltip="Avatar and Tasks Tooltip"
@@ -220,6 +223,7 @@ type DrawerProps = {
  * The main Drawer component that wraps around the application content.
  */
 export function NewSidebar(DrawerProps): JSX.Element {
+  const { openTab } = useTabLayout()
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -401,12 +405,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
               Icon={BoltIcon}
               open={openDrawer}
               onClick={() => {
-                dispatch(openTab({
+                openTab({
                   name: 'Events',
                   type: 'Events',
                   switchActive: true,
                   id: 'events',
-                }))
+                })
               }}
               text="Events"
               tooltip="Events Tooltip"
@@ -417,12 +421,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
               Icon={StorageIcon}
               open={openDrawer}
               onClick={() => {
-                dispatch(openTab({
+                openTab({
                   name: 'Requests',
                   type: 'Requests',
                   switchActive: true,
                   id: 'requests',
-                }))
+                })
               }}
               text="Requests"
               tooltip="Requests Tooltip"
@@ -436,12 +440,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
               Icon={SettingsIcon}
               open={openDrawer}
               onClick={() => {
-                dispatch(openTab({
+                openTab({
                   name: 'Settings',
                   type: 'Settings',
                   switchActive: true,
                   id: 'settings',
-                }))
+                })
               }}
               text="Settings"
               tooltip="Settings Tooltip"
@@ -464,6 +468,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
                     { depth, isOpen, onToggle }
                   ) => (
                     <CustomNode
+                      openTab={openTab}
                       node={node}
                       depth={depth}
                       isOpen={isOpen}

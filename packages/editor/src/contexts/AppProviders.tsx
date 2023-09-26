@@ -3,6 +3,7 @@ import { ConfigProvider, FeathersProvider, PubSubProvider } from '@magickml/clie
 import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
 import ToastProvider from './ToastProvider';
+import { TabProvider } from './TabProvider';
 
 // Create a dark theme for the application
 const darkTheme = createTheme({
@@ -25,6 +26,7 @@ function ComposeProviders({ config, children }) {
     [FeathersProvider, { token: config.token }],
     PubSubProvider,
     ToastProvider,
+    TabProvider
   ].reverse();
 
   // Compose providers together and pass the props for each provider

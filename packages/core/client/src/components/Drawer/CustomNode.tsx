@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -18,7 +18,6 @@ import {
   closeTab,
   selectAllTabs,
   spellApi,
-  openTab,
   activeTabSelector,
 } from '@magickml/core'
 import { useDispatch, useSelector } from 'react-redux'
@@ -31,6 +30,7 @@ type Props = {
   depth: number
   isOpen: boolean
   onToggle: (id: NodeModel['id']) => void
+  openTab: (tab: any) => void
 }
 
 type CustomData = {
@@ -69,21 +69,21 @@ export const CustomNode: React.FC<Props> = props => {
     if (!props.node) return
     if (props.node.fileType === 'txt') {
       setOpenDoc(props.node.id)
-      dispatch(openTab({
+      props.openTab({
         id: "Documents",
         name: 'Documents',
         type: 'Documents',
         switchActive: true
-      }))
+      })
     } else if (props.node.fileType === 'spell') {
       console.log('Open spell', props.node)
 
-      dispatch(openTab({
+      props.openTab({
         id: props.node.id,
         name: props.node.text,
         spellName: props.node.text,
         type: 'spell',
-      }))
+      })
     }
   }
 
@@ -149,7 +149,7 @@ export const CustomNode: React.FC<Props> = props => {
     }
 
     await dispatch(closeTab(props.node.id))
-  
+
     const spell: any = props.node.id
     const response: any = await patchSpell({
       id: props.node.id,
@@ -157,29 +157,25 @@ export const CustomNode: React.FC<Props> = props => {
         name: newName,
       },
     })
-  
+
     if (response.error) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
       return
     }
-  
-    if (response){
-      enqueueSnackbar('Spell saved', { variant: 'success' })
-      dispatch(
-        closeTab(props.node.id ) 
-      )
-    }
-  
-    dispatch(
-      openTab({
-        id: props.node.id,
-        name: newName,
-        spellName: newName,
-        type: 'spell',
-      })
-    )
+
+    enqueueSnackbar('Spell saved', { variant: 'success' })
+
+    // todo implement closing tab
+    dispatch(closeTab(props.node.id))
+
+    props.openTab({
+      id: props.node.id,
+      name: newName,
+      spellName: newName,
+      type: 'spell',
+    })
     setToDelete(spell)
     setIsAdded(true)
   }
