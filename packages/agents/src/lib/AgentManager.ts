@@ -23,12 +23,12 @@ export class AgentManager {
    * @param agent - The agent data.
    * @returns The agent if found.
    */
-  getAgent({ agent }) {
-    if (!agent) {
-      this.logger.error("AgentManager can't find agent %o", agent)
+  getAgent(agentId) {
+    if (!agentId) {
+      this.logger.error("AgentManager can't find agent %o", agentId)
       return null
     }
-    return this.agents[agent.id]
+    return this.agents[agentId]
   }
 
   /**
