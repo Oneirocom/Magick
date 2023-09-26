@@ -18,6 +18,9 @@ import DebugConsole from '../../windows/DebugConsole'
 import TextEditor from '../../windows/TextEditorWindow'
 import { RootState, spellApi } from '@magickml/state'
 import AgentControls from '../../windows/AgentControlWindow'
+import { IDockviewPanelProps } from 'dockview'
+import WorkspaceProvider from '../../contexts/WorkspaceProvider'
+import { Tab } from '../../contexts/TabProvider'
 
 /**
  * Workspace component that handles different tabs and their layouts.
@@ -124,6 +127,20 @@ const Composer = ({ tab, pubSub }) => {
   )
 }
 
-const Wrapped = React.memo(Composer)
+const Wrapped = (props: IDockviewPanelProps<{ tab: Tab, pubSub: any }>) => {
+  const pubSub = usePubSub()
+  return (
+    <WorkspaceProvider tab={props.params.tab}
+      pubSub={pubSub}>
+      <div style={{ position: 'relative', height: '100%' }}>
+        <Composer
+          tab={props.params.tab}
+          pubSub={pubSub}
+        />
+
+      </div>
+    </WorkspaceProvider>
+  );
+}
 
 export default Wrapped
