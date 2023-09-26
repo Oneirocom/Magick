@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import React from 'react';
 import ToastProvider from './ToastProvider';
 import { TabProvider } from './TabProvider';
+import { GlobalLayoutProvider } from './GlobalLayoutProvider';
 
 // Create a dark theme for the application
 const darkTheme = createTheme({
@@ -26,6 +27,7 @@ function ComposeProviders({ config, children }) {
     [FeathersProvider, { token: config.token }],
     PubSubProvider,
     ToastProvider,
+    GlobalLayoutProvider,
     TabProvider
   ].reverse();
 
