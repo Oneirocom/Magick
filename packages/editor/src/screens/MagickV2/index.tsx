@@ -1,11 +1,10 @@
-import { TabLayout } from "../../contexts/TabProvider";
+
+import MainPanel from "./panels/mainPanel";
 
 const MagickV2 = () => {
 
   return (
-    <TabLayout>
-      <h1>MagickV2</h1>
-    </TabLayout>
+    <MainPanel />
 
   );
 };
