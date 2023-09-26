@@ -7,6 +7,7 @@ import { usePubSub } from "@magickml/client-core";
 import Composer from "../screens/Composer";
 import WorkspaceProvider from "./WorkspaceProvider";
 import { getWorkspaceLayout } from "@magickml/layouts";
+import NewMenuBar from "../components/MenuBar/newMenuBar";
 
 // we will move this out into the layouts package
 function loadDefaultLayout(api: DockviewApi) {
@@ -175,9 +176,19 @@ export const TabLayout = ({ children }) => {
     setApi(event.api)
   };
 
-  return (<DockviewReact
-    onReady={onReady}
-    className={theme}
-    components={components}
-  />)
+  return (
+    <>
+      <NewMenuBar style={{
+        width: 50,
+        position: "absolute",
+        zIndex: 50
+
+      }} />
+      <DockviewReact
+        onReady={onReady}
+        className={`tab-layout ${theme}`}
+        components={components}
+      />
+    </>
+  )
 }

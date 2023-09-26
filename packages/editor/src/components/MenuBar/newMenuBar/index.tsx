@@ -17,7 +17,7 @@ import { RootState, Tab, activeTabSelector, changeEditorLayout, toggleAutoSave }
  *
  * @returns {JSX.Element}
  */
-const NewMenuBar = () => {
+const NewMenuBar = (props) => {
   const navigate = useNavigate()
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
@@ -497,7 +497,7 @@ const NewMenuBar = () => {
 
   return (
     <>
-      <IconButton onClick={handleMenuIconClick}>
+      <IconButton onClick={handleMenuIconClick} style={props.style ? props.style : {}}>
         <MenuIcon />
       </IconButton>
       <Menu
