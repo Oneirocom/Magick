@@ -83,6 +83,8 @@ export class AgentService<
 
     if (!connection) throw new Error('connection is required')
 
+    if (app.get('environment') !== 'server') return
+
     const oldAgentChannel = app.channels.filter(channel =>
       channel.match(/agent:/)
     )[0]
