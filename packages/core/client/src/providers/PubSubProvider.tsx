@@ -3,7 +3,6 @@
 // Import required modules
 import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/core'
 import PubSub from 'pubsub-js'
-import * as React from 'react'
 import { createContext, useContext, useEffect } from 'react'
 import { useFeathers } from './FeathersProvider'
 
