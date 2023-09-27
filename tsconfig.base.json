@@ -184,7 +184,6 @@
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
       ],
-      "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/rete": ["packages/rete/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
@@ -206,7 +205,8 @@
       ],
       "server/cloud-agent-worker": [
         "packages/server/cloud-agent-worker/src/index.ts"
-      ]
+      ],
+      "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
