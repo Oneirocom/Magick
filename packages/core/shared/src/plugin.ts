@@ -1,7 +1,7 @@
 import { FC, LazyExoticComponent } from 'react'
 import { MagickComponentArray } from './engine'
 import { CompletionProvider, Route, SpellInterface } from './types'
-import { Agent } from '@magickml/agents'
+import { Agent } from 'server/agents'
 
 export type PluginSecret = {
   name: string

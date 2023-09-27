@@ -7,7 +7,7 @@ import {
 } from '@magickml/core'
 import { app } from '@magickml/server-core'
 import { LoopHandler } from './loopHandler'
-import { Agent } from '@magickml/agents'
+import { Agent } from 'server/agents'
 import pino from 'pino'
 type StartLoopArgs = {
   agent: any
