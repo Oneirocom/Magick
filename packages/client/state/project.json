@@ -1,14 +1,14 @@
 {
-  "name": "state",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/state/src",
+  "name": "client-state",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/client/state/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/state"
+        "outputPath": "dist/packages/client/state"
       }
     },
     "test": {
@@ -16,7 +16,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/packages/state"
+        "reportsDirectory": "../../../coverage/packages/client/state"
       }
     },
     "lint": {
@@ -24,8 +24,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "packages/state/**/*.ts",
-          "packages/state/package.json"
+          "packages/client/state/**/*.ts",
+          "packages/client/state/package.json"
         ]
       }
     }

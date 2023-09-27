@@ -1,35 +1,34 @@
-// DOCUMENTED 
-import { memo, useEffect } from 'react';
-import isEqual from 'lodash/isEqual';
-import WorkspaceProvider from '../contexts/WorkspaceProvider';
+// DOCUMENTED
+import { memo, useEffect } from 'react'
+import isEqual from 'lodash/isEqual'
+import WorkspaceProvider from '../contexts/WorkspaceProvider'
 import { ClientPluginManager, pluginManager } from '@magickml/core'
-import Composer from './Workspace';
-import { Tab } from '@magickml/state';
+import Composer from './Workspace'
+import { Tab } from 'client/state'
 import Events from '../screens/EventWindow'
 import Requests from '../screens/RequestWindow'
 import Settings from '../screens/settings/SettingsWindow'
 import Documents from '../screens/DocumentWindow'
-import Agents from '../screens/agents/AgentManagerWindow';
-
+import Agents from '../screens/agents/AgentManagerWindow'
 
 type WorkspaceProps = {
-  pubSub: any;  // You might want to provide a more detailed type based on your usage.
+  pubSub: any // You might want to provide a more detailed type based on your usage.
   tab: Tab
-};
+}
 
 const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
   const pluginComponents = []
 
-    ; (pluginManager as ClientPluginManager)
-      .getGroupedClientRoutes()
-      .forEach(plugin => {
-        plugin.routes.map(route => {
-          pluginComponents.push({
-            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-            component: route.component,
-          })
+  ;(pluginManager as ClientPluginManager)
+    .getGroupedClientRoutes()
+    .forEach(plugin => {
+      plugin.routes.map(route => {
+        pluginComponents.push({
+          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+          component: route.component,
         })
       })
+    })
 
   const componentMapping = {
     spell: Composer,
@@ -45,15 +44,14 @@ const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
     }, {}),
   }
 
-
-  const Workspace = componentMapping[tab.type];
+  const Workspace = componentMapping[tab.type]
   const props = {
     pubSub,
-    tab
-  };
+    tab,
+  }
 
   if (!Workspace) {
-    return null;
+    return null
   }
 
   const isActive = tab.id === activeTabId
@@ -68,7 +66,7 @@ const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
         top: 0,
         left: 0,
         bottom: 0,
-        right: 0
+        right: 0,
       }}
     >
       <WorkspaceProvider {...props}>
@@ -83,12 +81,19 @@ const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
 const Workspaces = ({ tabs, pubSub, activeTabId }) => {
   return (
     <>
-      {tabs.map((tab) => {
+      {tabs.map(tab => {
         // render the component if it is a component type
-        return <WorkspaceComponent key={tab.id} tab={tab} pubSub={pubSub} activeTabId={activeTabId} />;
+        return (
+          <WorkspaceComponent
+            key={tab.id}
+            tab={tab}
+            pubSub={pubSub}
+            activeTabId={activeTabId}
+          />
+        )
       })}
     </>
-  );
-};
+  )
+}
 
-export default Workspaces;
+export default Workspaces

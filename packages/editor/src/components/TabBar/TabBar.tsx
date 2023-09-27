@@ -8,7 +8,7 @@ import MenuBar from '../MenuBar/MenuBar'
 import CreateTab from './CreateTab'
 import css from './tabBar.module.css'
 import { Icon } from '@magickml/client-core'
-import { RootState, changeActive, closeTab, selectAllTabs } from '@magickml/state'
+import { RootState, changeActive, closeTab, selectAllTabs } from 'client/state'
 
 /**
  * Tab Component
@@ -77,7 +77,9 @@ const TabBar = ({ tabs, activeTabId }) => {
       </div>
       <div className={css['tabbar-section']}>
         {tabs &&
-          tabs.map((tab) => <Tab tab={tab} activeTabId={activeTabId} key={tab.id} />)}
+          tabs.map(tab => (
+            <Tab tab={tab} activeTabId={activeTabId} key={tab.id} />
+          ))}
       </div>
       <div className={css['tabbar-section']}>
         <CreateTab />

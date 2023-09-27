@@ -16,7 +16,7 @@ import Playtest from '../windows/PlaytestWindow'
 
 import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
-import { RootState, spellApi } from '@magickml/state'
+import { RootState, spellApi } from 'client/state'
 import AgentControls from '../windows/AgentControlWindow'
 import isEqual from 'lodash/isEqual'
 

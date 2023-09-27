@@ -4,7 +4,7 @@ import {
   EditorContext,
   GraphData,
   MagickEditor,
-  SpellInterface
+  SpellInterface,
 } from '@magickml/core'
 import React, {
   createContext,
@@ -22,7 +22,7 @@ import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 import { EngineComponent } from '@magickml/rete'
-import { spellApi } from '@magickml/state'
+import { spellApi } from 'client/state'
 
 /**
  * MagickTab type definition.
@@ -98,7 +98,7 @@ const EditorProvider = ({ children }) => {
       tab,
       node: MyNode,
       client,
-      spell
+      spell,
     })
 
     setEditor(newEditor)

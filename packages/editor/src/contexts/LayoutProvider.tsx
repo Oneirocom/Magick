@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from '@magickml/client-core'
-import { activeTabSelector, saveTabLayout } from '@magickml/state'
+import { activeTabSelector, saveTabLayout } from 'client/state'
 import {
   Actions,
   DockLocation,

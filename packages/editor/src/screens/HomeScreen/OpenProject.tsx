@@ -8,7 +8,7 @@ import FileInput from '../../components/FileInput'
 import ProjectRow from '../../components/ProjectRow'
 import css from './homeScreen.module.css'
 import banner from './banner.png'
-import { RootState, selectAllTabs } from '@magickml/state'
+import { RootState, selectAllTabs } from 'client/state'
 
 const version = packageJson.version
 

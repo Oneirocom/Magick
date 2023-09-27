@@ -29,7 +29,7 @@ import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/use
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
 import NewMenuBar from '../../../../../editor/src/components/MenuBar/newMenuBar'
 import { AgentInterface, SpellInterface } from '@magickml/core'
-import { setCurrentAgentId } from '@magickml/state'
+import { setCurrentAgentId } from 'client/state'
 import { useTabLayout } from '../../../../../editor/src/contexts/TabProvider'
 
 interface Spell {
@@ -56,17 +56,14 @@ function AgentMenu({ data, resetData }) {
   const { agentUpdate, setAgentUpdate } = useTreeData()
   const dispatch = useDispatch()
 
-  const setCurrentAgent = useCallback(
-    (agent: AgentInterface) => {
-      // Subscribe to agent service
-      client.service('agents').subscribe(agent.id)
-      _setCurrentAgent(agent)
+  const setCurrentAgent = useCallback((agent: AgentInterface) => {
+    // Subscribe to agent service
+    client.service('agents').subscribe(agent.id)
+    _setCurrentAgent(agent)
 
-      // store this current agent in the global state for use in the editor
-      dispatch(setCurrentAgentId(agent.id))
-    },
-    []
-  )
+    // store this current agent in the global state for use in the editor
+    dispatch(setCurrentAgentId(agent.id))
+  }, [])
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -313,7 +310,7 @@ function AgentMenu({ data, resetData }) {
               src={
                 currentAgent && currentAgent.image
                   ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${currentAgent.image}`
-                  : undefined   // Ensure it's undefined if there's no valid image URL.
+                  : undefined // Ensure it's undefined if there's no valid image URL.
               }
               sx={{ width: 24, height: 24 }}
             >
@@ -431,7 +428,7 @@ function AgentMenu({ data, resetData }) {
                     src={
                       agent.image
                         ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
-                        : undefined   // Ensure it's undefined if there's no valid image URL.
+                        : undefined // Ensure it's undefined if there's no valid image URL.
                     }
                     sx={{ width: 24, height: 24 }}
                   >
@@ -467,10 +464,10 @@ function AgentMenu({ data, resetData }) {
           }}
           onClick={() => {
             openTab({
-              id: "Agents",
+              id: 'Agents',
               name: 'Agents',
               type: 'Agents',
-              switchActive: true
+              switchActive: true,
             })
           }}
         >
@@ -543,14 +540,14 @@ function AgentMenu({ data, resetData }) {
               background: 'none',
               outline: 'none',
             },
-            color: `${selectedAgentData &&
+            color: `${
+              selectedAgentData &&
               (selectedAgentData.default ? 'grey' : 'white')
-              }`,
-            cursor: `${selectedAgentData &&
-              (selectedAgentData.default
-                ? 'not-allowed'
-                : 'pointer')
-              }`,
+            }`,
+            cursor: `${
+              selectedAgentData &&
+              (selectedAgentData.default ? 'not-allowed' : 'pointer')
+            }`,
           }}
           onClick={e => {
             if (!selectedAgentData.default) {
@@ -558,7 +555,6 @@ function AgentMenu({ data, resetData }) {
             }
             handleCloseMenu2()
           }}
-
           disabled={data.length === 1}
         >
           Delete
@@ -590,10 +586,10 @@ function AgentMenu({ data, resetData }) {
           }}
           onClick={() => {
             openTab({
-              id: "Agents",
+              id: 'Agents',
               name: 'Agents',
               type: 'Agents',
-              switchActive: true
+              switchActive: true,
             })
           }}
         >
@@ -605,8 +601,9 @@ function AgentMenu({ data, resetData }) {
           open={openConfirm}
           onClose={handleClose}
           handleAction={onSubmit}
-          title={`Delete ${selectedAgentData ? selectedAgentData.name : ''
-            }  agent`}
+          title={`Delete ${
+            selectedAgentData ? selectedAgentData.name : ''
+          }  agent`}
           submitText="Confirm"
           children="Do you want to delete this agent?"
         />
