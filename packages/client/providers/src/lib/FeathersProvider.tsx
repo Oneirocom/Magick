@@ -10,7 +10,7 @@ import { getLogger, SpellInterface } from 'shared/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 import { useConfig } from './ConfigProvider'
-import { LoadingScreen } from '../components/LoadingScreen'
+import { LoadingScreen } from 'client/core'
 
 /**
  * SaveDiffData type definition.
@@ -122,7 +122,7 @@ export const FeathersProvider = ({ children, token }): JSX.Element => {
   const logger = getLogger()
 
   useEffect(() => {
-    ;(async (): Promise<void> => {
+    ; (async (): Promise<void> => {
       const client = await buildFeathersClient(config, token)
 
       client.io.on('connect', async (): Promise<void> => {

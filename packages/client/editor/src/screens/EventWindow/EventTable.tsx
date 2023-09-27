@@ -2,7 +2,7 @@
 // Import statements kept as-is
 import { TableComponent } from 'client/core'
 import { API_ROOT_URL } from 'shared/config'
-import { useFeathers } from 'client/core'
+import { useFeathers } from '@magickml/providers'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -330,9 +330,8 @@ function EventTable({ events, updateCallback }) {
         </div>
         <div className={styles.flex}>
           <Button
-            className={`${styles.btn} ${
-              selectedRows.length > 0 ? styles.selectedBtn : ''
-            }`}
+            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
+              }`}
             onClick={handleDeleteMany}
             variant="outlined"
             startIcon={<Delete />}

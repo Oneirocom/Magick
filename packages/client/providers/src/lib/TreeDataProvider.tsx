@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import { useSnackbar } from 'notistack'
-import { useConfig, useFeathers } from 'client/core'
 import { API_ROOT_URL } from 'shared/config'
 import { useSelector } from 'react-redux'
 import SampleData from './data/sampleData.json'
+import { useConfig } from './ConfigProvider'
+import { useFeathers } from './FeathersProvider'
 
 interface TreeDataContextType {
   treeData: NodeModel[]
@@ -32,15 +33,15 @@ interface Spell {
 
 const TreeDataContext = createContext<TreeDataContextType>({
   treeData: [],
-  setTreeData: () => {},
+  setTreeData: () => { },
   isAdded: false,
-  setIsAdded: () => {},
+  setIsAdded: () => { },
   docState: false,
-  setDocState: () => {},
+  setDocState: () => { },
   toDelete: null,
-  setToDelete: () => {},
+  setToDelete: () => { },
   openDoc: '',
-  setOpenDoc: () => {},
+  setOpenDoc: () => { },
   agentUpdate: false,
   setAgentUpdate: () => { },
 })

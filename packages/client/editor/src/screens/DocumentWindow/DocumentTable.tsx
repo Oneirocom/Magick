@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useConfig } from 'client/core'
+import { useConfig, useTreeData } from '@magickml/providers'
 import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
@@ -31,7 +31,6 @@ import {
 import { DocumentData, columns } from './document'
 import styles from './index.module.scss'
 import DocumentModal from './DocumentModal'
-import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
 import DocContentModal from './DocContentModal'
 /**
  * GlobalFilter component for applying search filter on the whole table.

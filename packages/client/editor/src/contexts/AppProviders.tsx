@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { ConfigProvider, FeathersProvider, PubSubProvider } from 'client/core'
+import { ConfigProvider, FeathersProvider, PubSubProvider } from '@magickml/providers'
 import { createTheme, ThemeProvider } from '@mui/material'
 import React from 'react'
 import ToastProvider from './ToastProvider'

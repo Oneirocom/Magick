@@ -1,4 +1,4 @@
-import { PubSub, events } from 'client/core'
+import { PubSub, events } from '@magickml/providers'
 import { MagickEditor } from 'shared/core'
 
 export class SnapGrid {
