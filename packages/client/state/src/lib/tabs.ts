@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { getWorkspaceLayout } from '@magickml/layouts'
+import { getWorkspaceLayout } from 'client/layouts'
 import {
   createDraftSafeSelector,
   createEntityAdapter,
