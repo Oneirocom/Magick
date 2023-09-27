@@ -17,22 +17,22 @@ const Inspector = (props) => {
   const [width, setWidth] = useState()
   const { openModal } = useModal()
 
-  useEffect(() => {
-    if (props?.node?._rect?.width) {
-      setWidth(props.node._rect.width)
-    }
+  // useEffect(() => {
+  //   if (props?.node?._rect?.width) {
+  //     setWidth(props.node._rect.width)
+  //   }
 
-    // Dynamically set the appropriate height so that Monaco editor doesn't break flexbox when resizing
-    props.node.setEventListener('resize', (data) => {
-      setTimeout(() => {
-        setWidth(data.rect.width)
-      }, 0)
-    })
+  //   // Dynamically set the appropriate height so that Monaco editor doesn't break flexbox when resizing
+  //   props.node.setEventListener('resize', (data) => {
+  //     setTimeout(() => {
+  //       setWidth(data.rect.width)
+  //     }, 0)
+  //   })
 
-    return () => {
-      props.node.removeEventListener('resize')
-    }
-  }, [props])
+  //   return () => {
+  //     props.node.removeEventListener('resize')
+  //   }
+  // }, [props])
 
   /**
    * Update a control's properties.
