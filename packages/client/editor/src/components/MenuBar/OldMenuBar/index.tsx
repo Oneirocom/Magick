@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { useProjectWindow, usePubSub } from 'client/core'
+import { useProjectWindow, usePubSub } from '@magickml/providers'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
