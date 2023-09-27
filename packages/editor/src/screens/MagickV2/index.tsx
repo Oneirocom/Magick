@@ -55,16 +55,16 @@ const loadDefaultLayout = (api: GridviewApi) => {
   })
 
   // Right side console panel
-  api.addPanel({
-    id: 'panel_6',
-    component: 'default',
-    params: {
-      title: 'Panel 6',
-    },
-    position: { referencePanel: 'panel_5', direction: 'right' },
-  }).api.setSize({
-    width: 5
-  });
+  // api.addPanel({
+  //   id: 'panel_6',
+  //   component: 'default',
+  //   params: {
+  //     title: 'Panel 6',
+  //   },
+  //   position: { referencePanel: 'panel_5', direction: 'right' },
+  // }).api.setSize({
+  //   width: 5
+  // });
 }
 
 const MagickV2 = () => {
