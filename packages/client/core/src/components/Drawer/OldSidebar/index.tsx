@@ -19,7 +19,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ProjectWindowProvider,
   useProjectWindow,
-} from '../../../contexts/ProjectWindowContext'
+} from '../../../../../providers/src/lib/ProjectWindowProvider'
 import ProjectWindow from '../ProjectWindow'
 import { SetAPIKeys } from '../SetAPIKeys'
 import MagickLogo from '../logo-full.png'

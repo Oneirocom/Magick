@@ -1,5 +1,6 @@
 // DOCUMENTED
-import { LoadingScreen, TabLayout, usePubSub } from 'client/core'
+import { LoadingScreen, TabLayout } from 'client/core'
+import { usePubSub } from '@magickml/providers'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -31,16 +32,16 @@ const Magick = ({ empty = false }): JSX.Element => {
   const pubSub = usePubSub()
   const pluginComponents = []
 
-  ;(pluginManager as ClientPluginManager)
-    .getGroupedClientRoutes()
-    .forEach(plugin => {
-      plugin.routes.map(route => {
-        pluginComponents.push({
-          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-          component: route.component,
+    ; (pluginManager as ClientPluginManager)
+      .getGroupedClientRoutes()
+      .forEach(plugin => {
+        plugin.routes.map(route => {
+          pluginComponents.push({
+            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+            component: route.component,
+          })
         })
       })
-    })
 
   // Subscribe to open tab events
   useEffect(() => {

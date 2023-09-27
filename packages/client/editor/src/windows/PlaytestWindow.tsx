@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button, Select, Window, useConfig } from 'client/core'
+import { Button, Select, Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -8,7 +8,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
-import { usePubSub } from 'client/core'
+import { usePubSub, useConfig } from '@magickml/providers'
 import css from '../screens/Magick/magick.module.css'
 import {
   RootState,
@@ -217,10 +217,10 @@ const Playtest = ({ tab }) => {
     if (!inspectorData || inspectorData.name !== 'Input') return
     setPlaytestOption(
       `Input - ` +
-        (inspectorData.data.inputType &&
+      (inspectorData.data.inputType &&
         inspectorData.data.inputType !== 'Default'
-          ? inspectorData.data.inputType
-          : inspectorData.data.inputName)
+        ? inspectorData.data.inputType
+        : inspectorData.data.inputName)
     )
   }, [inspectorData])
 

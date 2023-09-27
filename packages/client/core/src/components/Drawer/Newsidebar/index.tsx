@@ -13,7 +13,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { CSSObject, Theme, styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useTreeData } from '../../../contexts/TreeDataProvider'
+import { useTreeData } from '@magickml/providers'
 import { SetAPIKeys } from '../SetAPIKeys'
 import { Tooltip, Typography } from '@mui/material'
 import { drawerTooltipText } from '../tooltiptext'
@@ -38,7 +38,7 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
-import { useConfig } from 'client/core'
+import { useConfig } from '@magickml/providers'
 import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -317,33 +317,33 @@ export function NewSidebar(DrawerProps): JSX.Element {
 
   useEffect(() => {
     if (!config.apiUrl) return
-    ;(async () => {
-      const res = await fetch(
-        `${config.apiUrl}/agents?projectId=${config.projectId}`,
-        {
-          headers: STANDALONE
-            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-            : { Authorization: `Bearer ${token}` },
+      ; (async () => {
+        const res = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: STANDALONE
+              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+              : { Authorization: `Bearer ${token}` },
+          }
+        )
+        const json = await res.json()
+        // if data.length === 0  create new agent
+        if (json.data.length === 0) {
+          await createNew({
+            name: 'Default Agent',
+            projectId: config.projectId,
+            enabled: false,
+            publicVariables: '{}',
+            secrets: '{}',
+            default: true,
+          })
+          setData(json.data)
+        } else {
+          setData(json.data)
         }
-      )
-      const json = await res.json()
-      // if data.length === 0  create new agent
-      if (json.data.length === 0) {
-        await createNew({
-          name: 'Default Agent',
-          projectId: config.projectId,
-          enabled: false,
-          publicVariables: '{}',
-          secrets: '{}',
-          default: true,
-        })
-        setData(json.data)
-      } else {
-        setData(json.data)
-      }
 
-      // setIsLoading(false)
-    })()
+        // setIsLoading(false)
+      })()
   }, [config?.apiUrl])
 
   // Function to handle the click event on the hideMenu div

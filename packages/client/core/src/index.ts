@@ -8,8 +8,6 @@ import { ClientPluginManager, pluginManager } from 'shared/core'
 import defaultTemplates from './templates'
 
 export * from './components'
-export * from './contexts'
-export * from './providers'
 
 /**
  * Gets spell templates from plugin manager.

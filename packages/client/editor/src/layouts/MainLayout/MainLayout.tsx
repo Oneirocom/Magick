@@ -5,7 +5,8 @@
  */
 import { Outlet } from 'react-router-dom'
 import ModalProvider from '../../contexts/ModalProvider'
-import { DrawerProvider, TreeDataProvider } from 'client/core'
+import { DrawerProvider } from 'client/core'
+import { TreeDataProvider } from '@magickml/providers'
 
 /**
  * Main layout component.

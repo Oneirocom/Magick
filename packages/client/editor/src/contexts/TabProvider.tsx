@@ -6,7 +6,7 @@ import {
   IDockviewPanelProps,
   SerializedDockview,
 } from 'dockview'
-import { usePubSub } from 'client/core'
+import { usePubSub } from '@magickml/providers'
 import { getWorkspaceLayout } from 'client/layouts'
 
 type DockviewTheme = 'dockview-theme-abyss'

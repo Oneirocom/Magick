@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { usePubSub } from 'client/core'
+import { usePubSub } from '@magickml/providers'
 import { InspectorData, SupportedLanguages } from 'shared/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 
@@ -8,10 +8,10 @@ import { createContext, useContext, useEffect, useState } from 'react'
  */
 export type TextEditorData = {
   options?:
-    | Record<string, any>
-    | (undefined & {
-        language?: SupportedLanguages
-      })
+  | Record<string, any>
+  | (undefined & {
+    language?: SupportedLanguages
+  })
   data?: string
   control?: Record<string, any> | undefined
   name?: string

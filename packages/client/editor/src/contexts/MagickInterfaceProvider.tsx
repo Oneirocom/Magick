@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { useConfig, usePubSub } from 'client/core'
+import { useConfig, usePubSub } from '@magickml/providers'
 import {
   EditorContext,
   GetSpell,

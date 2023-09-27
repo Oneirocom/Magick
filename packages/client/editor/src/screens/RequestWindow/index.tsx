@@ -9,7 +9,8 @@ import { useEffect, useState } from 'react'
 import RequestTable from './RequestTable'
 
 import { API_ROOT_URL } from 'shared/config'
-import { LoadingScreen, useConfig } from 'client/core'
+import { LoadingScreen } from 'client/core'
+import { useConfig } from '@magickml/providers'
 import { useSelector } from 'react-redux'
 
 /**
