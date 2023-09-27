@@ -173,45 +173,41 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
   open,
 }) => {
   const { openTab } = useTabLayout()
-  const dispatch = useDispatch()
   const location = useLocation()
-  const navigate = useNavigate()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
   let lastPlugin: string | null = null
   let divider = false
   return (
-    <>
-      {drawerItems.map(item => {
-        if (item.plugin !== lastPlugin) {
-          divider = false
-          lastPlugin = item.plugin
-        } else {
-          divider = false
-        }
-        return (
-          <div key={item.path}>
-            {divider && <Divider />}
-            <DrawerItem
-              key={item.path}
-              active={location.pathname.includes(item.path)}
-              Icon={item.icon}
-              open={open}
-              onClick={() => {
-                openTab({
-                  name: item.text,
-                  type: item.text,
-                  switchActive: true,
-                  id: item.text,
-                })
-              }}
-              text={item.text}
-              tooltip="Avatar and Tasks Tooltip"
-              tooltipText={item.tooltip}
-            />
-          </div>
-        )
-      })}
-    </>
+    drawerItems.map(item => {
+      if (item.plugin !== lastPlugin) {
+        divider = false
+        lastPlugin = item.plugin
+      } else {
+        divider = false
+      }
+      return (
+        <div key={item.path}>
+          {divider && <Divider />}
+          <DrawerItem
+            key={item.path}
+            active={location.pathname.includes(item.path)}
+            Icon={item.icon}
+            open={open}
+            onClick={() => {
+              openTab({
+                name: item.text,
+                type: item.text,
+                switchActive: true,
+                id: item.text,
+              })
+            }}
+            text={item.text}
+            tooltip="Avatar and Tasks Tooltip"
+            tooltipText={item.tooltip}
+          />
+        </div>
+      )
+    })
   )
 }
 
@@ -226,9 +222,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const { openTab } = useTabLayout()
   const location = useLocation()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
-  const [openDrawer, setOpenDrawer] = useState<boolean>(true)
+  const [openDrawer] = useState<boolean>(true)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -350,20 +345,6 @@ export function NewSidebar(DrawerProps): JSX.Element {
       })()
   }, [config?.apiUrl])
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === 'b' && event.ctrlKey) {
-        setOpenDrawer(openDrawer => !openDrawer)
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
-
   // Function to handle the click event on the hideMenu div
   const handleHideMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setMenuAnchorEl(event.currentTarget)
@@ -390,179 +371,175 @@ export function NewSidebar(DrawerProps): JSX.Element {
   }, [menuAnchorEl])
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
-      <StyledDrawer variant="permanent" open={openDrawer}>
-        <>
-          <AgentMenu data={data} resetData={resetData} />
+    <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
+      <AgentMenu data={data} resetData={resetData} />
 
-          <List
-            sx={{
-              padding: 0,
+      <List
+        sx={{
+          padding: 0,
+        }}
+      >
+        <DrawerItem
+          active={location.pathname === '/events'}
+          Icon={BoltIcon}
+          open={openDrawer}
+          onClick={() => {
+            openTab({
+              name: 'Events',
+              type: 'Events',
+              switchActive: true,
+              id: 'events',
+            })
+          }}
+          text="Events"
+          tooltip="Events Tooltip"
+          tooltipText={drawerTooltipText.events}
+        />
+        <DrawerItem
+          active={location.pathname === '/requests'}
+          Icon={StorageIcon}
+          open={openDrawer}
+          onClick={() => {
+            openTab({
+              name: 'Requests',
+              type: 'Requests',
+              switchActive: true,
+              id: 'requests',
+            })
+          }}
+          text="Requests"
+          tooltip="Requests Tooltip"
+          tooltipText={drawerTooltipText.requests}
+        />
+
+        <PluginDrawerItems onClick={onClick} open={openDrawer} />
+
+        <DrawerItem
+          active={location.pathname.includes('/settings')}
+          Icon={SettingsIcon}
+          open={openDrawer}
+          onClick={() => {
+            openTab({
+              name: 'Settings',
+              type: 'Settings',
+              switchActive: true,
+              id: 'settings',
+            })
+          }}
+          text="Settings"
+          tooltip="Settings Tooltip"
+          tooltipText={drawerTooltipText.settings}
+        />
+        {!isAPIKeysSet && <SetAPIKeys />}
+      </List>
+      <Divider sx={{ marginY: 2 }} />
+
+      <div className={styles.files}>
+        <CssBaseline />
+        <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+          <div>
+            <Tree
+              tree={treeData}
+              rootId={0}
+              // @ts-ignore
+              render={(
+                node: NodeModel<CustomData>,
+                { depth, isOpen, onToggle }
+              ) => (
+                <CustomNode
+                  openTab={openTab}
+                  node={node}
+                  depth={depth}
+                  isOpen={isOpen}
+                  onToggle={onToggle}
+                />
+              )}
+              onDrop={handleDrop}
+              classes={{
+                root: styles.treeRoot,
+                draggingSource: styles.draggingSource,
+                dropTarget: styles.dropTarget,
+              }}
+            />
+          </div>
+        </DndProvider>
+      </div>
+      <div className={styles.menu} style={{ color: '#7D7D7D' }}>
+        <div className={styles.menuFlex}>
+          <AddIcon sx={{ mr: 1 }} />
+          <Typography variant="body1">Notion (coming soon)</Typography>
+        </div>
+        <div className={styles.menuFlex}>
+          <AddIcon sx={{ mr: 1 }} />
+          <Typography variant="body1">
+            Google Drive (coming soon)
+          </Typography>
+        </div>
+      </div>
+      <div
+        className={styles.hideMenu}
+        onClick={handleHideMenuClick}
+        style={{ cursor: 'pointer' }} // Add cursor style to indicate the clickable element
+      >
+        <Menu
+          anchorReference="anchorPosition"
+          anchorPosition={
+            menuAnchorEl
+              ? { top: cursorPosition.y, left: cursorPosition.x }
+              : undefined
+          }
+          open={Boolean(menuAnchorEl)}
+          onClose={handleMenuClose}
+          sx={{
+            '& .MuiMenu-paper': {
+              background: '#2B2B30',
+              width: '180px',
+              shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+              borderRadius: '0px',
+            },
+          }}
+        >
+          <div className={styles.hideMenuItem}>
+            <FolderOpenOutlinedIcon sx={{ mr: 1 }} />
+            <Typography variant="body1">New Folder</Typography>
+          </div>
+          <Divider />
+          <div
+            className={styles.hideMenuItem}
+            onClick={() => {
+              navigate('/home/create-new')
             }}
           >
-            <DrawerItem
-              active={location.pathname === '/events'}
-              Icon={BoltIcon}
-              open={openDrawer}
-              onClick={() => {
-                openTab({
-                  name: 'Events',
-                  type: 'Events',
-                  switchActive: true,
-                  id: 'events',
-                })
-              }}
-              text="Events"
-              tooltip="Events Tooltip"
-              tooltipText={drawerTooltipText.events}
-            />
-            <DrawerItem
-              active={location.pathname === '/requests'}
-              Icon={StorageIcon}
-              open={openDrawer}
-              onClick={() => {
-                openTab({
-                  name: 'Requests',
-                  type: 'Requests',
-                  switchActive: true,
-                  id: 'requests',
-                })
-              }}
-              text="Requests"
-              tooltip="Requests Tooltip"
-              tooltipText={drawerTooltipText.requests}
-            />
-
-            <PluginDrawerItems onClick={onClick} open={openDrawer} />
-
-            <DrawerItem
-              active={location.pathname.includes('/settings')}
-              Icon={SettingsIcon}
-              open={openDrawer}
-              onClick={() => {
-                openTab({
-                  name: 'Settings',
-                  type: 'Settings',
-                  switchActive: true,
-                  id: 'settings',
-                })
-              }}
-              text="Settings"
-              tooltip="Settings Tooltip"
-              tooltipText={drawerTooltipText.settings}
-            />
-            {!isAPIKeysSet && <SetAPIKeys />}
-          </List>
-          <Divider sx={{ marginY: 2 }} />
-
-          <div className={styles.files}>
-            <CssBaseline />
-            <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-              <div>
-                <Tree
-                  tree={treeData}
-                  rootId={0}
-                  // @ts-ignore
-                  render={(
-                    node: NodeModel<CustomData>,
-                    { depth, isOpen, onToggle }
-                  ) => (
-                    <CustomNode
-                      openTab={openTab}
-                      node={node}
-                      depth={depth}
-                      isOpen={isOpen}
-                      onToggle={onToggle}
-                    />
-                  )}
-                  onDrop={handleDrop}
-                  classes={{
-                    root: styles.treeRoot,
-                    draggingSource: styles.draggingSource,
-                    dropTarget: styles.dropTarget,
-                  }}
-                />
-              </div>
-            </DndProvider>
+            <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
+            <Typography variant="body1">New Spell</Typography>
           </div>
-          <div className={styles.menu} style={{ color: '#7D7D7D' }}>
-            <div className={styles.menuFlex}>
-              <AddIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">Notion (coming soon)</Typography>
-            </div>
-            <div className={styles.menuFlex}>
-              <AddIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">
-                Google Drive (coming soon)
-              </Typography>
-            </div>
+          <Divider />
+          <div className={styles.hideMenuItem}>
+            <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
+            <Typography variant="body1"> New Prompt</Typography>
           </div>
+          <Divider />
           <div
-            className={styles.hideMenu}
-            onClick={handleHideMenuClick}
-            style={{ cursor: 'pointer' }} // Add cursor style to indicate the clickable element
+            className={styles.hideMenuItem}
+            onClick={() => {
+              navigate(
+                `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
+              )
+            }}
           >
-            <Menu
-              anchorReference="anchorPosition"
-              anchorPosition={
-                menuAnchorEl
-                  ? { top: cursorPosition.y, left: cursorPosition.x }
-                  : undefined
-              }
-              open={Boolean(menuAnchorEl)}
-              onClose={handleMenuClose}
-              sx={{
-                '& .MuiMenu-paper': {
-                  background: '#2B2B30',
-                  width: '180px',
-                  shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  borderRadius: '0px',
-                },
-              }}
-            >
-              <div className={styles.hideMenuItem}>
-                <FolderOpenOutlinedIcon sx={{ mr: 1 }} />
-                <Typography variant="body1">New Folder</Typography>
-              </div>
-              <Divider />
-              <div
-                className={styles.hideMenuItem}
-                onClick={() => {
-                  navigate('/home/create-new')
-                }}
-              >
-                <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
-                <Typography variant="body1">New Spell</Typography>
-              </div>
-              <Divider />
-              <div className={styles.hideMenuItem}>
-                <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
-                <Typography variant="body1"> New Prompt</Typography>
-              </div>
-              <Divider />
-              <div
-                className={styles.hideMenuItem}
-                onClick={() => {
-                  navigate(
-                    `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
-                  )
-                }}
-              >
-                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
-                <Typography variant="body1">New Document</Typography>
-              </div>
-            </Menu>
+            <DescriptionOutlinedIcon sx={{ mr: 1 }} />
+            <Typography variant="body1">New Document</Typography>
           </div>
-          <div className={styles.credits}>
-            <div className={styles.menuFlex}>
-              <AutoAwesomeIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">MP</Typography>
-            </div>
-            <BorderLinearProgress variant="determinate" value={50} />
-            <p className={styles.creditCount}>300/500 monthly MP</p>
-          </div>
-        </>
-      </StyledDrawer>
+        </Menu>
+      </div>
+      <div className={styles.credits}>
+        <div className={styles.menuFlex}>
+          <AutoAwesomeIcon sx={{ mr: 1 }} />
+          <Typography variant="body1">MP</Typography>
+        </div>
+        <BorderLinearProgress variant="determinate" value={50} />
+        <p className={styles.creditCount}>300/500 monthly MP</p>
+      </div>
     </div>
   )
 }
