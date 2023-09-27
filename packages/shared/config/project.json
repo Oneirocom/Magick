@@ -1,29 +1,29 @@
 {
-  "name": "config",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/config/src",
+  "name": "shared-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/config/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/config"
+        "outputPath": "dist/packages/shared/config"
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/packages/config"],
+      "outputs": ["{workspaceRoot}/coverage/packages/shared/config"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/packages/config"
+        "reportsDirectory": "../../../coverage/packages/shared/config"
       }
     },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/config/**/*.ts"]
+        "lintFilePatterns": ["packages/shared/config/**/*.ts"]
       }
     }
   },

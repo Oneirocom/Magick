@@ -25,7 +25,7 @@ import 'regenerator-runtime/runtime'
 import plugins from './plugins'
 import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
-import { PRODUCTION } from '@magickml/config'
+import { PRODUCTION } from 'shared/config'
 
 if (PRODUCTION) {
   initLogger({

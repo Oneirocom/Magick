@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import { FEATURE_FLAGS } from '@magickml/config'
+import { FEATURE_FLAGS } from 'shared/config'
 import { ProjectWindowProvider } from '../../contexts/ProjectWindowContext'
 import { OldSidebar } from './OldSidebar'
 import { NewSidebar } from './Newsidebar'

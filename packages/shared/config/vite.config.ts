@@ -1,12 +1,12 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin'
 import dts from 'vite-plugin-dts'
 import { joinPathFragments } from '@nx/devkit'
 
 export default defineConfig({
-  cacheDir: '../../node_modules/.vite/config',
+  cacheDir: '../../../node_modules/.vite/config',
 
   plugins: [
     dts({
@@ -22,7 +22,7 @@ export default defineConfig({
   // worker: {
   //  plugins: [
   //    viteTsConfigPaths({
-  //      root: '../../',
+  //      root: '../../../',
   //    }),
   //  ],
   // },
@@ -48,7 +48,7 @@ export default defineConfig({
   test: {
     globals: true,
     cache: {
-      dir: '../../node_modules/.vitest',
+      dir: '../../../node_modules/.vitest',
     },
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],

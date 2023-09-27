@@ -2,7 +2,7 @@
 /** @module ProjectWindow */
 
 import { SpellInterface } from '@magickml/core'
-import { API_ROOT_URL, PRODUCTION } from '@magickml/config'
+import { API_ROOT_URL, PRODUCTION } from 'shared/config'
 import {
   Apps,
   ChevronRight,
@@ -55,7 +55,11 @@ const ProjectWindow = ({ openDrawer }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
-  const [data, setData] = useState<DataState>({ agents: [], spells: [], documents: [] })
+  const [data, setData] = useState<DataState>({
+    agents: [],
+    spells: [],
+    documents: [],
+  })
   const [loaded, setLoaded] = useState(false)
   const token = globalConfig?.token
 
@@ -364,7 +368,11 @@ const ProjectWindow = ({ openDrawer }) => {
                         key={index}
                         style={{ width: '100%' }}
                         nodeId={30 + index.toString()}
-                        label={document?.content ? document.content.slice(0, 12) : "document"}
+                        label={
+                          document?.content
+                            ? document.content.slice(0, 12)
+                            : 'document'
+                        }
                         icon={<TextSnippet />}
                       />
                     ))}

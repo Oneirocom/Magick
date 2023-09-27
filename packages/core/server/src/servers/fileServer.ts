@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { FILE_SERVER_PORT, USESSL } from '@magickml/config'
+import { FILE_SERVER_PORT, USESSL } from 'shared/config'
 import * as fs from 'fs'
 import http from 'http'
 import https from 'https'

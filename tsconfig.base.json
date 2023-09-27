@@ -28,7 +28,6 @@
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/client-core": ["packages/core/client/src/index.ts"],
-      "@magickml/config": ["packages/config/src/index.ts"],
       "@magickml/core": ["packages/core/shared/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/plugin-anthropic-client": [
@@ -206,6 +205,7 @@
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
       "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
+      "shared/config": ["packages/shared/config/src/index.ts"],
       "shared/rete": ["packages/shared/rete/src/index.ts"]
     }
   },
