@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugin-twitter/server/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core", "@magickml/agents"],
+  "implicitDependencies": ["@magickml/core", "server-agents"],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",

@@ -2,7 +2,7 @@ import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { initLogger, getLogger } from '@magickml/core'
 import { initApp } from '@magickml/server-core'
 import pluginExports from './plugins'
-import { initAgentCommander } from '@magickml/agents'
+import { initAgentCommander } from 'server/agents'
 import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/config'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 

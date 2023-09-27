@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import type { Agent } from '@magickml/agents'
+import type { Agent } from 'server/agents'
 import { type PubSub, type Job } from '@magickml/server-core'
 import {
   AGENT_RUN_JOB,
