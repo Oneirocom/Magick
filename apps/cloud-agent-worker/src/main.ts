@@ -1,4 +1,4 @@
-import { CloudAgentWorker } from '@magickml/cloud-agent-worker'
+import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { initLogger, getLogger } from '@magickml/core'
 import { initApp } from '@magickml/server-core'
 import pluginExports from './plugins'

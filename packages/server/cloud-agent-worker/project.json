@@ -1,0 +1,8 @@
+{
+  "name": "server-cloud-agent-worker",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/cloud-agent-worker/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
+}
