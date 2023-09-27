@@ -1,11 +1,11 @@
 /* eslint-disable */
 export default {
-  displayName: 'magickml-chatbox',
-  preset: '../../jest.preset.js',
+  displayName: 'client-magickml-chatbox',
+  preset: '../../../jest.preset.js',
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/magickml-chatbox',
+  coverageDirectory: '../../../coverage/packages/client/magickml-chatbox',
 }
