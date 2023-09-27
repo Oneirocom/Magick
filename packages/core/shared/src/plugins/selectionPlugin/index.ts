@@ -1,4 +1,4 @@
-import { NodeEditor } from '@magickml/rete'
+import { NodeEditor } from 'shared/rete'
 
 declare module '@magickml/rete' {
   interface EventsTypes {

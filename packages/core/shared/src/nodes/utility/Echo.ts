@@ -3,7 +3,7 @@
  * A simple rete component that returns the same output as the input.
  * @category Utility
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { MagickComponent } from '../../engine'
 import { anySocket, triggerSocket } from '../../sockets'

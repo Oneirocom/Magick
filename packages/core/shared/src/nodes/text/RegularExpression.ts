@@ -4,7 +4,7 @@
  * This component replaces a string with another in the input.
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'

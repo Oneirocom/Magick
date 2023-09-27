@@ -3,7 +3,7 @@
  * A simple rete component that is paired with AgentExectuor to Leave the voice channel when triggered
  * @category Discord
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   MagickComponent,
   stringSocket,

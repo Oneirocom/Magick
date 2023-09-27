@@ -3,7 +3,7 @@
  * @fileoverview The Destructure component allows you to destructure properties out of an object.
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { MagickComponent } from '../../engine'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { objectSocket, triggerSocket } from '../../sockets'

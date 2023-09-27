@@ -1,4 +1,4 @@
-import { Connection } from '@magickml/rete'
+import { Connection } from 'shared/rete'
 import {
   makeAllConnectionsOpaque,
   makeAllConnectionsTransparent,

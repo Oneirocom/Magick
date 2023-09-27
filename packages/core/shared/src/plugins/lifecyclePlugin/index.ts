@@ -2,7 +2,7 @@
 /**
  * Imports Required for the Plugin
  */
-import { NodeEditor } from '@magickml/rete'
+import { NodeEditor } from 'shared/rete'
 
 import {
   OnCreated,

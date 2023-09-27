@@ -1,4 +1,4 @@
-import { NodeEditor, Input, Output, Connection } from '@magickml/rete'
+import { NodeEditor, Input, Output, Connection } from 'shared/rete'
 import { PickerView } from './view'
 
 export class Picker {

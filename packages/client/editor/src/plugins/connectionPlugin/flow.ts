@@ -1,4 +1,4 @@
-import { IO, Input, Output } from '@magickml/rete'
+import { IO, Input, Output } from 'shared/rete'
 import { Picker } from './picker'
 
 export type FlowParams = { input?: Input; output?: Output }

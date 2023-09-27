@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'
 import { triggerSocket } from '../../sockets'

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete, { OutputsData } from '@magickml/rete'
+import Rete, { OutputsData } from 'shared/rete'
 
 import { DataControl } from '../plugins/inspectorPlugin'
 import { SocketType } from '../sockets'

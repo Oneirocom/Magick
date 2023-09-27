@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Node, NodeEditor } from '@magickml/rete'
+import { Node, NodeEditor } from 'shared/rete'
 import Action from '../action'
 
 /**
