@@ -8,7 +8,7 @@ import {
 } from '@magickml/core'
 import type { Reporter } from './Reporters'
 import { type PubSub, type MessageQueue, app } from '@magickml/server-core'
-import type { AgentListRecord } from '@magickml/cloud-agent-worker'
+import type { AgentListRecord } from 'server/cloud-agent-worker'
 import { Agent } from 'packages/core/server/src/services/agents/agents.schema'
 
 interface CloudAgentManagerConstructor {
