@@ -1,7 +1,7 @@
 {
-  "name": "magickml-chatbox",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/magickml-chatbox/src",
+  "name": "client-magickml-chatbox",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/client/magickml-chatbox/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,23 +9,25 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/magickml-chatbox/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "packages/client/magickml-chatbox/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "build": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/magickml-chatbox",
-        "tsConfig": "packages/magickml-chatbox/tsconfig.lib.json",
-        "project": "packages/magickml-chatbox/package.json",
-        "entryFile": "packages/magickml-chatbox/src/index.ts",
+        "outputPath": "dist/packages/client/magickml-chatbox",
+        "tsConfig": "packages/client/magickml-chatbox/tsconfig.lib.json",
+        "project": "packages/client/magickml-chatbox/package.json",
+        "entryFile": "packages/client/magickml-chatbox/src/index.ts",
         "external": ["react", "react-dom", "react/jsx-runtime"],
         "rollupConfig": "@nx/react/plugins/bundle-rollup",
         "compiler": "babel",
         "assets": [
           {
-            "glob": "packages/magickml-chatbox/README.md",
+            "glob": "packages/client/magickml-chatbox/README.md",
             "input": ".",
             "output": "."
           }
@@ -37,7 +39,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/magickml-chatbox/jest.config.ts",
+        "jestConfig": "packages/client/magickml-chatbox/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
