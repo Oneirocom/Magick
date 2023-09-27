@@ -16,7 +16,7 @@ import {
   numberSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `Deploys a contract from Solidity code, a standard for defining non-fungible tokens on EVM machines.`
 

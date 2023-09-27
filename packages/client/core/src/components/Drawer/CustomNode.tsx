@@ -19,7 +19,7 @@ import {
   selectAllTabs,
   spellApi,
   activeTabSelector,
-} from '@magickml/core'
+} from 'shared/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
 

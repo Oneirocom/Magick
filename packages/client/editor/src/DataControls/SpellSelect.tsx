@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { Select } from 'client/core'
-import { GraphData } from '@magickml/core'
+import { GraphData } from 'shared/core'
 import { getTemplates } from 'client/core'
 import md5 from 'md5'
 import { useSnackbar } from 'notistack'

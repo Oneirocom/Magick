@@ -3,8 +3,8 @@ import { resolve } from '@feathersjs/schema'
 import { Type, getValidator } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
-import type { HookContext } from '@magickml/server-core'
-import { dataValidator, queryValidator } from '@magickml/server-core'
+import type { HookContext } from 'server/core'
+import { dataValidator, queryValidator } from 'server/core'
 
 /**
  * Main data model schema

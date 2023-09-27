@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
+import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import { AgentTaskWindow } from './components/task.component'
 import TaskWindow from './windows/TaskWindow'
@@ -39,7 +39,7 @@ class TaskPlugin extends ClientPlugin {
           path: '/tasks',
           icon: AssignmentTurnedInIcon,
           text: 'Tasks',
-          tooltip: 'Objectives for agents to iterate through and complete'
+          tooltip: 'Objectives for agents to iterate through and complete',
         },
       ],
       clientRoutes: [

@@ -2,7 +2,7 @@
 import { memo, useEffect } from 'react'
 import isEqual from 'lodash/isEqual'
 import WorkspaceProvider from '../contexts/WorkspaceProvider'
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from './Workspace'
 import { Tab } from 'client/state'
 import Events from '../screens/EventWindow'

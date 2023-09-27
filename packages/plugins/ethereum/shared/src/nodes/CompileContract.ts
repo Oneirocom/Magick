@@ -16,7 +16,7 @@ import {
   CodeControl,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 // Default solidity code
 const defaultCode = `

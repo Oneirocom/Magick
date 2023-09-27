@@ -6,7 +6,7 @@ import {
   WorkerData,
   taskSocket,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 import Rete from 'shared/rete'
 
 const info = 'Delete a task.'

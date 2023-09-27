@@ -1,5 +1,5 @@
 import { PubSub, events } from 'client/core'
-import { MagickEditor } from '@magickml/core'
+import { MagickEditor } from 'shared/core'
 
 export class SnapGrid {
   editor: MagickEditor

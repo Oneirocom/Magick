@@ -6,7 +6,7 @@ import {
   RedisPubSubWrapper,
   app,
   BullQueue,
-} from '@magickml/server-core'
+} from 'server/core'
 import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -14,7 +14,7 @@ import {
   AGENT_DELETE_JOB,
   AGENT_RUN_JOB,
   AGENT_UPDATE_JOB,
-} from '@magickml/core'
+} from 'shared/core'
 
 export interface AgentListRecord {
   id: string

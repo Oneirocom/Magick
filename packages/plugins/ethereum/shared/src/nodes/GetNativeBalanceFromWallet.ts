@@ -15,7 +15,7 @@ import {
   numberSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `Check the balance of an ethereum wallet`
 

@@ -5,7 +5,7 @@ import {
   objectSocket,
   PluginSecret,
   stringSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 /**
  * An array of PluginSecret objects containing information about API key secrets.

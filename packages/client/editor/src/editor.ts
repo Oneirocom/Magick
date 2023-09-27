@@ -16,7 +16,7 @@ import {
   SelectionPlugin,
   SpellInterface,
   DebuggerPlugin,
-} from '@magickml/core'
+} from 'shared/core'
 import ReactRenderPlugin, {
   ReactRenderPluginOptions,
 } from './plugins/reactRenderPlugin'
@@ -35,11 +35,11 @@ import {
   MultiCopyPlugin,
   NodeClickPlugin,
   SocketGeneratorPlugin,
-} from '@magickml/core'
+} from 'shared/core'
 
 import AreaPlugin from './plugins/areaPlugin'
 import AutoArrangePlugin from './plugins/autoArrangePlugin'
-import { initSharedEngine, MagickEngine } from '@magickml/core'
+import { initSharedEngine, MagickEngine } from 'shared/core'
 
 /**
  * Extend MagickEngine with additional properties

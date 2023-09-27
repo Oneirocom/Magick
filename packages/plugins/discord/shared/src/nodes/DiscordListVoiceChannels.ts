@@ -16,7 +16,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   arraySocket,
-} from '@magickml/core'
+} from 'shared/core'
 import { ChannelType } from '../types/ChannelType'
 
 /**

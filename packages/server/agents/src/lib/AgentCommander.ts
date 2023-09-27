@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import type { Agent } from 'server/agents'
-import { type PubSub, type Job } from '@magickml/server-core'
+import { type PubSub, type Job } from 'server/core'
 import {
   AGENT_RUN_JOB,
   AGENT_RUN_ERROR,
@@ -9,8 +9,8 @@ import {
   getLogger,
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
-} from '@magickml/core'
-import type { MagickSpellInput } from '@magickml/core'
+} from 'shared/core'
+import type { MagickSpellInput } from 'shared/core'
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { AgentResult, AgentRunJob } from './Agent'

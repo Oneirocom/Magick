@@ -1,4 +1,4 @@
-import { SpellInterface } from '@magickml/core'
+import { SpellInterface } from 'shared/core'
 
 export interface Spells {
   data: SpellInterface[]

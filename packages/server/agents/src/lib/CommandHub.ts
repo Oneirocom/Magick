@@ -1,6 +1,6 @@
-import { type PubSub } from '@magickml/server-core'
+import { type PubSub } from 'server/core'
 import Agent from './Agent'
-import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from '@magickml/core'
+import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
 
 export interface CommandListener<T> {
   callback: (data: T, agent: Agent) => void

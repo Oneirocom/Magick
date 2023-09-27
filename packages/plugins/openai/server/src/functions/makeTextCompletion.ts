@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
+import { CompletionHandlerInputData, saveRequest } from 'shared/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 import {
@@ -8,7 +8,7 @@ import {
   BACKOFF_RETRY_LIMIT,
 } from 'shared/config'
 import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
-import { trackOpenAIUsage } from '@magickml/server-core'
+import { trackOpenAIUsage } from 'server/core'
 import axiosRetry from 'axios-retry'
 
 /**

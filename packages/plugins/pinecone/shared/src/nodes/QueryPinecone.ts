@@ -11,7 +11,7 @@ import {
   MagickNodeData,
   stringSocket,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 import { PineconeClient } from '@pinecone-database/pinecone'
 

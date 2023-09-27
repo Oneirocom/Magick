@@ -1,7 +1,7 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { SpellInterface } from '@magickml/core'
+import { SpellInterface } from 'shared/core'
 import { API_ROOT_URL, PRODUCTION } from 'shared/config'
 import {
   Apps,

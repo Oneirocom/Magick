@@ -5,7 +5,7 @@ import {
   GraphData,
   MagickEditor,
   SpellInterface,
-} from '@magickml/core'
+} from 'shared/core'
 import React, {
   createContext,
   useContext,
