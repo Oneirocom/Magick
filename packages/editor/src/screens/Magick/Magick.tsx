@@ -7,7 +7,14 @@ import TabBar from '../../components/TabBar/TabBar'
 import Workspaces from '../../components/Workspaces'
 
 import { ClientPluginManager, pluginManager } from '@magickml/core'
-import { RootState, activeTabIdSelector, activeTabSelector, changeActive, openTab, selectAllTabs } from '@magickml/state'
+import {
+  RootState,
+  activeTabIdSelector,
+  activeTabSelector,
+  changeActive,
+  openTab,
+  selectAllTabs,
+} from 'client/state'
 /**
  * Magick component
  * @param empty flag to control whether the workspaces should be rendered or not
@@ -24,16 +31,16 @@ const Magick = ({ empty = false }): JSX.Element => {
   const pubSub = usePubSub()
   const pluginComponents = []
 
-    ; (pluginManager as ClientPluginManager)
-      .getGroupedClientRoutes()
-      .forEach(plugin => {
-        plugin.routes.map(route => {
-          pluginComponents.push({
-            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-            component: route.component,
-          })
+  ;(pluginManager as ClientPluginManager)
+    .getGroupedClientRoutes()
+    .forEach(plugin => {
+      plugin.routes.map(route => {
+        pluginComponents.push({
+          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+          component: route.component,
         })
       })
+    })
 
   // Subscribe to open tab events
   useEffect(() => {
@@ -61,9 +68,9 @@ const Magick = ({ empty = false }): JSX.Element => {
     <>
       <TabBar tabs={tabs} activeTabId={activeTabId} />
       <TabLayout>
-        {!empty &&
+        {!empty && (
           <Workspaces tabs={tabs} pubSub={pubSub} activeTabId={activeTabId} />
-        }
+        )}
       </TabLayout>
     </>
   )

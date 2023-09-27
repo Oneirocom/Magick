@@ -9,7 +9,7 @@ import { getTemplates } from '@magickml/client-core'
 import { useConfig } from '@magickml/client-core'
 import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
-import { spellApi } from '@magickml/state'
+import { spellApi } from 'client/state'
 
 // Initial graph for the spell
 const defaultGraph = getTemplates().spells[0].graph

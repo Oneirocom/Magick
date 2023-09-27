@@ -10,7 +10,11 @@ import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/client-core'
-import { useLazyGetSpellByIdQuery, useSaveSpellMutation, RootState } from '@magickml/state'
+import {
+  useLazyGetSpellByIdQuery,
+  useSaveSpellMutation,
+  RootState,
+} from 'client/state'
 import { useSelector } from 'react-redux'
 
 /**
@@ -26,7 +30,9 @@ const EventHandler = ({ pubSub, tab }) => {
   const { createOrFocus, windowTypes } = useLayout()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { currentAgentId } = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId } = useSelector(
+    (state: RootState) => state.globalConfig
+  )
 
   const [saveSpellMutation] = useSaveSpellMutation()
   // TODO: is this a bug?
@@ -57,7 +63,6 @@ const EventHandler = ({ pubSub, tab }) => {
 
     spellRef.current = spell?.data[0]
   }, [spell])
-
 
   useEffect(() => {
     if (!client.io || !tab.id || !enqueueSnackbar) return
@@ -108,7 +113,7 @@ const EventHandler = ({ pubSub, tab }) => {
     $CLOSE_EDITOR,
     $PROCESS,
     $RUN_SPELL,
-    $RESET_HIGHLIGHTS
+    $RESET_HIGHLIGHTS,
   } = events
 
   /**
@@ -345,7 +350,7 @@ const EventHandler = ({ pubSub, tab }) => {
       agentId: currentAgentId,
       projectId: config.projectId,
       isPlaytest: true,
-      ..._data
+      ..._data,
     }
     const response = await client.service('agents').run(data)
   }

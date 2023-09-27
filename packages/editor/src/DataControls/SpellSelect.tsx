@@ -7,8 +7,7 @@ import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
 import { useConfig } from '@magickml/client-core'
-import { openTab, spellApi, useAppDispatch } from '@magickml/state'
-
+import { openTab, spellApi, useAppDispatch } from 'client/state'
 
 /**
  * Component that renders the Select element for selecting and creating modules.

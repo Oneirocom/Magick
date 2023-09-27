@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit'
 
 import { getWorkspaceLayout } from '@magickml/layouts'
-import { RootState } from '@magickml/state'
+import { RootState } from 'client/state'
 
 // Workspace map for initializing tabs with layout data
 export const workspaceMap = {

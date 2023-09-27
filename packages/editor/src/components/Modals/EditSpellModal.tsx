@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { closeTab, openTab, spellApi } from '@magickml/state'
+import { closeTab, openTab, spellApi } from 'client/state'
 /**
  * Represents a modal to edit spells.
  * @param {Object} props - properties passed to the component
