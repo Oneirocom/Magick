@@ -5,7 +5,7 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 
-import { getWorkspaceLayout } from '@magickml/layouts'
+import { getWorkspaceLayout } from 'client/layouts'
 import { RootState } from 'client/state'
 
 // Workspace map for initializing tabs with layout data
