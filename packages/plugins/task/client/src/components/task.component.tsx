@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { Tooltip } from '@mui/material'

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { IGNORE_AUTH } from 'shared/config'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 import { useSelector } from 'react-redux'
 
 export const useAgentList = () => {

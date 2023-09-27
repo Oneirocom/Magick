@@ -18,7 +18,7 @@ import AppProviders from './contexts/AppProviders'
 
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { AppConfig } from '@magickml/client-core'
+import { AppConfig } from 'client/core'
 import { MagickmlChatbox } from 'client/magickml-chatbox'
 import { createStore } from 'client/state'
 

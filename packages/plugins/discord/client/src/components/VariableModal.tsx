@@ -1,4 +1,4 @@
-import { Switch, Modal } from '@magickml/client-core'
+import { Switch, Modal } from 'client/core'
 import { useState } from 'react'
 import { Tooltip } from '@mui/material'
 
@@ -38,7 +38,12 @@ const VariableModal = ({
 
   return (
     editMode && (
-      <Modal open={editMode} onClose={setEditMode} showSaveBtn={true} handleAction={handleSave}>
+      <Modal
+        open={editMode}
+        onClose={setEditMode}
+        showSaveBtn={true}
+        handleAction={handleSave}
+      >
         <div style={{ marginBottom: '1em' }}>
           <div>
             <Tooltip title="add your api key here and save" placement='bottom' disableInteractive arrow >

@@ -1,4 +1,4 @@
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import VariableModal from './VariableModal'
@@ -13,7 +13,6 @@ export const TwitterAgentWindow: FC<any> = props => {
     selectedAgentData.data?.twitter_enabled
   )
   const [disable, setDisable] = useState(false)
-
 
   useEffect(() => {
     if (props.enable['TwitterPlugin'] == false) {

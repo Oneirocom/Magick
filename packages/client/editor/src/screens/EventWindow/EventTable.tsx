@@ -1,8 +1,8 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { TableComponent } from '@magickml/client-core'
+import { TableComponent } from 'client/core'
 import { API_ROOT_URL } from 'shared/config'
-import { useFeathers } from '@magickml/client-core'
+import { useFeathers } from 'client/core'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,

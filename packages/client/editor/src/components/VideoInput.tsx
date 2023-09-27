@@ -3,7 +3,7 @@
  * A React component that allows the user to import a video file.
  */
 import React from 'react'
-import { Icon } from '@magickml/client-core'
+import { Icon } from 'client/core'
 
 interface Props {
   /**

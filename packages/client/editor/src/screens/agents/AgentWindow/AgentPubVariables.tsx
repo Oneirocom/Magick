@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { Grid } from '@mui/material'
 import styles from '../AgentWindowStyle.module.css'
-import { Input, Switch } from '@magickml/client-core'
+import { Input, Switch } from 'client/core'
 
 /**
  * Interface for Props.

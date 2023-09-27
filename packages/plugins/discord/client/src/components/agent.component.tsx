@@ -9,7 +9,7 @@ type PluginProps = {
   props
 }
 import { API_ROOT_URL, FILE_SERVER_URL } from 'shared/config'
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import VariableModal from './VariableModal'
 import { useSelector } from 'react-redux'
 

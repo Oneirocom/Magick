@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { createRoot } from 'react-dom/client'
 import { MagickIDE } from 'client/editor'
-import { AppConfig } from '@magickml/client-core'
+import { AppConfig } from 'client/core'
 import {
   DEFAULT_PROJECT_ID,
   API_ROOT_URL,

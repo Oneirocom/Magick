@@ -2,7 +2,7 @@
 // Import statements kept as-is
 // TODO this whole file is a mess of typescript errors. Fix.
 //@ts-nocheck
-import { Button } from '@magickml/client-core'
+import { Button } from 'client/core'
 import { API_ROOT_URL } from 'shared/config'
 import {
   Grid,
@@ -33,7 +33,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.

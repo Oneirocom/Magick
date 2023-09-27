@@ -1,4 +1,4 @@
-import { Modal } from '@magickml/client-core'
+import { Modal } from 'client/core'
 import Grid from '@mui/material/Grid'
 import { useState } from 'react'
 import { Tooltip } from '@mui/material'

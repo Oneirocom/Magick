@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { LoadingScreen, useFeathers } from '@magickml/client-core'
+import { LoadingScreen, useFeathers } from 'client/core'
 import {
   EditorContext,
   GraphData,
@@ -15,7 +15,7 @@ import React, {
 } from 'react'
 import { useSelector } from 'react-redux'
 
-import { useConfig, usePubSub } from '@magickml/client-core'
+import { useConfig, usePubSub } from 'client/core'
 import { MyNode } from '../components/Node/Node'
 import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
