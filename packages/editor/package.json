@@ -1,9 +1,0 @@
-{
-  "name": "@magickml/editor",
-  "version": "0.1.0",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "vite build",
-    "prepare": "npm run build"
-  }
-}
