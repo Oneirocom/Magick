@@ -1,1 +1,5 @@
-export * from './lib/providers'
+export * from './lib/ConfigProvider'
+export * from './lib/FeathersProvider'
+export * from './lib/PubSubProvider'
+export * from './lib/ProjectWindowProvider'
+export * from './lib/TreeDataProvider'

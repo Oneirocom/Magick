@@ -11,7 +11,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone'
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
-import { useFeathers } from 'client/core'
+import { useFeathers } from '@magickml/providers'
 import { Modal } from 'client/core'
 import {
   RootState,
@@ -205,9 +205,8 @@ export const CustomNode: React.FC<Props> = props => {
       style={{ paddingInlineStart: indent }}
     >
       <div
-        className={`${styles.expandIconWrapper} ${
-          props.isOpen ? styles.isOpen : ''
-        }`}
+        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
+          }`}
       >
         {props.node.droppable && (
           <div onClick={handleToggle}>

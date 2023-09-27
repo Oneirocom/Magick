@@ -13,12 +13,11 @@ import {
   uniqueNamesGenerator,
 } from 'unique-names-generator'
 import TemplatePanel from '../../components/TemplatePanel'
-import { useConfig } from 'client/core'
+import { useConfig, useTreeData } from '@magickml/providers'
 import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'
 import { v4 as uuidv4 } from 'uuid'
-import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
 import { spellApi } from 'client/state'
 
 // Custom configuration for unique name generator
@@ -94,8 +93,7 @@ const CreateNew = () => {
       setLoading(false)
       setIsAdded(true)
       navigate(
-        `/magick/${
-          response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
+        `/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
         }`
       )
     } catch (err) {
@@ -150,9 +148,8 @@ const CreateNew = () => {
           cancel
         </Button>
         <LoadingButton
-          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${
-            css.button
-          }`}
+          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${css.button
+            }`}
           loading={loading}
           onClick={onCreate}
           variant="outlined"

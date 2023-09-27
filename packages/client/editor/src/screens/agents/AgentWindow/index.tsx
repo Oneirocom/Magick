@@ -5,7 +5,7 @@ import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
 import FileInput from '../../../components/FileInput'
 import { useEffect } from 'react'
-import { useConfig } from 'client/core'
+import { useConfig } from '@magickml/providers'
 
 /**
  * Props for AgentWindow component

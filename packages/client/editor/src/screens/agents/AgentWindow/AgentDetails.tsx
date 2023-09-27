@@ -1,17 +1,16 @@
 // DOCUMENTED
-import { IconBtn, CustomizedSwitch, useFeathers } from 'client/core'
+import { IconBtn, CustomizedSwitch } from 'client/core'
 import { ClientPluginManager, pluginManager } from 'shared/core'
+import { useFeathers, useConfig, useTreeData } from '@magickml/providers'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from 'client/core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import { tooltip_text } from './tooltip_texts'
-import { useTreeData } from '../../../../../core/client/src/contexts/TreeDataProvider'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -386,8 +385,8 @@ const AgentDetails = ({
         )}
       <div
         className={`${selectedAgentData.publicVariables !== '{}'
-            ? styles.connectorsLong
-            : styles.connectors
+          ? styles.connectorsLong
+          : styles.connectors
           }`}
       >
         {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {

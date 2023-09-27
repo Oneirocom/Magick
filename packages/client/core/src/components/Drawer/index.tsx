@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { FEATURE_FLAGS } from 'shared/config'
-import { ProjectWindowProvider } from '../../contexts/ProjectWindowContext'
+import { ProjectWindowProvider } from '../../../../providers/src/lib/ProjectWindowProvider'
 import { OldSidebar } from './OldSidebar'
 import { NewSidebar } from './Newsidebar'
 

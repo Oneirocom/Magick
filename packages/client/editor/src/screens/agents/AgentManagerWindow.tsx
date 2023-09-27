@@ -5,10 +5,9 @@ import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE } from 'shared/config'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from 'client/core'
+import { useConfig, useTreeData } from '@magickml/providers'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
-import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
 
 // todo - improve agent typing by pulling from feathers types
 type AgentData = {
@@ -228,23 +227,23 @@ const AgentManagerWindow = () => {
   useEffect(() => {
     if (!config.apiUrl || isLoading) return
     setIsLoading(true)
-    ;(async () => {
-      const res = await fetch(
-        `${config.apiUrl}/agents?projectId=${config.projectId}`,
-        {
-          headers: STANDALONE
-            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-            : { Authorization: `Bearer ${token}` },
-        }
-      )
-      const json = await res.json()
-      setData(json.data)
-      setIsLoading(false)
-    })()
+      ; (async () => {
+        const res = await fetch(
+          `${config.apiUrl}/agents?projectId=${config.projectId}`,
+          {
+            headers: STANDALONE
+              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+              : { Authorization: `Bearer ${token}` },
+          }
+        )
+        const json = await res.json()
+        setData(json.data)
+        setIsLoading(false)
+      })()
   }, [config.apiUrl])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const res = await fetch(
         `${config.apiUrl}/agents?projectId=${config.projectId}`,
         {
