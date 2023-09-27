@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { createRoot } from 'react-dom/client'
-import { MagickIDE } from '@magickml/editor'
+import { MagickIDE } from 'client/editor'
 import { AppConfig } from '@magickml/client-core'
 import {
   DEFAULT_PROJECT_ID,
@@ -19,7 +19,7 @@ import plugins from './plugins'
 // We want to add this back in eventually, but it's causing some visual bugs
 //import './globals.css'
 
-initLogger({ name: "AIDE" })
+initLogger({ name: 'AIDE' })
 
 const logger = getLogger()
 
@@ -28,12 +28,12 @@ logger.info('loaded with plugins %o', plugins)
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
-  logger.info("not in iframe")
+  logger.info('not in iframe')
   if (STANDALONE) {
-    logger.info("standalone")
+    logger.info('standalone')
     const container = document.getElementById('root') as Element
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
-      ; (window as any).root = root
+    ;(window as any).root = root
 
     // Check URL parameters for projectId and apiUrl
     const projectId =
@@ -56,7 +56,7 @@ if (window === window.parent) {
     root.render(<Root />)
   }
 } else {
-  logger.info("iframe: In iframe")
+  logger.info('iframe: In iframe')
   /**
    * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
    */
@@ -72,11 +72,17 @@ if (window === window.parent) {
         event.origin !== window.location.origin &&
         !TRUSTED_PARENT_URLS.includes(event.origin)
       ) {
+<<<<<<< HEAD
         logger.error('Untrusted origin %s', event.origin);
         // Log the trusted origins for debugging purposes
         TRUSTED_PARENT_URLS.forEach(trustedUrl => {
           logger.error('Trusted origin is %s', trustedUrl);
         });
+=======
+        logger.error('untrusted origin %s', event.origin)
+        logger.error('cloudUrl is %s', cloudUrl)
+        logger.error('TRUSTED_PARENT_URL is %s', TRUSTED_PARENT_URL)
+>>>>>>> 950214186 (Move editor package into client folder)
 
         return;
       }
@@ -108,7 +114,7 @@ if (window === window.parent) {
         }
         const container = document.getElementById('root') as Element
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
-          ; (window as any).root = root
+        ;(window as any).root = root
 
         logger.info('iframe: rendering root')
         root.render(<Root />)
