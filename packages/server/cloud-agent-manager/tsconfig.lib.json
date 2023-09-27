@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../../../dist/out-tsc",
     "declaration": true,
     "module": "esnext",
     "target": "es2017",
