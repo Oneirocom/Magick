@@ -22,6 +22,8 @@ const components = {
 };
 
 const loadDefaultLayout = (api: GridviewApi) => {
+
+  // Bottom status bar
   api.addPanel({
     id: 'panel_1',
     component: 'default',
@@ -32,6 +34,7 @@ const loadDefaultLayout = (api: GridviewApi) => {
     minimumHeight: 15,
   });
 
+  // Left side file drawer
   api.addPanel({
     id: 'panel_3',
     component: 'FileDrawer',
@@ -42,6 +45,7 @@ const loadDefaultLayout = (api: GridviewApi) => {
     },
   });
 
+  // Main panel in the in the middle
   api.addPanel({
     id: 'panel_5',
     component: 'MainPanel',
@@ -50,6 +54,8 @@ const loadDefaultLayout = (api: GridviewApi) => {
     },
     position: { referencePanel: 'panel_3', direction: 'right' },
   })
+
+  // Right side console panel
   api.addPanel({
     id: 'panel_6',
     component: 'default',

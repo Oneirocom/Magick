@@ -29,7 +29,8 @@ import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/use
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
 import NewMenuBar from '../../../../../editor/src/components/MenuBar/newMenuBar'
 import { AgentInterface, SpellInterface } from '@magickml/core'
-import { openTab, setCurrentAgentId } from '@magickml/state'
+import { setCurrentAgentId } from '@magickml/state'
+import { useTabLayout } from '../../../../../editor/src/contexts/TabProvider'
 
 interface Spell {
   id: number
@@ -39,6 +40,7 @@ interface Spell {
 
 function AgentMenu({ data, resetData }) {
   const { client } = useFeathers()
+  const { openTab } = useTabLayout()
   const [openMenu1, setOpenMenu1] = useState(null)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
   const [openMenu2, setOpenMenu2] = useState(null)
@@ -258,12 +260,12 @@ function AgentMenu({ data, resetData }) {
       if (matchingSpell) {
         const spellName = matchingSpell.name
 
-        dispatch(openTab({
-          id: agent.rootSpellId,
+        openTab({
+          id: spellName,
           name: spellName,
           spellName: spellName,
           type: 'spell',
-        }))
+        })
       }
     }
     handleCloseMenu1()
@@ -464,12 +466,12 @@ function AgentMenu({ data, resetData }) {
             },
           }}
           onClick={() => {
-            dispatch(openTab({
+            openTab({
               id: "Agents",
               name: 'Agents',
               type: 'Agents',
               switchActive: true
-            }))
+            })
           }}
         >
           <List
@@ -587,12 +589,12 @@ function AgentMenu({ data, resetData }) {
             },
           }}
           onClick={() => {
-            dispatch(openTab({
+            openTab({
               id: "Agents",
               name: 'Agents',
               type: 'Agents',
               switchActive: true
-            }))
+            })
           }}
         >
           Other Options
