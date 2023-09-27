@@ -1,0 +1,34 @@
+{
+  "name": "@magickml/providers",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "client/providers/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/client/providers"
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/client/providers"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "client/providers/**/*.ts",
+          "client/providers/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
