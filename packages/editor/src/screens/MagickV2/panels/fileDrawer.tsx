@@ -1,14 +1,17 @@
-import { NewSidebar, TreeDataProvider } from "@magickml/client-core";
+import { NewSidebar, TreeDataProvider, usePubSub } from "@magickml/client-core";
 import { IGridviewPanelProps } from "dockview";
 import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
-const ANIMATION_DURATION = 1;
+const ANIMATION_DURATION = 50;
 
 const FileDrawer = (props: IGridviewPanelProps<{ title: string }>) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentWidth, setCurrentWidth] = useState(0);
   const [targetWidth, setTargetWidth] = useState(0);
+  const { events, subscribe } = usePubSub()
+
+  const { TOGGLE_FILE_DRAWER } = events
 
   useHotkeys(
     'ctrl+b',
@@ -56,6 +59,20 @@ const FileDrawer = (props: IGridviewPanelProps<{ title: string }>) => {
       animateSize(currentWidth, 0);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = subscribe(TOGGLE_FILE_DRAWER, () => {
+      if (currentWidth > 0) {
+        close();
+      } else {
+        open();
+      }
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [currentWidth, open, close, subscribe, TOGGLE_FILE_DRAWER])
 
   // useEffect is now used only if you need an initial animation or similar effect
   useEffect(() => {

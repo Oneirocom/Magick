@@ -38,7 +38,6 @@ const loadDefaultLayout = (api: GridviewApi) => {
   api.addPanel({
     id: 'panel_3',
     component: 'FileDrawer',
-    minimumWidth: 200,
     maximumWidth: 300,
     params: {
       title: 'Panel 3',
@@ -83,10 +82,6 @@ const MagickV2 = () => {
       className="dockview-theme-abyss"
     />
   );
-
-  // return (
-  //   <MainPanel />
-  // );
 }
 
 export default MagickV2
