@@ -234,6 +234,7 @@ export const CustomNode: React.FC<Props> = props => {
             sx={{
               cursor: 'pointer',
               marginLeft: '8px',
+              whiteSpace: 'nowrap'
             }}
             onClick={handleClick}
             onContextMenu={handleContextMenu}

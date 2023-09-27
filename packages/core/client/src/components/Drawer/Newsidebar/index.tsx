@@ -472,11 +472,11 @@ export function NewSidebar(DrawerProps): JSX.Element {
       <div className={styles.menu} style={{ color: '#7D7D7D' }}>
         <div className={styles.menuFlex}>
           <AddIcon sx={{ mr: 1 }} />
-          <Typography variant="body1">Notion (coming soon)</Typography>
+          <Typography variant="body1" style={{ whiteSpace: 'nowrap' }}>Notion (coming soon)</Typography>
         </div>
         <div className={styles.menuFlex}>
           <AddIcon sx={{ mr: 1 }} />
-          <Typography variant="body1">
+          <Typography variant="body1" style={{ whiteSpace: 'nowrap' }}>
             Google Drive (coming soon)
           </Typography>
         </div>
