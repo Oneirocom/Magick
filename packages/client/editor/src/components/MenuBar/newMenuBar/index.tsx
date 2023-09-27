@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { useProjectWindow, usePubSub } from 'client/core'
+import { useProjectWindow, usePubSub } from '@magickml/providers'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
@@ -592,16 +592,16 @@ const NewMenuBar = props => {
                         {menuBarItems[item].items[subMenuKey].hasOwnProperty(
                           'isActive'
                         ) && (
-                          <span
-                            className={
-                              menuBarItems[item].items[subMenuKey].isActive
-                                ? css['preference-active']
-                                : css['preference-notActive']
-                            }
-                          >
-                            ●{' '}
-                          </span>
-                        )}
+                            <span
+                              className={
+                                menuBarItems[item].items[subMenuKey].isActive
+                                  ? css['preference-active']
+                                  : css['preference-notActive']
+                              }
+                            >
+                              ●{' '}
+                            </span>
+                          )}
                         {subMenuKey.replace(/_/g, ' ').charAt(0).toUpperCase() +
                           subMenuKey.slice(1)}
                       </p>
