@@ -2,7 +2,7 @@
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import OldMenuBar from './OldMenuBar'
 import NewMenuBar from './newMenuBar'
-import { FEATURE_FLAGS } from '@magickml/config'
+import { FEATURE_FLAGS } from 'shared/config'
 
 /**
  * MenuBar component

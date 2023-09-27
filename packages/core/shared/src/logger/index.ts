@@ -1,5 +1,5 @@
 import pino from 'pino'
-import { NODE_ENV, PINO_LOG_LEVEL } from '@magickml/config'
+import { NODE_ENV, PINO_LOG_LEVEL } from 'shared/config'
 
 let logger: pino.Logger | null = null
 

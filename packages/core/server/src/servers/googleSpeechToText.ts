@@ -5,7 +5,7 @@ import https from 'https'
 import * as fs from 'fs'
 import path from 'path'
 
-import { SPEECH_SERVER_PORT, USSSL_SPEECH } from '@magickml/config'
+import { SPEECH_SERVER_PORT, USSSL_SPEECH } from 'shared/config'
 
 let speechClient: SpeechClient
 const encoding = 'LINEAR16'

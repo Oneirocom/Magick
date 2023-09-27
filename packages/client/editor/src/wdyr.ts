@@ -1,6 +1,6 @@
 // DOCUMENTED
 
-import { NODE_ENV } from '@magickml/config'
+import { NODE_ENV } from 'shared/config'
 import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 /**

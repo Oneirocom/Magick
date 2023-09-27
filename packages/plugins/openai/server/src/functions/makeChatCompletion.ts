@@ -10,7 +10,7 @@ import {
   DEFAULT_OPENAI_KEY,
   PRODUCTION,
   BACKOFF_RETRY_LIMIT,
-} from '@magickml/config'
+} from 'shared/config'
 import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
 import { trackOpenAIUsage } from '@magickml/server-core'
 import axiosRetry from 'axios-retry'

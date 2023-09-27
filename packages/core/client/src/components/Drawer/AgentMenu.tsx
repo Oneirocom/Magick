@@ -20,7 +20,7 @@ import { useConfig } from '@magickml/client-core'
 import { enqueueSnackbar } from 'notistack'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from 'shared/config'
 
 import { useFeathers } from '../../providers/FeathersProvider'
 
