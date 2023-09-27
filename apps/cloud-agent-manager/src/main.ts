@@ -1,23 +1,24 @@
-import { CloudAgentManager, FeathersSyncReporter } from "@magickml/cloud-agent-manager"
-import { initLogger, getLogger } from "@magickml/core"
-import { app, BullQueue, initApp } from "@magickml/server-core"
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from "@magickml/config"
-import { initAgentCommander } from "@magickml/agents"
+import {
+  CloudAgentManager,
+  FeathersSyncReporter,
+} from 'server/cloud-agent-manager'
+import { initLogger, getLogger } from '@magickml/core'
+import { app, BullQueue, initApp } from '@magickml/server-core'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/config'
+import { initAgentCommander } from '@magickml/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
 if (PRODUCTION) {
-	initLogger({
-		name: 'cloud-agent-manager',
-		transport: {
-			targets: [
-				getPinoTransport('info')
-			]
-		},
-		level: 'info',
-	})
+  initLogger({
+    name: 'cloud-agent-manager',
+    transport: {
+      targets: [getPinoTransport('info')],
+    },
+    level: 'info',
+  })
 } else {
-	initLogger({ name: 'cloud-agent-manager' })
-}	
+  initLogger({ name: 'cloud-agent-manager' })
+}
 const logger = getLogger()
 
 function start() {
