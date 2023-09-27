@@ -1,0 +1,15 @@
+{
+  "name": "server/core",
+  "version": "0.1.0",
+  "feathers": {
+    "language": "ts",
+    "packager": "npm",
+    "database": "postgresql",
+    "framework": "koa",
+    "transports": [
+      "rest",
+      "websockets"
+    ],
+    "schema": "typebox"
+  }
+}

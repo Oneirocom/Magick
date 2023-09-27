@@ -3,7 +3,7 @@
  * A plugin for interacting with anthropic's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl } from 'shared/core'
 import shared from '@magickml/plugin-anthropic-shared'
 
 // Importing shared variables from plugin-anthropic-shared module

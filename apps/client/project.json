@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/client/src",
   "projectType": "application",
-  "implicitDependencies": ["client-editor", "@magickml/core"],
+  "implicitDependencies": ["client-editor", "shared-core"],
   "targets": {
     "build": {
       "executor": "@nx/vite:build",

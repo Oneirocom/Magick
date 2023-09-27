@@ -10,7 +10,7 @@ import Requests from '../../RequestWindow'
 import Settings from '../../settings/SettingsWindow'
 import Documents from '../../DocumentWindow'
 import Agents from '../../agents/AgentManagerWindow'
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from '../workspaces/composer'
 
 // we will move this out into the layouts package

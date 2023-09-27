@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A plugin for interacting with elevenlabs's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl } from 'shared/core'
 import shared from '@magickml/plugin-elevenlabs-shared'
 
 // Importing shared variables from plugin-elevenlabs-shared module
@@ -32,7 +32,7 @@ const textToSpeechControls = [
     icon: 'moon',
     defaultValue: '',
   },
-];
+]
 
 // Object containing all input controls for different completion types
 const inspectorControls = {
@@ -44,7 +44,7 @@ const elevenlabsPlugin = new ClientPlugin({
   name: 'elevenlabsPlugin',
   secrets, // API Key and Model ID secrets
   completionProviders: completionProviders.map(provider => {
-    // Adding custom input controls for each completion type 
+    // Adding custom input controls for each completion type
     return {
       ...provider,
       inspectorControls: inspectorControls[provider.subtype],

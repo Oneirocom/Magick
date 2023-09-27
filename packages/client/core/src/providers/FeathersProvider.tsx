@@ -6,7 +6,7 @@ import {
 } from '@feathersjs/feathers'
 import type { SocketService } from '@feathersjs/socketio-client'
 import socketio from '@feathersjs/socketio-client'
-import { getLogger, SpellInterface } from '@magickml/core'
+import { getLogger, SpellInterface } from 'shared/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 import { useConfig } from './ConfigProvider'

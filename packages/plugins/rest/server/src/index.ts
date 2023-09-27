@@ -15,7 +15,7 @@
  * @property {string} type - The socket type, always `eventSocket`.
  */
 
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
 import { agentHttp } from './services/agentHttp/agentHttp'
 
 /**

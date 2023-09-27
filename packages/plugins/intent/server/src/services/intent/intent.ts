@@ -15,14 +15,14 @@ import {
   checkPermissions,
   type Application,
   type HookContext,
-} from '@magickml/server-core'
+} from 'server/core'
 import { IntentService, getOptions } from './intent.class'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
 
 // Add this service to the service type index
-declare module '@magickml/server-core' {
+declare module 'server/core' {
   interface ServiceTypes {
     [intentPath]: IntentService
   }

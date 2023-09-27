@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Represents the Pinecone plugin for the MagickML engine.
  * @class
  */
-import { ClientPlugin } from '@magickml/core'
+import { ClientPlugin } from 'shared/core'
 import Nodes from '@magickml/plugin-pinecone-shared'
 
 const PineconePlugin = new ClientPlugin({
@@ -33,8 +33,8 @@ const PineconePlugin = new ClientPlugin({
        * URL that is used to retrieve the Pinecone API key.
        * @type {string}
        */
-      getUrl: 'https://app.pinecone.io/'
-    }
+      getUrl: 'https://app.pinecone.io/',
+    },
   ],
 })
 

@@ -4,8 +4,8 @@
   "sourceRoot": "apps/agent/src",
   "projectType": "application",
   "implicitDependencies": [
-    "@magickml/server-core",
-    "@magickml/core",
+    "server-core",
+    "shared-core",
     "server-agents",
     "@magickml/plugin-*"
   ],

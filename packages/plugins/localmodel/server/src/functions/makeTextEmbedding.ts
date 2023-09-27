@@ -3,7 +3,7 @@ import {
   CompletionHandlerInputData,
   EmbeddingModel,
   saveRequest,
-} from '@magickml/core'
+} from 'shared/core'
 import axios from 'axios'
 import { LOCALMODEL_ENPOINT } from '../constants'
 

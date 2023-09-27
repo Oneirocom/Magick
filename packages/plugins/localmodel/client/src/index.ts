@@ -1,9 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A plugin for interacting with local models.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl } from 'shared/core'
 import shared from '@magickml/plugin-localmodel-shared'
 
 // Importing shared variables from plugin-localmodel-shared module
@@ -84,7 +84,7 @@ const chatCompletionControls = [
     name: 'Presence Penalty (0-2.0)',
     icon: 'moon',
     defaultValue: 0,
-  }
+  },
 ]
 
 // Object containing all input controls for different completion types
@@ -99,7 +99,7 @@ const LocalModelPlugin = new ClientPlugin({
   name: 'LocalModelPlugin',
   secrets, // API Key and Model ID secrets
   completionProviders: completionProviders.map(provider => {
-    // Adding custom input controls for each completion type 
+    // Adding custom input controls for each completion type
     return {
       ...provider,
       inspectorControls: inspectorControls[provider.subtype],

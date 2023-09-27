@@ -8,8 +8,8 @@ import {
 } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
-import type { HookContext } from '@magickml/server-core'
-import { dataValidator, queryValidator } from '@magickml/server-core'
+import type { HookContext } from 'server/core'
+import { dataValidator, queryValidator } from 'server/core'
 
 /**
  * Full data model schema for a document.

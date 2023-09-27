@@ -17,7 +17,7 @@ import {
   stringSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 // A string variable that describes the component’s functionality.
 const info = `Check the recent transactions of an Ethereum wallet`

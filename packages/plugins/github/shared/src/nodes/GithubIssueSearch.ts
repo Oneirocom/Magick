@@ -15,7 +15,7 @@ import {
   objectSocket,
   MagickWorkerOutputs,
   getLogger,
-} from '@magickml/core'
+} from 'shared/core'
 
 import axios from 'axios'
 

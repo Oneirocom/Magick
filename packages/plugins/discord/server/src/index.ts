@@ -4,7 +4,7 @@ import {
   eventSocket,
   ServerPlugin,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 import { DiscordConnector } from './connectors/discord'
 import { handleVoiceResponse } from './connectors/discord-voice'
 
