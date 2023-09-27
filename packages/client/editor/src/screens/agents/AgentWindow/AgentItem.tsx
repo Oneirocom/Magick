@@ -1,6 +1,6 @@
-import { Icon, IconBtn } from '@magickml/client-core'
+import { Icon, IconBtn } from 'client/core'
 import { Avatar, Typography } from '@mui/material'
-import { Modal } from '@magickml/client-core'
+import { Modal } from 'client/core'
 import styles from './index.module.scss'
 import { useState } from 'react'
 

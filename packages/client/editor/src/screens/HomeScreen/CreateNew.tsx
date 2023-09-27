@@ -1,7 +1,7 @@
 // DOCUMENTED
-import { Button, Panel } from '@magickml/client-core'
+import { Button, Panel } from 'client/core'
 import { GraphData } from '@magickml/core'
-import { getTemplates } from '@magickml/client-core'
+import { getTemplates } from 'client/core'
 import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -13,7 +13,7 @@ import {
   uniqueNamesGenerator,
 } from 'unique-names-generator'
 import TemplatePanel from '../../components/TemplatePanel'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'

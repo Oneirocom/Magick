@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Window } from '@magickml/client-core'
+import { Window } from 'client/core'
 
 /**
  * The Inspector component displays the selected component's data in a window with controls for modifying the data.

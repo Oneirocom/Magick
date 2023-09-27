@@ -1,4 +1,4 @@
-import { Modal } from '@magickml/client-core'
+import { Modal } from 'client/core'
 import { useState } from 'react'
 import { Tooltip } from "@mui/material"
 
@@ -10,7 +10,7 @@ const VariableModal = ({
 }) => {
   const [state, setState] = useState({
     github_access_token: selectedAgentData?.data?.github_access_token,
-    github_repos: selectedAgentData?.data?.github_repos
+    github_repos: selectedAgentData?.data?.github_repos,
   })
 
   const handleSave = async () => {
@@ -36,7 +36,7 @@ const VariableModal = ({
     update(selectedAgentData.id, data)
   }
 
-  const handleAccessToken = async (e) => {
+  const handleAccessToken = async e => {
     const access_token = e.target.value.trim()
 
     setState({
@@ -45,7 +45,7 @@ const VariableModal = ({
     })
   }
 
-  const handleChange = async (e) => {
+  const handleChange = async e => {
     const repoInfos = e.target.value.split(',')
 
     setState({
@@ -56,7 +56,12 @@ const VariableModal = ({
 
   return (
     editMode && (
-      <Modal open={editMode} onClose={setEditMode} handleAction={handleSave} showSaveBtn={true}>
+      <Modal
+        open={editMode}
+        onClose={setEditMode}
+        handleAction={handleSave}
+        showSaveBtn={true}
+      >
         <>
           <div style={{ marginBottom: '1em' }}>
             <Tooltip title={" Add your Github access "} placement="bottom" disableInteractive arrow>
@@ -91,4 +96,3 @@ const VariableModal = ({
 }
 
 export default VariableModal
-

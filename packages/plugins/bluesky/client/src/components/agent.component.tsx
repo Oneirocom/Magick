@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { debounce } from 'lodash'
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import Button from '@mui/material/Button'
 import VariableModal from './VariableModal'
 import { Tooltip } from '@mui/material'

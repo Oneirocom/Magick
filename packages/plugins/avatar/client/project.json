@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/plugins/avatar/client/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core", "@magickml/client-core"],
+  "implicitDependencies": ["@magickml/core", "client-core"],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",

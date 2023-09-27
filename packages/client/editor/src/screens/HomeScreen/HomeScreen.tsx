@@ -1,9 +1,9 @@
 // DOCUMENTED
-import { LoadingScreen } from '@magickml/client-core'
+import { LoadingScreen } from 'client/core'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 import AllProjects from './AllProjects'
 import CreateNew from './CreateNew'
 import css from './homeScreen.module.css'

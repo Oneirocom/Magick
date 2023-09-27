@@ -1,6 +1,6 @@
 // DOCUMENTED
 import React, { useEffect, useState } from 'react'
-import { Button, Icon, Panel } from '@magickml/client-core'
+import { Button, Icon, Panel } from 'client/core'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import FileInput from '../../components/FileInput'
 import ProjectRow from '../../components/ProjectRow'

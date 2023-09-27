@@ -1,6 +1,6 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { TableComponent } from '@magickml/client-core'
+import { TableComponent } from 'client/core'
 import { CompletionProvider, pluginManager } from '@magickml/core'
 import { API_ROOT_URL } from 'shared/config'
 import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {

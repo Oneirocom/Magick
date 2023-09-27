@@ -1,7 +1,7 @@
 // DOCUMENTED
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
-import { Modal, Switch } from '@magickml/client-core'
+import { Modal, Switch } from 'client/core'
 import md5 from 'md5'
 import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'

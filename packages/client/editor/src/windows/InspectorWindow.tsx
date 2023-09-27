@@ -1,10 +1,5 @@
 // DOCUMENTED
-import {
-  componentCategories,
-  Icon,
-  Tooltip,
-  Window,
-} from '@magickml/client-core'
+import { componentCategories, Icon, Tooltip, Window } from 'client/core'
 import { Help } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { useEffect, useState } from 'react'

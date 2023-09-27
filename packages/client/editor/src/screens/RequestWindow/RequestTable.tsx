@@ -22,7 +22,7 @@ import {
 import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
 import { Delete, Refresh, MoreHoriz } from '@mui/icons-material'
-import { TableComponent, useFeathers } from '@magickml/client-core'
+import { TableComponent, useFeathers } from 'client/core'
 import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
 
