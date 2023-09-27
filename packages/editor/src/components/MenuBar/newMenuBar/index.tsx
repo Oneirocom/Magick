@@ -496,7 +496,7 @@ const NewMenuBar = (props) => {
   }))
 
   return (
-    <>
+    <div>
       <IconButton onClick={handleMenuIconClick} style={props.style ? props.style : {}}>
         <MenuIcon />
       </IconButton>
@@ -516,104 +516,102 @@ const NewMenuBar = (props) => {
         variant="menu"
       >
         {Object.keys(menuBarItems).map((item, index) => (
-          <>
-            <NestedMenu
-              key={index}
-              parentMenuOpen={isMenuOpen}
-              label={Object.keys(menuBarItems)[index].toUpperCase()}
-              divider={true}
-              sx={{
-                '&:hover, &:focus': {
-                  background: '#49545A',
-                  outline: 'none',
+          <NestedMenu
+            key={index}
+            parentMenuOpen={isMenuOpen}
+            label={Object.keys(menuBarItems)[index].toUpperCase()}
+            divider={true}
+            sx={{
+              '&:hover, &:focus': {
+                background: '#49545A',
+                outline: 'none',
+              },
+            }}
+            MenuProps={{
+              sx: {
+                '& .MuiMenu-paper': {
+                  background: '#2B2B30',
+                  width: '180px',
+                  shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  paddingY: 0,
                 },
-              }}
-              MenuProps={{
-                sx: {
-                  '& .MuiMenu-paper': {
-                    background: '#2B2B30',
-                    width: '180px',
-                    shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                    paddingY: 0,
-                  },
-                  // remove menulist padding
-                  '& .MuiMenu-list': {
+                // remove menulist padding
+                '& .MuiMenu-list': {
+                  padding: 0,
+                  '& .MuiListItem-root': {
                     padding: 0,
-                    '& .MuiListItem-root': {
-                      padding: 0,
-                    },
                   },
                 },
-              }}
-            >
-              {Object.keys(menuBarItems[item].items).map(
-                (subMenuKey, subIndex) => {
-                  const hotKeyLabel = menuBarItems[item]
-                    ? menuBarItems[item].items[subMenuKey].hotKey
-                    : ''
-                  // add useHotkeys for each sub-menu item
-                  if (hotKeyLabel) {
-                    useHotkeys(
-                      menuBarItems[item].items[subMenuKey].hotKey,
-                      event => {
-                        event.preventDefault()
-                        menuBarItems[item].items[subMenuKey].onClick()
-                      },
-                      { enableOnFormTags: ['INPUT'] },
-                      [menuBarItems[item].items[subMenuKey].onClick]
-                    )
-                  }
-
-                  return (
-                    <MenuItem
-                      key={subIndex}
-                      onClick={e => {
-                        menuBarItems[item].items[subMenuKey].onClick(e)
-                        handleMenuClose()
-                      }}
-                      sx={{
-                        '&:hover, &:focus': {
-                          background: '#49545A',
-                          outline: 'none',
-                        },
-                      }}
-                      divider={true}
-                    >
-                      <div className={css['menu-item']}>
-                        <p>
-                          {menuBarItems[item].items[subMenuKey].hasOwnProperty(
-                            'isActive'
-                          ) && (
-                              <span
-                                className={
-                                  menuBarItems[item].items[subMenuKey].isActive
-                                    ? css['preference-active']
-                                    : css['preference-notActive']
-                                }
-                              >
-                                ●{' '}
-                              </span>
-                            )}
-                          {subMenuKey
-                            .replace(/_/g, ' ')
-                            .charAt(0)
-                            .toUpperCase() + subMenuKey.slice(1)}
-                        </p>
-
-                        {hotKeyLabel &&
-                          parseStringToUnicode(
-                            hotKeyLabel.slice(0, hotKeyLabel.indexOf(','))
-                          )}
-                      </div>
-                    </MenuItem>
+              },
+            }}
+          >
+            {Object.keys(menuBarItems[item].items).map(
+              (subMenuKey, subIndex) => {
+                const hotKeyLabel = menuBarItems[item]
+                  ? menuBarItems[item].items[subMenuKey].hotKey
+                  : ''
+                // add useHotkeys for each sub-menu item
+                if (hotKeyLabel) {
+                  useHotkeys(
+                    menuBarItems[item].items[subMenuKey].hotKey,
+                    event => {
+                      event.preventDefault()
+                      menuBarItems[item].items[subMenuKey].onClick()
+                    },
+                    { enableOnFormTags: ['INPUT'] },
+                    [menuBarItems[item].items[subMenuKey].onClick]
                   )
                 }
-              )}
-            </NestedMenu>
-          </>
+
+                return (
+                  <MenuItem
+                    key={subIndex}
+                    onClick={e => {
+                      menuBarItems[item].items[subMenuKey].onClick(e)
+                      handleMenuClose()
+                    }}
+                    sx={{
+                      '&:hover, &:focus': {
+                        background: '#49545A',
+                        outline: 'none',
+                      },
+                    }}
+                    divider={true}
+                  >
+                    <div className={css['menu-item']}>
+                      <p>
+                        {menuBarItems[item].items[subMenuKey].hasOwnProperty(
+                          'isActive'
+                        ) && (
+                            <span
+                              className={
+                                menuBarItems[item].items[subMenuKey].isActive
+                                  ? css['preference-active']
+                                  : css['preference-notActive']
+                              }
+                            >
+                              ●{' '}
+                            </span>
+                          )}
+                        {subMenuKey
+                          .replace(/_/g, ' ')
+                          .charAt(0)
+                          .toUpperCase() + subMenuKey.slice(1)}
+                      </p>
+
+                      {hotKeyLabel &&
+                        parseStringToUnicode(
+                          hotKeyLabel.slice(0, hotKeyLabel.indexOf(','))
+                        )}
+                    </div>
+                  </MenuItem>
+                )
+              }
+            )}
+          </NestedMenu>
         ))}
       </Menu>
-    </>
+    </div>
   )
 }
 
