@@ -5,6 +5,7 @@ import { PubSubContext, PubSubData, PubSubEvents } from '@magickml/core'
 import PubSub from 'pubsub-js'
 import { createContext, useContext, useEffect } from 'react'
 import { useFeathers } from './FeathersProvider'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 // Create new context for PubSub
 const Context = createContext<PubSubContext>(undefined!)
@@ -23,6 +24,7 @@ export const events: PubSubEvents = {
   TOGGLE_SNAP: 'toggleSnap',
   RUN_AGENT: 'runAgent',
   SEND_COMMAND: 'sendCommand',
+  TOGGLE_FILE_DRAWER: 'toggleFileDrawer',
   $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
   $PLAYTEST_INPUT: tabId => `playtestInput:${tabId}`,
@@ -78,6 +80,14 @@ export const PubSubProvider = ({ children }) => {
       PubSub.unsubscribe(token)
     }
   }
+
+  useHotkeys('ctrl+b,cmd+b', () => {
+    publish(events.TOGGLE_FILE_DRAWER, {})
+  })
+
+  useHotkeys('ctrl+c', (event) => {
+    console.log('TRIGGER TAB SWITCH')
+  })
 
   useEffect(() => {
     if (!client) return
