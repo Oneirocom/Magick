@@ -4,7 +4,7 @@ import pino from 'pino'
 import { getLogger } from '@magickml/core'
 
 import { MessageQueue } from '../MessageQueues'
-import { AgentJob } from '@magickml/agents'
+import { AgentJob } from 'server/agents'
 
 export class BullQueue implements MessageQueue {
   logger: pino.Logger = getLogger()

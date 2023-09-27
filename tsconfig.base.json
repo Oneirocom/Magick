@@ -26,7 +26,6 @@
     ],
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
-      "@magickml/agents": ["packages/agents/src/index.ts"],
       "@magickml/chatbox": ["packages/magickml-chatbox/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/client-core": ["packages/core/client/src/index.ts"],
@@ -199,6 +198,7 @@
       "client/layouts": ["packages/client/layouts/src/index.ts"],
       "client/state": ["packages/client/state/src/index.ts"],
       "rete": ["packages/rete/src/index.ts"],
+      "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
       ],

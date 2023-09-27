@@ -4,7 +4,7 @@
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
 import { Application, app } from '@magickml/server-core'
-import type { Agent } from '@magickml/agents'
+import type { Agent } from 'server/agents'
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
 import type {

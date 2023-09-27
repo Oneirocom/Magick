@@ -31,6 +31,7 @@ import { createPosthogClient } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
+import type { AgentCommander } from 'server/agents'
 import { logError } from './hooks'
 import channels from './sockets/channels'
 import { authentication } from './auth/authentication'

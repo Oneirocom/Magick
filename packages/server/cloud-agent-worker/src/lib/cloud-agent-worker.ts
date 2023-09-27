@@ -7,7 +7,7 @@ import {
   app,
   BullQueue,
 } from '@magickml/server-core'
-import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
+import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
   AGENT_DELETE,
