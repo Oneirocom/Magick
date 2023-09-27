@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
-import { type ClientPluginManager, pluginManager } from '@magickml/core'
+import { type ClientPluginManager, pluginManager } from 'shared/core'
 import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE } from 'shared/config'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'

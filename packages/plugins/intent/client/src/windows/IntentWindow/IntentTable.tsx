@@ -1,7 +1,7 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { TableComponent } from 'client/core'
-import { CompletionProvider, pluginManager } from '@magickml/core'
+import { CompletionProvider, pluginManager } from 'shared/core'
 import { API_ROOT_URL } from 'shared/config'
 import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {

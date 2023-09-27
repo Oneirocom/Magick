@@ -1,5 +1,5 @@
 import { BskyAgent, AppBskyNotificationGetUnreadCount } from '@atproto/api'
-import { app } from '@magickml/server-core'
+import { app } from 'server/core'
 
 export class BlueskyConnector {
   declare bskyAgent: BskyAgent

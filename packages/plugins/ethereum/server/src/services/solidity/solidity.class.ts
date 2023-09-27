@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This file contains a SolidityService class that implements the ServiceInterface.
  * The class exposes a create() method that compiles Solidity code using the `solc` package.
@@ -6,22 +6,22 @@
  * @packageDocumentation
  */
 
-import type { Params, ServiceInterface } from '@feathersjs/feathers';
-import solc from 'solc';
-import { Application } from '@magickml/server-core';
-import type { Solidity, SolidityData, SolidityQuery } from './solidity.schema';
+import type { Params, ServiceInterface } from '@feathersjs/feathers'
+import solc from 'solc'
+import { Application } from 'server/core'
+import type { Solidity, SolidityData, SolidityQuery } from './solidity.schema'
 
 /**
  * An object representing options for the SolidityService class.
  */
 export interface SolidityServiceOptions {
-  app: Application;
+  app: Application
 }
 
 /**
  * Alias for the Params type with SolidityQuery type parameters.
  */
-type SolidityParams = Params<SolidityQuery>;
+type SolidityParams = Params<SolidityQuery>
 
 /**
  * The response object of SolidityService's get() method.
@@ -34,8 +34,10 @@ export type SolidityGetResponse = {
  * The SolidityService class that implements the ServiceInterface.
  * The class compiles Solidity code using the `solc` package.
  */
-export class SolidityService<ServiceParams extends SolidityParams = SolidityParams>
-implements ServiceInterface<Solidity, SolidityData, ServiceParams> {
+export class SolidityService<
+  ServiceParams extends SolidityParams = SolidityParams
+> implements ServiceInterface<Solidity, SolidityData, ServiceParams>
+{
   /**
    * Initializes a new instance of the SolidityService class.
    * @param options An object representing the options for SolidityService.
@@ -48,49 +50,52 @@ implements ServiceInterface<Solidity, SolidityData, ServiceParams> {
    * @param params An object representing additional parameters.
    * @returns An object representing the compiled Solidity code.
    */
-  async create(data: SolidityData, params?: ServiceParams): Promise<Solidity>;
-  
+  async create(data: SolidityData, params?: ServiceParams): Promise<Solidity>
+
   /**
    * Compiles an array of Solidity code objects using the `solc` package and returns the results.
    * @param data An array of objects representing Solidity code.
    * @param params An object representing additional parameters.
    * @returns An array of objects representing the compiled Solidity code.
    */
-  async create(data: SolidityData[], params?: ServiceParams): Promise<Solidity[]>;
-  
   async create(
-    data: SolidityData | SolidityData[],
+    data: SolidityData[],
+    params?: ServiceParams
+  ): Promise<Solidity[]>
+
+  async create(
+    data: SolidityData | SolidityData[]
   ): Promise<Solidity | Solidity[] | any> {
-    const { code } = data as any;
+    const { code } = data as any
 
     if (!code) {
       return {
-        error: 'The `code` field is required.'
-      };
+        error: 'The `code` field is required.',
+      }
     }
 
     const input = {
       language: 'Solidity',
       sources: {
         'code.sol': {
-          content: code
-        }
+          content: code,
+        },
       },
       settings: {
         outputSelection: {
           '*': {
-            '*': ['*']
-          }
-        }
-      }
-    };
-  
-    const output = JSON.parse(solc.compile(JSON.stringify(input)));
-    console.log(output);
+            '*': ['*'],
+          },
+        },
+      },
+    }
+
+    const output = JSON.parse(solc.compile(JSON.stringify(input)))
+    console.log(output)
 
     return {
-      result: output
-    };
+      result: output,
+    }
   }
 }
 
@@ -100,5 +105,5 @@ implements ServiceInterface<Solidity, SolidityData, ServiceParams> {
  * @returns An object representing the SolidityService options.
  */
 export const getOptions = (app: Application): SolidityServiceOptions => {
-  return { app };
+  return { app }
 }

@@ -3,7 +3,7 @@
  * The `ClientPlugin` interface represents a plugin used by the application.
  * @interface
  */
-import { ClientPlugin } from '@magickml/core'
+import { ClientPlugin } from 'shared/core'
 
 /**
  * This is the `Nodes` object from the search shared plugin.

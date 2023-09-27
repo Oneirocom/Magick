@@ -9,7 +9,7 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-openai-shared'
 import {
   makeChatCompletion,
@@ -17,7 +17,6 @@ import {
   makeTextEmbedding,
   makeTypeChatCompletion,
 } from './functions'
-
 
 /**
  * The secrets used by the OpenAI API

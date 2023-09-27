@@ -5,19 +5,9 @@
 
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import { pluginManager } from '@magickml/core'
-import {
-  apis,
-  initApp,
-  app,
-  Handler,
-  initFileServer,
-  Method,
-  Middleware,
-  Route,
-  spells
-} from '@magickml/server-core'
-import { initLogger, getLogger } from '@magickml/core'
+import { pluginManager } from 'shared/core'
+import { apis, initApp, app, Handler, initFileServer, Method, Middleware, Route, spells } from 'server/core'
+import { initLogger, getLogger } from 'shared/core'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'

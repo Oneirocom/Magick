@@ -4,7 +4,7 @@
  * @module optimizedClientCore
  */
 
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import defaultTemplates from './templates'
 
 export * from './components'

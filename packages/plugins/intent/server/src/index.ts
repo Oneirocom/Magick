@@ -1,4 +1,4 @@
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import { getNodes } from '@magickml/plugin-intent-shared'
 import { intent } from './services/intent/intent'
 

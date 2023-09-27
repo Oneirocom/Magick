@@ -28,7 +28,7 @@ import { useFeathers } from '../../providers/FeathersProvider'
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
 import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
 import NewMenuBar from '../../../../../editor/src/components/MenuBar/newMenuBar'
-import { AgentInterface, SpellInterface } from '@magickml/core'
+import { AgentInterface, SpellInterface } from 'shared/core'
 import { setCurrentAgentId } from 'client/state'
 import { useTabLayout } from '../../../../../editor/src/contexts/TabProvider'
 

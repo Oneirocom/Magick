@@ -6,8 +6,8 @@
  */
 
 import { AgentManager } from 'server/agents'
-import { app, initApp } from '@magickml/server-core'
-import { initLogger, getLogger } from '@magickml/core'
+import { app, initApp } from 'server/core'
+import { initLogger, getLogger } from 'shared/core'
 import 'regenerator-runtime/runtime'
 import pluginExports from './plugins'
 import { PRODUCTION, DONT_CRASH_ON_ERROR } from 'shared/config'

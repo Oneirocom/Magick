@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This is a Typescript module that exports a ClientPlugin instance named EthereumPlugin
  *
@@ -10,12 +10,12 @@
  * @packageDocumentation
  */
 
-import { ClientPlugin } from '@magickml/core';
-import { EthereumAgentWindow } from './components/agent.component';
-import Nodes from '@magickml/plugin-ethereum-shared';
-import MoneyIcon from '@mui/icons-material/AttachMoney';
-import { EthereumComponent } from './components/ethereum.route';
-import { ContractComponent } from './components/contract.route';
+import { ClientPlugin } from 'shared/core'
+import { EthereumAgentWindow } from './components/agent.component'
+import Nodes from '@magickml/plugin-ethereum-shared'
+import MoneyIcon from '@mui/icons-material/AttachMoney'
+import { EthereumComponent } from './components/ethereum.route'
+import { ContractComponent } from './components/contract.route'
 
 /**
  * An object of the StartEthereumArgs type.
@@ -59,8 +59,8 @@ const EthereumPlugin = new ClientPlugin({
       name: 'Ethereum Public Address',
       key: 'ethereum_public_address',
       global: false,
-    }
-  ]
+    },
+  ],
 })
 
-export default EthereumPlugin;
+export default EthereumPlugin

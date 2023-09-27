@@ -1,4 +1,4 @@
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
 
 let BlueskyConnector = null as any
 // dynamically import { BlueskyConnector } from './connectors/bluesky' if we are in node.js using esm syntax

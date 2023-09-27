@@ -1,6 +1,6 @@
-// DOCUMENTED 
-import { eventSocket, ClientPlugin, triggerSocket } from '@magickml/core';
-import { AgentLoopWindow } from './components/loop.component';
+// DOCUMENTED
+import { eventSocket, ClientPlugin, triggerSocket } from 'shared/core'
+import { AgentLoopWindow } from './components/loop.component'
 
 /**
  * The sockets that the `LoopPlugin` accepts as input.
@@ -16,7 +16,7 @@ const inputSockets = [
     name: 'trigger',
     type: triggerSocket,
   },
-];
+]
 
 /**
  * The `LoopPlugin` class provides loop functionality to the engine.
@@ -31,8 +31,8 @@ class LoopPlugin extends ClientPlugin {
       agentComponents: [AgentLoopWindow],
       inputTypes: [{ name: 'Loop In', sockets: inputSockets }],
       spellTemplates: [],
-    });
+    })
   }
 }
 
-export default new LoopPlugin();
+export default new LoopPlugin()

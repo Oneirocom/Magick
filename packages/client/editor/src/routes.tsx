@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import 'flexlayout-react/style/dark.css'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'

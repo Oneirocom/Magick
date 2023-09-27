@@ -3,7 +3,7 @@
  * A plugin for interacting with database's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl } from 'shared/core'
 import shared from '@magickml/plugin-database-shared'
 
 // Importing shared variables from plugin-database-shared module
@@ -18,7 +18,7 @@ const selectControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
-    tooltip: 'Enter table here'
+    tooltip: 'Enter table here',
   },
 ]
 
@@ -29,7 +29,7 @@ const insertControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
-    tooltip: 'Enter table here'
+    tooltip: 'Enter table here',
   },
 ]
 
@@ -40,7 +40,7 @@ const updateControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
-    tooltip: 'Enter table here'
+    tooltip: 'Enter table here',
   },
 ]
 
@@ -51,7 +51,7 @@ const upsertControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
-    tooltip: 'Enter table here'
+    tooltip: 'Enter table here',
   },
   {
     type: InputControl,
@@ -59,7 +59,7 @@ const upsertControls = [
     name: 'On Conflict',
     icon: 'database',
     defaultValue: '',
-    tooltip: 'Enter On conflict'
+    tooltip: 'Enter On conflict',
   },
 ]
 
@@ -70,7 +70,7 @@ const deleteControls = [
     name: 'Table',
     icon: 'database',
     defaultValue: '',
-    tooltip: 'Enter table here'
+    tooltip: 'Enter table here',
   },
 ]
 

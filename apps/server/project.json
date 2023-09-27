@@ -4,8 +4,8 @@
   "sourceRoot": "apps/server/src",
   "projectType": "application",
   "implicitDependencies": [
-    "@magickml/server-core",
-    "@magickml/core",
+    "server-core",
+    "shared-core",
     "@magickml/plugin-*"
   ],
   "targets": {

@@ -13,7 +13,7 @@ import PlaytestControl from './PlaytestControl'
 import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
 import CheckBoxControl from './CheckBox'
-import { ControlData } from '@magickml/core'
+import { ControlData } from 'shared/core'
 import { Tooltip } from '@mui/material'
 
 /**

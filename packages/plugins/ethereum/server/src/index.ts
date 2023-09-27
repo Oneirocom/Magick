@@ -1,13 +1,13 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * @fileoverview A module that exports an optimized version of the original Typescript module
  * that conforms to the Google code standards.
  * @module optimized-ts
  */
 
-import { ServerPlugin } from "@magickml/core";
-import Nodes from "@magickml/plugin-ethereum-shared";
-import { solidity } from "./services/solidity/solidity";
+import { ServerPlugin } from 'shared/core'
+import Nodes from '@magickml/plugin-ethereum-shared'
+import { solidity } from './services/solidity/solidity'
 
 /**
  * An object containing the arguments to start the Ethereum websocket.
@@ -30,9 +30,9 @@ import { solidity } from "./services/solidity/solidity";
  */
 function getAgentMethods() {
   // If we are in node, we need to import the Ethereum client.
-  if (typeof window !== "undefined") return;
+  if (typeof window !== 'undefined') return
 
-  let ethereum_client;
+  let ethereum_client
 
   /**
    * Starts the Ethereum websocket.
@@ -42,20 +42,18 @@ function getAgentMethods() {
    * @returns {void}
    */
   async function startEthereumWs({ agent, spellRunner }) {
-    console.log("Starting Ethereum WS...");
+    console.log('Starting Ethereum WS...')
     // Ignore import if using Vite.
     const module = await import(
       /* @vite-ignore */ `${
-        typeof window === "undefined"
-          ? "./connectors/ethereum"
-          : "./dummy"
+        typeof window === 'undefined' ? './connectors/ethereum' : './dummy'
       }`
-    );
-    ethereum_client = module.ethereum_client;
+    )
+    ethereum_client = module.ethereum_client
 
-    const ethereum = new ethereum_client();
-    agent.ethereum = ethereum;
-    await ethereum.createEthereumClient(agent, spellRunner);
+    const ethereum = new ethereum_client()
+    agent.ethereum = ethereum
+    await ethereum.createEthereumClient(agent, spellRunner)
   }
 
   /**
@@ -66,16 +64,16 @@ function getAgentMethods() {
    * @returns {void}
    */
   async function stopEthereumWs(agent) {
-    if (!agent.ethereum) return;
-    await agent.ethereum.destroy();
-    agent.ethereum = null;
-    console.log(`Stopped Ethereum WS client for agent ${agent.name}.`);
+    if (!agent.ethereum) return
+    await agent.ethereum.destroy()
+    agent.ethereum = null
+    console.log(`Stopped Ethereum WS client for agent ${agent.name}.`)
   }
 
   return {
     start: startEthereumWs,
     stop: stopEthereumWs,
-  };
+  }
 }
 
 /**
@@ -84,22 +82,22 @@ function getAgentMethods() {
  * @type {ServerPlugin}
  */
 const EthereumPlugin = new ServerPlugin({
-  name: "EthereumPlugin",
+  name: 'EthereumPlugin',
   nodes: Nodes,
   services: [solidity],
   agentMethods: getAgentMethods(),
   secrets: [
     {
-      name: "Ethereum Private Key",
-      key: "ethereum_private_key",
+      name: 'Ethereum Private Key',
+      key: 'ethereum_private_key',
       global: false,
     },
     {
-      name: "Ethereum Public Address",
-      key: "ethereum_public_address",
+      name: 'Ethereum Public Address',
+      key: 'ethereum_public_address',
       global: false,
     },
   ],
-});
+})
 
-export default EthereumPlugin;
+export default EthereumPlugin

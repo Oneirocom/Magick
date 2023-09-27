@@ -1,5 +1,5 @@
 import { Application } from '@feathersjs/koa/lib'
-import { SpellRunner } from '@magickml/core'
+import { SpellRunner } from 'shared/core'
 import TaskCreation from './spells/TaskCreation.spell'
 import TaskExecution from './spells/TaskExecution.spell'
 import TaskReprioritization from './spells/TaskReprioritization.spell'

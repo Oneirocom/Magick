@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import TabBar from '../../components/TabBar/TabBar'
 import Workspaces from '../../components/Workspaces'
 
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import {
   RootState,
   activeTabIdSelector,

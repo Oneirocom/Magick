@@ -8,7 +8,7 @@ import css from './homeScreen.module.css'
 import SearchIcon from '@mui/icons-material/Search'
 import { IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { SpellInterface } from '@magickml/core'
+import { SpellInterface } from 'shared/core'
 
 /**
  * @description AllProjects component props

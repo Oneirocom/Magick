@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
-import { SpellInterface } from '@magickml/core'
+import { SpellInterface } from 'shared/core'
 
 import { useConfig, useFeathers, usePubSub } from 'client/core'
 import { useEditor } from '../contexts/EditorProvider'

@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This file contains code related to SolidityService, a Feathers service for compiling Solidity contracts.
  *
@@ -6,7 +6,7 @@
  */
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import type { Application } from '@magickml/server-core'
+import type { Application } from 'server/core'
 import { SolidityService, getOptions } from './solidity.class'
 
 import {
@@ -28,21 +28,17 @@ export const solidityMethods = ['create'] as const
 
 /**
  * This function registers the Solidity service and its hooks via `app.configure`.
- * 
+ *
  * @param app - The Feathers application.
  */
 export const solidity = (app: Application): void => {
   // Register our service on the Feathers application
-  app.use(
-    solidityPath,
-    new SolidityService(getOptions(app)),
-    {
-      // A list of all methods this service exposes externally
-      methods: solidityMethods,
-      // You can add additional custom events to be sent to clients here
-      events: [],
-    }
-  )
+  app.use(solidityPath, new SolidityService(getOptions(app)), {
+    // A list of all methods this service exposes externally
+    methods: solidityMethods,
+    // You can add additional custom events to be sent to clients here
+    events: [],
+  })
 
   // Initialize hooks
   app.service(solidityPath).hooks({

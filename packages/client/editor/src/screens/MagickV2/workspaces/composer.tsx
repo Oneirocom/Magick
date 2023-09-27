@@ -6,7 +6,7 @@ import {
   IDockviewPanelProps,
 } from 'dockview'
 import { useEffect, useRef } from 'react'
-import { SpellInterface, spellApi } from '@magickml/core'
+import { SpellInterface, spellApi } from 'shared/core'
 
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { debounce } from '../../../utils/debounce'

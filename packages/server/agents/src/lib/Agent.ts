@@ -13,7 +13,8 @@ import {
   AGENT_RUN_JOB,
   MagickSpellOutput,
   type Event,
-} from '@magickml/core'
+} from 'shared/core'
+import { PING_AGENT_TIME_MSEC } from 'shared/config'
 
 import { AgentManager } from './AgentManager'
 import {
@@ -23,7 +24,7 @@ import {
   BullQueue,
   MessageQueue,
   Application,
-} from '@magickml/server-core'
+} from 'server/core'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
 

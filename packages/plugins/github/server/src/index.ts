@@ -2,8 +2,8 @@ import {
   eventSocket,
   ServerPlugin,
   triggerSocket,
-  getLogger
-} from '@magickml/core'
+  getLogger,
+} from 'shared/core'
 
 import { GithubConnector } from './connectors/github'
 import { getNodes } from '@magickml/plugin-github-shared'
@@ -36,8 +36,7 @@ function getAgentMethods() {
 
   async function stopGithub({ agent }) {
     const logger = getLogger()
-    if (!agent.github)
-      return logger.info("Github isn't running, can't stop it")
+    if (!agent.github) return logger.info("Github isn't running, can't stop it")
     try {
       await agent.github.destroy()
       agent.github = null

@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugin-discord/server/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core", "@magickml/server-core"],
+  "implicitDependencies": ["shared-core", "server-core"],
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",

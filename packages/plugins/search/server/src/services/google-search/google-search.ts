@@ -6,7 +6,7 @@
  * @returns void
  */
 
-import type { Application } from '@magickml/server-core'
+import type { Application } from 'server/core'
 import { GoogleSearchService } from './google-search.class'
 
 // Add this service to the service type index

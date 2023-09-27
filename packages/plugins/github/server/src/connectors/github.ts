@@ -1,10 +1,10 @@
-import { app } from '@magickml/server-core'
+import { app } from 'server/core'
 import { Octokit } from '@octokit/rest'
 import http from 'http'
 import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
 import ngrok from 'ngrok'
 import { v4 as uuidv4 } from 'uuid'
-import { getLogger } from '@magickml/core'
+import { getLogger } from 'shared/core'
 
 export class GithubConnector {
   spellRunner

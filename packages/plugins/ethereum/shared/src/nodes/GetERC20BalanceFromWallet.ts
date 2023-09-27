@@ -13,7 +13,7 @@ import {
   stringSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `Check the balance of an ethereum wallet for an ERC20 at a contract address`
 

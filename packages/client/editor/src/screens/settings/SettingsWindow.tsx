@@ -1,5 +1,5 @@
 import { Tooltip } from 'client/core'
-import { pluginManager } from '@magickml/core'
+import { pluginManager } from 'shared/core'
 import { Clear } from '@mui/icons-material/'
 import { IconButton, Input, Button } from '@mui/material'
 import { useState } from 'react'

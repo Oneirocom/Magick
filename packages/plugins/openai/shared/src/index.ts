@@ -6,7 +6,7 @@ import {
   objectSocket,
   PluginSecret,
   stringSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 export const GPT4_MODELS = ['gpt-4', 'gpt-4-0613']
 
