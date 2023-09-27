@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   Event,
   MagickComponent,

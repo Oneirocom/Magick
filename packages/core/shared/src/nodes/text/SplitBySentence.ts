@@ -3,7 +3,7 @@
  * Split a long body of text into multiple strings, each of which is no longer than the specified length.
  * @category Text
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { split } from 'sentence-splitter'
 
 import { MagickComponent } from '../../engine'

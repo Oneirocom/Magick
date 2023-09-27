@@ -16,7 +16,7 @@ import {
   NodeData,
   OutputsData,
   WorkerOutputs,
-} from '@magickml/rete'
+} from 'shared/rete'
 import { MagickComponent } from './engine'
 import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'

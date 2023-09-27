@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { MagickComponent } from '../../engine'
 import { stringSocket, triggerSocket } from '../../sockets'

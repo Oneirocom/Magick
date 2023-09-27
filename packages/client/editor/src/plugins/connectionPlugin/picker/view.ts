@@ -1,4 +1,4 @@
-import { Output, Input, Emitter, EditorView } from '@magickml/rete'
+import { Output, Input, Emitter, EditorView } from 'shared/rete'
 import { renderConnection, renderPathData, updateConnection } from '../utils'
 import { EventsTypes } from '../events'
 

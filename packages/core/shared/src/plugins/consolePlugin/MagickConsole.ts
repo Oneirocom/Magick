@@ -1,4 +1,4 @@
-import { NodeView } from '@magickml/rete'
+import { NodeView } from 'shared/rete'
 import { MagickComponent } from '../../engine'
 import {
   IRunContextEditor,

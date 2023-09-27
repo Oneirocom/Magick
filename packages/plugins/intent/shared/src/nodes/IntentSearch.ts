@@ -3,7 +3,7 @@
  * A component to process Intent Search.
  * @category Intent
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { InputControl } from '@magickml/core'
 import {
   MagickComponent,

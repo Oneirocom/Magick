@@ -5,7 +5,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'

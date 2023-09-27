@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Connection, Input, Node, Output } from '@magickml/rete'
+import { Connection, Input, Node, Output } from 'shared/rete'
 
 /**
  * Namespace for interfaces related to Rete Editor events.

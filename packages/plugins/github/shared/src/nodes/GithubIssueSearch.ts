@@ -3,7 +3,7 @@
  * A component to process Github Issue.
  * @category Github
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   MagickComponent,
   stringSocket,
