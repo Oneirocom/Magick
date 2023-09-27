@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { SpellInterface } from '@magickml/core'
 
-import { useConfig, useFeathers, usePubSub } from '@magickml/client-core'
+import { useConfig, useFeathers, usePubSub } from 'client/core'
 import { useEditor } from '../contexts/EditorProvider'
 import { Layout } from '../contexts/LayoutProvider'
 import { debounce } from '../utils/debounce'

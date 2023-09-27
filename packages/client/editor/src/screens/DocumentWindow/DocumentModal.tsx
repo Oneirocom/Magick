@@ -1,4 +1,4 @@
-import { Modal } from '@magickml/client-core'
+import { Modal } from 'client/core'
 import {
   Backdrop,
   Button,

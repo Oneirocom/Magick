@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button, Select, Window, useConfig } from '@magickml/client-core'
+import { Button, Select, Window, useConfig } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -8,7 +8,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
-import { usePubSub } from '@magickml/client-core'
+import { usePubSub } from 'client/core'
 import css from '../screens/Magick/magick.module.css'
 import {
   RootState,

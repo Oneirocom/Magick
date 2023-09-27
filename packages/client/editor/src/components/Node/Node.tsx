@@ -4,7 +4,7 @@ import { Socket } from '../../plugins/reactRenderPlugin/Socket'
 import { Control } from '../../plugins/reactRenderPlugin/Control'
 import { Upload } from '../../plugins/reactRenderPlugin/Upload'
 import { Tooltip } from '@mui/material'
-import { Icon, componentCategories } from '@magickml/client-core'
+import { Icon, componentCategories } from 'client/core'
 import css from './Node.module.css'
 import { styled } from '@mui/material/styles'
 

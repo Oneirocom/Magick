@@ -9,8 +9,8 @@
  */
 import React from 'react'
 import { useModal } from '../../contexts/ModalProvider'
-import { Button } from '@magickml/client-core'
-import { Icon } from '@magickml/client-core'
+import { Button } from 'client/core'
+import { Icon } from 'client/core'
 import css from './modal.module.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 

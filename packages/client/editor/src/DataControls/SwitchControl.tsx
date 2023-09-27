@@ -7,7 +7,7 @@
  * @param initialValue a boolean that represents the initial value of the switch.
  */
 import { useState } from 'react'
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 
 const SwitchControl = ({ control, updateData, initialValue }) => {
   // Destructure the dataKey and data properties from the control object.

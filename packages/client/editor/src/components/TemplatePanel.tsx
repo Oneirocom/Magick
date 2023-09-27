@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Panel } from '@magickml/client-core'
+import { Panel } from 'client/core'
 import css from '../screens/HomeScreen/homeScreen.module.css'
 
 /**

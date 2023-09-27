@@ -3,7 +3,7 @@
  * Imports
  */
 import React from 'react'
-import { Button } from '@magickml/client-core'
+import { Button } from 'client/core'
 import { useLayout } from '../contexts/LayoutProvider'
 
 /**

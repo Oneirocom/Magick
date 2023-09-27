@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import VariableModal from './VariableModal'
 import { Tooltip } from "@mui/material"
 
