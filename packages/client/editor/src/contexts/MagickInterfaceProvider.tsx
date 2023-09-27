@@ -13,7 +13,7 @@ import {
   runSpellType,
   SpellInterface,
   SupportedLanguages,
-} from '@magickml/core'
+} from 'shared/core'
 import { spellApi } from 'client/state'
 import { createContext, useContext } from 'react'
 

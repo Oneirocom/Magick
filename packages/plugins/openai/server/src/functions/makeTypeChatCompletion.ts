@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
+import { CompletionHandlerInputData, saveRequest } from 'shared/core'
 import {
   createLanguageModel,
   createJsonTranslator,

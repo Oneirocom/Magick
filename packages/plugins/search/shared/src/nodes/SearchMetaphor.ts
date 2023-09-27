@@ -9,7 +9,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   arraySocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 import { makeMetaphorSearch } from '../functions/SearchMetaphor'
 

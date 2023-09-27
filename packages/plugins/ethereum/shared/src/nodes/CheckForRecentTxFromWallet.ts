@@ -13,7 +13,7 @@ import {
   stringSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 /**
  * Check the recent transactions from another wallet

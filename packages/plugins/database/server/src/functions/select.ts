@@ -1,5 +1,5 @@
 // UNDOCUMENTED
-import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
+import { CompletionHandlerInputData, saveRequest } from 'shared/core'
 import { knex } from 'knex'
 
 /**

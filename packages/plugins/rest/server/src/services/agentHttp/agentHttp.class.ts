@@ -3,7 +3,7 @@
  * For more information about this file see
  * https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
  */
-import { Application, app } from '@magickml/server-core'
+import { Application, app } from 'server/core'
 import type { Agent } from 'server/agents'
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
@@ -15,7 +15,7 @@ import type {
 } from './agentHttp.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
-import { getLogger } from '@magickml/core'
+import { getLogger } from 'shared/core'
 import { CLOUD_AGENT_KEY, STANDALONE } from 'shared/config'
 
 export type { AgentHttp, AgentHttpData, AgentHttpPatch, AgentHttpQuery }

@@ -4,8 +4,8 @@ import {
   getLogger,
   ServerPlugin,
   triggerSocket,
-} from '@magickml/core'
-import { app } from '@magickml/server-core'
+} from 'shared/core'
+import { app } from 'server/core'
 import { LoopHandler } from './loopHandler'
 import { Agent } from 'server/agents'
 import pino from 'pino'

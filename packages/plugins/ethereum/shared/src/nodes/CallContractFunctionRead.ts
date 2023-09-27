@@ -9,7 +9,7 @@ import {
   MagickWorkerOutputs,
   stringSocket,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `Call an arbitrary function from a contract`
 

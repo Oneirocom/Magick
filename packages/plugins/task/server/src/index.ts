@@ -1,6 +1,6 @@
 // DOCUMENTED
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
-import { app } from '@magickml/server-core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
+import { app } from 'server/core'
 import { getNodes } from '@magickml/plugin-task-shared'
 
 type StartTaskArgs = {

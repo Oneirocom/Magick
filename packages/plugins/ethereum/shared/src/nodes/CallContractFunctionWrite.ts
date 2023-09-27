@@ -12,7 +12,7 @@ import {
   numberSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 /** Info for the component */
 const info = `Call a write function from a contract`

@@ -1,4 +1,4 @@
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
 
 let TwitterConnector = null as any
 // dynamically import { TwitterConnector } from './connectors/twitter' if we are in node.js using esm syntax

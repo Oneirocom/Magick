@@ -4,7 +4,7 @@
  * @category Intent
  */
 import Rete from 'shared/rete'
-import { InputControl } from '@magickml/core'
+import { InputControl } from 'shared/core'
 import {
   MagickComponent,
   numberSocket,
@@ -16,7 +16,7 @@ import {
   ModuleContext,
   WorkerData,
   MagickWorkerOutputs,
-} from '@magickml/core'
+} from 'shared/core'
 
 /**
  * The return type of the worker function.

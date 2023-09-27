@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import BoltIcon from '@mui/icons-material/Bolt'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'

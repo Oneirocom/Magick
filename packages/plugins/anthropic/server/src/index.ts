@@ -9,7 +9,7 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-anthropic-shared'
 import { makeChatCompletion } from './functions'
 

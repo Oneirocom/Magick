@@ -3,7 +3,7 @@
  * Imports
  */
 
-import { MagickComponent } from '@magickml/core'
+import { MagickComponent } from 'shared/core'
 import { IntentSearch } from './nodes/IntentSearch'
 
 /**

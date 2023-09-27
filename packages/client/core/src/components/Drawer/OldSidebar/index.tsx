@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 import AppsIcon from '@mui/icons-material/Apps'
 import ArticleIcon from '@mui/icons-material/Article'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'

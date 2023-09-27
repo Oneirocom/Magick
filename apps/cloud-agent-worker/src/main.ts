@@ -1,6 +1,6 @@
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
-import { initLogger, getLogger } from '@magickml/core'
-import { initApp } from '@magickml/server-core'
+import { initLogger, getLogger } from 'shared/core'
+import { initApp } from 'server/core'
 import pluginExports from './plugins'
 import { initAgentCommander } from 'server/agents'
 import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'

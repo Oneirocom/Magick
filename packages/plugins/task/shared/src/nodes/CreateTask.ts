@@ -14,7 +14,7 @@ import {
   ModuleContext,
   WorkerData,
   Event,
-} from '@magickml/core'
+} from 'shared/core'
 import Rete from 'shared/rete'
 
 /**

@@ -8,7 +8,7 @@ import App from './App'
  * @module AvatarPlugin
  */
 
-import { ClientPlugin } from '@magickml/core'
+import { ClientPlugin } from 'shared/core'
 
 /**
  * Represents a new avatar system.
@@ -23,7 +23,7 @@ const AvatarPlugin = new ClientPlugin({
       path: '/avatar',
       icon: AvatarIcon,
       text: 'Avatar',
-      tooltip: 'Chat with your agents embodied with a 3D avatar'
+      tooltip: 'Chat with your agents embodied with a 3D avatar',
     },
   ],
   clientRoutes: [

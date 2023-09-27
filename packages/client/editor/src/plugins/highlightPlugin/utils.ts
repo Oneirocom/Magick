@@ -1,4 +1,4 @@
-import { MagickEditor } from '@magickml/core'
+import { MagickEditor } from 'shared/core'
 import { Connection } from 'shared/rete'
 
 export const removeClassFromNodeConnections = (

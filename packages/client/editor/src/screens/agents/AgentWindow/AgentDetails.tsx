@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { IconBtn, CustomizedSwitch, useFeathers } from 'client/core'
-import { ClientPluginManager, pluginManager } from '@magickml/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
 
 import { Close, Done, Edit } from '@mui/icons-material'
 import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'

@@ -1,5 +1,5 @@
 // UNDOCUMENTED
-import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
+import { CompletionHandlerInputData, saveRequest } from 'shared/core'
 import Anthropic from '@anthropic-ai/sdk'
 import { countTokens } from '@anthropic-ai/tokenizer'
 

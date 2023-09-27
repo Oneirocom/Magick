@@ -6,7 +6,7 @@
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
-import { Application, app } from '@magickml/server-core'
+import { Application, app } from 'server/core'
 import type {
   Intent,
   IntentData,
@@ -18,7 +18,7 @@ import {
   MagickWorkerOutputs,
   WorkerData,
   pluginManager,
-} from '@magickml/core'
+} from 'shared/core'
 import { v4 as uuidv4 } from 'uuid'
 
 /** Type for Intent Params */

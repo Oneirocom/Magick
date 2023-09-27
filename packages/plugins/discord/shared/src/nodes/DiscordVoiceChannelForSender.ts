@@ -16,7 +16,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   stringSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 /**
  * The return type of the worker function.

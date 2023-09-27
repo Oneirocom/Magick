@@ -5,9 +5,9 @@ import {
   AGENT_DELETE_JOB,
   AGENT_UPDATE_JOB,
   getLogger,
-} from '@magickml/core'
+} from 'shared/core'
 import type { Reporter } from './Reporters'
-import { type PubSub, type MessageQueue, app } from '@magickml/server-core'
+import { type PubSub, type MessageQueue, app } from 'server/core'
 import type { AgentListRecord } from 'server/cloud-agent-worker'
 import { Agent } from 'packages/core/server/src/services/agents/agents.schema'
 

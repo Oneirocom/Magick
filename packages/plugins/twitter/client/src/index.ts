@@ -1,4 +1,4 @@
-import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
+import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
 import { TwitterAgentWindow } from './components/agent.component'
 
 const inputSockets = [

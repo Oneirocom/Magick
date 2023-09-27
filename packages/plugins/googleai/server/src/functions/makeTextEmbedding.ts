@@ -3,9 +3,9 @@ import {
   CompletionHandlerInputData,
   EmbeddingModel,
   saveRequest,
-} from '@magickml/core'
+} from 'shared/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
-import { trackGoogleAIUsage } from '@magickml/server-core'
+import { trackGoogleAIUsage } from 'server/core'
 import { wordCount } from './shared'
 import { DEFAULT_GOOGLEAI_API_KEY } from '@magickml/config'
 

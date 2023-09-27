@@ -12,7 +12,7 @@ import {
   STANDALONE,
 } from 'shared/config'
 import { PostHogProvider } from 'posthog-js/react'
-import { initLogger, getLogger } from '@magickml/core'
+import { initLogger, getLogger } from 'shared/core'
 
 import plugins from './plugins'
 
