@@ -16,13 +16,12 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { IconBtn } from 'client/core'
 import { Close, Done } from '@mui/icons-material'
 import styles from './menu.module.css'
-import { useConfig } from 'client/core'
 import { enqueueSnackbar } from 'notistack'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'client/core'
 import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from 'shared/config'
 
-import { useFeathers } from '../../providers/FeathersProvider'
+import { useFeathers, useConfig } from '@magickml/providers'
 
 // todo fix this import
 import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
@@ -540,14 +539,12 @@ function AgentMenu({ data, resetData }) {
               background: 'none',
               outline: 'none',
             },
-            color: `${
-              selectedAgentData &&
+            color: `${selectedAgentData &&
               (selectedAgentData.default ? 'grey' : 'white')
-            }`,
-            cursor: `${
-              selectedAgentData &&
+              }`,
+            cursor: `${selectedAgentData &&
               (selectedAgentData.default ? 'not-allowed' : 'pointer')
-            }`,
+              }`,
           }}
           onClick={e => {
             if (!selectedAgentData.default) {
@@ -601,9 +598,8 @@ function AgentMenu({ data, resetData }) {
           open={openConfirm}
           onClose={handleClose}
           handleAction={onSubmit}
-          title={`Delete ${
-            selectedAgentData ? selectedAgentData.name : ''
-          }  agent`}
+          title={`Delete ${selectedAgentData ? selectedAgentData.name : ''
+            }  agent`}
           submitText="Confirm"
           children="Do you want to delete this agent?"
         />

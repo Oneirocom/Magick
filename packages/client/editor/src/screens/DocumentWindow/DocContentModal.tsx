@@ -1,4 +1,5 @@
-import { Modal, useTreeData } from 'client/core'
+import { Modal } from 'client/core'
+import { useTreeData } from '@magickml/providers'
 import { Typography } from '@mui/material'
 import styles from './index.module.scss'
 

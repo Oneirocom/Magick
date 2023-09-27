@@ -22,7 +22,8 @@ import {
 import { useSelector } from 'react-redux'
 import styles from './index.module.scss'
 import { Delete, Refresh, MoreHoriz } from '@mui/icons-material'
-import { TableComponent, useFeathers } from 'client/core'
+import { TableComponent } from 'client/core'
+import { useFeathers } from '@magickml/providers'
 import { DocumentData, columns } from './requests'
 import { useSnackbar } from 'notistack'
 
@@ -356,9 +357,8 @@ function RequestTable({ requests, updateCallback }) {
         </div>
         <div className={styles.flex}>
           <Button
-            className={`${styles.btn} ${
-              selectedRows.length > 0 ? styles.selectedBtn : ''
-            }`}
+            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
+              }`}
             onClick={handleDeleteMany}
             variant="outlined"
             startIcon={<Delete />}

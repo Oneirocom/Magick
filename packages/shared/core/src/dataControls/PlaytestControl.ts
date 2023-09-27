@@ -45,7 +45,7 @@ export class PlaytestControl extends DataControl {
    * Callback that is executed when playtest data changes.
    * @param {any} playtestToggle - The current playtest toggle status.
    */
-  onData(playtestToggle) {
+  override onData(playtestToggle) {
     return // No-op, as this method is incomplete
   }
 }

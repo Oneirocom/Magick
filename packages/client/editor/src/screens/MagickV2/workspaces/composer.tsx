@@ -1,4 +1,4 @@
-import { useConfig, useFeathers, usePubSub } from 'client/core'
+import { useConfig, useFeathers, usePubSub } from '@magickml/providers'
 import {
   DockviewApi,
   DockviewReact,
