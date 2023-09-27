@@ -7,7 +7,7 @@ import { app } from '@magickml/server-core'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
-import { AgentCommandData, RunRootSpellArgs } from '@magickml/agents'
+import { AgentCommandData, RunRootSpellArgs } from 'server/agents'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
