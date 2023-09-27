@@ -9,7 +9,7 @@
  * @property {(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void} onAdd - function to be called when the add button is clicked
  */
 
-import { Button } from '@magickml/client-core'
+import { Button } from 'client/core'
 
 /**
  * Form component that renders a form with an input field and a button to add input value

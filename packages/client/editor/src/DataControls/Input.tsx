@@ -8,7 +8,7 @@
  */
 
 import React, { useState } from 'react'
-import { Input } from '@magickml/client-core'
+import { Input } from 'client/core'
 
 const InputControl: React.FC<{
   control: { name: string; dataKey: string }

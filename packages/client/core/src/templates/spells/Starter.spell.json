@@ -1,0 +1,244 @@
+{
+  "id": "30e438fe-8ce3-402f-bcf2-1c433b43a4f4",
+  "name": "Starter",
+  "projectId": "clmp2r33q0003vyxy4dh2uz8e",
+  "hash": "b9d6637c48f4a1edba20427a561a77d5",
+  "createdAt": "1695319267522",
+  "updatedAt": "1695319318544",
+  "graph": {
+    "id": "demo@0.1.0",
+    "nodes": {
+      "518": {
+        "id": 518,
+        "data": {
+          "log": false,
+          "isInput": true,
+          "socketKey": "fc6abca2-1806-42c6-a0a9-690df28e3c57",
+          "name": "Input - Default",
+          "inputName": "Default"
+        },
+        "inputs": {},
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 519,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "output": {
+            "connections": [
+              {
+                "node": 519,
+                "input": "event",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [-499.888916015625, -26.888902452256943],
+        "name": "Input"
+      },
+      "519": {
+        "id": 519,
+        "data": {
+          "log": false,
+          "socketKey": "d13533fc-1926-45f2-a87d-f355662e9f6d"
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 518,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "event": {
+            "connections": [
+              {
+                "node": 518,
+                "output": "output",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 520,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "agentId": {
+            "connections": []
+          },
+          "content": {
+            "connections": [
+              {
+                "node": 520,
+                "input": "source",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "client": {
+            "connections": []
+          },
+          "channel": {
+            "connections": []
+          },
+          "channelType": {
+            "connections": []
+          },
+          "connector": {
+            "connections": []
+          },
+          "entities": {
+            "connections": []
+          },
+          "projectId": {
+            "connections": []
+          },
+          "observer": {
+            "connections": []
+          },
+          "sender": {
+            "connections": []
+          },
+          "embedding": {
+            "connections": []
+          },
+          "rawData": {
+            "connections": []
+          }
+        },
+        "position": [-188.77780490451389, -25.777791341145832],
+        "name": "Event Destructure"
+      },
+      "520": {
+        "id": 520,
+        "data": {
+          "log": false
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 519,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "source": {
+            "connections": [
+              {
+                "node": 519,
+                "output": "content",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 521,
+                "input": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "output": {
+            "connections": [
+              {
+                "node": 521,
+                "input": "input",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          }
+        },
+        "position": [104.55552842881946, -15.777791341145829],
+        "name": "Echo"
+      },
+      "521": {
+        "id": 521,
+        "data": {
+          "log": false,
+          "sendToPlaytest": true,
+          "isOutput": true,
+          "name": "Output - Default",
+          "socketKey": "37505ffa-b5d0-4720-9525-6d832bcd160d"
+        },
+        "inputs": {
+          "trigger": {
+            "connections": [
+              {
+                "node": 520,
+                "output": "trigger",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "input": {
+            "connections": [
+              {
+                "node": 520,
+                "output": "output",
+                "data": {
+                  "hello": "hello"
+                }
+              }
+            ]
+          },
+          "event": {
+            "connections": []
+          }
+        },
+        "outputs": {
+          "trigger": {
+            "connections": []
+          },
+          "output": {
+            "connections": []
+          }
+        },
+        "position": [372.33330620659723, -14.666680230034714],
+        "name": "Output"
+      }
+    },
+    "comments": []
+  }
+}

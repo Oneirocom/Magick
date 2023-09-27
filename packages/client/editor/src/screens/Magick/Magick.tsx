@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { LoadingScreen, TabLayout, usePubSub } from '@magickml/client-core'
+import { LoadingScreen, TabLayout, usePubSub } from 'client/core'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'

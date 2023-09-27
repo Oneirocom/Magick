@@ -2,7 +2,7 @@
 import { API_ROOT_URL } from 'shared/config'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { LoadingScreen, useConfig } from '@magickml/client-core'
+import { LoadingScreen, useConfig } from 'client/core'
 import IntentTable from './IntentTable'
 
 /**

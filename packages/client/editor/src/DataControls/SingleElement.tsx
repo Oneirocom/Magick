@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { GridViewRounded } from '@mui/icons-material'
-import { Icon, IconBtn } from '@magickml/client-core'
+import { Icon, IconBtn } from 'client/core'
 import styles from './datacontrols.module.css'
 
 /**

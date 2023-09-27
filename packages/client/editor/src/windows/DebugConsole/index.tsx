@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Window, usePubSub } from '@magickml/client-core'
+import { Window, usePubSub } from 'client/core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'

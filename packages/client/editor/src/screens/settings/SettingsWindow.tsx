@@ -1,4 +1,4 @@
-import { Tooltip } from '@magickml/client-core'
+import { Tooltip } from 'client/core'
 import { pluginManager } from '@magickml/core'
 import { Clear } from '@mui/icons-material/'
 import { IconButton, Input, Button } from '@mui/material'

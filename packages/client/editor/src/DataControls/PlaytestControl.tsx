@@ -1,7 +1,7 @@
 // DOCUMENTED
 
 import { useState } from 'react'
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 
 /**
  * A control component for a switch UI element that updates data in the parent component.

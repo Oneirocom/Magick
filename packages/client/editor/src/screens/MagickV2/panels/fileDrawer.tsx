@@ -1,4 +1,4 @@
-import { NewSidebar, TreeDataProvider, usePubSub } from '@magickml/client-core'
+import { NewSidebar, TreeDataProvider, usePubSub } from 'client/core'
 import { IGridviewPanelProps } from 'dockview'
 import { useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'

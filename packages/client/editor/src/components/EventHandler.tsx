@@ -9,7 +9,7 @@ import { useLayout } from '../contexts/LayoutProvider'
 import { useEditor } from '../contexts/EditorProvider'
 import { diff } from '../utils/json0'
 
-import { useConfig, useFeathers } from '@magickml/client-core'
+import { useConfig, useFeathers } from 'client/core'
 import {
   useLazyGetSpellByIdQuery,
   useSaveSpellMutation,

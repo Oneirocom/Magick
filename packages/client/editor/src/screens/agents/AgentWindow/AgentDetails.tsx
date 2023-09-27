@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { IconBtn, CustomizedSwitch, useFeathers } from '@magickml/client-core'
+import { IconBtn, CustomizedSwitch, useFeathers } from 'client/core'
 import { ClientPluginManager, pluginManager } from '@magickml/core'
 
 import { Close, Done, Edit } from '@mui/icons-material'
@@ -7,7 +7,7 @@ import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import { tooltip_text } from './tooltip_texts'

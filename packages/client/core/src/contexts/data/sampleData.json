@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "parent": 0,
+    "droppable": true,
+    "text": "Documents"
+  },
+  {
+    "id": 3,
+    "parent": 1,
+    "droppable": true,
+    "text": "Uploaded Knowledge"
+  },
+
+  {
+    "id": 6,
+    "parent": 0,
+    "droppable": true,
+    "text": "Spells & Prompts"
+  }
+]

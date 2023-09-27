@@ -6,7 +6,7 @@
  * @param initialValue - The initial selected value
  */
 
-import { Select } from '@magickml/client-core'
+import { Select } from 'client/core'
 import useSWR from 'swr'
 import { OpenAI } from '../types/openai'
 import { useEffect, useState } from 'react'

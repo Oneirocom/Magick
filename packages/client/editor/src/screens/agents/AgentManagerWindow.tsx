@@ -1,11 +1,11 @@
 // DOCUMENTED
-import { LoadingScreen } from '@magickml/client-core'
+import { LoadingScreen } from 'client/core'
 import { type ClientPluginManager, pluginManager } from '@magickml/core'
 import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE } from 'shared/config'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from 'client/core'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
 import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
