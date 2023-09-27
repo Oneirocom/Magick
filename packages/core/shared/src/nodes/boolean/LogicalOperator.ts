@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { NumberControl } from '../../dataControls/NumberControl'
 import { MagickComponent } from '../../engine'

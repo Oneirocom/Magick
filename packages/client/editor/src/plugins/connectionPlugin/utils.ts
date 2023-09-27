@@ -1,4 +1,4 @@
-import { Emitter, Connection } from '@magickml/rete'
+import { Emitter, Connection } from 'shared/rete'
 import { EventsTypes } from './events'
 
 function toTrainCase(str: string) {

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { MagickComponent } from '../../engine'
 import { embeddingSocket, triggerSocket } from '../../sockets'

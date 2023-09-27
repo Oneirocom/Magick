@@ -1,4 +1,4 @@
-import { Input, Output, Connection } from '@magickml/rete'
+import { Input, Output, Connection } from 'shared/rete'
 import { IRunContextEditor, MagickNode } from '../../types'
 
 function install(editor: IRunContextEditor) {

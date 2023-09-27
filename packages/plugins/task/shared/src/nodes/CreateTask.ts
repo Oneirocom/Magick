@@ -15,7 +15,7 @@ import {
   WorkerData,
   Event,
 } from '@magickml/core'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 /**
  * Information about the CreateTask class

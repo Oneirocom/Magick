@@ -1,5 +1,5 @@
 // DOCUMENTED
-import * as Rete from '@magickml/rete' // Use `* as` for consistent import style
+import * as Rete from 'shared/rete' // Use `* as` for consistent import style
 import * as _ from 'lodash' // Use `* as` for consistent import style
 import { TextInputControl } from '../../dataControls/TextInputControl'
 import { MagickComponent } from '../../engine'

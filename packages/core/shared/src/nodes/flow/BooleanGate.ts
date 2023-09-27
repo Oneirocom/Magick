@@ -2,7 +2,7 @@
 /**
  * This component represents a boolean gate. It takes a boolean input, and depending on whether the value is true or false will only trigger one output or the other.
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { MagickComponent } from '../../engine'
 import { booleanSocket, triggerSocket } from '../../sockets'
 import { MagickNode, MagickWorkerInputs, WorkerData } from '../../types'

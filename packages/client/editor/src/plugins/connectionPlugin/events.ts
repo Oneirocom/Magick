@@ -1,4 +1,4 @@
-import { Connection, Input, Output } from '@magickml/rete'
+import { Connection, Input, Output } from 'shared/rete'
 
 export interface EventsTypes {
   connectionpath: {

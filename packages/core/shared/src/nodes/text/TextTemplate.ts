@@ -1,6 +1,6 @@
 // DOCUMENTED
 import Handlebars from 'handlebars'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
 import { MagickComponent } from '../../engine'

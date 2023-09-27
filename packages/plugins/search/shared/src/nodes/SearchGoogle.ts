@@ -4,7 +4,7 @@
  * @module SearchGoogle
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   MagickNode,
   MagickWorkerInputs,
