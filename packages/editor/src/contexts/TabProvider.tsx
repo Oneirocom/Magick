@@ -80,7 +80,8 @@ export const TabProvider = ({ children }) => {
       id: tab.name,
       component: tab.type,
       params: {
-        tab
+        tab,
+        theme
       }
     });
   }

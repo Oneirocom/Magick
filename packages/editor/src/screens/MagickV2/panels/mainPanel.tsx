@@ -1,12 +1,12 @@
 import { DockviewApi, DockviewReact, DockviewReadyEvent, IDockviewPanelProps } from "dockview";
 import { useTabLayout } from "../../../contexts/TabProvider";
-import Composer from "../../Composer";
 import Events from "../../EventWindow"
 import Requests from "../../RequestWindow"
 import Settings from "../../settings/SettingsWindow"
 import Documents from "../../DocumentWindow"
 import Agents from "../../agents/AgentManagerWindow";
 import { ClientPluginManager, pluginManager } from "@magickml/core";
+import Composer from "../workspaces/composer";
 
 // we will move this out into the layouts package
 function loadDefaultLayout(api: DockviewApi) {
