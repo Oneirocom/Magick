@@ -1,10 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from 'react'
 import {
   DockviewApi,
-  DockviewReact, DockviewReadyEvent, IDockviewPanelProps, SerializedDockview,
-} from 'dockview';
-import { usePubSub } from "@magickml/client-core";
-import { getWorkspaceLayout } from "@magickml/layouts";
+  DockviewReact,
+  DockviewReadyEvent,
+  IDockviewPanelProps,
+  SerializedDockview,
+} from 'dockview'
+import { usePubSub } from '@magickml/client-core'
+import { getWorkspaceLayout } from 'client/layouts'
 
 type DockviewTheme = 'dockview-theme-abyss'
 
@@ -18,11 +21,11 @@ export type Tab = {
 }
 
 type DocviewContext = {
-  theme: DockviewTheme,
-  setTheme: (theme: DockviewTheme) => void,
-  api: DockviewApi,
-  setApi: (api: DockviewApi) => void,
-  getLayout: () => SerializedDockview | null,
+  theme: DockviewTheme
+  setTheme: (theme: DockviewTheme) => void
+  api: DockviewApi
+  setApi: (api: DockviewApi) => void
+  getLayout: () => SerializedDockview | null
   setLayout: (layout: SerializedDockview) => void
 
   // IMPLEMENT THESE
@@ -41,7 +44,7 @@ export const useTabLayout = () => useContext(Context)
 
 export const TabProvider = ({ children }) => {
   const [theme, setTheme] = useState<DockviewTheme>('dockview-theme-abyss')
-  const [api, setApi] = useState<DockviewApi>();
+  const [api, setApi] = useState<DockviewApi>()
   const pubSub = usePubSub()
 
   const getLayout = () => {
@@ -50,7 +53,9 @@ export const TabProvider = ({ children }) => {
     if (!layout) {
       return null
     }
-    return JSON.parse(localStorage.getItem(TAB_LAYOUT_KEY)) as SerializedDockview
+    return JSON.parse(
+      localStorage.getItem(TAB_LAYOUT_KEY)
+    ) as SerializedDockview
   }
 
   const setLayout = (layout: SerializedDockview) => {
@@ -59,17 +64,16 @@ export const TabProvider = ({ children }) => {
 
   useEffect(() => {
     if (!api) {
-      return;
+      return
     }
 
     // set up API event handlers
     api.onDidLayoutChange(() => {
-      const layout = api.toJSON();
+      const layout = api.toJSON()
 
       setLayout(layout)
-    });
-
-  }, [api]);
+    })
+  }, [api])
 
   const openTab = (_tab: Tab) => {
     const tab = {
@@ -81,9 +85,9 @@ export const TabProvider = ({ children }) => {
       component: tab.type,
       params: {
         tab,
-        theme
-      }
-    });
+        theme,
+      },
+    })
   }
 
   const publicInterface = {
@@ -93,7 +97,7 @@ export const TabProvider = ({ children }) => {
     setApi,
     getLayout,
     setLayout,
-    openTab
+    openTab,
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
