@@ -4,7 +4,7 @@ import {
   OPENMETER_ENABLED,
   OPENMETER_TOKEN,
   OPENMETER_SOURCE,
-} from '@magickml/config'
+} from 'shared/config'
 import { getLogger } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
 

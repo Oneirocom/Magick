@@ -6,7 +6,7 @@ import {
 } from '@magickml/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
-import { DEFAULT_OPENAI_KEY } from '@magickml/config'
+import { DEFAULT_OPENAI_KEY } from 'shared/config'
 import { trackOpenAIUsage } from '@magickml/server-core'
 
 /**

@@ -19,11 +19,7 @@ import Redis from 'ioredis'
 import { RedisPubSub } from 'server/redis-pubsub'
 import sync from 'feathers-sync'
 
-import {
-  REDISCLOUD_URL,
-  API_ACCESS_KEY,
-  bullMQConnection,
-} from '@magickml/config'
+import { REDISCLOUD_URL, API_ACCESS_KEY, bullMQConnection } from 'shared/config'
 import { getLogger } from '@magickml/core'
 import type { AgentCommander } from '@magickml/agents'
 import { configureManager, globalsManager } from '@magickml/core'

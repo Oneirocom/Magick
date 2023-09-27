@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 /**
  * The type for the function's input parameter which contains the
  * app object, the projectId, and the id of a specific spell.

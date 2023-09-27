@@ -10,7 +10,7 @@ import {
   POSTHOG_ENABLED,
   DEFAULT_USER_TOKEN,
   STANDALONE,
-} from '@magickml/config'
+} from 'shared/config'
 import { PostHogProvider } from 'posthog-js/react'
 import { initLogger, getLogger } from '@magickml/core'
 

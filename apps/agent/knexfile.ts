@@ -1,4 +1,4 @@
-import { DATABASE_URL } from '@magickml/config'
+import { DATABASE_URL } from 'shared/config'
 
 const config = {
   client: 'pg',

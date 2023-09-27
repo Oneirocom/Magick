@@ -39,7 +39,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig } from '@magickml/client-core'
-import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
 import { useDispatch, useSelector } from 'react-redux'
 
 // todo FIX THIS IMPORT
@@ -63,7 +63,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: '0px'
+  width: '0px',
 })
 
 // DrawerHeader component properties
@@ -109,7 +109,6 @@ const StyledDrawer = styled(MuiDrawer, {
     '& .MuiDrawer-paper': closedMixin(theme as Theme),
   }),
 }))
-
 
 // DrawerItem component properties
 type DrawerItemProps = {
@@ -177,38 +176,36 @@ const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
   let lastPlugin: string | null = null
   let divider = false
-  return (
-    drawerItems.map(item => {
-      if (item.plugin !== lastPlugin) {
-        divider = false
-        lastPlugin = item.plugin
-      } else {
-        divider = false
-      }
-      return (
-        <div key={item.path}>
-          {divider && <Divider />}
-          <DrawerItem
-            key={item.path}
-            active={location.pathname.includes(item.path)}
-            Icon={item.icon}
-            open={open}
-            onClick={() => {
-              openTab({
-                name: item.text,
-                type: item.text,
-                switchActive: true,
-                id: item.text,
-              })
-            }}
-            text={item.text}
-            tooltip="Avatar and Tasks Tooltip"
-            tooltipText={item.tooltip}
-          />
-        </div>
-      )
-    })
-  )
+  return drawerItems.map(item => {
+    if (item.plugin !== lastPlugin) {
+      divider = false
+      lastPlugin = item.plugin
+    } else {
+      divider = false
+    }
+    return (
+      <div key={item.path}>
+        {divider && <Divider />}
+        <DrawerItem
+          key={item.path}
+          active={location.pathname.includes(item.path)}
+          Icon={item.icon}
+          open={open}
+          onClick={() => {
+            openTab({
+              name: item.text,
+              type: item.text,
+              switchActive: true,
+              id: item.text,
+            })
+          }}
+          text={item.text}
+          tooltip="Avatar and Tasks Tooltip"
+          tooltipText={item.tooltip}
+        />
+      </div>
+    )
+  })
 }
 
 type DrawerProps = {
@@ -231,11 +228,10 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const [data, setData] = useState([])
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const { treeData, setTreeData,
-    setAgentUpdate } = useTreeData()
+  const { treeData, setTreeData, setAgentUpdate } = useTreeData()
 
   useEffect(() => {
-    console.log("!!!!!!!!!TREE DATA", treeData)
+    console.log('!!!!!!!!!TREE DATA', treeData)
   }, [treeData])
 
   const handleDrop = (newTree: NodeModel[]) => {
@@ -321,33 +317,33 @@ export function NewSidebar(DrawerProps): JSX.Element {
 
   useEffect(() => {
     if (!config.apiUrl) return
-      ; (async () => {
-        const res = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` },
-          }
-        )
-        const json = await res.json()
-        // if data.length === 0  create new agent
-        if (json.data.length === 0) {
-          await createNew({
-            name: "Default Agent",
-            projectId: config.projectId,
-            enabled: false,
-            publicVariables: '{}',
-            secrets: '{}',
-            default: true,
-          })
-          setData(json.data)
-        } else {
-          setData(json.data)
+    ;(async () => {
+      const res = await fetch(
+        `${config.apiUrl}/agents?projectId=${config.projectId}`,
+        {
+          headers: STANDALONE
+            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+            : { Authorization: `Bearer ${token}` },
         }
+      )
+      const json = await res.json()
+      // if data.length === 0  create new agent
+      if (json.data.length === 0) {
+        await createNew({
+          name: 'Default Agent',
+          projectId: config.projectId,
+          enabled: false,
+          publicVariables: '{}',
+          secrets: '{}',
+          default: true,
+        })
+        setData(json.data)
+      } else {
+        setData(json.data)
+      }
 
-        // setIsLoading(false)
-      })()
+      // setIsLoading(false)
+    })()
   }, [config?.apiUrl])
 
   // Function to handle the click event on the hideMenu div
@@ -472,7 +468,9 @@ export function NewSidebar(DrawerProps): JSX.Element {
       <div className={styles.menu} style={{ color: '#7D7D7D' }}>
         <div className={styles.menuFlex}>
           <AddIcon sx={{ mr: 1 }} />
-          <Typography variant="body1" style={{ whiteSpace: 'nowrap' }}>Notion (coming soon)</Typography>
+          <Typography variant="body1" style={{ whiteSpace: 'nowrap' }}>
+            Notion (coming soon)
+          </Typography>
         </div>
         <div className={styles.menuFlex}>
           <AddIcon sx={{ mr: 1 }} />
@@ -553,7 +551,5 @@ export function NewSidebar(DrawerProps): JSX.Element {
 }
 
 export const DrawerProvider = ({ children }: DrawerProps) => {
-  return (
-    <NewSidebar> {children}</NewSidebar>
-  )
+  return <NewSidebar> {children}</NewSidebar>
 }

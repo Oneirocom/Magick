@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import { useSnackbar } from 'notistack'
 import { useConfig, useFeathers } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 import { useSelector } from 'react-redux'
 import SampleData from './data/sampleData.json'
 
@@ -19,29 +19,28 @@ interface TreeDataContextType {
   setOpenDoc: React.Dispatch<React.SetStateAction<string | number>>
   agentUpdate: boolean
   setAgentUpdate: React.Dispatch<React.SetStateAction<boolean>>
-
 }
 interface Document {
-  id: string;
-  content: string;
+  id: string
+  content: string
 }
 
 interface Spell {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 const TreeDataContext = createContext<TreeDataContextType>({
   treeData: [],
-  setTreeData: () => { },
+  setTreeData: () => {},
   isAdded: false,
-  setIsAdded: () => { },
+  setIsAdded: () => {},
   docState: false,
-  setDocState: () => { },
+  setDocState: () => {},
   toDelete: null,
-  setToDelete: () => { },
+  setToDelete: () => {},
   openDoc: '',
-  setOpenDoc: () => { },
+  setOpenDoc: () => {},
   agentUpdate: false,
   setAgentUpdate: () => { },
 })
@@ -199,13 +198,8 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         agentUpdate,
         setAgentUpdate,
       }}
-    >{children}
+    >
+      {children}
     </TreeDataContext.Provider>
   )
 }
-
-
-
-
-
-

@@ -1,6 +1,6 @@
 // DOCUMENTED
 
-import { SPEECH_SERVER_URL } from '@magickml/config'
+import { SPEECH_SERVER_URL } from 'shared/config'
 import socketIOClient from 'socket.io-client'
 
 /**

@@ -1,7 +1,7 @@
 // DOCUMENTED
 import io, { Socket } from 'socket.io-client'
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { API_ROOT_URL, SPEECH_SERVER_PORT } from '@magickml/config'
+import { API_ROOT_URL, SPEECH_SERVER_PORT } from 'shared/config'
 const SPEECH_SERVER_URL = `${API_ROOT_URL}:${SPEECH_SERVER_PORT}`
 
 /**

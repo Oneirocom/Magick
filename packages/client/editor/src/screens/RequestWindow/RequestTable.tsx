@@ -7,7 +7,7 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
