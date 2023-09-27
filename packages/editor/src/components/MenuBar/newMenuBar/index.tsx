@@ -10,14 +10,20 @@ import MenuIcon from '@mui/icons-material/Menu'
 import css from '../menuBar.module.css'
 import { styled } from '@mui/material/styles'
 import { NestedMenuItem } from 'mui-nested-menu'
-import { RootState, Tab, activeTabSelector, changeEditorLayout, toggleAutoSave } from '@magickml/state'
+import {
+  RootState,
+  Tab,
+  activeTabSelector,
+  changeEditorLayout,
+  toggleAutoSave,
+} from 'client/state'
 
 /**
  * MenuBar component
  *
  * @returns {JSX.Element}
  */
-const NewMenuBar = (props) => {
+const NewMenuBar = props => {
   const navigate = useNavigate()
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
@@ -497,7 +503,10 @@ const NewMenuBar = (props) => {
 
   return (
     <div>
-      <IconButton onClick={handleMenuIconClick} style={props.style ? props.style : {}}>
+      <IconButton
+        onClick={handleMenuIconClick}
+        style={props.style ? props.style : {}}
+      >
         <MenuIcon />
       </IconButton>
       <Menu
@@ -583,20 +592,18 @@ const NewMenuBar = (props) => {
                         {menuBarItems[item].items[subMenuKey].hasOwnProperty(
                           'isActive'
                         ) && (
-                            <span
-                              className={
-                                menuBarItems[item].items[subMenuKey].isActive
-                                  ? css['preference-active']
-                                  : css['preference-notActive']
-                              }
-                            >
-                              ●{' '}
-                            </span>
-                          )}
-                        {subMenuKey
-                          .replace(/_/g, ' ')
-                          .charAt(0)
-                          .toUpperCase() + subMenuKey.slice(1)}
+                          <span
+                            className={
+                              menuBarItems[item].items[subMenuKey].isActive
+                                ? css['preference-active']
+                                : css['preference-notActive']
+                            }
+                          >
+                            ●{' '}
+                          </span>
+                        )}
+                        {subMenuKey.replace(/_/g, ' ').charAt(0).toUpperCase() +
+                          subMenuKey.slice(1)}
                       </p>
 
                       {hotKeyLabel &&

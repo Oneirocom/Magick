@@ -198,13 +198,13 @@
       "@magickml/rete": ["packages/rete/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
-      "@magickml/state": ["packages/state/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/ui": ["packages/ui/src/index.ts"],
       "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
       "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
-      "rete": ["packages/rete/src/index.ts"],
-      "server/event-tracker": ["packages/server/event-tracker/src/index.ts"]
+      "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
+      "client/state": ["packages/client/state/src/index.ts"],
+      "rete": ["packages/rete/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -3,7 +3,7 @@
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE
  */
-import 'dockview/dist/styles/dockview.css';
+import 'dockview/dist/styles/dockview.css'
 import React from 'react'
 
 import './wdyr'
@@ -20,7 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { AppConfig } from '@magickml/client-core'
 import { MagickmlChatbox } from '@magickml/chatbox'
-import { createStore } from '@magickml/state'
+import { createStore } from 'client/state'
 
 /**
  * Type definition for the props that can be passed to MagickIDE

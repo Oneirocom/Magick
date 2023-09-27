@@ -6,7 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../../contexts/ModalProvider'
 import css from '../menuBar.module.css'
-import { RootState, Tab, activeTabSelector, changeEditorLayout, toggleAutoSave } from '@magickml/state'
+import {
+  RootState,
+  Tab,
+  activeTabSelector,
+  changeEditorLayout,
+  toggleAutoSave,
+} from 'client/state'
 
 /**
  * MenuBar component
