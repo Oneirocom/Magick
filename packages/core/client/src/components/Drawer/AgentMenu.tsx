@@ -358,101 +358,98 @@ function AgentMenu({ data, resetData }) {
               ? selectedAgentData.name
               : agent?.name
           return (
-            <>
-              <MenuItem
-                sx={{
-                  px: 1,
-                  py: 0,
-                  width: 200,
-                  justifyContent: 'space-between',
-                  '&:hover, &:focus': {
-                    background: 'none',
-                    outline: 'none',
-                  },
-                }}
-                key={i + agent.id}
-              >
-                {editMode && selectedAgentData?.id === agent?.id ? (
-                  <>
-                    <input
-                      type="text"
-                      name="name"
-                      className={styles.inputEdit}
-                      value={selectedAgentData.name}
-                      onChange={e =>
-                        setSelectedAgentData({
-                          ...selectedAgentData,
-                          name: e.target.value,
-                        })
-                      }
-                      placeholder="Add new agent name here"
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') {
-                          update(selectedAgentData.id)
-                          setEditMode(false)
-                          setOldName('')
-                        }
-                      }}
-                    />
-                    <IconBtn
-                      label={'Done'}
-                      Icon={<Done />}
-                      onClick={e => {
+            <MenuItem
+              sx={{
+                px: 1,
+                py: 0,
+                width: 200,
+                justifyContent: 'space-between',
+                '&:hover, &:focus': {
+                  background: 'none',
+                  outline: 'none',
+                },
+              }}
+              key={i + agent.id}
+            >
+              {editMode && selectedAgentData?.id === agent?.id ? (
+                <div>
+                  <input
+                    type="text"
+                    name="name"
+                    className={styles.inputEdit}
+                    value={selectedAgentData.name}
+                    onChange={e =>
+                      setSelectedAgentData({
+                        ...selectedAgentData,
+                        name: e.target.value,
+                      })
+                    }
+                    placeholder="Add new agent name here"
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
                         update(selectedAgentData.id)
                         setEditMode(false)
                         setOldName('')
-                      }}
-                    />
-                    <IconBtn
-                      label={'close'}
-                      Icon={<Close />}
-                      onClick={e => {
-                        setSelectedAgentData({
-                          ...selectedAgentData,
-                          name: oldName,
-                        })
-                        setOldName('')
-                        setEditMode(false)
-                      }}
-                    />
-                  </>
-                ) : (
-                  <ListItemAvatar
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <BorderedAvatar
-                      alt={primaryText.at(0) || 'A'}
-                      src={
-                        agent.image
-                          ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
-                          : primaryText.at(0) || 'A'
                       }
-                      sx={{ width: 24, height: 24 }}
-                    />
-                    <ListItemText
-                      onClick={() => handleSelectAgent(agent)}
-                      primary={primaryText}
-                      sx={{ ml: 2 }}
-                    />
-                  </ListItemAvatar>
-                )}
-                <ListItemIcon sx={{ placeContent: 'end' }}>
-                  <MoreIcon
-                    fontSize="small"
-                    onClick={event => handleToggleMenu2(agent, event)}
-                    aria-controls="menu2"
-                    aria-haspopup="true"
+                    }}
                   />
-                </ListItemIcon>
-              </MenuItem>
-              <StyledDivider />
-            </>
+                  <IconBtn
+                    label={'Done'}
+                    Icon={<Done />}
+                    onClick={e => {
+                      update(selectedAgentData.id)
+                      setEditMode(false)
+                      setOldName('')
+                    }}
+                  />
+                  <IconBtn
+                    label={'close'}
+                    Icon={<Close />}
+                    onClick={e => {
+                      setSelectedAgentData({
+                        ...selectedAgentData,
+                        name: oldName,
+                      })
+                      setOldName('')
+                      setEditMode(false)
+                    }}
+                  />
+                </div>
+              ) : (
+                <ListItemAvatar
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <BorderedAvatar
+                    alt={primaryText.at(0) || 'A'}
+                    src={
+                      agent.image
+                        ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
+                        : primaryText.at(0) || 'A'
+                    }
+                    sx={{ width: 24, height: 24 }}
+                  />
+                  <ListItemText
+                    onClick={() => handleSelectAgent(agent)}
+                    primary={primaryText}
+                    sx={{ ml: 2 }}
+                  />
+                </ListItemAvatar>
+              )}
+              <ListItemIcon sx={{ placeContent: 'end' }}>
+                <MoreIcon
+                  fontSize="small"
+                  onClick={event => handleToggleMenu2(agent, event)}
+                  aria-controls="menu2"
+                  aria-haspopup="true"
+                />
+              </ListItemIcon>
+            </MenuItem>
           )
         })}
-
+        <StyledDivider />
         <MenuItem
           sx={{
             px: 1,
