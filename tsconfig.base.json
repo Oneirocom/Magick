@@ -181,6 +181,7 @@
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
       ],
+      "@magickml/providers": ["client/providers/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/ui": ["packages/ui/src/index.ts"],
