@@ -1,12 +1,11 @@
 
 import { GridviewApi, GridviewReact, GridviewReadyEvent, IGridviewPanelProps, Orientation } from "dockview";
 import MainPanel from "./panels/mainPanel";
-import { useEffect, useState } from "react";
-import { useHotkeys } from 'react-hotkeys-hook'
 import FileDrawer from "./panels/fileDrawer";
 
 const components = {
   MainPanel,
+  FileDrawer,
   default: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
       <div
@@ -20,7 +19,6 @@ const components = {
       </div>
     );
   },
-  FileDrawer
 };
 
 const loadDefaultLayout = (api: GridviewApi) => {
@@ -37,6 +35,8 @@ const loadDefaultLayout = (api: GridviewApi) => {
   api.addPanel({
     id: 'panel_3',
     component: 'FileDrawer',
+    minimumWidth: 200,
+    maximumWidth: 300,
     params: {
       title: 'Panel 3',
     },
@@ -60,8 +60,6 @@ const loadDefaultLayout = (api: GridviewApi) => {
   }).api.setSize({
     width: 5
   });
-
-  console.log(api.toJSON())
 }
 
 const MagickV2 = () => {

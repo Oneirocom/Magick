@@ -11,6 +11,8 @@ export { Chip } from './Chip'
 // Export Drawer component
 export { DrawerProvider } from './Drawer'
 
+export { NewSidebar } from './Drawer/Newsidebar'
+
 // Export Icon and componentCategories
 export { componentCategories, Icon } from './Icon'
 
