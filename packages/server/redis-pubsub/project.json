@@ -1,21 +1,21 @@
 {
-  "name": "redis-pubsub",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/redis-pubsub/src",
+  "name": "server-redis-pubsub",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/redis-pubsub/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/redis-pubsub/**/*.ts"]
+        "lintFilePatterns": ["packages/server/redis-pubsub/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/redis-pubsub/jest.config.ts",
+        "jestConfig": "packages/server/redis-pubsub/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
