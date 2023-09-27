@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Component, Control } from '@magickml/rete'
+import { Component, Control } from 'shared/rete'
 
 import { MagickComponent } from '../../engine'
 import { MagickEditor, MagickNode, WorkerData } from '../../types'

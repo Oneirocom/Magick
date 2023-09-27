@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete, { Node, Engine, NodeData, Plugin } from '@magickml/rete'
+import Rete, { Node, Engine, NodeData, Plugin } from 'shared/rete'
 import io from 'socket.io'
 
 import { getLogger } from '@magickml/core'

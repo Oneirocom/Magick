@@ -1,5 +1,6 @@
-import { Engine, Socket, NodeData } from '@magickml/rete'
-import { type Socket as SocketType } from '@magickml/rete'
+import { Engine, Socket } from 'shared/rete'
+import { Socket as SocketType } from 'rete/types'
+import { NodeData } from 'rete/types/core/data'
 
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'

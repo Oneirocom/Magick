@@ -2,7 +2,7 @@
 /**
  * Class that represents a node that parses a JSON string into an Object
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { MagickComponent } from '../../engine'
 import { objectSocket, stringSocket, triggerSocket } from '../../sockets'

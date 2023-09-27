@@ -3,7 +3,7 @@
  * Get the length of the input string.
  * @category Text
  */
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import { MagickComponent } from '../../engine'
 import { numberSocket, stringSocket, triggerSocket } from '../../sockets'

@@ -8,7 +8,7 @@ import {
   taskSocket,
   triggerSocket,
 } from '@magickml/core'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 const info = 'Complete a task.'
 

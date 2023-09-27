@@ -21,7 +21,7 @@ import { initEditor } from '../editor'
 import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
-import { EngineComponent } from '@magickml/rete'
+import { EngineComponent } from 'shared/rete'
 import { spellApi } from 'client/state'
 
 /**

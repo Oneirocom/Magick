@@ -1,4 +1,4 @@
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 // TODO: fix this very unmaintainable mapping
 // this is a hack and only temporary until we have a rete schema migration system set up
