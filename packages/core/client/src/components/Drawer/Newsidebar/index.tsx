@@ -233,6 +233,11 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const token = globalConfig?.token
   const { treeData, setTreeData,
     setAgentUpdate } = useTreeData()
+
+  useEffect(() => {
+    console.log("!!!!!!!!!TREE DATA", treeData)
+  }, [treeData])
+
   const handleDrop = (newTree: NodeModel[]) => {
     setTreeData(newTree)
   }
@@ -522,9 +527,12 @@ export function NewSidebar(DrawerProps): JSX.Element {
           <div
             className={styles.hideMenuItem}
             onClick={() => {
-              navigate(
-                `/magick/Documents-${encodeURIComponent(btoa('Documents'))}`
-              )
+              openTab({
+                name: 'Documents',
+                type: 'Documents',
+                switchActive: true,
+                id: 'Documents',
+              })
             }}
           >
             <DescriptionOutlinedIcon sx={{ mr: 1 }} />

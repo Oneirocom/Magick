@@ -1,3 +1,4 @@
+import { NewSidebar, TreeDataProvider } from "@magickml/client-core";
 import { IGridviewPanelProps } from "dockview";
 import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -71,10 +72,10 @@ const FileDrawer = (props: IGridviewPanelProps<{ title: string }>) => {
   }, [props.api]);
 
   return (
-    <div style={{ padding: '20px' }}>
-      {props.params.title}
-      <button onClick={open}>Open</button>
-      <button onClick={close}>Close</button>
+    <div style={{ height: '100%' }}>
+      <TreeDataProvider>
+        <NewSidebar />
+      </TreeDataProvider>
     </div>
   );
 }

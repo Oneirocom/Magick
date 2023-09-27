@@ -311,10 +311,12 @@ function AgentMenu({ data, resetData }) {
               src={
                 currentAgent && currentAgent.image
                   ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${currentAgent.image}`
-                  : currentAgent?.name?.at(0) || 'A'
+                  : undefined   // Ensure it's undefined if there's no valid image URL.
               }
               sx={{ width: 24, height: 24 }}
-            />
+            >
+              {currentAgent?.name?.at(0) || 'A'}
+            </BorderedAvatar>
           </ListItemAvatar>
           <ListItemText
             primary={currentAgent ? currentAgent?.name : 'New agent'}
@@ -427,10 +429,12 @@ function AgentMenu({ data, resetData }) {
                     src={
                       agent.image
                         ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
-                        : primaryText.at(0) || 'A'
+                        : undefined   // Ensure it's undefined if there's no valid image URL.
                     }
                     sx={{ width: 24, height: 24 }}
-                  />
+                  >
+                    {primaryText.at(0) || 'A'}
+                  </BorderedAvatar>
                   <ListItemText
                     onClick={() => handleSelectAgent(agent)}
                     primary={primaryText}
