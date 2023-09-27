@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/state",
+  "name": "client/state",
   "version": "0.0.1",
   "dependencies": {},
   "main": "./index.js",

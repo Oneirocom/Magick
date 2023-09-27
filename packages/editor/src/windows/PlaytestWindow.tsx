@@ -10,7 +10,14 @@ import { useEditor } from '../contexts/EditorProvider'
 import { useInspector } from '../contexts/InspectorProvider'
 import { usePubSub } from '@magickml/client-core'
 import css from '../screens/Magick/magick.module.css'
-import { RootState, addLocalState, selectStateBytabId, spellApi, upsertLocalState, useAppSelector } from '@magickml/state'
+import {
+  RootState,
+  addLocalState,
+  selectStateBytabId,
+  spellApi,
+  upsertLocalState,
+  useAppSelector,
+} from 'client/state'
 
 /**
  * Input component - Receives and sends playtest input.
@@ -46,15 +53,12 @@ const Input = props => {
       if (ref.current.value !== '') {
         const index = playtestCache.indexOf(ref.current.value)
         if (index === -1) {
-
           // if the current value is not in the playtestCache, add it to the playtestCache
           setPlaytestCache([...playtestCache, ref.current.value])
         } else if (index === 0) {
-
           // if the current value is the first item in the playtestCache, do nothing
           return
         } else {
-
           // if the current value is in the playtestCache, move up one
           ref.current.value = playtestCache[index - 1]
           props.onChange({ target: { value: playtestCache[index - 1] } })
@@ -80,11 +84,9 @@ const Input = props => {
       if (ref.current.value !== '') {
         const index = playtestCache.indexOf(ref.current.value)
         if (index === -1) {
-
           // if the current value is not in the playtestCache, add it to the playtestCache
           setPlaytestCache([...playtestCache, ref.current.value])
         } else if (index === playtestCache.length - 1) {
-
           // handle user moving down back into an empty input
           ref.current.value = ''
           // if the current value is the last item in the playtestCache, do nothing
@@ -215,10 +217,10 @@ const Playtest = ({ tab }) => {
     if (!inspectorData || inspectorData.name !== 'Input') return
     setPlaytestOption(
       `Input - ` +
-      (inspectorData.data.inputType &&
+        (inspectorData.data.inputType &&
         inspectorData.data.inputType !== 'Default'
-        ? inspectorData.data.inputType
-        : inspectorData.data.inputName)
+          ? inspectorData.data.inputType
+          : inspectorData.data.inputName)
     )
   }, [inspectorData])
 
@@ -237,7 +239,8 @@ const Playtest = ({ tab }) => {
       }))
 
     setPlaytestOptions(options)
-    if (!playtestOption && options.length > 0) setPlaytestOption(options[0].value)
+    if (!playtestOption && options.length > 0)
+      setPlaytestOption(options[0].value)
   }, [spellData])
 
   // Keep scrollbar at the bottom of its window.
@@ -294,8 +297,7 @@ const Playtest = ({ tab }) => {
   const onSend = async () => {
     const newMessage: Message = {
       sender: 'user',
-      content: `You: ${value}`
-
+      content: `You: ${value}`,
     }
     const newHistory = [...history, newMessage]
     setHistory(newHistory as [])

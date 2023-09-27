@@ -16,7 +16,7 @@ import Playtest from '../../windows/PlaytestWindow'
 
 import DebugConsole from '../../windows/DebugConsole'
 import TextEditor from '../../windows/TextEditorWindow'
-import { RootState, spellApi } from '@magickml/state'
+import { RootState, spellApi } from 'client/state'
 import AgentControls from '../../windows/AgentControlWindow'
 import { IDockviewPanelProps } from 'dockview'
 import WorkspaceProvider from '../../contexts/WorkspaceProvider'
@@ -127,20 +127,15 @@ const Composer = ({ tab, pubSub }) => {
   )
 }
 
-const Wrapped = (props: IDockviewPanelProps<{ tab: Tab, pubSub: any }>) => {
+const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; pubSub: any }>) => {
   const pubSub = usePubSub()
   return (
-    <WorkspaceProvider tab={props.params.tab}
-      pubSub={pubSub}>
+    <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
       <div style={{ position: 'relative', height: '100%' }}>
-        <Composer
-          tab={props.params.tab}
-          pubSub={pubSub}
-        />
-
+        <Composer tab={props.params.tab} pubSub={pubSub} />
       </div>
     </WorkspaceProvider>
-  );
+  )
 }
 
 export default Wrapped

@@ -1,13 +1,12 @@
-import { useConfig, useFeathers, usePubSub } from "@magickml/client-core";
+import { useConfig, useFeathers, usePubSub } from '@magickml/client-core'
 import {
   DockviewApi,
   DockviewReact,
   DockviewReadyEvent,
-  IDockviewPanelProps
-} from "dockview";
-import { useEffect, useRef } from "react";
-import { SpellInterface, spellApi } from "@magickml/core";
-
+  IDockviewPanelProps,
+} from 'dockview'
+import { useEffect, useRef } from 'react'
+import { SpellInterface, spellApi } from '@magickml/core'
 
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { debounce } from '../../../utils/debounce'
@@ -21,107 +20,107 @@ import DebugConsole from '../../../windows/DebugConsole'
 import TextEditor from '../../../windows/TextEditorWindow'
 import { useEditor } from '../../../contexts/EditorProvider'
 import { Tab } from '../../../contexts/TabProvider'
-import { useSelector } from "react-redux";
-import { RootState } from "@magickml/state";
+import { useSelector } from 'react-redux'
+import { RootState } from 'client/state'
 
 function loadDefaultLayout(api: DockviewApi, tab) {
   const panel = api.addPanel({
-    id: "panel_1",
-    component: "default",
+    id: 'panel_1',
+    component: 'default',
     params: {
-      title: "Panel 1"
-    }
-  });
+      title: 'Panel 1',
+    },
+  })
 
-  panel.group.locked = true;
-  panel.group.header.hidden = true;
+  panel.group.locked = true
+  panel.group.header.hidden = true
 
   api.addPanel({
-    id: "Composer",
-    component: "EditorWindow",
+    id: 'Composer',
+    component: 'EditorWindow',
     params: {
-      title: "Composer",
-      tab
-    }
-  });
+      title: 'Composer',
+      tab,
+    },
+  })
 
   api
     .addPanel({
-      id: "Inspector",
-      component: "Inspector",
+      id: 'Inspector',
+      component: 'Inspector',
       params: {
-        title: "Inspector",
-        tab
+        title: 'Inspector',
+        tab,
       },
-      position: { referencePanel: "Composer", direction: "left" }
+      position: { referencePanel: 'Composer', direction: 'left' },
     })
     .api.setSize({
-      width: 300
-    });
+      width: 300,
+    })
 
   api.addPanel({
-    id: "Text Editor",
-    component: "TextEditor",
+    id: 'Text Editor',
+    component: 'TextEditor',
     params: {
-      title: "Text Editor",
-      tab
+      title: 'Text Editor',
+      tab,
     },
-    position: { referencePanel: "Inspector", direction: "below" }
-  });
+    position: { referencePanel: 'Inspector', direction: 'below' },
+  })
 
   // panel5.group!.model.header.hidden = true;
   // panel5.group!.model.locked = true;
 
   api
     .addPanel({
-      id: "Playtest",
-      component: "Playtest",
+      id: 'Playtest',
+      component: 'Playtest',
       params: {
-        title: "Playtest",
-        tab
+        title: 'Playtest',
+        tab,
       },
-      position: { referencePanel: "Composer", direction: "below" }
+      position: { referencePanel: 'Composer', direction: 'below' },
     })
     .api.setSize({
-      height: 300
-    });
+      height: 300,
+    })
 
   api.addPanel({
-    id: "Console",
-    component: "DebugConsole",
+    id: 'Console',
+    component: 'DebugConsole',
     params: {
-      title: "Console",
-      tab
+      title: 'Console',
+      tab,
     },
-    position: { referencePanel: "Playtest", direction: "right" }
-  });
+    position: { referencePanel: 'Playtest', direction: 'right' },
+  })
 }
 
 const components = {
   default: (props: IDockviewPanelProps<{ title: string }>) => {
     return (
-      <div style={{ padding: "20px", color: "white" }}>
+      <div style={{ padding: '20px', color: 'white' }}>
         {props.params.title}
       </div>
-    );
+    )
   },
   Playtest: (props: IDockviewPanelProps<{ tab: Tab }>) => {
-    return <Playtest {...props.params} />;
+    return <Playtest {...props.params} />
   },
   Inspector: (props: IDockviewPanelProps<{ tab: Tab }>) => {
-    return <Inspector {...props.params} />;
+    return <Inspector {...props.params} />
   },
   TextEditor: (props: IDockviewPanelProps<{ tab: Tab }>) => {
-    return <TextEditor {...props.params} />;
+    return <TextEditor {...props.params} />
   },
   EditorWindow: (props: IDockviewPanelProps<{ tab: Tab }>) => {
-    return <EditorWindow {...props.params} />;
+    return <EditorWindow {...props.params} />
   },
   DebugConsole: (props: IDockviewPanelProps<{ tab: Tab }>) => {
-    return <DebugConsole {...props.params} />;
+    return <DebugConsole {...props.params} />
   },
   // AgentControls
-};
+}
 
 export const Composer = ({ theme, tab, pubSub }) => {
   const config = useConfig()
@@ -195,9 +194,9 @@ export const Composer = ({ theme, tab, pubSub }) => {
     // }
 
     // if (!success) {
-    loadDefaultLayout(event.api, tab);
+    loadDefaultLayout(event.api, tab)
     // }
-  };
+  }
 
   return (
     <>
@@ -205,27 +204,25 @@ export const Composer = ({ theme, tab, pubSub }) => {
       <DockviewReact
         components={components}
         onReady={onReady}
-        className={theme || "dockview-theme-abyss"}
+        className={theme || 'dockview-theme-abyss'}
       />
     </>
-  );
-};
+  )
+}
 
-const Wrapped = (props: IDockviewPanelProps<{ tab: Tab, theme: string }>) => {
+const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; theme: string }>) => {
   const pubSub = usePubSub()
   return (
-    <WorkspaceProvider tab={props.params.tab}
-      pubSub={pubSub}>
+    <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
       <div style={{ position: 'relative', height: '100%' }}>
         <Composer
           theme={props.params.theme}
           tab={props.params.tab}
           pubSub={pubSub}
         />
-
       </div>
     </WorkspaceProvider>
-  );
+  )
 }
 
-export default Wrapped;
+export default Wrapped

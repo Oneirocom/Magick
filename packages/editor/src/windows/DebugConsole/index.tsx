@@ -5,7 +5,7 @@ import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'
 import { useEditor } from '../../contexts/EditorProvider'
 import { useSelector } from 'react-redux'
-import { RootState } from '@magickml/state'
+import { RootState } from 'client/state'
 
 /**
  * The type for debug messages.
@@ -61,7 +61,8 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @returns {string} Formatted error message.
    */
   const formatErrorMessage = (message): string =>
-    `> Node ${message.nodeId}: Error in ${message.from} component${message.name ? ' ' + message.name : ''
+    `> Node ${message.nodeId}: Error in ${message.from} component${
+      message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -71,7 +72,8 @@ const DebugConsole = ({ tab }): JSX.Element => {
    * @returns {string} Formatted log message.
    */
   const formatLogMessage = (message): string =>
-    `> Node ${message.nodeId}: Message from ${message.from} component ${message.name ? ' ' + message.name : ''
+    `> Node ${message.nodeId}: Message from ${message.from} component ${
+      message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -119,9 +121,9 @@ const DebugConsole = ({ tab }): JSX.Element => {
   const getMessage = _message => {
     const message = _message.content
       ? {
-        ..._message,
-        ...JSON.parse(_message.content),
-      }
+          ..._message,
+          ...JSON.parse(_message.content),
+        }
       : _message
 
     delete message.content
@@ -183,9 +185,8 @@ const DebugConsole = ({ tab }): JSX.Element => {
           command,
         })
         return `Sent agent command ${command} to agent ${currentAgentId}`
-      }
-
-    }
+      },
+    },
   }
 
   return (

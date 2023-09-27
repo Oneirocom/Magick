@@ -18,8 +18,8 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import emptyImg from './empty.png'
 import css from './homeScreen.module.css'
 import { v4 as uuidv4 } from 'uuid'
-import { useTreeData } from "../../../../core/client/src/contexts/TreeDataProvider"
-import { spellApi } from '@magickml/state'
+import { useTreeData } from '../../../../core/client/src/contexts/TreeDataProvider'
+import { spellApi } from 'client/state'
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -50,7 +50,7 @@ const CreateNew = () => {
   const [newSpell] = spellApi.useNewSpellMutation()
   const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
-  const { setIsAdded } = useTreeData();
+  const { setIsAdded } = useTreeData()
 
   /**
    * Handle creation process of a new spell.
@@ -72,13 +72,13 @@ const CreateNew = () => {
         })
         return
       }
-      const response = await newSpell({
+      const response = (await newSpell({
         id: uuidv4(),
         graph: selectedTemplate.graph,
         name,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      }) as any
+      })) as any
 
       if ('error' in response) {
         if ('status' in response.error) {
@@ -93,8 +93,11 @@ const CreateNew = () => {
       }
       setLoading(false)
       setIsAdded(true)
-      navigate(`/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))}`)
-
+      navigate(
+        `/magick/${
+          response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
+        }`
+      )
     } catch (err) {
       console.error('ERROR!', err)
     }
@@ -147,12 +150,13 @@ const CreateNew = () => {
           cancel
         </Button>
         <LoadingButton
-          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${css.button
-            }`}
+          className={`${!selectedTemplate ? 'disabled' : 'primary'} ${
+            css.button
+          }`}
           loading={loading}
           onClick={onCreate}
           variant="outlined"
-          sx={{ color: "#fff !important", border: 'none !important' }}
+          sx={{ color: '#fff !important', border: 'none !important' }}
         >
           CREATE
         </LoadingButton>
