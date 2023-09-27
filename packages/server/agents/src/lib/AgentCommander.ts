@@ -14,7 +14,7 @@ import type { MagickSpellInput } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { AgentResult, AgentRunJob } from './Agent'
-import { AGENT_RESPONSE_TIMEOUT_MSEC } from '@magickml/config'
+import { AGENT_RESPONSE_TIMEOUT_MSEC } from 'shared/config'
 
 export type RunRootSpellArgs = {
   agent?: Agent

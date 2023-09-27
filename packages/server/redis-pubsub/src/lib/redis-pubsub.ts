@@ -1,6 +1,6 @@
 import { createClient, RedisClientOptions } from 'redis'
 import { EventEmitter } from 'events'
-import { REDISCLOUD_URL } from '@magickml/config'
+import { REDISCLOUD_URL } from 'shared/config'
 
 export class RedisPubSub extends EventEmitter {
   private client!: ReturnType<typeof createClient>

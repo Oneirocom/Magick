@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
+import { DEFAULT_USER_TOKEN, STANDALONE } from 'shared/config'
 import { useConfig } from '@magickml/client-core'
 import { useSelector } from 'react-redux'
 

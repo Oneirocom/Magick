@@ -26,7 +26,7 @@ import MagickLogo from '../logo-full.png'
 import MagickLogoSmall from '../logo-small.png'
 import { Tooltip } from '@mui/material'
 import { drawerTooltipText } from '../tooltiptext'
-import { STANDALONE } from '@magickml/config'
+import { STANDALONE } from 'shared/config'
 
 // Constants
 const drawerWidth = 150

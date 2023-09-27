@@ -2,13 +2,13 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { debounce } from 'lodash'
-import { Tooltip } from "@mui/material"
+import { Tooltip } from '@mui/material'
 
 type PluginProps = {
   selectedAgentData: any
   props
 }
-import { API_ROOT_URL, FILE_SERVER_URL } from '@magickml/config'
+import { API_ROOT_URL, FILE_SERVER_URL } from 'shared/config'
 import { Switch } from '@magickml/client-core'
 import VariableModal from './VariableModal'
 import { useSelector } from 'react-redux'

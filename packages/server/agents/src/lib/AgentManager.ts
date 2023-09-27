@@ -3,7 +3,7 @@ import Agent from './Agent'
 import _ from 'lodash'
 import pino from 'pino'
 import { getLogger } from '@magickml/core'
-import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC } from '@magickml/config'
+import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC } from 'shared/config'
 import { BullMQWorker, RedisPubSubWrapper } from '@magickml/server-core'
 
 /**

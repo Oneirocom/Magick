@@ -3,7 +3,7 @@
 // TODO this whole file is a mess of typescript errors. Fix.
 //@ts-nocheck
 import { Button } from '@magickml/client-core'
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 import {
   Grid,
   IconButton,

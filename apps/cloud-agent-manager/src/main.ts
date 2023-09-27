@@ -4,7 +4,7 @@ import {
 } from 'server/cloud-agent-manager'
 import { initLogger, getLogger } from '@magickml/core'
 import { app, BullQueue, initApp } from '@magickml/server-core'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/config'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
 import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 

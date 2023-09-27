@@ -1,7 +1,7 @@
 // DOCUMENTED
 import axios, { AxiosResponse } from 'axios'
 import Rete from 'shared/rete'
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 
 import { InputControl } from '../../dataControls/InputControl'
 import { SocketGeneratorControl } from '../../dataControls/SocketGenerator'
