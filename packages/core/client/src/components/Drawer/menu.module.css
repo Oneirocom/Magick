@@ -38,6 +38,7 @@ ul ul ul li {
 .credits {
   padding: 0 1rem;
   margin-top: auto;
+  white-space: nowrap;
 }
 
 .creditCount {
