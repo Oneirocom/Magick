@@ -7,18 +7,10 @@ import { app } from 'server/core'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
-import { AgentCommandData, RunRootSpellArgs } from 'server/agents'
+import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
-
-export type AgentRunData = {
-  agentId: string
-  content: string
-  channel: string
-  sender: string
-  client: string
-}
 
 /**
  * Default AgentService class.

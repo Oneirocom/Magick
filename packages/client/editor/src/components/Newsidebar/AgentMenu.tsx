@@ -22,14 +22,11 @@ import { Modal } from 'client/core'
 import { DEFAULT_USER_TOKEN, STANDALONE, API_ROOT_URL } from 'shared/config'
 
 import { useFeathers, useConfig } from '@magickml/providers'
+import { useTreeData, useTabLayout } from '@magickml/providers'
 
-// todo fix this import
-import { useSpellList } from '../../../../../plugins/avatar/client/src/hooks/useSpellList'
-import { useTreeData } from '../../../../client/src/contexts/TreeDataProvider'
-import NewMenuBar from '../../../../../editor/src/components/MenuBar/newMenuBar'
-import { AgentInterface, SpellInterface } from 'shared/core'
-import { setCurrentAgentId } from 'client/state'
-import { useTabLayout } from '../../../../../editor/src/contexts/TabProvider'
+import NewMenuBar from '../MenuBar/newMenuBar'
+import { AgentInterface } from 'shared/core'
+import { setCurrentAgentId, useGetSpellsQuery } from 'client/state'
 
 interface Spell {
   id: number
@@ -50,7 +47,9 @@ function AgentMenu({ data, resetData }) {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
-  const spellList: SpellInterface[] = useSpellList()
+  const { data: spellList } = useGetSpellsQuery({
+    projectId: config.projectId,
+  })
   const imageInputRef = useRef<HTMLInputElement>(null)
   const { agentUpdate, setAgentUpdate } = useTreeData()
   const dispatch = useDispatch()

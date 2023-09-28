@@ -3,7 +3,7 @@ import { ConfigProvider, FeathersProvider, PubSubProvider } from '@magickml/prov
 import { createTheme, ThemeProvider } from '@mui/material'
 import React from 'react'
 import ToastProvider from './ToastProvider'
-import { TabProvider } from './TabProvider'
+import { TabProvider } from '../../../providers/src/lib/TabProvider'
 import { GlobalLayoutProvider } from './GlobalLayoutProvider'
 
 // Create a dark theme for the application

@@ -14,7 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { useTreeData } from '../../contexts'
+import { useTreeData } from '@magickml/providers'
 
 interface Props {
   rows: any
@@ -356,11 +356,11 @@ export const TableComponent = ({
                             )}
                           </IconButton>
                         ) : // Render truncatedValue or full value based on expansion state
-                        isExpanded ? (
-                          value
-                        ) : (
-                          truncatedValue
-                        )}
+                          isExpanded ? (
+                            value
+                          ) : (
+                            truncatedValue
+                          )}
                       </TableCell>
                     )
                   })}

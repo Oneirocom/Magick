@@ -1,4 +1,4 @@
-// import { Application } from '@magickml/server-core';
+// import { Application } from 'server/core';
 import { Application } from '@feathersjs/koa'
 import io from 'socket.io'
 import { getLogger } from 'shared/core'

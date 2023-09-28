@@ -47,3 +47,4 @@ export * from './metering'
 export * from './communication'
 
 export * from './lib/feathersPermissions'
+export * from './types'

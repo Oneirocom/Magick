@@ -1,9 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import {
   DockviewApi,
-  DockviewReact,
-  DockviewReadyEvent,
-  IDockviewPanelProps,
   SerializedDockview,
 } from 'dockview'
 import { usePubSub } from '@magickml/providers'
@@ -23,7 +20,7 @@ export type Tab = {
 type DocviewContext = {
   theme: DockviewTheme
   setTheme: (theme: DockviewTheme) => void
-  api: DockviewApi
+  api: DockviewApi | undefined
   setApi: (api: DockviewApi) => void
   getLayout: () => SerializedDockview | null
   setLayout: (layout: SerializedDockview) => void
@@ -44,7 +41,7 @@ export const useTabLayout = () => useContext(Context)
 
 export const TabProvider = ({ children }) => {
   const [theme, setTheme] = useState<DockviewTheme>('dockview-theme-abyss')
-  const [api, setApi] = useState<DockviewApi>()
+  const [api, setApi] = useState<DockviewApi | undefined>()
   const pubSub = usePubSub()
 
   const getLayout = () => {
@@ -54,7 +51,7 @@ export const TabProvider = ({ children }) => {
       return null
     }
     return JSON.parse(
-      localStorage.getItem(TAB_LAYOUT_KEY)
+      layout
     ) as SerializedDockview
   }
 
@@ -76,6 +73,8 @@ export const TabProvider = ({ children }) => {
   }, [api])
 
   const openTab = (_tab: Tab) => {
+    if (!api) return
+
     const tab = {
       ..._tab,
       layoutJson: getWorkspaceLayout(_tab?.workspace),

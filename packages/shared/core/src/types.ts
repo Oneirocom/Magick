@@ -25,12 +25,12 @@ import { Task, TaskOutputTypes, TaskStore } from './plugins/taskPlugin/task'
 import { SocketNameType, SocketType } from './sockets'
 
 import { DataControl } from './plugins/inspectorPlugin'
-import { SpellInterface } from './schemas'
+import { SpellInterface } from '../../../server/core/src/schemas'
 import { SpellManager } from './spellManager'
 
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
-export * from './schemas'
+export * from '../../../server/core/src/schemas'
 
 export type ImageType = {
   id: string
