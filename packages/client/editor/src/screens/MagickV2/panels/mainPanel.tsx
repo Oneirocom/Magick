@@ -2,6 +2,7 @@ import {
   DockviewApi,
   DockviewReact,
   DockviewReadyEvent,
+  IDockviewHeaderActionsProps,
   IDockviewPanelProps,
 } from 'dockview'
 import { useTabLayout } from '@magickml/providers';
@@ -12,6 +13,7 @@ import Documents from '../../DocumentWindow'
 import Agents from '../../agents/AgentManagerWindow'
 import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from '../workspaces/composer'
+import NewMenuBar from '../../../components/MenuBar/newMenuBar';
 
 // we will move this out into the layouts package
 function loadDefaultLayout(api: DockviewApi) {
@@ -77,6 +79,23 @@ const getComponents = () => {
   }
 }
 
+const PreControls = (props: IDockviewHeaderActionsProps) => {
+  return (
+    <div
+      className="group-control"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "0px",
+        height: "100%",
+        color: "var(--dv-activegroup-visiblepanel-tab-color)"
+      }}
+    >
+      <NewMenuBar />
+    </div>
+  );
+};
+
 const MainPanel = () => {
   const { theme, setApi, getLayout } = useTabLayout()
 
@@ -100,6 +119,7 @@ const MainPanel = () => {
   return (
     <DockviewReact
       onReady={onReady}
+      preHeaderActionsComponent={PreControls}
       className={`tab-layout ${theme}`}
       components={getComponents()}
     />
