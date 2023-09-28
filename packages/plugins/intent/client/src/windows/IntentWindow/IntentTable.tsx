@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useConfig } from 'client/core'
+import { useConfig } from '@magickml/providers'
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {

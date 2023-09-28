@@ -1,5 +1,3 @@
-import { useConfig, useFeathers } from 'client/core'
-import { v4 } from 'uuid'
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -11,8 +9,7 @@ import styles from './Chat.module.css'
 import { useLipSync } from '../../hooks/useLipSync'
 import { useAgentList } from '../../hooks/useAgentList'
 import { useZustand } from '../../store/useZustand'
-import { usePubSub } from 'client/core'
-import { nullEvent } from 'xstate/lib/actionTypes'
+import { usePubSub, useConfig, useFeathers } from '@magickml/providers'
 
 const voices = {
   'Female 1': '1QnOliOAmerMUNuo2wXoH-YoainoSjZen',
@@ -53,7 +50,7 @@ export async function pruneMessages(messages) {
 const sessionId =
   localStorage.getItem('sessionId') ??
   Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
+  Math.random().toString(36).substring(2, 15)
 
 localStorage.setItem('sessionId', sessionId)
 
@@ -331,7 +328,7 @@ export default function ChatBox() {
               value={input}
               onInput={handleChange}
               onChange={handleChange}
-              // disabled={waitingForResponse}
+            // disabled={waitingForResponse}
             />
             <button
               // size={14}
