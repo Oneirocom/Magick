@@ -57,7 +57,7 @@ export default class CommentManager {
   }
 
   deleteComments() {
-    ;[...this.comments].map(c => this.deleteComment(c))
+    [...this.comments].map(c => this.deleteComment(c))
   }
 
   toJSON() {

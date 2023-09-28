@@ -4,7 +4,7 @@ import {
   DockviewReadyEvent,
   IDockviewPanelProps,
 } from 'dockview'
-import { useTabLayout } from '../../../../../providers/src/lib/TabProvider'
+import { useTabLayout } from '@magickml/providers';
 import Events from '../../EventWindow'
 import Requests from '../../RequestWindow'
 import Settings from '../../settings/SettingsWindow'

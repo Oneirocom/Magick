@@ -1,6 +1,4 @@
 // DOCUMENTED
-import { memo, useEffect } from 'react'
-import isEqual from 'lodash/isEqual'
 import WorkspaceProvider from '../contexts/WorkspaceProvider'
 import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from './Workspace'
@@ -11,24 +9,19 @@ import Settings from '../screens/settings/SettingsWindow'
 import Documents from '../screens/DocumentWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
 
-type WorkspaceProps = {
-  pubSub: any // You might want to provide a more detailed type based on your usage.
-  tab: Tab
-}
-
 const WorkspaceComponent = ({ tab, pubSub, activeTabId }) => {
   const pluginComponents = []
 
-  ;(pluginManager as ClientPluginManager)
-    .getGroupedClientRoutes()
-    .forEach(plugin => {
-      plugin.routes.map(route => {
-        pluginComponents.push({
-          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-          component: route.component,
+    ; (pluginManager as ClientPluginManager)
+      .getGroupedClientRoutes()
+      .forEach(plugin => {
+        plugin.routes.map(route => {
+          pluginComponents.push({
+            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+            component: route.component,
+          })
         })
       })
-    })
 
   const componentMapping = {
     spell: Composer,
