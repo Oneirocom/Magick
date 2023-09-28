@@ -4,7 +4,7 @@ import {
   DockviewReadyEvent,
   IDockviewPanelProps,
 } from 'dockview'
-import { useTabLayout } from '../../../contexts/TabProvider'
+import { useTabLayout } from '../../../../../providers/src/lib/TabProvider'
 import Events from '../../EventWindow'
 import Requests from '../../RequestWindow'
 import Settings from '../../settings/SettingsWindow'
@@ -39,16 +39,16 @@ function loadDefaultLayout(api: DockviewApi) {
 const getComponents = () => {
   const pluginComponents = []
 
-  ;(pluginManager as ClientPluginManager)
-    .getGroupedClientRoutes()
-    .forEach(plugin => {
-      plugin.routes.map(route => {
-        pluginComponents.push({
-          name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-          component: route.component,
+    ; (pluginManager as ClientPluginManager)
+      .getGroupedClientRoutes()
+      .forEach(plugin => {
+        plugin.routes.map(route => {
+          pluginComponents.push({
+            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
+            component: route.component,
+          })
         })
       })
-    })
 
   return {
     Events,

@@ -9,7 +9,9 @@ import {
 import type { Reporter } from './Reporters'
 import { type PubSub, type MessageQueue, app } from 'server/core'
 import type { AgentListRecord } from 'server/cloud-agent-worker'
-import { Agent } from 'packages/core/server/src/services/agents/agents.schema'
+
+// todo probably fix this dependency
+import { Agent } from 'packages/server/core/src/services/agents/agents.schema'
 
 interface CloudAgentManagerConstructor {
   pubSub: PubSub

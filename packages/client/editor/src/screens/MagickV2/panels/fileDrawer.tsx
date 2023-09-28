@@ -1,8 +1,8 @@
-import { NewSidebar } from 'client/core'
 import { TreeDataProvider, usePubSub } from '@magickml/providers'
 import { IGridviewPanelProps } from 'dockview'
 import { useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { NewSidebar } from '../../../components/Newsidebar'
 
 const ANIMATION_DURATION = 50
 

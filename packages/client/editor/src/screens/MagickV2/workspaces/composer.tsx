@@ -6,7 +6,8 @@ import {
   IDockviewPanelProps,
 } from 'dockview'
 import { useEffect, useRef } from 'react'
-import { SpellInterface, spellApi } from 'shared/core'
+import { SpellInterface } from 'shared/core'
+import { spellApi } from 'client/state'
 
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { debounce } from '../../../utils/debounce'
@@ -19,7 +20,7 @@ import Playtest from '../../../windows/PlaytestWindow'
 import DebugConsole from '../../../windows/DebugConsole'
 import TextEditor from '../../../windows/TextEditorWindow'
 import { useEditor } from '../../../contexts/EditorProvider'
-import { Tab } from '../../../contexts/TabProvider'
+import { Tab } from '../../../../../providers/src/lib/TabProvider'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 
