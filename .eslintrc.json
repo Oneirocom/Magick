@@ -3,14 +3,27 @@
   "ignorePatterns": ["!**/*", "**/node_modules/**", "**/*.d.ts"],
   "plugins": ["@nx/eslint-plugin"],
   "rules": {
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@nx/enforce-module-boundaries": [
+      "error",
+      {
+        "enforceBuildableLibDependency": true,
+        "allow": [],
+        "depConstraints": [
+          {
+            "sourceTag": "*",
+            "onlyDependOnLibsWithTags": ["*"]
+          }
+        ]
+      }
+    ]
   },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "no-extra-semi": "off",
-        "@typescript-eslint/no-extra-semi": "off",
+        "@typescript-eslint/no-extra-semipackages/client/core/src/components/Drawer/Newsidebar": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": "off"
       }

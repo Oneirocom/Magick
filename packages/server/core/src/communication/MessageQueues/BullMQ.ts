@@ -1,5 +1,5 @@
 import { Queue } from 'bullmq'
-import { app } from 'server/core'
+import { app } from '../../app';
 import pino from 'pino'
 import { getLogger } from 'shared/core'
 

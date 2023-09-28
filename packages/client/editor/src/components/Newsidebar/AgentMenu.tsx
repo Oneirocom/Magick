@@ -28,12 +28,6 @@ import NewMenuBar from '../MenuBar/newMenuBar'
 import { AgentInterface } from 'shared/core'
 import { setCurrentAgentId, useGetSpellsQuery } from 'client/state'
 
-interface Spell {
-  id: number
-  name: string
-  // Add other relevant properties
-}
-
 function AgentMenu({ data, resetData }) {
   const { client } = useFeathers()
   const { openTab } = useTabLayout()

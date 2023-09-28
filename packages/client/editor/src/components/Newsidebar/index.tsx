@@ -93,22 +93,22 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 /**
  * The StyledDrawer component style definition based on its open state property.
  */
-const StyledDrawer = styled(MuiDrawer, {
-  shouldForwardProp: prop => prop !== 'open',
-})(({ theme, open }: HeaderProps) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme as Theme),
-    '& .MuiDrawer-paper': openedMixin(theme as Theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme as Theme),
-    '& .MuiDrawer-paper': closedMixin(theme as Theme),
-  }),
-}))
+// const StyledDrawer = styled(MuiDrawer, {
+//   shouldForwardProp: prop => prop !== 'open',
+// })(({ theme, open }: HeaderProps) => ({
+//   width: drawerWidth,
+//   flexShrink: 0,
+//   whiteSpace: 'nowrap',
+//   boxSizing: 'border-box',
+//   ...(open && {
+//     ...openedMixin(theme as Theme),
+//     '& .MuiDrawer-paper': openedMixin(theme as Theme),
+//   }),
+//   ...(!open && {
+//     ...closedMixin(theme as Theme),
+//     '& .MuiDrawer-paper': closedMixin(theme as Theme),
+//   }),
+// }))
 
 // DrawerItem component properties
 type DrawerItemProps = {

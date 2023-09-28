@@ -18,7 +18,6 @@ import DebugConsole from '../windows/DebugConsole'
 import TextEditor from '../windows/TextEditorWindow'
 import { RootState, spellApi } from 'client/state'
 import AgentControls from '../windows/AgentControlWindow'
-import isEqual from 'lodash/isEqual'
 
 /**
  * Workspace component that handles different tabs and their layouts.
@@ -33,7 +32,6 @@ const Workspace = ({ tab, pubSub }) => {
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
-  const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
 
   // Set up autosave for the workspaces

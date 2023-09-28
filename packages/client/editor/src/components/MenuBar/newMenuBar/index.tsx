@@ -148,10 +148,10 @@ const NewMenuBar = props => {
   /**
    * Project window creation handler
    */
-  const onProjectWindowCreate = () => {
-    if (!openProjectWindow) setOpenDrawer(false)
-    setOpenProjectWindow(prevState => !prevState)
-  }
+  // const onProjectWindowCreate = () => {
+  //   if (!openProjectWindow) setOpenDrawer(false)
+  //   setOpenProjectWindow(prevState => !prevState)
+  // }
 
   /**
    * Export handler
@@ -227,21 +227,21 @@ const NewMenuBar = props => {
   /**
    * Toggle save handler
    */
-  const changeLayout = event => {
-    const layout: string = event.target.innerText
-    const formattedKey = layout
-      .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
-      .replace(/\s(.)/g, (_, c) => c.toUpperCase())
-      .replace(/\s/g, '')
-      .replace(/^(.)/, (_, c) => c.toLowerCase())
+  // const changeLayout = event => {
+  //   const layout: string = event.target.innerText
+  //   const formattedKey = layout
+  //     .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
+  //     .replace(/\s(.)/g, (_, c) => c.toUpperCase())
+  //     .replace(/\s/g, '')
+  //     .replace(/^(.)/, (_, c) => c.toLowerCase())
 
-    dispatch(
-      changeEditorLayout({
-        tabId: activeTab.id,
-        layout: formattedKey,
-      })
-    )
-  }
+  //   dispatch(
+  //     changeEditorLayout({
+  //       tabId: activeTab.id,
+  //       layout: formattedKey,
+  //     })
+  //   )
+  // }
 
   // Menu bar entries
   const menuBarItems = {

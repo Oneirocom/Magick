@@ -28,7 +28,6 @@ const Magick = ({ empty = false }): JSX.Element => {
   const { subscribe, events } = usePubSub()
   const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const activeTabId = useSelector(activeTabIdSelector)
-  const activeTab = useSelector(activeTabSelector)
   const pubSub = usePubSub()
   const pluginComponents = []
 

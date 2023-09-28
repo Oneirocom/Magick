@@ -1,7 +1,17 @@
 {
   "name": "client/state",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "@reduxjs/toolkit": "1.9.5",
+    "md5": "2.3.0",
+    "react-redux": "8.0.5",
+    "redux-persist": "6.0.0",
+    "redux": "4.2.1",
+    "client/layouts": "*",
+    "vite": "^4.4.9",
+    "@nx/vite": "^16.7.4",
+    "vite-plugin-dts": "^2.3.0"
+  },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts"
