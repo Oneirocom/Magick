@@ -1,5 +1,5 @@
-import { NodeData } from '@magickml/rete'
-import { SpellInterface } from '../schemas'
+import { NodeData } from 'shared/rete'
+import type { SpellInterface } from 'server/core'
 
 export class Spell {
   spell: SpellInterface

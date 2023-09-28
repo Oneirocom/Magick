@@ -211,6 +211,7 @@ function install(
                 triggerIns,
                 useSocketName,
               })
+              return
             } catch (e) {
               return runContext.trigger('warn', e)
             }

@@ -2,7 +2,7 @@
 import Rete, { Node, Engine, NodeData, Plugin } from 'shared/rete'
 import io from 'socket.io'
 
-import { getLogger } from './engine';
+import { getLogger } from 'shared/core'
 import consolePlugin, { DebuggerArgs } from './plugins/consolePlugin'
 import ModulePlugin, { ModulePluginArgs } from './plugins/modulePlugin'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
