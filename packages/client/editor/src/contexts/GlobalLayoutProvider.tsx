@@ -1,52 +1,50 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import {
   DockviewApi,
-  DockviewReact,
-  DockviewReadyEvent,
-  IDockviewPanelProps,
+  // IDockviewPanelProps,
   SerializedDockview,
 } from 'dockview'
 
-// we will move this out into the layouts package
-function loadDefaultLayout(api: DockviewApi) {
-  api.addPanel({
-    id: 'panel_1',
-    component: 'default',
-    params: {
-      spellId: 'root',
-      spellName: 'root',
-      type: 'spell',
-    },
-  })
+// // we will move this out into the layouts package
+// function loadDefaultLayout(api: DockviewApi) {
+//   api.addPanel({
+//     id: 'panel_1',
+//     component: 'default',
+//     params: {
+//       spellId: 'root',
+//       spellName: 'root',
+//       type: 'spell',
+//     },
+//   })
 
-  api.addPanel({
-    id: 'panel_2',
-    component: 'default',
-  })
+//   api.addPanel({
+//     id: 'panel_2',
+//     component: 'default',
+//   })
 
-  api.addPanel({
-    id: 'panel_3',
-    component: 'default',
-  })
-}
+//   api.addPanel({
+//     id: 'panel_3',
+//     component: 'default',
+//   })
+// }
 
-const getComponents = () => {
-  return {
-    default: (props: IDockviewPanelProps<{ title: string }>) => {
-      return (
-        <div
-          style={{
-            height: '100%',
-            padding: '20px',
-            background: 'var(--dv-group-view-background-color)',
-          }}
-        >
-          {JSON.stringify(props.params)}
-        </div>
-      )
-    },
-  }
-}
+// const getComponents = () => {
+//   return {
+//     default: (props: IDockviewPanelProps<{ title: string }>) => {
+//       return (
+//         <div
+//           style={{
+//             height: '100%',
+//             padding: '20px',
+//             background: 'var(--dv-group-view-background-color)',
+//           }}
+//         >
+//           {JSON.stringify(props.params)}
+//         </div>
+//       )
+//     },
+//   }
+// }
 
 type DockviewTheme = 'dockview-theme-abyss'
 

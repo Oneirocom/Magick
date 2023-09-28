@@ -352,7 +352,7 @@ const EventHandler = ({ pubSub, tab }) => {
       isPlaytest: true,
       ..._data,
     }
-    const response = await client.service('agents').run(data)
+    await client.service('agents').run(data)
   }
 
   const resetHighlights = () => {

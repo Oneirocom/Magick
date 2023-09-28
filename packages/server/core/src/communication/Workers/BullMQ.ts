@@ -1,5 +1,5 @@
 import { Worker as BMQWorker } from 'bullmq'
-import { type Job, app } from 'server/core'
+import { app } from '../../app';
 import { Worker } from './Worker'
 
 export class BullMQWorker extends Worker {

@@ -1,12 +1,13 @@
 // DOCUMENTED
 import { GraphData, SpellInterface } from '../../src/types'
 import { SpellRunner } from '../../src/spellManager'
-import { app } from 'server/core'
+import type { Application } from 'server/core'
 
 /**
  * Type definition for arguments passed to the runSpell function.
  */
 export type RunSpellArgs = {
+  app: Application
   id: string
   inputs: Record<string, unknown>
   inputFormatter?: (graph: GraphData) => Record<string, unknown>
@@ -23,6 +24,7 @@ export type RunSpellArgs = {
 export const runSpell = async ({
   spell,
   inputs,
+  app,
   inputFormatter,
 }: RunSpellArgs) => {
   // Cast spell.graph to GraphData

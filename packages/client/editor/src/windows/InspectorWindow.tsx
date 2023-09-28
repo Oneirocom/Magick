@@ -2,7 +2,7 @@
 import { componentCategories, Icon, Tooltip, Window } from 'client/core'
 import { Help } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import WindowMessage from '../components/WindowMessage'
 import { useInspector } from '../contexts/InspectorProvider'
 import { useModal } from '../contexts/ModalProvider'
@@ -14,7 +14,7 @@ import DataControls from '../DataControls'
 const Inspector = props => {
   const { inspectorData, saveInspector } = useInspector()
 
-  const [width, setWidth] = useState()
+  const [width] = useState()
   const { openModal } = useModal()
 
   // useEffect(() => {

@@ -1,14 +1,14 @@
 // DOCUMENTED
 import classnames from 'classnames'
 import { VscClose } from 'react-icons/vsc'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import MenuBar from '../MenuBar/MenuBar'
 import CreateTab from './CreateTab'
 import css from './tabBar.module.css'
 import { Icon } from 'client/core'
-import { RootState, changeActive, closeTab, selectAllTabs } from 'client/state'
+import { changeActive, closeTab, selectAllTabs } from 'client/state'
 
 /**
  * Tab Component

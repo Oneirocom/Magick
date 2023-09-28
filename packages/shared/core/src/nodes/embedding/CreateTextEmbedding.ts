@@ -14,7 +14,7 @@ import {
   WorkerData,
 } from '../../types'
 
-import { expandVector } from '../../functions/expandVector'
+import { expandVector } from 'shared/utils'
 import { pluginManager } from '../../plugin'
 
 /** Brief description of the component that this file exports. */
