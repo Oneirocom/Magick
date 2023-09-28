@@ -505,7 +505,7 @@ const NewMenuBar = props => {
     <div>
       <IconButton
         onClick={handleMenuIconClick}
-        style={props.style ? props.style : {}}
+        style={props.style ? props.style : { borderRadius: 0 }}
       >
         <MenuIcon />
       </IconButton>

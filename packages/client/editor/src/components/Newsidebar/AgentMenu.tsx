@@ -295,7 +295,6 @@ function AgentMenu({ data, resetData }) {
             justifyContent: 'space-between',
           }}
         >
-          <NewMenuBar />
           <ListItemAvatar onClick={redirectToCloudAgents}>
             <BorderedAvatar
               alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
