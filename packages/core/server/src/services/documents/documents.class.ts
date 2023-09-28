@@ -52,11 +52,13 @@ export class DocumentService<
       elements = [
         ...elements,
         createElement(
-          chunkEmbeddings(
-            [{ text: docData.content, metadata: {} }],
-            embeddingSize,
-            '\n'
-          ),
+          docData.embedding
+            ? [docData.content]
+            : chunkEmbeddings(
+                [{ text: docData.content, metadata: {} }],
+                embeddingSize,
+                '\n'
+              ),
           docData
         ),
       ]
