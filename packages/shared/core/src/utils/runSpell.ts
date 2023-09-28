@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { SpellInterface } from '../schemas'
+import { SpellInterface } from '../../../../server/core/src/schemas'
 import { SpellManager } from '../spellManager/index'
 import { GraphData } from '../types'
 import { SpellError } from './SpellError'

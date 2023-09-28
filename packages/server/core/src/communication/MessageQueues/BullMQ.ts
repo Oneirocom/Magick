@@ -3,7 +3,7 @@ import { app } from 'server/core'
 import pino from 'pino'
 import { getLogger } from 'shared/core'
 
-import { MessageQueue } from '../MessageQueues'
+import { MessageQueue } from '.'
 import { AgentJob } from 'server/agents'
 
 export class BullQueue implements MessageQueue {

@@ -8,13 +8,13 @@ import { NumberControl } from '../../dataControls/NumberControl'
 import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
-import { SpellInterface } from '../../schemas'
 import { eventSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
   ModuleContext,
   ModuleWorkerOutput,
+  SpellInterface,
   WorkerData,
 } from '../../types'
 

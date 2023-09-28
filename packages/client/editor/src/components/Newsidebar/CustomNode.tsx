@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import AddIcon from '@mui/icons-material/Add'
-import { TypeIcon } from './TypeIcon'
 import styles from './menu.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '@magickml/providers'
@@ -19,9 +18,11 @@ import {
   selectAllTabs,
   spellApi,
   activeTabSelector,
-} from 'shared/core'
+} from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
+
+import { TypeIcon } from 'client/core'
 
 type ExtendedNodeModel = NodeModel & CustomData
 

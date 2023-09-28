@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { SpellInterface } from 'shared/core'
 
-import { useConfig, useFeathers, usePubSub } from '@magickml/providers'
+import { useConfig, useFeathers, usePubSub, Tab } from '@magickml/providers'
 import { useEditor } from '../../contexts/EditorProvider'
 import { Layout } from '../../contexts/LayoutProvider'
 import { debounce } from '../../utils/debounce'
@@ -20,7 +20,6 @@ import { RootState, spellApi } from 'client/state'
 import AgentControls from '../../windows/AgentControlWindow'
 import { IDockviewPanelProps } from 'dockview'
 import WorkspaceProvider from '../../contexts/WorkspaceProvider'
-import { Tab } from '../../contexts/TabProvider'
 
 /**
  * Workspace component that handles different tabs and their layouts.
