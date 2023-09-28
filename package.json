@@ -11,7 +11,7 @@
     "cloud": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
     "cloud-nocache": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100 --skip-nx-cache",
     "start": "node scripts/start-server.js",
-    "start-server": "OTEL_SERVICE_NAME=ide-server node -r './instrument.js' dist/apps/server/main.js",
+    "start-server": "node dist/apps/server/main.js",
     "start-cloud-agent-manager": "OTEL_SERVICE_NAME=agent-worker node -r './instrument.js' dist/apps/cloud-agent-manager/main.js",
     "start-cloud-agent-worker": "OTEL_SERVICE_NAME=agent-manager node -r './instrument.js' dist/apps/cloud-agent-worker/main.js",
     "start-docs": "npx nx serve @magickml/docs",
