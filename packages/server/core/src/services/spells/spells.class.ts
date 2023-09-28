@@ -10,7 +10,7 @@ import type { Application } from '../../declarations'
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { SpellData, SpellPatch, SpellQuery } from './spells.schema'
-import { SpellInterface } from 'shared/core'
+import type { SpellInterface } from 'shared/core'
 import { app } from '../../app'
 
 /**
