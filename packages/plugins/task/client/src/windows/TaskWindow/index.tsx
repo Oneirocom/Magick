@@ -2,7 +2,7 @@
 import { API_ROOT_URL } from 'shared/config'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useConfig } from 'client/core'
+import { useConfig } from '@magickml/providers'
 import TaskTable from './TaskTable'
 
 /**
