@@ -14,10 +14,7 @@ import { CSSObject, Theme, styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTreeData } from '@magickml/providers'
-import { SetAPIKeys } from '../SetAPIKeys'
 import { Tooltip, Typography } from '@mui/material'
-import { drawerTooltipText } from '../tooltiptext'
-import AgentMenu from '../AgentMenu'
 import { CssBaseline } from '@mui/material'
 import { DndProvider } from 'react-dnd'
 import {
@@ -26,8 +23,6 @@ import {
   MultiBackend,
   getBackendOptions,
 } from '@minoru/react-dnd-treeview'
-import styles from '../menu.module.css'
-import { CustomNode } from '../CustomNode'
 import AddIcon from '@mui/icons-material/Add'
 import LinearProgress, {
   linearProgressClasses,
@@ -40,10 +35,15 @@ import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurpl
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useConfig } from '@magickml/providers'
 import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+
+import { CustomNode } from './CustomNode'
+import AgentMenu from './AgentMenu'
+import { SetAPIKeys, drawerTooltipText } from 'client/core'
+import styles from '../menu.module.css'
 
 // todo FIX THIS IMPORT
-import { useTabLayout } from '../../../../../../editor/src/contexts/TabProvider'
+import { useTabLayout } from '@magickml/providers'
 
 const drawerWidth = 210
 

@@ -10,7 +10,6 @@ import { getLogger, SpellInterface } from 'shared/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 import io from 'socket.io-client'
 import { useConfig } from './ConfigProvider'
-import { LoadingScreen } from 'client/core'
 
 /**
  * SaveDiffData type definition.
@@ -116,7 +115,7 @@ export const useFeathers = (): FeathersContext => useContext(Context)
  * FeathersProvider component
  * @props children, token
  */
-export const FeathersProvider = ({ children, token }): JSX.Element => {
+export const FeathersProvider = ({ children, token }): JSX.Element | null => {
   const config = useConfig()
   const [client, setClient] = useState<FeathersContext['client']>(null)
   const logger = getLogger()
@@ -160,7 +159,7 @@ export const FeathersProvider = ({ children, token }): JSX.Element => {
     client,
   }
 
-  if (!client) return <LoadingScreen />
+  if (!client) return null
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
