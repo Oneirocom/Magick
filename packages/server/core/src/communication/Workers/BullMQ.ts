@@ -1,5 +1,5 @@
-import { Worker as BMQWorker } from 'bullmq'
-import { app } from '../../app';
+import { Worker as BMQWorker, Job } from 'bullmq'
+import { app } from '../../app'
 import { Worker } from './Worker'
 
 export class BullMQWorker extends Worker {

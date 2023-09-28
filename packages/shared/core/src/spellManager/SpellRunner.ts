@@ -14,8 +14,8 @@ import {
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
-import { NodeData } from '@magickml/rete'
-import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from '@magickml/config'
+import { NodeData } from 'shared/rete'
+import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from 'shared/config'
 import { AGENT_SPELL } from '../communication/agentEventTypes'
 
 export type RunComponentArgs = {
@@ -403,7 +403,8 @@ class SpellRunner {
       this.busy = false
       return this.outputData
     } catch (error) {
-      this.error(`Error running spell ${this.currentSpell.id}`, error)
+      this.error(`Error loading spell ${this.currentSpell.id}`, error)
+      return
     }
   }
 }

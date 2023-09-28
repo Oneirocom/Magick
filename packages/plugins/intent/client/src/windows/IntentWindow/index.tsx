@@ -2,7 +2,8 @@
 import { API_ROOT_URL } from 'shared/config'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { LoadingScreen, useConfig } from 'client/core'
+import { LoadingScreen } from 'client/core'
+import { useConfig } from '@magickml/providers'
 import IntentTable from './IntentTable'
 
 /**
@@ -34,8 +35,7 @@ const IntentWindow = (): JSX.Element => {
   const fetchIntents = async (): Promise<void> => {
     try {
       const response = await fetch(
-        `${API_ROOT_URL}/documents?projectId=${
-          config.projectId
+        `${API_ROOT_URL}/documents?projectId=${config.projectId
         }&metadata=${encodeURI('{"intent": { "type": "story" }}')}`,
         {
           headers: {

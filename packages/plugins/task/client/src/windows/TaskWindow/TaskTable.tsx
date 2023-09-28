@@ -33,7 +33,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import { useConfig } from 'client/core'
+import { useConfig } from '@magickml/providers'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
