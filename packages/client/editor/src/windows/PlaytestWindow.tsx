@@ -24,9 +24,6 @@ import {
  */
 const Input = props => {
   const ref = useRef() as React.MutableRefObject<HTMLInputElement>
-  const { currentAgentid } = useSelector<RootState>(
-    state => state.globalConfig
-  ) as any
 
   const [playtestCache, setPlaytestCache] = useState<string[]>([])
 

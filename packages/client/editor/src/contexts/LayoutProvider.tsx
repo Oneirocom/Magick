@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
-import { activeTabSelector, saveTabLayout } from 'client/state'
+import { saveTabLayout } from 'client/state'
 import {
   Actions,
   DockLocation,
@@ -10,7 +10,7 @@ import {
   TabSetNode,
 } from 'flexlayout-react'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 // List of window types used to load components from data sent by rete
 const windowTypes: WindowTypes = {

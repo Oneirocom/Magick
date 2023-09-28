@@ -1,7 +1,7 @@
 import { RedisPubSub } from 'server/redis-pubsub'
 import { PubSub } from './PubSub'
 
-import { app } from 'server/core'
+import { app } from '../../app';
 
 export class RedisPubSubWrapper extends PubSub {
   pubsub: RedisPubSub

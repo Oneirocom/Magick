@@ -1,4 +1,4 @@
-import type { app as FeathersApp } from 'server/core'
+import type { Application } from 'server/core'
 import pino from 'pino'
 import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
@@ -27,11 +27,11 @@ export type RunComponentArgs = {
   runSubspell?: boolean
   secrets?: Record<string, string>
   publicVariables?: Record<string, unknown>
-  app?: typeof FeathersApp
+  app?: Application
 }
 
 type SpellRunnerConstructor = {
-  app: typeof FeathersApp
+  app: Application
   socket?: io.Socket
   agent?: any
   spellManager: SpellManager
@@ -44,7 +44,7 @@ class SpellRunner {
   module: Module
   ranSpells: string[] = []
   socket?: io.Socket | null = null
-  app: typeof FeathersApp
+  app: Application
   agent?: any
   spellManager: SpellManager
   busy = false

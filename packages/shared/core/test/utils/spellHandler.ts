@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { app } from 'server/core'
+import type { Application } from 'server/core'
 import { SpellRunner } from '../../src/spellManager'
 import { MagickSpellInput, SpellInterface } from '../../src/types'
 
@@ -11,7 +11,8 @@ import { MagickSpellInput, SpellInterface } from '../../src/types'
  */
 export const runTestSpell = async (
   spell: SpellInterface,
-  inputs: MagickSpellInput
+  inputs: MagickSpellInput,
+  app: Application
 ): Promise<unknown> => {
   // Update return type to unknown to avoid using 'any'
 

@@ -20,7 +20,7 @@ import Playtest from '../../../windows/PlaytestWindow'
 import DebugConsole from '../../../windows/DebugConsole'
 import TextEditor from '../../../windows/TextEditorWindow'
 import { useEditor } from '../../../contexts/EditorProvider'
-import { Tab } from '../../../../../providers/src/lib/TabProvider'
+import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 
@@ -130,7 +130,6 @@ export const Composer = ({ theme, tab, pubSub }) => {
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
-  const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
 
   // Set up autosave for the workspaces

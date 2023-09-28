@@ -34,7 +34,6 @@ const Composer = ({ tab, pubSub }) => {
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const FeathersContext = useFeathers()
-  const client = FeathersContext?.client
   const preferences = useSelector((state: RootState) => state.preferences)
 
   // Set up autosave for the workspaces
