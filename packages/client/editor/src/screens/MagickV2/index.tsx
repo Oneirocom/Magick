@@ -1,16 +1,20 @@
 import {
+  DockviewReadyEvent,
   GridviewApi,
   GridviewReact,
   GridviewReadyEvent,
   IGridviewPanelProps,
   Orientation,
 } from 'dockview'
+import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
 import MainPanel from './panels/mainPanel'
 import FileDrawer from './panels/fileDrawer'
+import RightSidebar from './panels/rightSidebar'
 
 const components = {
   MainPanel,
   FileDrawer,
+  RightSidebar,
   default: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
       <div
@@ -23,16 +27,16 @@ const components = {
         {JSON.stringify(props.params)}
       </div>
     )
-  },
+  }
 }
 
 const loadDefaultLayout = (api: GridviewApi) => {
   // Bottom status bar
   api.addPanel({
-    id: 'panel_1',
+    id: 'StatusBar',
     component: 'default',
     params: {
-      title: 'Panel 1',
+      title: 'StatusBar',
     },
     maximumHeight: 15,
     minimumHeight: 15,
@@ -40,47 +44,65 @@ const loadDefaultLayout = (api: GridviewApi) => {
 
   // Left side file drawer
   api.addPanel({
-    id: 'panel_3',
+    id: 'FileDrawer',
     component: 'FileDrawer',
     maximumWidth: 300,
     params: {
-      title: 'Panel 3',
+      title: 'FileDrawer',
+      id: 'FileDrawer'
     },
   })
 
   // Main panel in the in the middle
   api.addPanel({
-    id: 'panel_5',
+    id: 'MainPanel',
     component: 'MainPanel',
     params: {
-      title: 'Panel 5',
+      title: 'MainPanel',
+      idL: 'MainPanel'
     },
-    position: { referencePanel: 'panel_3', direction: 'right' },
+    position: { referencePanel: 'FileDrawer', direction: 'right' },
   })
 
   // Right side console panel
-  // api.addPanel({
-  //   id: 'panel_6',
-  //   component: 'default',
-  //   params: {
-  //     title: 'Panel 6',
-  //   },
-  //   position: { referencePanel: 'panel_5', direction: 'right' },
-  // }).api.setSize({
-  //   width: 5
-  // });
+  api.addPanel({
+    id: 'RightSidebar',
+    component: 'RightSidebar',
+    params: {
+      title: 'Panel 6',
+      id: 'RightSidebar'
+    },
+    minimumWidth: 5,
+    position: { referencePanel: 'MainPanel', direction: 'right' },
+  })
 }
 
 const MagickV2 = () => {
+  const { getLayout, setApi } = useGlobalLayout()
+
   const onReady = (event: GridviewReadyEvent) => {
-    loadDefaultLayout(event.api)
+    const layout = getLayout()
+
+    let success = false
+
+    if (layout) {
+      event.api.fromJSON(layout)
+      success = true
+    }
+
+    if (!success) {
+      loadDefaultLayout(event.api)
+    }
+
+    setApi(event.api)
   }
 
   return (
     <GridviewReact
       components={components}
       onReady={onReady}
-      proportionalLayout={false}
+      disableAutoResizing={false}
+      proportionalLayout={true}
       orientation={Orientation.VERTICAL}
       className="dockview-theme-abyss"
     />
