@@ -81,9 +81,9 @@ export const PubSubProvider = ({ children }) => {
     }
   }
 
-  useHotkeys('ctrl+b,cmd+b', () => {
-    publish(events.TOGGLE_FILE_DRAWER, {})
-  })
+  // useHotkeys('ctrl+b,cmd+b', () => {
+  //   publish(events.TOGGLE_FILE_DRAWER, {})
+  // })
 
   useHotkeys('ctrl+c', event => {
     console.log('TRIGGER TAB SWITCH')
