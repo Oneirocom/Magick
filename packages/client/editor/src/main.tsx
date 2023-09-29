@@ -22,6 +22,8 @@ import { AppConfig } from '@magickml/providers'
 import { MagickmlChatbox } from 'client/magickml-chatbox'
 import { createStore } from 'client/state'
 
+import './themes.scss'
+
 /**
  * Type definition for the props that can be passed to MagickIDE
  * @typedef {Object} MagickIDEProps

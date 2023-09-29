@@ -24,6 +24,7 @@
     "../core/client/src/providers/ConfigProvider.tsx",
     "../core/client/src/providers/PubSubProvider.tsx",
     "../core/client/src/providers/FeathersProvider.tsx",
-    "../core/shared/src/state"
+    "../core/shared/src/state",
+    "../state/src/lib/helperHooks/useDockviewTheme.tsx"
   ]
 }

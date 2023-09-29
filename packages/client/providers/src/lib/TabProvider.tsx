@@ -5,8 +5,7 @@ import {
 } from 'dockview'
 import { usePubSub } from '@magickml/providers'
 import { getWorkspaceLayout } from 'client/layouts'
-
-type DockviewTheme = 'dockview-theme-abyss'
+import { useDockviewTheme } from 'client/state'
 
 export type Tab = {
   id: string
@@ -18,8 +17,8 @@ export type Tab = {
 }
 
 type DocviewContext = {
-  theme: DockviewTheme
-  setTheme: (theme: DockviewTheme) => void
+  theme: string
+  setTheme: (theme: string) => void
   api: DockviewApi | undefined
   setApi: (api: DockviewApi) => void
   getLayout: () => SerializedDockview | null
@@ -40,7 +39,7 @@ const Context = createContext<DocviewContext>(undefined!)
 export const useTabLayout = () => useContext(Context)
 
 export const TabProvider = ({ children }) => {
-  const [theme, setTheme] = useState<DockviewTheme>('dockview-theme-abyss')
+  const { theme, setTheme } = useDockviewTheme()
   const [api, setApi] = useState<DockviewApi | undefined>()
   const pubSub = usePubSub()
 
