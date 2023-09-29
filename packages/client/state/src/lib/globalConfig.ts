@@ -14,6 +14,8 @@ export interface GlobalConfig {
   token: string
   projectId: string
   currentAgentId: string
+  theme: string
+  dockviewTheme: string
 }
 
 /**
@@ -27,6 +29,8 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     token: '',
     projectId: '',
     currentAgentId: '',
+    dockviewTheme: 'dockview-theme-abyss',
+    theme: 'abyss',
   },
   reducers: {
     /**
@@ -50,6 +54,19 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     ): void => {
       state.currentAgentId = action.payload
     },
+    setTheme: (state: GlobalConfig, action: PayloadAction<string>): void => {
+      state.theme = action.payload
+
+      if (action.payload === 'abyss') {
+        state.dockviewTheme = 'dockview-theme-abyss'
+      }
+    },
+    setDockviewTheme: (
+      state: GlobalConfig,
+      action: PayloadAction<string>
+    ): void => {
+      state.dockviewTheme = action.payload
+    },
   },
 })
 
@@ -57,7 +74,8 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
 /**
  * Action to set the global configuration.
  */
-export const { setConfig, setCurrentAgentId } = globalConfigSlice.actions
+export const { setConfig, setCurrentAgentId, setDockviewTheme } =
+  globalConfigSlice.actions
 
 /**
  * Export GlobalConfigSlice reducer.

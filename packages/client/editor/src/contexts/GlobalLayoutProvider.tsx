@@ -3,8 +3,10 @@ import {
   GridviewApi,
   SerializedGridviewComponent,
 } from 'dockview'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, setDockviewTheme } from 'client/state'
+import { useDockviewTheme } from 'client/state'
 
-type DockviewTheme = 'dockview-theme-abyss'
 
 type Resizing = {
   id: string,
@@ -13,8 +15,8 @@ type Resizing = {
 }
 
 type DocviewContext = {
-  theme: DockviewTheme
-  setTheme: (theme: DockviewTheme) => void
+  theme: string
+  setTheme: (theme: string) => void
   api: GridviewApi
   setApi: (api: GridviewApi) => void
   getLayout: () => SerializedGridviewComponent | null
@@ -32,9 +34,10 @@ const Context = createContext<DocviewContext>(undefined!)
 export const useGlobalLayout = () => useContext(Context)
 
 export const GlobalLayoutProvider = ({ children }) => {
-  const [theme, setTheme] = useState<DockviewTheme>('dockview-theme-abyss')
   const [api, setApi] = useState<GridviewApi>()
   const [resizing, setResizing] = useState<Resizing>()
+
+  const { theme, setTheme } = useDockviewTheme()
 
   const getLayout = () => {
     const layout = localStorage.getItem(LAYOUT_KEY)
