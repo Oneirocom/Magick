@@ -1,0 +1,4 @@
+.sash:hover {
+  background: rgba(255, 255, 255, 0.249) !important;
+  transition-delay: 0.2s !important;
+}
