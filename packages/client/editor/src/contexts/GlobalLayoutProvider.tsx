@@ -1,60 +1,26 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import {
-  DockviewApi,
-  // IDockviewPanelProps,
-  SerializedDockview,
+  GridviewApi,
+  SerializedGridviewComponent,
 } from 'dockview'
 
-// // we will move this out into the layouts package
-// function loadDefaultLayout(api: DockviewApi) {
-//   api.addPanel({
-//     id: 'panel_1',
-//     component: 'default',
-//     params: {
-//       spellId: 'root',
-//       spellName: 'root',
-//       type: 'spell',
-//     },
-//   })
-
-//   api.addPanel({
-//     id: 'panel_2',
-//     component: 'default',
-//   })
-
-//   api.addPanel({
-//     id: 'panel_3',
-//     component: 'default',
-//   })
-// }
-
-// const getComponents = () => {
-//   return {
-//     default: (props: IDockviewPanelProps<{ title: string }>) => {
-//       return (
-//         <div
-//           style={{
-//             height: '100%',
-//             padding: '20px',
-//             background: 'var(--dv-group-view-background-color)',
-//           }}
-//         >
-//           {JSON.stringify(props.params)}
-//         </div>
-//       )
-//     },
-//   }
-// }
-
 type DockviewTheme = 'dockview-theme-abyss'
+
+type Resizing = {
+  id: string,
+  animationDuration: number,
+  size: number
+}
 
 type DocviewContext = {
   theme: DockviewTheme
   setTheme: (theme: DockviewTheme) => void
-  api: DockviewApi
-  setApi: (api: DockviewApi) => void
-  getLayout: () => SerializedDockview | null
-  setLayout: (layout: SerializedDockview) => void
+  api: GridviewApi
+  setApi: (api: GridviewApi) => void
+  getLayout: () => SerializedGridviewComponent | null
+  setLayout: (layout: SerializedGridviewComponent) => void
+  resizing: Resizing
+  setResizing: (resizing: Resizing) => void
 }
 
 const LAYOUT_KEY = 'global-layout'
@@ -67,7 +33,8 @@ export const useGlobalLayout = () => useContext(Context)
 
 export const GlobalLayoutProvider = ({ children }) => {
   const [theme, setTheme] = useState<DockviewTheme>('dockview-theme-abyss')
-  const [api, setApi] = useState<DockviewApi>()
+  const [api, setApi] = useState<GridviewApi>()
+  const [resizing, setResizing] = useState<Resizing>()
 
   const getLayout = () => {
     const layout = localStorage.getItem(LAYOUT_KEY)
@@ -75,10 +42,10 @@ export const GlobalLayoutProvider = ({ children }) => {
     if (!layout) {
       return null
     }
-    return JSON.parse(localStorage.getItem(LAYOUT_KEY)) as SerializedDockview
+    return JSON.parse(localStorage.getItem(LAYOUT_KEY)) as SerializedGridviewComponent
   }
 
-  const setLayout = (layout: SerializedDockview) => {
+  const setLayout = (layout: SerializedGridviewComponent) => {
     localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout))
   }
 
@@ -102,6 +69,8 @@ export const GlobalLayoutProvider = ({ children }) => {
     setApi,
     getLayout,
     setLayout,
+    resizing,
+    setResizing,
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
