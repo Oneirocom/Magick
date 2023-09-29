@@ -1,91 +1,18 @@
 import { TreeDataProvider, usePubSub } from '@magickml/providers'
 import { IGridviewPanelProps } from 'dockview'
-import { useEffect, useState } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
 import { NewSidebar } from '../../../components/Newsidebar'
+import { useGlobalLayout } from '../../../contexts/GlobalLayoutProvider'
+import { useDrawerAnimation } from '../hooks/useDrawerAnimation'
 
-const ANIMATION_DURATION = 50
+const ANIMATION_DURATION = 300
+const INITIAL_SIZE = 200
 
-const FileDrawer = (props: IGridviewPanelProps<{ title: string }>) => {
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [currentWidth, setCurrentWidth] = useState(0)
-  const [targetWidth, setTargetWidth] = useState(0)
-  const { events, subscribe } = usePubSub()
+const FileDrawer = (props: IGridviewPanelProps<{ title: string, id: string }>) => {
 
-  const { TOGGLE_FILE_DRAWER } = events
+  const { events } = usePubSub()
+  const { setResizing } = useGlobalLayout()
 
-  useHotkeys('ctrl+b', () => {
-    if (currentWidth > 0) {
-      close()
-    } else {
-      open()
-    }
-  })
-
-  const animateSize = (initialWidth: number, targetWidth: number) => {
-    let startTimestamp: number | null = null
-
-    const frame = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp
-
-      const elapsed = timestamp - startTimestamp
-      const progress = Math.min(elapsed / ANIMATION_DURATION, 1)
-
-      const currentWidth =
-        initialWidth + (targetWidth - initialWidth) * progress
-      props.api.setSize({ width: currentWidth })
-
-      if (progress < 1) {
-        requestAnimationFrame(frame)
-      } else {
-        setIsAnimating(false)
-      }
-    }
-
-    setIsAnimating(true)
-    requestAnimationFrame(frame)
-  }
-
-  const open = () => {
-    if (!isAnimating) {
-      animateSize(0, targetWidth)
-    }
-  }
-
-  const close = () => {
-    if (!isAnimating) {
-      setTargetWidth(currentWidth)
-      animateSize(currentWidth, 0)
-    }
-  }
-
-  useEffect(() => {
-    const unsubscribe = subscribe(TOGGLE_FILE_DRAWER, () => {
-      if (currentWidth > 0) {
-        close()
-      } else {
-        open()
-      }
-    })
-
-    return () => {
-      unsubscribe()
-    }
-  }, [currentWidth, open, close, subscribe, TOGGLE_FILE_DRAWER])
-
-  // useEffect is now used only if you need an initial animation or similar effect
-  useEffect(() => {
-    // Example: animate the opening when the component mounts
-    const dispose = props.api.onDidDimensionsChange(event => {
-      setCurrentWidth(event.width)
-    })
-
-    props.api.setSize({ width: 200 })
-
-    return () => {
-      dispose.dispose()
-    }
-  }, [props.api])
+  useDrawerAnimation(props, INITIAL_SIZE, ANIMATION_DURATION, events.TOGGLE_FILE_DRAWER, 'ctrl+b');
 
   return (
     <div style={{ height: '100%' }}>
