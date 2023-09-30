@@ -8,7 +8,11 @@ import Discord, {
   Partials,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
-import { initSpeechClient, stopSpeechClient, recognizeSpeech } from './discord-voice'
+import {
+  initSpeechClient,
+  stopSpeechClient,
+  recognizeSpeech,
+} from './discord-voice'
 
 export class DiscordConnector {
   logger = getLogger()
@@ -18,11 +22,7 @@ export class DiscordConnector {
   guildId!: any
   message!: any
   constructor(options) {
-    const {
-      agent,
-      discord_api_key,
-      spellRunner,
-    } = options
+    const { agent, discord_api_key, spellRunner } = options
     this.agent = agent
     this.spellRunner = spellRunner
 
@@ -57,25 +57,21 @@ export class DiscordConnector {
 
       this.client.embed = embed
 
-      const {
-        client,
-        agent,
-        spellRunner,
-      } = this
-        ; (async () => {
-          if (typeof window === 'undefined') {
-            this.client = initSpeechClient({
-              client,
-              agent,
-              spellRunner,
-            })
-          }
-        })()
+      const { client, agent, spellRunner } = this
+      ;(async () => {
+        if (typeof window === 'undefined') {
+          this.client = initSpeechClient({
+            client,
+            agent,
+            spellRunner,
+          })
+        }
+      })()
       this.client.on('joinvc', async voiceChannel => {
         console.log('joinvc', voiceChannel)
         return recognizeSpeech(voiceChannel, this.agent.id)
       })
-      this.client.on('leavevc', async (voiceChannel) => {
+      this.client.on('leavevc', async voiceChannel => {
         stopSpeechClient(voiceChannel, this.agent.id)
       })
 
@@ -108,18 +104,23 @@ export class DiscordConnector {
       })
 
       this.client.ws
-        ; (async () => {
-          try {
-            const login = await this.client.login(token)
-            agent.log('Discord client logged in', { login })
-          } catch (e) {
-            return agent.error('Error logging in discord client', e)
+      ;(async () => {
+        try {
+          const login = await this.client.login(token)
+          agent.log('Discord client logged in', { login })
+        } catch (error: any) {
+          const data = {
+            message: error.message,
+            stack: error.stack,
+            name: error.name,
           }
+          return agent.error('Error logging in discord client', data)
+        }
 
-          this.client.on('error', err => {
-            agent.error('Discord client error', err)
-          })
-        })()
+        this.client.on('error', err => {
+          agent.error('Discord client error', err)
+        })
+      })()
     } catch (e) {
       agent.error('Error creating discord client', e)
     }
@@ -279,7 +280,11 @@ export class DiscordConnector {
 
     const inputType = message.guildId === null ? 'DM' : 'Text'
 
-    this.logger.info(this.agent.name, ' - sending message on discord - ', content)
+    this.logger.info(
+      this.agent.name,
+      ' - sending message on discord - ',
+      content
+    )
 
     app.get('agentCommander').runSpell({
       inputs: {
@@ -333,29 +338,29 @@ export class DiscordConnector {
 
   async sendMessageToChannel(channelId: any, msg: any) {
     try {
-      const channel = await this.client.channels.fetch(channelId);
-      if (msg && msg !== '' && channel && channel !== undefined) {  
-        const paragraphs = msg?.split(/\n{2,}/) ?? [];
-  
+      const channel = await this.client.channels.fetch(channelId)
+      if (msg && msg !== '' && channel && channel !== undefined) {
+        const paragraphs = msg?.split(/\n{2,}/) ?? []
+
         // Process each paragraph individually
         for (const paragraph of paragraphs) {
           // Split paragraph into chunks of 2000 characters or less
-          const chunks = paragraph.match(/.{1,2000}/gs) || [];
-  
+          const chunks = paragraph.match(/.{1,2000}/gs) || []
+
           // Send each chunk individually
           for (const chunk of chunks) {
-            channel.send(chunk);
+            channel.send(chunk)
           }
         }
       } else {
         this.logger.error(
-          'Could not send message to channel: ' + channelId +'\n',
-          'msg = ' + msg +'\n',
-          'channel = ' + channel +'\n'
-        );
+          'Could not send message to channel: ' + channelId + '\n',
+          'msg = ' + msg + '\n',
+          'channel = ' + channel + '\n'
+        )
       }
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(e)
     }
   }
 }
