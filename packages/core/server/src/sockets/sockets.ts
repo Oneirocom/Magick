@@ -29,24 +29,34 @@ const handleSockets = (app: any) => {
             'No token provided in handshake query. Socket connection failed.'
           )
 
-        throw new Error(
-          'No token provided in handshake query. Socket connection failed.'
-        )
+        socket.emit('auth_error', 'Authentication failed. No token provided.')
+        return
       }
-      // Auth services will verify the token
-      const payload = await app
-        .service('authentication')
-        .verifyAccessToken(token)
 
-      const user = payload.user
-      // Attach the user info to the params for use in services
-      socket.feathers.user = user
-      // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
-      const spellManager = new SpellManager({ socket, app, watchSpells: true })
-      app.userSpellManagers.set(user.id, spellManager)
-      // emit login event to be handled by global app login methods for channels
-      app.emit('login', payload, { connection: socket.feathers })
-      socket.emit('connected')
+      try {
+        // Auth services will verify the token
+        const payload = await app
+          .service('authentication')
+          .verifyAccessToken(token)
+
+        const user = payload.user
+        // Attach the user info to the params for use in services
+        socket.feathers.user = user
+        // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
+        const spellManager = new SpellManager({
+          socket,
+          app,
+          watchSpells: true,
+        })
+        app.userSpellManagers.set(user.id, spellManager)
+        // emit login event to be handled by global app login methods for channels
+        app.emit('login', payload, { connection: socket.feathers })
+        socket.emit('connected')
+      } catch (error) {
+        console.error('Authentication error:', error.message)
+        socket.emit('auth_error', 'Authentication failed.')
+        return
+      }
     })
   }
 }
