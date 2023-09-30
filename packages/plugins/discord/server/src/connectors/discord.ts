@@ -109,20 +109,15 @@ export class DiscordConnector {
           const login = await this.client.login(token)
           agent.log('Discord client logged in', { login })
         } catch (error: any) {
-          const data = {
-            message: error.message,
-            stack: error.stack,
-            name: error.name,
-          }
-          return agent.error('Error logging in discord client', data)
+          return agent.error('Error logging in discord client', error.message)
         }
 
         this.client.on('error', err => {
           agent.error('Discord client error', err)
         })
       })()
-    } catch (e) {
-      agent.error('Error creating discord client', e)
+    } catch (error: any) {
+      agent.error('Error creating discord client', error.message)
     }
   }
 
