@@ -15,7 +15,6 @@ import {
   AGENT_RUN_JOB,
   MagickSpellOutput,
 } from '@magickml/core'
-import { PING_AGENT_TIME_MSEC } from '@magickml/config'
 
 import { AgentManager } from './AgentManager'
 import {
