@@ -52,7 +52,7 @@ const handleSockets = (app: any) => {
         // emit login event to be handled by global app login methods for channels
         app.emit('login', payload, { connection: socket.feathers })
         socket.emit('connected')
-      } catch (error) {
+      } catch (error: any) {
         console.error('Authentication error:', error.message)
         socket.emit('auth_error', 'Authentication failed.')
         return
