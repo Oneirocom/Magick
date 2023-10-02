@@ -3,7 +3,7 @@
  * A plugin for interacting with OpenAI's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl, SliderControl } from '@magickml/core'
 import shared from '@magickml/plugin-openai-shared'
 
 // Importing shared variables from plugin-openai-shared module
@@ -58,32 +58,52 @@ const textCompletionControls = [
 // Input controls for chat completion
 const chatCompletionControls = [
   {
-    type: InputControl,
+    type: SliderControl,
     dataKey: 'temperature',
     name: 'Temperature (0-1.0)',
     icon: 'moon',
     defaultValue: 0.5,
+    min: 0,
+    max: 1.0,
+    step: 0.01,
+    tooltip:
+      'Controls randomness: lowering results in less random completions. As the temperature approaches zero, the model will become deterministicand repetitive.',
   },
   {
-    type: InputControl,
+    type: SliderControl,
     dataKey: 'top_p',
     name: 'Top P (0-1.0)',
     icon: 'moon',
     defaultValue: 1,
+    min: 0,
+    max: 1.0,
+    step: 0.01,
+    tooltip:
+      'Controls the proportion of the mass of the distribution for the next token: smaller values make the output more focused and deterministic.',
   },
   {
-    type: InputControl,
+    type: SliderControl,
     dataKey: 'frequency_penalty',
     name: 'Frequency Penalty (0-2.0)',
     icon: 'moon',
     defaultValue: 0.0,
+    min: 0,
+    max: 2.0,
+    step: 0.01,
+    tooltip:
+      'Subtracts from the likelihood of each token based on its frequency: higher values make frequent tokens less likely to appear.',
   },
   {
-    type: InputControl,
+    type: SliderControl,
     dataKey: 'presence_penalty',
     name: 'Presence Penalty (0-2.0)',
     icon: 'moon',
     defaultValue: 0,
+    min: 0,
+    max: 2.0,
+    step: 0.01,
+    tooltip:
+      'Adds to the likelihood of each token based on its frequency: higher values make frequent tokens more likely to appear.',
   },
 ]
 

@@ -13,6 +13,7 @@ export { SocketGeneratorControl } from './dataControls/SocketGenerator'
 // Export all data controls
 export { SwitchControl } from './dataControls/SwitchControl'
 export { TextInputControl } from './dataControls/TextInputControl'
+export { SliderControl } from './dataControls/SliderControl'
 export * from './engine'
 export * from './functions/processCode'
 export * from './functions/saveRequest'
