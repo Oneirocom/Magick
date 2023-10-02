@@ -15,6 +15,8 @@ import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from '../workspaces/composer'
 import NewMenuBar from '../../../components/MenuBar/newMenuBar';
 
+import './tab-layout.scss'
+
 // we will move this out into the layouts package
 function loadDefaultLayout(api: DockviewApi) {
   api.addPanel({
@@ -37,6 +39,21 @@ function loadDefaultLayout(api: DockviewApi) {
     component: 'default',
   })
 }
+
+import { IDockviewPanelHeaderProps, DockviewDefaultTab } from 'dockview';
+
+const TabHeader = (props: IDockviewPanelHeaderProps) => {
+  const onContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    alert('context menu');
+  };
+  // @ts-ignore
+  return <DockviewDefaultTab onContextMenu={onContextMenu} {...props} />;
+};
+
+const tabComponents = {
+  tabHeader: TabHeader,
+};
 
 const getComponents = () => {
   const pluginComponents = []
@@ -120,6 +137,7 @@ const MainPanel = () => {
     <DockviewReact
       onReady={onReady}
       preHeaderActionsComponent={PreControls}
+      tabComponents={tabComponents}
       className={`tab-layout ${theme}`}
       components={getComponents()}
     />

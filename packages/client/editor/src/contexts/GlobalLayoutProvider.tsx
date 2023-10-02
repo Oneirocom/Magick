@@ -3,8 +3,6 @@ import {
   GridviewApi,
   SerializedGridviewComponent,
 } from 'dockview'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setDockviewTheme } from 'client/state'
 import { useDockviewTheme } from 'client/state'
 
 

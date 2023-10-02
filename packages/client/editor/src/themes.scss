@@ -1,0 +1,142 @@
+// Palette Colors
+:root {
+  --abyss: #03070c;
+  --neutral-dark: #20232a;
+  --midnight: #08121f;
+  --charcoal: #192130;
+  --slate: #696969;
+  --neutral-light: #ffffff;
+
+  // Functional Variables
+  --deep-background-color: var(--abyss);
+  --background-color: var(--midnight); // Used for main backgrounds
+  --foreground-color: var(--charcoal); // Primary text color
+  --divider: var(--slate); // Divider color
+  --sash-highlight: #3b6fd754;
+  --active-font-color: var(--neutral-light); // Primary font color
+  --inactive-font-color: var(--slate); // Secondary font color
+  --button-active-bg: var(--neutral-dark); // Background for active buttons
+  --button-inactive-text: var(--slate); // Text for inactive buttons
+  --button-active-text: var(--neutral-light); // Text for active buttons
+
+  // spacing
+  --sash-width: 4px;
+}
+
+@mixin dockview-theme-core-mixin {
+  --dv-background-color: black;
+  --dv-paneview-active-outline-color: dodgerblue;
+  --dv-tabs-and-actions-container-font-size: 14px;
+  --dv-tabs-and-actions-container-height: 35px;
+  --dv-drag-over-background-color: rgba(83, 89, 93, 0.5);
+  --dv-drag-over-border-color: white;
+  --dv-tabs-container-scrollbar-color: #888;
+  --dv-icon-hover-background-color: rgba(90, 93, 94, 0.31);
+  --dv-floating-box-shadow: 8px 8px 8px 0px rgba(83, 89, 93, 0.5);
+}
+
+.dockview-theme-night {
+  @include dockview-theme-core-mixin();
+  --dv-background-color: var(--background-color);
+  //
+  --dv-group-view-background-color: var(--foreground-color);
+  //
+  --dv-tabs-and-actions-container-background-color: var(
+    --deep-background-color
+  );
+  //
+  --dv-activegroup-visiblepanel-tab-background-color: #1e1e1e;
+  --dv-activegroup-hiddenpanel-tab-background-color: var(--background-color);
+  --dv-inactivegroup-visiblepanel-tab-background-color: #1e1e1e;
+  --dv-inactivegroup-hiddenpanel-tab-background-color: var(--background-color);
+  --dv-tab-divider-color: var(--divider);
+  //
+  --dv-activegroup-visiblepanel-tab-color: var(--background-color);
+  --dv-activegroup-hiddenpanel-tab-color: #969696;
+  --dv-inactivegroup-visiblepanel-tab-color: #8f8f8f;
+  --dv-inactivegroup-hiddenpanel-tab-color: #626262;
+  //
+  --dv-separator-border: rgb(68, 68, 68);
+  --dv-paneview-header-border-color: rgba(204, 204, 204, 0.2);
+
+  --dv-group-view-background-color: var(--background-color);
+  --dv-active-sash-color: var(--sash-highlight);
+
+  .tab-layout {
+    .tabs-and-actions-container {
+      height: 50px;
+
+      .tab.active-tab {
+        background-color: var(--background-color) !important;
+        color: var(--active-font-color) !important;
+      }
+
+      .tab.inactive-tab {
+        background-color: var(--deep-background-color) !important;
+        color: var(--inactive-font-color);
+      }
+    }
+
+    .sash {
+      background-color: var(--background-color);
+    }
+  }
+
+  .composer-layout {
+    .groupview {
+      background-color: var(--foreground-color);
+    }
+
+    .split-view-container .sash-container .sash:hover {
+      background-color: var(--sash-highlight) !important;
+    }
+
+    .split-view-container.horizontal > .sash-container > .sash {
+      width: var(--sash-width) !important;
+    }
+
+    .split-view-container.vertical > .sash-container > .sash {
+      height: var(--sash-width) !important;
+    }
+
+    .sash {
+      background-color: var(--background-color);
+    }
+
+    .split-view-container.vertical > .view-container > .view {
+      padding-top: var(--sash-width);
+      padding-left: var(--sash-width);
+    }
+
+    .split-view-container.vertical > .view-container > .view:first-child {
+      padding-top: 0;
+    }
+
+    .tabs-and-actions-container {
+      height: 30px;
+      background-color: var(--background-color);
+
+      .tabs-container {
+        .tab {
+          background-color: var(--background-color);
+          color: var(--active-font-color);
+        }
+
+        .tab.active-tab {
+          background-color: var(--foreground-color) !important;
+          color: var(--active-font-color);
+        }
+
+        .tab.inactive-tab {
+          background-color: var(--background-color) !important;
+          color: var(--inactive-font-color);
+        }
+      }
+    }
+  }
+
+  // todo there are better ways to do this I think
+  [name='react-console-emulator'] {
+    background-color: var(--background-color) !important;
+  }
+}
