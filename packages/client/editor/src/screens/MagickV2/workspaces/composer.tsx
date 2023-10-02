@@ -204,7 +204,7 @@ export const Composer = ({ theme, tab, pubSub }) => {
       <DockviewReact
         components={components}
         onReady={onReady}
-        className={theme || 'dockview-theme-abyss'}
+        className={theme}
       />
     </>
   )
@@ -214,9 +214,10 @@ const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; theme: string }>) => {
   const pubSub = usePubSub()
   return (
     <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
+      <div style={{ height: 20, width: '100%' }}></div>
       <div style={{ position: 'relative', height: '100%' }}>
         <Composer
-          theme={props.params.theme}
+          theme={`composer-layout ${props.params.theme}`}
           tab={props.params.tab}
           pubSub={pubSub}
         />

@@ -47,7 +47,7 @@
 .playtest-output {
   border: 1px solid var(--dark-2);
   padding: var(--c1);
-  background-color: rgba(40, 40, 40, 0.95);
+  background-color: var(--background-color);
   color: rgba(150, 150, 150, 0.95);
   flex: 1;
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
@@ -89,7 +89,7 @@
   width: 100%;
   border-radius: 4px;
   cursor: default;
-  background-color: var(--dark-2);
+  background-color: var(--background-color);
   border: 1px solid var(--dark-3);
   flex: 1;
   height: var(--c4);

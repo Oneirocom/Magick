@@ -78,7 +78,7 @@ const Inspector = props => {
       {inspectorData?.info && (
         <Tooltip title="Help" placement="bottom">
           <IconButton
-            style={{ height: '30px', width: '30px' }}
+            style={{ height: '100%', width: '30px' }}
             onClick={() =>
               openModal({
                 modal: 'infoModal',
@@ -97,7 +97,7 @@ const Inspector = props => {
   if (!inspectorData) return <WindowMessage />
 
   return (
-    <Window toolbar={toolbar} darker outline borderless>
+    <Window toolbar={toolbar} darker>
       <div style={{ padding: 15 }}>
         <DataControls
           inspectorData={inspectorData}

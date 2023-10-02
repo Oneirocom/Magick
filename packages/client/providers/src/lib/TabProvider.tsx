@@ -81,6 +81,7 @@ export const TabProvider = ({ children }) => {
     api.addPanel({
       id: tab.name,
       component: tab.type,
+      tabComponent: 'tabHeader',
       params: {
         tab,
         theme,

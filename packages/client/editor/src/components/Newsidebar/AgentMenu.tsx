@@ -285,7 +285,7 @@ function AgentMenu({ data, resetData }) {
 
   return (
     <div>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'var(--foreground-color)' }}>
         <ListItem
           alignItems="center"
           sx={{

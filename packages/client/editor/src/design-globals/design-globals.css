@@ -15,12 +15,15 @@ h2,
 h3,
 h4,
 h5,
+span,
+body,
+div,
 form,
 button,
 label,
 .flexlayout__tab_button_content {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
-    sans-serif;
+    sans-serif !important;
 }
 
 :root {
