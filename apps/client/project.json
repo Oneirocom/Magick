@@ -11,7 +11,8 @@
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/client",
-        "base": "/"
+        "base": "/",
+        "postcssConfig": "apps/client/postcss.config.js"
       },
       "configurations": {
         "development": {
