@@ -53,7 +53,7 @@ export class DocumentService<
         ...elements,
         createElement(
           docData.embedding
-            ? [docData.content]
+            ? [{ text: docData.content, metadata: {} }]
             : chunkEmbeddings(
                 [{ text: docData.content, metadata: {} }],
                 embeddingSize,
