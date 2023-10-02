@@ -4,6 +4,7 @@ import {
   GridviewReact,
   GridviewReadyEvent,
   IGridviewPanelProps,
+  LayoutPriority,
   Orientation,
 } from 'dockview'
 import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
@@ -38,8 +39,8 @@ const loadDefaultLayout = (api: GridviewApi) => {
     params: {
       title: 'StatusBar',
     },
-    maximumHeight: 15,
-    minimumHeight: 15,
+    maximumHeight: 30,
+    minimumHeight: 30,
   })
 
   // Left side file drawer
@@ -61,6 +62,7 @@ const loadDefaultLayout = (api: GridviewApi) => {
       title: 'MainPanel',
       idL: 'MainPanel'
     },
+    priority: LayoutPriority.High,
     position: { referencePanel: 'FileDrawer', direction: 'right' },
   })
 
@@ -72,9 +74,14 @@ const loadDefaultLayout = (api: GridviewApi) => {
       title: 'Panel 6',
       id: 'RightSidebar'
     },
-    minimumWidth: 5,
+    snap: true,
+    minimumWidth: 50,
+    priority: LayoutPriority.Low,
     position: { referencePanel: 'MainPanel', direction: 'right' },
   })
+
+  console.log('LAYOUT', api.toJSON())
+
 }
 
 const MagickV2 = () => {
@@ -85,10 +92,10 @@ const MagickV2 = () => {
 
     let success = false
 
-    if (layout) {
-      event.api.fromJSON(layout)
-      success = true
-    }
+    // if (layout) {
+    //   event.api.fromJSON(layout)
+    //   success = true
+    // }
 
     if (!success) {
       loadDefaultLayout(event.api)
@@ -102,7 +109,7 @@ const MagickV2 = () => {
       components={components}
       onReady={onReady}
       disableAutoResizing={false}
-      proportionalLayout={true}
+      proportionalLayout={false}
       orientation={Orientation.VERTICAL}
       className="dockview-theme-abyss"
     />
