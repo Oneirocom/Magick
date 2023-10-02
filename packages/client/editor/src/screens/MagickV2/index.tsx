@@ -11,6 +11,7 @@ import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
 import MainPanel from './panels/mainPanel'
 import FileDrawer from './panels/fileDrawer'
 import RightSidebar from './panels/rightSidebar'
+import { useDockviewTheme } from 'client/state'
 
 const components = {
   MainPanel,
@@ -21,11 +22,11 @@ const components = {
       <div
         style={{
           height: '100%',
-          padding: '20px',
+          padding: '5px',
           background: 'var(--dv-group-view-background-color)',
         }}
       >
-        {JSON.stringify(props.params)}
+        Status Bar
       </div>
     )
   }
@@ -67,25 +68,25 @@ const loadDefaultLayout = (api: GridviewApi) => {
   })
 
   // Right side console panel
-  api.addPanel({
-    id: 'RightSidebar',
-    component: 'RightSidebar',
-    params: {
-      title: 'Panel 6',
-      id: 'RightSidebar'
-    },
-    snap: true,
-    minimumWidth: 50,
-    priority: LayoutPriority.Low,
-    position: { referencePanel: 'MainPanel', direction: 'right' },
-  })
-
-  console.log('LAYOUT', api.toJSON())
-
+  // api.addPanel({
+  //   id: 'RightSidebar',
+  //   component: 'RightSidebar',
+  //   params: {
+  //     title: 'Panel 6',
+  //     id: 'RightSidebar'
+  //   },
+  //   snap: true,
+  //   minimumWidth: 50,
+  //   priority: LayoutPriority.Low,
+  //   position: { referencePanel: 'MainPanel', direction: 'right' },
+  // })
 }
 
 const MagickV2 = () => {
   const { getLayout, setApi } = useGlobalLayout()
+  const { theme } = useDockviewTheme()
+
+  console.log("THEME", theme)
 
   const onReady = (event: GridviewReadyEvent) => {
     const layout = getLayout()
@@ -111,7 +112,8 @@ const MagickV2 = () => {
       disableAutoResizing={false}
       proportionalLayout={false}
       orientation={Orientation.VERTICAL}
-      className="dockview-theme-abyss"
+      hideBorders={true}
+      className={`global-layout ${theme}`}
     />
   )
 }

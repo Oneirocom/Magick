@@ -29,7 +29,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     token: '',
     projectId: '',
     currentAgentId: '',
-    dockviewTheme: 'dockview-theme-abyss',
+    dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
   },
   reducers: {
@@ -56,10 +56,6 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     },
     setTheme: (state: GlobalConfig, action: PayloadAction<string>): void => {
       state.theme = action.payload
-
-      if (action.payload === 'abyss') {
-        state.dockviewTheme = 'dockview-theme-abyss'
-      }
     },
     setDockviewTheme: (
       state: GlobalConfig,
