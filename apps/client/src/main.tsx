@@ -15,6 +15,7 @@ import { PostHogProvider } from 'posthog-js/react'
 import { initLogger, getLogger } from '@magickml/core'
 
 import plugins from './plugins'
+import './globals.css'
 
 initLogger({ name: "AIDE" })
 
