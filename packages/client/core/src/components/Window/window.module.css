@@ -1,7 +1,8 @@
 .window {
   display: flex;
   flex-direction: column;
-  padding: var(--c1);
+  padding: var(--c2);
+  padding-bottom: var(--c3);
   height: 100%;
   box-sizing: border-box;
 }
@@ -13,7 +14,7 @@
   background-color: var(--dark-2);
 }
 .window.darker .window-layout {
-  background-color: var(--dark-0);
+  background-color: var(--foreground-color);
 }
 .window-layout {
   border-radius: 4px;
@@ -27,7 +28,7 @@
 .window-toolbar {
   display: flex;
   flex: 1;
-  min-height: var(--c4);
+  min-height: var(--c5);
   max-height: var(--c4);
   justify-content: flex-end;
   padding-bottom: var(--c1);

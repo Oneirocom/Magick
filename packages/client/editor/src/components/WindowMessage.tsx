@@ -9,7 +9,9 @@ import css from './windowMessage.module.css'
  */
 const WindowMessage = ({ content = 'No component selected' }): JSX.Element => {
   // Return a paragraph element with the provided or default content
-  return <p className={css['message']}>{content}</p>
+  return (<div className={css['container']}>
+    <div className={css['message']}>{content}</div>
+  </div>)
 }
 
 export default WindowMessage
