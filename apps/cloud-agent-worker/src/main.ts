@@ -3,22 +3,20 @@ import { initLogger, getLogger } from '@magickml/core'
 import { initApp } from '@magickml/server-core'
 import pluginExports from './plugins'
 import { initAgentCommander } from '@magickml/agents'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from "@magickml/config"
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/config'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
 if (PRODUCTION) {
-	initLogger({
-		name: 'cloud-agent-worker',
-		transport: {
-			targets: [
-				getPinoTransport('info')
-			]
-		},
-		level: 'info',
-	})
+  initLogger({
+    name: 'cloud-agent-worker',
+    transport: {
+      targets: [getPinoTransport('info')],
+    },
+    level: 'info',
+  })
 } else {
-	initLogger({ name: 'cloud-agent-worker' })
-}	
+  initLogger({ name: 'cloud-agent-worker' })
+}
 const logger = getLogger()
 
 await initApp()
@@ -35,11 +33,11 @@ async function loadPlugins(): Promise<void> {
 }
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
-  process.on('uncaughtException', (e) => {
+  process.on('uncaughtException', (e: any) => {
     logger.error('Uncaught exception: %s\n From: %o', e, e.stack)
   })
 
-  process.on('unhandledRejection', (e) => {
+  process.on('unhandledRejection', (e: any) => {
     logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
   })
 }
