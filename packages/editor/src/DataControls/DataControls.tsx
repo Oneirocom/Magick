@@ -14,9 +14,8 @@ import SwitchControl from './SwitchControl'
 import SpellSelect from './SpellSelect'
 import CheckBoxControl from './CheckBox'
 import { ControlData } from '@magickml/core'
-import {Tooltip } from '@mui/material'
-
-
+import { Tooltip } from '@mui/material'
+import SliderControl from './Slider'
 
 /**
  * Stub component for unknown control types.
@@ -35,7 +34,7 @@ const controlMap = {
   longText: LongText,
   spellSelect: SpellSelect,
   outputGenerator: OutputGenerator,
-  slider: StubComponent,
+  slider: SliderControl,
   multiSocketGenerator: MultiSocketGenerator,
   socketGenerator: SocketGenerator,
   playtest: PlaytestControl,
@@ -123,11 +122,14 @@ const DataControls = ({
               borderRadius: '5px',
             }}
           >
-            <Tooltip title={control.tooltip ? control.tooltip : control.name} placement="top-start" arrow>
-
-            <p style={{ margin: 0, marginBottom: '10px' }}>
-              {control.name || key}
-            </p>
+            <Tooltip
+              title={control.tooltip ? control.tooltip : control.name}
+              placement="top-start"
+              arrow
+            >
+              <p style={{ margin: 0, marginBottom: '10px' }}>
+                {control.name || key}
+              </p>
             </Tooltip>
             <Component key={nodeId + control.name} {...controlProps} />
           </div>
