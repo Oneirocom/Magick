@@ -1,9 +1,20 @@
 import { Worker, Job } from 'bullmq'
 
-import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue } from '@magickml/server-core'
+import {
+  BullMQWorker,
+  type PubSub,
+  RedisPubSubWrapper,
+  app,
+  BullQueue,
+} from '@magickml/server-core'
 import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
 import { v4 as uuidv4 } from 'uuid'
-import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_RUN_JOB, AGENT_UPDATE_JOB } from '@magickml/core'
+import {
+  AGENT_DELETE,
+  AGENT_DELETE_JOB,
+  AGENT_RUN_JOB,
+  AGENT_UPDATE_JOB,
+} from '@magickml/core'
 
 export interface AgentListRecord {
   id: string
@@ -20,11 +31,12 @@ export class CloudAgentWorker extends AgentManager {
   constructor() {
     super(app, false)
 
-
     this.pubSub = app.get('pubsub')
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
-      this.logger.info(`Agent ${agentId} deleted, removing from cloud agent worker`)
+      this.logger.info(
+        `Agent ${agentId} deleted, removing from cloud agent worker`
+      )
       await this.removeAgent(agentId)
     })
 
@@ -33,10 +45,13 @@ export class CloudAgentWorker extends AgentManager {
 
   heartbeat() {
     this.pubSub.subscribe('cloud-agents:ping', async () => {
-      this.pubSub.publish('cloud-agents:pong', JSON.stringify({
-        id: uuidv4(),
-        currentAgents: Object.keys(this.currentAgents),
-      }))
+      this.pubSub.publish(
+        'cloud-agents:pong',
+        JSON.stringify({
+          id: uuidv4(),
+          currentAgents: Object.keys(this.currentAgents),
+        })
+      )
     })
   }
 
@@ -65,28 +80,35 @@ export class CloudAgentWorker extends AgentManager {
       return
     }
 
-    const agent = new Agent(
-      agentData,
-      this,
-      new BullMQWorker(),
-      new RedisPubSubWrapper(),
-    )
+    try {
+      const agent = new Agent(
+        agentData,
+        this,
+        new BullMQWorker(),
+        new RedisPubSubWrapper()
+      )
 
-    const agentQueue = new BullQueue()
-    agentQueue.initialize(AGENT_RUN_JOB(agent.id))
-    this.listenForRun(agent.id)
-    this.listenForChanges(agentId)
+      const agentQueue = new BullQueue()
+      agentQueue.initialize(AGENT_RUN_JOB(agent.id))
+      this.listenForRun(agent.id)
+      this.listenForChanges(agentId)
 
+      this.logger.debug(`Running agent add handlers for ${agentId}`)
+      this.addHandlers.forEach(handler => {
+        handler({ agent, agentData })
+      })
 
-    this.logger.debug(`Running agent add handlers for ${agentId}`)
-    this.addHandlers.forEach(handler => {
-      handler({ agent, agentData })
-    })
+      this.currentAgents[agentId] = agent
+      this.logger.debug(`Finished running agent add handlers for ${agentId}`)
 
-    this.currentAgents[agentId] = agent
-    this.logger.debug(`Finished running agent add handlers for ${agentId}`)
-
-    this.logger.info(`Updated agent ${agentId}`)
+      this.logger.info(`Updated agent ${agentId}`)
+    } catch (e) {
+      this.logger.error(
+        `Error creating agent ${agentId} in cloud agent worker`,
+        e
+      )
+      // throw e
+    }
   }
 
   async removeAgent(agentId: string) {
@@ -130,7 +152,10 @@ export class CloudAgentWorker extends AgentManager {
 
     // update the agent's rootSpellId if it changed
     // we may want to make this updating flow more robust in the future
-    if (this.currentAgents[agentId] && agent.rootSpellId != this.currentAgents[agentId].rootSpellId) {
+    if (
+      this.currentAgents[agentId] &&
+      agent.rootSpellId != this.currentAgents[agentId].rootSpellId
+    ) {
       this.currentAgents[agentId].rootSpellId = agent.rootSpellId
     }
   }
@@ -138,23 +163,30 @@ export class CloudAgentWorker extends AgentManager {
   async listenForRun(agentId: string) {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
-    this.pubSub.subscribe(AGENT_RUN_JOB(agentId),
-      async (data: AgentRunJob) => {
-        this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
-        try {
-          const agent = this.currentAgents[agentId]
+    this.pubSub.subscribe(AGENT_RUN_JOB(agentId), async (data: AgentRunJob) => {
+      this.logger.info(
+        `Running spell ${data.spellId} for agent ${data.agentId}`
+      )
+      try {
+        const agent = this.currentAgents[agentId]
 
-          if (!agent) {
-            this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-            throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-          }
+        if (!agent) {
+          this.logger.error(
+            `Agent ${agentId} not found when running spell ${data.spellId}`
+          )
+          throw new Error(
+            `Agent ${agentId} not found when running spell ${data.spellId}`
+          )
+        }
 
-          agent?.runWorker({ data: { ...data, agentId } })
-        } catch (e) {
-            this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
-            throw e
-          }
-      })
+        agent?.runWorker({ data: { ...data, agentId } })
+      } catch (e) {
+        this.logger.error(
+          `Error loading or running spell ${data.spellId} for agent ${data.agentId}`
+        )
+        throw e
+      }
+    })
   }
 
   async listenForChanges(agentId: string) {
