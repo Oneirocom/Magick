@@ -68,25 +68,27 @@ export class DiscordConnector {
         }
       })()
       this.client.on('joinvc', async voiceChannel => {
-        console.log('joinvc', voiceChannel)
+        this.agent.log('Discord: Joined voice channel', voiceChannel)
         return recognizeSpeech(voiceChannel, this.agent.id)
       })
       this.client.on('leavevc', async voiceChannel => {
+        this.agent.log('Discord: Left voice channel', voiceChannel)
         stopSpeechClient(voiceChannel, this.agent.id)
       })
 
       this.client.on('messageCreate', async message => {
-        console.log('messageCreate', message)
+        this.agent.log('Discord: Message created', message)
         this.messageCreate(message)
       })
 
       this.client.on('dmCreate', async message => {
-        console.log('dmCreate', message)
+        this.agent.log('Discord: DM received', message)
         this.messageCreate(message)
       })
 
       // handle direct messages
       this.client.on('message', async message => {
+        this.agent.log('Discord: Message Received', message)
         this.messageCreate(message)
       })
 
@@ -103,13 +105,19 @@ export class DiscordConnector {
         this.handleMessageReactionAdd(reaction, user)
       })
 
-      this.client.ws
+      // this.client.ws
       ;(async () => {
         try {
           const login = await this.client.login(token)
           agent.log('Discord client logged in', { login })
         } catch (error: any) {
-          return agent.error('Error logging in discord client', error.message)
+          // destroy the agent before returning
+          this.destroy()
+          agent.error('Error logging in discord client', {
+            message: error.message,
+            stack: error.stack,
+          })
+          throw error
         }
 
         this.client.on('error', err => {
@@ -117,7 +125,11 @@ export class DiscordConnector {
         })
       })()
     } catch (error: any) {
-      agent.error('Error creating discord client', error.message)
+      agent.error('Error creating discord client', {
+        message: error.message,
+        stack: error.stack,
+      })
+      throw error
     }
   }
 
