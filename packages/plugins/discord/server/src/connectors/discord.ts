@@ -21,10 +21,12 @@ export class DiscordConnector {
   spellRunner: any = null
   guildId!: any
   message!: any
+  token: String
   constructor(options) {
     const { agent, discord_api_key, spellRunner } = options
     this.agent = agent
     this.spellRunner = spellRunner
+    this.token = discord_api_key
 
     const token = discord_api_key
     if (!token) {
@@ -102,23 +104,20 @@ export class DiscordConnector {
       this.client.on('messageReactionAdd', async (reaction: any, user: any) => {
         this.handleMessageReactionAdd(reaction, user)
       })
-
-      this.client.ws
-      ;(async () => {
-        try {
-          const login = await this.client.login(token)
-          agent.log('Discord client logged in', { login })
-        } catch (error: any) {
-          return agent.error('Error logging in discord client', error.message)
-        }
-
-        this.client.on('error', err => {
-          agent.error('Discord client error', err)
-        })
-      })()
+      this.client.on('error', err => {
+        agent.error('Discord client error', err)
+      })
     } catch (error: any) {
-      agent.error('Error creating discord client', error.message)
+      agent.error('Error creating discord client in initializer', {
+        message: error.message,
+        stack: error.stack,
+      })
+      throw error
     }
+  }
+
+  async initialize() {
+    return this.client.login(this.token)
   }
 
   async destroy() {
@@ -335,17 +334,32 @@ export class DiscordConnector {
     try {
       const channel = await this.client.channels.fetch(channelId)
       if (msg && msg !== '' && channel && channel !== undefined) {
-        const paragraphs = msg?.split(/\n{2,}/) ?? []
+        let chunks = msg.match(/.{1,2000}/gs) || []
 
-        // Process each paragraph individually
-        for (const paragraph of paragraphs) {
-          // Split paragraph into chunks of 2000 characters or less
-          const chunks = paragraph.match(/.{1,2000}/gs) || []
+        let finalChunks = [] as any[]
 
-          // Send each chunk individually
-          for (const chunk of chunks) {
-            channel.send(chunk)
+        for (let i = 0; i < chunks.length; i++) {
+          if (chunks[i].startsWith('```') && !chunks[i].endsWith('```')) {
+            // Current chunk starts a code block but doesn't end it.
+            while (i < chunks.length - 1 && !chunks[i].endsWith('```')) {
+              // Keep appending chunks until we find a closing ``` or exceed the limit
+              if ((chunks[i] + chunks[i + 1]).length <= 2000) {
+                chunks[i] += chunks[i + 1]
+                chunks.splice(i + 1, 1) // Remove the chunk we just appended
+              } else {
+                // Exceeding the limit. Close this chunk and start the next with ```
+                chunks[i] += '```'
+                chunks[i + 1] = '```' + chunks[i + 1]
+                break
+              }
+            }
           }
+          finalChunks.push(chunks[i])
+        }
+
+        // Send each chunk individually
+        for (const chunk of finalChunks) {
+          channel.send(chunk)
         }
       } else {
         this.logger.error(
