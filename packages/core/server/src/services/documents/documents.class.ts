@@ -68,10 +68,10 @@ export class DocumentService<
     }
 
     for (const element of elements) {
-      let { embeddings, ...document } = element
+      const { embeddings, ...document } = element
       await embeddingdb.from('documents').insert(document)
       //create embeddings
-      for (let embedding of element.embeddings) {
+      for (const embedding of element.embeddings) {
         if (!embedding.content || embedding.content?.length === 0) continue
         if (data.hasOwnProperty('secrets')) {
           await embeddingdb.fromString(embedding.content, embedding, {
@@ -276,11 +276,15 @@ const getUnstructuredData = async (files, docData) => {
   const elements = [] as any[]
   if (unstructured.data[0] instanceof Array) {
     for (const i in unstructured.data) {
-      let document = chunkEmbeddings(unstructured.data[i], embeddingSize, '\n')
+      const document = chunkEmbeddings(
+        unstructured.data[i],
+        embeddingSize,
+        '\n'
+      )
       elements.push(createElement(document, docData))
     }
   } else {
-    let document = chunkEmbeddings(unstructured.data, embeddingSize, '\n')
+    const document = chunkEmbeddings(unstructured.data, embeddingSize, '\n')
     elements.push(createElement(document, docData))
   }
 
@@ -288,9 +292,9 @@ const getUnstructuredData = async (files, docData) => {
 }
 
 const createElement = (element, docData) => {
-  let documentId = uuidv4()
-  let embeddings: any[] = []
-  for (let i in element) {
+  const documentId = uuidv4()
+  const embeddings: any[] = []
+  for (const i in element) {
     embeddings.push({
       documentId,
       index: i,
@@ -312,9 +316,9 @@ const createElement = (element, docData) => {
 
 //chunks an array of unstructured.io results into larger chunks and breaks down larger results to fit into the chunk. Doesn't stop mid-word and separates existing chunks using separator
 const chunkEmbeddings = (elements, chunkSize, separator) => {
-  let chunks: any[] = []
+  const chunks: any[] = []
   let chunk = ''
-  for (let element of elements) {
+  for (const element of elements) {
     let text = element.text
     for (let char of text) {
       if (chunk.length < chunkSize || char !== ' ') {

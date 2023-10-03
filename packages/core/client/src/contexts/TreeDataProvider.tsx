@@ -69,12 +69,12 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const [openDoc, setOpenDoc] = useState<string | number>('')
   const [agentUpdate, setAgentUpdate] = useState(false)
 
-  function truncateDocs(str, n) {
-    if (str.length > n) {
-      return str.substring(0, n) + '...'
-    }
-    return str
-  }
+  // function truncateDocs(str, n) {
+  //   if (str.length > n) {
+  //     return str.substring(0, n) + '...'
+  //   }
+  //   return str
+  // }
 
   function addNewItem(id, parent, text, fileType) {
     const newItem = {
