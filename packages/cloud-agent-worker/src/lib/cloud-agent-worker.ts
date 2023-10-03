@@ -2,7 +2,6 @@ import { Worker, Job } from 'bullmq'
 
 import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue } from '@magickml/server-core'
 import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
-import { v4 as uuidv4 } from 'uuid'
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_RUN_JOB, AGENT_UPDATE_JOB } from '@magickml/core'
 
 export interface AgentListRecord {
@@ -119,8 +118,6 @@ export class CloudAgentWorker extends AgentManager {
 
     // start or stop the agent if the enabled state changed
     if (agent.enabled && !this.currentAgents[agentId]) {
-      console.log("BEN LOOK AT ME")
-      console.log(this.currentAgents)
       await this.addAgent(agentId)
     }
     if (!agent.enabled && this.currentAgents[agentId]) {
@@ -137,23 +134,25 @@ export class CloudAgentWorker extends AgentManager {
   async listenForRun(agentId: string) {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
-    this.pubSub.subscribe(AGENT_RUN_JOB(agentId),
-                          async (data: AgentRunJob) => {
-                            this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
-                            try {
-                              const agent = this.currentAgents[agentId]
+    this.pubSub.subscribe(
+      AGENT_RUN_JOB(agentId),
+      async (data: AgentRunJob) => {
+        this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
+        try {
+          const agent = this.currentAgents[agentId]
 
-                              if (!agent) {
-                                this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-                                throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-                              }
+          if (!agent) {
+            this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
+            throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
+          }
 
-                              agent?.runWorker({ data: { ...data, agentId } })
-                            } catch (e) {
-                              this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
-                              throw e
-                            }
-                          })
+          agent?.runWorker({ data: { ...data, agentId } })
+        } catch (e) {
+          this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
+          throw e
+        }
+      }
+    )
   }
 
   async listenForChanges(agentId: string) {

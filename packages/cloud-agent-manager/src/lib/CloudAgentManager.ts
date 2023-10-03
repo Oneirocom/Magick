@@ -3,7 +3,6 @@ import { diff, unique } from "radash"
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB, getLogger } from "@magickml/core"
 import type { Reporter } from "./Reporters"
 import { type PubSub, type MessageQueue, app } from "@magickml/server-core"
-import type { AgentListRecord } from '@magickml/cloud-agent-worker'
 import { Agent } from "packages/core/server/src/services/agents/agents.schema"
 import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from "@magickml/config"
 
@@ -41,7 +40,6 @@ export class CloudAgentManager {
       const agent = data as Agent
 
       this.logger.info(`Agent Updated: ${agent.id}`)
-      const agentUpdatedAt = agent.updatedAt ? new Date(agent.updatedAt) : new Date()
 
       if (agent.enabled) {
         this.logger.info(`Agent ${agent.id} enabled, adding to cloud agent worker`)
