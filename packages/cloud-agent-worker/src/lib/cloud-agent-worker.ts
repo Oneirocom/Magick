@@ -184,7 +184,6 @@ export class CloudAgentWorker extends AgentManager {
         this.logger.error(
           `Error loading or running spell ${data.spellId} for agent ${data.agentId}`
         )
-        throw e
       }
     })
   }
