@@ -10,8 +10,6 @@ import {
   AGENT_RUN_RESULT,
   AGENT_RUN_ERROR,
   AGENT_LOG,
-  AGENT_WARN,
-  AGENT_ERROR,
   AGENT_RUN_JOB,
   MagickSpellOutput,
 } from '@magickml/core'
@@ -188,7 +186,7 @@ export class Agent implements AgentInterface {
 
   warn(message, data) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
-    this.publishEvent(AGENT_WARN(this.id), {
+    this.publishEvent(AGENT_LOG(this.id), {
       type: 'warn',
       message,
       data,
@@ -197,7 +195,7 @@ export class Agent implements AgentInterface {
 
   error(message, data = {}) {
     // this.logger.error(`${message} %o`, { error: data })
-    this.publishEvent(AGENT_ERROR(this.id), {
+    this.publishEvent(AGENT_LOG(this.id), {
       type: 'error',
       message,
       data: { error: data },

@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from 'uuid'
 export * from './agents.class'
 export * from './agents.schema'
 
-const AGENT_EVENTS = ['log', 'result', 'spell']
+const AGENT_EVENTS = ['log', 'result', 'spell', 'error']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -44,6 +44,7 @@ export const agent = (app: Application) => {
 
   // this handles relaying all agent messages up to connected clients.
   pubSub.patternSubscribe('agent*', (message, channel) => {
+    if (app.get('isAgent')) return
     // parse  the channel from agent:agentId:messageType
     const agentId = channel.split(':')[1]
 
