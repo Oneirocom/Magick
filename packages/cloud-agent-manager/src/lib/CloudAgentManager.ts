@@ -5,6 +5,7 @@ import type { Reporter } from "./Reporters"
 import { type PubSub, type MessageQueue, app } from "@magickml/server-core"
 import type { AgentListRecord } from '@magickml/cloud-agent-worker'
 import { Agent } from "packages/core/server/src/services/agents/agents.schema"
+import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from "@magickml/config"
 
 interface CloudAgentManagerConstructor {
   pubSub: PubSub
@@ -76,7 +77,7 @@ export class CloudAgentManager {
     this.logger.debug("Started heartbeat")
     let agentsOfWorkers: string[] = []
     this.pubSub.subscribe("heartbeat-pong", async (agents: string[]) => {
-      this.logger.info("Got heartbeat pong")
+      this.logger.debug("Got heartbeat pong")
       agents.forEach(a => agentsOfWorkers.push(a))
       agentsOfWorkers = await this.dedupeAgents(agentsOfWorkers)
     })
@@ -84,7 +85,7 @@ export class CloudAgentManager {
 
     setTimeout(() => 
       setInterval(async () => {
-        this.logger.info(`Starting Heartbeat update`)
+        this.logger.debug(`Starting Heartbeat update`)
         const enabledAgents = await app.service('agents').find({
           query: {
             enabled: true,
@@ -94,16 +95,18 @@ export class CloudAgentManager {
         const agentDiff = diff(enabledAgents.data.map(a => a.id), Array.from(agentsOfWorkers))
         const agentsToUpdate = enabledAgents.data.filter(a => agentDiff.includes(a.id))
 
-        this.logger.info(`Found ${agentDiff.length} agents to Update`)
-        const agentPromises: Promise<any>[] = []
-        for (const agent of agentsToUpdate) {
-          this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
-          agentPromises.push(this.newQueue.addJob('agent:new', {agentId: agent.id}))
-        }
+        if (agentDiff.length > 0) {
+          this.logger.info(`Found ${agentDiff.length} agents to Update`)
+          const agentPromises: Promise<any>[] = []
+          for (const agent of agentsToUpdate) {
+            this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
+            agentPromises.push(this.newQueue.addJob('agent:new', {agentId: agent.id}))
+          }
 
-        await Promise.all(agentPromises)
+          await Promise.all(agentPromises)
+        }
         agentsOfWorkers = [];
         this.pubSub.publish("heartbeat-ping", "{}")
-      }, 3000), 5000)
+      }, HEARTBEAT_MSEC), MANAGER_WARM_UP_MSEC)
   }
 }
