@@ -38,8 +38,15 @@ function getAgentMethods() {
         spellRunner,
       })
       agent.discord = discord
-    } catch (err) {
-      agent.error('Error starting discord client for agent ' + agent.name)
+
+      await discord.initialize()
+    } catch (err: any) {
+      agent.error('Error starting discord client for agent ' + agent.id, {
+        message: err.message,
+        stack: err.stack,
+      })
+      agent.discord.destroy()
+      agent.discord = null
       throw err
     }
   }
