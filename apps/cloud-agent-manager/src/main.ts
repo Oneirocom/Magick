@@ -7,7 +7,7 @@ import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
 if (PRODUCTION) {
 	initLogger({
-		name: 'cloud-agent-worker',
+		name: 'cloud-agent-manager',
 		transport: {
 			targets: [
 				getPinoTransport('info')
@@ -16,7 +16,7 @@ if (PRODUCTION) {
 		level: 'info',
 	})
 } else {
-	initLogger({ name: 'cloud-agent-worker' })
+	initLogger({ name: 'cloud-agent-manager' })
 }	
 const logger = getLogger()
 
