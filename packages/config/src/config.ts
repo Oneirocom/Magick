@@ -99,7 +99,7 @@ export const bullMQConnection = {
   db: REDISCLOUD_DB,
 }
 
-export const PINO_LOG_LEVEL = 'debug'//getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
+export const PINO_LOG_LEVEL = getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
 
 export const OPENMETER_ENDPOINT =
   getVarForEnvironment('OPENMETER_ENDPOINT') || 'http://localhost:8888'
