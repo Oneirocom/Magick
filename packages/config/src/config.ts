@@ -129,5 +129,5 @@ export const FEATURE_FLAGS = {
   SHOW_SIDEBAR: getVarForEnvironment('SHOW_SIDEBAR') === 'true' || false,
 }
 
-export const HEARTBEAT_MSEC = getVarForEnvironment('HEARTBEAT_MSEC') || 3000
-export const MANAGER_WARM_UP_MSEC = getVarForEnvironment('MANAGER_WARM_UP_MSEC') || 5000
+export const HEARTBEAT_MSEC = Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000
+export const MANAGER_WARM_UP_MSEC = Number(getVarForEnvironment('MANAGER_WARM_UP_MSEC')) || 5000
