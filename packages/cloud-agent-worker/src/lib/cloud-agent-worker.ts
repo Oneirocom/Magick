@@ -20,7 +20,6 @@ export class CloudAgentWorker extends AgentManager {
   constructor() {
     super(app, false)
 
-
     this.pubSub = app.get('pubsub')
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
@@ -28,16 +27,14 @@ export class CloudAgentWorker extends AgentManager {
       await this.removeAgent(agentId)
     })
 
-    this.heartbeat()
-  }
+    this.pubSub.subscribe("heartbeat-ping", async () => {
+      this.logger.info("Got heartbeat ping")
+      const agentIds = Object.keys(this.currentAgents)
+      this.pubSub.publish("heartbeat-pong", JSON.stringify(agentIds))
+    });
 
-  heartbeat() {
-    this.pubSub.subscribe('cloud-agents:ping', async () => {
-      this.pubSub.publish('cloud-agents:pong', JSON.stringify({
-        id: uuidv4(),
-        currentAgents: Object.keys(this.currentAgents),
-      }))
-    })
+    this.addAgent = this.addAgent.bind(this)
+    this.updateAgents = this.updateAgents.bind(this)
   }
 
   async addAgent(agentId: string) {
@@ -122,6 +119,8 @@ export class CloudAgentWorker extends AgentManager {
 
     // start or stop the agent if the enabled state changed
     if (agent.enabled && !this.currentAgents[agentId]) {
+      console.log("BEN LOOK AT ME")
+      console.log(this.currentAgents)
       await this.addAgent(agentId)
     }
     if (!agent.enabled && this.currentAgents[agentId]) {
@@ -160,7 +159,7 @@ export class CloudAgentWorker extends AgentManager {
   async listenForChanges(agentId: string) {
     this.pubSub.subscribe(AGENT_UPDATE_JOB(agentId), async () => {
       this.logger.info(`Agent ${agentId} updated, updating agent`)
-      this.agentUpdated(agentId)
+      await this.agentUpdated(agentId)
     })
     this.pubSub.subscribe(AGENT_DELETE_JOB(agentId), async () => {
       this.logger.info(`Agent ${agentId} updated, updating agent`)
@@ -168,18 +167,23 @@ export class CloudAgentWorker extends AgentManager {
     })
   }
 
-  async work() {
+  async startWork() {
     this.logger.info('waiting for jobs')
+
+    const redis = app.get('redis')
+
+    await redis.sadd("agent-workers", "me")
 
     new Worker(
       'agent:new',
       async (job: Job) => {
         this.logger.info(`Starting agent ${job.data.agentId}`)
-        this.agentUpdated(job.data.agentId)
+        await this.agentUpdated(job.data.agentId)
       },
       {
         connection: app.get('redis'),
       }
     )
   }
+
 }
