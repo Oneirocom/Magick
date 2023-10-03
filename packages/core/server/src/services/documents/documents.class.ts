@@ -319,8 +319,8 @@ const chunkEmbeddings = (elements, chunkSize, separator) => {
   const chunks: any[] = []
   let chunk = ''
   for (const element of elements) {
-    let text = element.text
-    for (let char of text) {
+    const text = element.text
+    for (const char of text) {
       if (chunk.length < chunkSize || char !== ' ') {
         chunk += char
       } else {
