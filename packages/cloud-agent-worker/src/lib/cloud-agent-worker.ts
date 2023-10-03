@@ -138,22 +138,22 @@ export class CloudAgentWorker extends AgentManager {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
     this.pubSub.subscribe(AGENT_RUN_JOB(agentId),
-      async (data: AgentRunJob) => {
-        this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
-        try {
-          const agent = this.currentAgents[agentId]
+                          async (data: AgentRunJob) => {
+                            this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
+                            try {
+                              const agent = this.currentAgents[agentId]
 
-          if (!agent) {
-            this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-            throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-          }
+                              if (!agent) {
+                                this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
+                                throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
+                              }
 
-          agent?.runWorker({ data: { ...data, agentId } })
-        } catch (e) {
-            this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
-            throw e
-          }
-      })
+                              agent?.runWorker({ data: { ...data, agentId } })
+                            } catch (e) {
+                              this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
+                              throw e
+                            }
+                          })
   }
 
   async listenForChanges(agentId: string) {
