@@ -10,7 +10,6 @@ import { Document } from 'langchain/document'
 import { Embeddings } from 'langchain/embeddings/base'
 import { SupabaseVectorStore } from 'langchain/vectorstores/supabase'
 import { expandVector } from '@magickml/core'
-import { v4 as uuidv4 } from 'uuid'
 import { EmbeddingArgs } from './customEmbeddings'
 
 export type ExtendedEmbeddings = Embeddings & {
