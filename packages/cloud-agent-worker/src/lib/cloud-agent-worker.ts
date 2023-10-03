@@ -2,7 +2,6 @@ import { Worker, Job } from 'bullmq'
 
 import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue } from '@magickml/server-core'
 import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
-import { v4 as uuidv4 } from 'uuid'
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_RUN_JOB, AGENT_UPDATE_JOB } from '@magickml/core'
 
 export interface AgentListRecord {
@@ -20,7 +19,6 @@ export class CloudAgentWorker extends AgentManager {
   constructor() {
     super(app, false)
 
-
     this.pubSub = app.get('pubsub')
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
@@ -28,16 +26,14 @@ export class CloudAgentWorker extends AgentManager {
       await this.removeAgent(agentId)
     })
 
-    this.heartbeat()
-  }
+    this.pubSub.subscribe("heartbeat-ping", async () => {
+      this.logger.debug("Got heartbeat ping")
+      const agentIds = Object.keys(this.currentAgents)
+      this.pubSub.publish("heartbeat-pong", JSON.stringify(agentIds))
+    });
 
-  heartbeat() {
-    this.pubSub.subscribe('cloud-agents:ping', async () => {
-      this.pubSub.publish('cloud-agents:pong', JSON.stringify({
-        id: uuidv4(),
-        currentAgents: Object.keys(this.currentAgents),
-      }))
-    })
+    this.addAgent = this.addAgent.bind(this)
+    this.updateAgents = this.updateAgents.bind(this)
   }
 
   async addAgent(agentId: string) {
@@ -138,7 +134,8 @@ export class CloudAgentWorker extends AgentManager {
   async listenForRun(agentId: string) {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
-    this.pubSub.subscribe(AGENT_RUN_JOB(agentId),
+    this.pubSub.subscribe(
+      AGENT_RUN_JOB(agentId),
       async (data: AgentRunJob) => {
         this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
         try {
@@ -151,16 +148,17 @@ export class CloudAgentWorker extends AgentManager {
 
           agent?.runWorker({ data: { ...data, agentId } })
         } catch (e) {
-            this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
-            throw e
-          }
-      })
+          this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
+          throw e
+        }
+      }
+    )
   }
 
   async listenForChanges(agentId: string) {
     this.pubSub.subscribe(AGENT_UPDATE_JOB(agentId), async () => {
       this.logger.info(`Agent ${agentId} updated, updating agent`)
-      this.agentUpdated(agentId)
+      await this.agentUpdated(agentId)
     })
     this.pubSub.subscribe(AGENT_DELETE_JOB(agentId), async () => {
       this.logger.info(`Agent ${agentId} updated, updating agent`)
@@ -168,18 +166,23 @@ export class CloudAgentWorker extends AgentManager {
     })
   }
 
-  async work() {
+  async startWork() {
     this.logger.info('waiting for jobs')
+
+    const redis = app.get('redis')
+
+    await redis.sadd("agent-workers", "me")
 
     new Worker(
       'agent:new',
       async (job: Job) => {
         this.logger.info(`Starting agent ${job.data.agentId}`)
-        this.agentUpdated(job.data.agentId)
+        await this.agentUpdated(job.data.agentId)
       },
       {
         connection: app.get('redis'),
       }
     )
   }
+
 }
