@@ -128,3 +128,6 @@ export const FEATURE_FLAGS = {
   // Enable the new editor
   SHOW_SIDEBAR: getVarForEnvironment('SHOW_SIDEBAR') === 'true' || false,
 }
+
+export const HEARTBEAT_MSEC = getVarForEnvironment('HEARTBEAT_MSEC') || 3000
+export const MANAGER_WARM_UP_MSEC = getVarForEnvironment('MANAGER_WARM_UP_MSEC') || 5000
