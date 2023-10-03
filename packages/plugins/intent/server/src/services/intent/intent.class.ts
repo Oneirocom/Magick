@@ -52,15 +52,15 @@ export class IntentService<
           variations: number
         }
 
-      let documentId = uuidv4()
-      let document = {
+      const documentId = uuidv4()
+      const document = {
         date: docData.date,
         type: docData.type,
         projectId: docData.projectId,
         id: documentId,
         metadata: data.metadata,
       }
-      let embedding = {
+      const embedding = {
         documentId,
         index: 0,
         content: docData.content,
@@ -168,15 +168,15 @@ export class IntentService<
 
         //create new document/embedding
         for (const result of results) {
-          let documentId = uuidv4()
-          let document = {
+          const documentId = uuidv4()
+          const document = {
             date: docData.date,
             type: docData.type,
             projectId: docData.projectId,
             id: documentId,
             metadata: data.metadata,
           }
-          let embedding = {
+          const embedding = {
             documentId,
             index: 0,
             content: result,
@@ -194,15 +194,15 @@ export class IntentService<
       return docData
     }
 
-    let documentId = uuidv4()
-    let document = {
+    const documentId = uuidv4()
+    const document = {
       date: data.date,
       type: data.type,
       projectId: data.projectId,
       id: documentId,
       metadata: data.metadata,
     }
-    let embedding = {
+    const embedding = {
       documentId,
       index: 0,
       content: data.content,
