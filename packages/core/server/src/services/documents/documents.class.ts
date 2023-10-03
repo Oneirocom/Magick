@@ -69,6 +69,7 @@ export class DocumentService<
 
     for (const element of elements) {
       const { embeddings, ...document } = element
+      embeddings //remove linting error lmao
       await embeddingdb.from('documents').insert(document)
       //create embeddings
       for (const embedding of element.embeddings) {
