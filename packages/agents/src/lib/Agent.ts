@@ -116,8 +116,12 @@ export class Agent implements AgentInterface {
             agent: this,
             spellRunner: this.spellRunner,
           })
-        } catch (err) {
-          this.error('Error in agent start method', { method, err })
+        } catch (err: any) {
+          this.error('Error in agent start method ' + method, {
+            method,
+            message: err.message,
+            stack: err.stack,
+          })
         }
       }
 
@@ -185,8 +189,6 @@ export class Agent implements AgentInterface {
   warn(message, data) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_WARN(this.id), {
-      agentId: this.id,
-      projectId: this.projectId,
       type: 'warn',
       message,
       data,
@@ -194,10 +196,8 @@ export class Agent implements AgentInterface {
   }
 
   error(message, data = {}) {
-    this.logger.error(`${message} %o`, { error: data })
+    // this.logger.error(`${message} %o`, { error: data })
     this.publishEvent(AGENT_ERROR(this.id), {
-      agentId: this.id,
-      projectId: this.projectId,
       type: 'error',
       message,
       data: { error: data },
