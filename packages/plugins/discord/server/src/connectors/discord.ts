@@ -336,9 +336,9 @@ export class DiscordConnector {
     try {
       const channel = await this.client.channels.fetch(channelId)
       if (msg && msg !== '' && channel && channel !== undefined) {
-        let chunks = msg.match(/.{1,2000}/gs) || []
+        const chunks = msg.match(/.{1,2000}/gs) || []
 
-        let finalChunks = [] as any[]
+        const finalChunks = [] as any[]
 
         for (let i = 0; i < chunks.length; i++) {
           if (chunks[i].startsWith('```') && !chunks[i].endsWith('```')) {
