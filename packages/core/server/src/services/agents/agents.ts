@@ -44,6 +44,7 @@ export const agent = (app: Application) => {
 
   // this handles relaying all agent messages up to connected clients.
   pubSub.patternSubscribe('agent*', (message, channel) => {
+    if (app.get('isAgent')) return
     // parse  the channel from agent:agentId:messageType
     const agentId = channel.split(':')[1]
 
