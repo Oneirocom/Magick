@@ -21,24 +21,24 @@ if (PRODUCTION) {
 const logger = getLogger()
 
 function start() {
-    logger.info("Starting cloud agent manager...")
-    const manager = new CloudAgentManager({
-        newQueue: new BullQueue(),
-        agentStateReporter: new FeathersSyncReporter(),
-        pubSub: app.get('pubsub')
-    });
+  logger.info('Starting cloud agent manager...')
+  const manager = new CloudAgentManager({
+    newQueue: new BullQueue(),
+    agentStateReporter: new FeathersSyncReporter(),
+    pubSub: app.get('pubsub'),
+  })
 
-    manager.run();
-    logger.info("Cloud agent manager started")
+  manager.run()
+  logger.info('Cloud agent manager started')
 }
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
-  process.on('uncaughtException', (e, o) => {
-    logger.error('Uncaught exception: %s\n From: %o', e, o)
+  process.on('uncaughtException', (e: any) => {
+    logger.error('Uncaught exception: %s\n From: %o', e, e.stack)
   })
 
-  process.on('unhandledRejection', (e, o) => {
-    logger.error('Unhandled rejection: %s\n From: %o', e, o)
+  process.on('unhandledRejection', (e: any) => {
+    logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
   })
 }
 
