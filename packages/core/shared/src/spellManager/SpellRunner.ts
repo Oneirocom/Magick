@@ -221,9 +221,11 @@ class SpellRunner {
 
     const inputs = extractNodes(this.currentSpell.graph.nodes, this.inputs)
 
-    return [...triggerIns, ...inputs].find(node => {
-      return node.data.name === componentName
-    })
+    return (
+      [...triggerIns, ...inputs].find(node => {
+        return node.data.name === componentName
+      }) || null
+    )
   }
 
   /**
@@ -270,6 +272,23 @@ class SpellRunner {
     this.logger.error(message, error)
     if (error) throw error
     throw new Error(message)
+  }
+
+  /**
+   * Returns the first triggered node from a list of node names.
+   * @param names - An array of node names to search for.
+   * @returns The first triggered node found, or null if none are found.
+   */
+  _getFirstTriggeredNodeFromList(names) {
+    for (const name of names) {
+      const node = this._getTriggeredNodeByName(name)
+      if (node) {
+        return [node, name]
+      } else {
+        this.logger.warn(`Fallback '${name}' not found.`)
+      }
+    }
+    return [null, null]
   }
 
   /**
@@ -320,15 +339,31 @@ class SpellRunner {
 
       this.logger.info('firstInput: %o', firstInput)
 
-      // Checking for the triggered node for the connection type
+      // This function returns the first triggered node found from a list of names.
+      // If none are found, it returns null.
+
+      // Now, you can simplify your previous code:
       let triggeredNode = this._getTriggeredNodeByName(firstInput)
 
-      // If there isn't one, we should
       if (!triggeredNode) {
         this.logger.warn(
-          `No trigger found for ${firstInput}.  Using default trigger.`
+          `No trigger found for ${firstInput}. Trying fallbacks.`
         )
-        triggeredNode = this._getTriggeredNodeByName('Input - Default')
+
+        // Define your array of fallbacks in order of priority
+        const fallbacks = ['Input - Default', 'Input - Discord (Text)']
+
+        const fallback = this._getFirstTriggeredNodeFromList(fallbacks)
+
+        if (!fallback) {
+          this.logger.warn(`No suitable fallback found for ${firstInput}.`)
+        }
+
+        const [node, name] = fallback
+        triggeredNode = node
+
+        // swap out input name for default input name
+        inputs[name] = inputs[firstInput]
       }
 
       // If we still don't have a triggered node, we should throw an error.
