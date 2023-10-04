@@ -91,9 +91,7 @@ export class EventService<
 
     const res = await query
 
-    if (!param.embedding) {
-      res.reverse()
-    }
+
 
     return { events: res as unknown as { data: Array<any> } }
   }

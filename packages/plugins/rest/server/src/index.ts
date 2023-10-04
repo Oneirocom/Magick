@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * An object representing input sockets.
  * @typedef {Object} InputSocket
@@ -15,8 +15,8 @@
  * @property {string} type - The socket type, always `eventSocket`.
  */
 
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core';
-import { api } from './services/api/api';
+import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import { agentHttp } from './services/agentHttp/agentHttp'
 
 /**
  * An array of input sockets.
@@ -26,14 +26,14 @@ const inputSockets = [
   {
     socket: 'output',
     name: 'output',
-    type: eventSocket
+    type: eventSocket,
   },
   {
     socket: 'trigger',
     name: 'trigger',
-    type: triggerSocket
-  }
-];
+    type: triggerSocket,
+  },
+]
 
 /**
  * An array of output sockets.
@@ -43,9 +43,9 @@ const outputSockets = [
   {
     socket: 'output',
     name: 'output',
-    type: eventSocket
-  }
-];
+    type: eventSocket,
+  },
+]
 
 /**
  * A class representing the REST plugin.
@@ -57,16 +57,16 @@ class RestPlugin extends ServerPlugin {
   constructor() {
     super({
       name: 'RestPlugin',
-      services: [ api ],
+      services: [agentHttp],
       inputTypes: [
         { name: 'REST API (GET)', sockets: inputSockets },
         { name: 'REST API (POST)', sockets: inputSockets },
         { name: 'REST API (PUT)', sockets: inputSockets },
-        { name: 'REST API (DELETE)', sockets: inputSockets }
+        { name: 'REST API (DELETE)', sockets: inputSockets },
       ],
-      outputTypes: [{ name: 'REST API (Response)', sockets: outputSockets }]
-    });
+      outputTypes: [{ name: 'REST API (Response)', sockets: outputSockets }],
+    })
   }
 }
 
-export default new RestPlugin(); // Return an instance of the class instead of the class itself.
+export default new RestPlugin() // Return an instance of the class instead of the class itself.

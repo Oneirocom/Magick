@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import MenuBar from '../MenuBar/MenuBar'
 import CreateTab from './CreateTab'
 import css from './tabBar.module.css'
-import { closeTab, selectAllTabs } from '../../state/tabs'
-import { changeActive } from '../../state/tabs'
-import { RootState } from '../../state/store'
+import { closeTab, selectAllTabs } from '@magickml/core'
+import { changeActive } from '@magickml/core'
+import { RootState } from '@magickml/core'
 import { Icon } from '@magickml/client-core'
 
 /**
@@ -39,17 +39,17 @@ const Tab = ({ tab, activeTab }) => {
     const updatedTabs = tabs.map(t =>
       t.id === tab.id
         ? {
-            id: t.id,
-            changes: {
-              active: true,
-            },
-          }
+          id: t.id,
+          changes: {
+            active: true,
+          },
+        }
         : {
-            id: t.id,
-            changes: {
-              active: false,
-            },
-          }
+          id: t.id,
+          changes: {
+            active: false,
+          },
+        }
     )
     dispatch(changeActive(updatedTabs))
     navigate(`/magick/${tab.URI}`)

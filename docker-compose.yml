@@ -15,8 +15,20 @@ services:
       POSTGRES_PASSWORD: magick_default_pw
     ports:
       - '5432:5432'
+  s3:
+    image: minio/minio:latest
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: minioaccesskey
+      MINIO_SECRET_KEY: miniosecretkey
+    ports:
+      - '9000:9000'
+    volumes:
+      - s3-data:/data
 volumes:
   cache:
+    driver: local
+  s3-data:
     driver: local
 
 networks:

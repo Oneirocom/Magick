@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "resolveJsonModule": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -190,10 +191,14 @@
       ],
       "@magickml/redis-pubsub": ["packages/redis-pubsub/src/index.ts"],
       "@magickml/rete": ["packages/rete/src/index.ts"],
-      "rete": ["packages/rete/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-core": ["packages/core/server/src/index.ts"],
-      "@magickml/types": ["packages/@types/src/index.ts"]
+      "@magickml/types": ["packages/@types/src/index.ts"],
+      "@magickml/ui": ["packages/ui/src/index.ts"],
+      "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
+      "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
+      "rete": ["packages/rete/src/index.ts"]
+      
     }
   },
   "exclude": ["node_modules", "tmp"]

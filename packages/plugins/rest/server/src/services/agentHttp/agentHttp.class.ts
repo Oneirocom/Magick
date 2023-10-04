@@ -7,61 +7,88 @@ import { Application, app } from '@magickml/server-core'
 import type { Agent } from '@magickml/agents'
 import type { Params, ServiceInterface } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
-import type { Api, ApiData, ApiPatch, ApiQuery } from './api.schema'
+import type {
+  AgentHttp,
+  AgentHttpData,
+  AgentHttpPatch,
+  AgentHttpQuery,
+} from './agentHttp.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
+import { CLOUD_AGENT_KEY, STANDALONE } from '@magickml/config'
 
-export type { Api, ApiData, ApiPatch, ApiQuery }
+export type { AgentHttp, AgentHttpData, AgentHttpPatch, AgentHttpQuery }
 
-/** Interface for API Service Options */
-export interface ApiServiceOptions {
+/** Interface for AgentHttp Service Options */
+export interface AgentHttpServiceOptions {
   app: Application
 }
 
-/** Type for API Params */
-export type ApiParams = Params<ApiQuery>
+/** Type for AgentHttp Params */
+export type AgentHttpParams = Params<AgentHttpQuery>
 
-/** Type for API GET Response */
-export interface ApiResponse {
+/** Type for AgentHttp GET Response */
+export interface AgentHttpResponse {
   result: Object
 }
 
-export interface ApiError {
+export interface AgentHttpError {
   error: string
 }
 
-const getAgent = async (agentId: string, apiKey: string): Promise<Agent> => {
-  const agent = await app
-    .service('agents')
-    .get(agentId)
+const getAgent = async (
+  agentId: string,
+  apiKey: string,
+  isCloud: boolean
+): Promise<Agent> => {
+  const agent = await app.service('agents').get(agentId)
   if (!agent) {
-    throw new NotFound('Agent not found with id ' + agentId);
+    throw new NotFound('Agent not found with id ' + agentId)
   }
 
-  if (!agent.data.rest_enabled) {
-    throw new BadRequest('Agent does not have REST API enabled')
-  }
+  if (!STANDALONE && isCloud) {
+    if (apiKey !== CLOUD_AGENT_KEY) {
+      throw new BadRequest('Invalid API KEY')
+    }
+  } else {
+    if (!agent.data.rest_enabled) {
+      throw new BadRequest('Agent does not have REST API enabled')
+    }
 
-  if (apiKey !== agent.data.rest_api_key) {
-    throw new Error('Invalid API Key')
+    if (apiKey !== agent.data.rest_api_key) {
+      throw new Error('Invalid API Key')
+    }
   }
 
   // Trust the types
-  return agent as unknown as Agent;
+  return agent as unknown as Agent
 }
 
-export class ApiService<ServiceParams extends ApiParams = ApiParams>
-  implements
-ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
-  {
+export class AgentHttpService<
+  ServiceParams extends AgentHttpParams = AgentHttpParams
+> implements
+    ServiceInterface<
+      AgentHttpResponse | AgentHttpError,
+      AgentHttpData,
+      ServiceParams,
+      AgentHttpPatch
+    >
+{
   logger: pino.Logger = getLogger()
 
   // GET
-  async get(agentId: string, params: ServiceParams): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = params.query as ApiData
+  async get(
+    agentId: string,
+    params: ServiceParams
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { spellId, content, isCloud } = params.query as AgentHttpData
 
-    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -71,7 +98,7 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
         spellId,
         inputs: {
           [`Input - REST API (GET)`]: {
-            connector: "REST API (GET)",
+            connector: 'REST API (GET)',
             content,
             sender: 'api',
             observer: agent.name,
@@ -80,32 +107,36 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
             agentId: agent.id,
             entities: ['api', agent.name],
             channelType: 'GET',
-            rawData: "{}"
+            rawData: '{}',
           },
           publicVariables: agent.publicVariables,
-          runSubspell: true
-        }
+          runSubspell: true,
+        },
       })
 
       return {
-        result: result as object
+        result: result as object,
       }
     } catch (err) {
-      this.logger.error("Error in ApiService.get: %s", err)
+      this.logger.error('Error in AgentHttpService.get: %s', err)
       throw new GeneralError({
-        error: err
+        error: err,
       })
     }
   }
 
   async create(
-    data: ApiData,
+    data: AgentHttpData,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { content } = data;
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { content, isCloud } = data
     const spellId = data?.spellId
 
-    const agent = await getAgent(data.agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      data.agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -135,7 +166,7 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error('Error in ApiService.create: %s', err)
+      this.logger.error('Error in AgentHttpService.create: %s', err)
       throw new GeneralError({
         error: err,
       })
@@ -144,13 +175,17 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
 
   async update(
     agentId: string,
-    data: ApiData,
+    data: AgentHttpData,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { content } = data
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { content, isCloud } = data
     const spellId = data?.spellId
 
-    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -180,7 +215,7 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error('Error in ApiService.update: %s', err)
+      this.logger.error('Error in AgentHttpService.update: %s', err)
       throw new GeneralError({
         error: err,
       })
@@ -190,10 +225,14 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
   async remove(
     agentId: string,
     params: ServiceParams
-  ): Promise<ApiResponse | ApiError> {
-    const { spellId, content } = params.query as ApiData
+  ): Promise<AgentHttpResponse | AgentHttpError> {
+    const { spellId, content, isCloud } = params.query as AgentHttpData
 
-    const agent = await getAgent(agentId, (params?.headers && params.headers['authorization']) as string)
+    const agent = await getAgent(
+      agentId,
+      (params?.headers && params.headers['authorization']) as string,
+      isCloud || false
+    )
 
     const agentCommander = app.get('agentCommander')
 
@@ -223,16 +262,15 @@ ServiceInterface<ApiResponse | ApiError, ApiData, ServiceParams, ApiPatch>
         result: result as object,
       }
     } catch (err) {
-      this.logger.error("Error in ApiService.remove: %s", err)
+      this.logger.error('Error in AgentHttpService.remove: %s', err)
       throw new GeneralError({
         error: err,
       })
     }
   }
-  
 }
 
-/** Helper function to get options for the ApiService. */
+/** Helper function to get options for the AgentHttpService. */
 export const getOptions = (app: Application) => {
   return { app }
 }

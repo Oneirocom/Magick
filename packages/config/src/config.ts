@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { config } from 'dotenv-flow'
 import { importMetaEnv } from './import-meta-env'
+import { v4 } from 'uuid'
 
 // Load environment variables
 config({
@@ -106,10 +107,15 @@ export const OPENMETER_ENDPOINT =
 export const OPENMETER_ENABLED =
   getVarForEnvironment('OPENMETER_ENABLED') === 'true'
 
+export const OPENMETER_TOKEN = getVarForEnvironment('OPENMETER_TOKEN') || ''
+
+export const OPENMETER_SOURCE = getVarForEnvironment('OPENMETER_SOURCE') || 'cloud-dev'
+
 export const AGENT_RESPONSE_TIMEOUT_MSEC =
   Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
 
-// S3 storage
+export const CLOUD_AGENT_KEY = getVarForEnvironment('CLOUD_AGENT_KEY') || v4()
+
 export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
 export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
 export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
@@ -122,3 +128,6 @@ export const FEATURE_FLAGS = {
   // Enable the new editor
   SHOW_SIDEBAR: getVarForEnvironment('SHOW_SIDEBAR') === 'true' || false,
 }
+
+export const HEARTBEAT_MSEC = Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000
+export const MANAGER_WARM_UP_MSEC = Number(getVarForEnvironment('MANAGER_WARM_UP_MSEC')) || 5000
