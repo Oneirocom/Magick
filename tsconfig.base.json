@@ -184,7 +184,7 @@
       "@magickml/providers": ["packages/client/providers/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
-      "@magickml/ui": ["packages/ui/src/index.ts"],
+      "@magickml/ui": ["packages/client/ui/src/index.ts"],
       "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
       "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
       "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],

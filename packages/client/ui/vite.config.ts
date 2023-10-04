@@ -6,7 +6,7 @@ import dts from 'vite-plugin-dts'
 import * as path from 'path'
 
 export default defineConfig({
-  cacheDir: '../../node_modules/.vite/ui',
+  cacheDir: '../../../node_modules/.vite/ui',
 
   plugins: [
     dts({
@@ -19,12 +19,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@magickml/ui": path.resolve(__dirname, "../../packages/ui/src"),
-      "@magickml/ui/": path.resolve(__dirname, "../../packages/ui/src/")
+      '@': path.resolve(__dirname, './src'),
+      '@magickml/ui': path.resolve(__dirname, '../../../packages/ui/src'),
+      '@magickml/ui/': path.resolve(__dirname, '../../../packages/ui/src/'),
     },
   },
-  
 
   // Uncomment this if you are using workers.
   // worker: {
@@ -44,7 +43,12 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', '@magickml/ui/utils'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@magickml/ui/utils',
+      ],
     },
   },
 })
