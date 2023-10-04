@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "apps/client/tailwind.config.js",
+    "css": "apps/client/src/globals.css",
+    "baseColor": "stone",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@magickml/ui/components",
+    "utils": "@magickml/ui/utils"
+  }
+}

@@ -1,8 +1,8 @@
-<p align="center"><img src="apps/docs/readme-files/MAGICK-banner.png" /></p>
+<p align="center"><img src="apps/docs/readme-files/magick-github-banner.png" /></p>
 
 <p align="center">
-  <a href="https://discord.gg/magickml">
-    <img src="https://dcbadge.vercel.app/api/server/magickml?style=social" alt="Join Discord" />
+  <a href="https://bit.ly/magickdiscordgh">
+    <img src="https://dcbadge.vercel.app/api/server/tacYgMnuzP?style=social" alt="Join Discord" />
   </a>
   <a href="https://twitter.com/magickml">
     <img src="https://img.shields.io/twitter/follow/magickml?style=social" alt="Follow on Twitter" />
@@ -248,6 +248,6 @@ The original source code was made by the following contributors to Thoth, which 
 
 We are building Magick as a community in the open on Discord. If you are interested in contributing to the project, we'd love to have you.
 
-Join us here: https://discord.gg/magickml
+Join us here: https://bit.ly/magickdiscordgh
 
 <p align="center"><img src="apps/docs/readme-files/wizard.png" /></p>

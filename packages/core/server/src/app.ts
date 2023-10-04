@@ -136,6 +136,7 @@ export async function initApp() {
           methods: ['GET', 'POST', 'OPTIONS'],
           allowedHeaders: ['Authorization'],
         },
+        transports: ['websocket'],
       },
       handleSockets(app)
     )

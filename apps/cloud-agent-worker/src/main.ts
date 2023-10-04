@@ -46,4 +46,4 @@ await loadPlugins()
 
 logger.info('Starting worker')
 const worker = new CloudAgentWorker()
-worker.work()
+worker.startWork()

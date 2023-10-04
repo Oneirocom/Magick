@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { spellApi } from '../../state/api/spells'
+import { spellApi } from '@magickml/core'
 import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
