@@ -129,7 +129,7 @@ export class AgentHttpService<
     data: AgentHttpData,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { content, isCloud } = data
+    const { content, isCloud, inputType } = data
     const spellId = data?.spellId
 
     const agent = await getAgent(
@@ -139,13 +139,14 @@ export class AgentHttpService<
     )
 
     const agentCommander = app.get('agentCommander')
+    const inputToTrigger = inpytType || `Input - REST API (POST)`
 
     try {
       const result = await agentCommander.runSpellWithResponse({
         agent,
         spellId,
         inputs: {
-          [`Input - REST API (POST)`]: {
+          [inputToTrigger]: {
             connector: 'REST API (POST)',
             content,
             sender: 'api',

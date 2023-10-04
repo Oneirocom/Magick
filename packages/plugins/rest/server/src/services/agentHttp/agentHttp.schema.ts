@@ -28,6 +28,7 @@ export const agentHttpExternalResolver = resolve<AgentHttp, HookContext>({})
 
 export const agentHttpDataSchema = Type.Object(
   {
+    inputType: Type.Optional(Type.String()),
     spellId: Type.Optional(Type.String()),
     agentId: Type.String(),
     content: Type.String(),
