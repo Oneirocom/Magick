@@ -45,12 +45,12 @@ initLogger({ name: 'agent' })
 const logger = getLogger()
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
-  process.on('uncaughtException', (e, o) => {
-    logger.error('Uncaught exception: %s\n From: %o', e, o)
+  process.on('uncaughtException', (e: any) => {
+    logger.error('Uncaught exception: %s\n From: %o', e, e.stack)
   })
 
-  process.on('unhandledRejection', (e, o) => {
-    logger.error('Unhandled rejection: %s\n From: %o', e, o)
+  process.on('unhandledRejection', (e: any) => {
+    logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
   })
 }
 
