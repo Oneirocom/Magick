@@ -281,7 +281,7 @@ class SpellRunner {
    */
   _getFirstTriggeredNodeFromList(names) {
     for (const name of names) {
-      let node = this._getTriggeredNodeByName(name)
+      const node = this._getTriggeredNodeByName(name)
       if (node) {
         return [node, name]
       } else {
@@ -370,6 +370,9 @@ class SpellRunner {
       if (!triggeredNode) {
         this.error('No triggered node found')
       }
+
+      console.log('SPELLRUNNER INPUTS', inputs)
+      console.log('SPELLRUNNER PUBLIC VARIABLES', publicVariables)
 
       // This is a failsafe to ensure that we don't have agents hanging around that are still running
       // A run shouldnt take this long.  This is a hacl but we are replacing all this soon.
