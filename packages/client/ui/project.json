@@ -1,7 +1,7 @@
 {
-  "name": "ui",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/ui/src",
+  "name": "client-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/client/ui/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/ui/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["packages/client/ui/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {
@@ -17,7 +17,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/ui"
+        "outputPath": "dist/packages/client/ui"
       },
       "configurations": {
         "development": {
@@ -32,7 +32,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/ui/jest.config.ts",
+        "jestConfig": "packages/client/ui/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
