@@ -283,12 +283,12 @@ class SpellRunner {
     for (const name of names) {
       let node = this._getTriggeredNodeByName(name)
       if (node) {
-        return node
+        return [node, name]
       } else {
         this.logger.warn(`Fallback '${name}' not found.`)
       }
     }
-    return null
+    return [null, null]
   }
 
   /**
@@ -353,11 +353,17 @@ class SpellRunner {
         // Define your array of fallbacks in order of priority
         const fallbacks = ['Input - Default', 'Input - Discord (Text)']
 
-        triggeredNode = this._getFirstTriggeredNodeFromList(fallbacks)
+        const fallback = this._getFirstTriggeredNodeFromList(fallbacks)
 
-        if (!triggeredNode) {
+        if (!fallback) {
           this.logger.warn(`No suitable fallback found for ${firstInput}.`)
         }
+
+        const [node, name] = fallback
+        triggeredNode = node
+
+        // swap out input name for default input name
+        inputs[name] = inputs[firstInput]
       }
 
       // If we still don't have a triggered node, we should throw an error.
