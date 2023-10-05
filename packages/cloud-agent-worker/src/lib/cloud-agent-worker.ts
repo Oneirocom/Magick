@@ -1,8 +1,19 @@
 import { Worker, Job } from 'bullmq'
 
-import { BullMQWorker, type PubSub, RedisPubSubWrapper, app, BullQueue } from '@magickml/server-core'
+import {
+  BullMQWorker,
+  type PubSub,
+  RedisPubSubWrapper,
+  app,
+  BullQueue,
+} from '@magickml/server-core'
 import { Agent, AgentManager, type AgentRunJob } from '@magickml/agents'
-import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_RUN_JOB, AGENT_UPDATE_JOB } from '@magickml/core'
+import {
+  AGENT_DELETE,
+  AGENT_DELETE_JOB,
+  AGENT_RUN_JOB,
+  AGENT_UPDATE_JOB,
+} from '@magickml/core'
 
 export interface AgentListRecord {
   id: string
@@ -22,15 +33,17 @@ export class CloudAgentWorker extends AgentManager {
     this.pubSub = app.get('pubsub')
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
-      this.logger.info(`Agent ${agentId} deleted, removing from cloud agent worker`)
+      this.logger.info(
+        `Agent ${agentId} deleted, removing from cloud agent worker`
+      )
       await this.removeAgent(agentId)
     })
 
-    this.pubSub.subscribe("heartbeat-ping", async () => {
-      this.logger.debug("Got heartbeat ping")
+    this.pubSub.subscribe('heartbeat-ping', async () => {
+      this.logger.debug('Got heartbeat ping')
       const agentIds = Object.keys(this.currentAgents)
-      this.pubSub.publish("heartbeat-pong", JSON.stringify(agentIds))
-    });
+      this.pubSub.publish('heartbeat-pong', JSON.stringify(agentIds))
+    })
 
     this.addAgent = this.addAgent.bind(this)
     this.updateAgents = this.updateAgents.bind(this)
@@ -65,14 +78,13 @@ export class CloudAgentWorker extends AgentManager {
       agentData,
       this,
       new BullMQWorker(),
-      new RedisPubSubWrapper(),
+      new RedisPubSubWrapper()
     )
 
     const agentQueue = new BullQueue()
     agentQueue.initialize(AGENT_RUN_JOB(agent.id))
     this.listenForRun(agent.id)
     this.listenForChanges(agentId)
-
 
     this.logger.debug(`Running agent add handlers for ${agentId}`)
     this.addHandlers.forEach(handler => {
@@ -126,33 +138,45 @@ export class CloudAgentWorker extends AgentManager {
 
     // update the agent's rootSpellId if it changed
     // we may want to make this updating flow more robust in the future
-    if (this.currentAgents[agentId] && agent.rootSpellId != this.currentAgents[agentId].rootSpellId) {
+    if (
+      this.currentAgents[agentId] &&
+      agent.rootSpellId != this.currentAgents[agentId].rootSpellId
+    ) {
       this.currentAgents[agentId].rootSpellId = agent.rootSpellId
+    }
+
+    if (this.currentAgents[agentId]) {
+      this.currentAgents[agentId].update(agent)
     }
   }
 
   async listenForRun(agentId: string) {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
-    this.pubSub.subscribe(
-      AGENT_RUN_JOB(agentId),
-      async (data: AgentRunJob) => {
-        this.logger.info(`Running spell ${data.spellId} for agent ${data.agentId}`)
-        try {
-          const agent = this.currentAgents[agentId]
+    this.pubSub.subscribe(AGENT_RUN_JOB(agentId), async (data: AgentRunJob) => {
+      this.logger.info(
+        `Running spell ${data.spellId} for agent ${data.agentId}`
+      )
+      try {
+        const agent = this.currentAgents[agentId]
 
-          if (!agent) {
-            this.logger.error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-            throw new Error(`Agent ${agentId} not found when running spell ${data.spellId}`)
-          }
-
-          agent?.runWorker({ data: { ...data, agentId } })
-        } catch (e) {
-          this.logger.error(`Error loading or running spell ${data.spellId} for agent ${data.agentId}`)
-          throw e
+        if (!agent) {
+          this.logger.error(
+            `Agent ${agentId} not found when running spell ${data.spellId}`
+          )
+          throw new Error(
+            `Agent ${agentId} not found when running spell ${data.spellId}`
+          )
         }
+
+        agent?.runWorker({ data: { ...data, agentId } })
+      } catch (e) {
+        this.logger.error(
+          `Error loading or running spell ${data.spellId} for agent ${data.agentId}`
+        )
+        throw e
       }
-    )
+    })
   }
 
   async listenForChanges(agentId: string) {
@@ -171,7 +195,7 @@ export class CloudAgentWorker extends AgentManager {
 
     const redis = app.get('redis')
 
-    await redis.sadd("agent-workers", "me")
+    await redis.sadd('agent-workers', 'me')
 
     new Worker(
       'agent:new',
@@ -184,5 +208,4 @@ export class CloudAgentWorker extends AgentManager {
       }
     )
   }
-
 }
