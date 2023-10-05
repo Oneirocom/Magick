@@ -81,7 +81,7 @@ export const agentHttp = (app: Application) => {
       ],
     },
     after: {
-      all: [],
+      all: [context => (context.event = null)],
     },
     error: {
       all: [],
