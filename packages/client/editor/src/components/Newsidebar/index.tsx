@@ -5,16 +5,10 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '@magickml/providers'
 import { Typography } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
 import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-import Menu from '@mui/material/Menu'
-import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
-import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
-import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useSelector } from 'react-redux'
 
 import { useConfig } from '@magickml/providers'
@@ -23,15 +17,11 @@ import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
 import { AgentMenu } from './AgentMenu'
 import styles from './menu.module.css'
 
-import { useTabLayout } from '@magickml/providers'
 import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ComingSoon } from './ComingSoon'
-
-type CustomData = {
-  fileType: string
-  fileSize: string
-}
+import { ContextMenu } from './ContextMenu'
+import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 7,
@@ -54,75 +44,55 @@ type DrawerProps = {
  * The main Drawer component that wraps around the application content.
  */
 export function NewSidebar(DrawerProps): JSX.Element {
-  const { openTab } = useTabLayout()
-  const navigate = useNavigate()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   // State to keep track of the anchor element of the menu and cursor position
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+
   const config = useConfig()
   const [data, setData] = useState([])
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const { setAgentUpdate } = useTreeData()
 
-  //create new default agent
-  const createNew = (data: {
-    projectId: string
-    rootSpell?: string
-    enabled: boolean
-    name: string
-    updatedAt?: string
-    publicVariables: string
-    secrets: string
-    default: boolean
-  }) => {
-    if (!token && PRODUCTION) {
+  const [createNewAgent, { data: newAgent }] = useCreateAgentMutation()
+  const { data: agents, refetch } = useGetAgentsQuery({ projectId: config.projectId, })
+
+  const resetData = async () => {
+    refetch()
+    setAgentUpdate(true)
+  }
+
+  // stopgap until I patch the agent menu with new redux stuff
+  useEffect(() => {
+    if (!newAgent) return
+    setAgentUpdate(true)
+  }, [newAgent])
+
+  /**
+   * get all agents
+   * if there areny any, create one
+   * this triggers cache reset on all agents and re-fetches them with the new agent included
+   */
+  useEffect(() => {
+    if (!agents) return
+
+    if (agents.total === 0) {
+      createNewAgent({
+        name: 'Default Agent',
+        projectId: config.projectId,
+        enabled: false,
+        publicVariables: '{}',
+        secrets: '{}',
+        default: true,
+      })
+
       return
     }
 
-    fetch(`${config.apiUrl}/agents`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        ...data,
-        updatedAt: new Date().toISOString(),
-        pingedAt: new Date().toISOString(),
-      }),
-    })
-      .then(async res => {
-        const res2 = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` },
-          }
-        )
-        const json = await res2.json()
-        setData(json.data)
-      })
-      .catch(err => {
-        console.error('error is', err)
-      })
-  }
+    // console.log('AGENTS', agents)
 
-  const resetData = async () => {
-    const res = await fetch(
-      `${config.apiUrl}/agents?projectId=${config.projectId}`,
-      {
-        headers: STANDALONE
-          ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-          : { Authorization: `Bearer ${token}` },
-      }
-    )
-    const json = await res.json()
-    setData(json.data)
-    setAgentUpdate(true)
-  }
+    setData(agents.data)
+
+  }, [agents])
 
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
@@ -138,61 +108,37 @@ export function NewSidebar(DrawerProps): JSX.Element {
     }
   }, [])
 
-  useEffect(() => {
-    if (!config.apiUrl) return
-      ; (async () => {
-        const res = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` },
-          }
-        )
-        const json = await res.json()
-        // if data.length === 0  create new agent
-        if (json.data.length === 0) {
-          await createNew({
-            name: 'Default Agent',
-            projectId: config.projectId,
-            enabled: false,
-            publicVariables: '{}',
-            secrets: '{}',
-            default: true,
-          })
-          setData(json.data)
-        } else {
-          setData(json.data)
-        }
+  // useEffect(() => {
+  //   if (!config.apiUrl) return
+  //     ; (async () => {
+  //       const res = await fetch(
+  //         `${config.apiUrl}/agents?projectId=${config.projectId}`,
+  //         {
+  //           headers: STANDALONE
+  //             ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
+  //             : { Authorization: `Bearer ${token}` },
+  //         }
+  //       )
+  //       const json = await res.json()
+  //       // if data.length === 0  create new agent
+  //       if (json.data.length === 0) {
+  //         await createNewAgent({
+  //           name: 'Default Agent',
+  //           projectId: config.projectId,
+  //           enabled: false,
+  //           publicVariables: '{}',
+  //           secrets: '{}',
+  //           default: true,
+  //         })
+  //         setData(json.data)
+  //       } else {
+  //         setData(json.data)
+  //       }
 
-        // setIsLoading(false)
-      })()
-  }, [config?.apiUrl])
+  //       // setIsLoading(false)
+  //     })()
+  // }, [config?.apiUrl])
 
-  // Function to handle the click event on the hideMenu div
-  const handleHideMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setMenuAnchorEl(event.currentTarget)
-    setCursorPosition({ x: event.clientX, y: event.clientY })
-  }
-
-  // Function to handle closing the menu
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null)
-  }
-
-  // Effect to add a click listener to the document to close the menu when clicked outside
-  useEffect(() => {
-    const handleDocumentClick = (event: MouseEvent) => {
-      if (menuAnchorEl && !menuAnchorEl.contains(event.target as Node)) {
-        handleMenuClose()
-      }
-    }
-
-    document.addEventListener('click', handleDocumentClick)
-    return () => {
-      document.removeEventListener('click', handleDocumentClick)
-    }
-  }, [menuAnchorEl])
 
   return (
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
@@ -203,65 +149,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
       <FileTree />
       <ComingSoon />
 
-      <div
-        className={styles.hideMenu}
-        onClick={handleHideMenuClick}
-        style={{ cursor: 'pointer' }} // Add cursor style to indicate the clickable element
-      >
-        <Menu
-          anchorReference="anchorPosition"
-          anchorPosition={
-            menuAnchorEl
-              ? { top: cursorPosition.y, left: cursorPosition.x }
-              : undefined
-          }
-          open={Boolean(menuAnchorEl)}
-          onClose={handleMenuClose}
-          sx={{
-            '& .MuiMenu-paper': {
-              background: '#2B2B30',
-              width: '180px',
-              shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-              borderRadius: '0px',
-            },
-          }}
-        >
-          <div className={styles.hideMenuItem}>
-            <FolderOpenOutlinedIcon sx={{ mr: 1 }} />
-            <Typography variant="body1">New Folder</Typography>
-          </div>
-          <Divider />
-          <div
-            className={styles.hideMenuItem}
-            onClick={() => {
-              navigate('/home/create-new')
-            }}
-          >
-            <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
-            <Typography variant="body1">New Spell</Typography>
-          </div>
-          <Divider />
-          <div className={styles.hideMenuItem}>
-            <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
-            <Typography variant="body1"> New Prompt</Typography>
-          </div>
-          <Divider />
-          <div
-            className={styles.hideMenuItem}
-            onClick={() => {
-              openTab({
-                name: 'Documents',
-                type: 'Documents',
-                switchActive: true,
-                id: 'Documents',
-              })
-            }}
-          >
-            <DescriptionOutlinedIcon sx={{ mr: 1 }} />
-            <Typography variant="body1">New Document</Typography>
-          </div>
-        </Menu>
-      </div>
+      <ContextMenu />
+
       <div className={styles.credits}>
         <div className={styles.menuFlex}>
           <AutoAwesomeIcon sx={{ mr: 1 }} />
