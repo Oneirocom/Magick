@@ -120,7 +120,7 @@ const components = {
   EditorWindow: (props: IDockviewPanelProps<{ tab: Tab }>) => {
     return <EditorWindow {...props.params} />
   },
-  DebugConsole: (props: IDockviewPanelProps<{ tab: Tab }>) => {
+  Console: (props: IDockviewPanelProps<{ tab: Tab }>) => {
     return <Console {...props.params} />
   },
   // AgentControls
