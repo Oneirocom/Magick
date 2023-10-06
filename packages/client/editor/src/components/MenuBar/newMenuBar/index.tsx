@@ -299,46 +299,13 @@ const NewMenuBar = props => {
           onClick: onDelete,
           hotKey: 'delete',
         },
-        snap: {
-          onClick: toggleSnapFunction,
-          isActive: snapEnabled,
-        },
       },
     },
-    window: {
+    settings: {
       items: {
-        text_editor: {
-          onClick: onTextEditorCreate,
-          hotKey: 'alt+1, control+1',
-        },
-        inspector: {
-          onClick: onInspectorCreate,
-          hotKey: 'alt+2, control+2',
-        },
-        playtest: {
-          onClick: onPlaytestCreate,
-          hotKey: 'alt+3, control+3',
-        },
-        console: {
-          onClick: onConsole,
-          hotKey: 'alt+4, control+4',
-        },
-        agent_controls: {
-          onClick: onAgentControlCreate,
-          hotKey: 'alt+6, control+6',
-        },
         snap: {
           onClick: toggleSnapFunction,
           isActive: snapEnabled,
-        },
-      },
-      settings: {
-        items: {
-          'Auto Save': {
-            onClick: toggleSave,
-            hotKey: 'alt+shift+a',
-            isActive: preferences.autoSave,
-          },
         },
       },
     },
