@@ -28,7 +28,7 @@ import NewMenuBar from '../MenuBar/newMenuBar'
 import { AgentInterface } from 'shared/core'
 import { setCurrentAgentId, useGetSpellsQuery } from 'client/state'
 
-function AgentMenu({ data, resetData }) {
+export function AgentMenu({ data, resetData }) {
   const { client } = useFeathers()
   const { openTab } = useTabLayout()
   const [openMenu1, setOpenMenu1] = useState(null)
@@ -606,5 +606,3 @@ function AgentMenu({ data, resetData }) {
     </div>
   )
 }
-
-export default AgentMenu
