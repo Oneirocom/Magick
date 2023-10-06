@@ -1,9 +1,12 @@
 import { useConfig, useFeathers, usePubSub } from '@magickml/providers'
 import {
   DockviewApi,
+  DockviewDndOverlayEvent,
+  DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
   IDockviewPanelProps,
+  positionToDirection,
 } from 'dockview'
 import { useEffect, useRef } from 'react'
 import { SpellInterface } from 'shared/core'
@@ -198,23 +201,73 @@ export const Composer = ({ theme, tab, pubSub }) => {
     // }
   }
 
+  const onDidDrop = (event: DockviewDropEvent) => {
+    const component = event.nativeEvent.dataTransfer.getData('component')
+    event.api.addPanel({
+      id: component,
+      component: component,
+      position: {
+        direction: positionToDirection(event.position),
+        referenceGroup: event.group || undefined,
+      },
+      params: {
+        title: component,
+        tab
+      }
+    });
+  };
+
+  const showDndOverlay = (event: DockviewDndOverlayEvent) => {
+    return true;
+  };
+
   return (
     <>
       <EventHandler tab={tab} pubSub={pubSub} />
       <DockviewReact
+        onDidDrop={onDidDrop}
         components={components}
         onReady={onReady}
         className={theme}
+        showDndOverlay={showDndOverlay}
       />
     </>
   )
 }
 
+const DraggableElement = (props) => (
+  <p
+    tabIndex={-1}
+    onDragStart={(event) => {
+      console.log("DRAG START")
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'move';
+
+        event.dataTransfer.setData('text/plain', 'nothing');
+        event.dataTransfer.setData('component', props.window)
+      }
+    }}
+    style={{
+      padding: '8px',
+      color: 'white',
+      cursor: 'pointer',
+    }}
+    draggable={true}
+  >
+    {props.window}
+  </p>
+);
+
 const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; theme: string }>) => {
   const pubSub = usePubSub()
   return (
     <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
-      <div style={{ height: 20, width: '100%' }}></div>
+      <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
+        <DraggableElement window="DebugConsole" />
+        <DraggableElement window="TextEditor" />
+        <DraggableElement window="Inspector" />
+        <DraggableElement window="Playtest" />
+      </div>
       <div style={{ position: 'relative', height: '100%' }}>
         <Composer
           theme={`composer-layout ${props.params.theme}`}
