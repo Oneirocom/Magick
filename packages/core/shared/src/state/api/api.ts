@@ -1,5 +1,4 @@
-// DOCUMENTED 
-// Import necessary libraries and types from toolkit
+// DOCUMENTED
 import {
   BaseQueryFn,
   createApi,
@@ -55,11 +54,26 @@ const dynamicBaseQuery: BaseQueryFn<
 
 /**
  * Creates a root API with a dynamic base query, appropriate reducerPath,
- * tagTypes, and empty endpoints.
+ * tagTypes, and endpoints for different data types.
  */
 export const rootApi = createApi({
   reducerPath: 'api', // Set reducer path
   baseQuery: dynamicBaseQuery, // Use dynamicBaseQuery as baseQuery
-  tagTypes: ['Spell', 'Spells', 'Version'], // Define tagTypes for invalidation
-  endpoints: () => ({}), // Provide an empty object for endpoints
+  tagTypes: [
+    'Spell',
+    'Spells',
+    'Version',
+    'Collection',
+    'Collections',
+    'Record',
+    'Records',
+  ],
+  endpoints: builder => ({
+    spells: builder.query({
+      query: () => '/spells',
+    }),
+    collections: builder.query({
+      query: () => '/collections',
+    }),
+  }),
 })
