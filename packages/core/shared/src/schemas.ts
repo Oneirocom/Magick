@@ -108,3 +108,64 @@ export const documentSchema = Type.Object(
 
 /** The interface for a document object that's based on the `documentSchema`. */
 export type Document = Static<typeof documentSchema>
+
+/**
+ * Full data model schema for a collection.
+ *
+ * @property {string} id - The collection's ID.
+ * @property {string} name - The name of the collection.
+ * @property {string} projectId - The ID of the project that the collection belongs to.
+ * @property {string} [description] - Description of the collection (optional).
+ * @property {string} createdAt - Timestamp of when the collection was created.
+ * @property {string} updatedAt - Timestamp of when the collection was last updated.
+ * @property {string | null} [deletedAt] - Timestamp of when the collection was deleted, or null if not deleted.
+ */
+
+export const collectionSchema = Type.Object(
+  {
+    id: Type.String(),
+    name: Type.String(),
+    projectId: Type.String(),
+    description: Type.Optional(Type.String()),
+    createdAt: Type.String(),
+    updatedAt: Type.String(),
+    deletedAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+  },
+  { $id: 'Collection', additionalProperties: false }
+)
+
+/** The type for a collection object that's based on the `collectionSchema`. */
+export type CollectionSchema = Static<typeof collectionSchema>
+/** The interface for a collection object that's based on the `collectionSchema`. */
+export type CollectionInterface = CollectionSchema
+
+/**
+ * Full data model schema for a record.
+ *
+ * @property {string} id - The record's ID.
+ * @property {string} key - The key of the record.
+ * @property {string} collectionId - The ID of the collection that the record belongs to.
+ * @property {any} [data] - The data for the record (optional).
+ * @property {any} [metadata] - The metadata for the record (optional).
+ * @property {string} createdAt - Timestamp of when the record was created.
+ * @property {string} updatedAt - Timestamp of when the record was last updated.
+ * @property {string | null} [deletedAt] - Timestamp of when the record was deleted, or null if not deleted.
+ */
+export const recordSchema = Type.Object(
+  {
+    id: Type.String(),
+    key: Type.String(),
+    collectionId: Type.String(),
+    data: Type.Optional(Type.Any()),
+    metadata: Type.Optional(Type.Any()),
+    createdAt: Type.String(),
+    updatedAt: Type.String(),
+    deletedAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+  },
+  { $id: 'Record', additionalProperties: false }
+)
+
+/** The type for a record object that's based on the `recordSchema`. */
+export type RecordSchema = Static<typeof recordSchema>
+/** The interface for a record object that's based on the `recordSchema`. */
+export type RecordInterface = RecordSchema
