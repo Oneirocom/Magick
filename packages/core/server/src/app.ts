@@ -198,7 +198,8 @@ export async function initApp() {
 
               if (authentication.payload.project !== projectId) {
                 throw new NotAuthenticated(
-                  'User not authorized to access project'
+                  // 'User not authorized to access project'
+                  `${authentication.payload.project} and ${context.params.projectId} do not match}`
                 )
               }
             }
