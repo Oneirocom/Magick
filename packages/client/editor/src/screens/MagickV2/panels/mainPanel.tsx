@@ -136,7 +136,7 @@ const MainPanel = () => {
   return (
     <DockviewReact
       onReady={onReady}
-      preHeaderActionsComponent={PreControls}
+      prefixHeaderActionsComponent={PreControls}
       tabComponents={tabComponents}
       className={`tab-layout ${theme}`}
       components={getComponents()}
