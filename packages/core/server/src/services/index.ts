@@ -8,10 +8,12 @@ import { document } from './documents/documents'
 import { projects } from './projects/projects'
 import { spellRunner } from './spell-runner/spell-runner'
 import { agentImage } from './agentImage/agentImage'
+import { collection } from './collections/collections'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
 import { pluginManager } from '@magickml/core'
+import { records } from './records/records'
 
 /**
  * Configures and registers services for the application.
@@ -30,6 +32,8 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(spellRunner)
   app.configure(projects)
   app.configure(agentImage)
+  app.configure(collection)
+  app.configure(records)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better

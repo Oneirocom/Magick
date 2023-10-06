@@ -8,6 +8,9 @@ import { combineReducers } from 'redux'
 
 import { spellApi } from './api/spells'
 import { rootApi } from './api/api'
+import { collectionApi } from './api/collections'
+import { recordApi } from './api/records'
+
 import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
@@ -28,6 +31,8 @@ const rootReducer = combineReducers({
   tabs: tabReducer,
   preferences: preferencesReducer,
   [spellApi.reducerPath]: spellApi.reducer,
+  [collectionApi.reducerPath]: collectionApi.reducer,
+  [recordApi.reducerPath]: recordApi.reducer,
   localState: localStateReducer,
 })
 
@@ -46,7 +51,12 @@ export const createStore = (config: AppConfig) => {
     key: config.projectId,
     version: 1,
     storage,
-    blacklist: [spellApi.reducerPath, 'globalConfig'],
+    blacklist: [
+      spellApi.reducerPath,
+      collectionApi.reducerPath,
+      recordApi.reducerPath,
+      'globalConfig',
+    ],
   }
 
   const store = configureStore({
@@ -57,7 +67,11 @@ export const createStore = (config: AppConfig) => {
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }).concat(rootApi.middleware),
+      }).concat(
+        rootApi.middleware,
+        collectionApi.middleware,
+        recordApi.middleware
+      ),
   })
 
   setupListeners(store.dispatch)
