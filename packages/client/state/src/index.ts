@@ -1,4 +1,4 @@
-export * from './lib/api/spells'
+export * from './lib/api'
 export * from './lib/globalConfig'
 export * from './lib/hooks'
 export * from './lib/localState'
