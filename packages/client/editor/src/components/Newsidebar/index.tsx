@@ -1,21 +1,17 @@
 // DOCUMENTED
-import { ClientPluginManager, pluginManager } from 'shared/core'
 import BoltIcon from '@mui/icons-material/Bolt'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import { CSSObject, Theme, styled } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTreeData } from '@magickml/providers'
-import { Tooltip, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 import { DndProvider } from 'react-dnd'
+
 import {
   Tree,
   NodeModel,
@@ -32,44 +28,19 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
-import { useConfig } from '@magickml/providers'
-import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
 import { useSelector } from 'react-redux'
 
+import { useConfig } from '@magickml/providers'
+import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
 import { CustomNode } from './CustomNode'
-import AgentMenu from './AgentMenu'
+import { AgentMenu } from './AgentMenu'
+import { PluginDrawerItems } from './PluginDrawerItems'
 import { SetAPIKeys, drawerTooltipText } from 'client/core'
 import styles from './menu.module.css'
 
-// todo FIX THIS IMPORT
 import { useTabLayout } from '@magickml/providers'
-
-const drawerWidth = 210
-
-// CSS mixins for open and close states
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-})
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: '0px',
-})
-
-// DrawerHeader component properties
-type HeaderProps = {
-  open: boolean
-  theme?: Theme
-}
+import { DrawerItem } from './DrawerItem'
+import { ScreenLinkItems } from './ScreenLinkItems'
 
 type CustomData = {
   fileType: string
@@ -89,124 +60,6 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }))
 
-/**
- * The StyledDrawer component style definition based on its open state property.
- */
-// const StyledDrawer = styled(MuiDrawer, {
-//   shouldForwardProp: prop => prop !== 'open',
-// })(({ theme, open }: HeaderProps) => ({
-//   width: drawerWidth,
-//   flexShrink: 0,
-//   whiteSpace: 'nowrap',
-//   boxSizing: 'border-box',
-//   ...(open && {
-//     ...openedMixin(theme as Theme),
-//     '& .MuiDrawer-paper': openedMixin(theme as Theme),
-//   }),
-//   ...(!open && {
-//     ...closedMixin(theme as Theme),
-//     '& .MuiDrawer-paper': closedMixin(theme as Theme),
-//   }),
-// }))
-
-// DrawerItem component properties
-type DrawerItemProps = {
-  Icon: React.ElementType
-  open: boolean
-  text: string
-  tooltip: string
-  active: boolean
-  onClick?: () => void
-  tooltipText: string
-}
-
-/**
- * The DrawerItem component used to display individual items in the main drawer.
- */
-const DrawerItem: React.FC<DrawerItemProps> = ({
-  Icon,
-  open,
-  text,
-  active,
-  onClick,
-  tooltipText,
-}) => (
-  <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-    <Tooltip title={tooltipText} placement="top" enterDelay={500} disableInteractive arrow>
-      <ListItemButton
-        sx={{
-          py: 0.2,
-          justifyContent: open ? 'initial' : 'center',
-          px: 1,
-        }}
-        onClick={onClick}
-      >
-        <ListItemIcon
-          sx={{
-            minWidth: 0,
-            mr: open ? 2 : 'auto',
-            justifyContent: 'center',
-            color: active ? 'var(--primary)' : 'white',
-          }}
-        >
-          <Icon />
-        </ListItemIcon>
-        <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-      </ListItemButton>
-    </Tooltip>
-  </ListItem>
-)
-
-// PluginDrawerItems component properties
-type PluginDrawerItemsProps = {
-  onClick: (path: string) => () => void
-  open: boolean
-}
-
-/**
- * The PluginDrawerItems component used to display plugin-related drawer items.
- */
-const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({
-  onClick,
-  open,
-}) => {
-  const { openTab } = useTabLayout()
-  const location = useLocation()
-  const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
-  let lastPlugin: string | null = null
-  let divider = false
-  return drawerItems.map(item => {
-    if (item.plugin !== lastPlugin) {
-      divider = false
-      lastPlugin = item.plugin
-    } else {
-      divider = false
-    }
-    return (
-      <div key={item.path}>
-        {divider && <Divider />}
-        <DrawerItem
-          key={item.path}
-          active={location.pathname.includes(item.path)}
-          Icon={item.icon}
-          open={open}
-          onClick={() => {
-            openTab({
-              name: item.text,
-              type: item.text,
-              switchActive: true,
-              id: item.text,
-            })
-          }}
-          text={item.text}
-          tooltip="Avatar and Tasks Tooltip"
-          tooltipText={item.tooltip}
-        />
-      </div>
-    )
-  })
-}
-
 type DrawerProps = {
   children: React.ReactNode
 }
@@ -219,7 +72,6 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const location = useLocation()
   const navigate = useNavigate()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
-  const [openDrawer] = useState<boolean>(true)
   // State to keep track of the anchor element of the menu and cursor position
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -228,10 +80,6 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const { treeData, setTreeData, setAgentUpdate } = useTreeData()
-
-  useEffect(() => {
-    console.log('!!!!!!!!!TREE DATA', treeData)
-  }, [treeData])
 
   const handleDrop = (newTree: NodeModel[]) => {
     setTreeData(newTree)
@@ -372,66 +220,9 @@ export function NewSidebar(DrawerProps): JSX.Element {
 
   return (
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
-      <AgentMenu data={data} resetData={resetData} />
+      <AgentMenu data={data} resetData={resetData} />a
 
-      <List
-        sx={{
-          padding: 0,
-        }}
-      >
-        <DrawerItem
-          active={location.pathname === '/events'}
-          Icon={BoltIcon}
-          open={openDrawer}
-          onClick={() => {
-            openTab({
-              name: 'Events',
-              type: 'Events',
-              switchActive: true,
-              id: 'events',
-            })
-          }}
-          text="Events"
-          tooltip="Events Tooltip"
-          tooltipText={drawerTooltipText.events}
-        />
-        <DrawerItem
-          active={location.pathname === '/requests'}
-          Icon={StorageIcon}
-          open={openDrawer}
-          onClick={() => {
-            openTab({
-              name: 'Requests',
-              type: 'Requests',
-              switchActive: true,
-              id: 'requests',
-            })
-          }}
-          text="Requests"
-          tooltip="Requests Tooltip"
-          tooltipText={drawerTooltipText.requests}
-        />
-
-        <PluginDrawerItems onClick={onClick} open={openDrawer} />
-
-        <DrawerItem
-          active={location.pathname.includes('/settings')}
-          Icon={SettingsIcon}
-          open={openDrawer}
-          onClick={() => {
-            openTab({
-              name: 'Settings',
-              type: 'Settings',
-              switchActive: true,
-              id: 'settings',
-            })
-          }}
-          text="Settings"
-          tooltip="Settings Tooltip"
-          tooltipText={drawerTooltipText.settings}
-        />
-        {!isAPIKeysSet && <SetAPIKeys />}
-      </List>
+      <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} />
       <Divider sx={{ marginY: 2 }} />
 
       <div className={styles.files}>
