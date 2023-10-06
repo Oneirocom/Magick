@@ -20,7 +20,7 @@ import EditorWindow from '../../../windows/EditorWindow'
 import Inspector from '../../../windows/InspectorWindow'
 import Playtest from '../../../windows/PlaytestWindow'
 
-import DebugConsole from '../../../windows/DebugConsole'
+import Console from '../../../windows/DebugConsole'
 import TextEditor from '../../../windows/TextEditorWindow'
 import { useEditor } from '../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
@@ -91,7 +91,7 @@ function loadDefaultLayout(api: DockviewApi, tab) {
 
   api.addPanel({
     id: 'Console',
-    component: 'DebugConsole',
+    component: 'Console',
     params: {
       title: 'Console',
       tab,
@@ -121,7 +121,7 @@ const components = {
     return <EditorWindow {...props.params} />
   },
   DebugConsole: (props: IDockviewPanelProps<{ tab: Tab }>) => {
-    return <DebugConsole {...props.params} />
+    return <Console {...props.params} />
   },
   // AgentControls
 }
@@ -203,6 +203,7 @@ export const Composer = ({ theme, tab, pubSub }) => {
 
   const onDidDrop = (event: DockviewDropEvent) => {
     const component = event.nativeEvent.dataTransfer.getData('component')
+    const title = event.nativeEvent.dataTransfer.getData('title')
     event.api.addPanel({
       id: component,
       component: component,
@@ -211,7 +212,7 @@ export const Composer = ({ theme, tab, pubSub }) => {
         referenceGroup: event.group || undefined,
       },
       params: {
-        title: component,
+        title: title ? title : component,
         tab
       }
     });
@@ -239,12 +240,12 @@ const DraggableElement = (props) => (
   <p
     tabIndex={-1}
     onDragStart={(event) => {
-      console.log("DRAG START")
       if (event.dataTransfer) {
         event.dataTransfer.effectAllowed = 'move';
 
         event.dataTransfer.setData('text/plain', 'nothing');
         event.dataTransfer.setData('component', props.window)
+        event.dataTransfer.setData('title', props.title)
       }
     }}
     style={{
@@ -263,8 +264,8 @@ const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; theme: string }>) => {
   return (
     <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
       <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
-        <DraggableElement window="DebugConsole" />
-        <DraggableElement window="TextEditor" />
+        <DraggableElement window="Console" />
+        <DraggableElement window="TextEditor" title="Text Editor" />
         <DraggableElement window="Inspector" />
         <DraggableElement window="Playtest" />
       </div>
