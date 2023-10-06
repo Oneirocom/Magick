@@ -60,6 +60,6 @@ const dynamicBaseQuery: BaseQueryFn<
 export const rootApi = createApi({
   reducerPath: 'api', // Set reducer path
   baseQuery: dynamicBaseQuery, // Use dynamicBaseQuery as baseQuery
-  tagTypes: ['Spell', 'Spells', 'Version'], // Define tagTypes for invalidation
+  tagTypes: ['Spell', 'Spells', 'Version', 'Agent', 'Agents'], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })

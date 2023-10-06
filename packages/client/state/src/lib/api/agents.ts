@@ -1,0 +1,65 @@
+import { rootApi } from './api'
+
+export const agentApi = rootApi.injectEndpoints({
+  endpoints: builder => ({
+    getAgents: builder.query({
+      providesTags: ['Agents'],
+      query: ({ projectId }) => ({
+        url: `agents?projectId=${projectId}`,
+      }),
+    }),
+    getAgent: builder.query({
+      providesTags: ['Agent'],
+      query: ({ agentName, projectId }) => {
+        return {
+          url: `agents?name=${agentName}&projectId=${projectId}`,
+          params: {},
+        }
+      },
+    }),
+    getAgentById: builder.query({
+      providesTags: ['Agent'],
+      query: ({ agentId, projectId }) => {
+        return {
+          url: `agents?id=${agentId}&projectId=${projectId}`,
+          params: {},
+        }
+      },
+    }),
+    createAgent: builder.mutation({
+      invalidatesTags: ['Agents'],
+      query: ({ agent, projectId }) => ({
+        url: `agents?projectId=${projectId}`,
+        method: 'POST',
+        body: agent,
+      }),
+    }),
+    updateAgent: builder.mutation({
+      invalidatesTags: ['Agent'],
+      query: ({ agent, projectId }) => ({
+        url: `agents?projectId=${projectId}`,
+        method: 'PATCH',
+        body: agent,
+      }),
+    }),
+    deleteAgent: builder.mutation({
+      invalidatesTags: ['Agent'],
+      query: ({ agentId, projectId }) => ({
+        url: `agents?id=${agentId}&projectId=${projectId}`,
+        method: 'DELETE',
+      }),
+    }),
+  }),
+})
+
+export const {
+  useGetAgentsQuery,
+  useGetAgentQuery,
+  useGetAgentByIdQuery,
+  useCreateAgentMutation,
+  useUpdateAgentMutation,
+  useDeleteAgentMutation,
+  useLazyGetAgentQuery,
+  useLazyGetAgentByIdQuery,
+  useLazyGetAgentsQuery,
+} = agentApi
