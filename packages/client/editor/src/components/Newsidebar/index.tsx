@@ -1,23 +1,10 @@
 // DOCUMENTED
-import BoltIcon from '@mui/icons-material/Bolt'
-import SettingsIcon from '@mui/icons-material/Settings'
-import StorageIcon from '@mui/icons-material/Storage'
 import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '@magickml/providers'
 import { Typography } from '@mui/material'
-import { CssBaseline } from '@mui/material'
-import { DndProvider } from 'react-dnd'
-
-import {
-  Tree,
-  NodeModel,
-  MultiBackend,
-  getBackendOptions,
-} from '@minoru/react-dnd-treeview'
 import AddIcon from '@mui/icons-material/Add'
 import LinearProgress, {
   linearProgressClasses,
@@ -32,15 +19,14 @@ import { useSelector } from 'react-redux'
 
 import { useConfig } from '@magickml/providers'
 import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
-import { CustomNode } from './CustomNode'
+
 import { AgentMenu } from './AgentMenu'
-import { PluginDrawerItems } from './PluginDrawerItems'
-import { SetAPIKeys, drawerTooltipText } from 'client/core'
 import styles from './menu.module.css'
 
 import { useTabLayout } from '@magickml/providers'
-import { DrawerItem } from './DrawerItem'
 import { ScreenLinkItems } from './ScreenLinkItems'
+import { FileTree } from './FileTree'
+import { ComingSoon } from './ComingSoon'
 
 type CustomData = {
   fileType: string
@@ -69,7 +55,6 @@ type DrawerProps = {
  */
 export function NewSidebar(DrawerProps): JSX.Element {
   const { openTab } = useTabLayout()
-  const location = useLocation()
   const navigate = useNavigate()
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   // State to keep track of the anchor element of the menu and cursor position
@@ -79,16 +64,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const [data, setData] = useState([])
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const { treeData, setTreeData, setAgentUpdate } = useTreeData()
-
-  const handleDrop = (newTree: NodeModel[]) => {
-    setTreeData(newTree)
-  }
-
-  // Function to handle navigation based on location path
-  const onClick = (location: string) => () => {
-    navigate(location)
-  }
+  const { setAgentUpdate } = useTreeData()
 
   //create new default agent
   const createNew = (data: {
@@ -220,55 +196,13 @@ export function NewSidebar(DrawerProps): JSX.Element {
 
   return (
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
-      <AgentMenu data={data} resetData={resetData} />a
+      <AgentMenu data={data} resetData={resetData} />
 
       <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} />
       <Divider sx={{ marginY: 2 }} />
+      <FileTree />
+      <ComingSoon />
 
-      <div className={styles.files}>
-        <CssBaseline />
-        <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-          <div>
-            <Tree
-              tree={treeData}
-              rootId={0}
-              // @ts-ignore
-              render={(
-                node: NodeModel<CustomData>,
-                { depth, isOpen, onToggle }
-              ) => (
-                <CustomNode
-                  openTab={openTab}
-                  node={node}
-                  depth={depth}
-                  isOpen={isOpen}
-                  onToggle={onToggle}
-                />
-              )}
-              onDrop={handleDrop}
-              classes={{
-                root: styles.treeRoot,
-                draggingSource: styles.draggingSource,
-                dropTarget: styles.dropTarget,
-              }}
-            />
-          </div>
-        </DndProvider>
-      </div>
-      <div className={styles.menu} style={{ color: '#7D7D7D' }}>
-        <div className={styles.menuFlex}>
-          <AddIcon sx={{ mr: 1 }} />
-          <Typography variant="body1" style={{ whiteSpace: 'nowrap' }}>
-            Notion (coming soon)
-          </Typography>
-        </div>
-        <div className={styles.menuFlex}>
-          <AddIcon sx={{ mr: 1 }} />
-          <Typography variant="body1" style={{ whiteSpace: 'nowrap' }}>
-            Google Drive (coming soon)
-          </Typography>
-        </div>
-      </div>
       <div
         className={styles.hideMenu}
         onClick={handleHideMenuClick}
