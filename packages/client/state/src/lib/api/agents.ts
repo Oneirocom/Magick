@@ -28,22 +28,24 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     createAgent: builder.mutation({
       invalidatesTags: ['Agents'],
-      query: ({ agent, projectId }) => ({
-        url: `agents?projectId=${projectId}`,
+      query: ({ agent }) => ({
+        url: `agents/${agent.id}`,
         method: 'POST',
         body: agent,
       }),
     }),
     updateAgent: builder.mutation({
-      invalidatesTags: ['Agent'],
-      query: ({ agent, projectId }) => ({
-        url: `agents?projectId=${projectId}`,
-        method: 'PATCH',
-        body: agent,
-      }),
+      invalidatesTags: ['Agent', 'Agents'],
+      query: agent => {
+        return {
+          url: `agents/${agent.id}`,
+          method: 'PATCH',
+          body: agent,
+        }
+      },
     }),
     deleteAgent: builder.mutation({
-      invalidatesTags: ['Agent'],
+      invalidatesTags: ['Agent', 'Agents'],
       query: ({ agentId, projectId }) => ({
         url: `agents?id=${agentId}&projectId=${projectId}`,
         method: 'DELETE',
