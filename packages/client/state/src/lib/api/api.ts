@@ -9,6 +9,11 @@ import {
 } from '@reduxjs/toolkit/query/react'
 import { RootState } from '../store'
 
+interface RequestBody {
+  projectId?: string
+  [key: string]: any // allows for any other properties
+}
+
 /**
  * Dynamic base query that can be used to create a Redux Toolkit Query API
  * with a dynamic API url and token based on the current state.
@@ -25,9 +30,26 @@ const dynamicBaseQuery: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   // Get state from Redux store
   const state = api.getState() as RootState
-  // Extract apiUrl and token from state
+  // Extract apiUrl, token, and projectId from state
   const apiUrl = state.globalConfig.apiUrl
   const token = state.globalConfig.token
+  const projectId = state.globalConfig.projectId
+
+  // Append projectId as a query parameter if not already present in args.url
+  let endpointUrl = typeof args === 'string' ? args : args.url
+
+  const projectIdParam = `projectId=${projectId}`
+  if (!endpointUrl.includes(projectIdParam)) {
+    const separator = endpointUrl.includes('?') ? '&' : '?'
+    endpointUrl = `${endpointUrl}${separator}${projectIdParam}`
+  }
+
+  // Update the args.url if args is an object
+  if (typeof args === 'string') {
+    args = endpointUrl // Assigning the modified string URL back to args
+  } else {
+    args.url = endpointUrl // Updating the .url property of args object
+  }
 
   // Handle scenarios where apiUrl is not present gracefully
   if (!apiUrl) {
@@ -39,6 +61,8 @@ const dynamicBaseQuery: BaseQueryFn<
       },
     }
   }
+
+  console.log('NEW URL', apiUrl)
 
   // Create rawBaseQuery with provided apiUrl and token (if exists)
   const rawBaseQuery = fetchBaseQuery({
