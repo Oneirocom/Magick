@@ -2,12 +2,13 @@
 import { LoadingScreen } from 'client/core'
 import { type ClientPluginManager, pluginManager } from 'shared/core'
 import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE } from 'shared/config'
-import { useSnackbar } from 'notistack'
+import { enqueueSnackbar, useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useConfig, useTreeData } from '@magickml/providers'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
+import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
 
 // todo - improve agent typing by pulling from feathers types
 type AgentData = {
@@ -18,104 +19,29 @@ type AgentData = {
  * @description Main window representing the agent manager.
  */
 const AgentManagerWindow = () => {
-  const config = useConfig()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [data, setData] = useState<Array<AgentData>>([])
-  const { enqueueSnackbar } = useSnackbar()
-  const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
-  const [enable, setEnable] = useState({})
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
-  const { setAgentUpdate, agentUpdate } = useTreeData()
+  const { data: agentData, isLoading } = useGetAgentsQuery({})
 
-  /**
-   * @description Reset the data and fetch the latest info from the server.
-   */
-  const resetData = async () => {
-    setIsLoading(true)
-    const res = await fetch(
-      `${config.apiUrl}/agents?projectId=${config.projectId}`,
-      {
-        headers: STANDALONE
-          ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-          : { Authorization: `Bearer ${token}` },
-      }
-    )
-    const json = await res.json()
-    setData(json.data)
-    setIsLoading(false)
-    if (!json.data || !json.data[0]) return
-    const spellAgent = json.data[0]?.rootSpell ?? {}
+  const config = useConfig()
+  const [data, setData] = useState<Array<AgentData>>([])
+  const [enable, setEnable] = useState({})
+
+  // Handle data from initial loading of the agent data
+  useEffect(() => {
+    if (!agentData) return
+    if (!agentData.data || !agentData.data[0]) return
+    setData(agentData.data)
+
+    const spellAgent = agentData.data[0]?.rootSpell ?? {}
     const inputs = (pluginManager as ClientPluginManager).getInputByName()
     const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
     for (const key of Object.keys(plugin_list)) {
       plugin_list[key] = validateSpellData(spellAgent, inputs[key])
     }
     setEnable(plugin_list)
-  }
+  }, [agentData])
 
-  const updateData = async newData => {
-    const index = data.findIndex(agent => agent.id === newData.id)
-    // Create a new array with the updated object
-    const updatedArray = [
-      ...data.slice(0, index),
-      newData,
-      ...data.slice(index + 1),
-    ]
 
-    // Set the state with the updated array
-    setData(updatedArray)
-  }
-
-  /**
-   * @description Create a new agent with provided data.
-   * @param {Object} data The data needed to create a new agent.
-   */
-  const createNew = (data: {
-    projectId: string
-    rootSpell: string
-    enabled: true
-    name: string
-    updatedAt: string
-    secrets: string
-  }) => {
-    setAgentUpdate(false)
-    if (!token && PRODUCTION) {
-      enqueueSnackbar('You must be logged in to create an agent', {
-        variant: 'error',
-      })
-      return
-    }
-
-    fetch(`${config.apiUrl}/agents`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        ...data,
-        updatedAt: new Date().toISOString(),
-        pingedAt: new Date().toISOString(),
-      }),
-    })
-      .then(async res => {
-        const res2 = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` },
-          }
-        )
-        const json = await res2.json()
-        setData(json.data)
-        setAgentUpdate(true)
-      })
-      .catch(err => {
-        console.error('error is', err)
-      })
-  }
+  const [createNewAgent] = useCreateAgentMutation()
 
   /**
    * @description Load file and create an agent with its data.
@@ -144,131 +70,18 @@ const AgentManagerWindow = () => {
       if (data.hasOwnProperty('id')) {
         delete data.id
       }
-      createNew(data)
-    }
-  }
-
-  /**
-   * @description Update an agent with provided data.
-   * @param {string} id The agent ID.
-   * @param {any} _data The new data to update the agent.
-   */
-  const update = (id: string, _data: any) => {
-    setAgentUpdate(false)
-    fetch(`${config.apiUrl}/agents/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        ..._data,
-        updatedAt: new Date().toISOString(),
-      }),
-    })
-      .then(async res => {
-        res = await res.json()
-        if (typeof res === 'string' && res === 'internal error') {
-          enqueueSnackbar('internal error updating agent', {
-            variant: 'error',
-          })
-        } else {
-          enqueueSnackbar('Updated agent', {
+      createNewAgent(data)
+        .unwrap()
+        .then(() => {
+          enqueueSnackbar('Agent created successfully!', {
             variant: 'success',
           })
-          setAgentUpdate(true)
-          resetData()
-        }
-      })
-      .catch(e => {
-        console.error('ERROR', e)
-        enqueueSnackbar('internal error updating entity', {
-          variant: 'error',
         })
-      })
-  }
-
-  /**
-   * @description Handle agent delete request.
-   * @param {string} id The agent ID to delete.
-   */
-  const handleDelete = (id: string) => {
-    setAgentUpdate(false)
-    fetch(`${config.apiUrl}/agents/` + id, {
-      method: 'DELETE',
-      headers: STANDALONE
-        ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-        : { Authorization: `Bearer ${token}` },
-    })
-      .then(async res => {
-        res = await res.json()
-        // TODO: Handle internal error
-        // if (res === 'internal error') {
-        //   enqueueSnackbar('Server Error deleting agent with id: ' + id, {
-        //     variant: 'error',
-        //   })
-        // } else {
-        enqueueSnackbar('Agent with id: ' + id + ' deleted successfully', {
-          variant: 'success',
+        .catch(() => {
+          enqueueSnackbar('Error creating agent!', { variant: 'error' })
         })
-        // }
-        if (selectedAgentData.id === id) setSelectedAgentData(undefined)
-        setAgentUpdate(true)
-        resetData()
-      })
-      .catch(e => {
-        enqueueSnackbar('Server Error deleting entity with id: ' + id, {
-          variant: 'error',
-        })
-      })
-  }
-
-  // useEffect callbacks for handling initial render and fetching data.
-  useEffect(() => {
-    if (!config.apiUrl || isLoading) return
-    setIsLoading(true)
-      ; (async () => {
-        const res = await fetch(
-          `${config.apiUrl}/agents?projectId=${config.projectId}`,
-          {
-            headers: STANDALONE
-              ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-              : { Authorization: `Bearer ${token}` },
-          }
-        )
-        const json = await res.json()
-        setData(json.data)
-        setIsLoading(false)
-      })()
-  }, [config.apiUrl])
-
-  useEffect(() => {
-    ; (async () => {
-      const res = await fetch(
-        `${config.apiUrl}/agents?projectId=${config.projectId}`,
-        {
-          headers: STANDALONE
-            ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-            : { Authorization: `Bearer ${token}` },
-        }
-      )
-      const json = await res.json()
-      if (!json.data || !json.data[0]) return
-      const spellAgent = json.data[0]?.rootSpell ?? {}
-      const inputs = (pluginManager as ClientPluginManager).getInputByName()
-      const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
-      for (const key of Object.keys(plugin_list)) {
-        plugin_list[key] = validateSpellData(spellAgent, inputs[key])
-      }
-      setEnable(plugin_list)
-    })()
-  }, [])
-
-  useEffect(() => {
-    if (agentUpdate) {
-      resetData()
     }
-  }, [agentUpdate])
+  }
 
   // Render the component.
   return isLoading ? (
@@ -276,13 +89,7 @@ const AgentManagerWindow = () => {
   ) : (
     <AgentWindow
       data={data}
-      onDelete={handleDelete}
-      onCreateAgent={createNew}
-      update={update}
-      updateData={updateData}
       onLoadFile={loadFile}
-      setSelectedAgentData={setSelectedAgentData}
-      selectedAgentData={selectedAgentData}
       onLoadEnables={enable}
     />
   )

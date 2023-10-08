@@ -2,7 +2,6 @@
 import Divider from '@mui/material/Divider'
 import { styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '@magickml/providers'
 import { Typography } from '@mui/material'
 import LinearProgress, {
@@ -12,7 +11,6 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { useSelector } from 'react-redux'
 
 import { useConfig } from '@magickml/providers'
-import { DEFAULT_USER_TOKEN, STANDALONE, PRODUCTION } from 'shared/config'
 
 import { AgentMenu } from './AgentMenu'
 import styles from './menu.module.css'
@@ -49,17 +47,10 @@ export function NewSidebar(DrawerProps): JSX.Element {
 
   const config = useConfig()
   const [data, setData] = useState([])
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
   const { setAgentUpdate } = useTreeData()
 
   const [createNewAgent, { data: newAgent }] = useCreateAgentMutation()
-  const { data: agents, refetch } = useGetAgentsQuery({ projectId: config.projectId, })
-
-  const resetData = async () => {
-    refetch()
-    setAgentUpdate(true)
-  }
+  const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
 
   // stopgap until I patch the agent menu with new redux stuff
   useEffect(() => {
@@ -108,41 +99,9 @@ export function NewSidebar(DrawerProps): JSX.Element {
     }
   }, [])
 
-  // useEffect(() => {
-  //   if (!config.apiUrl) return
-  //     ; (async () => {
-  //       const res = await fetch(
-  //         `${config.apiUrl}/agents?projectId=${config.projectId}`,
-  //         {
-  //           headers: STANDALONE
-  //             ? { Authorization: `Bearer ${DEFAULT_USER_TOKEN}` }
-  //             : { Authorization: `Bearer ${token}` },
-  //         }
-  //       )
-  //       const json = await res.json()
-  //       // if data.length === 0  create new agent
-  //       if (json.data.length === 0) {
-  //         await createNewAgent({
-  //           name: 'Default Agent',
-  //           projectId: config.projectId,
-  //           enabled: false,
-  //           publicVariables: '{}',
-  //           secrets: '{}',
-  //           default: true,
-  //         })
-  //         setData(json.data)
-  //       } else {
-  //         setData(json.data)
-  //       }
-
-  //       // setIsLoading(false)
-  //     })()
-  // }, [config?.apiUrl])
-
-
   return (
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
-      <AgentMenu data={data} resetData={resetData} />
+      <AgentMenu data={data} />
 
       <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} />
       <Divider sx={{ marginY: 2 }} />
