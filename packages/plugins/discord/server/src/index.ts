@@ -1,5 +1,10 @@
 // DOCUMENTED
-import { audioSocket, eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
+import {
+  audioSocket,
+  eventSocket,
+  ServerPlugin,
+  triggerSocket,
+} from '@magickml/core'
 import { DiscordConnector } from './connectors/discord'
 import { handleVoiceResponse } from './connectors/discord-voice'
 
@@ -33,8 +38,16 @@ function getAgentMethods() {
         spellRunner,
       })
       agent.discord = discord
-    } catch (err) {
-      agent.error('Error starting discord client for agent ' + agent.name)
+
+      await discord.initialize()
+    } catch (err: any) {
+      agent.error('Error starting discord client for agent ' + agent.id, {
+        message: err.message,
+        stack: err.stack,
+      })
+      agent.discord.destroy()
+      agent.discord = null
+      throw err
     }
   }
 
@@ -68,8 +81,7 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return agent.logger.warn('No output to send to discord')
 
-    await agent?.discord?.sendMessageToChannel(event.channel, output)
-
+  await agent?.discord?.sendMessageToChannel(event.channel, output)
 }
 
 // Input socket configurations
