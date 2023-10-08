@@ -3,10 +3,13 @@ import { Avatar, Typography } from '@mui/material'
 import { Modal } from 'client/core'
 import styles from './index.module.scss'
 import { useState } from 'react'
+import { enqueueSnackbar } from 'notistack'
+import { useDeleteAgentMutation } from 'client/state'
 
-const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
+const AgentItem = ({ keyId, agent, onClick, style }) => {
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
   const [agentId, setAgentID] = useState<string>('')
+  const [deleteAgent] = useDeleteAgentMutation()
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -14,12 +17,20 @@ const AgentItem = ({ keyId, agent, onDelete, onClick, style }) => {
   }
 
   const onSubmit = () => {
-    onDelete(agentId)
     setAgentID('')
     setOpenConfirm(false)
+
+    deleteAgent(agentId).unwrap()
+      .then(() => {
+        enqueueSnackbar('Agent deleted successfully!', { variant: 'success' })
+      })
+      .catch(() => {
+        enqueueSnackbar('Error deleting agent!', { variant: 'error' })
+      })
   }
 
   // Conditionally render the delete button only if the agent's name is not "Default Agent"
+  // todo we will need to probably handle the default agent differently
   const renderDeleteButton = () => {
     if (!agent.default) {
       return (

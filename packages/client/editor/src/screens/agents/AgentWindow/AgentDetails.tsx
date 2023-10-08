@@ -1,16 +1,16 @@
 // DOCUMENTED
-import { IconBtn, CustomizedSwitch } from 'client/core'
-import { ClientPluginManager, pluginManager } from 'shared/core'
-import { useFeathers, useConfig, useTreeData } from '@magickml/providers'
-
-import { Close, Done, Edit } from '@mui/icons-material'
-import { Avatar, Button, Input, Typography, Tooltip } from '@mui/material'
+import { CustomizedSwitch } from 'client/core'
+import { ClientPluginManager, SpellInterface, pluginManager } from 'shared/core'
+import { Button, Input, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import AgentPubVariables from './AgentPubVariables'
 import styles from './index.module.scss'
 import { tooltip_text } from './tooltip_texts'
+import { InputEdit } from './InputEdit'
+
+import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
+import { useGetSpellByJustIdQuery, useGetSpellsQuery, useLazyGetSpellByJustIdQuery, useUpdateAgentMutation } from 'client/state'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -24,7 +24,7 @@ const RenderComp = (props: any) => {
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData: any
-  updateData: (data: object) => void
+
   onLoadEnables: object
 }
 
@@ -39,40 +39,41 @@ interface AgentDetailsProps {
 const AgentDetails = ({
   selectedAgentData,
   setSelectedAgentData,
-  updateData,
   onLoadEnables,
 }: AgentDetailsProps) => {
-  const [spellList, setSpellList] = useState<any[]>([])
-  const config = useConfig()
+  const [updateAgent] = useUpdateAgentMutation()
+  const { data: spellListData } = useGetSpellsQuery({})
+  const [spellList, setSpellList] = useState<SpellInterface[]>([])
+
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
   const [enable] = useState(onLoadEnables)
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
-  const { setAgentUpdate } = useTreeData()
 
-  const [rootSpell, setRootSpell] = useState<any>(null)
+
+  const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
+
   useEffect(() => {
-    if (spellList.length === 0) {
-      return
+    if (!selectedAgentData) return
+
+    if (selectedAgentData?.rootSpellId)
+      getSpellById({ id: selectedAgentData.rootSpellId })
+
+    if (selectedAgentData?.rootSpell?.id)
+      getSpellById(selectedAgentData.rootSpell.id)
+
+  }, [selectedAgentData])
+
+  useEffect(() => {
+    if (!spellListData) return
+    setSpellList(spellListData.data)
+  }, [spellListData])
+
+  useEffect(() => {
+    if (rootSpell) {
+      console.log("ROOT SPELL CHANGED", rootSpell)
+      updatePublicVar(rootSpell)
     }
-
-    // Fix for legacy agents with no root spell id
-    if (!selectedAgentData.rootSpellId && selectedAgentData.rootSpell) {
-      const rootSpell = spellList.find(
-        spell => spell.id === selectedAgentData.rootSpell.id
-      )
-      setRootSpell(rootSpell)
-      return
-    }
-
-    const rootSpell = spellList.find(
-      spell => spell.id === selectedAgentData.rootSpellId
-    )
-    setRootSpell(rootSpell)
-  }, [selectedAgentData, spellList])
-
-  const { client } = useFeathers()
+  }, [rootSpell])
 
   /**
    * update agent data by agent id.
@@ -81,45 +82,22 @@ const AgentDetails = ({
    * @param data - Data to update.
    */
   const update = (id: string, data = undefined) => {
-    setAgentUpdate(false)
     const _data = data || { ...selectedAgentData }
-    id = id || _data.id
-    if (_data['id']) {
-      delete _data.id
-      delete _data?.dirty
-    }
 
     // Avoid server-side validation error
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     _data.secrets = _data.secrets ? _data.secrets : '{}'
 
-    fetch(`${config.apiUrl}/agents/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(_data),
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
-        return res.json()
-      })
+    updateAgent(_data)
+      .unwrap()
       .then(data => {
         enqueueSnackbar('Updated agent', {
           variant: 'success',
         })
-        setAgentUpdate(true)
         setSelectedAgentData(data)
-
-        // update data instead of refetching data to avoid agent window flashes
-        updateData(data)
       })
       .catch(e => {
-        console.error('ERROR', e)
         enqueueSnackbar(e, {
           variant: 'error',
         })
@@ -155,102 +133,41 @@ const AgentDetails = ({
   }
 
   const updatePublicVar = spell => {
+    const spellsPublicVariables = formatPublicVars(spell.graph.nodes)
+    const agentPublicVariables = JSON.parse(selectedAgentData.publicVariables)
+
+    // combine the two objects, and replace the values of spells public variables with the agents public variables
+    const newPublicVariables = {
+      ...spellsPublicVariables,
+      ...agentPublicVariables,
+    }
+
     setSelectedAgentData({
       ...selectedAgentData,
+      publicVariables: JSON.stringify(newPublicVariables),
       rootSpellId: spell.id,
-      publicVariables: JSON.stringify(formatPublicVars(spell.graph.nodes)),
     })
   }
-
-  useEffect(() => {
-    ; (async () => {
-      try {
-        const spells = await client.service('spells').find({
-          query: {
-            projectId: config.projectId,
-          },
-        })
-
-        setSpellList(spells.data)
-
-        if (selectedAgentData.rootSpellId) {
-          const agentRootSpell = await client
-            .service('spells')
-            .get(selectedAgentData.rootSpellId)
-
-          updatePublicVar(agentRootSpell)
-        }
-      } catch (err) {
-        if (err instanceof Error) {
-          enqueueSnackbar(err.message, {
-            variant: 'error',
-          })
-        }
-      }
-    })()
-  }, [])
 
   return (
     <div style={{ overflowY: 'scroll', height: '100vh' }}>
       <div className={styles.agentDetailsContainer}>
         <div className={styles.agentDescription}>
           {editMode ? (
-            <>
-              <input
-                type="text"
-                name="name"
-                value={selectedAgentData.name}
-                onChange={e =>
-                  setSelectedAgentData({
-                    ...selectedAgentData,
-                    name: e.target.value,
-                  })
-                }
-                placeholder="Add new agent name here"
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    update(selectedAgentData.id)
-                    setEditMode(false)
-                    setOldName('')
-                  }
-                }}
-              />
-              <IconBtn
-                label={'Done'}
-                Icon={<Done />}
-                onClick={e => {
-                  update(selectedAgentData.id)
-                  setEditMode(false)
-                  setOldName('')
-                }}
-              />
-              <IconBtn
-                label={'close'}
-                Icon={<Close />}
-                onClick={e => {
-                  setSelectedAgentData({ ...selectedAgentData, name: oldName })
-                  setOldName('')
-                  setEditMode(false)
-                }}
-              />
-            </>
+            <InputEdit
+              selectedAgentData={selectedAgentData}
+              setSelectedAgentData={setSelectedAgentData}
+              update={update}
+              setEditMode={setEditMode}
+              setOldName={setOldName}
+              oldName={oldName}
+            />
           ) : (
-            <>
-              <Avatar className={styles.avatar}>
-                {selectedAgentData?.name?.slice(0, 1)[0]}{' '}
-              </Avatar>
-              <div>
-                <Typography variant="h5">{selectedAgentData.name}</Typography>
-              </div>
-              <IconBtn
-                label={'edit'}
-                Icon={<Edit />}
-                onClick={e => {
-                  setEditMode(true)
-                  setOldName(selectedAgentData.name)
-                }}
-              />
-            </>
+            <SmallAgentAvatarCard
+              agent={selectedAgentData}
+              setEditMode={setEditMode}
+              setOldName={setOldName}
+            />
           )}
           <Tooltip
             title={
@@ -300,23 +217,18 @@ const AgentDetails = ({
           <span className="form-item-label">Root Spell</span>
         </Tooltip>
         <select
-          style={{
-            appearance: 'none',
-          }}
           name="rootSpell"
           id="rootSpellId"
-          value={rootSpell?.name || 'default'}
+          value={
+            selectedAgentData?.rootSpellId
+            || selectedAgentData?.rootSpell?.id
+            || 'default'
+          }
           onChange={event => {
-            const newRootSpell = spellList.find(
-              spell => spell.name === event.target.value
-            )
-
             setSelectedAgentData({
               ...selectedAgentData,
-              rootSpellId: newRootSpell.id,
+              rootSpellId: event.target.value,
             })
-
-            updatePublicVar(newRootSpell)
           }}
         >
           <option disabled value={'default'}>
@@ -327,7 +239,7 @@ const AgentDetails = ({
               .sort((a, b) => a.name.localeCompare(b.name)) // Sort the spellList alphabetically by name
               .map((spell, idx) => {
                 return (
-                  <option value={spell.name} key={idx}>
+                  <option value={spell.id} key={idx}>
                     {spell.name}
                   </option>
                 )
