@@ -62,8 +62,6 @@ const dynamicBaseQuery: BaseQueryFn<
     }
   }
 
-  console.log('NEW URL', apiUrl)
-
   // Create rawBaseQuery with provided apiUrl and token (if exists)
   const rawBaseQuery = fetchBaseQuery({
     baseUrl: apiUrl,

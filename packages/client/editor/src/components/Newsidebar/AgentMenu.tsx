@@ -18,7 +18,7 @@ import { useTabLayout } from '@magickml/providers'
 import { AgentInterface } from 'shared/core'
 import { setCurrentAgentId } from 'client/state'
 
-export function AgentMenu({ data, resetData }) {
+export function AgentMenu({ data }) {
 
   const { client } = useFeathers()
   const { openTab } = useTabLayout()
@@ -79,7 +79,7 @@ export function AgentMenu({ data, resetData }) {
 
   return (
     <div>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'var(--foreground-color)' }}>
+      <List sx={{ width: '100%', bgcolor: 'var(--foreground-color)' }}>
         <ListItem
           alignItems="center"
         >
@@ -164,6 +164,7 @@ export function AgentMenu({ data, resetData }) {
               type: 'Agents',
               switchActive: true,
             })
+            handleCloseMenu()
           }}
         >
           Manage agents

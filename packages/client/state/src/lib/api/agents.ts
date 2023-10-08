@@ -4,8 +4,8 @@ export const agentApi = rootApi.injectEndpoints({
   endpoints: builder => ({
     getAgents: builder.query({
       providesTags: ['Agents'],
-      query: ({ projectId }) => ({
-        url: `agents?projectId=${projectId}`,
+      query: () => ({
+        url: `agents`,
       }),
     }),
     getAgent: builder.query({
@@ -28,8 +28,8 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     createAgent: builder.mutation({
       invalidatesTags: ['Agents'],
-      query: ({ agent }) => ({
-        url: `agents/${agent.id}`,
+      query: agent => ({
+        url: `agents`,
         method: 'POST',
         body: agent,
       }),
