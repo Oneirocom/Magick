@@ -1,53 +1,39 @@
 // DOCUMENTED
+import { useEffect, useState } from 'react'
+import { enqueueSnackbar } from 'notistack'
 import { Button, Grid, Typography } from '@mui/material'
 import AgentItem from './AgentItem'
 import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
 import FileInput from '../../../components/FileInput'
-import { useEffect } from 'react'
 import { useConfig } from '@magickml/providers'
+import { useCreateAgentMutation } from 'client/state'
 
 /**
  * Props for AgentWindow component
  */
 interface Props {
   data: Array<object>
-  selectedAgentData: {
-    id: string
-  }
   onLoadEnables: object
-  setSelectedAgentData: (data: object) => void
-  onCreateAgent: (data: any) => void
-  updateData: (data: object) => void
-  update: (id: string, data: object) => void
-  onDelete: (id: string) => void
   onLoadFile: (selectedFile: any) => void
 }
 
 /**
  * AgentWindow component
  * @param data - array of agents data
- * @param selectedAgentData - currently selected agent data
  * @param onLoadEnables - callback for enabling agents load
- * @param setSelectedAgentData - callback for setting selected agent data
- * @param onCreateAgent - callback for creating an agent
- * @param updateCallBack - callback after updating an agent
- * @param update - function to update an agent
  * @param onDelete - function to delete an agent
  * @param onLoadFile - function to load agents from a file
  * @returns AgentWindow component
  */
 const AgentWindow = ({
   data,
-  selectedAgentData,
-  onCreateAgent,
-  setSelectedAgentData,
-  onDelete,
   onLoadFile,
-  updateData,
   onLoadEnables,
 }: Props) => {
   const config = useConfig()
+  const [createNewAgent] = useCreateAgentMutation()
+  const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
   /**
    * Handler for agent click
    * @param agent - clicked agent
@@ -78,13 +64,22 @@ const AgentWindow = ({
             variant="contained"
             className={`${styles.btn} ${styles['mg-btm-medium']}`}
             onClick={() =>
-              onCreateAgent({
+              createNewAgent({
                 name: 'New Agent',
                 projectId: config.projectId,
                 enabled: false,
                 publicVariables: '{}',
                 secrets: '{}',
               })
+                .unwrap()
+                .then(() => {
+                  enqueueSnackbar('Agent created successfully!', {
+                    variant: 'success',
+                  })
+                })
+                .catch(() => {
+                  enqueueSnackbar('Error creating agent!', { variant: 'error' })
+                })
             }
           >
             Add Agent
@@ -94,7 +89,6 @@ const AgentWindow = ({
               <AgentItem
                 key={agent?.id}
                 keyId={agent?.id}
-                onDelete={onDelete}
                 onClick={onClickHandler}
                 agent={agent}
                 style={
@@ -111,7 +105,6 @@ const AgentWindow = ({
             <AgentDetails
               selectedAgentData={selectedAgentData}
               setSelectedAgentData={setSelectedAgentData}
-              updateData={updateData}
               onLoadEnables={onLoadEnables}
             />
           ) : (

@@ -45,16 +45,16 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for getting spells
     getSpells: builder.query({
       providesTags: ['Spells'],
-      query: ({ projectId }) => ({
-        url: `spells?projectId=${projectId}`,
+      query: () => ({
+        url: `spells`,
       }),
     }),
     // Api endpoint for getting a spell by name
     getSpell: builder.query({
       providesTags: ['Spell'],
-      query: ({ spellName, projectId }) => {
+      query: ({ spellName }) => {
         return {
-          url: `spells?name=${spellName}&projectId=${projectId}`,
+          url: `spells?name=${spellName}`,
           params: {},
         }
       },
@@ -62,9 +62,9 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for getting a spell by name and ID
     getSpellById: builder.query({
       providesTags: ['Spell'],
-      query: ({ spellName, projectId, id }) => {
+      query: ({ spellName, id }) => {
         return {
-          url: `spells?name=${spellName}&projectId=${projectId}&id=${id}`,
+          url: `spells?name=${spellName}&id=${id}`,
           params: {},
         }
       },
@@ -72,9 +72,10 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for getting a spell by ID only
     getSpellByJustId: builder.query({
       providesTags: ['Spell'],
-      query: ({ projectId, id }) => {
+      query: ({ id }) => {
+        console.log('Getting spell by just id', id)
         return {
-          url: `spells?projectId=${projectId}&id=${id}`,
+          url: `spells/${id}`,
           params: {},
         }
       },
@@ -185,6 +186,7 @@ export const {
   useGetSpellQuery,
   useGetSpellByIdQuery,
   useGetSpellByJustIdQuery,
+  useLazyGetSpellByJustIdQuery,
   useRunSpellMutation,
   useSaveDiffMutation,
   useSpellExistsMutation,
