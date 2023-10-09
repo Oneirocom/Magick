@@ -88,6 +88,7 @@ const AgentDetails = ({
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
     _data.secrets = _data.secrets ? _data.secrets : '{}'
+    _data.pingedAt = new Date().toISOString()
 
     updateAgent(_data)
       .unwrap()
@@ -205,7 +206,7 @@ const AgentDetails = ({
             style={{
               margin: '1em',
               color: 'white',
-              backgroundColor: 'var(--primary-dark)',
+              backgroundColor: 'var(--primary)',
             }}
           >
             Update
