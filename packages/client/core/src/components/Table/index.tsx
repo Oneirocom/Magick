@@ -288,7 +288,7 @@ export const TableComponent = ({
   return (
     <React.Fragment>
       <TableContainer>
-        <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+        <Table sx={{ minWidth: 750, fontSize: '1rem !important' }} aria-labelledby="tableTitle">
           <EnhancedTableHead
             numSelected={selectedRows?.length ?? 0}
             order={order}
