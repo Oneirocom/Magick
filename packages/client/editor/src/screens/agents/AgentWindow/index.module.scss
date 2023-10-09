@@ -9,7 +9,7 @@
 }
 
 .item {
-  background: var(--dark-2);
+  background: var(--background-color);
   border-radius: 4px;
   padding: 1em;
 }
@@ -62,14 +62,15 @@
 .agentItemContainer {
   display: flex;
   justify-content: space-between;
-  background: var(--dark-1);
+  background: var(--foreground-color);
   padding: 5px;
   border-radius: 4px;
   margin-bottom: 0.5em;
   cursor: pointer;
 
   &:hover {
-    background: #212121;
+    // todo use a more specific color variable
+    background: var(--slate);
   }
 }
 

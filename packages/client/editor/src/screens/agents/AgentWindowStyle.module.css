@@ -6,7 +6,7 @@
 
 .agentPubVars {
   padding: 2rem;
-  background: #313131;
+  border: 1px solid var(--foreground-color);
   color: var(--dark-5);
   margin-bottom: 20px;
 }
