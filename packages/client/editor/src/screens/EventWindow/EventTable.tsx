@@ -1,8 +1,6 @@
 // DOCUMENTED
 // Import statements kept as-is
 import { TableComponent } from 'client/core'
-import { API_ROOT_URL } from 'shared/config'
-import { useFeathers } from '@magickml/providers'
 import { Delete, MoreHoriz, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -28,6 +26,7 @@ import {
 } from 'react-table'
 import { EventData, columns } from './event'
 import styles from './index.module.scss'
+import { useDeleteEventMutation, useDeleteEventsMutation } from 'client/state'
 
 /**
  * GlobalFilter component for applying search filter on the whole table.
@@ -68,21 +67,21 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
 
 /**
  * EventTable component for displaying events in a table with sorting, filtering, and pagination.
- * @param {{ events: any[], updateCallback: Function }} param0
+ * @param {{ events: any[] }} param0
  * @returns JSX.Element
  */
-function EventTable({ events, updateCallback }) {
+function EventTable({ events, refetchEvents }) {
+  const [deleteEvents] = useDeleteEventsMutation()
+  const [deleteEvent] = useDeleteEventMutation()
+
   const { enqueueSnackbar } = useSnackbar()
   const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
 
   const [anchorEl, setAnchorEl] = useState(null)
   // todo need better typing for the row here
   const [selectedRow, setSelectedRow] = useState<any>(null)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(0)
-
-  const { client: feathersClient } = useFeathers()
 
   const handleActionClick = (event, row) => {
     setAnchorEl(event.currentTarget)
@@ -176,6 +175,8 @@ function EventTable({ events, updateCallback }) {
     []
   )
 
+  console.log("EVENTS", events)
+
   // Initialize the table with hooks
   const tableInstance = useTable(
     {
@@ -239,44 +240,41 @@ function EventTable({ events, updateCallback }) {
 
   // Handle events deletion
   const handleDeleteMany = async (event: any) => {
-    const isDeleted = await feathersClient.service('events').remove(null, {
-      query: {
-        id: {
-          $in: selectedRows,
-        },
-      },
-    })
+    const query = `id[$in]=${selectedRows.join('&id[$in]=')}`
+    deleteEvents({ query })
+      .unwrap()
+      .then(() => {
+        enqueueSnackbar('Events deleted', { variant: 'success' })
+        // Clear the selected rows
+        setSelectedRows([])
 
-    if (isDeleted) {
-      enqueueSnackbar('Events deleted', { variant: 'success' })
-      // Update the table data with the updated data from the server
-      updateCallback()
-      // Clear the selected rows
-      setSelectedRows([])
-
-      const updatedPageLength = page.length - selectedRows.length
-      // Check if there are no more documents on the current page
-      if (updatedPageLength === 0 && currentPage > 0) {
-        const pageIndex = currentPage - 1
-        setCurrentPage(pageIndex)
-        // Go to the previous page
-        gotoPage(pageIndex)
-      }
-    } else {
-      enqueueSnackbar('Error deleting Event', { variant: 'error' })
-    }
+        const updatedPageLength = page.length - selectedRows.length
+        // Check if there are no more documents on the current page
+        if (updatedPageLength === 0 && currentPage > 0) {
+          const pageIndex = currentPage - 1
+          setCurrentPage(pageIndex)
+          // Go to the previous page
+          gotoPage(pageIndex)
+        }
+      })
+      .catch(() => {
+        enqueueSnackbar('Error deleting Event', { variant: 'error' })
+      })
   }
 
   // Handle event deletion
   const handleEventDelete = async (event: any) => {
-    const isDeleted = await fetch(`${API_ROOT_URL}/events/${selectedRow.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    if (isDeleted) enqueueSnackbar('Event deleted', { variant: 'success' })
-    else enqueueSnackbar('Error deleting Event', { variant: 'error' })
+    // Delete the event
+    deleteEvent({ eventId: selectedRow.id })
+      .unwrap()
+      .then(() => {
+        enqueueSnackbar('Event deleted', { variant: 'success' })
+        // Close the action menu
+        handleActionClose()
+      })
+      .catch(() => {
+        enqueueSnackbar('Error deleting Event', { variant: 'error' })
+      })
 
     //navigate user to previous page if rows are empty
     if (page.length === 1) {
@@ -287,7 +285,6 @@ function EventTable({ events, updateCallback }) {
 
     // close the action menu
     handleActionClose()
-    updateCallback()
   }
 
   // Get the original rows data
@@ -310,7 +307,7 @@ function EventTable({ events, updateCallback }) {
               className={styles.btn}
               startIcon={<Refresh />}
               name="refresh"
-              onClick={updateCallback}
+              onClick={refetchEvents}
             >
               Refresh
             </Button>
