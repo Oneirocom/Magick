@@ -1,9 +1,5 @@
 // DOCUMENTED
-import { API_ROOT_URL } from 'shared/config'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { LoadingScreen } from 'client/core'
-import { useConfig } from '@magickml/providers'
 import EventTable from './EventTable'
 import { useGetEventsQuery } from 'client/state'
 
