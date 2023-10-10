@@ -31,11 +31,11 @@ export class Agent implements AgentInterface {
   name = ''
   id: any
   secrets: any
-  publicVariables: Record<string, string>
-  data: AgentInterface
+  publicVariables!: Record<string, string>
+  data!: AgentInterface
   spellManager: SpellManager
-  projectId: string
-  rootSpellId: string
+  projectId!: string
+  rootSpellId!: string
   agentManager: AgentManager
   spellRunner?: SpellRunner
   logger: pino.Logger = getLogger()
@@ -58,15 +58,10 @@ export class Agent implements AgentInterface {
     worker: Worker,
     pubsub: PubSub
   ) {
-    this.secrets = agentData?.secrets ? JSON.parse(agentData?.secrets) : {}
-    this.publicVariables = agentData.publicVariables
     this.id = agentData.id
-    this.data = agentData
     this.agentManager = agentManager
-    this.name = agentData.name ?? 'agent'
-    this.projectId = agentData.projectId
-    this.rootSpellId = agentData.rootSpellId as string
 
+    this.update(agentData)
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
 
     // Set up the agent worker to handle incoming messages
@@ -122,21 +117,23 @@ export class Agent implements AgentInterface {
       const outputTypes = pluginManager.getOutputTypes()
       this.outputTypes = outputTypes
 
-      // this.updateInterval = setInterval(async () => {
-      //   // every second, update the agent, set pingedAt to now
-      //   try {
-      //     await app.service('agents').ping(this.id)
-      //   } catch (err) {
-      //     if (err instanceof Error && err?.name === 'NotFound') {
-      //       this.logger.warn('Agent not found: %s', this.id)
-      //       app.get('agentCommander').removeAgent(this.id)
-      //       clearInterval(this.updateInterval)
-      //     }
-      //   }
-      // }, PING_AGENT_TIME_MSEC)
       this.logger.info('New agent created: %s | %s', this.name, this.id)
       this.ready = true
     })()
+  }
+
+  /**
+   * Updates the agent's data.
+   * @param data {AgentData} - The new data.
+   */
+  update(data: AgentInterface) {
+    this.data = data
+    this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
+    this.publicVariables = data.publicVariables
+    this.name = data.name ?? 'agent'
+    this.projectId = data.projectId
+    this.rootSpellId = data.rootSpellId as string
+    this.logger.info('Updated agent: %s | %s', this.name, this.id)
   }
 
   /**

@@ -81,7 +81,8 @@ export const agentHttp = (app: Application) => {
       ],
     },
     after: {
-      all: [],
+      // The http service was sending events out via feathers sync. But the other servers don't have that service loaded into them since it comes from an agent plugin so it barfs an error. This prevents any events from being broadcast.
+      all: [context => (context.event = null)],
     },
     error: {
       all: [],
