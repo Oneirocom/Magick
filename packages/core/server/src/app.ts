@@ -18,7 +18,11 @@ import { RedisPubSub } from '@magickml/redis-pubsub'
 import sync from 'feathers-sync'
 import { configureManager, globalsManager } from '@magickml/core'
 
-import { REDISCLOUD_URL, bullMQConnection } from '@magickml/config'
+import {
+  REDISCLOUD_URL,
+  API_ACCESS_KEY,
+  bullMQConnection,
+} from '@magickml/config'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
@@ -34,6 +38,7 @@ import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
 
 import { getLogger } from '@magickml/core'
+import { authenticateApiKey } from './hooks/authenticateApiKey'
 
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
@@ -167,9 +172,15 @@ export async function initApp() {
     around: {
       all: [
         logError,
+        authenticateApiKey([API_ACCESS_KEY]),
         async (context: HookContext, next) => {
           // if the route is to the api service, skip auth
           if (context.path === 'api') {
+            return next()
+          }
+
+          // if we are authenticated with the API key, skip auth
+          if (context.params.authenticated && context.params.apiKey) {
             return next()
           }
 
@@ -186,6 +197,11 @@ export async function initApp() {
         },
         async (context: HookContext, next) => {
           const { params } = context
+
+          // if we are authenticated with the API key, skip auth for full access
+          if (context.params.authenticated && context.params.apiKey) {
+            return next()
+          }
 
           const { authentication, authenticated } = params
 
