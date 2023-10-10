@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { LoadingScreen } from 'client/core'
 import { useConfig } from '@magickml/providers'
 import EventTable from './EventTable'
+import { useGetEventsQuery } from 'client/state'
 
 /**
  * Defines the properties of an event.
@@ -20,45 +21,9 @@ interface Event {
  * @returns JSX Element
  */
 const EventWindow = (): JSX.Element => {
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
-  const config = useConfig()
-  const [events, setEvents] = useState<Event[] | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const { data, isLoading, refetch } = useGetEventsQuery({})
 
-  useEffect(() => {
-    setLoading(true)
-    fetchEvents()
-  }, [])
-
-  /**
-   * Resets the events and fetches the updated events.
-   */
-  const resetEvents = async (): Promise<void> => {
-    await fetchEvents()
-  }
-
-  /**
-   * Fetches the events of the current project.
-   */
-  const fetchEvents = async (): Promise<void> => {
-    try {
-      const response = await fetch(
-        `${API_ROOT_URL}/events?projectId=${config.projectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
-      const data = await response.json()
-      setEvents(data.events)
-      setLoading(false)
-    } catch (error) {
-      console.error('ERROR', error)
-    }
-  }
+  if (isLoading) return <LoadingScreen />
 
   return (
     <div
@@ -70,8 +35,8 @@ const EventWindow = (): JSX.Element => {
         overflow: 'scroll',
       }}
     >
-      {loading && <LoadingScreen />}
-      {events && <EventTable events={events} updateCallback={resetEvents} />}
+
+      <EventTable events={data.events} refetchEvents={refetch} />
     </div>
   )
 }

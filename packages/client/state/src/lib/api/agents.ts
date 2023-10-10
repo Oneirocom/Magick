@@ -10,18 +10,18 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     getAgent: builder.query({
       providesTags: ['Agent'],
-      query: ({ agentName, projectId }) => {
+      query: ({ agentName }) => {
         return {
-          url: `agents?name=${agentName}&projectId=${projectId}`,
+          url: `agents?name=${agentName}`,
           params: {},
         }
       },
     }),
     getAgentById: builder.query({
       providesTags: ['Agent'],
-      query: ({ agentId, projectId }) => {
+      query: ({ agentId }) => {
         return {
-          url: `agents?id=${agentId}&projectId=${projectId}`,
+          url: `agents?id=${agentId}`,
           params: {},
         }
       },
@@ -46,8 +46,8 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     deleteAgent: builder.mutation({
       invalidatesTags: ['Agent', 'Agents'],
-      query: ({ agentId, projectId }) => ({
-        url: `agents?id=${agentId}&projectId=${projectId}`,
+      query: ({ agentId }) => ({
+        url: `agents?id=${agentId}`,
         method: 'DELETE',
       }),
     }),
