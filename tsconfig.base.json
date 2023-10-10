@@ -190,6 +190,9 @@
       "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
       "client/editor": ["packages/client/editor/src/index.ts"],
+      "client/feathers-client": [
+        "packages/client/feathers-client/src/index.ts"
+      ],
       "client/layouts": ["packages/client/layouts/src/index.ts"],
       "client/magickml-chatbox": [
         "packages/client/magickml-chatbox/src/index.ts"
