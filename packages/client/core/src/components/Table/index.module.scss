@@ -21,6 +21,8 @@
 .tableCellHeader {
   background: var(--primary-dark) !important;
   color: var(--dark-5) !important;
+  padding: 8px !important;
+  line-height: 1 !important;
   span {
     font-weight: bold;
     font-size: 1rem;
@@ -39,6 +41,9 @@
   color: var(--dark-5) !important;
   background: var(--tableCellBackground) !important;
   font-size: 1rem !important;
+  padding: 8px !important;
+  font-family: var(--font-family) !important;
+  line-height: 1 !important;
 }
 
 .tableFooter {
