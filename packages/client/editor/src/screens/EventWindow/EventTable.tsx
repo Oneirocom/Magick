@@ -175,8 +175,6 @@ function EventTable({ events, refetchEvents }) {
     []
   )
 
-  console.log("EVENTS", events)
-
   // Initialize the table with hooks
   const tableInstance = useTable(
     {

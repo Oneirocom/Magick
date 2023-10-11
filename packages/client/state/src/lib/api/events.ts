@@ -1,4 +1,5 @@
 import { rootApi } from './api'
+import { feathersClient } from '@magickml/providers'
 
 export const eventsApi = rootApi.injectEndpoints({
   endpoints: builder => ({
@@ -7,6 +8,33 @@ export const eventsApi = rootApi.injectEndpoints({
       query: () => ({
         url: `events`,
       }),
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        await cacheDataLoaded
+
+        const client = feathersClient.getClient()
+
+        console.log('Feathers client', feathersClient)
+
+        const listener = (event: any) => {
+          // we need to validate if the event matches the current project we are on.
+          // if it does not we should not update the cache.
+
+          if (event.embedding) delete event.embedding
+
+          updateCachedData(draft => {
+            draft.events.push(event)
+          })
+        }
+
+        client.service('events').on('created', listener)
+
+        await cacheEntryRemoved
+
+        client.service('events').off('created', listener)
+      },
     }),
     getEvent: builder.query({
       providesTags: ['Event'],
