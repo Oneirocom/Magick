@@ -67,7 +67,7 @@ export class AgentService<
     if (!id) {
       throw new Error('ID is required to delete an agent.')
     }
-    if (!params) {
+    if (!params.authentication.payload.project) {
       throw new Error('Authentication is required to delete an agent.')
     }
 
