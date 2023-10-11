@@ -72,7 +72,6 @@ export class MagickConsole {
 
   updateNodeView() {
     if (!this.nodeView) return
-    console.log('Updating node view in console', this.nodeView)
     this.nodeView.onStart()
     this.nodeView.node.update()
     this.editor.isHighlighted = true

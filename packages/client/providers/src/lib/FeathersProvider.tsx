@@ -1,101 +1,8 @@
 // DOCUMENTED
-import {
-  Application,
-  feathers,
-  TransportConnection,
-} from '@feathersjs/feathers'
-import type { SocketService } from '@feathersjs/socketio-client'
-import socketio from '@feathersjs/socketio-client'
-import { getLogger, SpellInterface } from 'shared/core'
+import { getLogger } from 'shared/core'
 import { createContext, useContext, useEffect, useState } from 'react'
-import io from 'socket.io-client'
 import { useConfig } from './ConfigProvider'
-
-/**
- * SaveDiffData type definition.
- */
-type SaveDiffData = {
-  name: string
-  diff: Record<string, any>
-  projectId: string
-}
-
-/**
- * SaveDiffParams type definition.
- */
-type SaveDiffParams = Record<string, any>
-
-/**
- * ServiceTypes type definition.
- */
-type ServiceTypes = {
-  // The type is a Socket service extended with custom methods
-  spells: SocketService & {
-    saveDiff(
-      data: SaveDiffData,
-      params: SaveDiffParams
-    ): Promise<SpellInterface>
-  }
-}
-
-/**
- * Configure custom services.
- *
- * @param app - Feathers application instance
- * @param socketClient - TransportConnection instance
- */
-const configureCustomServices = (
-  app: Application<any, any>,
-  socketClient: TransportConnection<any>
-): void => {
-  app.use('spells', socketClient.service('spells'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
-  })
-
-  app.use('agents', socketClient.service('agents'), {
-    methods: [
-      'find',
-      'get',
-      'create',
-      'patch',
-      'remove',
-      'log',
-      'run',
-      'subscribe',
-      'command',
-    ],
-    events: ['log', 'result', 'spell'],
-  })
-  app.use('request', socketClient.service('request'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
-  })
-}
-
-/**
- * Build Feathers client connection.
- *
- * @param config - Application configuration object.
- * @param token - API token.
- * @returns Feathers client
- */
-const buildFeathersClient = async (config, token): Promise<any> => {
-  const socket = io(`${config.apiUrl}?token=${token}`, {
-    transports: ['websocket'],
-    extraHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-    withCredentials: true,
-  })
-  const app = feathers<ServiceTypes>()
-  const socketClient = socketio(socket, { timeout: 10000 })
-  // todo this needs more than an<any> here.  Super hacky.
-  app.configure(socketClient as any)
-
-  configureCustomServices(app, socketClient)
-
-  // No idea how to type feathers to add io properties to root client.
-  return app
-}
+import FeathersClient from './FeathersClient'
 
 interface FeathersContext {
   client: any | null
@@ -122,7 +29,7 @@ export const FeathersProvider = ({ children, token }): JSX.Element | null => {
 
   useEffect(() => {
     ; (async (): Promise<void> => {
-      const client = await buildFeathersClient(config, token)
+      const client = await FeathersClient.initialize(token, config)
 
       client.io.on('connect', async (): Promise<void> => {
         setClient(client)
