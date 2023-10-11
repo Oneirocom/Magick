@@ -65,6 +65,50 @@ const getAgent = async (
   return agent as unknown as Agent
 }
 
+const formatRequest = async (method, agentId, data, params) => {
+  const {
+    spellId,
+    content,
+    isCloud,
+    sender = 'api',
+    client = 'rest',
+    channel = 'rest',
+  } = data
+  let { publicVariables } = data
+
+  const agent = await getAgent(
+    agentId,
+    (params?.headers && params.headers['authorization']) as string,
+    isCloud || false
+  )
+
+  method = method.toUpperCase()
+
+  return {
+    agent,
+    spellId,
+    inputs: {
+      [`Input - REST API (${method})`]: {
+        connector: `REST API (${method})`,
+        content,
+        sender: sender,
+        observer: agent.name,
+        client,
+        channel: channel,
+        agentId: agent.id,
+        entities: [sender, agent.name],
+        channelType: method,
+        rawData: '{}',
+      },
+      publicVariables: {
+        ...agent.publicVariables,
+        ...publicVariables,
+      },
+      runSubspell: true,
+    },
+  }
+}
+
 export class AgentHttpService<
   ServiceParams extends AgentHttpParams = AgentHttpParams
 > implements
@@ -82,37 +126,11 @@ export class AgentHttpService<
     agentId: string,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { spellId, content, isCloud } = params.query as AgentHttpData
-
-    const agent = await getAgent(
-      agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
-
     const agentCommander = app.get('agentCommander')
 
+    const request = await formatRequest('GET', agentId, params.query, params)
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (GET)`]: {
-            connector: 'REST API (GET)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'GET',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
@@ -129,38 +147,16 @@ export class AgentHttpService<
     data: AgentHttpData,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { content, isCloud } = data
-    const spellId = data?.spellId
-
-    const agent = await getAgent(
-      data.agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
+    if (!data.agentId) {
+      throw new BadRequest('Agent ID is required')
+    }
 
     const agentCommander = app.get('agentCommander')
 
+    const request = await formatRequest('POST', data.agentId, data, params)
+
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (POST)`]: {
-            connector: 'REST API (POST)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'POST',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
@@ -178,38 +174,12 @@ export class AgentHttpService<
     data: AgentHttpData,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { content, isCloud } = data
-    const spellId = data?.spellId
-
-    const agent = await getAgent(
-      agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
-
     const agentCommander = app.get('agentCommander')
 
+    const request = await formatRequest('POST', agentId, data, params)
+
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (UPDATE)`]: {
-            connector: 'REST API (UPDATE)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'UPDATE',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
@@ -226,37 +196,12 @@ export class AgentHttpService<
     agentId: string,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { spellId, content, isCloud } = params.query as AgentHttpData
-
-    const agent = await getAgent(
-      agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
-
     const agentCommander = app.get('agentCommander')
 
+    const request = await formatRequest('DELETE', agentId, params.query, params)
+
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (DELETE)`]: {
-            connector: 'REST API (DELETE)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'DELETE',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
