@@ -24,7 +24,7 @@
 - Search Google, Wikipedia and the Semantic Web
 - Many included powertools, including voice and image generation and vector search
 - Powerful graph-based IDE for complex data pipelines
-- Graphs can be embedded in subgraphs and shared for rapid community development
+- Graphs can be embedded in subgraphs and shared for rapid community development.
 
 ## 🔮 Magick: Automate, Build, and Bring Your Ideas to Life with AI.
 
@@ -44,8 +44,8 @@ With Magick, you can unleash the power of AI without needing to know how to code
 
 ### Spells
 
-A spell is a pipeline that describes data moving from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell". 
-Spell is not a machine learning term. 
+A spell is a pipeline that describes data moving from one place to another, running through different processes we call "nodes", via wires we call "connections". In Magick, the collection of data, nodes, variables, and presets for each graph is known as a "spell".
+Spell is not a machine learning term.
 
 We just like it. Spells can be imported and exported at any time. Spells in their raw form are JSON, a standard format that is easy to share.
 
@@ -53,7 +53,7 @@ We just like it. Spells can be imported and exported at any time. Spells in thei
 
 **At the core, Magick is a system for taking in data, doing stuff to it, and then sending the final data out.**
 
-This "stuff" is called a "transformation", the data transforms from one thing into the next. The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out. 
+This "stuff" is called a "transformation", the data transforms from one thing into the next. The "stuff" that is happening to the data is a black box that takes something in, anything, and returns something out.
 
 We call the black box where the transformstion takes place a "node". Nodes are the building blocks of Magick.
 
@@ -71,7 +71,6 @@ Nodes can be deleted by right-clicking on them and selecting "Delete".
 - Generator Node: Lets you define your own input sockets and then work with that data inside of the node.
 - Wait For All Node: Used to wait for different execution branches to complete before joining back into a single branch -- this is a good way to do several slow tasks at once.
 - ...and lots more! (if you have suggestions for any, do let us know)
-
 
 ### Inputs and Outputs
 
@@ -95,14 +94,14 @@ Triggers tell nodes to start asynchronous tasks. Some nodes can process data wit
 
 Before you start, ensure you have the following software installed on your machine:
 
-- **git**: Version control system, required for cloning the repository. 
+- **git**: Version control system, required for cloning the repository.
   - [Download git](https://git-scm.com/downloads)
 - **node.js 18+**: JavaScript runtime, needed for running the application.
   - [Download Node.js](https://nodejs.org/en/download/)
 - **Docker**: Enables you to run the project within containers for easier setup and distribution.
   - [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
 
-Follow the respective installation guides to set up each piece of software. 
+Follow the respective installation guides to set up each piece of software.
 
 Once installed, proceed to set up Magick.
 
@@ -174,7 +173,9 @@ Developing locally, it can be very helpful to have google chrome accept all self
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
