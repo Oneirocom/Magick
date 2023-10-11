@@ -21,6 +21,10 @@
 
   // spacing
   --sash-width: 4px;
+
+  // fonts
+
+  --font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
 }
 
 @mixin dockview-theme-core-mixin {
