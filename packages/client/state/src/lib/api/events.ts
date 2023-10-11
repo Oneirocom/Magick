@@ -16,8 +16,6 @@ export const eventsApi = rootApi.injectEndpoints({
 
         const client = feathersClient.getClient()
 
-        console.log('Feathers client', feathersClient)
-
         const listener = (event: any) => {
           // we need to validate if the event matches the current project we are on.
           // if it does not we should not update the cache.
