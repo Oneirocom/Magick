@@ -4,7 +4,7 @@ import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '@magickml/server-core'
-import md5 from 'md5';
+import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import { Queue } from 'bullmq'
@@ -53,6 +53,30 @@ export class AgentService<
     return { data: query }
   }
 
+  /**
+   * Removes an agent by ID
+   * @param id {string | number } The agent ID to remove
+   * @return {Promise<Agent>} The removed agent
+   */
+  async remove(
+    id: number | string | null,
+    params: AgentParams | any
+  ): Promise<Agent | Agent[] | any> {
+    const db = app.get('dbClient')
+
+    if (!id) {
+      throw new Error('ID is required to delete an agent.')
+    }
+    if (!params) {
+      throw new Error('Authentication is required to delete an agent.')
+    }
+
+    return await db('agents')
+      .where('id', id)
+      .where('projectId', params.authentication.payload.project)
+      .del()
+  }
+
   async run(data: AgentRunData) {
     if (!data.agentId) throw new Error('agentId is required')
     // probably need to authenticate the request here against project id
@@ -68,7 +92,6 @@ export class AgentService<
   async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
-
     // ADDING REST API KEY TO AGENT's DATA
     if (data.data) {
       data.data = JSON.stringify({
@@ -100,4 +123,3 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     multi: ['remove'],
   }
 }
-
