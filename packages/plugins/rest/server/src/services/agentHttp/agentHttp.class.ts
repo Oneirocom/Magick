@@ -70,11 +70,12 @@ const formatRequest = async (method, agentId, data, params) => {
     spellId,
     content,
     isCloud,
+    secrets = {},
+    publicVariables = {},
     sender = 'api',
     client = 'rest',
     channel = 'rest',
   } = data
-  let { publicVariables } = data
 
   const agent = await getAgent(
     agentId,
@@ -105,6 +106,10 @@ const formatRequest = async (method, agentId, data, params) => {
         ...publicVariables,
       },
       runSubspell: true,
+      secrets: {
+        ...agent.secrets,
+        ...secrets,
+      },
     },
   }
 }
