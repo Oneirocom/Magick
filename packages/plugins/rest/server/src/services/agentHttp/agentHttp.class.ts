@@ -1,4 +1,3 @@
-import { agent } from './../../../../../../core/server/src/services/agents/agents'
 // DOCUMENTED
 /**
  * For more information about this file see
@@ -18,7 +17,6 @@ import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
 import { CLOUD_AGENT_KEY, STANDALONE } from '@magickml/config'
-import { type } from 'os'
 
 export type { AgentHttp, AgentHttpData, AgentHttpPatch, AgentHttpQuery }
 
