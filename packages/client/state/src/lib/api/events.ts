@@ -1,5 +1,5 @@
 import { rootApi } from './api'
-import { feathersClient } from '@magickml/providers'
+import { feathersClient } from 'client/feathers-client'
 
 export const eventsApi = rootApi.injectEndpoints({
   endpoints: builder => ({
