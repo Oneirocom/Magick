@@ -1,3 +1,4 @@
+import { agent } from './../../../../../../core/server/src/services/agents/agents'
 // DOCUMENTED
 /**
  * For more information about this file see
@@ -17,6 +18,7 @@ import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
 import { getLogger } from '@magickml/core'
 import { CLOUD_AGENT_KEY, STANDALONE } from '@magickml/config'
+import { type } from 'os'
 
 export type { AgentHttp, AgentHttpData, AgentHttpPatch, AgentHttpQuery }
 
@@ -77,12 +79,24 @@ const formatRequest = async (method, agentId, data, params) => {
     channel = 'rest',
   } = data
 
+  console.log('incoming public variables', publicVariables)
+
   const agent = await getAgent(
     agentId,
     (params?.headers && params.headers['authorization']) as string,
     isCloud || false
   )
 
+  // check if public variables are a string, if they are parse them as json. Otherwise do nothing.
+  const formattedPublicVariables =
+    typeof publicVariables === 'string'
+      ? JSON.parse(publicVariables)
+      : publicVariables
+
+  const agentPublicVariables =
+    typeof agent.publicVariables === 'string'
+      ? JSON.parse(agent.publicVariables)
+      : agent.publicVariables
   method = method.toUpperCase()
 
   return {
@@ -102,8 +116,8 @@ const formatRequest = async (method, agentId, data, params) => {
         rawData: '{}',
       },
       publicVariables: {
-        ...agent.publicVariables,
-        ...publicVariables,
+        ...agentPublicVariables,
+        ...formattedPublicVariables,
       },
       runSubspell: true,
       secrets: {
