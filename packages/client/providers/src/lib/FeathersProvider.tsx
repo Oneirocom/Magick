@@ -2,7 +2,7 @@
 import { getLogger } from 'shared/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useConfig } from './ConfigProvider'
-import FeathersClient from './FeathersClient'
+import { feathersClient } from 'client/feathers-client'
 
 interface FeathersContext {
   client: any | null
@@ -29,7 +29,7 @@ export const FeathersProvider = ({ children, token }): JSX.Element | null => {
 
   useEffect(() => {
     ; (async (): Promise<void> => {
-      const client = await FeathersClient.initialize(token, config)
+      const client = await feathersClient.initialize(token, config)
 
       client.io.on('connect', async (): Promise<void> => {
         setClient(client)
