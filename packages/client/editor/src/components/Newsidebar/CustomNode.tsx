@@ -204,13 +204,14 @@ export const CustomNode: React.FC<Props> = props => {
     <div
       className={`tree-node ${styles.root}`}
       style={{ paddingInlineStart: indent }}
+      onClick={handleToggle}
     >
       <div
         className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
           }`}
       >
         {props.node.droppable && (
-          <div onClick={handleToggle}>
+          <div>
             <ChevronRightIcon />
           </div>
         )}
