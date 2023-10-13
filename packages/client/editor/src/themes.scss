@@ -5,9 +5,11 @@
   --midnight: #08121f;
   --charcoal: #192130;
   --slate: #696969;
+  --slate-30: #69696930;
   --neutral-light: #ffffff;
 
   // Functional Variables
+  --primary-color: var(--neutral-light); // Primary color for buttons, etc.
   --deep-background-color: var(--abyss);
   --background-color: var(--midnight); // Used for main backgrounds
   --foreground-color: var(--charcoal); // Primary text color

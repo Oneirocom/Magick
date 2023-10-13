@@ -29,6 +29,7 @@
 ul ul ul li {
   top: 0 !important;
   left: 0 !important;
+  width: 100% !important;
 }
 
 .menu {
@@ -87,9 +88,7 @@ ul ul ul li {
   left: 5px;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 225, 239, 0.2);
+  background-color: var(--slate-30);
   pointer-events: none;
-  width: 120%;
-  border: 1px solid var(--primary);
-  border-radius: 8px;
+  width: 200%;
 }
