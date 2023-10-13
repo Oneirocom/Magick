@@ -203,7 +203,7 @@ export const CustomNode: React.FC<Props> = props => {
   return (
     <div
       className={`tree-node ${styles.root}`}
-      style={{ paddingInlineStart: indent }}
+      style={{ paddingInlineStart: indent, cursor: 'pointer', width: '200%' }}
       onClick={handleToggle}
     >
       <div
@@ -259,6 +259,8 @@ export const CustomNode: React.FC<Props> = props => {
           </div>
         )}
       </div>
+
+
       <Menu
         anchorReference="anchorPosition"
         anchorPosition={

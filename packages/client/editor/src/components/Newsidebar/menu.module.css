@@ -6,6 +6,10 @@
   padding-inline-end: 8px;
 }
 
+.root:hover {
+  background-color: var(--slate-15);
+}
+
 .expandIconWrapper {
   align-items: center;
   font-size: 0;
