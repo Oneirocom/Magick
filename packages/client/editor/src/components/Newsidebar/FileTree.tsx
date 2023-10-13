@@ -16,7 +16,7 @@ type CustomData = {
   fileSize: string
 }
 
-export const FileTree = () => {
+export const FileTree = ({ currentTab }) => {
   const { treeData, setTreeData } = useTreeData()
   const { openTab } = useTabLayout()
 
@@ -37,6 +37,7 @@ export const FileTree = () => {
             { depth, isOpen, onToggle }
           ) => (
             <CustomNode
+              currentTab={currentTab}
               openTab={openTab}
               node={node}
               depth={depth}

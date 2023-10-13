@@ -7,7 +7,7 @@ import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
 import { SetAPIKeys, drawerTooltipText } from "client/core"
 
-export const ScreenLinkItems = ({ isAPIKeysSet }) => {
+export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const { openTab } = useTabLayout()
 
   return (
@@ -17,7 +17,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet }) => {
       }}
     >
       <DrawerItem
-        active={location.pathname === '/events'}
+        active={currentTab?.id === 'Events'}
         Icon={BoltIcon}
         onClick={() => {
           openTab({
@@ -32,7 +32,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet }) => {
         tooltipText={drawerTooltipText.events}
       />
       <DrawerItem
-        active={location.pathname === '/requests'}
+        active={currentTab?.id === 'Requests'}
         Icon={StorageIcon}
         onClick={() => {
           openTab({
@@ -47,10 +47,10 @@ export const ScreenLinkItems = ({ isAPIKeysSet }) => {
         tooltipText={drawerTooltipText.requests}
       />
 
-      <PluginDrawerItems />
+      <PluginDrawerItems currentTab={currentTab} />
 
       <DrawerItem
-        active={location.pathname.includes('/settings')}
+        active={currentTab?.id === 'Settings'}
         Icon={SettingsIcon}
         onClick={() => {
           openTab({

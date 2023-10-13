@@ -4,15 +4,16 @@ import { useTabLayout } from '@magickml/providers'
 import { useLocation } from 'react-router-dom'
 import Divider from '@mui/material/Divider'
 import { DrawerItem } from './DrawerItem'
+import { Panel } from 'client/state'
 // PluginDrawerItems component properties
 type PluginDrawerItemsProps = {
-
+  currentTab: Panel
 }
 
 /**
  * The PluginDrawerItems component used to display plugin-related drawer items.
  */
-export const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = () => {
+export const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({ currentTab }) => {
   const { openTab } = useTabLayout()
   const location = useLocation()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
@@ -30,7 +31,7 @@ export const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = () => {
         {divider && <Divider />}
         <DrawerItem
           key={item.path}
-          active={location.pathname.includes(item.path)}
+          active={currentTab?.id === item.text}
           Icon={item.icon}
 
           onClick={() => {
