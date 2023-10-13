@@ -99,6 +99,7 @@ export const CustomNode: React.FC<Props> = props => {
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault() // Prevent the default behavior of the right-click (context menu).
     if (!props.node) return
+    if (props.node.fileType !== 'txt' && props.node.fileType !== 'spell') return
     setContextMenuPosition({ x: e.clientX, y: e.clientY })
 
     // Open the custom context menu
@@ -259,7 +260,6 @@ export const CustomNode: React.FC<Props> = props => {
           </div>
         )}
       </div>
-
 
       <Menu
         anchorReference="anchorPosition"
