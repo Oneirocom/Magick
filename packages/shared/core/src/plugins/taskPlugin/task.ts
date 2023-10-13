@@ -231,7 +231,7 @@ export class Task {
     )
   }
 
-  clone(root = true, oldTask: Task, newTask: Task) {
+  clone(root = true, oldTask?: Task, newTask?: Task) {
     const inputs = Object.assign({}, this.inputs) as MagickWorkerInputs
 
     if (root)
@@ -267,6 +267,6 @@ export class Task {
       nodeId: n.nodeId,
     }))
 
-    return {}
+    return task
   }
 }
