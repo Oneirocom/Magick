@@ -70,9 +70,9 @@ export const ContextMenu = () => {
           },
         }}
       >
-        <div className={styles.hideMenuItem}>
+        {/* <div className={styles.hideMenuItem}>
           <Typography variant="body1">New Folder</Typography>
-        </div>
+        </div> */}
         <Divider />
         <div
           className={styles.hideMenuItem}
@@ -86,7 +86,7 @@ export const ContextMenu = () => {
           <Typography variant="body1">New Spell</Typography>
         </div>
         <Divider />
-        <div className={styles.hideMenuItem}>
+        {/* <div className={styles.hideMenuItem}>
           <Typography variant="body1"> New Prompt</Typography>
         </div>
         <Divider />
@@ -102,7 +102,7 @@ export const ContextMenu = () => {
           }}
         >
           <Typography variant="body1">New Document</Typography>
-        </div>
+        </div> */}
       </Menu>
     </div>
   )
