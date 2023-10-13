@@ -35,6 +35,7 @@ export const DrawerItem: React.FC<DrawerItemProps> = ({
           justifyContent: open ? 'initial' : 'center',
           px: 1,
         }}
+        selected={active}
         onClick={onClick}
       >
         <ListItemIcon

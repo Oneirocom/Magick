@@ -18,11 +18,13 @@ import {
   selectAllTabs,
   spellApi,
   activeTabSelector,
+  Panel,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
 
 import { TypeIcon } from 'client/core'
+import { useModal } from '../../contexts/ModalProvider'
 
 type ExtendedNodeModel = NodeModel & CustomData
 
@@ -30,6 +32,7 @@ type Props = {
   node: ExtendedNodeModel
   depth: number
   isOpen: boolean
+  currentTab: Panel
   onToggle: (id: NodeModel['id']) => void
   openTab: (tab: any) => void
 }
@@ -41,6 +44,7 @@ type CustomData = {
 
 export const CustomNode: React.FC<Props> = props => {
   const dispatch = useDispatch()
+  const { openModal } = useModal()
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
   const navigate = useNavigate()
@@ -77,8 +81,6 @@ export const CustomNode: React.FC<Props> = props => {
         switchActive: true,
       })
     } else if (props.node.fileType === 'spell') {
-      console.log('Open spell', props.node)
-
       props.openTab({
         id: props.node.id,
         name: props.node.text,
@@ -89,7 +91,9 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleOpenSpell = () => {
-    navigate('/home/create-new')
+    openModal({
+      modal: 'createSpellModal',
+    })
   }
   // Close the context menu when clicking outside of it
   const handleContextMenuClose = () => {
@@ -185,7 +189,7 @@ export const CustomNode: React.FC<Props> = props => {
   const setClassSelectedFile = () => {
     if (activeTab?.name === 'Documents') return
 
-    return activeTab?.name === props.node.text ? styles.isSelected : ''
+    return props.currentTab?.id === props.node.text ? styles.isSelected : ''
   }
 
   useEffect(() => {
@@ -208,8 +212,7 @@ export const CustomNode: React.FC<Props> = props => {
       onClick={handleToggle}
     >
       <div
-        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''
-          }`}
+        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''}`}
       >
         {props.node.droppable && (
           <div>

@@ -11,13 +11,30 @@ import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
 import MainPanel from './panels/mainPanel'
 import FileDrawer from './panels/fileDrawer'
 import RightSidebar from './panels/rightSidebar'
-import { useDockviewTheme } from 'client/state'
+import { RootState, useDockviewTheme } from 'client/state'
 import ModalProvider from '../../contexts/ModalProvider'
+import { useSelector } from 'react-redux'
 
 const components = {
   MainPanel,
   FileDrawer,
   RightSidebar,
+  StatusBar: (props: IGridviewPanelProps<{ title: string }>) => {
+    const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+
+    return (
+      <div
+        style={{
+          height: '100%',
+          padding: '5px 10px',
+          background: 'var(--dv-group-view-background-color)',
+          borderTop: '1px solid var(--deep-background-color)'
+        }}
+      >
+        Current Tab: {currentTab?.title}
+      </div>
+    )
+  },
   default: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
       <div
@@ -37,7 +54,7 @@ const loadDefaultLayout = (api: GridviewApi) => {
   // Bottom status bar
   api.addPanel({
     id: 'StatusBar',
-    component: 'default',
+    component: 'StatusBar',
     params: {
       title: 'StatusBar',
     },
