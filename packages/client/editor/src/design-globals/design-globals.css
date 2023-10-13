@@ -29,6 +29,7 @@ label,
 :root {
   color-scheme: dark;
 
+  --primary-light: #3cb8c6;
   --primary: #01b5c9;
   --primary-dark: #00818a;
   --primary-darkest: #043b3f;

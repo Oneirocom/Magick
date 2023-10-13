@@ -8,8 +8,10 @@ import styles from './menu.module.css'
 import Typography from "@mui/material/Typography"
 import Divider from "@mui/material/Divider"
 import { useTabLayout } from '@magickml/providers'
+import { useModal } from "../../contexts/ModalProvider"
 
 export const ContextMenu = () => {
+  const { openModal } = useModal()
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const { openTab } = useTabLayout()
@@ -47,7 +49,6 @@ export const ContextMenu = () => {
       style={{ cursor: 'pointer' }} // Add cursor style to indicate the clickable element
     >
 
-
       <Menu
         anchorReference="anchorPosition"
         anchorPosition={
@@ -58,31 +59,34 @@ export const ContextMenu = () => {
         open={Boolean(menuAnchorEl)}
         onClose={handleMenuClose}
         sx={{
+          '& .MuiMenu-list': {
+            padding: 0,
+          },
           '& .MuiMenu-paper': {
             background: '#2B2B30',
             width: '180px',
             shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-            borderRadius: '0px',
+            borderRadius: '5px',
           },
         }}
       >
         <div className={styles.hideMenuItem}>
-          <FolderOpenOutlinedIcon sx={{ mr: 1 }} />
           <Typography variant="body1">New Folder</Typography>
         </div>
         <Divider />
         <div
           className={styles.hideMenuItem}
           onClick={() => {
-            // navigate('/home/create-new')
+            console.log("NEW SPELL CLICKED")
+            openModal({
+              modal: 'createSpellModal',
+            })
           }}
         >
-          <StarBorderPurple500OutlinedIcon sx={{ mr: 1 }} />
           <Typography variant="body1">New Spell</Typography>
         </div>
         <Divider />
         <div className={styles.hideMenuItem}>
-          <HistoryEduOutlinedIcon sx={{ mr: 1 }} />
           <Typography variant="body1"> New Prompt</Typography>
         </div>
         <Divider />
@@ -97,7 +101,6 @@ export const ContextMenu = () => {
             })
           }}
         >
-          <DescriptionOutlinedIcon sx={{ mr: 1 }} />
           <Typography variant="body1">New Document</Typography>
         </div>
       </Menu>
