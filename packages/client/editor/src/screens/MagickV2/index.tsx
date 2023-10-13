@@ -12,6 +12,7 @@ import MainPanel from './panels/mainPanel'
 import FileDrawer from './panels/fileDrawer'
 import RightSidebar from './panels/rightSidebar'
 import { useDockviewTheme } from 'client/state'
+import ModalProvider from '../../contexts/ModalProvider'
 
 const components = {
   MainPanel,
@@ -106,15 +107,17 @@ const MagickV2 = () => {
   }
 
   return (
-    <GridviewReact
-      components={components}
-      onReady={onReady}
-      disableAutoResizing={false}
-      proportionalLayout={false}
-      orientation={Orientation.VERTICAL}
-      hideBorders={true}
-      className={`global-layout ${theme}`}
-    />
+    <ModalProvider>
+      <GridviewReact
+        components={components}
+        onReady={onReady}
+        disableAutoResizing={false}
+        proportionalLayout={false}
+        orientation={Orientation.VERTICAL}
+        hideBorders={true}
+        className={`global-layout ${theme}`}
+      />
+    </ModalProvider>
   )
 }
 

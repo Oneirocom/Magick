@@ -57,6 +57,7 @@ const ModalContext: React.FC<React.PropsWithChildren<unknown>> = ({
 
   // Open the modal with the specified options and attach closeModal function
   const openModal = (modalOptions: { modal: string }) => {
+    console.log("OPENING MODAL", modalOptions.modal)
     setModalName(modalOptions.modal)
     setActiveModal({ ...modalOptions, closeModal })
   }
