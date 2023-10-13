@@ -66,6 +66,10 @@ ul ul ul li {
   background-color: #2b2b30;
 }
 
+.hideMenuItem:hover {
+  background-color: #3b3b40;
+}
+
 .files * {
   padding: 0;
   margin: 0;
