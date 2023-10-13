@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import SampleData from './data/sampleData.json'
 import { useConfig } from './ConfigProvider'
 import { useFeathers } from './FeathersProvider'
+import { useGetSpellsQuery } from 'client/state'
 
 interface TreeDataContextType {
   treeData: NodeModel[]
@@ -53,6 +54,8 @@ type Props = {
 }
 
 export const TreeDataProvider = ({ children }: Props): JSX.Element => {
+  const { data: fetchedSpells } = useGetSpellsQuery({})
+
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
   const [documents, setDocuments] = useState<Document[] | null>(null)
   const [spells, setSpells] = useState<Spell[] | null>(null)
@@ -98,10 +101,17 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     })
   }
 
+  useEffect(() => {
+    if (!fetchedSpells) return
+    if (!fetchedSpells.data.length) return
+
+    setSpells(fetchedSpells.data)
+
+  }, [fetchedSpells])
+
   const fetchData = async () => {
     //first initialize states to null
     setDocuments(null)
-    setSpells(null)
     try {
       // Fetch your data here...
       const response = await fetch(
@@ -112,21 +122,6 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
           },
         }
       )
-
-      const spellsResponse = await client.service('spells').find({
-        query: {
-          projectId: config.projectId,
-        },
-      })
-
-      if ('error' in spellsResponse) {
-        enqueueSnackbar('Error fetching spells', {
-          variant: 'error',
-        })
-      } else {
-        const fetchedSpells = spellsResponse.data
-        setSpells(fetchedSpells)
-      }
 
       const data = await response.json()
 
