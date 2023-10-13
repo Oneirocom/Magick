@@ -63,8 +63,8 @@ export const eventsApi = rootApi.injectEndpoints({
     }),
     deleteEvents: builder.mutation({
       invalidatesTags: ['Events'],
-      query: ({ queryString }) => ({
-        url: `events?${queryString}`,
+      query: ({ query }) => ({
+        url: `events?${query}`,
         method: 'DELETE',
       }),
     }),
