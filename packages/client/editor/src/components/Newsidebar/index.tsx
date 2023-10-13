@@ -52,6 +52,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const [createNewAgent, { data: newAgent }] = useCreateAgentMutation()
   const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
 
+  const { currentTab } = useSelector((state: any) => state.tabLayout)
+
   // stopgap until I patch the agent menu with new redux stuff
   useEffect(() => {
     if (!newAgent) return
@@ -103,9 +105,9 @@ export function NewSidebar(DrawerProps): JSX.Element {
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
       <AgentMenu data={data} />
 
-      <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} />
+      <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
       <Divider sx={{ marginY: 2 }} />
-      <FileTree />
+      <FileTree currentTab={currentTab} />
       <ComingSoon />
 
       <ContextMenu />

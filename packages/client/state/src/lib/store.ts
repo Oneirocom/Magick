@@ -8,20 +8,24 @@ import { combineReducers } from 'redux'
 
 import { spellApi } from './api/spells'
 import { rootApi } from './api/api'
+import { agentApi } from './api/agents'
 import tabReducer from './tabs'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
+import tabLayoutReducer from './tabLayoutState'
+
 // import { AppConfig } from '@magickml/client-core'
 
 /**
  * Combine all reducers into the root reducer.
  */
 const rootReducer = combineReducers({
+  [rootApi.reducerPath]: rootApi.reducer,
+  tabLayout: tabLayoutReducer,
   globalConfig: globalConfigReducer,
   tabs: tabReducer,
   preferences: preferencesReducer,
-  [spellApi.reducerPath]: spellApi.reducer,
   localState: localStateReducer,
 })
 
