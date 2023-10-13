@@ -238,7 +238,7 @@ function EventTable({ events, refetchEvents }) {
 
   // Handle events deletion
   const handleDeleteMany = async (event: any) => {
-    const query = `id[$in]=${selectedRows.join('&id[$in]=')}`
+    const query = `id[$in][]=${selectedRows.join('&id[$in][]=')}`
     deleteEvents({ query })
       .unwrap()
       .then(() => {
