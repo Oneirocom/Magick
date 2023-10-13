@@ -1,8 +1,8 @@
 .window {
   display: flex;
   flex-direction: column;
-  padding: var(--c2);
-  padding-bottom: var(--c3);
+  padding: var(--c1);
+  /* padding-bottom: var(--c3); */
   height: 100%;
   box-sizing: border-box;
 }

@@ -5,12 +5,15 @@ import {
   DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
+  GridviewReact,
   IDockviewPanelProps,
+  IGridviewPanelProps,
+  Orientation,
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef } from 'react'
 import { SpellInterface } from 'shared/core'
-import { spellApi } from 'client/state'
+import { spellApi, useDockviewTheme } from 'client/state'
 
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { debounce } from '../../../utils/debounce'
@@ -126,7 +129,8 @@ const components = {
   // AgentControls
 }
 
-export const Composer = ({ theme, tab, pubSub }) => {
+export const Composer = ({ tab, theme }) => {
+  const pubSub = usePubSub()
   const config = useConfig()
   const spellRef = useRef<SpellInterface>()
   const { events, publish } = usePubSub()
@@ -259,25 +263,75 @@ const DraggableElement = (props) => (
   </p>
 );
 
-const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; theme: string }>) => {
-  const pubSub = usePubSub()
-  return (
-    <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
+const tabComponents = {
+  WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
+    return (
       <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
         <DraggableElement window="Console" />
         <DraggableElement window="TextEditor" title="Text Editor" />
         <DraggableElement window="Inspector" />
         <DraggableElement window="Playtest" />
       </div>
-      <div style={{ position: 'relative', height: '100%' }}>
-        <Composer
-          theme={`composer-layout ${props.params.theme}`}
-          tab={props.params.tab}
-          pubSub={pubSub}
-        />
-      </div>
-    </WorkspaceProvider>
-  )
+    )
+  },
+  Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string }>) => {
+    return <Composer {...props.params} theme={`composer-layout ${props.params.theme}`} tab={props.params.tab} />
+  }
+}
+
+const Wrapped = (props: IGridviewPanelProps<{ tab: Tab; theme: string }>) => {
+  const { theme } = useDockviewTheme()
+  const pubSub = usePubSub()
+
+  const onReady = (event) => {
+    event.api.addPanel({
+      id: 'WindowBar',
+      component: 'WindowBar',
+      maximumHeight: 30,
+      minimumHeight: 30,
+    })
+
+    event.api.addPanel({
+      id: 'Composer',
+      component: 'Composer',
+      params: {
+        title: 'Composer',
+        tab: props.params.tab,
+        theme: props.params.theme
+      },
+      position: { referencePanel: 'WindowBar', direction: 'below' },
+    })
+  }
+
+  return (
+    <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
+      <GridviewReact
+        components={tabComponents}
+        disableAutoResizing={false}
+        proportionalLayout={false}
+        orientation={Orientation.VERTICAL}
+        hideBorders={true}
+        onReady={onReady}
+        className={`global-layout ${theme}`}
+      /></WorkspaceProvider>)
 }
 
 export default Wrapped
+
+// return (
+//   <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
+//     <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
+//       <DraggableElement window="Console" />
+//       <DraggableElement window="TextEditor" title="Text Editor" />
+//       <DraggableElement window="Inspector" />
+//       <DraggableElement window="Playtest" />
+//     </div>
+//     <div style={{ position: 'relative', height: '100%' }}>
+//       <Composer
+//         theme={`composer-layout ${props.params.theme}`}
+//         tab={props.params.tab}
+//         pubSub={pubSub}
+//       />
+//     </div>
+//   </WorkspaceProvider>
+// )
