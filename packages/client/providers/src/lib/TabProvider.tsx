@@ -5,7 +5,8 @@ import {
 } from 'dockview'
 import { usePubSub } from '@magickml/providers'
 import { getWorkspaceLayout } from 'client/layouts'
-import { useDockviewTheme } from 'client/state'
+import { setCurrentTab, useDockviewTheme } from 'client/state'
+import { useDispatch } from 'react-redux'
 
 export type Tab = {
   id: string
@@ -41,6 +42,7 @@ export const useTabLayout = () => useContext(Context)
 export const TabProvider = ({ children }) => {
   const { theme, setTheme } = useDockviewTheme()
   const [api, setApi] = useState<DockviewApi | undefined>()
+  const dispatch = useDispatch()
   const pubSub = usePubSub()
 
   const getLayout = () => {
@@ -62,6 +64,16 @@ export const TabProvider = ({ children }) => {
     if (!api) {
       return
     }
+
+    api.onDidActivePanelChange((panel) => {
+      if (!panel) return
+
+      console.log("PANEL CHANGED", panel)
+      dispatch(setCurrentTab({
+        id: panel.id,
+        title: panel.title,
+      }))
+    })
 
     // set up API event handlers
     api.onDidLayoutChange(() => {
