@@ -6,6 +6,7 @@ import InfoModal from './InfoModal'
 import EditSpellModal from './EditSpellModal'
 import SaveAsModal from './SaveAsModal'
 import DeleteModal from './DeleteModal'
+import CreateSpellModal from './CreateSpellModal'
 
 // A dictionary of modals with their names and components
 const modals = {
@@ -13,6 +14,7 @@ const modals = {
   editSpellModal: EditSpellModal,
   saveAsModal: SaveAsModal,
   deleteModal: DeleteModal,
+  createSpellModal: CreateSpellModal,
 }
 
 /**
