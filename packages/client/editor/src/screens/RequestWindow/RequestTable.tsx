@@ -320,7 +320,7 @@ function RequestTable({ requests, updateCallback }) {
 
   return (
     <Container className={styles.container} classes={{ root: styles.root }}>
-      <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
+      <Stack spacing={2} style={{ padding: '1rem', background: 'var(--background-color)' }}>
         <div className={styles.flex}>
           <Typography variant="h4" className={styles.header}>
             Requests
