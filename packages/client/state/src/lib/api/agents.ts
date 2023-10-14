@@ -21,7 +21,7 @@ export const agentApi = rootApi.injectEndpoints({
       providesTags: ['Agent'],
       query: ({ agentId }) => {
         return {
-          url: `agents?id=${agentId}`,
+          url: `agents/${agentId}`,
           params: {},
         }
       },
@@ -47,7 +47,7 @@ export const agentApi = rootApi.injectEndpoints({
     deleteAgent: builder.mutation({
       invalidatesTags: ['Agent', 'Agents'],
       query: ({ agentId }) => ({
-        url: `agents?id=${agentId}`,
+        url: `agents/${agentId}`,
         method: 'DELETE',
       }),
     }),
