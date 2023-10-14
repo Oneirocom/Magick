@@ -186,7 +186,7 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const setClassSelectedFile = () => {
-    if (activeTab?.name === 'Documents') return
+    if (props.currentTab?.id === 'Documents') return
 
     return props.currentTab?.id === props.node.text ? styles.isSelected : ''
   }

@@ -70,17 +70,31 @@
   --dv-active-sash-color: var(--sash-highlight);
 
   .tab-layout {
+    .tabs-and-actions-container .tabs-container .tab:not(:first-child)::before {
+      background-color: var(--foreground-color) !important;
+    }
+
     .tabs-and-actions-container {
       height: 50px;
 
       .tab.active-tab {
+        border-top: 2px solid var(--primary);
         background-color: var(--background-color) !important;
         color: var(--active-font-color) !important;
       }
 
       .tab.inactive-tab {
         background-color: var(--deep-background-color) !important;
-        color: var(--inactive-font-color);
+        color: var(--inactive-font-color) !important;
+      }
+    }
+
+    .inactive-group {
+      .tabs-and-actions-container {
+        .tab.active-tab {
+          border-top: none;
+          color: var(--inactive-font-color) !important;
+        }
       }
     }
 
