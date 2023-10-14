@@ -38,7 +38,7 @@ export const eventsApi = rootApi.injectEndpoints({
       providesTags: ['Event'],
       query: ({ eventId, projectId }) => {
         return {
-          url: `events?id=${eventId}`,
+          url: `events/${eventId}`,
           params: {},
         }
       },
@@ -71,7 +71,7 @@ export const eventsApi = rootApi.injectEndpoints({
     deleteEvent: builder.mutation({
       invalidatesTags: ['Event', 'Events'],
       query: ({ eventId }) => ({
-        url: `events?id=${eventId}`,
+        url: `events/${eventId}`,
         method: 'DELETE',
       }),
     }),

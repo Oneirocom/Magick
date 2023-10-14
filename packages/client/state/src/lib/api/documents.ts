@@ -12,7 +12,7 @@ export const documentsApi = rootApi.injectEndpoints({
       providesTags: ['Document'],
       query: ({ documentId }) => {
         return {
-          url: `documents?id=${documentId}`,
+          url: `documents/${documentId}`,
           params: {},
         }
       },
@@ -21,14 +21,14 @@ export const documentsApi = rootApi.injectEndpoints({
       providesTags: ['Document'],
       query: ({ documentId }) => {
         return {
-          url: `documents?id=${documentId}`,
+          url: `documents/${documentId}`,
           params: {},
         }
       },
     }),
     createDocument: builder.mutation({
       invalidatesTags: ['Documents'],
-      query: document => ({
+      query: ({ document }) => ({
         url: `documents`,
         method: 'POST',
         body: document,
@@ -36,7 +36,7 @@ export const documentsApi = rootApi.injectEndpoints({
     }),
     updateDocument: builder.mutation({
       invalidatesTags: ['Document', 'Documents'],
-      query: document => {
+      query: ({ document }) => {
         return {
           url: `documents/${document.id}`,
           method: 'PATCH',
@@ -47,7 +47,7 @@ export const documentsApi = rootApi.injectEndpoints({
     deleteDocument: builder.mutation({
       invalidatesTags: ['Document', 'Documents'],
       query: ({ documentId }) => ({
-        url: `documents?id=${documentId}`,
+        url: `documents/${documentId}`,
         method: 'DELETE',
       }),
     }),

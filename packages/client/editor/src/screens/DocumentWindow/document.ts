@@ -10,7 +10,6 @@ export const columns: Column[] = [
   { id: 'collapse', label: '', minWidth: 10 },
   { id: 'content', label: 'Content', minWidth: 65 },
   { id: 'type', label: 'Type', minWidth: 65 },
-  { id: 'projectId', label: 'Project ID', minWidth: 65 },
   { id: 'date', label: 'Date', minWidth: 65 },
 ]
 
