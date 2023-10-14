@@ -41,6 +41,8 @@ const DocumentModal = ({
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files
 
+      console.log('files', files)
+
       if (files && files.length > 0) {
         setLoading(true)
         const newfiles = []
@@ -67,6 +69,7 @@ const DocumentModal = ({
     setLoading(true)
     if (newDocument.type) {
       await handleSave(selectedModel)
+      console.log("handleSaveDocument!!!!!!!!!!!!")
       setLoading(false)
     } else {
       setLoading(false)
