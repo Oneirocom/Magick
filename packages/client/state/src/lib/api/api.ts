@@ -90,6 +90,8 @@ export const rootApi = createApi({
     'Agents',
     'Events',
     'Event',
+    'Document',
+    'Documents',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })
