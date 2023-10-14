@@ -44,7 +44,6 @@ const CreateSpellModal = ({ closeModal }) => {
   const [newSpell] = spellApi.useNewSpellMutation()
   const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
-  const { setIsAdded } = useTreeData()
 
   const onCreate = handleSubmit(async data => {
     try {
@@ -83,7 +82,6 @@ const CreateSpellModal = ({ closeModal }) => {
         }
       }
       setLoading(false)
-      setIsAdded(true)
       closeModal()
     } catch (err) {
       console.error('ERROR!', err)

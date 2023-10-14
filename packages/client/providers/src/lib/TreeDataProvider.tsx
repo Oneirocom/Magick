@@ -6,15 +6,11 @@ import { useSelector } from 'react-redux'
 import SampleData from './data/sampleData.json'
 import { useConfig } from './ConfigProvider'
 import { useFeathers } from './FeathersProvider'
-import { useGetSpellsQuery } from 'client/state'
+import { useGetDocumentsQuery, useGetSpellsQuery } from 'client/state'
 
 interface TreeDataContextType {
   treeData: NodeModel[]
   setTreeData: React.Dispatch<React.SetStateAction<NodeModel[]>>
-  isAdded: boolean
-  setIsAdded: React.Dispatch<React.SetStateAction<boolean>>
-  docState: boolean
-  setDocState: React.Dispatch<React.SetStateAction<boolean>>
   toDelete: null
   setToDelete: React.Dispatch<React.SetStateAction<null>>
   openDoc: string | number
@@ -35,10 +31,6 @@ interface Spell {
 const TreeDataContext = createContext<TreeDataContextType>({
   treeData: [],
   setTreeData: () => { },
-  isAdded: false,
-  setIsAdded: () => { },
-  docState: false,
-  setDocState: () => { },
   toDelete: null,
   setToDelete: () => { },
   openDoc: '',
@@ -55,19 +47,14 @@ type Props = {
 
 export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const { data: fetchedSpells } = useGetSpellsQuery({})
+  const { data: fetchedDocuments } = useGetDocumentsQuery({})
 
   const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
   const [documents, setDocuments] = useState<Document[] | null>(null)
   const [spells, setSpells] = useState<Spell[] | null>(null)
-  const { enqueueSnackbar } = useSnackbar()
-  const config = useConfig()
-  const globalConfig = useSelector((state: any) => state.globalConfig)
-  const token = globalConfig?.token
-  const FeathersContext = useFeathers()
-  const client = FeathersContext.client
-  const [isAdded, setIsAdded] = useState(false)
+
+
   const [addedItemIds, setAddedItemIds] = useState<string[]>([])
-  const [docState, setDocState] = useState(false)
   const [toDelete, setToDelete] = useState(null)
   const [openDoc, setOpenDoc] = useState<string | number>('')
   const [agentUpdate, setAgentUpdate] = useState(false)
@@ -109,47 +96,13 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
 
   }, [fetchedSpells])
 
-  const fetchData = async () => {
-    //first initialize states to null
-    setDocuments(null)
-    try {
-      // Fetch your data here...
-      const response = await fetch(
-        `${API_ROOT_URL}/documents?projectId=${config.projectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
-      const data = await response.json()
-
-      setDocuments(data.data)
-    } catch (error) {
-      console.error('ERROR', error)
-    }
-  }
-
   useEffect(() => {
-    fetchData() // Fetch data initially
-  }, [config.projectId, token, client])
+    if (!fetchedDocuments) return
+    if (!fetchedDocuments.data.length) return
 
-  useEffect(() => {
-    if (isAdded || docState) {
-      if (toDelete !== null) {
-        // Remove deleted ID from addedItemIds
-        setAddedItemIds(prevIds => prevIds.filter(item => item !== toDelete))
-        // Find and remove the item with the matching ID from treeData
-        setTreeData(prevData => prevData.filter(item => item.id !== toDelete))
-        setToDelete(null) // Reset toDelete after removing ID
-      }
+    setDocuments(fetchedDocuments.data)
 
-      fetchData() // Fetch data again when isAdded or docState is true
-      setIsAdded(false) // Reset isAdded after fetching
-      setDocState(false)
-    }
-  }, [isAdded, docState, toDelete])
+  }, [fetchedDocuments])
 
   useEffect(() => {
     if (!documents || !spells) {
@@ -183,10 +136,6 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
       value={{
         treeData,
         setTreeData,
-        isAdded,
-        setIsAdded,
-        docState,
-        setDocState,
         toDelete,
         setToDelete,
         openDoc,
