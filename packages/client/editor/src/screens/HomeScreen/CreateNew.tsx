@@ -49,7 +49,6 @@ const CreateNew = () => {
   const [newSpell] = spellApi.useNewSpellMutation()
   const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
-  const { setIsAdded } = useTreeData()
 
   /**
    * Handle creation process of a new spell.
@@ -91,7 +90,6 @@ const CreateNew = () => {
         }
       }
       setLoading(false)
-      setIsAdded(true)
       navigate(
         `/magick/${response.data.id + '-' + encodeURIComponent(btoa(response.data.name))
         }`

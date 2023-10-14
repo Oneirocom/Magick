@@ -2,6 +2,7 @@ import List from "@mui/material/List"
 import { DrawerItem } from "./DrawerItem"
 import { PluginDrawerItems } from "./PluginDrawerItems"
 import BoltIcon from '@mui/icons-material/Bolt'
+import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
@@ -30,6 +31,21 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
         text="Events"
         tooltip="Events Tooltip"
         tooltipText={drawerTooltipText.events}
+      />
+      <DrawerItem
+        active={currentTab?.id === 'Documents'}
+        Icon={ArticleIcon}
+        onClick={() => {
+          openTab({
+            name: 'Documents',
+            type: 'Documents',
+            switchActive: true,
+            id: 'documents',
+          })
+        }}
+        text="Documents"
+        tooltip="Documents Tooltip"
+        tooltipText={drawerTooltipText.documents}
       />
       <DrawerItem
         active={currentTab?.id === 'Requests'}

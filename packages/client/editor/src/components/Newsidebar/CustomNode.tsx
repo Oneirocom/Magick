@@ -48,7 +48,7 @@ export const CustomNode: React.FC<Props> = props => {
   const { droppable, data }: any = props.node
   const indent = props.depth * 24
   const navigate = useNavigate()
-  const { setOpenDoc, setToDelete, setIsAdded } = useTreeData()
+  const { setOpenDoc, setToDelete } = useTreeData()
   const { enqueueSnackbar } = useSnackbar()
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [isContextMenuOpen, setContextMenuOpen] = useState(false)
@@ -128,7 +128,6 @@ export const CustomNode: React.FC<Props> = props => {
           window.localStorage.removeItem(`zoomValues-${tab.id}`)
         }
         setToDelete(spell)
-        setIsAdded(true)
         setContextMenuOpen(false)
       }
     } catch (err) {
@@ -183,7 +182,7 @@ export const CustomNode: React.FC<Props> = props => {
       type: 'spell',
     })
     setToDelete(spell)
-    setIsAdded(true)
+    setIsRenaming(false)
   }
 
   const setClassSelectedFile = () => {
