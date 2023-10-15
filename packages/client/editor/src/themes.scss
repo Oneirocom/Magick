@@ -138,6 +138,15 @@
       padding-top: 0;
     }
 
+    .inactive-group {
+      .tabs-and-actions-container {
+        .tab.active-tab {
+          border-top: none;
+          color: var(--active-font-color) !important;
+        }
+      }
+    }
+
     .tabs-and-actions-container {
       height: 30px;
       background-color: var(--background-color);
@@ -149,13 +158,14 @@
         }
 
         .tab.active-tab {
+          border-top: none;
           background-color: var(--foreground-color) !important;
           color: var(--active-font-color);
         }
 
         .tab.inactive-tab {
           background-color: var(--background-color) !important;
-          color: var(--inactive-font-color);
+          color: var(--active-font-color) !important;
         }
       }
     }
