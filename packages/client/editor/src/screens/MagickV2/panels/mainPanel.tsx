@@ -4,7 +4,10 @@ import {
   DockviewReadyEvent,
   IDockviewHeaderActionsProps,
   IDockviewPanelProps,
+  IDockviewPanelHeaderProps,
+  DockviewDefaultTab
 } from 'dockview'
+import { useHotkeys } from 'react-hotkeys-hook';
 import { useTabLayout } from '@magickml/providers';
 import Events from '../../EventWindow'
 import Requests from '../../RequestWindow'
@@ -39,8 +42,6 @@ function loadDefaultLayout(api: DockviewApi) {
     component: 'default',
   })
 }
-
-import { IDockviewPanelHeaderProps, DockviewDefaultTab } from 'dockview';
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
   const onContextMenu = (event: React.MouseEvent) => {
@@ -114,7 +115,17 @@ const PreControls = (props: IDockviewHeaderActionsProps) => {
 };
 
 const MainPanel = () => {
-  const { theme, setApi, getLayout } = useTabLayout()
+  const { theme, setApi, getLayout, api } = useTabLayout()
+
+  useHotkeys('ctrl+alt+right', () => {
+    if (!api) return
+    api.moveToNext({ includePanel: true });
+  })
+
+  useHotkeys('ctrl+alt+left', () => {
+    if (!api) return
+    api.moveToPrevious({ includePanel: true });
+  })
 
   const onReady = (event: DockviewReadyEvent) => {
     const layout = getLayout()
