@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background-color: var(--dark-0);
+  background-color: var(--deep-background-color);
 }
 
 .deploy-shield {

@@ -10,27 +10,25 @@
 }
 .node {
   /* animation: nodeGenesis 0.5s ease; */
-  transition: background-color 0.05s ease, border 0.2s ease,
-    outline-color 0.2s ease;
+  transition: background-color 0.05s ease;
   min-width: var(--c30);
   width: var(--c30);
   border-radius: var(--extraSmall);
-  outline: 1px solid var(--glow-dark);
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
-  background-color: #0011168f;
-  color: var(--glow);
+  /* box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2); */
+  background-color: var(--foreground-color-90);
+  color: white;
   resize: both;
 
   /* backdrop-filter: blur(3px); */
 }
 .node:hover {
-  outline: 4px solid var(--glow-dark);
+  outline: 2px solid var(--blue);
 }
 .node.selected {
   /* color: var(--glow); */
-  background-color: #001116bb;
-  box-shadow: var(--glow);
-  outline: 4px solid var(--glow);
+  background-color: var(--foreground-color);
+  box-shadow: var(--blue);
+  outline: 2px solid var(--blue);
   /* backdrop-filter: blur(15px); */
 }
 .node.error {
@@ -38,8 +36,8 @@
   /* backdrop-filter: blur(15px); */
 }
 .node.success {
-  outline-color: var(--glow) !important;
-  border: 2px solid var(--glow);
+  outline-color: var(--blue) !important;
+  border: 2px solid var(--blue);
   transition: border 0.2s ease, outline-color 0.2s ease;
 }
 .node-depricated {
@@ -61,8 +59,8 @@
   color: var(--green);
 }
 .node-title-container {
-  background: var(--dark-0);
-  border-bottom: 1px solid var(--dark-2);
+  background: var(--background-color);
+  border-bottom: 1px solid var(--deep-background-color);
 }
 .node-title {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
@@ -71,7 +69,7 @@
   letter-spacing: 0.1em;
   font-weight: 900;
   padding: var(--extraSmall);
-  color: var(--glow);
+  color: white;
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
   display: flex;
   width: 83%;
