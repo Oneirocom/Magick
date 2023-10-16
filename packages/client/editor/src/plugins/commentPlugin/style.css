@@ -28,6 +28,6 @@
 
 .frame-comment {
   z-index: -10;
-  background: rgba(15, 83, 255, 0.104);
+  background: var(--slate-15);
   border: 3px solid transparent;
 }
