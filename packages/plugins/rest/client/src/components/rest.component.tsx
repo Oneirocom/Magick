@@ -10,7 +10,7 @@ import { API_ROOT_URL } from '@magickml/config'
 import { Tooltip } from "@mui/material"
 
 
-const fetchGetExample = (selectedAgentData, content) =>`
+const fetchGetExample = (selectedAgentData, content) => `
     fetch("${API_ROOT_URL}/api/${selectedAgentData.id}?content=${encodeURIComponent(content)}", {
     method: 'GET',
     headers: {
@@ -24,7 +24,7 @@ const fetchGetExample = (selectedAgentData, content) =>`
     });
 `;
 
-const fetchDeleteExample = (selectedAgentData, content) =>`
+const fetchDeleteExample = (selectedAgentData, content) => `
     fetch("${API_ROOT_URL}/api/${selectedAgentData.id}?content=${encodeURIComponent(content)}", {
     method: 'GET',
     headers: {
@@ -116,7 +116,7 @@ export const RestAgentWindow: FC<any> = props => {
                     opacity: disable ? 0.2 : 1,
                 }}
             >
-                <Tooltip title="add your rest Api seetings here" placement='left' arrow >
+                <Tooltip title="add your rest Api seetings here" placement='left' disableInteractive arrow >
                     <h3>REST API</h3>
                 </Tooltip>
                 <div
@@ -161,7 +161,7 @@ export const RestAgentWindow: FC<any> = props => {
                     <div className="form-item">
                         <Grid container>
                             <Grid item xs={12}>
-                                <Tooltip title="add your agentId here" placement='bottom' arrow >
+                                <Tooltip title="add your agentId here" placement='bottom' disableInteractive arrow >
                                     <span className="form-item-label modal-element">Agent ID</span>
                                 </Tooltip>
                                 <Input
@@ -177,7 +177,7 @@ export const RestAgentWindow: FC<any> = props => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Tooltip title="add your api key here" placement='bottom' arrow >
+                                <Tooltip title="add your api key here" placement='bottom' disableInteractive arrow >
                                     <span
                                         style={{ marginTop: '2em' }}
                                         className="form-item-label modal-element"
@@ -200,7 +200,7 @@ export const RestAgentWindow: FC<any> = props => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Tooltip title="add your url here" placement='bottom' arrow >
+                                <Tooltip title="add your url here" placement='bottom' disableInteractive arrow >
                                     <span
                                         style={{ marginTop: '2em' }}
                                         className="form-item-label modal-element"
@@ -244,7 +244,7 @@ export const RestAgentWindow: FC<any> = props => {
                                     >
                                         {showGetExample ? 'Hide' : 'Show'}
                                     </Button>
-                                    <Tooltip title="Your Get url" placement='bottom' arrow >
+                                    <Tooltip title="Your Get url" placement='bottom' disableInteractive arrow >
 
                                         <h4>GET Example</h4>
                                     </Tooltip>
@@ -294,7 +294,7 @@ export const RestAgentWindow: FC<any> = props => {
                                     >
                                         {showPostExample ? 'Hide' : 'Show'}
                                     </Button>
-                                    <Tooltip title="Your Post url" placement='bottom' arrow >
+                                    <Tooltip title="Your Post url" placement='bottom' disableInteractive arrow >
                                         <h4>POST Example</h4>
                                     </Tooltip>
                                 </span>
@@ -342,7 +342,7 @@ export const RestAgentWindow: FC<any> = props => {
                                     >
                                         {showPutExample ? 'Hide' : 'Show'}
                                     </Button>
-                                    <Tooltip title="Your Put url" placement='bottom' arrow >
+                                    <Tooltip title="Your Put url" placement='bottom' disableInteractive arrow >
                                         <h4>PUT Example</h4>
                                     </Tooltip>
                                 </span>
@@ -392,7 +392,7 @@ export const RestAgentWindow: FC<any> = props => {
                                     >
                                         {showDeleteExample ? 'Hide' : 'Show'}
                                     </Button>
-                                    <Tooltip title="Your Delete url" placement='bottom' arrow >
+                                    <Tooltip title="Your Delete url" placement='bottom' disableInteractive arrow >
                                         <h4>DELETE Example</h4>
                                     </Tooltip>
                                 </span>

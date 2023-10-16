@@ -104,7 +104,7 @@ export const DiscordAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <Tooltip title="Add discord Api key here" placement='left' arrow>
+        <Tooltip title="Add discord Api key here" placement='left' disableInteractive arrow>
           <h3>Discord</h3>
         </Tooltip>
         <div
