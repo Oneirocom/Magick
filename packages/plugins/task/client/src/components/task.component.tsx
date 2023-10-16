@@ -56,8 +56,8 @@ export const AgentTaskWindow: FC<PluginProps> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <Tooltip title="Enable/Disable Task Plugin" placement="left" arrow>
-        <h3>Agent Task Runner</h3>
+        <Tooltip title="Enable/Disable Task Plugin" placement="left" disableInteractive arrow>
+          <h3>Agent Task Runner</h3>
         </Tooltip>
         <div
           style={{

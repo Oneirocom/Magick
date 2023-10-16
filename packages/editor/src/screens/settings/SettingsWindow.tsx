@@ -28,7 +28,7 @@ const SettingsWindowChild = ({
   getKey,
 }) => {
   const [clear, setClear] = useState('Clear');
- 
+
 
   return (
     <div className={styles['child']}>
@@ -100,7 +100,7 @@ const SettingsWindow = () => {
     window.localStorage.setItem('secrets', JSON.stringify(secretKeys));
 
     pluginManager.getSecrets(true).forEach((value) => {
-      const { name, displayName }:any = value;
+      const { name, displayName }: any = value;
       const secretName = displayName || name;
       const valueName = secretKeys[value.key];
 
