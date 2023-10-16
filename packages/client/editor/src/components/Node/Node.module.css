@@ -14,6 +14,7 @@
   min-width: var(--c30);
   width: var(--c30);
   border-radius: var(--extraSmall);
+  border: 1px solid var(--deep-background-color);
   /* box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2); */
   background-color: var(--foreground-color-90);
   color: white;
@@ -61,6 +62,7 @@
 .node-title-container {
   background: var(--background-color);
   border-bottom: 1px solid var(--deep-background-color);
+  border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
 }
 .node-title {
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',

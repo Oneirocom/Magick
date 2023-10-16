@@ -14,6 +14,7 @@ import localStateReducer from './localState'
 import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
 import tabLayoutReducer from './tabLayoutState'
+import statusBarReducer from './statusBarState'
 
 // import { AppConfig } from '@magickml/client-core'
 
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   tabs: tabReducer,
   preferences: preferencesReducer,
   localState: localStateReducer,
+  statusBar: statusBarReducer,
 })
 
 // Store instance placeholder
