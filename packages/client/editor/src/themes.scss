@@ -3,7 +3,8 @@
   --abyss: #03070c;
   --neutral-dark: #20232a;
   --midnight: #0d1533;
-  --charcoal: #1b2a46;
+  --charcoal: rgb(27, 42, 70);
+  --charcoal-90: #1b2a46e0;
   --slate-light: #8d8d8d;
   --slate: #696969;
   --slate-30: #69696930;
@@ -15,6 +16,7 @@
   --deep-background-color: var(--abyss);
   --background-color: var(--midnight); // Used for main backgrounds
   --foreground-color: var(--charcoal); // Primary text color
+  --foreground-color-90: var(--charcoal-90);
   --divider: var(--slate); // Divider color
   --sash-highlight: #3b6fd754;
   --active-font-color: var(--neutral-light); // Primary font color
