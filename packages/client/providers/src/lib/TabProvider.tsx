@@ -29,6 +29,8 @@ type DocviewContext = {
   openTab: (tab: Tab) => void
   closeTab?: (tab: any) => void
   switchTab?: (tab: any) => void
+
+  isTabOpen: (id: string) => boolean
 }
 
 const TAB_LAYOUT_KEY = 'tab-layout'
@@ -83,6 +85,24 @@ export const TabProvider = ({ children }) => {
     })
   }, [api])
 
+  const isTabOpen = (id: string) => {
+    if (!api) return false
+
+    const panel = api.getPanel(id)
+
+    return !!panel
+  }
+
+  const setActiveTab = (id: string) => {
+    if (!api) return
+
+    const panel = api.getPanel(id)
+
+    if (!panel) return
+
+    panel.api.setActive()
+  }
+
   const openTab = (_tab: Tab) => {
     if (!api) return
 
@@ -90,6 +110,12 @@ export const TabProvider = ({ children }) => {
       ..._tab,
       layoutJson: getWorkspaceLayout(_tab?.workspace),
     }
+
+    if (isTabOpen(tab.name)) {
+      setActiveTab(tab.name)
+      return
+    }
+
     api.addPanel({
       id: tab.name,
       component: tab.type,
@@ -109,6 +135,7 @@ export const TabProvider = ({ children }) => {
     getLayout,
     setLayout,
     openTab,
+    isTabOpen
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }

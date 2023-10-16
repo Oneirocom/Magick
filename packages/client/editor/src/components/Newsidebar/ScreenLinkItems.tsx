@@ -25,7 +25,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
             name: 'Events',
             type: 'Events',
             switchActive: true,
-            id: 'events',
+            id: 'Events',
           })
         }}
         text="Events"
@@ -40,7 +40,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
             name: 'Documents',
             type: 'Documents',
             switchActive: true,
-            id: 'documents',
+            id: 'Documents',
           })
         }}
         text="Documents"
@@ -55,7 +55,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
             name: 'Requests',
             type: 'Requests',
             switchActive: true,
-            id: 'requests',
+            id: 'Requests',
           })
         }}
         text="Requests"
@@ -73,7 +73,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
             name: 'Settings',
             type: 'Settings',
             switchActive: true,
-            id: 'settings',
+            id: 'Settings',
           })
         }}
         text="Settings"
