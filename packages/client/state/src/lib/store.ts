@@ -15,7 +15,7 @@ import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
 import tabLayoutReducer from './tabLayoutState'
 import statusBarReducer from './statusBarState'
-import { configureFeathersStore } from './feathers/root'
+import rootFeathers, { configureFeathersStore } from './feathers/root'
 import { feathersEventMiddleware } from '@magickml/feathersRedux'
 
 // import { AppConfig } from '@magickml/client-core'
@@ -25,6 +25,7 @@ import { feathersEventMiddleware } from '@magickml/feathersRedux'
  */
 const rootReducer = combineReducers({
   [rootApi.reducerPath]: rootApi.reducer,
+  [rootFeathers.rootReducerPath]: rootFeathers.reducer,
   tabLayout: tabLayoutReducer,
   globalConfig: globalConfigReducer,
   tabs: tabReducer,
