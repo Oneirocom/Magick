@@ -6,20 +6,14 @@ import {
   configureStore,
 } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
-import { AnyAction } from 'redux'
+import { AnyAction, combineReducers } from 'redux'
 import {
-  EventHook,
   EventHooks,
   InjectServiceResult,
   ServiceDetails,
 } from '../types/serviceTypes'
 import { REGISTER_EVENTS } from './constants'
-import {
-  ActionNames,
-  ServiceConfigType,
-  SliceActions,
-  StringKeyof,
-} from '../types/configtypes'
+import { ServiceConfigType, SliceActions } from '../types/configtypes'
 
 let globalFeathersClient: Application | null = null
 
@@ -252,6 +246,17 @@ export const createFeathersReduxToolkit = (client: Application) => {
       })
       return extractedReducers
     },
+
+    get reducer() {
+      return combineReducers(this.getReducers())
+    },
+
+    /**
+     * Returns the root reducer path for the Feathers-Redux integration.
+     *
+     * @returns {string} The root reducer path.
+     */
+    rootReducerPath: 'feathersReduxToolkit', // You can specify the path you want here
 
     /**
      * Configures the Redux store and automatically registers the Feathers service events.
