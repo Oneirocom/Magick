@@ -5,96 +5,23 @@ import {
   Reducer,
   configureStore,
 } from '@reduxjs/toolkit'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
+import {
+  EventHook,
+  EventHooks,
+  InjectServiceResult,
+  ServiceDetails,
+} from '../types/serviceTypes'
+import { REGISTER_EVENTS } from './constants'
+import {
+  ActionNames,
+  ServiceConfigType,
+  SliceActions,
+  StringKeyof,
+} from '../types/configtypes'
 
 let globalFeathersClient: Application | null = null
-
-const REGISTER_EVENTS = 'FEATHERS/REGISTER_EVENTS'
-
-type StringKeyof<T> = Extract<keyof T, string>
-
-type ActionNames = StringKeyof<ReturnType<typeof createSlice>['actions']>
-
-type ServiceActionHook<
-  ServiceName extends string,
-  ActionKey extends string
-> = `use${Capitalize<ServiceName>}${Capitalize<ActionKey>}`
-
-type ServiceEventHook<
-  ServiceName extends string,
-  Event extends string
-> = `useSelect${Capitalize<ServiceName>}${Capitalize<Event>}`
-
-interface ServiceConfigType<
-  ServiceName extends string = string,
-  Events extends string[] = string[]
-> {
-  name: ServiceName
-  initialState?: Record<string, any>
-  reducers?: Record<string, (state: any, action: PayloadAction<any>) => void>
-  events: Events
-}
-
-type HooksReturnType<ServiceName extends string, Events extends string[]> = {
-  [K in Events[number] as `useSelect${Capitalize<ServiceName>}${Capitalize<K>}`]: () => {
-    data: any[]
-    lastItem: any
-    error: any
-  }
-}
-
-type ActionHooks<ServiceName extends string, ActionKeys extends string> = {
-  [K in ActionKeys as `use${Capitalize<ServiceName>}${Capitalize<K>}`]: () => (
-    payload: any
-  ) => void
-}
-
-type EventHooks<ServiceName extends string, Events extends string[]> = {
-  [E in Events[number] as `useSelect${Capitalize<ServiceName>}${Capitalize<E>}`]: () => {
-    data: any[]
-    lastItem: any
-    error: any
-  }
-}
-
-type InjectServiceResult<
-  ServiceName extends string,
-  Events extends string[],
-  ActionKeys extends Extract<
-    keyof ReturnType<typeof createSlice>['actions'],
-    string
-  >
-> = {
-  reducer: Reducer
-  actions: ReturnType<typeof createSlice>['actions']
-  registerFeathersEvents: () => {
-    type: typeof REGISTER_EVENTS
-    payload: { serviceName: ServiceName; events: Events }
-  }
-  hooks: {
-    [K in ActionKeys as ServiceActionHook<ServiceName, K>]: () => (
-      payload: any
-    ) => void
-  } & {
-    [E in Events[number] as ServiceEventHook<ServiceName, E>]: () => {
-      data: any[]
-      lastItem: any
-      error: any
-    }
-  }
-}
-
-export interface FeathersReduxInitialState {
-  data: any[]
-  item: any
-  loading: boolean
-}
-
-export interface ServiceDetails {
-  reducer: Reducer
-  config: ServiceConfigType
-}
 
 const reducers: { [key: string]: ServiceDetails } = {}
 
@@ -201,7 +128,7 @@ export const createFeathersReduxToolkit = (client: Application) => {
      */
     injectService<ServiceName extends string, Events extends string[]>(
       serviceConfig: ServiceConfigType<ServiceName, Events>
-    ): InjectServiceResult<ServiceName, Events, ActionNames> {
+    ): InjectServiceResult<ServiceName, Events, SliceActions> {
       const defaultState: { [key: string]: any } = {}
 
       const {
@@ -250,22 +177,18 @@ export const createFeathersReduxToolkit = (client: Application) => {
         config: serviceConfig,
       }
 
-      const actionHooks: ActionHooks<ServiceName, ActionNames> = {} as any
-      const eventHooks: EventHooks<ServiceName, Events> = {} as any
+      type ServiceEventHooks = EventHooks<typeof name, typeof events>
 
-      Object.keys(slice.actions).forEach(actionKey => {
-        const hookName = `use${capitalize(name)}${capitalize(actionKey)}`
-        actionHooks[hookName] = () => {
-          const dispatch = useDispatch()
-          return (payload: any) => dispatch(slice.actions[actionKey](payload))
-        }
-      })
+      // Construct the hooks object
+      // Inside your function
+      const selectors: ServiceEventHooks = {} as any
 
-      events.forEach(event => {
+      events.forEach((event: (typeof events)[number]) => {
         const selectEventHookName = `useSelect${capitalize(name)}${capitalize(
           event
         )}`
-        eventHooks[selectEventHookName] = () => {
+
+        const selectEventHook = () => {
           const eventState = useSelector((state: any) => state[name][event])
           return {
             data: eventState.data,
@@ -273,7 +196,9 @@ export const createFeathersReduxToolkit = (client: Application) => {
             error: eventState.error,
           }
         }
+        selectors[selectEventHookName] = selectEventHook
       })
+
       return {
         actions: slice.actions,
         reducer: slice.reducer,
@@ -281,10 +206,7 @@ export const createFeathersReduxToolkit = (client: Application) => {
           type: REGISTER_EVENTS,
           payload: { serviceName: name, events },
         }),
-        hooks: {
-          ...actionHooks,
-          ...eventHooks,
-        },
+        selectors,
       }
     },
 
