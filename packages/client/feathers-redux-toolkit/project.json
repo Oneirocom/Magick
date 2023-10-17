@@ -1,0 +1,34 @@
+{
+  "name": "feathers-redux-toolkit",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/client/feathers-redux-toolkit/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/client/feathers-redux-toolkit"
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../../coverage/packages/client/feathers-redux-toolkit"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/client/feathers-redux-toolkit/**/*.ts",
+          "packages/client/feathers-redux-toolkit/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
