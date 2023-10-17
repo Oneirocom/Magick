@@ -183,7 +183,9 @@ export const createFeathersReduxToolkit = (client: Application) => {
         )}`
 
         const selectEventHook = () => {
-          const eventState = useSelector((state: any) => state[name][event])
+          const eventState = useSelector(
+            (state: any) => state[this.rootReducerPath][name][event]
+          )
           return {
             data: eventState.data,
             lastItem: eventState.lastItem,
