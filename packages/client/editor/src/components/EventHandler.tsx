@@ -14,8 +14,9 @@ import {
   useLazyGetSpellByIdQuery,
   useSaveSpellMutation,
   RootState,
+  setSyncing,
 } from 'client/state'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -24,6 +25,7 @@ import { useSelector } from 'react-redux'
  * @returns - null, this is a functional component used for managing side effects
  */
 const EventHandler = ({ pubSub, tab }) => {
+  const dispatch = useDispatch()
   const config = useConfig()
 
   // only using this to handle events, so not rendering anything with it.
@@ -179,6 +181,7 @@ const EventHandler = ({ pubSub, tab }) => {
     updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     try {
+      dispatch(setSyncing(true))
       // We save the diff. Doing this via feathers but may want to switch to rtk query
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
@@ -188,6 +191,11 @@ const EventHandler = ({ pubSub, tab }) => {
       })
 
       spellRef.current = diffResponse
+
+      // extend the timeout to 500ms to give the user a chance to see the sync icon
+      setTimeout(() => {
+        dispatch(setSyncing(false))
+      }, 1000)
 
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
