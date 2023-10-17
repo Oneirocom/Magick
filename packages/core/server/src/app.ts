@@ -46,7 +46,7 @@ export const app: Application = koa(feathers())
 declare module './declarations' {
   interface Configuration {
     vectordb: PostgresVectorStoreCustom | any
-    docdb: PostgresVectorStoreCustom | any
+    embeddingdb: PostgresVectorStoreCustom | any
     pubsub: RedisPubSub
     redis: Redis
     isAgent?: boolean
@@ -157,13 +157,13 @@ export async function initApp() {
     tableName: 'events',
     queryName: 'match_events',
   })
-  const docdb = new PostgresVectorStoreCustom(embeddings, {
+  const embeddingdb = new PostgresVectorStoreCustom(embeddings, {
     client: app.get('dbClient'),
-    tableName: 'documents',
-    queryName: 'match_documents',
+    tableName: 'embeddings',
+    queryName: 'match_embeddings',
   })
   app.set('vectordb', vectordb)
-  app.set('docdb', docdb)
+  app.set('embeddingdb', embeddingdb)
   app.configure(services)
   app.configure(channels)
 

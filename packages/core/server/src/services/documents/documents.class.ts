@@ -21,6 +21,8 @@ import { v4 as uuidv4 } from 'uuid'
 // Extended parameter type for DocumentService support
 export type DocumentParams = KnexAdapterParams<DocumentQuery>
 
+const embeddingSize = 1000
+
 /**
  * DocumentService class
  * Implements the custom document service extending the base Knex service
@@ -39,7 +41,7 @@ export class DocumentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: DocumentData): Promise<any> {
-    const docdb = app.get('docdb')
+    const embeddingdb = app.get('embeddingdb')
     const { modelName, secrets, files, ...docData } = data as DocumentData & {
       modelName: string
       secrets: string
@@ -49,10 +51,16 @@ export class DocumentService<
     if (docData.content) {
       elements = [
         ...elements,
-        ...(await getUnstructuredData(
-          [{ text: docData.content, originalFilename: 'text.txt' }],
+        createElement(
+          docData.embedding
+            ? [{ text: docData.content, metadata: {} }]
+            : chunkEmbeddings(
+                [{ text: docData.content, metadata: {} }],
+                embeddingSize,
+                '\n'
+              ),
           docData
-        )),
+        ),
       ]
     }
     if (files && files.length > 0) {
@@ -60,15 +68,21 @@ export class DocumentService<
     }
 
     for (const element of elements) {
-      if (!element.content) continue
-      if (data.hasOwnProperty('secrets')) {
-        await docdb.fromString(element.content, element, {
-          modelName,
-          projectId: element.projectId,
-          secrets,
-        })
-      } else {
-        await docdb.from('documents').insert(element)
+      const { embeddings, ...document } = element
+      embeddings //remove linting error lmao
+      await embeddingdb.from('documents').insert(document)
+      //create embeddings
+      for (const embedding of element.embeddings) {
+        if (!embedding.content || embedding.content?.length === 0) continue
+        if (data.hasOwnProperty('secrets')) {
+          await embeddingdb.fromString(embedding.content, embedding, {
+            modelName,
+            projectId: element.projectId,
+            secrets,
+          })
+        } else {
+          await embeddingdb.from('embeddings').insert(embedding)
+        }
       }
     }
 
@@ -84,10 +98,18 @@ export class DocumentService<
     const db = app.get('dbClient')
 
     if (!id && params.projectId) {
+      await db('embeddings')
+        .whereRaw(
+          '"documentId" in (select id from documents where projectId = $)',
+          params.projectId
+        )
+        .del()
       // delete all documents of a project
       return await db('documents').where('projectId', params.projectId).del()
     }
 
+    //TODO: make this a single transaction
+    await db('embeddings').where('documentId', id).del()
     return await db('documents').where('id', id).del()
   }
 
@@ -107,13 +129,18 @@ export class DocumentService<
       console.log('param!!!!!!!', param)
 
       const querys = await db('documents')
-        .select('*')
+        .joinRaw(
+          'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+        )
+        // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
+        .select(
+          db.raw(
+            'documents.id as id, documents.type, documents."projectId", documents.date, documents.metadata, embeddings.id as embeddingId, embeddings.content, embeddings.embedding, embeddings.index'
+          )
+        )
         .where({
           ...(param.type && { type: param.type }),
-          ...(param.id && { id: param.id }),
-          ...(param.sender && { sender: param.sender }),
-          ...(param.client && { client: param.client }),
-          ...(param.channel && { channel: param.channel }),
+          ...(param.id && { 'documents.id': param.id }),
           ...(param.projectId && { projectId: param.projectId }),
           ...(param.content && { content: param.content }),
         })
@@ -146,17 +173,32 @@ export class DocumentService<
     const param = params?.query
 
     if (!param) {
-      return await db('documents').select('*').limit(100)
+      return await db('documents')
+        .joinRaw(
+          'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+        )
+        // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
+        .select(
+          db.raw(
+            'documents.id as id, documents.type, documents."projectId", documents.date, documents.metadata, embeddings.id as embeddingId, embeddings.content, embeddings.embedding, embeddings.index'
+          )
+        )
+        .limit(100)
     }
 
     const querys = await db('documents')
-      .select('*')
+      .joinRaw(
+        'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+      )
+      // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
+      .select(
+        db.raw(
+          'documents.id as id, documents.type, documents."projectId", documents.date, documents.metadata, embeddings.id as embeddingId, embeddings.content, embeddings.embedding, embeddings.index'
+        )
+      )
       .where({
         ...(param.type && { type: param.type }),
-        ...(param.id && { id: param.id }),
-        ...(param.sender && { sender: param.sender }),
-        ...(param.client && { client: param.client }),
-        ...(param.channel && { channel: param.channel }),
+        ...(param.id && { 'documents.id': param.id }),
         ...(param.projectId && { projectId: param.projectId }),
         ...(param.content && { content: param.content }),
       })
@@ -233,33 +275,68 @@ const getUnstructuredData = async (files, docData) => {
 
   //iterate and format for document insert (api returns either an array or an array of arrays)
   const elements = [] as any[]
-  for (const i in unstructured.data) {
-    // check for empty array
-    if (!unstructured.data[i] && unstructured.data[i] < 0) continue
-    if (unstructured.data[i] instanceof Array) {
-      for (const j in unstructured.data[i]) {
-        // check for undefined
-        if (!unstructured.data[i][j]) continue
-        elements.push(createElement(unstructured.data[i][j], docData, j))
-      }
-    } else {
-      elements.push(createElement(unstructured.data[i], docData, i))
+  if (unstructured.data[0] instanceof Array) {
+    for (const i in unstructured.data) {
+      const document = chunkEmbeddings(
+        unstructured.data[i],
+        embeddingSize,
+        '\n'
+      )
+      elements.push(createElement(document, docData))
     }
+  } else {
+    const document = chunkEmbeddings(unstructured.data, embeddingSize, '\n')
+    elements.push(createElement(document, docData))
   }
 
   return elements
 }
 
-const createElement = (element, docData, elementNumber) => {
-  return {
-    ...docData,
-    id: uuidv4(),
-    content: element.text,
-    metadata: {
-      elementNumber: elementNumber,
-      fileName: element.metadata.filename,
-      pageNumber: element.metadata.page_number,
-      type: element.type,
-    },
+const createElement = (element, docData) => {
+  const documentId = uuidv4()
+  const embeddings: any[] = []
+  for (const i in element) {
+    embeddings.push({
+      documentId,
+      index: i,
+      content: element[i].text,
+    })
   }
+  return {
+    date: docData.date,
+    type: docData.type,
+    projectId: docData.projectId,
+    id: documentId,
+    metadata: {
+      fileName: element[0].metadata?.filename,
+      fileType: element[0].metadata?.filetype,
+    },
+    embeddings,
+  }
+}
+
+//chunks an array of unstructured.io results into larger chunks and breaks down larger results to fit into the chunk. Doesn't stop mid-word and separates existing chunks using separator
+const chunkEmbeddings = (elements, chunkSize, separator) => {
+  const chunks: any[] = []
+  let chunk = ''
+  for (const element of elements) {
+    const text = element.text
+    for (const char of text) {
+      if (chunk.length < chunkSize || char !== ' ') {
+        chunk += char
+      } else {
+        chunks.push(chunk)
+        chunk = ''
+      }
+    }
+    if (chunk.length > 0) {
+      chunk += separator
+    }
+  }
+  if (chunk.length > 0) {
+    chunks.push(chunk)
+  }
+  return chunks.map(chunk => {
+    return { ...elements[0], text: chunk }
+  })
 }

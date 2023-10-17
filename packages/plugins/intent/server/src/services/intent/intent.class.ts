@@ -19,6 +19,7 @@ import {
   WorkerData,
   pluginManager,
 } from '@magickml/core'
+import { v4 as uuidv4 } from 'uuid'
 
 /** Type for Intent Params */
 export type IntentParams = KnexAdapterParams<IntentQuery>
@@ -40,7 +41,7 @@ export class IntentService<
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async create(data: IntentData): Promise<any> {
-    const docdb = app.get('docdb')
+    const embeddingdb = app.get('embeddingdb')
 
     if (data.hasOwnProperty('secrets')) {
       const { variations, secrets, modelName, chatModelName, ...docData } =
@@ -51,9 +52,24 @@ export class IntentService<
           variations: number
         }
 
-      docdb.fromString(docData.content, docData, {
+      const documentId = uuidv4()
+      const document = {
+        date: docData.date,
+        type: docData.type,
+        projectId: docData.projectId,
+        id: documentId,
+        metadata: data.metadata,
+      }
+      const embedding = {
+        documentId,
+        index: 0,
+        content: docData.content,
+      }
+
+      await embeddingdb.from('documents').insert(document)
+      await embeddingdb.fromString(embedding.content, embedding, {
         modelName,
-        projectId: docData?.projectId,
+        projectId: document.projectId,
         secrets,
       })
 
@@ -152,22 +168,49 @@ export class IntentService<
 
         //create new document/embedding
         for (const result of results) {
-          docdb.fromString(
-            result,
-            { ...docData, content: result },
-            {
-              modelName,
-              projectId: docData?.projectId,
-              secrets,
-            }
-          )
+          const documentId = uuidv4()
+          const document = {
+            date: docData.date,
+            type: docData.type,
+            projectId: docData.projectId,
+            id: documentId,
+            metadata: data.metadata,
+          }
+          const embedding = {
+            documentId,
+            index: 0,
+            content: result,
+          }
+
+          await embeddingdb.from('documents').insert(document)
+          await embeddingdb.fromString(result, embedding, {
+            modelName,
+            projectId: docData.projectId,
+            secrets,
+          })
         }
       }
 
       return docData
     }
 
-    await docdb.from('documents').insert(data)
+    const documentId = uuidv4()
+    const document = {
+      date: data.date,
+      type: data.type,
+      projectId: data.projectId,
+      id: documentId,
+      metadata: data.metadata,
+    }
+    const embedding = {
+      documentId,
+      index: 0,
+      content: data.content,
+      embedding: data.embedding,
+    }
+
+    await embeddingdb.from('documents').insert(document)
+    await embeddingdb.from('embeddings').insert(embedding)
     return data
   }
 }
