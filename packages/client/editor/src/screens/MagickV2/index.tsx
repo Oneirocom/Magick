@@ -7,6 +7,7 @@ import {
   LayoutPriority,
   Orientation,
 } from 'dockview'
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
 import MainPanel from './panels/mainPanel'
 import FileDrawer from './panels/fileDrawer'
@@ -21,17 +22,38 @@ const components = {
   RightSidebar,
   StatusBar: (props: IGridviewPanelProps<{ title: string }>) => {
     const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+    const { syncing, connected } = useSelector((state: RootState) => state.statusBar)
 
     return (
       <div
         style={{
           height: '100%',
-          padding: '5px 10px',
+          padding: '0px 10px',
           background: 'var(--dv-group-view-background-color)',
-          borderTop: '1px solid var(--deep-background-color)'
+          borderTop: '1px solid var(--deep-background-color)',
+          display: 'flex',
+          alignItems: 'center'
         }}
       >
-        Current Tab: {currentTab?.title}
+        <span style={{ color: connected ? 'green' : 'red', marginRight: 20 }}>●</span>
+        <p>Syncing: </p>
+        <AutorenewIcon
+          sx={{
+            marginRight: "20px",
+            animation: syncing ? "spin 2s linear infinite" : "none",
+            "@keyframes spin": {
+              "0%": {
+                transform: "rotate(0deg)",
+              },
+              "100%": {
+                transform: "rotate(230deg)",
+              },
+            },
+          }}
+        />
+        <p>
+          Current Tab: {currentTab?.title}
+        </p>
       </div>
     )
   },
