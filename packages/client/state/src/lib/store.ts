@@ -46,7 +46,7 @@ export const createStore = (config: any) => {
     key: config.projectId,
     version: 1,
     storage,
-    blacklist: [spellApi.reducerPath, 'globalConfig'],
+    blacklist: [spellApi.reducerPath, 'globalConfig', 'statusBar'],
   }
 
   const store = configureStore({
