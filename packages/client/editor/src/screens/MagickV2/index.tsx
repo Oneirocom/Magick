@@ -1,5 +1,4 @@
 import {
-  DockviewReadyEvent,
   GridviewApi,
   GridviewReact,
   GridviewReadyEvent,
@@ -7,54 +6,21 @@ import {
   LayoutPriority,
   Orientation,
 } from 'dockview'
-import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
 import MainPanel from './panels/mainPanel'
 import FileDrawer from './panels/fileDrawer'
 import RightSidebar from './panels/rightSidebar'
-import { RootState, useDockviewTheme } from 'client/state'
+import { useDockviewTheme } from 'client/state'
 import ModalProvider from '../../contexts/ModalProvider'
-import { useSelector } from 'react-redux'
+import { StatusBar } from './components/statusBar';
 
 const components = {
   MainPanel,
   FileDrawer,
   RightSidebar,
   StatusBar: (props: IGridviewPanelProps<{ title: string }>) => {
-    const { currentTab } = useSelector((state: RootState) => state.tabLayout)
-    const { syncing, connected } = useSelector((state: RootState) => state.statusBar)
-
     return (
-      <div
-        style={{
-          height: '100%',
-          padding: '0px 10px',
-          background: 'var(--dv-group-view-background-color)',
-          borderTop: '1px solid var(--deep-background-color)',
-          display: 'flex',
-          alignItems: 'center'
-        }}
-      >
-        <span style={{ color: connected ? 'green' : 'red', marginRight: 20 }}>●</span>
-        <p>Syncing: </p>
-        <AutorenewIcon
-          sx={{
-            marginRight: "20px",
-            animation: syncing ? "spin 2s linear infinite" : "none",
-            "@keyframes spin": {
-              "0%": {
-                transform: "rotate(0deg)",
-              },
-              "100%": {
-                transform: "rotate(230deg)",
-              },
-            },
-          }}
-        />
-        <p>
-          Current Tab: {currentTab?.title}
-        </p>
-      </div>
+      <StatusBar />
     )
   },
   default: (props: IGridviewPanelProps<{ title: string }>) => {
@@ -108,18 +74,18 @@ const loadDefaultLayout = (api: GridviewApi) => {
   })
 
   // Right side console panel
-  // api.addPanel({
-  //   id: 'RightSidebar',
-  //   component: 'RightSidebar',
-  //   params: {
-  //     title: 'Panel 6',
-  //     id: 'RightSidebar'
-  //   },
-  //   snap: true,
-  //   minimumWidth: 50,
-  //   priority: LayoutPriority.Low,
-  //   position: { referencePanel: 'MainPanel', direction: 'right' },
-  // })
+  api.addPanel({
+    id: 'RightSidebar',
+    component: 'RightSidebar',
+    params: {
+      title: 'Panel 6',
+      id: 'RightSidebar'
+    },
+    snap: true,
+    minimumWidth: 50,
+    priority: LayoutPriority.Low,
+    position: { referencePanel: 'MainPanel', direction: 'right' },
+  })
 }
 
 const MagickV2 = () => {
