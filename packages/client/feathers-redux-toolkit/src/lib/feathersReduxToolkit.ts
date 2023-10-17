@@ -1,28 +1,99 @@
 import { Application } from '@feathersjs/feathers'
-import { createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  PayloadAction,
+  Reducer,
+  configureStore,
+} from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
 let globalFeathersClient: Application | null = null
 
-interface InitialState {
+const REGISTER_EVENTS = 'FEATHERS/REGISTER_EVENTS'
+
+type StringKeyof<T> = Extract<keyof T, string>
+
+type ActionNames = StringKeyof<ReturnType<typeof createSlice>['actions']>
+
+type ServiceActionHook<
+  ServiceName extends string,
+  ActionKey extends string
+> = `use${Capitalize<ServiceName>}${Capitalize<ActionKey>}`
+
+type ServiceEventHook<
+  ServiceName extends string,
+  Event extends string
+> = `useSelect${Capitalize<ServiceName>}${Capitalize<Event>}`
+
+interface ServiceConfigType<
+  ServiceName extends string = string,
+  Events extends string[] = string[]
+> {
+  name: ServiceName
+  initialState?: Record<string, any>
+  reducers?: Record<string, (state: any, action: PayloadAction<any>) => void>
+  events: Events
+}
+
+type HooksReturnType<ServiceName extends string, Events extends string[]> = {
+  [K in Events[number] as `useSelect${Capitalize<ServiceName>}${Capitalize<K>}`]: () => {
+    data: any[]
+    lastItem: any
+    error: any
+  }
+}
+
+type ActionHooks<ServiceName extends string, ActionKeys extends string> = {
+  [K in ActionKeys as `use${Capitalize<ServiceName>}${Capitalize<K>}`]: () => (
+    payload: any
+  ) => void
+}
+
+type EventHooks<ServiceName extends string, Events extends string[]> = {
+  [E in Events[number] as `useSelect${Capitalize<ServiceName>}${Capitalize<E>}`]: () => {
+    data: any[]
+    lastItem: any
+    error: any
+  }
+}
+
+type InjectServiceResult<
+  ServiceName extends string,
+  Events extends string[],
+  ActionKeys extends Extract<
+    keyof ReturnType<typeof createSlice>['actions'],
+    string
+  >
+> = {
+  reducer: Reducer
+  actions: ReturnType<typeof createSlice>['actions']
+  registerFeathersEvents: () => {
+    type: typeof REGISTER_EVENTS
+    payload: { serviceName: ServiceName; events: Events }
+  }
+  hooks: {
+    [K in ActionKeys as ServiceActionHook<ServiceName, K>]: () => (
+      payload: any
+    ) => void
+  } & {
+    [E in Events[number] as ServiceEventHook<ServiceName, E>]: () => {
+      data: any[]
+      lastItem: any
+      error: any
+    }
+  }
+}
+
+export interface FeathersReduxInitialState {
   data: any[]
   item: any
   loading: boolean
 }
 
-interface ServiceConfig {
-  name: string
-  initialState?: InitialState
-  reducers?: {
-    [key: string]: (state: any, action: PayloadAction<any>) => any
-  }
-  events: string[]
-}
-
-interface ServiceDetails {
+export interface ServiceDetails {
   reducer: Reducer
-  config: ServiceConfig
+  config: ServiceConfigType
 }
 
 const reducers: { [key: string]: ServiceDetails } = {}
@@ -65,6 +136,42 @@ const registerFeathersServiceEvents = (
 }
 
 /**
+ * Redux middleware for registering Feathers service events.
+ *
+ * @example
+ *
+ * ```typescript
+ * import { configureStore } from '@reduxjs/toolkit';
+ *
+ * // Set up the store with the middleware
+ * const store = configureStore({
+ *   reducer: rootReducer,
+ *   middleware: [feathersEventMiddleware]
+ * });
+ *
+ * // Dispatch an action to register Feathers service events
+ * store.dispatch({
+ *   type: 'FEATHERS/REGISTER_EVENTS',
+ *   payload: {
+ *     serviceName: 'myServiceName',
+ *     events: ['created', 'updated', 'removed']
+ *   }
+ * });
+ * ```
+ *
+ * @param {any} storeAPI - The Redux store API.
+ * @returns {Function} Middleware function that checks for the 'FEATHERS/REGISTER_EVENTS' action type.
+ */
+export const feathersEventMiddleware =
+  (storeAPI: any) => (next: any) => (action: AnyAction) => {
+    if (action.type === REGISTER_EVENTS) {
+      const { serviceName, events } = action['payload']
+      registerFeathersServiceEvents(storeAPI, serviceName, events)
+    }
+    return next(action)
+  }
+
+/**
  * Creates and manages integration between Feathers services and Redux.
  *
  * Example usage:
@@ -92,19 +199,36 @@ export const createFeathersReduxToolkit = (client: Application) => {
      * @param serviceConfig - Configuration for the Feathers service.
      * @returns An object containing the Redux reducer, actions, and hooks for the service.
      */
-    injectService: (serviceConfig: ServiceConfig) => {
-      const defaultState = {
-        data: [],
-        lastItem: null,
-      }
+    injectService<ServiceName extends string, Events extends string[]>(
+      serviceConfig: ServiceConfigType<ServiceName, Events>
+    ): InjectServiceResult<ServiceName, Events, ActionNames> {
+      const defaultState: { [key: string]: any } = {}
 
       const {
         name,
         initialState = defaultState,
         reducers: serviceReducers = {},
-        events = [],
+        events,
       } = serviceConfig
 
+      // Add default state for each event
+      events.forEach(event => {
+        defaultState[event] = {
+          data: [],
+          lastItem: null,
+          error: null,
+        }
+      })
+
+      /**
+       * Creates a slice for a Feathers service with the given name, initial state, and service reducers.
+       * Also adds extra reducers for each event in the events array.
+       * @param name - The name of the Feathers service.
+       * @param initialState - The initial state of the slice.
+       * @param serviceReducers - The service reducers to be included in the slice.
+       * @param events - The events array to add extra reducers for.
+       * @returns A slice object with the specified name, initial state, and reducers.
+       */
       const slice = createSlice({
         name,
         initialState,
@@ -113,36 +237,54 @@ export const createFeathersReduxToolkit = (client: Application) => {
           events.forEach(event => {
             const actionType = generateActionType(name, event)
             builder.addCase(actionType, (state, action: PayloadAction<any>) => {
-              ;(state.data as any[]).push(action.payload)
+              ;(state['data'][event] as any[]).push(action.payload)
               ;(state as any).lastItem = action.payload
             })
           })
         },
       })
 
+      // Add the service reducers to the slice
       reducers[name] = {
         reducer: slice.reducer,
         config: serviceConfig,
       }
 
-      const generatedHooks: { [key: string]: any } = {}
+      const actionHooks: ActionHooks<ServiceName, ActionNames> = {} as any
+      const eventHooks: EventHooks<ServiceName, Events> = {} as any
 
       Object.keys(slice.actions).forEach(actionKey => {
         const hookName = `use${capitalize(name)}${capitalize(actionKey)}`
-        generatedHooks[hookName] = () => {
+        actionHooks[hookName] = () => {
           const dispatch = useDispatch()
           return (payload: any) => dispatch(slice.actions[actionKey](payload))
         }
       })
 
-      const selectHookName = `useSelect${capitalize(name)}`
-      generatedHooks[selectHookName] = () =>
-        useSelector((state: any) => state[name])
-
+      events.forEach(event => {
+        const selectEventHookName = `useSelect${capitalize(name)}${capitalize(
+          event
+        )}`
+        eventHooks[selectEventHookName] = () => {
+          const eventState = useSelector((state: any) => state[name][event])
+          return {
+            data: eventState.data,
+            lastItem: eventState.lastItem,
+            error: eventState.error,
+          }
+        }
+      })
       return {
-        reducer: slice.reducer,
         actions: slice.actions,
-        hooks: generatedHooks,
+        reducer: slice.reducer,
+        registerFeathersEvents: () => ({
+          type: REGISTER_EVENTS,
+          payload: { serviceName: name, events },
+        }),
+        hooks: {
+          ...actionHooks,
+          ...eventHooks,
+        },
       }
     },
 
@@ -187,6 +329,40 @@ export const createFeathersReduxToolkit = (client: Application) => {
         extractedReducers[key] = reducers[key].reducer
       })
       return extractedReducers
+    },
+
+    /**
+     * Configures the Redux store and automatically registers the Feathers service events.
+     *
+     * @example
+     *
+     * ```typescript
+     * const feathersToolkit = createFeathersReduxToolkit(feathersClient);
+     * const store = feathersToolkit.configureFeathersStore({
+     *   reducer: rootReducer,
+     *   middleware: [feathersEventMiddleware, ...getDefaultMiddleware()]
+     * });
+     * ```
+     *
+     * @param {Object} config - Configuration options for the Redux store.
+     * @returns {Object} The Redux store.
+     */
+    configureFeathersStore: (config: any) => {
+      // Create the store using the provided configuration
+      const store = configureStore(config)
+
+      // Dispatch the registration action for each service
+      Object.values(reducers).forEach(serviceDetails => {
+        store.dispatch({
+          type: REGISTER_EVENTS,
+          payload: {
+            serviceName: serviceDetails.config.name,
+            events: serviceDetails.config.events,
+          },
+        })
+      })
+
+      return store
     },
   }
 }
