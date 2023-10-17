@@ -15,6 +15,8 @@ import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
 import tabLayoutReducer from './tabLayoutState'
 import statusBarReducer from './statusBarState'
+import { configureFeathersStore } from './feathers/root'
+import { feathersEventMiddleware } from '@magickml/feathersRedux'
 
 // import { AppConfig } from '@magickml/client-core'
 
@@ -49,7 +51,7 @@ export const createStore = (config: any) => {
     blacklist: [spellApi.reducerPath, 'globalConfig', 'statusBar'],
   }
 
-  const store = configureStore({
+  const store = configureFeathersStore({
     reducer: persistReducer(persistConfig, rootReducer),
     preloadedState: {
       globalConfig: config,
@@ -57,7 +59,9 @@ export const createStore = (config: any) => {
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }).concat(rootApi.middleware),
+      })
+        .concat(rootApi.middleware)
+        .concat(feathersEventMiddleware),
   })
 
   setupListeners(store.dispatch)
