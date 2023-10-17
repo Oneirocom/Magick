@@ -1,6 +1,6 @@
 import { Modal } from '@magickml/client-core'
 import { useState } from 'react'
-import {Tooltip} from "@mui/material"
+import { Tooltip } from "@mui/material"
 
 const VariableModal = ({
   selectedAgentData,
@@ -59,8 +59,8 @@ const VariableModal = ({
       <Modal open={editMode} onClose={setEditMode} handleAction={handleSave} showSaveBtn={true}>
         <>
           <div style={{ marginBottom: '1em' }}>
-            <Tooltip title={" Add your Github access "} placement="bottom" arrow>
-            <span className="form-item-label">Personal Access Token</span>
+            <Tooltip title={" Add your Github access "} placement="bottom" disableInteractive arrow>
+              <span className="form-item-label">Personal Access Token</span>
             </Tooltip>
             <input
               type="text"
@@ -72,8 +72,8 @@ const VariableModal = ({
             />
           </div>
           <div style={{ marginBottom: '1em' }}>
-            <Tooltip title={" Add your Github repositories "} placement="bottom" arrow>
-            <span className="form-item-label">Repositories (Comma separated, i.e. org/repo, org/repo)</span>
+            <Tooltip title={" Add your Github repositories "} placement="bottom" disableInteractive arrow>
+              <span className="form-item-label">Repositories (Comma separated, i.e. org/repo, org/repo)</span>
             </Tooltip>
             <input
               type="text"

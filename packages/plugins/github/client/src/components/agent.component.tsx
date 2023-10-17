@@ -3,7 +3,7 @@ import { debounce } from 'lodash'
 
 import { Switch } from '@magickml/client-core'
 import VariableModal from './VariableModal'
-import {Tooltip} from "@mui/material"
+import { Tooltip } from "@mui/material"
 
 export const GithubAgentWindow: FC<any> = props => {
   props = props.props
@@ -42,9 +42,9 @@ export const GithubAgentWindow: FC<any> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-         <Tooltip title={" Add your Github access "} placement="left" arrow>
-        <h3>Github</h3>
-         </Tooltip>
+        <Tooltip title={" Add your Github access "} placement="left" disableInteractive arrow>
+          <h3>Github</h3>
+        </Tooltip>
         <div
           style={{
             display: 'flex',

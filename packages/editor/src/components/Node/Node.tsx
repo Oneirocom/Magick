@@ -66,14 +66,12 @@ export class MyNode extends Node {
     `
     return (
       <div
-        className={`${css['node']} ${css[selected]} ${
-          css[hasError ? 'error' : '']
-        } ${css[hasSuccess ? 'success' : '']}`}
+        className={`${css['node']} ${css[selected]} ${css[hasError ? 'error' : '']
+          } ${css[hasSuccess ? 'success' : '']}`}
       >
         <div
-          className={`${css['node-id']} ${hasError ? css['error'] : ''} ${
-            hasSuccess ? css['success'] : ''
-          }`}
+          className={`${css['node-id']} ${hasError ? css['error'] : ''} ${hasSuccess ? css['success'] : ''
+            }`}
         >
           <p>{node.id}</p>
         </div>
@@ -112,7 +110,8 @@ export class MyNode extends Node {
                     <StyleTooltip
                       title={`Input:${input.name}`}
                       placement="left"
-                      enterNextDelay={2000} 
+                      enterNextDelay={500}
+                      disableInteractive
                     >
                       <div className="input-title">{input.name}</div>
                     </StyleTooltip>
@@ -139,7 +138,8 @@ export class MyNode extends Node {
                   <StyleTooltip
                     title={`output: ${output.name}`}
                     placement="right"
-                    enterNextDelay={2000} 
+                    enterNextDelay={500}
+                    disableInteractive
                   >
                     <div className="output-title">{output.name}</div>
                   </StyleTooltip>
