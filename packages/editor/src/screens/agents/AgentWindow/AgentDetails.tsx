@@ -258,6 +258,7 @@ const AgentDetails = ({
             }
 
             placement="right-start"
+            disableInteractive
             arrow
           >
             <span style={{ marginLeft: '20px' }}>
@@ -296,7 +297,7 @@ const AgentDetails = ({
         </div>
       </div>
       <div className="form-item agent-select">
-        <Tooltip title={tooltip_text.rootSpell} placement="right" arrow>
+        <Tooltip title={tooltip_text.rootSpell} placement="right" disableInteractive arrow>
           <span className="form-item-label">Root Spell</span>
         </Tooltip>
         <select
@@ -339,7 +340,7 @@ const AgentDetails = ({
 
           return (
             <div key={value.name + index} style={{ marginBottom: '1em' }}>
-              <Tooltip title={tooltip_text[value.name]} placement="right" arrow>
+              <Tooltip title={tooltip_text[value.name]} placement="right" disableInteractive arrow>
                 <div style={{ width: '100%', marginBottom: '1em' }}>
                   {value.name}
                 </div>
@@ -392,7 +393,7 @@ const AgentDetails = ({
           console.log(value);
 
           return (
-            <Tooltip title="kkkk" arrow>
+            <Tooltip title="kkkk" disableInteractive arrow>
               <RenderComp
                 key={index}
                 enable={enable}

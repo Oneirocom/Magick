@@ -88,8 +88,8 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
           opacity: disable ? 0.2 : 1,
         }}
       >
-        <Tooltip title="Add your loop settings" placement="left" arrow>
-        <h3>Agent Update Loop</h3>
+        <Tooltip title="Add your loop settings" placement="left" disableInteractive arrow>
+          <h3>Agent Update Loop</h3>
         </Tooltip>
         <div
           style={{
@@ -133,8 +133,8 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
         <Modal open={editMode} onClose={handleClose} handleAction={handleSave}>
           <div>
             <div>
-              <Tooltip title="add number of seconds to run the loop" placement="bottom" arrow>
-              <span className="form-item-label">Loop Interval</span>
+              <Tooltip title="add number of seconds to run the loop" placement="bottom" disableInteractive arrow>
+                <span className="form-item-label">Loop Interval</span>
               </Tooltip>
               <input
                 type="text"

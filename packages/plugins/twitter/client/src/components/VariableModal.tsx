@@ -1,7 +1,7 @@
 import { Modal, Switch } from '@magickml/client-core'
 import Grid from '@mui/material/Grid'
 import { useState } from 'react'
-import {Tooltip} from '@mui/material'
+import { Tooltip } from '@mui/material'
 
 const VariableModal = ({
   selectedAgentData,
@@ -64,8 +64,8 @@ const VariableModal = ({
       </Grid>
       <div style={{ marginBottom: '1em' }}>
         <div>
-          <Tooltip title="Your Twitter userID" placement='bottom' arrow>
-          <span className="form-item-label">User ID</span>
+          <Tooltip title="Your Twitter userID" placement='bottom' disableInteractive arrow>
+            <span className="form-item-label">User ID</span>
           </Tooltip>
           <input
             className="modal-element"
@@ -79,8 +79,8 @@ const VariableModal = ({
       </div>
       <div>
         <div style={{ marginBottom: '1em' }}>
-          <Tooltip title="Your Twitter bearer token" placement='bottom' arrow>
-          <span className="form-item-label">Bearer Token (API v2)</span>
+          <Tooltip title="Your Twitter bearer token" placement='bottom' disableInteractive arrow>
+            <span className="form-item-label">Bearer Token (API v2)</span>
           </Tooltip>
           <input
             className="modal-element"
@@ -93,8 +93,8 @@ const VariableModal = ({
       </div>
       <div>
         <div style={{ marginBottom: '1em' }}>
-          <Tooltip title="Your Twitter API key" placement='bottom' arrow>
-          <span className="form-item-label">API Key</span>
+          <Tooltip title="Your Twitter API key" placement='bottom' disableInteractive arrow>
+            <span className="form-item-label">API Key</span>
           </Tooltip>
           <input
             className="modal-element"
@@ -107,8 +107,8 @@ const VariableModal = ({
       </div>
       <div>
         <div style={{ marginBottom: '1em' }}>
-          <Tooltip title="Your Twitter API key secret" placement='bottom' arrow>
-          <span className="form-item-label">API Key Secret</span>
+          <Tooltip title="Your Twitter API key secret" placement='bottom' disableInteractive arrow>
+            <span className="form-item-label">API Key Secret</span>
           </Tooltip>
           <input
             className="modal-element"
@@ -121,8 +121,8 @@ const VariableModal = ({
       </div>
       <div>
         <div style={{ marginBottom: '1em' }}>
-          <Tooltip title="Your Twitter access token" placement='bottom' arrow>
-          <span className="form-item-label">Access Token</span>
+          <Tooltip title="Your Twitter access token" placement='bottom' disableInteractive arrow>
+            <span className="form-item-label">Access Token</span>
           </Tooltip>
           <input
             className="modal-element"
@@ -135,8 +135,8 @@ const VariableModal = ({
       </div>
       <div>
         <div style={{ marginBottom: '1em' }}>
-          <Tooltip title="Your Twitter access token secret" placement='bottom' arrow>
-          <span className="form-item-label">Access Token Secret</span>
+          <Tooltip title="Your Twitter access token secret" placement='bottom' disableInteractive arrow>
+            <span className="form-item-label">Access Token Secret</span>
           </Tooltip>
           <input
             className="modal-element"

@@ -19,7 +19,7 @@ interface Props {
  * @returns {React.ReactElement} A Tooltip component with title and placement options.
  */
 export const Tooltip = ({ title, placement = 'top', children }: Props): React.ReactElement => (
-  <MUITooltip title={title} placement={placement}>
+  <MUITooltip title={title} placement={placement} disableInteractive>
     {children}
   </MUITooltip>
 );
