@@ -1,4 +1,5 @@
 export * from './lib/api'
+export * from './lib/feathers'
 export * from './lib/globalConfig'
 export * from './lib/hooks'
 export * from './lib/localState'
