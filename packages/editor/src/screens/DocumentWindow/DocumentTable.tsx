@@ -83,13 +83,13 @@ function DocumentTable({ documents, updateCallback }) {
   const config = useConfig()
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
-  const [document , setDocument] = useState(null)
+  const [document, setDocument] = useState(null)
   const [contentModal, setContentModal] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   // todo better typing here for the row
   const [selectedRow, setSelectedRow] = useState<any>(null)
   const [currentPage, setCurrentPage] = useState(0)
-  const { setDocState,setToDelete ,  openDoc } = useTreeData();
+  const { setDocState, setToDelete, openDoc } = useTreeData();
 
   const handleActionClick = (document, row) => {
     setAnchorEl(document.currentTarget)
@@ -98,6 +98,7 @@ function DocumentTable({ documents, updateCallback }) {
 
   const createData = (
     row: any,
+    fileName: any,
     content: string,
     type: string,
     projectId: string,
@@ -105,6 +106,7 @@ function DocumentTable({ documents, updateCallback }) {
   ): DocumentData => {
     return {
       row,
+      fileName,
       content,
       type,
       projectId,
@@ -125,6 +127,11 @@ function DocumentTable({ documents, updateCallback }) {
 
   const defaultColumns = useMemo(
     () => [
+      {
+        Header: 'Filename',
+        accessor: 'metadata.fileName',
+        disableSortBy: true,
+      },
       {
         Header: 'Content',
         accessor: 'content',
@@ -177,6 +184,7 @@ function DocumentTable({ documents, updateCallback }) {
   const rows = page.map(el => {
     return createData(
       el.original,
+      el.original.metadata?.fileName,
       el.original.content,
       el.original.type,
       el.original.projectId,
@@ -297,7 +305,7 @@ function DocumentTable({ documents, updateCallback }) {
   }
 
   const handleFindDoc = (doc) => {
-   //fetch the document 
+    //fetch the document 
     fetch(`${API_ROOT_URL}/documents/${doc}`, {
       method: 'GET',
       headers: {
@@ -326,7 +334,7 @@ function DocumentTable({ documents, updateCallback }) {
     if (openDoc) {
       handleFindDoc(openDoc)
       console.log(openDoc);
-      
+
     }
   }, [openDoc])
 
@@ -342,7 +350,7 @@ function DocumentTable({ documents, updateCallback }) {
         providerList={filteredProviders}
       />
     )}
-      {contentModal && document  && (
+      {contentModal && document && (
         <DocContentModal
           contentModal={contentModal}
           setContentModal={setContentModal}

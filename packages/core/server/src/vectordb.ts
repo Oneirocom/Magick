@@ -10,7 +10,6 @@ import { Document } from 'langchain/document'
 import { Embeddings } from 'langchain/embeddings/base'
 import { SupabaseVectorStore } from 'langchain/vectorstores/supabase'
 import { expandVector } from '@magickml/core'
-import { v4 as uuidv4 } from 'uuid'
 import { EmbeddingArgs } from './customEmbeddings'
 
 export type ExtendedEmbeddings = Embeddings & {
@@ -29,8 +28,8 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
     super(embeddings, args as any)
 
     this.client = args.client
-    this.tableName = args.tableName || 'documents'
-    this.queryName = args.queryName || 'match_documents'
+    this.tableName = args.tableName || 'embeddings'
+    this.queryName = args.queryName || 'match_embeddings'
   }
 
   /**
@@ -77,29 +76,12 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
     metadata: any[],
     args: EmbeddingArgs
   ): Promise<any> {
-    if (text.length > 8000 || text.includes('<<BREAK>>')) {
-      const [vectors, split_docs] = await (
-        this.embeddings as ExtendedEmbeddings
-      ).embedDocumentsWithMeta(text, args)
-      vectors.forEach(async (vector, index) => {
-        if (vector.length !== 1536) {
-          vector = expandVector(vector as number[], 1536)
-        }
-        metadata['id'] = uuidv4()
-        metadata['content'] = split_docs[index]
-        await this.addEvents({
-          array: [{ ...metadata, embedding: JSON.stringify(vector) }],
-        })
-      })
-      return
-    }
     let vector = await (
       this.embeddings as ExtendedEmbeddings
     ).embedQueryWithMeta(text, args)
     if (vector.length !== 1536) {
       vector = expandVector(vector as number[], 1536)
     }
-    metadata['id'] = uuidv4()
     const insert_data = [
       {
         embedding: vector,
@@ -109,7 +91,7 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
         },
       },
     ]
-    await this.addEvents({
+    await this.insertData({
       array: [{ ...metadata, embedding: JSON.stringify(vector) }],
     })
     return insert_data
@@ -120,7 +102,7 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
    * @param { array: any[]} events - Array of events
    * @returns {Promise<void>}
    */
-  async addEvents(documents: { array: any[] }): Promise<void> {
+  async insertData(documents: { array: any[] }): Promise<void> {
     documents.array.forEach(async element => {
       const res = await this.client(this.tableName).insert(element)
       if (res.error) {
