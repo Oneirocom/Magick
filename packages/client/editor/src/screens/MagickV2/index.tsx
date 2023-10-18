@@ -99,10 +99,10 @@ const MagickV2 = () => {
 
     let success = false
 
-    // if (layout) {
-    //   event.api.fromJSON(layout)
-    //   success = true
-    // }
+    if (layout) {
+      event.api.fromJSON(layout)
+      success = true
+    }
 
     if (!success) {
       loadDefaultLayout(event.api)
