@@ -11,7 +11,7 @@ const FileDrawer = (props: IGridviewPanelProps<{ title: string, id: string }>) =
   usePanelControls(props, events.TOGGLE_FILE_DRAWER, 'ctrl+b');
 
   return (
-    <div style={{ height: '100%', backgroundColor: 'var(--foreground-color)' }}>
+    <div style={{ height: '100%', background: "var(--gradient-1)" }}>
       <TreeDataProvider>
         <NewSidebar />
       </TreeDataProvider>
@@ -20,3 +20,4 @@ const FileDrawer = (props: IGridviewPanelProps<{ title: string, id: string }>) =
 }
 
 export default FileDrawer
+

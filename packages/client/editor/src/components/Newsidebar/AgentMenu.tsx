@@ -79,7 +79,7 @@ export function AgentMenu({ data }) {
 
   return (
     <div>
-      <List sx={{ width: '100%', bgcolor: 'var(--foreground-color)' }}>
+      <List sx={{ width: '100%' }}>
         <ListItem
           alignItems="center"
         >
