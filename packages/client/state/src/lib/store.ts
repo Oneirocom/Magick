@@ -49,7 +49,12 @@ export const createStore = (config: any) => {
     key: config.projectId,
     version: 1,
     storage,
-    blacklist: [spellApi.reducerPath, 'globalConfig', 'statusBar'],
+    blacklist: [
+      spellApi.reducerPath,
+      rootFeathers.rootReducerPath,
+      'globalConfig',
+      'statusBar',
+    ],
   }
 
   const store = configureFeathersStore({
