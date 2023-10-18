@@ -108,6 +108,7 @@ export const agent = (app: Application) => {
       // todo harder typing on all message transports
       app.service('agents').emit(messageType, {
         ...cleanMessage,
+        timestamp: new Date().toISOString(),
         messageType,
         channel,
         agentId,
