@@ -8,4 +8,5 @@ const feathersService = root.injectService<
   events: ['log', 'results', 'spell'],
 })
 
-export const { useSelectAgentsLog } = feathersService.selectors
+export const { useSelectAgentsLog, useSelectAgentsSpell } =
+  feathersService.selectors
