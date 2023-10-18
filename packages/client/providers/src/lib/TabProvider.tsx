@@ -70,7 +70,6 @@ export const TabProvider = ({ children }) => {
     api.onDidActivePanelChange((panel) => {
       if (!panel) return
 
-      console.log("PANEL CHANGED", panel)
       dispatch(setCurrentTab({
         id: panel.id,
         title: panel.title,
