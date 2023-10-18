@@ -1,41 +1,66 @@
-import { IGridviewPanelProps } from "dockview"
+import {
+  IGridviewPanelProps, IPaneviewPanelProps,
+  PaneviewReact,
+  PaneviewReadyEvent,
+} from "dockview"
 import { useEffect, useState } from "react"
-import { useGlobalLayout } from "../../../contexts/GlobalLayoutProvider"
 import { usePanelControls } from "../hooks/usePanelControls"
 import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state"
 import LogWindow from "../components/logWindow"
 
+const components = {
+  default: (props: IPaneviewPanelProps<{ title: string }>) => {
+    return (
+      <div
+        style={{
+          padding: '10px',
+          height: '100%',
+          backgroundColor: 'rgb(60,60,60)',
+        }}
+      >
+        {props.params.title}
+      </div>
+    );
+  },
+  LogPanel: (props: IPaneviewPanelProps<{ title: string }>) => {
+    return (
+      <div
+        style={{
+          height: '100%',
+          background: 'var(--dv-group-view-background-color)',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <LogWindow />
+      </div>
+    )
+  }
+};
+
 const RightSidebar = (props: IGridviewPanelProps<{ title: string, id: string }>) => {
   usePanelControls(props, 'none', 'ctrl+l');
-  const { data: LogData } = useSelectAgentsLog()
-  const { data: spellData } = useSelectAgentsSpell()
-  const [combinedData, setCombinedData] = useState([]);
 
-  useEffect(() => {
-    if (!spellData || !LogData) return;
-
-    const merged = [...LogData, ...spellData].sort((a, b) => {
-      const dateA = new Date(a.timestamp);
-      const dateB = new Date(b.timestamp);
-
-      return dateA.getTime() - dateB.getTime();
+  const onReady = (event: PaneviewReadyEvent) => {
+    event.api.addPanel({
+      id: 'Logs',
+      component: 'LogPanel',
+      params: {
+        title: 'Panel 1',
+      },
+      isExpanded: true,
+      title: 'Logs',
     });
-
-    setCombinedData(merged);
-  }, [spellData, LogData]);
+  };
 
   return (
-    <div
-      style={{
-        height: '100%',
-        background: 'var(--dv-group-view-background-color)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <LogWindow logs={combinedData} />
-    </div>
-  )
+    <PaneviewReact
+      components={components}
+      // headerComponents={headerComponents}
+      onReady={onReady}
+      className="dockview-theme-abyss"
+    />
+  );
 }
 
 export default RightSidebar
