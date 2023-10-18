@@ -3,6 +3,7 @@ import format from "date-fns/format"
 import { VariableSizeList } from "react-window";
 import ReactJson from 'react-json-view'
 import AutoSizer from "react-virtualized-auto-sizer";
+import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state";
 
 type Log = {
   type: string;
@@ -65,8 +66,8 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
   useEffect(() => {
     if (!isRefAvailable) return;
 
+    // todo keep an eye on this for performance stuff.
     const resizeObserver = new ResizeObserver(() => {
-      console.log("resize observed!")
       const expandHeight = expandRef.current.offsetHeight;
       const expandedHeight = 35 + expandHeight;
 
@@ -131,11 +132,11 @@ const LogContainer = ({ logs, autoscroll }) => {
     listRef.current.resetAfterIndex(index);
   };
 
-  useEffect(() => {
-    if (autoscroll && listRef.current) {
-      listRef.current.scrollToItem(logs.length - 1);  // Scroll to the last log
-    }
-  }, [autoscroll, logs]);
+  // useEffect(() => {
+  //   if (autoscroll && listRef.current) {
+  //     listRef.current.scrollToItem(logs.length - 1);  // Scroll to the last log
+  //   }
+  // }, [autoscroll, logs]);
 
   return (
     <div className="flex-grow border rounded border-[#262730] [background-color:var(--deep-background-color)]">
@@ -170,7 +171,7 @@ const LogFooter = ({ autoscroll, setAutoscroll }) => {
       type="checkbox"
       value=""
       checked={autoscroll}
-      // onChange={() => setAutoscroll(prev => !prev)}
+      onChange={() => setAutoscroll(prev => !prev)}
       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
     />
     <label
@@ -183,22 +184,40 @@ const LogFooter = ({ autoscroll, setAutoscroll }) => {
 }
 
 
-const LogsComponent = ({ logs }: Props) => {
+const LogsComponent = () => {
+  const { data: LogData } = useSelectAgentsLog()
+  const { data: spellData } = useSelectAgentsSpell()
+  const [combinedData, setCombinedData] = useState([]);
   const [autoscroll, setAutoscroll] = useState(true);
   const [showSpellLogs, setShowSpellLogs] = useState(true);
   const [showLogLogs, setShowLogLogs] = useState(true);
 
-  const filteredLogs = logs.filter(log => {
-    if (log.messageType === 'spell' && showSpellLogs) return true;
-    if (log.messageType === 'log' && showLogLogs) return true;
-    return false;
-  });
+  useEffect(() => {
+    if (!spellData || !LogData) return;
+
+    const merged = [...LogData, ...spellData].sort((a, b) => {
+      const dateA = new Date(a.timestamp);
+      const dateB = new Date(b.timestamp);
+
+      return dateA.getTime() - dateB.getTime();
+    });
+
+    setCombinedData(merged);
+  }, [spellData, LogData]);
+
+  const filterLogs = (logs) => {
+    return logs.filter(log => {
+      if (log.messageType === 'spell' && showSpellLogs) return true;
+      if (log.messageType === 'log' && showLogLogs) return true;
+      return false;
+    });
+  }
 
   return (
     <div className="flex flex-col h-full p-4 text-white">
       {/* Clean up the props to this header */}
       <LogHeader showLogLogs={showLogLogs} showSpellLogs={showSpellLogs} setShowSpellLogs={setShowSpellLogs} setShowLogLogs={setShowLogLogs} />
-      <LogContainer logs={filteredLogs} autoscroll={autoscroll} />
+      <LogContainer logs={filterLogs(combinedData)} autoscroll={autoscroll} />
       <LogFooter autoscroll={autoscroll} setAutoscroll={setAutoscroll} />
     </div>
   );
