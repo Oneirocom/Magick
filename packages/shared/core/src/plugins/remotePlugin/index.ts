@@ -146,6 +146,9 @@ function install(
           const isPlaytest = context.module.isPlaytest
 
           if (server) {
+            const message = `SPELL: ${context.currentSpell.name} - node ${
+              node.id
+            } ${node.data.name ? '-' + node.data.name : node.name}`
             try {
               const result = await worker.apply(component, [
                 node,
@@ -167,6 +170,7 @@ function install(
                 name: node.data.name,
                 output: result,
                 input: inputs,
+                message,
                 isPlaytest,
               })
 
@@ -182,6 +186,7 @@ function install(
                 outputType: node.data.outputType || null,
                 sessionId: context.module.sessionId || null,
                 isPlaytest,
+                message,
                 error: {
                   message: err.message,
                   stack: err.stack,
