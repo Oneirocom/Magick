@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { createRoot } from 'react-dom/client'
 import { MagickIDE } from 'client/editor'
-import { AppConfig } from 'client/core'
 import {
   DEFAULT_PROJECT_ID,
   API_ROOT_URL,
@@ -15,6 +14,7 @@ import { PostHogProvider } from 'posthog-js/react'
 import { initLogger, getLogger } from 'shared/core'
 
 import plugins from './plugins'
+import { AppConfig } from '@magickml/providers'
 
 // We want to add this back in eventually, but it's causing some visual bugs
 //import './globals.css'
@@ -33,7 +33,7 @@ if (window === window.parent) {
     logger.info('standalone')
     const container = document.getElementById('root') as Element
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
-    ;(window as any).root = root
+      ; (window as any).root = root
 
     // Check URL parameters for projectId and apiUrl
     const projectId =
@@ -114,7 +114,7 @@ if (window === window.parent) {
         }
         const container = document.getElementById('root') as Element
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
-        ;(window as any).root = root
+          ; (window as any).root = root
 
         logger.info('iframe: rendering root')
         root.render(<Root />)

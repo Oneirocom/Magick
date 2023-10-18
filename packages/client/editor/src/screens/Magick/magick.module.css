@@ -57,7 +57,6 @@
 }
 
 .playtest-output ul {
-  padding: 0 var(--c2);
   margin: 0;
 }
 
@@ -166,11 +165,10 @@
 }
 
 .playtest-user-message-content {
-  background-color: rgba(40, 40, 40, 0.95);
-  border: 1px solid var(--dark-2);
+  background-color: transparent;
   padding: var(--c1);
   border-radius: 4px;
-  color: rgba(150, 150, 150, 0.95);
+  color: white;
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
   white-space: pre-line;
   flex: 1;
@@ -185,11 +183,10 @@
 }
 
 .playtest-agent-message-content {
-  background-color: rgba(92, 92, 92, 0.527);
-  border: 1px solid var(--dark-2);
+  background-color: var(--slate-15);
   padding: var(--c1);
   border-radius: 4px;
-  color: rgba(150, 150, 150, 0.95);
+  color: white;
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
   white-space: pre-line;
   flex: 1;
