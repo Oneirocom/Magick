@@ -11,11 +11,11 @@ import {
   EventHooks,
   InjectServiceResult,
   ServiceDetails,
+  ServiceConfigType,
+  SliceActions,
 } from '../types/serviceTypes'
 import { REGISTER_EVENTS } from './constants'
-import { ServiceConfigType, SliceActions } from '../types/configtypes'
-
-let globalFeathersClient: Application | null = null
+import { feathersClient } from 'client/feathers-client'
 
 const reducers: { [key: string]: ServiceDetails } = {}
 
@@ -47,7 +47,8 @@ const registerFeathersServiceEvents = (
   serviceName: string,
   events: string[]
 ): void => {
-  const service = globalFeathersClient!.service(serviceName)
+  const client = feathersClient.getClient()
+  const service = client!.service(serviceName)
   events.forEach(event => {
     service.on(event, data => {
       const actionType = generateActionType(serviceName, event)
@@ -104,9 +105,7 @@ export const feathersEventMiddleware =
  * @param client - The Feathers client instance.
  * @returns An object containing methods to integrate Feathers and Redux.
  */
-export const createFeathersReduxToolkit = (client: Application) => {
-  globalFeathersClient = client
-
+export const createFeathersReduxToolkit = () => {
   return {
     /**
      * Integrates a Feathers service with Redux by creating a slice, generating hooks, and storing service details.
@@ -158,7 +157,7 @@ export const createFeathersReduxToolkit = (client: Application) => {
           events.forEach(event => {
             const actionType = generateActionType(name, event)
             builder.addCase(actionType, (state, action: PayloadAction<any>) => {
-              ;(state['data'][event] as any[]).push(action.payload)
+              ;(state[event]['data'] as any[]).push(action.payload)
               ;(state as any).lastItem = action.payload
             })
           })
