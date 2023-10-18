@@ -21,10 +21,9 @@ const RightSidebar = (props: IGridviewPanelProps<{ title: string, id: string }>)
       return dateA.getTime() - dateB.getTime();
     });
 
-    console.log("Merged", merged)
-
     setCombinedData(merged);
   }, [spellData, LogData]);
+
   return (
     <div
       style={{
