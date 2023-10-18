@@ -10,6 +10,11 @@
   --slate-30: #69696930;
   --slate-15: #69696915;
   --neutral-light: #ffffff;
+  --gradient-1: linear-gradient(
+    -141deg,
+    rgb(13, 21, 51) 35%,
+    rgba(0, 11, 214, 0.178)
+  );
 
   // Functional Variables
   --primary-color: var(--neutral-light); // Primary color for buttons, etc.
