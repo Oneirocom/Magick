@@ -4,7 +4,7 @@
  * @module MagickIDE
  */
 import 'dockview/dist/styles/dockview.css'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './wdyr'
 import 'regenerator-runtime/runtime'
@@ -23,6 +23,7 @@ import { MagickmlChatbox } from 'client/magickml-chatbox'
 import { createStore } from 'client/state'
 
 import './themes.scss'
+import { feathersClient } from 'client/feathers-client'
 
 /**
  * Type definition for the props that can be passed to MagickIDE
@@ -39,6 +40,17 @@ export type MagickIDEProps = {
  * @returns {React.ReactElement} - A React component
  */
 export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    (async () => {
+      await feathersClient.initialize(config.token, config)
+      setLoaded(true)
+    })()
+  })
+
+
+  if (!loaded) return null
+
   return (
     <Router>
       <Provider store={createStore(config)}>
