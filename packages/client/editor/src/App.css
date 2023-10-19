@@ -587,3 +587,27 @@ button.rcw-launcher {
 button.rcw-launcher.rcw-hide-sm {
   padding: 9px 20px;
 }
+
+/* styles for global connector layout */
+
+.connector-layout {
+  background-color: var(--background-color);
+  padding: 1em 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+  opacity: 1;
+  font-size: 14px;
+  border: 1px solid var(--foreground-color);
+  margin-bottom: 10px;
+}
+
+.connector-layout > .controls {
+  display: flex;
+  /* padding-top: 1em; */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

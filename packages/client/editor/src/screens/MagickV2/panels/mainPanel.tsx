@@ -12,6 +12,7 @@ import { useTabLayout } from '@magickml/providers';
 import Events from '../../EventWindow'
 import Requests from '../../RequestWindow'
 import Settings from '../../settings/SettingsWindow'
+import Config from '../../ConfigWindow'
 import Documents from '../../DocumentWindow'
 import Agents from '../../agents/AgentManagerWindow'
 import { ClientPluginManager, pluginManager } from 'shared/core'
@@ -76,6 +77,7 @@ const getComponents = () => {
     Settings,
     Documents,
     Agents,
+    Config,
     ...pluginComponents.reduce((acc, obj) => {
       acc[obj.name] = obj.component
       return acc

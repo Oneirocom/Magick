@@ -294,7 +294,7 @@ function EventTable({ events, refetchEvents }) {
   // Render the table with useMemo
   return (
     <Container className={styles.container} classes={{ root: styles.root }}>
-      <Stack spacing={2} style={{ padding: '1rem', background: 'var(--background-color)' }}>
+      <Stack spacing={2} style={{ padding: '1rem', background: 'transparent' }}>
         <div className={styles.flex}>
           <Typography variant="h4" className={styles.header}>
             Events

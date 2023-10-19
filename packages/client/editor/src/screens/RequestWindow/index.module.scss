@@ -19,7 +19,7 @@
 }
 
 .btn {
-  background: var(--dark-3) !important;
+  background: none;
   color: var(--dark-5) !important;
   border: 1px solid var(--dark-4) !important;
 }
@@ -36,5 +36,5 @@
 }
 
 .selectedBtn {
-  background: var(--primary) !important;
+  background: var(--primary-dark) !important;
 }
