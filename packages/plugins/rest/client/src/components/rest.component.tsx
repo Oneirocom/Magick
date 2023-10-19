@@ -106,26 +106,11 @@ export const RestAgentWindow: FC<any> = props => {
 
   return (
     <>
-      <div
-        style={{
-          backgroundColor: '#222',
-          padding: '2em',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pointerEvents: disable ? 'none' : 'auto',
-          opacity: disable ? 0.2 : 1,
-        }}
-      >
+      <div className='connector-layout'>
         <Tooltip title="add your rest Api seetings here" placement="left" arrow>
           <h3>REST API</h3>
         </Tooltip>
-        <div
-          style={{
-            display: 'flex',
-            paddingTop: '1em',
-          }}
-        >
+        <div className='controls'>
           <button
             onClick={() => {
               setViewMode(true)

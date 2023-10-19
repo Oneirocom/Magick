@@ -23,6 +23,11 @@
   );
   --gradient-3: linear-gradient(0deg, #1459fa, #7027dd);
   --gradient-4: linear-gradient(310deg, rgb(13, 21, 51), rgba(0, 11, 214, 0.3));
+  --gradient-5: linear-gradient(
+    121deg,
+    rgb(13, 21, 51) 0%,
+    rgba(0, 11, 214, 0.178)
+  );
 
   // Functional Variables
   --primary-color: var(--neutral-light); // Primary color for buttons, etc.
@@ -90,6 +95,10 @@
       background-color: var(--foreground-color) !important;
     }
 
+    .groupview > .content-container {
+      background: var(--gradient-5);
+    }
+
     .tabs-and-actions-container {
       height: 40px;
 
@@ -126,7 +135,11 @@
 
   .composer-layout {
     .groupview {
-      background-color: var(--foreground-color);
+      background-color: var(--foreground-color) !important;
+    }
+
+    .groupview > .content-container {
+      background: var(--foreground-color) !important;
     }
 
     .split-view-container .sash-container .sash:hover {

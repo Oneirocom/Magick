@@ -93,26 +93,11 @@ export const DiscordAgentWindow: FC<any> = props => {
 
   return (
     <>
-      <div
-        style={{
-          backgroundColor: '#222',
-          padding: '2em',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pointerEvents: disable ? 'none' : 'auto',
-          opacity: disable ? 0.2 : 1,
-        }}
-      >
-        <Tooltip title="Add discord Api key here" placement='left' disableInteractive arrow>
+      <div className='connector-layout'>
+        <Tooltip title="Add discord Api key here" placement="left" disableInteractive arrow>
           <h3>Discord</h3>
         </Tooltip>
-        <div
-          style={{
-            display: 'flex',
-            paddingTop: '1em',
-          }}
-        >
+        <div className='controls'>
           <button
             onClick={() => {
               setEditMode(true)
