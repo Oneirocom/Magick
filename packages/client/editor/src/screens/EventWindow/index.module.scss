@@ -5,7 +5,7 @@
 }
 
 .container {
-  padding: 0rem !important;
+  padding: 1.5rem !important;
   margin-right: 2rem !important;
   margin-left: 0 !important;
 }
@@ -15,13 +15,13 @@
 }
 
 .btn {
-  background: var(--dark-3) !important;
+  background: none;
   color: var(--dark-5) !important;
   border: 1px solid var(--dark-4) !important;
 }
 
 .selectedBtn {
-  background: var(--primary) !important;
+  background: var(--primary-dark) !important;
 }
 
 .header {

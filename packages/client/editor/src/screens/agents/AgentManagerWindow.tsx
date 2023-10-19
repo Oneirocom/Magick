@@ -1,11 +1,9 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
 import { type ClientPluginManager, pluginManager } from 'shared/core'
-import { DEFAULT_USER_TOKEN, PRODUCTION, STANDALONE } from 'shared/config'
-import { enqueueSnackbar, useSnackbar } from 'notistack'
+import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useConfig, useTreeData } from '@magickml/providers'
+import { useConfig } from '@magickml/providers'
 import AgentWindow from './AgentWindow'
 import validateSpellData from './AgentWindow/spellValidator'
 import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
