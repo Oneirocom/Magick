@@ -5,6 +5,7 @@ import { OPENAI_ENDPOINT } from '../constants'
 import { DEFAULT_OPENAI_KEY, PRODUCTION } from '@magickml/config'
 import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
 import { trackOpenAIUsage } from '@magickml/server-core'
+import axiosRetry from 'axios-retry'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -72,6 +73,13 @@ export async function makeTextCompletion(
 
   // Make the API request and handle the response.
   try {
+    // Exponential back-off retry delay between requests
+    axiosRetry(axios, {
+      retries: 5,
+      retryDelay: axiosRetry.exponentialDelay,
+      shouldResetTimeout: true,
+    })
+
     const start = Date.now()
     const resp = await axios.post(`${OPENAI_ENDPOINT}/completions`, settings, {
       headers: headers,
