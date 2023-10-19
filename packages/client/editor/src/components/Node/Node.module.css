@@ -19,19 +19,49 @@
   background-color: var(--foreground-color-90);
   color: white;
   resize: both;
+  background-color: var(--foreground-color);
+  background-clip: padding-box; /* !importanté */
+  border: solid 2px transparent; /* !importanté */
 
   /* backdrop-filter: blur(3px); */
 }
 .node:hover {
-  outline: 2px solid var(--blue);
+  /* outline: 2px solid var(--gradient-3); */
+  cursor: pointer;
 }
+
+.node:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: 0px; /* !importanté */
+  border-radius: inherit; /* !importanté */
+  background: var(--gradient-3);
+}
+
 .node.selected {
   /* color: var(--glow); */
   background-color: var(--foreground-color);
   box-shadow: var(--blue);
-  outline: 2px solid var(--blue);
-  /* backdrop-filter: blur(15px); */
 }
+
+.node.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: 0px; /* !importanté */
+  border-radius: inherit; /* !importanté */
+  background: var(--gradient-3);
+}
+
 .node.error {
   outline-color: var(--red) !important;
   /* backdrop-filter: blur(15px); */
@@ -60,7 +90,7 @@
   color: var(--green);
 }
 .node-title-container {
-  background: var(--background-color);
+  background: var(--gradient-2);
   border-bottom: 1px solid var(--deep-background-color);
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
 }
