@@ -90,7 +90,7 @@
   color: var(--green);
 }
 .node-title-container {
-  background: var(--gradient-2);
+  background: var(--gradient-4);
   border-bottom: 1px solid var(--deep-background-color);
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
 }
