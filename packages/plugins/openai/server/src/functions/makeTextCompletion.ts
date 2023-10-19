@@ -79,7 +79,7 @@ export async function makeTextCompletion(
       retryDelay: axiosRetry.exponentialDelay,
       shouldResetTimeout: true,
       retryCondition: error => {
-        return error.code === '429'
+        return error?.response?.status === 429
       },
     })
 
