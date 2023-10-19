@@ -2,8 +2,9 @@
 :root {
   --abyss: #03070c;
   --neutral-dark: #20232a;
-  --midnight: #0d1533;
+  --midnight: hwb(227 5% 80%);
   --charcoal: rgb(27, 42, 70);
+  --rich-blue: rgba(0, 11, 214, 0.178);
   --charcoal-90: #1b2a46e0;
   --slate-light: #8d8d8d;
   --slate: #696969;
@@ -12,9 +13,15 @@
   --neutral-light: #ffffff;
   --gradient-1: linear-gradient(
     -141deg,
-    rgb(13, 21, 51) 35%,
+    rgb(13, 21, 51) 60%,
     rgba(0, 11, 214, 0.178)
   );
+  --gradient-2: linear-gradient(
+    0deg,
+    rgb(13, 21, 51) 20%,
+    rgba(0, 11, 214, 0.25)
+  );
+  --gradient-3: linear-gradient(0deg, #1459fa, #7027dd);
 
   // Functional Variables
   --primary-color: var(--neutral-light); // Primary color for buttons, etc.
@@ -87,7 +94,8 @@
 
       .tab.active-tab {
         border-top: 2px solid var(--primary);
-        background-color: var(--background-color) !important;
+        // background-color: var(--background-color) !important;
+        background: var(--gradient-2) !important;
         color: var(--active-font-color) !important;
       }
 
@@ -160,13 +168,13 @@
 
       .tabs-container {
         .tab {
-          background-color: var(--background-color);
+          background: var(--background-color);
           color: var(--active-font-color);
         }
 
         .tab.active-tab {
           border-top: none;
-          background-color: var(--foreground-color) !important;
+          background: var(--foreground-color) !important;
           color: var(--active-font-color);
         }
 
