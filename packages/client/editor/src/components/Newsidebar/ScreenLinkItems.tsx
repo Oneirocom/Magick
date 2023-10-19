@@ -6,8 +6,22 @@ import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
-import { SetAPIKeys, drawerTooltipText } from "client/core"
+import { SetAPIKeys } from "client/core"
 import React from "react";
+
+export const drawerTooltipText = {
+  spells: 'Create and manage spell node graphs for agents to use. ',
+  agents: 'Create and manage autonomous agents powered by spells. ',
+  documents:
+    'Information vectorized as embeddings for quick search and retrieval. ',
+  events: 'Data stored for use as short-term memory between spell runs.',
+  requests: 'Historical outbound requests made to LLM web services. ',
+  tasks: 'Objectives for agents to iterate through and complete.',
+  avatar: 'Chat with your agents embodied with a 3D avatar.',
+  settings: 'Global settings used in the Playtest window.',
+  config: 'Configure your agents integrations, data, and more.'
+}
+
 
 type DrawerItem = {
   name: string
@@ -40,7 +54,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
     },
     <PluginDrawerItems currentTab={currentTab} />,
     {
-      name: 'Settings',
+      name: 'Config',
       Icon: SettingsIcon,
       tooltip: 'Settings Tooltip',
       tooltipText: drawerTooltipText.settings,
@@ -76,7 +90,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
             />
           )
         } else {
-          console.log('ITEM!!')
           return _item as JSX.Element
         }
       })}

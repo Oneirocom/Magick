@@ -23,8 +23,7 @@ const RenderComp = (props: any) => {
 
 interface AgentDetailsProps {
   selectedAgentData: any
-  setSelectedAgentData: any
-
+  setSelectedAgentData?: any
   onLoadEnables: object
 }
 
@@ -49,7 +48,6 @@ const AgentDetails = ({
   const [oldName, setOldName] = useState<string>('')
   const [enable] = useState(onLoadEnables)
 
-
   const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
 
   useEffect(() => {
@@ -70,7 +68,6 @@ const AgentDetails = ({
 
   useEffect(() => {
     if (rootSpell) {
-      console.log("ROOT SPELL CHANGED", rootSpell)
       updatePublicVar(rootSpell)
     }
   }, [rootSpell])
