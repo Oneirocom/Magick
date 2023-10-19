@@ -78,6 +78,9 @@ export async function makeTextCompletion(
       retries: 5,
       retryDelay: axiosRetry.exponentialDelay,
       shouldResetTimeout: true,
+      retryCondition: error => {
+        return error.code === '429'
+      },
     })
 
     const start = Date.now()
