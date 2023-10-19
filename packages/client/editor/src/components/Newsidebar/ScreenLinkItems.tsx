@@ -7,9 +7,45 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
 import { SetAPIKeys, drawerTooltipText } from "client/core"
+import React from "react";
+
+type DrawerItem = {
+  name: string
+  Icon: any
+  tooltip: string
+  tooltipText: string
+}
 
 export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const { openTab } = useTabLayout()
+
+  const DrawerItems: (DrawerItem | JSX.Element)[] = [
+    {
+      name: 'Events',
+      Icon: BoltIcon,
+      tooltip: 'Events Tooltip',
+      tooltipText: drawerTooltipText.events,
+    },
+    {
+      name: 'Documents',
+      Icon: ArticleIcon,
+      tooltip: 'Documents Tooltip',
+      tooltipText: drawerTooltipText.documents,
+    },
+    {
+      name: 'Requests',
+      Icon: StorageIcon,
+      tooltip: 'Requests Tooltip',
+      tooltipText: drawerTooltipText.requests,
+    },
+    <PluginDrawerItems currentTab={currentTab} />,
+    {
+      name: 'Settings',
+      Icon: SettingsIcon,
+      tooltip: 'Settings Tooltip',
+      tooltipText: drawerTooltipText.settings,
+    },
+  ]
 
   return (
     <List
@@ -17,69 +53,33 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
         padding: 0,
       }}
     >
-      <DrawerItem
-        active={currentTab?.id === 'Events'}
-        Icon={BoltIcon}
-        onClick={() => {
-          openTab({
-            name: 'Events',
-            type: 'Events',
-            switchActive: true,
-            id: 'Events',
-          })
-        }}
-        text="Events"
-        tooltip="Events Tooltip"
-        tooltipText={drawerTooltipText.events}
-      />
-      <DrawerItem
-        active={currentTab?.id === 'Documents'}
-        Icon={ArticleIcon}
-        onClick={() => {
-          openTab({
-            name: 'Documents',
-            type: 'Documents',
-            switchActive: true,
-            id: 'Documents',
-          })
-        }}
-        text="Documents"
-        tooltip="Documents Tooltip"
-        tooltipText={drawerTooltipText.documents}
-      />
-      <DrawerItem
-        active={currentTab?.id === 'Requests'}
-        Icon={StorageIcon}
-        onClick={() => {
-          openTab({
-            name: 'Requests',
-            type: 'Requests',
-            switchActive: true,
-            id: 'Requests',
-          })
-        }}
-        text="Requests"
-        tooltip="Requests Tooltip"
-        tooltipText={drawerTooltipText.requests}
-      />
+      {DrawerItems.map((_item, index) => {
+        // check that item is not a react element object
+        if (typeof _item === 'object' && !React.isValidElement(_item)) {
+          const item = _item as DrawerItem
 
-      <PluginDrawerItems currentTab={currentTab} />
-
-      <DrawerItem
-        active={currentTab?.id === 'Settings'}
-        Icon={SettingsIcon}
-        onClick={() => {
-          openTab({
-            name: 'Settings',
-            type: 'Settings',
-            switchActive: true,
-            id: 'Settings',
-          })
-        }}
-        text="Settings"
-        tooltip="Settings Tooltip"
-        tooltipText={drawerTooltipText.settings}
-      />
+          return (
+            <DrawerItem
+              active={currentTab?.id === item.name}
+              Icon={item.Icon}
+              onClick={() => {
+                openTab({
+                  name: item.name,
+                  type: item.name,
+                  switchActive: true,
+                  id: item.name,
+                })
+              }}
+              text={item.name}
+              tooltip={item.tooltip}
+              tooltipText={item.tooltipText}
+            />
+          )
+        } else {
+          console.log('ITEM!!')
+          return _item as JSX.Element
+        }
+      })}
       {!isAPIKeysSet && <SetAPIKeys />}
     </List>)
 }
