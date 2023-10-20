@@ -10,7 +10,7 @@ import { RootState } from './store'
 /**
  * Tab interface representing a tab object
  */
-export interface Tab {
+export interface DepricatedTab {
   id: string
   name: string
   URI: string
@@ -24,7 +24,7 @@ export interface Tab {
 }
 
 // Entity adapter for tabs
-const tabAdapater = createEntityAdapter<Tab>()
+const tabAdapater = createEntityAdapter<DepricatedTab>()
 const tabSelectors = tabAdapater.getSelectors()
 
 /**

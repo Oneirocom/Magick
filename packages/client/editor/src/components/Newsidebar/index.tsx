@@ -102,7 +102,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   }, [])
 
   return (
-    <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', height: '100%', flexDirection: 'column', borderRight: '1px solid var(--deep-background-color)' }}>
       <AgentMenu data={data} />
 
       <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />

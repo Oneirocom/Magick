@@ -291,10 +291,6 @@ export type OnDebug = (
 export type PublishEditorEvent = (data: PubSubData) => void
 
 export interface EditorContext extends EngineContext {
-  onTrigger: (
-    node: MagickNode | string,
-    callback: (data: unknown) => void
-  ) => () => void
   sendToPlaytest: (data: string) => void
   sendToInspector: PublishEditorEvent
   sendToDebug: PublishEditorEvent

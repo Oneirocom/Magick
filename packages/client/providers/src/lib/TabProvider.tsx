@@ -15,6 +15,7 @@ export type Tab = {
   type: string
   workspace?: string
   switchActive?: boolean
+  params?: Record<string, unknown>
 }
 
 type DocviewContext = {
@@ -30,6 +31,7 @@ type DocviewContext = {
   closeTab?: (tab: any) => void
   switchTab?: (tab: any) => void
 
+  renameTab: (id: string, newName: string) => void
   isTabOpen: (id: string) => boolean
 }
 
@@ -73,6 +75,7 @@ export const TabProvider = ({ children }) => {
       dispatch(setCurrentTab({
         id: panel.id,
         title: panel.title,
+        params: panel.params,
       }))
     })
 
@@ -90,6 +93,16 @@ export const TabProvider = ({ children }) => {
     const panel = api.getPanel(id)
 
     return !!panel
+  }
+
+  const renameTab = (id: string, newName: string) => {
+    if (!api) return
+
+    const panel = api.getPanel(id)
+
+    if (!panel) return
+
+    panel.api.setTitle(newName)
   }
 
   const setActiveTab = (id: string) => {
@@ -122,6 +135,7 @@ export const TabProvider = ({ children }) => {
       params: {
         tab,
         theme,
+        ...tab.params
       },
     })
   }
@@ -134,7 +148,8 @@ export const TabProvider = ({ children }) => {
     getLayout,
     setLayout,
     openTab,
-    isTabOpen
+    isTabOpen,
+    renameTab
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }

@@ -4,23 +4,16 @@ import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import AddIcon from '@mui/icons-material/Add'
 import styles from './menu.module.css'
-import { useNavigate } from 'react-router-dom'
-import { useTreeData } from '@magickml/providers'
+import { useTabLayout, useTreeData } from '@magickml/providers'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone'
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
-import { useFeathers } from '@magickml/providers'
 import { Modal } from 'client/core'
 import {
-  RootState,
-  closeTab,
-  selectAllTabs,
   spellApi,
-  activeTabSelector,
-  Panel,
+  Tab,
 } from 'client/state'
-import { useDispatch, useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
 
 import { TypeIcon } from 'client/core'
@@ -32,7 +25,7 @@ type Props = {
   node: ExtendedNodeModel
   depth: number
   isOpen: boolean
-  currentTab: Panel
+  currentTab: Tab
   onToggle: (id: NodeModel['id']) => void
   openTab: (tab: any) => void
 }
@@ -43,23 +36,22 @@ type CustomData = {
 }
 
 export const CustomNode: React.FC<Props> = props => {
-  const dispatch = useDispatch()
-  const { openModal } = useModal()
-  const { droppable, data }: any = props.node
-  const indent = props.depth * 24
-  const navigate = useNavigate()
-  const { setOpenDoc, setToDelete } = useTreeData()
-  const { enqueueSnackbar } = useSnackbar()
-  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
-  const [isContextMenuOpen, setContextMenuOpen] = useState(false)
-  const FeathersContext = useFeathers()
-  const client = FeathersContext.client
-  const tabs = useSelector((state: RootState) => selectAllTabs(state.tabs))
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState(props.node.text)
-  const [patchSpell] = spellApi.usePatchSpellMutation()
+  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
+  const [isContextMenuOpen, setContextMenuOpen] = useState(false)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
-  const activeTab = useSelector(activeTabSelector)
+
+  const [patchSpell] = spellApi.usePatchSpellMutation()
+  const [deleteSpell] = spellApi.useDeleteSpellMutation()
+
+  const { openModal } = useModal()
+  const { setOpenDoc } = useTreeData()
+  const { enqueueSnackbar } = useSnackbar()
+  const { renameTab } = useTabLayout()
+
+  const indent = props.depth * 24
+  const { droppable, data }: any = props.node
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -81,11 +73,15 @@ export const CustomNode: React.FC<Props> = props => {
         switchActive: true,
       })
     } else if (props.node.fileType === 'spell') {
+      console.log('OPEN SPELL', props.node)
       props.openTab({
-        id: props.node.id,
+        id: props.node.text,
         name: props.node.text,
         spellName: props.node.text,
         type: 'spell',
+        params: {
+          spellId: props.node.id,
+        }
       })
     }
   }
@@ -119,19 +115,21 @@ export const CustomNode: React.FC<Props> = props => {
 
     try {
       if (props.node.fileType === 'spell') {
-        const spell: any = props.node.id
-        navigate('/magick')
-        await client.service('spells').remove(props.node.id)
-        const tab = tabs.find(tab => tab.id === props.node.id)
-        if (tab) {
-          dispatch(closeTab(tab.id))
-          window.localStorage.removeItem(`zoomValues-${tab.id}`)
-        }
-        setToDelete(spell)
+        const spellId: any = props.node.id
+
+        await deleteSpell({ spellId })
+          .unwrap()
+
         setContextMenuOpen(false)
+        enqueueSnackbar('Spell successfully deleted', {
+          variant: 'success',
+        })
       }
     } catch (err) {
       console.error('Error deleting spell', err)
+      enqueueSnackbar('Error deleting spell', {
+        variant: 'error',
+      })
     }
   }
 
@@ -153,36 +151,25 @@ export const CustomNode: React.FC<Props> = props => {
       return
     }
 
-    await dispatch(closeTab(props.node.id))
+    try {
+      await patchSpell({
+        id: props.node.id,
+        update: {
+          name: newName,
+        },
+      }).unwrap()
 
-    const spell: any = props.node.id
-    const response: any = await patchSpell({
-      id: props.node.id,
-      update: {
-        name: newName,
-      },
-    })
+      renameTab(props.currentTab.id, newName)
 
-    if (response.error) {
+      enqueueSnackbar('Spell saved', { variant: 'success' })
+      setIsRenaming(false)
+
+    } catch (err) {
+      console.error("error saving spell", err)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
-      return
     }
-
-    enqueueSnackbar('Spell saved', { variant: 'success' })
-
-    // todo implement closing tab
-    dispatch(closeTab(props.node.id))
-
-    props.openTab({
-      id: props.node.id,
-      name: newName,
-      spellName: newName,
-      type: 'spell',
-    })
-    setToDelete(spell)
-    setIsRenaming(false)
   }
 
   const setClassSelectedFile = () => {
