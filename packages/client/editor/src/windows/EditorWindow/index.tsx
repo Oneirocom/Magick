@@ -9,7 +9,7 @@ import css from './editorwindow.module.css'
  * @param {Object} props.tab - Tab object
  * @returns {JSX.Element} EditorWindow component JSX
  */
-const EditorWindow = ({ tab }) => {
+const EditorWindow = ({ tab, spellId }) => {
   // Destructure required methods and properties from the useEditor hook
   // const { getNodes } = useEditor();
 
@@ -130,7 +130,7 @@ const EditorWindow = ({ tab }) => {
           <EditorToolbar />
         </div>
       */}
-        <Editor tab={tab} />
+        <Editor tab={tab} spellId={spellId} />
       </div>
     </div>
   )

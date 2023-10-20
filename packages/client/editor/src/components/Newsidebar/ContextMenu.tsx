@@ -77,7 +77,6 @@ export const ContextMenu = () => {
         <div
           className={styles.hideMenuItem}
           onClick={() => {
-            console.log("NEW SPELL CLICKED")
             openModal({
               modal: 'createSpellModal',
             })

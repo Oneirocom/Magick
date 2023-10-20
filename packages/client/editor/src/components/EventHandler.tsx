@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux'
  * @param {object} tab - The current editor's tab object
  * @returns - null, this is a functional component used for managing side effects
  */
-const EventHandler = ({ pubSub, tab }) => {
+const EventHandler = ({ pubSub, tab, spellId }) => {
   const dispatch = useDispatch()
   const config = useConfig()
 
@@ -40,7 +40,7 @@ const EventHandler = ({ pubSub, tab }) => {
   // TODO: is this a bug?
   const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
     spellName: tab.name.split('--')[0],
-    id: tab.id,
+    id: spellId,
     projectId: config.projectId,
   } as any)
   // Spell ref because callbacks can't hold values from state without them
@@ -52,10 +52,10 @@ const EventHandler = ({ pubSub, tab }) => {
   useEffect(() => {
     getSpell({
       spellName: tab.name,
-      id: tab.id,
+      id: spellId,
       projectId: config.projectId,
     })
-  }, [config.projectId, getSpell, tab.id, tab.name])
+  }, [config.projectId, getSpell, spellId, tab.name])
 
   useEffect(() => {
     if (!spell) return
@@ -66,24 +66,7 @@ const EventHandler = ({ pubSub, tab }) => {
     spellRef.current = spell?.data[0]
   }, [spell])
 
-  useEffect(() => {
-    if (!client.io || !tab.id || !enqueueSnackbar) return
 
-    const listener = data => {
-      // publish($DEBUG_PRINT(tab.id), (data.error.message))
-      console.error('Error in spell execution')
-      enqueueSnackbar('Error Running the spell. Please Check the Console', {
-        variant: 'error',
-      })
-    }
-
-    client.io.on(`${tab.id}-error`, listener)
-
-    // Handle cleaning up the subscription
-    return () => {
-      client.io.off(`${tab.id}-error`, listener)
-    }
-  }, [client.io, tab.id, enqueueSnackbar])
 
   const {
     serialize,
@@ -122,6 +105,7 @@ const EventHandler = ({ pubSub, tab }) => {
    * Save the current spell
    */
   const saveSpell = async () => {
+    console.log('Saving!')
     const currentSpell = spellRef.current
     const graph = serialize() as GraphData
     if (!currentSpell) return
@@ -388,6 +372,8 @@ const EventHandler = ({ pubSub, tab }) => {
     [$RUN_SPELL(tab.id)]: runSpell,
     [$RESET_HIGHLIGHTS(tab.id)]: resetHighlights,
   }
+
+  console.log('Handler map', handlerMap)
 
   useEffect(() => {
     if (!tab && !spell && !client) return
