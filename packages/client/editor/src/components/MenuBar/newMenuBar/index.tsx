@@ -31,7 +31,6 @@ const NewMenuBar = props => {
 
   useEffect(() => {
     if (!currentTab || !currentTab.id) return
-    console.log('Current tab', currentTab)
     activeTabRef.current = currentTab
   }, [currentTab])
 

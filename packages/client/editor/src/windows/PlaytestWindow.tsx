@@ -166,13 +166,13 @@ const Playtest = ({ tab, spellId }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
     {
-      spellName: tab,
+      spellName: tab.name,
       id: spellId,
       projectId: config.projectId,
     },
     {
       refetchOnMountOrArgChange: true,
-      skip: !tab.name.split('--')[0],
+      skip: !spellId,
     }
   )
 
@@ -222,8 +222,12 @@ const Playtest = ({ tab, spellId }) => {
   }, [inspectorData])
 
   useEffect(() => {
+
+    console.log('PLAYTEST SPELL DATA', spellData)
     if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
       return
+
+
 
     const graph = spellData.data[0].graph
     const options = Object.values(graph.nodes)
