@@ -44,7 +44,12 @@ out but can be utilized if desired.
  * @returns {React.Element} The ToastProvider component within SnackbarProvider
  */
 const ToastProvider = ({ children }) => {
-  return <SnackbarProvider maxSnack={3}>{children}</SnackbarProvider>
+  return <SnackbarProvider
+    maxSnack={3}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}>{children}</SnackbarProvider>
 }
 
 // Export ToastProvider component as default
