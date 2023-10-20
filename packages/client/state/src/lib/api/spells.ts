@@ -169,8 +169,8 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for deleting a spell
     deleteSpell: builder.mutation({
       invalidatesTags: ['Spells'],
-      query: ({ spellName }) => ({
-        url: `spells/${spellName}`,
+      query: ({ spellId }) => ({
+        url: `spells/${spellId}`,
         method: 'DELETE',
       }),
     }),

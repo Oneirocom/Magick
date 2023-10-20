@@ -6,14 +6,15 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 
-export interface Panel {
+export interface Tab {
   id: string
   title: string
+  params: Record<string, unknown>
 }
 
 /** Interface for the tab layout state. */
 export interface TabLayoutState {
-  currentTab: Panel | null
+  currentTab: Tab | null
 }
 
 /** The initial state for tab layouts. */

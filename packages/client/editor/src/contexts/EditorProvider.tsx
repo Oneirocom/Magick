@@ -183,7 +183,7 @@ const EditorProvider = ({ children }) => {
 /**
  * RawEditor component.
  */
-const RawEditor = ({ tab, children }) => {
+const RawEditor = ({ tab, children, spellId }) => {
   const config = useConfig()
 
   const [getSpell, { data: spell, isLoading }] =
@@ -196,7 +196,7 @@ const RawEditor = ({ tab, children }) => {
     if (!tab || loaded) return
     getSpell({
       spellName: tab.name,
-      id: tab.id,
+      id: spellId,
       projectId: config.projectId,
     })
   }, [tab])

@@ -28,8 +28,9 @@ export const useMagickInterface = () => useContext(Context)
  */
 const MagickInterfaceProvider: React.FC<{
   children: React.ReactNode
-  tab: any
-}> = ({ children, tab }) => {
+  tab: any,
+  spellId: string
+}> = ({ children, tab, spellId }) => {
   const config = useConfig()
   const { events, publish, subscribe } = usePubSub()
   const [_runSpell] = spellApi.useRunSpellMutation()
@@ -46,27 +47,8 @@ const MagickInterfaceProvider: React.FC<{
     $NODE_SET,
     ADD_SUBSPELL,
     UPDATE_SUBSPELL,
-    // $SUBSPELL_UPDATED,
-    $PROCESS,
-    $TRIGGER,
     $REFRESH_EVENT_TABLE,
   } = events
-
-  /**
-   * @deprecated The method should not be used - this is a tech debt.
-   * @function onTrigger
-   * @description Subscribe to a node trigger event for callbacks.
-   */
-  const onTrigger = (node: any, callback: (data: any) => void) => {
-    const isDefault = node === 'default' ? 'default' : null
-    return subscribe(
-      $TRIGGER(tab.id, isDefault ?? node.id),
-      (_event: string, data: any) => {
-        publish($PROCESS(tab.id))
-        setTimeout(() => callback(data), 0)
-      }
-    )
-  }
 
   /**
    * @function refreshEventTable
@@ -141,7 +123,7 @@ const MagickInterfaceProvider: React.FC<{
   const getSpell: GetSpell = async spellName => {
     const spell = await _getSpell({
       spellName,
-      id: tab.id,
+      id: spellId,
       projectId: config.projectId,
     })
 
@@ -204,7 +186,6 @@ const MagickInterfaceProvider: React.FC<{
 
   // Define public interface for context
   const publicInterface = {
-    onTrigger,
     onInspector,
     onAddModule,
     onUpdateModule,
