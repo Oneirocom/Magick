@@ -11,7 +11,16 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        berkeleyMono: [
+          'BerkeleyMono-Regular',
+          'IBM Plex Sans',
+          'IBM Plex Mono',
+          'sans-serif',
+        ],
+      },
+    },
   },
   plugins: [],
 }
