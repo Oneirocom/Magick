@@ -36,8 +36,6 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     },
   })
 
-  console.log('LOASING SPELL INTO TAB LAYUOUT', spellId)
-
   panel.group.locked = true
   panel.group.header.hidden = true
 
@@ -125,7 +123,6 @@ const components = {
     return <TextEditor {...props.params} />
   },
   EditorWindow: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    console.log('PARAMS INTO EDITOR WINDOW', props.params)
     return <EditorWindow {...props.params} />
   },
   Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
