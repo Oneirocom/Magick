@@ -20,29 +20,8 @@ import Composer from '../workspaces/composer'
 import NewMenuBar from '../../../components/MenuBar/newMenuBar';
 
 import './tab-layout.scss'
+import WelcomeScreen from '../components/watermark';
 
-// we will move this out into the layouts package
-function loadDefaultLayout(api: DockviewApi) {
-  api.addPanel({
-    id: 'panel_1',
-    component: 'default',
-    params: {
-      spellId: 'root',
-      spellName: 'root',
-      type: 'spell',
-    },
-  })
-
-  api.addPanel({
-    id: 'panel_2',
-    component: 'default',
-  })
-
-  api.addPanel({
-    id: 'panel_3',
-    component: 'default',
-  })
-}
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
   const onContextMenu = (event: React.MouseEvent) => {
@@ -132,15 +111,8 @@ const MainPanel = () => {
   const onReady = (event: DockviewReadyEvent) => {
     const layout = getLayout()
 
-    let success = false
-
     if (layout) {
       event.api.fromJSON(layout)
-      success = true
-    }
-
-    if (!success) {
-      loadDefaultLayout(event.api)
     }
 
     setApi(event.api)
@@ -149,6 +121,7 @@ const MainPanel = () => {
   return (
     <DockviewReact
       onReady={onReady}
+      watermarkComponent={WelcomeScreen}
       prefixHeaderActionsComponent={PreControls}
       tabComponents={tabComponents}
       className={`tab-layout ${theme}`}
