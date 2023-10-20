@@ -67,10 +67,9 @@ export const Select = ({
   // Custom styles for react-select
   const styles: StylesConfig<unknown, false, any> = {
     menu: () => ({
-      backgroundColor: 'var(--dark-2)',
+      backgroundColor: 'var(--foreground-light)',
       borderRadius: 4,
       boxShadow: '0px 5px 5px rgba(0,0,0,0.3)',
-      border: '1px solid var(--dark-3)',
     }),
     menuPortal: base => ({
       ...base,
@@ -87,8 +86,8 @@ export const Select = ({
       padding: 'var(--extraSmall)',
       paddingLeft: nested ? 'var(--large)' : 'var(--small)',
       paddingRight: 'var(--small)',
-      backgroundColor: state.isFocused ? 'var(--dark-3)' : 'transparent',
-      fontFamily: 'IBM Plex Mono',
+      backgroundColor: state.isFocused ? 'var(--slate-30)' : 'transparent',
+      fontFamily: 'Berkelely Mono',
     }),
     input: () => ({
       color: '#fff',
@@ -100,12 +99,8 @@ export const Select = ({
 
     control: (provided, state) => ({
       color: '#fff',
-      backgroundColor: state.isFocused ? 'var(--dark-2)' : 'var(--dark-3)',
+      backgroundColor: 'var(--foreground-light)',
       borderRadius: 4,
-      border:
-        state.isFocused && focusKey
-          ? '2px solid var(--primary)'
-          : '1px solid var(--dark-4)',
       boxSizing: 'border-box',
       display: 'flex',
       boxShadow: state.isFocused
@@ -119,7 +114,7 @@ export const Select = ({
     placeholder: (provided, state) => ({
       color: '#fff',
       position: 'absolute',
-      fontFamily: '"IBM Plex Mono"',
+      fontFamily: '"Berkelely Mono"',
       textTransform: 'uppercase',
       display: state.isFocused && focusKey ? 'none' : 'inline-block',
     }),
@@ -132,7 +127,7 @@ export const Select = ({
       marginTop: props.searchable ? '0' : '8px',
       flex: '1',
       alignItems: 'center',
-      fontFamily: 'IBM Plex Mono',
+      fontFamily: 'Berkelely Mono',
       overflow: 'clip',
     }),
     singleValue: () => ({

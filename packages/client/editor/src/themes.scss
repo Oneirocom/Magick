@@ -4,6 +4,7 @@
   --neutral-dark: #20232a;
   --midnight: hwb(227 5% 80%);
   --charcoal: rgb(27, 42, 70);
+  --charcoal-light: rgb(50 65 94);
   --rich-blue: rgba(0, 11, 214, 0.178);
   --charcoal-90: #1b2a46e0;
   --slate-light: #8d8d8d;
@@ -35,6 +36,7 @@
   --background-color: var(--midnight); // Used for main backgrounds
   --foreground-color: var(--charcoal); // Primary text color
   --foreground-color-90: var(--charcoal-90);
+  --foreground-light: var(--charcoal-light);
   --divider: var(--slate); // Divider color
   --sash-highlight: #3b6fd754;
   --active-font-color: var(--neutral-light); // Primary font color
