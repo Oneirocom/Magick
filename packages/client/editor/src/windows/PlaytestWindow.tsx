@@ -150,7 +150,7 @@ type Message = {
 /**
  * Playtest component - The main component for handling playtesting functionality.
  */
-const Playtest = ({ tab }) => {
+const Playtest = ({ tab, spellId }) => {
   const config = useConfig()
   const { inspectorData } = useInspector()
 
@@ -166,8 +166,8 @@ const Playtest = ({ tab }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
     {
-      spellName: tab.name.split('--')[0],
-      id: tab.id,
+      spellName: tab,
+      id: spellId,
       projectId: config.projectId,
     },
     {
@@ -365,8 +365,8 @@ const Playtest = ({ tab }) => {
     }
 
     const data = {
-      spellName: tab.name.split('--')[0],
-      id: tab.id,
+      spellName: tab.name,
+      id: spellId,
       projectId: config.projectId,
       inputs: {
         [playtestInputName as string]: toSend,

@@ -4,10 +4,10 @@ import { useTabLayout } from '@magickml/providers'
 import { useLocation } from 'react-router-dom'
 import Divider from '@mui/material/Divider'
 import { DrawerItem } from './DrawerItem'
-import { Panel } from 'client/state'
+import { Tab } from 'client/state'
 // PluginDrawerItems component properties
 type PluginDrawerItemsProps = {
-  currentTab: Panel
+  currentTab: Tab
 }
 
 /**

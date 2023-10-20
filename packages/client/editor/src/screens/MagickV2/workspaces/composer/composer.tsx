@@ -1,36 +1,33 @@
-import { useConfig, useFeathers, usePubSub } from '@magickml/providers'
+import { useConfig, usePubSub } from '@magickml/providers'
 import {
   DockviewApi,
   DockviewDndOverlayEvent,
   DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
-  GridviewReact,
+
   IDockviewPanelProps,
-  IGridviewPanelProps,
-  Orientation,
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef } from 'react'
 import { SpellInterface } from 'shared/core'
-import { spellApi, useDockviewTheme } from 'client/state'
+import { spellApi } from 'client/state'
 
-import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
-import { debounce } from '../../../utils/debounce'
-import EventHandler from '../../../components/EventHandler'
+import { debounce } from '../../../../utils/debounce'
+import EventHandler from '../../../../components/EventHandler'
 
-import EditorWindow from '../../../windows/EditorWindow'
-import Inspector from '../../../windows/InspectorWindow'
-import Playtest from '../../../windows/PlaytestWindow'
+import EditorWindow from '../../../../windows/EditorWindow'
+import Inspector from '../../../../windows/InspectorWindow'
+import Playtest from '../../../../windows/PlaytestWindow'
 
-import Console from '../../../windows/DebugConsole'
-import TextEditor from '../../../windows/TextEditorWindow'
-import { useEditor } from '../../../contexts/EditorProvider'
+import Console from '../../../../windows/DebugConsole'
+import TextEditor from '../../../../windows/TextEditorWindow'
+import { useEditor } from '../../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 
-function loadDefaultLayout(api: DockviewApi, tab) {
+function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
     id: 'panel_1',
     component: 'default',
@@ -38,6 +35,8 @@ function loadDefaultLayout(api: DockviewApi, tab) {
       title: 'Panel 1',
     },
   })
+
+  console.log('LOASING SPELL INTO TAB LAYUOUT', spellId)
 
   panel.group.locked = true
   panel.group.header.hidden = true
@@ -48,6 +47,7 @@ function loadDefaultLayout(api: DockviewApi, tab) {
     params: {
       title: 'Composer',
       tab,
+      spellId
     },
   })
 
@@ -58,6 +58,7 @@ function loadDefaultLayout(api: DockviewApi, tab) {
       params: {
         title: 'Inspector',
         tab,
+        spellId
       },
       position: { referencePanel: 'Composer', direction: 'left' },
     })
@@ -71,6 +72,7 @@ function loadDefaultLayout(api: DockviewApi, tab) {
     params: {
       title: 'Text Editor',
       tab,
+      spellId
     },
     position: { referencePanel: 'Inspector', direction: 'below' },
   })
@@ -85,6 +87,7 @@ function loadDefaultLayout(api: DockviewApi, tab) {
       params: {
         title: 'Playtest',
         tab,
+        spellId
       },
       position: { referencePanel: 'Composer', direction: 'below' },
     })
@@ -98,45 +101,46 @@ function loadDefaultLayout(api: DockviewApi, tab) {
     params: {
       title: 'Console',
       tab,
+      spellId
     },
     position: { referencePanel: 'Playtest', direction: 'right' },
   })
 }
 
 const components = {
-  default: (props: IDockviewPanelProps<{ title: string }>) => {
+  default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
     return (
       <div style={{ padding: '20px', color: 'white' }}>
         {props.params.title}
       </div>
     )
   },
-  Playtest: (props: IDockviewPanelProps<{ tab: Tab }>) => {
+  Playtest: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Playtest {...props.params} />
   },
-  Inspector: (props: IDockviewPanelProps<{ tab: Tab }>) => {
+  Inspector: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Inspector {...props.params} />
   },
-  TextEditor: (props: IDockviewPanelProps<{ tab: Tab }>) => {
+  TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <TextEditor {...props.params} />
   },
-  EditorWindow: (props: IDockviewPanelProps<{ tab: Tab }>) => {
+  EditorWindow: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    console.log('PARAMS INTO EDITOR WINDOW', props.params)
     return <EditorWindow {...props.params} />
   },
-  Console: (props: IDockviewPanelProps<{ tab: Tab }>) => {
+  Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Console {...props.params} />
   },
   // AgentControls
 }
 
-export const Composer = ({ tab, theme }) => {
+export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
   const config = useConfig()
   const spellRef = useRef<SpellInterface>()
   const { events, publish } = usePubSub()
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
-  const FeathersContext = useFeathers()
   const preferences = useSelector((state: RootState) => state.preferences)
 
   // Set up autosave for the workspaces
@@ -186,7 +190,7 @@ export const Composer = ({ tab, theme }) => {
     loadSpell({
       spellName: tab.name,
       projectId: config.projectId,
-      id: tab.id,
+      id: spellId,
     })
   }, [tab])
 
@@ -201,7 +205,7 @@ export const Composer = ({ tab, theme }) => {
     // }
 
     // if (!success) {
-    loadDefaultLayout(event.api, tab)
+    loadDefaultLayout(event.api, tab, spellId)
     // }
   }
 
@@ -217,7 +221,8 @@ export const Composer = ({ tab, theme }) => {
       },
       params: {
         title: title ? title : component,
-        tab
+        tab,
+        spellId
       }
     });
   };
@@ -228,7 +233,7 @@ export const Composer = ({ tab, theme }) => {
 
   return (
     <>
-      <EventHandler tab={tab} pubSub={pubSub} />
+      <EventHandler tab={tab} pubSub={pubSub} spellId={spellId} />
       <DockviewReact
         onDidDrop={onDidDrop}
         components={components}
@@ -239,99 +244,3 @@ export const Composer = ({ tab, theme }) => {
     </>
   )
 }
-
-const DraggableElement = (props) => (
-  <p
-    tabIndex={-1}
-    onDragStart={(event) => {
-      if (event.dataTransfer) {
-        event.dataTransfer.effectAllowed = 'move';
-
-        event.dataTransfer.setData('text/plain', 'nothing');
-        event.dataTransfer.setData('component', props.window)
-        event.dataTransfer.setData('title', props.title)
-      }
-    }}
-    style={{
-      padding: '8px',
-      color: 'white',
-      cursor: 'pointer',
-    }}
-    draggable={true}
-  >
-    {props.window}
-  </p>
-);
-
-const tabComponents = {
-  WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
-    return (
-      <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
-        <DraggableElement window="Console" />
-        <DraggableElement window="TextEditor" title="Text Editor" />
-        <DraggableElement window="Inspector" />
-        <DraggableElement window="Playtest" />
-      </div>
-    )
-  },
-  Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string }>) => {
-    return <Composer {...props.params} theme={`composer-layout ${props.params.theme}`} tab={props.params.tab} />
-  }
-}
-
-const Wrapped = (props: IGridviewPanelProps<{ tab: Tab; theme: string }>) => {
-  const { theme } = useDockviewTheme()
-  const pubSub = usePubSub()
-
-  const onReady = (event) => {
-    event.api.addPanel({
-      id: 'WindowBar',
-      component: 'WindowBar',
-      maximumHeight: 30,
-      minimumHeight: 30,
-    })
-
-    event.api.addPanel({
-      id: 'Composer',
-      component: 'Composer',
-      params: {
-        title: 'Composer',
-        tab: props.params.tab,
-        theme: props.params.theme
-      },
-      position: { referencePanel: 'WindowBar', direction: 'below' },
-    })
-  }
-
-  return (
-    <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
-      <GridviewReact
-        components={tabComponents}
-        disableAutoResizing={false}
-        proportionalLayout={false}
-        orientation={Orientation.VERTICAL}
-        hideBorders={true}
-        onReady={onReady}
-        className={`global-layout ${theme}`}
-      /></WorkspaceProvider>)
-}
-
-export default Wrapped
-
-// return (
-//   <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
-//     <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
-//       <DraggableElement window="Console" />
-//       <DraggableElement window="TextEditor" title="Text Editor" />
-//       <DraggableElement window="Inspector" />
-//       <DraggableElement window="Playtest" />
-//     </div>
-//     <div style={{ position: 'relative', height: '100%' }}>
-//       <Composer
-//         theme={`composer-layout ${props.params.theme}`}
-//         tab={props.params.tab}
-//         pubSub={pubSub}
-//       />
-//     </div>
-//   </WorkspaceProvider>
-// )

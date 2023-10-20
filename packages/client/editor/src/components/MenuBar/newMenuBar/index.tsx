@@ -1,10 +1,9 @@
 // DOCUMENTED
-import { useProjectWindow, usePubSub } from '@magickml/providers'
+import { usePubSub } from '@magickml/providers'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useModal } from '../../../contexts/ModalProvider'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import css from '../menuBar.module.css'
@@ -13,9 +12,6 @@ import { NestedMenuItem } from 'mui-nested-menu'
 import {
   RootState,
   Tab,
-  activeTabSelector,
-  changeEditorLayout,
-  toggleAutoSave,
 } from 'client/state'
 
 /**
@@ -26,35 +22,22 @@ import {
 const NewMenuBar = props => {
   const navigate = useNavigate()
   const { publish, events } = usePubSub()
-  const dispatch = useDispatch()
-  const activeTab = useSelector(activeTabSelector)
   const [snapEnabled, setSnapEnabled] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { openProjectWindow, setOpenProjectWindow, setOpenDrawer } =
-    useProjectWindow()
-
-  const preferences = useSelector(
-    (state: RootState) => state.preferences
-  ) as any
-
-  const { openModal } = useModal()
+  const { currentTab } = useSelector((state: RootState) => state.tabLayout)
 
   const activeTabRef = useRef<Tab | null>(null)
 
   useEffect(() => {
-    if (!activeTab || !activeTab.name) return
-    activeTabRef.current = activeTab
-  }, [activeTab])
+    if (!currentTab || !currentTab.id) return
+    console.log('Current tab', currentTab)
+    activeTabRef.current = currentTab
+  }, [currentTab])
 
   // Grab all events we need
   const {
     $SAVE_SPELL,
-    $CREATE_PLAYTEST,
-    $CREATE_INSPECTOR,
-    $CREATE_TEXT_EDITOR,
-    $CREATE_AGENT_CONTROLS,
-    $CREATE_CONSOLE,
     $EXPORT,
     $UNDO,
     $REDO,
@@ -69,31 +52,8 @@ const NewMenuBar = props => {
    */
   const onSave = () => {
     // if (!activeTabRef.current) return
+    console.log('SAVING!!!')
     publish($SAVE_SPELL(activeTabRef.current?.id))
-  }
-
-  /**
-   * Save as handler
-   */
-  const onSaveAs = () => {
-    openModal({
-      modal: 'saveAsModal',
-      tab: activeTabRef.current,
-    })
-  }
-
-  /**
-   * Edit handler
-   */
-  const onEdit = () => {
-    if (!activeTabRef.current) return
-    openModal({
-      modal: 'editSpellModal',
-      content: 'This is an example modal',
-      tab: activeTabRef.current,
-      spellName: activeTabRef.current.spell,
-      name: activeTabRef.current.spell,
-    })
   }
 
   /**
@@ -117,34 +77,6 @@ const NewMenuBar = props => {
     navigate('/home/all-projects?import')
   }
 
-  const onPlaytestCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_PLAYTEST(activeTabRef.current.id))
-  }
-
-  /**
-   * Inspector creation handler
-   */
-  const onInspectorCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_INSPECTOR(activeTabRef.current.id))
-  }
-
-  /**
-   * Agent control creation handler
-   */
-  const onAgentControlCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_AGENT_CONTROLS(activeTabRef.current.id))
-  }
-  /**
-   * Text editor creation handler
-   */
-  const onTextEditorCreate = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_TEXT_EDITOR(activeTabRef.current.id))
-  }
-
   /**
    * Project window creation handler
    */
@@ -159,14 +91,6 @@ const NewMenuBar = props => {
   const onExport = () => {
     if (!activeTabRef.current) return
     publish($EXPORT(activeTabRef.current.id))
-  }
-
-  /**
-   * Console handler
-   */
-  const onConsole = () => {
-    if (!activeTabRef.current) return
-    publish($CREATE_CONSOLE(activeTabRef.current.id))
   }
 
   /**
@@ -210,13 +134,6 @@ const NewMenuBar = props => {
   }
 
   /**
-   * Toggle save handler
-   */
-  const toggleSave = () => {
-    dispatch(toggleAutoSave())
-  }
-
-  /**
    * Toggle snap handler
    */
   const toggleSnapFunction = () => {
@@ -251,26 +168,26 @@ const NewMenuBar = props => {
           onClick: onNew,
           hotKey: 'alt+n, ctrl+n',
         },
-        open_spell: {
-          onClick: onOpen,
-          hotKey: 'alt+o, ctrl+o',
-        },
+        // open_spell: {
+        //   onClick: onOpen,
+        //   hotKey: 'alt+o, ctrl+o',
+        // },
         import_spell: {
           onClick: onImport,
           hotKey: 'alt+i, ctrl+i',
         },
-        rename_spell: {
-          onClick: onEdit,
-          hotKey: 'alt+e, ctrl+e',
-        },
+        // rename_spell: {
+        //   onClick: onEdit,
+        //   hotKey: 'alt+e, ctrl+e',
+        // },
         save_spell: {
           onClick: onSave,
           hotKey: 'alt+s, ctrl+s',
         },
-        save_a_copy: {
-          onClick: onSaveAs,
-          hotKey: 'alt+shift+s, ctrl+shift+s',
-        },
+        // save_a_copy: {
+        //   onClick: onSaveAs,
+        //   hotKey: 'alt+shift+s, ctrl+shift+s',
+        // },
         export_spell: {
           onClick: onExport,
           hotKey: 'alt+shift+e, ctrl+shift+e',
@@ -385,6 +302,7 @@ const NewMenuBar = props => {
                 useHotkeys(
                   item.hotKey,
                   event => {
+                    console.log("HOTKEYS", item.hotKey)
                     event.preventDefault()
                     item.onClick()
                   },
