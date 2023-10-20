@@ -63,6 +63,7 @@ export const spellApi = rootApi.injectEndpoints({
     getSpellById: builder.query({
       providesTags: ['Spell'],
       query: ({ spellName, id }) => {
+        console.log('GET SPELL BY ID', spellName, id)
         return {
           url: `spells?name=${spellName}&id=${id}`,
           params: {},

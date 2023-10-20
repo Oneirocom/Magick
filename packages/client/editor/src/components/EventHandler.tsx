@@ -373,8 +373,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     [$RESET_HIGHLIGHTS(tab.id)]: resetHighlights,
   }
 
-  console.log('Handler map', handlerMap)
-
   useEffect(() => {
     if (!tab && !spell && !client) return
 
