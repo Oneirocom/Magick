@@ -65,11 +65,52 @@ const getAgent = async (
   return agent as unknown as Agent
 }
 
-const formatRequest = async (method, agentId, data, params) => {
+type Request = {
+  agent: Agent
+  spellId: string
+  inputs: {
+    [key: string]: {
+      connector: string
+      content: string
+      sender: string
+      observer: string
+      client: string
+      channel: string
+      agentId: string
+      entities: string[]
+      channelType: string
+      rawData: string
+    }
+  }
+}
+
+type RequestData = {
+  content: string
+  spellId?: string
+  isCloud?: boolean
+  secrets?: {
+    [key: string]: string
+  }
+  publicVariables?: {
+    [key: string]: string
+  }
+  sender?: string
+  client?: string
+  channel?: string
+}
+
+type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'
+
+const formatRequest = async (
+  method: Method,
+  agentId: string,
+  data: RequestData,
+  params: any
+): Promise<Request> => {
   const {
     spellId,
     content,
-    isCloud,
+    isCloud = false,
     secrets = {},
     publicVariables = {},
     sender = 'api',
@@ -77,7 +118,16 @@ const formatRequest = async (method, agentId, data, params) => {
     channel = 'rest',
   } = data
 
-  console.log('incoming public variables', publicVariables)
+  if (!spellId) {
+    throw new BadRequest('Spell ID is required')
+  }
+
+  // validate if method is GET, POST, PATCH, DELETE
+
+  const validMethods = ['GET', 'POST', 'PATCH', 'DELETE']
+  if (!validMethods.includes(method)) {
+    throw new BadRequest('Invalid method')
+  }
 
   const agent = await getAgent(
     agentId,
@@ -95,7 +145,8 @@ const formatRequest = async (method, agentId, data, params) => {
     typeof agent.publicVariables === 'string'
       ? JSON.parse(agent.publicVariables)
       : agent.publicVariables
-  method = method.toUpperCase()
+
+  method = method.toUpperCase() as Method
 
   return {
     agent,
@@ -144,6 +195,10 @@ export class AgentHttpService<
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
     const agentCommander = app.get('agentCommander')
+
+    if (!params.query) {
+      throw new BadRequest('Query params are required')
+    }
 
     const request = await formatRequest('GET', agentId, params.query, params)
     try {
@@ -214,6 +269,10 @@ export class AgentHttpService<
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
     const agentCommander = app.get('agentCommander')
+
+    if (!params.query) {
+      throw new BadRequest('Query params are required')
+    }
 
     const request = await formatRequest('DELETE', agentId, params.query, params)
 
