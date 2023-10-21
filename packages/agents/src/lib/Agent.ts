@@ -231,7 +231,10 @@ export class Agent implements AgentInterface {
       const output = await spellRunner.runComponent({
         ...data,
         agent: this,
-        secrets: this.secrets,
+        secrets: {
+          ...this.secrets,
+          ...data.secrets,
+        },
         publicVariables: this.publicVariables,
         runSubspell: data.runSubspell,
         app,

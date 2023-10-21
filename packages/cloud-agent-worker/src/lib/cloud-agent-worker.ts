@@ -158,7 +158,7 @@ export class CloudAgentWorker extends AgentManager {
         `Running spell ${data.spellId} for agent ${data.agentId}`
       )
       try {
-        const agent = this.currentAgents[agentId]
+        const agent = this.currentAgents[agentId] as Agent
 
         if (!agent) {
           this.logger.error(
