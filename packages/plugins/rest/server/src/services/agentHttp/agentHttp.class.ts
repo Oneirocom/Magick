@@ -67,7 +67,7 @@ const getAgent = async (
 
 type Request = {
   agent: Agent
-  spellId: string
+  spellId?: string
   inputs: {
     [key: string]: {
       connector: string
@@ -117,10 +117,6 @@ const formatRequest = async (
     client = 'rest',
     channel = 'rest',
   } = data
-
-  if (!spellId) {
-    throw new BadRequest('Spell ID is required')
-  }
 
   // validate if method is GET, POST, PATCH, DELETE
 
