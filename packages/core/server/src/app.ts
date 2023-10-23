@@ -43,6 +43,8 @@ import { authenticateApiKey } from './hooks/authenticateApiKey'
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
 
+export type Environment = 'default' | 'server' | 'agent'
+
 declare module './declarations' {
   interface Configuration {
     vectordb: PostgresVectorStoreCustom | any
@@ -51,10 +53,11 @@ declare module './declarations' {
     redis: Redis
     isAgent?: boolean
     agentCommander: AgentCommander
+    environment: Environment
   }
 }
 
-export async function initApp() {
+export async function initApp(environment: Environment = 'default') {
   const logger = getLogger()
   logger.info('Initializing feathers app...')
   globalsManager.register('feathers', app)
@@ -70,6 +73,7 @@ export async function initApp() {
     max: paginateMax,
   }
   app.set('paginate', paginate)
+  app.set('environment', environment)
 
   // Koa middleware
   app.use(cors({ origin: '*' }))
