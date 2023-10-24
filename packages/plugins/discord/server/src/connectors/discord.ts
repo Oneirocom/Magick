@@ -266,7 +266,7 @@ export class DiscordConnector {
     }
 
     // add the sender if not already in the list
-    if (!entities.includes(author.username)) {
+    if (!entities.includes(this.client.user.username)) {
       entities.push(this.client.user.username)
     }
 
