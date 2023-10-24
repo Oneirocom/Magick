@@ -39,7 +39,7 @@ export class AgentImageService {
 
     const s3Params = {
       Bucket: this.bucketName,
-      Key: `agents/${agentId}.jpg`,
+      Key: `agents/${agentId}/avatar.jpg`,
       Body: buffer,
       ContentEncoding: 'base64',
       ContentType: 'image/jpeg',
