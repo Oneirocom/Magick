@@ -2,6 +2,16 @@
 // This module provides a document service for managing documents with embedding and pagination support
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 
+import AWS from 'aws-sdk'
+import * as BullMQ from 'bullmq'
+import {
+  AWS_BUCKET_NAME,
+  AWS_ACCESS_KEY,
+  AWS_REGION,
+  AWS_SECRET_KEY,
+  AWS_BUCKET_ENDPOINT,
+} from '@magickml/config'
+
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexService } from '@feathersjs/knex'
@@ -23,6 +33,24 @@ export type DocumentParams = KnexAdapterParams<DocumentQuery>
 
 const embeddingSize = 1000
 
+export const DOCUMENT_QUEUE = 'document:process'
+
+type Element = {
+  date: string
+  type: string
+  projectId: string
+  id: string
+  metadata: {
+    fileName: string
+    fileType: string
+  }
+  embeddings: {
+    documentId: string
+    index: string
+    content: string
+  }[]
+}
+
 /**
  * DocumentService class
  * Implements the custom document service extending the base Knex service
@@ -32,6 +60,34 @@ const embeddingSize = 1000
 export class DocumentService<
   ServiceParams extends Params = DocumentParams
 > extends KnexService<Document, DocumentData, ServiceParams, DocumentPatch> {
+  s3: AWS.S3
+  uploader: any
+  bucketName: string = AWS_BUCKET_NAME
+  documentQueue: BullMQ.Queue = new BullMQ.Queue(DOCUMENT_QUEUE)
+
+  constructor(args) {
+    super(args)
+    // Set up AWS S3
+    AWS.config.update({
+      accessKeyId: AWS_ACCESS_KEY,
+      secretAccessKey: AWS_SECRET_KEY,
+      region: AWS_REGION,
+    })
+    this.s3 = new AWS.S3({
+      endpoint: AWS_BUCKET_ENDPOINT,
+      s3ForcePathStyle: true,
+    })
+  }
+
+  // Not the best typing here
+  async create(data: DocumentData[] | any): Promise<any> {
+    console.log('Adding document to queue', data)
+    const job = this.documentQueue.add('create', data)
+    return {
+      job,
+    }
+  }
+
   /**
    * Creates a new document
    * @param data {DocumentData} The document data to create
@@ -40,14 +96,15 @@ export class DocumentService<
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  async create(data: DocumentData): Promise<any> {
+  async createWorker(data: DocumentData, job: BullMQ.Job): Promise<any> {
+    console.log('Work received in create worker')
     const embeddingdb = app.get('embeddingdb')
     const { modelName, secrets, files, ...docData } = data as DocumentData & {
       modelName: string
       secrets: string
     }
 
-    let elements = [] as any[]
+    let elements = [] as Element[]
     if (docData.content) {
       elements = [
         ...elements,
@@ -68,11 +125,14 @@ export class DocumentService<
     }
 
     for (const element of elements) {
+      // report the progress of the jpb
+
       const { embeddings, ...document } = element
       embeddings //remove linting error lmao
       await embeddingdb.from('documents').insert(document)
       //create embeddings
-      for (const embedding of element.embeddings) {
+      for (let i = 0; i < element.embeddings.length; i++) {
+        const embedding = element.embeddings[i]
         if (!embedding.content || embedding.content?.length === 0) continue
         if (data.hasOwnProperty('secrets')) {
           await embeddingdb.fromString(embedding.content, embedding, {
@@ -83,6 +143,7 @@ export class DocumentService<
         } else {
           await embeddingdb.from('embeddings').insert(embedding)
         }
+        await job.updateProgress((i / element.embeddings.length) * 100)
       }
     }
 
@@ -125,8 +186,6 @@ export class DocumentService<
       (params && params?.query?.metadata)
     ) {
       const param = params.query
-
-      console.log('param!!!!!!!', param)
 
       const querys = await db('documents')
         .joinRaw(
@@ -292,7 +351,7 @@ const getUnstructuredData = async (files, docData) => {
   return elements
 }
 
-const createElement = (element, docData) => {
+const createElement = (element, docData): Element => {
   const documentId = uuidv4()
   const embeddings: any[] = []
   for (const i in element) {

@@ -1,14 +1,16 @@
 // DOCUMENTED
+import * as BullMQ from 'bullmq'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { Application, HookContext } from '../../declarations'
-import { DocumentService, getOptions } from './documents.class'
+import { DOCUMENT_QUEUE, DocumentService, getOptions } from './documents.class'
 import {
   documentPatchResolver,
   documentPatchValidator,
   documentQueryResolver,
   documentQueryValidator,
 } from './documents.schema'
+import { event } from '../events/events'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
@@ -24,8 +26,31 @@ export const document = (app: Application) => {
   // Register our service on the Feathers application
   app.use('documents', new DocumentService(getOptions(app)), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
-    events: [],
+    events: ['finished', 'progress'],
   })
+
+  if (app.get('environment') === 'server') {
+    // Set up document queue to process document jobs
+    const worker = new BullMQ.Worker(DOCUMENT_QUEUE, async job => {
+      const { data } = await app
+        .service('documents')
+        .createWorker(job.data, job)
+      return data
+    })
+
+    // event queues to send events to the client
+    const eventQueue = new BullMQ.QueueEvents(DOCUMENT_QUEUE)
+
+    eventQueue.on('completed', (jobId, returnvalue) => {
+      console.log('DOCUMENT COMPLETED', jobId, returnvalue)
+      app.service('documents').emit('finished', { jobId, returnvalue })
+    })
+
+    eventQueue.on('progress', (jobId, progress) => {
+      console.log('progress', jobId, progress)
+      app.service('documents').emit('progress', { jobId, progress })
+    })
+  }
 
   // Initialize hooks
   app.service('documents').hooks({
