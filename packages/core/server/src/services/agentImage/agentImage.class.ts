@@ -35,20 +35,21 @@ export class AgentImageService {
 
   async create(data: AgentImageData): Promise<PutObjectOutput> {
     const logger = getLogger()
-    const { image, agentId } = data
-    const buffer = this.createBufferFromImage(image)
-
-    const s3Params = {
-      Bucket: this.bucketName,
-      Key: `agents/${agentId}/avatar.jpg`,
-      Body: buffer,
-      ContentEncoding: 'base64',
-      ContentType: 'image/jpeg',
-    }
-
-    const command = new PutObjectCommand(s3Params)
 
     try {
+      const { image, agentId } = data
+      const buffer = this.createBufferFromImage(image)
+
+      const s3Params = {
+        Bucket: this.bucketName,
+        Key: `agents/${agentId}/avatar.jpg`,
+        Body: buffer,
+        ContentEncoding: 'base64',
+        ContentType: 'image/jpeg',
+      }
+
+      const command = new PutObjectCommand(s3Params)
+
       return await this.s3.send(command)
     } catch (error) {
       logger.error('Error uploading image to S3', { error })
