@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import { S3Client, PutObjectCommand, PutObjectOutput } from '@aws-sdk/client-s3'
 import {
   AWS_BUCKET_NAME,
   AWS_ACCESS_KEY,
@@ -6,6 +6,7 @@ import {
   AWS_SECRET_KEY,
   AWS_BUCKET_ENDPOINT,
 } from '@magickml/config'
+import { getLogger } from '@magickml/core'
 
 type AgentImageData = {
   image: string
@@ -13,44 +14,44 @@ type AgentImageData = {
 }
 
 export class AgentImageService {
-  s3: AWS.S3
-  uploader: any
+  s3: S3Client
   bucketName: string = AWS_BUCKET_NAME
 
   constructor() {
-    // Set up AWS S3
-    AWS.config.update({
-      accessKeyId: AWS_ACCESS_KEY,
-      secretAccessKey: AWS_SECRET_KEY,
+    this.s3 = new S3Client({
+      credentials: {
+        accessKeyId: AWS_ACCESS_KEY,
+        secretAccessKey: AWS_SECRET_KEY,
+      },
       region: AWS_REGION,
-    })
-    this.s3 = new AWS.S3({
       endpoint: AWS_BUCKET_ENDPOINT,
-      s3ForcePathStyle: true,
+      forcePathStyle: true,
     })
   }
 
-  async create(data: AgentImageData) {
+  createBufferFromImage(image: string): Buffer {
+    return Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64')
+  }
+
+  async create(data: AgentImageData): Promise<PutObjectOutput> {
+    const logger = getLogger()
     const { image, agentId } = data
-    const buffer = Buffer.from(
-      image.replace(/^data:image\/\w+;base64,/, ''),
-      'base64'
-    )
+    const buffer = this.createBufferFromImage(image)
 
     const s3Params = {
       Bucket: this.bucketName,
-      Key: `agents/${agentId}.jpg`,
+      Key: `agents/${agentId}/avatar.jpg`,
       Body: buffer,
       ContentEncoding: 'base64',
       ContentType: 'image/jpeg',
     }
 
+    const command = new PutObjectCommand(s3Params)
+
     try {
-      const response = await this.s3.putObject(s3Params).promise()
-      return {
-        message: JSON.stringify(response),
-      }
+      return await this.s3.send(command)
     } catch (error) {
+      logger.error('Error uploading image to S3', { error })
       throw new Error('Failed to upload image to S3.')
     }
   }
