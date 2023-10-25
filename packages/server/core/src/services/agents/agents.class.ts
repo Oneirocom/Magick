@@ -29,6 +29,27 @@ export class AgentService<
     this.app = app
   }
 
+  async get(agentId: string, params: ServiceParams) {
+    const { versionTag } = params
+    const db = app.get('dbClient')
+
+    const agents = db('agents')
+      .select('agents.*')
+      .innerJoin('AgentReleases', 'agents.id', 'AgentReleases.agent_id')
+      .groupBy('agentId')
+
+    return agents
+  }
+
+  async find(params?: ServiceParams): Promise<Agent[] | Paginated<Agent>> {
+    // Modify the query to exclude agents with the frozen flag set
+    const { query = {} } = params || {};
+    query.frozen = false;  // Only fetch agents where frozen is false
+
+    // Call the original find method with the modified query
+    return super.find({ ...params, query });
+  }
+
   // we use this ping to avoid firing a patched event on the agent
   // every time the agent is pinged
   async ping(agentId: string) {
@@ -65,6 +86,7 @@ export class AgentService<
     return { response }
   }
 
+<<<<<<< HEAD:packages/server/core/src/services/agents/agents.class.ts
   async subscribe(agentId: string, params: ServiceParams) {
     // check for socket io
     if (!params.provider)
@@ -111,6 +133,33 @@ export class AgentService<
 
     return true
   }
+
+  /**
+  * Creates a new agent by copying data from the provided agentId, then associates it with a version tag in the AgentReleases table.
+  * @param agentId - the ID of the agent to copy from
+  * @param versionTag - the version tag to associate with the newly created agent
+  */
+  async copyAndRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
+    // Get the agent by its agentId
+    const existingAgent = await this.app.service('agents').get(agentId);
+    if (!existingAgent) {
+      throw new Error(`Agent with ID ${agentId} not found.`);
+    }
+
+    // Copy data from the fetched agent, omitting the ID field to create a new agent
+    const { id, ...agentData } = existingAgent;
+    const newAgent = await this.app.service('agents').create(agentData);
+
+    // Add the new agent's ID and the provided version tag to the AgentReleases table
+    const db = this.app.get('dbClient');
+    const release = await db('AgentReleases').insert({
+      agent_id: newAgent.id,
+      version: versionTag,
+    });
+
+    return { agent: newAgent, release };
+  }
+
 
   override async create(
     data: AgentData | AgentData[] | any

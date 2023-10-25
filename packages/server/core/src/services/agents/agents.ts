@@ -72,6 +72,13 @@ export const agent = (app: Application) => {
     events: AGENT_EVENTS,
   })
 
+  app.use('/agents/release', new AgentService(getOptions(app), app), {
+    async create(data, params) {
+      const agentService = app.service('agents');
+      return await agentService.copyAndRelease(data.agentId, data.versionTag);
+    },
+  })
+
   const pubSub = app.get<'pubsub'>('pubsub')
 
   // this handles relaying all agent messages up to connected clients.
