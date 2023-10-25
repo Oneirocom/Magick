@@ -65,6 +65,114 @@ const getAgent = async (
   return agent as unknown as Agent
 }
 
+type Request = {
+  agent: Agent
+  spellId?: string
+  inputs: {
+    [key: string]: {
+      connector: string
+      content: string
+      sender: string
+      observer: string
+      client: string
+      channel: string
+      agentId: string
+      entities: string[]
+      channelType: string
+      rawData: string
+    }
+  }
+}
+
+type RequestData = {
+  content: string
+  spellId?: string
+  isCloud?: boolean
+  secrets?: {
+    [key: string]: string
+  }
+  publicVariables?: {
+    [key: string]: string
+  }
+  sender?: string
+  client?: string
+  channel?: string
+}
+
+type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'
+
+const formatRequest = async (
+  method: Method,
+  agentId: string,
+  data: RequestData,
+  params: any
+): Promise<Request> => {
+  const {
+    spellId,
+    content,
+    isCloud = false,
+    secrets = {},
+    publicVariables = {},
+    sender = 'api',
+    client = 'rest',
+    channel = 'rest',
+  } = data
+
+  // validate if method is GET, POST, PATCH, DELETE
+
+  const validMethods = ['GET', 'POST', 'PATCH', 'DELETE']
+  if (!validMethods.includes(method)) {
+    throw new BadRequest('Invalid method')
+  }
+
+  const agent = await getAgent(
+    agentId,
+    (params?.headers && params.headers['authorization']) as string,
+    isCloud || false
+  )
+
+  // check if public variables are a string, if they are parse them as json. Otherwise do nothing.
+  const formattedPublicVariables =
+    typeof publicVariables === 'string'
+      ? JSON.parse(publicVariables)
+      : publicVariables
+
+  const agentPublicVariables =
+    typeof agent.publicVariables === 'string'
+      ? JSON.parse(agent.publicVariables)
+      : agent.publicVariables
+
+  method = method.toUpperCase() as Method
+
+  return {
+    agent,
+    spellId,
+    inputs: {
+      [`Input - REST API (${method})`]: {
+        connector: `REST API (${method})`,
+        content,
+        sender: sender,
+        observer: agent.name,
+        client,
+        channel: channel,
+        agentId: agent.id,
+        entities: [sender, agent.name],
+        channelType: method,
+        rawData: '{}',
+      },
+      publicVariables: {
+        ...agentPublicVariables,
+        ...formattedPublicVariables,
+      },
+      runSubspell: true,
+      secrets: {
+        ...agent.secrets,
+        ...secrets,
+      },
+    },
+  }
+}
+
 export class AgentHttpService<
   ServiceParams extends AgentHttpParams = AgentHttpParams
 > implements
@@ -82,37 +190,15 @@ export class AgentHttpService<
     agentId: string,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { spellId, content, isCloud } = params.query as AgentHttpData
-
-    const agent = await getAgent(
-      agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
-
     const agentCommander = app.get('agentCommander')
 
+    if (!params.query) {
+      throw new BadRequest('Query params are required')
+    }
+
+    const request = await formatRequest('GET', agentId, params.query, params)
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (GET)`]: {
-            connector: 'REST API (GET)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'GET',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
@@ -129,38 +215,16 @@ export class AgentHttpService<
     data: AgentHttpData,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { content, isCloud } = data
-    const spellId = data?.spellId
-
-    const agent = await getAgent(
-      data.agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
+    if (!data.agentId) {
+      throw new BadRequest('Agent ID is required')
+    }
 
     const agentCommander = app.get('agentCommander')
 
+    const request = await formatRequest('POST', data.agentId, data, params)
+
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (POST)`]: {
-            connector: 'REST API (POST)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'POST',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
@@ -178,38 +242,12 @@ export class AgentHttpService<
     data: AgentHttpData,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { content, isCloud } = data
-    const spellId = data?.spellId
-
-    const agent = await getAgent(
-      agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
-
     const agentCommander = app.get('agentCommander')
 
+    const request = await formatRequest('POST', agentId, data, params)
+
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (UPDATE)`]: {
-            connector: 'REST API (UPDATE)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'UPDATE',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,
@@ -226,37 +264,16 @@ export class AgentHttpService<
     agentId: string,
     params: ServiceParams
   ): Promise<AgentHttpResponse | AgentHttpError> {
-    const { spellId, content, isCloud } = params.query as AgentHttpData
-
-    const agent = await getAgent(
-      agentId,
-      (params?.headers && params.headers['authorization']) as string,
-      isCloud || false
-    )
-
     const agentCommander = app.get('agentCommander')
 
+    if (!params.query) {
+      throw new BadRequest('Query params are required')
+    }
+
+    const request = await formatRequest('DELETE', agentId, params.query, params)
+
     try {
-      const result = await agentCommander.runSpellWithResponse({
-        agent,
-        spellId,
-        inputs: {
-          [`Input - REST API (DELETE)`]: {
-            connector: 'REST API (DELETE)',
-            content,
-            sender: 'api',
-            observer: agent.name,
-            client: 'rest',
-            channel: 'rest',
-            agentId: agent.id,
-            entities: ['api', agent.name],
-            channelType: 'DELETE',
-            rawData: '{}',
-          },
-          publicVariables: agent.publicVariables,
-          runSubspell: true,
-        },
-      })
+      const result = await agentCommander.runSpellWithResponse(request)
 
       return {
         result: result as object,

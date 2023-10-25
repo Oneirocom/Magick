@@ -22,6 +22,7 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
     const inputElement = document.createElement('input');
     inputElement.type = 'file';
     inputElement.accept = '.eml,.html,.json,.md,.msg,.rst,.rtf,.txt,.xml,.jpeg,.jpg,.png,.csv,.doc,.docx,.epub,.odt,.pdf,.ppt,.pptx,.tsv,.xlsx'; // Specify the file formats to accept, if needed
+    inputElement.multiple = true;
     inputElement.click();
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files;
@@ -136,11 +137,6 @@ const DocumentModal = ({ createMode, setCreateMode, handleSave, setNewDocument, 
             multiline
             rows={5}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography style={{ width: '100%', margin: '.5em' }} variant={'h6'}>
-            Add &lt;&lt;BREAK&gt;&gt; anywhere in your content to force a chunk break at this point
-          </Typography>
         </Grid>
       </Grid>
     </Modal>
