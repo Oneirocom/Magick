@@ -15,6 +15,7 @@ import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
 import { NodeData } from 'rete/types/core/data'
+import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from '@magickml/config'
 
 export type RunComponentArgs = {
   inputs: MagickSpellInput
@@ -377,7 +378,7 @@ class SpellRunner {
       // A run shouldnt take this long.  This is a hacl but we are replacing all this soon.
       setTimeout(() => {
         this.busy = false
-      }, 120000)
+      }, SPELLRUNNER_BUSY_TIMEOUT_MSEC)
 
       // this running is where the main "work" happens.
       // I do wonder whether we could make this even more elegant by having the node
