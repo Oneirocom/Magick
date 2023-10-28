@@ -90,7 +90,7 @@ export default class SpellManager {
       this.logger.debug(`Reloading spell ${spellId}`)
       return this.load(spell)
     } catch (error) {
-      this.logger.error(`Error loading spell ${spellId}`, error)
+      this.logger.error(`Error loading spell ${spellId}: %o`, error)
       return
     }
   }

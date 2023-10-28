@@ -269,7 +269,7 @@ class SpellRunner {
   }
   error(message: string, error: unknown | null = null) {
     this.busy = false
-    this.logger.error(message, error)
+    this.logger.error(message, 'error: %o', error)
     if (error) throw error
     throw new Error(message)
   }
@@ -359,6 +359,8 @@ class SpellRunner {
           this.logger.warn(`No suitable fallback found for ${firstInput}.`)
         }
 
+        this.logger.info('fallback: %o', fallback)
+
         const [node, name] = fallback
         triggeredNode = node
 
@@ -375,7 +377,7 @@ class SpellRunner {
       // A run shouldnt take this long.  This is a hacl but we are replacing all this soon.
       setTimeout(() => {
         this.busy = false
-      }, 10000)
+      }, 120000)
 
       // this running is where the main "work" happens.
       // I do wonder whether we could make this even more elegant by having the node
@@ -388,7 +390,7 @@ class SpellRunner {
       this.busy = false
       return this.outputData
     } catch (error) {
-      this.error(`Error loading spell ${this.currentSpell.id}`, error)
+      this.error(`Error running spell ${this.currentSpell.id} %o`, error)
     }
   }
 }
