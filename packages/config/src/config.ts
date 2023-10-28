@@ -141,3 +141,9 @@ export const MANAGER_WARM_UP_MSEC =
   Number(getVarForEnvironment('MANAGER_WARM_UP_MSEC')) || 5000
 
 export const API_ACCESS_KEY = getVarForEnvironment('API_ACCESS_KEY') || 'apiKey'
+
+export const SPELLRUNNER_BUSY_TIMEOUT_MSEC = getVarForEnvironment(
+  'SPELLRUNNER_BUSY_TIMEOUT_MS'
+)
+  ? Number(getVarForEnvironment('SPELLRUNNER_BUSY_TIMEOUT_MS'))
+  : 120000
