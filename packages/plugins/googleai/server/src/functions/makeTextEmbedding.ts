@@ -7,6 +7,7 @@ import {
 import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from '@magickml/server-core'
 import { wordCount } from './shared'
+import { DEFAULT_GOOGLEAI_API_KEY } from '@magickml/config'
 
 /**
  * A function that makes a request to create a text embedding using GoogleAI's
@@ -40,6 +41,7 @@ export async function makeTextEmbedding(
   const apiKey =
     (context?.module?.secrets &&
       context?.module?.secrets['googleai_api_key']) ||
+    DEFAULT_GOOGLEAI_API_KEY ||
     null
 
   if (!apiKey) {
@@ -57,7 +59,7 @@ export async function makeTextEmbedding(
       text: input,
     }
 
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:embedText?key=${context.module?.secrets?.['googleai_api_key']}`
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:embedText?key=${apiKey}`
     // Make the API call to GoogleAI
     const completion = await fetch(endpoint, {
       method: 'POST',
