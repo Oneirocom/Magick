@@ -38,6 +38,9 @@ export const DEFAULT_USER_TOKEN =
 export const STANDALONE = getVarForEnvironment('STANDALONE') === 'true' || false
 export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
 export const DEFAULT_OPENAI_KEY = getVarForEnvironment('DEFAULT_OPENAI_KEY')
+export const DEFAULT_GOOGLEAI_API_KEY = getVarForEnvironment(
+  'DEFAULT_GOOGLEAI_API_KEY'
+)
 export const DONT_CRASH_ON_ERROR =
   getVarForEnvironment('DONT_CRASH_ON_ERROR') === 'true'
 export const SERVER_PORT = getVarForEnvironment('PORT') || '3030'
