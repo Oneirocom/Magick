@@ -3,6 +3,7 @@ import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from '@magickml/server-core'
 import { wordCount } from './shared'
+import { DEFAULT_GOOGLEAI_API_KEY } from '@magickml/config'
 
 /**
  * Makes an API request to an AI text completion service.
@@ -50,8 +51,21 @@ export async function makeTextCompletion(
   // Make the API request and handle the response.
   const start = Date.now()
 
+  const apiKey =
+    (context?.module?.secrets &&
+      context?.module?.secrets['googleai_api_key']) ||
+    DEFAULT_GOOGLEAI_API_KEY ||
+    null
+
+  if (!apiKey) {
+    return {
+      success: false,
+      error: 'GoogleAI API key is required to make a text completion',
+    }
+  }
+
   try {
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateText?key=${context.module?.secrets?.['googleai_api_key']}`
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateText?key=${apiKey}`
     // Make the API call to GoogleAI
     const completion = await fetch(endpoint, {
       method: 'POST',

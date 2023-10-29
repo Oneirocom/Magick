@@ -3,6 +3,7 @@ import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from '@magickml/server-core'
 import { wordCount } from './shared'
+import { DEFAULT_GOOGLEAI_API_KEY } from '@magickml/config'
 
 type ChatMessage = {
   author?: string
@@ -55,9 +56,22 @@ export async function makeChatCompletion(
     top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
   } as any
 
+  const apiKey =
+    (context?.module?.secrets &&
+      context?.module?.secrets['googleai_api_key']) ||
+    DEFAULT_GOOGLEAI_API_KEY ||
+    null
+
+  if (!apiKey) {
+    return {
+      success: false,
+      error: 'GoogleAI API key is required to make a chat completion',
+    }
+  }
+
   try {
     const start = Date.now()
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${context.module?.secrets?.['googleai_api_key']}`
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${apiKey}`
     // Make the API call to GoogleAI
     const completion = await fetch(endpoint, {
       method: 'POST',
