@@ -167,6 +167,7 @@ function install(
                 output: null,
                 eventType,
                 input: inputs,
+                sessionId: context.module.sessionId || null,
                 error: {
                   message: err.message,
                   stack: err.stack,
