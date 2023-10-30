@@ -18,6 +18,7 @@ import { NodeData } from 'rete/types/core/data'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from '@magickml/config'
 
 export type RunComponentArgs = {
+  sessionId?: string
   inputs: MagickSpellInput
   agent?: any
   componentName?: string
@@ -91,7 +92,6 @@ class SpellRunner {
       this.app.service('agents').emit('spell', message)
     } else {
       // handle the case of the emit being run on an agent not the server
-      console.log('emitting from new!!!!')
       // to do we probably want these events to be constants somewhere
       this.agent.publishEvent('spell', message)
     }
@@ -304,6 +304,7 @@ class SpellRunner {
     runSubspell = false,
     secrets,
     publicVariables,
+    sessionId,
     app,
   }: RunComponentArgs) {
     this.busy = true
@@ -326,6 +327,7 @@ class SpellRunner {
         secrets,
         publicVariables,
         app,
+        sessionId,
       })
 
       const component = this._getComponent(
