@@ -1,4 +1,5 @@
 // DOCUMENTED
+const checkPermissions = require('feathers-permissions')
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { v4 as uuidv4 } from 'uuid'
@@ -45,6 +46,9 @@ export const event = (app: Application) => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['admin', 'events'],
+        }),
         schemaHooks.validateQuery(eventQueryValidator),
         schemaHooks.resolveQuery(eventQueryResolver),
       ],
