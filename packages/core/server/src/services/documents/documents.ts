@@ -1,4 +1,5 @@
 // DOCUMENTED
+const checkPermissions = require('feathers-permissions')
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { Application, HookContext } from '../../declarations'
@@ -37,6 +38,9 @@ export const document = (app: Application) => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['admin', 'documents'],
+        }),
         schemaHooks.validateQuery(documentQueryValidator),
         schemaHooks.resolveQuery(documentQueryResolver),
       ],

@@ -5,6 +5,7 @@
  */
 
 // Import necessary modules and functions
+const checkPermissions = require('feathers-permissions')
 import * as BullMQ from 'bullmq'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
@@ -105,6 +106,9 @@ export const agent = (app: Application) => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['admin', 'agent'],
+        }),
         schemaHooks.validateQuery(agentQueryValidator),
         schemaHooks.resolveQuery(agentQueryResolver),
       ],
