@@ -4,10 +4,11 @@ import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '@magickml/server-core'
-import md5 from 'md5';
+import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import { Queue } from 'bullmq'
+import { RunRootSpellArgs } from '@magickml/agents'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -53,22 +54,21 @@ export class AgentService<
     return { data: query }
   }
 
-  async run(data: AgentRunData) {
+  async run(data: Omit<RunRootSpellArgs, 'agent'>) {
     if (!data.agentId) throw new Error('agentId is required')
     // probably need to authenticate the request here against project id
     // add the job to the queueD
-    const job = await this.runQueue.add(data.agentId, {
-      ...data,
-    })
+
+    const agentCommander = this.app.get('agentCommander')
+    const response = await agentCommander.runSpellWithResponse(data)
 
     // return the job id
-    return { jobId: job.id }
+    return { response }
   }
 
   async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
-
     // ADDING REST API KEY TO AGENT's DATA
     if (data.data) {
       data.data = JSON.stringify({
@@ -100,4 +100,3 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     multi: ['remove'],
   }
 }
-
