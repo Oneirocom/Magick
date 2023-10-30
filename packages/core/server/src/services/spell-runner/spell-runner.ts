@@ -34,7 +34,7 @@ export const spellRunner = (app: Application): void => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'spell-runner'],
+          roles: ['owner', 'spell-runner'],
         }),
       ],
       get: [],

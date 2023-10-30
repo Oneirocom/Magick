@@ -107,7 +107,7 @@ export const agent = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'agent'],
+          roles: ['owner', 'agent'],
         }),
         schemaHooks.validateQuery(agentQueryValidator),
         schemaHooks.resolveQuery(agentQueryResolver),

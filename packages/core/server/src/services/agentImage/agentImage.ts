@@ -10,7 +10,7 @@ export const agentImage = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'agent'],
+          roles: ['owner', 'agent'],
         }),
       ],
     },

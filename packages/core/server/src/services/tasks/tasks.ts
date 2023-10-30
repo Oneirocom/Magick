@@ -41,7 +41,7 @@ export const task = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'tasks'],
+          roles: ['owner', 'tasks'],
         }),
         schemaHooks.validateQuery(taskQueryValidator),
         schemaHooks.resolveQuery(taskQueryResolver),

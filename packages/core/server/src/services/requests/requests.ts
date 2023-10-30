@@ -52,7 +52,7 @@ export const request = (app: Application): void => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'requests'],
+          roles: ['owner', 'requests'],
         }),
         // Push `requestQueryValidator` and `requestQueryResolver` hooks that validate and resolve QueryParams respectively
         schemaHooks.validateQuery(requestQueryValidator),

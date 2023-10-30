@@ -27,7 +27,7 @@ export const projects = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'projects'],
+          roles: ['owner', 'projects'],
         }),
       ],
       find: [],
