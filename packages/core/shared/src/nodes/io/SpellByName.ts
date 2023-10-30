@@ -131,6 +131,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
           'Input - Default': event,
         },
         runSubspell: false,
+        spellId,
         agent: agent,
         secrets: agent?.secrets ?? secrets,
         app: module.app,

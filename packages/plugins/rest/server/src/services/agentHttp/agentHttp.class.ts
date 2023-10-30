@@ -146,7 +146,7 @@ const formatRequest = async (
 
   return {
     agent,
-    spellId,
+    spellId: agent.rootSpellId as string,
     inputs: {
       [`Input - REST API (${method})`]: {
         connector: `REST API (${method})`,
