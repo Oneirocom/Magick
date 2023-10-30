@@ -5,6 +5,7 @@
 
 // Import hooks from '@feathersjs/schema'
 import { hooks as schemaHooks } from '@feathersjs/schema'
+const checkPermissions = require('feathers-permissions')
 
 // Import API resolvers and validators
 import {
@@ -63,6 +64,11 @@ export const agentHttp = (app: Application) => {
       ],
     },
     before: {
+      all: [
+        checkPermissions({
+          roles: ['owner', 'agentHttp'],
+        }),
+      ],
       get: [
         schemaHooks.validateQuery(agentHttpQueryValidator),
         schemaHooks.resolveQuery(agentHttpQueryResolver),
