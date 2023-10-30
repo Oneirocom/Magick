@@ -1,4 +1,5 @@
 // DOCUMENTED
+const checkPermissions = require('feathers-permissions')
 import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
@@ -225,7 +226,11 @@ export async function initApp() {
       ],
     },
     before: {
-      all: [],
+      all: [
+        checkPermissions({
+          roles: ['admin', 'owner', 'public'],
+        }),
+      ],
     },
     after: {},
     error: {},
