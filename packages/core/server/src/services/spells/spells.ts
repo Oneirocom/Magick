@@ -56,7 +56,7 @@ export const spell = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'spells'],
+          roles: ['owner', 'spells'],
         }),
         schemaHooks.validateQuery(spellQueryValidator),
         schemaHooks.resolveQuery(spellQueryResolver),

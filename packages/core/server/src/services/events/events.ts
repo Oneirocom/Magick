@@ -47,7 +47,7 @@ export const event = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'events'],
+          roles: ['owner', 'events'],
         }),
         schemaHooks.validateQuery(eventQueryValidator),
         schemaHooks.resolveQuery(eventQueryResolver),

@@ -39,7 +39,7 @@ export const document = (app: Application) => {
     before: {
       all: [
         checkPermissions({
-          roles: ['admin', 'documents'],
+          roles: ['owner', 'documents'],
         }),
         schemaHooks.validateQuery(documentQueryValidator),
         schemaHooks.resolveQuery(documentQueryResolver),
