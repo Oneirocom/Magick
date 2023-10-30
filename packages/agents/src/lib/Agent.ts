@@ -235,6 +235,7 @@ export class Agent implements AgentInterface {
           ...this.secrets,
           ...data.secrets,
         },
+        sessionId: data?.sessionId || null,
         publicVariables: this.publicVariables,
         runSubspell: data.runSubspell,
         app,
@@ -269,6 +270,7 @@ export class Agent implements AgentInterface {
 
 export interface AgentRunJob {
   inputs: MagickSpellInput
+  sessionId?: string
   jobId: string
   agentId: string
   spellId: string
