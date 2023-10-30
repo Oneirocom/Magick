@@ -40,10 +40,14 @@ export default function (app: Application): void {
 
     // Remove the connection from the anonymous channel
     app.channel('anonymous').leave(connection)
-    app.channel('authenticated').join(connection)
+
+    if (authResult.sessionId) {
+      const sessionId = authResult.sessionId
+      app.channel(sessionId).join(authResult.sessionId)
+      return
+    }
 
     app.channel(authResult.project).join(connection)
-    // Additional custom channels can be set up and joined here
   })
 
   /**
@@ -52,14 +56,28 @@ export default function (app: Application): void {
    * @param hook - The hook context.
    */
   app.publish((data: any, context) => {
+    // get the user from the context
+    if (app.get('isAgent')) return
+
+    // Session IDs are used when we are running a spell in a session
+    // Currently this is only used for the cloud web client
+    if (data.sessionId) {
+      const sessionId = data.sessionId
+      // don't publish if we are an agent
+
+      // Lets not relay up all the patch events
+      if (context.method === 'patch') return
+
+      // Publish all events to the authenticated user channel
+      const channel = app.channel(sessionId)
+      return channel
+    }
+
     const projectId =
       context.params?.projectId ||
       context.result.projectId ||
       context.data?.projectId ||
       data.projectId
-
-    // don't publish if we are an agent
-    if (app.get('isAgent')) return
 
     // Lets not relay up all the patch events
     if (context.method === 'patch') return
