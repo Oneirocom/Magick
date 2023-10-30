@@ -42,6 +42,8 @@ const handleSockets = (app: any) => {
         const user = payload.user
         // Attach the user info to the params for use in services
         socket.feathers.user = user
+        if (payload.sessionId) socket.feathers.sessionId = payload.sessionId
+
         // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
         const spellManager = new SpellManager({
           socket,
