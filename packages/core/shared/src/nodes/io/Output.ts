@@ -1,6 +1,5 @@
 // DOCUMENTED
 import Rete from '@magickml/rete'
-import { getLogger } from '@magickml/core'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DropdownControl } from '../../dataControls/DropdownControl'
@@ -28,12 +27,12 @@ const defaultOutputTypes = [
   },
 ]
 
-const logger = getLogger();
 
 /**
  * Output component
  */
 export class Output extends MagickComponent<void> {
+
   /**
    * Constructor for Output component
    */
@@ -52,7 +51,6 @@ export class Output extends MagickComponent<void> {
     )
 
     this.common = true
-
     this.module = {
       nodeType: 'output',
       socket: anySocket,
@@ -165,9 +163,9 @@ export class Output extends MagickComponent<void> {
         const t = agent.outputTypes.find(t => t.name === outputType)
         // Find outputType in outputTypes where name is outputType
         if (!t) {
-          logger.error({ outputType, finalType: t }, 'Output type is not defined')
+          this.logger.error({ outputType, finalType: t }, 'Output type is not defined')
         } else if (!t.handler) {
-          logger.error({ outputType, finalType: t }, 'Output type is not defined')
+          this.logger.error({ outputType, finalType: t }, 'Output type is not defined')
         } else {
           t.handler({
             output,
