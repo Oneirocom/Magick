@@ -13,6 +13,7 @@ import {
 
 import { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 /**
  * Export the Event class and event schema
@@ -45,6 +46,9 @@ export const event = (app: Application) => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['owner', 'events'],
+        }),
         schemaHooks.validateQuery(eventQueryValidator),
         schemaHooks.resolveQuery(eventQueryResolver),
       ],

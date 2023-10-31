@@ -5,7 +5,6 @@
  */
 
 // Import necessary modules and functions
-import * as BullMQ from 'bullmq'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   agentDataValidator,
@@ -22,12 +21,35 @@ import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
 import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Re-export agents.class and agents.schema
 export * from './agents.class'
 export * from './agents.schema'
 
-const AGENT_EVENTS = ['log', 'result', 'spell']
+function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
+  // Base cases
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  // For arrays, iterate over each item
+  if (Array.isArray(obj)) {
+    return obj.map(item => removeUnwantedProperties(item, keysToRemove))
+  }
+
+  // Create a new object without the unwanted properties
+  const result: any = {}
+  for (const key of Object.keys(obj)) {
+    if (!keysToRemove.includes(key)) {
+      result[key] = removeUnwantedProperties(obj[key], keysToRemove)
+    }
+  }
+
+  return result
+}
+
+const AGENT_EVENTS = ['log', 'result', 'spell', 'run']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -44,12 +66,14 @@ export const agent = (app: Application) => {
 
   // this handles relaying all agent messages up to connected clients.
   pubSub.patternSubscribe('agent*', (message, channel) => {
-    if (app.get('isAgent')) return
+    if (app.get('environment') !== 'server') return
     // parse  the channel from agent:agentId:messageType
     const agentId = channel.split(':')[1]
 
     // parse the type of agent message
     const messageType = channel.split(':')[2]
+
+    console.log('EMITTING TYPE', messageType)
 
     // check if message type is an agent event
     if (!AGENT_EVENTS.includes(messageType)) {
@@ -57,42 +81,30 @@ export const agent = (app: Application) => {
       app.service('agents').emit('log', {
         channel,
         agentId,
+        project: agentId,
         data: {
-          message: `Unknown message type ${messageType}`,
+          message: `Unknown message type ${messageType} on channel ${channel}`,
         },
       })
     }
+
+    // remove unwanted properties from the message
+    // embeddings and spells are large data packages we don't need on the client
+    const cleanMessage = removeUnwantedProperties(message, [
+      'embedding',
+      'spell',
+    ])
 
     // this is where we relay messages up based upon the time.
     // note for every custom type we need to add it to the above
     // todo harder typing on all message transports
     app.service('agents').emit(messageType, {
-      ...message,
+      ...cleanMessage,
       messageType,
       channel,
       agentId,
     })
   })
-
-  // todo more predictable channel names and method for handling message queues
-  // similar to the above
-  new BullMQ.Worker(
-    'agent:run:result',
-    async job => {
-      // we wil shuttle this message from here back up a socket to the client
-      const { agentId, projectId, originalData } = job.data
-      // emit custom events via the agent service
-      app.service('agents').emit('result', {
-        channel: `agent:${agentId}`,
-        sessionId: originalData.sessionId,
-        projectId,
-        data: job.data,
-      })
-    },
-    {
-      connection: app.get('redis'),
-    }
-  )
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
@@ -105,6 +117,9 @@ export const agent = (app: Application) => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['owner', 'agent'],
+        }),
         schemaHooks.validateQuery(agentQueryValidator),
         schemaHooks.resolveQuery(agentQueryResolver),
       ],
