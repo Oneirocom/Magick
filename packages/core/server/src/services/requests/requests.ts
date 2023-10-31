@@ -3,7 +3,7 @@
  * This file provides a configure function exporting a request that registers the service and its hooks via `app.configure`.
  * @see https://dove.feathersjs.com/guides/cli/service.html
  */
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   requestDataValidator,

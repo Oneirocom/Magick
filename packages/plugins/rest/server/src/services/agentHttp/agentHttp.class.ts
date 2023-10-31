@@ -110,7 +110,6 @@ const formatRequest = async (
   params: any
 ): Promise<Request> => {
   const {
-    spellId,
     content,
     isCloud = false,
     secrets = {},

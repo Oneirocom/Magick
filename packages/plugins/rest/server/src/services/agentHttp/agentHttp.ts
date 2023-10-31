@@ -5,7 +5,8 @@
 
 // Import hooks from '@feathersjs/schema'
 import { hooks as schemaHooks } from '@feathersjs/schema'
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
+
 
 // Import API resolvers and validators
 import {

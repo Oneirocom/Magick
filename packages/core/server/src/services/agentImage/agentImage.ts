@@ -1,4 +1,4 @@
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import { Application } from '../../declarations'
 import { AgentImageService } from './agentImage.class'
 

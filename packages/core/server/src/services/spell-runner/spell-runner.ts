@@ -3,7 +3,7 @@
  * This module provides a configure function that registers the spell-runner service and its hooks on a Feathers application instance.
  * @packageDocumentation
  */
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import type { Application } from '../../declarations'
 import { checkForSpellInManager } from '../../hooks/spellmanagerHooks'
 import { SpellRunnerService } from './spell-runner.class'
