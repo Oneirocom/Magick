@@ -1,5 +1,5 @@
-import checkPermissions from 'feathers-permissions'
 import { Application } from '../../declarations'
+import { checkPermissions } from '../../lib/feathersPermissions'
 import { AgentImageService } from './agentImage.class'
 
 export const agentImage = (app: Application) => {

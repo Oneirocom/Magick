@@ -35,7 +35,7 @@ export const spellRunner = (app: Application): void => {
       all: [
         checkPermissions({
           roles: ['owner', 'spell-runner'],
-        }),
+        }) as any,
       ],
       get: [],
       create: [checkForSpellInManager], // Only check for the spell in the manager before creating it.

@@ -1,5 +1,4 @@
 // DOCUMENTED
-import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   taskExternalResolver,
@@ -12,6 +11,7 @@ import {
 
 import { Application } from '../../declarations'
 import { TaskService, getOptions } from './tasks.class'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 /**
  * Export the Task class and task schema
