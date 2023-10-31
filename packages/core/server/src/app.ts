@@ -40,6 +40,7 @@ import { PluginEmbeddings } from './customEmbeddings'
 
 import { getLogger } from '@magickml/core'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
+import pino from 'pino'
 
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
@@ -52,11 +53,13 @@ declare module './declarations' {
     redis: Redis
     isAgent?: boolean
     agentCommander: AgentCommander
+    logger: pino.Logger
   }
 }
 
 export async function initApp() {
   const logger = getLogger()
+  app.set('logger', logger)
   logger.info('Initializing feathers app...')
   globalsManager.register('feathers', app)
 

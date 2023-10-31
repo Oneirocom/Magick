@@ -16,6 +16,7 @@ import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
 import { NodeData } from 'rete/types/core/data'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from '@magickml/config'
+import { AGENT_SPELL } from '../communication/agentEventTypes'
 
 export type RunComponentArgs = {
   sessionId?: string
@@ -69,14 +70,6 @@ class SpellRunner {
     })
   }
 
-  publish(event, message) {
-    if (!this.agent) return
-    this.agent.publishEvent(`spell:${this.currentSpell.id}`, {
-      ...message,
-      event,
-    })
-  }
-
   emit(_message) {
     // same message emitted from server or agent
     const message = {
@@ -89,11 +82,12 @@ class SpellRunner {
     if (!this.agent) {
       // if we aren't in an agent, we are on the server.
       // Emit the event directly via the agent service
+
       this.app.service('agents').emit('spell', message)
     } else {
       // handle the case of the emit being run on an agent not the server
       // to do we probably want these events to be constants somewhere
-      this.agent.publishEvent('spell', message)
+      this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
     }
   }
 

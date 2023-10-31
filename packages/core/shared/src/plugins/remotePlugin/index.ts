@@ -153,8 +153,10 @@ function install(
               // emit the event, along with the evet type to be picked up by the client
               // the event namespace is determined in the smit function
               // the event is agent:agentId:spell since we are in the spellrunnner
+              console.log('EMIITTTING TO SESSION ID', context.module.sessionId)
               emit({
                 eventType,
+                sessionId: context.module.sessionId || null,
                 nodeId: node.id,
                 output: result,
                 input: inputs,
