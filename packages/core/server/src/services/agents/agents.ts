@@ -5,8 +5,7 @@
  */
 
 // Import necessary modules and functions
-const checkPermissions = require('feathers-permissions')
-import * as BullMQ from 'bullmq'
+import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   agentDataValidator,

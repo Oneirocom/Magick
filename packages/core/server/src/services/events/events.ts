@@ -1,5 +1,5 @@
 // DOCUMENTED
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { v4 as uuidv4 } from 'uuid'

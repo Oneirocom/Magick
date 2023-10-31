@@ -1,5 +1,5 @@
 // DOCUMENTED
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
