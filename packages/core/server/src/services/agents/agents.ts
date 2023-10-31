@@ -28,6 +28,28 @@ import { v4 as uuidv4 } from 'uuid'
 export * from './agents.class'
 export * from './agents.schema'
 
+function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
+  // Base cases
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  // For arrays, iterate over each item
+  if (Array.isArray(obj)) {
+    return obj.map(item => removeUnwantedProperties(item, keysToRemove))
+  }
+
+  // Create a new object without the unwanted properties
+  const result: any = {}
+  for (const key of Object.keys(obj)) {
+    if (!keysToRemove.includes(key)) {
+      result[key] = removeUnwantedProperties(obj[key], keysToRemove)
+    }
+  }
+
+  return result
+}
+
 const AGENT_EVENTS = ['log', 'result', 'spell', 'run']
 
 /**
@@ -45,7 +67,7 @@ export const agent = (app: Application) => {
 
   // this handles relaying all agent messages up to connected clients.
   pubSub.patternSubscribe('agent*', (message, channel) => {
-    if (app.get('isAgent')) return
+    if (app.get('environment') !== 'server') return
     // parse  the channel from agent:agentId:messageType
     const agentId = channel.split(':')[1]
 
@@ -67,11 +89,18 @@ export const agent = (app: Application) => {
       })
     }
 
+    // remove unwanted properties from the message
+    // embeddings and spells are large data packages we don't need on the client
+    const cleanMessage = removeUnwantedProperties(message, [
+      'embedding',
+      'spell',
+    ])
+
     // this is where we relay messages up based upon the time.
     // note for every custom type we need to add it to the above
     // todo harder typing on all message transports
     app.service('agents').emit(messageType, {
-      ...message,
+      ...cleanMessage,
       messageType,
       channel,
       agentId,
