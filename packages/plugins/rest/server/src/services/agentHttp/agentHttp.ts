@@ -17,7 +17,7 @@ import {
 } from './agentHttp.schema'
 
 // Import types and classes
-import type { Application } from '@magickml/server-core'
+import { checkPermissions, type Application } from '@magickml/server-core'
 import { AgentHttpService } from './agentHttp.class'
 
 // Add this service to the service type index
@@ -63,6 +63,11 @@ export const agentHttp = (app: Application) => {
       ],
     },
     before: {
+      all: [
+        checkPermissions({
+          roles: ['owner', 'agentHttp'],
+        }),
+      ],
       get: [
         schemaHooks.validateQuery(agentHttpQueryValidator),
         schemaHooks.resolveQuery(agentHttpQueryResolver),

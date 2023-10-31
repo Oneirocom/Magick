@@ -17,6 +17,7 @@ import {
 
 import type { Application } from '../../declarations'
 import { AnalyticsParams, RequestService, getOptions } from './requests.class'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Exporting all functions and classes to be used by other modules
 export * from './requests.class'
@@ -50,6 +51,9 @@ export const request = (app: Application): void => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['owner', 'requests'],
+        }),
         // Push `requestQueryValidator` and `requestQueryResolver` hooks that validate and resolve QueryParams respectively
         schemaHooks.validateQuery(requestQueryValidator),
         schemaHooks.resolveQuery(requestQueryResolver),

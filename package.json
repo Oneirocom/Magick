@@ -126,6 +126,7 @@
     "ethers": "5.7.2",
     "expletives": "0.1.5",
     "express": "4.18.2",
+    "feathers-permissions": "^2.1.4",
     "feathers-sync": "3.0.3",
     "flatted": "3.2.7",
     "flexlayout-react": "0.7.7",
