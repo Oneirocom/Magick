@@ -5,7 +5,6 @@
  */
 
 // Import necessary modules and functions
-import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   agentDataValidator,
@@ -22,6 +21,7 @@ import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
 import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Re-export agents.class and agents.schema
 export * from './agents.class'

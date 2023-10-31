@@ -5,7 +5,6 @@
 
 // Import hooks from '@feathersjs/schema'
 import { hooks as schemaHooks } from '@feathersjs/schema'
-const checkPermissions = require('feathers-permissions')
 
 // Import API resolvers and validators
 import {
@@ -18,7 +17,7 @@ import {
 } from './agentHttp.schema'
 
 // Import types and classes
-import type { Application } from '@magickml/server-core'
+import { checkPermissions, type Application } from '@magickml/server-core'
 import { AgentHttpService } from './agentHttp.class'
 
 // Add this service to the service type index

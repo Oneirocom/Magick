@@ -55,47 +55,17 @@ export const spell = (app: Application) => {
     },
     before: {
       all: [
-        checkPermissions({
-          roles: ['owner', 'spells'],
-        }),
         schemaHooks.validateQuery(spellQueryValidator),
         schemaHooks.resolveQuery(spellQueryResolver),
+        checkPermissions({
+          roles: ['owner', 'spells'],
+        }) as any,
       ],
       find: [],
       get: [],
       create: [
         schemaHooks.validateData(spellDataValidator),
         schemaHooks.resolveData(spellDataResolver),
-        // async (context: HookContext) => {
-        //   const { data, service } = context
-        //   context.data = {
-        //     [service.id]: uuidv4(),
-        //     ...data,
-        //   }
-        //   await context.service
-        //     .find({
-        //       query: {
-        //         projectId: data.projectId,
-        //         name: data.name,
-        //       },
-        //     })
-        //     .then(async param => {
-        //       if (param.data.length >= 1) {
-        //         await context.service
-        //           .find({
-        //             query: {
-        //               projectId: data.projectId,
-        //               name: {
-        //                 $ilike: data.name + ' (%)',
-        //               },
-        //             },
-        //           })
-        //           .then(val => {
-        //             context.data.name = data.name + ' (' + (1 + val.data.length) + ')'
-        //           })
-        //       }
-        //     })
-        // },
       ],
       patch: [
         schemaHooks.validateData(spellPatchValidator),

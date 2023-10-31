@@ -1,5 +1,4 @@
 // DOCUMENTED
-import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,6 +13,7 @@ import {
 
 import { Application, HookContext } from '../../declarations'
 import { EventService, getOptions } from './events.class'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 /**
  * Export the Event class and event schema

@@ -1,5 +1,4 @@
 // DOCUMENTED
-import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import pgvector from 'pgvector/pg'
 import { Application, HookContext } from '../../declarations'
@@ -10,6 +9,7 @@ import {
   documentQueryResolver,
   documentQueryValidator,
 } from './documents.schema'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
