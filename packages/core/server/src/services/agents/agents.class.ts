@@ -32,14 +32,10 @@ export class AgentService<
   ServiceParams extends Params = AgentParams
 > extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
   app: Application
-  runQueue: Queue
 
   constructor(options: KnexAdapterOptions, app: Application) {
     super(options)
     this.app = app
-    this.runQueue = new Queue(`agent:run`, {
-      connection: app.get('redis'),
-    })
   }
 
   // we use this ping to avoid firing a patched event on the agent

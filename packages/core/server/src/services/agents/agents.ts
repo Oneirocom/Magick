@@ -28,7 +28,7 @@ import { v4 as uuidv4 } from 'uuid'
 export * from './agents.class'
 export * from './agents.schema'
 
-const AGENT_EVENTS = ['log', 'result', 'spell']
+const AGENT_EVENTS = ['log', 'result', 'spell', 'run']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -52,14 +52,17 @@ export const agent = (app: Application) => {
     // parse the type of agent message
     const messageType = channel.split(':')[2]
 
+    console.log('EMITTING TYPE', messageType)
+
     // check if message type is an agent event
     if (!AGENT_EVENTS.includes(messageType)) {
       // notify connected clients via log message that an unknown message type was received
       app.service('agents').emit('log', {
         channel,
         agentId,
+        project: agentId,
         data: {
-          message: `Unknown message type ${messageType}`,
+          message: `Unknown message type ${messageType} on channel ${channel}`,
         },
       })
     }
@@ -74,26 +77,6 @@ export const agent = (app: Application) => {
       agentId,
     })
   })
-
-  // todo more predictable channel names and method for handling message queues
-  // similar to the above
-  new BullMQ.Worker(
-    'agent:run:result',
-    async job => {
-      // we wil shuttle this message from here back up a socket to the client
-      const { agentId, projectId, originalData } = job.data
-      // emit custom events via the agent service
-      app.service('agents').emit('result', {
-        channel: `agent:${agentId}`,
-        sessionId: originalData.sessionId,
-        projectId,
-        data: job.data,
-      })
-    },
-    {
-      connection: app.get('redis'),
-    }
-  )
 
   // Initialize hooks for the agent service
   app.service('agents').hooks({
