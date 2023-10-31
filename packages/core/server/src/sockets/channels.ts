@@ -36,9 +36,9 @@ export default function (app: Application): void {
    */
   app.on('login', (authResult: any, { connection }: any): void => {
     // Return early if there's no real-time connection (e.g. during REST login)
-    logger.debug(`AUTH: Login event for ${authResult.user.id}`)
+    logger.debug(`CHANNELS: Login event for ${authResult.user.id}`)
     if (!connection) {
-      logger.debug(`AUTH: No connection for ${authResult.user.id}`)
+      logger.debug(`CHANNELS: No connection for ${authResult.user.id}`)
       return
     }
 
@@ -46,7 +46,7 @@ export default function (app: Application): void {
     app.channel('anonymous').leave(connection)
 
     if (authResult.sessionId) {
-      logger.debug(`AUTH: Joining session id ${authResult.sessionId}`)
+      logger.debug(`CHANNELS: Joining session id ${authResult.sessionId}`)
       const sessionId = authResult.sessionId
       app.channel(sessionId).join(connection)
       return
@@ -62,7 +62,7 @@ export default function (app: Application): void {
    */
   app.publish((data: any, context) => {
     // get the user from the context
-    if (app.get('isAgent')) return
+    if (app.get('environment') !== 'server') return
 
     const sessionId =
       context.params?.sessionId ||
@@ -72,7 +72,7 @@ export default function (app: Application): void {
     // Currently this is only used for the cloud web client
     if (sessionId) {
       // conly send the right events up the right channel
-      logger.debug(`PUBLISH: Publishing to session ${sessionId}!`)
+      logger.debug(`CHANNELS: Publishing to session ${sessionId}!`)
 
       // Lets not relay up all the patch events
       if (context.method === 'patch') return
