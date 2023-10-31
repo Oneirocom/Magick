@@ -45,6 +45,8 @@ import pino from 'pino'
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
 
+export type Environment = 'default' | 'server' | 'agent'
+
 declare module './declarations' {
   interface Configuration {
     vectordb: PostgresVectorStoreCustom | any
@@ -54,10 +56,11 @@ declare module './declarations' {
     isAgent?: boolean
     agentCommander: AgentCommander
     logger: pino.Logger
+    environment: Environment
   }
 }
 
-export async function initApp() {
+export async function initApp(environment: Environment = 'default') {
   const logger = getLogger()
   app.set('logger', logger)
   logger.info('Initializing feathers app...')
@@ -74,6 +77,7 @@ export async function initApp() {
     max: paginateMax,
   }
   app.set('paginate', paginate)
+  app.set('environment', environment)
 
   // Koa middleware
   app.use(cors({ origin: '*' }))
