@@ -4,7 +4,7 @@
  */
 
 // Imports
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import type { Application } from '../../declarations'
 import { checkForSpellInManager } from '../../hooks/spellmanagerHooks'

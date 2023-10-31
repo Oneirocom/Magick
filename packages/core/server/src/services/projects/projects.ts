@@ -1,6 +1,6 @@
 // DOCUMENTED
 // For more information about this file, see https://dove.feathersjs.com/guides/cli/service.html
-const checkPermissions = require('feathers-permissions')
+import checkPermissions from 'feathers-permissions'
 import type { Application } from '../../declarations'
 import { ProjectsService } from './projects.class'
 export * from './projects.class'
