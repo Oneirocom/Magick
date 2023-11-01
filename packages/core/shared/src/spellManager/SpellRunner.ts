@@ -82,7 +82,10 @@ class SpellRunner {
     if (!this.agent) {
       // if we aren't in an agent, we are on the server.
       // Emit the event directly via the agent service
-
+      this.logger.trace(
+        'SPELLRUNNER: Emitting spell event from sandbox %o',
+        message
+      )
       this.app.service('agents').emit('spell', message)
     } else {
       // handle the case of the emit being run on an agent not the server
