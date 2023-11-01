@@ -52,6 +52,10 @@ export default function (app: Application): void {
       return
     }
 
+    logger.debug(
+      'CHANNELS: Joining authenticated channel for project %s',
+      authResult.project
+    )
     app.channel(authResult.project).join(connection)
   })
 
@@ -72,7 +76,7 @@ export default function (app: Application): void {
     // Currently this is only used for the cloud web client
     if (sessionId) {
       // conly send the right events up the right channel
-      logger.debug(`CHANNELS: Publishing to session ${sessionId}!`)
+      logger.trace(`CHANNELS: Publishing to session ${sessionId}!`)
 
       // Lets not relay up all the patch events
       if (context.method === 'patch') return
@@ -89,8 +93,12 @@ export default function (app: Application): void {
       data.projectId
 
     // Lets not relay up all the patch events
-    if (context.method === 'patch' || projectId) return
+    if (context.method === 'patch' || !projectId) return
 
+    logger.trace(
+      `CHANNELS: Publishing event path ${context.path} to project %s!`,
+      projectId
+    )
     // Publish all events to the authenticated user channel
     const channel = app.channel(projectId)
     return channel
