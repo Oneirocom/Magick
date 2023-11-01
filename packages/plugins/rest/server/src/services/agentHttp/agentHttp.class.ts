@@ -90,6 +90,7 @@ type RequestData = {
   content: string
   spellId?: string
   isCloud?: boolean
+  sessionId?: string
   secrets?: {
     [key: string]: string
   }
@@ -99,7 +100,6 @@ type RequestData = {
   sender?: string
   client?: string
   channel?: string
-  sessionId?: string
 }
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'

@@ -337,7 +337,7 @@ export class SpellComponent extends MagickComponent<
       spellId: node.data.spellId as string,
       inputs: flattenedInputs,
       runSubspell: true,
-      agent: agent,
+      agentId: agent.id,
       secrets: agent?.secrets ?? secrets,
       app,
       publicVariables: variables,

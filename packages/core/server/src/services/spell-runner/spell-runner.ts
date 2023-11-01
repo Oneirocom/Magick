@@ -1,17 +1,17 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * This module provides a configure function that registers the spell-runner service and its hooks on a Feathers application instance.
  * @packageDocumentation
  */
-
-import type { Application } from '../../declarations';
-import { checkForSpellInManager } from '../../hooks/spellmanagerHooks';
-import { SpellRunnerService } from './spell-runner.class';
+import checkPermissions from 'feathers-permissions'
+import type { Application } from '../../declarations'
+import { checkForSpellInManager } from '../../hooks/spellmanagerHooks'
+import { SpellRunnerService } from './spell-runner.class'
 
 /**
  * Exports all members of the `SpellRunnerService` module.
  */
-export * from './spell-runner.class';
+export * from './spell-runner.class'
 
 /**
  * Configures a Feathers application instance by registering the `spell-runner` service and its hooks on it.
@@ -24,7 +24,7 @@ export const spellRunner = (app: Application): void => {
     methods: ['get', 'create', 'update'],
     // You can add additional custom events to be sent to clients here
     events: [],
-  });
+  })
 
   // Initialize hooks for the `spell-runner` service
   app.service('spell-runner').hooks({
@@ -32,7 +32,11 @@ export const spellRunner = (app: Application): void => {
       all: [],
     },
     before: {
-      all: [],
+      all: [
+        checkPermissions({
+          roles: ['owner', 'spell-runner'],
+        }) as any,
+      ],
       get: [],
       create: [checkForSpellInManager], // Only check for the spell in the manager before creating it.
       update: [],
@@ -43,14 +47,14 @@ export const spellRunner = (app: Application): void => {
     error: {
       all: [],
     },
-  });
-};
+  })
+}
 
 /**
  * Augments the `ServiceTypes` interface of the Feathers application so that it includes the `spell-runner` service.
  */
 declare module '../../declarations' {
   interface ServiceTypes {
-    'spell-runner': SpellRunnerService;
+    'spell-runner': SpellRunnerService
   }
 }
