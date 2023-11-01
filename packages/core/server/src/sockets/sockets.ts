@@ -7,11 +7,13 @@ import { SpellManager } from '@magickml/core'
  * @returns {(io: any) => void} - A function that takes an `io` instance and sets up socket connections.
  */
 const handleSockets = (app: any) => {
+  const logger = app.get('logger')
   return (io: any) => {
     /**
      * Set up a connection event listener for incoming sockets.
      */
     io.on('connection', async function (socket: any) {
+      logger.debug('Socket connected', socket.id)
       //   // Use a custom header for the handshake.
       let token = socket?.handshake?.query?.token
 
@@ -25,7 +27,7 @@ const handleSockets = (app: any) => {
         }
 
         if (!token)
-          return console.error(
+          return logger.error(
             'No token provided in handshake query. Socket connection failed.'
           )
 
@@ -39,9 +41,16 @@ const handleSockets = (app: any) => {
           .service('authentication')
           .verifyAccessToken(token)
 
+        logger.debug(
+          `Socket connection for user ${payload.user.id}: %o`,
+          payload
+        )
+
         const user = payload.user
         // Attach the user info to the params for use in services
         socket.feathers.user = user
+        if (payload.sessionId) socket.feathers.sessionId = payload.sessionId
+
         // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
         const spellManager = new SpellManager({
           socket,
@@ -50,10 +59,11 @@ const handleSockets = (app: any) => {
         })
         app.userSpellManagers.set(user.id, spellManager)
         // emit login event to be handled by global app login methods for channels
+        logger.debug('Emitting login event for connection')
         app.emit('login', payload, { connection: socket.feathers })
         socket.emit('connected')
       } catch (error: any) {
-        console.error('Authentication error:', error.message)
+        logger.error('Authentication error: %o', error.message)
         socket.emit('auth_error', 'Authentication failed.')
         return
       }
