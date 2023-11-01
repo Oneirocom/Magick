@@ -73,8 +73,6 @@ export const agent = (app: Application) => {
     // parse the type of agent message
     const messageType = channel.split(':')[2]
 
-    console.log('EMITTING TYPE', messageType)
-
     // check if message type is an agent event
     if (!AGENT_EVENTS.includes(messageType)) {
       // notify connected clients via log message that an unknown message type was received
