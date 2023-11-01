@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -138,6 +138,8 @@ export const CustomNode: React.FC<Props> = props => {
       return
     }
 
+    await dispatch(closeTab(props.node.id))
+  
     const spell: any = props.node.id
     const response: any = await patchSpell({
       id: props.node.id,
@@ -145,17 +147,21 @@ export const CustomNode: React.FC<Props> = props => {
         name: newName,
       },
     })
-
+  
     if (response.error) {
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
       return
     }
-
-    enqueueSnackbar('Spell saved', { variant: 'success' })
-
-    dispatch(closeTab(props.node.id))
+  
+    if (response){
+      enqueueSnackbar('Spell saved', { variant: 'success' })
+      dispatch(
+        closeTab(props.node.id ) 
+      )
+    }
+  
     dispatch(
       openTab({
         name: props.node.id + '-' + encodeURIComponent(btoa(newName)),
@@ -165,7 +171,6 @@ export const CustomNode: React.FC<Props> = props => {
     )
     setToDelete(spell)
     setIsAdded(true)
-    setIsRenaming(false)
   }
 
   const setClassSelectedFile = () => {
@@ -174,12 +179,16 @@ export const CustomNode: React.FC<Props> = props => {
     return activeTab?.name === props.node.text ? styles.isSelected : ''
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isRenaming) {
       const renameInput = document?.querySelector('.rename-input') as HTMLElement
       if (renameInput) renameInput.focus()
     }
   }, [isRenaming])
+
+  // useEffect(() => {
+  //   setIsRenaming(false)
+  // }, [props.node, newName])
 
   return (
     <div
