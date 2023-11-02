@@ -221,6 +221,7 @@ class SpellRunner {
 
     return (
       [...triggerIns, ...inputs].find(node => {
+        console.log('NODE DATA NAME', node.data.name)
         return node.data.name === componentName
       }) || null
     )
@@ -267,7 +268,7 @@ class SpellRunner {
   }
   error(message: string, error: unknown | null = null) {
     this.busy = false
-    this.logger.error(message, 'error: %o', error)
+    this.logger.error(error, message)
     if (error) throw error
     throw new Error(message)
   }
@@ -390,7 +391,7 @@ class SpellRunner {
       this.busy = false
       return this.outputData
     } catch (error) {
-      this.error(`Error running spell ${this.currentSpell.id} %o`, error)
+      this.error(`Error running spell ${this.currentSpell.id}`, error)
     }
   }
 }

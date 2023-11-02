@@ -108,6 +108,8 @@ export class BlueskyConnector {
           },
         },
         agent: this.agent,
+        agentId: this.agent.id,
+        spellId: this.agent.rootSpellId,
         secrets: this.agent.secrets,
         publicVariables: this.agent.publicVariables,
         runSubspell: true,
