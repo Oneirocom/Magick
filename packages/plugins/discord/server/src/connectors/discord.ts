@@ -295,6 +295,8 @@ export class DiscordConnector {
           rawData: JSON.stringify(message),
         },
       },
+      spellId: this.agent.rootSpellId,
+      agentId: this.agent.id,
       agent: this.agent,
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,

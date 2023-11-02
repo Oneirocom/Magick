@@ -67,7 +67,8 @@ const getAgent = async (
 
 type Request = {
   agent: Agent
-  spellId?: string
+  agentId: string
+  spellId: string
   sessionId?: string
   inputs: {
     [key: string]: {
@@ -148,6 +149,7 @@ const formatRequest = async (
 
   return {
     agent,
+    agentId: agent.id,
     spellId: agent.rootSpellId as string,
     sessionId: sessionId,
     inputs: {

@@ -132,7 +132,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         },
         runSubspell: false,
         spellId,
-        agent: agent,
+        agentId: agent?.id,
         secrets: agent?.secrets ?? secrets,
         app: module.app,
         publicVariables: {},
@@ -140,6 +140,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       const outputs = await app
         .get('agentCommander')
         .runSpellWithResponse(runComponentArgs)
+
       const output = Object.values(outputs as any)[0]
       return {
         output,
