@@ -614,6 +614,7 @@ export type ModuleContext = {
     app?: Application
     inputs: Record<string, unknown>
     outputs: Record<string, unknown>
+    sessionId?: string
   }
   projectId: string
   currentSpell: Spell

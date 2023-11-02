@@ -126,8 +126,6 @@ export class DocumentService<
     ) {
       const param = params.query
 
-      console.log('param!!!!!!!', param)
-
       const querys = await db('documents')
         .joinRaw(
           'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
