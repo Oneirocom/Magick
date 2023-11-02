@@ -1,5 +1,4 @@
 // DOCUMENTED
-import checkPermissions from 'feathers-permissions'
 import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
@@ -40,12 +39,9 @@ import { PluginEmbeddings } from './customEmbeddings'
 
 import { getLogger } from '@magickml/core'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
-import pino from 'pino'
 
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
-
-export type Environment = 'default' | 'server' | 'agent'
 
 declare module './declarations' {
   interface Configuration {
@@ -55,14 +51,11 @@ declare module './declarations' {
     redis: Redis
     isAgent?: boolean
     agentCommander: AgentCommander
-    logger: pino.Logger
-    environment: Environment
   }
 }
 
-export async function initApp(environment: Environment = 'default') {
+export async function initApp() {
   const logger = getLogger()
-  app.set('logger', logger)
   logger.info('Initializing feathers app...')
   globalsManager.register('feathers', app)
 
@@ -77,7 +70,6 @@ export async function initApp(environment: Environment = 'default') {
     max: paginateMax,
   }
   app.set('paginate', paginate)
-  app.set('environment', environment)
 
   // Koa middleware
   app.use(cors({ origin: '*' }))
@@ -184,21 +176,11 @@ export async function initApp(environment: Environment = 'default') {
         async (context: HookContext, next) => {
           // if the route is to the api service, skip auth
           if (context.path === 'api') {
-            context.params.user = {
-              id: 'api',
-              permissions: ['admin', 'owner'],
-            }
-
             return next()
           }
 
           // if we are authenticated with the API key, skip auth
           if (context.params.authenticated && context.params.apiKey) {
-            // set the user to the api user for all permissions here
-            context.params.user = {
-              id: 'api',
-              permissions: ['admin', 'owner'],
-            }
             return next()
           }
 
@@ -243,11 +225,7 @@ export async function initApp(environment: Environment = 'default') {
       ],
     },
     before: {
-      all: [
-        checkPermissions({
-          roles: ['admin', 'owner', 'public'],
-        }),
-      ],
+      all: [],
     },
     after: {},
     error: {},

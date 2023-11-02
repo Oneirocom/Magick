@@ -68,26 +68,23 @@ export class SpellRunnerService<
     data: CreateData,
     params?: ServiceParams
   ): Promise<Record<string, unknown> | void> {
-    const logger = app.get('logger')
     if (!app.userSpellManagers) return {}
-    if (!params) return logger.error('No params present in service')
+    if (!params) return console.error('No params present in service')
 
     const { user } = params as any
 
-    if (!user) return logger.error('No user is present in service')
+    if (!user) return console.error('No user is present in service')
 
     const { inputs, projectId, secrets, publicVariables, id } = data
     const decodedId = id.length > 36 ? id.slice(0, 36) : id
     const spellManager = app.userSpellManagers.get(user.id)
 
-    if (!spellManager) return logger.error('No spell manager found for user!')
+    if (!spellManager) return console.error('No spell manager found for user!')
 
     if (!spellManager.hasSpellRunner(decodedId)) {
       const spell = await getSpell({ app, id: decodedId, projectId })
       await spellManager.load(spell as SpellInterface)
     }
-
-    logger.debug('Running playtest spell %s', id)
 
     const result = await spellManager.run({
       spellId: id,
