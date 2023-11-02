@@ -163,6 +163,8 @@ export class TwitterConnector {
 
           app.get('agentCommander').runSpell({
             agent: this.agent,
+            agentId: this.agent.id,
+            spellId: this.agent.rootSpellId,
             inputs: {
               'Input - Twitter (Feed)': {
                 connector: 'Twitter (Feed)',
@@ -252,6 +254,8 @@ export class TwitterConnector {
 
               await app.get('agentCommander').runSpell({
                 agent: this.agent,
+                agentId: this.agent.id,
+                spellId: this.agent.rootSpellId,
                 inputs: {
                   'Input - Twitter (DM)': {
                     connector: 'Twitter (DM)',
@@ -308,27 +312,27 @@ export class TwitterConnector {
       console.log('DM MESSAGE: response', response)
     } else if (event.channelType === 'feed') {
       // Split the response into chunks of complete sentences but less than 280 characters
-      const responses = [] as string[];
-      const maxChunkSize = 280;
-    
-      const sentences = message.match(/[^.!?]+[.!?]+/g) || [];
-    
-      let currentChunk = '';
+      const responses = [] as string[]
+      const maxChunkSize = 280
+
+      const sentences = message.match(/[^.!?]+[.!?]+/g) || []
+
+      let currentChunk = ''
       for (const sentence of sentences) {
         if (currentChunk.length + sentence.length <= maxChunkSize) {
-          currentChunk += sentence;
+          currentChunk += sentence
         } else {
-          responses.push(currentChunk.trim());
-          currentChunk = sentence;
+          responses.push(currentChunk.trim())
+          currentChunk = sentence
         }
       }
-    
+
       if (currentChunk.length > 0) {
-        responses.push(currentChunk.trim());
+        responses.push(currentChunk.trim())
       }
-    
+
       for (const chunk of responses) {
-        await this.twitterv1?.v1.reply(chunk, event.channel);
+        await this.twitterv1?.v1.reply(chunk, event.channel)
       }
     } else {
       console.log('Unknown channel type', event.channelType)

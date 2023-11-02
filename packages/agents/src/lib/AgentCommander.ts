@@ -16,13 +16,13 @@ import { AGENT_RESPONSE_TIMEOUT_MSEC } from '@magickml/config'
 
 export type RunRootSpellArgs = {
   agent?: Agent
-  agentId?: string
+  agentId: string
   inputs: MagickSpellInput
   componentName?: string
   runSubspell?: boolean
   secrets?: Record<string, string>
   publicVariables?: Record<string, unknown>
-  spellId?: string
+  spellId: string
   isSubSpell?: boolean
   currentJob?: Job<AgentRunJob>
   subSpellDepth?: number
@@ -116,7 +116,17 @@ export class AgentCommander extends EventEmitter {
   async runSubSpell(args: RunRootSpellArgs) {
     const { agentId, agent } = args
     const id = agentId || agent?.id
+
     if (!id) throw new Error('Agent or agent id is required')
+
+    // Make sure agent ID is set
+    args.agentId = id
+
+    const spellId = args.spellId || args?.agent?.rootSpellId
+    if (!spellId) throw new Error('Spell ID or agent is required')
+
+    // Make sure spell ID is set
+    args.spellId = spellId
 
     const jobId = uuidv4()
     await this.pubSub.publish(
@@ -131,8 +141,22 @@ export class AgentCommander extends EventEmitter {
     const id = agentId || agent?.id
     if (!id) throw new Error('Agent or agent id is required')
 
+    // Make sure agent ID is set
+    args.agentId = id
+
+    //spellID is required
+    const spellId = args.spellId || args?.agent?.rootSpellId
+    if (!spellId) throw new Error('Spell ID or agent is required')
+
+    // Make sure spell ID is set
+    args.spellId = spellId
+
     this.logger.debug(`Running Spell on Agent: ${id}`)
     this.logger.debug(AGENT_RUN_JOB(id))
+    this.logger.debug(
+      JSON.parse(this.runRootSpellArgsToString(uuidv4(), args)),
+      'Sending root spell args'
+    )
     const jobId = uuidv4()
     await this.pubSub.publish(
       AGENT_RUN_JOB(id),
