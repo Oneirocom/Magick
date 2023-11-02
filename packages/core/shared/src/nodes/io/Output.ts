@@ -27,12 +27,10 @@ const defaultOutputTypes = [
   },
 ]
 
-
 /**
  * Output component
  */
 export class Output extends MagickComponent<void> {
-
   /**
    * Constructor for Output component
    */
@@ -51,6 +49,7 @@ export class Output extends MagickComponent<void> {
     )
 
     this.common = true
+
     this.module = {
       nodeType: 'output',
       socket: anySocket,
@@ -163,9 +162,9 @@ export class Output extends MagickComponent<void> {
         const t = agent.outputTypes.find(t => t.name === outputType)
         // Find outputType in outputTypes where name is outputType
         if (!t) {
-          this.logger.error({ outputType, finalType: t }, 'Output type is not defined')
+          console.error('output type is not defined', t)
         } else if (!t.handler) {
-          this.logger.error({ outputType, finalType: t }, 'Output type is not defined')
+          console.error('output type handler is not defined', t)
         } else {
           t.handler({
             output,
