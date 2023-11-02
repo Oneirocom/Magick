@@ -40,7 +40,7 @@ export class CloudAgentWorker extends AgentManager {
     })
 
     this.pubSub.subscribe('heartbeat-ping', async () => {
-      this.logger.trace('Got heartbeat ping')
+      this.logger.debug('Got heartbeat ping')
       const agentIds = Object.keys(this.currentAgents)
       this.pubSub.publish('heartbeat-pong', JSON.stringify(agentIds))
     })

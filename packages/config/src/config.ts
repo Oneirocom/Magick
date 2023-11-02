@@ -122,10 +122,6 @@ export const AGENT_RESPONSE_TIMEOUT_MSEC =
 
 export const CLOUD_AGENT_KEY = getVarForEnvironment('CLOUD_AGENT_KEY') || v4()
 
-export const BACKOFF_RETRY_LIMIT = Number(
-  getVarForEnvironment('BACKOFF_RETRY_LIMIT') || 0
-)
-
 export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
 export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
 export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''

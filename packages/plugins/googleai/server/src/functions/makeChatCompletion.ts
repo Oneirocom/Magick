@@ -113,14 +113,15 @@ export async function makeChatCompletion(
       nodeId: node.id,
     })
 
+    // Save metering event
+    trackGoogleAIUsage({
+      projectId: context.projectId,
+      model: node?.data?.model as string,
+      callCount: 1,
+      wordCount: wordCount(result),
+    })
+
     if (result) {
-      // Save metering event
-      trackGoogleAIUsage({
-        projectId: context.projectId,
-        model: node?.data?.model as string,
-        callCount: 1,
-        wordCount: wordCount(result),
-      })
       return { success: true, result }
     }
 
