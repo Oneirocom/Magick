@@ -67,7 +67,8 @@ const getAgent = async (
 
 type Request = {
   agent: Agent
-  spellId?: string
+  agentId: string
+  spellId: string
   sessionId?: string
   inputs: {
     [key: string]: {
@@ -110,6 +111,8 @@ const formatRequest = async (
   params: any
 ): Promise<Request> => {
   const {
+    spellId,
+    sessionId,
     content,
     isCloud = false,
     secrets = {},
@@ -117,7 +120,6 @@ const formatRequest = async (
     sender = 'api',
     client = 'rest',
     channel = 'rest',
-    sessionId,
   } = data
 
   // validate if method is GET, POST, PATCH, DELETE
@@ -148,7 +150,8 @@ const formatRequest = async (
 
   return {
     agent,
-    spellId: agent.rootSpellId as string,
+    agentId: agent.id,
+    spellId: spellId || (agent.rootSpellId as string),
     sessionId: sessionId,
     inputs: {
       [`Input - REST API (${method})`]: {

@@ -57,6 +57,8 @@ class LoopManager {
           },
         },
         agent,
+        agentId: agent.id,
+        spellId: agent.rootSpellId,
         secrets: agent.secrets,
         publicVariables: agent.publicVariables,
       })
