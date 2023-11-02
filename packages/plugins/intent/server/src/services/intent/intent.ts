@@ -11,11 +11,7 @@ import { intentQueryResolver, intentQueryValidator } from './intent.schema'
 import { v4 as uuidv4 } from 'uuid'
 import pgvector from 'pgvector/pg'
 // Import types and classes
-import {
-  checkPermissions,
-  type Application,
-  type HookContext,
-} from '@magickml/server-core'
+import type { Application, HookContext } from '@magickml/server-core'
 import { IntentService, getOptions } from './intent.class'
 
 // Array with 1536 elements containing 0
@@ -59,9 +55,6 @@ export const intent = (app: Application) => {
     },
     before: {
       all: [
-        checkPermissions({
-          roles: ['owner', 'agent'],
-        }),
         schemaHooks.validateQuery(intentQueryValidator),
         schemaHooks.resolveQuery(intentQueryResolver),
       ],

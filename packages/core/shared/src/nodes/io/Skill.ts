@@ -137,11 +137,10 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
           'Input - Default': task,
         },
         runSubspell: false,
-        agentId: agent.id,
+        agent: agent,
         secrets: agent?.secrets ?? secrets,
         app: module.app,
         publicVariables: {},
-        spellId: agent.rootSpellId as string,
       }
       const outputs = await app
         .get('agentCommander')
