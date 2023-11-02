@@ -4,7 +4,7 @@ import http from 'http'
 import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
 import ngrok from 'ngrok'
 import { v4 as uuidv4 } from 'uuid'
-import { getLogger } from '@magickml/core';
+import { getLogger } from '@magickml/core'
 
 export class GithubConnector {
   spellRunner
@@ -54,8 +54,12 @@ export class GithubConnector {
     const repos = data.github_repos
 
     if (!repos) {
-      this.logger.error('Github repos not configured correctly. No repos found. skipping')
-      throw new Error('Github repos not configured correctly. No repos found. skipping')
+      this.logger.error(
+        'Github repos not configured correctly. No repos found. skipping'
+      )
+      throw new Error(
+        'Github repos not configured correctly. No repos found. skipping'
+      )
     }
 
     // repos is an array of owner/repos, separated by comma
@@ -81,7 +85,7 @@ export class GithubConnector {
       this.logger.info('payload pull_request: %o', payload.pull_request)
       const repo = {
         owner: payload.repository.owner.login,
-        name: payload.repository.name
+        name: payload.repository.name,
       }
       this.newSpellInput('Pull Request', 'new_prs', payload.pull_request, repo)
     })
@@ -90,7 +94,7 @@ export class GithubConnector {
       this.logger.info('payload issue: %o', payload.issue)
       const repo = {
         owner: payload.repository.owner.login,
-        name: payload.repository.name
+        name: payload.repository.name,
       }
       this.newSpellInput('Issue', 'new_issues', payload.issue, repo)
     })
@@ -99,11 +103,11 @@ export class GithubConnector {
       this.logger.info('payload comment: %o', payload.comment)
       const params = {
         ...payload.comment,
-        number: payload.issue.number
+        number: payload.issue.number,
       }
       const repo = {
         owner: payload.repository.owner.login,
-        name: payload.repository.name
+        name: payload.repository.name,
       }
       this.newSpellInput('Comment', 'issue_response', params, repo)
     })
@@ -133,7 +137,11 @@ export class GithubConnector {
       this.logger.info('webhooks: %o', webhooks)
       // If the webhook exists, update it with the new configuration
       const events = [
-        'issues', 'issue_comment', 'pull_request', 'push', 'repository'
+        'issues',
+        'issue_comment',
+        'pull_request',
+        'push',
+        'repository',
       ]
       if (webhooks.length > 0) {
         const webhook = webhooks.find(hook => hook.config.url.includes('ngrok'))
@@ -171,7 +179,7 @@ export class GithubConnector {
             port: randomPort,
             secret: this.secret,
           },
-          events
+          events,
         })
 
         webhookId = newWebhook.data.id
@@ -206,12 +214,7 @@ export class GithubConnector {
   ) => {
     const { number, title, body, id } = content
     const { owner, name } = repo
-    const entities = [
-      owner,
-      name,
-      title,
-      body,
-    ]
+    const entities = [owner, name, title, body]
     return app.get('agentCommander').runSpell({
       inputs: {
         [`Input - Github (${pretext})`]: {
@@ -225,10 +228,17 @@ export class GithubConnector {
           entities,
           channelType: type,
           rawData: JSON.stringify({
-            number, title, body, id, owner, name
+            number,
+            title,
+            body,
+            id,
+            owner,
+            name,
           }),
         },
       },
+      agentId: this.agent.id,
+      spellId: this.agent.rootSpellId,
       agent: this.agent,
       secrets: this.agent.secrets,
       publicVariables: this.agent.publicVariables,
@@ -246,7 +256,12 @@ export class GithubConnector {
     const { github_access_token } = data
     const owner = repo[0]
     const name = repo[1]
-    this.logger.info('GITHUB CREATE COMMENT: type:%s, [%s, %s]', type, owner, name)
+    this.logger.info(
+      'GITHUB CREATE COMMENT: type:%s, [%s, %s]',
+      type,
+      owner,
+      name
+    )
     try {
       if (!github_access_token || github_access_token[0] != 'g') {
         this.logger.info('github access token is invalid')
@@ -271,7 +286,11 @@ export class GithubConnector {
         issue_number: number,
         body,
       })
-      this.logger.info('new comment: %s, %o', comment.data.id, comment.data.body)
+      this.logger.info(
+        'new comment: %s, %o',
+        comment.data.id,
+        comment.data.body
+      )
 
       return comment.data
     } catch (error) {
@@ -416,14 +435,19 @@ export class GithubConnector {
     if (type === 'comment') {
       const count = this.numbers.length
       this.numbers = this.numbers.filter(num => num != event.observer)
-      if (this.numbers.length != count) { // is existed
+      if (this.numbers.length != count) {
+        // is existed
         this.logger.error('duplicate created')
         return
       }
     }
 
     const comment = await this.createComment(
-      this.data, event.channel, event.entities, content, type
+      this.data,
+      event.channel,
+      event.entities,
+      content,
+      type
     )
     if (comment) {
       this.numbers.push(comment.id)

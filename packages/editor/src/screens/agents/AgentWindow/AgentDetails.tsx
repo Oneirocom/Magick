@@ -390,7 +390,6 @@ const AgentDetails = ({
           }`}
       >
         {(pluginManager as ClientPluginManager).getAgentComponents().map((value, index, array) => {
-          console.log(value);
 
           return (
             <Tooltip title="kkkk" disableInteractive arrow>

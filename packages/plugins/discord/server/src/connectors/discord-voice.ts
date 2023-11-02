@@ -5,7 +5,7 @@ import {
   createAudioResource,
   NoSubscriberBehavior,
   getVoiceConnection,
-  AudioPlayerStatus
+  AudioPlayerStatus,
 } from '@discordjs/voice'
 import { app } from '@magickml/server-core'
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent'
@@ -20,10 +20,7 @@ export function initSpeechClient(options: {
   agent: any
   spellRunner: any
 }) {
-  const {
-    client,
-    agent,
-  } = options
+  const { client, agent } = options
 
   // Add speech event to the client.
   addSpeechEvent(client, { group: 'default_' + agent.id })
@@ -77,6 +74,8 @@ export function initSpeechClient(options: {
           rawData: JSON.stringify({}),
         },
       },
+      spellId: agent.rootSpellId,
+      agentId: agent.id,
       secrets: agent.secrets ?? {},
       publicVariables: agent.publicVariables ?? {},
       runSubspell: true,
@@ -111,51 +110,53 @@ export async function handleVoiceResponse({ output, agent, event }) {
 
   console.log('guild', guild)
 
-  const voiceConnection = getVoiceConnection(guild.id, 'default_' + agent.id);
+  const voiceConnection = getVoiceConnection(guild.id, 'default_' + agent.id)
 
   console.log('voiceConnection', voiceConnection)
   if (!voiceConnection) {
-    console.error(`The bot is not in the voice channel of the guild ${guild.id}`);
-    return;
+    console.error(
+      `The bot is not in the voice channel of the guild ${guild.id}`
+    )
+    return
   }
 
   // output is a readable stream object
   const resource = createAudioResource(output)
   console.log('playing audio')
 
-  const player = createAudioPlayer();
+  const player = createAudioPlayer()
 
-  player.play(resource);
+  player.play(resource)
 
   console.log('played audio')
 
   player.on('error', error => {
-    console.error(`Error in audio player: ${error.message}`);
-  });
+    console.error(`Error in audio player: ${error.message}`)
+  })
 
   console.log('subscribing to voice connection')
 
-  voiceConnection.subscribe(player);
+  voiceConnection.subscribe(player)
   console.log('subscribed')
 
   // on idle, log finished
   player.on(AudioPlayerStatus.Idle, async () => {
-    console.log('Finished playing!');
+    console.log('Finished playing!')
     const fs = await import('fs')
     // delete any files in fs older than 2 hours
     const files = fs.readdirSync('./files')
     files.forEach(file => {
-      if(file.includes('mp3')) {
+      if (file.includes('mp3')) {
         const { birthtime } = fs.statSync(`./files/${file}`)
         const now = new Date()
         const diff = now.getTime() - birthtime.getTime()
         const hours = Math.floor(diff / 1000 / 60 / 60)
-        if(hours > 2) {
+        if (hours > 2) {
           fs.unlinkSync(`./files/${file}`)
         }
       }
+    })
   })
-})
 }
 
 export async function stopSpeechClient(textChannel, clientId) {
