@@ -1,8 +1,9 @@
-// DOCUMENTED 
+// DOCUMENTED
 // For more information about this file, see https://dove.feathersjs.com/guides/cli/service.html
-import type { Application } from '../../declarations';
-import { ProjectsService } from './projects.class';
-export * from './projects.class';
+import type { Application } from '../../declarations'
+import { checkPermissions } from '../../lib/feathersPermissions'
+import { ProjectsService } from './projects.class'
+export * from './projects.class'
 
 /**
  * Configure function that registers the service and its hooks.
@@ -16,7 +17,7 @@ export const projects = (app: Application) => {
     methods: ['find', 'create'],
     // You can add additional custom events to be sent to clients here
     events: [],
-  });
+  })
 
   // Initialize hooks
   app.service('projects').hooks({
@@ -24,7 +25,11 @@ export const projects = (app: Application) => {
       all: [],
     },
     before: {
-      all: [],
+      all: [
+        checkPermissions({
+          roles: ['owner', 'projects'],
+        }),
+      ],
       find: [],
       create: [],
     },
@@ -34,8 +39,8 @@ export const projects = (app: Application) => {
     error: {
       all: [],
     },
-  });
-};
+  })
+}
 
 // Add this service to the service type index
 declare module '../../declarations' {
@@ -43,6 +48,6 @@ declare module '../../declarations' {
    * Interface for ServiceTypes
    */
   interface ServiceTypes {
-    'projects': ProjectsService;
+    projects: ProjectsService
   }
 }
