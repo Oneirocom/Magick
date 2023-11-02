@@ -201,6 +201,7 @@ export class Agent implements AgentInterface {
 
   async runWorker(job: Job<AgentRunJob>) {
     // the job name is the agent id.  Only run if the agent id matches.
+    this.logger.debug('running worker', { id: this.id, data: job.data })
     if (this.id !== job.data.agentId) return
 
     const { data } = job
@@ -235,6 +236,7 @@ export class Agent implements AgentInterface {
           ...this.secrets,
           ...data.secrets,
         },
+        sessionId: data?.sessionId,
         publicVariables: this.publicVariables,
         runSubspell: data.runSubspell,
         app,
@@ -269,6 +271,7 @@ export class Agent implements AgentInterface {
 
 export interface AgentRunJob {
   inputs: MagickSpellInput
+  sessionId?: string
   jobId: string
   agentId: string
   spellId: string

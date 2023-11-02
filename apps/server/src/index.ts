@@ -28,18 +28,16 @@ import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 import { PRODUCTION } from '@magickml/config'
 
 if (PRODUCTION) {
-	initLogger({
-		name: 'cloud-agent-worker',
-		transport: {
-			targets: [
-				getPinoTransport('info')
-			]
-		},
-		level: 'info',
-	})
+  initLogger({
+    name: 'cloud-agent-worker',
+    transport: {
+      targets: [getPinoTransport('info')]
+    },
+    level: 'info'
+  })
 } else {
-	initLogger({ name: 'cloud-agent-worker' })
-}	
+  initLogger({ name: 'cloud-agent-worker' })
+}
 const logger = getLogger()
 
 // log handle errors
@@ -69,7 +67,7 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
  * form and multipart-json requests, and routes.
  */
 async function init() {
-  await initApp()
+  await initApp('server')
   await initAgentCommander()
   // load plugins
   await (async () => {
