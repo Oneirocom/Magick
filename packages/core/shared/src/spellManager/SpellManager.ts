@@ -153,7 +153,8 @@ export default class SpellManager {
         secrets,
         publicVariables,
         app,
-        agent: this.agent,
+        agentId: this.agent.id,
+        spellId: this.agent.rootSpellId as string,
       })
 
       this.agent?.publishEvent(`${spellId}:run`, {

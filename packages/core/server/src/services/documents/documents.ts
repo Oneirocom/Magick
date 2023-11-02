@@ -9,6 +9,7 @@ import {
   documentQueryResolver,
   documentQueryValidator,
 } from './documents.schema'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Array with 1536 elements containing 0
 const nullArray = new Array(1536).fill(0)
@@ -37,6 +38,9 @@ export const document = (app: Application) => {
     },
     before: {
       all: [
+        checkPermissions({
+          roles: ['owner', 'documents'],
+        }),
         schemaHooks.validateQuery(documentQueryValidator),
         schemaHooks.resolveQuery(documentQueryResolver),
       ],
