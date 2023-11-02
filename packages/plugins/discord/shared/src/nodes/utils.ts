@@ -78,6 +78,8 @@ export async function runSpell(
       },
     },
     agent: agent,
+    agentId: agent.id,
+    spellId: agent.rootSpellId,
     secrets: agent.secrets,
     publicVariables: agent.publicVariables,
     runSubspell: true,
