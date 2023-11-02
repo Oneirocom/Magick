@@ -68,7 +68,7 @@ export async function runSpell(
       'Input - Discord (Text)': {
         connector: 'Discord (Text)',
         content: content,
-        sender: ' message.author.id',
+        sender: ' message.author.username',
         observer: ' message.author.username',
         client: 'discord',
         channel: 'message.channel.id',

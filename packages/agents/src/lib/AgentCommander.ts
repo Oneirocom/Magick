@@ -26,7 +26,6 @@ export type RunRootSpellArgs = {
   isSubSpell?: boolean
   currentJob?: Job<AgentRunJob>
   subSpellDepth?: number
-  sessionId?: string
 }
 
 interface AgentCommanderArgs {
@@ -43,10 +42,7 @@ export class AgentCommander extends EventEmitter {
   }
 
   runSpellWithResponse(args: RunRootSpellArgs) {
-    const { agentId, agent } = args
-    const id = agentId || agent?.id
-    if (!id) throw new Error('Agent or agent id is required')
-
+    const { agent } = args
     return new Promise((resolve, reject) => {
       ;(async () => {
         setTimeout(() => {
@@ -55,7 +51,7 @@ export class AgentCommander extends EventEmitter {
 
         let jobId: null | string = null
 
-        const agentMessageName = AGENT_RUN_RESULT(id)
+        const agentMessageName = AGENT_RUN_RESULT(agent.id)
 
         this.pubSub.subscribe(agentMessageName, (data: AgentResult) => {
           if (data.result.error) {
@@ -71,7 +67,7 @@ export class AgentCommander extends EventEmitter {
           }
         })
 
-        const agentErrorName = AGENT_RUN_ERROR(id)
+        const agentErrorName = AGENT_RUN_ERROR(agent.id)
         this.pubSub.subscribe(agentErrorName, (data: AgentResult) => {
           if (data.jobId === jobId) {
             this.pubSub.unsubscribe(agentErrorName)
@@ -88,7 +84,7 @@ export class AgentCommander extends EventEmitter {
   private runRootSpellArgsToString(
     jobId: string,
     {
-      agentId,
+      agent,
       inputs,
       componentName,
       runSubspell,
@@ -96,20 +92,18 @@ export class AgentCommander extends EventEmitter {
       publicVariables,
       spellId,
       subSpellDepth,
-      sessionId,
     }: RunRootSpellArgs
   ) {
     return JSON.stringify({
       jobId,
-      agentId,
-      spellId: spellId,
+      agentId: agent.id,
+      spellId: spellId || agent.rootSpellId,
       inputs,
       componentName,
       runSubspell,
       secrets,
       publicVariables,
       subSpellDepth,
-      sessionId,
     })
   }
 
@@ -159,7 +153,7 @@ export class AgentCommander extends EventEmitter {
     )
     const jobId = uuidv4()
     await this.pubSub.publish(
-      AGENT_RUN_JOB(id),
+      AGENT_RUN_JOB(agent.id),
       this.runRootSpellArgsToString(jobId, args)
     )
     return jobId
