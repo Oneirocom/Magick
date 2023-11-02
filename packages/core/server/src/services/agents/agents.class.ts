@@ -4,10 +4,10 @@ import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '@magickml/server-core'
-import md5 from 'md5'
+import md5 from 'md5';
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
-import { RunRootSpellArgs } from '@magickml/agents'
+import { Queue } from 'bullmq'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -31,10 +31,14 @@ export class AgentService<
   ServiceParams extends Params = AgentParams
 > extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
   app: Application
+  runQueue: Queue
 
   constructor(options: KnexAdapterOptions, app: Application) {
     super(options)
     this.app = app
+    this.runQueue = new Queue(`agent:run`, {
+      connection: app.get('redis'),
+    })
   }
 
   // we use this ping to avoid firing a patched event on the agent
@@ -49,21 +53,22 @@ export class AgentService<
     return { data: query }
   }
 
-  async run(data: Omit<RunRootSpellArgs, 'agent'>) {
+  async run(data: AgentRunData) {
     if (!data.agentId) throw new Error('agentId is required')
     // probably need to authenticate the request here against project id
     // add the job to the queueD
-
-    const agentCommander = this.app.get('agentCommander')
-    const response = await agentCommander.runSpellWithResponse(data)
+    const job = await this.runQueue.add(data.agentId, {
+      ...data,
+    })
 
     // return the job id
-    return { response }
+    return { jobId: job.id }
   }
 
   async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
+
     // ADDING REST API KEY TO AGENT's DATA
     if (data.data) {
       data.data = JSON.stringify({
@@ -95,3 +100,4 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     multi: ['remove'],
   }
 }
+
