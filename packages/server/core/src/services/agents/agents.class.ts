@@ -3,7 +3,7 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-import { app } from '../../app';
+import { app } from '../../app'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
@@ -111,7 +111,7 @@ export class AgentService<
     return true
   }
 
-  async create(
+  override async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
     // ADDING REST API KEY TO AGENT's DATA

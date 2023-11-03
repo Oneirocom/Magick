@@ -7,7 +7,7 @@ import {
 import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from 'server/core'
 import { wordCount } from './shared'
-import { DEFAULT_GOOGLEAI_API_KEY } from '@magickml/config'
+import { DEFAULT_GOOGLEAI_API_KEY } from 'shared/config'
 
 /**
  * A function that makes a request to create a text embedding using GoogleAI's

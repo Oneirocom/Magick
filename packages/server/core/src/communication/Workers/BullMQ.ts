@@ -9,7 +9,7 @@ export class BullMQWorker extends Worker {
     super()
   }
 
-  initialize(
+  override initialize(
     queueName: string,
     callback: (job: Job<any>) => Promise<any>
   ): void {

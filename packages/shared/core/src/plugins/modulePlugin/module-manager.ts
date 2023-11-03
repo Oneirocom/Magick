@@ -145,6 +145,7 @@ export class ModuleManager {
       secrets: context.module.secrets,
       publicVariables: context.module.publicVariables,
       app: context.module.app,
+      sessionId: context.module.sessionId,
     })
     await engine?.process(data, null, Object.assign({}, context, { module }))
 
