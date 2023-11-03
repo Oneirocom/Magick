@@ -19,7 +19,7 @@ export class SpellError extends Error {
   /** The HTTP status code of the error */
   public status: number
   /** The error message */
-  public message: string
+  public override message: string
   /** Additional details about the error */
   public details?: string
 

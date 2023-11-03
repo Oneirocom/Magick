@@ -161,7 +161,7 @@ export abstract class MagickComponent<
   _task: Task
   cache: UnknownData
   editor: MagickEditor | null = null
-  data: unknown = {}
+  override data: unknown = {}
   category: string
   info: string
   display?: boolean
@@ -175,7 +175,7 @@ export abstract class MagickComponent<
   contextMenuName: string | undefined
   workspaceType: 'spell' | null | undefined
   displayName: string | undefined
-  engine: MagickEngine | null = null
+  override engine: MagickEngine | null = null
   logger = getLogger()
 
   constructor(name: string, task: TaskOptions, category: string, info: string) {

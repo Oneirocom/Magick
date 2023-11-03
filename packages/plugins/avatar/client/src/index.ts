@@ -4,7 +4,7 @@ import App from './App'
 
 /**
  * This module provides an AvatarPlugin to be used
- * with the @magickml/core client-side library.
+ * with the shared/core client-side library.
  * @module AvatarPlugin
  */
 

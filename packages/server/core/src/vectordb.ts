@@ -39,7 +39,10 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
    * @param {any[]} [vector=''] - Precomputed vector (optional)
    * @returns {Promise<void>}
    */
-  async addDocuments(documents: Document[], vector: any = ''): Promise<void> {
+  override async addDocuments(
+    documents: Document[],
+    vector: any = ''
+  ): Promise<void> {
     const texts = documents.map(({ pageContent }) => pageContent)
     if (vector != '') {
       return this.addVectors(vector, documents)
@@ -56,7 +59,10 @@ export class PostgresVectorStoreCustom extends SupabaseVectorStore {
    * @param {Document[]} documents - Array of documents
    * @returns {Promise<void>}
    */
-  async addVectors(vectors: number[][], documents: Document[]): Promise<void> {
+  override async addVectors(
+    vectors: number[][],
+    documents: Document[]
+  ): Promise<void> {
     const res = await this.client(this.tableName).insert(documents)
     if (res.error) {
       throw new Error(

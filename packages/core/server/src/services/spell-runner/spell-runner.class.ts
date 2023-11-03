@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { SpellInterface } from '@magickml/core'
+import { SpellInterface } from 'shared/core'
 import otJson0 from 'ot-json0'
 import { app } from '../../app'
 import { Params } from '@feathersjs/feathers'

@@ -57,7 +57,7 @@ export class SwitchControl extends DataControl {
    * The event handler for data.
    * @memberof SwitchControl
    */
-  onData = () => {
+  override onData = () => {
     return
   }
 }

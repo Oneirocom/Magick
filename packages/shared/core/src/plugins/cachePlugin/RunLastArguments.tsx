@@ -59,7 +59,7 @@ export class RunButtonControl extends Control {
    * Returns the parent node object.
    * @returns {Node} - The parent node instance.
    */
-  getNode() {
+  override getNode() {
     return this.parent as any
   }
 }
