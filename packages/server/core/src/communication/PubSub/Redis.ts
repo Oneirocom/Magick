@@ -1,7 +1,7 @@
 import { RedisPubSub } from 'server/redis-pubsub'
 import { PubSub } from './PubSub'
 
-import { app } from '../../app';
+import { app } from '../../app'
 
 export class RedisPubSubWrapper extends PubSub {
   pubsub: RedisPubSub
@@ -11,15 +11,18 @@ export class RedisPubSubWrapper extends PubSub {
     this.pubsub = app.get('pubsub')
   }
 
-  async publish(channel: string, message: string): Promise<void> {
+  override async publish(channel: string, message: string): Promise<void> {
     return await this.pubsub.publish(channel, message)
   }
 
-  async subscribe(channel: string, callback: Function): Promise<void> {
+  override async subscribe(channel: string, callback: Function): Promise<void> {
     return await this.pubsub.subscribe(channel, callback)
   }
 
-  async patternSubscribe(pattern: string, callback: Function): Promise<void> {
+  override async patternSubscribe(
+    pattern: string,
+    callback: Function
+  ): Promise<void> {
     return await this.pubsub.patternSubscribe(pattern, callback)
   }
 }

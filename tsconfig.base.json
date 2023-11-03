@@ -17,6 +17,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "noPropertyAccessFromIndexSignature": false,
     "strict": false,
     "typeRoots": [
       "packages/@types",
