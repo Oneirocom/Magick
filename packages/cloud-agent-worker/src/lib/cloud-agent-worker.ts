@@ -78,7 +78,8 @@ export class CloudAgentWorker extends AgentManager {
       agentData,
       this,
       new BullMQWorker(),
-      new RedisPubSubWrapper()
+      new RedisPubSubWrapper(),
+      app
     )
 
     const agentQueue = new BullQueue()
