@@ -1,6 +1,6 @@
 // DOCUMENTED
 /**
- * A plugin for the @magickml/core that adds elevenlabs completion functionality
+ * A plugin for the shared/core that adds elevenlabs completion functionality
  *
  * @remarks
  * The plugin uses handlers for text, chat and text embedding which are defined in the 'makeTextCompletion',
@@ -28,7 +28,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds elevenlabs completion functionality
+ * A server plugin for the shared/core that adds elevenlabs completion functionality
  */
 const elevenlabsPlugin = new ServerPlugin({
   name: 'elevenlabsPlugin',

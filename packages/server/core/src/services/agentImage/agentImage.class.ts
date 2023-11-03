@@ -7,7 +7,7 @@ import {
   AWS_BUCKET_ENDPOINT,
 } from 'shared/config'
 
-import { getLogger } from '@magickml/core'
+import { getLogger } from 'shared/core'
 
 type AgentImageData = {
   image: string

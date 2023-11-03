@@ -94,7 +94,7 @@ export class DocumentService<
    * @param id {string} The document ID to remove
    * @return {Promise<any>} The removed document
    */
-  async remove(id: any, params): Promise<any> {
+  override async remove(id: any, params): Promise<any> {
     const db = app.get('dbClient')
 
     if (!id && params.projectId) {
@@ -118,7 +118,7 @@ export class DocumentService<
    * @param params {ServiceParams} Optional parameters for the find operation
    * @return {Promise<any>} The found documents
    */
-  async find(params?: ServiceParams): Promise<any> {
+  override async find(params?: ServiceParams): Promise<any> {
     const db = app.get('dbClient')
     if (
       (params && params?.query?.embedding) ||

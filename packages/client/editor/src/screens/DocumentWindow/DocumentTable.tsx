@@ -123,7 +123,6 @@ function DocumentTable({ documents }) {
   ): DocumentData => {
     return {
       row,
-      fileName,
       content,
       type,
       projectId,
