@@ -38,7 +38,7 @@ export async function makeChatCompletion(
 
   // Get or set default settings
   const settings = {
-    model: node?.data?.model,
+    model: node?.data?.customModel ?? node?.data?.model,
     temperature: parseFloat((node?.data?.temperature as string) ?? '0.0'),
     top_p: parseFloat((node?.data?.top_p as string) ?? '1.0'),
     frequency_penalty: parseFloat(
@@ -158,7 +158,7 @@ export async function makeChatCompletion(
       startTime: start,
       statusCode: completion.status,
       status: completion.statusText,
-      model: settings.model,
+      model: node?.data?.model as string,
       parameters: JSON.stringify(settings),
       type: 'completion',
       provider: 'openai',
