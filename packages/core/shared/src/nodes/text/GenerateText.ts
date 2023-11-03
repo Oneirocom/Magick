@@ -14,6 +14,7 @@ import {
   MagickWorkerOutputs,
   WorkerData,
 } from '../../types'
+import { InputControl } from '../../dataControls/InputControl'
 
 /** Information related to the GenerateText */
 const info =
@@ -71,7 +72,15 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       tooltip: 'Choose model name',
     })
 
-    node.inspector.add(modelName)
+    const customModel = new InputControl({
+      name: 'Custom Model',
+      dataKey: 'customModel',
+      defaultValue: '',
+      tooltip:
+        'Use to use a custom model.  Will override the model dropdown. You need an API key for your service.',
+    })
+
+    node.inspector.add(modelName).add(customModel)
 
     node.addInput(dataInput).addOutput(dataOutput)
 
@@ -170,9 +179,11 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       'chat',
     ]) as CompletionProvider[]
 
-    const model = (node.data as { model: string }).model as string
+    let model = (node.data as { model: string }).model as string
+    const customModel = (node.data as { customModel: string })
+      .customModel as string
+
     // get the provider for the selected model
-    console.log('model', model)
     const provider = completionProviders.find(provider =>
       provider.models.includes(model)
     ) as CompletionProvider
@@ -182,6 +193,13 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       console.error('No completion handler found for provider', provider)
       throw new Error('ERROR: Completion handler undefined')
     }
+
+    // cvheck if custom model and regex check for word fine-tune in model
+    if (customModel.length > 0) {
+      node.data.customModel = customModel
+    }
+
+    console.log('node.data.customModel', node.data.customModel)
 
     const { success, result, error } = await completionHandler({
       node,
