@@ -179,7 +179,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       'chat',
     ]) as CompletionProvider[]
 
-    let model = (node.data as { model: string }).model as string
+    const model = (node.data as { model: string }).model as string
     const customModel = (node.data as { customModel: string })
       .customModel as string
 
