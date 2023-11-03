@@ -37,7 +37,7 @@ export async function makeTextCompletion(
   const prompt = inputs['input'][0]
 
   const requestData = {
-    model: node?.data?.model,
+    model: node?.data?.customModel ?? node?.data?.model,
     temperature: parseFloat((node?.data?.temperature as string) ?? '0'),
     max_tokens: parseFloat((node?.data?.max_tokens as string) ?? '100'),
     top_p: parseFloat((node?.data?.top_p as string) ?? '1.0'),
@@ -103,7 +103,8 @@ export async function makeTextCompletion(
       startTime: start,
       statusCode: resp.status,
       status: resp.statusText,
-      model: settings.model,
+      model: node?.data?.model as string,
+      customModel: (node?.data?.customModel as string) || undefined,
       parameters: JSON.stringify(settings),
       type: 'completion',
       provider: 'openai',
