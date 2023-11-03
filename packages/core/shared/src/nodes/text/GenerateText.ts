@@ -73,11 +73,11 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     })
 
     const customModel = new InputControl({
-      name: 'Custom Model',
+      name: 'Custom OpenAI Model',
       dataKey: 'customModel',
       defaultValue: '',
       tooltip:
-        'Use to use a custom model.  Will override the model dropdown. You need an API key for your service.',
+        'Use to use a custom Open AI model.  Will override the model dropdown. You need an API key for your service.',
     })
 
     node.inspector.add(modelName).add(customModel)
@@ -194,12 +194,10 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       throw new Error('ERROR: Completion handler undefined')
     }
 
-    // cvheck if custom model and regex check for word fine-tune in model
+    // check if custom model and regex check for word fine-tune in model
     if (customModel.length > 0) {
       node.data.customModel = customModel
     }
-
-    console.log('node.data.customModel', node.data.customModel)
 
     const { success, result, error } = await completionHandler({
       node,
