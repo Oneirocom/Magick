@@ -1,5 +1,6 @@
 // DOCUMENTED
 import checkPermissions from 'feathers-permissions'
+import { PostHog } from 'posthog-node'
 import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
@@ -14,20 +15,24 @@ import {
   rest,
 } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
+import pino from 'pino'
 import Redis from 'ioredis'
-import { RedisPubSub } from '@magickml/redis-pubsub'
 import sync from 'feathers-sync'
-import { configureManager, globalsManager } from '@magickml/core'
 
 import {
   REDISCLOUD_URL,
   API_ACCESS_KEY,
   bullMQConnection,
+  POSTHOG_API_KEY,
 } from '@magickml/config'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { getLogger } from '@magickml/core'
+import type { AgentCommander } from '@magickml/agents'
+import { configureManager, globalsManager } from '@magickml/core'
+import { buildEventTracker } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
-import type { AgentCommander } from '@magickml/agents'
 import { logError } from './hooks'
 import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
@@ -38,9 +43,7 @@ import handleSockets from './sockets/sockets'
 import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
 
-import { getLogger } from '@magickml/core'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
-import pino from 'pino'
 
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
@@ -57,25 +60,42 @@ declare module './declarations' {
     agentCommander: AgentCommander
     logger: pino.Logger
     environment: Environment
+    posthog: ReturnType<typeof buildEventTracker>
   }
+}
+
+const createPosthogClient = () => {
+  const client = new PostHog(
+    POSTHOG_API_KEY,
+
+    { host: 'https://app.posthog.com' }
+  )
+
+  return buildEventTracker(client)
 }
 
 export async function initApp(environment: Environment = 'default') {
   const logger = getLogger()
-  app.set('logger', logger)
   logger.info('Initializing feathers app...')
+  app.set('logger', logger)
+
+  app.set('posthog', createPosthogClient())
+
   globalsManager.register('feathers', app)
 
   const port = parseInt(process.env.PORT || '3030', 10)
   app.set('port', port)
+
   const host = process.env.HOST || 'localhost'
   app.set('host', host)
+
   const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
   const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
   const paginate = {
     default: paginateDefault,
     max: paginateMax,
   }
+
   app.set('paginate', paginate)
   app.set('environment', environment)
 
