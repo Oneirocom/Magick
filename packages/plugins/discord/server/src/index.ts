@@ -9,6 +9,7 @@ import { DiscordConnector } from './connectors/discord'
 import { handleVoiceResponse } from './connectors/discord-voice'
 
 import { getNodes } from '@magickml/plugin-discord-shared'
+import { AgentEvents } from 'server/event-tracker'
 type StartDiscordArgs = {
   agent: any
   spellRunner: any
@@ -81,6 +82,7 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return agent.logger.warn('No output to send to discord')
 
+  agent.trackEvent(AgentEvents.AGENT_DISCORD_RESPONSE, {}, agent.id)
   await agent?.discord?.sendMessageToChannel(event.channel, output)
 }
 
@@ -144,6 +146,10 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Voice)',
       sockets: audioOutputSockets,
       handler: async ({ output, agent, event }) => {
+        const metadata = {
+          channel: 'discord_voice',
+        }
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
         await handleVoiceResponse({ output, agent, event })
       },
     },
@@ -151,6 +157,10 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (DM)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
+        const metadata = {
+          channel: 'discord_dm',
+        }
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
         await handleResponse({ output, agent, event })
       },
     },
@@ -158,6 +168,10 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Text)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
+        const metadata = {
+          channel: 'discord_text',
+        }
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
         await handleResponse({ output, agent, event })
       },
     },
@@ -165,6 +179,10 @@ const DiscordPlugin = new ServerPlugin({
       name: 'Discord (Image)',
       sockets: outputSockets,
       handler: async ({ output, agent, event }) => {
+        const metadata = {
+          channel: 'discord_image',
+        }
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
         await handleResponse({ output, agent, event })
       },
     },
