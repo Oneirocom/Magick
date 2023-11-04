@@ -23,13 +23,12 @@ import {
   REDISCLOUD_URL,
   API_ACCESS_KEY,
   bullMQConnection,
-  POSTHOG_API_KEY,
 } from '@magickml/config'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import { getLogger } from '@magickml/core'
 import type { AgentCommander } from '@magickml/agents'
 import { configureManager, globalsManager } from '@magickml/core'
-import { buildEventTracker } from 'server/event-tracker'
+import { createPosthogClient } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
@@ -60,18 +59,8 @@ declare module './declarations' {
     agentCommander: AgentCommander
     logger: pino.Logger
     environment: Environment
-    posthog: ReturnType<typeof buildEventTracker>
+    posthog: ReturnType<typeof createPosthogClient>
   }
-}
-
-const createPosthogClient = () => {
-  const client = new PostHog(
-    POSTHOG_API_KEY,
-
-    { host: 'https://app.posthog.com' }
-  )
-
-  return buildEventTracker(client)
 }
 
 export async function initApp(environment: Environment = 'default') {
@@ -79,7 +68,7 @@ export async function initApp(environment: Environment = 'default') {
   logger.info('Initializing feathers app...')
   app.set('logger', logger)
 
-  app.set('posthog', createPosthogClient())
+  app.set('posthog', createPosthogClient(app))
 
   globalsManager.register('feathers', app)
 
