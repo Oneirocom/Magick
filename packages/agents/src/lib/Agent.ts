@@ -12,17 +12,19 @@ import {
   AGENT_LOG,
   AGENT_RUN_JOB,
   MagickSpellOutput,
+  type Event,
 } from '@magickml/core'
 
 import { AgentManager } from './AgentManager'
 import {
-  app,
   type Job,
   type Worker,
   type PubSub,
   BullQueue,
   MessageQueue,
+  Application,
 } from '@magickml/server-core'
+import { AgentEvents, EventMetadata } from 'server/event-tracker'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -43,6 +45,7 @@ export class Agent implements AgentInterface {
   messageQueue: MessageQueue
   pubsub: PubSub
   ready = false
+  app: Application
 
   outputTypes: any[] = []
   updateInterval: any
@@ -56,10 +59,12 @@ export class Agent implements AgentInterface {
     agentData: AgentInterface,
     agentManager: AgentManager,
     worker: Worker,
-    pubsub: PubSub
+    pubsub: PubSub,
+    app: Application
   ) {
     this.id = agentData.id
     this.agentManager = agentManager
+    this.app = app
 
     this.update(agentData)
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
@@ -155,6 +160,22 @@ export class Agent implements AgentInterface {
     this.log('destroyed agent', { id: this.id })
   }
 
+  trackEvent(
+    eventName: AgentEvents,
+    metadata: EventMetadata = {},
+    event: Event
+  ) {
+    // remove unwanted data
+    delete event.content
+    delete event.embedding
+    delete event.rawData
+    delete event.entities
+
+    metadata.event = event
+
+    this.app.get('posthog').track(eventName, metadata, this.id)
+  }
+
   // published an event to the agents event stream
   publishEvent(event, message) {
     this.pubsub.publish(event, {
@@ -239,7 +260,7 @@ export class Agent implements AgentInterface {
         sessionId: data?.sessionId,
         publicVariables: this.publicVariables,
         runSubspell: data.runSubspell,
-        app,
+        app: this.app,
       })
 
       this.publishEvent(AGENT_RUN_RESULT(this.id), {

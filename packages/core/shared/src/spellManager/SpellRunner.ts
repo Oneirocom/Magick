@@ -221,7 +221,6 @@ class SpellRunner {
 
     return (
       [...triggerIns, ...inputs].find(node => {
-        console.log('NODE DATA NAME', node.data.name)
         return node.data.name === componentName
       }) || null
     )
