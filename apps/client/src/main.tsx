@@ -43,6 +43,8 @@ if (window === window.parent) {
     const apiUrl =
       new URLSearchParams(window.location.search).get('apiUrl') ??
       API_ROOT_URL ??
+      'https://www.magickml.com' ??
+      'https://beta.magickml.com' ??
       'http://localhost:3030'
 
     const config: AppConfig = {
