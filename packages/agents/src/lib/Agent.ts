@@ -12,6 +12,7 @@ import {
   AGENT_LOG,
   AGENT_RUN_JOB,
   MagickSpellOutput,
+  type Event,
 } from '@magickml/core'
 
 import { AgentManager } from './AgentManager'
@@ -159,8 +160,20 @@ export class Agent implements AgentInterface {
     this.log('destroyed agent', { id: this.id })
   }
 
-  trackEvent(eventName: AgentEvents, metadata: EventMetadata = {}) {
-    this.app.get('posthog').track(eventName, metadata)
+  trackEvent(
+    eventName: AgentEvents,
+    metadata: EventMetadata = {},
+    event: Event
+  ) {
+    // remove unwanted data
+    delete event.content
+    delete event.embedding
+    delete event.rawData
+    delete event.entities
+
+    metadata.event = event
+
+    this.app.get('posthog').track(eventName, metadata, this.id)
   }
 
   // published an event to the agents event stream
