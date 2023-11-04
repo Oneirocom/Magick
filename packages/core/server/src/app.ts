@@ -1,6 +1,5 @@
 // DOCUMENTED
 import checkPermissions from 'feathers-permissions'
-import { PostHog } from 'posthog-node'
 import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'

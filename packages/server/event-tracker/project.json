@@ -8,7 +8,9 @@
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/server/event-tracker"
+        "outputPath": "dist/packages/server/event-tracker",
+        "third-party": true,
+        "generatePackageJson": true
       }
     },
     "test": {
