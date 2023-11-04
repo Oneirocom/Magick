@@ -197,8 +197,8 @@
       "@magickml/ui": ["packages/ui/src/index.ts"],
       "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
       "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
-      "rete": ["packages/rete/src/index.ts"]
-      
+      "rete": ["packages/rete/src/index.ts"],
+      "server/event-tracker": ["packages/server/event-tracker/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
