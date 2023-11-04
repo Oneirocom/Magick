@@ -164,7 +164,13 @@ export class AgentManager {
         ...agent,
         pingedAt: new Date().toISOString(),
       }
-      const agentInstance = new Agent(data, this, new BullMQWorker(), new RedisPubSubWrapper())
+      const agentInstance = new Agent(
+        data,
+        this,
+        new BullMQWorker(),
+        new RedisPubSubWrapper(),
+        this.app
+      )
 
       this.agents[agent.id] = agentInstance
       this.currentAgents.push(agent)
