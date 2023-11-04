@@ -82,7 +82,7 @@ async function handleResponse({ output, agent, event }) {
   if (!output || output === '')
     return agent.logger.warn('No output to send to discord')
 
-  agent.trackEvent(AgentEvents.AGENT_DISCORD_RESPONSE, {}, agent.id)
+  agent.trackEvent(AgentEvents.AGENT_DISCORD_RESPONSE, {}, event)
   await agent?.discord?.sendMessageToChannel(event.channel, output)
 }
 
@@ -149,7 +149,7 @@ const DiscordPlugin = new ServerPlugin({
         const metadata = {
           channel: 'discord_voice',
         }
-        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, event)
         await handleVoiceResponse({ output, agent, event })
       },
     },
@@ -160,7 +160,7 @@ const DiscordPlugin = new ServerPlugin({
         const metadata = {
           channel: 'discord_dm',
         }
-        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, event)
         await handleResponse({ output, agent, event })
       },
     },
@@ -171,7 +171,7 @@ const DiscordPlugin = new ServerPlugin({
         const metadata = {
           channel: 'discord_text',
         }
-        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, event)
         await handleResponse({ output, agent, event })
       },
     },
@@ -182,7 +182,7 @@ const DiscordPlugin = new ServerPlugin({
         const metadata = {
           channel: 'discord_image',
         }
-        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, agent.id)
+        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, event)
         await handleResponse({ output, agent, event })
       },
     },
