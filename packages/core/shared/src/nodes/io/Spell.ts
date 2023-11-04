@@ -337,16 +337,20 @@ export class SpellComponent extends MagickComponent<
       spellId: node.data.spellId as string,
       inputs: flattenedInputs,
       runSubspell: true,
-      agentId: agent.id,
       secrets: agent?.secrets ?? secrets,
       app,
       publicVariables: variables,
     }
 
     if (agent) {
+      const runSpellWithResponseArgs = {
+        ...runComponentArgs,
+        agentId: agent.id,
+      }
+
       const outputs = await app
         .get('agentCommander')
-        .runSpellWithResponse(runComponentArgs)
+        .runSpellWithResponse(runSpellWithResponseArgs)
 
       const output = this.formatOutputs(node, outputs)
 
