@@ -1,4 +1,4 @@
-import { Application } from '@magickml/server-core'
+import { Application } from '@feathersjs/feathers'
 import { POSTHOG_API_KEY } from '@magickml/config'
 import { PostHog } from 'posthog-node'
 
