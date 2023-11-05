@@ -1,0 +1,17 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cloud-agent-worker-service
+  namespace: 'default'
+spec:
+  template:
+    spec:
+      containers:
+      - image: gcr.io/$PROJECT_ID/cloud-agent-worker:$SHORT_SHA
+        resources:
+          limits:
+            cpu: '1'
+            memory: 512Mi
+        envFrom:
+        - configMapRef:
+            name: cloud-agent-worker-config
