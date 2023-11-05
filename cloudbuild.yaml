@@ -1,0 +1,53 @@
+steps:
+  # Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+
+  # Build the server application
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build-server']
+
+  # Build the cloud agent worker application
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build-cloud-agent-worker']
+
+  # Build the cloud agent manager application
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build-cloud-agent-manager']
+
+  # Optionally, build other projects here following the same pattern...
+
+  # Build and push the server Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/server:$SHORT_SHA', '-f', './apps/server/Dockerfile', '.']
+    dir: 'apps/server'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/server:$SHORT_SHA']
+
+  # Build and push the cloud agent worker Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/cloud-agent-worker:$SHORT_SHA', '-f', './apps/cloud-agent-worker-app/Dockerfile', '.']
+    dir: 'apps/cloud-agent-worker-app'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/cloud-agent-worker:$SHORT_SHA']
+
+  # Build and push the cloud agent manager Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/cloud-agent-manager:$SHORT_SHA', '-f', './apps/cloud-agent-manager-app/Dockerfile', '.']
+    dir: 'apps/cloud-agent-manager-app'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/cloud-agent-manager:$SHORT_SHA']
+
+  # Optionally, add steps for other images here following the same pattern...
+
+# Set the images to be available after the build completes
+images:
+  - 'gcr.io/$PROJECT_ID/server:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/cloud-agent-worker:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/cloud-agent-manager:$SHORT_SHA'
+  # Optionally, list other images here...
+
+# Define substitution variables that you can use in your build
+substitutions:
+  _PROJECT_ID: your-gcp-project-id
+  _SHORT_SHA: 'latest' # or use a specific tag or versioning scheme
