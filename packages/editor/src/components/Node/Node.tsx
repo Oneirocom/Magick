@@ -76,9 +76,6 @@ export class MyNode extends Node {
     width: initial;
     `
 
-    if (inputs.length > 0) {
-      console.log('INPUTS', inputs)
-    }
     return (
       <div
         className={`${css['node']} ${css[selected]} ${css[hasError ? 'error' : '']
