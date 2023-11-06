@@ -653,6 +653,7 @@ export type RequestPayload = {
   totalTokens?: number
   spell?: SpellInterface
   nodeId?: number
+  customModel?: string
 }
 
 export type RequestData = {
