@@ -5,6 +5,7 @@
 export enum ChatModel {
   GPT4 = 'gpt-4',
   GPT35Turbo = 'gpt-3.5-turbo',
+  GPT35TURBO_FINETUNE = 'fine-tuned-gpt-3.5-turbo',
   GPT4_0613 = 'gpt-4-0613',
   GPT35Turbo_0613 = 'gpt-3.5-turbo-0613',
   CLAUDE_1 = 'claude-1',
@@ -56,6 +57,7 @@ export const COST_PER_TOKEN: CostPerToken<
   [ChatModel.GPT35Turbo]: 0.002 / 1000,
   [ChatModel.GPT4_0613]: 0.06 / 1000,
   [ChatModel.GPT35Turbo_0613]: 0.002 / 1000,
+  [ChatModel.GPT35TURBO_FINETUNE]: 0.016 / 1000,
   [EmbeddingModel.ADA_002]: 0.0001 / 1000,
   [EmbeddingModel.ADA_001]: 0.0004 / 1000,
   [ChatModel.CLAUDE_1]: 11.02 / 1_000_000,
