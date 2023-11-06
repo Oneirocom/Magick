@@ -95,8 +95,6 @@ export default function ContextMenu({
 
   const displayedItems = search ? flattenItems(items, search) : items;
 
-  console.log('DISPLAYED', displayedItems)
-
   return (
     <Context.Provider value={{ args, onClose }}>
       <div
