@@ -8,14 +8,25 @@ import { Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
 import { styled } from '@mui/material/styles'
 
+const triggerName = 'Trigger'
+
+const sortSockets = (a: any, b: any) => {
+  // Handle primary sort by socket type
+  if (a.socket.name === triggerName && b.socket.name !== triggerName) return -1;
+  if (b.socket.name === triggerName && a.socket.name !== triggerName) return 1;
+  if (a.socket.name !== triggerName && b.socket.name !== triggerName) {
+    if (a.socket.name < b.socket.name) return -1;
+    if (a.socket.name > b.socket.name) return 1;
+  }
+
+  // If primary sort is the same (either both 'Trigger' or both non-'Trigger' of the same type), then sort by rendered name
+  return a.name.localeCompare(b.name);
+}
+
 /**
  * Custom Node component for rendering nodes with specific functionality.
  * Inherits from the base Node class.
  */
-
-
-
-
 export class MyNode extends Node {
   declare props: any
   declare state: any
@@ -64,6 +75,10 @@ export class MyNode extends Node {
     const StyleTooltip = styled(Tooltip)`
     width: initial;
     `
+
+    if (inputs.length > 0) {
+      console.log('INPUTS', inputs)
+    }
     return (
       <div
         className={`${css['node']} ${css[selected]} ${css[hasError ? 'error' : '']
@@ -93,7 +108,7 @@ export class MyNode extends Node {
           )}
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
-              {inputs.map(input => (
+              {inputs.sort(sortSockets).map(input => (
                 <div className={css['input']} key={input.key}>
                   <div
                     onMouseEnter={() => handleMouseEnter(input)}
@@ -129,7 +144,7 @@ export class MyNode extends Node {
           )}
           {outputs.length > 0 && (
             <div className={`${css['connection-container']} ${css['out']}`}>
-              {outputs.map(output => (
+              {outputs.sort(sortSockets).map(output => (
                 <div className={css['output']} key={output.key}>
                   {typeof output != 'undefined' &&
                     output.connections.forEach(element => {
