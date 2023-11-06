@@ -75,9 +75,15 @@ export const agent = (app: Application) => {
   app.use('/agents/release', new AgentService(getOptions(app), app), {
     async create(data, params) {
       const agentService = app.service('agents');
-      return await agentService.copyAndRelease(data.agentId, data.versionTag);
+      return await agentService.setRelease(data.agentId, data.versionTag);
     },
+
+    async update(id: string, data, params) {
+      const agentService = app.service('agents');
+      return await agentService.setRelease(id, data.versionTag);
+    }
   })
+
 
   const pubSub = app.get<'pubsub'>('pubsub')
 
