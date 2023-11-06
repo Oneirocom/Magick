@@ -33,10 +33,20 @@ export class AgentService<
     const { versionTag } = params
     const db = app.get('dbClient')
 
-    const agents = db('agents')
-      .select('agents.*')
-      .innerJoin('AgentReleases', 'agents.id', 'AgentReleases.agent_id')
-      .groupBy('agentId')
+    let agents: Agent[];
+
+    if (versionTag) {
+      agents = db('agents')
+        .select('agents.*')
+        .innerJoin('agentReleases', 'agents.id', 'agentReleases.agent_id')
+        .where('agentReleases.version', versionTag)
+        .groupBy('agentId')
+    } else {
+      agents = db('agents')
+        .select('agents.*')
+        .innerJoin('agentReleases', 'agents.id', 'agentReleases.agent_id')
+        .groupBy('agentId')
+    }
 
     return agents
   }
@@ -44,7 +54,7 @@ export class AgentService<
   async find(params?: ServiceParams): Promise<Agent[] | Paginated<Agent>> {
     // Modify the query to exclude agents with the frozen flag set
     const { query = {} } = params || {};
-    query.frozen = false;  // Only fetch agents where frozen is false
+    query.frozen ||= false;  // Only fetch agents where frozen is false
 
     // Call the original find method with the modified query
     return super.find({ ...params, query });
@@ -139,7 +149,7 @@ export class AgentService<
   * @param agentId - the ID of the agent to copy from
   * @param versionTag - the version tag to associate with the newly created agent
   */
-  async copyAndRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
+  async setRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
     // Get the agent by its agentId
     const existingAgent = await this.app.service('agents').get(agentId);
     if (!existingAgent) {
@@ -152,14 +162,13 @@ export class AgentService<
 
     // Add the new agent's ID and the provided version tag to the AgentReleases table
     const db = this.app.get('dbClient');
-    const release = await db('AgentReleases').insert({
+    const release = await db('agentReleases').insert({
       agent_id: newAgent.id,
       version: versionTag,
     });
 
     return { agent: newAgent, release };
   }
-
 
   override async create(
     data: AgentData | AgentData[] | any
