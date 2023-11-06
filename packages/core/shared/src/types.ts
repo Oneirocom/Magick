@@ -151,6 +151,7 @@ export type ControlData = {
 }
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
+  declare tabMap: Record<string, MagickEditor>
   declare getTask: (nodeId: number) => Task
   declare getTasks: () => TaskStore
   declare currentSpell: SpellInterface
