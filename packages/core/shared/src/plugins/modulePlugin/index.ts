@@ -33,7 +33,8 @@ export type UpdateModuleSockets = (
   graphData?: GraphData,
   useSocketName?: boolean
 ) => () => void
-interface IModuleComponent extends MagickComponent<MagickWorkerOutputs | Promise<MagickWorkerOutputs>> {
+interface IModuleComponent
+  extends MagickComponent<MagickWorkerOutputs | Promise<MagickWorkerOutputs>> {
   updateModuleSockets: (UpdateModuleSockets) => void
   module: ModuleOptions
   noBuildUpdate: boolean
@@ -54,7 +55,7 @@ function install(
 
   moduleManager.setEngine(engine)
 
-  runContext.on('componentregister', (component:IModuleComponent):void => {
+  runContext.on('componentregister', (component: IModuleComponent): void => {
     if (!component.module) return
 
     // socket - Rete.Socket instance or function that returns a socket instance
@@ -119,7 +120,7 @@ function install(
             _outputs,
             context as { module: Module }
           )
-          if(ret!==undefined) return ret
+          if (ret !== undefined) return ret
           else return {}
         }
         break
@@ -165,14 +166,27 @@ function install(
           ) => {
             const modules = moduleManager.modules || []
             const currentNodeModule = node.data.spellId as string
-            if (!modules[currentNodeModule] && !graphData) return
+
+            // This is SUPER hacky but works as we store all editors on this.  Just need to see if it is kept up to date.
+            let graph = graphData
+
+            if (
+              !graph &&
+              component?.editor &&
+              component?.editor.tabMap[node.data.spellId as string]
+            ) {
+              graph =
+                component?.editor.tabMap[node.data.spellId as string].toJSON()
+            }
+
+            if (!modules[currentNodeModule] && !graph) return
 
             if (!node.data.inputs) node.data.inputs = AsInputsData([])
             if (!node.data.outputs) node.data.outputs = AsOutputsData([])
 
             const data = modules[currentNodeModule]
               ? modules[currentNodeModule].data
-              : graphData
+              : graph
 
             if (!data) return
             const inputs = moduleManager.getInputs(data)
@@ -205,7 +219,10 @@ function install(
 
           component.builder = async node => {
             // @ts-ignore
-            if (!component.noBuildUpdate) component.updateModuleSockets(node)
+            console.log('UPDATING SOCKETS!')
+            if (!component.noBuildUpdate) {
+              component.updateModuleSockets(node)
+            }
             await builder.call(component, node)
           }
         }
@@ -258,8 +275,8 @@ function install(
             context as { module: Module }
           )
 
-          if (outputsWorker){
-             return await outputsWorker.call(
+          if (outputsWorker) {
+            return await outputsWorker.call(
               component,
               node,
               inputs,
