@@ -1,6 +1,5 @@
-import { Engine, Socket } from '@magickml/rete'
-import { Socket as SocketType } from 'rete/types'
-import { NodeData } from 'rete/types/core/data'
+import { Engine, Socket, NodeData } from '@magickml/rete'
+import { type Socket as SocketType } from '@magickml/rete'
 
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
@@ -86,7 +85,8 @@ export class ModuleManager {
     return socket as SocketType
   }
 
-  registerInput(name: string, socket: Socket) {
+  registerInput(name: string, socket: Socket, hide = false) {
+    socket.hide = hide
     this.inputs.set(name, socket)
   }
 

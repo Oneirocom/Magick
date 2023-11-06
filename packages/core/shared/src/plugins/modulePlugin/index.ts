@@ -1,6 +1,4 @@
-import { Socket } from 'rete/types'
-import { WorkerInputs, WorkerOutputs } from 'rete/types/core/data'
-
+import { Socket, WorkerInputs, WorkerOutputs } from '@magickml/rete'
 import { MagickComponent, MagickEngine } from '../../engine'
 import { anySocket } from '../../sockets'
 import {
@@ -26,6 +24,7 @@ type ModuleOptions = {
   socket: Socket
   nodeType: 'input' | 'output' | 'triggerIn' | 'triggerOut' | 'module'
   skip?: boolean
+  hide?: boolean
 }
 
 export type UpdateModuleSockets = (
@@ -61,14 +60,14 @@ function install(
     // socket - Rete.Socket instance or function that returns a socket instance
     // TODO: Check this assignment
     const socket = component.module.socket || anySocket
-    const { nodeType, skip } = component.module
+    const { nodeType, skip, hide } = component.module
     const name = component.name
 
     switch (nodeType) {
       case 'input':
         const inputsWorker = component.worker
 
-        moduleManager.registerInput(name, socket)
+        moduleManager.registerInput(name, socket, hide)
 
         if (skip) return
 

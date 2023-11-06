@@ -14,7 +14,7 @@ import {
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
-import { NodeData } from 'rete/types/core/data'
+import { NodeData } from '@magickml/rete'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from '@magickml/config'
 import { AGENT_SPELL } from '../communication/agentEventTypes'
 

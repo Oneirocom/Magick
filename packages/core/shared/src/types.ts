@@ -674,6 +674,9 @@ export interface ModuleOptions {
   nodeType: 'input' | 'output' | 'triggerIn' | 'triggerOut' | 'module'
   socket?: Socket
   skip?: boolean
+  /**
+   * Hides the socket from the parent node
+   */
   hide?: boolean
 }
 

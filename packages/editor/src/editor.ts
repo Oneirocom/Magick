@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Plugin } from 'rete/types/core/plugin'
+import { Plugin } from '@magickml/rete'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'

@@ -1,4 +1,4 @@
-import { NodeData } from 'rete/types/core/data'
+import { NodeData } from '@magickml/rete'
 import { Task } from './task'
 
 export type TaskOptions = {
