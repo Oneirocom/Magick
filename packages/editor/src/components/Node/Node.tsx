@@ -10,18 +10,39 @@ import { styled } from '@mui/material/styles'
 
 const triggerName = 'Trigger'
 
+// Define the priorities
+const priorityConfig = {
+  socketTypes: ['Trigger', 'Event', 'String'], // Add all known socket types here in order of priority
+  socketNames: ['content'] // Add all known socket names here in order of priority
+};
+
+// Function to get the index of a socket name or type from the priority configuration; if not found, return a large index number
+const getPriorityIndex = (value: string, type: 'socketTypes' | 'socketNames') => {
+  const index = priorityConfig[type].indexOf(value);
+  return index === -1 ? 999 : index; // If the item is not found, assign a large index number to sort it to the end
+};
+
+// Sorting function using the priority configuration
 const sortSockets = (a: any, b: any) => {
-  // Handle primary sort by socket type
-  if (a.socket.name === triggerName && b.socket.name !== triggerName) return -1;
-  if (b.socket.name === triggerName && a.socket.name !== triggerName) return 1;
-  if (a.socket.name !== triggerName && b.socket.name !== triggerName) {
-    if (a.socket.name < b.socket.name) return -1;
-    if (a.socket.name > b.socket.name) return 1;
+  // Compare socket types using their priority
+  const typePriorityA = getPriorityIndex(a.socket.name, 'socketTypes');
+  const typePriorityB = getPriorityIndex(b.socket.name, 'socketTypes');
+
+  if (typePriorityA !== typePriorityB) {
+    return typePriorityA - typePriorityB;
   }
 
-  // If primary sort is the same (either both 'Trigger' or both non-'Trigger' of the same type), then sort by rendered name
+  // If types are the same, compare socket names using their priority
+  const namePriorityA = getPriorityIndex(a.name, 'socketNames');
+  const namePriorityB = getPriorityIndex(b.name, 'socketNames');
+
+  if (namePriorityA !== namePriorityB) {
+    return namePriorityA - namePriorityB;
+  }
+
+  // If priorities are the same, sort by name alphabetically
   return a.name.localeCompare(b.name);
-}
+};
 
 /**
  * Custom Node component for rendering nodes with specific functionality.
