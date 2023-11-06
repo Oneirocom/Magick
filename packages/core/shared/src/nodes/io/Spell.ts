@@ -109,6 +109,11 @@ export class SpellComponent extends MagickComponent<
     )
   }
 
+  created(node) {
+    this.updateModuleSockets(node)
+    node.update()
+  }
+
   builder(node: MagickNode) {
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
@@ -224,6 +229,7 @@ export class SpellComponent extends MagickComponent<
     spellControl.onData = async (spell: SpellInterface) => {
       if (!spell.name) return console.warn('spell name not found', spell)
       // break out of it the nodes data already exists.
+      console.log('SPELL DATA RECEIVED!!!')
       if (spell.name === node.data.name) return
 
       node.data.name = spell.name
@@ -255,7 +261,7 @@ export class SpellComponent extends MagickComponent<
 
       // subscribe to changes form the spell to update the sockets if there are changes
       // Note: We could store all spells in a spell map here and rather than receive the whole spell, only receive the diff, make the changes, update the sockets, etc.  Mayb improve speed?
-      this.subscribe(node, spell.name)
+      this.subscribe(node, spell.id)
 
       const context = this.editor && this.editor.context
       if (!context) return
