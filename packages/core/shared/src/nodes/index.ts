@@ -49,7 +49,7 @@ import { GreaterThanOrEqual } from './number/GreaterThanOrEqual'
 import { InRange } from './number/InRange'
 import { LessThan } from './number/LessThan'
 import { LessThanOrEqual } from './number/LessThanOrEqual'
-import { Multiply} from './number/Multiply'
+import { Multiply } from './number/Multiply'
 import { Divide } from './number/Divide'
 import { Add } from './number/Add'
 import { Subtract } from './number/Subtract'
@@ -85,6 +85,7 @@ import { GetLength } from './text/GetLength'
 import { UUIDGenerator } from './text/GenerateUUID'
 import { TypeChat } from './text/TypeChat'
 import { CommandParser } from './flow/CommandParser'
+import { SocketOutput } from './io/SocketOutput'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -171,6 +172,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   generateUUID: () => new UUIDGenerator(),
   typeChat: () => new TypeChat(),
   commandParser: () => new CommandParser(),
+  socketOutput: () => new SocketOutput(),
 }
 
 /**
