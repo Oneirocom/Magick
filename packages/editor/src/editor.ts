@@ -89,6 +89,7 @@ export const initEditor = function ({
   editor.context = context
   editor.tab = tab
   editor.currentSpell = spell
+  editor.tabMap = editorTabMap
 
   editor.use(CachePlugin)
 
