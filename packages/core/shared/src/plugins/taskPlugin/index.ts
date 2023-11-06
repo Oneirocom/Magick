@@ -1,6 +1,4 @@
-import { Component } from '@magickml/rete'
-import { NodeData, WorkerOutputs } from 'rete/types/core/data'
-
+import { Component, NodeData, WorkerOutputs } from '@magickml/rete'
 import {
   MagickEditor,
   MagickWorkerInputs,

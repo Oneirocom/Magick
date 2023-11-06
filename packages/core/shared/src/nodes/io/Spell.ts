@@ -1,7 +1,6 @@
 import isEqual from 'lodash/isEqual'
-import Rete from '@magickml/rete'
+import Rete, { Data } from '@magickml/rete'
 
-import { Data } from 'rete/types/core/data'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
@@ -10,7 +9,7 @@ import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { SpellInterface } from '../../schemas'
-import { triggerSocket } from '../../sockets'
+import { eventSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -116,9 +115,10 @@ export class SpellComponent extends MagickComponent<
 
   builder(node: MagickNode) {
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const eventIn = new Rete.Input('event', 'Event', eventSocket)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    node.addInput(triggerIn).addOutput(triggerOut)
+    node.addInput(eventIn).addInput(triggerIn).addOutput(triggerOut)
 
     const spellControl = new SpellControl({
       name: 'Spell Select',
@@ -322,6 +322,8 @@ export class SpellComponent extends MagickComponent<
   ) {
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
+
+    console.log('flattenedInputs!!!!!!!!!!!!!', flattenedInputs)
 
     const publicVariables = getPublicVariables(node.data.graph)
 

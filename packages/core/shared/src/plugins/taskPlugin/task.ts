@@ -1,4 +1,4 @@
-import { NodeData } from 'rete/types/core/data'
+import { NodeData } from '@magickml/rete'
 
 import { MagickReteInput, MagickWorkerInputs } from '../../types'
 import { MagickComponent } from '../../engine'

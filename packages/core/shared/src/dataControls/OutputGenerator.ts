@@ -1,11 +1,10 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete, { OutputsData } from '@magickml/rete'
 
 import { DataControl } from '../plugins/inspectorPlugin'
 import { SocketType } from '../sockets'
 import * as sockets from '../sockets'
 import { DataSocketType, OutputComponentData, AsDataSocket } from '../types'
-import { OutputsData } from 'rete/types/core/data'
 
 /**
  * OutputGeneratorControl class is used to generate data output controls
