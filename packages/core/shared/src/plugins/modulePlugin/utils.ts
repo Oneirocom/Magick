@@ -147,6 +147,7 @@ const addSockets = ({
         socketKey: socketKey,
         connectionType: connectionType,
         useSocketName,
+        hide: socket.hide,
         socketType: socketNameMap[socket.name as SocketNameType],
       })
 
