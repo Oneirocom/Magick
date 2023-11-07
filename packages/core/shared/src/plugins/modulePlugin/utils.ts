@@ -151,7 +151,6 @@ const addSockets = ({
         socketType: socketNameMap[socket.name as SocketNameType],
       })
 
-      console.log('SOCKET', newSocket)
       if (newSocket.socket.hide) return
 
       node[addMethod](new Socket(socketKey, name, socket) as Input & Output)
