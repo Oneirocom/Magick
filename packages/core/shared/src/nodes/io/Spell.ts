@@ -229,7 +229,6 @@ export class SpellComponent extends MagickComponent<
     spellControl.onData = async (spell: SpellInterface) => {
       if (!spell.name) return console.warn('spell name not found', spell)
       // break out of it the nodes data already exists.
-      console.log('SPELL DATA RECEIVED!!!')
       if (spell.name === node.data.name) return
 
       node.data.name = spell.name
@@ -320,9 +319,6 @@ export class SpellComponent extends MagickComponent<
     _outputs: { [key: string]: string },
     _context: ModuleContext
   ) {
-    // We format the inputs since these inputs rely on the use of the socket keys.
-    const flattenedInputs = this.formatInputs(node, inputs)
-
     const publicVariables = getPublicVariables(node.data.graph)
 
     // for each public variable...
@@ -339,12 +335,18 @@ export class SpellComponent extends MagickComponent<
     const { module, spellManager, app, agent } = _context
     const { secrets } = module
 
+    const finalInputs = Object.entries(inputs).reduce((acc, [key, value]) => {
+      if (key === 'event') return acc
+      acc[key] = value[0]
+      return acc
+    }, {})
+
     // We want to trigger off the subspell with the incoming event as its payload.
-    flattenedInputs['Input - Subspell'] = inputs.event[0]
+    finalInputs['Input - Subspell'] = inputs.event[0]
 
     const runComponentArgs = {
       spellId: node.data.spellId as string,
-      inputs: flattenedInputs,
+      inputs: finalInputs,
       runSubspell: true,
       secrets: agent?.secrets ?? secrets,
       app,
