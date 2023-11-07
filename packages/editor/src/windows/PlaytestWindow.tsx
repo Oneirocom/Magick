@@ -160,6 +160,7 @@ const Playtest = ({ tab }) => {
 
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState<Message[]>([])
+
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
 
@@ -188,21 +189,24 @@ const Playtest = ({ tab }) => {
   // Print to console callback function.
   const printToConsole = useCallback(
     (_, _text) => {
+      console.log('Playtest received!', _text);
       // check if _text is a string
-      if (typeof _text !== 'string')
-        return console.warn('could not split text, not a string', _text)
-      const text = `Agent: ` + _text
+      if (typeof _text !== 'string') {
+        console.warn('Could not split text, not a string', _text);
+        return;
+      }
+      const text = `Agent: ` + _text;
 
       const newMessage: Message = {
         sender: 'agent',
         content: text,
-      }
+      };
 
-      const newHistory = [...history, newMessage]
-      setHistory(newHistory as [])
+      // Use the functional update form to ensure we are always using the most up-to-date state
+      setHistory((prevHistory) => [...prevHistory, newMessage]);
     },
-    [history]
-  )
+    []
+  );
 
   // Set playtest options based on spell graph nodes with the playtestToggle set to true.
   const [playtestOptions, setPlaytestOptions] = useState<Record<
