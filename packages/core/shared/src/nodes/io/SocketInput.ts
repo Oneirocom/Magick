@@ -58,6 +58,12 @@ export class SocketInput extends MagickComponent<void> {
 
     node.data.name = node.data.name || `input-${node.id}`
 
+    // Set isInput to true so we can identify this node as an input node
+    // node.data.isInput = true
+
+    // Each node should have a unique socket key
+    node.data.socketKey = node?.data?.socketKey || uuidv4()
+
     const nameInput = new InputControl({
       dataKey: 'name',
       name: 'Input name',
