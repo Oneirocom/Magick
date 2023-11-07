@@ -88,11 +88,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
         inspectorControls: [inputName],
         sockets: [triggerOutput, dataOutput],
       },
-      // {
-      //   name: 'Task',
-      //   inspectorControls: [],
-      //   sockets: [triggerOutput, dataOutput],
-      // },
       {
         name: 'Subspell',
         inspectorControls: [],
@@ -108,6 +103,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
     // Each node should have a unique socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
+
+    node.data.hideSocket = true
 
     // Set the default name if there is none
     if (!node.data.name) {
