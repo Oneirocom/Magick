@@ -43,16 +43,16 @@ export class ModuleManager {
     typeMap: Map<string, Socket>,
     defaultName: string
   ): ModuleSocketType[] {
-    return extractNodes(data.nodes, typeMap).map(
-      (node, i): ModuleSocketType => {
+    return extractNodes(data.nodes, typeMap)
+      .filter(n => !n.data.hideSocket)
+      .map((node, i): ModuleSocketType => {
         node.data.name = node.data.name || `${defaultName}-${i + 1}`
         return {
           name: node.data.name as SocketNameType,
           socketKey: node.data.socketKey as string,
           socket: this.socketFactory(node, typeMap.get(node.name)),
         }
-      }
-    )
+      })
   }
 
   getInputs(data: GraphData): ModuleSocketType[] {
