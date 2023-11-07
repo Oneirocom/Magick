@@ -1,7 +1,12 @@
 import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
-import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
+import {
+  eventSocket,
+  objectSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -63,6 +68,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const spellName = new Rete.Input('spellName', 'Spell Name', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const spellInputs = new Rete.Input('inputs', 'Inputs', objectSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const output = new Rete.Output('output', 'Output', stringSocket)
     node
@@ -70,6 +76,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
       .addOutput(triggerOut)
       .addInput(spellName)
       .addInput(eventInput)
+      .addInput(spellInputs)
       .addOutput(output)
 
     return node
@@ -92,12 +99,8 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     _context: ModuleContext
   ) {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
-
-    // todo should be better typed.  Removed 'EventData' to prevent circular dependency
     const event = inputs['event'] && (inputs['event'][0] as any)
-
     const { agent, module, spellManager } = _context
-
     const { app, secrets } = module
 
     if (!app) {
@@ -124,11 +127,14 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const spellId = firstSpell.id || firstSpell._id
 
+    const spellInputs = inputs.inputs[0] as Record<string, unknown>
+
     const { projectId } = _context
     if (agent) {
       const runComponentArgs = {
         inputs: {
-          'Input - Default': event,
+          'Input - Subspell': event,
+          ...spellInputs,
         },
         runSubspell: false,
         spellId,
@@ -148,7 +154,8 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     } else {
       const runComponentArgs = {
         inputs: {
-          'Input - Default': event,
+          'Input - Subspell': event,
+          ...spellInputs,
         },
         runSubspell: false,
         spellId: spellId as string,
