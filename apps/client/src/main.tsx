@@ -43,8 +43,6 @@ if (window === window.parent) {
     const apiUrl =
       new URLSearchParams(window.location.search).get('apiUrl') ??
       API_ROOT_URL ??
-      'https://www.magickml.com' ??
-      'https://beta.magickml.com' ??
       'http://localhost:3030'
 
     const config: AppConfig = {
@@ -62,30 +60,25 @@ if (window === window.parent) {
   /**
    * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
    */
+  const TRUSTED_PARENT_URLS = [TRUSTED_PARENT_URL, 'https://www.magickml.com', 'https://beta.magickml.com'].map(url => url.replace(/\/+$/, ''));
+
   window.addEventListener(
     'message',
     event => {
-      // Remove possible trailing slash on only the end
-      const cloudUrl = TRUSTED_PARENT_URL?.replace(/\/+$/, '')
-
       // Check for trusted origin
       if (
-        TRUSTED_PARENT_URL &&
-        TRUSTED_PARENT_URL !== '' &&
+        TRUSTED_PARENT_URLS.length > 0 &&
         event.source !== window &&
         event.origin !== window.location.origin &&
-        event.origin !== cloudUrl
+        !TRUSTED_PARENT_URLS.includes(event.origin)
       ) {
-        logger.error('untrusted origin %s', event.origin)
-        logger.error(
-          'cloudUrl is %s',
-          cloudUrl)
-        logger.error(
-          'TRUSTED_PARENT_URL is %s',
-          TRUSTED_PARENT_URL
-        )
+        logger.error('Untrusted origin %s', event.origin);
+        // Log the trusted origins for debugging purposes
+        TRUSTED_PARENT_URLS.forEach(trustedUrl => {
+          logger.error('Trusted origin is %s', trustedUrl);
+        });
 
-        return
+        return;
       }
 
       const { data } = event
