@@ -306,7 +306,10 @@ export class SpellComponent extends MagickComponent<
   formatInputs(node: WorkerData, inputs: MagickWorkerInputs) {
     return Object.entries(inputs).reduce((acc, [key, value]) => {
       const name = inputNameFromSocketKey(node, key)
-      if (!name) return acc
+      if (!name) {
+        acc[key] = value[0]
+        return acc
+      }
 
       acc[name] = value[0]
       return acc
@@ -320,6 +323,7 @@ export class SpellComponent extends MagickComponent<
     _context: ModuleContext
   ) {
     const publicVariables = getPublicVariables(node.data.graph)
+    const formattedInputs = this.formatInputs(node, inputs)
 
     // for each public variable...
     // todo switch to map
@@ -335,18 +339,13 @@ export class SpellComponent extends MagickComponent<
     const { module, spellManager, app, agent } = _context
     const { secrets } = module
 
-    const finalInputs = Object.entries(inputs).reduce((acc, [key, value]) => {
-      if (key === 'event') return acc
-      acc[key] = value[0]
-      return acc
-    }, {})
-
     // We want to trigger off the subspell with the incoming event as its payload.
-    finalInputs['Input - Subspell'] = inputs.event[0]
+    formattedInputs['Input - Subspell'] = inputs.event[0]
+    delete formattedInputs.event
 
     const runComponentArgs = {
       spellId: node.data.spellId as string,
-      inputs: finalInputs,
+      inputs: formattedInputs,
       runSubspell: true,
       secrets: agent?.secrets ?? secrets,
       app,
