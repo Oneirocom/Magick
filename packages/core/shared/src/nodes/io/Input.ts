@@ -88,8 +88,13 @@ export class InputComponent extends MagickComponent<InputReturn> {
         inspectorControls: [inputName],
         sockets: [triggerOutput, dataOutput],
       },
+      // {
+      //   name: 'Task',
+      //   inspectorControls: [],
+      //   sockets: [triggerOutput, dataOutput],
+      // },
       {
-        name: 'Task',
+        name: 'Subspell',
         inspectorControls: [],
         sockets: [triggerOutput, dataOutput],
       },

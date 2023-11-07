@@ -86,6 +86,7 @@ import { UUIDGenerator } from './text/GenerateUUID'
 import { TypeChat } from './text/TypeChat'
 import { CommandParser } from './flow/CommandParser'
 import { SocketOutput } from './io/SocketOutput'
+import { SocketInput } from './io/SocketInput'
 
 export const components: Record<string, () => MagickComponent<unknown>> = {
   booleanGate: () => new BooleanGate(),
@@ -173,6 +174,7 @@ export const components: Record<string, () => MagickComponent<unknown>> = {
   typeChat: () => new TypeChat(),
   commandParser: () => new CommandParser(),
   socketOutput: () => new SocketOutput(),
+  socketInput: () => new SocketInput(),
 }
 
 /**
