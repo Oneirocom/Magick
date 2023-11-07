@@ -66,7 +66,6 @@ if (window === window.parent) {
     'message',
     event => {
       // Check for trusted origin
-      console.log('TRUSTED_PARENT_URLS', TRUSTED_PARENT_URLS)
       if (
         TRUSTED_PARENT_URLS.length > 0 &&
         event.source !== window &&
