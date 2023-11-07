@@ -323,8 +323,6 @@ export class SpellComponent extends MagickComponent<
     // We format the inputs since these inputs rely on the use of the socket keys.
     const flattenedInputs = this.formatInputs(node, inputs)
 
-    console.log('flattenedInputs!!!!!!!!!!!!!', flattenedInputs)
-
     const publicVariables = getPublicVariables(node.data.graph)
 
     // for each public variable...
@@ -340,6 +338,9 @@ export class SpellComponent extends MagickComponent<
 
     const { module, spellManager, app, agent } = _context
     const { secrets } = module
+
+    // We want to trigger off the subspell with the incoming event as its payload.
+    flattenedInputs['Input - Subspell'] = inputs.event[0]
 
     const runComponentArgs = {
       spellId: node.data.spellId as string,

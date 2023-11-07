@@ -62,7 +62,6 @@ export class SocketOutput extends MagickComponent<void> {
     // const output = new Rete.Output('output', 'Output', anySocket)
 
     node.data.sendToPlaytest = true
-
     node.data.name = node.data.name || `output-${node.id}`
 
     node.data.isOutput = true
