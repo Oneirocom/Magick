@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import TemplatePanel from '../../components/TemplatePanel'
-import { useConfig, useTreeData } from '@magickml/providers'
+import { useConfig, useTabLayout, useTreeData } from '@magickml/providers'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { v4 as uuidv4 } from 'uuid'
 import md5 from 'md5'
@@ -34,6 +34,7 @@ const customConfig = {
 
 const CreateSpellModal = ({ closeModal }) => {
   const config = useConfig()
+  const { openTab } = useTabLayout()
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     getTemplates().spells[0] as Template
@@ -81,6 +82,18 @@ const CreateSpellModal = ({ closeModal }) => {
           return
         }
       }
+
+      openTab({
+        id: response.data.name,
+        name: response.data.name,
+        spellName: response.data.name,
+        switchActive: true,
+        type: 'spell',
+        params: {
+          spellId: response.data.id
+        }
+      })
+
       setLoading(false)
       closeModal()
     } catch (err) {
