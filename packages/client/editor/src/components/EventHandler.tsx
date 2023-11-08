@@ -142,6 +142,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * @param {object} update - The updated spell object
    */
   const onSaveDiff = async (event, update) => {
+    // return
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current
@@ -337,7 +338,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    */
   const runSpell = async (event, _data) => {
     // run the spell in the spell runner service
-    console.log('sending run spell')
     const data = {
       spellId: spellRef.current.id,
       agentId: currentAgentId,
