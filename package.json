@@ -22,7 +22,7 @@
     "lint:engine": "npx nx lint shared-core --fix",
     "lint:editor": "npx nx lint @magickml/editor --fix",
     "lint:server-core": "npx nx lint @magickml/server-core",
-    "build": "npx nx lint @magickml/core && npx nx run-many --target=build --projects=@magickml/server,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app",
+    "build": "npx nx run-many --target=build --projects=@magickml/server,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app",
     "build-client": "npx nx build @magickml/client",
     "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-server": "npx nx build @magickml/server",
