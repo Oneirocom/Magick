@@ -91,6 +91,11 @@ class SpellRunner {
     } else {
       // handle the case of the emit being run on an agent not the server
       // to do we probably want these events to be constants somewhere
+      this.logger.trace(
+        'SPELLRUNNER: Emitting spell event from agent %o',
+        AGENT_SPELL(this.agent.id)
+      )
+      this.logger.trace('THIS IS THE AGENT ID', this.agent.id)
       this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
     }
   }
@@ -398,6 +403,7 @@ class SpellRunner {
       // subscribe to a run pubsub and then we just use that.  This would treat running
       // from a trigger in node like any other data stream. Or even just pass in socket IO.
       //
+      this.logger.trace(inputs, 'Running component %s', componentName)
       await component.run(triggeredNode as NodeData, inputs, this.engine)
 
       this.busy = false

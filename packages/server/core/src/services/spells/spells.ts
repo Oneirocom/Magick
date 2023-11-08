@@ -40,7 +40,7 @@ export const spell = (app: Application) => {
 
   // Register our service on the Feathers application
   app.use('spells', new SpellService(getOptions(app)), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
+    methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff', 'update'],
     events: [],
   })
 
@@ -77,8 +77,8 @@ export const spell = (app: Application) => {
     after: {
       all: [],
       create: [],
-      patch: [checkForSpellInManager],
-      saveDiff: [checkForSpellInManager],
+      patch: [],
+      saveDiff: [],
     },
     error: {
       all: [],
