@@ -86,31 +86,22 @@ export default function (app: Application): void {
       return channel
     }
 
-    const projectId =
-      context.params?.projectId ||
-      context.result.projectId ||
-      context.data?.projectId ||
-      data.projectId
-
     const agentId =
       context.params?.agentId ||
       context.result.agentId ||
       context.data?.agentId ||
       data.agentId
 
-    // Block publishing unless we are on the main server
-    if (app.get('environment') !== 'server') return
-
     // Lets not relay up all the patch events
-    if (context.method === 'patch' || !projectId) return
+    if (context.method === 'patch' || !agentId) return
 
     logger.trace(
-      `CHANNELS: Publishing event path ${context.path} to project %s!`,
-      projectId
+      `CHANNELS: Publishing event path ${context.path} to agent %s!`,
+      agentId
     )
     // Publish all events to the authenticated user channel
-    const projectChannel = app.channel(projectId)
+    // const projectChannel = app.channel(projectId)
     const agentChannel = app.channel(`agent:${agentId}`)
-    return [projectChannel, agentChannel]
+    return agentChannel
   })
 }
