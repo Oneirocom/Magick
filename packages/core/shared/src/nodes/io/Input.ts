@@ -104,8 +104,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
     // Each node should have a unique socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
-    node.data.hideSocket = true
-
     // Set the default name if there is none
     if (!node.data.name) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -190,6 +188,12 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
       const inspectorControls = inputTypeData.inspectorControls ?? []
       const sockets = inputTypeData.sockets ?? []
+
+      if (inputType === 'Subspell') {
+        node.data.hideSocket = true
+      } else {
+        node.data.hideSocket = false
+      }
 
       // configure default
       if (inputType === 'Default') {
