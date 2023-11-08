@@ -337,6 +337,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    */
   const runSpell = async (event, _data) => {
     // run the spell in the spell runner service
+    console.log('sending run spell')
     const data = {
       spellId: spellRef.current.id,
       agentId: currentAgentId,
