@@ -34,11 +34,11 @@ async function loadPlugins(): Promise<void> {
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
   process.on('uncaughtException', (e: any) => {
-    logger.error('Uncaught exception: %s\n From: %o', e, e.stack)
+    logger.error(e, 'Uncaught exception: %s\n From: %o', e)
   })
 
   process.on('unhandledRejection', (e: any) => {
-    logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
+    logger.error(e, 'Unhandled rejection: %s\n From: %o', e)
   })
 }
 

@@ -232,8 +232,8 @@ const AgentDetails = ({
           <option disabled value={'default'}>
             Select Spell
           </option>
-          {spellList?.length > 0 &&
-            spellList
+          {spellList && spellList?.length > 0 &&
+            [...spellList]
               .sort((a, b) => a.name.localeCompare(b.name)) // Sort the spellList alphabetically by name
               .map((spell, idx) => {
                 return (

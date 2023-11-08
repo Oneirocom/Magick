@@ -227,6 +227,7 @@ export class Agent implements AgentInterface {
 
   // published an event to the agents event stream
   publishEvent(event, message) {
+    this.logger.trace('AGENT: publishing event %s', event)
     this.pubsub.publish(event, {
       ...message,
       // make sure all events include the agent and project id
