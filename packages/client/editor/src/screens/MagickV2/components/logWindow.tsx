@@ -15,6 +15,8 @@ interface Props {
   logs: Array<Log>;
 }
 
+const LIST_ITEM_HEIGHT = 25;
+
 const LogHeader = ({ showSpellLogs, showLogLogs, setShowLogLogs, setShowSpellLogs }) => {
   return (<div className="flex justify-between mb-6 border-b border-gray-800 pb-5">
     <h1 className="text-l font-semibold">Application Logs</h1>
@@ -69,12 +71,12 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
     // todo keep an eye on this for performance stuff.
     const resizeObserver = new ResizeObserver(() => {
       const expandHeight = expandRef.current.offsetHeight;
-      const expandedHeight = 35 + expandHeight;
+      const expandedHeight = LIST_ITEM_HEIGHT + expandHeight;
 
       if (isExpandedRef.current) {
         onExpandCollapse(expandedHeight);
       } else {
-        onExpandCollapse(35);
+        onExpandCollapse(LIST_ITEM_HEIGHT);
       }
     });
 
@@ -86,7 +88,7 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
   }, [isRefAvailable]);
 
   return (
-    <div className="flex flex-col justify-between p-3 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
+    <div className="flex flex-col justify-between p-1 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
       <div className="flex flex-row justify-between w-full items-center gap-5 " onClick={() => setIsExpanded(!isExpanded)}>
         <span className="text-md text-[#328597] whitespace-nowrap">{timestamp}</span>
         <span className="text-md text-white break-all flex-grow truncate">{log.message}</span>
@@ -124,7 +126,7 @@ const LogContainer = ({ logs, autoscroll }) => {
   const rowHeights = useRef({});
 
   const getItemSize = (index) => {
-    return rowHeights.current[index] || 35;  // Default height
+    return rowHeights.current[index] || LIST_ITEM_HEIGHT;  // Default height
   };
 
   const handleExpandCollapse = (index, size) => {
