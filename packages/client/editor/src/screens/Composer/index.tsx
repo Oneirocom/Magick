@@ -96,6 +96,7 @@ const Composer = ({ tab, pubSub }) => {
       const props = {
         tab,
         node,
+        spellId: ""
       }
       const component = node.getComponent()
       switch (component) {
@@ -119,7 +120,7 @@ const Composer = ({ tab, pubSub }) => {
 
   return (
     <>
-      <EventHandler tab={tab} pubSub={pubSub} />
+      <EventHandler tab={tab} pubSub={pubSub} spellId="" />
       <Layout json={tab.layoutJson} factory={factory(tab)} tab={tab} />
     </>
   )
