@@ -97,6 +97,7 @@ export class AgentService<
     }
 
     // join the new channel
+    this.app.get('logger').debug(`Subscribing to agent ${agentId}`)
     app.channel(`agent:${agentId}`).join(connection)
 
     // turn on the new agent
