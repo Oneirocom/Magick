@@ -32,7 +32,7 @@ const logger = getLogger()
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
-  logger.error('uncaughtException %s', err)
+  logger.error(err, 'uncaughtException %s')
 })
 
 process.on(
