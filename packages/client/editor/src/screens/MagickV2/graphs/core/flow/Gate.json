@@ -1,0 +1,152 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "1",
+      "parameters": {
+        "text": {
+          "value": "Starting Sequence..."
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "2",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/sequence",
+      "configuration": {
+        "numOutputs": 5
+      },
+      "id": "2",
+      "flows": {
+        "1": {
+          "nodeId": "3",
+          "socket": "flow"
+        },
+        "2": {
+          "nodeId": "4",
+          "socket": "flow"
+        },
+        "3": {
+          "nodeId": "5",
+          "socket": "flow"
+        },
+        "4": {
+          "nodeId": "6",
+          "socket": "flow"
+        },
+        "5": {
+          "nodeId": "7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "value": "Trigging Gate"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "8",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "4",
+      "parameters": {
+        "text": {
+          "value": "Opening Gate"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "8",
+          "socket": "open"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "5",
+      "parameters": {
+        "text": {
+          "value": "Triggering Gate"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "8",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "6",
+      "parameters": {
+        "text": {
+          "value": "Closing Gate"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "8",
+          "socket": "close"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "7",
+      "parameters": {
+        "text": {
+          "value": "Triggering Gate"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "8",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/gate",
+      "id": "8",
+      "flows": {
+        "flow": {
+          "nodeId": "9",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "9",
+      "parameters": {
+        "text": {
+          "value": "Gate Output Triggered"
+        }
+      }
+    }
+  ]
+}

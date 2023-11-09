@@ -1,0 +1,23 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "1",
+      "parameters": {
+        "text": {
+          "value": "Hello World!"
+        }
+      }
+    }
+  ]
+}

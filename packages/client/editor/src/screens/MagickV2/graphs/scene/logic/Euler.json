@@ -1,0 +1,53 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "3",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "math/toEuler/float",
+      "id": "1",
+      "parameters": {
+        "x": {
+          "value": 1
+        },
+        "y": {
+          "value": 0
+        },
+        "z": {
+          "value": 0
+        }
+      }
+    },
+    {
+      "type": "math/toString/euler",
+      "id": "2",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "1",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "link": {
+            "nodeId": "2",
+            "socket": "result"
+          }
+        }
+      }
+    }
+  ]
+}
