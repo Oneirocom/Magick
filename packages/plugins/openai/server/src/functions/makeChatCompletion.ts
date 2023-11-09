@@ -35,7 +35,7 @@ export async function makeChatCompletion(
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
   let func = inputs['function']?.[0] as string
-  const customModel = node?.data?.customModel as string
+  const customModel = node?.data?.customModel as string | undefined
 
   // Get or set default settings
   const settings = {
