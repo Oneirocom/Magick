@@ -5,8 +5,8 @@ import cx from 'classnames';
 import React from 'react';
 import { Connection, Handle, Position, useReactFlow } from 'reactflow';
 
-import { colors, valueTypeColorMap } from '../util/colors.js';
-import { isValidConnection } from '../util/isValidConnection.js';
+import { colors, valueTypeColorMap } from '../../util/colors.js';
+import { isValidConnection } from '../../util/isValidConnection.js';
 
 export type OutputSocketProps = {
   connected: boolean;
