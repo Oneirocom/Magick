@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "1",
+      "parameters": {
+        "text": {
+          "value": "Selecting 'alpha'..."
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "2",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/switch/string",
+      "configuration": {
+        "numCases": 3
+      },
+      "id": "2",
+      "parameters": {
+        "selection": {
+          "value": "alpha"
+        },
+        "1": {
+          "value": "alpha"
+        },
+        "2": {
+          "value": "beta"
+        },
+        "3": {
+          "value": "delta"
+        }
+      },
+      "flows": {
+        "1": {
+          "nodeId": "3",
+          "socket": "flow"
+        },
+        "2": {
+          "nodeId": "4",
+          "socket": "flow"
+        },
+        "3": {
+          "nodeId": "5",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "value": "First Switch Output: Alpha!"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "4",
+      "parameters": {
+        "text": {
+          "value": "Second Switch Output: Beta!"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "5",
+      "parameters": {
+        "text": {
+          "value": "Third Switch Output: Delta!"
+        }
+      }
+    }
+  ]
+}

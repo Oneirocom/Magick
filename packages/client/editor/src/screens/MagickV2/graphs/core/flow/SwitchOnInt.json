@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "1",
+      "parameters": {
+        "text": {
+          "value": "Selecting 3..."
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "2",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/switch/integer",
+      "configuration": {
+        "numCases": 3
+      },
+      "id": "2",
+      "parameters": {
+        "selection": {
+          "value": 3
+        },
+        "1": {
+          "value": 1
+        },
+        "2": {
+          "value": 2
+        },
+        "3": {
+          "value": 3
+        }
+      },
+      "flows": {
+        "1": {
+          "nodeId": "3",
+          "socket": "flow"
+        },
+        "2": {
+          "nodeId": "4",
+          "socket": "flow"
+        },
+        "3": {
+          "nodeId": "5",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "value": "First Switch Output!"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "4",
+      "parameters": {
+        "text": {
+          "value": "Second Switch Output!"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "5",
+      "parameters": {
+        "text": {
+          "value": "Third Switch Output!"
+        }
+      }
+    }
+  ]
+}

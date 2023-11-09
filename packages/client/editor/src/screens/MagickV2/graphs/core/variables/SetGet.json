@@ -1,0 +1,71 @@
+{
+  "variables": [
+    {
+      "valueTypeName": "float",
+      "name": "counter",
+      "id": 0,
+      "initialValue": -1
+    }
+  ],
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "variable/set",
+      "configuration": {
+        "variableId": 0 
+      },
+      "id": "1",
+      "parameters": {
+        "value": {
+          "value": 1000
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "4",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "variable/get",
+      "configuration": {
+        "variableId": 0 
+      },
+      "id": "2"
+    },
+    {
+      "type": "math/toString/float",
+      "id": "3",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "2",
+            "socket": "value"
+          }
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "4",
+      "parameters": {
+        "text": {
+          "link": {
+            "nodeId": "3",
+            "socket": "result"
+          }
+        }
+      }
+    }
+  ]
+}

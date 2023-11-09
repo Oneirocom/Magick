@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/branch",
+      "id": "1",
+      "parameters": {
+        "condition": {
+          "value": false
+        }
+      },
+      "flows": {
+        "true": {
+          "nodeId": "2",
+          "socket": "flow"
+        },
+        "false": {
+          "nodeId": "3",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "2",
+      "parameters": {
+        "text": {
+          "value": "Condition is true!"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "value": "Condition is false!"
+        }
+      }
+    }
+  ]
+}
