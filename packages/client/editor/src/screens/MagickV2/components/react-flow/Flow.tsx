@@ -1,24 +1,26 @@
 import { GraphJSON, IRegistry } from '@magickml/behave-graph';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Background, BackgroundVariant, ReactFlow } from 'reactflow';
 
 import CustomControls from './Controls.js';
-import { Examples } from './modals/LoadModal.js';
-import { NodePicker } from './NodePicker.js';
-import { useNodeSpecJson } from '../../hooks/react-flow/useNodeSpecJson.js';
-import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
-import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
-import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
+import { Examples } from './modals/LoadModal';
+import { NodePicker } from './NodePicker';
+import { useNodeSpecJson } from '../../hooks/react-flow/useNodeSpecJson';
+import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow';
+import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers';
+import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner';
 
 type FlowProps = {
   initialGraph: GraphJSON;
   registry: IRegistry;
   examples: Examples;
+  parentRef: React.RefObject<HTMLDivElement>;
 };
 
 export const Flow: React.FC<FlowProps> = ({
   initialGraph: graph,
   registry,
+  parentRef,
   examples
 }) => {
   const specJson = useNodeSpecJson(registry);
@@ -51,7 +53,8 @@ export const Flow: React.FC<FlowProps> = ({
     nodes,
     onEdgesChange,
     onNodesChange,
-    specJSON: specJson
+    specJSON: specJson,
+    parentRef
   });
 
   const { togglePlay, playing } = useGraphRunner({
@@ -67,12 +70,11 @@ export const Flow: React.FC<FlowProps> = ({
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      // @ts-ignore
       onConnectStart={handleStartConnect}
-      // @ts-ignore
       onConnectEnd={handleStopConnect}
       fitView
-      fitViewOptions={{ maxZoom: 1 }}
+      fitViewOptions={{ maxZoom: 2, minZoom: 0.1 }}
+      minZoom={0.1}
       onPaneClick={handlePaneClick}
       onPaneContextMenu={handlePaneContextMenu}
     >
