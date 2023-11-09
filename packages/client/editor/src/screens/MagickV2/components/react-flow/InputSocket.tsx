@@ -28,7 +28,7 @@ const InputFieldForValue = ({
   'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType'
 >) => {
   const showChoices = choices?.length;
-  const inputVal = String(value) ?? defaultValue ?? '';
+  const inputVal = (String(value) ?? defaultValue ?? '') as string;
 
   if (showChoices)
     return (
