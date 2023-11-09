@@ -64,7 +64,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
         {filtered.map(({ type }) => (
           <div
             key={type}
-            className="p-2 cursor-pointer border-b border-gray-600"
+            className="p-2 cursor-pointer border-b border-gray-600 hover:bg-gray-600"
             onClick={() => onPickNode(type, instance.project(position))}
           >
             {type}

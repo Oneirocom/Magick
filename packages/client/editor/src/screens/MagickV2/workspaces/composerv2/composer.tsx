@@ -9,12 +9,14 @@ import {
   IDockviewPanelProps,
   positionToDirection,
 } from 'dockview'
-import { useEffect, useRef } from 'react'
+import Branch from '../../graphs/core/flow/Branch.json'
+import { useEffect, useRef, useState } from 'react'
 import { SpellInterface } from 'shared/core'
 import { spellApi } from 'client/state'
 
 import { debounce } from '../../../../utils/debounce'
 import EventHandler from '../../../../components/EventHandler'
+import graph from '../../graphs/graph.json'
 
 import EditorWindow from '../../../../windows/EditorWindow'
 import Inspector from '../../../../windows/InspectorWindow'
@@ -26,6 +28,10 @@ import { useEditor } from '../../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
+import { GraphJSON } from '@magickml/behave-graph'
+import { useRegistry } from '../../hooks/react-flow/useRegistry'
+import { Flow } from '../../components/react-flow/Flow'
+import { usePanelControls } from '../../hooks/usePanelControls'
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -123,7 +129,30 @@ const components = {
     return <TextEditor {...props.params} />
   },
   EditorWindow: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <EditorWindow {...props.params} />
+    const examples = {
+      branch: Branch as unknown as GraphJSON,
+    } as Record<string, GraphJSON>;
+    const parentRef = useRef();
+
+
+    const [height, setHeight] = useState(0)
+    const [width, setWidth] = useState(0)
+
+    useEffect(() => {
+      const dispose = props.api.onDidDimensionsChange(event => {
+        setWidth(event.width)
+        setHeight(event.height)
+      })
+
+      return () => {
+        dispose.dispose()
+      }
+    })
+
+    const registry = useRegistry();
+    return <div style={{ height, width }} ref={parentRef}>
+      <Flow registry={registry} initialGraph={graph} examples={examples} parentRef={parentRef} />;
+    </div>
   },
   Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Console {...props.params} />

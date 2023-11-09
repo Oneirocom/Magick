@@ -1,0 +1,78 @@
+body,
+#root {
+  height: 100%;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.25rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+}
+
+.react-flow__handle {
+  width: 10px;
+  height: 10px;
+}
+
+.react-flow__handle-right {
+  right: -6px;
+}
+
+.react-flow__handle-left {
+  left: -6px;
+}
+
+.react-flow__edge-path {
+  stroke: #b1b1b7;
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.react-flow__edge-path {
+  stroke: #555;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #fff;
+}
+
+.node-picker ::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.node-picker ::-webkit-scrollbar-track {
+  @apply bg-gray-700;
+}
+
+.node-picker ::-webkit-scrollbar-thumb {
+  @apply bg-gray-600;
+}
+
+.react-flow .react-flow__controls {
+  display: flex;
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: auto;
+}
+
+.react-flow__controls-button {
+  background: white;
+  border: none;
+  border-radius: 0;
+}
+
+.react-flow__controls-button svg {
+  color: black;
+}
