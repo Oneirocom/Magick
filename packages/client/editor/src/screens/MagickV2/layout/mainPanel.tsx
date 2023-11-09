@@ -17,10 +17,12 @@ import Documents from '../../DocumentWindow'
 import Agents from '../../agents/AgentManagerWindow'
 import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from '../workspaces/composer'
+import ComposerV2 from '../workspaces/composerv2'
 import NewMenuBar from '../../../components/MenuBar/newMenuBar';
 
 import './tab-layout.scss'
-import WelcomeScreen from '../components/watermark';
+import WelcomeScreen from '../components/Watermark/watermark';
+import { FEATURE_FLAGS } from 'shared/config';
 
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
@@ -61,7 +63,7 @@ const getComponents = () => {
       acc[obj.name] = obj.component
       return acc
     }, {}),
-    spell: Composer,
+    spell: FEATURE_FLAGS.COMPOSER_V2 ? ComposerV2 : Composer,
     default: (props: IDockviewPanelProps<{ title: string }>) => {
       return (
         <div
