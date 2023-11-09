@@ -35,11 +35,12 @@ export async function makeChatCompletion(
   const system = inputs['system']?.[0] as string
   const conversation = inputs['conversation']?.[0] as any
   let func = inputs['function']?.[0] as string
+  const customModel = node?.data?.customModel as string
 
   // Get or set default settings
   const settings = {
     model:
-      (node?.data?.customModel as string).length > 0
+      customModel && customModel.length > 0
         ? node?.data?.customModel
         : node?.data?.model,
     temperature: parseFloat((node?.data?.temperature as string) ?? '0.0'),
