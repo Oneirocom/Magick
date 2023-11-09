@@ -1,0 +1,104 @@
+{
+  "variables": [
+    {
+      "valueTypeName": "float",
+      "name": "frameCounter",
+      "id": 0,
+      "initialValue": -1
+    }
+  ],
+  "nodes": [
+    {
+      "type": "lifecycle/onTick",
+      "id": "1",
+      "flows": {
+        "flow": {
+          "nodeId": "4",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "variable/get",
+      "configuration": {
+        "variableId": 0
+      },
+      "id": "2"
+    },
+    {
+      "type": "math/add/float",
+      "id": "3",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "2",
+            "socket": "value"
+          }
+        },
+        "b": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "type": "variable/set",
+      "configuration": {
+        "variableId": 0
+      },
+      "id": "4",
+      "parameters": {
+        "value": {
+          "link": {
+            "nodeId": "3",
+            "socket": "result"
+          }
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "math/toString/float",
+      "id": "5",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "2",
+            "socket": "value"
+          }
+        }
+      }
+    },
+    {
+      "type": "logic/concat/string",
+      "id": "6",
+      "parameters": {
+        "a": {
+          "value": "Frame Count is "
+        },
+        "b": {
+          "link": {
+            "nodeId": "5",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "7",
+      "parameters": {
+        "text": {
+          "link": {
+            "nodeId": "6",
+            "socket": "result"
+          }
+        }
+      }
+    }
+  ]
+}

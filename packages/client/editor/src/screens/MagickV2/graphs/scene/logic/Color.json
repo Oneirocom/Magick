@@ -1,0 +1,53 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "3",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "math/toColor/rgb",
+      "id": "1",
+      "parameters": {
+        "r": {
+          "value": 1
+        },
+        "g": {
+          "value": 0
+        },
+        "b": {
+          "value": 0
+        }
+      }
+    },
+    {
+      "type": "math/toString/color",
+      "id": "2",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "1",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "link": {
+            "nodeId": "2",
+            "socket": "result"
+          }
+        }
+      }
+    }
+  ]
+}
