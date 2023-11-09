@@ -1,0 +1,117 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "1",
+      "parameters": {
+        "text": {
+          "value": "Starting 10,000,000 iteration for-loop..."
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "2",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/forLoop",
+      "id": "2",
+      "parameters": {
+        "startIndex": {
+          "value": 0
+        },
+        "endIndex": {
+          "value": 10000000
+        }
+      },
+      "flows": {
+        "loopBody": {
+          "nodeId": "5",
+          "socket": "flow"
+        },
+        "completed": {
+          "nodeId": "7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "math/modulus/integer",
+      "id": "3",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "2",
+            "socket": "index"
+          }
+        },
+        "b": {
+          "value": 1000000
+        }
+      }
+    },
+    {
+      "type": "math/equal/integer",
+      "id": "4",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "3",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "value": 0
+        }
+      }
+    },
+    {
+      "type": "flow/branch",
+      "id": "5",
+      "parameters": {
+        "condition": {
+          "link": {
+            "nodeId": "4",
+            "socket": "result"
+          }
+        }
+      },
+      "flows": {
+        "true": {
+          "nodeId": "6",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "6",
+      "parameters": {
+        "text": {
+          "value": "1,000,000 more iterations..."
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "7",
+      "parameters": {
+        "text": {
+          "value": "Completed all iterations!"
+        }
+      }
+    }
+  ]
+}

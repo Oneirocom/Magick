@@ -1,0 +1,155 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "10",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "math/float",
+      "id": "1",
+      "parameters": {
+        "a": {
+          "value": 3
+        }
+      }
+    },
+    {
+      "type": "math/pow/float",
+      "id": "2",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "1",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "type": "math/pow/float",
+      "id": "3",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "1",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "value": 2
+        }
+      }
+    },
+    {
+      "type": "math/pow/float",
+      "id": "4",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "1",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "value": 3
+        }
+      }
+    },
+    {
+      "type": "math/multiply/float",
+      "id": "5",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "2",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "value": 3
+        }
+      }
+    },
+    {
+      "type": "math/add/float",
+      "id": "6",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "5",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "link": {
+            "nodeId": "3",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "math/negate/float",
+      "id": "7",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "4",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "math/add/float",
+      "id": "8",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "6",
+            "socket": "result"
+          }
+        },
+        "b": {
+          "link": {
+            "nodeId": "7",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "time/now",
+      "id": "9",
+      "parameters": {
+        "a": {
+          "link": {
+            "nodeId": "8",
+            "socket": "result"
+          }
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "10",
+      "parameters": {
+        "text": {
+          "link": {
+            "nodeId": "9",
+            "socket": "result"
+          }
+        }
+      }
+    }
+  ]
+}
