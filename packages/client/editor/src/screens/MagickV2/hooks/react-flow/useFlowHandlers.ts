@@ -1,104 +1,110 @@
-import { NodeSpecJSON } from '@magickml/behave-graph';
+import { NodeSpecJSON } from '@magickml/behave-graph'
 import {
   MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
-  useState
-} from 'react';
-import { Connection, Node, OnConnectStartParams, XYPosition } from 'reactflow';
-import { v4 as uuidv4 } from 'uuid';
+  useState,
+} from 'react'
+import {
+  Connection,
+  Node,
+  OnConnectStartParams,
+  XYPosition,
+  useReactFlow,
+} from 'reactflow'
+import { v4 as uuidv4 } from 'uuid'
 
-import { calculateNewEdge } from '../../util/calculateNewEdge.js';
-import { getNodePickerFilters } from '../../util/getPickerFilters.js';
-import { useBehaveGraphFlow } from './useBehaveGraphFlow.js';
+import { calculateNewEdge } from '../../util/calculateNewEdge.js'
+import { getNodePickerFilters } from '../../util/getPickerFilters.js'
+import { useBehaveGraphFlow } from './useBehaveGraphFlow.js'
 
-type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>;
+type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
 const useNodePickFilters = ({
   nodes,
   lastConnectStart,
-  specJSON
+  specJSON,
 }: {
-  nodes: Node[];
-  lastConnectStart: OnConnectStartParams | undefined;
-  specJSON: NodeSpecJSON[] | undefined;
+  nodes: Node[]
+  lastConnectStart: OnConnectStartParams | undefined
+  specJSON: NodeSpecJSON[] | undefined
 }) => {
   const [nodePickFilters, setNodePickFilters] = useState(
     getNodePickerFilters(nodes, lastConnectStart, specJSON)
-  );
+  )
 
   useEffect(() => {
-    setNodePickFilters(getNodePickerFilters(nodes, lastConnectStart, specJSON));
-  }, [nodes, lastConnectStart, specJSON]);
+    setNodePickFilters(getNodePickerFilters(nodes, lastConnectStart, specJSON))
+  }, [nodes, lastConnectStart, specJSON])
 
-  return nodePickFilters;
-};
+  return nodePickFilters
+}
 
 export const useFlowHandlers = ({
   onEdgesChange,
   onNodesChange,
   nodes,
-  specJSON
+  specJSON,
+  parentRef,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
-  nodes: Node[];
-  specJSON: NodeSpecJSON[] | undefined;
+  nodes: Node[]
+  specJSON: NodeSpecJSON[] | undefined
+  parentRef: React.RefObject<HTMLDivElement>
 }) => {
   const [lastConnectStart, setLastConnectStart] =
-    useState<OnConnectStartParams>();
-  const [nodePickerVisibility, setNodePickerVisibility] =
-    useState<XYPosition>();
+    useState<OnConnectStartParams>()
+  const [nodePickerVisibility, setNodePickerVisibility] = useState<XYPosition>()
+  const reactFlow = useReactFlow()
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      if (connection.source === null) return;
-      if (connection.target === null) return;
+      if (connection.source === null) return
+      if (connection.target === null) return
 
       const newEdge = {
         id: uuidv4(),
         source: connection.source,
         target: connection.target,
         sourceHandle: connection.sourceHandle,
-        targetHandle: connection.targetHandle
-      };
+        targetHandle: connection.targetHandle,
+      }
       onEdgesChange([
         {
           type: 'add',
-          item: newEdge
-        }
-      ]);
+          item: newEdge,
+        },
+      ])
     },
     [onEdgesChange]
-  );
+  )
 
   const closeNodePicker = useCallback(() => {
-    setLastConnectStart(undefined);
-    setNodePickerVisibility(undefined);
-  }, []);
+    setLastConnectStart(undefined)
+    setNodePickerVisibility(undefined)
+  }, [])
 
   const handleAddNode = useCallback(
     (nodeType: string, position: XYPosition) => {
-      closeNodePicker();
+      closeNodePicker()
       const newNode = {
         id: uuidv4(),
         type: nodeType,
         position,
-        data: {}
-      };
+        data: {},
+      }
       onNodesChange([
         {
           type: 'add',
-          item: newNode
-        }
-      ]);
+          item: newNode,
+        },
+      ])
 
-      if (lastConnectStart === undefined) return;
+      if (lastConnectStart === undefined) return
 
       // add an edge if we started on a socket
-      const originNode = nodes.find(
-        (node) => node.id === lastConnectStart.nodeId
-      );
-      if (originNode === undefined) return;
-      if (!specJSON) return;
+      const originNode = nodes.find(node => node.id === lastConnectStart.nodeId)
+      if (originNode === undefined) return
+      if (!specJSON) return
       onEdgesChange([
         {
           type: 'add',
@@ -108,9 +114,9 @@ export const useFlowHandlers = ({
             newNode.id,
             lastConnectStart,
             specJSON
-          )
-        }
-      ]);
+          ),
+        },
+      ])
     },
     [
       closeNodePicker,
@@ -118,41 +124,50 @@ export const useFlowHandlers = ({
       nodes,
       onEdgesChange,
       onNodesChange,
-      specJSON
+      specJSON,
     ]
-  );
+  )
 
   const handleStartConnect = useCallback(
     (e: ReactMouseEvent, params: OnConnectStartParams) => {
-      setLastConnectStart(params);
+      setLastConnectStart(params)
     },
     []
-  );
+  )
 
   const handleStopConnect = useCallback((e: MouseEvent) => {
-    const element = e.target as HTMLElement;
+    const element = e.target as HTMLElement
     if (element.classList.contains('react-flow__pane')) {
-      setNodePickerVisibility({ x: e.clientX, y: e.clientY });
+      setNodePickerVisibility({ x: e.clientX, y: e.clientY })
     } else {
-      setLastConnectStart(undefined);
+      setLastConnectStart(undefined)
     }
-  }, []);
+  }, [])
 
   const handlePaneClick = useCallback(
     () => closeNodePicker(),
     [closeNodePicker]
-  );
+  )
 
-  const handlePaneContextMenu = useCallback((e: ReactMouseEvent) => {
-    e.preventDefault();
-    setNodePickerVisibility({ x: e.clientX, y: e.clientY });
-  }, []);
+  const handlePaneContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      if (parentRef && parentRef.current) {
+        const bounds = parentRef.current.getBoundingClientRect()
+        setNodePickerVisibility({
+          x: e.clientX - bounds.left + window.scrollX,
+          y: e.clientY - bounds.top + window.scrollY,
+        })
+      }
+    },
+    [parentRef]
+  )
 
   const nodePickFilters = useNodePickFilters({
     nodes,
     lastConnectStart,
-    specJSON
-  });
+    specJSON,
+  })
 
   return {
     onConnect,
@@ -164,6 +179,6 @@ export const useFlowHandlers = ({
     nodePickerVisibility,
     handleAddNode,
     closeNodePicker,
-    nodePickFilters
-  };
-};
+    nodePickFilters,
+  }
+}
