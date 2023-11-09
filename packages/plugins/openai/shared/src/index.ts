@@ -107,7 +107,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: ['gpt-3.5-turbo', ...GPT4_MODELS],
+    models: ['gpt-3.5-turbo', 'fine-tuned-gpt-3.5-turbo', ...GPT4_MODELS],
   },
   {
     type: 'text',
