@@ -6,7 +6,7 @@ import {
 import { useEffect, useState } from "react"
 import { usePanelControls } from "../hooks/usePanelControls"
 import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state"
-import LogWindow from "../components/logWindow"
+import LogWindow from "../components/LogWindow/logWindow"
 
 const components = {
   default: (props: IPaneviewPanelProps<{ title: string }>) => {

@@ -7,12 +7,12 @@ import {
   Orientation,
 } from 'dockview'
 import { useGlobalLayout } from '../../contexts/GlobalLayoutProvider'
-import MainPanel from './panels/mainPanel'
-import FileDrawer from './panels/fileDrawer'
-import RightSidebar from './panels/rightSidebar'
+import MainPanel from './layout/mainPanel'
+import FileDrawer from './layout/fileDrawer'
+import RightSidebar from './layout/rightSidebar'
 import { useDockviewTheme } from 'client/state'
 import ModalProvider from '../../contexts/ModalProvider'
-import { StatusBar } from './components/statusBar';
+import { StatusBar } from './components/StatusBar/statusBar';
 
 const components = {
   MainPanel,
