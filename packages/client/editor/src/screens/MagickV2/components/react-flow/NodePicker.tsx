@@ -1,8 +1,7 @@
 import { NodeSpecJSON } from '@magickml/behave-graph';
 import React, { useState } from 'react';
 import { useReactFlow, XYPosition } from 'reactflow';
-
-import { useOnPressKey } from '../hooks/useOnPressKey.js';
+import { useOnPressKey } from '../../hooks/react-flow/useOnPressKey';
 
 export type NodePickerFilters = {
   handleType: 'source' | 'target';

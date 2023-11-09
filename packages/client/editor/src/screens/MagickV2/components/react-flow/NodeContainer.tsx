@@ -2,7 +2,7 @@ import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph';
 import cx from 'classnames';
 import React, { PropsWithChildren } from 'react';
 
-import { categoryColorMap, colors } from '../util/colors.js';
+import { categoryColorMap, colors } from '../../util/colors.js';
 
 type NodeProps = {
   title: string;
