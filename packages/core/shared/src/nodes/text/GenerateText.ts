@@ -180,8 +180,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     ]) as CompletionProvider[]
 
     const model = (node.data as { model: string }).model as string
-    const customModel = (node.data as { customModel: string })
-      .customModel as string
+    const customModel = node.data.customModel as string | undefined
 
     // get the provider for the selected model
     const provider = completionProviders.find(provider =>
@@ -195,7 +194,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     // check if custom model and regex check for word fine-tune in model
-    if (customModel.length > 0) {
+    if (customModel && customModel.length > 0) {
       node.data.customModel = customModel
     }
 
