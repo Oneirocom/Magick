@@ -17,7 +17,7 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator'
-import FileInput from '../FileInput'
+import FileInput from '../FileInput/FileInput'
 import { FileUpload } from '@mui/icons-material'
 
 import v2graph from '../../screens/MagickV2/graphs/graph.json'
