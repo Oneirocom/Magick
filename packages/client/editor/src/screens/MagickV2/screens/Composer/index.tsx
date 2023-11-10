@@ -8,7 +8,7 @@ import { useConfig, useFeathers, usePubSub, Tab } from '@magickml/providers'
 import { useEditor } from '../../../../contexts/EditorProvider'
 import { Layout } from '../../../../contexts/LayoutProvider'
 import { debounce } from '../../../../utils/debounce'
-import EventHandler from '../../../../components/EventHandler'
+import EventHandler from '../../../../components/EventHandler/EventHandler'
 
 import EditorWindow from '../../components/EditorWindow'
 import Inspector from '../../components/InspectorWindow/InspectorWindow'

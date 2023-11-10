@@ -14,7 +14,7 @@ import { SpellInterface } from 'shared/core'
 import { spellApi } from 'client/state'
 
 import { debounce } from '../../../../utils/debounce'
-import EventHandler from '../../../../components/EventHandler'
+import EventHandler from '../../../../components/EventHandler/EventHandler'
 
 import EditorWindow from '../../components/EditorWindow'
 import Inspector from '../../components/InspectorWindow/InspectorWindow'
