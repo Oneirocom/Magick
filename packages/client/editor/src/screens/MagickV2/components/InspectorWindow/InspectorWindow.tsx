@@ -3,10 +3,10 @@ import { componentCategories, Icon, Tooltip, Window } from 'client/core'
 import { Help } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { useState } from 'react'
-import WindowMessage from '../components/WindowMessage'
-import { useInspector } from '../contexts/InspectorProvider'
-import { useModal } from '../contexts/ModalProvider'
-import DataControls from '../DataControls'
+import WindowMessage from '../../../../components/WindowMessage'
+import { useInspector } from '../../../../contexts/InspectorProvider'
+import { useModal } from '../../../../contexts/ModalProvider'
+import DataControls from '../../../../DataControls'
 
 /**
  * The Inspector component displays the selected component's data in a window with controls for modifying the data.

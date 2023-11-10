@@ -24,6 +24,7 @@ const spellDataSchemaProperties = {
   createdAt: spellSchema.properties.createdAt,
   updatedAt: spellSchema.properties.updatedAt,
   hash: spellSchema.properties.hash,
+  type: spellSchema.properties.type,
   id: Type.Optional(spellSchema.properties.id),
 }
 
@@ -59,6 +60,7 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'name',
   'projectId',
   'graph',
+  'type',
   'createdAt',
   'updatedAt',
   'hash',

@@ -26,6 +26,7 @@ interface Document {
 interface Spell {
   id: string
   name: string
+  type?: string
 }
 
 const TreeDataContext = createContext<TreeDataContextType>({
@@ -127,6 +128,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     })
     // Adding spells without duplicates
     spells.forEach((spell, index) => {
+      const type = spell?.type || 'spell'
       addNewItemWithoutDuplication(spell.id, 6, spell.name, 'spell')
     })
   }, [documents, spells, addedItemIds])

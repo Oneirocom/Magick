@@ -5,9 +5,8 @@ import { getTemplates } from 'client/core'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import TemplatePanel from '../../components/TemplatePanel'
+import TemplatePanel from '../TemplatePanel/TemplatePanel'
 import { useConfig, useTabLayout, useTreeData } from '@magickml/providers'
-import LoadingButton from '@mui/lab/LoadingButton'
 import { v4 as uuidv4 } from 'uuid'
 import md5 from 'md5'
 import emptyImg from './empty.png'
@@ -21,10 +20,19 @@ import {
 import FileInput from '../FileInput'
 import { FileUpload } from '@mui/icons-material'
 
+import v2graph from '../../screens/MagickV2/graphs/graph.json'
+
 export type Template = {
-  label?: string
+  name?: string
   bg?: string
-  graph: GraphData
+  type?: string
+  graph: Record<string, unknown>
+}
+
+const spellV2: Template = {
+  name: 'Spell 2.0',
+  type: 'spellV2',
+  graph: v2graph
 }
 
 // Custom configuration for unique name generator
@@ -98,6 +106,7 @@ const CreateSpellModal = ({ closeModal }) => {
         id: uuidv4(),
         graph: selectedTemplate.graph,
         name,
+        type: selectedTemplate.type || null,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })) as any
@@ -115,7 +124,7 @@ const CreateSpellModal = ({ closeModal }) => {
       name: response.data.name,
       spellName: response.data.name,
       switchActive: true,
-      type: 'spell',
+      type: response.data.type || 'spell',
       params: {
         spellId: response.data.id
       }
@@ -200,7 +209,7 @@ const CreateSpellModal = ({ closeModal }) => {
           flexWrap: 'wrap',
         }}
       >
-        {(getTemplates().spells as Template[]).map((template, i) => (
+        {[spellV2, ...(getTemplates().spells as Template[])].map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}

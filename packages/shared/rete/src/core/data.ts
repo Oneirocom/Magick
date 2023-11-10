@@ -38,7 +38,7 @@ export interface NodesData {
 }
 
 export interface Data {
-  id: string
+  id?: string
   nodes: NodesData
 }
 

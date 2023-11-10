@@ -16,12 +16,12 @@ import { spellApi } from 'client/state'
 import { debounce } from '../../../../utils/debounce'
 import EventHandler from '../../../../components/EventHandler'
 
-import EditorWindow from '../../../../windows/EditorWindow'
-import Inspector from '../../../../windows/InspectorWindow'
-import Playtest from '../../../../windows/PlaytestWindow'
+import EditorWindow from '../../components/EditorWindow'
+import Inspector from '../../components/InspectorWindow/InspectorWindow'
+import Playtest from '../../components/PlaytestWindow/PlaytestWindow'
 
-import Console from '../../../../windows/DebugConsole'
-import TextEditor from '../../../../windows/TextEditorWindow'
+import Console from '../../components/DebugConsole'
+import TextEditor from '../../components/TextEditorWindow'
 import { useEditor } from '../../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'

@@ -20,8 +20,9 @@ export const spellSchema = Type.Object(
     projectId: Type.String(),
     name: Type.String(),
     hash: Type.String(),
+    type: Type.Optional(Type.String()),
     graph: Type.Object({
-      id: Type.String(),
+      id: Type.Optional(Type.String()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
     createdAt: Type.Optional(Type.String()),
