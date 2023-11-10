@@ -110,13 +110,17 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       throw new Error('Feathers app not found in node skill')
     }
 
+    const query = {
+      name: spellName,
+      projectId,
+    }
+
+    if (module.releaseVersion) {
+      query.version = module.releaseVersion;
+    }
+
     // call the spells service and find a spell where name is spellName and projectId is projectId
-    const spell = await app?.service('spells').find({
-      query: {
-        name: spellName,
-        // projectId,
-      },
-    })
+    const spell = await app?.service('spells').find({ query })
 
     if (!spell) {
       throw new Error(`Spell ${spellName} not found`)

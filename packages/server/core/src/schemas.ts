@@ -66,6 +66,8 @@ export const agentSchema = Type.Object(
     publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
     image: Type.Optional(Type.String()),
+    releaseVersion: Type.Optional(Type.String()),
+    frozen: Type.Optional(Type.Boolean()),
     default: Type.Optional(Type.Boolean()),
   },
   {

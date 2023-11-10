@@ -121,6 +121,8 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'image',
   'rootSpellId',
   'default',
+  'frozen',
+  'releaseVersion'
 ])
 
 /**

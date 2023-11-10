@@ -1,6 +1,6 @@
 // DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Params } from '@feathersjs/feathers'
+import type { Paginated, Params } from '@feathersjs/feathers'
 import { KnexService } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '../../app'
@@ -30,21 +30,21 @@ export class AgentService<
   }
 
   async get(agentId: string, params: ServiceParams) {
-    const { versionTag } = params
+    const { releaseVersion } = params
     const db = app.get('dbClient')
 
-    let agents: Agent[];
+    let agents: AgentData[];
 
-    if (versionTag) {
+    if (releaseVersion) {
       agents = db('agents')
         .select('agents.*')
-        .innerJoin('agentReleases', 'agents.id', 'agentReleases.agent_id')
-        .where('agentReleases.version', versionTag)
-        .groupBy('agentId')
+        .innerJoin('agentReleases', 'agents.id', 'agentReleases.agentId')
+        .where('agentReleases.version', releaseVersion)
+        .groupBy('agentId') as AgentData
     } else {
       agents = db('agents')
         .select('agents.*')
-        .innerJoin('agentReleases', 'agents.id', 'agentReleases.agent_id')
+        .innerJoin('agentReleases', 'agents.currentReleaseVersionId', 'agentReleases.agentId')
         .groupBy('agentId')
     }
 
@@ -149,7 +149,7 @@ export class AgentService<
   * @param agentId - the ID of the agent to copy from
   * @param versionTag - the version tag to associate with the newly created agent
   */
-  async setRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
+  async createRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
     // Get the agent by its agentId
     const existingAgent = await this.app.service('agents').get(agentId);
     if (!existingAgent) {
