@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import TemplatePanel from '../TemplatePanel/TemplatePanel'
-import { useConfig, useTabLayout, useTreeData } from '@magickml/providers'
+import { useConfig, useTabLayout } from '@magickml/providers'
 import { v4 as uuidv4 } from 'uuid'
 import md5 from 'md5'
 import emptyImg from './empty.png'
@@ -20,7 +20,7 @@ import {
 import FileInput from '../FileInput/FileInput'
 import { FileUpload } from '@mui/icons-material'
 
-import v2graph from '../../screens/MagickV2/graphs/graph.json'
+import v2graph from '../../graphs/graph.json'
 
 export type Template = {
   name?: string
@@ -106,7 +106,7 @@ const CreateSpellModal = ({ closeModal }) => {
         id: uuidv4(),
         graph: selectedTemplate.graph,
         name,
-        type: selectedTemplate.type || null,
+        type: selectedTemplate.type,
         projectId: config.projectId,
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })) as any

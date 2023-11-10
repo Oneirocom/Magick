@@ -13,7 +13,7 @@ import { WagmiConfig } from 'wagmi'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import App from './App'
-import { config as wagmiConfig } from './wagmi'
+import { config as wagmiConfig } from './contexts/wagmi'
 import AppProviders from './contexts/AppProviders'
 
 import { LocalizationProvider } from '@mui/x-date-pickers'
