@@ -54,6 +54,9 @@ const Modal = ({
     return (
       options &&
       options.map(item => {
+        if (item.component) {
+          return item.component
+        }
         return (
           <Button
             key={item.label}
