@@ -5,9 +5,9 @@ import { GraphData, SpellInterface } from 'shared/core'
 
 import md5 from 'md5'
 
-import { useLayout } from '../contexts/LayoutProvider'
-import { useEditor } from '../contexts/EditorProvider'
-import { diff } from '../utils/json0'
+import { useLayout } from '../../contexts/LayoutProvider'
+import { useEditor } from '../../contexts/EditorProvider'
+import { diff } from '../../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/providers'
 import {

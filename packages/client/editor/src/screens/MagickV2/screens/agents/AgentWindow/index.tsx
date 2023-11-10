@@ -5,7 +5,7 @@ import { Button, Grid, Typography } from '@mui/material'
 import AgentItem from './AgentItem'
 import styles from './index.module.scss'
 import AgentDetails from './AgentDetails'
-import FileInput from '../../../../../components/FileInput'
+import FileInput from '../../../../../components/FileInput/FileInput'
 import { useConfig } from '@magickml/providers'
 import { useCreateAgentMutation } from 'client/state'
 
