@@ -89,7 +89,7 @@ export const agent = (app: Application) => {
     // remove unwanted properties from the message
     // embeddings and spells are large data packages we don't need on the client
     const cleanMessage = removeUnwantedProperties(message, [
-      'embedding',
+      // 'embedding',
       'spell',
     ])
 
