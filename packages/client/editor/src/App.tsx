@@ -3,17 +3,25 @@
  * A functional component that renders the 'Routes' component.
  */
 import React from 'react'
-import Routes from './routes'
+import { Route, Routes } from 'react-router-dom'
+
+import MagickV2 from './screens'
+
+import './styles/design-globals/design-globals.css'
 import 'reactflow/dist/style.css';
-import './behaveFlow.css'
-import './App.css'
-import './dockview.css'
+import './styles/behaveFlow.css'
+import './styles/App.css'
+import './styles/dockview.css'
 import enableWhyDidYouRender from './wdyr'
 
 enableWhyDidYouRender(React)
 
 function App(): JSX.Element {
-  return <Routes />
+  return (
+    <Routes>
+      <Route path="/" element={<MagickV2 />} />
+    </Routes>
+  )
 }
 
 export default App
