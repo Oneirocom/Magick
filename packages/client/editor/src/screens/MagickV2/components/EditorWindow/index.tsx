@@ -1,6 +1,6 @@
 // DOCUMENTED
 // Import required components and hooks
-import { Editor } from '../../contexts/EditorProvider'
+import { Editor } from '../../../../contexts/EditorProvider'
 import css from './editorwindow.module.css'
 
 /**

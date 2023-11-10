@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { Panel } from 'client/core'
-import css from '../screens/HomeScreen/homeScreen.module.css'
+import css from './templatePanel.module.css'
 
 /**
  * A functional component that represents a single template panel.
@@ -32,9 +32,8 @@ const TemplatePanel = ({
   return (
     // Create a wrapper div and set isSelected and onClick
     <div
-      className={`${css['template-container']} ${
-        css[isSelected && 'selected']
-      }`}
+      className={`${css['template-container']} ${css[isSelected && 'selected']
+        }`}
       onClick={handleClick}
     >
       {/* Create the panel with styling and the background image */}

@@ -6,12 +6,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEditor } from '../contexts/EditorProvider'
-import { useInspector } from '../contexts/InspectorProvider'
+import { useEditor } from '../../../../contexts/EditorProvider'
+import { useInspector } from '../../../../contexts/InspectorProvider'
 import { usePubSub, useConfig } from '@magickml/providers'
-import css from '../screens/Magick/magick.module.css'
+import css from '../../../../styles/magick.module.css'
 import {
-  RootState,
   addLocalState,
   selectStateBytabId,
   spellApi,

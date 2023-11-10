@@ -4,20 +4,22 @@ import { useSelector } from 'react-redux'
 
 import { SpellInterface } from 'shared/core'
 
-import { useConfig, useFeathers, usePubSub } from '@magickml/providers'
-import { useEditor } from '../contexts/EditorProvider'
-import { Layout } from '../contexts/LayoutProvider'
-import { debounce } from '../utils/debounce'
-import EventHandler from './EventHandler'
+import { useConfig, useFeathers, usePubSub, Tab } from '@magickml/providers'
+import { useEditor } from '../../../../contexts/EditorProvider'
+import { Layout } from '../../../../contexts/LayoutProvider'
+import { debounce } from '../../../../utils/debounce'
+import EventHandler from '../../../../components/EventHandler'
 
-import EditorWindow from '../windows/EditorWindow'
-import Inspector from '../windows/InspectorWindow'
-import Playtest from '../windows/PlaytestWindow'
+import EditorWindow from '../../components/EditorWindow'
+import Inspector from '../../components/InspectorWindow/InspectorWindow'
+import Playtest from '../../components/PlaytestWindow/PlaytestWindow'
 
-import DebugConsole from '../windows/DebugConsole'
-import TextEditor from '../windows/TextEditorWindow'
+import DebugConsole from '../../components/DebugConsole'
+import TextEditor from '../../components/TextEditorWindow'
 import { RootState, spellApi } from 'client/state'
-import AgentControls from '../windows/AgentControlWindow'
+import AgentControls from '../../components/AgentControlWindow/AgentControlWindow'
+import { IDockviewPanelProps } from 'dockview'
+import WorkspaceProvider from '../../../../contexts/WorkspaceProvider'
 
 /**
  * Workspace component that handles different tabs and their layouts.
@@ -25,7 +27,7 @@ import AgentControls from '../windows/AgentControlWindow'
  * @param {{tab: object, pubSub: object}} props
  * @returns {JSX.Element}
  */
-const Workspace = ({ tab, pubSub }) => {
+const Composer = ({ tab, pubSub }) => {
   const config = useConfig()
   const spellRef = useRef<SpellInterface>()
   const { events, publish } = usePubSub()
@@ -94,7 +96,7 @@ const Workspace = ({ tab, pubSub }) => {
       const props = {
         tab,
         node,
-        spellId: ''
+        spellId: ""
       }
       const component = node.getComponent()
       switch (component) {
@@ -124,8 +126,15 @@ const Workspace = ({ tab, pubSub }) => {
   )
 }
 
-const Wrapped = props => {
-  return <Workspace {...props} />
+const Wrapped = (props: IDockviewPanelProps<{ tab: Tab; pubSub: any }>) => {
+  const pubSub = usePubSub()
+  return (
+    <WorkspaceProvider tab={props.params.tab} pubSub={pubSub}>
+      <div style={{ position: 'relative', height: '100%' }}>
+        <Composer tab={props.params.tab} pubSub={pubSub} />
+      </div>
+    </WorkspaceProvider>
+  )
 }
 
-export default React.memo(Wrapped)
+export default Wrapped
