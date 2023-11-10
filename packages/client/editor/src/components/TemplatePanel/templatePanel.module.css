@@ -1,0 +1,32 @@
+.template-panel:hover {
+  /* background-color: var(--dark-3); */
+  border: 1px solid var(--primary);
+}
+.template-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--extraSmall);
+}
+.template-container .template-panel {
+  border: 1px solid transparent;
+}
+.template-container p {
+  display: inline-block;
+  border-radius: 4px;
+  padding: var(--extraSmall);
+}
+.template-container:hover p {
+  background-color: var(--dark-3);
+}
+.template-container:hover .template-panel {
+  border: 1px solid var(--dark-4);
+}
+
+.template-container.selected p {
+  background-color: var(--primary);
+}
+.template-container.selected .template-panel {
+  border: 1px solid var(--primary);
+}

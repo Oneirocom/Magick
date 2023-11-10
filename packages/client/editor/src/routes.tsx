@@ -12,16 +12,6 @@ import 'flexlayout-react/style/dark.css'
 import './design-globals/design-globals.css'
 
 /**
- * A component that renders the given component element with the given props.
- *
- * @param {object} props - The properties to pass to the rendered element.
- * @returns {React.Element} - The rendered React element.
- */
-const RenderComp = (props: { element: React.ElementType }) => {
-  return <props.element props={props} />
-}
-
-/**
  * MyRoutes component handles the routing for the application.
  *
  * @returns {React.Element} - The Routes React element.

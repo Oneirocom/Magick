@@ -4,7 +4,7 @@ import { usePubSub } from '@magickml/providers'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'
-import { useEditor } from '../../contexts/EditorProvider'
+import { useEditor } from '../../../../contexts/EditorProvider'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 

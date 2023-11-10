@@ -9,12 +9,12 @@ import {
 } from 'dockview'
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useTabLayout } from '@magickml/providers';
-import Events from '../../EventWindow'
-import Requests from '../../RequestWindow'
-import Settings from '../../settings/SettingsWindow'
-import Config from '../../ConfigWindow'
-import Documents from '../../DocumentWindow'
-import Agents from '../../agents/AgentManagerWindow'
+import Events from '../screens/EventWindow'
+import Requests from '../screens/RequestWindow'
+import Settings from '../screens/settings/SettingsWindow'
+import Config from '../screens/ConfigWindow'
+import Documents from '../screens/DocumentWindow'
+import Agents from '../screens/agents/AgentManagerWindow'
 import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from '../workspaces/composer'
 import ComposerV2 from '../workspaces/composerv2'
@@ -63,7 +63,8 @@ const getComponents = () => {
       acc[obj.name] = obj.component
       return acc
     }, {}),
-    spell: FEATURE_FLAGS.COMPOSER_V2 ? ComposerV2 : Composer,
+    spell: Composer,
+    spellV2: ComposerV2,
     default: (props: IDockviewPanelProps<{ title: string }>) => {
       return (
         <div

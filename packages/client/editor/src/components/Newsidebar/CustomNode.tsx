@@ -62,27 +62,56 @@ export const CustomNode: React.FC<Props> = props => {
     setOpenConfirm(false)
   }
 
+  const handleOpenDocTab = () => {
+    setOpenDoc(props.node.id)
+    props.openTab({
+      id: 'Documents',
+      name: 'Documents',
+      type: 'Documents',
+      switchActive: true,
+    })
+  }
+
+  const handleOpenSpellTab = () => {
+    props.openTab({
+      id: props.node.text,
+      name: props.node.text,
+      spellName: props.node.text,
+      type: 'spell',
+      params: {
+        spellId: props.node.id,
+      }
+    })
+  }
+
+  const handleOpenSpellV2Tab = () => {
+    props.openTab({
+      id: props.node.text,
+      name: props.node.text,
+      spellName: props.node.text,
+      type: 'spellV2',
+      params: {
+        spellId: props.node.id,
+      }
+    })
+  }
+
+
   const handleClick = () => {
     if (!props.node) return
-    if (props.node.fileType === 'txt') {
-      setOpenDoc(props.node.id)
-      props.openTab({
-        id: 'Documents',
-        name: 'Documents',
-        type: 'Documents',
-        switchActive: true,
-      })
-    } else if (props.node.fileType === 'spell') {
-      console.log('OPEN SPELL', props.node)
-      props.openTab({
-        id: props.node.text,
-        name: props.node.text,
-        spellName: props.node.text,
-        type: 'spell',
-        params: {
-          spellId: props.node.id,
-        }
-      })
+
+    switch (props.node.fileType) {
+      case 'txt':
+        handleOpenDocTab()
+        break
+      case 'spell':
+        handleOpenSpellTab()
+        break
+      case 'spellV2':
+        handleOpenSpellV2Tab()
+        break
+      default:
+        break
     }
   }
 
