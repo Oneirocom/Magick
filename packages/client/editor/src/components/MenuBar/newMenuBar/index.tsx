@@ -13,6 +13,7 @@ import {
   RootState,
   Tab,
 } from 'client/state'
+import { useModal } from '../../../contexts/ModalProvider'
 
 /**
  * MenuBar component
@@ -26,6 +27,7 @@ const NewMenuBar = props => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+  const { openModal } = useModal()
 
   const activeTabRef = useRef<Tab | null>(null)
 
@@ -51,7 +53,6 @@ const NewMenuBar = props => {
    */
   const onSave = () => {
     // if (!activeTabRef.current) return
-    console.log('SAVING!!!')
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
@@ -59,21 +60,18 @@ const NewMenuBar = props => {
    * New handler
    */
   const onNew = () => {
-    navigate('/home/create-new')
-  }
-
-  /**
-   * Open handler
-   */
-  const onOpen = () => {
-    navigate('/home/all-projects')
+    openModal({
+      modal: 'createSpellModal',
+    })
   }
 
   /**
    * Import handler
    */
   const onImport = () => {
-    navigate('/home/all-projects?import')
+    openModal({
+      modal: 'createSpellModal',
+    })
   }
 
   /**
