@@ -2,7 +2,7 @@ import { Button, Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useEffect, useRef, useState } from 'react'
 // import '../../../../styles/magick.module.css'
-import WindowMessage from '../../../../components/WindowMessage'
+import WindowMessage from '../../../../components/WindowMessage/WindowMessage'
 import { TextEditorData, useInspector } from '../../../../contexts/InspectorProvider'
 
 const TextEditor = props => {
