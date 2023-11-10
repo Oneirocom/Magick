@@ -18,6 +18,8 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator'
+import FileInput from '../FileInput'
+import { FileUpload } from '@mui/icons-material'
 
 export type Template = {
   label?: string
@@ -46,6 +48,35 @@ const CreateSpellModal = ({ closeModal }) => {
   const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
 
+  /**
+  * Handles loading a selected file for opening a spell.
+  * @param event - FileReader onload event
+  */
+  const onReaderLoad = async (event): Promise<void> => {
+    const spellData = JSON.parse(event.target.result)
+
+    // Create new spell
+    const response = (await newSpell({
+      id: uuidv4(),
+      graph: spellData.graph,
+      name: `${spellData.name}-copy`,
+      projectId: config.projectId,
+      hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
+    })) as any
+
+    handleSpellResponse(response)
+  }
+
+  /**
+   * Load a selected file
+   * @param selectedFile - File to load
+   */
+  const loadFile = (selectedFile): void => {
+    const reader = new FileReader()
+    reader.onload = onReaderLoad
+    reader.readAsText(selectedFile)
+  }
+
   const onCreate = handleSubmit(async data => {
     try {
       if (!selectedTemplate) return
@@ -71,42 +102,70 @@ const CreateSpellModal = ({ closeModal }) => {
         hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
       })) as any
 
-      if ('error' in response) {
-        if ('status' in response.error) {
-          const err = response.error as any
-          const errMsg = err.data.error.message
-          setError(errMsg as string)
-          enqueueSnackbar(`Error saving spell. ${errMsg}.`, {
-            variant: 'error',
-          })
-          return
-        }
-      }
-
-      openTab({
-        id: response.data.name,
-        name: response.data.name,
-        spellName: response.data.name,
-        switchActive: true,
-        type: 'spell',
-        params: {
-          spellId: response.data.id
-        }
-      })
-
-      setLoading(false)
-      closeModal()
+      handleSpellResponse(response)
     } catch (err) {
       console.error('ERROR!', err)
     }
   })
 
-  const options = [{
-    label: 'Create',
-    onClick: onCreate,
-    disabled: !selectedTemplate,
-    className: css['create-btn'],
-  }]
+  const handleSpellResponse = (response) => {
+    if (handleError(response)) return
+    openTab({
+      id: response.data.name,
+      name: response.data.name,
+      spellName: response.data.name,
+      switchActive: true,
+      type: 'spell',
+      params: {
+        spellId: response.data.id
+      }
+    })
+
+    setLoading(false)
+    closeModal()
+  }
+
+  const handleError = (response) => {
+    if ('error' in response) {
+      if ('status' in response.error) {
+        const err = response.error as any
+        const errMsg = err.data.error.message
+        setError(errMsg as string)
+        enqueueSnackbar(`Error creating spell. ${errMsg}.`, {
+          variant: 'error',
+        })
+        return true
+      }
+    }
+    return false
+  }
+
+
+  const options = [
+    {
+      component:
+        <FileInput
+          // todo fix this typing issue
+          // @ts-ignore
+          loadFile={loadFile}
+          Icon={
+            <FileUpload
+              style={{
+                height: '1em',
+                width: '1em',
+                marginRight: '0.5em',
+              }}
+            />
+          }
+          innerText={'Import'}
+        />
+    },
+    {
+      label: 'Create',
+      onClick: onCreate,
+      disabled: !selectedTemplate,
+      className: css['create-btn'],
+    }]
 
   return (
     <Modal
