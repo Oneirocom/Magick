@@ -1,13 +1,14 @@
 // DOCUMENTED
-import { Select } from 'client/core'
-import { GraphData } from 'shared/core'
-import { getTemplates } from 'client/core'
 import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
-import { useConfig } from '@magickml/providers'
-import { openTab, spellApi, useAppDispatch } from 'client/state'
+import { Select } from 'client/core'
+import { GraphData } from 'shared/core'
+import { getTemplates } from 'client/core'
+import { spellApi } from 'client/state'
+
+import { useConfig, useTabLayout } from '@magickml/providers'
 
 /**
  * Component that renders the Select element for selecting and creating modules.
@@ -18,8 +19,8 @@ import { openTab, spellApi, useAppDispatch } from 'client/state'
  * @returns {JSX.Element} The rendered Select element for selecting or creating modules.
  */
 const ModuleSelect = ({ control, updateData, initialValue }) => {
+  const { openTab } = useTabLayout()
   const config = useConfig()
-  const dispatch = useAppDispatch()
   const [getSpell, { data: spell }] = spellApi.useLazyGetSpellByJustIdQuery()
   const { data: spells } = spellApi.useGetSpellsQuery({
     projectId: config.projectId,
@@ -35,9 +36,8 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   useEffect(() => {
     if (!spell) return
 
-    const _spell = spell.data[0]
-    update(_spell)
-    _openTab(_spell)
+    update(spell)
+    _openTab(spell)
   }, [spell])
 
   /**
@@ -58,14 +58,16 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
    */
   const _openTab = async spell => {
     const tab = {
-      name: spell.id + '-' + encodeURIComponent(btoa(spell.name)),
+      id: spell.name,
+      name: spell.name,
       spellName: spell.name,
       type: 'spell',
-      openNew: false,
-      switchActive: false,
+      params: {
+        spellId: spell.id,
+      }
     }
 
-    dispatch(openTab(tab))
+    openTab(tab)
   }
 
   const onChange = async e => {
