@@ -3,19 +3,22 @@
     "id": 1,
     "parent": 0,
     "droppable": true,
-    "text": "Documents"
+    "text": "Documents",
+    "fileType": "folder"
   },
   {
     "id": 3,
     "parent": 1,
     "droppable": true,
-    "text": "Uploaded Knowledge"
+    "text": "Uploaded Knowledge",
+    "fileType": "folder"
   },
 
   {
     "id": 6,
     "parent": 0,
     "droppable": true,
-    "text": "Spells & Prompts"
+    "text": "Spells & Prompts",
+    "fileType": "folder"
   }
 ]

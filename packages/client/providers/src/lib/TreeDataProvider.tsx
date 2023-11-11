@@ -8,9 +8,13 @@ import { useConfig } from './ConfigProvider'
 import { useFeathers } from './FeathersProvider'
 import { useGetDocumentsQuery, useGetSpellsQuery } from 'client/state'
 
+interface TreeNode extends NodeModel {
+  fileType: string
+}
+
 interface TreeDataContextType {
-  treeData: NodeModel[]
-  setTreeData: React.Dispatch<React.SetStateAction<NodeModel[]>>
+  treeData: TreeNode[]
+  setTreeData: React.Dispatch<React.SetStateAction<TreeNode[]>>
   toDelete: null
   setToDelete: React.Dispatch<React.SetStateAction<null>>
   openDoc: string | number
@@ -50,10 +54,9 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const { data: fetchedSpells } = useGetSpellsQuery({})
   const { data: fetchedDocuments } = useGetDocumentsQuery({})
 
-  const [treeData, setTreeData] = useState<NodeModel[]>(SampleData)
+  const [treeData, setTreeData] = useState<TreeNode[]>(SampleData)
   const [documents, setDocuments] = useState<Document[] | null>(null)
   const [spells, setSpells] = useState<Spell[] | null>(null)
-
 
   const [addedItemIds, setAddedItemIds] = useState<string[]>([])
   const [toDelete, setToDelete] = useState(null)
@@ -89,7 +92,22 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     })
   }
 
+  function deleteItem(id) {
+    setTreeData(prevData => {
+      const updatedData = prevData.slice() // Create a copy of the existing data array
+
+      const index = updatedData.findIndex(item => item.id === id)
+
+      if (index !== -1) {
+        updatedData.splice(index, 1) // Delete item
+      }
+
+      return updatedData // Return the updated data
+    })
+  }
+
   useEffect(() => {
+    console.log('FETCHING SPELLS', fetchedSpells)
     if (!fetchedSpells) return
     if (!fetchedSpells.data.length) return
 
@@ -117,6 +135,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         setAddedItemIds(prevIds => [...prevIds, id]) // Update addedItemIds
       }
     }
+
     // Adding documents
     documents.forEach((doc, index) => {
       addNewItemWithoutDuplication(
@@ -126,6 +145,17 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
         'txt'
       )
     })
+
+    // find spells which are not in the tree data and delete them
+    const spellIds = spells.map(spell => spell.id)
+    console.log('TREE DATA', treeData)
+    const treeDataIds = treeData.filter(item => item.fileType === 'spell').map(item => item.id)
+    const toDelete = treeDataIds.filter(id => !spellIds.includes(id as string))
+
+    console.log('TO DELETE', toDelete)
+
+    toDelete.forEach(id => deleteItem(id))
+
     // Adding spells without duplicates
     spells.forEach((spell, index) => {
       const type = spell?.type || 'spell'
