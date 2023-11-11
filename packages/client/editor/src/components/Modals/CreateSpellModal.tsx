@@ -209,7 +209,7 @@ const CreateSpellModal = ({ closeModal }) => {
           flexWrap: 'wrap',
         }}
       >
-        {[spellV2, ...(getTemplates().spells as Template[])].map((template, i) => (
+        {[...(getTemplates().spells as Template[]), spellV2].map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
