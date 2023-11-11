@@ -1,6 +1,5 @@
 // DOCUMENTED
 import EditorProvider from './EditorProvider'
-import LayoutProvider from './LayoutProvider'
 import MagickInterfaceProvider from './MagickInterfaceProvider'
 import InspectorProvider from './InspectorProvider'
 
@@ -8,7 +7,6 @@ import InspectorProvider from './InspectorProvider'
 const providers = [
   MagickInterfaceProvider,
   EditorProvider,
-  LayoutProvider,
   InspectorProvider,
 ]
 

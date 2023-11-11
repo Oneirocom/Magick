@@ -1,6 +1,6 @@
 // DOCUMENTED
-import { Plugin } from '@magickml/rete'
-import gridimg from './grid.png'
+import { Plugin } from 'shared/rete'
+import gridimg from './assets/grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
 import ContextMenuPlugin, { ContextMenuOptions } from './plugins/contextMenu'

@@ -3,27 +3,25 @@
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE
  */
-import 'dockview/dist/styles/dockview.css'
-import React, { useEffect, useState } from 'react'
-
 import './wdyr'
-import 'regenerator-runtime/runtime'
+import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import { WagmiConfig } from 'wagmi'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
+import 'regenerator-runtime/runtime'
 
 import App from './App'
 import { config as wagmiConfig } from './contexts/wagmi'
 import AppProviders from './contexts/AppProviders'
-
-import { LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { AppConfig } from '@magickml/providers'
 import { MagickmlChatbox } from 'client/magickml-chatbox'
 import { createStore } from 'client/state'
-
-import './themes.scss'
 import { feathersClient } from 'client/feathers-client'
+
+import './styles/themes.scss'
 
 /**
  * Type definition for the props that can be passed to MagickIDE

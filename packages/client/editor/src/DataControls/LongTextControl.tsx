@@ -4,22 +4,26 @@
  */
 import React from 'react'
 import { Button } from 'client/core'
-import { useLayout } from '../contexts/LayoutProvider'
+import { Tab, usePubSub } from '@magickml/providers'
+
+type Props = {
+  tab: Tab
+}
 
 /**
  * LongText component
  */
-const LongText = (): JSX.Element => {
+const LongText = ({ tab }: Props): JSX.Element => {
   /**
    * Destructuring the createOrFocus and windowTypes functions from the useLayout hook
    */
-  const { createOrFocus, windowTypes } = useLayout()
+  const { publish, events } = usePubSub()
 
   /**
    * Function that is called when the button is clicked
    */
   const onClick = (): void => {
-    createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
+    publish(events.$CREATE_TEXT_EDITOR(tab.id))
   }
 
   /**
