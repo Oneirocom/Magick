@@ -21,6 +21,7 @@ import FileInput from '../FileInput/FileInput'
 import { FileUpload } from '@mui/icons-material'
 
 import v2graph from '../../graphs/graph.json'
+import { FEATURE_FLAGS } from 'shared/config'
 
 export type Template = {
   name?: string
@@ -209,7 +210,7 @@ const CreateSpellModal = ({ closeModal }) => {
           flexWrap: 'wrap',
         }}
       >
-        {[...(getTemplates().spells as Template[]), spellV2].map((template, i) => (
+        {[...(getTemplates().spells as Template[]), (FEATURE_FLAGS.COMPOSER_V2 ? spellV2 : null)].filter(Boolean).map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
