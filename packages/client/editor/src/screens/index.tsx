@@ -83,9 +83,10 @@ const loadDefaultLayout = (api: GridviewApi) => {
       id: 'RightSidebar'
     },
     snap: true,
-    minimumWidth: 50,
     priority: LayoutPriority.Low,
     position: { referencePanel: 'MainPanel', direction: 'right' },
+  }).api.setSize({
+    width: 0
   })
 }
 
