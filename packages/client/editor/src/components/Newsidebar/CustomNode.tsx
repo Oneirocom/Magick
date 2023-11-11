@@ -160,6 +160,8 @@ export const CustomNode: React.FC<Props> = props => {
         variant: 'error',
       })
     }
+
+    handleClose()
   }
 
   const handleRenameStart = () => {
