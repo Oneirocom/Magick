@@ -4,17 +4,17 @@
  */
 import React from 'react'
 import { Button } from 'client/core'
-import { useLayout } from '../contexts/LayoutProvider'
+import { Tab, usePubSub } from '@magickml/providers'
 
+type Props = {
+  tab: Tab
+}
 /**
  * CodeControl component.
  * Renders a button that when clicked will open a code editor.
  */
-const CodeControl: React.FC = (): JSX.Element => {
-  /**
-   * Hooks
-   */
-  const { createOrFocus, windowTypes } = useLayout()
+const CodeControl: React.FC = ({ tab }: Props): JSX.Element => {
+  const { publish, events } = usePubSub()
 
   /**
    * Event handlers
@@ -24,7 +24,7 @@ const CodeControl: React.FC = (): JSX.Element => {
    * Triggers the creation of a new window or the focus on an existing one.
    */
   const onClick = (): void => {
-    createOrFocus(windowTypes.TEXT_EDITOR, 'Text Editor')
+    publish(events.$CREATE_TEXT_EDITOR(tab.id))
   }
 
   /**
