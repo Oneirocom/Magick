@@ -87,8 +87,8 @@ export const Flow: React.FC<FlowProps> = ({
       />
       <Background
         variant={BackgroundVariant.Lines}
-        color="#2a2b2d"
-        style={{ backgroundColor: '#1E1F22' }}
+        color="var(--background-color)"
+        style={{ backgroundColor: 'var(--deep-background-color)' }}
       />
       {nodePickerVisibility && (
         <NodePicker
