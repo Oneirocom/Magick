@@ -8,7 +8,7 @@ import { useConfig } from './ConfigProvider'
 import { useFeathers } from './FeathersProvider'
 import { useGetDocumentsQuery, useGetSpellsQuery } from 'client/state'
 
-interface TreeNode extends NodeModel {
+export interface TreeNode extends NodeModel {
   fileType: string
 }
 
