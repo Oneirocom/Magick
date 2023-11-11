@@ -164,7 +164,8 @@ export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
   const config = useConfig()
   const spellRef = useRef<SpellInterface>()
-  const { events, publish } = usePubSub()
+  const [api, setApi] = useState<DockviewApi>(null)
+  const { events, publish, subscribe } = usePubSub()
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const preferences = useSelector((state: RootState) => state.preferences)
@@ -233,7 +234,28 @@ export const Composer = ({ tab, theme, spellId }) => {
     // if (!success) {
     loadDefaultLayout(event.api, tab, spellId)
     // }
+    setApi(event.api)
   }
+
+  useEffect(() => {
+    if (!api) return
+
+    const unsubscribe = subscribe(events.$CREATE_TEXT_EDITOR(tab.id), () => {
+      api.addPanel({
+        id: 'Text Editor',
+        component: 'TextEditor',
+        params: {
+          title: 'Text Editor',
+          tab,
+          spellId
+        },
+      })
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [api])
 
   const onDidDrop = (event: DockviewDropEvent) => {
     const component = event.nativeEvent.dataTransfer.getData('component')

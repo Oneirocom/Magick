@@ -14,7 +14,7 @@ import { useDockviewTheme } from 'client/state'
 import ModalProvider from '../contexts/ModalProvider'
 import { StatusBar } from '../components/StatusBar/statusBar';
 import { ReactFlowProvider } from 'reactflow'
-
+67
 const components = {
   MainPanel,
   FileDrawer,
@@ -92,8 +92,6 @@ const loadDefaultLayout = (api: GridviewApi) => {
 const MagickV2 = () => {
   const { getLayout, setApi } = useGlobalLayout()
   const { theme } = useDockviewTheme()
-
-  console.log("THEME", theme)
 
   const onReady = (event: GridviewReadyEvent) => {
     const layout = getLayout()
