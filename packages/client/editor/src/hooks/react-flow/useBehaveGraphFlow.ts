@@ -1,12 +1,23 @@
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
-import { useEdgesState, useNodesState } from 'reactflow'
+import { Node, Edge, NodeChange, EdgeChange, Connection } from 'reactflow'
 
 import { behaveToFlow } from '../../utils/transformers/behaveToFlow.js'
 import { flowToBehave } from '../../utils/transformers/flowToBehave.js'
 import { autoLayout } from '../../utils/autoLayout.js'
 import { hasPositionMetaData } from '../../utils/hasPositionMetaData.js'
 import { useCustomNodeTypes } from './useCustomNodeTypes.js'
+import { Tab } from '@magickml/providers'
+import {
+  selectTabEdges,
+  selectTabNodes,
+  setNodes as _setNodes,
+  setEdges as _setEdges,
+  onEdgesChange as _onEdgesChange,
+  onNodesChange as _onNodesChange,
+  onConnect as _onConnect,
+} from 'client/state'
+import { useDispatch, useSelector } from 'react-redux'
 
 export const fetchBehaviorGraphJson = async (url: string) =>
   // eslint-disable-next-line unicorn/no-await-expression-member
@@ -22,30 +33,52 @@ export const fetchBehaviorGraphJson = async (url: string) =>
 export const useBehaveGraphFlow = ({
   initialGraphJson,
   specJson,
+  tab,
 }: {
   initialGraphJson: GraphJSON
   specJson: NodeSpecJSON[] | undefined
+  tab: Tab
 }) => {
+  const dispatch = useDispatch()
+
+  const nodes = useSelector(selectTabNodes(tab.id))
+  const edges = useSelector(selectTabEdges(tab.id))
+
+  const setNodes = (nodes: Node[]) => {
+    dispatch(_setNodes(nodes))
+  }
+
+  const setEdges = (edges: Edge[]) => {
+    dispatch(_setEdges(edges))
+  }
+
+  const onNodesChange = (nodes: NodeChange[]) => {
+    dispatch(_onNodesChange(nodes))
+  }
+
+  const onEdgesChange = (edges: EdgeChange[]) => {
+    dispatch(_onEdgesChange(edges))
+  }
+
+  const onConnect = (connection: Connection) => {
+    dispatch(_onConnect(connection))
+  }
+
   const [graphJson, setStoredGraphJson] = useState<GraphJSON | undefined>()
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
-  const setGraphJson = useCallback(
-    (graphJson: GraphJSON) => {
-      if (!graphJson) return
+  const setGraphJson = useCallback((graphJson: GraphJSON) => {
+    if (!graphJson) return
 
-      const [nodes, edges] = behaveToFlow(graphJson)
+    const [nodes, edges] = behaveToFlow(graphJson)
 
-      if (hasPositionMetaData(graphJson) === false) {
-        autoLayout(nodes, edges)
-      }
+    if (hasPositionMetaData(graphJson) === false) {
+      autoLayout(nodes, edges)
+    }
 
-      setNodes(nodes)
-      setEdges(edges)
-      setStoredGraphJson(graphJson)
-    },
-    [setEdges, setNodes]
-  )
+    setNodes(nodes)
+    setEdges(edges)
+    setStoredGraphJson(graphJson)
+  }, [])
 
   useEffect(() => {
     if (!initialGraphJson) return
@@ -54,6 +87,7 @@ export const useBehaveGraphFlow = ({
 
   useEffect(() => {
     if (!specJson) return
+    console.log('Udating stored graph json')
     // when nodes and edges are updated, update the graph json with the flow to behave behavior
     const graphJson = flowToBehave(nodes, edges, specJson)
     setStoredGraphJson(graphJson)
@@ -66,6 +100,7 @@ export const useBehaveGraphFlow = ({
   return {
     nodes,
     edges,
+    onConnect,
     onEdgesChange,
     onNodesChange,
     setGraphJson,
