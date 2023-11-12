@@ -24,7 +24,6 @@ import { debounce } from '../../../utils/debounce'
 import EventHandler from '../../EventHandler/EventHandler'
 
 import Inspector from '../../InspectorWindow/InspectorWindow'
-import Playtest from '../../PlaytestWindow/PlaytestWindow'
 
 import Console from '../../DebugConsole'
 import TextEditor from '../../TextEditorWindow'
@@ -32,6 +31,7 @@ import { useEditor } from '../../../contexts/EditorProvider'
 import { useRegistry } from '../../../hooks/react-flow/useRegistry'
 import { Flow } from '../../react-flow/Flow'
 import { usePanelControls } from '../../../hooks/usePanelControls'
+import ChatWindow from '../../ChatWindow/ChatWindow'
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -58,7 +58,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   api
     .addPanel({
       id: 'Inspector',
-      component: 'Inspector',
+      component: 'default',
       params: {
         title: 'Inspector',
         tab,
@@ -86,10 +86,10 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
 
   api
     .addPanel({
-      id: 'Playtest',
-      component: 'Playtest',
+      id: 'Chat',
+      component: 'Chat',
       params: {
-        title: 'Playtest',
+        title: 'Chat',
         tab,
         spellId
       },
@@ -107,7 +107,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
       tab,
       spellId
     },
-    position: { referencePanel: 'Playtest', direction: 'right' },
+    position: { referencePanel: 'Chat', direction: 'right' },
   })
 }
 
@@ -119,8 +119,8 @@ const components = {
       </div>
     )
   },
-  Playtest: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <Playtest {...props.params} />
+  Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    return <ChatWindow {...props.params} />
   },
   Inspector: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Inspector {...props.params} />
@@ -151,7 +151,7 @@ const components = {
 
     const registry = useRegistry();
     return <div style={{ height, width }} ref={parentRef}>
-      <Flow registry={registry} initialGraph={graph} examples={examples} parentRef={parentRef} />;
+      <Flow registry={registry} initialGraph={graph} examples={examples} parentRef={parentRef} tab={props.params.tab} />;
     </div>
   },
   Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
