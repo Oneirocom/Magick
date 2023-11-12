@@ -9,19 +9,22 @@ import { useNodeSpecJson } from '../../hooks/react-flow/useNodeSpecJson.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
 import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
+import { Tab } from '@magickml/providers';
 
 type FlowProps = {
   initialGraph: GraphJSON;
   registry: IRegistry;
   examples: Examples;
   parentRef: React.RefObject<HTMLDivElement>;
+  tab: Tab
 };
 
 export const Flow: React.FC<FlowProps> = ({
   initialGraph: graph,
   registry,
   parentRef,
-  examples
+  examples,
+  tab
 }) => {
   const specJson = useNodeSpecJson(registry);
 
@@ -32,14 +35,15 @@ export const Flow: React.FC<FlowProps> = ({
     onEdgesChange,
     graphJson,
     setGraphJson,
-    nodeTypes
+    nodeTypes,
+    onConnect
   } = useBehaveGraphFlow({
     initialGraphJson: graph,
-    specJson
+    specJson,
+    tab
   });
 
   const {
-    onConnect,
     handleStartConnect,
     handleStopConnect,
     handlePaneClick,
