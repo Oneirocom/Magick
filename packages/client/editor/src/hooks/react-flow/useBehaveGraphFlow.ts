@@ -18,6 +18,7 @@ import {
   onConnect as _onConnect,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
+import { debounce } from 'lodash'
 
 export const fetchBehaviorGraphJson = async (url: string) =>
   // eslint-disable-next-line unicorn/no-await-expression-member
@@ -85,13 +86,26 @@ export const useBehaveGraphFlow = ({
     setGraphJson(initialGraphJson)
   }, [initialGraphJson, setGraphJson])
 
+  // Make sure we are only doing this conversion when the graph changes
+  // Debounce because changes stream in.
+  const debouncedUpdate = useCallback(
+    debounce(() => {
+      const graphJson = flowToBehave(nodes, edges, specJson)
+      setStoredGraphJson(graphJson)
+    }, 1000),
+    [] // Dependencies array is empty to ensure this function is created once
+  )
+
   useEffect(() => {
     if (!specJson) return
-    console.log('Udating stored graph json')
-    // when nodes and edges are updated, update the graph json with the flow to behave behavior
-    const graphJson = flowToBehave(nodes, edges, specJson)
-    setStoredGraphJson(graphJson)
-  }, [nodes, edges, specJson])
+
+    debouncedUpdate()
+
+    // Cleanup function to cancel the debounced call if component unmounts
+    return () => {
+      debouncedUpdate.cancel()
+    }
+  }, [debouncedUpdate, nodes, edges, specJson])
 
   const nodeTypes = useCustomNodeTypes({
     specJson,
