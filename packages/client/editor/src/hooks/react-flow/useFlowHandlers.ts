@@ -54,29 +54,6 @@ export const useFlowHandlers = ({
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
   const [nodePickerVisibility, setNodePickerVisibility] = useState<XYPosition>()
-  const reactFlow = useReactFlow()
-
-  const onConnect = useCallback(
-    (connection: Connection) => {
-      if (connection.source === null) return
-      if (connection.target === null) return
-
-      const newEdge = {
-        id: uuidv4(),
-        source: connection.source,
-        target: connection.target,
-        sourceHandle: connection.sourceHandle,
-        targetHandle: connection.targetHandle,
-      }
-      onEdgesChange([
-        {
-          type: 'add',
-          item: newEdge,
-        },
-      ])
-    },
-    [onEdgesChange]
-  )
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
@@ -170,7 +147,6 @@ export const useFlowHandlers = ({
   })
 
   return {
-    onConnect,
     handleStartConnect,
     handleStopConnect,
     handlePaneClick,
