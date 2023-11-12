@@ -68,7 +68,7 @@ const loadDefaultLayout = (api: GridviewApi) => {
     component: 'MainPanel',
     params: {
       title: 'MainPanel',
-      idL: 'MainPanel'
+      id: 'MainPanel'
     },
     priority: LayoutPriority.High,
     position: { referencePanel: 'FileDrawer', direction: 'right' },
