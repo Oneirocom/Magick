@@ -141,6 +141,7 @@
     }
 
     .groupview > .content-container {
+      overflow: initial !important;
       background: var(--foreground-color) !important;
     }
 
