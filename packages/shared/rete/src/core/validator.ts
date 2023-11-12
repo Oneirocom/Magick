@@ -15,6 +15,7 @@ export class Validator {
   }
 
   static validate(id: string, data: Data) {
+    if (!data.id) return { success: false, msg: 'No id' }
     const id1 = id.split('@')
     const id2 = data.id.split('@')
     const msg = [] as string[]
