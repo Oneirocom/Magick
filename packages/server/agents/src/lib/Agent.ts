@@ -272,7 +272,7 @@ export class Agent implements AgentInterface {
 
   async runWorker(job: Job<AgentRunJob>) {
     // the job name is the agent id.  Only run if the agent id matches.
-    this.logger.debug('running worker', { id: this.id, data: job.data })
+    this.logger.debug({ id: this.id, data: job.data }, 'running worker')
     if (this.id !== job.data.agentId) return
 
     const { data } = job
