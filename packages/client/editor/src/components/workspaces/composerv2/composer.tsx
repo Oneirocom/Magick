@@ -33,6 +33,7 @@ import { Flow } from '../../react-flow/Flow'
 import { usePanelControls } from '../../../hooks/usePanelControls'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
+import GraphWindow from '../../GraphWindow/GraphWindow'
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -47,10 +48,10 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   panel.group.header.hidden = true
 
   api.addPanel({
-    id: 'Composer',
-    component: 'EditorWindow',
+    id: 'Graph',
+    component: 'Graph',
     params: {
-      title: 'Composer',
+      title: 'Graph',
       tab,
       spellId
     },
@@ -65,7 +66,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
         tab,
         spellId
       },
-      position: { referencePanel: 'Composer', direction: 'left' },
+      position: { referencePanel: 'Graph', direction: 'left' },
     })
     .api.setSize({
       width: 300,
@@ -94,7 +95,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
         tab,
         spellId
       },
-      position: { referencePanel: 'Composer', direction: 'below' },
+      position: { referencePanel: 'Graph', direction: 'below' },
     })
     .api.setSize({
       height: 300,
@@ -132,32 +133,7 @@ const components = {
   TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <TextEditor {...props.params} />
   },
-  EditorWindow: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    const examples = {
-      branch: Branch as unknown as GraphJSON,
-    } as Record<string, GraphJSON>;
-    const parentRef = useRef();
-
-
-    const [height, setHeight] = useState(0)
-    const [width, setWidth] = useState(0)
-
-    useEffect(() => {
-      const dispose = props.api.onDidDimensionsChange(event => {
-        setWidth(event.width)
-        setHeight(event.height)
-      })
-
-      return () => {
-        dispose.dispose()
-      }
-    })
-
-    const registry = useRegistry();
-    return <div style={{ height, width }} ref={parentRef}>
-      <Flow registry={registry} initialGraph={graph} examples={examples} parentRef={parentRef} tab={props.params.tab} />;
-    </div>
-  },
+  Graph: GraphWindow,
   Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Console {...props.params} />
   },
