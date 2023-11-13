@@ -142,65 +142,8 @@ const components = {
 
 export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
-  const config = useConfig()
-  const spellRef = useRef<SpellInterface>()
   const [api, setApi] = useState<DockviewApi>(null)
-  const { events, publish, subscribe } = usePubSub()
-  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
-  const { editor, serialize } = useEditor()
-  const preferences = useSelector((state: RootState) => state.preferences)
-
-  // Set up autosave for the workspaces
-  useEffect(() => {
-    if (!editor?.on) return
-    const unsubscribe = editor.on(
-      'nodecreated noderemoved connectioncreated connectionremoved nodetranslated',
-      debounce(async data => {
-        if (tab.type === 'spell' && spellRef.current) {
-          publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: serialize() })
-        }
-      }, 1000) // debounce for 2000 ms
-    )
-
-    return () => {
-      unsubscribe()
-    }
-  }, [editor, preferences.autoSave])
-
-  useEffect(() => {
-    if (!editor?.on) return
-
-    const unsubscribe = editor.on('nodecreated noderemoved', (node: any) => {
-      if (!spellRef.current) return
-      if (node.category !== 'IO') return
-      const spell = {
-        ...spellRef.current,
-        graph: editor.toJSON(),
-      }
-      publish(events.$SUBSPELL_UPDATED(spellRef.current.id), spell)
-    })
-
-    return () => {
-      unsubscribe()
-    }
-  }, [editor])
-
-  useEffect(() => {
-    if (!spellData) return
-    spellRef.current = spellData.data[0]
-  }, [spellData])
-
-  useEffect(() => {
-    // If there is no tab, or we already have a spell, return early
-    if (!tab || !tab.name || spellRef.current) return
-
-    loadSpell({
-      spellName: tab.name,
-      projectId: config.projectId,
-      id: spellId,
-    })
-  }, [tab])
-
+  const { events, subscribe } = usePubSub()
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
 
