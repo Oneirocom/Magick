@@ -1,7 +1,8 @@
 import React from 'react'
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
-import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 
 type Props = {
@@ -20,7 +21,10 @@ export const TypeIcon: React.FC<Props> = props => {
     case 'prompt':
       return <HistoryEduOutlinedIcon style={{ color: '#1BC5EB' }} />
     case 'spell':
-      return <StarBorderPurple500OutlinedIcon style={{ color: '#9D12A4' }} />
+      return <AutoStoriesIcon fontSize="small" style={{ color: 'white' }} />
+    case 'behave':
+      return <AccountTreeIcon fontSize="small" style={{ color: 'white' }} />
+
     default:
       return null
   }

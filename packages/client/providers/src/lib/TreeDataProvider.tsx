@@ -148,18 +148,16 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
 
     // find spells which are not in the tree data and delete them
     const spellIds = spells.map(spell => spell.id)
-    console.log('TREE DATA', treeData)
     const treeDataIds = treeData.filter(item => item.fileType === 'spell').map(item => item.id)
     const toDelete = treeDataIds.filter(id => !spellIds.includes(id as string))
 
-    console.log('TO DELETE', toDelete)
 
     toDelete.forEach(id => deleteItem(id))
 
     // Adding spells without duplicates
     spells.forEach((spell, index) => {
       const type = spell?.type || 'spell'
-      addNewItemWithoutDuplication(spell.id, 6, spell.name, 'spell')
+      addNewItemWithoutDuplication(spell.id, 6, spell.name, type)
     })
   }, [documents, spells, addedItemIds])
 

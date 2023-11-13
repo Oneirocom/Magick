@@ -64,7 +64,7 @@ const getComponents = () => {
       return acc
     }, {}),
     spell: Composer,
-    spellV2: ComposerV2,
+    behave: ComposerV2,
     default: (props: IDockviewPanelProps<{ title: string }>) => {
       return (
         <div
