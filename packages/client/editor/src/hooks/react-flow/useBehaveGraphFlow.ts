@@ -11,14 +11,15 @@ import { Tab } from '@magickml/providers'
 import {
   selectTabEdges,
   selectTabNodes,
-  setNodes as _setNodes,
-  setEdges as _setEdges,
-  onEdgesChange as _onEdgesChange,
-  onNodesChange as _onNodesChange,
-  onConnect as _onConnect,
+  setNodes,
+  setEdges,
+  onEdgesChange,
+  onNodesChange,
+  onConnect,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'
+import { CollectionsBookmarkOutlined } from '@mui/icons-material'
 
 export const fetchBehaviorGraphJson = async (url: string) =>
   // eslint-disable-next-line unicorn/no-await-expression-member
@@ -40,30 +41,8 @@ export const useBehaveGraphFlow = ({
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
-  const dispatch = useDispatch()
-
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
-
-  const setNodes = (nodes: Node[]) => {
-    dispatch(_setNodes(nodes))
-  }
-
-  const setEdges = (edges: Edge[]) => {
-    dispatch(_setEdges(edges))
-  }
-
-  const onNodesChange = (nodes: NodeChange[]) => {
-    dispatch(_onNodesChange(nodes))
-  }
-
-  const onEdgesChange = (edges: EdgeChange[]) => {
-    dispatch(_onEdgesChange(edges))
-  }
-
-  const onConnect = (connection: Connection) => {
-    dispatch(_onConnect(connection))
-  }
 
   const [graphJson, setStoredGraphJson] = useState<GraphJSON | undefined>()
 
@@ -89,7 +68,8 @@ export const useBehaveGraphFlow = ({
   // Make sure we are only doing this conversion when the graph changes
   // Debounce because changes stream in.
   const debouncedUpdate = useCallback(
-    debounce(() => {
+    debounce(specJson => {
+      console.log('SPEC JSON', specJson)
       const graphJson = flowToBehave(nodes, edges, specJson)
       setStoredGraphJson(graphJson)
     }, 1000),
@@ -99,7 +79,7 @@ export const useBehaveGraphFlow = ({
   useEffect(() => {
     if (!specJson) return
 
-    debouncedUpdate()
+    debouncedUpdate(specJson)
 
     // Cleanup function to cancel the debounced call if component unmounts
     return () => {
