@@ -32,6 +32,7 @@ import { useRegistry } from '../../../hooks/react-flow/useRegistry'
 import { Flow } from '../../react-flow/Flow'
 import { usePanelControls } from '../../../hooks/usePanelControls'
 import ChatWindow from '../../ChatWindow/ChatWindow'
+import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -57,10 +58,10 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
 
   api
     .addPanel({
-      id: 'Inspector',
-      component: 'default',
+      id: 'Properties',
+      component: 'Properties',
       params: {
-        title: 'Inspector',
+        title: 'Properties',
         tab,
         spellId
       },
@@ -78,7 +79,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
       tab,
       spellId
     },
-    position: { referencePanel: 'Inspector', direction: 'below' },
+    position: { referencePanel: 'Properties', direction: 'below' },
   })
 
   // panel5.group!.model.header.hidden = true;
@@ -124,6 +125,9 @@ const components = {
   },
   Inspector: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Inspector {...props.params} />
+  },
+  Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    return <PropertiesWindow {...props.params} />
   },
   TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <TextEditor {...props.params} />
