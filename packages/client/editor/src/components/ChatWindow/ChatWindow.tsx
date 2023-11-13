@@ -151,7 +151,6 @@ type Message = {
  */
 const ChatWindow = ({ tab, spellId }) => {
   const config = useConfig()
-  const { inspectorData } = useInspector()
 
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState<Message[]>([])
@@ -160,7 +159,6 @@ const ChatWindow = ({ tab, spellId }) => {
 
   const { publish, subscribe, events } = usePubSub()
   const dispatch = useDispatch()
-  const { serialize } = useEditor()
   const { enqueueSnackbar } = useSnackbar()
   const { data: spellData } = spellApi.useGetSpellByIdQuery(
     {
@@ -287,10 +285,38 @@ const ChatWindow = ({ tab, spellId }) => {
       return
     }
 
-    const data = {}
+    const playtestInputName = 'Input - Default'
+
+
+    toSend = {
+      connector: playtestInputName,
+      content: value,
+      sender: 'user',
+      observer: 'assistant',
+      agentId: 'preview',
+      client: 'playtest',
+      channel: 'previewChannel',
+      projectId: config.projectId,
+      channelType: 'previewChannelType',
+      rawData: value,
+      entities: ['user', 'assistant'],
+      ...JSON.parse(json),
+    }
+
+    const data = {
+      spellName: tab.name,
+      id: spellId,
+      projectId: config.projectId,
+      inputs: {
+        [playtestInputName as string]: toSend,
+      },
+      publicVariables: '{}',
+      secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
+    }
 
     setValue('')
 
+    publish($RUN_SPELL(tab.id), data)
     publish($RUN_SPELL(tab.id), data)
   }
 
