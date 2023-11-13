@@ -195,7 +195,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
     }
 
     // check if custom model and regex check for word fine-tune in model
-    if (customModel.length > 0) {
+    if (customModel?.length > 0) {
       node.data.customModel = customModel
     }
 
@@ -205,7 +205,7 @@ export class GenerateText extends MagickComponent<Promise<WorkerReturn>> {
       outputs,
       context,
     })
-    console.log('result', result)
+
     if (!success) {
       throw new Error('ERROR: ' + error)
     }
