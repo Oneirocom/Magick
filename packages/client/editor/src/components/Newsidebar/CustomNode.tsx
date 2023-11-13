@@ -84,12 +84,12 @@ export const CustomNode: React.FC<Props> = props => {
     })
   }
 
-  const handleOpenSpellV2Tab = () => {
+  const handleOpenBehaveTab = () => {
     props.openTab({
       id: props.node.text,
       name: props.node.text,
       spellName: props.node.text,
-      type: 'spellV2',
+      type: 'behave',
       params: {
         spellId: props.node.id,
       }
@@ -107,8 +107,8 @@ export const CustomNode: React.FC<Props> = props => {
       case 'spell':
         handleOpenSpellTab()
         break
-      case 'spellV2':
-        handleOpenSpellV2Tab()
+      case 'behave':
+        handleOpenBehaveTab()
         break
       default:
         break
@@ -228,15 +228,13 @@ export const CustomNode: React.FC<Props> = props => {
       style={{ paddingInlineStart: indent, cursor: 'pointer', width: '200%' }}
       onClick={handleToggle}
     >
-      <div
+      {props.node.droppable && <div
         className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''}`}
       >
-        {props.node.droppable && (
-          <div>
-            <ChevronRightIcon />
-          </div>
-        )}
-      </div>
+        <div>
+          <ChevronRightIcon />
+        </div>
+      </div>}
       <div>
         <TypeIcon
           droppable={droppable}
