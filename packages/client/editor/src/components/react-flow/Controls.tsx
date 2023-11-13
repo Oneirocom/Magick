@@ -21,21 +21,17 @@ export type CustomControlsProps = {
   playing: boolean;
   togglePlay: () => void;
   setBehaviorGraph: (value: GraphJSON) => void;
-  examples: Examples;
   specJson: NodeSpecJSON[] | undefined;
 };
 
 export const CustomControls: React.FC<CustomControlsProps> = ({
   playing,
   togglePlay,
-  setBehaviorGraph,
-  examples,
   specJson
 }: {
   playing: boolean;
   togglePlay: () => void;
   setBehaviorGraph: (value: GraphJSON) => void;
-  examples: Examples;
   specJson: NodeSpecJSON[] | undefined;
 }) => {
   const [loadModalOpen, setLoadModalOpen] = useState(false);
@@ -62,12 +58,6 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
           <FontAwesomeIcon icon={playing ? faPause : faPlay} />
         </ControlButton>
       </Controls>
-      <LoadModal
-        open={loadModalOpen}
-        onClose={() => setLoadModalOpen(false)}
-        setBehaviorGraph={setBehaviorGraph}
-        examples={examples}
-      />
       {specJson && (
         <SaveModal
           open={saveModalOpen}
