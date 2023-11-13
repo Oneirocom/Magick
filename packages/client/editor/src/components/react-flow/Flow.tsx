@@ -12,20 +12,19 @@ import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
 import { Tab } from '@magickml/providers';
 
 import './flowOverrides.css'
+import { SpellInterface } from 'shared/core';
 
 type FlowProps = {
-  initialGraph: GraphJSON;
+  spell: SpellInterface;
   registry: IRegistry;
-  examples: Examples;
   parentRef: React.RefObject<HTMLDivElement>;
   tab: Tab
 };
 
 export const Flow: React.FC<FlowProps> = ({
-  initialGraph: graph,
+  spell,
   registry,
   parentRef,
-  examples,
   tab
 }) => {
   const specJson = useNodeSpecJson(registry);
@@ -40,7 +39,7 @@ export const Flow: React.FC<FlowProps> = ({
     nodeTypes,
     onConnect
   } = useBehaveGraphFlow({
-    initialGraphJson: graph,
+    initialGraphJson: spell.graph,
     specJson,
     tab
   });
@@ -88,7 +87,6 @@ export const Flow: React.FC<FlowProps> = ({
         playing={playing}
         togglePlay={togglePlay}
         setBehaviorGraph={setGraphJson}
-        examples={examples}
         specJson={specJson}
       />
       <Background
