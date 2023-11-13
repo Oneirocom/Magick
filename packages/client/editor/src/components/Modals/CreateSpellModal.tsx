@@ -1,5 +1,5 @@
 import Modal from '../Modal/Modal'
-import { GraphData } from 'shared/core'
+import { ConsolePlugin, GraphData } from 'shared/core'
 import css from './createSpellModal.module.css'
 import { getTemplates } from 'client/core'
 import { useSnackbar } from 'notistack'
@@ -20,7 +20,7 @@ import {
 import FileInput from '../FileInput/FileInput'
 import { FileUpload } from '@mui/icons-material'
 
-import v2graph from '../../graphs/graph.json'
+import behaveGraph from '../../graphs/graph.json'
 import { FEATURE_FLAGS } from 'shared/config'
 
 export type Template = {
@@ -30,10 +30,10 @@ export type Template = {
   graph: Record<string, unknown>
 }
 
-const spellV2: Template = {
-  name: 'Spell 2.0',
-  type: 'spellV2',
-  graph: v2graph
+const behave: Template = {
+  name: 'Behave Graph',
+  type: 'behave',
+  graph: behaveGraph
 }
 
 // Custom configuration for unique name generator
@@ -131,8 +131,8 @@ const CreateSpellModal = ({ closeModal }) => {
       }
     })
 
+    // closeModal()
     setLoading(false)
-    closeModal()
   }
 
   const handleError = (response) => {
@@ -210,7 +210,7 @@ const CreateSpellModal = ({ closeModal }) => {
           flexWrap: 'wrap',
         }}
       >
-        {[...(getTemplates().spells as Template[]), (FEATURE_FLAGS.COMPOSER_V2 ? spellV2 : null)].filter(Boolean).map((template, i) => (
+        {[...(getTemplates().spells as Template[]), (FEATURE_FLAGS.COMPOSER_V2 ? behave : null)].filter(Boolean).map((template, i) => (
           <TemplatePanel
             setSelectedTemplate={setSelectedTemplate}
             selectedTemplate={selectedTemplate}
