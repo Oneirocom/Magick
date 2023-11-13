@@ -38,8 +38,6 @@ export const graphSlice = createSlice({
     },
   },
 })
-
-export const { setNodes, setEdges, onEdgesChange, onNodesChange, onConnect } =
-  graphSlice.actions
+export const graphActions = graphSlice.actions
 
 export default graphSlice.reducer
