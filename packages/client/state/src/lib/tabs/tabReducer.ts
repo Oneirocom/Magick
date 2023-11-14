@@ -10,10 +10,6 @@ export interface TabState {
   graph: GraphState
 }
 
-export const makeSelectTabState = tabId => {
-  return (state: RootState) => state[tabId] as TabState
-}
-
 export const selectTabState = tabId => state => state[tabId] as TabState
 
 export const selectTabNodes = tabId => state => {
