@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { usePubSub } from '@magickml/providers'
-import { useGlobalLayout } from '../contexts/GlobalLayoutProvider'
 import { IGridviewPanelProps } from 'dockview'
 
 export const usePanelControls = (

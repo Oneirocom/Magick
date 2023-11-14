@@ -1,4 +1,4 @@
-type ReadArgs = {
+export type ReadArgs = {
   inputs: Record<string, unknown>
   secrets?: Record<string, string>
   publicVariables?: Record<string, unknown>

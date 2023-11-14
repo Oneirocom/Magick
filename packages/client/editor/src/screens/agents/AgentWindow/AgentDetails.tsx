@@ -10,7 +10,7 @@ import { tooltip_text } from './tooltip_texts'
 import { InputEdit } from './InputEdit'
 
 import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
-import { useGetSpellByJustIdQuery, useGetSpellsQuery, useLazyGetSpellByJustIdQuery, useUpdateAgentMutation } from 'client/state'
+import { useGetSpellsQuery, useLazyGetSpellByJustIdQuery, useUpdateAgentMutation } from 'client/state'
 
 /**
  * RenderComp renders the given component with the given props.

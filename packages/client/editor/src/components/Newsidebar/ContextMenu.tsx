@@ -1,20 +1,14 @@
 import Menu from "@mui/material/Menu"
-import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined'
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
-import StarBorderPurple500OutlinedIcon from '@mui/icons-material/StarBorderPurple500Outlined'
-import HistoryEduOutlinedIcon from '@mui/icons-material/HistoryEduOutlined'
 import { useEffect, useState } from "react"
 import styles from './menu.module.css'
 import Typography from "@mui/material/Typography"
 import Divider from "@mui/material/Divider"
-import { useTabLayout } from '@magickml/providers'
 import { useModal } from "../../contexts/ModalProvider"
 
 export const ContextMenu = () => {
   const { openModal } = useModal()
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
-  const { openTab } = useTabLayout()
 
   // Function to handle the click event on the hideMenu div
   const handleHideMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {

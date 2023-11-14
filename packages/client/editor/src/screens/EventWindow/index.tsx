@@ -4,15 +4,6 @@ import EventTable from './EventTable'
 import { useGetEventsQuery } from 'client/state'
 
 /**
- * Defines the properties of an event.
- */
-interface Event {
-  // Add properties of the event
-  name: string
-  location: string
-}
-
-/**
  * EventWindow component displays the events of a project.
  * @returns JSX Element
  */
