@@ -10,6 +10,7 @@ import { useTreeData, useTabLayout, TreeNode } from '@magickml/providers'
 
 import styles from './menu.module.css'
 import { CustomNode } from './CustomNode'
+import { useModal } from '../../contexts/ModalProvider'
 
 type CustomData = {
   fileType: string
@@ -19,13 +20,21 @@ type CustomData = {
 export const FileTree = ({ currentTab }) => {
   const { treeData, setTreeData } = useTreeData()
   const { openTab } = useTabLayout()
+  const { openModal } = useModal()
 
   const handleDrop = (newTree: TreeNode[]) => {
     setTreeData(newTree)
   }
 
-  return (<div className={styles.files}>
+  const onCreateSpell = () => {
+    openModal({
+      modal: 'createSpellModal',
+    })
+  }
+
+  return (<div className={`${styles.files} px-4`} >
     <CssBaseline />
+    <button onClick={onCreateSpell} className="p-4 w-full mb-4">+ Create spell</button>
     <DndProvider backend={MultiBackend} options={getBackendOptions()}>
       <div>
         <Tree
