@@ -33,7 +33,6 @@ import {
   ModulePlugin,
   ModulePluginArgs,
   MultiCopyPlugin,
-  MultiSocketGenerator,
   NodeClickPlugin,
   SocketGeneratorPlugin,
 } from '@magickml/core'

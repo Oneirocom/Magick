@@ -1,14 +1,10 @@
-import { Output } from './../../../../../rete/src/output'
 // DOCUMENTED
 import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
-import { pluginManager } from '../../plugin'
-import { anySocket, eventSocket, triggerSocket } from '../../sockets'
+import { anySocket } from '../../sockets'
 import {
-  Event,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
@@ -16,7 +12,6 @@ import {
   WorkerData,
 } from '../../types'
 import { InputControl } from '../../dataControls/InputControl'
-import { TextInputControl } from '../../dataControls/TextInputControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 
 /** Component info text */
@@ -87,8 +82,10 @@ export class SocketInput extends MagickComponent<void> {
    */
   async worker(
     node: WorkerData,
+    // @eslint-ignore-next-line
     inputs: MagickWorkerInputs,
     outputs: MagickWorkerOutputs,
+    // @eslint-ignore-next-line
     context: ModuleContext
   ): Promise<{ output: string }> {
     if (outputs.output) {

@@ -2,12 +2,9 @@
 import Rete from '@magickml/rete'
 import { v4 as uuidv4 } from 'uuid'
 
-import { DropdownControl } from '../../dataControls/DropdownControl'
 import { MagickComponent } from '../../engine'
-import { pluginManager } from '../../plugin'
-import { anySocket, eventSocket, triggerSocket } from '../../sockets'
+import { anySocket, triggerSocket } from '../../sockets'
 import {
-  Event,
   MagickNode,
   MagickWorkerInputs,
   MagickWorkerOutputs,
@@ -89,9 +86,11 @@ export class SocketOutput extends MagickComponent<void> {
    * @returns output data
    */
   async worker(
+    // @eslint-ignore-next-line
     node: WorkerData,
     inputs: MagickWorkerInputs,
     _outputs: MagickWorkerOutputs,
+    // @eslint-ignore-next-line
     context: ModuleContext
   ): Promise<{ output: string }> {
     if (!inputs.input) throw new Error('No input provided to output component')
