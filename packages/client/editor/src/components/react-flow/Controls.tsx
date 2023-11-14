@@ -14,7 +14,6 @@ import { ControlButton, Controls } from 'reactflow';
 
 import { ClearModal } from './modals/ClearModal.js';
 import { HelpModal } from './modals/HelpModal.js';
-import { Examples, LoadModal } from './modals/LoadModal.js';
 import { SaveModal } from './modals/SaveModal.js';
 
 export type CustomControlsProps = {
@@ -34,7 +33,7 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
   setBehaviorGraph: (value: GraphJSON) => void;
   specJson: NodeSpecJSON[] | undefined;
 }) => {
-  const [loadModalOpen, setLoadModalOpen] = useState(false);
+  const [, setLoadModalOpen] = useState(false);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [clearModalOpen, setClearModalOpen] = useState(false);

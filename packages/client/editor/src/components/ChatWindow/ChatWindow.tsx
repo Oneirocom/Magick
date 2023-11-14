@@ -5,15 +5,12 @@ import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEditor } from '../../contexts/EditorProvider'
-import { useInspector } from '../../contexts/InspectorProvider'
+import { useDispatch } from 'react-redux'
 import { usePubSub, useConfig } from '@magickml/providers'
 import css from '../../styles/magick.module.css'
 import {
   addLocalState,
   selectStateBytabId,
-  spellApi,
   upsertLocalState,
   useAppSelector,
 } from 'client/state'
@@ -160,17 +157,6 @@ const ChatWindow = ({ tab, spellId }) => {
   const { publish, subscribe, events } = usePubSub()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
-  const { data: spellData } = spellApi.useGetSpellByIdQuery(
-    {
-      spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: !spellId,
-    }
-  )
 
   const localState = useAppSelector(state => {
     return selectStateBytabId(state.localState, tab.id)
@@ -198,7 +184,7 @@ const ChatWindow = ({ tab, spellId }) => {
   )
 
   // Set playtest options based on spell graph nodes with the playtestToggle set to true.
-  const [playtestOptions, setPlaytestOptions] = useState<Record<
+  const [playtestOptions] = useState<Record<
     string,
     any
   > | null>([])

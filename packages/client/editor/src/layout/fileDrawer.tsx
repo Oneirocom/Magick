@@ -1,7 +1,6 @@
 import { TreeDataProvider, usePubSub } from '@magickml/providers'
 import { IGridviewPanelProps } from 'dockview'
 import { NewSidebar } from '../components/Newsidebar'
-import { useGlobalLayout } from '../contexts/GlobalLayoutProvider'
 import { usePanelControls } from '../hooks/usePanelControls'
 
 const FileDrawer = (props: IGridviewPanelProps<{ title: string, id: string }>) => {

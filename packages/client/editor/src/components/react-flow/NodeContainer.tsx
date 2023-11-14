@@ -20,7 +20,8 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   if (colorName === undefined) {
     colorName = 'red';
   }
-  let [backgroundColor, borderColor, textColor] = colors[colorName];
+  const [backgroundColor, textColor] = colors[colorName];
+  let [borderColor] = colors[colorName];
   if (selected) {
     borderColor = 'border-gray-800';
   }

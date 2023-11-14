@@ -2,8 +2,7 @@
 // Import statements kept as-is
 import { TableComponent } from 'client/core'
 import { CompletionProvider, pluginManager } from 'shared/core'
-import { API_ROOT_URL } from 'shared/config'
-import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
+import { MoreHoriz, NewReleases } from '@mui/icons-material'
 import {
   Button,
   Container,
@@ -18,7 +17,6 @@ import { useConfig, useTreeData } from '@magickml/providers'
 import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
 import {
   TableInstance,
   useAsyncDebounce,
@@ -86,7 +84,6 @@ function DocumentTable({ documents }) {
     'embedding',
   ]) as CompletionProvider[]
   const config = useConfig()
-  const globalConfig = useSelector((state: any) => state.globalConfig)
 
   const [document, setDocument] = useState(null)
   const [contentModal, setContentModal] = useState(false)

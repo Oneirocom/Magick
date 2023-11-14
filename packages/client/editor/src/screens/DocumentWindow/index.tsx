@@ -1,5 +1,4 @@
 // DOCUMENTED
-import { useSelector } from 'react-redux'
 import { LoadingScreen } from 'client/core'
 import DocumentTable from './DocumentTable'
 import { useGetDocumentsQuery } from 'client/state'

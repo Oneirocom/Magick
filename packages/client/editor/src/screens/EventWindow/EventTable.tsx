@@ -15,7 +15,6 @@ import { useSnackbar } from 'notistack'
 import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
 import {
   useAsyncDebounce,
   useFilters,
@@ -75,7 +74,6 @@ function EventTable({ events, refetchEvents }) {
   const [deleteEvent] = useDeleteEventMutation()
 
   const { enqueueSnackbar } = useSnackbar()
-  const globalConfig = useSelector((state: any) => state.globalConfig)
 
   const [anchorEl, setAnchorEl] = useState(null)
   // todo need better typing for the row here

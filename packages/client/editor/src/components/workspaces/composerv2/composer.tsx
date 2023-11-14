@@ -1,6 +1,5 @@
 import {
   DockviewApi,
-  DockviewDndOverlayEvent,
   DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
@@ -8,29 +7,15 @@ import {
   IDockviewPanelProps,
   positionToDirection,
 } from 'dockview'
-import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { SpellInterface } from 'shared/core'
-import { spellApi } from 'client/state'
+import { useEffect, useState } from 'react'
 import { Tab } from '@magickml/providers';
-import { useConfig, usePubSub } from '@magickml/providers'
-import { RootState } from 'client/state'
-import { GraphJSON } from '@magickml/behave-graph'
-
-import Branch from '../../../graphs/core/flow/Branch.json'
-import graph from '../../../graphs/graph.json'
-
-import { debounce } from '../../../utils/debounce'
+import { usePubSub } from '@magickml/providers'
 import EventHandler from '../../EventHandler/EventHandler'
 
 import Inspector from '../../InspectorWindow/InspectorWindow'
 
 import Console from '../../DebugConsole'
 import TextEditor from '../../TextEditorWindow'
-import { useEditor } from '../../../contexts/EditorProvider'
-import { useRegistry } from '../../../hooks/react-flow/useRegistry'
-import { Flow } from '../../react-flow/Flow'
-import { usePanelControls } from '../../../hooks/usePanelControls'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
@@ -198,7 +183,7 @@ export const Composer = ({ tab, theme, spellId }) => {
     });
   };
 
-  const showDndOverlay = (event: DockviewDndOverlayEvent) => {
+  const showDndOverlay = () => {
     return true;
   };
 

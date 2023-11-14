@@ -93,7 +93,7 @@ export default function (app: Application): void {
       data.agentId
 
     // Lets not relay up all the patch events
-    if (context.method === 'patch' || !agentId) return
+    // if (context.method === 'patch' || !agentId) return
 
     logger.trace(
       `CHANNELS: Publishing event path ${context.path} to agent %s!`,

@@ -9,11 +9,6 @@ import {
 } from '@reduxjs/toolkit/query/react'
 import { RootState } from '../store'
 
-interface RequestBody {
-  projectId?: string
-  [key: string]: any // allows for any other properties
-}
-
 /**
  * Dynamic base query that can be used to create a Redux Toolkit Query API
  * with a dynamic API url and token based on the current state.
