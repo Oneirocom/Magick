@@ -101,6 +101,9 @@ export class InputComponent extends MagickComponent<InputReturn> {
     // Set isInput to true so we can identify this node as an input node
     node.data.isInput = true
 
+    // Hide the input sockets on any parent node
+    node.data.hideSocket = true
+
     // Each node should have a unique socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
 
@@ -188,12 +191,6 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
       const inspectorControls = inputTypeData.inspectorControls ?? []
       const sockets = inputTypeData.sockets ?? []
-
-      if (inputType === 'Subspell') {
-        node.data.hideSocket = true
-      } else {
-        node.data.hideSocket = false
-      }
 
       // configure default
       if (inputType === 'Default') {
