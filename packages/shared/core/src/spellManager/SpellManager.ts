@@ -1,5 +1,5 @@
 // import { Application } from 'server/core';
-import { Application } from '@feathersjs/koa'
+import { Application } from 'server/core'
 import io from 'socket.io'
 import { getLogger } from 'shared/core'
 
@@ -239,7 +239,6 @@ export default class SpellManager {
         inputs,
         secrets,
         publicVariables,
-        app,
         agentId: this.agent.id,
         spellId: this.agent.rootSpellId as string,
       })
