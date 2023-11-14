@@ -50,7 +50,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     super(
       'Spell By Name',
       {
-        outputs: { output: 'output', trigger: 'option' },
+        outputs: { outputs: 'output', trigger: 'option' },
       },
       'Invoke/Spells',
       info
@@ -70,14 +70,14 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
     const spellInputs = new Rete.Input('inputs', 'Inputs', objectSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const output = new Rete.Output('output', 'Output', stringSocket)
+    const outputs = new Rete.Output('outputs', 'Outputs', objectSocket)
     node
       .addInput(triggerIn)
       .addOutput(triggerOut)
       .addInput(spellName)
       .addInput(eventInput)
       .addInput(spellInputs)
-      .addOutput(output)
+      .addOutput(outputs)
 
     return node
   }
@@ -143,13 +143,13 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await app
+      const spellOutputs = await app
         .get('agentCommander')
         .runSpellWithResponse(runComponentArgs)
 
-      const output = Object.values(outputs as any)[0]
+      const outputs = Object.values(spellOutputs as any)[0]
       return {
-        output,
+        outputs,
       }
     } else {
       const runComponentArgs = {
@@ -171,13 +171,13 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         throw new Error(`Spell runner for ${spellName} not found`)
       }
 
-      const outputs = await spellRunner.runComponent(runComponentArgs)
+      const spellOutputs = await spellRunner.runComponent(runComponentArgs)
 
       // get the first value from outputs
-      const output = Object.values(outputs as any)[0]
+      const outputs = Object.values(spellOutputs as any)[0]
 
       return {
-        output,
+        outputs,
       }
     }
   }
