@@ -1,11 +1,6 @@
 import { NodeView } from 'shared/rete'
 import { MagickComponent } from '../../engine'
-import {
-  IRunContextEditor,
-  MagickEditor,
-  MagickNode,
-  PubSubData,
-} from '../../types'
+import { MagickEditor, MagickNode, PubSubData } from '../../types'
 
 type ConsoleConstructor = {
   component: MagickComponent<unknown>

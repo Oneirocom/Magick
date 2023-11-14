@@ -1,5 +1,4 @@
 import {
-  DockviewApi,
   DockviewReact,
   DockviewReadyEvent,
   IDockviewHeaderActionsProps,
@@ -22,7 +21,6 @@ import NewMenuBar from '../components/MenuBar/newMenuBar';
 
 import './tab-layout.scss'
 import WelcomeScreen from '../components/Watermark/watermark';
-import { FEATURE_FLAGS } from 'shared/config';
 
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {

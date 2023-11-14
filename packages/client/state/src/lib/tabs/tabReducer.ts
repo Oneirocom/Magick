@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux'
 import graphSlice, { GraphState } from './graphSlice'
-import { RootState } from '../store'
 
 export const tabReducer = combineReducers({
   graph: graphSlice,

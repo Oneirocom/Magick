@@ -1,19 +1,12 @@
-import { GraphJSON } from "@magickml/behave-graph";
 import { IDockviewPanelProps } from "dockview";
 import { useEffect, useRef, useState } from "react";
 import { useRegistry } from "../../hooks/react-flow/useRegistry";
 import { Flow } from "../react-flow/Flow";
 
-import graph from '../../graphs/graph.json';
-import Branch from '../../graphs/core/flow/Branch.json';
 import { Tab, useConfig } from "@magickml/providers";
 import { spellApi } from "client/state";
-import { SpellInterface } from "shared/core";
 
 const GraphWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-  const examples = {
-    branch: Branch as unknown as GraphJSON,
-  } as Record<string, GraphJSON>;
 
   const config = useConfig()
   const parentRef = useRef();

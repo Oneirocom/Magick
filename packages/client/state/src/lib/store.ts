@@ -1,11 +1,5 @@
 // DOCUMENTED
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  Dispatch,
-  EnhancedStore,
-} from '@reduxjs/toolkit'
+import { ThunkAction, Action, Dispatch, EnhancedStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 
 import { persistStore, persistReducer } from 'redux-persist'
@@ -14,7 +8,6 @@ import { Reducer, combineReducers } from 'redux'
 
 import { spellApi } from './api/spells'
 import { rootApi } from './api/api'
-import { agentApi } from './api/agents'
 import localStateReducer from './localState'
 import preferencesReducer from './preferences'
 import globalConfigReducer from './globalConfig'
@@ -23,7 +16,6 @@ import statusBarReducer from './statusBarState'
 import rootFeathers, { configureFeathersStore } from './feathers/root'
 import { feathersEventMiddleware } from '@magickml/feathersRedux'
 import { tabReducer } from './tabs/tabReducer'
-import { stringSocket } from 'shared/core'
 
 // import { AppConfig } from '@magickml/client-core'
 

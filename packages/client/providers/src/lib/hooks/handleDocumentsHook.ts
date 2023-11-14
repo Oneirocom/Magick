@@ -30,7 +30,7 @@ export const handleDocumentsHook = ({
     useEffect(() => {
       if (!documents || !documents.length) return
 
-      documents.forEach((doc, index) => {
+      documents.forEach(doc => {
         addNewItemWithoutDuplication(doc?.id, 3, '', 'txt')
       })
     }, [documents])

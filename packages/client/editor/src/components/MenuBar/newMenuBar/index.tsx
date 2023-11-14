@@ -3,7 +3,6 @@ import { usePubSub } from '@magickml/providers'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { Menu, MenuItem, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import css from '../menuBar.module.css'
@@ -21,7 +20,6 @@ import { useModal } from '../../../contexts/ModalProvider'
  * @returns {JSX.Element}
  */
 const NewMenuBar = props => {
-  const navigate = useNavigate()
   const { publish, events } = usePubSub()
   const [snapEnabled, setSnapEnabled] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -331,7 +329,7 @@ const NewMenuBar = props => {
       >
         <span>
           {Object.entries(item as [string, Record<string, any>][]).map(
-            ([key, value]: [string, Record<string, any>]) => {
+            ([key]: [string, Record<string, any>]) => {
               if (key === 'isActive')
                 return (
                   <span

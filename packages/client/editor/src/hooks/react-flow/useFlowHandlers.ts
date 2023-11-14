@@ -5,13 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import {
-  Connection,
-  Node,
-  OnConnectStartParams,
-  XYPosition,
-  useReactFlow,
-} from 'reactflow'
+import { Node, OnConnectStartParams, XYPosition } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
 import { calculateNewEdge } from '../../utils/calculateNewEdge.js'
