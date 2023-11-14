@@ -8,20 +8,20 @@ type NodeProps = {
   title: string;
   category?: NodeSpecJSON['category'];
   selected: boolean;
+  onClick?: () => void;
 };
 
 const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   title,
   category = NodeCategory.None,
   selected,
-  children
+  children,
 }) => {
   let colorName = categoryColorMap[category];
   if (colorName === undefined) {
     colorName = 'red';
   }
-  const [backgroundColor, textColor] = colors[colorName];
-  let [borderColor] = colors[colorName];
+  let [backgroundColor, borderColor, textColor] = colors[colorName];
   if (selected) {
     borderColor = 'border-gray-800';
   }
