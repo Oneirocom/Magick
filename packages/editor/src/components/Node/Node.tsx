@@ -8,8 +8,6 @@ import { Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
 import { styled } from '@mui/material/styles'
 
-const triggerName = 'Trigger'
-
 // Define the priorities
 const priorityConfig = {
   socketTypes: ['Trigger', 'Event', 'String'], // Add all known socket types here in order of priority

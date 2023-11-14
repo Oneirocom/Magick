@@ -1,7 +1,7 @@
 export class Socket {
   name: string
   data: unknown
-  hide: boolean = false
+  hide = false
   compatible: Socket[] = []
 
   constructor(name: string, data = {}) {
