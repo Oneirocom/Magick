@@ -32,14 +32,14 @@ const composerLayoutComponents = {
   WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
       <div>
-        <p>COMPOSER V2</p>
         <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
+          <p style={{ padding: 8, color: 'grey', marginRight: 50 }}>Composer V2</p>
           <DraggableElement window="Console" />
           <DraggableElement window="TextEditor" title="Text Editor" />
           <DraggableElement window="Inspector" />
           <DraggableElement window="Playtest" />
         </div>
-      </div>
+      </div >
     )
   },
   Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string, spellId: string }>) => {

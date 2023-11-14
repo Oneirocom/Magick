@@ -40,7 +40,6 @@ export const FileTree = ({ currentTab }) => {
         <Tree
           tree={treeData}
           rootId={0}
-          // @ts-ignore
           render={(
             node: NodeModel<CustomData>,
             { depth, isOpen, onToggle }
