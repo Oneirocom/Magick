@@ -7,6 +7,8 @@ import SampleData from './data/sampleData.json'
 import { useConfig } from './ConfigProvider'
 import { useFeathers } from './FeathersProvider'
 import { useGetDocumentsQuery, useGetSpellsQuery } from 'client/state'
+import { handleDocumentsHook } from './hooks/handleDocumentsHook'
+import { handleSpellsHook } from './hooks/handleSpellsHook'
 
 export interface TreeNode extends NodeModel {
   fileType: string
@@ -21,16 +23,6 @@ interface TreeDataContextType {
   setOpenDoc: React.Dispatch<React.SetStateAction<string | number>>
   agentUpdate: boolean
   setAgentUpdate: React.Dispatch<React.SetStateAction<boolean>>
-}
-interface Document {
-  id: string
-  content: string
-}
-
-interface Spell {
-  id: string
-  name: string
-  type?: string
 }
 
 const TreeDataContext = createContext<TreeDataContextType>({
@@ -51,24 +43,11 @@ type Props = {
 }
 
 export const TreeDataProvider = ({ children }: Props): JSX.Element => {
-  const { data: fetchedSpells } = useGetSpellsQuery({})
-  const { data: fetchedDocuments } = useGetDocumentsQuery({})
-
   const [treeData, setTreeData] = useState<TreeNode[]>(SampleData)
-  const [documents, setDocuments] = useState<Document[] | null>(null)
-  const [spells, setSpells] = useState<Spell[] | null>(null)
-
   const [addedItemIds, setAddedItemIds] = useState<string[]>([])
   const [toDelete, setToDelete] = useState(null)
   const [openDoc, setOpenDoc] = useState<string | number>('')
   const [agentUpdate, setAgentUpdate] = useState(false)
-
-  // function truncateDocs(str, n) {
-  //   if (str.length > n) {
-  //     return str.substring(0, n) + '...'
-  //   }
-  //   return str
-  // }
 
   function addNewItem(id, parent, text, fileType) {
     const newItem = {
@@ -106,60 +85,16 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     })
   }
 
-  useEffect(() => {
-    console.log('FETCHING SPELLS', fetchedSpells)
-    if (!fetchedSpells) return
-    if (!fetchedSpells.data.length) return
-
-    setSpells(fetchedSpells.data)
-
-  }, [fetchedSpells])
-
-  useEffect(() => {
-    if (!fetchedDocuments) return
-    if (!fetchedDocuments.data.length) return
-
-    setDocuments(fetchedDocuments.data)
-
-  }, [fetchedDocuments])
-
-  useEffect(() => {
-    if (!documents || !spells) {
-      return // Exit early if documents or spells are not available
+  // Function to add new item to the tree data while avoiding duplication
+  const addNewItemWithoutDuplication = (id, parent, text, fileType) => {
+    if (!addedItemIds.includes(id)) {
+      addNewItem(id, parent, text, fileType) // Add the new item
+      setAddedItemIds(prevIds => [...prevIds, id]) // Update addedItemIds
     }
+  }
 
-    // Function to add new item to the tree data while avoiding duplication
-    const addNewItemWithoutDuplication = (id, parent, text, fileType) => {
-      if (!addedItemIds.includes(id)) {
-        addNewItem(id, parent, text, fileType) // Add the new item
-        setAddedItemIds(prevIds => [...prevIds, id]) // Update addedItemIds
-      }
-    }
-
-    // Adding documents
-    documents.forEach((doc, index) => {
-      addNewItemWithoutDuplication(
-        doc?.id,
-        3,
-        '',
-        'txt'
-      )
-    })
-
-    // find spells which are not in the tree data and delete them
-    const spellIds = spells.map(spell => spell.id)
-    const treeDataIds = treeData.filter(item => item.fileType === 'spell').map(item => item.id)
-    const toDelete = treeDataIds.filter(id => !spellIds.includes(id as string))
-
-
-    toDelete.forEach(id => deleteItem(id))
-
-    // Adding spells without duplicates
-    spells.forEach((spell, index) => {
-      const type = spell?.type || 'spell'
-      addNewItemWithoutDuplication(spell.id, 6, spell.name, type)
-    })
-  }, [documents, spells, addedItemIds])
+  handleDocumentsHook({ addNewItemWithoutDuplication })
+  handleSpellsHook({ treeData, addNewItemWithoutDuplication, deleteItem, addedItemIds })
 
   return (
     <TreeDataContext.Provider
