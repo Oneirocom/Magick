@@ -17,7 +17,6 @@ import styles from './menu.module.css'
 
 import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
-import { ComingSoon } from './ComingSoon'
 import { ContextMenu } from './ContextMenu'
 import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
 
@@ -108,7 +107,6 @@ export function NewSidebar(DrawerProps): JSX.Element {
       <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
       <Divider sx={{ marginY: 2 }} />
       <FileTree currentTab={currentTab} />
-      <ComingSoon />
 
       <ContextMenu />
 
@@ -117,8 +115,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
           <AutoAwesomeIcon sx={{ mr: 1 }} />
           <Typography variant="body1">MP</Typography>
         </div>
-        <BorderLinearProgress variant="determinate" value={50} />
-        <p className={styles.creditCount}>300/500 monthly MP</p>
+        <BorderLinearProgress variant="determinate" value={100} />
+        <p className={styles.creditCount}><span style={{ fontSize: '2rem', position: 'relative', top: 3 }}>&#8734;</span> monthly MP</p>
       </div>
     </div>
   )
