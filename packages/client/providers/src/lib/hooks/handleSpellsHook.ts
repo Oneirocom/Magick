@@ -49,7 +49,7 @@ export const handleSpellsHook = ({
     toDelete.forEach(id => deleteItem(id))
 
     // Adding spells without duplicates
-    spells.forEach((spell, index) => {
+    spells.forEach(spell => {
       const type = spell?.type || 'spell'
       addNewItemWithoutDuplication(spell.id, 6, spell.name, type)
     })

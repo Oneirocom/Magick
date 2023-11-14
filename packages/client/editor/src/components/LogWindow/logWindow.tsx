@@ -5,15 +5,12 @@ import ReactJson from 'react-json-view'
 import AutoSizer from "react-virtualized-auto-sizer";
 import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state";
 
-type Log = {
+export type Log = {
   type: string;
   timestamp: string;
   message: string;
   messageType: string;
 };
-interface Props {
-  logs: Array<Log>;
-}
 
 const LIST_ITEM_HEIGHT = 25;
 
@@ -48,12 +45,11 @@ const LogHeader = ({ showSpellLogs, showLogLogs, setShowLogLogs, setShowSpellLog
 const LogMessage = ({ log, style, onExpandCollapse }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isRefAvailable, setRefAvailable] = useState(false);
-  const [listenerSetUp, setListenerSetUp] = useState(false);
   const containerRef = useRef(null);
   const expandRef = useRef(null);
   const isExpandedRef = useRef(isExpanded);
 
-  // const timestamp = format(new Date(log.timestamp), 'MMM-dd-yy-HH:mm')
+  const timestamp = format(new Date(log.timestamp), 'MMM-dd-yy-HH:mm')
 
   useEffect(() => {
     isExpandedRef.current = isExpanded;
@@ -90,7 +86,7 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
   return (
     <div className="flex flex-col justify-between p-1 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
       <div className="flex flex-row justify-between w-full items-center gap-5 " onClick={() => setIsExpanded(!isExpanded)}>
-        {/* <span className="text-md text-[#328597] whitespace-nowrap">{timestamp}</span> */}
+        <span className="text-md text-[#328597] whitespace-nowrap">{timestamp}</span>
         <span className="text-md text-white break-all flex-grow truncate">{log.message}</span>
         <div>
           {isExpanded ? (

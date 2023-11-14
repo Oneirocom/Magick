@@ -1,6 +1,5 @@
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
-import { Node, Edge, NodeChange, EdgeChange, Connection } from 'reactflow'
 
 import { behaveToFlow } from '../../utils/transformers/behaveToFlow.js'
 import { flowToBehave } from '../../utils/transformers/flowToBehave.js'
@@ -17,12 +16,11 @@ import {
   onNodesChange,
   onConnect,
 } from 'client/state'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { debounce } from 'lodash'
-import { CollectionsBookmarkOutlined } from '@mui/icons-material'
 
 export const fetchBehaviorGraphJson = async (url: string) =>
-  // eslint-disable-next-line unicorn/no-await-expression-member
+  // @eslint-ignore
   (await (await fetch(url)).json()) as GraphJSON
 
 /**

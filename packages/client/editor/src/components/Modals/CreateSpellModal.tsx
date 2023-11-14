@@ -1,5 +1,4 @@
 import Modal from '../Modal/Modal'
-import { ConsolePlugin, GraphData } from 'shared/core'
 import css from './createSpellModal.module.css'
 import { getTemplates } from 'client/core'
 import { useSnackbar } from 'notistack'
@@ -43,7 +42,7 @@ const customConfig = {
   length: 2,
 }
 
-const CreateSpellModal = ({ closeModal }) => {
+const CreateSpellModal = () => {
   const config = useConfig()
   const { openTab } = useTabLayout()
 
@@ -51,7 +50,7 @@ const CreateSpellModal = ({ closeModal }) => {
     getTemplates().spells[0] as Template
   )
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [, setLoading] = useState<boolean>(false)
   const { enqueueSnackbar } = useSnackbar()
   const [newSpell] = spellApi.useNewSpellMutation()
   const [spellExists] = spellApi.useLazyGetSpellQuery()

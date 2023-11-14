@@ -7,7 +7,6 @@
 import checkPermissions from 'feathers-permissions'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import type { Application } from '../../declarations'
-import { checkForSpellInManager } from '../../hooks/spellmanagerHooks'
 import { jsonResolver } from '../utils'
 import { SpellService, getOptions } from './spells.class'
 import {

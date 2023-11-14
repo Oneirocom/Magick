@@ -1,9 +1,8 @@
-import { GraphJSON, IRegistry } from '@magickml/behave-graph';
-import React, { useCallback, useEffect } from 'react';
+import { IRegistry } from '@magickml/behave-graph';
+import React from 'react';
 import { Background, BackgroundVariant, ReactFlow } from 'reactflow';
 
 import CustomControls from './Controls.js';
-import { Examples } from './modals/LoadModal.js';
 import { NodePicker } from './NodePicker.js';
 import { useNodeSpecJson } from '../../hooks/react-flow/useNodeSpecJson.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
@@ -51,7 +50,6 @@ export const Flow: React.FC<FlowProps> = ({
     handlePaneContextMenu,
     nodePickerVisibility,
     handleAddNode,
-    lastConnectStart,
     closeNodePicker,
     nodePickFilters
   } = useFlowHandlers({
