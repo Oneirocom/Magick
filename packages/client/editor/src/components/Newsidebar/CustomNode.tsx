@@ -165,6 +165,7 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleRenameStart = () => {
+    if (props?.node?.fileType === 'folder') return
     setIsRenaming(true)
     setContextMenuOpen(false)
   }
@@ -221,7 +222,6 @@ export const CustomNode: React.FC<Props> = props => {
   // useEffect(() => {
   //   setIsRenaming(false)
   // }, [props.node, newName])
-
   return (
     <div
       className={`tree-node ${styles.root}`}

@@ -34,7 +34,7 @@ export const FileTree = ({ currentTab }) => {
 
   return (<div className={`${styles.files} px-4`} >
     <CssBaseline />
-    <button onClick={onCreateSpell} className="p-4 w-full mb-4">+ Create spell</button>
+    <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>
     <DndProvider backend={MultiBackend} options={getBackendOptions()}>
       <div>
         <Tree
