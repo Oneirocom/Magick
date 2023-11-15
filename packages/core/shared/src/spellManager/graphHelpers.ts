@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { GraphData } from '../types'
 
 /**
@@ -8,7 +8,11 @@ import { GraphData } from '../types'
  */
 export function extractModuleInputKeys(data: GraphData): string[] {
   return Object.values(data.nodes).reduce((inputKeys: string[], node) => {
-    if (node.name === 'Input' && node.data.name && !node.data.useDefault) {
+    if (
+      (node.name === 'Input' || node.name === 'Socket Input') &&
+      node.data.name &&
+      !node.data.useDefault
+    ) {
       inputKeys.push(node.data.name as string)
     }
     return inputKeys

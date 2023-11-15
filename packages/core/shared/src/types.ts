@@ -151,6 +151,7 @@ export type ControlData = {
 }
 
 export class MagickEditor extends NodeEditor<EventsTypes> {
+  declare tabMap: Record<string, MagickEditor>
   declare getTask: (nodeId: number) => Task
   declare getTasks: () => TaskStore
   declare currentSpell: SpellInterface
@@ -328,6 +329,7 @@ export type DataSocketType = {
   connectionType: ConnectionType
   socketType: SocketType
   useSocketName: boolean
+  hide?: boolean
 }
 
 export type MagicNodeInput = Input & { socketType: DataSocketType }
@@ -674,6 +676,9 @@ export interface ModuleOptions {
   nodeType: 'input' | 'output' | 'triggerIn' | 'triggerOut' | 'module'
   socket?: Socket
   skip?: boolean
+  /**
+   * Hides the socket from the parent node
+   */
   hide?: boolean
 }
 
