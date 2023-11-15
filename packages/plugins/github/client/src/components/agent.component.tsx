@@ -44,7 +44,7 @@ export const GithubAgentWindow: FC<any> = props => {
             }}
             style={{ marginRight: '10px', cursor: 'pointer' }}
           >
-            Edit
+            Configure
           </button>
           <Switch
             label={null}
