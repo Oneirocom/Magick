@@ -206,7 +206,7 @@ const AgentDetails = ({
               backgroundColor: 'var(--primary)',
             }}
           >
-            Update
+            Save changes
           </Button>
         </div>
       </div>
