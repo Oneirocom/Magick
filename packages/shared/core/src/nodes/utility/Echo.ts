@@ -13,6 +13,7 @@ import {
   MagickWorkerOutputs,
   WorkerData,
 } from '../../types'
+import { InputControl } from '../../dataControls/InputControl'
 
 /**
  * The return type of the worker function.
@@ -51,6 +52,15 @@ export class Echo extends MagickComponent<Promise<WorkerReturn>> {
     const dataInput = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const dataOutput = new Rete.Output('trigger', 'Trigger', triggerSocket)
     const outp = new Rete.Output('output', 'Output', anySocket)
+
+    const nameControl = new InputControl({
+      dataKey: 'name',
+      name: 'Name',
+      icon: 'moon',
+      tooltip: 'Enter name',
+    })
+
+    node.inspector.add(nameControl)
 
     return node
       .addInput(dataInput)
