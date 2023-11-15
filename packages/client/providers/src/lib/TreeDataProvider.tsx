@@ -1,11 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { NodeModel } from '@minoru/react-dnd-treeview'
-import { useSnackbar } from 'notistack'
-import { API_ROOT_URL } from 'shared/config'
-import { useSelector } from 'react-redux'
-import SampleData from './data/sampleData.json'
-import { useConfig } from './ConfigProvider'
-import { useFeathers } from './FeathersProvider'
 import { useGetDocumentsQuery, useGetSpellsQuery } from 'client/state'
 
 export interface TreeNode extends NodeModel {
@@ -54,7 +48,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   const { data: fetchedSpells } = useGetSpellsQuery({})
   const { data: fetchedDocuments } = useGetDocumentsQuery({})
 
-  const [treeData, setTreeData] = useState<TreeNode[]>(SampleData)
+  const [treeData, setTreeData] = useState<TreeNode[]>([])
   const [documents, setDocuments] = useState<Document[] | null>(null)
   const [spells, setSpells] = useState<Spell[] | null>(null)
 
@@ -82,10 +76,17 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     setTreeData(prevData => {
       const updatedData = prevData.slice() // Create a copy of the existing data array
 
+      console.log('ADDING SPELL', newItem)
+
       const parentIndex = updatedData.findIndex(item => item.id === parent)
 
       if (parentIndex !== -1) {
         updatedData.splice(parentIndex + 1, 0, newItem) // Insert new item after parent
+      }
+
+      // handle index 0
+      if (parentIndex === -1) {
+        updatedData.splice(0, 0, newItem) // Insert new item at the beginning
       }
 
       return updatedData // Return the updated data
@@ -122,27 +123,27 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
 
   }, [fetchedSpells])
 
-  useEffect(() => {
-    if (!fetchedDocuments) return
-    if (!fetchedDocuments.data.length) return
+  // useEffect(() => {
+  //   if (!fetchedDocuments) return
+  //   if (!fetchedDocuments.data.length) return
 
-    setDocuments(fetchedDocuments.data)
+  //   setDocuments(fetchedDocuments.data)
 
-  }, [fetchedDocuments])
+  // }, [fetchedDocuments])
 
   // process documents
-  useEffect(() => {
-    if (!documents || !documents.length) return
+  // useEffect(() => {
+  //   if (!documents || !documents.length) return
 
-    documents.forEach((doc, index) => {
-      addNewItemWithoutDuplication(
-        doc?.id,
-        3,
-        '',
-        'txt'
-      )
-    })
-  }, [documents])
+  //   documents.forEach((doc, index) => {
+  //     addNewItemWithoutDuplication(
+  //       doc?.id,
+  //       3,
+  //       '',
+  //       'txt'
+  //     )
+  //   })
+  // }, [documents])
 
   // handle spells
   useEffect(() => {
@@ -159,7 +160,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     // Adding spells without duplicates
     spells.forEach((spell, index) => {
       const type = spell?.type || 'spell'
-      addNewItemWithoutDuplication(spell.id, 6, spell.name, type)
+      addNewItemWithoutDuplication(spell.id, 0, spell.name, type)
     })
   }, [documents, spells, addedItemIds])
 
