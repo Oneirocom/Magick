@@ -5,7 +5,6 @@ import { PubSubContext, PubSubData, PubSubEvents } from 'shared/core'
 import PubSub from 'pubsub-js'
 import { createContext, useContext, useEffect } from 'react'
 import { useFeathers } from './FeathersProvider'
-import { useHotkeys } from 'react-hotkeys-hook'
 
 // Create new context for PubSub
 const Context = createContext<PubSubContext>(undefined!)
@@ -72,7 +71,7 @@ export const PubSubProvider = ({ children }) => {
   // Subscribe function
   const subscribe = (
     event: string,
-    callback: PubSubJS.SubscriptionListener<PubSubData>
+    callback: PubSubJS.SubscriptionListener<any>
   ): (() => void) => {
     const token = PubSub.subscribe(event, callback)
 
@@ -98,9 +97,11 @@ export const PubSubProvider = ({ children }) => {
       client.service('agents').command(data)
     })
 
+
     return () => {
       unsubscribeRun()
       unsubscribeCommand()
+
     }
   }, [client])
 

@@ -52,7 +52,7 @@ ul ul ul li {
 }
 
 .hideMenu {
-  display: flex;
+  display: none;
   flex-flow: column;
   height: 100%;
   width: 100%;
