@@ -89,10 +89,9 @@ ul ul ul li {
   content: '';
   position: absolute;
   top: 0;
-  left: 5px;
+  left: -25px;
   right: 0;
   bottom: 0;
   background-color: var(--slate-30);
   pointer-events: none;
-  width: 200%;
 }
