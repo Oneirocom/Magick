@@ -56,6 +56,10 @@ const VariableModal = ({
               defaultValue={state.discord_api_key}
               onChange={handleOnChange}
             />
+            <br />
+            <p>Get your api key here: <a href="https://discord.com/developers/applications">Discord developer portal</a></p>
+            <br />
+            Here is a video to help you out: <a href="https://youtu.be/KCV2Gwkukuw?t=31">How to make your discord API key</a>
           </div>
         </div>
       </Modal>
