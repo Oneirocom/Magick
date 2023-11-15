@@ -98,8 +98,12 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    */
   const saveSpell = async () => {
     console.log('Saving!')
+    if (!spellRef.current) return
+    const type = spellRef.current.type || 'spell'
+    let graph;
+
     const currentSpell = spellRef.current
-    const graph = serialize() as GraphData
+    graph = type === 'spell' ? serialize() as GraphData : currentSpell.graph
     if (!currentSpell) return
 
     const updatedSpell = {
@@ -107,6 +111,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       graph,
       hash: md5(JSON.stringify(graph)),
     }
+
+    if (!updatedSpell.type) updatedSpell.type = type
 
     const response = await saveSpellMutation({
       spell: updatedSpell,
