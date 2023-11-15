@@ -76,8 +76,6 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     setTreeData(prevData => {
       const updatedData = prevData.slice() // Create a copy of the existing data array
 
-      console.log('ADDING SPELL', newItem)
-
       const parentIndex = updatedData.findIndex(item => item.id === parent)
 
       if (parentIndex !== -1) {
