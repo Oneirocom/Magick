@@ -104,7 +104,7 @@ export const DiscordAgentWindow: FC<any> = props => {
             }}
             style={{ marginRight: '10px', cursor: 'pointer' }}
           >
-            Edit
+            Configure
           </button>
           <Switch
             label={null}
