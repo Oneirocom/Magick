@@ -5,7 +5,7 @@
 html,
 body {
   background-color: var(--dark-0);
-  color: var(--dark-4);
+  color: var(---rich-blue);
   overflow: hidden;
   padding: 0;
   margin: 0;
@@ -191,7 +191,7 @@ button.primary {
 }
 
 button.list {
-  background-color: var(--dark-1);
+  background-color: var(--midnight);
   padding: 3px;
   padding-left: var(--small);
   padding-right: var(--small);
@@ -225,7 +225,7 @@ button.disabled {
   box-shadow: none;
   pointer-events: none;
   opacity: 0.5;
-  background-color: var(--dark-1);
+  background-color: var(--midnight);
 }
 
 .node.selected button {
@@ -258,7 +258,7 @@ button.disabled {
 
 .flexlayout__tabset_tabbar_inner_tab_container_top {
   border-top: none;
-  background-color: var(--dark-1);
+  background-color: var(--midnight);
 }
 
 .flexlayout__tabset_tabbar_outer_top {
@@ -275,7 +275,7 @@ button.disabled {
 }
 
 .flexlayout__tab_toolbar {
-  background-color: var(--dark-1);
+  background-color: var(--midnight);
 }
 
 .flexlayout__tab_button {
@@ -310,23 +310,22 @@ button.disabled {
 
 input {
   box-sizing: border-box;
-  padding: var(--extraSmall);
+  padding: var(--small);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--dark-1);
+  background-color: var(--midnight);
   padding-left: var(--small);
   padding-right: var(--small);
   color: #fff;
   border-radius: 4px;
   cursor: default;
-  border: 1px solid var(--dark-4);
+  border: 1px solid var(---rich-blue);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
-  font-size: 11px;
-  height: var(--c4);
+  font-size: 16px;
 }
 
 input:focus-visible {
-  outline: 1px solid var(--primary);
+  outline: 1px solid var(--primary-dark);
 }
 
 .App {
@@ -391,7 +390,7 @@ input:focus-visible {
   margin-bottom: 0.5em;
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
 
-  color: var(--dark-4);
+  color: var(---rich-blue);
 }
 
 .select {
@@ -407,7 +406,7 @@ input:focus-visible {
   box-sizing: border-box;
   padding: var(--extraSmall);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--dark-1);
+  background-color: var(--midnight);
   color: #fff;
   border-radius: 4px;
   cursor: default;
@@ -559,8 +558,8 @@ div.item {
 }
 
 .flexlayout__layout {
-  background-color: var(--dark-1) !important;
-  color: var(--dark-4);
+  background-color: var(--midnight) !important;
+  color: var(---rich-blue);
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
 }
 
