@@ -21,6 +21,7 @@ import { FileUpload } from '@mui/icons-material'
 
 import behaveGraph from '../../graphs/graph.json'
 import { FEATURE_FLAGS } from 'shared/config'
+import { useModal } from '../../contexts/ModalProvider'
 
 export type Template = {
   name?: string
@@ -45,6 +46,7 @@ const customConfig = {
 const CreateSpellModal = () => {
   const config = useConfig()
   const { openTab } = useTabLayout()
+  const { closeModal } = useModal()
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     getTemplates().spells[0] as Template
@@ -130,7 +132,7 @@ const CreateSpellModal = () => {
       }
     })
 
-    // closeModal()
+    closeModal()
     setLoading(false)
   }
 
