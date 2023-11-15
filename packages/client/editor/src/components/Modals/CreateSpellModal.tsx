@@ -205,7 +205,7 @@ const CreateSpellModal = () => {
       <div
         style={{
           width: 'var(--c62)',
-          backgroundColor: 'var(--dark-2)',
+          backgroundColor: 'var(--foreground-color',
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',

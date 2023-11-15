@@ -60,8 +60,8 @@ const outputSockets = [
 const DiscordPlugin = new ClientPlugin({
   name: 'DiscordPlugin',
   nodes: getNodes(),
-  agentComponents: [DiscordAgentWindow],
-  spellTemplates: [DiscordSpellTemplate],
+  // agentComponents: [DiscordAgentWindow],
+  // spellTemplates: [DiscordSpellTemplate],
   inputTypes: [
     { name: 'Discord (Voice)', sockets: inputSockets },
     { name: 'Discord (Text)', sockets: inputSockets },
