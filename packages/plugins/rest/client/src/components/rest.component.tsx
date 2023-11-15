@@ -9,8 +9,13 @@ import { debounce } from 'lodash'
 import { API_ROOT_URL } from 'shared/config'
 import { Tooltip } from '@mui/material'
 
+function removeTrailingSlash(url) {
+  return url.endsWith('/') ? url.slice(0, -1) : url;
+}
+
+
 const fetchGetExample = (selectedAgentData, content) => `
-    fetch("${API_ROOT_URL}/api/${selectedAgentData.id
+    fetch("${removeTrailingSlash(API_ROOT_URL)}/api/${selectedAgentData.id
   }?content=${encodeURIComponent(content)}", {
     method: 'GET',
     headers: {
@@ -25,7 +30,7 @@ const fetchGetExample = (selectedAgentData, content) => `
 `
 
 const fetchDeleteExample = (selectedAgentData, content) => `
-    fetch("${API_ROOT_URL}/api/${selectedAgentData.id
+    fetch("${removeTrailingSlash(API_ROOT_URL)}/api/${selectedAgentData.id
   }?content=${encodeURIComponent(content)}", {
     method: 'GET',
     headers: {
@@ -40,7 +45,7 @@ const fetchDeleteExample = (selectedAgentData, content) => `
 `
 
 const fetchPutExample = (selectedAgentData, content) => `
-    fetch("${API_ROOT_URL}/api/${selectedAgentData.id}", {
+    fetch("${removeTrailingSlash(API_ROOT_URL)}/api/${selectedAgentData.id}", {
     method: 'PUT',
     headers: {
         'Authorization': ${selectedAgentData.data?.rest_api_key},
@@ -56,7 +61,7 @@ const fetchPutExample = (selectedAgentData, content) => `
 `
 
 const fetchPostExample = (selectedAgentData, content) => `
-    fetch("${API_ROOT_URL}/api", {
+    fetch("${removeTrailingSlash(API_ROOT_URL)}/api", {
     method: 'POST',
     headers: {
         'Authorization': ${selectedAgentData.data?.rest_api_key},
@@ -197,7 +202,7 @@ export const RestAgentWindow: FC<any> = props => {
                   </span>
                 </Tooltip>
                 <Input
-                  value={`${API_ROOT_URL}/api`}
+                  value={`${removeTrailingSlash(API_ROOT_URL)}/api`}
                   readOnly
                   className="modal-element"
                   style={{
