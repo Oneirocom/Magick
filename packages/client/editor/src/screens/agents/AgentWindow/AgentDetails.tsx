@@ -148,7 +148,7 @@ const AgentDetails = ({
   }
 
   return (
-    <div style={{ overflowY: 'scroll', height: '100vh' }}>
+    <div style={{ overflowY: 'scroll', height: '100vh', padding: '40px 100px' }}>
       <div className={styles.agentDetailsContainer}>
         <div className={styles.agentDescription}>
           {editMode ? (
@@ -316,6 +316,7 @@ const AgentDetails = ({
           )
         })}
       </div>
+      <div style={{ height: 50 }}></div>
     </div>
   )
 }
