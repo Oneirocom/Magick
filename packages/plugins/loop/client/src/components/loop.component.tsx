@@ -88,7 +88,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
             }}
             style={{ marginRight: '10px', cursor: 'pointer' }}
           >
-            Edit
+            Configure
           </button>
           <Switch
             checked={checked}
