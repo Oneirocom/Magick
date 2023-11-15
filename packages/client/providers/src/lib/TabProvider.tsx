@@ -45,6 +45,7 @@ export const useTabLayout = () => useContext(Context)
 
 export const TabProvider = ({ children }) => {
   const { theme, setTheme } = useDockviewTheme()
+  const { subscribe, events } = usePubSub()
   const [api, setApi] = useState<DockviewApi | undefined>()
   const dispatch = useDispatch()
   const pubSub = usePubSub()
@@ -85,7 +86,26 @@ export const TabProvider = ({ children }) => {
 
       setLayout(layout)
     })
+
+    const unsubscribeOpenTab = subscribe(events.OPEN_TAB, (event, data) => {
+      if (!data) return
+      openTab({
+        id: data.name,
+        name: data.name,
+        spellName: data.name,
+        type: 'spell',
+        params: {
+          spellId: data.spellId,
+        }
+      })
+    })
+
+    return () => {
+      unsubscribeOpenTab()
+    }
+
   }, [api])
+
 
   const isTabOpen = (id: string) => {
     if (!api) return false
@@ -122,6 +142,8 @@ export const TabProvider = ({ children }) => {
       ..._tab,
       layoutJson: getWorkspaceLayout(_tab?.workspace),
     }
+
+    console.log('OPENING TAB', tab)
 
     if (isTabOpen(tab.name)) {
       setActiveTab(tab.name)
