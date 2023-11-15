@@ -1,6 +1,6 @@
 .template-panel:hover {
   /* background-color: var(--dark-3); */
-  border: 1px solid var(--primary);
+  border: 1px solid var(--primary-dark);
 }
 .template-container {
   display: flex;
@@ -25,8 +25,8 @@
 }
 
 .template-container.selected p {
-  background-color: var(--primary);
+  background-color: var(--primary-dark);
 }
 .template-container.selected .template-panel {
-  border: 1px solid var(--primary);
+  border: 1px solid var(--primary-dark);
 }

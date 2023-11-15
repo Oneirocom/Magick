@@ -43,8 +43,6 @@ const GraphWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) 
 
   if (!spell?.data) return null
 
-  console.log('SPELL', spell)
-
   return (<div style={{ height, width }} ref={parentRef}>
     <Flow
       registry={registry}

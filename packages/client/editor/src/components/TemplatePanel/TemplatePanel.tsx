@@ -42,7 +42,7 @@ const TemplatePanel = ({
         style={{
           width: 'var(--c18)',
           height: 'var(--c18)',
-          backgroundColor: 'var(--dark-3)',
+          backgroundColor: 'var(--background-color)',
           backgroundImage: `url(${template.bg})`,
         }}
         className={css['template-panel']}
