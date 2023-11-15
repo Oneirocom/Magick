@@ -199,14 +199,14 @@ const NewMenuBar = props => {
           onClick: onRedo,
           hotKey: 'alt+y, ctrl+y, alt+shift+z, ctrl+shift+z',
         },
-        copy: {
-          onClick: onMultiSelectCopy,
-          hotKey: 'alt+c, ctrl+c',
-        },
-        paste: {
-          onClick: onMultiSelectPaste,
-          hotKey: 'alt+v, ctrl+v',
-        },
+        // copy: {
+        //   onClick: onMultiSelectCopy,
+        //   hotKey: 'alt+c, ctrl+c',
+        // },
+        // paste: {
+        //   onClick: onMultiSelectPaste,
+        //   hotKey: 'alt+v, ctrl+v',
+        // },
         delete: {
           onClick: onDelete,
           hotKey: 'delete',
@@ -404,6 +404,19 @@ const NewMenuBar = props => {
         MenuListProps={{ sx: { py: 0 } }}
         variant="menu"
       >
+        <MenuItem
+          onClick={e => {
+            window.parent.postMessage({ type: 'redirect', href: '/' }, '*')
+            handleMenuClose()
+          }}
+          sx={{
+            '&:hover, &:focus': {
+              background: '#49545A',
+              outline: 'none',
+            },
+          }}
+          divider={true}
+        >Home</MenuItem>
         {Object.keys(menuBarItems).map((item, index) => (
           <NestedMenu
             key={index}
@@ -438,7 +451,7 @@ const NewMenuBar = props => {
               (subMenuKey, subIndex) => {
                 const hotKeyLabel = menuBarItems[item]
                   ? menuBarItems[item].items[subMenuKey].hotKey
-                  : ''
+                  : null
                 // add useHotkeys for each sub-menu item
                 if (hotKeyLabel) {
                   useHotkeys(
