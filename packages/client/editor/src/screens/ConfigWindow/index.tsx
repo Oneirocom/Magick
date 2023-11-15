@@ -33,7 +33,7 @@ const ConfigWindow = () => {
 
   // todo make this selected agent stuff internal to the component
   return (
-    <div style={{ padding: '50px 200px' }}>
+    <div>
       <AgentDetails selectedAgentData={selectedAgent} onLoadEnables={pluginList} setSelectedAgentData={setSelectedAgent} />
     </div>
   )
