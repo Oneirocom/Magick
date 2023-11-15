@@ -81,9 +81,8 @@ export class SpellComponent extends MagickComponent<
       const event = pubsub.events.OPEN_TAB
       pubsub.publish(event, {
         type: 'spell',
-        name:
-          node.data.spellId + '-' + encodeURIComponent(btoa(node.data.name)),
-        openNew: false,
+        name: node.data.spell,
+        spellId: node.data.spellId,
       })
     }
   }
