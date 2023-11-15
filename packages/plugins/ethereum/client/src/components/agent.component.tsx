@@ -79,7 +79,7 @@ export const EthereumAgentWindow: FC<PluginProps> = ({
             }}
             style={{ marginRight: '10px', cursor: 'pointer' }}
           >
-            Edit
+            Configure
           </button>
           <Switch
             checked={checked}
