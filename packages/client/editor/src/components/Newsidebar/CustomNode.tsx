@@ -225,6 +225,7 @@ export const CustomNode: React.FC<Props> = props => {
       className={`tree-node relative ${styles.root} ${setClassSelectedFile()}`}
       style={{ paddingInlineStart: indent, cursor: 'pointer', width: '200%' }}
       onClick={handleClick}
+      onContextMenu={handleContextMenu}
     >
       {props.node.droppable && <div
         className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''}`}
@@ -258,7 +259,6 @@ export const CustomNode: React.FC<Props> = props => {
               whiteSpace: 'nowrap',
             }}
             onClick={handleClick}
-            onContextMenu={handleContextMenu}
             onDoubleClick={handleRenameStart}
           >
             {props.node.text}
