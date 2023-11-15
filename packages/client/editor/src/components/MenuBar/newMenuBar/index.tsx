@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { usePubSub } from '@magickml/providers'
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useSelector } from 'react-redux'
 import { Menu, MenuItem, IconButton } from '@mui/material'
@@ -11,8 +11,28 @@ import { NestedMenuItem } from 'mui-nested-menu'
 import {
   RootState,
   Tab,
+  rootApi,
+  useAppDispatch
 } from 'client/state'
 import { useModal } from '../../../contexts/ModalProvider'
+import { enqueueSnackbar } from 'notistack'
+import axios from 'axios'
+import { SpellInterface } from 'shared/core'
+import { PRODUCTION } from 'shared/config'
+
+function toTitleCase(str) {
+  return str
+    .split('_') // Split the string by underscores
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+    .join(' '); // Join the words with a space
+}
+
+type DataState = {
+  agents: any[]
+  spells: SpellInterface[]
+  documents: any[]
+}
+
 
 /**
  * MenuBar component
@@ -20,12 +40,22 @@ import { useModal } from '../../../contexts/ModalProvider'
  * @returns {JSX.Element}
  */
 const NewMenuBar = props => {
+  const dispatch = useAppDispatch()
   const { publish, events } = usePubSub()
   const [snapEnabled, setSnapEnabled] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { openModal } = useModal()
+  const hiddenFileInput = useRef<HTMLInputElement>(null)
+  const token = globalConfig?.token
+
+  const [data, setData] = useState<DataState>({
+    agents: [],
+    spells: [],
+    documents: [],
+  })
 
   const activeTabRef = useRef<Tab | null>(null)
 
@@ -105,22 +135,6 @@ const NewMenuBar = props => {
   }
 
   /**
-   * Multi-select copy handler
-   */
-  const onMultiSelectCopy = () => {
-    if (!activeTabRef.current) return
-    publish($MULTI_SELECT_COPY(activeTabRef.current.id))
-  }
-
-  /**
-   * Multi-select paste handler
-   */
-  const onMultiSelectPaste = () => {
-    if (!activeTabRef.current) return
-    publish($MULTI_SELECT_PASTE(activeTabRef.current.id))
-  }
-
-  /**
    * Delete handler
    */
   const onDelete = () => {
@@ -136,24 +150,47 @@ const NewMenuBar = props => {
     publish(TOGGLE_SNAP)
     setSnapEnabled(!snapEnabled)
   }
-  /**
-   * Toggle save handler
-   */
-  // const changeLayout = event => {
-  //   const layout: string = event.target.innerText
-  //   const formattedKey = layout
-  //     .replace(/[-_](.)/g, (_, c) => c.toUpperCase())
-  //     .replace(/\s(.)/g, (_, c) => c.toUpperCase())
-  //     .replace(/\s/g, '')
-  //     .replace(/^(.)/, (_, c) => c.toLowerCase())
 
-  //   dispatch(
-  //     changeEditorLayout({
-  //       tabId: activeTab.id,
-  //       layout: formattedKey,
-  //     })
-  //   )
-  // }
+  const loadFile = async (selectedFile, replace) => {
+    if (!token && PRODUCTION) {
+      enqueueSnackbar('You must be logged in to create a project', {
+        variant: 'error',
+      })
+      return
+    }
+    const fileReader = new FileReader()
+    fileReader.readAsText(selectedFile)
+    fileReader.onload = async event => {
+      const data = JSON.parse(event?.target?.result as string)
+
+      delete data['id']
+
+      // upload agents
+      await axios({
+        url: `${globalConfig.apiUrl}/projects?projectId=${globalConfig.projectId}`,
+        method: 'POST',
+        data: { ...data, projectId: globalConfig.projectId, replace },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      dispatch(rootApi.util.invalidateTags(['Spells', 'Agents', 'Documents']))
+    }
+  }
+
+
+  const onImportProject = () => {
+    console.log('Clicking import project')
+    hiddenFileInput.current?.click()
+  }
+
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.files) {
+      Array.from(event.target.files).forEach(loadFile)
+    }
+  }
+
 
   // Menu bar entries
   const menuBarItems = {
@@ -187,6 +224,9 @@ const NewMenuBar = props => {
           onClick: onExport,
           hotKey: 'alt+shift+e, ctrl+shift+e',
         },
+        import_project: {
+          onClick: onImportProject,
+        }
       },
     },
     edit: {
@@ -323,6 +363,7 @@ const NewMenuBar = props => {
     }
 
     return (
+
       <li
         className={`${css[topLevel ? 'menu-bar-item' : 'list-item']}`}
         onClick={onClick}
@@ -383,6 +424,14 @@ const NewMenuBar = props => {
 
   return (
     <div>
+      <input
+        id="import"
+        type="file"
+        multiple
+        ref={hiddenFileInput}
+        onChange={handleFileInputChange}
+        style={{ display: 'none' }}
+      />
       <IconButton
         onClick={handleMenuIconClick}
         style={props.style ? props.style : { borderRadius: 0 }}
@@ -495,8 +544,7 @@ const NewMenuBar = props => {
                               ●{' '}
                             </span>
                           )}
-                        {subMenuKey.replace(/_/g, ' ').charAt(0).toUpperCase() +
-                          subMenuKey.slice(1)}
+                        {toTitleCase(subMenuKey)}
                       </p>
 
                       {hotKeyLabel &&
