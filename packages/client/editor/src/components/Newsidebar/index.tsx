@@ -19,6 +19,7 @@ import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ContextMenu } from './ContextMenu'
 import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
+import { useModal } from '../../contexts/ModalProvider'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 7,
@@ -45,6 +46,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   // State to keep track of the anchor element of the menu and cursor position
 
   const config = useConfig()
+  const { openModal } = useModal()
   const [data, setData] = useState([])
   const { setAgentUpdate } = useTreeData()
 
@@ -100,15 +102,27 @@ export function NewSidebar(DrawerProps): JSX.Element {
     }
   }, [])
 
+  const onCreateSpell = () => {
+    openModal({
+      modal: 'createSpellModal',
+    })
+  }
+
   return (
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column', borderRight: '1px solid var(--deep-background-color)' }}>
       <AgentMenu data={data} />
 
       <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
       <Divider sx={{ marginY: 2 }} />
-      <FileTree currentTab={currentTab} />
+      <div className="px-4">
+        <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>
 
-      <ContextMenu />
+      </div>
+      <div className="overflow-y-scroll overflow-x-hidden pb-8">
+        <FileTree currentTab={currentTab} />
+
+        <ContextMenu />
+      </div>
 
       <div className={styles.credits}>
         <div className={styles.menuFlex}>
