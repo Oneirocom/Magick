@@ -11,6 +11,7 @@ import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRena
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
 import { Modal } from 'client/core'
 import {
+  RootState,
   spellApi,
   Tab,
 } from 'client/state'
@@ -53,10 +54,10 @@ export const CustomNode: React.FC<Props> = props => {
   const indent = props.depth * 24
   const { droppable, data }: any = props.node
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    props.onToggle(props.node.id)
-  }
+  // const handleToggle = (e: React.MouseEvent) => {
+  //   e.stopPropagation()
+  //   props.onToggle(props.node.id)
+  // }
 
   const handleClose = () => {
     setOpenConfirm(false)
@@ -206,8 +207,8 @@ export const CustomNode: React.FC<Props> = props => {
 
   const setClassSelectedFile = () => {
     if (props.currentTab?.id === 'Documents') return
-
-    return props.currentTab?.id === props.node.text ? styles.isSelected : ''
+    const style = props.currentTab?.id === props.node.text ? styles.isSelected : ''
+    return style
   }
 
   useEffect(() => {
@@ -219,14 +220,11 @@ export const CustomNode: React.FC<Props> = props => {
     }
   }, [isRenaming])
 
-  // useEffect(() => {
-  //   setIsRenaming(false)
-  // }, [props.node, newName])
   return (
     <div
-      className={`tree-node ${styles.root}`}
+      className={`tree-node relative ${styles.root} ${setClassSelectedFile()}`}
       style={{ paddingInlineStart: indent, cursor: 'pointer', width: '200%' }}
-      onClick={handleToggle}
+      onClick={handleClick}
     >
       {props.node.droppable && <div
         className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''}`}
@@ -262,7 +260,6 @@ export const CustomNode: React.FC<Props> = props => {
             onClick={handleClick}
             onContextMenu={handleContextMenu}
             onDoubleClick={handleRenameStart}
-            className={setClassSelectedFile()}
           >
             {props.node.text}
           </Typography>
