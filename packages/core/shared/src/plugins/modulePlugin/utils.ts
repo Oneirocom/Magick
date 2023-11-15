@@ -147,13 +147,13 @@ const addSockets = ({
         socketKey: socketKey,
         connectionType: connectionType,
         useSocketName,
+        hide: socket.hide,
         socketType: socketNameMap[socket.name as SocketNameType],
       })
 
-      node[addMethod](
-        new Socket(socketKey, name, socket, taskType === 'option') as Input &
-          Output
-      )
+      if (newSocket.socket.hide) return
+
+      node[addMethod](new Socket(socketKey, name, socket) as Input & Output)
       if (connectionType === 'output') {
         node.inspector.component.task.outputs[socketKey] = taskType
 
