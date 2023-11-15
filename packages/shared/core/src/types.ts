@@ -265,10 +265,7 @@ export type PubSubEvents = {
 export interface PubSubContext {
   publish: (event: string, data?: PubSubData) => boolean
   // eslint-disable-next-line @typescript-eslint/ban-types
-  subscribe(
-    event: string,
-    func: PubSubJS.SubscriptionListener<PubSubData>
-  ): () => void
+  subscribe(event: string, func: PubSubJS.SubscriptionListener<any>): () => void
   PubSub: typeof PubSub
   events: PubSubEvents
 }
