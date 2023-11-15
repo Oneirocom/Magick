@@ -67,7 +67,6 @@ export const useBehaveGraphFlow = ({
   // Debounce because changes stream in.
   const debouncedUpdate = useCallback(
     debounce(specJson => {
-      console.log('SPEC JSON', specJson)
       const graphJson = flowToBehave(nodes, edges, specJson)
       setStoredGraphJson(graphJson)
     }, 1000),
