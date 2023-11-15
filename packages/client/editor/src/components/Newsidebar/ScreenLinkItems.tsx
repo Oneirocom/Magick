@@ -65,6 +65,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
     <List
       sx={{
         padding: 0,
+        height: '100%',
       }}
     >
       {DrawerItems.map((_item, index) => {
