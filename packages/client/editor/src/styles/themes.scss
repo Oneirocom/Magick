@@ -112,8 +112,9 @@
       }
 
       .tab.inactive-tab {
-        background-color: var(--deep-background-color) !important;
+        background-color: var(--midnight) !important;
         color: var(--inactive-font-color) !important;
+        border-bottom: 1px solid var(--deep-background-color) !important;
       }
     }
 
