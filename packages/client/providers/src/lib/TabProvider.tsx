@@ -3,7 +3,7 @@ import {
   DockviewApi,
   SerializedDockview,
 } from 'dockview'
-import { usePubSub } from '@magickml/providers'
+import { useConfig, usePubSub } from '@magickml/providers'
 import { getWorkspaceLayout } from 'client/layouts'
 import { setCurrentTab, useDockviewTheme } from 'client/state'
 import { useDispatch } from 'react-redux'
@@ -35,8 +35,6 @@ type DocviewContext = {
   isTabOpen: (id: string) => boolean
 }
 
-const TAB_LAYOUT_KEY = 'tab-layout'
-
 // Creating the context
 const Context = createContext<DocviewContext>(undefined!)
 
@@ -46,9 +44,11 @@ export const useTabLayout = () => useContext(Context)
 export const TabProvider = ({ children }) => {
   const { theme, setTheme } = useDockviewTheme()
   const { subscribe, events } = usePubSub()
+  const config = useConfig()
   const [api, setApi] = useState<DockviewApi | undefined>()
   const dispatch = useDispatch()
-  const pubSub = usePubSub()
+
+  const TAB_LAYOUT_KEY = `${config.projectId}/tab-layout`
 
   const getLayout = () => {
     const layout = localStorage.getItem(TAB_LAYOUT_KEY)
