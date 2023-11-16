@@ -112,7 +112,10 @@ export function NewSidebar(DrawerProps): JSX.Element {
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column', borderRight: '1px solid var(--deep-background-color)' }}>
       <AgentMenu data={data} />
 
-      <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
+      <div className={`${!isAPIKeysSet ? "flex pb-4" : ""}`}>
+        <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
+      </div>
+
       <Divider sx={{ marginY: 2 }} />
       <div className="px-4">
         <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>

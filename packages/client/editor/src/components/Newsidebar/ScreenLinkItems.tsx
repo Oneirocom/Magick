@@ -8,6 +8,7 @@ import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
 import { SetAPIKeys } from "client/core"
 import React from "react";
+import { ListItem } from "@mui/material";
 
 export const drawerTooltipText = {
   spells: 'Create and manage spell node graphs for agents to use. ',
@@ -66,7 +67,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       sx={{
         padding: 0,
         // todo - make this properly autosize
-        height: '400px',
       }}
     >
       {DrawerItems.map((_item, index) => {
@@ -95,6 +95,8 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
           return _item as JSX.Element
         }
       })}
-      {!isAPIKeysSet && <SetAPIKeys />}
+      <ListItem key="set-api-keys" disablePadding sx={{ display: 'block' }}>
+        {!isAPIKeysSet && <SetAPIKeys />}
+      </ListItem>
     </List>)
 }

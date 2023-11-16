@@ -25,26 +25,23 @@ export const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({ currentTab
       divider = false
     }
     return (
-      <div key={item.path}>
-        {divider && <Divider />}
-        <DrawerItem
-          key={item.path}
-          active={currentTab?.id === item.text}
-          Icon={item.icon}
+      <DrawerItem
+        key={item.path}
+        active={currentTab?.id === item.text}
+        Icon={item.icon}
 
-          onClick={() => {
-            openTab({
-              name: item.text,
-              type: item.text,
-              switchActive: true,
-              id: item.text,
-            })
-          }}
-          text={item.text}
-          tooltip="Avatar and Tasks Tooltip"
-          tooltipText={item.tooltip}
-        />
-      </div>
+        onClick={() => {
+          openTab({
+            name: item.text,
+            type: item.text,
+            switchActive: true,
+            id: item.text,
+          })
+        }}
+        text={item.text}
+        tooltip="Avatar and Tasks Tooltip"
+        tooltipText={item.tooltip}
+      />
     )
   })
 }
