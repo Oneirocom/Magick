@@ -116,8 +116,6 @@ const addSockets = ({
     (soc: DataSocketType) => soc.socketKey
   )
 
-  console.log('SOCKETS', sockets)
-
   if (uniqueCount !== sockets.length)
     return console.error(
       `Module ${node.data.spell} has duplicate ${
@@ -149,11 +147,8 @@ const addSockets = ({
         socketKey: socketKey,
         connectionType: connectionType,
         useSocketName,
-        hide: socket.hide,
         socketType: socketNameMap[socket.name as SocketNameType],
       })
-
-      if (newSocket.socket.hide) return
 
       node[addMethod](new Socket(socketKey, name, socket) as Input & Output)
       if (connectionType === 'output') {

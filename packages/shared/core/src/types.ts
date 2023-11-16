@@ -330,7 +330,6 @@ export type DataSocketType = {
   connectionType: ConnectionType
   socketType: SocketType
   useSocketName: boolean
-  hide?: boolean
 }
 
 export type MagicNodeInput = Input & { socketType: DataSocketType }

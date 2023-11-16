@@ -2,7 +2,6 @@ export class Socket {
   name: string
   data: unknown
   compatible: Socket[] = []
-  hide = false
 
   constructor(name: string, data = {}) {
     this.name = name
