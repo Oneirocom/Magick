@@ -128,7 +128,7 @@ export class DocumentService<
 
       const querys = await db('documents')
         .joinRaw(
-          'inner join embeddings on documents.id = embeddings."documentId" and embeddings.index = 0'
+          'inner join embeddings on documents.id = embeddings."documentId"'
         )
         // .innerJoin('embeddings', 'documents.id', '=', 'embeddings.documentId')
         .select(
