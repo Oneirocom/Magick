@@ -6,7 +6,7 @@
   "implicitDependencies": ["shared-core"],
   "targets": {
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/plugins/elevenlabs/shared/**/*.ts"]
@@ -16,8 +16,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/plugins/elevenlabs/shared/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/plugins/elevenlabs/shared/jest.config.ts"
       }
     }
   },
