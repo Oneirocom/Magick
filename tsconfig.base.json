@@ -191,7 +191,6 @@
       "@magickml/ui": ["packages/client/ui/src/index.ts"],
       "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
       "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
-      "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
       "client/editor": ["packages/client/editor/src/index.ts"],
       "client/feathers-client": [
@@ -211,6 +210,7 @@
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
       "server/core": ["packages/server/core/src/index.ts"],
+      "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
       "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
       "shared/config": ["packages/shared/config/src/index.ts"],
       "shared/core": ["packages/shared/core/src/index.ts"],
