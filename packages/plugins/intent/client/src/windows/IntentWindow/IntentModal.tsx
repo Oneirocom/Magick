@@ -32,7 +32,7 @@ const IntentModal = ({
     setNewIntent(newIntent)
   }, [newIntent])
 
-  const [selectedModel, setSelectedModel] = useState(null)
+  const [selectedModel, setSelectedModel] = useState<{ model: string, object: any } | null>(null)
 
   const handleModelChange = event => {
     const selectedModelValue = event.target.value
