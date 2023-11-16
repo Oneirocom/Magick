@@ -111,7 +111,6 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const spell = await app?.service('spells').find({
       query: {
         name: spellName,
-        // projectId,
       },
     })
 
@@ -126,55 +125,26 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     }
 
     const spellId = firstSpell.id || firstSpell._id
-
     const spellInputs = inputs.inputs[0] as Record<string, unknown>
 
-    const { projectId } = _context
-    if (agent) {
-      const runComponentArgs = {
-        inputs: {
-          'Input - Subspell': event,
-          ...spellInputs,
-        },
-        runSubspell: false,
-        spellId,
-        agentId: agent?.id,
-        secrets: agent?.secrets ?? secrets,
-        app: module.app,
-        publicVariables: {},
-      }
-      const spellOutputs = await app
-        .get('agentCommander')
-        .runSpellWithResponse(runComponentArgs)
+    const runComponentArgs = {
+      inputs: {
+        'Input - Subspell': event,
+        ...spellInputs,
+      },
+      runSubspell: false,
+      spellId,
+      agentId: agent?.id,
+      secrets: agent?.secrets ?? secrets,
+      app: module.app,
+      publicVariables: {},
+    }
+    const spellOutputs = await app
+      .get('agentCommander')
+      .runSpellWithResponse(runComponentArgs)
 
-      return {
-        outputs: spellOutputs,
-      }
-    } else {
-      const runComponentArgs = {
-        inputs: {
-          'Input - Subspell': event,
-          ...spellInputs,
-        },
-        runSubspell: false,
-        spellId: spellId as string,
-        projectId,
-        secrets: secrets as Record<string, string>,
-        publicVariables: {},
-        app: module.app,
-      }
-
-      const spellRunner = await spellManager.loadById(spellId)
-
-      if (!spellRunner) {
-        throw new Error(`Spell runner for ${spellName} not found`)
-      }
-
-      const spellOutputs = await spellRunner.runComponent(runComponentArgs)
-
-      return {
-        outputs: spellOutputs,
-      }
+    return {
+      outputs: spellOutputs,
     }
   }
 }
