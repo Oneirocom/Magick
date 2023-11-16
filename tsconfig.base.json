@@ -214,6 +214,7 @@
       "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
       "shared/config": ["packages/shared/config/src/index.ts"],
       "shared/core": ["packages/shared/core/src/index.ts"],
+      "shared/plugin": ["packages/shared/plugin/src/index.ts"],
       "shared/rete": ["packages/shared/rete/src/index.ts"],
       "shared/utils": ["packages/shared/utils/src/index.ts"]
     }
