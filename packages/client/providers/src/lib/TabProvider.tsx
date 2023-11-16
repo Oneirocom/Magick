@@ -162,6 +162,16 @@ export const TabProvider = ({ children }) => {
     })
   }
 
+  const closeTab = (tabId: string) => {
+    if (!api) return
+
+    const panel = api.getPanel(tabId)
+
+    if (!panel) return
+
+    panel.api.close()
+  }
+
   const publicInterface = {
     theme,
     setTheme,
@@ -171,7 +181,8 @@ export const TabProvider = ({ children }) => {
     setLayout,
     openTab,
     isTabOpen,
-    renameTab
+    renameTab,
+    closeTab
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
