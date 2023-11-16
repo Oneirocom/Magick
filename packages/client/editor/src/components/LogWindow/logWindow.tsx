@@ -83,11 +83,13 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
     return () => resizeObserver.disconnect();
   }, [isRefAvailable]);
 
+  const textColor = log.messageType === 'error' ? 'text-red-500' : 'text-white';
+
   return (
     <div className="flex flex-col justify-between p-1 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
       <div className="flex flex-row justify-between w-full items-center gap-5 " onClick={() => setIsExpanded(!isExpanded)}>
         <span className="text-md text-[#328597] whitespace-nowrap">{timestamp}</span>
-        <span className="text-md text-white break-all flex-grow truncate">{log.message}</span>
+        <span className={`text-md ${textColor} break-all flex-grow truncate`}>{log.message}</span>
         <div>
           {isExpanded ? (
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
