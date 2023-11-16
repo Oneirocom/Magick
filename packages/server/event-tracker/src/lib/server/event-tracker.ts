@@ -1,5 +1,5 @@
 import { Application } from '@feathersjs/feathers'
-import { POSTHOG_API_KEY } from '@magickml/config'
+import { POSTHOG_API_KEY } from 'shared/config'
 import { PostHog } from 'posthog-node'
 
 export enum AgentEvents {
