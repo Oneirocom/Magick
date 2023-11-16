@@ -309,6 +309,7 @@ function DocumentTable({ documents, updateCallback }) {
     fetch(`${API_ROOT_URL}/documents/${doc}`, {
       method: 'GET',
       headers: {
+        $limit: '1',
         Authorization: `Bearer ${token}`,
       },
     })
