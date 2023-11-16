@@ -60,7 +60,11 @@ if (window === window.parent) {
   /**
    * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
    */
-  const TRUSTED_PARENT_URLS = [TRUSTED_PARENT_URL, 'https://www.magickml.com', 'https://beta.magickml.com'].map(url => url.replace(/\/+$/, ''));
+  const TRUSTED_PARENT_URLS = [
+    TRUSTED_PARENT_URL,
+    'https://www.magickml.com',
+    'https://beta.magickml.com']
+    .map(url => url.replace(/\/+$/, ''));
 
   window.addEventListener(
     'message',
@@ -72,17 +76,11 @@ if (window === window.parent) {
         event.origin !== window.location.origin &&
         !TRUSTED_PARENT_URLS.includes(event.origin)
       ) {
-<<<<<<< HEAD
         logger.error('Untrusted origin %s', event.origin);
         // Log the trusted origins for debugging purposes
         TRUSTED_PARENT_URLS.forEach(trustedUrl => {
           logger.error('Trusted origin is %s', trustedUrl);
         });
-=======
-        logger.error('untrusted origin %s', event.origin)
-        logger.error('cloudUrl is %s', cloudUrl)
-        logger.error('TRUSTED_PARENT_URL is %s', TRUSTED_PARENT_URL)
->>>>>>> 950214186 (Move editor package into client folder)
 
         return;
       }

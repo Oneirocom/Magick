@@ -27,6 +27,7 @@ import { SocketNameType, SocketType } from './sockets'
 import { DataControl } from './plugins/inspectorPlugin'
 import { SpellInterface } from '../../../server/core/src/schemas'
 import { SpellManager } from './spellManager'
+import { ExtendedStore } from 'client/state'
 
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
@@ -173,6 +174,7 @@ export class MagickEditor extends NodeEditor<EventsTypes> {
     callback: (spell: SpellInterface) => void
   ) => () => void
   declare refreshEventTable: () => void
+  declare store: ExtendedStore
 }
 
 export type Env = {
@@ -322,7 +324,7 @@ export type TaskType = 'output' | 'option'
 export type ConnectionType = 'input' | 'output'
 
 export type DataSocketType = {
-  name: SocketNameType
+  name: string
   taskType: TaskType
   socketKey: string
   connectionType: ConnectionType

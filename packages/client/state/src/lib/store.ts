@@ -35,7 +35,7 @@ const initialReducers = {
 const rootReducer = combineReducers(initialReducers)
 
 // Extend the store type
-interface ExtendedStore extends EnhancedStore {
+export interface ExtendedStore extends EnhancedStore {
   asyncReducers: Record<string, Reducer>
 }
 

@@ -40,6 +40,7 @@ import {
 import AreaPlugin from './plugins/areaPlugin'
 import AutoArrangePlugin from './plugins/autoArrangePlugin'
 import { initSharedEngine, MagickEngine } from 'shared/core'
+import { createStore } from 'client/state'
 
 /**
  * Extend MagickEngine with additional properties
@@ -75,6 +76,7 @@ export const initEditor = function ({
 }) {
   // Clear editor instance if it exists for the given tab ID
   if (editorTabMap[tab.id]) editorTabMap[tab.id].clear()
+  const store = createStore()
 
   // Retrieve the nodes
   const components = getNodes()
@@ -89,6 +91,7 @@ export const initEditor = function ({
   editor.tab = tab
   editor.currentSpell = spell
   editor.tabMap = editorTabMap
+  editor.store = store
 
   editor.use(CachePlugin)
 

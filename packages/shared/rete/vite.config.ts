@@ -6,7 +6,7 @@ import dts from 'vite-plugin-dts'
 import * as path from 'path'
 
 export default defineConfig({
-  cacheDir: '../../../node_modules/.vite/@magickml/rete',
+  cacheDir: '../../../node_modules/.vite/shared/rete',
 
   plugins: [
     dts({
@@ -29,7 +29,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
-      name: '@magickml/rete',
+      name: 'shared/rete',
       fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.

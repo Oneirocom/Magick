@@ -37,7 +37,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
     if (!spell) return
 
     update(spell)
-    _openTab(spell)
   }, [spell])
 
   /**
