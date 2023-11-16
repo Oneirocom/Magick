@@ -16,9 +16,10 @@ import {
 import { Module } from './module'
 
 export type ModuleSocketType = {
-  name: SocketNameType
+  name: string
   socketKey: string
   socket: SocketType
+  hide?: boolean
   [key: string]: unknown
 }
 
@@ -44,12 +45,15 @@ export class ModuleManager {
     typeMap: Map<string, Socket>,
     defaultName: string
   ): ModuleSocketType[] {
+    console.log('GETTING SOCKETS')
     return extractNodes(data.nodes, typeMap)
-      .filter(n => !n.data.hideSocket)
+      .filter(n => {
+        return n.name !== 'Input'
+      })
       .map((node, i): ModuleSocketType => {
-        node.data.name = node.data.name || `${defaultName}-${i + 1}`
+        const name = (node.data.name || `${defaultName}-${i + 1}`) as string
         return {
-          name: node.data.name as SocketNameType,
+          name,
           socketKey: node.data.socketKey as string,
           socket: this.socketFactory(node, typeMap.get(node.name)),
         }
@@ -57,6 +61,7 @@ export class ModuleManager {
   }
 
   getInputs(data: GraphData): ModuleSocketType[] {
+    console.log('Getting inputs', this.getSockets(data, this.inputs, 'input'))
     return this.getSockets(data, this.inputs, 'input')
   }
 

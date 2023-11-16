@@ -46,10 +46,7 @@ const sortSockets = (a: any, b: any) => {
  * Custom Node component for rendering nodes with specific functionality.
  * Inherits from the base Node class.
  */
-<<<<<<< HEAD:packages/editor/src/components/Node/Node.tsx
-=======
 
->>>>>>> 950214186 (Move editor package into client folder):packages/client/editor/src/components/Node/Node.tsx
 export class MyNode extends Node {
   declare props: any
   declare state: any

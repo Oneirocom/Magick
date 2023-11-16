@@ -1,4 +1,4 @@
-import { WorkerOutputs } from '@magickml/rete'
+import { WorkerOutputs } from 'shared/rete'
 import io from 'socket.io'
 import { MagickComponent } from '../../engine'
 

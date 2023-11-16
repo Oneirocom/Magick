@@ -21,8 +21,6 @@ import sync from 'feathers-sync'
 import { configureManager, globalsManager } from 'shared/core'
 
 import { REDISCLOUD_URL, API_ACCESS_KEY, bullMQConnection } from 'shared/config'
-import type { AgentCommander } from '@magickml/agents'
-import { configureManager, globalsManager } from '@magickml/core'
 import { createPosthogClient } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'

@@ -1,6 +1,6 @@
 import { NodeEditor } from 'shared/rete'
 
-declare module '@magickml/rete' {
+declare module 'shared/rete' {
   interface EventsTypes {
     multiselection: boolean
   }
