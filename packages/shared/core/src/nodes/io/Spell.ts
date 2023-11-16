@@ -25,6 +25,23 @@ type Socket = {
   name: string
 }
 
+function getSpellByIdData(state, spellId) {
+  // Access the RTK Query slice - replace 'spellApi' with the name of your api slice
+  const queries = state.api.queries || {}
+
+  // Create a regex pattern to match the query key with the spellId
+  const pattern = new RegExp(`getSpellById.*?"id"\s*:\s*"${spellId}"`)
+
+  // Find the key that matches the spellId
+  const queryKey = Object.keys(queries).find(key => pattern.test(key))
+
+  // Get the data from the query state using the found key
+  const queryState = queries[queryKey]
+
+  // Return the cached data
+  return queryState?.data.data[0]
+}
+
 export const createNameFromSocket = (type: 'inputs' | 'outputs') => {
   return (node: WorkerData, socketKey: string) => {
     return (node.data[type] as Socket[]).find(
@@ -108,7 +125,21 @@ export class SpellComponent extends MagickComponent<
   }
 
   created(node) {
-    this.updateModuleSockets(node)
+    console.log('UPDATING MODULE SOCKETS')
+    const spellId = node.data.spellId as string
+
+    if (!spellId) return
+
+    const state = this.editor?.store?.getState()
+    if (!state) return
+
+    const spell = getSpellByIdData(state, spellId)
+
+    if (!spell) return
+
+    console.log('FOUND SPELL', spell)
+
+    this.updateModuleSockets(node, spell.graph)
     node.update()
   }
 

@@ -132,7 +132,7 @@ export class Agent implements AgentInterface {
       return
     }
     const spell = (
-      await app.service('spells').find({
+      await this.app.service('spells').find({
         query: {
           projectId: this.data.projectId,
           id: this.data.rootSpellId,
