@@ -49,7 +49,7 @@ export const CustomNode: React.FC<Props> = props => {
   const { openModal } = useModal()
   const { setOpenDoc } = useTreeData()
   const { enqueueSnackbar } = useSnackbar()
-  const { renameTab } = useTabLayout()
+  const { renameTab, closeTab } = useTabLayout()
 
   const indent = props.depth * 24
   const { droppable, data }: any = props.node
@@ -151,6 +151,7 @@ export const CustomNode: React.FC<Props> = props => {
           .unwrap()
 
         setContextMenuOpen(false)
+        closeTab(props.node.text)
         enqueueSnackbar('Spell successfully deleted', {
           variant: 'success',
         })
@@ -299,6 +300,7 @@ export const CustomNode: React.FC<Props> = props => {
           onClick={e => {
             e.stopPropagation()
             setOpenConfirm(true)
+            handleContextMenuClose()
           }}
         >
           <DeleteOutlineTwoToneIcon sx={{ mr: 1 }} />
