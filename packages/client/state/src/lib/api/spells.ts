@@ -156,7 +156,7 @@ export const spellApi = rootApi.injectEndpoints({
     }),
     // Api endpoint for patching a spell
     patchSpell: builder.mutation({
-      invalidatesTags: ['Spell'],
+      invalidatesTags: ['Spell', 'Spells'],
       query({ id, update }) {
         return {
           url: `spells/${id}`,
