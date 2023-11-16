@@ -4,7 +4,6 @@
   "dependencies": {
     "@feathersjs/feathers": "5.0.8",
     "@feathersjs/socketio-client": "5.0.8",
-    "server/core": "*",
     "socket.io-client": "4.6.1",
     "vite": "^4.4.9",
     "@nx/vite": "^16.7.4",
