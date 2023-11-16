@@ -3,7 +3,7 @@ import { Socket as SocketType } from 'rete/types'
 import { NodeData } from 'rete/types/core/data'
 
 import { extractNodes } from '../../engine'
-import { SocketNameType } from '../../sockets'
+
 import {
   GraphData,
   MagickNode,
@@ -19,7 +19,6 @@ export type ModuleSocketType = {
   name: string
   socketKey: string
   socket: SocketType
-  hide?: boolean
   [key: string]: unknown
 }
 
@@ -92,7 +91,6 @@ export class ModuleManager {
   }
 
   registerInput(name: string, socket: Socket, hide = false) {
-    socket.hide = hide
     this.inputs.set(name, socket)
   }
 

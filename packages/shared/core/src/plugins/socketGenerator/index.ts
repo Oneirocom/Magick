@@ -53,8 +53,6 @@ function install(editor: IRunContextEditor) {
         nodeInputs.forEach(socket => {
           // If the input key is already on the node, return
           if (inputMap[socket.socketKey]) return
-          console.log('SOCKET', socket)
-          if (socket.hide) return
           const input = new Rete.Input(
             socket.socketKey ? socket.socketKey : socket.name,
             socket.name,
