@@ -19,27 +19,38 @@
       "analyzeSourceFiles": true
     }
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx-cloud",
-      "options": {
-        "cacheableOperations": ["serve", "build", "lint", "test", "e2e"],
-        "accessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU="
-      }
-    }
-  },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"]
-    },
-    "server": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "cache": true
     },
     "test": {
-      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
+      "cache": true
     },
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
+    },
+    "serve": {
+      "cache": true
+    },
+    "@nx/jest:jest": {
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
+      "cache": true,
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "@nx/vite:test": {
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
+      "cache": true
     }
   },
   "generators": {
@@ -59,8 +70,6 @@
       }
     }
   },
-  "cli": {
-    "defaultCollection": "@nx/node"
-  },
-  "defaultProject": "@magickml/server"
+  "defaultProject": "@magickml/server",
+  "nxCloudAccessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU="
 }
