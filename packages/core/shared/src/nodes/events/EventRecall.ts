@@ -181,7 +181,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
       return events
     }
-    const typeSocket = inputs['type'] && inputs['type'][0]
+    const typeSocket = (inputs['type'] && inputs['type'][0]) as string
 
     const event = (inputs['event'] &&
       (inputs['event'][0] || inputs['event'])) as Event
@@ -198,12 +198,11 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const { client, channel, connector, channelType, projectId, entities } =
       event
 
-    const typeData = (node.data as { type: string })?.type
-    const type =
-      (typeSocket as string) ??
-      (typeData !== undefined && typeData.length > 0
-        ? typeData.toLowerCase().trim()
-        : 'none')
+    const typeData = node?.data?.type as string
+    const typeRaw =
+      typeSocket ??
+      (typeData !== undefined && typeData.length > 0 ? typeData : 'none')
+    const type = typeRaw.trim()
 
     let max_count
     if (typeof node.data.max_count === 'string') {
