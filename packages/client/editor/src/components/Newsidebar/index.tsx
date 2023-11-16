@@ -82,8 +82,6 @@ export function NewSidebar(DrawerProps): JSX.Element {
       return
     }
 
-    // console.log('AGENTS', agents)
-
     setData(agents.data)
 
   }, [agents])
