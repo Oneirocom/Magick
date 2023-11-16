@@ -60,3 +60,4 @@ data.json
 /logs
 docstore.json
 .vercel
+.nx/cache
