@@ -35,8 +35,10 @@ function getSpellByIdData(state, spellId) {
   // Find the key that matches the spellId
   const queryKey = Object.keys(queries).find(key => pattern.test(key))
 
+  if (!queryKey) return null
+
   // Get the data from the query state using the found key
-  const queryState = queries[queryKey]
+  const queryState = queries[queryKey as string]
 
   // Return the cached data
   return queryState?.data.data[0]
@@ -136,8 +138,6 @@ export class SpellComponent extends MagickComponent<
     const spell = getSpellByIdData(state, spellId)
 
     if (!spell) return
-
-    console.log('FOUND SPELL', spell)
 
     this.updateModuleSockets(node, spell.graph)
     node.update()
