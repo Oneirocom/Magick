@@ -127,7 +127,11 @@ export class Task {
 
   private filterOutputConnections(con, fromNodeId: number | undefined) {
     const task = this.getTask(con.nodeId)
-    if (this.component.task.runOneInput && fromNodeId) {
+    if (
+      this.component.task.runOneInput &&
+      fromNodeId &&
+      !task.component.name.match('Variable')
+    ) {
       if (task.nodeId === fromNodeId) return true
       if (task.outputData) return true
       return false
