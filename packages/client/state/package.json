@@ -13,7 +13,6 @@
     "client/feathers-client": "*",
     "@magickml/feathersRedux": "*",
     "shared/config": "*",
-    "shared/core": "*",
     "reactflow": "^11.9.4"
   },
   "main": "./index.js",

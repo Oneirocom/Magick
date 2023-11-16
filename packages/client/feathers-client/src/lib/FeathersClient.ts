@@ -4,7 +4,6 @@ import {
   feathers,
 } from '@feathersjs/feathers'
 import socketio, { SocketService } from '@feathersjs/socketio-client'
-import { SpellInterface } from 'server/core'
 import { io } from 'socket.io-client'
 
 /**
@@ -27,10 +26,7 @@ type SaveDiffParams = Record<string, any>
 type ServiceTypes = {
   // The type is a Socket service extended with custom methods
   spells: SocketService & {
-    saveDiff(
-      data: SaveDiffData,
-      params: SaveDiffParams
-    ): Promise<SpellInterface>
+    saveDiff(data: SaveDiffData, params: SaveDiffParams): Promise<any>
   }
 }
 
