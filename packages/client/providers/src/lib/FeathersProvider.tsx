@@ -33,6 +33,7 @@ export const FeathersProvider = ({ children, token }): JSX.Element | null => {
   useEffect(() => {
     ; (async (): Promise<void> => {
       const client = await feathersClient.initialize(token, config)
+      dispatch(setConnected(false))
 
       client.io.on('connect', async (): Promise<void> => {
         dispatch(setConnected(true))
