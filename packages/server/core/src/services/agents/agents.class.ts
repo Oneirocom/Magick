@@ -9,6 +9,7 @@ import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
 import { NotFound } from '@feathersjs/errors'
+import { AgentInterface } from '../../schemas'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -22,7 +23,7 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
  */
 export class AgentService<
   ServiceParams extends Params = AgentParams
-> extends KnexAdapter<AgentData, Agent, ServiceParams, AgentPatch> {
+> extends KnexAdapter<AgentInterface, AgentData, ServiceParams, AgentPatch> {
   app: Application
 
   constructor(options: KnexAdapterOptions, app: Application) {
@@ -32,11 +33,11 @@ export class AgentService<
 
   async get(agentId: string, params: ServiceParams) {
     const db = app.get('dbClient')
-    const { releaseVersion } = params.query
+    const { currentReleaseVersion } = params.query
 
     const query = super.createQuery(params)
 
-    if (agentId && !releaseVersion) {
+    if (agentId && !currentReleaseVersion) {
       const count = await db('agentReleases').count('*').as('count').where('agent_id', '=', agentId)
 
       if (count["count"] > 0) {
@@ -46,11 +47,11 @@ export class AgentService<
           })
       }
 
-    } else if(agentId && releaseVersion) {
+    } else if(agentId && currentReleaseVersion) {
 
       query
         .leftJoin('agentRelease as releases', function() {
-          this.on('agents.id', '=', 'agentReleases.agentId').andOn(releaseVersion, '=', 'agentReleases.releaseVersion')
+          this.on('agents.id', '=', 'agentReleases.agentId').andOn(currentReleaseVersion, '=', 'agentReleases.releaseVersion')
         })
     }
 
@@ -67,31 +68,8 @@ export class AgentService<
   }
 
   async update(id: string, data: AgentData, params?: ServiceParams) {
-    const { query: { releaseVersion } } = params;
-
-    if (releaseVersion) {
-      const db = this.app.get('dbClient');
-
-      // Find the release ID from the agentReleases table that matches the releaseVersion string
-      const releaseRecord = await db('agentReleases')
-        .select('id')
-        .where('version', releaseVersion)
-        .first();
-
-      if (!releaseRecord) {
-        throw new Error(`Release version '${releaseVersion}' not found.`);
-      }
-
-      // Update the currentReleaseVersionId of the agent
-      await db('agents')
-        .where({ id: id })
-        .update({
-          currentReleaseVersionId: releaseRecord.id
-        });
-    }
-
     // Call the original update method to handle other updates
-    return this._update(id, { id, ...data }, params);
+    return this._update(id, data, params);
   } 
 
   // we use this ping to avoid firing a patched event on the agent

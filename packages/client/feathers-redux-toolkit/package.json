@@ -6,7 +6,6 @@
     "@feathersjs/feathers": "5.0.8",
     "@reduxjs/toolkit": "1.9.5",
     "react-redux": "8.0.5",
-    "client/feathers-client": "*",
     "vite": "^4.4.9",
     "@nx/vite": "^16.7.4",
     "vite-plugin-dts": "^2.3.0"

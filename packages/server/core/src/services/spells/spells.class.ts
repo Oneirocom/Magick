@@ -4,7 +4,7 @@
  */
 import otJson0 from 'ot-json0'
 import md5 from 'md5'
-import { KnexService } from '@feathersjs/knex'
+import { KnexAdapter } from '@feathersjs/knex'
 import { BadRequest } from '@feathersjs/errors/lib'
 import type { Application } from '../../declarations'
 import type { Paginated, Params } from '@feathersjs/feathers'
@@ -29,7 +29,31 @@ export type SaveDiffData = {
  */
 export class SpellService<
   ServiceParams extends Params = SpellParams
-> extends KnexService<SpellInterface, SpellData, ServiceParams, SpellPatch> {
+> extends KnexAdapter<SpellInterface, SpellData, ServiceParams, SpellPatch> {
+
+  async get(spellId: string, params: ServiceParams) {
+    return this._get(spellId, params)
+  }
+
+  async find(params: ServiceParams) {
+    return this._find(params)
+  }
+
+  async update(spellId: string, params: SpellData) {
+    return this._update(spellId, params)
+  }
+
+  async create(params: SpellData) {
+    return this._create(params)
+  }
+
+  async patch(spellId: string, params: SpellPatch) {
+    return this._patch(spellId, params)
+  }
+
+  async remove(spellId: string | null, params: ServiceParams) {
+    return this._remove(spellId, params)
+  }
 
   /**
    * Saves the diff of a spell
@@ -41,7 +65,7 @@ export class SpellService<
     const spellData = await app
       .service('spells')
       .find({ query: { projectId, name } })
-    const spell = spellData.data[0]
+    const spell = spellData[0]
 
     // Check if spell exists and that diff is available
     if (!spell) throw new BadRequest(`No spell with ${name} name found.`)

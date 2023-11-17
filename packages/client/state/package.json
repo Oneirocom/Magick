@@ -10,9 +10,6 @@
     "vite": "^4.4.9",
     "@nx/vite": "^16.7.4",
     "vite-plugin-dts": "^2.3.0",
-    "client/feathers-client": "*",
-    "@magickml/feathersRedux": "*",
-    "shared/config": "*",
     "reactflow": "^11.9.4"
   },
   "main": "./index.js",

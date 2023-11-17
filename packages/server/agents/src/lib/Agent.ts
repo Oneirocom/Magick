@@ -13,6 +13,7 @@ import {
   AGENT_RUN_JOB,
   MagickSpellOutput,
   type Event,
+  SpellInterface,
 } from 'shared/core'
 import { PING_AGENT_TIME_MSEC } from 'shared/config'
 
@@ -27,6 +28,7 @@ import {
 } from 'server/core'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
+import { checkPaginated } from 'shared/utils'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -131,7 +133,7 @@ export class Agent implements AgentInterface {
       })
       return
     }
-    const spell = (
+    const spell = checkPaginated<SpellInterface>(
       await this.app.service('spells').find({
         query: {
           projectId: this.data.projectId,
