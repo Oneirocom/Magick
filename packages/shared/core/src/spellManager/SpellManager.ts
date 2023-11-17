@@ -153,21 +153,16 @@ export default class SpellManager {
     try {
       const spellService = this.app.service('spells');
 
-      const spellResults = checkPaginated<SpellInterface>(await spellService.find({
-        query: {
-          $limit: 1,
-          $and: [
-            {id: spellId},
-            {versionId: versionId}
-          ]
-        }
-      }))
-
-      if (spellResults.total === 0) {
-        this.logger.error({spellId, versionId}, `Error loading spell %s with version %s: %s`, spellId, versionId)
+      const query: { versionId?: string } = {}
+      if (versionId) {
+        query.versionId = versionId
       }
 
-      const spell = spellResults.data[0]
+      const spell = await spellService.get(spellId, { query })
+
+      if (!spell) {
+        this.logger.error({spellId, versionId}, `Error loading spell %s with version %s: %s`, spellId, versionId)
+      }
 
       if (
         this.hasSpellRunner(spellId) &&

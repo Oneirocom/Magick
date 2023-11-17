@@ -204,7 +204,7 @@ export class AgentService<
     return this._patch(agentId, params)
   }
 
-  async remove(agentId: string, params: ServiceParams) {
+  async remove(agentId: string | null, params: ServiceParams) {
     return this._remove(agentId, params)
   }
 }
