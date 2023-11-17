@@ -45,9 +45,6 @@ export class EventService<
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
 
-    const entities = params?.query?.entities
-    // entities is an array of strings
-
     const query = db.from('events').select('*')
 
     if (params?.query?.embedding) {
@@ -65,14 +62,6 @@ export class EventService<
       // If not searching by embedding, perform a normal query
       query.orderBy('date', 'desc')
     }
-
-    if (entities && entities.length > 0) {
-      // Safely check if all entities are included in the `entities` column
-      entities.forEach(entity => {
-        query.whereRaw(`'${entity}' = ANY (entities)`)
-      })
-    }
-
     const param = params?.query
 
     if (!param) {
@@ -80,6 +69,8 @@ export class EventService<
     }
 
     if (param.type) query.where({ type: param.type })
+    if (param.sender) query.where({ sender: param.sender })
+    if (param.observer) query.where({ observer: param.observer })
     if (param.id) query.where({ id: param.id })
     if (param.client) query.where({ client: param.client })
     if (param.channel) query.where({ channel: param.channel })
@@ -90,8 +81,6 @@ export class EventService<
     query.limit(param['$limit'])
 
     const res = await query
-
-
 
     return { events: res as unknown as { data: Array<any> } }
   }
