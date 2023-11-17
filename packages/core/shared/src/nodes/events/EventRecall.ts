@@ -31,9 +31,9 @@ type InputReturn = {
 }
 
 enum FilterTypes {
-  ChannelAndSender = 'Channel And Sender (DMs OK)',
+  ChannelAndSender = 'Channel And Sender',
   AllInChannel = 'All In Channel',
-  AllFromSender = 'All From Sender (No DMs)',
+  AllFromSender = 'All From Sender',
   AllFromConnector = 'All From Connector',
   All = 'All',
 }
@@ -181,6 +181,7 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
 
       return events
     }
+
     const typeSocket = (inputs['type'] && inputs['type'][0]) as
       | string
       | undefined
@@ -197,8 +198,15 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       embedding = (embedding as string)?.split(',')
     }
 
-    const { client, channel, connector, channelType, projectId, entities } =
-      event
+    const {
+      client,
+      channel,
+      connector,
+      channelType,
+      projectId,
+      sender,
+      observer,
+    } = event
 
     const typeData = node?.data?.type as string | undefined
     const typeRaw =
@@ -217,11 +225,12 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
     const data = {
       type,
       client,
-      entities,
       channel,
       connector,
       channelType,
       projectId,
+      sender,
+      observer,
       $limit: max_count ?? 1,
     }
 
@@ -230,20 +239,20 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       // no need to do anything, should just work
     } else if (filterBy === FilterTypes.AllInChannel) {
       // filter by observer but not sender
-      delete data['entities']
+      delete data['sender']
     } else if (filterBy === FilterTypes.AllFromSender) {
       // filter by sender but not channel
       delete data['channel']
       delete data['channelType']
     } else if (filterBy === FilterTypes.AllFromConnector) {
       // filter by connector but not channel or sender
+      delete data['sender']
       delete data['channel']
       delete data['channelType']
-      delete data['entities']
     } else if (filterBy === FilterTypes.All) {
       // filter by all except sender, channel, and connector -- basically all for this observer
       delete data['channel']
-      delete data['entities']
+      delete data['sender']
       delete data['connector']
       delete data['channelType']
     }
