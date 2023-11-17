@@ -25,6 +25,7 @@ export const spellSchema = Type.Object(
       id: Type.Optional(Type.String()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
+    versionId: Type.Optional(Type.String()),
     createdAt: Type.Optional(Type.String()),
     updatedAt: Type.Optional(Type.String()),
   },
@@ -66,7 +67,7 @@ export const agentSchema = Type.Object(
     publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
     image: Type.Optional(Type.String()),
-    releaseVersion: Type.Optional(Type.String()),
+    currentReleaseVersionId: Type.Optional(Type.String()),
     frozen: Type.Optional(Type.Boolean()),
     default: Type.Optional(Type.Boolean()),
   },

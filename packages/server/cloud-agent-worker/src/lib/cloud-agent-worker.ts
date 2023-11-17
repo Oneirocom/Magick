@@ -64,21 +64,16 @@ export class CloudAgentWorker extends AgentManager {
 
   async addAgent(agentId: string) {
     this.logger.info(`Creating agent ${agentId}...`)
-    const agentDBResult = (
-      await app.service('agents').find({
-        query: {
-          id: agentId,
-        },
-      })
-    )?.data
+    const agentDBResult = await app.service('agents').get(agentId, {})
 
-    if (agentDBResult.length == 0 || !agentDBResult) {
+    if (!agentDBResult) {
       this.logger.error(`Agent ${agentId} not found when creating agent`)
       throw new Error(`Agent ${agentId} not found when creating agent`)
     }
 
     const agentData = {
-      ...agentDBResult[0],
+      id: agentId,
+      ...agentDBResult,
       pingedAt: new Date().toISOString(),
     }
 
@@ -128,14 +123,10 @@ export class CloudAgentWorker extends AgentManager {
   async agentUpdated(agentId: string) {
     this.logger.info(`Updating agent ${agentId}`)
     const agentDBResult = (
-      await app.service('agents').find({
-        query: {
-          id: agentId,
-        },
-      })
-    )?.data
+      await app.service('agents').get(agentId, {})
+    )
 
-    if (agentDBResult.length == 0 || !agentDBResult) {
+    if (!agentDBResult) {
       this.logger.error(`Agent ${agentId} not found when updating agent`)
       throw new Error(`Agent ${agentId} not found when updating agent`)
     }

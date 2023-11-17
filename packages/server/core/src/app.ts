@@ -253,9 +253,9 @@ export async function initApp(environment: Environment = 'default') {
     },
     before: {
       all: [
-        checkPermissions({
+        /*checkPermissions({
           roles: ['admin', 'owner', 'public'],
-        }),
+        }),*/
       ],
     },
     after: {},
