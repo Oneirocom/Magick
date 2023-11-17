@@ -25,6 +25,7 @@ const spellDataSchemaProperties = {
   updatedAt: spellSchema.properties.updatedAt,
   hash: spellSchema.properties.hash,
   type: Type.Optional(spellSchema.properties.type),
+  versionId: spellSchema.properties.versionId,
   id: Type.Optional(spellSchema.properties.id),
 }
 

@@ -6,6 +6,11 @@ import { getLogger } from 'shared/core'
 import { isEqual } from 'radash'
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
+import { Paginated } from '@feathersjs/feathers'
+import { checkPaginated } from 'shared/utils'
+import { Spell } from './Spell'
+import { SpellData } from 'client/state'
+import { SpellQuery } from 'packages/server/core/src/services/spells/spells.schema'
 
 type SpellManagerArgs = {
   socket?: io.Socket
@@ -148,7 +153,21 @@ export default class SpellManager {
     try {
       const spellService = this.app.service('spells');
 
-      const spell = await spellService.get(spellId, { query: { versionId } });
+      const spellResults = checkPaginated<SpellInterface>(await spellService.find({
+        query: {
+          $limit: 1,
+          $and: [
+            {id: spellId},
+            {versionId: versionId}
+          ]
+        }
+      }))
+
+      if (spellResults.total === 0) {
+        this.logger.error({spellId, versionId}, `Error loading spell %s with version %s: %s`, spellId, versionId)
+      }
+
+      const spell = spellResults.data[0]
 
       if (
         this.hasSpellRunner(spellId) &&
@@ -161,10 +180,10 @@ export default class SpellManager {
         return this.getReadySpellRunner(spellId)
       }
 
-      this.logger.debug(`Reloading spell ${spellId}`)
+      this.logger.debug({spellId}, `Reloading spell %s`, spellId)
       return this.load(spell)
     } catch (error) {
-      this.logger.error(`Error loading spell ${spellId}: %o`, error)
+      this.logger.error({spellId}, `Error loading spell %s: %o`, spellId, error)
       return
     }
   }
