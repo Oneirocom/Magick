@@ -5,7 +5,7 @@
 import otJson0 from 'ot-json0'
 import md5 from 'md5'
 import { KnexAdapter } from '@feathersjs/knex'
-import { BadRequest } from '@feathersjs/errors/lib'
+import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import type { Application } from '../../declarations'
 import type { Paginated, Params } from '@feathersjs/feathers'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
@@ -32,7 +32,34 @@ export class SpellService<
 > extends KnexAdapter<SpellInterface, SpellData, ServiceParams, SpellPatch> {
 
   async get(spellId: string, params: ServiceParams) {
-    return this._get(spellId, params)
+    const db = app.get('dbClient')
+    const { versionId } = params.query
+
+    const query = super.createQuery(params)
+
+    if (spellId && !versionId) {
+      const count = await db('agentReleases').count('*').as('count').where('id', '=', versionId)
+
+      if (count["count"] > 0) {
+        query
+          .leftJoin('agentRelease as releases', function() {
+            this.on('agents.id', '=', 'agentReleases.agentId')
+          })
+      }
+
+    } else if(spellId && versionId) {
+      query
+        .leftJoin('agentRelease as releases', function() {
+          this.on('spelld.versionId', '=', 'agentReleases.id').andOn(versionId, '=', 'agentReleases.id')
+        })
+    }
+
+    const data = await query.andWhere('spells.id', '=', spellId)
+    if (data.length !== 1) {
+      throw new NotFound(`No record found for id '${spellId}'`)
+    }
+
+    return data
   }
 
   async find(params: ServiceParams) {
