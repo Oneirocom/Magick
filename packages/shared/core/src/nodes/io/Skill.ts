@@ -110,13 +110,11 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
       throw new Error('Feathers app not found in node skill')
     }
 
+    const { projectId } = _context
+
     const query = {
       name: spellName,
       projectId,
-    }
-
-    if (module.releaseVersion) {
-      query.version = module.releaseVersion;
     }
 
     // call the spells service and find a spell where name is spellName and projectId is projectId
@@ -134,7 +132,6 @@ export class Skill extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const spellId = firstSpell.id || firstSpell._id
 
-    const { projectId } = _context
     if (agent) {
       const runComponentArgs = {
         inputs: {

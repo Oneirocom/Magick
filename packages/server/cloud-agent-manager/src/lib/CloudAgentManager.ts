@@ -40,11 +40,13 @@ export class CloudAgentManager {
   async startup() {
     this.logger.info('Cloud Agent Manager Startup')
 
-    const enabledAgents = await app.service('agents').find({
+    const enabledAgentsResult = await app.service('agents').find({
       query: {
         enabled: true,
       },
     })
+
+    const enabledAgents = enabledAgentsResult.data ? enabledAgentsResult.data : enabledAgentsResult
 
     this.logger.info(`Found ${enabledAgents.data.length} enabled agents`)
     const agentPromises: Promise<any>[] = []

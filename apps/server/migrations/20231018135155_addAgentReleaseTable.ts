@@ -11,14 +11,14 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('frozen').defaultTo(false).notNullable();
   });
 
-  return knex.schema.alterTable('agents', function(table) {
+  await knex.schema.alterTable('agents', function(table) {
     table.uuid('currentReleaseVersionId')
     table.foreign('currentReleaseVersionId').references('id').inTable('agentReleases')
   })
 
   return knex.schema.alterTable('spells', function(table) {
-    table.uuid('currentReleaseVersionId')
-    table.foreign('currentReleaseVersionId').references('id').inTable('agentReleases')
+    table.uuid('versionId')
+    table.foreign('versionId').references('id').inTable('agentReleases')
   })
 }
 

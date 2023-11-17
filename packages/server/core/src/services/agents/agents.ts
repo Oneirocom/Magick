@@ -72,16 +72,11 @@ export const agent = (app: Application) => {
     events: AGENT_EVENTS,
   })
 
-  app.use('/agents/release', new AgentService(getOptions(app), app), {
-    async create(data, params) {
+  app.use('/agents/createRelease', {
+    create: async (data: { agentId: string, versionTag: string }) => {
       const agentService = app.service('agents');
-      return await agentService.setRelease(data.agentId, data.versionTag);
+      return await agentService.createRelease(data.agentId, data.versionTag);
     },
-
-    async update(id: string, data, params) {
-      const agentService = app.service('agents');
-      return await agentService.setRelease(id, data.versionTag);
-    }
   })
 
 
@@ -141,9 +136,9 @@ export const agent = (app: Application) => {
     },
     before: {
       all: [
-        checkPermissions({
+        /*checkPermissions({
           roles: ['owner', 'agent'],
-        }),
+        }),*/
         schemaHooks.validateQuery(agentQueryValidator),
         schemaHooks.resolveQuery(agentQueryResolver),
       ],
@@ -177,5 +172,8 @@ export const agent = (app: Application) => {
 declare module '../../declarations' {
   interface ServiceTypes {
     agents: AgentService
+    '/agents/createRelease': {
+      create: ReturnType<any>
+    }
   }
 }

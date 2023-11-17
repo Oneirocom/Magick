@@ -84,7 +84,7 @@ export function checkPermissions(options: Options = {}) {
     )
 
     if (error !== false && !permitted) {
-      throw new Forbidden('You do not have the correct permissions.')
+     throw new Forbidden('You do not have the correct permissions.')
     }
 
     context.params = {

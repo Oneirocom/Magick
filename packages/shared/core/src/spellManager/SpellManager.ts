@@ -143,10 +143,12 @@ export default class SpellManager {
    * @param {string} spellId - Id of the spell.
    * @returns {Promise<SpellRunner | undefined>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
    */
-  async loadById(spellId: string): Promise<SpellRunner | undefined> {
+  async loadById(spellId: string, versionId?: string | null): Promise<SpellRunner | undefined> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
-      const spell = await this.app.service('spells').get(spellId)
+      const spellService = this.app.service('spells');
+
+      const spell = await spellService.get(spellId, { query: { versionId } });
 
       if (
         this.hasSpellRunner(spellId) &&

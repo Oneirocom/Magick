@@ -1,13 +1,14 @@
 // DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Paginated, Params } from '@feathersjs/feathers'
-import { KnexService } from '@feathersjs/knex'
+import type { Params } from '@feathersjs/feathers'
+import { KnexAdapter } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '../../app'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
+import { NotFound } from '@feathersjs/errors'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -21,7 +22,7 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
  */
 export class AgentService<
   ServiceParams extends Params = AgentParams
-> extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
+> extends KnexAdapter<AgentData, Agent, ServiceParams, AgentPatch> {
   app: Application
 
   constructor(options: KnexAdapterOptions, app: Application) {
@@ -30,35 +31,68 @@ export class AgentService<
   }
 
   async get(agentId: string, params: ServiceParams) {
-    const { releaseVersion } = params
     const db = app.get('dbClient')
+    const { releaseVersion } = params.query
 
-    let agents: AgentData[];
+    const query = super.createQuery(params)
 
-    if (releaseVersion) {
-      agents = db('agents')
-        .select('agents.*')
-        .innerJoin('agentReleases', 'agents.id', 'agentReleases.agentId')
-        .where('agentReleases.version', releaseVersion)
-        .groupBy('agentId') as AgentData
-    } else {
-      agents = db('agents')
-        .select('agents.*')
-        .innerJoin('agentReleases', 'agents.currentReleaseVersionId', 'agentReleases.agentId')
-        .groupBy('agentId')
+    if (agentId && !releaseVersion) {
+      const count = await db('agentReleases').count('*').as('count').where('agent_id', '=', agentId)
+
+      if (count["count"] > 0) {
+        query
+          .leftJoin('agentRelease as releases', function() {
+            this.on('agents.id', '=', 'agentReleases.agentId')
+          })
+      }
+
+    } else if(agentId && releaseVersion) {
+
+      query
+        .leftJoin('agentRelease as releases', function() {
+          this.on('agents.id', '=', 'agentReleases.agentId').andOn(releaseVersion, '=', 'agentReleases.releaseVersion')
+        })
     }
 
-    return agents
+    const data = await query.andWhere('agents.id', '=', agentId)
+    if (data.length !== 1) {
+      throw new NotFound(`No record found for id '${agentId}'`)
+    }
+
+    return data as AgentData
   }
 
-  async find(params?: ServiceParams): Promise<Agent[] | Paginated<Agent>> {
-    // Modify the query to exclude agents with the frozen flag set
-    const { query = {} } = params || {};
-    query.frozen ||= false;  // Only fetch agents where frozen is false
-
-    // Call the original find method with the modified query
-    return super.find({ ...params, query });
+  async find(params?: ServiceParams) {
+    return await this._find(params)
   }
+
+  async update(id: string, data: AgentData, params?: ServiceParams) {
+    const { query: { releaseVersion } } = params;
+
+    if (releaseVersion) {
+      const db = this.app.get('dbClient');
+
+      // Find the release ID from the agentReleases table that matches the releaseVersion string
+      const releaseRecord = await db('agentReleases')
+        .select('id')
+        .where('version', releaseVersion)
+        .first();
+
+      if (!releaseRecord) {
+        throw new Error(`Release version '${releaseVersion}' not found.`);
+      }
+
+      // Update the currentReleaseVersionId of the agent
+      await db('agents')
+        .where({ id: id })
+        .update({
+          currentReleaseVersionId: releaseRecord.id
+        });
+    }
+
+    // Call the original update method to handle other updates
+    return this._update(id, { id, ...data }, params);
+  } 
 
   // we use this ping to avoid firing a patched event on the agent
   // every time the agent is pinged
@@ -96,7 +130,6 @@ export class AgentService<
     return { response }
   }
 
-<<<<<<< HEAD:packages/server/core/src/services/agents/agents.class.ts
   async subscribe(agentId: string, params: ServiceParams) {
     // check for socket io
     if (!params.provider)
@@ -144,20 +177,20 @@ export class AgentService<
     return true
   }
 
-  /**
-  * Creates a new agent by copying data from the provided agentId, then associates it with a version tag in the AgentReleases table.
-  * @param agentId - the ID of the agent to copy from
-  * @param versionTag - the version tag to associate with the newly created agent
-  */
+  /*
+   * Creates a new agent by copying data from the provided agentId, then associates it with a version tag in the AgentReleases table.
+   * @param agentId - the ID of the agent to copy from
+   * @param versionTag - the version tag to associate with the newly created agent
+   */
   async createRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
     // Get the agent by its agentId
-    const existingAgent = await this.app.service('agents').get(agentId);
-    if (!existingAgent) {
+    const agentData = await this.app.service('agents').get(agentId, {});
+
+    if (!agentData) {
       throw new Error(`Agent with ID ${agentId} not found.`);
     }
 
     // Copy data from the fetched agent, omitting the ID field to create a new agent
-    const { id, ...agentData } = existingAgent;
     const newAgent = await this.app.service('agents').create(agentData);
 
     // Add the new agent's ID and the provided version tag to the AgentReleases table
@@ -170,7 +203,7 @@ export class AgentService<
     return { agent: newAgent, release };
   }
 
-  override async create(
+  async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
     // ADDING REST API KEY TO AGENT's DATA
@@ -186,7 +219,15 @@ export class AgentService<
       })
     }
 
-    return await super.create(data)
+    return await this._create(data)
+  }
+
+  async patch(agentId: string, params: AgentPatch) {
+    return this._patch(agentId, params)
+  }
+
+  async remove(agentId: string, params: ServiceParams) {
+    return this._remove(agentId, params)
   }
 }
 
@@ -203,4 +244,5 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     name: 'agents',
     multi: ['remove'],
   }
+
 }
