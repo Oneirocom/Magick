@@ -6,6 +6,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('connector')
     table.string('agentId').references('id').inTable('agents').notNullable()
     table.string('message').notNullable()
+    table.string('sender')
     table.dateTime('createdAt')
   })
 }
