@@ -189,7 +189,6 @@ const Playtest = ({ tab }) => {
   // Print to console callback function.
   const printToConsole = useCallback(
     (_, _text) => {
-      console.log('Playtest received!', _text);
       // check if _text is a string
       if (typeof _text !== 'string') {
         console.warn('Could not split text, not a string', _text);
