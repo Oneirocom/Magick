@@ -1,6 +1,5 @@
-import { Engine, Socket } from '@magickml/rete'
-import { Socket as SocketType } from 'rete/types'
-import { NodeData } from 'rete/types/core/data'
+import { Engine, Socket, NodeData } from '@magickml/rete'
+import { type Socket as SocketType } from '@magickml/rete'
 
 import { extractNodes } from '../../engine'
 import { SocketNameType } from '../../sockets'
@@ -44,16 +43,16 @@ export class ModuleManager {
     typeMap: Map<string, Socket>,
     defaultName: string
   ): ModuleSocketType[] {
-    return extractNodes(data.nodes, typeMap).map(
-      (node, i): ModuleSocketType => {
+    return extractNodes(data.nodes, typeMap)
+      .filter(n => !n.data.hideSocket)
+      .map((node, i): ModuleSocketType => {
         node.data.name = node.data.name || `${defaultName}-${i + 1}`
         return {
           name: node.data.name as SocketNameType,
           socketKey: node.data.socketKey as string,
           socket: this.socketFactory(node, typeMap.get(node.name)),
         }
-      }
-    )
+      })
   }
 
   getInputs(data: GraphData): ModuleSocketType[] {
@@ -86,7 +85,8 @@ export class ModuleManager {
     return socket as SocketType
   }
 
-  registerInput(name: string, socket: Socket) {
+  registerInput(name: string, socket: Socket, hide = false) {
+    socket.hide = hide
     this.inputs.set(name, socket)
   }
 

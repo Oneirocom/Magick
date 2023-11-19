@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Plugin } from 'rete/types/core/plugin'
+import { Plugin } from '@magickml/rete'
 import gridimg from './grid.png'
 import CommentPlugin from './plugins/commentPlugin'
 import CommentManager from './plugins/commentPlugin/manager'
@@ -33,7 +33,6 @@ import {
   ModulePlugin,
   ModulePluginArgs,
   MultiCopyPlugin,
-  MultiSocketGenerator,
   NodeClickPlugin,
   SocketGeneratorPlugin,
 } from '@magickml/core'
@@ -89,6 +88,7 @@ export const initEditor = function ({
   editor.context = context
   editor.tab = tab
   editor.currentSpell = spell
+  editor.tabMap = editorTabMap
 
   editor.use(CachePlugin)
 
@@ -135,7 +135,6 @@ export const initEditor = function ({
   editor.use(DebuggerPlugin)
   editor.use(MultiCopyPlugin)
   editor.use(SocketGeneratorPlugin)
-  editor.use(MultiSocketGenerator)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
 

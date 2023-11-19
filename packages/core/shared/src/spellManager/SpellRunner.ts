@@ -14,7 +14,7 @@ import {
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
 import { getLogger } from '../logger'
-import { NodeData } from 'rete/types/core/data'
+import { NodeData } from '@magickml/rete'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from '@magickml/config'
 import { AGENT_SPELL } from '../communication/agentEventTypes'
 
@@ -335,7 +335,18 @@ class SpellRunner {
         this.error('Component does not have a run method')
       }
 
-      const firstInput = Object.keys(inputs)[0]
+      const findFirstInputKey = inputs => {
+        // Iterate over the keys of the inputs object
+        for (const key of Object.keys(inputs)) {
+          // Check if the key starts with 'Input -'
+          if (key.startsWith('Input -')) {
+            return key // Return the first matching key
+          }
+        }
+        return inputs[0] // Return null if no matching key is found
+      }
+
+      const firstInput = findFirstInputKey(inputs)
 
       this.logger.info('firstInput: %o', firstInput)
 

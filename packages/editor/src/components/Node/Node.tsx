@@ -8,14 +8,44 @@ import { Icon, componentCategories } from '@magickml/client-core'
 import css from './Node.module.css'
 import { styled } from '@mui/material/styles'
 
+// Define the priorities
+const priorityConfig = {
+  socketTypes: ['Trigger', 'Event', 'String'], // Add all known socket types here in order of priority
+  socketNames: ['content'] // Add all known socket names here in order of priority
+};
+
+// Function to get the index of a socket name or type from the priority configuration; if not found, return a large index number
+const getPriorityIndex = (value: string, type: 'socketTypes' | 'socketNames') => {
+  const index = priorityConfig[type].indexOf(value);
+  return index === -1 ? 999 : index; // If the item is not found, assign a large index number to sort it to the end
+};
+
+// Sorting function using the priority configuration
+const sortSockets = (a: any, b: any) => {
+  // Compare socket types using their priority
+  const typePriorityA = getPriorityIndex(a.socket.name, 'socketTypes');
+  const typePriorityB = getPriorityIndex(b.socket.name, 'socketTypes');
+
+  if (typePriorityA !== typePriorityB) {
+    return typePriorityA - typePriorityB;
+  }
+
+  // If types are the same, compare socket names using their priority
+  const namePriorityA = getPriorityIndex(a.name, 'socketNames');
+  const namePriorityB = getPriorityIndex(b.name, 'socketNames');
+
+  if (namePriorityA !== namePriorityB) {
+    return namePriorityA - namePriorityB;
+  }
+
+  // If priorities are the same, sort by name alphabetically
+  return a.name.localeCompare(b.name);
+};
+
 /**
  * Custom Node component for rendering nodes with specific functionality.
  * Inherits from the base Node class.
  */
-
-
-
-
 export class MyNode extends Node {
   declare props: any
   declare state: any
@@ -64,6 +94,7 @@ export class MyNode extends Node {
     const StyleTooltip = styled(Tooltip)`
     width: initial;
     `
+
     return (
       <div
         className={`${css['node']} ${css[selected]} ${css[hasError ? 'error' : '']
@@ -93,7 +124,7 @@ export class MyNode extends Node {
           )}
           {inputs.length > 0 && (
             <div className={css['connection-container']}>
-              {inputs.map(input => (
+              {inputs.sort(sortSockets).map(input => (
                 <div className={css['input']} key={input.key}>
                   <div
                     onMouseEnter={() => handleMouseEnter(input)}
@@ -129,7 +160,7 @@ export class MyNode extends Node {
           )}
           {outputs.length > 0 && (
             <div className={`${css['connection-container']} ${css['out']}`}>
-              {outputs.map(output => (
+              {outputs.sort(sortSockets).map(output => (
                 <div className={css['output']} key={output.key}>
                   {typeof output != 'undefined' &&
                     output.connections.forEach(element => {

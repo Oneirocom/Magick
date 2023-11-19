@@ -1,7 +1,6 @@
 import isEqual from 'lodash/isEqual'
-import Rete from '@magickml/rete'
+import Rete, { Data } from '@magickml/rete'
 
-import { Data } from 'rete/types/core/data'
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
 import { InputControl } from '../../dataControls/InputControl'
@@ -10,7 +9,7 @@ import { SpellControl } from '../../dataControls/SpellControl'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
 import { SpellInterface } from '../../schemas'
-import { triggerSocket } from '../../sockets'
+import { eventSocket, triggerSocket } from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -109,11 +108,17 @@ export class SpellComponent extends MagickComponent<
     )
   }
 
+  created(node) {
+    this.updateModuleSockets(node)
+    node.update()
+  }
+
   builder(node: MagickNode) {
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
+    const eventIn = new Rete.Input('event', 'Event', eventSocket)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
 
-    node.addInput(triggerIn).addOutput(triggerOut)
+    node.addInput(eventIn).addInput(triggerIn).addOutput(triggerOut)
 
     const spellControl = new SpellControl({
       name: 'Spell Select',
@@ -255,7 +260,7 @@ export class SpellComponent extends MagickComponent<
 
       // subscribe to changes form the spell to update the sockets if there are changes
       // Note: We could store all spells in a spell map here and rather than receive the whole spell, only receive the diff, make the changes, update the sockets, etc.  Mayb improve speed?
-      this.subscribe(node, spell.name)
+      this.subscribe(node, spell.id)
 
       const context = this.editor && this.editor.context
       if (!context) return
@@ -301,7 +306,10 @@ export class SpellComponent extends MagickComponent<
   formatInputs(node: WorkerData, inputs: MagickWorkerInputs) {
     return Object.entries(inputs).reduce((acc, [key, value]) => {
       const name = inputNameFromSocketKey(node, key)
-      if (!name) return acc
+      if (!name) {
+        acc[key] = value[0]
+        return acc
+      }
 
       acc[name] = value[0]
       return acc
@@ -314,10 +322,8 @@ export class SpellComponent extends MagickComponent<
     _outputs: { [key: string]: string },
     _context: ModuleContext
   ) {
-    // We format the inputs since these inputs rely on the use of the socket keys.
-    const flattenedInputs = this.formatInputs(node, inputs)
-
     const publicVariables = getPublicVariables(node.data.graph)
+    const formattedInputs = this.formatInputs(node, inputs)
 
     // for each public variable...
     // todo switch to map
@@ -333,9 +339,13 @@ export class SpellComponent extends MagickComponent<
     const { module, spellManager, app, agent } = _context
     const { secrets } = module
 
+    // We want to trigger off the subspell with the incoming event as its payload.
+    formattedInputs['Input - Subspell'] = inputs.event[0]
+    delete formattedInputs.event
+
     const runComponentArgs = {
       spellId: node.data.spellId as string,
-      inputs: flattenedInputs,
+      inputs: formattedInputs,
       runSubspell: true,
       secrets: agent?.secrets ?? secrets,
       app,

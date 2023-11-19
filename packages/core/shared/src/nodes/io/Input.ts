@@ -8,7 +8,7 @@ import { InputControl } from '../../dataControls/InputControl'
 import { MagickComponent } from '../../engine'
 import { PluginIOType, pluginManager } from '../../plugin'
 import { DataControl } from '../../plugins/inspectorPlugin'
-import { anySocket, triggerSocket } from '../../sockets'
+import { anySocket, eventSocket, triggerSocket } from '../../sockets'
 import {
   CompletionSocket,
   MagickNode,
@@ -43,13 +43,14 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
     this.module = {
       nodeType: 'input',
+      hide: true,
       socket: anySocket,
     }
 
     this.common = true
 
-    this.contextMenuName = 'Input'
-    this.displayName = 'Input'
+    this.contextMenuName = 'Event Input'
+    this.displayName = 'Event Input'
   }
 
   /**
@@ -71,8 +72,8 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
     const dataOutput = {
       socket: 'output',
-      name: 'output',
-      type: anySocket,
+      name: 'Event',
+      type: eventSocket,
     }
 
     const triggerOutput = {
@@ -85,10 +86,10 @@ export class InputComponent extends MagickComponent<InputReturn> {
       {
         name: 'Default',
         inspectorControls: [inputName],
-        sockets: [],
+        sockets: [triggerOutput, dataOutput],
       },
       {
-        name: 'Task',
+        name: 'Subspell',
         inspectorControls: [],
         sockets: [triggerOutput, dataOutput],
       },
@@ -99,6 +100,9 @@ export class InputComponent extends MagickComponent<InputReturn> {
 
     // Set isInput to true so we can identify this node as an input node
     node.data.isInput = true
+
+    // Hide the input sockets on any parent node
+    node.data.hideSocket = true
 
     // Each node should have a unique socket key
     node.data.socketKey = node?.data?.socketKey || uuidv4()
@@ -205,7 +209,7 @@ export class InputComponent extends MagickComponent<InputReturn> {
           node.addOutput(new Rete.Output('trigger', 'trigger', triggerSocket))
         }
         if (!node.outputs.has('output')) {
-          node.addOutput(new Rete.Output('output', 'output', anySocket))
+          node.addOutput(new Rete.Output('output', 'Event', eventSocket))
         }
       }
 
