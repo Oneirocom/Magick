@@ -135,7 +135,6 @@ export const initEditor = function ({
   editor.use(DebuggerPlugin)
   editor.use(MultiCopyPlugin)
   editor.use(SocketGeneratorPlugin)
-  // editor.use(MultiSocketGenerator)
   editor.use(InspectorPlugin)
   editor.use(NodeClickPlugin)
 

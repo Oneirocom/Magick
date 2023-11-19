@@ -218,7 +218,6 @@ function install(
 
           component.builder = async node => {
             // @ts-ignore
-            console.log('UPDATING SOCKETS!')
             if (!component.noBuildUpdate) {
               component.updateModuleSockets(node)
             }
