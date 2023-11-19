@@ -93,11 +93,11 @@ body,
 .socket.output.trigger,
 .socket.input.trigger,
 .expanding.trigger {
-  background: var(--purple);
+  background: var(--white);
 }
 
 .trigger .main-path {
-  stroke: var(--purple) !important;
+  stroke: var(--white) !important;
 }
 
 .socket.output.event,
@@ -352,7 +352,7 @@ input:focus-visible {
 }
 
 .nav-item-active {
-  color: white;
+  color: var(--white);
 }
 
 .flex-container {
@@ -565,7 +565,7 @@ div.rcw-sender {
   align-items: center;
 }
 
-button.rcw-picker-btn, 
+button.rcw-picker-btn,
 button.rcw-send {
   background: transparent;
   box-shadow: none;
@@ -577,4 +577,4 @@ button.rcw-launcher {
 
 button.rcw-launcher.rcw-hide-sm {
   padding: 9px 20px;
-} 
+}

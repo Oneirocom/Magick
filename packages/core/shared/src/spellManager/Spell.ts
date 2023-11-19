@@ -1,4 +1,4 @@
-import { NodeData } from 'rete/types/core/data'
+import { NodeData } from '@magickml/rete'
 import { SpellInterface } from '../schemas'
 
 export class Spell {

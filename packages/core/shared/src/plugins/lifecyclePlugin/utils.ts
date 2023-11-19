@@ -26,7 +26,7 @@ export function getHook<T extends HookActions>(
 
   const component = editor.getComponent(name)
 
-  if (typeof method in component) {
+  if (component[method as string]) {
     const c = component as unknown as T
     const func = c[method] as () => unknown
 

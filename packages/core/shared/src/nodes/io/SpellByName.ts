@@ -1,7 +1,12 @@
 import Rete from '@magickml/rete'
 import { MagickComponent } from '../../engine'
 import { UpdateModuleSockets } from '../../plugins/modulePlugin'
-import { eventSocket, stringSocket, triggerSocket } from '../../sockets'
+import {
+  eventSocket,
+  objectSocket,
+  stringSocket,
+  triggerSocket,
+} from '../../sockets'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -45,7 +50,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     super(
       'Spell By Name',
       {
-        outputs: { output: 'output', trigger: 'option' },
+        outputs: { outputs: 'output', trigger: 'option' },
       },
       'Invoke/Spells',
       info
@@ -63,14 +68,16 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     const triggerIn = new Rete.Input('trigger', 'Trigger', triggerSocket, true)
     const spellName = new Rete.Input('spellName', 'Spell Name', stringSocket)
     const eventInput = new Rete.Input('event', 'Event', eventSocket)
+    const spellInputs = new Rete.Input('inputs', 'Inputs', objectSocket, true)
     const triggerOut = new Rete.Output('trigger', 'Trigger', triggerSocket)
-    const output = new Rete.Output('output', 'Output', stringSocket)
+    const outputs = new Rete.Output('outputs', 'Outputs', objectSocket)
     node
       .addInput(triggerIn)
       .addOutput(triggerOut)
       .addInput(spellName)
       .addInput(eventInput)
-      .addOutput(output)
+      .addInput(spellInputs)
+      .addOutput(outputs)
 
     return node
   }
@@ -92,12 +99,8 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
     _context: ModuleContext
   ) {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
-
-    // todo should be better typed.  Removed 'EventData' to prevent circular dependency
     const event = inputs['event'] && (inputs['event'][0] as any)
-
     const { agent, module, spellManager } = _context
-
     const { app, secrets } = module
 
     if (!app) {
@@ -124,11 +127,14 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
 
     const spellId = firstSpell.id || firstSpell._id
 
+    const spellInputs = inputs.inputs[0] as Record<string, unknown>
+
     const { projectId } = _context
     if (agent) {
       const runComponentArgs = {
         inputs: {
-          'Input - Default': event,
+          'Input - Subspell': event,
+          ...spellInputs,
         },
         runSubspell: false,
         spellId,
@@ -137,18 +143,18 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         app: module.app,
         publicVariables: {},
       }
-      const outputs = await app
+      const spellOutputs = await app
         .get('agentCommander')
         .runSpellWithResponse(runComponentArgs)
 
-      const output = Object.values(outputs as any)[0]
       return {
-        output,
+        outputs: spellOutputs,
       }
     } else {
       const runComponentArgs = {
         inputs: {
-          'Input - Default': event,
+          'Input - Subspell': event,
+          ...spellInputs,
         },
         runSubspell: false,
         spellId: spellId as string,
@@ -164,13 +170,10 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
         throw new Error(`Spell runner for ${spellName} not found`)
       }
 
-      const outputs = await spellRunner.runComponent(runComponentArgs)
-
-      // get the first value from outputs
-      const output = Object.values(outputs as any)[0]
+      const spellOutputs = await spellRunner.runComponent(runComponentArgs)
 
       return {
-        output,
+        outputs: spellOutputs,
       }
     }
   }
