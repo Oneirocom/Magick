@@ -4,7 +4,7 @@ import Rete from 'rete'
 //@ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
-import { MagickComponent, MagickNode, WorkerData } from '../../types'
+import { MagickComponent, MagickNode } from '../../types'
 import { TaskOptions } from '../../plugins/taskPlugin/task'
 import { triggerSocket } from '../../sockets'
 import { InputControl } from '../../dataControls/InputControl'
