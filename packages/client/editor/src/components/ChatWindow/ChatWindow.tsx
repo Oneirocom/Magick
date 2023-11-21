@@ -301,8 +301,6 @@ const ChatWindow = ({ tab, spellId }) => {
     }
 
     setValue('')
-
-    publish($RUN_SPELL(tab.id), data)
     publish($RUN_SPELL(tab.id), data)
   }
 
