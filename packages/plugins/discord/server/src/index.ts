@@ -83,7 +83,7 @@ async function handleResponse({ output, agent, event }) {
     return agent.logger.warn('No output to send to discord')
 
   agent.trackEvent(AgentEvents.AGENT_DISCORD_RESPONSE, {}, event)
-  await agent?.discord?.sendMessageToChannel(event.channel, output)
+  await agent?.discord?.sendMessageToChannel(event.channelId, output)
 }
 
 // Input socket configurations
