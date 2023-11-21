@@ -32,6 +32,7 @@
       "@magickml/feathersRedux": [
         "packages/client/feathers-redux-toolkit/src/index.ts"
       ],
+      "@magickml/grimoire": ["packages/server/grimoire/src/index.ts"],
       "@magickml/plugin-anthropic-client": [
         "packages/plugins/anthropic/client/src/index.ts"
       ],
