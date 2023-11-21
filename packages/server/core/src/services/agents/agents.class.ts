@@ -33,11 +33,11 @@ export class AgentService<
 
   async get(agentId: string, params: ServiceParams) {
     const db = app.get('dbClient')
-    const { currentReleaseVersion } = params.query
+    const currentReleaseVersionId = params.query?.currentReleaseVersionId
 
     const query = super.createQuery(params)
 
-    if (agentId && !currentReleaseVersion) {
+    if (agentId && !currentReleaseVersionId) {
       const count = await db('agentReleases').count('*').as('count').where('agent_id', '=', agentId)
 
       if (count["count"] > 0) {
@@ -47,11 +47,11 @@ export class AgentService<
           })
       }
 
-    } else if(agentId && currentReleaseVersion) {
+    } else if(agentId && currentReleaseVersionId) {
 
       query
         .leftJoin('agentRelease as releases', function() {
-          this.on('agents.id', '=', 'agentReleases.agentId').andOn(currentReleaseVersion, '=', 'agentReleases.releaseVersion')
+          this.on('agents.id', '=', 'agentReleases.agentId').andOn(currentReleaseVersionId, '=', 'agentReleases.releaseVersion')
         })
     }
 
