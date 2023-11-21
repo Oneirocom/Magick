@@ -83,7 +83,7 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
     return () => resizeObserver.disconnect();
   }, [isRefAvailable]);
 
-  const textColor = log.messageType === 'error' ? 'text-red-500' : 'text-white';
+  const textColor = log.type === 'error' ? 'text-red-500' : 'text-white';
 
   return (
     <div className="flex flex-col justify-between p-1 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
