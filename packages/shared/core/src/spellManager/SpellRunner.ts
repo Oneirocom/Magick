@@ -71,6 +71,17 @@ class SpellRunner {
     })
   }
 
+  error(message: string, error: unknown | null = null) {
+    this.busy = false
+    if (!this.agent) return
+
+    this.agent.error(message, {
+      spellId: this.currentSpell.id,
+      projectId: this.currentSpell.projectId,
+      error,
+    })
+  }
+
   emit(_message) {
     // same message emitted from server or agent
     const message = {
@@ -270,12 +281,6 @@ class SpellRunner {
 
   isBusy() {
     return this.busy
-  }
-  error(message: string, error: unknown | null = null) {
-    this.busy = false
-    this.logger.error(error, message)
-    if (error) throw error
-    throw new Error(message)
   }
 
   /**
