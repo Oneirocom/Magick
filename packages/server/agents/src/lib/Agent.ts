@@ -259,7 +259,7 @@ export class Agent implements AgentInterface {
   }
 
   error(message, data = {}) {
-    this.logger.error(`${message} %o`, { error: data })
+    this.logger.error({ error: data }, `${message} %o`)
     this.publishEvent(AGENT_LOG(this.id), {
       agentId: this.id,
       projectId: this.projectId,
