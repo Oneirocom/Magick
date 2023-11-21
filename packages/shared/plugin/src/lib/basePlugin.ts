@@ -34,7 +34,7 @@ export type EventFormat = {
  */
 export abstract class BasePlugin extends Plugin {
   protected events: EventDefinition[]
-  protected eventEmitter: EventEmitter
+  eventEmitter: EventEmitter
   protected eventQueue: BullQueue
   protected enabled: boolean = false
 
