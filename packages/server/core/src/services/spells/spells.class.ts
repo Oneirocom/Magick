@@ -33,7 +33,7 @@ export class SpellService<
 
   async get(spellId: string, params: ServiceParams) {
     const db = app.get('dbClient')
-    const { versionId } = params.query
+    const versionId = params.query?.versionId
 
     const query = super.createQuery(params)
 
