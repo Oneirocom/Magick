@@ -1,0 +1,39 @@
+meta {
+  name: Create Release
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/agents/createRelease/d9289fe5-71ad-4472-bcbe-f692ecd7d733?projectId=clp77m6sc0003ffjuezrwphn7
+  body: json
+  auth: none
+}
+
+query {
+  projectId: clp77m6sc0003ffjuezrwphn7
+}
+
+headers {
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0
+  Accept: */*
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate, br
+  Referer: http://localhost:4200/
+  authorization: Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..69iUxpF7UvHXdMGi.qd9RrgVcsmGGc8jBVVdiKe-aPRuH6S8yv2ng5O8oB2LLMTj9nlXlwAsmHDk86IeSKMp2u5JvYHuHixjRgx8D5NgUn3SgZFrxS8ovcWY0eAwxMauvp17g80i0IgyOEX5EfiCBXDrYkC11twOvhEn3nL0-cRN_c2mrZ_C_2s9bFxtwrw0_zyAImenE7mF9B541-QHGNhAg_1sLcD3O4xMOx7GkMOQa29YRlENjlsN-efRAUuSLcFOIikvv82V-DgtFGcxNjR9Td3nGWPdgJ_zzMQU42AbosEE3DlopyKGyS6y6q742A7nnPWf_EpxgGz5WIoi9zmTsMrX8a_-ERIypXS0rEovl6P8hkKgHI3ytaGng7bwVKVWdCub8N2IUZgfKfIZlG3N7h2opPUI2BwvfV-yluuFqEnLKSIomdpcR6mKuIWVgnAkc_zpPDEVMll5nl44ZiMi2roDhLjgEdUVqOoGQ7agY3RIrOvXulKeWnX3nswum883DNeQPN09Y547bVoV7Qn6zlUS2BqrwW6XhOM9BMIj08Ew52N53EdcVzHetKMGfOp5xK5BWEXZajrASosPoAo2UyopG1aQIHMygy2DNxvcmPghmlD2rZfqcQZWnt-3JRP6ecKeXmStxEiMgbpM_sSR332HzenbPMtMBgeQjio6mUrebg6OR3IjUCzTFb7Ob4AryyF-vUb6WAs92DpJckfnL8ZyUSFyvAH84Jhz3RbDluDeR6hKQd7d0Ie546n6TViI8nSYpFcBjnnymYVYLfORw_9_A_St1c6t8.wdgZei2lnX_enT4ibTJHOg
+  Origin: http://localhost:4200
+  Connection: keep-alive
+  Sec-Fetch-Dest: empty
+  Sec-Fetch-Mode: cors
+  Sec-Fetch-Site: same-site
+  DNT: 1
+  Sec-GPC: 1
+}
+
+body:json {
+  {
+    "agentId": "d9289fe5-71ad-4472-bcbe-f692ecd7d733",
+    "versionTag": "Test",
+    "projectId": "clp77m6sc0003ffjuezrwphn7"
+  }
+}
