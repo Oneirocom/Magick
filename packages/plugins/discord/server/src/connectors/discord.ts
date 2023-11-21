@@ -2,10 +2,13 @@
 import { getLogger } from 'shared/core'
 import { app } from 'server/core'
 import Discord, {
+  Client,
   AttachmentBuilder,
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
+  Message,
+  ChannelType,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import {
@@ -14,14 +17,18 @@ import {
   recognizeSpeech,
 } from './discord-voice'
 
+type ExtendedClient = Client & {
+  embed?: EmbedBuilder
+}
+
 export class DiscordConnector {
   logger = getLogger()
-  client = Discord.Client as any
+  client!: ExtendedClient | null
   agent: any
   spellRunner: any = null
   guildId!: any
   message!: any
-  token: String
+  token: string
   constructor(options) {
     const { agent, discord_api_key, spellRunner } = options
     this.agent = agent
@@ -117,11 +124,17 @@ export class DiscordConnector {
   }
 
   async initialize() {
+    if (!this.client) {
+      throw new Error('Discord client not initialized')
+    }
     return this.client.login(this.token)
   }
 
   async destroy() {
     console.log('destroying discord client')
+    if (!this.client) {
+      throw new Error('Discord client not initialized')
+    }
     await this.client.destroy()
     this.client = null
   }
@@ -230,7 +243,15 @@ export class DiscordConnector {
   }
 
   //Event that is trigger when a new message is created (sent)
-  messageCreate = async (message: any) => {
+  messageCreate = async (message: Message) => {
+    if (!this.client) {
+      console.log('client not defined')
+      return
+    }
+    if (!this.client.user) {
+      console.log('client user not defined')
+      return
+    }
     console.log('new message from discord:', message.content)
     this.guildId = message.guild
     this.message = message
@@ -251,9 +272,7 @@ export class DiscordConnector {
       return
     }
 
-    const entities: {
-      user: string
-    }[] = []
+    const entities: string[] = []
 
     // add the mentioned users
     mentions.users.forEach(user => {
@@ -285,10 +304,13 @@ export class DiscordConnector {
         [`Input - Discord (${inputType})`]: {
           connector: `Discord (${inputType})`,
           content: content,
-          sender: author.id,
+          sender: author.username,
           observer: this.client.user.username,
           client: 'discord',
-          channel: message.channel.id,
+          channel: message?.channel['name']
+            ? message.channel['name']
+            : author.id,
+          channelId: message.channel.id,
           agentId: this.agent.id,
           entities: entities,
           channelType: inputType,
@@ -304,35 +326,16 @@ export class DiscordConnector {
     })
   }
 
-  //Event that is triggered when a message is deleted
-  messageDelete = async (
-    client: { user: any },
-    message: { author: any; channel: any; id: any }
-  ) => {
-    const { author, channel } = message
-    if (!author) return
-    if (!client || !client.user) return
-    if (author.id === this.client.user.id) return
-    this.logger.info('message deleted by', author.username, 'in', channel.id)
-  }
-
   //Event that is triggered when the discord client fully loaded
   ready = async () => {
     this.logger.info('client is ready')
   }
 
-  async sendImageToChannel(channelId: any, imageUri: any) {
-    try {
-      const channel = await this.client.channels.fetch(channelId)
-      const buffer = Buffer.from(imageUri, 'base64')
-      const attachment = new AttachmentBuilder(buffer, { name: 'image.png' })
-      await channel.send(attachment)
-    } catch (error) {
-      this.logger.error(`Error sending image to channel: ${error}`)
-    }
-  }
-
   async sendMessageToChannel(channelId: any, msg: any) {
+    if (!this.client) {
+      console.log('client not defined')
+      return
+    }
     try {
       const channel = await this.client.channels.fetch(channelId)
       if (msg && msg !== '' && channel && channel !== undefined) {
@@ -361,7 +364,7 @@ export class DiscordConnector {
 
         // Send each chunk individually
         for (const chunk of finalChunks) {
-          channel.send(chunk)
+          if (channel.isTextBased()) channel.send(chunk)
         }
       } else {
         this.logger.error(
