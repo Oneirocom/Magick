@@ -181,6 +181,7 @@ export class Agent implements AgentInterface {
     this.commandHub.registerDomain('agent', 'core', {
       toggleLive: async (data: any) => {
         this.spellManager.toggleLive(data)
+        // update this to use new spellCaster
       },
     })
   }
