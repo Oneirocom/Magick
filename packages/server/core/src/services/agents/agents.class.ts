@@ -47,7 +47,7 @@ export class AgentService<
           })
       }
 
-    } else if(agentId && currentReleaseVersionId) {
+    } else if (agentId && currentReleaseVersionId) {
 
       query
         .leftJoin('agentRelease as releases', function() {
@@ -55,8 +55,8 @@ export class AgentService<
         })
     }
 
-    const data = await query.andWhere('agents.id', '=', agentId)
-    if (data.length !== 1) {
+    const data = await query.andWhere('agents.id', '=', agentId).limit(1).first()
+    if (!data) {
       throw new NotFound(`No record found for id '${agentId}'`)
     }
 
@@ -70,7 +70,7 @@ export class AgentService<
   async update(id: string, data: AgentData, params?: ServiceParams) {
     // Call the original update method to handle other updates
     return this._update(id, data, params);
-  } 
+  }
 
   // we use this ping to avoid firing a patched event on the agent
   // every time the agent is pinged
@@ -160,13 +160,15 @@ export class AgentService<
    * @param agentId - the ID of the agent to copy from
    * @param versionTag - the version tag to associate with the newly created agent
    */
-  async createRelease(agentId: string, versionTag: string): Promise<{agent: Agent, release: any}> {
+  async createRelease(agentId: string, versionTag: string): Promise<{ agent: Agent, release: any }> {
     // Get the agent by its agentId
     const agentData = await this.app.service('agents').get(agentId, {});
 
     if (!agentData) {
       throw new Error(`Agent with ID ${agentId} not found.`);
     }
+
+    console.log(agentData)
 
     // Copy data from the fetched agent, omitting the ID field to create a new agent
     const newAgent = await this.app.service('agents').create(agentData);

@@ -38,24 +38,26 @@ export class SpellService<
     const query = super.createQuery(params)
 
     if (spellId && !versionId) {
-      const count = await db('agentReleases').count('*').as('count').where('id', '=', versionId)
+      const count = await db('agentReleases').count('*').as('count').leftJoin('spells as spells', function() {
+        this.on('spells.versionId', '=', 'agentReleases.id').andOn('spells.id', '=', spellId)
+      })
 
       if (count["count"] > 0) {
         query
           .leftJoin('agentRelease as releases', function() {
-            this.on('agents.id', '=', 'agentReleases.agentId')
+            this.on('spells.versionId', '=', 'agentReleases.id')
           })
       }
 
     } else if(spellId && versionId) {
       query
         .leftJoin('agentRelease as releases', function() {
-          this.on('spelld.versionId', '=', 'agentReleases.id').andOn(versionId, '=', 'agentReleases.id')
+          this.on('spelld.versionId', '=', 'agentReleases.id').andOn('agentReleases.id', '=', versionId)
         })
     }
 
-    const data = await query.andWhere('spells.id', '=', spellId)
-    if (data.length !== 1) {
+    const data = await query.andWhere('spells.id', '=', spellId).first()
+    if (!data) {
       throw new NotFound(`No record found for id '${spellId}'`)
     }
 
@@ -63,7 +65,7 @@ export class SpellService<
   }
 
   async find(params: ServiceParams) {
-    return this._find(params)
+    return this._find(params) as Promise<Paginated<SpellInterface>>
   }
 
   async update(spellId: string, params: SpellData) {
@@ -92,7 +94,7 @@ export class SpellService<
     const spellData = await app
       .service('spells')
       .find({ query: { projectId, name } })
-    const spell = spellData[0]
+    const spell = spellData.data[0]
 
     // Check if spell exists and that diff is available
     if (!spell) throw new BadRequest(`No spell with ${name} name found.`)
