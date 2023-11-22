@@ -109,6 +109,12 @@ export class CommandHub {
    * @param domain - The domain to register the commands for.
    * @param subdomain - The subdomain to register the commands for.
    * @param commands - An object containing the commands to register.
+   * @example
+   * registerDomain('agent', 'core', {
+   *  toggleLive: async (data: any) => {
+   *   this.spellManager.toggleLive(data)
+   *  },
+   * });
    */
   registerDomain(
     domain: string,
