@@ -47,7 +47,7 @@ import {
  * 
 
  */
-class Spellbook {
+export class Spellbook {
   /**
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
@@ -107,7 +107,8 @@ class Spellbook {
    *  }
    * }
    */
-  watchSpells: boolean
+  private watchSpells = false
+
   /**
    * Logger instance.
    */
@@ -138,17 +139,14 @@ class Spellbook {
     app,
     agent,
     plugins,
-    watchSpells = false,
   }: {
     app: Application
     agent: any
     plugins: BasePlugin[]
-    watchSpells?: boolean
   }) {
     this.app = app
     this.agent = agent
     this.plugins = plugins
-    this.watchSpells = watchSpells
     this.pluginEventEmitters = new Map()
     this.initializePlugins()
     this.buildRegistry()
@@ -195,7 +193,69 @@ class Spellbook {
    * await spellbook.loadSpells(spells);
    */
   async loadSpells(spells: SpellInterface[]) {
-    await Promise.all(spells.map(spell => this.load(spell)))
+    await Promise.all(spells.map(spell => this.loadSpell(spell)))
+  }
+
+  /**
+   * Loads the spell runner for the given spell id.
+   * @param {string} spellId - Id of the spell.
+   * @returns {Promise<SpellCaster | undefined>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
+   * @example
+   * const spellCaster= await spellbook.loadById(spellId);
+   */
+  async loadById(spellId: string): Promise<SpellCaster | undefined> {
+    this.logger.debug(`Loading spell ${spellId}`)
+    try {
+      const spell = await this.app.service('spells').get(spellId)
+
+      if (
+        this.hasSpellCaster(spellId) &&
+        this.getReadySpellCaster(spellId) &&
+        isEqual(this.getReadySpellCaster(spellId)!.spell.graph, spell.graph)
+      ) {
+        return this.getReadySpellCaster(spellId)
+      }
+
+      this.logger.debug(`Reloading spell ${spellId}`)
+      return this.loadSpell(spell)
+    } catch (error) {
+      this.logger.error(`Error loading spell ${spellId}: %o`, error)
+      return
+    }
+  }
+
+  /**
+   * Loads the spell runner for the given spell.
+   * @param {SpellInterface} spell - Spell instance.
+   * @returns {Promise<SpellRunner | null>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
+   * @example
+   * const spellCaster = await spellbook.load(spell);
+   * @example
+   * const spellCaster = await spellbook.load({
+   *   id: 'spellId',
+   *   graph: {},
+   * });
+   */
+  async loadSpell(spell: SpellInterface): Promise<SpellCaster | undefined> {
+    if (!spell) {
+      this.agent?.error('No spell provided')
+      console.error('No spell provided')
+      return
+    }
+
+    const spellCaster = await new SpellCaster({}).initialize(
+      spell,
+      this.mainRegistry
+    )
+
+    const spellCasterList = this.spellMap.get(spell.id)
+    if (spellCasterList) {
+      spellCasterList.push(spellCaster)
+    } else {
+      this.spellMap.set(spell.id, [spellCaster])
+    }
+
+    return spellCaster
   }
 
   /**
@@ -210,7 +270,7 @@ class Spellbook {
 
     if (!spellCaster) {
       this.logger.warn(`No spell runner found for spell ${spell.id}`)
-      await this.load(spell)
+      await this.loadSpell(spell)
       return
     }
 
@@ -245,68 +305,6 @@ class Spellbook {
    */
   hasSpellCaster(spellId: string): boolean {
     return this.spellMap.has(spellId)
-  }
-
-  /**
-   * Loads the spell runner for the given spell id.
-   * @param {string} spellId - Id of the spell.
-   * @returns {Promise<SpellCaster | undefined>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
-   * @example
-   * const spellCaster= await spellbook.loadById(spellId);
-   */
-  async loadById(spellId: string): Promise<SpellCaster | undefined> {
-    this.logger.debug(`Loading spell ${spellId}`)
-    try {
-      const spell = await this.app.service('spells').get(spellId)
-
-      if (
-        this.hasSpellCaster(spellId) &&
-        this.getReadySpellCaster(spellId) &&
-        isEqual(this.getReadySpellCaster(spellId)!.spell.graph, spell.graph)
-      ) {
-        return this.getReadySpellCaster(spellId)
-      }
-
-      this.logger.debug(`Reloading spell ${spellId}`)
-      return this.load(spell)
-    } catch (error) {
-      this.logger.error(`Error loading spell ${spellId}: %o`, error)
-      return
-    }
-  }
-
-  /**
-   * Loads the spell runner for the given spell.
-   * @param {SpellInterface} spell - Spell instance.
-   * @returns {Promise<SpellRunner | null>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
-   * @example
-   * const spellCaster = await spellbook.load(spell);
-   * @example
-   * const spellCaster = await spellbook.load({
-   *   id: 'spellId',
-   *   graph: {},
-   * });
-   */
-  async load(spell: SpellInterface): Promise<SpellCaster | undefined> {
-    if (!spell) {
-      this.agent?.error('No spell provided')
-      console.error('No spell provided')
-      return
-    }
-
-    const spellCaster = await new SpellCaster({}).initialize(
-      spell,
-      this.mainRegistry
-    )
-
-    const spellCasterList = this.spellMap.get(spell.id)
-    if (spellCasterList) {
-      spellCasterList.push(spellCaster)
-    } else {
-      this.spellMap.set(spell.id, [spellCaster])
-    }
-
-    return spellCaster
   }
 
   /**
@@ -427,5 +425,3 @@ class Spellbook {
     }
   }
 }
-
-export default Spellbook
