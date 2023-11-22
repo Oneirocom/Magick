@@ -88,7 +88,7 @@ export class Agent implements AgentInterface {
     })
     ;(async () => {
       // initialize the plugins
-      await this.initializePlugins()
+      await this.initializeV1Plugins()
 
       // initialize the plugin commands
       this.initializePluginCommands()
@@ -122,7 +122,7 @@ export class Agent implements AgentInterface {
    * Runs the agent start methods that were loaded from plugins.
    * Sets the outputTypes for the Agent.
    */
-  private async initializePlugins() {
+  private async initializeV1Plugins() {
     if (!this.data.rootSpellId) {
       this.logger.warn('No root spell found for agent: %o', {
         id: this.id,
