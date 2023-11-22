@@ -2,7 +2,7 @@ import { Worker as BMQWorker, Job } from 'bullmq'
 import { app } from '../../app'
 import { Worker } from './Worker'
 
-export class BullMQWorker extends Worker {
+export class BullMQWorker<T = any> extends Worker {
   declare worker: BMQWorker
 
   constructor() {
@@ -11,7 +11,7 @@ export class BullMQWorker extends Worker {
 
   override initialize(
     queueName: string,
-    callback: (job: Job<any>) => Promise<any>
+    callback: (job: Job<T>) => Promise<any>
   ): void {
     const connection = app.get('redis')
     this.worker = new BMQWorker(queueName, callback, {
