@@ -2,7 +2,15 @@ import { EventEmitter } from 'events'
 import { BullQueue } from 'server/core'
 import { Plugin } from './plugin'
 import { Agent } from 'server/agents'
+import {
+  IRegistry,
+  NodeDefinition,
+  ValueType,
+  ValueTypeMap,
+  memo,
+} from '@magickml/behave-graph'
 
+export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
  * Interface for defining an event.
  * @property eventName - The unique name of the event, typically namespaced.
@@ -12,7 +20,6 @@ import { Agent } from 'server/agents'
 interface EventDefinition {
   eventName: string
   displayName: string
-  payloadType: any
 }
 
 export type EventFormat = {
@@ -23,7 +30,25 @@ export type EventFormat = {
   rawData: unknown
   channelType: string
   observer: string
+  metadata?: Record<string, any>
   status?: 'success' | 'error' | 'pending' | 'unknown'
+}
+
+export type EventPayload = {
+  connector: string
+  eventName: string
+  status: 'success' | 'error' | 'pending' | 'unknown'
+  content: string
+  sender: string
+  observer: string
+  client: string
+  channel: string
+  // agentId: string
+  // entities: any[]
+  channelType: string
+  rawData: unknown
+  timestamp: string
+  metadata: Record<string, any>
 }
 
 /**
@@ -31,12 +56,17 @@ export type EventFormat = {
  * @property name - The name of the plugin.
  * @property events - An array of events the plugin can emit.
  * @property eventEmitter - The event emitter for emitting events.
+ * @property eventQueue - The BullMQ queue for processing events.
+ * @property enabled - The enabled state of the plugin.
  */
 export abstract class BasePlugin extends Plugin {
   protected events: EventDefinition[]
-  eventEmitter: EventEmitter
   protected eventQueue: BullQueue
   protected enabled: boolean = false
+  dependencies: Record<string, any>
+  nodes: NodeDefinition[]
+  values: ValueType[]
+  eventEmitter: EventEmitter
 
   /**
    * Creates an instance of BasePlugin.
@@ -44,14 +74,56 @@ export abstract class BasePlugin extends Plugin {
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor(name: string, eventQueue: BullQueue) {
+  constructor(name: string) {
     super({ name })
     this.eventEmitter = new EventEmitter()
-    this.eventQueue = eventQueue
+    this.eventQueue = new BullQueue()
+    this.eventQueue.initialize(this.queueName)
     this.events = []
+    this.nodes = []
+    this.values = []
+    this.dependencies = []
     this.defineEvents()
     this.initializeFunctionalities()
   }
+
+  /**
+   * Returns a dictionary of the behave values this plugin may provide
+   * @returns A dictionary of the behave values
+   */
+  protected getPluginValues = memo<ValueTypeMap>(() => {
+    const valueTypes = this.values
+    return Object.fromEntries(
+      valueTypes.map(valueType => [valueType.name, valueType])
+    )
+  })
+
+  /**
+   * Returns a dictionary of the behave nodes this plugin may provide
+   * @returns A dictionary of the behave nodes
+   */
+  protected getPluginNodes = memo<Record<string, NodeDefinition>>(() => {
+    const nodeDefinitions = this.nodes
+
+    return Object.fromEntries(
+      nodeDefinitions.map(nodeDefinition => [
+        nodeDefinition.typeName,
+        nodeDefinition,
+      ])
+    )
+  })
+
+  /**
+   * Returns a dictionary of the behave dependencies this plugin may provide
+   * @returns A dictionary of the behave dependencies
+   */
+  protected getPluginDependencies = memo<Record<string, any>>(() => {
+    const dependencies = this.dependencies
+
+    return Object.fromEntries(
+      dependencies.map(dependency => [dependency.name, dependency])
+    )
+  })
 
   /**
    * Emits an event with the given name and payload.
@@ -60,9 +132,39 @@ export abstract class BasePlugin extends Plugin {
    * @example
    * this.emitEvent('myEvent', { data: 'example' });
    */
-  protected emitEvent(eventName: string, payload: any) {
+  protected emitEvent(eventName: string, payload: EventPayload) {
     if (!this.enabled) return
     this.eventEmitter.emit(eventName, payload)
+  }
+
+  /**
+   * Returns the name of the BullMQ queue for the plugin.
+   * Format: event:pluginName
+   * @returns The name of the queue.
+   * @example
+   * const queueName = this.getQueueName();
+   */
+  get queueName() {
+    return `event:${this.name}`
+  }
+
+  /**
+   * Returns a registry object merged with the plugin's specific registry.
+   * @param existingRegistry An existing registry to merge with the plugin's registry.
+   * @returns A merged registry object.
+   */
+  getRegistry(existingRegistry: IRegistry): IRegistry {
+    // Define the plugin-specific values, nodes, and dependencies
+    const pluginValues = this.getPluginValues()
+    const pluginNodes = this.getPluginNodes()
+    const pluginDependencies = this.getPluginDependencies()
+
+    // Merge the plugin's registry with the existing registry
+    return {
+      values: { ...existingRegistry.values, ...pluginValues },
+      nodes: { ...existingRegistry.nodes, ...pluginNodes },
+      dependencies: { ...existingRegistry.dependencies, ...pluginDependencies },
+    }
   }
 
   /**
@@ -139,10 +241,10 @@ export abstract class BasePlugin extends Plugin {
    * @param messageDetails Details of the message to format.
    * @returns Formatted message event payload.
    */
-  formatMessageEvent(event, messageDetails: EventFormat) {
+  formatMessageEvent(event, messageDetails: EventFormat): EventPayload {
     return {
       connector: this.name,
-      event,
+      eventName: event,
       status: messageDetails.status || 'success',
       content: messageDetails.content,
       sender: messageDetails.senderId,
@@ -153,6 +255,7 @@ export abstract class BasePlugin extends Plugin {
       // entities: messageDetails.entities,
       channelType: messageDetails.channelType,
       rawData: messageDetails.rawData,
+      metadata: messageDetails.metadata || {},
       timestamp: new Date().toISOString(),
     }
   }
