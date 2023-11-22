@@ -1,7 +1,7 @@
 import * as Bull from 'bullmq'
 import { EventEmitter } from 'events'
 import SpellCaster from './spellCaster'
-import { BasePlugin, EventFormat } from 'shared/plugin'
+import { BasePlugin, EventFormat, EventPayload } from 'shared/plugin'
 import {
   BullQueue,
   type Application,
@@ -11,16 +11,48 @@ import {
 import { Agent } from 'server/agents'
 import isEqual from 'lodash/isEqual'
 import { getLogger } from 'shared/core'
+import {
+  DefaultLogger,
+  IRegistry,
+  ManualLifecycleEventEmitter,
+  registerCoreProfile,
+} from '@magickml/behave-graph'
 
 /**
- * Manages spell runners and handles events from plugins.
+ * The `Spellbook` serves as the orchestrator within an event-driven architecture, 
+ * managing the execution lifecycle of `SpellCasters`—dedicated executors for units 
+ * of logic termed as spells. It adeptly assigns tasks to `SpellCasters` in response 
+ * to events triggered by plugins, ensuring efficient resource management and responsiveness.
+ * These spells casters are horizontally scalable, allowing for the execution of multiple
+ * spells in parallel.
+ *
+ * Featuring real-time synchronization, the `Spellbook` enables dynamic spell updates,
+ * reflecting changes instantaneously. This architecture not only bolsters modularity 
+ * and scalability but also delineates a clear operational boundary within the application, 
+ * paving the way for a robust and maintainable codebase.
+ * 
+ * @example
+ * const spellbook = new Spellbook({
+ * app,
+ * agent,
+ * plugins,
+ * watchSpells: true,
+ * });
+ * 
+ * @example
+ * spellbook.loadSpells(spells);
+ *  
+ * @example
+ * spellbook.updateSpell(spell);
+ * 
+
  */
 class Spellbook {
   /**
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
    */
-  private spellCasterMap: Map<string, SpellCaster[]> = new Map()
+  private spellMap: Map<string, SpellCaster[]> = new Map()
 
   /**
    * Map of plugin event emitters.
@@ -82,6 +114,11 @@ class Spellbook {
   logger = getLogger()
 
   /**
+   * Main registry.
+   */
+  mainRegistry!: IRegistry
+
+  /**
    * Constructs a SpellManager.
    * @param app - The application instance.
    * @param agent - The agent instance.
@@ -114,6 +151,7 @@ class Spellbook {
     this.watchSpells = watchSpells
     this.pluginEventEmitters = new Map()
     this.initializePlugins()
+    this.buildRegistry()
     this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
   }
 
@@ -145,7 +183,19 @@ class Spellbook {
    * Clears the spell runner map.
    */
   clear() {
-    this.spellCasterMap = new Map()
+    this.spellMap = new Map()
+  }
+
+  /**
+   * Loads the spell casters for the given spells.  We use this to load the spells when the agent starts.
+   * With this new system, we no longer need a single root spell but all spells can process events in parallel.
+   * @param {SpellInterface[]} spells - Array of spell instances.
+   * @returns {Promise<void>} - Promise that resolves when the spells are loaded.
+   * @example
+   * await spellbook.loadSpells(spells);
+   */
+  async loadSpells(spells: SpellInterface[]) {
+    await Promise.all(spells.map(spell => this.load(spell)))
   }
 
   /**
@@ -166,10 +216,11 @@ class Spellbook {
 
     // we need to go through every spellCaster and update it
     // todo monitor this for performance.  Might be easier to nuke the spellCasters and create a new one
-    const spellCasterList = this.spellCasterMap.get(spell.id)
+    const spellCasterList = this.spellMap.get(spell.id)
     if (spellCasterList) {
-      spellCasterList.forEach(async caster => {
-        await caster.loadSpell(spell)
+      // we need to reinitialize the spellCaster
+      spellCasterList.forEach(async runner => {
+        await runner.initialize(spell, this.mainRegistry)
       })
     }
   }
@@ -182,7 +233,7 @@ class Spellbook {
    * const spellRunner = spellbook.getReadySpellRunner(spellId);
    */
   getReadySpellCaster(spellId: string): SpellCaster | undefined {
-    return this.spellCasterMap.get(spellId)?.find(runner => !runner.isBusy())
+    return this.spellMap.get(spellId)?.find(runner => !runner.isBusy())
   }
 
   /**
@@ -193,7 +244,7 @@ class Spellbook {
    * const hasSpellRunner = spellbook.hasSpellRunner(spellId);
    */
   hasSpellCaster(spellId: string): boolean {
-    return this.spellCasterMap.has(spellId)
+    return this.spellMap.has(spellId)
   }
 
   /**
@@ -211,10 +262,7 @@ class Spellbook {
       if (
         this.hasSpellCaster(spellId) &&
         this.getReadySpellCaster(spellId) &&
-        isEqual(
-          this.getReadySpellCaster(spellId)!.currentSpell.graph,
-          spell.graph
-        )
+        isEqual(this.getReadySpellCaster(spellId)!.spell.graph, spell.graph)
       ) {
         return this.getReadySpellCaster(spellId)
       }
@@ -246,19 +294,16 @@ class Spellbook {
       return
     }
 
-    const spellCaster = new SpellCaster({
-      app: this.app,
-      agent: this.agent,
-      spellbook: this,
-    })
+    const spellCaster = await new SpellCaster({}).initialize(
+      spell,
+      this.mainRegistry
+    )
 
-    await spellCaster.loadSpell(spell)
-
-    const spellCasterList = this.spellCasterMap.get(spell.id)
+    const spellCasterList = this.spellMap.get(spell.id)
     if (spellCasterList) {
       spellCasterList.push(spellCaster)
     } else {
-      this.spellCasterMap.set(spell.id, [spellCaster])
+      this.spellMap.set(spell.id, [spellCaster])
     }
 
     return spellCaster
@@ -276,6 +321,45 @@ class Spellbook {
       this.registerPluginEventEmitter(plugin.name, plugin.eventEmitter)
       this.setupPluginWorker(plugin)
     })
+  }
+
+  /**
+   * Builds the registry for the Spellbook.
+   * We start with an initial base registry.
+   * We then combine each plugin's registry with the current combined registry.
+   * Finally, we apply the core profile to the combined registry.
+   * @returns {IRegistry} - The built registry.
+   */
+  private buildRegistry(): IRegistry {
+    // Start with an initial base registry
+    let combinedRegistry: IRegistry = {
+      values: {},
+      nodes: {},
+      dependencies: {
+        ILogger: new DefaultLogger(),
+        ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
+      },
+    }
+
+    // Combine each plugin's registry with the current combined registry
+    this.plugins.forEach(plugin => {
+      const pluginRegistry = plugin.getRegistry(combinedRegistry)
+      combinedRegistry = {
+        values: { ...combinedRegistry.values, ...pluginRegistry.values },
+        nodes: { ...combinedRegistry.nodes, ...pluginRegistry.nodes },
+        dependencies: {
+          ...combinedRegistry.dependencies,
+          ...pluginRegistry.dependencies,
+        },
+      }
+    })
+
+    // Finally, apply the core profile to the combined registry
+    combinedRegistry = registerCoreProfile(combinedRegistry)
+
+    this.mainRegistry = combinedRegistry
+
+    return combinedRegistry
   }
 
   /**
@@ -303,47 +387,44 @@ class Spellbook {
    */
   private setupPluginWorker(plugin: BasePlugin) {
     // Set up a Bull queue to process events from the plugin
-    const queue = new BullMQWorker()
-    queue.initialize(plugin.name, async job => {
-      const { eventName, payload } = job.data
-      this.triggerSpellEvent(eventName, payload)
+    const queue = new BullMQWorker<EventPayload>()
+    queue.initialize(plugin.queueName, async job => {
+      const { eventName } = job.data
+      this.handleSpellEvent(plugin.name, eventName, job.data)
     })
   }
 
   /**
-   * Triggers an event in the first available spell runner.
+   * Runs through all spells in the spell book, find the first available one and triggers the event in it.
    * @param {string} eventName - Name of the event to trigger.
    * @param {any} payload - Payload of the event.
    * @example
    * this.triggerSpellEvent('myEvent', { data: 'example' });
    */
-  private triggerSpellEvent(eventName: string, payload: EventFormat) {
-    // Trigger an event in the first available spell runner
-    const availableRunner = this.getAvailableSpellCaster()
-    if (availableRunner) {
-      availableRunner.handleEvent(eventName, payload)
-    } else {
-      const newRunner = this.createSpellCaster()
-      newRunner.handleEvent(eventName, payload)
-    }
-  }
-
-  private getAvailableSpellCaster(): SpellCaster | undefined {
-    // Get the first available spell runner
-    for (const runners of this.spellCasterMap.values()) {
-      const availableRunner = runners.find(runner => !runner.isBusy())
+  private async handleSpellEvent(
+    dependency: string,
+    eventName: string,
+    payload: EventPayload
+  ) {
+    // Iterate over alll spell casters
+    for (const [spellId, spellMap] of this.spellMap.entries()) {
+      // Get the first available spell runner
+      const availableRunner = spellMap.find(runner => !runner.isBusy())
       if (availableRunner) {
-        return availableRunner
+        // Trigger the event in the spell runner
+        availableRunner.handleEvent(dependency, eventName, payload)
+        return
       }
-    }
-    return undefined
-  }
 
-  private createSpellCaster(): SpellCaster {
-    // Create a new spell runner instance
-    const newCaster = new SpellCaster(/* ... */)
-    // Add newCaster to spellCasterMap and other necessary setups
-    return newCaster
+      // If there are no available spell runners, we create a new one
+      const spellCaster = await this.loadById(spellId)
+
+      if (!spellCaster) {
+        this.agent.error(`Error handling event ${eventName} for ${spellId}`)
+        return
+      }
+      spellCaster?.handleEvent(dependency, eventName, payload)
+    }
   }
 }
 
