@@ -35,8 +35,7 @@ class DiscordPlugin extends BasePlugin {
   defineEvents() {
     this.registerEvent({
       eventName: 'discord:messageReceived',
-      displayName: 'Message Received',
-      payloadType: MessagePayload, // Define MessagePayload type
+      displayName: 'Message Received', // Define MessagePayload type
     })
 
     // ... register other Discord-specific events
