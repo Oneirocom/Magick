@@ -297,6 +297,7 @@ const ChatWindow = ({ tab, spellId }) => {
         [playtestInputName as string]: toSend,
       },
       publicVariables: '{}',
+      version: 'v2',
       secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
     }
 
