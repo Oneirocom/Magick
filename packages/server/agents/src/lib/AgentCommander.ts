@@ -30,6 +30,7 @@ export type RunRootSpellArgs = {
   subSpellDepth?: number
   sessionId?: string
   isPlaytest?: boolean
+  version?: string
 }
 
 export interface AgentCommandData {
@@ -108,6 +109,7 @@ export class AgentCommander extends EventEmitter {
       subSpellDepth,
       sessionId,
       isPlaytest = false,
+      version = 'v1',
     }: RunRootSpellArgs
   ) {
     return JSON.stringify({
@@ -122,6 +124,7 @@ export class AgentCommander extends EventEmitter {
       subSpellDepth,
       sessionId,
       isPlaytest,
+      version,
     })
   }
 
