@@ -36,24 +36,20 @@ export type PluginIOType = {
 
 type PluginConstuctor = {
   name: string
-  profiles?: any[]
   secrets?: PluginSecret[]
   completionProviders?: CompletionProvider[]
   agentCommands?: PluginServerCommandList
 }
 export class Plugin {
   name: string
-  profiles: any[]
   secrets: PluginSecret[]
   completionProviders: CompletionProvider[]
   constructor({
     name,
-    profiles = [],
     secrets = [],
     completionProviders = [],
   }: PluginConstuctor) {
     this.name = name
-    this.profiles = profiles
     this.secrets = secrets
     this.completionProviders = completionProviders
   }
