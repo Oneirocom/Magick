@@ -26,6 +26,7 @@ import {
 } from 'server/core'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
+import { Spellbook } from '@magickml/grimoire'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -48,6 +49,7 @@ export class Agent implements AgentInterface {
   pubsub: PubSub
   ready = false
   app: Application
+  spellbook: Spellbook
 
   outputTypes: any[] = []
   updateInterval: any
@@ -86,6 +88,12 @@ export class Agent implements AgentInterface {
       agent: this,
       app,
     })
+
+    this.spellbook = new Spellbook({
+      agent: this,
+      app,
+      plugins: [],
+    })
     ;(async () => {
       // initialize the plugins
       await this.initializeV1Plugins()
@@ -96,6 +104,8 @@ export class Agent implements AgentInterface {
       // initialize the core commands
       // These are used to remotely control the agent
       this.initializeCoreCommands()
+
+      this.initializeSpellbook()
 
       this.logger.info('New agent created: %s | %s', this.name, this.id)
       this.ready = true
@@ -114,6 +124,21 @@ export class Agent implements AgentInterface {
     this.projectId = data.projectId
     this.rootSpellId = data.rootSpellId as string
     this.logger.info('Updated agent: %s | %s', this.name, this.id)
+  }
+
+  private async initializeSpellbook() {
+    const spellsData = await this.app.service('spells').find({
+      query: {
+        projectId: this.projectId,
+      },
+    })
+    if (!spellsData.data.length) {
+      this.error(`No spells found for agent ${this.id}to load into spellbook.`)
+      return
+    }
+
+    const spells = spellsData.data
+    this.spellbook.loadSpells(spells)
   }
   /*
    * Initializes the plugins for the Agent.
@@ -339,12 +364,17 @@ export class Agent implements AgentInterface {
     }
   }
 
+  runV2Job(job: Job<AgentRunJob>) {
+    console.log('RUNNING NEW V2 SPELL!  YAY!')
+  }
+
   async runWorker(job: Job<AgentRunJob>) {
     // the job name is the agent id.  Only run if the agent id matches.
     this.logger.debug({ id: this.id, data: job.data }, 'running worker')
     if (this.id !== job.data.agentId) return
 
-    this.runV1Job(job)
+    if (job.data.version === 'v1') this.runV1Job(job)
+    if (job.data.version === 'v2') this.runV2Job(job)
   }
 }
 
@@ -359,6 +389,7 @@ export interface AgentRunJob {
   secrets: Record<string, string>
   publicVariables: Record<string, unknown>
   isPlaytest?: boolean
+  version: string
 }
 
 export interface AgentResult {
