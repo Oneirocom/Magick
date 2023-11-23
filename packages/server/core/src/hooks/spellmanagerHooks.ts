@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { SpellInterface } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { HookContext } from '../declarations'
 import { getSpell } from '../helpers/getSpell'
 

@@ -12,13 +12,13 @@ import Menu from '@mui/material/Menu'
 import { useDispatch } from 'react-redux'
 import { STANDALONE, } from 'shared/config'
 import { useFeathers } from '@magickml/providers'
-import { AgentInterface } from 'shared/core'
 import { setCurrentAgentId, setCurrentSpellReleaseId, useCreateAgentReleaseMutation } from 'client/state'
 import { Button } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
 import { useSnackbar } from 'notistack'
 import StyledDivider from './StyledDivider'
+import { AgentInterface } from 'server/schemas'
 
 export function AgentMenu({ data }) {
 

@@ -11,7 +11,7 @@ import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
 import { Tab } from '@magickml/providers';
 
 import './flowOverrides.css'
-import { SpellInterface } from 'shared/core';
+import { SpellInterface } from 'server/schemas';
 
 type FlowProps = {
   spell: SpellInterface;

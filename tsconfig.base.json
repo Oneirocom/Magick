@@ -215,6 +215,7 @@
       "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
       "server/logger": ["packages/server/logger/src/index.ts"],
       "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
+      "server/schemas": ["packages/server/schemas/src/index.ts"],
       "shared/config": ["packages/shared/config/src/index.ts"],
       "shared/core": ["packages/shared/core/src/index.ts"],
       "shared/plugin": ["packages/shared/plugin/src/index.ts"],

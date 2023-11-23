@@ -6,11 +6,7 @@
  * @packageDocumentation
  */
 
-import {
-  ClientPlugin,
-  eventSocket,
-  triggerSocket,
-} from 'shared/core'
+import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
 import { DiscordAgentWindow } from './components/agent.component'
 
 import { getNodes } from '@magickml/plugin-discord-shared'
