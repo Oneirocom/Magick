@@ -13,6 +13,8 @@ import {
 } from 'shared/core'
 
 import { getLogger } from 'server/logger'
+
+import { getLogger } from 'server/logger'
 import { Application } from 'server/core'
 
 import {
