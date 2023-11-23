@@ -9,12 +9,12 @@ import {
 } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../config/validators'
 import type { HookContext } from '../../declarations'
+import { SpellInterface, spellSchema } from 'server/schemas'
 
 // Resolvers for SpellInterface
 export const spellResolver = resolve<SpellInterface, HookContext>({})
 export const spellExternalResolver = resolve<SpellInterface, HookContext>({})
 
-import { SpellInterface, spellSchema } from 'shared/core'
 // Schema for creating new entries, removing additional fields
 // Define the properties for the new schema
 const spellDataSchemaProperties = {

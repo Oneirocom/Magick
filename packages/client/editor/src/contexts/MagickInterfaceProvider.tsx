@@ -11,9 +11,10 @@ import {
   PublishEditorEvent,
   runPython,
   runSpellType,
-  SpellInterface,
   SupportedLanguages,
 } from 'shared/core'
+
+import { SpellInterface } from 'server/schemas'
 import { spellApi } from 'client/state'
 import { createContext, useContext } from 'react'
 

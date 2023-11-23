@@ -6,12 +6,8 @@
  * @packageDocumentation
  */
 
-import {
-  ClientPlugin,
-  eventSocket,
-  SpellInterface,
-  triggerSocket,
-} from 'shared/core'
+import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { DiscordAgentWindow } from './components/agent.component'
 
 import _DiscordSpellTemplate from './templates/spells/Discord Bot.spell.json'

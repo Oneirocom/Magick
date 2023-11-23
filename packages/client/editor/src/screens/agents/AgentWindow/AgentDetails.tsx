@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { CustomizedSwitch } from 'client/core'
-import { ClientPluginManager, SpellInterface, pluginManager } from 'shared/core'
+import { ClientPluginManager, pluginManager } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { Button, Input, Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'

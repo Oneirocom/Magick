@@ -1,5 +1,5 @@
 import { NodeData } from 'shared/rete'
-import type { SpellInterface } from 'server/core'
+import { SpellInterface } from 'server/schemas'
 
 export class Spell {
   spell: SpellInterface

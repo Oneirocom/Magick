@@ -4,7 +4,6 @@ import {
   SpellManager,
   SpellRunner,
   pluginManager,
-  AgentInterface,
   MagickSpellInput,
   AGENT_RUN_RESULT,
   AGENT_RUN_ERROR,
@@ -29,6 +28,7 @@ import {
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
 import { Spellbook } from '@magickml/grimoire'
+import { AgentInterface } from 'server/schemas'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -51,7 +51,7 @@ export class Agent implements AgentInterface {
   pubsub: PubSub
   ready = false
   app: Application
-  spellbook: Spellbook
+  spellbook: Spellbook<Agent, Application>
 
   outputTypes: any[] = []
   updateInterval: any

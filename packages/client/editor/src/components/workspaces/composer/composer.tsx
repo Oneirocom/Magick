@@ -10,7 +10,7 @@ import {
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
-import { SpellInterface } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { spellApi } from 'client/state'
 
 import { debounce } from '../../../utils/debounce'

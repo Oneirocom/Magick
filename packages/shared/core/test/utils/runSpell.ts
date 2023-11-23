@@ -1,7 +1,8 @@
 // DOCUMENTED
-import { GraphData, SpellInterface } from '../../src/types'
+import { GraphData } from '../../src/types'
 import { SpellRunner } from '../../src/spellManager'
 import type { Application } from 'server/core'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Type definition for arguments passed to the runSpell function.

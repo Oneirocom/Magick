@@ -17,7 +17,7 @@ import {
 import { useModal } from '../../../contexts/ModalProvider'
 import { enqueueSnackbar } from 'notistack'
 import axios from 'axios'
-import { SpellInterface } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { PRODUCTION } from 'shared/config'
 
 function toTitleCase(str) {

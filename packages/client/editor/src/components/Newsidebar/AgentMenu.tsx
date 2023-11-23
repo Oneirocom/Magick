@@ -15,7 +15,7 @@ import { STANDALONE, } from 'shared/config'
 
 import { useFeathers } from '@magickml/providers'
 import { useTabLayout } from '@magickml/providers'
-import { AgentInterface } from 'shared/core'
+import { AgentInterface } from 'server/schemas'
 import { setCurrentAgentId } from 'client/state'
 
 export function AgentMenu({ data }) {

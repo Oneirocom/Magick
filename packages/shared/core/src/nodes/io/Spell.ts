@@ -1,5 +1,6 @@
 import isEqual from 'lodash/isEqual'
 import Rete, { Data } from 'shared/rete'
+import { SpellInterface } from 'server/schemas'
 
 import { BooleanControl } from '../../dataControls/BooleanControl'
 import { FewshotControl } from '../../dataControls/FewshotControl'
@@ -14,7 +15,6 @@ import {
   MagickWorkerInputs,
   ModuleContext,
   ModuleWorkerOutput,
-  SpellInterface,
   WorkerData,
 } from '../../types'
 

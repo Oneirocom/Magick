@@ -1,4 +1,5 @@
 import type { Application } from 'server/core'
+import { SpellInterface } from 'server/schemas'
 import pino from 'pino'
 import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
@@ -9,7 +10,6 @@ import {
   MagickNode,
   MagickSpellInput,
   ModuleComponent,
-  SpellInterface,
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'

@@ -12,7 +12,7 @@ import type { Static } from '@feathersjs/typebox'
 // Imports custom module types for working with engineered documents
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../config/validators'
-import { documentSchema } from 'shared/core'
+import { documentSchema } from 'server/schemas'
 
 // Definitions for base document schema resolution
 export const documentResolver = resolve<Document, HookContext>({})

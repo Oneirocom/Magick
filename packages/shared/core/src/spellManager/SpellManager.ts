@@ -2,9 +2,10 @@
 import { Application } from 'server/core'
 import io from 'socket.io'
 import { getLogger } from 'server/logger'
+import { SpellInterface } from 'server/schemas'
 
 import { isEqual } from 'radash'
-import { MagickSpellInput, SpellInterface } from '../types'
+import { MagickSpellInput } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {

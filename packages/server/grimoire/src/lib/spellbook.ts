@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import { Application as FeathersApplication } from '@feathersjs/koa'
 import {
   DefaultLogger,
   IRegistry,
@@ -6,21 +7,20 @@ import {
   registerCoreProfile,
 } from '@magickml/behave-graph'
 import type { BasePlugin, EventPayload } from 'shared/plugin'
-// import {
-//   type Application,
-//   type SpellInterface,
-//   BullMQWorker,
-// } from 'server/core'
+import { SpellInterface } from 'server/schemas'
 import SpellCaster from './spellCaster'
-// import type { Agent } from 'server/agents'
 import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
+import { BullMQWorker } from 'server/communication'
 
-type Application = any
-type SpellInterface = any
-// type BasePlugin = any
-// type EventPayload = any
-type Agent = any
+interface IApplication extends FeathersApplication {
+  service: any
+}
+
+interface IAgent {
+  id: string
+  error: (message: string) => void
+}
 
 /**
  * The `Spellbook` serves as the orchestrator within an event-driven architecture, 
@@ -51,7 +51,7 @@ type Agent = any
  * 
 
  */
-export class Spellbook {
+export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   /**
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
@@ -176,7 +176,6 @@ export class Spellbook {
    */
   onDestroy() {
     this.clear()
-
     //
     this.app.service('spells').removeListener('updated', this.watchSpellHandler)
   }
@@ -389,11 +388,11 @@ export class Spellbook {
    */
   private setupPluginWorker(plugin: BasePlugin) {
     // Set up a Bull queue to process events from the plugin
-    // const queue = new BullMQWorker<EventPayload>()
-    // queue.initialize(plugin.queueName, async job => {
-    //   const { eventName } = job.data
-    //   this.handleSpellEvent(plugin.name, eventName, job.data)
-    // })
+    const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
+    queue.initialize(plugin.queueName, async job => {
+      const { eventName } = job.data
+      this.handleSpellEvent(plugin.name, eventName, job.data)
+    })
   }
 
   /**
