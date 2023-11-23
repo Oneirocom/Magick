@@ -1,0 +1,37 @@
+{
+  "name": "server/schemas",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/schemas/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/schemas",
+        "main": "packages/server/schemas/src/index.ts",
+        "tsConfig": "packages/server/schemas/tsconfig.lib.json",
+        "assets": ["packages/server/schemas/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/server/schemas/**/*.ts",
+          "packages/server/schemas/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../../coverage/packages/server/schemas"
+      }
+    }
+  },
+  "tags": []
+}

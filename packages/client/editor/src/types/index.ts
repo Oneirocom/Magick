@@ -1,4 +1,4 @@
-import { SpellInterface } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 
 export interface Spells {
   data: SpellInterface[]

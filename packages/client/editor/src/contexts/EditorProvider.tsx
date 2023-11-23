@@ -5,7 +5,6 @@ import {
   EditorContext,
   GraphData,
   MagickEditor,
-  SpellInterface,
 } from 'shared/core'
 import React, {
   createContext,
@@ -22,6 +21,7 @@ import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 import { EngineComponent } from 'shared/rete'
 import { spellApi } from 'client/state'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * MagickTab type definition.
