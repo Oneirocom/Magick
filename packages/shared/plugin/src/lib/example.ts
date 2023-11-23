@@ -1,13 +1,13 @@
 import Discord, { GatewayIntentBits, MessagePayload } from 'discord.js'
 
 import BasePlugin from './basePlugin'
-import { BullQueue } from 'server/core'
+// import { BullQueue } from 'server/core'
 
 class DiscordPlugin extends BasePlugin {
   private client: Discord.Client
 
-  constructor(bullQueue: BullQueue) {
-    super('DiscordPlugin', bullQueue)
+  constructor(bullQueue: any) {
+    super('DiscordPlugin')
     this.client = new Discord.Client({
       intents: [
         GatewayIntentBits.Guilds,

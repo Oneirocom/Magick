@@ -1,5 +1,12 @@
-import { Agent } from 'server/agents'
-import { CompletionProvider } from 'shared/core'
+// import { Agent } from 'server/agents'
+// import { CompletionProvider } from 'shared/core'
+
+type Agent = any
+
+export type CompletionProvider = {
+  name: string
+  handler: (data: any, agent: Agent) => Promise<any[]>
+}
 
 export type PluginSecret = {
   name: string

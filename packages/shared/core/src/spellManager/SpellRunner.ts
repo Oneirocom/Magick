@@ -13,7 +13,7 @@ import {
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
-import { getLogger } from '../logger'
+import { getLogger } from 'server/logger'
 import { NodeData } from 'shared/rete'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from 'shared/config'
 import { AGENT_SPELL } from '../communication/agentEventTypes'

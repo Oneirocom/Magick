@@ -1,15 +1,15 @@
 import EventEmitter from 'events'
 import { Agent } from './Agent'
-import { type PubSub, type Job } from 'server/core'
+import { type PubSub, type Job } from 'server/communication'
 import {
   AGENT_RUN_JOB,
   AGENT_RUN_ERROR,
   AGENT_RUN_RESULT,
   AGENT_DELETE,
-  getLogger,
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
 } from 'shared/core'
+import { getLogger } from 'server/logger'
 import type { MagickSpellInput } from 'shared/core'
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'

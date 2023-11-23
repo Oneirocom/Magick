@@ -1,13 +1,10 @@
 import pino from 'pino'
 import { diff } from 'radash'
-import {
-  AGENT_DELETE,
-  AGENT_DELETE_JOB,
-  AGENT_UPDATE_JOB,
-  getLogger,
-} from 'shared/core'
+import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'shared/core'
+import { getLogger } from 'server/logger'
 import type { Reporter } from './Reporters'
-import { type PubSub, type MessageQueue, app } from 'server/core'
+import { app } from 'server/core'
+import { type PubSub, type MessageQueue } from 'server/communication'
 import type { AgentListRecord } from 'server/cloud-agent-worker'
 
 // todo probably fix this dependency

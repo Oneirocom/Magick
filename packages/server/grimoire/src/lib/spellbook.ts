@@ -1,22 +1,26 @@
-import * as Bull from 'bullmq'
 import { EventEmitter } from 'events'
-import SpellCaster from './spellCaster'
-import { BasePlugin, EventFormat, EventPayload } from 'shared/plugin'
-import {
-  BullQueue,
-  type Application,
-  type SpellInterface,
-  BullMQWorker,
-} from 'server/core'
-import { Agent } from 'server/agents'
-import isEqual from 'lodash/isEqual'
-import { getLogger } from 'shared/core'
 import {
   DefaultLogger,
   IRegistry,
   ManualLifecycleEventEmitter,
   registerCoreProfile,
 } from '@magickml/behave-graph'
+import type { BasePlugin, EventPayload } from 'shared/plugin'
+// import {
+//   type Application,
+//   type SpellInterface,
+//   BullMQWorker,
+// } from 'server/core'
+import SpellCaster from './spellCaster'
+// import type { Agent } from 'server/agents'
+import isEqual from 'lodash/isEqual'
+import { getLogger } from 'server/logger'
+
+type Application = any
+type SpellInterface = any
+// type BasePlugin = any
+// type EventPayload = any
+type Agent = any
 
 /**
  * The `Spellbook` serves as the orchestrator within an event-driven architecture, 
@@ -385,11 +389,11 @@ export class Spellbook {
    */
   private setupPluginWorker(plugin: BasePlugin) {
     // Set up a Bull queue to process events from the plugin
-    const queue = new BullMQWorker<EventPayload>()
-    queue.initialize(plugin.queueName, async job => {
-      const { eventName } = job.data
-      this.handleSpellEvent(plugin.name, eventName, job.data)
-    })
+    // const queue = new BullMQWorker<EventPayload>()
+    // queue.initialize(plugin.queueName, async job => {
+    //   const { eventName } = job.data
+    //   this.handleSpellEvent(plugin.name, eventName, job.data)
+    // })
   }
 
   /**

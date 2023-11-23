@@ -4,7 +4,7 @@ import http from 'http'
 import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
 import ngrok from 'ngrok'
 import { v4 as uuidv4 } from 'uuid'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 
 export class GithubConnector {
   spellRunner
