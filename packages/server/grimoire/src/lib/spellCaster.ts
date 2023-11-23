@@ -293,7 +293,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       | undefined
 
     if (!eventEmitter) {
-      this.logger.error(`No dependency found for ${dependency}`)
+      // this.logger.error(`No dependency found for ${dependency}`)
       return
     }
 
