@@ -1,14 +1,12 @@
 import { RedisPubSub } from 'server/redis-pubsub'
 import { PubSub } from './PubSub'
 
-import { app } from '../../app'
-
 export class RedisPubSubWrapper extends PubSub {
   pubsub: RedisPubSub
 
-  constructor() {
+  constructor(pubsub: RedisPubSub) {
     super()
-    this.pubsub = app.get('pubsub')
+    this.pubsub = pubsub
   }
 
   override async publish(channel: string, message: string): Promise<void> {

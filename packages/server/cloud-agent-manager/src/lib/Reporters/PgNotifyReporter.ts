@@ -1,6 +1,6 @@
 import { Reporter } from '.'
 import createSubscriber, { Subscriber } from 'pg-listen'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 
 export class PgNotifyReporter implements Reporter {
   logger = getLogger()

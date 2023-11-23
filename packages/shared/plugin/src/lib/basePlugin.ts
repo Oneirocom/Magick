@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events'
-import { BullQueue } from 'server/core'
+// import { BullQueue } from 'server/core'
 import { Plugin } from './plugin'
-import { Agent } from 'server/agents'
 import {
   IRegistry,
   NodeDefinition,
@@ -61,7 +60,7 @@ export type EventPayload = {
  */
 export abstract class BasePlugin extends Plugin {
   protected events: EventDefinition[]
-  protected eventQueue: BullQueue
+  // protected eventQueue: BullQueue
   protected enabled: boolean = false
   dependencies: Record<string, any>
   nodes: NodeDefinition[]
@@ -77,8 +76,8 @@ export abstract class BasePlugin extends Plugin {
   constructor(name: string) {
     super({ name })
     this.eventEmitter = new EventEmitter()
-    this.eventQueue = new BullQueue()
-    this.eventQueue.initialize(this.queueName)
+    // this.eventQueue = new BullQueue()
+    // this.eventQueue.initialize(this.queueName)
     this.events = []
     this.nodes = []
     this.values = []
@@ -231,7 +230,7 @@ export abstract class BasePlugin extends Plugin {
     this.events.forEach(event => {
       this.eventEmitter.on(event.eventName, async payload => {
         const namespacedEventName = `${this.name}:${event.eventName}`
-        await this.eventQueue.addJob(namespacedEventName, payload)
+        // await this.eventQueue.addJob(namespacedEventName, payload)
       })
     })
   }

@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { app } from 'server/core'
 import Discord, {
   Client,

@@ -2,9 +2,9 @@
 import Agent from './Agent'
 import _ from 'lodash'
 import pino from 'pino'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC } from 'shared/config'
-import { BullMQWorker, RedisPubSubWrapper } from 'server/core'
+import { BullMQWorker, RedisPubSubWrapper } from 'server/communication'
 
 /**
  * Class for managing agents.
@@ -167,8 +167,8 @@ export class AgentManager {
       const agentInstance = new Agent(
         data,
         this,
-        new BullMQWorker(),
-        new RedisPubSubWrapper(),
+        new BullMQWorker(this.app.get('redis')),
+        new RedisPubSubWrapper(this.app.get('pubsub')),
         this.app
       )
 

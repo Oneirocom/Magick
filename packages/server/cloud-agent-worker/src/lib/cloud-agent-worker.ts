@@ -1,12 +1,14 @@
 import { Worker, Job } from 'bullmq'
 
+import { app } from 'server/core'
+
 import {
   BullMQWorker,
   type PubSub,
   RedisPubSubWrapper,
-  app,
   BullQueue,
-} from 'server/core'
+} from 'server/communication'
+
 import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -90,12 +92,12 @@ export class CloudAgentWorker extends AgentManager {
     const agent = new Agent(
       agentData,
       this,
-      new BullMQWorker(),
-      new RedisPubSubWrapper(),
+      new BullMQWorker(this.app.get('redis')),
+      new RedisPubSubWrapper(this.app.get('pubsub')),
       app
     )
 
-    const agentQueue = new BullQueue()
+    const agentQueue = new BullQueue(this.app)
     agentQueue.initialize(AGENT_RUN_JOB(agent.id))
     this.listenForRun(agent.id)
     this.listenForChanges(agentId)

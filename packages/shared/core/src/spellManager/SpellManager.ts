@@ -1,7 +1,7 @@
 // import { Application } from 'server/core';
 import { Application } from 'server/core'
 import io from 'socket.io'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 
 import { isEqual } from 'radash'
 import { MagickSpellInput, SpellInterface } from '../types'

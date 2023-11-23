@@ -1,21 +1,22 @@
 import { Worker as BMQWorker, Job } from 'bullmq'
-import { app } from '../../app'
+import Redis from 'ioredis'
 import { Worker } from './Worker'
 
 export class BullMQWorker<T = any> extends Worker {
   declare worker: BMQWorker
+  connection: Redis
 
-  constructor() {
+  constructor(connection: Redis) {
     super()
+    this.connection = connection
   }
 
   override initialize(
     queueName: string,
     callback: (job: Job<T>) => Promise<any>
   ): void {
-    const connection = app.get('redis')
     this.worker = new BMQWorker(queueName, callback, {
-      connection,
+      connection: this.connection,
       concurrency: 10,
     })
   }

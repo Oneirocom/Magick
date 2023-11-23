@@ -36,7 +36,7 @@ import handleSockets from './sockets/sockets'
 import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
 import { PluginEmbeddings } from './customEmbeddings'
 
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
 
 // Initialize the Feathers Koa app

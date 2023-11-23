@@ -15,7 +15,7 @@ import type {
 } from './agentHttp.schema'
 import { BadRequest, NotFound } from '@feathersjs/errors/lib'
 import { pino } from 'pino'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { CLOUD_AGENT_KEY, STANDALONE } from 'shared/config'
 
 export type { AgentHttp, AgentHttpData, AgentHttpPatch, AgentHttpQuery }
