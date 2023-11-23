@@ -5,7 +5,6 @@ import {
   SpellRunner,
   pluginManager,
   AgentInterface,
-  getLogger,
   MagickSpellInput,
   AGENT_RUN_RESULT,
   AGENT_RUN_ERROR,
@@ -15,15 +14,18 @@ import {
   type Event,
 } from 'shared/core'
 
+import { getLogger } from 'server/logger'
+
 import { AgentManager } from './AgentManager'
+import { Application } from 'server/core'
+
 import {
   type Job,
   type Worker,
   type PubSub,
+  type MessageQueue,
   BullQueue,
-  MessageQueue,
-  Application,
-} from 'server/core'
+} from 'server/communication'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
 import { Spellbook } from '@magickml/grimoire'
@@ -77,7 +79,7 @@ export class Agent implements AgentInterface {
     this.worker = worker
     this.worker.initialize(AGENT_RUN_JOB(this.id), this.runWorker.bind(this))
 
-    this.messageQueue = new BullQueue()
+    this.messageQueue = new BullQueue(this.app.get('redis'))
     this.messageQueue.initialize(AGENT_RUN_JOB(this.id))
     this.pubsub = pubsub
 

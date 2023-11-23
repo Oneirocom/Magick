@@ -1,26 +1,27 @@
-import { spell } from './../../../core/src/services/spells/spells'
+import EventEmitter from 'events'
+import pino from 'pino'
+
 import {
   Engine,
-  ILogger,
   ILifecycleEventEmitter,
   readGraphFromJSON,
-  ManualLifecycleEventEmitter,
   IRegistry,
   GraphJSON,
-  DefaultLogger,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
-import type { SpellInterface } from 'server/core'
-import EventEmitter from 'events'
-import { EventPayload } from 'shared/plugin'
-import { getLogger } from 'shared/core'
-import pino from 'pino'
+// import { type SpellInterface } from 'server/core'
+// import { type EventPayload } from 'shared/plugin'
+
+type SpellInterface = any
+type EventPayload = any
+
+// import { getLogger } from 'server/logger'
 
 class SpellCaster {
   registry!: IRegistry
   engine!: Engine
   busy = false
   spell!: SpellInterface
-  private logger: pino.Logger
+  // private logger: pino.Logger
   private isRunning: boolean = false
   private loopDelay: number
   private limitInSeconds: number
@@ -35,7 +36,7 @@ class SpellCaster {
     limitInSeconds?: number
     limitInSteps?: number
   }) {
-    this.logger = getLogger()
+    // this.logger = getLogger()
     this.loopDelay = loopDelay
     this.limitInSeconds = limitInSeconds
     this.limitInSteps = limitInSteps
@@ -121,7 +122,7 @@ class SpellCaster {
       | undefined
 
     if (!eventEmitter) {
-      this.logger.error(`No dependency found for ${dependency}`)
+      // this.logger.error(`No dependency found for ${dependency}`)
       return
     }
     eventEmitter.emit(eventName, payload)

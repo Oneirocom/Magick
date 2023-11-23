@@ -2,11 +2,12 @@ import {
   CloudAgentManager,
   FeathersSyncReporter,
 } from 'server/cloud-agent-manager'
-import { initLogger, getLogger } from 'shared/core'
-import { app, BullQueue, initApp } from 'server/core'
+import { initLogger, getLogger } from 'server/logger'
+import { app, initApp } from 'server/core'
 import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
 import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
+import { BullQueue } from 'server/communication'
 
 if (PRODUCTION) {
   initLogger({
@@ -24,7 +25,7 @@ const logger = getLogger()
 function start() {
   logger.info('Starting cloud agent manager...')
   const manager = new CloudAgentManager({
-    newQueue: new BullQueue(),
+    newQueue: new BullQueue(app.get('redis')),
     agentStateReporter: new FeathersSyncReporter(),
     pubSub: app.get('pubsub'),
   })

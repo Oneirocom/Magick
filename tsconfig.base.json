@@ -210,6 +210,7 @@
       "server/cloud-agent-worker": [
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
+      "server/communication": ["packages/server/communication/src/index.ts"],
       "server/core": ["packages/server/core/src/index.ts"],
       "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
       "server/logger": ["packages/server/logger/src/index.ts"],

@@ -1,5 +1,5 @@
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
-import { initLogger, getLogger } from 'shared/core'
+import { initLogger, getLogger } from 'server/logger'
 import { initApp } from 'server/core'
 import pluginExports from './plugins'
 import { initAgentCommander } from 'server/agents'
