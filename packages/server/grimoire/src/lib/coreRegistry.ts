@@ -9,21 +9,13 @@ import {
 } from '@magickml/behave-graph'
 import { coreEmitter } from './dependencies/coreEmitter'
 import { MessageEvent } from './nodes/events/messageEvent'
-
-export const coreRegistry: IRegistry = {
-  values: {},
-  nodes: {},
-  dependencies: {
-    ILogger: new DefaultLogger(),
-    ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
-  },
-}
-
 export class CoreRegistry {
   values: ValueType[] = []
   nodes: NodeDefinition[] = [MessageEvent]
   dependencies: Record<string, any> = {
     core: coreEmitter,
+    ILogger: new DefaultLogger(),
+    ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
   }
 
   /**
