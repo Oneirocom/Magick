@@ -56,7 +56,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
    */
-  private spellMap: Map<string, SpellCaster[]> = new Map()
+  private spellMap: Map<string, SpellCaster<Agent>[]> = new Map()
 
   /**
    * Map of plugin event emitters.
@@ -206,7 +206,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * const spellCaster= await spellbook.loadById(spellId);
    */
-  async loadById(spellId: string): Promise<SpellCaster | undefined> {
+  async loadById(spellId: string): Promise<SpellCaster<Agent> | undefined> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
       const spell = await this.app.service('spells').get(spellId)
@@ -239,17 +239,18 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *   graph: {},
    * });
    */
-  async loadSpell(spell: SpellInterface): Promise<SpellCaster | undefined> {
+  async loadSpell(
+    spell: SpellInterface
+  ): Promise<SpellCaster<Agent> | undefined> {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
       return
     }
 
-    const spellCaster = await new SpellCaster({}).initialize(
-      spell,
-      this.mainRegistry
-    )
+    const spellCaster = await new SpellCaster<Agent>({
+      agent: this.agent,
+    }).initialize(spell, this.mainRegistry)
 
     const spellCasterList = this.spellMap.get(spell.id)
     if (spellCasterList) {
@@ -295,7 +296,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * const spellRunner = spellbook.getReadySpellRunner(spellId);
    */
-  getReadySpellCaster(spellId: string): SpellCaster | undefined {
+  getReadySpellCaster(spellId: string): SpellCaster<Agent> | undefined {
     return this.spellMap.get(spellId)?.find(runner => !runner.isBusy())
   }
 
@@ -391,7 +392,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
     queue.initialize(plugin.queueName, async job => {
       const { eventName } = job.data
-      this.handleSpellEvent(plugin.name, eventName, job.data)
+      this.handlePluginEvent(plugin.name, eventName, job.data)
     })
   }
 
@@ -402,7 +403,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * this.triggerSpellEvent('myEvent', { data: 'example' });
    */
-  private async handleSpellEvent(
+  private async handlePluginEvent(
     dependency: string,
     eventName: string,
     payload: EventPayload

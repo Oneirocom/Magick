@@ -11,12 +11,18 @@ import {
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'shared/plugin'
 import { getLogger } from 'server/logger'
+import { generateNodeHash } from 'shared/utils'
 
-class SpellCaster {
+interface IAgent {
+  id: string
+}
+
+class SpellCaster<Agent extends IAgent> {
   registry!: IRegistry
   engine!: Engine
   busy = false
   spell!: SpellInterface
+  private agent
   private logger: pino.Logger
   private isRunning: boolean = false
   private loopDelay: number
@@ -27,11 +33,14 @@ class SpellCaster {
     loopDelay = 100,
     limitInSeconds = 5,
     limitInSteps = 100,
+    agent,
   }: {
     loopDelay?: number
     limitInSeconds?: number
     limitInSteps?: number
+    agent: Agent
   }) {
+    this.agent = agent
     this.logger = getLogger()
     this.loopDelay = loopDelay
     this.limitInSeconds = limitInSeconds
@@ -46,6 +55,9 @@ class SpellCaster {
    * @returns A promise that resolves when the spell caster is initialized.
    */
   async initialize(spell: SpellInterface, registry: IRegistry): Promise<this> {
+    this.logger.debug(
+      `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
+    )
     this.spell = spell
     this.registry = registry
     const graph = readGraphFromJSON({
@@ -54,8 +66,19 @@ class SpellCaster {
     })
 
     this.engine = new Engine(graph.nodes)
+    this.initializeHandlers()
     this.startRunLoop()
     return this
+  }
+
+  initializeHandlers() {
+    // this.engine.onNodeExecutionStart.addListener(node => {
+    //   console.log(`>> ${node.description.typeName} >> START`)
+    //   this.logger.trace(`<< ${node.description.typeName} >> START`)
+    // })
+    // this.engine.onNodeExecutionEnd.addListener(node => {
+    //   console.log('NODE EXECUTED', generateNodeHash(node))
+    // })
   }
 
   /**
@@ -77,6 +100,10 @@ class SpellCaster {
    * @returns A promise that resolves when the run loop is started.
    */
   async startRunLoop(): Promise<void> {
+    this.logger.debug(
+      'SPELLBOOK: Starting run loop for spell %s',
+      this.spell.id
+    )
     this.isRunning = true
     this.lifecycleEventEmitter.startEvent.emit()
 
