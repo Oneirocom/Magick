@@ -27,7 +27,7 @@ import {
 } from 'server/communication'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
-// import { Spellbook } from 'server/grimoire'
+import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 
 /**
@@ -51,7 +51,7 @@ export class Agent implements AgentInterface {
   pubsub: PubSub
   ready = false
   app: Application
-  // spellbook: Spellbook<Agent, Application>
+  spellbook: Spellbook<Agent, Application>
 
   outputTypes: any[] = []
   updateInterval: any
@@ -91,11 +91,11 @@ export class Agent implements AgentInterface {
       app,
     })
 
-    // this.spellbook = new Spellbook({
-    //   agent: this,
-    //   app,
-    //   plugins: [],
-    // })
+    this.spellbook = new Spellbook({
+      agent: this,
+      app,
+      plugins: [],
+    })
     ;(async () => {
       // initialize the plugins
       await this.initializeV1Plugins()
@@ -129,9 +129,11 @@ export class Agent implements AgentInterface {
   }
 
   private async initializeSpellbook() {
+    this.logger.debug('Initializing spellbook for agent %s', this.id)
     const spellsData = await this.app.service('spells').find({
       query: {
         projectId: this.projectId,
+        type: 'behave',
       },
     })
     if (!spellsData.data.length) {
@@ -140,7 +142,7 @@ export class Agent implements AgentInterface {
     }
 
     const spells = spellsData.data
-    // this.spellbook.loadSpells(spells)
+    this.spellbook.loadSpells(spells)
   }
   /*
    * Initializes the plugins for the Agent.
@@ -298,6 +300,7 @@ export class Agent implements AgentInterface {
   }
 
   async runV1Job(job: Job<AgentRunJob>) {
+    this.logger.debug('Running V1 Job')
     const { data } = job
 
     const spellRunner = await this.spellManager.loadById(
@@ -367,7 +370,32 @@ export class Agent implements AgentInterface {
   }
 
   runV2Job(job: Job<AgentRunJob>) {
-    console.log('RUNNING NEW V2 SPELL!  YAY!')
+    this.logger.debug('Running V2 Job!!!')
+    const { data } = job
+
+    try {
+      this.logger.debug(
+        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
+        "Running agent's behave graph spell in spellbook"
+      )
+
+      // this.spellbook.
+    } catch (err) {
+      this.logger.error(
+        { spellId: data.spellId, agent: { name: this.name, id: this.id }, err },
+        'Error running agent spell'
+      )
+
+      this.publishEvent(AGENT_RUN_ERROR(this.id), {
+        jobId: job.data.jobId,
+        agentId: this.id,
+        projectId: this.projectId,
+        originalData: data,
+        result: {
+          error: err instanceof Error ? err.message : 'Error running agent',
+        },
+      })
+    }
   }
 
   async runWorker(job: Job<AgentRunJob>) {
