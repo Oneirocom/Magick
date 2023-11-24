@@ -1,14 +1,14 @@
 {
   "name": "plugin",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shared/plugin/src",
+  "sourceRoot": "packages/server/plugin/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/shared/plugin"
+        "outputPath": "dist/packages/server/plugin"
       }
     },
     "test": {
@@ -16,7 +16,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/packages/shared/plugin"
+        "reportsDirectory": "../../../coverage/packages/server/plugin"
       }
     },
     "lint": {
@@ -24,8 +24,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "packages/shared/plugin/**/*.ts",
-          "packages/shared/plugin/package.json"
+          "packages/server/plugin/**/*.ts",
+          "packages/server/plugin/package.json"
         ]
       }
     }
