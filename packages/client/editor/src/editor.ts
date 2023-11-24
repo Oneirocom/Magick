@@ -13,7 +13,7 @@ import {
   PubSubContext,
   RemotePlugin,
   RemotePluginArgs,
-  SelectionPlugin,]
+  SelectionPlugin,
   DebuggerPlugin,
 } from 'shared/core'
 import ReactRenderPlugin, {
