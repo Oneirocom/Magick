@@ -147,7 +147,7 @@ export class Agent implements AgentInterface {
     }
 
     const spells = spellsData.data
-    this.spellbook.loadSpells(spells)
+    // this.spellbook.loadSpells(spells)
   }
 
   /*
