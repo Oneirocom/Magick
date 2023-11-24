@@ -9,6 +9,7 @@ import {
   memo,
 } from '@magickml/behave-graph'
 import { BullQueue } from 'server/communication'
+import { getLogger } from 'server/logger'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -64,6 +65,7 @@ export abstract class BasePlugin extends Plugin {
   protected events: EventDefinition[]
   protected eventQueue: BullQueue
   protected enabled: boolean = false
+  logger = getLogger()
   dependencies: Record<string, any>
   nodes: NodeDefinition[]
   values: ValueType[]
@@ -84,8 +86,15 @@ export abstract class BasePlugin extends Plugin {
     this.nodes = []
     this.values = []
     this.dependencies = []
+  }
+
+  /**
+   * Initializes the plugin by defining events and initializing functionalities.
+   */
+  init() {
     this.defineEvents()
     this.initializeFunctionalities()
+    this.mapEventsToQueue()
   }
 
   /**
@@ -169,6 +178,34 @@ export abstract class BasePlugin extends Plugin {
   }
 
   /**
+   * Activates the plugin, making it ready for operation.
+   */
+  activate(): void {
+    // Activation logic specific to the plugin
+    this.setEnabled(true)
+    this.logger.debug(`Plugin ${this.name} activated`)
+  }
+
+  /**
+   * Deactivates the plugin, putting it into a passive state.
+   */
+  deactivate(): void {
+    // Deactivation logic specific to the plugin
+    this.setEnabled(false)
+    this.logger.debug(`Plugin ${this.name} deactivated`)
+  }
+
+  /**
+   * Cleans up resources and performs necessary teardown tasks.
+   */
+  destroy(): void {
+    // Remove all listeners to prevent memory leaks
+    this.eventEmitter.removeAllListeners()
+
+    this.logger.debug(`Plugin ${this.name} destroyed.`)
+  }
+
+  /**
    * Sets the enabled state of the plugin.
    * @param state The state to set the plugin to.
    * @example
@@ -231,8 +268,7 @@ export abstract class BasePlugin extends Plugin {
   mapEventsToQueue() {
     this.events.forEach(event => {
       this.eventEmitter.on(event.eventName, async payload => {
-        const namespacedEventName = `${this.name}:${event.eventName}`
-        await this.eventQueue.addJob(namespacedEventName, payload)
+        await this.eventQueue.addJob(event.eventName, payload)
       })
     })
   }
