@@ -6,7 +6,7 @@ import {
   ManualLifecycleEventEmitter,
   registerCoreProfile,
 } from '@magickml/behave-graph'
-import type { BasePlugin, EventPayload } from 'shared/plugin'
+import type { BasePlugin, EventPayload } from 'server/plugin'
 import { SpellInterface } from 'server/schemas'
 import SpellCaster from './spellCaster'
 import isEqual from 'lodash/isEqual'
