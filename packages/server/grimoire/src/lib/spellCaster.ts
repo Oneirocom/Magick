@@ -72,10 +72,9 @@ class SpellCaster<Agent extends IAgent> {
   }
 
   initializeHandlers() {
-    // this.engine.onNodeExecutionStart.addListener(node => {
-    //   console.log(`>> ${node.description.typeName} >> START`)
-    //   this.logger.trace(`<< ${node.description.typeName} >> START`)
-    // })
+    this.engine.onNodeExecutionStart.addListener(node => {
+      this.logger.trace(`<< ${node.description.typeName} >> START`)
+    })
     // this.engine.onNodeExecutionEnd.addListener(node => {
     //   console.log('NODE EXECUTED', generateNodeHash(node))
     // })

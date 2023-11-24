@@ -13,7 +13,7 @@ import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
 
-import { CoreRegistry, coreRegistry } from './coreRegistry'
+import { CoreRegistry } from './coreRegistry'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -59,7 +59,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * This contains all the core dependencies for spellbook.
    * Includes primary handler for the core events magick handles.
    */
-  private coreRegistry = new CoreRegistry().getRegistry()
+  private coreRegistry!: IRegistry
   /**
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
@@ -160,8 +160,14 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.agent = agent
     this.plugins = plugins
     this.pluginEventEmitters = new Map()
+    this.init()
+  }
+
+  init() {
+    this.coreRegistry = new CoreRegistry().getRegistry()
+    console.log('#############################CORE REGISTRY', this.coreRegistry)
+    this.buildRegistry(this.coreRegistry)
     this.initializePlugins()
-    this.buildRegistry()
     this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
   }
 
@@ -340,10 +346,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Finally, we apply the core profile to the combined registry.
    * @returns {IRegistry} - The built registry.
    */
-  private buildRegistry(): IRegistry {
+  private buildRegistry(coreRegistry: IRegistry): IRegistry {
     // Start with an initial base registry
-    let combinedRegistry: IRegistry = this.coreRegistry
-
+    let combinedRegistry: IRegistry = coreRegistry
     // Combine each plugin's registry with the current combined registry
     this.plugins.forEach(plugin => {
       const pluginRegistry = plugin.getRegistry(combinedRegistry)
