@@ -9,7 +9,7 @@ import {
   GraphJSON,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
 import { SpellInterface } from 'server/schemas'
-import { type EventPayload } from 'shared/plugin'
+import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { generateNodeHash } from 'shared/utils'
 
