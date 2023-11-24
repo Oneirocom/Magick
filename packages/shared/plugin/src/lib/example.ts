@@ -1,4 +1,5 @@
 import Discord, { GatewayIntentBits, MessagePayload } from 'discord.js'
+import Redis from 'ioredis'
 
 import BasePlugin from './basePlugin'
 // import { BullQueue } from 'server/core'
@@ -6,8 +7,8 @@ import BasePlugin from './basePlugin'
 class DiscordPlugin extends BasePlugin {
   private client: Discord.Client
 
-  constructor(bullQueue: any) {
-    super('DiscordPlugin')
+  constructor(connection: Redis) {
+    super('DiscordPlugin', connection)
     this.client = new Discord.Client({
       intents: [
         GatewayIntentBits.Guilds,

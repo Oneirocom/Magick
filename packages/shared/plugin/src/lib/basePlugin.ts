@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-// import { BullQueue } from 'server/core'
+import Redis from 'ioredis'
 import { Plugin } from './plugin'
 import {
   IRegistry,
@@ -8,6 +8,7 @@ import {
   ValueTypeMap,
   memo,
 } from '@magickml/behave-graph'
+import { BullQueue } from 'server/communication'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -61,7 +62,7 @@ export type EventPayload = {
  */
 export abstract class BasePlugin extends Plugin {
   protected events: EventDefinition[]
-  // protected eventQueue: BullQueue
+  protected eventQueue: BullQueue
   protected enabled: boolean = false
   dependencies: Record<string, any>
   nodes: NodeDefinition[]
@@ -74,11 +75,11 @@ export abstract class BasePlugin extends Plugin {
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor(name: string) {
+  constructor(name: string, connection: Redis) {
     super({ name })
     this.eventEmitter = new EventEmitter()
-    // this.eventQueue = new BullQueue()
-    // this.eventQueue.initialize(this.queueName)
+    this.eventQueue = new BullQueue(connection)
+    this.eventQueue.initialize(this.queueName)
     this.events = []
     this.nodes = []
     this.values = []
@@ -231,7 +232,7 @@ export abstract class BasePlugin extends Plugin {
     this.events.forEach(event => {
       this.eventEmitter.on(event.eventName, async payload => {
         const namespacedEventName = `${this.name}:${event.eventName}`
-        // await this.eventQueue.addJob(namespacedEventName, payload)
+        await this.eventQueue.addJob(namespacedEventName, payload)
       })
     })
   }
