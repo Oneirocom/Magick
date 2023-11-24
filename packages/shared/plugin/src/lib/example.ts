@@ -49,11 +49,12 @@ class DiscordPlugin extends BasePlugin {
 
     // Emitting a custom event for message creation
     const payload = this.formatMessageEvent(eventName, {
+      client: 'Discord',
       content: message.content,
       channelId: message.channel.id,
       rawData: message.toJSON(),
       channelType: eventName,
-      senderId: message.author.id,
+      sender: message.author.id,
       observer: this?.client?.user?.username || 'Discord',
     })
 
