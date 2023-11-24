@@ -64,7 +64,7 @@ class SpellCaster {
    */
   get lifecycleEventEmitter(): ILifecycleEventEmitter {
     return this.registry.dependencies[
-      'lifecycleEventEmitter'
+      'ILifecycleEventEmitter'
     ] as ILifecycleEventEmitter
   }
 

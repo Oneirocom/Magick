@@ -126,6 +126,7 @@ export class DiscordListTextChannels extends MagickComponent<
       ChannelType.PublicThread,
     ]
 
+    // @ts-ignore
     if (!allowedChannelTypes.includes(fetchedChannel.type)) {
       throw new Error('Event channel must be a text channel')
     }
@@ -135,6 +136,7 @@ export class DiscordListTextChannels extends MagickComponent<
 
     // get the list of text channels
     const textChannels = guild.channels.cache.filter(ch =>
+      // @ts-ignore
       allowedChannelTypes.includes(ch.type)
     )
 
