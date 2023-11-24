@@ -27,7 +27,7 @@ import {
 } from 'server/communication'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
-import { Spellbook } from '@magickml/grimoire'
+// import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 
 /**
@@ -51,7 +51,7 @@ export class Agent implements AgentInterface {
   pubsub: PubSub
   ready = false
   app: Application
-  spellbook: Spellbook<Agent, Application>
+  // spellbook: Spellbook<Agent, Application>
 
   outputTypes: any[] = []
   updateInterval: any
@@ -91,11 +91,11 @@ export class Agent implements AgentInterface {
       app,
     })
 
-    this.spellbook = new Spellbook({
-      agent: this,
-      app,
-      plugins: [],
-    })
+    // this.spellbook = new Spellbook({
+    //   agent: this,
+    //   app,
+    //   plugins: [],
+    // })
     ;(async () => {
       // initialize the plugins
       await this.initializeV1Plugins()
@@ -140,7 +140,7 @@ export class Agent implements AgentInterface {
     }
 
     const spells = spellsData.data
-    this.spellbook.loadSpells(spells)
+    // this.spellbook.loadSpells(spells)
   }
   /*
    * Initializes the plugins for the Agent.

@@ -1,22 +1,17 @@
 {
-  "name": "@magickml/grimoire",
+  "name": "server/grimoire",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/grimoire/src",
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/vite:build",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/server/grimoire"
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/packages/server/grimoire"
+        "outputPath": "dist/packages/server/grimoire",
+        "main": "packages/server/grimoire/src/index.ts",
+        "tsConfig": "packages/server/grimoire/tsconfig.lib.json",
+        "assets": ["packages/server/grimoire/*.md"]
       }
     },
     "lint": {
@@ -27,6 +22,13 @@
           "packages/server/grimoire/**/*.ts",
           "packages/server/grimoire/package.json"
         ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/server/grimoire/jest.config.ts"
       }
     }
   },

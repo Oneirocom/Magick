@@ -1,9 +1,4 @@
-import {
-  DefaultLogger,
-  IRegistry,
-  ManualLifecycleEventEmitter,
-  registerCoreProfile,
-} from '@magickml/behave-graph'
+import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import { useMemo } from 'react'
 
 export const useRegistry = () => {
@@ -12,10 +7,7 @@ export const useRegistry = () => {
       registerCoreProfile({
         values: {},
         nodes: {},
-        dependencies: {
-          ILogger: new DefaultLogger(),
-          ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
-        },
+        dependencies: {},
       }),
     []
   )

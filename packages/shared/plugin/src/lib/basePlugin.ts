@@ -23,12 +23,13 @@ interface EventDefinition {
 
 export type EventFormat = {
   content: string
-  senderId: string
+  sender: string
   channelId: string
   entities?: any[]
   rawData: unknown
   channelType: string
   observer: string
+  client: string
   metadata?: Record<string, any>
   status?: 'success' | 'error' | 'pending' | 'unknown'
 }
@@ -246,9 +247,9 @@ export abstract class BasePlugin extends Plugin {
       eventName: event,
       status: messageDetails.status || 'success',
       content: messageDetails.content,
-      sender: messageDetails.senderId,
-      observer: messageDetails.senderId,
-      client: 'discord',
+      sender: messageDetails.sender,
+      observer: messageDetails.observer,
+      client: messageDetails.client,
       channel: messageDetails.channelId,
       // agentId: this.agent.id, // Assuming this.agent is accessible
       // entities: messageDetails.entities,
