@@ -244,12 +244,12 @@ export abstract class BasePlugin extends Plugin {
   formatMessageEvent(event, messageDetails: EventFormat): EventPayload {
     return {
       connector: this.name,
+      client: messageDetails.client,
       eventName: event,
       status: messageDetails.status || 'success',
       content: messageDetails.content,
       sender: messageDetails.sender,
       observer: messageDetails.observer,
-      client: messageDetails.client,
       channel: messageDetails.channelId,
       // agentId: this.agent.id, // Assuming this.agent is accessible
       // entities: messageDetails.entities,
