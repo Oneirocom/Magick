@@ -334,6 +334,7 @@
     "tailwindcss": "^3.3.3",
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
+    "typed-emitter": "^2.1.0",
     "typescript": "5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-dts": "^2.3.0",

@@ -7,6 +7,8 @@ import {
   ValueTypeMap,
   memo,
 } from '@magickml/behave-graph'
+import { coreEmitter } from './dependencies/coreEmitter'
+import { MessageEvent } from './nodes/events/messageEvent'
 
 export const coreRegistry: IRegistry = {
   values: {},
@@ -19,8 +21,10 @@ export const coreRegistry: IRegistry = {
 
 export class CoreRegistry {
   values: ValueType[] = []
-  nodes: NodeDefinition[] = []
-  dependencies: Record<string, any> = {}
+  nodes: NodeDefinition[] = [MessageEvent]
+  dependencies: Record<string, any> = {
+    core: coreEmitter,
+  }
 
   /**
    * Returns a dictionary of the behave values this plugin may provide
