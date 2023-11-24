@@ -13,6 +13,8 @@ import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
 
+import { CoreRegistry, coreRegistry } from './coreRegistry'
+
 interface IApplication extends FeathersApplication {
   service: any
 }
@@ -52,6 +54,12 @@ interface IAgent {
 
  */
 export class Spellbook<Agent extends IAgent, Application extends IApplication> {
+  /**
+   * Core registry.
+   * This contains all the core dependencies for spellbook.
+   * Includes primary handler for the core events magick handles.
+   */
+  private coreRegistry = new CoreRegistry().getRegistry()
   /**
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
@@ -334,14 +342,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   private buildRegistry(): IRegistry {
     // Start with an initial base registry
-    let combinedRegistry: IRegistry = {
-      values: {},
-      nodes: {},
-      dependencies: {
-        ILogger: new DefaultLogger(),
-        ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
-      },
-    }
+    let combinedRegistry: IRegistry = this.coreRegistry
 
     // Combine each plugin's registry with the current combined registry
     this.plugins.forEach(plugin => {
