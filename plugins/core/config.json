@@ -1,0 +1,4 @@
+{
+  "name": "Core",
+  "main": "./src/index.js"
+}
