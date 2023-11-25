@@ -201,6 +201,7 @@
         "packages/client/magickml-chatbox/src/index.ts"
       ],
       "client/state": ["packages/client/state/src/index.ts"],
+      "plugin/core": ["plugins/core/src/index.ts"],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
