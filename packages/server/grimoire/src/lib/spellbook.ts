@@ -1,11 +1,6 @@
 import { EventEmitter } from 'events'
 import { Application as FeathersApplication } from '@feathersjs/koa'
-import {
-  DefaultLogger,
-  IRegistry,
-  ManualLifecycleEventEmitter,
-  registerCoreProfile,
-} from '@magickml/behave-graph'
+import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import type { BasePlugin, EventPayload } from 'server/plugin'
 import { SpellInterface } from 'server/schemas'
 import SpellCaster from './spellCaster'
@@ -14,6 +9,7 @@ import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
 
 import { CoreRegistry } from './coreRegistry'
+import PluginManager from 'packages/server/pluginManager/src/lib/plugin-manager'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -67,19 +63,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private spellMap: Map<string, SpellCaster<Agent>[]> = new Map()
 
   /**
-   * Map of plugin event emitters.
-   * We use this to trigger events in the first available spell runner.
-   * @example
-   * pluginEventEmitters = {
-   *  'plugin1': new EventEmitter(),
-   * 'plugin2': new EventEmitter(),
-   * }
-   * @example
-   * pluginEventEmitters.get('plugin1').emit('event1', { payload: 'payload' });
-   */
-  private pluginEventEmitters: Map<string, EventEmitter>
-
-  /**
    * Application instance.  Typed to main app.
    * @example
    * app.service('spells').on('updated', this.watchSpellHandler.bind(this));
@@ -102,6 +85,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * });
    */
   private plugins: BasePlugin[]
+
+  private pluginManager!: PluginManager
 
   /**
    * Flag to enable/disable watching spells.  We use this to keep the spells in sync with the server.
@@ -159,16 +144,48 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.app = app
     this.agent = agent
     this.plugins = plugins
-    this.pluginEventEmitters = new Map()
     this.init()
   }
 
   init() {
+    const pluginDirectory = process.env.PLUGIN_DIRECTORY || './plugins'
+    this.pluginManager = new PluginManager(pluginDirectory)
     this.coreRegistry = new CoreRegistry().getRegistry()
-    console.log('#############################CORE REGISTRY', this.coreRegistry)
-    this.buildRegistry(this.coreRegistry)
     this.initializePlugins()
+    this.buildRegistry(this.coreRegistry)
     this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
+  }
+
+  /**
+   * Initializes the plugins for the Spellbook.
+   * We run over each plugin and initialize it.
+   * We load the plugin into the spellbook for injection into each spellcaster.
+   * We also use the plugin's event emitter to trigger events in the spellbook.
+   */
+  private initializePlugins() {
+    // Load plugins
+    this.pluginManager.loadPlugins().then(() => {
+      this.pluginManager.getPlugins().forEach(plugin => {
+        this.setupPluginWorker(plugin)
+      })
+    })
+  }
+
+  /**
+   * Sets up a plugin's worker.  We map over the plugin's events and add them to the queue.
+   * This will create an even isomorphism for the plugins between the agent and the spellbook.
+   * When an even is received from the plugin, we trigger the event in the first available spell runner.
+   * @param {BasePlugin} plugin - Plugin instance.
+   * @example
+   * this.setupPluginWorker(plugin);
+   */
+  private setupPluginWorker(plugin: BasePlugin) {
+    // Set up a Bull queue to process events from the plugin
+    const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
+    queue.initialize(plugin.queueName, async job => {
+      const { eventName } = job.data
+      this.handlePluginEvent(plugin.name, eventName, job.data)
+    })
   }
 
   /**
@@ -326,20 +343,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
-   * Initializes the plugins for the Spellbook.
-   * We run over each plugin and initialize it.
-   * We load the plugin into the spellbook for injection into each spellcaster.
-   * We also use the plugin's event emitter to trigger events in the spellbook.
-   */
-  private initializePlugins() {
-    // Initialize each plugin
-    this.plugins.forEach(plugin => {
-      this.registerPluginEventEmitter(plugin.name, plugin.eventEmitter)
-      this.setupPluginWorker(plugin)
-    })
-  }
-
-  /**
    * Builds the registry for the Spellbook.
    * We start with an initial base registry.
    * We then combine each plugin's registry with the current combined registry.
@@ -368,38 +371,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.mainRegistry = combinedRegistry
 
     return combinedRegistry
-  }
-
-  /**
-   * Registers a plugin's event emitter.
-   * @param {string} pluginName - Name of the plugin.
-   * @param {EventEmitter} eventEmitter - Event emitter instance.
-   * @example
-   * this.registerPluginEventEmitter(plugin.name, plugin.eventEmitter);
-   */
-  private registerPluginEventEmitter(
-    pluginName: string,
-    eventEmitter: EventEmitter
-  ) {
-    // Register a plugin's event emitter
-    this.pluginEventEmitters.set(pluginName, eventEmitter)
-  }
-
-  /**
-   * Sets up a plugin's worker.  We map over the plugin's events and add them to the queue.
-   * This will create an even isomorphism for the plugins between the agent and the spellbook.
-   * When an even is received from the plugin, we trigger the event in the first available spell runner.
-   * @param {BasePlugin} plugin - Plugin instance.
-   * @example
-   * this.setupPluginWorker(plugin);
-   */
-  private setupPluginWorker(plugin: BasePlugin) {
-    // Set up a Bull queue to process events from the plugin
-    const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
-    queue.initialize(plugin.queueName, async job => {
-      const { eventName } = job.data
-      this.handlePluginEvent(plugin.name, eventName, job.data)
-    })
   }
 
   /**
