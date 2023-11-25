@@ -1,1 +1,1 @@
-export * from './lib/server/plugin-manager'
+export * from './lib/plugin-manager'
