@@ -23,7 +23,10 @@ interface EventDefinition {
   displayName: string
 }
 
-export type EventFormat = {
+export type EventFormat<
+  Data = Record<string, unknown>,
+  Y = Record<string, unknown>
+> = {
   content: string
   sender: string
   channelId: string
@@ -32,11 +35,15 @@ export type EventFormat = {
   channelType: string
   observer: string
   client: string
-  metadata?: Record<string, any>
+  data: Data
+  metadata?: Y
   status?: 'success' | 'error' | 'pending' | 'unknown'
 }
 
-export type EventPayload = {
+export type EventPayload<
+  T = Record<string, unknown>,
+  Y = Record<string, unknown>
+> = {
   connector: string
   eventName: string
   status: 'success' | 'error' | 'pending' | 'unknown'
@@ -50,7 +57,8 @@ export type EventPayload = {
   channelType: string
   rawData: unknown
   timestamp: string
-  metadata: Record<string, any>
+  data: T
+  metadata: Y
 }
 
 /**
@@ -61,10 +69,15 @@ export type EventPayload = {
  * @property eventQueue - The BullMQ queue for processing events.
  * @property enabled - The enabled state of the plugin.
  */
-export abstract class BasePlugin extends Plugin {
+export abstract class BasePlugin<
+  Payload extends Partial<EventPayload> = Partial<EventPayload>,
+  Data = Record<string, unknown>,
+  Metadata = Record<string, unknown>
+> extends Plugin {
   protected events: EventDefinition[]
   protected eventQueue: BullQueue
   protected enabled: boolean = false
+  protected centralEventBus!: EventEmitter
   logger = getLogger()
   dependencies: Record<string, any>
   nodes: NodeDefinition[]
@@ -85,13 +98,14 @@ export abstract class BasePlugin extends Plugin {
     this.events = []
     this.nodes = []
     this.values = []
-    this.dependencies = []
+    this.dependencies = {}
   }
 
   /**
    * Initializes the plugin by defining events and initializing functionalities.
    */
-  init() {
+  init(centralEventBus: EventEmitter) {
+    this.centralEventBus = centralEventBus
     this.defineEvents()
     this.initializeFunctionalities()
     this.mapEventsToQueue()
@@ -120,18 +134,6 @@ export abstract class BasePlugin extends Plugin {
         nodeDefinition.typeName,
         nodeDefinition,
       ])
-    )
-  })
-
-  /**
-   * Returns a dictionary of the behave dependencies this plugin may provide
-   * @returns A dictionary of the behave dependencies
-   */
-  protected getPluginDependencies = memo<Record<string, any>>(() => {
-    const dependencies = this.dependencies
-
-    return Object.fromEntries(
-      dependencies.map(dependency => [dependency.name, dependency])
     )
   })
 
@@ -167,7 +169,7 @@ export abstract class BasePlugin extends Plugin {
     // Define the plugin-specific values, nodes, and dependencies
     const pluginValues = this.getPluginValues()
     const pluginNodes = this.getPluginNodes()
-    const pluginDependencies = this.getPluginDependencies()
+    const pluginDependencies = this.dependencies
 
     // Merge the plugin's registry with the existing registry
     return {
@@ -274,11 +276,27 @@ export abstract class BasePlugin extends Plugin {
   }
 
   /**
+   * Abstract method for formatting the event payload.
+   * Each plugin should implement this method to format its specific event data.
+   * The formatMessageEvent method can be used to format a message event.
+   * @param event The event name.
+   * @param details The specific details of the event.
+   * @returns Formatted event payload.
+   */
+  abstract formatPayload(
+    event: string,
+    details: Payload
+  ): EventPayload<Data, Metadata>
+
+  /**
    * Formats to an event payload for a message.
    * @param messageDetails Details of the message to format.
    * @returns Formatted message event payload.
    */
-  formatMessageEvent(event, messageDetails: EventFormat): EventPayload {
+  formatMessageEvent<Data, Metadata>(
+    event,
+    messageDetails: EventFormat<Data, Metadata>
+  ): EventPayload<Data, Metadata> {
     return {
       connector: this.name,
       client: messageDetails.client,
@@ -292,7 +310,8 @@ export abstract class BasePlugin extends Plugin {
       // entities: messageDetails.entities,
       channelType: messageDetails.channelType,
       rawData: messageDetails.rawData,
-      metadata: messageDetails.metadata || {},
+      metadata: messageDetails.metadata || ({} as Metadata),
+      data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
     }
   }
