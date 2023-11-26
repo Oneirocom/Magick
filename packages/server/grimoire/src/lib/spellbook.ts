@@ -9,7 +9,7 @@ import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
 
 import { CoreRegistry } from './coreRegistry'
-import PluginManager from 'temp/src/lib/plugin-manager'
+import { PluginManager } from 'server/pluginManager'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -149,7 +149,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
   init() {
     const pluginDirectory = process.env.PLUGIN_DIRECTORY || './plugins'
-    this.pluginManager = new PluginManager(pluginDirectory)
+    this.pluginManager = new PluginManager(
+      pluginDirectory,
+      this.app.get('redis')
+    )
     this.coreRegistry = new CoreRegistry().getRegistry()
     this.initializePlugins()
     this.buildRegistry(this.coreRegistry)
