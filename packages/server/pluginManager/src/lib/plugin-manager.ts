@@ -1,15 +1,24 @@
 import fs from 'fs'
 import path from 'path'
 import { EventEmitter } from 'events'
-import { CorePlugin } from 'server/plugin'
+import { BasePlugin, CorePlugin } from 'server/plugin'
 import { IRegistry } from '@magickml/behave-graph'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
+import Redis from 'ioredis'
+import * as plugins from './../../../../../plugins'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
  */
-class PluginManager extends EventEmitter {
+export class PluginManager extends EventEmitter {
+  /**
+   * The Redis connection.
+   * @private
+   * @type {Redis}
+   */
+  private connection: Redis
+
   /**
    * The map of plugins, keyed by name.
    * @private
@@ -59,8 +68,9 @@ class PluginManager extends EventEmitter {
    * @param {string} pluginDirectory The directory where plugins are located.
    * @memberof PluginManager
    */
-  constructor(pluginDirectory: string) {
+  constructor(pluginDirectory: string, connection: Redis) {
     super()
+    this.connection = connection
     this.pluginDirectory = pluginDirectory
     this.plugins = new Map()
     this.logger = getLogger()
@@ -75,11 +85,41 @@ class PluginManager extends EventEmitter {
     return Array.from(this.plugins.values())
   }
 
+  private isValidPlugin(potentialPlugin: any): boolean {
+    return potentialPlugin instanceof BasePlugin
+  }
+
   /**
-   * Loads plugins from the plugin directory and registeres them.
-   * @memberof PluginManager
+   * Loads plugins from the plugin directory and registers them.
+   *
    */
   async loadPlugins(): Promise<void> {
+    debugger
+    for (const [pluginName, pluginGetter] of Object.entries(plugins)) {
+      // Get the actual class from the getter
+      const PluginClass = pluginGetter
+
+      // Check if PluginClass extends CorePlugin
+      // This check assumes CorePlugin is the base class for all your plugins
+      if (
+        Object.getPrototypeOf(PluginClass) === CorePlugin.prototype ||
+        PluginClass.prototype instanceof CorePlugin
+      ) {
+        // PluginClass is a subclass of CorePlugin
+        console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
+
+        // Create an instance of the plugin
+        const pluginInstance = new PluginClass(this.connection)
+        this.registerPlugin(pluginInstance)
+      }
+    }
+  }
+
+  /**
+   * Loads plugins from the plugin directory and registers them.
+   * @memberof PluginManager
+   */
+  async loadPluginsDynamic(): Promise<void> {
     this.logger.debug('Loading plugins from %s', this.pluginDirectory)
     const pluginFolders = fs
       .readdirSync(this.pluginDirectory, { withFileTypes: true })
@@ -95,10 +135,21 @@ class PluginManager extends EventEmitter {
       )
       if (fs.existsSync(pluginConfigPath)) {
         const config = JSON.parse(fs.readFileSync(pluginConfigPath, 'utf-8'))
-        const pluginPath = path.join(this.pluginDirectory, folder, config.main)
-        const PluginClassPackage = await import(pluginPath)
-        const pluginInstance = new PluginClassPackage.default(config)
-        this.registerPlugin(pluginInstance)
+        const packageName = config.packageName
+        this.logger.debug(`PLUGIN-MANAGER: loading package ${packageName}`)
+
+        try {
+          const PluginClassPackage = require(packageName)
+          console.log('PACKAGE LOADE')
+          // const PluginClassPackage = await import(packageName)
+          const pluginInstance = new PluginClassPackage.default(config)
+          this.registerPlugin(pluginInstance)
+        } catch (err) {
+          this.logger.error(
+            err,
+            `PLUGIN-MANAGER: error loading package ${packageName}`
+          )
+        }
       }
     }
   }
@@ -108,7 +159,7 @@ class PluginManager extends EventEmitter {
    * @param plugin The plugin instance to register.
    */
   registerPlugin(plugin: CorePlugin): void {
-    this.logger.debug('Registering plugin %s', plugin.name)
+    this.logger.debug(`Registering plugin ${plugin.name}`)
     this.plugins.set(plugin.name, plugin)
     this.setupPluginEventForwarding(plugin)
     plugin.init(this.centralEventBus)
@@ -191,5 +242,3 @@ class PluginManager extends EventEmitter {
 
   // Additional methods for handling activation, deactivation, and unloading of plugins...
 }
-
-export default PluginManager
