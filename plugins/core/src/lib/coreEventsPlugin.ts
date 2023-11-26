@@ -1,12 +1,24 @@
-import { CorePlugin, ON_MESSAGE } from 'server/plugin'
+import { CorePlugin, EventPayload, ON_MESSAGE } from 'server/plugin'
+import { MessageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
+import { coreEmitter } from './dependencies/coreEmitter'
+
+const pluginName = 'Core'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
 export class CoreEventsPlugin extends CorePlugin {
-  constructor(name: string, connection: Redis) {
-    super(name, connection)
+  nodes = [MessageEvent]
+
+  values = []
+
+  dependencies = {
+    pluginName: coreEmitter,
+  }
+
+  constructor(connection: Redis) {
+    super(pluginName, connection)
   }
 
   /**
@@ -24,7 +36,7 @@ export class CoreEventsPlugin extends CorePlugin {
     this.centralEventBus.on(ON_MESSAGE, this.handleMessage.bind(this))
   }
 
-  handleMessage(payload: any) {
+  handleMessage(payload: EventPayload) {
     this.emitEvent(ON_MESSAGE, payload)
   }
 

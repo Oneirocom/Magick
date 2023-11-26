@@ -1,10 +1,10 @@
 import EventEmitter from 'events'
-import { EventPayload } from 'server/plugin'
+import { EventPayload, ON_MESSAGE } from 'server/plugin'
 import TypedEmitter from 'typed-emitter'
 
 type MessageEvents = {
   error: (error: Error) => void
-  message: (event: EventPayload) => void
+  [ON_MESSAGE]: (event: EventPayload) => void
 }
 
 export type CoreEmitter = TypedEmitter<MessageEvents>
