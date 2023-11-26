@@ -1,4 +1,5 @@
 {
   "name": "Core",
-  "main": "./src/index.js"
+  "packageName": "plugin/core",
+  "main": "./src/lib/coreEventsPlugin.ts"
 }
