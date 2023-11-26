@@ -16,6 +16,10 @@ type DiscordPayload = {
 class DiscordPlugin extends CorePlugin<DiscordPayload> {
   private client: Discord.Client
 
+  nodes = []
+  values = []
+  dependencies = {}
+
   constructor(connection: Redis) {
     super('DiscordPlugin', connection)
     this.client = new Discord.Client({
