@@ -78,10 +78,10 @@ export abstract class BasePlugin<
   protected eventQueue: BullQueue
   protected enabled: boolean = false
   protected centralEventBus!: EventEmitter
+  abstract dependencies?: Record<string, any>
+  abstract nodes?: NodeDefinition[]
+  abstract values?: ValueType[]
   logger = getLogger()
-  dependencies: Record<string, any>
-  nodes: NodeDefinition[]
-  values: ValueType[]
   eventEmitter: EventEmitter
 
   /**
@@ -96,9 +96,6 @@ export abstract class BasePlugin<
     this.eventQueue = new BullQueue(connection)
     this.eventQueue.initialize(this.queueName)
     this.events = []
-    this.nodes = []
-    this.values = []
-    this.dependencies = {}
   }
 
   /**
@@ -117,6 +114,9 @@ export abstract class BasePlugin<
    */
   protected getPluginValues = memo<ValueTypeMap>(() => {
     const valueTypes = this.values
+
+    if (!valueTypes) return {}
+
     return Object.fromEntries(
       valueTypes.map(valueType => [valueType.name, valueType])
     )
@@ -128,6 +128,8 @@ export abstract class BasePlugin<
    */
   protected getPluginNodes = memo<Record<string, NodeDefinition>>(() => {
     const nodeDefinitions = this.nodes
+
+    if (!nodeDefinitions) return {}
 
     return Object.fromEntries(
       nodeDefinitions.map(nodeDefinition => [
