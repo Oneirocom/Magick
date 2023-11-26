@@ -9,7 +9,7 @@ import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
 
 import { CoreRegistry } from './coreRegistry'
-import PluginManager from 'packages/server/pluginManager/src/lib/plugin-manager'
+import PluginManager from 'temp/src/lib/plugin-manager'
 
 interface IApplication extends FeathersApplication {
   service: any

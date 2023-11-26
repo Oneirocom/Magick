@@ -4,16 +4,6 @@
   "sourceRoot": "packages/server/schemas/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/server/schemas",
-        "main": "packages/server/schemas/src/index.ts",
-        "tsConfig": "packages/server/schemas/tsconfig.lib.json",
-        "assets": ["packages/server/schemas/*.md"]
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
