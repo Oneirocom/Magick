@@ -4,7 +4,7 @@ import {
   makeEventNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreEmitter } from '../../dependencies/coreEmitter'
-import { EventPayload } from 'server/plugin'
+import { EventPayload, ON_MESSAGE } from 'server/plugin'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
@@ -26,7 +26,7 @@ export const MessageEvent = makeEventNodeDefinition({
   },
   initialState: makeInitialState(),
   init: ({ state, write, commit, graph: { getDependency } }) => {
-    Assert.mustBeTrue(state.onStartEvent === undefined)
+    Assert.mustBeTrue(state[ON_MESSAGE] === undefined)
     const onStartEvent = (event: EventPayload) => {
       write('event', event)
       write('content', event.content)
@@ -35,7 +35,7 @@ export const MessageEvent = makeEventNodeDefinition({
 
     const coreEventEmitter = getDependency<CoreEmitter>('Core')
 
-    coreEventEmitter?.on('message', onStartEvent)
+    coreEventEmitter?.on(ON_MESSAGE, onStartEvent)
 
     return {
       onStartEvent,
@@ -46,7 +46,7 @@ export const MessageEvent = makeEventNodeDefinition({
 
     const coreEventEmitter = getDependency<CoreEmitter>('Core')
 
-    if (onStartEvent) coreEventEmitter?.removeListener('message', onStartEvent)
+    if (onStartEvent) coreEventEmitter?.removeListener(ON_MESSAGE, onStartEvent)
 
     return {}
   },
