@@ -1,0 +1,66 @@
+const fs = require('fs')
+const path = require('path')
+import * as pluginModules from '../../../../../plugins'
+import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
+import Redis from 'ioredis'
+
+const checkIfCorePlugin = PluginClass => {
+  return (
+    typeof PluginClass.prototype.init === 'function' &&
+    typeof PluginClass.prototype.getRegistry === 'function' &&
+    typeof PluginClass.prototype.onMessage === 'function'
+  )
+}
+
+const getUnifiedRegistry = plugins => {
+  const unifiedRegistry = {
+    nodes: {},
+    values: {},
+    dependencies: {},
+  }
+
+  for (const plugin of plugins) {
+    const { nodes, values, dependencies } = plugin.getRegistry(unifiedRegistry)
+    Object.assign(unifiedRegistry.nodes, nodes)
+    Object.assign(unifiedRegistry.values, values)
+    Object.assign(unifiedRegistry.dependencies, dependencies)
+  }
+
+  return unifiedRegistry
+}
+
+const loadPlugins = () => {
+  const connection = new Redis()
+
+  const plugins = []
+  for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
+    // Get the actual class from the getter
+    const PluginClass = pluginGetter
+
+    // Check if PluginClass extends CorePlugin
+    // This check assumes CorePlugin is the base class for all your plugins
+    if (checkIfCorePlugin(PluginClass)) {
+      // PluginClass is a subclass of CorePlugin
+      console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
+
+      // Create an instance of the plugin
+      const pluginInstance = new PluginClass(connection)
+      plugins.push(pluginInstance)
+    }
+    return plugins
+  }
+}
+
+export function writeNodeSpecsToFile(fileLocation) {
+  // get the registry from all plugins
+  const registry = getUnifiedRegistry(loadPlugins())
+
+  // write the registry to JSON
+  const nodeSpecsJson = writeNodeSpecsToJSON(registry)
+
+  // write the JSON to file
+  fs.writeFileSync(
+    path.join(fileLocation),
+    JSON.stringify(nodeSpecsJson, null, 2)
+  )
+}
