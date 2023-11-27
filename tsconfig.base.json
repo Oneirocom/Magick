@@ -72,6 +72,15 @@
       "@magickml/plugin-database-shared": [
         "packages/plugins/database/shared/src/index.ts"
       ],
+      "@magickml/plugin-ddiffusers-client": [
+        "packages/plugins/ddiffusers/client/src/index.ts"
+      ],
+      "@magickml/plugin-ddiffusers-server": [
+        "packages/plugins/ddiffusers/server/src/index.ts"
+      ],
+      "@magickml/plugin-ddiffusers-shared": [
+        "packages/plugins/ddiffusers/shared/src/index.ts"
+      ],
       "@magickml/plugin-discord-client": [
         "packages/plugins/discord/client/src/index.ts"
       ],
@@ -198,7 +207,6 @@
       "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
       "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
       "rete": ["packages/rete/src/index.ts"]
-      
     }
   },
   "exclude": ["node_modules", "tmp"]

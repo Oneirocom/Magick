@@ -18,6 +18,7 @@ import MainLayout from './layouts/MainLayout/MainLayout'
 import EventWindow from './screens/EventWindow'
 import RequestWindow from './screens/RequestWindow'
 import AgentManagerWindow from './screens/agents/AgentManagerWindow'
+import CollectionsWindow from './screens/CollectionsWindow/CollectionsWindow'
 
 /**
  * Exported components
@@ -31,6 +32,7 @@ export {
   EventWindow,
   RequestWindow,
   AgentManagerWindow,
+  CollectionsWindow,
 }
 
 /**

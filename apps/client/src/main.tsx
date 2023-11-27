@@ -16,8 +16,7 @@ import { initLogger, getLogger } from '@magickml/core'
 
 import plugins from './plugins'
 
-// We want to add this back in eventually, but it's causing some visual bugs
-//import './globals.css'
+import './globals.css'
 
 initLogger({ name: "AIDE" })
 

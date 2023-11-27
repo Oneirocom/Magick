@@ -169,3 +169,39 @@ export const recordSchema = Type.Object(
 export type RecordSchema = Static<typeof recordSchema>
 /** The interface for a record object that's based on the `recordSchema`. */
 export type RecordInterface = RecordSchema
+
+/**
+ * Full data model schema for a generation.
+ *
+ * @property {string} id - The generation's ID.
+ * @property {string} projectId - The ID of the project that the generation belongs to.
+ * @property {string} modelName - The name of the generative model used.
+ * @property {string} [description] - Description of the generation (optional).
+ * @property {string[]} [outputPaths] - Paths to the generation outputs (optional).
+ * @property {'image' | 'audio' | 'video'} type - Type of the generation.
+ * @property {string} createdAt - Timestamp of when the generation was created.
+ * @property {string | null} [deletedAt] - Timestamp of when the generation was deleted, or null if not deleted.
+ */
+export const generationSchema = Type.Object(
+  {
+    id: Type.String(),
+    projectId: Type.String(),
+    modelName: Type.String(),
+    description: Type.Optional(Type.String()),
+    outputPaths: Type.Optional(Type.Array(Type.String())),
+    type: Type.Union([
+      Type.Literal('image'),
+      Type.Literal('audio'),
+      Type.Literal('video'),
+    ]),
+    createdAt: Type.String(),
+    deletedAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+  },
+  { $id: 'Generation', additionalProperties: false }
+)
+
+/**  The type for a generation object that's based on the `generationSchema`. */
+export type GenerationSchema = Static<typeof generationSchema>
+
+/** The interface for a generation object that's based on the `generationSchema`. */
+export type GenerationInterface = GenerationSchema

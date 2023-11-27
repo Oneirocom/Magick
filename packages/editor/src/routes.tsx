@@ -15,6 +15,7 @@ import DocumentWindow from './screens/DocumentWindow'
 import EventWindow from './screens/EventWindow'
 import RequestWindow from './screens/RequestWindow'
 import SettingsWindow from './screens/settings/SettingsWindow'
+import CollectionsWindow from './screens/CollectionsWindow/CollectionsWindow'
 // import ProjectWindow from './windows/ProjectWindow';
 import './App.css'
 import './design-globals/design-globals.css'
@@ -70,6 +71,7 @@ const MyRoutes = () => (
       <Route path="/requests" element={<RequestWindow />} />
       <Route path="/agents" element={<AgentManagerWindow />} />
       <Route path="/settings" element={<SettingsWindow />} />
+      <Route path="/collections" element={<CollectionsWindow />} />
 
       <Route element={<MagickPageLayout />}>
         <Route path="/home/*" element={<HomeScreen />} />
