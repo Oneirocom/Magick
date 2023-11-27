@@ -115,19 +115,22 @@ export function AgentMenu({ data }) {
         onClose={handleCloseMenu}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
         sx={{
           '& .MuiMenu-paper': {
             background: '#2B2B30',
             width: '210px',
             shadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-            borderRadius: '0px',
+            borderRadius: '2px',
+            border: '1px solid #3B3B3B',
             left: '0px !important',
+            marginTop: '20px',
+            marginLeft: '180px',
           },
         }}
       >
