@@ -1,4 +1,6 @@
 // DOCUMENTED
+import StorageCard from './Storage/StorageCard'
+
 // Export Accordion component
 export { Accordion } from './Accordion'
 
@@ -52,3 +54,8 @@ export { Modal } from './Modal'
 
 // Export Table component
 export { TableComponent } from './Table'
+
+// Export StorageCard component
+export { StorageCard }
+
+export * from './DataTable'
