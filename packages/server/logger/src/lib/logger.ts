@@ -1,5 +1,13 @@
 import pino from 'pino'
-import { NODE_ENV, PINO_LOG_LEVEL } from 'shared/config'
+import { config } from 'dotenv-flow'
+
+// Load environment variables
+config({
+  path: '../../../.env.*',
+})
+
+const PINO_LOG_LEVEL = process.env['PINO_LOG_LEVEL'] || 'info'
+const NODE_ENV = process.env['NODE_ENV'] || 'development'
 
 let logger: pino.Logger | null = null
 
