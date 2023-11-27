@@ -13,8 +13,6 @@ export default async function runExecutor(
     options.specFileName
   )
 
-  console.log('FILE PATH', filePath)
-
   // get the path for a relative fole in ../tools/generateNodeSpec using path
 
   try {
