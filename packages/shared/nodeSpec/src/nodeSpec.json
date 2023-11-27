@@ -1,0 +1,23 @@
+[
+  {
+    "type": "magick/onMessage",
+    "category": "Event",
+    "label": "On Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  }
+]
