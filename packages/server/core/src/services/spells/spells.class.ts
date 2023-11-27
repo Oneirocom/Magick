@@ -39,8 +39,8 @@ export class SpellService<
 
     if (spellId && !versionId) {
       const count = await db('agentReleases').count('*').as('count').leftJoin('spells as spells', function() {
-        this.on('spells.versionId', '=', 'agentReleases.id').andOn('spells.id', '=', spellId)
-      })
+        this.on('spells.versionId', '=', 'agentReleases.id')
+      }).where('spells.id', '=', spellId)
 
       if (count["count"] > 0) {
         query
@@ -73,6 +73,7 @@ export class SpellService<
   }
 
   async create(params: SpellData) {
+    app.get('logger').debug('Creating spell: %o', params)
     return this._create(params)
   }
 
