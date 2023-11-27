@@ -24,9 +24,9 @@ const spellDataSchemaProperties = {
   createdAt: spellSchema.properties.createdAt,
   updatedAt: spellSchema.properties.updatedAt,
   hash: spellSchema.properties.hash,
-  type: Type.Optional(spellSchema.properties.type),
-  versionId: spellSchema.properties.versionId,
-  id: Type.Optional(spellSchema.properties.id),
+  type: spellSchema.properties.type,
+  versionId: Type.Optional(Type.Union([Type.Null(), spellSchema.properties.versionId])),
+  id: spellSchema.properties.id,
 }
 
 export const spellDataSchema = Type.Object(spellDataSchemaProperties, {
