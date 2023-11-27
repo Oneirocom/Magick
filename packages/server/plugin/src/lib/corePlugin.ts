@@ -1,14 +1,5 @@
-import { EventEmitter } from 'events'
 import Redis from 'ioredis'
-import { BasePlugin, EventPayload, EventFormat } from './basePlugin'
-import {
-  IRegistry,
-  NodeDefinition,
-  ValueType,
-  ValueTypeMap,
-} from '@magickml/behave-graph'
-import { BullQueue } from 'server/communication'
-import { getLogger } from 'server/logger'
+import { BasePlugin, EventPayload } from './basePlugin'
 import { ON_MESSAGE } from './coreEventTypes'
 
 /**

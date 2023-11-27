@@ -94,7 +94,6 @@ export class PluginManager extends EventEmitter {
    *
    */
   async loadPlugins(): Promise<void> {
-    debugger
     for (const [pluginName, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
