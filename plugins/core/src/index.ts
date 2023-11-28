@@ -1,1 +1,1 @@
-export * from './lib/coreEventsPlugin'
+export * from './lib/corePlugin
