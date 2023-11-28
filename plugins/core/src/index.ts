@@ -1,1 +1,1 @@
-export * from './lib/corePlugin
+export * from './lib/corePlugin'
