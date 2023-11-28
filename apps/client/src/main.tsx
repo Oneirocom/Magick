@@ -18,19 +18,13 @@ import { AppConfig } from '@magickml/providers'
 
 // We want to add this back in eventually, but it's causing some visual bugs
 //import './globals.css'
-
-initLogger({ name: 'AIDE' })
-
-const logger = getLogger()
-
-logger.info('loaded with plugins %o', plugins)
+console.info('loaded with plugins %o', plugins)
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
-  logger.info('not in iframe')
   if (STANDALONE) {
-    logger.info('standalone')
+    console.info('standalone')
     const container = document.getElementById('root') as Element
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
       ; (window as any).root = root
@@ -56,7 +50,6 @@ if (window === window.parent) {
     root.render(<Root />)
   }
 } else {
-  logger.info('iframe: In iframe')
   /**
    * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
    */
@@ -76,10 +69,10 @@ if (window === window.parent) {
         event.origin !== window.location.origin &&
         !TRUSTED_PARENT_URLS.includes(event.origin)
       ) {
-        logger.error('Untrusted origin %s', event.origin);
+        console.error('Untrusted origin %s', event.origin);
         // Log the trusted origins for debugging purposes
         TRUSTED_PARENT_URLS.forEach(trustedUrl => {
-          logger.error('Trusted origin is %s', trustedUrl);
+          console.error('Trusted origin is %s', trustedUrl);
         });
 
         return;
@@ -94,7 +87,6 @@ if (window === window.parent) {
         const { config } = payload as { config: AppConfig }
         const Root = () => {
           if (POSTHOG_ENABLED && config?.posthogEnabled) {
-            logger.info('iframe: rendering with posthog')
             return (
               <PostHogProvider
                 apiKey={POSTHOG_API_KEY}
@@ -106,7 +98,6 @@ if (window === window.parent) {
               </PostHogProvider>
             )
           } else {
-            logger.info('iframe: rendering without posthog')
             return <MagickIDE config={config} />
           }
         }
@@ -114,7 +105,6 @@ if (window === window.parent) {
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
           ; (window as any).root = root
 
-        logger.info('iframe: rendering root')
         root.render(<Root />)
       }
     },
