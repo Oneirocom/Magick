@@ -4,7 +4,6 @@ import { Background, BackgroundVariant, ReactFlow } from 'reactflow';
 
 import CustomControls from './Controls.js';
 import { NodePicker } from './NodePicker.js';
-import { useNodeSpecJson } from '../../hooks/react-flow/useNodeSpecJson.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
 import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
@@ -12,6 +11,7 @@ import { Tab } from '@magickml/providers';
 
 import './flowOverrides.css'
 import { SpellInterface } from 'server/schemas';
+import { getNodeSpec } from 'shared/nodeSpec';
 
 type FlowProps = {
   spell: SpellInterface;
@@ -26,7 +26,7 @@ export const Flow: React.FC<FlowProps> = ({
   parentRef,
   tab
 }) => {
-  const specJson = useNodeSpecJson(registry);
+  const specJson = getNodeSpec()
 
   const {
     nodes,
