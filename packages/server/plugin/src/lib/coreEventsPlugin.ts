@@ -13,7 +13,7 @@ import { ON_MESSAGE } from './coreEventTypes'
  *  }
  * }
  */
-export abstract class CorePlugin<
+export abstract class CoreEventsPlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>
