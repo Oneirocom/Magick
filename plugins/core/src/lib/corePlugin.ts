@@ -1,4 +1,4 @@
-import { CorePlugin, EventPayload, ON_MESSAGE } from 'server/plugin'
+import { CoreEventsPlugin, EventPayload, ON_MESSAGE } from 'server/plugin'
 import { MessageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { coreEmitter } from './dependencies/coreEmitter'
@@ -8,7 +8,7 @@ const pluginName = 'Core'
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
-export class CoreEventsPlugin extends CorePlugin {
+export class CorePlugin extends CoreEventsPlugin {
   nodes = [MessageEvent]
 
   values = []
