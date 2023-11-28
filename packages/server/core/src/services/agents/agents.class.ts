@@ -60,14 +60,14 @@ export class AgentService<
       throw new NotFound(`No record found for id '${agentId}'`)
     }
 
-    return data as AgentData
+    return data
   }
 
   async find(params?: ServiceParams) {
     return await this._find(params)
   }
 
-  async update(id: string, data: AgentData, params?: ServiceParams) {
+  async update(id: string, data: AgentInterface, params?: ServiceParams) {
     // Call the original update method to handle other updates
     return this._update(id, data, params);
   }
@@ -168,15 +168,14 @@ export class AgentService<
       throw new Error(`Agent with ID ${agentId} not found.`);
     }
 
-    console.log(agentData)
-
+    delete agentData.id;
     // Copy data from the fetched agent, omitting the ID field to create a new agent
     const newAgent = await this.app.service('agents').create(agentData);
 
     // Add the new agent's ID and the provided version tag to the AgentReleases table
     const db = this.app.get('dbClient');
-    const release = await db('agentReleases').insert({
-      agent_id: newAgent.id,
+    const release = await app.service('agentReleases').create({
+      agentId: newAgent.id,
       version: versionTag,
     });
 
@@ -187,9 +186,10 @@ export class AgentService<
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
     // ADDING REST API KEY TO AGENT's DATA
+
     if (data.data) {
       data.data = JSON.stringify({
-        ...JSON.parse(data.data),
+        ...typeof data.data === 'string' ? JSON.parse(data.data) : data.data,
         rest_api_key: md5(Math.random().toString()),
       })
     } else {
