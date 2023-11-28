@@ -61,13 +61,14 @@ export const agentSchema = Type.Object(
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
+    rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
+    image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
+    currentReleaseVersionId: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     updatedAt: Type.Optional(Type.String()),
     pingedAt: Type.Optional(Type.String()),
     data: Type.Optional(Type.Any()),
     publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
-    image: Type.Optional(Type.String()),
-    currentReleaseVersionId: Type.Optional(Type.String()),
     frozen: Type.Optional(Type.Boolean()),
     default: Type.Optional(Type.Boolean()),
   },
@@ -112,3 +113,37 @@ export const documentSchema = Type.Object(
 
 /** The interface for a document object that's based on the `documentSchema`. */
 export type Document = Static<typeof documentSchema>
+
+
+/**
+ * Full data model schema for an agent.
+ *
+ * @property {string} id - The agent's ID.
+ * @property {string} projectId - The ID of the project that the agent belongs to.
+ * @property {string} name - The name of the agent.
+ * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
+ * @property {string} runState - The run state of the agent.
+ * @property {string} updatedAt - The date when the agent was last updated.
+ * @property {string} [pingedAt] - The date when the agent was last pinged (optional).
+ * @property {any} [data] - The data stored in the agent (optional).
+ * @property {any} [publicVariables] - The public variables of the agent (optional).
+ * @property {string} [secrets] - The secrets of the agent (optional).
+ * @property {string} [image] - The image of the agent (optional).
+ */
+export const agentReleaseSchema = Type.Object(
+  {
+    id: Type.String(),
+    agentId: Type.String(),
+    version: Type.String(),
+    createdAt: Type.String(),
+  },
+  {
+    $id: 'AgentRelease',
+    additionalProperties: false,
+  }
+)
+
+/** The type for an agent object that's based on the `agentSchema`. */
+export type AgentReleaseSchema = Static<typeof agentSchema>
+/** The interface for an agent object that's based on the `agentSchema`. */
+export type AgentReleaseInterface = AgentReleaseSchema

@@ -43,6 +43,10 @@ export const agentDataSchema = Type.Pick(
     'publicVariables',
     'secrets',
     'rootSpellId',
+    'rootSpell', //DEPRECATED
+    'runState', //UNUSED right now
+    'image',
+    'currentReleaseVersionId',
     'default',
   ],
   { $id: 'AgentData' }
