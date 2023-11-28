@@ -6,8 +6,10 @@ config({
   path: '../../../.env.*',
 })
 
-const PINO_LOG_LEVEL = process.env['PINO_LOG_LEVEL'] || 'info'
-const NODE_ENV = process.env['NODE_ENV'] || 'development'
+const PINO_LOG_LEVEL =
+  (typeof process !== 'undefined' && process.env['PINO_LOG_LEVEL']) || 'info'
+const NODE_ENV =
+  (typeof process !== 'undefined' && process.env['NODE_ENV']) || 'development'
 
 let logger: pino.Logger | null = null
 
