@@ -2,7 +2,7 @@ import Discord, { GatewayIntentBits, MessagePayload } from 'discord.js'
 import Redis from 'ioredis'
 
 import { EventFormat } from './basePlugin'
-import { CorePlugin } from './corePlugin'
+import { CoreEventsPlugin } from './coreEventsPlugin'
 // import { BullQueue } from 'server/core'
 
 type DiscordPayload = {
@@ -13,7 +13,7 @@ type DiscordPayload = {
   observer: string
 }
 
-class DiscordPlugin extends CorePlugin<DiscordPayload> {
+class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
   private client: Discord.Client
 
   nodes = []
