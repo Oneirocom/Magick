@@ -1,12 +1,12 @@
 {
   "name": "shared/nodeSpec",
-  "implicitDependencies": ["plugin/*"],
+  "implicitDependencies": ["plugin*"],
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shared/nodeSpec/src",
   "projectType": "library",
   "targets": {
     "build": {
-      "dependsOn": ["^build"],
+      "implicitDependencies": ["plugin*", "plugins/*"],
       "executor": "@magickml/buildSpec:buildSpec",
       "options": {
         "specFileLocation": "packages/shared/nodeSpec/src",

@@ -2,6 +2,7 @@ import { CoreEventsPlugin, EventPayload, ON_MESSAGE } from 'server/plugin'
 import { MessageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { coreEmitter } from './dependencies/coreEmitter'
+import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 
 const pluginName = 'Core'
 
@@ -30,6 +31,14 @@ export class CorePlugin extends CoreEventsPlugin {
       eventName: ON_MESSAGE,
       displayName: 'Message Received',
     })
+  }
+
+  /**
+   * Provides the core registry from Behave Graph. Wraps our existing nodes and values.
+   * @param registry The registry to provide.
+   */
+  override provideRegistry(registry: IRegistry): IRegistry {
+    return registerCoreProfile(registry)
   }
 
   initializeFunctionalities() {
