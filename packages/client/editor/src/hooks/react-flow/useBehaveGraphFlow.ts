@@ -44,12 +44,7 @@ export const useBehaveGraphFlow = ({
   const setGraphJson = useCallback((graphJson: GraphJSON) => {
     if (!graphJson) return
 
-    console.log('GRAPJH JSON CALLBACK', graphJson)
-
     const [nodes, edges] = behaveToFlow(graphJson)
-
-    console.log('NODES', nodes)
-    console.log('EDGES', edges)
 
     if (hasPositionMetaData(graphJson) === false) {
       autoLayout(nodes, edges)
