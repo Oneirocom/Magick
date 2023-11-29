@@ -17,6 +17,7 @@ import {
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
+import { getStringConversionsForValueType } from '@magickml/behave-graph'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -140,7 +141,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * @param {object} update - The updated spell object
    */
   const onSaveDiff = async (event, update) => {
-    // return
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current
@@ -150,6 +150,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     }
 
     const jsonDiff = diff(currentSpell, updatedSpell)
+
+    console.log('DIFF', jsonDiff)
 
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) {
