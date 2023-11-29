@@ -105,7 +105,7 @@ export const agent = (app: Application) => {
       const agentId = channel.split(':')[1]
 
       // parse the type of agent message
-      const messageType = channel.split(':')[2]
+      const messageType = channel.split(':')[3]
 
       // check if message type is an agent event
       if (!AGENT_EVENTS.includes(messageType)) {

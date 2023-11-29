@@ -151,7 +151,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     const pluginDirectory = process.env.PLUGIN_DIRECTORY || './plugins'
     this.pluginManager = new PluginManager(
       pluginDirectory,
-      this.app.get('redis')
+      this.app.get('redis'),
+      this.agent.id
     )
     this.coreRegistry = new CoreRegistry().getRegistry()
     this.initializePlugins()

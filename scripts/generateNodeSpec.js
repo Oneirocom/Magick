@@ -43,7 +43,7 @@ const loadPlugins = () => {
       console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
 
       // Create an instance of the plugin
-      const pluginInstance = new PluginClass(connection)
+      const pluginInstance = new PluginClass(connection, '000000000')
       plugins.push(pluginInstance)
     }
   }
