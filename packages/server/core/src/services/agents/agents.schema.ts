@@ -67,6 +67,7 @@ export const agentPatchDataSchema = Type.Pick(
     'pingedAt',
     'data',
     'publicVariables',
+    'currentReleaseVersionId',
     'secrets',
   ],
   { $id: 'AgentPatch', additionalProperties: true }

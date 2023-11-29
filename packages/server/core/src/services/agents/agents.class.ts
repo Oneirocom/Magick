@@ -169,6 +169,7 @@ export class AgentService<
     }
 
     delete agentData.id;
+    agentData.currentReleaseVersionId = versionTag;
     // Copy data from the fetched agent, omitting the ID field to create a new agent
     const newAgent = await this.app.service('agents').create(agentData);
 
@@ -179,7 +180,11 @@ export class AgentService<
       version: versionTag,
     });
 
-    return { agent: newAgent, release };
+    // TODO: this is a little ugly, but it's alright for now
+    // Might want to change it if/when we move away from feathers
+    const finalNewAgent = await this.app.service('agents').patch(newAgent.id, { ...newAgent, currentReleaseVersionId: release.id });
+
+    return { agent: finalNewAgent, release };
   }
 
   async create(

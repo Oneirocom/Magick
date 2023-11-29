@@ -32,36 +32,7 @@ export class SpellService<
 > extends KnexAdapter<SpellInterface, SpellData, ServiceParams, SpellPatch> {
 
   async get(spellId: string, params: ServiceParams) {
-    const db = app.get('dbClient')
-    const versionId = params.query?.versionId
-
-    const query = super.createQuery(params)
-
-    if (spellId && !versionId) {
-      const count = await db('agentReleases').count('*').as('count').leftJoin('spells as spells', function() {
-        this.on('spells.versionId', '=', 'agentReleases.id')
-      }).where('spells.id', '=', spellId)
-
-      if (count["count"] > 0) {
-        query
-          .leftJoin('agentRelease as releases', function() {
-            this.on('spells.versionId', '=', 'agentReleases.id')
-          })
-      }
-
-    } else if(spellId && versionId) {
-      query
-        .leftJoin('agentRelease as releases', function() {
-          this.on('spelld.versionId', '=', 'agentReleases.id').andOn('agentReleases.id', '=', versionId)
-        })
-    }
-
-    const data = await query.andWhere('spells.id', '=', spellId).first()
-    if (!data) {
-      throw new NotFound(`No record found for id '${spellId}'`)
-    }
-
-    return data
+    return this._get(spellId, params);
   }
 
   async find(params: ServiceParams) {
