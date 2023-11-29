@@ -6,7 +6,6 @@ import CustomControls from './Controls.js';
 import { NodePicker } from './NodePicker.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
-import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
 import { Tab } from '@magickml/providers';
 
 import './flowOverrides.css'
@@ -22,7 +21,6 @@ type FlowProps = {
 
 export const Flow: React.FC<FlowProps> = ({
   spell,
-  registry,
   parentRef,
   tab
 }) => {
@@ -33,7 +31,6 @@ export const Flow: React.FC<FlowProps> = ({
     edges,
     onNodesChange,
     onEdgesChange,
-    graphJson,
     setGraphJson,
     nodeTypes,
     onConnect
@@ -60,10 +57,8 @@ export const Flow: React.FC<FlowProps> = ({
     parentRef
   });
 
-  const { togglePlay, playing } = useGraphRunner({
-    graphJson,
-    registry
-  });
+  const playing = false;
+  const togglePlay = () => { };
 
   return (
     <ReactFlow
