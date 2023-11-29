@@ -18,8 +18,8 @@ export abstract class CoreEventsPlugin<
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>
 > extends BasePlugin<Payload, Data, Metadata> {
-  constructor(name: string, connection: Redis) {
-    super(name, connection)
+  constructor(name: string, connection: Redis, agentId: string) {
+    super(name, connection, agentId)
     // Initialize CoreEventPlugin specific stuff if needed
   }
 

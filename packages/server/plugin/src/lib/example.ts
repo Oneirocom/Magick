@@ -20,8 +20,8 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
   values = []
   dependencies = {}
 
-  constructor(connection: Redis) {
-    super('DiscordPlugin', connection)
+  constructor(connection: Redis, agentId: string) {
+    super('discord', connection, agentId)
     this.client = new Discord.Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -48,7 +48,7 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
 
   defineEvents() {
     this.registerEvent({
-      eventName: 'discord:messageReceived',
+      eventName: 'messageReceived',
       displayName: 'Message Received', // Define MessagePayload type
     })
     // ... register other Discord-specific events
@@ -103,7 +103,7 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
     // add a whitelist option here probably.
     if (message.author.bot) return
 
-    const eventName = 'discord:messageReceived'
+    const eventName = 'messageReceived'
     const pluginPayload = this.makePayloadFromMessage(message)
 
     // Emitting a custom event for message creation

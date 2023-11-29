@@ -64,12 +64,20 @@ export class PluginManager extends EventEmitter {
   centralEventBus: EventEmitter = new EventEmitter()
 
   /**
+   * The agent ID of the agent running the plugin manager.
+   * @type {string}
+   * @memberof PluginManager
+   */
+  agentId: string
+
+  /**
    * Creates an instance of PluginManager.
    * @param {string} pluginDirectory The directory where plugins are located.
    * @memberof PluginManager
    */
-  constructor(pluginDirectory: string, connection: Redis) {
+  constructor(pluginDirectory: string, connection: Redis, agentId: string) {
     super()
+    this.agentId = agentId
     this.connection = connection
     this.pluginDirectory = pluginDirectory
     this.plugins = new Map()
@@ -104,7 +112,7 @@ export class PluginManager extends EventEmitter {
         console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
 
         // Create an instance of the plugin
-        const pluginInstance = new PluginClass(this.connection)
+        const pluginInstance = new PluginClass(this.connection, this.agentId)
         this.registerPlugin(pluginInstance)
       }
     }
