@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { EventEmitter } from 'events'
-import { BasePlugin, CorePlugin } from 'server/plugin'
+import { BasePlugin } from 'server/plugin'
 import { IRegistry } from '@magickml/behave-graph'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
@@ -22,9 +22,9 @@ export class PluginManager extends EventEmitter {
   /**
    * The map of plugins, keyed by name.
    * @private
-   * @type {Map<string, CorePlugin>}
+   * @type {Map<string, BasePlugin>}
    */
-  private plugins: Map<string, CorePlugin>
+  private plugins: Map<string, BasePlugin>
 
   /**
    * The directory where plugins are located.
@@ -78,15 +78,11 @@ export class PluginManager extends EventEmitter {
 
   /**
    * Returns a list of plugins.
-   * @returns {CorePlugin[]} An array of plugins.
+   * @returns {BasePlugin[]} An array of plugins.
    * @memberof PluginManager
    */
-  getPlugins(): CorePlugin[] {
+  getPlugins(): BasePlugin[] {
     return Array.from(this.plugins.values())
-  }
-
-  private isValidPlugin(potentialPlugin: any): boolean {
-    return potentialPlugin instanceof BasePlugin
   }
 
   /**
@@ -98,13 +94,13 @@ export class PluginManager extends EventEmitter {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
 
-      // Check if PluginClass extends CorePlugin
-      // This check assumes CorePlugin is the base class for all your plugins
+      // Check if PluginClass extends BasePlugin
+      // This check assumes BasePlugin is the base class for all your plugins
       if (
-        Object.getPrototypeOf(PluginClass) === CorePlugin.prototype ||
-        PluginClass.prototype instanceof CorePlugin
+        Object.getPrototypeOf(PluginClass) === BasePlugin.prototype ||
+        PluginClass.prototype instanceof BasePlugin
       ) {
-        // PluginClass is a subclass of CorePlugin
+        // PluginClass is a subclass of BasePlugin
         console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
 
         // Create an instance of the plugin
@@ -157,7 +153,7 @@ export class PluginManager extends EventEmitter {
    * Registers a plugin with the Plugin Manager.
    * @param plugin The plugin instance to register.
    */
-  registerPlugin(plugin: CorePlugin): void {
+  registerPlugin(plugin: BasePlugin): void {
     this.logger.debug(`Registering plugin ${plugin.name}`)
     this.plugins.set(plugin.name, plugin)
     this.setupPluginEventForwarding(plugin)
@@ -168,7 +164,7 @@ export class PluginManager extends EventEmitter {
    * Sets up event forwarding from a plugin to the Plugin Manager's event emitter.
    * @param plugin The plugin from which to forward events.
    */
-  private setupPluginEventForwarding(plugin: CorePlugin): void {
+  private setupPluginEventForwarding(plugin: BasePlugin): void {
     plugin.eventEmitter.on('event', eventData => {
       this.emit('pluginEvent', plugin.name, eventData)
     })

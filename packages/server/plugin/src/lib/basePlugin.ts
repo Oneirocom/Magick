@@ -163,6 +163,13 @@ export abstract class BasePlugin<
   }
 
   /**
+   * optional method to be override by plugins to provide an additional registry when needed.
+   */
+  provideRegistry(registry: IRegistry): IRegistry {
+    return registry
+  }
+
+  /**
    * Returns a registry object merged with the plugin's specific registry.
    * @param existingRegistry An existing registry to merge with the plugin's registry.
    * @returns A merged registry object.
@@ -174,11 +181,13 @@ export abstract class BasePlugin<
     const pluginDependencies = this.dependencies
 
     // Merge the plugin's registry with the existing registry
-    return {
+    const registry = {
       values: { ...existingRegistry.values, ...pluginValues },
       nodes: { ...existingRegistry.nodes, ...pluginNodes },
       dependencies: { ...existingRegistry.dependencies, ...pluginDependencies },
     }
+
+    return this.provideRegistry(registry)
   }
 
   /**
