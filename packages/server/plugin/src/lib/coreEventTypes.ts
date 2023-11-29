@@ -1,1 +1,1 @@
-export const ON_MESSAGE = 'core:messageReceived'
+export const ON_MESSAGE = 'messageReceived'

@@ -81,6 +81,7 @@ export abstract class BasePlugin<
   abstract dependencies?: Record<string, any>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
+  protected agentId: string
   logger = getLogger()
   eventEmitter: EventEmitter
 
@@ -90,8 +91,9 @@ export abstract class BasePlugin<
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor(name: string, connection: Redis) {
+  constructor(name: string, connection: Redis, agentId: string) {
     super({ name })
+    this.agentId = agentId
     this.eventEmitter = new EventEmitter()
     this.eventQueue = new BullQueue(connection)
     this.eventQueue.initialize(this.queueName)
@@ -148,7 +150,7 @@ export abstract class BasePlugin<
    */
   protected emitEvent(eventName: string, payload: EventPayload) {
     if (!this.enabled) return
-    this.eventEmitter.emit(eventName, payload)
+    this.eventEmitter.emit(`event:${this.name}:${eventName}`, payload)
   }
 
   /**
@@ -159,7 +161,7 @@ export abstract class BasePlugin<
    * const queueName = this.getQueueName();
    */
   get queueName() {
-    return `event:${this.name}`
+    return `agent:${this.agentId}:${this.name}:event`
   }
 
   /**
