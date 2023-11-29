@@ -6,7 +6,7 @@ import { flowToBehave } from '../../utils/transformers/flowToBehave.js'
 import { autoLayout } from '../../utils/autoLayout.js'
 import { hasPositionMetaData } from '../../utils/hasPositionMetaData.js'
 import { useCustomNodeTypes } from './useCustomNodeTypes.js'
-import { Tab } from '@magickml/providers'
+import { Tab, usePubSub } from '@magickml/providers'
 import {
   selectTabEdges,
   selectTabNodes,
@@ -18,10 +18,6 @@ import {
 } from 'client/state'
 import { useSelector } from 'react-redux'
 import { debounce } from 'lodash'
-
-export const fetchBehaviorGraphJson = async (url: string) =>
-  // @eslint-ignore
-  (await (await fetch(url)).json()) as GraphJSON
 
 /**
  * Hook that returns the nodes and edges for react-flow, and the graphJson for the behave-graph.
@@ -39,6 +35,7 @@ export const useBehaveGraphFlow = ({
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
+  const { events, publish } = usePubSub()
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
 
@@ -47,7 +44,12 @@ export const useBehaveGraphFlow = ({
   const setGraphJson = useCallback((graphJson: GraphJSON) => {
     if (!graphJson) return
 
+    console.log('GRAPJH JSON CALLBACK', graphJson)
+
     const [nodes, edges] = behaveToFlow(graphJson)
+
+    console.log('NODES', nodes)
+    console.log('EDGES', edges)
 
     if (hasPositionMetaData(graphJson) === false) {
       autoLayout(nodes, edges)
@@ -69,8 +71,9 @@ export const useBehaveGraphFlow = ({
     debounce(specJson => {
       const graphJson = flowToBehave(nodes, edges, specJson)
       setStoredGraphJson(graphJson)
+      publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: graphJson })
     }, 1000),
-    [] // Dependencies array is empty to ensure this function is created once
+    [nodes, edges] // Dependencies array is empty to ensure this function is created once
   )
 
   useEffect(() => {
