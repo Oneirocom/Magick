@@ -15,6 +15,9 @@ export default async function runExecutor(
 
   // get the path for a relative fole in ../tools/generateNodeSpec using path
 
+  console.log(
+    '############ Running script to update node specs ###############'
+  )
   try {
     writeNodeSpecsToFile(filePath)
     return {
