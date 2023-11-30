@@ -39,6 +39,11 @@ import { PluginEmbeddings } from './customEmbeddings'
 import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
 
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return this.toString()
+}
+
 // Initialize the Feathers Koa app
 export const app: Application = koa(feathers())
 
