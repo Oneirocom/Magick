@@ -12,6 +12,7 @@ import {
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
+import { AGENT_SPELL } from 'shared/core'
 interface IAgent {
   id: string
 }
@@ -21,6 +22,7 @@ class SpellCaster<Agent extends IAgent> {
   engine!: Engine
   busy = false
   spell!: SpellInterface
+  executeGraph = false
   private agent
   private logger: pino.Logger
   private isRunning: boolean = false
@@ -47,6 +49,16 @@ class SpellCaster<Agent extends IAgent> {
   }
 
   /**
+   * Returns the lifecycle event emitter from the registry for easy access.
+   * @returns The lifecycle event emitter.
+   */
+  get lifecycleEventEmitter(): ILifecycleEventEmitter {
+    return this.registry.dependencies[
+      'ILifecycleEventEmitter'
+    ] as ILifecycleEventEmitter
+  }
+
+  /**
    * Initialize the spell caster. We are assuming here that the registry coming in is already
    * created by the main spellbook with the appropriate logger and other core dependencies.
    * @param spell - The spell to initialize.
@@ -70,6 +82,26 @@ class SpellCaster<Agent extends IAgent> {
     return this
   }
 
+  /**
+   * Initialize the handlers for the spell caster.  We are listening for the node
+   * execution end event so that we can emit the node work event.
+   * @returns A promise that resolves when the handlers are initialized.
+   */
+  initializeHandlers() {
+    // this.engine.onNodeExecutionStart.addListener(node => {
+    //   this.logger.trace(`<< ${node.description.typeName} >> START`)
+    // })
+    this.engine.onNodeExecutionEnd.addListener(
+      this.executionEndHandler.bind(this)
+    )
+  }
+
+  /**
+   * This is the handler for the node execution end event. We emit the
+   * node work event here to be sent up to appropriate clients.
+   * @param node - The node that just finished executing.
+   * @returns A promise that resolves when the node work event is emitted.
+   */
   executionEndHandler = async (node: any) => {
     let foundNode: INode | null = null
     let id: string | null = null
@@ -95,27 +127,7 @@ class SpellCaster<Agent extends IAgent> {
       return
     }
 
-    debugger
-    // console.log('NODE HASH', await generateBehaveNodeHash(node))
-  }
-
-  initializeHandlers() {
-    // this.engine.onNodeExecutionStart.addListener(node => {
-    //   this.logger.trace(`<< ${node.description.typeName} >> START`)
-    // })
-    this.engine.onNodeExecutionEnd.addListener(
-      this.executionEndHandler.bind(this)
-    )
-  }
-
-  /**
-   * Returns the lifecycle event emitter from the registry for easy access.
-   * @returns The lifecycle event emitter.
-   */
-  get lifecycleEventEmitter(): ILifecycleEventEmitter {
-    return this.registry.dependencies[
-      'ILifecycleEventEmitter'
-    ] as ILifecycleEventEmitter
+    await this.emitNodeWork(id as string, node)
   }
 
   /**
@@ -134,13 +146,38 @@ class SpellCaster<Agent extends IAgent> {
     this.isRunning = true
     this.lifecycleEventEmitter.startEvent.emit()
 
-    while (this.isRunning) {
-      this.lifecycleEventEmitter.tickEvent.emit()
-      this.busy = true
-      await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
+    while (true) {
+      // Always loop
+      if (this.isRunning || this.executeGraph) {
+        await this.executeGraphOnce()
+      }
       await new Promise(resolve => setTimeout(resolve, this.loopDelay))
-      this.busy = false
     }
+  }
+
+  /**
+   * Method which will run a single execution  on the graph. We tick the lifecycle event emitter
+   * and then execute all the nodes in the graph.  We then set the busy flag to false. Finally
+   * we set the executeGraph flag to false so that the spellbook knows that the spell is no longer
+   * executing.
+   * @returns A promise that resolves when the graph is executed.
+   */
+  async executeGraphOnce(): Promise<void> {
+    this.lifecycleEventEmitter.tickEvent.emit()
+    this.busy = true
+    await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
+    this.busy = false
+    this.executeGraph = false // Reset the flag after execution
+  }
+
+  /**
+   * Triggers the graph to execfute.  The flag is used in the loop to determine
+   * if the graph should be executed.
+   * @example
+   * spellCaster.triggerGraphExecution()
+   */
+  triggerGraphExecution(): void {
+    this.executeGraph = true
   }
 
   /**
@@ -175,9 +212,21 @@ class SpellCaster<Agent extends IAgent> {
       this.logger.error(`No dependency found for ${dependency}`)
       return
     }
+
+    // we emit the event to the dependency which will commit the event to the engine
     eventEmitter.emit(eventName, payload)
+
+    // we trigger the graph to execute if it our main loop isnt running
+    this.triggerGraphExecution()
   }
 
+  /**
+   * Disposes the spell caster.  We stop the run loop, dispose the engine
+   * and set running to false.
+   * @example
+   * spellCaster.dispose()
+   * @returns A promise that resolves when the spell caster is disposed.
+   */
   dispose() {
     this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
     this.stopRunLoop()
@@ -185,8 +234,61 @@ class SpellCaster<Agent extends IAgent> {
     this.isRunning = false
   }
 
+  /**
+   * Returns the busy state of the spell caster.
+   * @returns The busy state of the spell caster.
+   * @example
+   * const isBusy = spellCaster.isBusy()
+   * if (isBusy) {
+   *  // do something
+   * }
+   */
   isBusy() {
     return this.busy
+  }
+
+  /**
+   * emit the node work event to the agent when it is executed.
+   * @param nodeId - The id of the node.
+   * @param node - The node.
+   * @returns A promise that resolves when the event is emitted.
+   * @example
+   * spellCaster.emitNodeWork(nodeId, node)
+   */
+  emitNodeWork(nodeId: string, node: INode) {
+    const event = `${this.spell.id}-${nodeId}`
+
+    const message = {
+      event,
+      nodeId,
+      type: node.description.typeName,
+      outputs: node.outputs,
+      inputs: node.inputs,
+    }
+
+    this.emitAgentSpellEvent(message)
+  }
+
+  /*
+   * This is the entrypoint for the spellCaster.  It is called by the spellbook
+   * when a spell receives an event.  We pass the event to the engine and it will
+   * trigger the appropriate nodes to fire off a flow to get added to the fiber queue.
+   * @param dependency - The name of the dependency. Often the plugin name.
+   * @param eventName - The name of the event.
+   * @param payload - The payload of the event.
+   * @returns A promise that resolves when the event is handled.
+   * @example
+   */
+  emitAgentSpellEvent(_message) {
+    // same message emitted from server or agent
+    const message = {
+      ..._message,
+      // make sure the message contains the spellId in case it is needed.
+      spellId: this.spell.id,
+      projectId: this.spell.projectId,
+    }
+
+    this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
   }
 }
 
