@@ -179,6 +179,8 @@ class SpellCaster<Agent extends IAgent> {
   }
 
   dispose() {
+    this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
+    this.stopRunLoop()
     this.engine.dispose()
     this.isRunning = false
   }
