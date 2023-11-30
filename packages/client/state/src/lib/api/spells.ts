@@ -1,6 +1,4 @@
 // DOCUMENTED
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
 import md5 from 'md5'
 
