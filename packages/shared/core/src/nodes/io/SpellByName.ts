@@ -100,7 +100,7 @@ export class SpellByName extends MagickComponent<Promise<ModuleWorkerOutput>> {
   ) {
     const spellName = inputs['spellName'] && (inputs['spellName'][0] as string)
     const event = inputs['event'] && (inputs['event'][0] as any)
-    const { agent, module, spellManager } = _context
+    const { agent, module } = _context
     const { app, secrets } = module
 
     if (!app) {

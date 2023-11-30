@@ -100,10 +100,9 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     console.log('Saving!')
     if (!spellRef.current) return
     const type = spellRef.current.type || 'spell'
-    let graph;
 
     const currentSpell = spellRef.current
-    graph = type === 'spell' ? serialize() as GraphData : currentSpell.graph
+    const graph = type === 'spell' ? serialize() as GraphData : currentSpell.graph
     if (!currentSpell) return
 
     const updatedSpell = {

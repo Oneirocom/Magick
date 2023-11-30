@@ -3,13 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "@reduxjs/toolkit": "1.9.5",
-    "md5": "2.3.0",
     "react-redux": "8.0.5",
     "redux-persist": "6.0.0",
     "redux": "4.2.1",
-    "vite": "^4.4.9",
-    "@nx/vite": "^16.7.4",
-    "vite-plugin-dts": "^2.3.0",
     "client/feathers-client": "*",
     "@magickml/feathersRedux": "*",
     "shared/config": "*",

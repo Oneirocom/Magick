@@ -6,9 +6,6 @@
 
 import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
 
-import { RestAgentWindow } from './components/rest.component'
-import RestSpellTemplate from './templates/spells/REST API.spell.json'
-
 /**
  * Input sockets that are common to all REST API request types.
  */
