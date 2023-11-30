@@ -186,24 +186,24 @@ const LogFooter = ({ autoscroll, setAutoscroll }) => {
 
 const LogsComponent = () => {
   const { data: LogData } = useSelectAgentsLog()
-  const { data: spellData } = useSelectAgentsSpell()
-  const [combinedData, setCombinedData] = useState([]);
+  // const { data: spellData } = useSelectAgentsSpell()
+  // const [combinedData, setCombinedData] = useState([]);
   const [autoscroll, setAutoscroll] = useState(true);
   const [showSpellLogs, setShowSpellLogs] = useState(true);
   const [showLogLogs, setShowLogLogs] = useState(true);
 
-  useEffect(() => {
-    if (!spellData || !LogData) return;
+  // useEffect(() => {
+  //   if (!spellData || !LogData) return;
 
-    const merged = [...LogData, ...spellData].sort((a, b) => {
-      const dateA = new Date(a.timestamp);
-      const dateB = new Date(b.timestamp);
+  //   const merged = [...LogData, ...spellData].sort((a, b) => {
+  //     const dateA = new Date(a.timestamp);
+  //     const dateB = new Date(b.timestamp);
 
-      return dateA.getTime() - dateB.getTime();
-    });
+  //     return dateA.getTime() - dateB.getTime();
+  //   });
 
-    setCombinedData(merged);
-  }, [spellData, LogData]);
+  //   setCombinedData(merged);
+  // }, [spellData, LogData]);
 
   const filterLogs = (logs) => {
     return logs.filter(log => {
@@ -217,7 +217,7 @@ const LogsComponent = () => {
     <div className="flex flex-col h-full p-4 text-white">
       {/* Clean up the props to this header */}
       <LogHeader showLogLogs={showLogLogs} showSpellLogs={showSpellLogs} setShowSpellLogs={setShowSpellLogs} setShowLogLogs={setShowLogLogs} />
-      <LogContainer logs={filterLogs(combinedData)} autoscroll={autoscroll} />
+      <LogContainer logs={filterLogs(LogData)} autoscroll={autoscroll} />
       <LogFooter autoscroll={autoscroll} setAutoscroll={setAutoscroll} />
     </div>
   );
