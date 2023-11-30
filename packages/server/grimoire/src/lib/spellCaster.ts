@@ -7,12 +7,11 @@ import {
   readGraphFromJSON,
   IRegistry,
   GraphJSON,
+  INode,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
-import { generateNodeHash } from 'shared/utils'
-
 interface IAgent {
   id: string
 }
@@ -71,13 +70,42 @@ class SpellCaster<Agent extends IAgent> {
     return this
   }
 
+  executionEndHandler = async (node: any) => {
+    let foundNode: INode | null = null
+    let id: string | null = null
+
+    // We should keep an eye on this as it may reduce performance over large graphs.
+    // We are looping through the engine nodes to find the node that matches the one
+    // that just finished executing.  We are doing this because the node that is passed
+    // does not cotnain the node id which we need to broadcast the work being done.
+    for (const [nodeId, engineNode] of Object.entries(this.engine.nodes)) {
+      if (
+        engineNode.metadata.positionX === node.metadata.positionX &&
+        engineNode.metadata.positionY === node.metadata.positionY
+      ) {
+        id = nodeId
+        foundNode = engineNode
+      }
+    }
+
+    if (!foundNode) {
+      this.logger.debug(
+        `SPELLCASTER: Could not find node in engine for spell ${this.spell.id}`
+      )
+      return
+    }
+
+    debugger
+    // console.log('NODE HASH', await generateBehaveNodeHash(node))
+  }
+
   initializeHandlers() {
     // this.engine.onNodeExecutionStart.addListener(node => {
     //   this.logger.trace(`<< ${node.description.typeName} >> START`)
     // })
-    // this.engine.onNodeExecutionEnd.addListener(node => {
-    //   console.log('NODE EXECUTED', generateNodeHash(node))
-    // })
+    this.engine.onNodeExecutionEnd.addListener(
+      this.executionEndHandler.bind(this)
+    )
   }
 
   /**
