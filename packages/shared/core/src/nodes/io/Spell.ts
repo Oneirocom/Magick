@@ -30,7 +30,7 @@ function getSpellByIdData(state, spellId) {
   const queries = state.api.queries || {}
 
   // Create a regex pattern to match the query key with the spellId
-  const pattern = new RegExp(`getSpellById.*?"id"\s*:\s*"${spellId}"`)
+  const pattern = new RegExp(`getSpellById.*?"id"s*:*"${spellId}"`)
 
   // Find the key that matches the spellId
   const queryKey = Object.keys(queries).find(key => pattern.test(key))

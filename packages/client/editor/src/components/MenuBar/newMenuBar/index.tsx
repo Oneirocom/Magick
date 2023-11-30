@@ -17,20 +17,13 @@ import {
 import { useModal } from '../../../contexts/ModalProvider'
 import { enqueueSnackbar } from 'notistack'
 import axios from 'axios'
-import { SpellInterface } from 'shared/core'
 import { PRODUCTION } from 'shared/config'
 
-function toTitleCase(str) {
+function toTitleCase(str: string) {
   return str
     .split('_') // Split the string by underscores
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
     .join(' '); // Join the words with a space
-}
-
-type DataState = {
-  agents: any[]
-  spells: SpellInterface[]
-  documents: any[]
 }
 
 
@@ -51,12 +44,6 @@ const NewMenuBar = props => {
   const hiddenFileInput = useRef<HTMLInputElement>(null)
   const token = globalConfig?.token
 
-  const [data, setData] = useState<DataState>({
-    agents: [],
-    spells: [],
-    documents: [],
-  })
-
   const activeTabRef = useRef<Tab | null>(null)
 
   useEffect(() => {
@@ -70,8 +57,6 @@ const NewMenuBar = props => {
     $EXPORT,
     $UNDO,
     $REDO,
-    $MULTI_SELECT_COPY,
-    $MULTI_SELECT_PASTE,
     $DELETE,
     TOGGLE_SNAP,
   } = events

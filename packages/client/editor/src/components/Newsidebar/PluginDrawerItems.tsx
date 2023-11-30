@@ -1,7 +1,6 @@
 
 import { ClientPluginManager, pluginManager } from 'shared/core'
 import { useTabLayout } from '@magickml/providers'
-import Divider from '@mui/material/Divider'
 import { DrawerItem } from './DrawerItem'
 import { Tab } from 'client/state'
 // PluginDrawerItems component properties
@@ -15,15 +14,7 @@ type PluginDrawerItemsProps = {
 export const PluginDrawerItems: React.FC<PluginDrawerItemsProps> = ({ currentTab }) => {
   const { openTab } = useTabLayout()
   const drawerItems = (pluginManager as ClientPluginManager).getDrawerItems()
-  let lastPlugin: string | null = null
-  let divider = false
   return drawerItems.map(item => {
-    if (item.plugin !== lastPlugin) {
-      divider = false
-      lastPlugin = item.plugin
-    } else {
-      divider = false
-    }
     return (
       <DrawerItem
         key={item.path}

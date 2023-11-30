@@ -9,7 +9,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/@magickml/ui/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["packages/client/ui/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {

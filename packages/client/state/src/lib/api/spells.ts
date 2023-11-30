@@ -118,8 +118,6 @@ export const spellApi = rootApi.injectEndpoints({
       invalidatesTags: ['Spell'],
       async queryFn(
         { spell, projectId },
-        { dispatch },
-        extraOptions,
         baseQuery
       ) {
         const spellCopy = { ...spell } as any

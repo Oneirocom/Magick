@@ -11,7 +11,6 @@ import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRena
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
 import { Modal } from 'client/core'
 import {
-  RootState,
   spellApi,
   Tab,
 } from 'client/state'
@@ -267,7 +266,7 @@ export const CustomNode: React.FC<Props> = props => {
         )}
       </div>
       <div
-        className={`${styles.expandIconWrapper} 
+        className={`${styles.expandIconWrapper}
           }`}
       >
         {props.node.text === 'Spells & Prompts' && (
