@@ -61,16 +61,19 @@ export const agentSchema = Type.Object(
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
-    rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
-    image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
-    currentReleaseVersionId: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     updatedAt: Type.Optional(Type.String()),
+    createdAt: Type.Optional(Type.String()),
     pingedAt: Type.Optional(Type.String()),
     data: Type.Optional(Type.Any()),
     publicVariables: Type.Optional(Type.Any()),
     secrets: Type.Optional(Type.String()),
     frozen: Type.Optional(Type.Boolean()),
     default: Type.Optional(Type.Boolean()),
+    currentSpellReleaseId: Type.Optional(
+      Type.Union([Type.Null(), Type.String()])
+    ), // DEPRECATED
+    rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
+    image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
   },
   {
     $id: 'Agent',
@@ -113,7 +116,6 @@ export const documentSchema = Type.Object(
 
 /** The interface for a document object that's based on the `documentSchema`. */
 export type Document = Static<typeof documentSchema>
-
 
 /**
  * Full data model schema for an agent.
