@@ -33,7 +33,7 @@ export const MessageEvent = makeEventNodeDefinition({
       commit('flow')
     }
 
-    const coreEventEmitter = getDependency<CoreEmitter>('Core')
+    const coreEventEmitter = getDependency<CoreEmitter>('core')
 
     coreEventEmitter?.on('message', onStartEvent)
 
