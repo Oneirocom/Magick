@@ -4,7 +4,7 @@ import Redis from 'ioredis'
 import { coreEmitter } from './dependencies/coreEmitter'
 import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 
-const pluginName = 'core'
+const pluginName = 'Core'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -15,7 +15,7 @@ export class CorePlugin extends CoreEventsPlugin {
   values = []
 
   dependencies = {
-    pluginName: coreEmitter,
+    [pluginName]: coreEmitter,
   }
 
   constructor(connection: Redis, agentId: string) {
