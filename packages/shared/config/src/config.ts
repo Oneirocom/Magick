@@ -48,7 +48,7 @@ export const SERVER_HOST = getVarForEnvironment('HOST') || 'localhost'
 export const SPEECH_SERVER_URL =
   getVarForEnvironment('SPEECH_SERVER_URL') || 'http://localhost:65532'
 export const TRUSTED_PARENT_URL =
-  getVarForEnvironment('TRUSTED_PARENT_URL') || null
+  getVarForEnvironment('TRUSTED_PARENT_URL') || 'https://localhost:3000'
 export const API_ROOT_URL =
   getVarForEnvironment('API_URL') || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
@@ -86,8 +86,6 @@ export const REDISCLOUD_USERNAME = getVarForEnvironment('REDISCLOUD_USERNAME')
 export const ELEVENLABS_API_KEY =
   getVarForEnvironment('ELEVENLABS_API_KEY') ||
   'ce69df07b50e7179cbbfc5c2bef9d752'
-export const VITE_APP_TRUSTED_PARENT_URL =
-  getVarForEnvironment('VITE_APP_TRUSTED_PARENT_URL') || ''
 
 export const AGENT_UPDATE_TIME_MSEC = Number(
   getVarForEnvironment('AGENT_UPDATE_TIME_MSEC') || 3000
