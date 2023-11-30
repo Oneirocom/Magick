@@ -1,5 +1,14 @@
-import { INode } from '@magickml/behave-graph'
-import crypto from 'crypto'
+import type { INode } from '@magickml/behave-graph'
+
+async function hash(string) {
+  const utf8 = new TextEncoder().encode(string)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', utf8)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray
+    .map(bytes => bytes.toString(16).padStart(2, '0'))
+    .join('')
+  return hashHex
+}
 
 type HashProperties = {
   nodeType: string
@@ -16,9 +25,7 @@ export function formatBehaveNodeForHash(node: INode): HashProperties {
 }
 
 export function generateNodeHash(node: HashProperties) {
-  const hash = crypto.createHash('sha256')
-  hash.update(`${node.nodeType}-${node.positionX}-${node.positionY}`)
-  return hash.digest('hex')
+  return hash(`${node.nodeType}-${node.positionX}-${node.positionY}`)
 }
 
 export function generateBehaveNodeHash(node: INode) {
