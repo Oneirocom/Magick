@@ -116,9 +116,8 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for saving a spell
     saveSpell: builder.mutation({
       invalidatesTags: ['Spell'],
-      async queryFn(
-        { spell, projectId },
-        baseQuery
+      query(
+        { spell, projectId }
       ) {
         const spellCopy = { ...spell } as any
         if (spellCopy.id) delete spellCopy.id
@@ -130,17 +129,11 @@ export const spellApi = rootApi.injectEndpoints({
 
         delete spellCopy.creatorId
 
-        const baseQueryOptions = {
+        return {
           url: 'spells/' + spell.id,
           body: spellCopy,
           method: 'PATCH',
         }
-
-        return baseQuery(baseQueryOptions) as QueryReturnValue<
-          Partial<any>,
-          FetchBaseQueryError,
-          unknown
-        >
       },
     }),
     // Api endpoint for creating a new spell
