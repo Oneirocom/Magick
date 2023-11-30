@@ -6,7 +6,7 @@
   "implicitDependencies": ["shared-core"],
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/plugins/loop/shared/**/*.ts"]
