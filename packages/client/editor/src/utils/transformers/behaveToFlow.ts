@@ -1,12 +1,12 @@
-import { GraphJSON } from '@magickml/behave-graph';
-import { Edge, Node } from 'reactflow';
-import { v4 as uuidv4 } from 'uuid';
+import { GraphJSON } from '@magickml/behave-graph'
+import { Edge, Node } from 'reactflow'
+import { v4 as uuidv4 } from 'uuid'
 
 export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
-  const nodes: Node[] = [];
-  const edges: Edge[] = [];
+  const nodes: Node[] = []
+  const edges: Edge[] = []
 
-  graph.nodes?.forEach((nodeJSON) => {
+  graph.nodes?.forEach(nodeJSON => {
     const node: Node = {
       id: nodeJSON.id,
       type: nodeJSON.type,
@@ -16,12 +16,12 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
           : 0,
         y: nodeJSON.metadata?.positionY
           ? Number(nodeJSON.metadata?.positionY)
-          : 0
+          : 0,
       },
-      data: {} as { [key: string]: any }
-    };
+      data: {} as { [key: string]: any },
+    }
 
-    nodes.push(node);
+    nodes.push(node)
 
     if (nodeJSON.parameters) {
       for (const [inputKey, input] of Object.entries(nodeJSON.parameters)) {
@@ -31,11 +31,11 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
             source: input.link.nodeId,
             sourceHandle: input.link.socket,
             target: nodeJSON.id,
-            targetHandle: inputKey
-          });
+            targetHandle: inputKey,
+          })
         }
         if ('value' in input) {
-          node.data[inputKey] = input.value;
+          node.data[inputKey] = input.value
         }
       }
     }
@@ -47,11 +47,11 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
           source: nodeJSON.id,
           sourceHandle: inputKey,
           target: link.nodeId,
-          targetHandle: link.socket
-        });
+          targetHandle: link.socket,
+        })
       }
     }
-  });
+  })
 
-  return [nodes, edges];
-};
+  return [nodes, edges]
+}
