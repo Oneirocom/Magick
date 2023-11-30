@@ -18,6 +18,7 @@ interface IApplication extends FeathersApplication {
 interface IAgent {
   id: string
   error: (message: string) => void
+  log: (message: string) => void
 }
 
 /**
@@ -193,6 +194,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Toggles the watchSpells flag.
+   */
+  toggleLive(data) {
+    this.agent.log(`Toggling watchSpells to ${data.live}`)
+    const { live } = data
+    this.watchSpells = live ? live : !this.watchSpells
+  }
+
+  /**
    * Handles watching spell updates that stream in from feathers server
    * @param {SpellInterface} spell - The spell that was updated.
    * @example
@@ -200,26 +210,11 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   private watchSpellHandler(spell: SpellInterface) {
     if (!this.watchSpells) return
+
     if (this.hasSpellCaster(spell.id)) {
       this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
       this.updateSpell(spell)
     }
-  }
-
-  /**
-   * Cleans up the SpellManager instance.
-   */
-  onDestroy() {
-    this.clear()
-    //
-    this.app.service('spells').removeListener('updated', this.watchSpellHandler)
-  }
-
-  /**
-   * Clears the spell runner map.
-   */
-  clear() {
-    this.spellMap = new Map()
   }
 
   /**
@@ -298,30 +293,17 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
-   * Updates the spell runner for the given spell.
+   * Updates the spell runner for the given spell. Called from the watchSpellHandler.
    * @param {SpellInterface} spell - Spell instance.
    * @returns {Promise<void>} - Promise that resolves when the spell runner is updated.
    * @example
    * await spellbook.updateSpell(spell);
    */
   async updateSpell(spell: SpellInterface): Promise<void> {
-    const spellCaster = this.getReadySpellCaster(spell.id)
-
-    if (!spellCaster) {
-      this.logger.warn(`No spell runner found for spell ${spell.id}`)
-      await this.loadSpell(spell)
-      return
-    }
-
-    // we need to go through every spellCaster and update it
-    // todo monitor this for performance.  Might be easier to nuke the spellCasters and create a new one
-    const spellCasterList = this.spellMap.get(spell.id)
-    if (spellCasterList) {
-      // we need to reinitialize the spellCaster
-      spellCasterList.forEach(async runner => {
-        await runner.initialize(spell, this.mainRegistry)
-      })
-    }
+    // clear out all instances of the spell
+    this.clearSpellCasters(spell.id)
+    // load the updated spell into memory
+    this.loadSpell(spell)
   }
 
   /**
@@ -344,6 +326,25 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   hasSpellCaster(spellId: string): boolean {
     return this.spellMap.has(spellId)
+  }
+
+  /**
+   * Clears the spell runners for the given spell id.
+   * We run through all spellcasters held in memory and clear them.
+   * This stops the loop, disposes the engine, and then deletes the spellcasters from the map.
+   * @param {string} spellId - Id of the spell.
+   * @example
+   * spellbook.clearSpellCasters(spellId);
+   */
+  clearSpellCasters(spellId: string) {
+    // go over each spellcaster and clear it
+    const spellCasterList = this.spellMap.get(spellId)
+    if (spellCasterList) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.dispose()
+      }
+    }
+    this.spellMap.delete(spellId)
   }
 
   /**
@@ -408,5 +409,21 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       }
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
+  }
+
+  /**
+   * Cleans up the SpellManager instance.
+   */
+  onDestroy() {
+    this.clear()
+    //
+    this.app.service('spells').removeListener('updated', this.watchSpellHandler)
+  }
+
+  /**
+   * Clears the spell runner map.
+   */
+  clear() {
+    this.spellMap = new Map()
   }
 }
