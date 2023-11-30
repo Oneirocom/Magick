@@ -9,7 +9,8 @@
     "client/feathers-client": "*",
     "@magickml/feathersRedux": "*",
     "shared/config": "*",
-    "reactflow": "^11.9.4"
+    "reactflow": "^11.9.4",
+    "md5": "^2.3.0"
   },
   "main": "./index.js",
   "module": "./index.mjs",
