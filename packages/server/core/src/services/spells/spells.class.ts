@@ -30,38 +30,30 @@ export type SaveDiffData = {
 export class SpellService<
   ServiceParams extends Params = SpellParams
 > extends KnexAdapter<SpellInterface, SpellData, ServiceParams, SpellPatch> {
-
-  async get(spellId: string, params: ServiceParams) {
-    const db = app.get('dbClient')
-    const versionId = params.query?.versionId
-
+  /**
+   * @description Gets a spell by id or a versioned spell by spellReleaseId
+   * @param spellId
+   * @param params
+   * @returns
+   */
+  async get(spellId: string, params: ServiceParams): Promise<SpellInterface> {
+    const spellReleaseId = params.query?.spellReleaseId
     const query = super.createQuery(params)
 
-    if (spellId && !versionId) {
-      const count = await db('agentReleases').count('*').as('count').leftJoin('spells as spells', function() {
-        this.on('spells.versionId', '=', 'agentReleases.id')
-      }).where('spells.id', '=', spellId)
-
-      if (count["count"] > 0) {
-        query
-          .leftJoin('agentRelease as releases', function() {
-            this.on('spells.versionId', '=', 'agentReleases.id')
-          })
-      }
-
-    } else if(spellId && versionId) {
-      query
-        .leftJoin('agentRelease as releases', function() {
-          this.on('spelld.versionId', '=', 'agentReleases.id').andOn('agentReleases.id', '=', versionId)
-        })
+    let spell
+    if (spellReleaseId) {
+      spell = await query
+        .where('spells.spellReleaseId', '=', params.query.spellReleaseId)
+        .andWhere('spells.id', '=', spellId)
+        .first()
+    } else {
+      spell = await query.where('spells.id', '=', spellId).first()
     }
 
-    const data = await query.andWhere('spells.id', '=', spellId).first()
-    if (!data) {
+    if (!spell) {
       throw new NotFound(`No record found for id '${spellId}'`)
     }
-
-    return data
+    return spell
   }
 
   async find(params: ServiceParams) {
