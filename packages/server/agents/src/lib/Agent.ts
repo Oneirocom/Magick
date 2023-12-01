@@ -29,6 +29,7 @@ import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -48,7 +49,7 @@ export class Agent implements AgentInterface {
   worker: Worker
   messageQueue: MessageQueue
   commandHub: CommandHub
-  pubsub: PubSub
+  pubsub: RedisPubSub
   ready = false
   app: Application
   spellbook: Spellbook<Agent, Application>
@@ -65,7 +66,7 @@ export class Agent implements AgentInterface {
     agentData: AgentInterface,
     agentManager: AgentManager,
     worker: Worker,
-    pubsub: PubSub,
+    pubsub: RedisPubSub,
     app: Application
   ) {
     this.id = agentData.id
