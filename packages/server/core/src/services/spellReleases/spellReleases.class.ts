@@ -3,25 +3,35 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexAdapter } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-import { app } from '../../app'
-import md5 from 'md5'
+// import { app } from '../../app'
+// import md5 from 'md5'
 import type { Application } from '../../declarations'
-import type { AgentRelease, AgentReleaseData, AgentReleasePatch, AgentReleaseQuery } from './agentReleases.schema'
+import type {
+  SpellRelease,
+  SpellReleaseData,
+  SpellReleasePatch,
+  SpellReleaseQuery,
+} from './spellReleases.schema'
 import { NotFound } from '@feathersjs/errors'
 
-// Define AgentReleasesParams type based on KnexAdapterParams with AgentQuery
-export type AgentReleasesParams = KnexAdapterParams<AgentReleaseQuery>
+// Define SpellReleasesParams type based on KnexAdapterParams with AgentQuery
+export type SpellReleasesParams = KnexAdapterParams<SpellReleaseQuery>
 
 /**
- * Default AgentReleasesService class.
+ * Default SpellReleasesService class.
  * Calls the standard Knex adapter service methods but can be customized with your own functionality.
  *
  * @template ServiceParams - The input params for the service
  * @extends KnexService
  */
-export class AgentReleasesService<
-  ServiceParams extends Params = AgentReleasesParams
-> extends KnexAdapter<AgentReleaseData, AgentReleaseData, ServiceParams, AgentReleasePatch> {
+export class SpellReleasesService<
+  ServiceParams extends Params = SpellReleasesParams
+> extends KnexAdapter<
+  SpellReleaseData,
+  SpellReleaseData,
+  ServiceParams,
+  SpellReleasePatch
+> {
   app: Application
 
   constructor(options: KnexAdapterOptions, app: Application) {
@@ -37,10 +47,8 @@ export class AgentReleasesService<
     return await this._find(params)
   }
 
-  async create(
-    data: AgentReleaseData
-  ): Promise<AgentRelease> {
-    return await this._create(data) as AgentRelease
+  async create(data: SpellReleaseData): Promise<SpellRelease> {
+    return (await this._create(data)) as SpellRelease
   }
 
   async remove(agentId: string | null, params: ServiceParams) {
@@ -49,7 +57,7 @@ export class AgentReleasesService<
 }
 
 /**
- * Returns options needed to initialize the AgentReleasesService.
+ * Returns options needed to initialize the SpellReleasesService.
  *
  * @param app - the Feathers application
  * @returns KnexAdapterOptions - options for initializing the Knex adapter
@@ -58,7 +66,7 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
-    name: 'agentReleases',
+    name: 'SpellReleases',
     multi: ['remove'],
   }
 }
