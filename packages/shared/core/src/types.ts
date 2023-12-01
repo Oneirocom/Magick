@@ -230,6 +230,7 @@ export type PubSubEvents = {
   RUN_AGENT: string
   SEND_COMMAND: string
   TOGGLE_FILE_DRAWER: string
+  MESSAGE_AGENT: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $RESET_HIGHLIGHTS: (tabId: string) => string
