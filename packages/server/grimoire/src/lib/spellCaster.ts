@@ -78,7 +78,7 @@ class SpellCaster<Agent extends IAgent> {
 
     this.engine = new Engine(graph.nodes)
     this.initializeHandlers()
-    this.startRunLoop()
+    this.start()
     return this
   }
 
@@ -138,13 +138,11 @@ class SpellCaster<Agent extends IAgent> {
    * if this one is busy.
    * @returns A promise that resolves when the run loop is started.
    */
-  async startRunLoop(): Promise<void> {
+  async start(): Promise<void> {
     this.logger.debug(
       'SPELLBOOK: Starting run loop for spell %s',
       this.spell.id
     )
-    this.isRunning = true
-    this.lifecycleEventEmitter.startEvent.emit()
 
     while (true) {
       // Always loop
@@ -179,6 +177,14 @@ class SpellCaster<Agent extends IAgent> {
    */
   triggerGraphExecution(): void {
     this.executeGraph = true
+  }
+
+  /**
+   * Starts the run loop.  This is called by the spellbook when the spell is started.
+   */
+  startRunLoop(): void {
+    this.lifecycleEventEmitter.startEvent.emit()
+    this.isRunning = true
   }
 
   /**
