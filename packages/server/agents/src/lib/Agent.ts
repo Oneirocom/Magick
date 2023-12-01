@@ -15,7 +15,6 @@ import {
   type Event,
   SpellInterface,
 } from 'shared/core'
-import { PING_AGENT_TIME_MSEC } from 'shared/config'
 
 import { AgentManager } from './AgentManager'
 import {
