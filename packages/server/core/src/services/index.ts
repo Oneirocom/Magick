@@ -7,7 +7,7 @@ import { task } from './tasks/tasks'
 import { document } from './documents/documents'
 import { projects } from './projects/projects'
 import { agentImage } from './agentImage/agentImage'
-import { agentReleases } from './agentReleases/agentReleases'
+import { spellReleases } from './spellReleases/spellReleases'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
@@ -29,7 +29,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(document)
   app.configure(projects)
   app.configure(agentImage)
-  app.configure(agentReleases)
+  app.configure(spellReleases)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better
