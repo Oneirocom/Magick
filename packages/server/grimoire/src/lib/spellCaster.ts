@@ -211,6 +211,9 @@ class SpellCaster<Agent extends IAgent> {
     eventName: string,
     payload: EventPayload
   ): void {
+    this.logger.trace(
+      `SpellCaster: Handling event ${eventName} for ${dependency}`
+    )
     // we grab the dependency from the registry and trigger it
     const eventEmitter = this.registry.dependencies[dependency] as
       | EventEmitter
