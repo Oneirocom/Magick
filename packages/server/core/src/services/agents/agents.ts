@@ -21,7 +21,6 @@ import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
 import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
-import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Re-export agents.class and agents.schema
 export * from './agents.class'
@@ -73,12 +72,14 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/createRelease', {
-    create: async (data: { agentId: string, versionTag: string }) => {
-      const agentService = app.service('agents');
-      return await agentService.createRelease(data.agentId, data.versionTag);
+    create: async (data: { agentId: string; versionTag: string }) => {
+      const agentService = app.service('agents')
+      return await agentService.createRelease({
+        agentId: data.agentId,
+        versionTag: data.versionTag,
+      })
     },
   })
-
 
   const pubSub = app.get<'pubsub'>('pubsub')
 
