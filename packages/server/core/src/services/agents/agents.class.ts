@@ -9,12 +9,17 @@ import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
-import { AgentInterface } from '../../schemas'
 import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
+import { EventPayload } from 'server/plugin'
+import { AgentInterface } from 'server/schemas'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
+
+type MessagePayload = EventPayload & {
+  agentId: string
+}
 
 /**
  * Default AgentService class.
@@ -31,6 +36,18 @@ export class AgentService<
   constructor(options: KnexAdapterOptions, app: Application) {
     super(options)
     this.app = app
+  }
+
+  async message(data: MessagePayload) {
+    const agentId = data.agentId
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.message(agentId, data)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
   }
 
   // we use this ping to avoid firing a patched event on the agent
