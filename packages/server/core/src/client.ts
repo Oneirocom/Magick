@@ -95,7 +95,7 @@ export interface ServiceTypes {
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any,>(
+export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>
 ) => {
   // Create a new Feathers client
@@ -114,9 +114,5 @@ export const createClient = <Configuration = any,>(
   client.use('request', connection.service('request'), {
     methods: requestServiceMethods,
   })
-
-  // Return the configured client
-  client.configure(agentReleaseServiceClient)
-  client.configure(agentReleasesClient)
   return client
 }
