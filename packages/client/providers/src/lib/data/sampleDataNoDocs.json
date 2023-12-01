@@ -1,0 +1,9 @@
+[
+  {
+    "id": 6,
+    "parent": 0,
+    "droppable": true,
+    "text": "Spells",
+    "fileType": "folder"
+  }
+]

@@ -39,10 +39,10 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/cloud-agent-manager/**/*.ts"]
+        "lintFilePatterns": ["packages/server/cloud-agent-manager/**/*.ts"]
       }
     },
     "test": {

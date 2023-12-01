@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { DEFAULT_USER_TOKEN, STANDALONE } from '@magickml/config'
-import { useConfig } from '@magickml/client-core'
+import { DEFAULT_USER_TOKEN, STANDALONE } from 'shared/config'
+import { useConfig } from '@magickml/providers'
 import { useSelector } from 'react-redux'
 
 export const useSpellList = () => {

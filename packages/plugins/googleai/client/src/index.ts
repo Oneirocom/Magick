@@ -3,7 +3,7 @@
  * A plugin for interacting with GoogleAI's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl } from 'shared/core'
 import shared from '@magickml/plugin-googleai-shared'
 
 // Importing shared variables from plugin-googleai-shared module
@@ -17,7 +17,7 @@ const textCompletionControls = [
     name: 'Temperature (0-1.0)',
     icon: 'moon',
     defaultValue: 0.5,
-    tooltip: 'Change the Temperature'
+    tooltip: 'Change the Temperature',
   },
   {
     type: InputControl,
@@ -25,7 +25,7 @@ const textCompletionControls = [
     name: 'Top K (0-100)',
     icon: 'moon',
     defaultValue: 50,
-    tooltip: 'Change the top_k '
+    tooltip: 'Change the top_k ',
   },
   {
     type: InputControl,
@@ -33,7 +33,7 @@ const textCompletionControls = [
     name: 'Top P (0-1.0)',
     icon: 'moon',
     defaultValue: 1,
-    tooltip: 'Change the top_p'
+    tooltip: 'Change the top_p',
   },
   {
     type: InputControl,
@@ -41,7 +41,7 @@ const textCompletionControls = [
     name: 'Stop Sequences (comma separated)',
     icon: 'moon',
     defaultValue: '',
-    tooltip: 'Add Stop Sequence'
+    tooltip: 'Add Stop Sequence',
   },
 ]
 

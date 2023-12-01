@@ -1,6 +1,6 @@
 // DOCUMENTED
 /**
- * A plugin for the @magickml/core that adds elevenlabs completion functionality
+ * A plugin for the shared/core that adds elevenlabs completion functionality
  *
  * @remarks
  * The plugin uses handlers for text, chat and text embedding which are defined in the 'makeTextCompletion',
@@ -9,11 +9,9 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-elevenlabs-shared'
-import {
-  textToSpeech,
-} from './functions'
+import { textToSpeech } from './functions'
 
 /**
  * The secrets used by the elevenlabs API
@@ -25,12 +23,12 @@ const { secrets } = shared
  */
 const completionHandlers = {
   audio: {
-    'text2speech': textToSpeech,
+    text2speech: textToSpeech,
   },
 }
 
 /**
- * A server plugin for the @magickml/core that adds elevenlabs completion functionality
+ * A server plugin for the shared/core that adds elevenlabs completion functionality
  */
 const elevenlabsPlugin = new ServerPlugin({
   name: 'elevenlabsPlugin',

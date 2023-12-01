@@ -1,6 +1,6 @@
 import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2'
 import { DMEventV2 } from 'twitter-api-v2/dist/esm/types/v2/dm.v2.types'
-import { app } from '@magickml/server-core'
+import { app } from 'server/core'
 
 export class TwitterConnector {
   twitterv1: TwitterApi | undefined

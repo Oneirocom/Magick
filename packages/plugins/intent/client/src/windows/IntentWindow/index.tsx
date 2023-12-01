@@ -1,10 +1,10 @@
 // DOCUMENTED
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { LoadingScreen, useConfig } from '@magickml/client-core'
+import { LoadingScreen } from 'client/core'
+import { useConfig } from '@magickml/providers'
 import IntentTable from './IntentTable'
-
 
 /**
  * IntentWindow component displays the intents of a project.
@@ -35,7 +35,8 @@ const IntentWindow = (): JSX.Element => {
   const fetchIntents = async (): Promise<void> => {
     try {
       const response = await fetch(
-        `${API_ROOT_URL}/documents?projectId=${config.projectId}&metadata=${encodeURI('{"intent": { "type": "story" }}')}`,
+        `${API_ROOT_URL}/documents?projectId=${config.projectId
+        }&metadata=${encodeURI('{"intent": { "type": "story" }}')}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,7 +68,9 @@ const IntentWindow = (): JSX.Element => {
       }}
     >
       {loading && <LoadingScreen />}
-      {intents && <IntentTable intents={intents} updateCallback={resetIntents} />}
+      {intents && (
+        <IntentTable intents={intents} updateCallback={resetIntents} />
+      )}
     </div>
   )
 }

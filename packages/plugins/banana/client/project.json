@@ -3,10 +3,10 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/plugins/banana/client/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core"],
+  "implicitDependencies": ["shared-core"],
   "targets": {
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/plugins/banana/client/**/*.ts"]
@@ -16,8 +16,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/plugins/banana/client/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/plugins/banana/client/jest.config.ts"
       }
     }
   },

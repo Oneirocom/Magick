@@ -1,0 +1,612 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background-color: var(--dark-0);
+  color: var(---rich-blue);
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Overrides tabs in dockview 
+.tab-layout .tabs-and-actions-container {
+  margin-left: 50px !important;
+} */
+
+.expanding {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--extra-small);
+  width: var(--extra-small);
+  border-radius: 100%;
+  transition: transform 0.2s ease;
+}
+
+.expanding:hover {
+  transform: scale(1.5);
+}
+
+.socket.output.any-type,
+.socket.input.any-type,
+.expanding.any {
+  background: #838383;
+}
+
+.any .main-path {
+  stroke: #838383 !important;
+}
+
+.socket.output.boolean,
+.socket.input.boolean,
+.expanding.boolean {
+  background: var(--red);
+}
+
+.boolean .main-path {
+  stroke: var(--red) !important;
+}
+
+.socket.output.string,
+.socket.input.string,
+.expanding.string {
+  background: var(--orange);
+}
+
+.string .main-path {
+  stroke: var(--orange) !important;
+}
+
+.socket.output.array,
+.socket.input.array,
+.expanding.array {
+  background: var(--blue);
+}
+
+.array .main-path {
+  stroke: var(--blue) !important;
+}
+
+.socket.output.object,
+.socket.input.object,
+.expanding.object {
+  background: var(--green);
+}
+
+.object .main-path {
+  stroke: var(--green) !important;
+}
+
+.socket.output.number,
+.socket.input.number,
+.expanding.number {
+  background: var(--yellow);
+}
+
+.number .main-path {
+  stroke: var(--yellow) !important;
+}
+
+.socket.output.trigger,
+.socket.input.trigger,
+.expanding.trigger {
+  background: var(--white);
+}
+
+.trigger .main-path {
+  stroke: var(--white) !important;
+}
+
+.socket.output.event,
+.socket.input.event,
+.expanding.event {
+  background: var(--deep-blue);
+}
+
+.event .main-path {
+  stroke: var(--deep-blue) !important;
+}
+
+.connection .main-path {
+  stroke-width: 2px !important;
+}
+
+.connection .main-path:hover {
+  stroke-width: 5px !important;
+  opacity: 1 !important;
+  /* stroke: var(--glow) !important; */
+}
+
+.selected .main-path {
+  stroke-width: 5px !important;
+}
+
+.transparent .main-path {
+  opacity: 0.5 !important;
+}
+
+.socket {
+  height: var(--small);
+  width: var(--small);
+}
+
+.socket.output {
+  position: relative;
+  right: -5px;
+}
+
+.socket.input {
+  position: relative;
+  left: -5px;
+}
+
+/* .socket:hover {
+  background-color: var(--dark-0);
+} */
+
+.node.selected {
+  background-color: #05c807 !important;
+}
+
+button {
+  box-sizing: border-box;
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  background: var(--slate-30);
+  border: 1px solid var(--dark-3);
+  padding: 9px 16px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
+  font-size: 11px;
+  text-transform: uppercase;
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
+  height: var(--c4);
+  display: flex;
+  align-items: center;
+}
+
+button.option {
+  border: none;
+  margin: 0;
+  border-radius: 0;
+}
+
+button.primary {
+  background-color: var(--primary-dark);
+  color: var(--dark-5);
+}
+
+button.list {
+  background-color: var(--midnight);
+  padding: 3px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+}
+
+button.small {
+  background-color: var(--slate-30);
+  padding: 8px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+}
+
+button.extra-small {
+  background-color: var(--slate-30);
+  padding: 4px;
+  padding-left: var(--extraSmall);
+  padding-right: var(--extraSmall);
+  font-size: 8px;
+  height: 16px;
+}
+
+button:hover {
+  filter: brightness(1.3);
+}
+
+button:active {
+  filter: brightness(0.9);
+}
+
+button.disabled {
+  box-shadow: none;
+  pointer-events: none;
+  opacity: 0.5;
+  background-color: var(--midnight);
+}
+
+.node.selected button {
+  background-color: var(--primary) !important;
+}
+
+.flexlayout__tab {
+  overflow: hidden;
+  background-color: var(--dark-0) !important;
+  border-radius: 0px 0px 4px 4px;
+  border: 1px solid #333;
+  border-top: 0;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+}
+
+.flexlayout__tabset {
+  box-sizing: border-box;
+  border: 1px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.flexlayout__tabset-selected {
+  background: var(--dark-0);
+}
+
+.flexlayout__tabset_tabbar_inner_tab_container {
+  padding-left: 0;
+}
+
+.flexlayout__tabset_tabbar_inner_tab_container_top {
+  border-top: none;
+  background-color: var(--midnight);
+}
+
+.flexlayout__tabset_tabbar_outer_top {
+  border-bottom: none;
+}
+
+.flexlayout__tabset {
+  font-size: 14px;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
+}
+
+.flexlayout__tab {
+  background-color: var(--dark-2);
+}
+
+.flexlayout__tab_toolbar {
+  background-color: var(--midnight);
+}
+
+.flexlayout__tab_button {
+  margin: 0;
+  background-color: var(--dark-2);
+  box-shadow: none;
+  padding-left: var(--extraSmall);
+  padding-right: var(--extraSmall);
+}
+
+.flexlayout__tab_button {
+  border-radius: 0;
+  visibility: inherit !important;
+}
+
+.flexlayout__tab_button--unselected {
+  background-color: var(--dark-2);
+}
+
+.flexlayout__tab_button:hover {
+  filter: brightness(2.1);
+  /* background-color: var(--dark-3); */
+}
+
+.flexlayout__splitter {
+  background-color: transparent;
+}
+
+/* .view-line span {
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', sans-serif;
+} */
+
+input {
+  box-sizing: border-box;
+  padding: var(--small);
+  /* not using a var here to optically correct for base + cap of typeface */
+  background-color: var(--midnight);
+  padding-left: var(--small);
+  padding-right: var(--small);
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  border: 1px solid var(---rich-blue);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-size: 16px;
+}
+
+input:focus-visible {
+  outline: 1px solid var(--primary-dark);
+}
+
+.App {
+  width: calc(100% - 180px);
+}
+
+.agents-container {
+  display: flex;
+}
+
+.agent-header {
+  display: flex;
+}
+
+.agent-createModal {
+  position: relative;
+  right: 400px;
+  bottom: 350px;
+}
+
+.nav {
+  width: 180px;
+  float: left;
+  height: 100vh;
+}
+
+.nav-item,
+.nav-item-active {
+  cursor: pointer;
+  margin: 2em;
+  display: block;
+}
+
+.nav-item-active {
+  color: var(--white);
+}
+
+.flex-container {
+  margin: 0.5em;
+  width: calc(100% - 2em);
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-item {
+  display: flex;
+  margin: 0.5em;
+}
+
+.form-item {
+  padding: 1em 0;
+}
+
+.entBtns {
+  padding: 1em;
+  display: flex;
+}
+
+.form-item-label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+
+  color: var(---rich-blue);
+}
+
+.select {
+  padding: 0.4em;
+  border: 1px solid var(--dark-3);
+  border-radius: 4px;
+}
+
+.form-text-area,
+.agent-select > select,
+.search-corpus > select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--extraSmall);
+  /* not using a var here to optically correct for base + cap of typeface */
+  background-color: var(--midnight);
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  border: 1px solid var(--dark-3);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-size: 11px;
+  height: var(--c4);
+}
+
+.search-corpus-btns {
+  vertical-align: middle;
+  display: inline-flex;
+  justify-content: space-between;
+  margin: 0 1rem;
+  width: 25%;
+}
+
+.search-corpus-documents-list {
+  margin: 1rem 0;
+}
+
+.search-corpus-document,
+.content-obj {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.search-corpus-document {
+  background: #545454;
+}
+.content-obj {
+  background: var(--dark-3);
+}
+
+.search-corpus-btn {
+  background-color: #2e2e2e;
+  border: none;
+  margin: 0 0.4rem;
+}
+
+.admin-container {
+  margin-left: 11em;
+  margin-top: 1em;
+}
+
+.agentFields {
+  padding-right: 10px;
+}
+
+.agentBtns {
+  display: flex;
+}
+
+.agentBtns button {
+  background-color: #878587;
+}
+
+.agentBtns .updateBtn {
+  margin-left: auto;
+  order: 2;
+}
+
+.agent-Manager select {
+  background: #fff;
+  color: #636363;
+}
+
+.dialogInput {
+  min-height: 100px;
+}
+.gettingsInput {
+  min-height: 80px;
+}
+
+.agent-container {
+  max-width: 100%;
+  padding: 2em;
+  height: calc(100% - 4em);
+  overflow: auto;
+}
+
+.agent-editor {
+  padding: 1em;
+  height: calc(100% - 4em);
+  overflow: auto;
+}
+
+.agentWindow {
+  padding: 1em;
+  margin-bottom: 1em;
+  background-color: #333;
+  border-radius: 0.25em;
+}
+
+.form-item > input[type='text'] {
+  width: 100%;
+}
+
+.form-item > input[type='checkbox'] {
+  display: inline-flex;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.custom-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.4rem;
+  margin: 0 0.5rem;
+}
+
+.bare-input {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 0.975rem;
+}
+
+.input-title,
+.output-title,
+div.item {
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+    sans-serif;
+}
+
+.flexlayout__layout {
+  background-color: var(--midnight) !important;
+  color: var(---rich-blue);
+  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+}
+
+.MuiInputBase-root input,
+.MuiInputBase-multiline {
+  padding: 13px !important;
+}
+
+/* chatbox style */
+div.rcw-sender {
+  align-items: center;
+}
+
+button.rcw-picker-btn,
+button.rcw-send {
+  background: transparent;
+  box-shadow: none;
+}
+
+button.rcw-launcher {
+  padding: 9px 13px;
+}
+
+button.rcw-launcher.rcw-hide-sm {
+  padding: 9px 20px;
+}
+
+/* styles for global connector layout */
+
+.connector-layout {
+  background-color: var(--background-color);
+  padding: 1em 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+  opacity: 1;
+  font-size: 14px;
+  border: 1px solid var(--foreground-color);
+  margin-bottom: 10px;
+}
+
+.connector-layout > .controls {
+  display: flex;
+  /* padding-top: 1em; */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

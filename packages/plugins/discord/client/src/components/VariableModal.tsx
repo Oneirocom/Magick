@@ -1,4 +1,4 @@
-import { Switch, Modal } from '@magickml/client-core'
+import { Switch, Modal } from 'client/core'
 import { useState } from 'react'
 import { Tooltip } from '@mui/material'
 
@@ -38,7 +38,12 @@ const VariableModal = ({
 
   return (
     editMode && (
-      <Modal open={editMode} onClose={setEditMode} showSaveBtn={true} handleAction={handleSave}>
+      <Modal
+        open={editMode}
+        onClose={setEditMode}
+        showSaveBtn={true}
+        handleAction={handleSave}
+      >
         <div style={{ marginBottom: '1em' }}>
           <div>
             <Tooltip title="add your api key here and save" placement='bottom' disableInteractive arrow >
@@ -51,6 +56,10 @@ const VariableModal = ({
               defaultValue={state.discord_api_key}
               onChange={handleOnChange}
             />
+            <br />
+            <p>Get your api key here: <a href="https://discord.com/developers/applications">Discord developer portal</a></p>
+            <br />
+            Here is a video to help you out: <a href="https://youtu.be/KCV2Gwkukuw?t=31">How to make your discord API key</a>
           </div>
         </div>
       </Modal>

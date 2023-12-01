@@ -5,27 +5,17 @@
 
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import { pluginManager } from '@magickml/core'
-import {
-  apis,
-  initApp,
-  app,
-  Handler,
-  initFileServer,
-  Method,
-  Middleware,
-  Route,
-  spells
-} from '@magickml/server-core'
-import { initLogger, getLogger } from '@magickml/core'
+import { pluginManager } from 'shared/core'
+import { apis, initApp, app, Handler, initFileServer, Method, Middleware, Route, spells } from 'server/core'
+import { initLogger, getLogger } from 'shared/core'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
 import plugins from './plugins'
-import { initAgentCommander } from '@magickml/agents'
+import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
-import { PRODUCTION } from '@magickml/config'
+import { PRODUCTION } from 'shared/config'
 
 if (PRODUCTION) {
   initLogger({
@@ -42,7 +32,7 @@ const logger = getLogger()
 
 // log handle errors
 process.on('uncaughtException', (err: Error) => {
-  logger.error('uncaughtException %s', err)
+  logger.error(err, 'uncaughtException %s')
 })
 
 process.on(

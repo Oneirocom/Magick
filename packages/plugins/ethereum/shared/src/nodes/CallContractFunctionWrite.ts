@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -12,7 +12,7 @@ import {
   numberSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 /** Info for the component */
 const info = `Call a write function from a contract`

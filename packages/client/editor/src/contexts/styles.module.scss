@@ -1,0 +1,11 @@
+.editor-container {
+  width: calc(100vw) !important;
+  height: calc(100vh) !important;
+  position: absolute;
+  z-index: 2;
+  background-color: transparent;
+}
+
+.tabs-and-actions-container {
+  margin-left: 50px !important;
+}

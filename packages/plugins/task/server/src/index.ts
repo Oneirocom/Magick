@@ -1,6 +1,6 @@
 // DOCUMENTED
-import { eventSocket, ServerPlugin, triggerSocket } from '@magickml/core'
-import { app } from '@magickml/server-core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
+import { app } from 'server/core'
 import { getNodes } from '@magickml/plugin-task-shared'
 
 type StartTaskArgs = {
@@ -88,7 +88,7 @@ class TaskManager {
    * @param {any} agent - Agent to remove.
    */
   removeAgent({ agent }) {
-    const _agent = this.agentManager.getAgent({ agent })
+    const _agent = this.agentManager.getAgent(agent.id)
     if (!_agent || !agent?.taskHandler) return
     clearInterval(agent.taskHandler)
     delete agent.taskHandler

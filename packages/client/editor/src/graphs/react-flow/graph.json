@@ -1,0 +1,173 @@
+{
+  "nodes": [
+    {
+      "id": "7569b164-1b58-4520-bd1c-0ca1386c554b",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "-217",
+        "positionY": "413"
+      },
+      "parameters": {
+        "text": {
+          "value": "Finished"
+        }
+      }
+    },
+    {
+      "id": "9c8f417c-4a96-4be0-8b7b-5c0542ba3a0f",
+      "type": "lifecycle/onEnd",
+      "metadata": {
+        "positionX": "-430",
+        "positionY": "421"
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "7569b164-1b58-4520-bd1c-0ca1386c554b",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "id": "fb0d04f5-0915-4408-bee0-87b1f3931ea7",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "-287",
+        "positionY": "196"
+      },
+      "parameters": {
+        "text": {
+          "value": "Ticking"
+        }
+      }
+    },
+    {
+      "id": "1fe32e5d-e14e-455a-9a49-7c21a79dd9da",
+      "type": "lifecycle/onTick",
+      "metadata": {
+        "positionX": "-550",
+        "positionY": "168"
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "fb0d04f5-0915-4408-bee0-87b1f3931ea7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "id": "0",
+      "type": "lifecycle/onStart",
+      "metadata": {
+        "positionX": "-579",
+        "positionY": "-67"
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "id": "1",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "-422",
+        "positionY": "-67"
+      },
+      "parameters": {
+        "text": {
+          "value": "Starting Sequence..."
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "2",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "id": "2",
+      "type": "flow/sequence",
+      "metadata": {
+        "positionX": "-164",
+        "positionY": "-67"
+      },
+      "flows": {
+        "1": {
+          "nodeId": "3",
+          "socket": "flow"
+        },
+        "2": {
+          "nodeId": "4",
+          "socket": "flow"
+        },
+        "3": {
+          "nodeId": "5",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "32",
+        "positionY": "-99"
+      },
+      "parameters": {
+        "text": {
+          "value": "First Sequence Output!"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "6",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "id": "4",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "26",
+        "positionY": "40"
+      },
+      "parameters": {
+        "text": {
+          "value": "Second Sequence Output!"
+        }
+      }
+    },
+    {
+      "id": "5",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "21",
+        "positionY": "179"
+      },
+      "parameters": {
+        "text": {
+          "value": "Third Sequence Output!"
+        }
+      }
+    },
+    {
+      "id": "6",
+      "type": "debug/log",
+      "metadata": {
+        "positionX": "321",
+        "positionY": "-98"
+      },
+      "parameters": {
+        "text": {
+          "value": "Downstream of First Sequence!"
+        }
+      }
+    }
+  ],
+  "variables": [],
+  "customEvents": []
+}

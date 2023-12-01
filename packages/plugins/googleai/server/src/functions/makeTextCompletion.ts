@@ -1,9 +1,9 @@
 // DOCUMENTED
-import { CompletionHandlerInputData, saveRequest } from '@magickml/core'
+import { CompletionHandlerInputData, saveRequest } from 'shared/core'
 import { GOOGLEAI_ENDPOINT } from '../constants'
-import { trackGoogleAIUsage } from '@magickml/server-core'
+import { trackGoogleAIUsage } from 'server/core'
 import { wordCount } from './shared'
-import { DEFAULT_GOOGLEAI_API_KEY } from '@magickml/config'
+import { DEFAULT_GOOGLEAI_API_KEY } from 'shared/config'
 
 /**
  * Makes an API request to an AI text completion service.

@@ -1,30 +1,32 @@
-// UNDOCUMENTED 
-import {
-  CompletionHandlerInputData,
-} from '@magickml/core'
+// UNDOCUMENTED
+import { CompletionHandlerInputData } from 'shared/core'
 import axios from 'axios'
 
-
-async function callTextToSpeechApi(text: string, voice_id: string, stability: number, similarity_boost: number, apiKey: string) {
+async function callTextToSpeechApi(
+  text: string,
+  voice_id: string,
+  stability: number,
+  similarity_boost: number,
+  apiKey: string
+) {
   const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`
   const requestBody = {
     text,
     voice_settings: {
       stability,
-      similarity_boost
-    }
+      similarity_boost,
+    },
   }
 
   const response = await axios.post(apiUrl, requestBody, {
     headers: {
-      'xi-api-key': apiKey
+      'xi-api-key': apiKey,
     },
-    responseType: 'blob'
-  });
+    responseType: 'blob',
+  })
 
-  return response.data;
+  return response.data
 }
-
 
 /**
  * Generate speech from text.
@@ -33,21 +35,31 @@ async function callTextToSpeechApi(text: string, voice_id: string, stability: nu
  */
 export async function textToSpeech(
   data: CompletionHandlerInputData
-): Promise<{ success: boolean, result?: ArrayBuffer | null, error?: string | null }> {
+): Promise<{
+  success: boolean
+  result?: ArrayBuffer | null
+  error?: string | null
+}> {
   const { node, inputs, context } = data
 
   const settings = {
-    stability: parseFloat(node?.data?.stability as string ?? "0.5"),
-    similarity_boost: parseFloat(node?.data?.stability as string ?? "0.5"),
-    voice_id: node?.data.voice_id as string ?? 'MF3mGyEYCl7XYWbV9V6O'
+    stability: parseFloat((node?.data?.stability as string) ?? '0.5'),
+    similarity_boost: parseFloat((node?.data?.stability as string) ?? '0.5'),
+    voice_id: (node?.data.voice_id as string) ?? 'MF3mGyEYCl7XYWbV9V6O',
   }
-  
+
   const text = inputs['input']?.[0] as string
 
   // @ts-ignore
   const key = context.module.secrets['elevenlabs_api_key'] as string
   try {
-    const audioBuffer = await callTextToSpeechApi(text, settings.voice_id, settings.stability, settings.similarity_boost, key);
+    const audioBuffer = await callTextToSpeechApi(
+      text,
+      settings.voice_id,
+      settings.stability,
+      settings.similarity_boost,
+      key
+    )
 
     // TODO: handle event storage
 

@@ -2,7 +2,7 @@
 /**
  * Class representing a server plugin for search functionality
  */
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 
 /**
  * Nodes that are shared between search plugins

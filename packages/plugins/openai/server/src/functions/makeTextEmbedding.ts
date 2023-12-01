@@ -3,11 +3,11 @@ import {
   CompletionHandlerInputData,
   EmbeddingModel,
   saveRequest,
-} from '@magickml/core'
+} from 'shared/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
-import { DEFAULT_OPENAI_KEY } from '@magickml/config'
-import { trackOpenAIUsage } from '@magickml/server-core'
+import { DEFAULT_OPENAI_KEY } from 'shared/config'
+import { trackOpenAIUsage } from 'server/core'
 
 /**
  * A function that makes a request to create a text embedding using OpenAI's

@@ -1,0 +1,169 @@
+.editor-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--deep-background-color);
+}
+
+.deploy-shield {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(40, 40, 40, 0.5), rgba(30, 30, 30, 0.5));
+  z-index: 1;
+  transition: opacity 0.2s ease;
+}
+.deploy-window {
+  position: absolute;
+  height: calc(100% - var(--c1));
+  width: 512px;
+  right: 0;
+  z-index: 1;
+  background-color: var(--dark-1);
+  border: 1px solid var(--dark-3);
+  margin: var(--c1);
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 0;
+  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.5);
+  transition: right 0.2s ease;
+}
+.deploy-shield.inactive {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.deploy-window.inactive {
+  pointer-events: none;
+  right: -520px;
+}
+
+.editor-deployments-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.editor-toolbar {
+  background: linear-gradient(to bottom, var(--dark-2), rgba(40, 40, 40, 0.9));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /* backdrop-filter: blur(15px); */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - var(--c2));
+  z-index: 1;
+  padding: var(--c1);
+  display: flex;
+  justify-content: space-between;
+  height: var(--c4);
+  max-height: var(--c6);
+}
+.editor-toolbar li {
+  box-sizing: border-box;
+}
+.editor-toolbar ul {
+  box-sizing: border-box;
+  margin: 0;
+  list-style: none;
+  position: relative;
+  border-radius: 3px;
+}
+
+.editor-toolbar ul button {
+  display: flex;
+  justify-content: space-between;
+  width: var(--c25);
+}
+
+.list-item {
+  border: 1px solid var(--dark-3);
+  border-top: 0;
+  border-bottom: 0;
+  position: relative;
+  display: inline-block;
+  background-color: var(--dark-2);
+  padding: var(--extraSmall);
+  padding-left: var(--small);
+  text-transform: capitalize;
+}
+.list-item:hover {
+  background-color: var(--primary);
+}
+
+/* Hide Dropdowns by Default */
+.editor-toolbar ul ul {
+  display: none;
+  position: absolute;
+  top: var(--c4); /* the height of the main nav */
+  transform: translateX(calc(var(--c7) * -1));
+}
+
+/* Display Dropdowns on Hover */
+.editor-toolbar ul li:hover > ul {
+  display: inherit;
+}
+
+/* Fisrt Tier Dropdown */
+.editor-toolbar ul ul li {
+  top: 2px;
+  width: var(--c25);
+  float: none;
+  display: list-item;
+  position: relative;
+  left: var(--c2);
+}
+
+/* Second, Third and more Tiers	*/
+.editor-toolbar ul ul ul li {
+  position: relative;
+  top: calc(var(--c4) * -1);
+}
+
+.editor-toolbar li.list-item:first-child {
+  border: 1px solid var(--dark-3);
+  border-bottom: 0;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.editor-toolbar li.list-item:last-child {
+  border: 1px solid var(--dark-3);
+  border-top: 0;
+  border-radius: 0px 0px 4px 4px;
+}
+.editor-toolbar li.list-item:only-child {
+  border: 1px solid var(--dark-3);
+  border-radius: 4px;
+}
+
+.editor-toolbar li .folder-arrow {
+  transition: transform 0.2s ease;
+}
+
+.editor-toolbar li .folder-arrow {
+  display: inline-block;
+  transform: rotate(0deg);
+}
+
+.editor-toolbar li:hover .folder-arrow {
+  transform: rotate(90deg);
+}
+
+.message {
+  position: relative;
+  margin-left: var(--extraLarge);
+  margin-right: var(--extraLarge);
+  padding: var(--extraSmall);
+  padding-left: var(--small);
+  padding-right: var(--small);
+  text-align: center;
+  top: 35%;
+  transform: translateY(-50%);
+}
+
+.load-button {
+  position: absolute;
+  top: 50px;
+  right: 18px;
+}

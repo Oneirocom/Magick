@@ -1,7 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/app.test.html
 import assert from 'assert'
 import axios from 'axios'
-import { app } from '@magickml/server-core'
+import { app } from 'server/core'
 
 const port = app.get('port')
 const appUrl = `http://${app.get('host')}:${port}`
@@ -16,7 +16,7 @@ describe('Feathers application tests', () => {
   it('shows a 404 JSON error', async () => {
     try {
       await axios.get(`${appUrl}/path/to/nowhere`, {
-        responseType: 'json',
+        responseType: 'json'
       })
       assert.fail('should never get here')
     } catch (error: any) {

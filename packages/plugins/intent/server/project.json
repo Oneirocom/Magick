@@ -3,10 +3,10 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/plugins/intent/server/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core"],
+  "implicitDependencies": ["shared-core"],
   "targets": {
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/plugins/intent/server/**/*.ts"]
@@ -16,8 +16,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/plugin/intent-server/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/plugin/intent-server/jest.config.ts"
       }
     }
   },

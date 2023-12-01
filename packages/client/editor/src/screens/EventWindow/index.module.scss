@@ -1,0 +1,42 @@
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  padding: 1.5rem !important;
+  margin-right: 2rem !important;
+  margin-left: 0 !important;
+}
+
+.root {
+  max-width: 100% !important;
+}
+
+.btn {
+  background: none;
+  color: var(--dark-5) !important;
+  border: 1px solid var(--dark-4) !important;
+}
+
+.selectedBtn {
+  background: var(--primary-dark) !important;
+}
+
+.header {
+  color: var(--dark-5);
+  font-weight: bold;
+}
+
+.search {
+  border: 1px solid var(--dark-4) !important;
+  width: 40rem;
+  padding: 1.6rem;
+  background: var(--foreground-color);
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+}

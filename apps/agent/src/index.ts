@@ -5,12 +5,12 @@
  * @packageDocumentation
  */
 
-import { AgentManager } from '@magickml/agents'
-import { app, initApp } from '@magickml/server-core'
-import { initLogger, getLogger } from '@magickml/core'
+import { AgentManager } from 'server/agents'
+import { app, initApp } from 'server/core'
+import { initLogger, getLogger } from 'shared/core'
 import 'regenerator-runtime/runtime'
 import pluginExports from './plugins'
-import { PRODUCTION, DONT_CRASH_ON_ERROR } from '@magickml/config'
+import { PRODUCTION, DONT_CRASH_ON_ERROR } from 'shared/config'
 
 /**
  * Asynchronously loads the application's plugins and logs their names.

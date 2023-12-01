@@ -4,9 +4,9 @@
   "sourceRoot": "apps/agent/src",
   "projectType": "application",
   "implicitDependencies": [
-    "@magickml/server-core",
-    "@magickml/core",
-    "@magickml/agents",
+    "server-core",
+    "shared-core",
+    "server-agents",
     "@magickml/plugin-*"
   ],
   "targets": {
@@ -56,7 +56,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": [
         "{options.outputFile}"
       ],
@@ -72,8 +72,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "apps/agent/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/agent/jest.config.ts"
       }
     }
   },

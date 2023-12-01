@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Imports
  */
 
-import { MagickComponent } from '@magickml/core'
-import { GithubIssueSearch } from './nodes/GithubIssueSearch';
+import { MagickComponent } from 'shared/core'
+import { GithubIssueSearch } from './nodes/GithubIssueSearch'
 
 /**
  * Export an array of all nodes used in the app.

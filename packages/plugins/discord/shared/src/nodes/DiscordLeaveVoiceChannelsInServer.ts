@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   Event,
   MagickComponent,
@@ -16,7 +16,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   booleanSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 /**
  * The return type of the worker function.

@@ -3,7 +3,7 @@
  * A plugin for interacting with OpenAI's API.
  * @class
  */
-import { ClientPlugin, InputControl } from '@magickml/core'
+import { ClientPlugin, InputControl } from 'shared/core'
 import shared from '@magickml/plugin-openai-shared'
 
 // Importing shared variables from plugin-openai-shared module

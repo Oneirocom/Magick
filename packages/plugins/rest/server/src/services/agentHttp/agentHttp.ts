@@ -17,11 +17,11 @@ import {
 } from './agentHttp.schema'
 
 // Import types and classes
-import { checkPermissions, type Application } from '@magickml/server-core'
+import { checkPermissions, type Application } from 'server/core'
 import { AgentHttpService } from './agentHttp.class'
 
 // Add this service to the service type index
-declare module '@magickml/server-core' {
+declare module 'server/core' {
   interface ServiceTypes {
     [agentHttpPath]: AgentHttpService
   }

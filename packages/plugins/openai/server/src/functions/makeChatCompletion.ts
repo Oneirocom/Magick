@@ -3,16 +3,16 @@ import {
   ChatMessage,
   CompletionHandlerInputData,
   saveRequest,
-} from '@magickml/core'
+} from 'shared/core'
 import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 import {
   DEFAULT_OPENAI_KEY,
   PRODUCTION,
   BACKOFF_RETRY_LIMIT,
-} from '@magickml/config'
+} from 'shared/config'
 import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
-import { trackOpenAIUsage } from '@magickml/server-core'
+import { trackOpenAIUsage } from 'server/core'
 import axiosRetry from 'axios-retry'
 
 /**

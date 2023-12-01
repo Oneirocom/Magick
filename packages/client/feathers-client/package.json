@@ -1,0 +1,12 @@
+{
+  "name": "client/feathers-client",
+  "version": "0.0.1",
+  "dependencies": {
+    "@feathersjs/feathers": "5.0.8",
+    "@feathersjs/socketio-client": "5.0.8",
+    "socket.io-client": "4.6.1"
+  },
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "typings": "./index.d.ts"
+}

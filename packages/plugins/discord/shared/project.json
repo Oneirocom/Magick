@@ -3,10 +3,10 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/plugins/discord/shared/src",
   "projectType": "library",
-  "implicitDependencies": ["@magickml/core", "@magickml/agents"],
+  "implicitDependencies": ["shared-core", "server-agents"],
   "targets": {
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/plugins/discord/shared/**/*.ts"]
@@ -16,8 +16,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/plugins/discord/shared/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "packages/plugins/discord/shared/jest.config.ts"
       }
     }
   },

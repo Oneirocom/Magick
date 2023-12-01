@@ -1,6 +1,6 @@
 // DOCUMENTED
 /**
- * A plugin for the @magickml/core that adds OpenAI completion functionality
+ * A plugin for the shared/core that adds OpenAI completion functionality
  *
  * @remarks
  * The plugin uses handlers for text, chat and text embedding which are defined in the 'makeTextCompletion',
@@ -9,7 +9,7 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-openai-shared'
 import {
   makeChatCompletion,
@@ -17,7 +17,6 @@ import {
   makeTextEmbedding,
   makeTypeChatCompletion,
 } from './functions'
-
 
 /**
  * The secrets used by the OpenAI API
@@ -37,7 +36,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds OpenAI completion functionality
+ * A server plugin for the shared/core that adds OpenAI completion functionality
  */
 const OpenAIPlugin = new ServerPlugin({
   name: 'OpenAIPlugin',

@@ -1,7 +1,7 @@
 // DOCUMENTED
-import { CompletionHandlerInputData } from '@magickml/core'
+import { CompletionHandlerInputData } from 'shared/core'
 import metaphor from 'metaphor-node'
-import { saveRequest } from '@magickml/core'
+import { saveRequest } from 'shared/core'
 
 /**
  * Makes an API request to an AI text completion service.

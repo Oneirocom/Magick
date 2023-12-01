@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { Tooltip } from '@mui/material'
@@ -45,26 +45,11 @@ export const AgentTaskWindow: FC<PluginProps> = props => {
   // Render the component
   return (
     <>
-      <div
-        style={{
-          backgroundColor: '#222',
-          padding: '2em',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pointerEvents: disable ? 'none' : 'auto',
-          opacity: disable ? 0.2 : 1,
-        }}
-      >
+      <div className='connector-layout'>
         <Tooltip title="Enable/Disable Task Plugin" placement="left" disableInteractive arrow>
           <h3>Agent Task Runner</h3>
         </Tooltip>
-        <div
-          style={{
-            display: 'flex',
-            paddingTop: '1em',
-          }}
-        >
+        <div className='controls'>
           <Switch
             checked={checked}
             onChange={e => {
