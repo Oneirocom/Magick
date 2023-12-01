@@ -16,6 +16,8 @@ import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { AgentResult, AgentRunJob } from './Agent'
 import { AGENT_RESPONSE_TIMEOUT_MSEC } from 'shared/config'
+import { EventPayload } from 'server/plugin'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 export type RunRootSpellArgs = {
   agent?: Agent
@@ -42,11 +44,11 @@ export interface AgentCommandData {
 }
 
 interface AgentCommanderArgs {
-  pubSub: PubSub
+  pubSub: RedisPubSub
 }
 
 export class AgentCommander extends EventEmitter {
-  pubSub: PubSub
+  pubSub: RedisPubSub
   logger: pino.Logger = getLogger()
 
   constructor({ pubSub }: AgentCommanderArgs) {
