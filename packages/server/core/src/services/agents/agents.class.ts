@@ -8,9 +8,10 @@ import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
-import { NotFound } from '@feathersjs/errors'
 import { AgentInterface } from '../../schemas'
-
+import { fetchAllPages } from 'shared/utils'
+import { SpellData } from '../spells/spells.schema'
+import { v4 as uuidv4 } from 'uuid'
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
 
@@ -32,35 +33,7 @@ export class AgentService<
   }
 
   async get(agentId: string, params: ServiceParams) {
-    const db = app.get('dbClient')
-    const currentReleaseVersionId = params.query?.currentReleaseVersionId
-
-    const query = super.createQuery(params)
-
-    if (agentId && !currentReleaseVersionId) {
-      const count = await db('agentReleases').count('*').as('count').where('agent_id', '=', agentId)
-
-      if (count["count"] > 0) {
-        query
-          .leftJoin('agentRelease as releases', function() {
-            this.on('agents.id', '=', 'agentReleases.agentId')
-          })
-      }
-
-    } else if (agentId && currentReleaseVersionId) {
-
-      query
-        .leftJoin('agentRelease as releases', function() {
-          this.on('agents.id', '=', 'agentReleases.agentId').andOn(currentReleaseVersionId, '=', 'agentReleases.releaseVersion')
-        })
-    }
-
-    const data = await query.andWhere('agents.id', '=', agentId).limit(1).first()
-    if (!data) {
-      throw new NotFound(`No record found for id '${agentId}'`)
-    }
-
-    return data
+    return await this._get(agentId, params)
   }
 
   async find(params?: ServiceParams) {
@@ -69,7 +42,7 @@ export class AgentService<
 
   async update(id: string, data: AgentInterface, params?: ServiceParams) {
     // Call the original update method to handle other updates
-    return this._update(id, data, params);
+    return this._update(id, data, params)
   }
 
   // we use this ping to avoid firing a patched event on the agent
@@ -155,31 +128,59 @@ export class AgentService<
     return true
   }
 
-  /*
-   * Creates a new agent by copying data from the provided agentId, then associates it with a version tag in the AgentReleases table.
-   * @param agentId - the ID of the agent to copy from
-   * @param versionTag - the version tag to associate with the newly created agent
+  /**
+   * Creates a new spell release for the given agent by
+   * creating a new spell release and then creating a new spell
+   * for each spell in the project and giving it a spellReleaseId.
+   * Then updates the agent with the new spell release ID.
+   * @param agentId - The id of the agent to create a new spell release for.
+   * @param versionTag - The version tag to give the new spell release.
+   * @returns An object containing the id of the new spell release ID.
    */
-  async createRelease(agentId: string, versionTag: string): Promise<{ agent: Agent, release: any }> {
-    // Get the agent by its agentId
-    const agentData = await this.app.service('agents').get(agentId, {});
+  async createRelease({
+    agentId,
+    versionTag,
+  }: {
+    agentId: string
+    versionTag: string
+  }): Promise<{ spellReleaseId: string }> {
+    try {
+      // update current agent with reference to new version
+      const agent = await app.service('agents').get(agentId, {})
 
-    if (!agentData) {
-      throw new Error(`Agent with ID ${agentId} not found.`);
+      // get all spells for the project
+      const allSpells = await fetchAllPages(app.services.spells.find, {
+        query: {
+          projectId: agent.projectId,
+        },
+      })
+
+      const spellRelease = await app.services.spellReleases.create({
+        version: versionTag,
+        agentId,
+      })
+
+      // create new spell release for each spell
+      await Promise.all(
+        allSpells.map(async (spell: SpellData) => {
+          return await app.service('spells').create({
+            ...spell,
+            id: uuidv4(),
+            spellReleaseId: spellRelease.id,
+          })
+        })
+      )
+
+      // update agent with new spell release
+      await app.service('agents').patch(agentId, {
+        ...agent,
+        currentSpellReleaseId: spellRelease.id,
+      })
+
+      return { spellReleaseId: spellRelease.id }
+    } catch (error) {
+      throw new Error(`Error in agents.class:createRelease: ${error.message}`)
     }
-
-    delete agentData.id;
-    // Copy data from the fetched agent, omitting the ID field to create a new agent
-    const newAgent = await this.app.service('agents').create(agentData);
-
-    // Add the new agent's ID and the provided version tag to the AgentReleases table
-    const db = this.app.get('dbClient');
-    const release = await app.service('agentReleases').create({
-      agentId: newAgent.id,
-      version: versionTag,
-    });
-
-    return { agent: newAgent, release };
   }
 
   async create(
@@ -189,7 +190,7 @@ export class AgentService<
 
     if (data.data) {
       data.data = JSON.stringify({
-        ...typeof data.data === 'string' ? JSON.parse(data.data) : data.data,
+        ...(typeof data.data === 'string' ? JSON.parse(data.data) : data.data),
         rest_api_key: md5(Math.random().toString()),
       })
     } else {
@@ -224,5 +225,4 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     name: 'agents',
     multi: ['remove'],
   }
-
 }
