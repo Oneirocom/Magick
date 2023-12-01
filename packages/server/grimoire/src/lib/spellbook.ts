@@ -135,7 +135,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.pluginManager = new PluginManager(
       pluginDirectory,
       this.app.get('redis'),
-      this.agent.id
+      this.agent.id,
+      this.app.get('pubsub')
     )
 
     // Initialize the plugins first
