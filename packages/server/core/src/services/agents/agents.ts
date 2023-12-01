@@ -68,6 +68,7 @@ export const agent = (app: Application) => {
       'command',
       'ping',
       'subscribe',
+      'message',
     ],
     events: AGENT_EVENTS,
   })

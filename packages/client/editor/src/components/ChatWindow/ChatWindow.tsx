@@ -5,10 +5,11 @@ import { useSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { usePubSub, useConfig } from '@magickml/providers'
 import css from '../../styles/magick.module.css'
 import {
+  RootState,
   addLocalState,
   selectStateBytabId,
   upsertLocalState,
@@ -154,6 +155,8 @@ const ChatWindow = ({ tab, spellId }) => {
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
 
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId } = globalConfig
   const { publish, subscribe, events } = usePubSub()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
@@ -162,7 +165,7 @@ const ChatWindow = ({ tab, spellId }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
 
-  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
+  const { $PLAYTEST_PRINT, MESSAGE_AGENT } = events
 
   // Print to console callback function.
   const printToConsole = useCallback(
@@ -271,38 +274,33 @@ const ChatWindow = ({ tab, spellId }) => {
       return
     }
 
-    const playtestInputName = 'Input - Default'
-
-
-    toSend = {
-      connector: playtestInputName,
+    const eventPayload = {
+      // connector: playtestInputName,
       content: value,
       sender: 'user',
       observer: 'assistant',
-      agentId: 'preview',
       client: 'playtest',
       channel: 'previewChannel',
       projectId: config.projectId,
       channelType: 'previewChannelType',
       rawData: value,
-      entities: ['user', 'assistant'],
-      ...JSON.parse(json),
+      agentId: currentAgentId
     }
 
-    const data = {
-      spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
-      inputs: {
-        [playtestInputName as string]: toSend,
-      },
-      publicVariables: '{}',
-      version: 'v2',
-      secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
-    }
+    // const data = {
+    //   spellName: tab.name,
+    //   id: spellId,
+    //   projectId: config.projectId,
+    //   inputs: {
+    //     [playtestInputName as string]: toSend,
+    //   },
+    //   publicVariables: '{}',
+    //   version: 'v2',
+    //   secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
+    // }
 
     setValue('')
-    publish($RUN_SPELL(tab.id), data)
+    publish(MESSAGE_AGENT, eventPayload)
   }
 
   // Update state when playtest data is changed.

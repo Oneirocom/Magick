@@ -59,6 +59,7 @@ const configureCustomServices = (
       'run',
       'subscribe',
       'command',
+      'message',
     ],
     events: ['log', 'result', 'spell'],
   })
