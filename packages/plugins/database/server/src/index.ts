@@ -1,6 +1,6 @@
 // DOCUMENTED
 /**
- * A plugin for the @magickml/core that adds OpenAI completion functionality
+ * A plugin for the shared/core that adds OpenAI completion functionality
  *
  * @remarks
  * The plugin uses handlers for text, chat and text embedding which are defined in the 'makeTextCompletion',
@@ -9,7 +9,7 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-database-shared'
 import { select, deleteRow, insert, update, upsert } from './functions'
 
@@ -32,7 +32,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds OpenAI completion functionality
+ * A server plugin for the shared/core that adds OpenAI completion functionality
  */
 const databasePlugin = new ServerPlugin({
   name: 'databasePlugin',

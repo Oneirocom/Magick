@@ -1,0 +1,19 @@
+{
+  "name": "@magickml/providers",
+  "version": "0.0.1",
+  "dependencies": {
+    "shared/config": "*",
+    "react": "18.2.0",
+    "shared/core": "*",
+    "pubsub-js": "1.9.4",
+    "dockview": "^0.0.0-experimental-806ff2a9-20230927",
+    "client/layouts": "*",
+    "@minoru/react-dnd-treeview": "^3.4.4",
+    "react-redux": "8.0.5",
+    "client/feathers-client": "*",
+    "client/state": "*"
+  },
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "typings": "./index.d.ts"
+}

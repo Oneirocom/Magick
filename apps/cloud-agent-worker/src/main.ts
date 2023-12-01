@@ -1,9 +1,9 @@
-import { CloudAgentWorker } from '@magickml/cloud-agent-worker'
-import { initLogger, getLogger } from '@magickml/core'
-import { initApp } from '@magickml/server-core'
+import { CloudAgentWorker } from 'server/cloud-agent-worker'
+import { initLogger, getLogger } from 'shared/core'
+import { initApp } from 'server/core'
 import pluginExports from './plugins'
-import { initAgentCommander } from '@magickml/agents'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/config'
+import { initAgentCommander } from 'server/agents'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
 if (PRODUCTION) {
@@ -34,11 +34,11 @@ async function loadPlugins(): Promise<void> {
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
   process.on('uncaughtException', (e: any) => {
-    logger.error('Uncaught exception: %s\n From: %o', e, e.stack)
+    logger.error(e, 'Uncaught exception: %s\n From: %o', e)
   })
 
   process.on('unhandledRejection', (e: any) => {
-    logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
+    logger.error(e, 'Unhandled rejection: %s\n From: %o', e)
   })
 }
 

@@ -1,0 +1,53 @@
+.header {
+  padding: 0.7rem 1rem;
+  display: flex;
+  background: #272727;
+  align-items: center;
+  justify-content: space-between;
+  cursor: default;
+}
+
+.btn {
+  box-shadow: none;
+  background: none;
+}
+
+.listContainer {
+  background: #424242;
+  height: 100%;
+  cursor: default;
+}
+
+.container {
+  background: var(--dark-0);
+}
+
+.drawer {
+  width: 200px;
+  z-index: 9 !important;
+  height: 100%;
+}
+
+.drawerPaper {
+  width: 80%;
+  margin-left: 20%;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  overflow: hidden;
+}
+
+.resizer {
+  height: 100%;
+  background: transparent;
+  position: absolute;
+  left: 200px;
+  z-index: 10;
+  width: 3px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #3794ff;
+    cursor: ew-resize;
+  }
+}

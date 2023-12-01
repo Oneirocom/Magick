@@ -4,7 +4,7 @@
  * @category Discord
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   Event,
   MagickComponent,
@@ -16,7 +16,7 @@ import {
   MagickWorkerOutputs,
   ModuleContext,
   arraySocket,
-} from '@magickml/core'
+} from 'shared/core'
 import { ChannelType } from '../types/ChannelType'
 
 /**

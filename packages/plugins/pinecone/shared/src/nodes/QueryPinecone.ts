@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 
 import {
   arraySocket,
@@ -11,7 +11,7 @@ import {
   MagickNodeData,
   stringSocket,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 import { PineconeClient } from '@pinecone-database/pinecone'
 

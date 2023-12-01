@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { isEmpty } from 'lodash'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { v4 as uuidv4 } from 'uuid'
 import * as ethers from 'ethers'
 
@@ -16,7 +16,7 @@ import {
   numberSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `Deploys a contract from Solidity code, a standard for defining non-fungible tokens on EVM machines.`
 

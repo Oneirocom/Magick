@@ -1,0 +1,61 @@
+.tableContainer {
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.checkbox {
+  color: var(--primary) !important;
+}
+.selectedRow {
+  background: var(--slate-30) !important;
+}
+
+.tableCellHeader {
+  background: var(--primary-dark) !important;
+  color: var(--dark-5) !important;
+  padding: 8px !important;
+  line-height: 1 !important;
+  span {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+}
+
+.expandCollapse {
+  box-shadow: none !important;
+  height: 2rem !important;
+  width: 2rem !important;
+  padding: 1.4rem !important;
+}
+
+.tableCellBody {
+  border-bottom: 1px solid var(--dark-3) !important;
+  color: var(--dark-5) !important;
+  background: var(--tableCellBackground) !important;
+  font-size: 1rem !important;
+  padding: 8px !important;
+  font-family: var(--font-family) !important;
+  line-height: 1 !important;
+}
+
+.tableFooter {
+  background: var(--tableFooterBackground) !important;
+  color: var(--textColor) !important;
+  overflow: unset;
+}
+
+.spanWhite {
+  color: var(--textColor) !important;
+}
+
+.spanWhite:hover {
+  opacity: 0.8;
+}

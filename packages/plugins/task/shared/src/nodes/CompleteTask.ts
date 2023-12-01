@@ -7,8 +7,8 @@ import {
   WorkerData,
   taskSocket,
   triggerSocket,
-} from '@magickml/core'
-import Rete from '@magickml/rete'
+} from 'shared/core'
+import Rete from 'shared/rete'
 
 const info = 'Complete a task.'
 

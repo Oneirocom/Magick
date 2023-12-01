@@ -1,0 +1,97 @@
+.root {
+  align-items: center;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  height: 32px;
+  padding-inline-end: 8px;
+}
+
+.root:hover {
+  background-color: var(--slate-15);
+}
+
+.expandIconWrapper {
+  align-items: center;
+  font-size: 0;
+  cursor: pointer;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+  transition: transform linear 0.1s;
+  transform: rotate(0deg);
+}
+
+.expandIconWrapper.isOpen {
+  transform: rotate(90deg);
+}
+
+.labelGridItem {
+  padding-inline-start: 8px;
+}
+
+ul ul ul li {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+}
+
+.menu {
+  margin-top: 1rem;
+}
+
+.credits {
+  padding: 0 1rem;
+  margin-top: auto;
+  white-space: nowrap;
+}
+
+.creditCount {
+  margin-right: 0.5rem;
+  /* margin-top: 1rem; */
+}
+
+.hideMenu {
+  display: none;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+}
+.menuFlex {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.hideMenuItem {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  background-color: #2b2b30;
+}
+
+.hideMenuItem:hover {
+  background-color: #3b3b40;
+}
+
+.files * {
+  padding: 0;
+  margin: 0;
+  /* margin-top: 0.8rem; */
+}
+
+.inputEdit {
+  width: 134px !important;
+}
+
+.isSelected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -25px;
+  right: 0;
+  bottom: 0;
+  background-color: var(--slate-30);
+  pointer-events: none;
+}

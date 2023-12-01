@@ -1,0 +1,57 @@
+.settings-editor {
+  width: 100%;
+  height: 100vh !important;
+  overflow: auto;
+  padding: 2em;
+}
+
+.settings-editor > .child {
+  margin-bottom: 2em;
+  width: 100%;
+}
+
+.title {
+  display: flex;
+  font-size: 1.8rem;
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md-margin {
+  margin-left: 1rem;
+}
+
+.icon {
+  font-size: 1.8rem !important;
+  box-shadow: none;
+}
+
+.input {
+  width: 30%;
+  padding: 0.5rem 1rem;
+}
+
+.padHorizontal {
+  padding: 0 1.5rem;
+}
+
+.info {
+  margin-top: 1rem;
+}
+
+.btn {
+  background: none;
+  color: var(--dark-5) !important;
+  border: 1px solid var(--dark-4) !important;
+  margin-bottom: 6rem !important;
+  padding: 2px 60px !important;
+}
+
+.btn_container {
+  display: flex;
+  justify-content: space-around;
+}

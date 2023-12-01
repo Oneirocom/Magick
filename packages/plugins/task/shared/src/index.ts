@@ -3,7 +3,7 @@
  * This is the main file exporting the nodes used in the app
  */
 
-import { MagickComponent } from '@magickml/core'
+import { MagickComponent } from 'shared/core'
 import { CancelTask } from './nodes/CancelTask'
 import { CompleteTask } from './nodes/CompleteTask'
 import { CreateTask } from './nodes/CreateTask'

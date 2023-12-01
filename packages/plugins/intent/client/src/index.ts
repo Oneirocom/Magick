@@ -1,4 +1,4 @@
-import { ClientPlugin } from '@magickml/core'
+import { ClientPlugin } from 'shared/core'
 import { getNodes } from '@magickml/plugin-intent-shared'
 import MediationIcon from '@mui/icons-material/Mediation'
 import IntentWindow from './windows/IntentWindow'

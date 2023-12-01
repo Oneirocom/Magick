@@ -1,4 +1,4 @@
-import { ClientPlugin, eventSocket, triggerSocket } from '@magickml/core'
+import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
 import { GithubAgentWindow } from './components/agent.component'
 import { getNodes } from '@magickml/plugin-github-shared'
 

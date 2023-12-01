@@ -1,5 +1,5 @@
 // DOCUMENTED
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { v4 as uuidv4 } from 'uuid'
 import {
   anySocket,
@@ -9,7 +9,7 @@ import {
   MagickWorkerOutputs,
   stringSocket,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `Call an arbitrary function from a contract`
 

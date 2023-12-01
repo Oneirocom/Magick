@@ -4,11 +4,11 @@ import App from './App'
 
 /**
  * This module provides an AvatarPlugin to be used
- * with the @magickml/core client-side library.
+ * with the shared/core client-side library.
  * @module AvatarPlugin
  */
 
-import { ClientPlugin } from '@magickml/core'
+import { ClientPlugin } from 'shared/core'
 
 /**
  * Represents a new avatar system.
@@ -23,7 +23,7 @@ const AvatarPlugin = new ClientPlugin({
       path: '/avatar',
       icon: AvatarIcon,
       text: 'Avatar',
-      tooltip: 'Chat with your agents embodied with a 3D avatar'
+      tooltip: 'Chat with your agents embodied with a 3D avatar',
     },
   ],
   clientRoutes: [

@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { createRoot } from 'react-dom/client'
-import { MagickIDE } from '@magickml/editor'
-import { AppConfig } from '@magickml/client-core'
+import { MagickIDE } from 'client/editor'
 import {
   DEFAULT_PROJECT_ID,
   API_ROOT_URL,
@@ -10,16 +9,17 @@ import {
   POSTHOG_ENABLED,
   DEFAULT_USER_TOKEN,
   STANDALONE,
-} from '@magickml/config'
+} from 'shared/config'
 import { PostHogProvider } from 'posthog-js/react'
-import { initLogger, getLogger } from '@magickml/core'
+import { initLogger, getLogger } from 'shared/core'
 
 import plugins from './plugins'
+import { AppConfig } from '@magickml/providers'
 
 // We want to add this back in eventually, but it's causing some visual bugs
 //import './globals.css'
 
-initLogger({ name: "AIDE" })
+initLogger({ name: 'AIDE' })
 
 const logger = getLogger()
 
@@ -28,9 +28,9 @@ logger.info('loaded with plugins %o', plugins)
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
 if (window === window.parent) {
-  logger.info("not in iframe")
+  logger.info('not in iframe')
   if (STANDALONE) {
-    logger.info("standalone")
+    logger.info('standalone')
     const container = document.getElementById('root') as Element
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
       ; (window as any).root = root
@@ -56,11 +56,15 @@ if (window === window.parent) {
     root.render(<Root />)
   }
 } else {
-  logger.info("iframe: In iframe")
+  logger.info('iframe: In iframe')
   /**
    * If the editor is loaded in an iframe, listen for messages from the parent to initialize and render the MagickIDE component
    */
-  const TRUSTED_PARENT_URLS = [TRUSTED_PARENT_URL, 'https://www.magickml.com', 'https://beta.magickml.com'].map(url => url.replace(/\/+$/, ''));
+  const TRUSTED_PARENT_URLS = [
+    TRUSTED_PARENT_URL,
+    'https://www.magickml.com',
+    'https://beta.magickml.com']
+    .map(url => url.replace(/\/+$/, ''));
 
   window.addEventListener(
     'message',

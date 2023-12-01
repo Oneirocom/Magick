@@ -3,7 +3,7 @@
  * This is the main file exporting the nodes used in the app
  */
 
-import { MagickComponent, PluginSecret } from '@magickml/core'
+import { MagickComponent, PluginSecret } from 'shared/core'
 import { SearchGoogle } from './nodes/SearchGoogle'
 import { SearchMetaphor } from './nodes/SearchMetaphor'
 

@@ -1,0 +1,33 @@
+.inline-comment,
+.frame-comment {
+  color: black;
+  padding: 12px;
+  font-size: 140%;
+  color: white;
+  position: absolute;
+  cursor: move;
+  border-radius: 16px;
+}
+
+.frame-comment,
+.inline-comment {
+  background: rgb(70 47 186 / 20%);
+}
+
+.frame-comment:focus,
+.inline-comment:focus {
+  outline: none;
+  border-color: rgba(59, 109, 234, 0.504);
+}
+
+.inline-comment {
+  z-index: 4;
+  background: #aec4ff;
+  border: 3px solid #aec4ff;
+}
+
+.frame-comment {
+  z-index: -10;
+  background: var(--slate-15);
+  border: 3px solid transparent;
+}

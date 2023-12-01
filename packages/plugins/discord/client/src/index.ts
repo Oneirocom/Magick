@@ -9,18 +9,11 @@
 import {
   ClientPlugin,
   eventSocket,
-  SpellInterface,
   triggerSocket,
-} from '@magickml/core'
+} from 'shared/core'
 import { DiscordAgentWindow } from './components/agent.component'
 
-import _DiscordSpellTemplate from './templates/spells/Discord Bot.spell.json'
-
 import { getNodes } from '@magickml/plugin-discord-shared'
-// TODO: add schema validation with e.g. zod
-// Typecast `DiscordSpellTemplate` to `SpellInterface`
-const DiscordSpellTemplate = _DiscordSpellTemplate as unknown as SpellInterface
-
 /**
  * The input sockets that are accepted by the plugin.
  *
@@ -61,7 +54,7 @@ const DiscordPlugin = new ClientPlugin({
   name: 'DiscordPlugin',
   nodes: getNodes(),
   agentComponents: [DiscordAgentWindow],
-  spellTemplates: [DiscordSpellTemplate],
+  // spellTemplates: [DiscordSpellTemplate],
   inputTypes: [
     { name: 'Discord (Voice)', sockets: inputSockets },
     { name: 'Discord (Text)', sockets: inputSockets },

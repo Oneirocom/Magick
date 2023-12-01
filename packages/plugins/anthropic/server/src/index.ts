@@ -1,6 +1,6 @@
 // UNDOCUMENTED
 /**
- * A plugin for the @magickml/core that adds anthropic completion functionality
+ * A plugin for the shared/core that adds anthropic completion functionality
  *
  * @remarks
  * The plugin uses handlers for text, chat and text embedding which are defined in the 'makeTextCompletion',
@@ -9,7 +9,7 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-anthropic-shared'
 import { makeChatCompletion } from './functions'
 
@@ -28,7 +28,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds anthropic completion functionality
+ * A server plugin for the shared/core that adds anthropic completion functionality
  */
 const anthropicPlugin = new ServerPlugin({
   name: 'anthropicPlugin',

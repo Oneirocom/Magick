@@ -1,0 +1,133 @@
+{
+  "nodes": [
+    {
+      "type": "lifecycle/onStart",
+      "id": "0",
+      "flows": {
+        "flow": {
+          "nodeId": "1",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "1",
+      "parameters": {
+        "text": {
+          "value": "Starting Sequence..."
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "2",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/sequence",
+      "configuration": {
+        "numOutputs": 4
+      },
+      "id": "2",
+      "flows": {
+        "1": {
+          "nodeId": "3",
+          "socket": "flow"
+        },
+        "2": {
+          "nodeId": "4",
+          "socket": "flow"
+        },
+        "3": {
+          "nodeId": "5",
+          "socket": "flow"
+        },
+        "4": {
+          "nodeId": "6",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "3",
+      "parameters": {
+        "text": {
+          "value": "Trigging DoOnce"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "4",
+      "parameters": {
+        "text": {
+          "value": "Trigging DoOnce"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "5",
+      "parameters": {
+        "text": {
+          "value": "Resetting DoOnce"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "7",
+          "socket": "reset"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "6",
+      "parameters": {
+        "text": {
+          "value": "Triggering DoOnce"
+        }
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "7",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "flow/doOnce",
+      "id": "7",
+      "flows": {
+        "flow": {
+          "nodeId": "8",
+          "socket": "flow"
+        }
+      }
+    },
+    {
+      "type": "debug/log",
+      "id": "8",
+      "parameters": {
+        "text": {
+          "value": "DoOnce Output Triggered"
+        }
+      }
+    }
+  ]
+}

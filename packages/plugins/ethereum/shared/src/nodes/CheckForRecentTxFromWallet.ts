@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { isEmpty } from 'lodash'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -13,7 +13,7 @@ import {
   stringSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 /**
  * Check the recent transactions from another wallet

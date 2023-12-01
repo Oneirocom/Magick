@@ -1,5 +1,3 @@
-import { useConfig, useFeathers } from '@magickml/client-core'
-import { v4 } from 'uuid'
 import Mic from '@mui/icons-material/Mic'
 import MicOff from '@mui/icons-material/MicOff'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -11,8 +9,7 @@ import styles from './Chat.module.css'
 import { useLipSync } from '../../hooks/useLipSync'
 import { useAgentList } from '../../hooks/useAgentList'
 import { useZustand } from '../../store/useZustand'
-import { usePubSub } from '@magickml/client-core'
-import { nullEvent } from 'xstate/lib/actionTypes'
+import { usePubSub, useConfig, useFeathers } from '@magickml/providers'
 
 const voices = {
   'Female 1': '1QnOliOAmerMUNuo2wXoH-YoainoSjZen',
@@ -66,7 +63,9 @@ const SpeechRecognition =
 
 export default function ChatBox() {
   const [micEnabled, setMicEnabled] = useState(false)
-  const [speechRecognition, setSpeechRecognition] = useState<typeof SpeechRecognition | null>(null)
+  const [speechRecognition, setSpeechRecognition] = useState<
+    typeof SpeechRecognition | null
+  >(null)
   const { avatarVrm } = useZustand()
   const lipSync = useLipSync(avatarVrm)
   const agentList = useAgentList()
@@ -153,7 +152,7 @@ export default function ChatBox() {
     handleUserChatInput(value)
   }
 
-  const printToConsole = useCallback((text) => {
+  const printToConsole = useCallback(text => {
     setWaitingForResponse(false)
     setMessages(messages => [...messages, name + ': ' + text])
     try {
@@ -202,13 +201,12 @@ export default function ChatBox() {
       entities: ['user', 'assistant'],
     }
 
-
     const data = {
       id: 'avatar',
-      agentName: currentAgent ? currentAgent.name : "lost agent name",
+      agentName: currentAgent ? currentAgent.name : 'lost agent name',
       projectId: config.projectId,
       sessionId,
-      agentId: currentAgent ? currentAgent.id : "lost agent id",
+      agentId: currentAgent ? currentAgent.id : 'lost agent id',
       inputs: {
         'Input - Default': toSend,
       },
@@ -233,7 +231,6 @@ export default function ChatBox() {
 
       printToConsole(output)
     })
-
   }, [client])
 
   useEffect(() => {
@@ -275,7 +272,7 @@ export default function ChatBox() {
             className={styles.agentSelector}
             name="agentList"
             id="agentList"
-            defaultValue={currentAgent ? currentAgent.name : ""}
+            defaultValue={currentAgent ? currentAgent.name : ''}
             onChange={e => {
               const newAgent = agentList?.find(agent => {
                 if (agent.name === e.target.value) {
@@ -313,10 +310,7 @@ export default function ChatBox() {
             ))}
           </div>
 
-          <form
-            className={styles['send']}
-            onSubmit={handleSubmit}
-          >
+          <form className={styles['send']} onSubmit={handleSubmit}>
             {/* Disabled until state error is fixed */}
             <button
               // type="icon"

@@ -1,0 +1,23 @@
+.agent-window {
+  margin: 1em;
+  padding: 1em;
+  background-color: #111;
+}
+
+.agentPubVars {
+  padding: 2rem;
+  border: 1px solid var(--foreground-color);
+  color: var(--dark-5);
+  margin-bottom: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.btn {
+  cursor: pointer;
+  background: none;
+}

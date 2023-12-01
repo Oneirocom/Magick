@@ -1,6 +1,6 @@
 // DOCUMENTED
 /**
- * A plugin for the @magickml/core that adds GoogleAI completion functionality
+ * A plugin for the shared/core that adds GoogleAI completion functionality
  *
  * @remarks
  * The plugin uses handlers for text, chat and text embedding which are defined in the 'makeTextCompletion',
@@ -9,7 +9,7 @@
  * @packageDocumentation
  */
 
-import { ServerPlugin } from '@magickml/core'
+import { ServerPlugin } from 'shared/core'
 import shared from '@magickml/plugin-googleai-shared'
 import {
   makeChatCompletion,
@@ -34,7 +34,7 @@ const completionHandlers = {
 }
 
 /**
- * A server plugin for the @magickml/core that adds GoogleAI completion functionality
+ * A server plugin for the shared/core that adds GoogleAI completion functionality
  */
 const GoogleAIPlugin = new ServerPlugin({
   name: 'GoogleAIPlugin',

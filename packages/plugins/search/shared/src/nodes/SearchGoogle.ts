@@ -4,7 +4,7 @@
  * @module SearchGoogle
  */
 
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import {
   MagickNode,
   MagickWorkerInputs,
@@ -14,7 +14,7 @@ import {
   WorkerData,
   MagickWorkerOutputs,
   ModuleContext,
-} from '@magickml/core'
+} from 'shared/core'
 
 const info = `When the alert component is triggered, it will fire an alert with the message in the input box.`
 

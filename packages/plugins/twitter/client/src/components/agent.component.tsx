@@ -1,4 +1,4 @@
-import { Switch } from '@magickml/client-core'
+import { Switch } from 'client/core'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import VariableModal from './VariableModal'
@@ -14,7 +14,6 @@ export const TwitterAgentWindow: FC<any> = props => {
   )
   const [disable, setDisable] = useState(false)
 
-
   useEffect(() => {
     if (props.enable['TwitterPlugin'] == false) {
       setChecked(false)
@@ -27,33 +26,23 @@ export const TwitterAgentWindow: FC<any> = props => {
   }, [props.enable, selectedAgentData])
   return (
     <>
-      <div
-        style={{
-          backgroundColor: '#222',
-          padding: '2em',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          pointerEvents: disable ? 'none' : 'auto',
-          opacity: disable ? 0.2 : 1,
-        }}
-      >
-        <Tooltip title="Add your twitter account details here" placement='left' disableInteractive arrow>
+      <div className='connector-layout'>
+        <Tooltip
+          title="Add your twitter account details here"
+          placement="left"
+          arrow
+          disableInteractive
+        >
           <h3>Twitter</h3>
         </Tooltip>
-        <div
-          style={{
-            display: 'flex',
-            paddingTop: '1em',
-          }}
-        >
+        <div className='controls'>
           <button
             onClick={() => {
               setEditMode(true)
             }}
             style={{ marginRight: '10px', cursor: 'pointer' }}
           >
-            Edit
+            Configure
           </button>
           <Switch
             label={null}

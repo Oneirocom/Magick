@@ -4,7 +4,7 @@
  * More information: https://lodash.com/docs/4.17.15#isEmpty
  */
 import { isEmpty } from 'lodash'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -17,7 +17,7 @@ import {
   stringSocket,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 // A string variable that describes the component’s functionality.
 const info = `Check the recent transactions of an Ethereum wallet`
@@ -34,7 +34,7 @@ type InputReturn =
  * It belongs to the Ethereum family according to the specification in the constructor.
  *
  * @remarks
- * This component extends the MagickComponent class from the @magickml/core module and has an async worker method.
+ * This component extends the MagickComponent class from the shared/core module and has an async worker method.
  *
  * @returns a promise with a custom InputReturn type
  */
@@ -96,9 +96,9 @@ export class GetRecentTxsFromWallet extends MagickComponent<
    * @remarks
    * As shown before, the component expects a custom return of the InputReturn type.
    *
-   * @param node - Required by the worker and uses the WorkerData type from the @magickml/core module.
-   * @param inputs - Required by the worker and uses the MagickWorkerInputs type from the @magickml/core module.
-   * @param outputs - Required by the worker and uses the MagickWorkerOutputs type from the @magickml/core module.
+   * @param node - Required by the worker and uses the WorkerData type from the shared/core module.
+   * @param inputs - Required by the worker and uses the MagickWorkerInputs type from the shared/core module.
+   * @param outputs - Required by the worker and uses the MagickWorkerOutputs type from the shared/core module.
    * @param data - A property of the worker method which defines the wallet address.
    *
    * @returns a promise with a custom InputReturn type

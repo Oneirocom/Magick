@@ -1,8 +1,8 @@
 // DOCUMENTED
 // Import statements kept as-is
-import { TableComponent } from '@magickml/client-core'
-import { CompletionProvider, pluginManager } from '@magickml/core'
-import { API_ROOT_URL } from '@magickml/config'
+import { TableComponent } from 'client/core'
+import { CompletionProvider, pluginManager } from 'shared/core'
+import { API_ROOT_URL } from 'shared/config'
 import { MoreHoriz, NewReleases, Refresh } from '@mui/icons-material'
 import {
   Button,
@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useConfig } from '@magickml/client-core'
+import { useConfig } from '@magickml/providers'
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {
@@ -148,29 +148,35 @@ function IntentTable({ intents, updateCallback }) {
   )
 
   // Initialize the table with hooks
-  const { page, pageOptions, gotoPage, setGlobalFilter, state: { sortBy, globalFilter },
-    setSortBy } =
-    useTable(
-      {
-        columns: defaultColumns,
-        data: intents,
-        initialState: {
-          // todo needto add proper generic to useTable to fix this
-          // @ts-ignore
-          pageIndex: currentPage
-        }
+  const {
+    page,
+    pageOptions,
+    gotoPage,
+    setGlobalFilter,
+    state: { sortBy, globalFilter },
+    setSortBy,
+  } = useTable(
+    {
+      columns: defaultColumns,
+      data: intents,
+      initialState: {
+        // todo needto add proper generic to useTable to fix this
+        // @ts-ignore
+        pageIndex: currentPage,
       },
-      useFilters,
-      useGlobalFilter,
-      useSortBy,
-      usePagination
-    ) as TableInstance & any //TODO: FIX Type
+    },
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  ) as TableInstance & any //TODO: FIX Type
 
   // Function to handle sorting when a column header is clicked
-  const handleSort = (column) => {
-    const isAsc = sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc;
-    setSortBy([{ id: column, desc: isAsc ? isAsc : false }]);
-  };
+  const handleSort = column => {
+    const isAsc =
+      sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc
+    setSortBy([{ id: column, desc: isAsc ? isAsc : false }])
+  }
 
   const rows = page.map(el => {
     return createData(
@@ -197,12 +203,15 @@ function IntentTable({ intents, updateCallback }) {
   // Handle intent deletion
   const handleIntentDelete = async (intent: any) => {
     if (!selectedRow) return
-    const isDeleted = await fetch(`${API_ROOT_URL}/documents/${selectedRow.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const isDeleted = await fetch(
+      `${API_ROOT_URL}/documents/${selectedRow.id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     if (isDeleted) enqueueSnackbar('intent deleted', { variant: 'success' })
     else enqueueSnackbar('Error deleting intent', { variant: 'error' })
 
@@ -226,10 +235,10 @@ function IntentTable({ intents, updateCallback }) {
     intent: '',
     date: new Date().toISOString(),
     embedding: '',
-    variations: 0
+    variations: 0,
   })
   // Handle save action
-  const handleSave = async (selectedModel) => {
+  const handleSave = async selectedModel => {
     // call documents endpoint
     const result = await fetch(`${API_ROOT_URL}/intents`, {
       method: 'POST',
@@ -246,10 +255,10 @@ function IntentTable({ intents, updateCallback }) {
         projectId: config.projectId,
         modelName: selectedModel.model,
         variations: newIntent.variations > 20 ? 20 : newIntent.variations,
-        chatModelName: "gpt-3.5-turbo",
+        chatModelName: 'gpt-3.5-turbo',
         secrets: localStorage.getItem('secrets'),
       }),
-    });
+    })
     // Check if the save operation was successful
     if (result.ok) {
       // Reset newIntent
@@ -259,24 +268,22 @@ function IntentTable({ intents, updateCallback }) {
         intent: '',
         date: '',
         embedding: '',
-        variations: 0
-      });
-      enqueueSnackbar('Intent saved successfully', { variant: 'success' });
-
+        variations: 0,
+      })
+      enqueueSnackbar('Intent saved successfully', { variant: 'success' })
 
       // Close the modal by setting createMode to false after a delay
       setTimeout(() => {
-        setCreateMode(false);
-      }, 2000);
+        setCreateMode(false)
+      }, 2000)
 
       // Trigger the updateCallback function to update the table after a delay
 
-      updateCallback();
-
+      updateCallback()
     } else {
-      enqueueSnackbar('Error saving intent', { variant: 'error' });
+      enqueueSnackbar('Error saving intent', { variant: 'error' })
     }
-  };
+  }
 
   // Show create modal
   const showCreateModal = () => {
@@ -286,20 +293,21 @@ function IntentTable({ intents, updateCallback }) {
   // trigger updateCallback when createMode changes
   useEffect(() => {
     if (!createMode) {
-      updateCallback();
+      updateCallback()
     }
-  }, [createMode]);
+  }, [createMode])
   return (
-    <>{createMode && (
-      <IntentModal
-        createMode={createMode}
-        setCreateMode={setCreateMode}
-        handleSave={handleSave}
-        setNewIntent={setNewIntent}
-        providerList={filteredProviders}
-        chatProviderList={chatProviders}
-      />
-    )}
+    <>
+      {createMode && (
+        <IntentModal
+          createMode={createMode}
+          setCreateMode={setCreateMode}
+          handleSave={handleSave}
+          setNewIntent={setNewIntent}
+          providerList={filteredProviders}
+          chatProviderList={chatProviders}
+        />
+      )}
       <Container className={styles.container} classes={{ root: styles.root }}>
         <Stack spacing={2} style={{ padding: '1rem', background: '#272727' }}>
           <div className={styles.flex}>
@@ -366,7 +374,6 @@ function IntentTable({ intents, updateCallback }) {
         </Stack>
       </Container>
     </>
-
   )
 }
 

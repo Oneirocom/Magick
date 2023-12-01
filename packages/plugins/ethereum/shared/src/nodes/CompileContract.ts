@@ -1,8 +1,8 @@
 // DOCUMENTED
 import { isEmpty } from 'lodash'
-import Rete from '@magickml/rete'
+import Rete from 'shared/rete'
 import { v4 as uuidv4 } from 'uuid'
-import { API_ROOT_URL } from '@magickml/config'
+import { API_ROOT_URL } from 'shared/config'
 
 import {
   anySocket,
@@ -16,7 +16,7 @@ import {
   CodeControl,
   triggerSocket,
   WorkerData,
-} from '@magickml/core'
+} from 'shared/core'
 
 // Default solidity code
 const defaultCode = `

@@ -7,7 +7,7 @@ import {
   getVoiceConnection,
   AudioPlayerStatus,
 } from '@discordjs/voice'
-import { app } from '@magickml/server-core'
+import { app } from 'server/core'
 import { addSpeechEvent } from './voiceUtils/addSpeechEvent'
 
 /**
