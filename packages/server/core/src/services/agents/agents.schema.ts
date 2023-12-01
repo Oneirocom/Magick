@@ -38,16 +38,17 @@ export const agentDataSchema = Type.Pick(
     'name',
     'enabled',
     'updatedAt',
+    'createdAt',
     'pingedAt',
     'data',
     'publicVariables',
     'secrets',
     'rootSpellId',
-    'rootSpell', //DEPRECATED
     'runState', //UNUSED right now
     'image',
-    'currentReleaseVersionId',
+    'currentSpellReleaseId',
     'default',
+    'rootSpell', //DEPRECATED
   ],
   { $id: 'AgentData' }
 )
@@ -68,6 +69,7 @@ export const agentPatchDataSchema = Type.Pick(
     'data',
     'publicVariables',
     'secrets',
+    'currentSpellReleaseId',
   ],
   { $id: 'AgentPatch', additionalProperties: true }
 )
@@ -118,6 +120,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'runState',
   'name',
   'updatedAt',
+  'createdAt',
   'pingedAt',
   'data',
   'publicVariables',
@@ -126,7 +129,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'rootSpellId',
   'default',
   'frozen',
-  'currentReleaseVersionId'
+  'currentSpellReleaseId',
 ])
 
 /**
