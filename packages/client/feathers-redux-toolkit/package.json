@@ -2,6 +2,8 @@
   "name": "@magickml/feathersRedux",
   "version": "0.0.1",
   "dependencies": {
+    "react-redux": "^8.0.5",
+    "client/feathers-client": "*",
     "redux": "4.2.1",
     "@reduxjs/toolkit": "1.9.5"
   },
