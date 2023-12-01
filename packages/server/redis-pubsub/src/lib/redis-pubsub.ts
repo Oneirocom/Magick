@@ -2,10 +2,54 @@ import { createClient, RedisClientOptions } from 'redis'
 import { EventEmitter } from 'events'
 import { REDISCLOUD_URL } from 'shared/config'
 
+/**
+ * A class for managing Redis Publish/Subscribe operations.
+ *
+ * This class abstracts the complexity of subscribing and publishing messages to Redis
+ * channels and patterns.
+ *
+ * It uses reference counting to manage subscriptions, ensuring that channels and patterns
+ * are only unsubscribed when no more listeners are interested in them. This is particularly
+ * useful in applications with dynamic subscription needs.
+ *
+ * Design Patterns Used:
+ * - Singleton: Ensures a single instance of Redis clients.
+ * - Observer: Manages subscriptions and broadcasts messages to listeners.
+ *
+ * Principles:
+ * - Encapsulation: Hides the complexity of direct Redis operations.
+ * - Single Responsibility: Each method has a clear and distinct purpose.
+ *
+ * Usage Example:
+ * ```typescript
+ * const redisPubSub = new RedisPubSub();
+ * await redisPubSub.initialize({});
+ * redisPubSub.subscribe('myChannel', message => console.log(message));
+ * redisPubSub.unsubscribe('myChannel');
+ * redisPubSub.close();
+ * ```
+ *
+ * Note: Always ensure to call `close()` when the instance is no longer needed to prevent
+ * resource leaks.
+ */
 export class RedisPubSub extends EventEmitter {
   private client!: ReturnType<typeof createClient>
   private subscriber!: ReturnType<typeof createClient>
 
+  private channelRefCount = new Map<string, number>()
+  private patternRefCount = new Map<string, number>()
+  private channelCallbacks = new Map<string, Array<Function>>()
+  private patternCallbacks = new Map<string, Array<Function>>()
+
+  /**
+   * Initializes the Redis clients for publishing and subscribing.
+   * This method should be called before attempting any publish/subscribe operations.
+   *
+   * @param _options - The Redis client options, including the URL and socket configurations.
+   *
+   * Example:
+   * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
+   */
   async initialize(_options: RedisClientOptions): Promise<void> {
     const options: RedisClientOptions = {
       ..._options,
@@ -42,6 +86,15 @@ export class RedisPubSub extends EventEmitter {
     })
   }
 
+  /**
+   * Publishes a message to the specified Redis channel.
+   *
+   * @param channel - The Redis channel to publish the message to.
+   * @param message - The message to be published. Can be a string or an object.
+   *
+   * Example:
+   * await redisPubSub.publish('myChannel', 'Hello World');
+   */
   async publish(channel, message) {
     try {
       let serializedMessage
@@ -59,7 +112,27 @@ export class RedisPubSub extends EventEmitter {
     }
   }
 
+  /**
+   * Subscribes to a Redis channel with a callback to handle incoming messages.
+   *
+   * @param channel - The Redis channel to subscribe to.
+   * @param callback - The callback function to invoke with the message.
+   *
+   * Example:
+   * redisPubSub.subscribe('myChannel', message => console.log(message));
+   */
   async subscribe(channel, callback) {
+    this.channelRefCount.set(
+      channel,
+      (this.channelRefCount.get(channel) || 0) + 1
+    )
+
+    if (!this.channelCallbacks.has(channel)) {
+      this.channelCallbacks.set(channel, [])
+    }
+
+    this.channelCallbacks.get(channel)!.push(callback)
+
     const messageListener = message => {
       let deserializedMessage
       try {
@@ -82,7 +155,28 @@ export class RedisPubSub extends EventEmitter {
     }
   }
 
+  /**
+   * Subscribes to a Redis pattern with a callback to handle incoming messages.
+   *
+   * @param pattern - The Redis pattern to subscribe to.
+   * @param callback - The callback function to invoke with the message and channel.
+   *
+   * Example:
+   * redisPubSub.patternSubscribe('myPattern*', (message, channel) => console.log(message, channel));
+   */
   async patternSubscribe(pattern, callback) {
+    this.patternRefCount.set(
+      pattern,
+      (this.patternRefCount.get(pattern) || 0) + 1
+    )
+
+    // Store the callback for the pattern
+    if (!this.patternCallbacks.has(pattern)) {
+      this.patternCallbacks.set(pattern, [])
+    }
+
+    this.patternCallbacks.get(pattern)!.push(callback)
+
     const messageListener = (message, channel) => {
       let deserializedMessage
       try {
@@ -105,24 +199,121 @@ export class RedisPubSub extends EventEmitter {
     }
   }
 
-  async unsubscribe(channel) {
-    try {
-      await this.subscriber.unsubscribe(channel)
-      console.log(`Unsubscribed from the ${channel} channel.`)
-    } catch (err) {
-      console.error('Failed to unsubscribe from channel:', err)
-      return
+  /**
+   * Unsubscribes from a Redis pattern.
+   *
+   * @param pattern - The Redis pattern to unsubscribe from.
+   *
+   * Example:
+   * await redisPubSub.patternUnsubscribe('myPattern*');
+   */
+  async patternUnsubscribe(pattern) {
+    const currentCount = this.patternRefCount.get(pattern) || 0
+    if (currentCount > 1) {
+      // Decrease reference count but don't actually unsubscribe
+      this.patternRefCount.set(pattern, currentCount - 1)
+    } else {
+      // Unsubscribe only when count is 1 or less
+      await this.subscriber.pUnsubscribe(pattern)
+      this.patternRefCount.delete(pattern)
+      this.patternCallbacks.delete(pattern) // Remove all callbacks
+      console.log(`Unsubscribed from the ${pattern} pattern.`)
     }
   }
 
+  /**
+   * Unsubscribes from a Redis channel.
+   *
+   * @param channel - The Redis channel to unsubscribe from.
+   *
+   * Example:
+   * await redisPubSub.unsubscribe('myChannel');
+   */
+  async unsubscribe(channel) {
+    const currentCount = this.channelRefCount.get(channel) || 0
+    if (currentCount > 1) {
+      // Decrease reference count but don't actually unsubscribe
+      this.channelRefCount.set(channel, currentCount - 1)
+    } else {
+      // Unsubscribe only when count is 1 or less
+      await this.subscriber.unsubscribe(channel)
+      this.channelRefCount.delete(channel)
+      this.channelCallbacks.delete(channel) // Remove all callbacks
+      console.log(`Unsubscribed from the ${channel} channel.`)
+    }
+  }
+
+  /**
+   * Removes a specific callback from a given channel.
+   * This method is useful when you need to detach a particular callback from a channel
+   * without affecting other callbacks.
+   *
+   * @param channel - The channel from which the callback should be removed.
+   * @param callbackToRemove - The callback function to remove.
+   *
+   * Usage Example:
+   * const myCallback = message => console.log(message);
+   * redisPubSub.subscribe('myChannel', myCallback);
+   * // Later, to remove the callback
+   * redisPubSub.removeCallback('myChannel', myCallback);
+   */
+  removeCallback(channel, callbackToRemove) {
+    const callbacks = this.channelCallbacks.get(channel)
+    if (callbacks) {
+      // Filter out the specific callback
+      this.channelCallbacks.set(
+        channel,
+        callbacks.filter(callback => callback !== callbackToRemove)
+      )
+    }
+  }
+
+  /**
+   * Removes a specific callback from a given pattern subscription.
+   * This method is useful for detaching a particular callback from a pattern subscription, similar to `removeCallback` for channels.
+   *
+   * @param pattern - The pattern from which the callback should be removed.
+   * @param callbackToRemove - The callback function to remove.
+   *
+   * Usage Example:
+   * const myPatternCallback = (message, channel) => console.log(message, channel);
+   * redisPubSub.patternSubscribe('myPattern*', myPatternCallback);
+   * // Later, to remove the callback
+   * redisPubSub.removePatternCallback('myPattern*', myPatternCallback);
+   */
+  removePatternCallback(pattern, callbackToRemove) {
+    const callbacks = this.patternCallbacks.get(pattern)
+    if (callbacks) {
+      // Filter out the specific callback
+      this.patternCallbacks.set(
+        pattern,
+        callbacks.filter(callback => callback !== callbackToRemove)
+      )
+    }
+  }
+
+  /**
+   * Closes the Redis client connections.
+   * This method should be called when the RedisPubSub instance is no longer needed to properly release resources and prevent memory leaks.
+   *
+   * Usage Example:
+   * redisPubSub.close();
+   */
   close(): void {
     this.client.quit()
     this.subscriber.quit()
   }
 
-  // Message handling with promises is more complex, as messages can come in at any time.
-  // So, we can provide a method to wait for the next message on a channel.
-  // This method returns a promise that resolves with the next message received on the specified channel.
+  /**
+   * Waits for and retrieves the next message on a specified channel.
+   * This method is useful for scenarios where you need to handle messages in a promise-based manner.
+   *
+   * @param channel - The channel to listen for the next message.
+   * @returns A promise that resolves with the next message received on the specified channel.
+   *
+   * Usage Example:
+   * redisPubSub.getNextMessage('myChannel').then(message => console.log(message));
+   */
   getNextMessage(channel: string): Promise<string> {
     return new Promise(resolve => {
       const listener = (ch: string, message: string) => {
@@ -135,8 +326,16 @@ export class RedisPubSub extends EventEmitter {
     })
   }
 
-  // Method to wait for the next message on a pattern.
-  // This method returns a promise that resolves with the next message received on the specified pattern.
+  /**
+   * Waits for and retrieves the next message on a specified pattern.
+   * Similar to `getNextMessage`, but for pattern subscriptions.
+   *
+   * @param pattern - The pattern to listen for the next message.
+   * @returns A promise that resolves with the next message received on the specified pattern.
+   *
+   * Usage Example:
+   * redisPubSub.getNextPatternMessage('myPattern*').then(message => console.log(message));
+   */
   getNextPatternMessage(pattern: string): Promise<string> {
     return new Promise(resolve => {
       const listener = (pat: string, channel: string, message: string) => {
@@ -149,7 +348,16 @@ export class RedisPubSub extends EventEmitter {
     })
   }
 
-  // Retry strategy with exponential backoff
+  /**
+   * Implements a retry strategy with exponential backoff for the Redis client connections.
+   * This method is invoked internally in the event of connection failures and attempts to reconnect with increasing delays.
+   *
+   * @param attempt - The current attempt number.
+   * @returns The time to wait before the next reconnection attempt.
+   *
+   * Usage Note:
+   * This method is private and used internally by the Redis client to manage reconnection attempts.
+   */
   private retryStrategy(attempt: number): number {
     if (attempt > 10) {
       // We have tried to connect over 10 times, so don't retry
