@@ -73,6 +73,15 @@ export class PluginManager extends EventEmitter {
   /**
    * Creates an instance of PluginManager.
    * @param {string} pluginDirectory The directory where plugins are located.
+   * @param {Redis} connection The Redis connection.
+   * @param {string} agentId The agent ID of the agent running the plugin manager.
+   * @example
+   * ```typescript
+   * const pluginManager = new PluginManager(
+   *   path.join(__dirname, 'plugins'),
+   *   redisConnection,
+   *   agentId
+   * )
    * @memberof PluginManager
    */
   constructor(pluginDirectory: string, connection: Redis, agentId: string) {
@@ -182,8 +191,8 @@ export class PluginManager extends EventEmitter {
    * Retrieves a unified registry of all nodes, values, and dependencies from the plugins.
    * @returns A unified registry object.
    */
-  getUnifiedRegistry(): IRegistry {
-    const unifiedRegistry: IRegistry = {
+  getRegistry(baseRegistry?: IRegistry): IRegistry {
+    const unifiedRegistry: IRegistry = baseRegistry || {
       nodes: {},
       values: {},
       dependencies: {},
