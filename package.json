@@ -113,7 +113,7 @@
     "@types/pubsub-js": "1.8.3",
     "@use-gesture/react": "10.2.27",
     "@welldone-software/why-did-you-render": "7.0.1",
-    "axios": "1.4.0",
+    "axios": "1.6.0",
     "axios-retry": "^3.8.0",
     "bullmq": "4.6.0",
     "class-variance-authority": "^0.7.0",
