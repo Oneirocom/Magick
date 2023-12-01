@@ -1,9 +1,13 @@
+const dotenv = require('dotenv-flow')
+dotenv.config('../')
+
 const fs = require('fs')
 const path = require('path')
-console.log('DIRNAME', __dirname)
 const pluginModules = require('../plugins')
 const { writeNodeSpecsToJSON } = require('@magickml/behave-graph')
 const Redis = require('ioredis')
+const { RedisPubSub } = require('server/redis-pubsub')
+const { REDISCLOUD_URL } = require('shared/config')
 
 const checkIfCorePlugin = PluginClass => {
   return (
@@ -30,8 +34,13 @@ const getUnifiedRegistry = plugins => {
   return unifiedRegistry
 }
 
-const loadPlugins = () => {
+const loadPlugins = async () => {
   const connection = new Redis()
+  const pubSub = new RedisPubSub()
+
+  await pubSub.initialize({
+    url: REDISCLOUD_URL,
+  })
 
   const plugins = []
   for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
@@ -43,16 +52,18 @@ const loadPlugins = () => {
       console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
 
       // Create an instance of the plugin
-      const pluginInstance = new PluginClass(connection, '000000000')
+      const pluginInstance = new PluginClass(connection, '000000000', pubSub)
       plugins.push(pluginInstance)
     }
   }
   return plugins
 }
 
-function writeNodeSpecsToFile(fileLocation) {
+async function writeNodeSpecsToFile(fileLocation) {
   // Get the registry from all plugins
-  const registry = getUnifiedRegistry(loadPlugins())
+  const plugins = await loadPlugins()
+
+  const registry = getUnifiedRegistry(plugins)
 
   // Write the registry to JSON
   const nodeSpecsJson = writeNodeSpecsToJSON(registry)
