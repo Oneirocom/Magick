@@ -123,7 +123,7 @@ export type GetEventArgs = {
   channelType?: string
   connector?: string
   rawData?: string
-  projectId?: string
+  projectId: string
   $limit?: number
 }
 
