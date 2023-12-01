@@ -155,7 +155,11 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private initializePlugins() {
     // Load plugins
     this.pluginManager.loadPlugins().then(() => {
+      this.logger.trace(
+        `Plugins loaded in Spellbook for agent ${this.agent.id}`
+      )
       this.pluginManager.getPlugins().forEach(plugin => {
+        debugger
         this.setupPluginWorker(plugin)
       })
     })
@@ -174,12 +178,48 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * this.setupPluginWorker(plugin);
    */
   private setupPluginWorker(plugin: BasePlugin) {
+    this.logger.trace(`Setting up plugin worker for ${plugin.name}`)
     // Set up a Bull queue to process events from the plugin
     const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
     queue.initialize(plugin.queueName, async job => {
+      console.log('JOB RECEIVED', job.data)
       const { eventName } = job.data
       this.handlePluginEvent(plugin.name, eventName, job.data)
     })
+  }
+
+  /**
+   * Runs through all spells in the spell book, find the first available one and triggers the event in it.
+   * @param {string} eventName - Name of the event to trigger.
+   * @param {any} payload - Payload of the event.
+   * @example
+   * this.triggerSpellEvent('myEvent', { data: 'example' });
+   */
+  private async handlePluginEvent(
+    dependency: string,
+    eventName: string,
+    payload: EventPayload
+  ) {
+    this.logger.trace(`Handling event ${eventName} for ${dependency}`)
+    // Iterate over alll spell casters
+    for (const [spellId, spellMap] of this.spellMap.entries()) {
+      // Get the first available spell runner
+      const availableRunner = spellMap.find(runner => !runner.isBusy())
+      if (availableRunner) {
+        // Trigger the event in the spell runner
+        availableRunner.handleEvent(dependency, eventName, payload)
+        return
+      }
+
+      // If there are no available spell runners, we create a new one
+      const spellCaster = await this.loadById(spellId)
+
+      if (!spellCaster) {
+        this.agent.error(`Error handling event ${eventName} for ${spellId}`)
+        return
+      }
+      spellCaster?.handleEvent(dependency, eventName, payload)
+    }
   }
 
   /**
@@ -357,39 +397,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     const { spellId } = data
     for (const spellCaster of this.spellMap.get(spellId) || []) {
       spellCaster.stopRunLoop()
-    }
-  }
-
-  /**
-   * Runs through all spells in the spell book, find the first available one and triggers the event in it.
-   * @param {string} eventName - Name of the event to trigger.
-   * @param {any} payload - Payload of the event.
-   * @example
-   * this.triggerSpellEvent('myEvent', { data: 'example' });
-   */
-  private async handlePluginEvent(
-    dependency: string,
-    eventName: string,
-    payload: EventPayload
-  ) {
-    // Iterate over alll spell casters
-    for (const [spellId, spellMap] of this.spellMap.entries()) {
-      // Get the first available spell runner
-      const availableRunner = spellMap.find(runner => !runner.isBusy())
-      if (availableRunner) {
-        // Trigger the event in the spell runner
-        availableRunner.handleEvent(dependency, eventName, payload)
-        return
-      }
-
-      // If there are no available spell runners, we create a new one
-      const spellCaster = await this.loadById(spellId)
-
-      if (!spellCaster) {
-        this.agent.error(`Error handling event ${eventName} for ${spellId}`)
-        return
-      }
-      spellCaster?.handleEvent(dependency, eventName, payload)
     }
   }
 
