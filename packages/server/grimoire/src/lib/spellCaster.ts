@@ -162,8 +162,9 @@ class SpellCaster<Agent extends IAgent> {
    * executing.
    * @returns A promise that resolves when the graph is executed.
    */
-  async executeGraphOnce(): Promise<void> {
-    this.lifecycleEventEmitter.tickEvent.emit()
+  async executeGraphOnce(isEnd = false): Promise<void> {
+    if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
+    if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
     this.busy = true
     await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
     this.busy = false
@@ -184,8 +185,9 @@ class SpellCaster<Agent extends IAgent> {
    * Stops the run loop.  This is called by the spellbook when the spell is stopped.
    */
   stopRunLoop(): void {
+    // onnly execute once for the end event if it is running
+    if (this.isRunning) this.executeGraphOnce(true)
     this.isRunning = false
-    this.lifecycleEventEmitter.endEvent.emit()
   }
 
   /**
@@ -231,7 +233,6 @@ class SpellCaster<Agent extends IAgent> {
     this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
     this.stopRunLoop()
     this.engine.dispose()
-    this.isRunning = false
   }
 
   /**
