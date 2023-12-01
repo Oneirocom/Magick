@@ -17,6 +17,57 @@ interface IAgent {
   id: string
 }
 
+/**
+ * @class SpellCaster
+ * @description
+ * The `SpellCaster` class is a core component of our system, designed to manage the execution of spells
+ * (defined workflows or logical sequences) within a graph-based architecture. This class embodies several
+ * key software design principles and patterns that are crucial for a robust, scalable, and flexible system.
+ * Understanding these principles will be vital for both utilizing and extending the `SpellCaster` effectively.
+ *
+ * Key Design Principles:
+ * 1. Modularity: `SpellCaster` is designed as a self-contained module with a well-defined interface. This
+ *    encapsulation allows for easy testing, maintenance, and scalability. It can be used in different contexts
+ *    without affecting or being affected by other parts of the system.
+ *
+ * 2. Event-Driven Architecture: The class heavily relies on events for triggering and handling actions.
+ *    This approach allows for decoupling components and promotes a reactive system where changes or specific
+ *    conditions lead to corresponding actions.
+ *
+ * 3. Separation of Concerns: `SpellCaster` focuses solely on executing spells and managing their lifecycle.
+ *    It separates the concerns of spell logic from other system functionalities like event handling or data
+ *    persistence, ensuring that each module has a single responsibility.
+ *
+ * Usage Guidelines:
+ * - Initialization: Before using `SpellCaster`, ensure that the spell configuration and registry are correctly
+ * set up. The registry should include all necessary dependencies and configurations.
+ *
+ * - Event Handling: Utilize the `initializeHandlers` method to set up custom event listeners for node execution.
+ * This method is crucial for monitoring and controlling the execution flow.
+ *
+ * - Graph Execution: The `executeGraphOnce` method allows for running the graph's nodes. It should be used
+ * judiciously to control when and how often the graph is processed.
+ *
+ * - Extensibility: When extending `SpellCaster`, maintain the core principles and ensure that any additional
+ * functionality aligns with the existing architecture.
+ *
+ * For junior developers:
+ * Understanding `SpellCaster` is a great opportunity to learn about practical applications of design patterns
+ * and principles. When working with this class, always consider how your changes or extensions will interact
+ * with the existing architecture. Aim for clean, readable code that aligns with the principles outlined above.
+ * Don't hesitate to ask questions or seek clarification as you navigate through the system.
+ *
+ * @example
+ * // Example of using SpellCaster
+ * const spellCaster = new SpellCaster({ loopDelay: 100, agent: agentInstance });
+ * spellCaster.initialize(spellConfig, registry)
+ *   .then(() => {
+ *     // Spell is initialized and ready to execute
+ *   })
+ *   .catch(error => {
+ *     // Handle initialization errors
+ *   });
+ */
 class SpellCaster<Agent extends IAgent> {
   registry!: IRegistry
   engine!: Engine
