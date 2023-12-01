@@ -1,3 +1,7 @@
 .react-flow {
   overflow: initial !important;
 }
+
+.react-flow__minimap {
+  background-color: var(--midnight) !important;
+}
