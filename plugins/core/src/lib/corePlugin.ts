@@ -3,6 +3,8 @@ import { MessageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { coreEmitter } from './dependencies/coreEmitter'
 import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
+import CoreEventReceiver from './services/coreEventReceiver'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 const pluginName = 'Core'
 
@@ -10,16 +12,17 @@ const pluginName = 'Core'
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
 export class CorePlugin extends CoreEventsPlugin {
+  coreEventreceiver: CoreEventReceiver
   nodes = [MessageEvent]
-
   values = []
-
   dependencies = {
     [pluginName]: coreEmitter,
   }
 
-  constructor(connection: Redis, agentId: string) {
+  constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
+
+    this.coreEventreceiver = new CoreEventReceiver(pubSub, agentId)
   }
 
   /**
@@ -43,6 +46,7 @@ export class CorePlugin extends CoreEventsPlugin {
 
   initializeFunctionalities() {
     this.centralEventBus.on(ON_MESSAGE, this.handleMessage.bind(this))
+    this.coreEventreceiver.onMessage(this.handleMessage.bind(this))
   }
 
   handleMessage(payload: EventPayload) {
