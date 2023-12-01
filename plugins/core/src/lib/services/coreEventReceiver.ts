@@ -48,6 +48,14 @@ class CoreEventReceiver {
 
   coreEventHandler(message, channel) {
     const eventType = this.extractEventType(channel)
+
+    if (!this.eventHandlers.has(eventType)) {
+      this.logger.warn(
+        `No handler registered for event type '${eventType}'. Message will be ignored.`
+      )
+      return
+    }
+
     this.eventHandlers
       .get(eventType)
       ?.forEach(handler => handler(JSON.parse(message)))
