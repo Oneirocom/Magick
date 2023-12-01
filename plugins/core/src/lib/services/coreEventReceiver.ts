@@ -49,23 +49,16 @@ class CoreEventReceiver {
   coreEventHandler(message, channel) {
     const eventType = this.extractEventType(channel)
 
-    if (!this.eventHandlers.has(eventType)) {
-      this.logger.warn(
-        `No handler registered for event type '${eventType}'. Message will be ignored.`
-      )
-      return
-    }
+    this.logger.debug(`Received event of type '${eventType}'`)
 
-    this.eventHandlers
-      .get(eventType)
-      ?.forEach(handler => handler(JSON.parse(message)))
+    this.eventHandlers.get(eventType)?.forEach(handler => handler(message))
   }
 
   /**
    * Subscribes to Redis channels based on a pattern specific to the agent's core events.
    * It listens to all events of the format 'agent:{agentId}:Core:*'.
    *
-   * This method demonstrates the use of pattern-based subscriptions in Redis, which
+   * This method demonstrates the use of pattern-based subscriptionas in Redis, which
    * is a powerful feature for subscribing to multiple channels with similar naming conventions.
    *
    * Example:
@@ -76,6 +69,7 @@ class CoreEventReceiver {
    */
   private subscribeToCoreEvents(): void {
     const pattern = `agent:${this.agentId}:Core:*`
+    this.logger.debug(`Subscribing to pattern '${pattern}'`)
     this.pubSub.patternSubscribe(pattern, this.coreEventHandler.bind(this))
   }
 
