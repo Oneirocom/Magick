@@ -210,6 +210,12 @@ export class Agent implements AgentInterface {
         this.spellManager.toggleLive(data)
         this.spellbook.toggleLive(data)
       },
+      pauseSpell: async (data: any) => {
+        this.spellbook.pauseSpell(data)
+      },
+      playSpell: async (data: any) => {
+        this.spellbook.playSpell(data)
+      },
     })
   }
 
