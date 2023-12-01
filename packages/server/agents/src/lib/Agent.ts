@@ -94,7 +94,6 @@ export class Agent implements AgentInterface {
     this.spellbook = new Spellbook({
       agent: this,
       app,
-      plugins: [],
     })
     ;(async () => {
       // initialize the plugins
