@@ -7,6 +7,7 @@ import pino from 'pino'
 import { getLogger } from 'server/logger'
 import Redis from 'ioredis'
 import * as plugins from './../../../../../plugins'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
@@ -18,6 +19,13 @@ export class PluginManager extends EventEmitter {
    * @type {Redis}
    */
   private connection: Redis
+
+  /**
+   * The Redis PubSub connection.
+   * @private
+   * @type {RedisPubSub}
+   */
+  private pubSub: RedisPubSub
 
   /**
    * The map of plugins, keyed by name.
@@ -84,9 +92,15 @@ export class PluginManager extends EventEmitter {
    * )
    * @memberof PluginManager
    */
-  constructor(pluginDirectory: string, connection: Redis, agentId: string) {
+  constructor(
+    pluginDirectory: string,
+    connection: Redis,
+    agentId: string,
+    pubSub: RedisPubSub
+  ) {
     super()
     this.agentId = agentId
+    this.pubSub = pubSub
     this.connection = connection
     this.pluginDirectory = pluginDirectory
     this.plugins = new Map()
@@ -121,7 +135,11 @@ export class PluginManager extends EventEmitter {
         console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
 
         // Create an instance of the plugin
-        const pluginInstance = new PluginClass(this.connection, this.agentId)
+        const pluginInstance = new PluginClass(
+          this.connection,
+          this.agentId,
+          this.pubSub
+        )
         this.registerPlugin(pluginInstance)
       }
     }
