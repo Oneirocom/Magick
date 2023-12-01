@@ -337,6 +337,30 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Starts the spell runner for the given spell id.
+   * Used by the agent to control the spell runner via commands.
+   * @param {string} spellId - Id of the spell.
+   */
+  playSpell(data) {
+    const { spellId } = data
+    for (const spellCaster of this.spellMap.get(spellId) || []) {
+      spellCaster.startRunLoop()
+    }
+  }
+
+  /**
+   * Stops the spell runner for the given spell id.
+   * Used by the agent to control the spell runner via commands.
+   * @param {string} spellId - Id of the spell.
+   */
+  pauseSpell(data) {
+    const { spellId } = data
+    for (const spellCaster of this.spellMap.get(spellId) || []) {
+      spellCaster.stopRunLoop()
+    }
+  }
+
+  /**
    * Runs through all spells in the spell book, find the first available one and triggers the event in it.
    * @param {string} eventName - Name of the event to trigger.
    * @param {any} payload - Payload of the event.
