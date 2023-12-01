@@ -12,6 +12,7 @@ const pluginName = 'Core'
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
 export class CorePlugin extends CoreEventsPlugin {
+  override enabled = true
   coreEventreceiver: CoreEventReceiver
   nodes = [MessageEvent]
   values = []
