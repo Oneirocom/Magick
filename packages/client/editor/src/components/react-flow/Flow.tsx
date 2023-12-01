@@ -6,11 +6,13 @@ import CustomControls from './Controls.js';
 import { NodePicker } from './NodePicker.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
-import { Tab } from '@magickml/providers';
+import { Tab, useConfig, usePubSub } from '@magickml/providers';
 
 import './flowOverrides.css'
 import { SpellInterface } from 'server/schemas';
 import { getNodeSpec } from 'shared/nodeSpec';
+import { useSelector } from 'react-redux';
+import { RootState } from 'client/state';
 
 type FlowProps = {
   spell: SpellInterface;
@@ -25,6 +27,12 @@ export const Flow: React.FC<FlowProps> = ({
   tab
 }) => {
   const specJson = getNodeSpec()
+  const [playing, setPlaying] = React.useState(false);
+  const { publish, events } = usePubSub()
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { projectId, currentAgentId } = globalConfig
+
+  const { SEND_COMMAND } = events
 
   const {
     nodes,
@@ -57,8 +65,28 @@ export const Flow: React.FC<FlowProps> = ({
     parentRef
   });
 
-  const playing = false;
-  const togglePlay = () => { };
+  const togglePlay = () => {
+    if (playing) {
+      publish(SEND_COMMAND, {
+        projectId,
+        agentId: currentAgentId,
+        command: 'agent:core:pauseSpell',
+        data: {
+          spellId: spell.id
+        }
+      })
+    } else {
+      publish(SEND_COMMAND, {
+        projectId,
+        agentId: currentAgentId,
+        command: 'agent:core:playSpell',
+        data: {
+          spellId: spell.id
+        }
+      })
+    }
+    setPlaying(!playing);
+  };
 
   return (
     <ReactFlow
