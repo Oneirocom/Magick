@@ -6,11 +6,11 @@ import { getLogger } from 'shared/core'
 import { isEqual } from 'radash'
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
-import { Paginated } from '@feathersjs/feathers'
-import { checkPaginated } from 'shared/utils'
-import { Spell } from './Spell'
-import { SpellData } from 'client/state'
-import { SpellQuery } from 'packages/server/core/src/services/spells/spells.schema'
+// import { Paginated } from '@feathersjs/feathers'
+// import { checkPaginated } from 'shared/utils'
+// import { Spell } from './Spell'
+// import { SpellData } from 'client/state'
+// import { SpellQuery } from 'packages/server/core/src/services/spells/spells.schema'
 
 type SpellManagerArgs = {
   socket?: io.Socket
@@ -148,20 +148,19 @@ export default class SpellManager {
    * @param {string} spellId - Id of the spell.
    * @returns {Promise<SpellRunner | undefined>} - Promise that resolves with the loaded spell runner instance or undefined if there was an error.
    */
-  async loadById(spellId: string, versionId?: string | null): Promise<SpellRunner | undefined> {
+  async loadById(spellId: string): Promise<SpellRunner | undefined> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
-      const spellService = this.app.service('spells');
-
-      const query: { versionId?: string } = {}
-      if (versionId) {
-        query.versionId = versionId
-      }
-
+      const spellService = this.app.service('spells')
+      const query: { spellReleaseId?: string } = {}
       const spell = await spellService.get(spellId, { query })
 
       if (!spell) {
-        this.logger.error({spellId, versionId}, `Error loading spell %s with version %s: %s`, spellId, versionId)
+        this.logger.error(
+          { spellId },
+          `Error loading spell %s with version %s: %s`,
+          spellId
+        )
       }
 
       if (
@@ -175,10 +174,15 @@ export default class SpellManager {
         return this.getReadySpellRunner(spellId)
       }
 
-      this.logger.debug({spellId}, `Reloading spell %s`, spellId)
+      this.logger.debug({ spellId }, `Reloading spell %s`, spellId)
       return this.load(spell)
     } catch (error) {
-      this.logger.error({spellId}, `Error loading spell %s: %o`, spellId, error)
+      this.logger.error(
+        { spellId },
+        `Error loading spell %s: %o`,
+        spellId,
+        error
+      )
       return
     }
   }
