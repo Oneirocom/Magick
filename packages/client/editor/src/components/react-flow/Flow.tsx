@@ -1,6 +1,6 @@
 import { IRegistry } from '@magickml/behave-graph';
 import React from 'react';
-import { Background, BackgroundVariant, ReactFlow } from 'reactflow';
+import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
 
 import CustomControls from './Controls.js';
 import { NodePicker } from './NodePicker.js';
@@ -27,10 +27,12 @@ export const Flow: React.FC<FlowProps> = ({
   tab
 }) => {
   const specJson = getNodeSpec()
-  const [playing, setPlaying] = React.useState(false);
-  const { publish, events } = usePubSub()
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { projectId, currentAgentId } = globalConfig
+  const { publish, events } = usePubSub()
+
+  const [playing, setPlaying] = React.useState(false);
+  const [miniMapOpen, setMiniMapOpen] = React.useState(false);
 
   const { SEND_COMMAND } = events
 
@@ -109,12 +111,17 @@ export const Flow: React.FC<FlowProps> = ({
         togglePlay={togglePlay}
         setBehaviorGraph={setGraphJson}
         specJson={specJson}
+        miniMapOpen={miniMapOpen}
+        toggleMiniMap={() => setMiniMapOpen(!miniMapOpen)}
       />
       <Background
         variant={BackgroundVariant.Lines}
         color="var(--background-color)"
         style={{ backgroundColor: 'var(--deep-background-color)' }}
       />
+      {miniMapOpen &&
+        <MiniMap nodeStrokeWidth={3} maskColor="#69696930" nodeColor="var(--charcoal)" pannable zoomable />
+      }
       {nodePickerVisibility && (
         <NodePicker
           position={nodePickerVisibility}
