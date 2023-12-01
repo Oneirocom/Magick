@@ -23,6 +23,7 @@ export const events: PubSubEvents = {
   TOGGLE_SNAP: 'toggleSnap',
   RUN_AGENT: 'runAgent',
   SEND_COMMAND: 'sendCommand',
+  MESSAGE_AGENT: 'messageAgent',
   TOGGLE_FILE_DRAWER: 'toggleFileDrawer',
   $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
@@ -97,10 +98,16 @@ export const PubSubProvider = ({ children }) => {
       client.service('agents').command(data)
     })
 
+    const unsubscribeMessage = subscribe(events.MESSAGE_AGENT, (event, data) => {
+      console.log('SENDING MESSAGE DATA', data)
+      client.service('agents').message(data)
+    })
+
 
     return () => {
       unsubscribeRun()
       unsubscribeCommand()
+      unsubscribeMessage()
 
     }
   }, [client])

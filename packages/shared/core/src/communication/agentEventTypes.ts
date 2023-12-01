@@ -10,3 +10,7 @@ export const AGENT_COMMAND = (agentId: string) =>
 export const AGENT_COMMAND_PROJECT = (projectId: string) =>
   `agent:${projectId}:command`
 export const AGENT_DELETE = `agent:delete`
+
+// This cant be hardcodded
+export const AGENT_MESSAGE = (agentId: string) =>
+  `agent:${agentId}:Core:messageReceived`

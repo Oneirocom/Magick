@@ -8,6 +8,7 @@ import {
   AGENT_DELETE,
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
+  AGENT_MESSAGE,
 } from 'shared/core'
 import { getLogger } from 'server/logger'
 import type { MagickSpellInput } from 'shared/core'
@@ -216,7 +217,19 @@ export class AgentCommander extends EventEmitter {
     return jobId
   }
 
+  message(agentId: string, data: EventPayload) {
+    const eventPayload: EventPayload = {
+      ...data,
+    }
+
+    this.logger.debug(
+      data,
+      `Sending message ${AGENT_MESSAGE(agentId)} to agent ${agentId} `
+    )
+    this.pubSub.publish(AGENT_MESSAGE(agentId), eventPayload)
+  }
+
   async removeAgent(agentId: string) {
-    this.pubSub.emit(AGENT_DELETE, agentId)
+    this.pubSub.publish(AGENT_DELETE, agentId)
   }
 }
