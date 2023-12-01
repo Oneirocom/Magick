@@ -25,7 +25,9 @@ const spellDataSchemaProperties = {
   updatedAt: spellSchema.properties.updatedAt,
   hash: spellSchema.properties.hash,
   type: spellSchema.properties.type,
-  versionId: Type.Optional(Type.Union([Type.Null(), spellSchema.properties.versionId])),
+  spellReleaseId: Type.Optional(
+    Type.Union([Type.Null(), spellSchema.properties.spellReleaseId])
+  ),
   id: spellSchema.properties.id,
 }
 
@@ -62,10 +64,10 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'projectId',
   'graph',
   'type',
-  'versionId',
   'createdAt',
   'updatedAt',
   'hash',
+  'spellReleaseId',
 ])
 export const spellQuerySchema = Type.Intersect(
   [
