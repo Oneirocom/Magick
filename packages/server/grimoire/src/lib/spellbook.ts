@@ -8,17 +8,16 @@ import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
 
-import { CoreRegistry } from './coreRegistry'
+import { BaseRegistry } from './baseRegistry'
 import { PluginManager } from 'server/pluginManager'
+import { IAgentLogger } from 'server/agents'
 
 interface IApplication extends FeathersApplication {
   service: any
 }
 
-interface IAgent {
+interface IAgent extends IAgentLogger {
   id: string
-  error: (message: string) => void
-  log: (message: string) => void
 }
 
 /**
@@ -52,12 +51,6 @@ interface IAgent {
  */
 export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   /**
-   * Core registry.
-   * This contains all the core dependencies for spellbook.
-   * Includes primary handler for the core events magick handles.
-   */
-  private coreRegistry!: IRegistry
-  /**
    * Map of spell runners for each spell id.
    * We use this to scale spell runners and to keep track of them.
    */
@@ -76,17 +69,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private agent: Agent
 
   /**
-   * Array of plugins.
+   * The main plugin manager.  This loads up all plugins in the plugin folder and provides
+   * a unified registry for all plugins.
    * @example
-   * plugins = [plugin1, plugin2];
-   * @example
-   * plugins.forEach(plugin => {
-   *   this.registerPluginEventEmitter(plugin.name, plugin.eventEmitter);
-   *   this.setupPluginWorker(plugin);
-   * });
+   * this.pluginManager = new PluginManager(
+   *   pluginDirectory,
+   *   this.app.get('redis'),
+   *   this.agent.id
+   * );
    */
-  private plugins: BasePlugin[]
-
   private pluginManager!: PluginManager
 
   /**
@@ -133,18 +124,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *  watchSpells: true,
    * });
    */
-  constructor({
-    app,
-    agent,
-    plugins,
-  }: {
-    app: Application
-    agent: any
-    plugins: BasePlugin[]
-  }) {
+  constructor({ app, agent }: { app: Application; agent: any }) {
     this.app = app
     this.agent = agent
-    this.plugins = plugins
     this.init()
   }
 
@@ -155,9 +137,11 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       this.app.get('redis'),
       this.agent.id
     )
-    this.coreRegistry = new CoreRegistry().getRegistry()
-    this.initializePlugins()
-    this.buildRegistry(this.coreRegistry)
+
+    // Initialize the plugins first
+    this.mainRegistry = this.initializePlugins()
+
+    // Listen for spell changes
     this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
   }
 
@@ -174,6 +158,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         this.setupPluginWorker(plugin)
       })
     })
+
+    // When we are done loading plugins, we build the registry
+    const baseRegistry = new BaseRegistry(this.agent).getRegistry()
+    return this.pluginManager.getRegistry(baseRegistry)
   }
 
   /**
@@ -345,37 +333,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       }
     }
     this.spellMap.delete(spellId)
-  }
-
-  /**
-   * Builds the registry for the Spellbook.
-   * We start with an initial base registry.
-   * We then combine each plugin's registry with the current combined registry.
-   * Finally, we apply the core profile to the combined registry.
-   * @returns {IRegistry} - The built registry.
-   */
-  private buildRegistry(coreRegistry: IRegistry): IRegistry {
-    // Start with an initial base registry
-    let combinedRegistry: IRegistry = coreRegistry
-    // Combine each plugin's registry with the current combined registry
-    this.plugins.forEach(plugin => {
-      const pluginRegistry = plugin.getRegistry(combinedRegistry)
-      combinedRegistry = {
-        values: { ...combinedRegistry.values, ...pluginRegistry.values },
-        nodes: { ...combinedRegistry.nodes, ...pluginRegistry.nodes },
-        dependencies: {
-          ...combinedRegistry.dependencies,
-          ...pluginRegistry.dependencies,
-        },
-      }
-    })
-
-    // Finally, apply the core profile to the combined registry
-    combinedRegistry = registerCoreProfile(combinedRegistry)
-
-    this.mainRegistry = combinedRegistry
-
-    return combinedRegistry
   }
 
   /**
