@@ -28,7 +28,7 @@ export const createPosthogClient = (app: Application) => {
       let commonProps = { ...properties }
 
       if (agentId) {
-        commonProps = { ...commonProps, agent_id: agentId, agent: true }
+        commonProps = { ...commonProps, agentId, agent: true }
       }
 
       // could add event properties here too:
