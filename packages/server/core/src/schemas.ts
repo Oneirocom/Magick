@@ -8,9 +8,11 @@ import { Static, Type } from '@feathersjs/typebox'
  * @property {string} projectId - The ID of the project that the spell belongs to.
  * @property {string} name - The name of the spell.
  * @property {string} hash - The hash of the spell.
+ * @property {string} [type] - The type of the spell (optional).
  * @property {object} graph - The spell's graph object.
  * @property {string} graph.id - The ID of the spell's graph.
  * @property {any} graph.nodes - The nodes of the spell's graph.
+ * @property {string} [spellReleaseId] - The ID of the spell's spell release record(optional).
  * @property {string} [createdAt] - The date when the spell was created (optional).
  * @property {string} [updatedAt] - The date when the spell was last updated (optional).
  */
@@ -25,7 +27,7 @@ export const spellSchema = Type.Object(
       id: Type.Optional(Type.String()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
-    versionId: Type.Optional(Type.String()),
+    spellReleaseId: Type.Optional(Type.String()),
     createdAt: Type.Optional(Type.String()),
     updatedAt: Type.Optional(Type.String()),
   },
@@ -132,7 +134,7 @@ export type Document = Static<typeof documentSchema>
  * @property {string} [secrets] - The secrets of the agent (optional).
  * @property {string} [image] - The image of the agent (optional).
  */
-export const agentReleaseSchema = Type.Object(
+export const spellReleaseSchema = Type.Object(
   {
     id: Type.String(),
     agentId: Type.String(),
@@ -140,12 +142,12 @@ export const agentReleaseSchema = Type.Object(
     createdAt: Type.String(),
   },
   {
-    $id: 'AgentRelease',
+    $id: 'SpellRelease',
     additionalProperties: false,
   }
 )
 
 /** The type for an agent object that's based on the `agentSchema`. */
-export type AgentReleaseSchema = Static<typeof agentSchema>
+export type SpellReleaseSchema = Static<typeof spellSchema>
 /** The interface for an agent object that's based on the `agentSchema`. */
-export type AgentReleaseInterface = AgentReleaseSchema
+export type SpellReleaseInterface = SpellReleaseSchema
