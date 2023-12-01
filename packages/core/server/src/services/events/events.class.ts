@@ -6,7 +6,7 @@
 
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
-import { KnexAdapter, KnexService } from '@feathersjs/knex'
+import { KnexAdapter } from '@feathersjs/knex'
 import { app } from '../../app'
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
@@ -95,10 +95,6 @@ export class EventService<
     if (param.id) query.where({ id: param.id })
     if (param.client) query.where({ client: param.client })
     if (param.channel) query.where({ channel: param.channel })
-
-    // if (param.projectId) query.where({ projectId: param.projectId })
-    // if (param.content && param.embedding)
-    //   query.where({ content: param.content })
 
     query.limit(param['$limit'])
 

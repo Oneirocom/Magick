@@ -275,9 +275,6 @@ export class EventRecall extends MagickComponent<Promise<InputReturn>> {
       }
     }
 
-    console.log('FILTER TYPE', filterBy)
-    console.log('Sending query to events service: ', data)
-
     const events = await getEvents(data)
     return {
       events,
