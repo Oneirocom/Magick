@@ -1,6 +1,7 @@
 import { type PubSub } from 'server/communication'
 import Agent from './Agent'
 import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 export interface CommandListener<T> {
   callback: (data: T, agent: Agent) => void
@@ -21,14 +22,14 @@ export class CommandHub {
   /**
    * The worker instance.
    */
-  private pubsub: PubSub
+  private pubsub: RedisPubSub
 
   /**
    * Creates a new CommandHub instance.
    * @param agent - The agent instance.
    * @param worker - The worker instance.
    */
-  constructor(agent: Agent, pubsub: PubSub) {
+  constructor(agent: Agent, pubsub: RedisPubSub) {
     this.agent = agent
 
     // Generate queue name
@@ -80,6 +81,7 @@ export class CommandHub {
    * @returns True if the event type is valid, false otherwise.
    */
   private validateEventType(eventType: string): boolean {
+    if (!eventType) return false
     const parts = eventType.split(':')
     return parts.length === 3
   }

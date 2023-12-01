@@ -4,7 +4,7 @@ import _ from 'lodash'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
 import { AGENT_UPDATE_TIME_MSEC, PING_AGENT_TIME_MSEC } from 'shared/config'
-import { BullMQWorker, RedisPubSubWrapper } from 'server/communication'
+import { BullMQWorker } from 'server/communication'
 
 /**
  * Class for managing agents.
@@ -168,7 +168,7 @@ export class AgentManager {
         data,
         this,
         new BullMQWorker(this.app.get('redis')),
-        new RedisPubSubWrapper(this.app.get('pubsub')),
+        this.app.get('pubsub'),
         this.app
       )
 

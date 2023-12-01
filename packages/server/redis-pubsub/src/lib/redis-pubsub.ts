@@ -121,7 +121,7 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * redisPubSub.subscribe('myChannel', message => console.log(message));
    */
-  async subscribe(channel, callback) {
+  async subscribe(channel: string, callback) {
     this.channelRefCount.set(
       channel,
       (this.channelRefCount.get(channel) || 0) + 1
@@ -140,6 +140,7 @@ export class RedisPubSub extends EventEmitter {
         callback(deserializedMessage)
       } catch (err) {
         console.error('Failed to deserialize message:', err)
+        callback(null)
         return
       }
     }
