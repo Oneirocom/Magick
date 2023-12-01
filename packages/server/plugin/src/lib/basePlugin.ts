@@ -76,12 +76,12 @@ export abstract class BasePlugin<
 > extends Plugin {
   protected events: EventDefinition[]
   protected eventQueue: BullQueue
-  protected enabled: boolean = false
   protected centralEventBus!: EventEmitter
   abstract dependencies?: Record<string, any>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
+  enabled: boolean = false
   logger = getLogger()
   eventEmitter: EventEmitter
 
@@ -150,7 +150,7 @@ export abstract class BasePlugin<
    */
   protected emitEvent(eventName: string, payload: EventPayload) {
     if (!this.enabled) return
-    this.eventEmitter.emit(`event:${this.name}:${eventName}`, payload)
+    this.eventEmitter.emit(eventName, payload)
   }
 
   /**
@@ -283,6 +283,8 @@ export abstract class BasePlugin<
   mapEventsToQueue() {
     this.events.forEach(event => {
       this.eventEmitter.on(event.eventName, async payload => {
+        payload.eventName = event.eventName
+        this.logger.debug(`Sending event ${event.eventName} to queue`)
         await this.eventQueue.addJob(event.eventName, payload)
       })
     })
