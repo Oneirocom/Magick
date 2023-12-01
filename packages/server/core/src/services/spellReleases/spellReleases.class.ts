@@ -3,8 +3,6 @@
 import type { Params } from '@feathersjs/feathers'
 import { KnexAdapter } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-// import { app } from '../../app'
-// import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type {
   SpellRelease,
@@ -12,7 +10,6 @@ import type {
   SpellReleasePatch,
   SpellReleaseQuery,
 } from './spellReleases.schema'
-import { NotFound } from '@feathersjs/errors'
 
 // Define SpellReleasesParams type based on KnexAdapterParams with AgentQuery
 export type SpellReleasesParams = KnexAdapterParams<SpellReleaseQuery>
