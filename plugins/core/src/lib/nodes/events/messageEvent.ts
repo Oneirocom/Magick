@@ -25,12 +25,24 @@ export const MessageEvent = makeEventNodeDefinition({
     event: 'object',
   },
   initialState: makeInitialState(),
-  init: ({ state, write, commit, graph: { getDependency } }) => {
+  init: args => {
+    const {
+      state,
+      write,
+      commit,
+      node,
+      engine,
+      graph: { getDependency },
+    } = args
     Assert.mustBeTrue(state[ON_MESSAGE] === undefined)
     const onStartEvent = (event: EventPayload) => {
       write('event', event)
       write('content', event.content)
       commit('flow')
+
+      if (!node || !engine) return
+
+      engine.onNodeExecutionEnd.emit(node)
     }
 
     const coreEventEmitter = getDependency<CoreEmitter>('Core')
