@@ -151,8 +151,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     const jsonDiff = diff(currentSpell, updatedSpell)
 
-    console.log('DIFF', jsonDiff)
-
     // no point saving if nothing has changed
     if (jsonDiff.length === 0) {
       console.warn('No changes to save')
