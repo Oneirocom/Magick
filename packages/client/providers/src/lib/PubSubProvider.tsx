@@ -94,12 +94,10 @@ export const PubSubProvider = ({ children }) => {
     })
 
     const unsubscribeCommand = subscribe(events.SEND_COMMAND, (event, data) => {
-      console.log('SENDING COMMAND DATA', data)
       client.service('agents').command(data)
     })
 
     const unsubscribeMessage = subscribe(events.MESSAGE_AGENT, (event, data) => {
-      console.log('SENDING MESSAGE DATA', data)
       client.service('agents').message(data)
     })
 
