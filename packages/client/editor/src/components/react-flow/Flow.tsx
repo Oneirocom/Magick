@@ -45,7 +45,7 @@ export const Flow: React.FC<FlowProps> = ({
     nodeTypes,
     onConnect
   } = useBehaveGraphFlow({
-    initialGraphJson: spell.graph,
+    spell,
     specJson,
     tab
   });

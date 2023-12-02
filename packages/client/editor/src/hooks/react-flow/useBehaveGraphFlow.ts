@@ -18,6 +18,7 @@ import {
 } from 'client/state'
 import { useSelector } from 'react-redux'
 import { debounce } from 'lodash'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Hook that returns the nodes and edges for react-flow, and the graphJson for the behave-graph.
@@ -27,11 +28,11 @@ import { debounce } from 'lodash'
  * @returns
  */
 export const useBehaveGraphFlow = ({
-  initialGraphJson,
+  spell,
   specJson,
   tab,
 }: {
-  initialGraphJson: GraphJSON
+  spell: SpellInterface
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
@@ -56,9 +57,9 @@ export const useBehaveGraphFlow = ({
   }, [])
 
   useEffect(() => {
-    if (!initialGraphJson) return
-    setGraphJson(initialGraphJson)
-  }, [initialGraphJson, setGraphJson])
+    if (!spell) return
+    setGraphJson(spell.graph)
+  }, [spell, setGraphJson])
 
   // Make sure we are only doing this conversion when the graph changes
   // Debounce because changes stream in.
@@ -83,6 +84,7 @@ export const useBehaveGraphFlow = ({
   }, [debouncedUpdate, nodes, edges, specJson])
 
   const nodeTypes = useCustomNodeTypes({
+    spell,
     specJson,
   })
 
