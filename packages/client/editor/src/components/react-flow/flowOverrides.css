@@ -5,3 +5,11 @@
 .react-flow__minimap {
   background-color: var(--midnight) !important;
 }
+
+.react-flow__controls-button {
+  background-color: var(--slate) !important;
+}
+
+/* .react-flow__controls-button svg {
+  color: white !important;
+} */
