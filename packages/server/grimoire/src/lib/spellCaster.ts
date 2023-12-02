@@ -182,6 +182,28 @@ class SpellCaster<Agent extends IAgent> {
   }
 
   /**
+   * emit the node work event to the agent when it is executed.
+   * @param nodeId - The id of the node.
+   * @param node - The node.
+   * @returns A promise that resolves when the event is emitted.
+   * @example
+   * spellCaster.emitNodeWork(nodeId, node)
+   */
+  emitNodeWork(nodeId: string, node: INode) {
+    const event = `${this.spell.id}-${nodeId}`
+
+    const message = {
+      event,
+      nodeId,
+      type: node.description.typeName,
+      outputs: node.outputs,
+      inputs: node.inputs,
+    }
+
+    this.emitAgentSpellEvent(message)
+  }
+
+  /**
    * Starts the run loop.  We set running to true, fire off the appropriate lifecycle events.
    * Then we loop through the engine and execute all the nodes.  We then wait for the loop delay
    * and then repeat. We are also ensuring that the engine is labelled busy when it is actively
@@ -306,28 +328,6 @@ class SpellCaster<Agent extends IAgent> {
    */
   isBusy() {
     return this.busy
-  }
-
-  /**
-   * emit the node work event to the agent when it is executed.
-   * @param nodeId - The id of the node.
-   * @param node - The node.
-   * @returns A promise that resolves when the event is emitted.
-   * @example
-   * spellCaster.emitNodeWork(nodeId, node)
-   */
-  emitNodeWork(nodeId: string, node: INode) {
-    const event = `${this.spell.id}-${nodeId}`
-
-    const message = {
-      event,
-      nodeId,
-      type: node.description.typeName,
-      outputs: node.outputs,
-      inputs: node.inputs,
-    }
-
-    this.emitAgentSpellEvent(message)
   }
 
   /*
