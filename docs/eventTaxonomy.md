@@ -18,3 +18,6 @@ agent:{agentId}:job:delete
 Plugin events
 
 agent:{agentId}:{pluginName}:event
+
+agent:{agentId}:spellBook:play
+agent:{agentId}:spellBook:pause
