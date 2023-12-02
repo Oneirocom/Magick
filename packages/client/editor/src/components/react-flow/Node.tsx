@@ -1,5 +1,5 @@
 import { NodeSpecJSON } from '@magickml/behave-graph';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NodeProps as FlowNodeProps, useEdges } from 'reactflow';
 
 import InputSocket from './InputSocket.js';
@@ -7,10 +7,13 @@ import NodeContainer from './NodeContainer.js';
 import OutputSocket from './OutputSocket.js';
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData.js';
 import { isHandleConnected } from '../../utils/isHandleConnected.js';
+import { useSelectAgentsSpell } from 'client/state';
+import { SpellInterface } from 'server/schemas';
 
 type NodeProps = FlowNodeProps & {
   spec: NodeSpecJSON;
   allSpecs: NodeSpecJSON[];
+  spell: SpellInterface
 };
 
 const getPairs = <T, U>(arr1: T[], arr2: U[]) => {
@@ -28,13 +31,36 @@ export const Node: React.FC<NodeProps> = ({
   data,
   spec,
   selected,
-  allSpecs
+  allSpecs,
+  spell
 }: NodeProps) => {
+  const { lastItem: spellEvent } = useSelectAgentsSpell()
+  const [eventName, setEventName] = useState<string | null>(null)
+  const [fired, setFired] = useState(false)
   const edges = useEdges();
   const handleChange = useChangeNodeData(id);
   const pairs = getPairs(spec.inputs, spec.outputs);
+
+  useEffect(() => {
+    if (!spell || !id) return;
+    setEventName(`${spell.id}-${id}`)
+  }, [spell, id])
+
+  useEffect(() => {
+    if (!spellEvent) return;
+    if (spellEvent.event === eventName) {
+      // handleChange('eventName', spellEvent.eventName)
+      setFired(true)
+
+      setTimeout(() => {
+        setFired(false)
+      }, 3000)
+    }
+  }, [spellEvent])
+
   return (
     <NodeContainer
+      fired={fired}
       title={spec.label}
       category={spec.category}
       selected={selected}
