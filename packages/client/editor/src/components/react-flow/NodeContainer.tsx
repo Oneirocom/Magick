@@ -9,6 +9,7 @@ type NodeProps = {
   category?: NodeSpecJSON['category'];
   selected: boolean;
   onClick?: () => void;
+  fired: boolean;
 };
 
 const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
@@ -16,6 +17,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   category = NodeCategory.None,
   selected,
   children,
+  fired
 }) => {
   let colorName = categoryColorMap[category];
   if (colorName === undefined) {
@@ -25,11 +27,16 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   if (selected) {
     borderColor = 'border-gray-800';
   }
+
+  // if (fired) {
+  //   borderColor = 'border-green-500';
+  // }
   return (
     <div
       className={cx(
-        'rounded text-white text-sm bg-gray-800 min-w-[120px]',
-        selected && 'outline outline-1'
+        'rounded text-white text-sm bg-gray-800 min-w-[120px] transition-all duration-300',
+        selected && 'outline outline-1',
+        fired && 'outline outline-2 outline-green-500'
       )}
     >
       <div className={`${backgroundColor} ${textColor} px-2 py-1 rounded-t`}>
