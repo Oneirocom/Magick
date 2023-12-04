@@ -93,7 +93,6 @@ if (window === window.parent) {
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
         const { config } = payload as { config: AppConfig }
-        console.log('email', payload?.config?.email)
 
         const Root = () => {
           if (POSTHOG_ENABLED && config?.posthogEnabled) {
