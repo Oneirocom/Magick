@@ -34,7 +34,6 @@ export const MessageEvent = makeEventNodeDefinition({
       engine,
       graph: { getDependency },
     } = args
-    Assert.mustBeTrue(state[ON_MESSAGE] === undefined)
     const onStartEvent = (event: EventPayload) => {
       write('event', event)
       write('content', event.content)
