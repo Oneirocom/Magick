@@ -4,14 +4,11 @@ import {
   NodeDefinition,
   ValueType,
 } from '@magickml/behave-graph'
-import { coreEmitter } from './dependencies/coreEmitter'
-import { MessageEvent } from './nodes/events/messageEvent'
 import { AgentLoggingService, IAgentLogger } from 'server/agents'
 export class BaseRegistry {
   values: ValueType[] = []
-  nodes: NodeDefinition[] = [MessageEvent]
+  nodes: NodeDefinition[] = []
   dependencies: Record<string, any> = {
-    core: coreEmitter,
     ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
   }
 
