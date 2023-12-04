@@ -43,7 +43,7 @@ export class SpellService<
     let spell
     if (spellReleaseId) {
       spell = await query
-        .where('spells.spellReleaseId', '=', params.query.spellReleaseId)
+        .where('spells.spellReleaseId', '=', spellReleaseId)
         .andWhere('spells.id', '=', spellId)
         .first()
     } else {
