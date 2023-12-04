@@ -36,6 +36,15 @@ export class AgentService<
     return await this._get(agentId, params)
   }
 
+  // Its easier to imagine an agent having many releases
+  // even though we actually version with the spellReleases table
+  async getAgentReleases(agentId: string) {
+    const db = app.get('dbClient')
+    const query = await db('spellReleases').where({ agentId })
+
+    return { data: query }
+  }
+
   async find(params?: ServiceParams) {
     return await this._find(params)
   }
@@ -156,7 +165,7 @@ export class AgentService<
       })
 
       const spellRelease = await app.services.spellReleases.create({
-        version: versionTag,
+        versionName: versionTag,
         agentId,
       })
 
@@ -178,7 +187,7 @@ export class AgentService<
       })
 
       return { spellReleaseId: spellRelease.id }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Error in agents.class:createRelease: ${error.message}`)
     }
   }
