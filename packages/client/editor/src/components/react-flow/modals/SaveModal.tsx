@@ -3,7 +3,7 @@ import React from 'react';
 import { useMemo, useRef, useState } from 'react';
 import { useEdges, useNodes } from 'reactflow';
 
-import { Modal } from './Modal.js';
+import { Modal } from './Modal';
 import { flowToBehave } from '../../../utils/transformers/flowToBehave.js';
 
 export type SaveModalProps = {
