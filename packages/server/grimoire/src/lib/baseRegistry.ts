@@ -5,11 +5,13 @@ import {
   ValueType,
 } from '@magickml/behave-graph'
 import { AgentLoggingService, IAgentLogger } from 'server/agents'
+import DefaultStateService from './services/defaultStateService'
 export class BaseRegistry {
   values: ValueType[] = []
   nodes: NodeDefinition[] = []
   dependencies: Record<string, any> = {
     ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
+    IStateService: new DefaultStateService(),
   }
 
   constructor(agent: IAgentLogger) {
