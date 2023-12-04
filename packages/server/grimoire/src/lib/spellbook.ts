@@ -1,6 +1,5 @@
-import { EventEmitter } from 'events'
 import { Application as FeathersApplication } from '@feathersjs/koa'
-import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
+import { IRegistry } from '@magickml/behave-graph'
 import type { BasePlugin, EventPayload } from 'server/plugin'
 import { SpellInterface } from 'server/schemas'
 import SpellCaster from './spellCaster'
@@ -182,7 +181,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     // Set up a Bull queue to process events from the plugin
     const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
     queue.initialize(plugin.queueName, async job => {
-      console.log('JOB RECEIVED', job.data)
       const { eventName } = job.data
       this.handlePluginEvent(plugin.name, eventName, job.data)
     })
