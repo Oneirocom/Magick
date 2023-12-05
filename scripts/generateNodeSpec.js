@@ -49,8 +49,6 @@ const loadPlugins = async () => {
 
     // Check if PluginClass is a subclass of CorePlugin
     if (checkIfCorePlugin(PluginClass)) {
-      console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
-
       // Create an instance of the plugin
       const pluginInstance = new PluginClass(connection, '000000000', pubSub)
       plugins.push(pluginInstance)
