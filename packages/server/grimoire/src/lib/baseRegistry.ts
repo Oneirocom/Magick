@@ -19,12 +19,12 @@ export class BaseRegistry {
 
   constructor(agent: IAgentLogger) {
     // Create the agent logger for the core registry
-    this.dependencies.IStateServive = new DefaultStateService()
+    this.dependencies.IStateService = new DefaultStateService()
     this.dependencies.ILogger = new AgentLoggingService(agent)
   }
 
   init(graph: IGraph) {
-    this.dependencies.IStateServive.init(graph)
+    this.dependencies.IStateService.init(graph)
   }
 
   getRegistry(): IRegistry {
