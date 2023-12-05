@@ -206,7 +206,9 @@ const LogsComponent = () => {
   }
 
   const filterLogs = (logs) => {
+    if (logs.length === 0) return [];
     return logs.filter(log => {
+      if (!log) return false;
       if (log.messageType === 'spell' && showSpellLogs) return true;
       if (log.messageType === 'log' && showLogLogs) return true;
       return false;
