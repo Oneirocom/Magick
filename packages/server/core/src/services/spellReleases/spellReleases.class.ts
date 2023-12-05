@@ -63,7 +63,7 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('dbClient'),
-    name: 'SpellReleases',
+    name: 'spellReleases',
     multi: ['remove'],
   }
 }
