@@ -40,6 +40,10 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
     this.initializeFunctionalities()
   }
 
+  getDependencies() {
+    return {}
+  }
+
   initializeFunctionalities() {
     this.client.on('messageCreate', this.handleMessageCreate.bind(this))
     // ... other event handlers
