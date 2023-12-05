@@ -5,6 +5,7 @@ import {
 } from '@magickml/behave-graph'
 import { CoreEmitter } from '../../dependencies/coreEmitter'
 import { EventPayload, ON_MESSAGE } from 'server/plugin'
+import { createEventName } from 'shared/utils'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
@@ -46,7 +47,8 @@ export const MessageEvent = makeEventNodeDefinition({
 
     const coreEventEmitter = getDependency<CoreEmitter>('Core')
 
-    coreEventEmitter?.on(ON_MESSAGE, onStartEvent)
+    const event = createEventName(engine!.id, ON_MESSAGE)
+    coreEventEmitter?.on(event, onStartEvent)
 
     return {
       onStartEvent,
