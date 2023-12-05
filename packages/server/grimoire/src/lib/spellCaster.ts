@@ -13,6 +13,7 @@ import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { AGENT_SPELL } from 'shared/core'
+import { createEventName } from 'shared/utils'
 interface IAgent {
   id: string
 }
@@ -297,8 +298,10 @@ class SpellCaster<Agent extends IAgent> {
       return
     }
 
+    const event = createEventName(this.engine.id, eventName)
+
     // we emit the event to the dependency which will commit the event to the engine
-    eventEmitter.emit(eventName, payload)
+    eventEmitter.emit(event, payload)
 
     // we trigger the graph to execute if it our main loop isnt running
     this.triggerGraphExecution()
