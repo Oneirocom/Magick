@@ -77,7 +77,6 @@ export abstract class BasePlugin<
   protected events: EventDefinition[]
   protected eventQueue: BullQueue
   protected centralEventBus!: EventEmitter
-  abstract dependencies?: Record<string, any>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -171,6 +170,8 @@ export abstract class BasePlugin<
     return registry
   }
 
+  abstract getDependencies(): Record<string, any>
+
   /**
    * Returns a registry object merged with the plugin's specific registry.
    * @param existingRegistry An existing registry to merge with the plugin's registry.
@@ -180,7 +181,7 @@ export abstract class BasePlugin<
     // Define the plugin-specific values, nodes, and dependencies
     const pluginValues = this.getPluginValues()
     const pluginNodes = this.getPluginNodes()
-    const pluginDependencies = this.dependencies
+    const pluginDependencies = this.getDependencies()
 
     // Merge the plugin's registry with the existing registry
     const registry = {
