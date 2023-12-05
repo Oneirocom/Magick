@@ -13,7 +13,7 @@ const pluginName = 'Core'
  */
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
-  coreEventreceiver: CoreEventReceiver
+  coreEventReceiver: CoreEventReceiver
   nodes = [MessageEvent]
   values = []
   dependencies = {
@@ -23,7 +23,7 @@ export class CorePlugin extends CoreEventsPlugin {
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
 
-    this.coreEventreceiver = new CoreEventReceiver(pubSub, agentId)
+    this.coreEventReceiver = new CoreEventReceiver(pubSub, agentId)
   }
 
   /**
@@ -47,7 +47,7 @@ export class CorePlugin extends CoreEventsPlugin {
 
   initializeFunctionalities() {
     this.centralEventBus.on(ON_MESSAGE, this.handleMessage.bind(this))
-    this.coreEventreceiver.onMessage(this.handleMessage.bind(this))
+    this.coreEventReceiver.onMessage(this.handleMessage.bind(this))
   }
 
   handleMessage(payload: EventPayload) {
