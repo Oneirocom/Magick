@@ -1,7 +1,7 @@
 import { CoreEventsPlugin, EventPayload, ON_MESSAGE } from 'server/plugin'
 import { MessageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
-import { coreEmitter } from './dependencies/coreEmitter'
+import { CoreEmitter } from './dependencies/coreEmitter'
 import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventReceiver from './services/coreEventReceiver'
 import { RedisPubSub } from 'server/redis-pubsub'
@@ -16,9 +16,6 @@ export class CorePlugin extends CoreEventsPlugin {
   coreEventReceiver: CoreEventReceiver
   nodes = [MessageEvent]
   values = []
-  dependencies = {
-    [pluginName]: coreEmitter,
-  }
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
@@ -35,6 +32,12 @@ export class CorePlugin extends CoreEventsPlugin {
       eventName: ON_MESSAGE,
       displayName: 'Message Received',
     })
+  }
+
+  getDependencies() {
+    return {
+      [pluginName]: new CoreEmitter(),
+    }
   }
 
   /**
