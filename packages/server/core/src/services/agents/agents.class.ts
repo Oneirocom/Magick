@@ -12,6 +12,7 @@ import { AgentInterface } from '../../schemas'
 import { fetchAllPages } from 'shared/utils'
 import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
+
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
 
@@ -156,15 +157,17 @@ export class AgentService<
     try {
       // update current agent with reference to new version
       const agent = await app.service('agents').get(agentId, {})
+      // // get all spells for the project
+      const allSpells: SpellData[] = await fetchAllPages(
+        app.service('spells').find.bind(app.service('spells')),
+        {
+          query: {
+            projectId: agent.projectId,
+          },
+        }
+      )
 
-      // get all spells for the project
-      const allSpells = await fetchAllPages(app.services.spells.find, {
-        query: {
-          projectId: agent.projectId,
-        },
-      })
-
-      const spellRelease = await app.services.spellReleases.create({
+      const spellRelease = await app.service('spellReleases').create({
         versionName: versionTag,
         agentId,
       })
@@ -176,14 +179,20 @@ export class AgentService<
             ...spell,
             id: uuidv4(),
             spellReleaseId: spellRelease.id,
+            updatedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            type: spell.type ?? 'spell',
           })
         })
       )
 
       // update agent with new spell release
+      // TODO: id and name should not be required in the type
       await app.service('agents').patch(agentId, {
-        ...agent,
         currentSpellReleaseId: spellRelease.id,
+        projectId: agent.projectId,
+        id: agentId,
+        name: agent.name,
       })
 
       return { spellReleaseId: spellRelease.id }
@@ -216,7 +225,7 @@ export class AgentService<
     return this._patch(agentId, params)
   }
 
-  async remove(agentId: string | null, params: ServiceParams) {
+  async remove(agentId: string, params: ServiceParams) {
     return this._remove(agentId, params)
   }
 }
