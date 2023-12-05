@@ -7,6 +7,6 @@ type MessageEvents = {
   [ON_MESSAGE]: (event: EventPayload) => void
 }
 
-export type CoreEmitter = TypedEmitter<any>
+export type CoreEmitterType = TypedEmitter<MessageEvents>
 
-export const coreEmitter = new EventEmitter()
+export const CoreEmitter = EventEmitter
