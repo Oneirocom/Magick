@@ -160,7 +160,7 @@ export class TextToSpeech extends MagickComponent<Promise<WorkerReturn>> {
     }
   ) {
     const completionProviders = pluginManager.getCompletionProviders('audio', [
-      'textToSpeech',
+      'text2speech',
     ]) as CompletionProvider[]
 
     const model = (node.data as { model: string }).model as string
