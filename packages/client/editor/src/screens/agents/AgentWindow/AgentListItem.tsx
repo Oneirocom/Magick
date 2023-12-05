@@ -3,7 +3,17 @@ import { MenuItem, Avatar, ListItemText, Box } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-const AgentListItem = ({ agent, onSelectAgent }) => {
+import { AgentInterface } from 'server/core';
+
+const AgentListItem = ({
+  agent,
+  onSelectAgent,
+  isDraft = false
+}: {
+  agent: AgentInterface
+  onSelectAgent: (agent: AgentInterface) => void
+  isDraft?: boolean
+}) => {
   const agentImage = agent.image
     ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
     : undefined;
@@ -35,7 +45,7 @@ const AgentListItem = ({ agent, onSelectAgent }) => {
             whiteSpace: 'nowrap'
           }} />
       </Box>
-      <LockIcon />
+      {!isDraft && <LockIcon />}
     </MenuItem>
   );
 };
