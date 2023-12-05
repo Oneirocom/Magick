@@ -139,7 +139,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     )
 
     // Initialize the plugins first
-    this.mainRegistry = this.initializePlugins()
+    this.initializePlugins()
 
     // Listen for spell changes
     this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
@@ -162,10 +162,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         this.setupPluginWorker(plugin)
       })
     })
-
-    // When we are done loading plugins, we build the registry
-    const baseRegistry = new BaseRegistry(this.agent).getRegistry()
-    return this.pluginManager.getRegistry(baseRegistry)
   }
 
   /**
@@ -307,7 +303,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
     const spellCaster = await new SpellCaster<Agent>({
       agent: this.agent,
-    }).initialize(spell, this.mainRegistry)
+      pluginManager: this.pluginManager,
+    }).initialize(spell)
 
     const spellCasterList = this.spellMap.get(spell.id)
     if (spellCasterList) {
