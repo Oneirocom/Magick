@@ -51,6 +51,14 @@ export const agentApi = rootApi.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    createAgentRelease: builder.mutation({
+      invalidatesTags: ['Agent', 'Agents'],
+      query: agent => ({
+        url: `agents/createRelease`,
+        method: 'POST',
+        body: agent,
+      }),
+    }),
   }),
 })
 
@@ -59,6 +67,7 @@ export const {
   useGetAgentQuery,
   useGetAgentByIdQuery,
   useCreateAgentMutation,
+  useCreateAgentReleaseMutation,
   useUpdateAgentMutation,
   useDeleteAgentMutation,
   useLazyGetAgentQuery,
