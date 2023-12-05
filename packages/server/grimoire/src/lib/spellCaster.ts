@@ -8,14 +8,16 @@ import {
   IRegistry,
   GraphJSON,
   INode,
+  IGraph,
+  makeGraphApi,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { AGENT_SPELL } from 'shared/core'
-import { createEventName } from 'shared/utils'
 import { BaseRegistry } from './baseRegistry'
 import { PluginManager } from 'server/pluginManager'
+import { IEventStore } from './services/eventStore'
 interface IAgent {
   id: string
 }
@@ -74,6 +76,7 @@ interface IAgent {
 class SpellCaster<Agent extends IAgent> {
   registry!: IRegistry
   engine!: Engine
+  graph!: IGraph
   busy = false
   spell!: SpellInterface
   executeGraph = false
@@ -106,8 +109,13 @@ class SpellCaster<Agent extends IAgent> {
     this.limitInSteps = limitInSteps
 
     // When we are done loading plugins, we build the registry
-    const baseRegistry = new BaseRegistry(this.agent).getRegistry()
-    this.registry = this.pluginManager.getRegistry(baseRegistry)
+    const baseRegistry = new BaseRegistry(this.agent)
+    this.registry = this.pluginManager.getRegistry(baseRegistry.getRegistry())
+    this.graph = makeGraphApi(this.registry)
+
+    // initialize the base registry once we have the full graph.
+    // This sets up the state service properly.
+    baseRegistry.init(this.graph)
   }
 
   /**
@@ -306,6 +314,11 @@ class SpellCaster<Agent extends IAgent> {
       this.logger.error(`No dependency found for ${dependency}`)
       return
     }
+
+    // we set the current event in the event store for access in the state
+    const eventStore = this.graph.getDependency<IEventStore>('IEventStore')
+
+    if (eventStore) eventStore.setEvent(payload)
 
     // we emit the event to the dependency which will commit the event to the engine
     eventEmitter.emit(eventName, payload)
