@@ -1,8 +1,8 @@
 import { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
-  // Create 'spell_releases' table
-  await knex.schema.createTable('spell_releases', function (table) {
+  // Create 'spellReleases' table
+  await knex.schema.createTable('spellReleases', function (table) {
     table.uuid('id').primary()
     table.string('versionName', 255).notNullable()
     table.uuid('agentId').notNullable()
@@ -11,36 +11,48 @@ export async function up(knex: Knex): Promise<void> {
     table.foreign('agentId').references('id').inTable('agents')
   })
 
+  // Check if the 'agents' table has the 'createdAt' and 'updatedAt' columns
+  const hasCreatedAtColumn = await knex.schema.hasColumn('agents', 'createdAt')
+  const hasUpdatedAtColumn = await knex.schema.hasColumn('agents', 'updatedAt')
+
   // Alter 'agents' table to include 'createdAt', 'updatedAt', and 'currentSpellReleaseId' fields
   await knex.schema.alterTable('agents', (table) => {
-    table.timestamp('createdAt').defaultTo(knex.fn.now())
-    table.timestamp('updatedAt').defaultTo(knex.fn.now()).alter()
+    if (!hasCreatedAtColumn) {
+      table.timestamp('createdAt').defaultTo(knex.fn.now())
+    }
+    if (!hasUpdatedAtColumn) {
+      table.timestamp('updatedAt').defaultTo(knex.fn.now())
+    }
     table.uuid('currentSpellReleaseId')
-    table.foreign('currentSpellReleaseId').references('id').inTable('spell_releases')
+    table.foreign('currentSpellReleaseId').references('id').inTable('spellReleases')
   })
 
   // Alter 'spells' table to include 'spellReleaseId' field
   await knex.schema.alterTable('spells', (table) => {
     table.uuid('spellReleaseId').nullable()
-    table.foreign('spellReleaseId').references('id').inTable('spell_releases')
+    table.foreign('spellReleaseId').references('id').inTable('spellReleases')
   })
 }
 
 export async function down(knex: Knex): Promise<void> {
-  // Remove foreign key constraints from 'agents' table
+  // Remove foreign key constraints and columns from 'agents' table
   await knex.schema.table('agents', (table) => {
-    table.dropForeign(['currentSpellReleaseId'], 'agents_currentspellreleaseid_foreign')
+    table.dropForeign(['currentSpellReleaseId'])
     table.dropColumn('currentSpellReleaseId')
-    table.dropColumn('createdAt')
-    table.dropColumn('updatedAt')
+    if (knex.schema.hasColumn('agents', 'createdAt')) {
+      table.dropColumn('createdAt')
+    }
+    if (knex.schema.hasColumn('agents', 'updatedAt')) {
+      table.dropColumn('updatedAt')
+    }
   })
 
-  // Remove foreign key constraints from 'spells' table
+  // Remove foreign key constraints and column from 'spells' table
   await knex.schema.table('spells', (table) => {
-    table.dropForeign(['spellReleaseId'], 'spells_spellreleaseid_foreign')
+    table.dropForeign(['spellReleaseId'])
     table.dropColumn('spellReleaseId')
   })
 
-  // Now it's safe to drop the 'spell_releases' table
-  await knex.schema.dropTable('spell_releases')
+  // Drop the 'spellReleases' table
+  await knex.schema.dropTableIfExists('spellReleases')
 }
