@@ -14,6 +14,8 @@ import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { AGENT_SPELL } from 'shared/core'
 import { createEventName } from 'shared/utils'
+import { BaseRegistry } from './baseRegistry'
+import { PluginManager } from 'server/pluginManager'
 interface IAgent {
   id: string
 }
@@ -75,6 +77,7 @@ class SpellCaster<Agent extends IAgent> {
   busy = false
   spell!: SpellInterface
   executeGraph = false
+  pluginManager: PluginManager
   private agent
   private logger: pino.Logger
   private isRunning: boolean = false
@@ -87,17 +90,24 @@ class SpellCaster<Agent extends IAgent> {
     limitInSeconds = 5,
     limitInSteps = 100,
     agent,
+    pluginManager,
   }: {
     loopDelay?: number
     limitInSeconds?: number
     limitInSteps?: number
     agent: Agent
+    pluginManager: PluginManager
   }) {
     this.agent = agent
+    this.pluginManager = pluginManager
     this.logger = getLogger()
     this.loopDelay = loopDelay
     this.limitInSeconds = limitInSeconds
     this.limitInSteps = limitInSteps
+
+    // When we are done loading plugins, we build the registry
+    const baseRegistry = new BaseRegistry(this.agent).getRegistry()
+    this.registry = this.pluginManager.getRegistry(baseRegistry)
   }
 
   /**
@@ -117,15 +127,14 @@ class SpellCaster<Agent extends IAgent> {
    * @param registry - The registry to use.
    * @returns A promise that resolves when the spell caster is initialized.
    */
-  async initialize(spell: SpellInterface, registry: IRegistry): Promise<this> {
+  async initialize(spell: SpellInterface): Promise<this> {
     this.logger.debug(
       `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
     )
     this.spell = spell
-    this.registry = registry
     const graph = readGraphFromJSON({
       graphJson: this.spell.graph as GraphJSON,
-      registry: registry,
+      registry: this.registry,
     })
 
     this.engine = new Engine(graph.nodes)
@@ -298,10 +307,8 @@ class SpellCaster<Agent extends IAgent> {
       return
     }
 
-    const event = createEventName(this.engine.id, eventName)
-
     // we emit the event to the dependency which will commit the event to the engine
-    eventEmitter.emit(event, payload)
+    eventEmitter.emit(eventName, payload)
 
     // we trigger the graph to execute if it our main loop isnt running
     this.triggerGraphExecution()
