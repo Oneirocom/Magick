@@ -27,9 +27,9 @@ export const spellSchema = Type.Object(
       id: Type.Optional(Type.String()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
-    spellReleaseId: Type.Optional(Type.String()),
-    createdAt: Type.Optional(Type.String()),
-    updatedAt: Type.Optional(Type.String()),
+    spellReleaseId: Type.Optional(Type.String() || Type.Null()),
+    createdAt: Type.Optional(Type.String() || Type.Null()),
+    updatedAt: Type.Optional(Type.String() || Type.Null()),
   },
   {
     $id: 'Spell',
@@ -63,8 +63,8 @@ export const agentSchema = Type.Object(
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
-    updatedAt: Type.Optional(Type.String()),
-    createdAt: Type.Optional(Type.String()),
+    updatedAt: Type.Optional(Type.String() || Type.Null()),
+    createdAt: Type.Optional(Type.String() || Type.Null()),
     pingedAt: Type.Optional(Type.String()),
     data: Type.Optional(Type.Any()),
     publicVariables: Type.Optional(Type.Any()),
@@ -73,7 +73,7 @@ export const agentSchema = Type.Object(
     default: Type.Optional(Type.Boolean()),
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
-    ), // DEPRECATED
+    ),
     rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
   },
