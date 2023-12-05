@@ -131,9 +131,6 @@ export class PluginManager extends EventEmitter {
         Object.getPrototypeOf(PluginClass) === BasePlugin.prototype ||
         PluginClass.prototype instanceof BasePlugin
       ) {
-        // PluginClass is a subclass of BasePlugin
-        console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
-
         // Create an instance of the plugin
         const pluginInstance = new PluginClass(
           this.connection,
