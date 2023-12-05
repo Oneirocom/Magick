@@ -1,33 +1,53 @@
-import { IStateService } from '@magickml/behave-graph'
+import { IGraph, IStateService } from '@magickml/behave-graph'
+import { IEventStore } from './eventStore'
+import { EventPayload } from 'server/plugin'
 
-class DefaultStateService implements IStateService {
-  stateStore: Record<string, any>
+export class DefaultStateService implements IStateService {
+  private stateStore: Record<string, any>
+  private eventStore?: IEventStore
+
   constructor() {
     this.stateStore = {}
   }
 
-  getState(nodeId, graph) {
-    console.log('GETTING SERVICE STATE', nodeId)
-    // const eventStore = graph.getDependency('IEventStore')
+  init(graph: IGraph) {
+    this.eventStore = graph.getDependency('IEventStore')
+  }
 
-    // if (eventStore) {
-    //   const event = eventStore.getCurrentEvent()
+  formatKey(nodeId: string, event: EventPayload): string {
+    return `${nodeId}:}`
+  }
 
-    //   const key = `${nodeId}:${event.channel}:${event.sender}`
+  storeEvent(event: any) {
+    this.eventStore?.setEvent(event)
+  }
 
-    //   return this.stateStore[key] || null
+  getState(nodeId: string): any {
+    if (this.eventStore) {
+      const event = this.eventStore.currentEvent()
 
-    // }
-
-    // const key = `${nodeId}:${event.channel}:${event.sender}`
+      if (event) {
+        // const key = `${nodeId}:${event.channel}:${event.sender}`
+        const key = `${nodeId}`
+        return this.stateStore[key] || null
+      }
+    }
 
     return this.stateStore[nodeId] || null
   }
 
-  setState(nodeId, newState, graph) {
-    console.log('SETTING SERVICE STATE', nodeId, newState)
+  setState(nodeId: string, newState: any): void {
+    if (this.eventStore) {
+      const event = this.eventStore.currentEvent()
+
+      if (event) {
+        // const key = `${nodeId}:${event.channel}:${event.sender}`
+        const key = `${nodeId}`
+        this.stateStore[key] = newState
+        return
+      }
+    }
+
     this.stateStore[nodeId] = newState
   }
 }
-
-export default DefaultStateService
