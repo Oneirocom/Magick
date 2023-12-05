@@ -3,6 +3,7 @@ const path = require('path')
 import * as pluginModules from '../../../../../plugins'
 import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
 import Redis from 'ioredis'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 const checkIfCorePlugin = PluginClass => {
   return (
@@ -31,6 +32,7 @@ const getUnifiedRegistry = plugins => {
 
 const loadPlugins = () => {
   const connection = new Redis()
+  const pubSub = new RedisPubSub()
 
   const plugins = []
   for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
@@ -41,10 +43,9 @@ const loadPlugins = () => {
     // This check assumes CorePlugin is the base class for all your plugins
     if (checkIfCorePlugin(PluginClass)) {
       // PluginClass is a subclass of CorePlugin
-      console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
 
       // Create an instance of the plugin
-      const pluginInstance = new PluginClass(connection)
+      const pluginInstance = new PluginClass(connection, '000000', pubSub)
       plugins.push(pluginInstance)
     }
     return plugins
