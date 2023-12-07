@@ -1,6 +1,7 @@
 import Redis from 'ioredis'
 import { BasePlugin, EventPayload } from './basePlugin'
 import { ON_MESSAGE } from './coreEventTypes'
+import EventEmitter from 'events'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
@@ -21,6 +22,27 @@ export abstract class CoreEventsPlugin<
   constructor(name: string, connection: Redis, agentId: string) {
     super(name, connection, agentId)
     // Initialize CoreEventPlugin specific stuff if needed
+  }
+
+  override init(centralEventBus: EventEmitter) {
+    super.init(centralEventBus)
+    this.initializeActionHandlers()
+    // Initialize CoreEventPlugin specific stuff if needed
+  }
+
+  /**
+   * Initializes the action handlers for the plugin. This will
+   * listen for the action events and then call the handler
+   * function for the action.  Hooks into the central event bus
+   * to listen for the events. This is called automatically
+   * when the plugin is initialized. This makes all of the
+   * actions available to the central event bus if needed.
+   */
+  private initializeActionHandlers() {
+    this.actions.forEach(action => {
+      const eventName = `${this.name}:${action.actionName}`
+      this.centralEventBus.on(eventName, action.handler)
+    })
   }
 
   /**
