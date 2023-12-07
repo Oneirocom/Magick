@@ -259,7 +259,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * const spellCaster= await spellbook.loadById(spellId);
    */
-  async loadById(spellId: string): Promise<SpellCaster<Agent> | undefined> {
+  async loadById(spellId: string): Promise<SpellCaster<Agent> | null> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
       const spell = await this.app.service('spells').get(spellId)
@@ -276,7 +276,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       return this.loadSpell(spell)
     } catch (error) {
       this.logger.error(`Error loading spell ${spellId}: %o`, error)
-      return
+      return null
     }
   }
 
@@ -292,28 +292,31 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *   graph: {},
    * });
    */
-  async loadSpell(
-    spell: SpellInterface
-  ): Promise<SpellCaster<Agent> | undefined> {
+  async loadSpell(spell: SpellInterface): Promise<SpellCaster<Agent> | null> {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
-      return
+      return null
     }
 
-    const spellCaster = await new SpellCaster<Agent>({
-      agent: this.agent,
-      pluginManager: this.pluginManager,
-    }).initialize(spell)
+    try {
+      const spellCaster = await new SpellCaster<Agent>({
+        agent: this.agent,
+        pluginManager: this.pluginManager,
+      }).initialize(spell)
 
-    const spellCasterList = this.spellMap.get(spell.id)
-    if (spellCasterList) {
-      spellCasterList.push(spellCaster)
-    } else {
-      this.spellMap.set(spell.id, [spellCaster])
+      const spellCasterList = this.spellMap.get(spell.id)
+      if (spellCasterList) {
+        spellCasterList.push(spellCaster)
+      } else {
+        this.spellMap.set(spell.id, [spellCaster])
+      }
+
+      return spellCaster
+    } catch (err) {
+      this.agent?.error(`Error loading spell ${spell.id}`)
+      return null
     }
-
-    return spellCaster
   }
 
   /**
@@ -337,8 +340,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * const spellRunner = spellbook.getReadySpellRunner(spellId);
    */
-  getReadySpellCaster(spellId: string): SpellCaster<Agent> | undefined {
-    return this.spellMap.get(spellId)?.find(runner => !runner.isBusy())
+  getReadySpellCaster(spellId: string): SpellCaster<Agent> | null {
+    return this.spellMap.get(spellId)?.find(runner => !runner.isBusy()) || null
   }
 
   /**
