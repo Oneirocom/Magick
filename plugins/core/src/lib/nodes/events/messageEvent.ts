@@ -42,6 +42,7 @@ export const messageEvent = makeEventNodeDefinition({
     const onStartEvent = (event: EventPayload) => {
       write('event', event)
       write('content', event.content)
+
       commit('flow')
 
       if (!node || !engine) return
