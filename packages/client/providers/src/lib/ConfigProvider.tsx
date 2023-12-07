@@ -9,6 +9,7 @@ export type AppConfig = {
   projectId: string
   token: string
   posthogEnabled?: boolean
+  email: string | undefined
 }
 
 // Define ConfigContext interface
@@ -34,6 +35,7 @@ export const defaultConfig: AppConfig = {
   apiUrl: 'http://localhost:3030',
   projectId: DEFAULT_PROJECT_ID,
   token: '',
+  email: undefined
 }
 
 /**
