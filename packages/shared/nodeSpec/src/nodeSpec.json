@@ -18,6 +18,35 @@
         "valueType": "object"
       }
     ],
+    "configuration": [
+      {
+        "name": "numInputs",
+        "valueType": "number",
+        "defaultValue": 3
+      }
+    ]
+  },
+  {
+    "type": "magick/sendMessage",
+    "category": "Action",
+    "label": "Send Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
     "configuration": []
   },
   {
@@ -1614,7 +1643,13 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "customEventId",
+        "valueType": "string",
+        "defaultValue": "-1"
+      }
+    ]
   },
   {
     "type": "customEvent/trigger",
@@ -1632,7 +1667,13 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "customEventId",
+        "valueType": "string",
+        "defaultValue": "-1"
+      }
+    ]
   },
   {
     "type": "variable/get",
@@ -1645,7 +1686,12 @@
         "valueType": "string"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "variableId",
+        "valueType": "number"
+      }
+    ]
   },
   {
     "type": "variable/set",
@@ -1668,7 +1714,12 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "variableId",
+        "valueType": "number"
+      }
+    ]
   },
   {
     "type": "math/easing",
@@ -1952,7 +2003,12 @@
       }
     ],
     "outputs": [],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "numOutputs",
+        "valueType": "number"
+      }
+    ]
   },
   {
     "type": "flow/switch/integer",
@@ -1975,7 +2031,12 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "numCases",
+        "valueType": "number"
+      }
+    ]
   },
   {
     "type": "flow/switch/string",
@@ -1998,7 +2059,12 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "numCases",
+        "valueType": "number"
+      }
+    ]
   },
   {
     "type": "flow/debounce",
@@ -2203,7 +2269,13 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "numInputs",
+        "valueType": "number",
+        "defaultValue": 3
+      }
+    ]
   },
   {
     "type": "flow/counter",
