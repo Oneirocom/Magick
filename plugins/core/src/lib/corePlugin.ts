@@ -1,7 +1,6 @@
 import {
   ActionPayload,
   CoreEventsPlugin,
-  EventFormat,
   EventPayload,
   ON_MESSAGE,
 } from 'server/plugin'
@@ -9,7 +8,7 @@ import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { CoreEmitter } from './dependencies/coreEmitter'
 import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
-import CoreEventReceiver from './services/coreEventReceiver'
+import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
 import { sendMessage } from './nodes/actions/sendMessage'
@@ -22,14 +21,14 @@ const pluginName = 'Core'
  */
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
-  coreEventReceiver: CoreEventReceiver
+  client: CoreEventClient
   nodes = [messageEvent, sendMessage]
   values = []
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
 
-    this.coreEventReceiver = new CoreEventReceiver(pubSub, agentId)
+    this.client = new CoreEventClient(pubSub, agentId)
   }
 
   /**
@@ -78,7 +77,7 @@ export class CorePlugin extends CoreEventsPlugin {
 
   initializeFunctionalities() {
     this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
-    this.coreEventReceiver.onMessage(this.handleOnMessage.bind(this))
+    this.client.onMessage(this.handleOnMessage.bind(this))
   }
 
   handleOnMessage(payload: EventPayload) {
@@ -87,9 +86,16 @@ export class CorePlugin extends CoreEventsPlugin {
   }
 
   handleSendMessage(actionPayload: Job<ActionPayload>) {
-    console.log('CORE PLUGIN: handleSendMessage', actionPayload)
+    const { actionName, event } = actionPayload.data
+    const { plugin } = event
+    const eventName = `${plugin}:${actionName}`
     // handle sending a message back out.
-    // this.centralEventBus.emit(ON_MESSAGE, payload)
+
+    if (plugin === 'Core') {
+      this.client.sendMessage(actionPayload.data)
+    } else {
+      this.centralEventBus.emit(eventName, actionPayload.data)
+    }
   }
 
   /**
