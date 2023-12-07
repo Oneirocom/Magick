@@ -58,6 +58,8 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
     // ... register other Discord-specific events
   }
 
+  defineActions() {}
+
   /**
    * Formats the full event payload from the plugin payload.
    * This method can be used to format a message event.
