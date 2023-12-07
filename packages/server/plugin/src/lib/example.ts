@@ -9,6 +9,7 @@ type DiscordPayload = {
   content: string
   sender: string
   channelId: string
+  channel: string
   rawData: unknown
   observer: string
 }
@@ -81,6 +82,7 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
       client: 'Discord',
       observer: this?.client?.user?.username || 'Discord',
       channelType: event,
+      channel: event,
       data: {},
     }
     return this.formatMessageEvent(event, eventPayload)
@@ -96,6 +98,7 @@ class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
       content: message.content,
       sender: message.author.username,
       channelId: message.channel.id,
+      channel: (message.channel as Discord.TextChannel).name,
       rawData: message,
       observer: this?.client?.user?.username || 'Discord',
     }
