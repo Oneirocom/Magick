@@ -149,7 +149,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
 
     // find spells which are not in the tree data and delete them
     const spellIds = spells.map(spell => spell.id)
-    const treeDataIds = treeData.filter(item => item.fileType === 'spell').map(item => item.id)
+    const treeDataIds = treeData.filter(item => item.fileType === 'spell' || item.fileType === 'behave').map(item => item.id)
     const toDelete = treeDataIds.filter(id => !spellIds.includes(id as string))
 
 
