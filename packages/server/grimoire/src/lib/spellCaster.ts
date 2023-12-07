@@ -172,31 +172,7 @@ class SpellCaster<Agent extends IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionEndHandler = async (node: any) => {
-    let foundNode: INode | null = null
-    let id: string | null = null
-
-    // We should keep an eye on this as it may reduce performance over large graphs.
-    // We are looping through the engine nodes to find the node that matches the one
-    // that just finished executing.  We are doing this because the node that is passed
-    // does not cotnain the node id which we need to broadcast the work being done.
-    for (const [nodeId, engineNode] of Object.entries(this.engine.nodes)) {
-      if (
-        engineNode.metadata.positionX === node.metadata.positionX &&
-        engineNode.metadata.positionY === node.metadata.positionY
-      ) {
-        id = nodeId
-        foundNode = engineNode
-      }
-    }
-
-    if (!foundNode) {
-      this.logger.debug(
-        `SPELLCASTER: Could not find node in engine for spell ${this.spell.id}`
-      )
-      return
-    }
-
-    await this.emitNodeWork(id as string, node)
+    this.emitNodeWork(node)
   }
 
   /**
@@ -207,12 +183,12 @@ class SpellCaster<Agent extends IAgent> {
    * @example
    * spellCaster.emitNodeWork(nodeId, node)
    */
-  emitNodeWork(nodeId: string, node: INode) {
-    const event = `${this.spell.id}-${nodeId}`
+  emitNodeWork(node: INode) {
+    const event = `${this.spell.id}-${node.id}`
 
     const message = {
       event,
-      nodeId,
+      nodeId: node.id,
       type: node.description.typeName,
       outputs: node.outputs,
       inputs: node.inputs,
