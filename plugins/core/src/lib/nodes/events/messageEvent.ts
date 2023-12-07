@@ -14,10 +14,16 @@ const makeInitialState = (): State => ({
   onStartEvent: undefined,
 })
 
-export const MessageEvent = makeEventNodeDefinition({
+export const messageEvent = makeEventNodeDefinition({
   typeName: 'magick/onMessage',
   label: 'On Message',
   category: NodeCategory.Event,
+  configuration: {
+    numInputs: {
+      valueType: 'number',
+      defaultValue: 3,
+    },
+  },
   in: {},
   out: {
     flow: 'flow',
@@ -27,7 +33,6 @@ export const MessageEvent = makeEventNodeDefinition({
   initialState: makeInitialState(),
   init: args => {
     const {
-      state,
       write,
       commit,
       node,
