@@ -14,6 +14,7 @@ import {
   selectStateBytabId,
   upsertLocalState,
   useAppSelector,
+  useSelectAgentsEvent,
 } from 'client/state'
 
 /**
@@ -150,6 +151,8 @@ type Message = {
 const ChatWindow = ({ tab, spellId }) => {
   const config = useConfig()
 
+  const { lastItem: lastEvent } = useSelectAgentsEvent()
+
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState<Message[]>([])
   const [value, setValue] = useState('')
@@ -185,6 +188,18 @@ const ChatWindow = ({ tab, spellId }) => {
     },
     [history]
   )
+
+  // note here that we can do better than this by using things like a sessionId, etc.
+  useEffect(() => {
+    if (!lastEvent) return
+
+    console.log('lastEvent received', lastEvent)
+
+    const { data } = lastEvent
+    const { content } = data
+
+    printToConsole(null, content)
+  }, [lastEvent])
 
   // Set playtest options based on spell graph nodes with the playtestToggle set to true.
   const [playtestOptions] = useState<Record<
