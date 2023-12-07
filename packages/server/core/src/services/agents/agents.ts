@@ -49,7 +49,7 @@ function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
   return result
 }
 
-const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command']
+const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command', 'event']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -84,6 +84,8 @@ export const agent = (app: Application) => {
 
       // parse the type of agent message
       const messageType = channel.split(':')[3]
+
+      console.log('MESSAGE TYPE RECEIVED', messageType)
 
       // check if message type is an agent event
       if (!AGENT_EVENTS.includes(messageType)) {
