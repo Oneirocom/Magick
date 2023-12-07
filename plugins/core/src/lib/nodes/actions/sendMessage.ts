@@ -30,7 +30,7 @@ export const sendMessage = makeFlowNodeDefinition({
       throw new Error('No event found')
     }
 
-    coreActionService?.sendMessage(event, content)
+    coreActionService?.sendMessage(event, { content })
 
     commit('flow')
   },
