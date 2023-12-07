@@ -8,7 +8,7 @@ import {
   ValueTypeMap,
   memo,
 } from '@magickml/behave-graph'
-import { BullQueue } from 'server/communication'
+import { BullMQWorker, BullQueue } from 'server/communication'
 import { getLogger } from 'server/logger'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
@@ -23,13 +23,31 @@ interface EventDefinition {
   displayName: string
 }
 
+/**
+ * Interface for defining an action.
+ * @property actionName - The unique name of the action, typically namespaced.
+ * @property displayName - A user-friendly name for the action.
+ * @property handler - The handler for the action.
+ */
+interface ActionDefinition {
+  actionName: string
+  displayName: string
+  handler: (ActionPayload) => void
+}
+
+export interface ActionPayload {
+  actionName: string
+  event: EventPayload
+  data: any
+}
+
 export type EventFormat<
   Data = Record<string, unknown>,
   Y = Record<string, unknown>
 > = {
   content: string
   sender: string
-  channelId: string
+  channel: string
   entities?: any[]
   rawData: unknown
   channelType: string
@@ -52,6 +70,8 @@ export type EventPayload<
   observer: string
   client: string
   channel: string
+  plugin: string
+  agentId: string
   // agentId: string
   // entities: any[]
   channelType: string
@@ -62,37 +82,40 @@ export type EventPayload<
 }
 
 /**
- * The `BasePlugin` class serves as an abstract foundation for creating plugins within the system.
- * It encapsulates common functionalities and structures that are shared across various plugins,
- * providing a consistent interface and lifecycle management.
+ * The `BasePlugin` class serves as an abstract foundation for creating plugins
+ * within the system. It encapsulates common functionalities and structures that
+ * are shared across various plugins, providing a consistent interface and lifecycle
+ *  management.
  *
  * Core Principles:
- * 1. Event-Driven Architecture: Plugins can emit and respond to events. This aligns with the
- *    reactive programming model, where the flow of the program is driven by events.
- * 2. Extensibility: Through inheritance, specific plugins can extend `BasePlugin`, customizing
- *    or enhancing the base functionality.
- * 3. Abstraction: It abstracts away common functionalities like event handling, queue management, and logging,
- *    allowing developers to focus on plugin-specific logic.
- * 4. Encapsulation: By encapsulating event and queue logic within the plugin, it maintains a separation
- *    of concerns, making the code more manageable and modular.
+ * 1. Event-Driven Architecture: Plugins can emit and respond to events. This aligns
+ *    with the reactive programming model, where the flow of the program is driven by
+ *    events.
+ * 2. Extensibility: Through inheritance, specific plugins can extend `BasePlugin`,
+ *    customizingvor enhancing the base functionality.
+ * 3. Abstraction: It abstracts away common functionalities like event handling,
+ *    queue management, and logging, allowing developers to focus on plugin-specific logic.
+ * 4. Encapsulation: By encapsulating event and queue logic within the plugin, it maintains a
+ *    separation of concerns, making the code more manageable and modular.
  *
  * Design Patterns:
- * - Template Method: The class provides a skeletal implementation with `abstract` methods like `defineEvents`
- *   and `initializeFunctionalities` that subclasses should override.
- * - Observer: Through the use of `EventEmitter`, the class follows the observer pattern, allowing subscribers
- *   to react to emitted events.
- * - Command: The emission of events can be seen as a command pattern, where an event triggers specific actions or
- *   commands.
+ * - Template Method: The class provides a skeletal implementation with `abstract`
+ *   methods like `defineEvents` and `initializeFunctionalities` that subclasses should
+ *   override.
+ * - Observer: Through the use of `EventEmitter`, the class follows the observer pattern,
+ *   allowing subscribers to react to emitted events.
+ * - Command: The emission of events can be seen as a command pattern, where an event
+ *   triggers specific actions or commands.
  *
  * Strengths:
- * - Reduced Boilerplate: Common functionalities like event handling are handled by the base class, reducing
- *   redundancy in subclasses.
- * - Consistency: It enforces a consistent structure and lifecycle for plugins, making the system predictable and
- *   easier to understand.
- * - Scalability: The event-driven nature facilitates loose coupling and scalability, as new plugins can be easily
- *   integrated.
- * - Testability: With well-defined interfaces and separation of concerns, testing individual plugins becomes more
- *   straightforward.
+ * - Reduced Boilerplate: Common functionalities like event handling are handled by
+ *   the base class, reducing redundancy in subclasses.
+ * - Consistency: It enforces a consistent structure and lifecycle for plugins, making
+ *   the system predictable and easier to understand.
+ * - Scalability: The event-driven nature facilitates loose coupling and scalability,
+ *   as new plugins can be easily integrated.
+ * - Testability: With well-defined interfaces and separation of concerns,
+ *   testing individual plugins becomes more straightforward.
  *
  * Example Usage:
  * // Assuming there's a `CustomPlugin` that extends `BasePlugin`
@@ -118,8 +141,8 @@ export type EventPayload<
  * customPlugin.activate();
  *
  * Note:
- * This class should be used as a base for creating new plugins. It's not meant to be instantiated directly,
- * but to be extended by concrete plugin implementations.
+ * This class should be used as a base for creating new plugins. It's not meant to be
+ * instantiated directly, but to be extended by concrete plugin implementations.
  *
  * @property name - The name of the plugin.
  * @property events - An array of events the plugin can emit.
@@ -133,14 +156,17 @@ export abstract class BasePlugin<
   Metadata = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
+  protected actions: ActionDefinition[] = []
   protected eventQueue: BullQueue
+  protected actionQueue: BullMQWorker
   protected centralEventBus!: EventEmitter
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
-  enabled: boolean = false
-  logger = getLogger()
-  eventEmitter: EventEmitter
+  public connection: Redis
+  public enabled: boolean = false
+  public logger = getLogger()
+  public eventEmitter: EventEmitter
 
   /**
    * Creates an instance of BasePlugin.
@@ -151,9 +177,15 @@ export abstract class BasePlugin<
   constructor(name: string, connection: Redis, agentId: string) {
     super({ name })
     this.agentId = agentId
+    this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.eventQueue = new BullQueue(connection)
     this.eventQueue.initialize(this.queueName)
+    this.actionQueue = new BullMQWorker(connection)
+    this.actionQueue.initialize(
+      this.actionQueueName,
+      this.handleAction.bind(this)
+    )
     this.events = []
   }
 
@@ -163,6 +195,7 @@ export abstract class BasePlugin<
   init(centralEventBus: EventEmitter) {
     this.centralEventBus = centralEventBus
     this.defineEvents()
+    this.defineActions()
     this.initializeFunctionalities()
     this.mapEventsToQueue()
   }
@@ -199,6 +232,16 @@ export abstract class BasePlugin<
   })
 
   /**
+   * Handles an action from the action queue.
+   * @param job The job to handle.
+   */
+  protected async handleAction(job) {
+    const action = this.actions.find(action => action.actionName === job.name)
+    if (!action) return
+    await action.handler(job as ActionPayload)
+  }
+
+  /**
    * Emits an event with the given name and payload.
    * @param eventName The name of the event to emit.
    * @param payload The payload of the event.
@@ -219,6 +262,17 @@ export abstract class BasePlugin<
    */
   get queueName() {
     return `agent:${this.agentId}:${this.name}:event`
+  }
+
+  /**
+   * Returns the name of the BullMQ queue for the plugin's actions.
+   * Format: action:pluginName
+   * @returns The name of the queue.
+   * @example
+   * const queueName = this.getActionQueueName();
+   */
+  get actionQueueName() {
+    return `agent:${this.agentId}:${this.name}:action`
   }
 
   /**
@@ -304,6 +358,20 @@ export abstract class BasePlugin<
   }
 
   /**
+   * Registers an action with the plugin.
+   * @param action The action definition to register.
+   * @example
+   * this.registerAction({
+   *   actionName: 'myAction',
+   *   displayName: 'My Action',
+   *   handler: this.handleMyAction.bind(this)
+   * });
+   */
+  registerAction(action: ActionDefinition) {
+    this.actions.push(action)
+  }
+
+  /**
    * Returns the list of registered events.
    * @returns An array of EventDefinition objects.
    * @example
@@ -324,6 +392,18 @@ export abstract class BasePlugin<
    * });xz
    */
   abstract defineEvents(): void
+
+  /**
+   * Abstract method to be implemented by plugins to define their actions.
+   * @example
+   * defineActions() {
+   *  this.registerAction({
+   *   actionName: 'myAction',
+   *   displayName: 'My Action',
+   *   handler: this.handleMyAction.bind(this)
+   * });
+   */
+  abstract defineActions(): void
 
   /**
    * Abstract method to be implemented by plugins to initialize their functionalities.
@@ -372,6 +452,7 @@ export abstract class BasePlugin<
     messageDetails: EventFormat<Data, Metadata>
   ): EventPayload<Data, Metadata> {
     return {
+      plugin: this.name,
       connector: this.name,
       client: messageDetails.client,
       eventName: event,
@@ -379,8 +460,8 @@ export abstract class BasePlugin<
       content: messageDetails.content,
       sender: messageDetails.sender,
       observer: messageDetails.observer,
-      channel: messageDetails.channelId,
-      // agentId: this.agent.id, // Assuming this.agent is accessible
+      channel: messageDetails.channel,
+      agentId: this.agentId,
       // entities: messageDetails.entities,
       channelType: messageDetails.channelType,
       rawData: messageDetails.rawData,
