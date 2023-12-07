@@ -1,10 +1,19 @@
-import { CoreEventsPlugin, EventPayload, ON_MESSAGE } from 'server/plugin'
-import { MessageEvent } from './nodes/events/messageEvent'
+import {
+  ActionPayload,
+  CoreEventsPlugin,
+  EventFormat,
+  EventPayload,
+  ON_MESSAGE,
+} from 'server/plugin'
+import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { CoreEmitter } from './dependencies/coreEmitter'
 import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventReceiver from './services/coreEventReceiver'
 import { RedisPubSub } from 'server/redis-pubsub'
+import { CoreActionService } from './services/coreActionService'
+import { sendMessage } from './nodes/actions/sendMessage'
+import { Job } from 'bullmq'
 
 const pluginName = 'Core'
 
@@ -14,7 +23,7 @@ const pluginName = 'Core'
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   coreEventReceiver: CoreEventReceiver
-  nodes = [MessageEvent]
+  nodes = [messageEvent, sendMessage]
   values = []
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
@@ -34,9 +43,28 @@ export class CorePlugin extends CoreEventsPlugin {
     })
   }
 
+  /**
+   * Defines the actions that the plugin will handle.
+   */
+  defineActions() {
+    // Define actions here
+    this.registerAction({
+      actionName: 'sendMessage',
+      displayName: 'Send Message',
+      handler: this.handleSendMessage.bind(this),
+    })
+  }
+
+  /**
+   * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
+   */
   getDependencies() {
     return {
       [pluginName]: new CoreEmitter(),
+      coreActionService: new CoreActionService(
+        this.connection,
+        this.actionQueueName
+      ),
     }
   }
 
@@ -49,12 +77,19 @@ export class CorePlugin extends CoreEventsPlugin {
   }
 
   initializeFunctionalities() {
-    this.centralEventBus.on(ON_MESSAGE, this.handleMessage.bind(this))
-    this.coreEventReceiver.onMessage(this.handleMessage.bind(this))
+    this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
+    this.coreEventReceiver.onMessage(this.handleOnMessage.bind(this))
   }
 
-  handleMessage(payload: EventPayload) {
-    this.emitEvent(ON_MESSAGE, payload)
+  handleOnMessage(payload: EventPayload) {
+    const event = this.formatMessageEvent(ON_MESSAGE, payload)
+    this.emitEvent(ON_MESSAGE, event)
+  }
+
+  handleSendMessage(actionPayload: Job<ActionPayload>) {
+    console.log('CORE PLUGIN: handleSendMessage', actionPayload)
+    // handle sending a message back out.
+    // this.centralEventBus.emit(ON_MESSAGE, payload)
   }
 
   /**
