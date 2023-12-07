@@ -1,10 +1,10 @@
 import pino from 'pino'
 import { getLogger } from 'server/logger'
-import { EventPayload, ON_MESSAGE } from 'server/plugin'
+import { ActionPayload, EventPayload, ON_MESSAGE } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 /**
- * CoreEventReceiver manages the subscription to specific Redis pub/sub channels
+ * CoreEventClient manages the subscription to specific Redis pub/sub channels
  * based on a pattern. It routes incoming messages to appropriate event handlers.
  * This class demonstrates an event-driven architecture, where events are published
  * and subscribed to over Redis channels. It uses pattern subscription to listen
@@ -22,20 +22,20 @@ import { RedisPubSub } from 'server/redis-pubsub'
  * ```typescript
  * const redisConnection = new Redis();
  * const agentId = 'your-agent-id';
- * const receiver = new CoreEventReceiver(redisConnection, agentId);
+ * const receiver = new CoreEventClient(redisConnection, agentId);
  * receiver.onMessage((message) => {
  *   console.log('Message received:', message);
  * });
  * ```
  */
-class CoreEventReceiver {
+class CoreEventClient {
   private logger: pino.Logger = getLogger()
   private pubSub: RedisPubSub
   private agentId: string
   private eventHandlers: Map<string, ((message: EventPayload) => void)[]>
 
   /**
-   * Creates a new instance of CoreEventReceiver.
+   * Creates a new instance of CoreEventClient.
    * @param redisConnection The Redis connection to use for subscribing to channels.
    * @param agentId The agent ID to use for subscribing to channels.
    */
@@ -55,7 +55,7 @@ class CoreEventReceiver {
    *
    * Example:
    * ```
-   * const receiver = new CoreEventReceiver(redisConnection, 'agent123');
+   * const receiver = new CoreEventClient(redisConnection, 'agent123');
    * // This will subscribe to all channels matching 'agent:agent123:Core:*'
    * ```
    */
@@ -73,7 +73,7 @@ class CoreEventReceiver {
    *
    * Example:
    * ```
-   * const receiver = new CoreEventReceiver(redisConnection, 'agent123');
+   * const receiver = new CoreEventClient(redisConnection, 'agent123');
    * receiver.onMessage((message) => {
    *   console.log('Message received:', message);
    * });
@@ -109,7 +109,7 @@ class CoreEventReceiver {
   }
 
   /**
-   * Registers a handler for a specific event type. This allows the CoreEventReceiver
+   * Registers a handler for a specific event type. This allows the CoreEventClient
    * to route messages to the appropriate function based on the event type.
    *
    * Example:
@@ -151,6 +151,11 @@ class CoreEventReceiver {
     this.registerHandler(ON_MESSAGE, handler)
   }
 
+  sendMessage(payload: ActionPayload): void {
+    console.log('Sending message from core client!!!', payload)
+    this.pubSub.publish(`agent:${this.agentId}:Core:event`, payload)
+  }
+
   /**
    * Unsubscribes from all subscribed Redis channels and clears event handlers.
    * This method is crucial for preventing memory leaks and ensuring that when
@@ -169,4 +174,4 @@ class CoreEventReceiver {
   }
 }
 
-export default CoreEventReceiver
+export default CoreEventClient
