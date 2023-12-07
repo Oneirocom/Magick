@@ -46,14 +46,6 @@ class CoreEventReceiver {
     this.subscribeToCoreEvents()
   }
 
-  coreEventHandler(message, channel) {
-    const eventType = this.extractEventType(channel)
-
-    this.logger.debug(`Received event of type '${eventType}'`)
-
-    this.eventHandlers.get(eventType)?.forEach(handler => handler(message))
-  }
-
   /**
    * Subscribes to Redis channels based on a pattern specific to the agent's core events.
    * It listens to all events of the format 'agent:{agentId}:Core:*'.
@@ -71,6 +63,32 @@ class CoreEventReceiver {
     const pattern = `agent:${this.agentId}:Core:*`
     this.logger.debug(`Subscribing to pattern '${pattern}'`)
     this.pubSub.patternSubscribe(pattern, this.coreEventHandler.bind(this))
+  }
+
+  /**
+   * Handles incoming messages from subscribed channels. This method is called
+   * whenever a new message is received on a channel that the receiver is subscribed to.
+   * It uses a mapping strategy to route messages to the appropriate event handlers
+   * based on the event type.
+   *
+   * Example:
+   * ```
+   * const receiver = new CoreEventReceiver(redisConnection, 'agent123');
+   * receiver.onMessage((message) => {
+   *   console.log('Message received:', message);
+   * });
+   * ```
+   *
+   * @param message The message received on the subscribed channel.
+   * @param channel The channel on which the message was received.
+   */
+  coreEventHandler(event, channel) {
+    const eventType = this.extractEventType(channel)
+
+    this.logger.debug(`Received event of type '${eventType}'`)
+    event.plugin = 'core'
+
+    this.eventHandlers.get(eventType)?.forEach(handler => handler(event))
   }
 
   /**
