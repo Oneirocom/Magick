@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/utils",
+  "name": "shared/utils",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shared/utils/src",
   "projectType": "library",
