@@ -52,17 +52,6 @@ const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string,
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
 
-  // We need to inject the tab reducer into the root reducer here.
-  // This will give us a state namespaces by the tab id.
-  useEffect(() => {
-    if (!tab) return
-
-    const store = createStore()
-
-    injectReducer(store, tab.id, tabReducer)
-
-  }, [tab])
-
   const onReady = (event) => {
     event.api.addPanel({
       id: 'WindowBar',

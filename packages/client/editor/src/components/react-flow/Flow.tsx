@@ -95,9 +95,9 @@ export const Flow: React.FC<FlowProps> = ({
       nodeTypes={nodeTypes}
       nodes={nodes}
       edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
+      onNodesChange={onNodesChange(tab.id)}
+      onEdgesChange={onEdgesChange(tab.id)}
+      onConnect={onConnect(tab.id)}
       onConnectStart={handleStartConnect}
       onConnectEnd={handleStopConnect}
       fitView
