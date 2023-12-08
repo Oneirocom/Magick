@@ -17,4 +17,5 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.dropTable('chatMessages')
+  await knex.schema.raw('DROP EXTENSION IF EXISTS "uuid-ossp"')
 }
