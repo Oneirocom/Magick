@@ -5,8 +5,8 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('chatMessages', (table) => {
     table.uuid('id').primary();
     table.string('message').notNullable();
-    table.uuid('agent_id').unsigned().notNullable();
-    table.foreign('agent_id').references('id').inTable('agents');
+    table.uuid('agentId').unsigned().notNullable();
+    table.foreign('agentId').references('id').inTable('agents');
     table.string('sender').notNullable();
     table.string('connector').notNullable();
     table.string('content').notNullable();
