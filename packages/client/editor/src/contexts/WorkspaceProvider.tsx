@@ -2,9 +2,11 @@
 import EditorProvider from './EditorProvider'
 import MagickInterfaceProvider from './MagickInterfaceProvider'
 import InspectorProvider from './InspectorProvider'
+import { ReactFlowProvider } from 'reactflow'
 
 /** An array of providers used in the application */
 const providers = [
+  ReactFlowProvider,
   MagickInterfaceProvider,
   EditorProvider,
   InspectorProvider,
