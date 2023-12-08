@@ -8,8 +8,6 @@ import { AgentInterface } from 'server/core'; // Adjust the import path as neces
 const AgentListItem = ({
   agent,
   onSelectAgent,
-  onRemoveSelectedAgent,
-  onAddSelectedAgent,
   isDraft = false,
   selectedAgents,
   onCheckboxChange,
