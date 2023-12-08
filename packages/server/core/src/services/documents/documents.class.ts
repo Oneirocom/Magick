@@ -295,6 +295,7 @@ const createElement = (element, docData) => {
   const embeddings: any[] = []
   for (const i in element) {
     embeddings.push({
+      embedding: docData.embedding,
       documentId,
       index: i,
       content: element[i].text,
