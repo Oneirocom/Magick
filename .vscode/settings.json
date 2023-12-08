@@ -2,10 +2,18 @@
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-},
-"editor.formatOnType": false,
-"editor.defaultFormatter": "esbenp.prettier-vscode",
-"[typescriptreact]": {
-  "editor.defaultFormatter": "vscode.typescript-language-features"
-},
+  },
+  "editor.formatOnType": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/build": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/build": true
+  }
 }
