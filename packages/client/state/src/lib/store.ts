@@ -31,6 +31,7 @@ const initialReducers = {
   preferences: preferencesReducer,
   localState: localStateReducer,
   statusBar: statusBarReducer,
+  graph: tabReducer,
 }
 const rootReducer = combineReducers(initialReducers)
 
