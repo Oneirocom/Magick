@@ -50,9 +50,8 @@ export const useBehaveGraphFlow = ({
     if (hasPositionMetaData(graphJson) === false) {
       autoLayout(nodes, edges)
     }
-
-    setNodes(nodes)
-    setEdges(edges)
+    setNodes(tab.id, nodes)
+    setEdges(tab.id, edges)
     setStoredGraphJson(graphJson)
   }, [])
 
