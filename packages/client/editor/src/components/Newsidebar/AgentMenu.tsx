@@ -8,31 +8,32 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import { useDispatch } from 'react-redux'
 import { STANDALONE, } from 'shared/config'
 import { useFeathers } from '@magickml/providers'
-import { useTabLayout } from '@magickml/providers'
 import { AgentInterface } from 'shared/core'
-import { setCurrentAgentId } from 'client/state'
+import { setCurrentAgentId, useCreateAgentReleaseMutation } from 'client/state'
 import { Button } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
 import { useSnackbar } from 'notistack'
 
-
 export function AgentMenu({ data }) {
 
   const { client } = useFeathers()
-  const { openTab } = useTabLayout()
   const dispatch = useDispatch()
   const { openModal, closeModal } = useModal()
   const { enqueueSnackbar } = useSnackbar()
 
   const [openMenu, setOpenMenu] = useState(null)
   const [currentAgent, _setCurrentAgent] = useState<AgentInterface | null>(null)
-  const [selectedAgents, setSelectedAgents] = useState<number[]>([])
+  const [selectedAgents, setSelectedAgents] = useState<string[]>([])
+  const [draftAgent, setDraftAgent] = useState(null);
+  const [publishedAgents, setPublishedAgents] = useState([]);
+
+  const [createAgentRelease] = useCreateAgentReleaseMutation()
+
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
     client.service('agents').subscribe(agent.id)
@@ -41,19 +42,14 @@ export function AgentMenu({ data }) {
     dispatch(setCurrentAgentId(agent.id))
   }, [])
 
-  // Set currentAgent based on data prop
+  // Update draftAgent and publishedAgents when data changes
   useEffect(() => {
-    if (data && data.length > 0) {
-      const defaultAgent = data.find(agent => agent.default)
-      //TODO: This feels like a potential bug eventually
-      // Set currentAgent to 'Default Agent' if it exists, otherwise choose the first agent
-      setCurrentAgent((defaultAgent || data[0]) as AgentInterface)
-    }
+    if (!data) return;
+    const draft = data.find(agent => agent.default);
+    setDraftAgent(draft || null);
+    const published = data.filter(agent => agent.currentSpellReleaseId);
+    setPublishedAgents(published);
   }, [data])
-
-
-  const publishedAgents = data?.filter(agent => agent.spellReleaseVersionID)
-  const defaultAgent = data?.filter(agent => agent.default)
 
   const toggleMenu = (target = null) => {
     if (openMenu) {
@@ -78,39 +74,49 @@ export function AgentMenu({ data }) {
   }
 
 
-  const handleBatchPublish = (): void => {
-    if (selectedAgents.length === 0) return
+  const handleBatchPublish = async () => {
+    if (selectedAgents.length === 0) return;
+
     openModal({
       modal: 'confirmationModal',
       title: 'Publish to agents',
       confirmButtonText: 'Publish',
       cancelButtonText: 'Cancel',
-      children: (
-        <div>
-          <p>
-            Are you sure you want to publish to the selected agents?
-          </p>
-        </div>
-      ),
+      children: <div><p>Are you sure you want to publish to the selected agents?</p></div>,
       onConfirm: async () => {
-        await Promise.all(selectedAgents.map(async (agentId) => {
-          const result = await client.service('agents').createRelease(agentId)
-          //TODO: This should be a toast
-          if (!result) {
-            enqueueSnackbar('Failed to create release', { variant: 'error' })
-            throw new Error('Failed to create release')
-          }
-          enqueueSnackbar('Successfully updated agents', { variant: 'success' })
-          return result
-        }))
-        setSelectedAgents([])
-        closeModal()
-      }
-    })
-  }
+        try {
+          const releasePromises = selectedAgents.map(agentId =>
+            createAgentRelease({ agentId }).unwrap()
+          );
+          const results = await Promise.all(releasePromises);
 
-  const handlePublish = async () => {
-    await client.service('agents').createRelease(currentAgent.id)
+          results.forEach(result => {
+            if (!result) {
+              enqueueSnackbar('Failed to create release', { variant: 'error' });
+            } else {
+              enqueueSnackbar('Successfully updated agents', { variant: 'success' });
+            }
+          });
+        } catch (error) {
+          enqueueSnackbar('Error creating release!', { variant: 'error' });
+        } finally {
+          setSelectedAgents([]);
+          closeModal();
+        }
+      }
+    });
+  };
+
+
+  // Add a function to handle checkbox changes
+  const handleCheckboxChange = (agentId: string, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedAgents((prevSelected) => [...prevSelected, agentId]);
+    } else {
+      setSelectedAgents((prevSelected) =>
+        prevSelected.filter((id) => id !== agentId)
+      );
+    }
   }
 
   const BorderedAvatar = styled(Avatar)`
@@ -191,15 +197,16 @@ export function AgentMenu({ data }) {
           marginBottom: 4,
           marginLeft: 16,
         }}>Draft</h3>
-        {defaultAgent?.map((agent, i) => {
-          return (
+        {
+          draftAgent && (
             <AgentListItem
-              key={i + agent.id}
-              agent={agent}
+              key={draftAgent.id}
+              agent={draftAgent}
               onSelectAgent={handleSelectAgent}
+              isDraft
             />
           )
-        })}
+        }
         {
           publishedAgents && publishedAgents.length > 0 && (
             <>
@@ -216,7 +223,9 @@ export function AgentMenu({ data }) {
                   <AgentListItem
                     key={i + agent.id}
                     agent={agent}
+                    selectedAgents={selectedAgents}
                     onSelectAgent={handleSelectAgent}
+                    onCheckboxChange={handleCheckboxChange}
                   />
                 )
               }
@@ -227,52 +236,22 @@ export function AgentMenu({ data }) {
 
         <StyledDivider />
         <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0 16px' }}>
-          {publishedAgents && publishedAgents.length > 0 ? (
-            <Button
-              disabled={!(selectedAgents.length > 0)}
-              hoverStyle={{}}
-              style={{
-                backgroundColor: selectedAgents.length > 0 ? '#0074a0' : 'grey',
-                border: 'none',
-                marginTop: '8px',
-                marginBottom: '8px'
-              }}
-              onClick={() => {
-                void handleBatchPublish()
-              }}
-            >
-              Publish to selected agents
-            </Button>
-          ) : (
-            <Button
-              hoverStyle={{}}
-              style={{
-                backgroundColor: '#0074a0',
-                border: 'none',
-                marginTop: '8px',
-                marginBottom: '8px'
-              }}
-              onClick={() => {
-                void handlePublish()
-              }}
-            >
-              Publish this agent
-            </Button>
 
-          )}
-          <MenuItem
+          <Button
+            disabled={!(selectedAgents.length > 0)}
+            hoverStyle={{}}
+            style={{
+              backgroundColor: selectedAgents.length > 0 ? '#0074a0' : 'grey',
+              border: 'none',
+              marginTop: '8px',
+              marginBottom: '8px'
+            }}
             onClick={() => {
-              openTab({
-                id: 'Agents',
-                name: 'Agents',
-                type: 'Agents',
-                switchActive: true,
-              })
-              toggleMenu()
+              void handleBatchPublish()
             }}
           >
-            Manage agents
-          </MenuItem>
+            Publish to selected agents
+          </Button>
         </div>
       </Menu >
     </div >
