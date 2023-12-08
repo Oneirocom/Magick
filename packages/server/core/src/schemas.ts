@@ -59,7 +59,7 @@ export const agentSchema = Type.Object(
   {
     id: Type.String(),
     projectId: Type.String(),
-    rootSpellId: Type.Optional(Type.String()),
+    rootSpellId: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     name: Type.String(),
     enabled: Type.Optional(Type.Boolean()),
     runState: Type.Optional(Type.String()), // TODO: THe database restricts this to a set of values, but we don't have a way to express that in typebox afaik
