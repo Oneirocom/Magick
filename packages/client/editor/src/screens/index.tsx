@@ -112,19 +112,17 @@ const MagickV2 = () => {
   }
 
   return (
-    <ReactFlowProvider>
-      <ModalProvider>
-        <GridviewReact
-          components={components}
-          onReady={onReady}
-          disableAutoResizing={false}
-          proportionalLayout={false}
-          orientation={Orientation.VERTICAL}
-          hideBorders={true}
-          className={`global-layout ${theme}`}
-        />
-      </ModalProvider>
-    </ReactFlowProvider>
+    <ModalProvider>
+      <GridviewReact
+        components={components}
+        onReady={onReady}
+        disableAutoResizing={false}
+        proportionalLayout={false}
+        orientation={Orientation.VERTICAL}
+        hideBorders={true}
+        className={`global-layout ${theme}`}
+      />
+    </ModalProvider>
   )
 }
 
