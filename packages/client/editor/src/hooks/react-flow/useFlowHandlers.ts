@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { calculateNewEdge } from '../../utils/calculateNewEdge.js'
 import { getNodePickerFilters } from '../../utils/getPickerFilters.js'
 import { useBehaveGraphFlow } from './useBehaveGraphFlow.js'
+import { Tab } from '@magickml/providers'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
@@ -40,10 +41,12 @@ export const useFlowHandlers = ({
   nodes,
   specJSON,
   parentRef,
+  tab,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
   nodes: Node[]
   specJSON: NodeSpecJSON[] | undefined
   parentRef: React.RefObject<HTMLDivElement>
+  tab: Tab
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
@@ -63,7 +66,7 @@ export const useFlowHandlers = ({
         position,
         data: {},
       }
-      onNodesChange([
+      onNodesChange(tab.id)([
         {
           type: 'add',
           item: newNode,
@@ -76,7 +79,7 @@ export const useFlowHandlers = ({
       const originNode = nodes.find(node => node.id === lastConnectStart.nodeId)
       if (originNode === undefined) return
       if (!specJSON) return
-      onEdgesChange([
+      onEdgesChange(tab.id)([
         {
           type: 'add',
           item: calculateNewEdge(
