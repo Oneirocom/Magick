@@ -11,14 +11,14 @@ const AgentListItem = ({
   isDraft = false,
   selectedAgents,
   onCheckboxChange,
+  isSinglePublishedAgent = false,
 }: {
   agent: AgentInterface;
-  onSelectAgent?: (agent: AgentInterface) => void;
-  onAddSelectedAgent?: (agent: string) => void;
-  onRemoveSelectedAgent?: (agent: string) => void;
+  onSelectAgent: (agent: AgentInterface) => void;
   isDraft?: boolean;
   selectedAgents?: string[];
   onCheckboxChange?: (agentId: string, checked: boolean) => void;
+  isSinglePublishedAgent?: boolean;
 }) => {
   const agentImage = agent.image
     ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
@@ -29,9 +29,11 @@ const AgentListItem = ({
     return formatDistanceToNow(new Date(date), { addSuffix: true });
   };
 
-  const handleCheckboxClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent menu close
-  };
+  const handleCheckboxClick = (event) => {
+    if (event.target.type === 'checkbox') {
+      event.stopPropagation();
+    }
+  }
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     if (onCheckboxChange) {
@@ -47,22 +49,19 @@ const AgentListItem = ({
         justifyContent: 'space-between',
         width: '100%',
       }}
-      onClick={() => onSelectAgent && onSelectAgent(agent)}
+      onClick={() => {
+        onSelectAgent(agent)
+      }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={handleCheckboxClick}>
-        {!isDraft && (
+        {!isDraft && !isSinglePublishedAgent && (
           <Checkbox
             size='small'
             checked={selectedAgents?.includes(agent.id)}
             onChange={handleCheckboxChange}
             sx={{
-              ":hover": {
-                backgroundColor: 'transparent',
-                cursor: 'pointer',
-              },
-              marginRight: 0,
-              marginLeft: 0,
-              paddingLeft: 0,
+              marginRight: '8px',
+              padding: 0,
             }}
           />
         )}
@@ -75,7 +74,7 @@ const AgentListItem = ({
         </Avatar>
         <ListItemText
           primary={agent.name}
-          secondary={`${agent.updatedAt ? 'Updated:' : 'Created:'} ${formatDate(agent.updatedAt || agent.createdAt)}`}
+          secondary={`Updated ${formatDate(agent.updatedAt || agent.createdAt)}`}
           sx={{
             ml: 1,
             maxWidth: isDraft ? '220px' : '180px',
