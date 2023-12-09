@@ -67,8 +67,8 @@
   /* backdrop-filter: blur(15px); */
 }
 .node.success {
-  outline-color: var(--blue) !important;
-  border: 2px solid var(--blue);
+  outline-color: var(--green) !important;
+  border: 2px solid var(--green);
   transition: border 0.2s ease, outline-color 0.2s ease;
 }
 .node-depricated {
