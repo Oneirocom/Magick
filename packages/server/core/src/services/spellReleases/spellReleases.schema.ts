@@ -35,7 +35,7 @@ export const spellReleaseExternalResolver = resolve<SpellRelease, HookContext>(
  */
 export const spellReleaseDataSchema = Type.Pick(
   spellReleaseSchema,
-  ['agentId', 'versionName'],
+  ['agentId', 'description'],
   { $id: 'SpellReleaseData' }
 )
 
@@ -90,7 +90,7 @@ export const spellReleasePatchResolver = resolve<SpellRelease, HookContext>({})
 export const spellReleaseQueryProperties = Type.Pick(spellReleaseSchema, [
   'id',
   'spellId',
-  'versionName',
+  'description',
   'createdAt',
 ])
 
