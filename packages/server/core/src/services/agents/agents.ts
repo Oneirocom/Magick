@@ -72,12 +72,19 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/createRelease', {
-    create: async (data: { agentId: string; versionTag: string }) => {
+    create: async ({
+      agentId,
+      description,
+    }: {
+      agentId: string
+      description: string
+    }) => {
       try {
-        return await app.service('agents').createRelease({
-          agentId: data.agentId,
-          versionTag: data.versionTag,
+        const result = await app.service('agents').createRelease({
+          agentId: agentId,
+          description: description,
         })
+        return result
       } catch (error: any) {
         throw new Error(`Error in agents:createRelease: ${error.message}`)
       }
