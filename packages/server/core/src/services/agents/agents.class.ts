@@ -40,10 +40,14 @@ export class AgentService<
   // Its easier to imagine an agent having many releases
   // even though we actually version with the spellReleases table
   async getAgentReleases(agentId: string) {
-    const db = app.get('dbClient')
-    const query = await db('spellReleases').where({ agentId })
-
-    return { data: query }
+    try {
+      const db = app.get('dbClient')
+      const query = await db('spellReleases').where({ agentId })
+      return { data: query }
+    } catch (error) {
+      console.error('Error fetching agent releases:', error)
+      throw error // or handle error as needed
+    }
   }
 
   async find(params?: ServiceParams) {
@@ -139,43 +143,54 @@ export class AgentService<
   }
 
   /**
-   * Creates a new spell release for the given agent by
-   * creating a new spell release and then creating a new spell
-   * for each spell in the project and giving it a spellReleaseId.
-   * Then updates the agent with the new spell release ID.
-   * @param agentId - The id of the agent to create a new spell release for.
-   * @param versionTag - The version tag to give the new spell release.
-   * @returns An object containing the id of the new spell release ID.
+   * Creates a new spell release for the agent.
+   * Currently we only verison from the draft agent to the live agent.
+   * So agentId will be the draft agent untill we add publishing ot multiple agents.
+   * @param agentId - The id of the agent to create a release for.
+   * @param description - A description of the release.
+   * @returns An object containing the id of the new spell release.
    */
   async createRelease({
     agentId,
-    versionTag,
+    description,
   }: {
     agentId: string
-    versionTag: string
+    description: string
   }): Promise<{ spellReleaseId: string }> {
-    try {
-      // update current agent with reference to new version
-      const agent = await app.service('agents').get(agentId, {})
-      // // get all spells for the project
-      const allSpells: SpellData[] = await fetchAllPages(
-        app.service('spells').find.bind(app.service('spells')),
-        {
-          query: {
-            projectId: agent.projectId,
-          },
-        }
-      )
+    // Start a new transaction
+    return this.app.get('dbClient').transaction(async trx => {
+      try {
+        // this agent will have the project Id
+        const liveAgent = await trx('agents').where({ id: agentId }).first()
+        if (!liveAgent) throw new Error(`Agent with id ${agentId} not found`)
+        const projectId = liveAgent.projectId
+        const draftAgent = await trx('agents')
+          .where({ projectId, default: true })
+          .first()
 
-      const spellRelease = await app.service('spellReleases').create({
-        versionName: versionTag,
-        agentId,
-      })
+        const [spellRelease] = await trx('spellReleases')
+          .insert({
+            id: uuidv4(),
+            description,
+            agentId,
+          })
+          .returning('*')
 
-      // create new spell release for each spell
-      await Promise.all(
-        allSpells.map(async (spell: SpellData) => {
-          return await app.service('spells').create({
+        // Get all draft spells for the project using fetchAllPages
+        const allDraftSpells: SpellData[] = await fetchAllPages(
+          this.app.service('spells').find.bind(this.app.service('spells')),
+          {
+            query: {
+              projectId,
+              agentId: draftAgent.id,
+            },
+            transaction: trx, // Pass the transaction object to fetchAllPages if needed
+          }
+        )
+
+        // Create new spells linked to the new spell release
+        for (const spell of allDraftSpells) {
+          await trx('spells').insert({
             ...spell,
             id: uuidv4(),
             spellReleaseId: spellRelease.id,
@@ -183,22 +198,20 @@ export class AgentService<
             createdAt: new Date().toISOString(),
             type: spell.type ?? 'spell',
           })
+        }
+        // Update agent with new spell release ID
+        await trx('agents').where({ id: liveAgent.id }).update({
+          currentSpellReleaseId: spellRelease.id,
+          updatedAt: new Date().toISOString(),
         })
-      )
 
-      // update agent with new spell release
-      // TODO: id and name should not be required in the type
-      await app.service('agents').patch(agentId, {
-        currentSpellReleaseId: spellRelease.id,
-        projectId: agent.projectId,
-        id: agentId,
-        name: agent.name,
-      })
-
-      return { spellReleaseId: spellRelease.id }
-    } catch (error: any) {
-      throw new Error(`Error in agents.class:createRelease: ${error.message}`)
-    }
+        return { spellReleaseId: spellRelease.id }
+      } catch (error: any) {
+        throw new Error(
+          `Error in agents.class:createRelease: ${error?.message}`
+        )
+      }
+    })
   }
 
   async create(
