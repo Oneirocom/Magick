@@ -57,6 +57,8 @@ export const useFlowHandlers = ({
     setNodePickerVisibility(undefined)
   }, [])
 
+  let blockClose = false
+
   const handleAddNode = useCallback(
     (nodeType: string, position: XYPosition) => {
       closeNodePicker()
@@ -110,18 +112,28 @@ export const useFlowHandlers = ({
   )
 
   const handleStopConnect = useCallback((e: MouseEvent) => {
+    blockClose = true
+    e.preventDefault()
     const element = e.target as HTMLElement
     if (element.classList.contains('react-flow__pane')) {
-      setNodePickerVisibility({ x: e.clientX, y: e.clientY })
+      const bounds = parentRef.current.getBoundingClientRect()
+      setNodePickerVisibility({
+        x: e.clientX - bounds.left + window.scrollX,
+        y: e.clientY - bounds.top + window.scrollY,
+      })
+
+      setTimeout(() => {
+        blockClose = false
+      }, 500)
     } else {
       setLastConnectStart(undefined)
     }
   }, [])
 
-  const handlePaneClick = useCallback(
-    () => closeNodePicker(),
-    [closeNodePicker]
-  )
+  const handlePaneClick = useCallback(() => {
+    if (blockClose) return
+    closeNodePicker()
+  }, [closeNodePicker])
 
   const handlePaneContextMenu = useCallback(
     (e: React.MouseEvent) => {
