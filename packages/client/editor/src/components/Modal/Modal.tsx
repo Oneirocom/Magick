@@ -40,7 +40,7 @@ const Modal = ({
   const handleModalBackgroundClick = useCallback((e) => {
     e.stopPropagation();
     closeModal();
-    onClose();
+    if (onClose) onClose();
   }, [closeModal, onClose]);
 
   /**
