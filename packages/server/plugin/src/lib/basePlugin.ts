@@ -10,6 +10,7 @@ import {
 } from '@magickml/behave-graph'
 import { BullMQWorker, BullQueue } from 'server/communication'
 import { getLogger } from 'server/logger'
+import { SpellCaster } from 'server/grimoire'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -77,6 +78,9 @@ export type EventPayload<
   channelType: string
   rawData: unknown
   timestamp: string
+  runInfo?: {
+    spellId: string
+  }
   data: T
   metadata: Y
 }
@@ -282,18 +286,21 @@ export abstract class BasePlugin<
     return registry
   }
 
-  abstract getDependencies(): Record<string, any>
+  abstract getDependencies(spellCaster: SpellCaster): Record<string, any>
 
   /**
    * Returns a registry object merged with the plugin's specific registry.
    * @param existingRegistry An existing registry to merge with the plugin's registry.
    * @returns A merged registry object.
    */
-  getRegistry(existingRegistry: IRegistry): IRegistry {
+  getRegistry(
+    existingRegistry: IRegistry,
+    spellCaster: SpellCaster
+  ): IRegistry {
     // Define the plugin-specific values, nodes, and dependencies
     const pluginValues = this.getPluginValues()
     const pluginNodes = this.getPluginNodes()
-    const pluginDependencies = this.getDependencies()
+    const pluginDependencies = this.getDependencies(spellCaster)
 
     // Merge the plugin's registry with the existing registry
     const registry = {
