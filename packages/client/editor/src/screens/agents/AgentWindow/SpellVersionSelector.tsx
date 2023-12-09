@@ -25,7 +25,7 @@ const SpellVersionSelector = ({
 
   const selectedRelease = spellReleaseList.find((spell) => spell.id === activeSpellReleaseId);
 
-  const val = selectedRelease ? `${selectedRelease?.versionName} (${selectedRelease?.createdAt})` : 'Default';
+  const val = selectedRelease ? `Released on ${selectedRelease?.createdAt}` : 'Default';
 
   return (
     <div className="form-item agent-select">
@@ -45,7 +45,7 @@ const SpellVersionSelector = ({
           spellReleaseList.sort((a, b) => a.createdAt < b.createdAt ? 1 : -1)
             .map((spell, idx) => (
               <option value={spell.id} key={idx}>
-                {`${selectedRelease?.versionName} (${selectedRelease?.createdAt})`}
+                {`Released on ${selectedRelease?.createdAt}`}
               </option>
             ))
         }
