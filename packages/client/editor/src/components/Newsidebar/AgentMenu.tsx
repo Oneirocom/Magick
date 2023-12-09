@@ -34,22 +34,27 @@ export function AgentMenu({ data }) {
 
   const [createAgentRelease] = useCreateAgentReleaseMutation()
 
-
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
     client.service('agents').subscribe(agent.id)
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
     dispatch(setCurrentAgentId(agent.id))
-    dispatch(setCurrentSpellReleaseId(agent.currentSpellReleaseId))
+    dispatch(setCurrentSpellReleaseId(agent?.currentSpellReleaseId))
   }, [])
 
   // Update draftAgent and publishedAgents when data changes
   useEffect(() => {
     if (!data) return;
-    const draft = data.find(agent => agent.default);
-    setDraftAgent(draft || null)
-    const published = data.filter(agent => agent.currentSpellReleaseId);
-    setPublishedAgents(published)
+    if (!draftAgent) {
+
+      const draft = data.find(agent => agent.default);
+      setDraftAgent(draft)
+      _setCurrentAgent(draft)
+    }
+    if (!publishedAgents.length) {
+      const published = data.filter(agent => agent.currentSpellReleaseId);
+      setPublishedAgents(published)
+    }
   }, [data])
 
   const toggleMenu = (target = null) => {
@@ -229,7 +234,7 @@ export function AgentMenu({ data }) {
         }
         {
           publishedAgents && publishedAgents.length > 0 && (
-            <>
+            <div>
               <StyledDivider />
               <h3 style={{
                 marginTop: 2,
@@ -251,7 +256,7 @@ export function AgentMenu({ data }) {
                 )
               }
               )}
-            </>
+            </div>
           )
         }
 
