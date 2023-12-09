@@ -30,7 +30,7 @@ const components = {
         style={{
           height: '100%',
           padding: '5px',
-          background: 'var(--dv-group-view-background-color)',
+          background: 'var(--background-color)',
         }}
       >
         Status Bar

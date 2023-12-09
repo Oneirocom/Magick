@@ -191,7 +191,7 @@ button.primary {
 }
 
 button.list {
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
   padding: 3px;
   padding-left: var(--small);
   padding-right: var(--small);
@@ -225,7 +225,7 @@ button.disabled {
   box-shadow: none;
   pointer-events: none;
   opacity: 0.5;
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
 }
 
 .node.selected button {
@@ -258,7 +258,7 @@ button.disabled {
 
 .flexlayout__tabset_tabbar_inner_tab_container_top {
   border-top: none;
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
 }
 
 .flexlayout__tabset_tabbar_outer_top {
@@ -275,7 +275,7 @@ button.disabled {
 }
 
 .flexlayout__tab_toolbar {
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
 }
 
 .flexlayout__tab_button {
@@ -312,7 +312,7 @@ input {
   box-sizing: border-box;
   padding: var(--small);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
   padding-left: var(--small);
   padding-right: var(--small);
   color: #fff;
@@ -406,7 +406,7 @@ input:focus-visible {
   box-sizing: border-box;
   padding: var(--extraSmall);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
   color: #fff;
   border-radius: 4px;
   cursor: default;
@@ -558,7 +558,7 @@ div.item {
 }
 
 .flexlayout__layout {
-  background-color: var(--midnight) !important;
+  background-color: var(--foreground-light) !important;
   color: var(---rich-blue);
   font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
 }

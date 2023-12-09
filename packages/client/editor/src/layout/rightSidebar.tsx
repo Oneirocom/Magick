@@ -25,7 +25,7 @@ const components = {
       <div
         style={{
           height: '100%',
-          background: 'var(--dv-group-view-background-color)',
+          background: 'var(--background-color)',
           display: 'flex',
           flexDirection: 'column',
         }}
