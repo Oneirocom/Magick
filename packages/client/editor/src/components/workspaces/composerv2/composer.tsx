@@ -39,6 +39,15 @@ const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | unde
   localStorage.setItem(key, JSON.stringify(layout))
 }
 
+const getLayoutFromLocalStorage = (spellId: string) => {
+  const layout = localStorage.getItem(`composer_layout_${spellId}`)
+  return layout ? JSON.parse(layout) : null
+}
+
+const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
+  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
+}
+
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
     id: 'panel_1',
