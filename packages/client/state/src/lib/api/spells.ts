@@ -118,6 +118,7 @@ export const spellApi = rootApi.injectEndpoints({
       invalidatesTags: ['Spell'],
       async queryFn(
         { spell, projectId },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         { dispatch },
         extraOptions,
         baseQuery
