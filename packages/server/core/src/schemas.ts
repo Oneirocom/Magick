@@ -137,7 +137,7 @@ export type Document = Static<typeof documentSchema>
 export const spellReleaseSchema = Type.Object(
   {
     id: Type.String(),
-    versionName: Type.String(),
+    description: Type.String(),
     agentId: Type.Optional(Type.String()), // An agent will typically run the release which batches many spell releases
     spellId: Type.Optional(Type.String()), // A spell may in theory be release by the spell service
     createdAt: Type.String(),
