@@ -193,10 +193,10 @@ const ChatWindow = ({ tab, spellId }) => {
   useEffect(() => {
     if (!lastEvent) return
 
-    console.log('lastEvent received', lastEvent)
-
-    const { data } = lastEvent
+    const { data, event } = lastEvent
     const { content } = data
+
+    if (event.channel !== spellId) return
 
     printToConsole(null, content)
   }, [lastEvent])
@@ -290,14 +290,13 @@ const ChatWindow = ({ tab, spellId }) => {
     }
 
     const eventPayload = {
-      // connector: playtestInputName,
       content: value,
       sender: 'user',
       observer: 'assistant',
-      client: 'playtest',
-      channel: 'previewChannel',
+      client: 'cloud.magickml.com',
+      channel: spellId,
       projectId: config.projectId,
-      channelType: 'previewChannelType',
+      channelType: 'spell playtest',
       rawData: value,
       agentId: currentAgentId
     }
