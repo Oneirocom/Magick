@@ -40,19 +40,25 @@ export class SpellService<
     const spellReleaseId = params.query?.spellReleaseId
     const query = super.createQuery(params)
 
-    let spell
+    // Start building the query with the spell ID condition
+    let spellQuery = query.where('spells.id', '=', spellId)
+
+    // Conditionally add the spellReleaseId filter if it exists
     if (spellReleaseId) {
-      spell = await query
-        .where('spells.spellReleaseId', '=', spellReleaseId)
-        .andWhere('spells.id', '=', spellId)
-        .first()
-    } else {
-      spell = await query.where('spells.id', '=', spellId).first()
+      spellQuery = spellQuery.andWhere(
+        'spells.spellReleaseId',
+        '=',
+        spellReleaseId
+      )
     }
+
+    // Execute the query
+    const spell = await spellQuery.first()
 
     if (!spell) {
       throw new NotFound(`No record found for id '${spellId}'`)
     }
+
     return spell
   }
 
