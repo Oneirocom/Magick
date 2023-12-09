@@ -20,6 +20,15 @@ import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
 
+const getLayoutFromLocalStorage = (spellId: string) => {
+  const layout = localStorage.getItem(`composer_layout_${spellId}`)
+  return layout ? JSON.parse(layout) : null
+}
+
+const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
+  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
+}
+
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
     id: 'panel_1',
@@ -129,19 +138,22 @@ export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, subscribe } = usePubSub()
+
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
+    const layout = getLayoutFromLocalStorage(spellId)
 
-    // let success = false;
+    let success = false;
 
-    // if (layout) {
-    //   event.api.fromJSON(layout);
-    //   success = true;
-    // }
+    if (layout) {
+      event.api.fromJSON(layout);
+      success = true;
+    }
 
-    // if (!success) {
-    loadDefaultLayout(event.api, tab, spellId)
-    // }
+    if (!success) {
+      loadDefaultLayout(event.api, tab, spellId)
+    }
+
     setApi(event.api)
   }
 
@@ -158,6 +170,12 @@ export const Composer = ({ tab, theme, spellId }) => {
           spellId
         },
       })
+    })
+
+    api.onDidLayoutChange(() => {
+      const layout = api.toJSON()
+
+      saveLayoutToLocalStorage(spellId, layout)
     })
 
     return () => {

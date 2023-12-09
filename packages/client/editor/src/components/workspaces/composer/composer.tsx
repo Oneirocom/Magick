@@ -7,6 +7,8 @@ import {
   DockviewReadyEvent,
 
   IDockviewPanelProps,
+  SerializedDockview,
+  SerializedGridviewComponent,
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
@@ -26,6 +28,15 @@ import { useEditor } from '../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
+
+const getLayoutFromLocalStorage = (spellId: string) => {
+  const layout = localStorage.getItem(`composer_layout_${spellId}`)
+  return layout ? JSON.parse(layout) : null
+}
+
+const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
+  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
+}
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -194,17 +205,20 @@ export const Composer = ({ tab, theme, spellId }) => {
 
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
+    const layout = getLayoutFromLocalStorage(spellId)
 
-    // let success = false;
+    let success = false;
 
-    // if (layout) {
-    //   event.api.fromJSON(layout);
-    //   success = true;
-    // }
+    if (layout) {
+      event.api.fromJSON(layout);
+      success = true;
+    }
 
-    // if (!success) {
-    loadDefaultLayout(event.api, tab, spellId)
-    // }
+    if (!success) {
+      loadDefaultLayout(event.api, tab, spellId)
+    }
+
+    console.log('READY!!!!!!!!!! Setting api')
     setApi(event.api)
   }
 
@@ -221,6 +235,14 @@ export const Composer = ({ tab, theme, spellId }) => {
           spellId
         },
       })
+    })
+
+    console.log('Setting up layout change listener')
+    api.onDidLayoutChange(() => {
+      console.log('layout changed!!!!!!!!!!!')
+      const layout = api.toJSON()
+
+      saveLayoutToLocalStorage(spellId, layout)
     })
 
     return () => {
