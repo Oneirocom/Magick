@@ -1,5 +1,5 @@
 import { IRegistry } from '@magickml/behave-graph';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
 
 import CustomControls from './Controls.js';
