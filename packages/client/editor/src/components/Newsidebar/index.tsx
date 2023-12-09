@@ -65,61 +65,65 @@ export function NewSidebar(DrawerProps): JSX.Element {
 
   useEffect(() => {
     const handleInitialAgentSetup = async () => {
-      // If there are no agents, create a draft agent and a live agent
-      if (agents && agents.total === 0) {
-        // Create a draft agent
-        await createNewAgent({
-          name: 'Draft Agent',
-          projectId: config.projectId,
-          enabled: false,
-          default: true,
-          publicVariables: '{}',
-          secrets: '{}',
-        }).unwrap();
+      try {
+        // If there are no agents, create a draft agent and a live agent
+        if (agents && agents.total === 0) {
+          // Create a draft agent
+          await createNewAgent({
+            name: 'Draft Agent',
+            projectId: config.projectId,
+            enabled: false,
+            default: true,
+            publicVariables: '{}',
+            secrets: '{}',
+          }).unwrap();
 
-        // Create a live agent
-        const newLiveAgent = await createNewAgent({
-          name: 'My Live Agent',
-          projectId: config.projectId,
-          enabled: true,
-          default: false,
-          publicVariables: '{}',
-          secrets: '{}',
-        }).unwrap();
+          // Create a live agent
+          const newLiveAgent = await createNewAgent({
+            name: 'My Live Agent',
+            projectId: config.projectId,
+            enabled: true,
+            default: false,
+            publicVariables: '{}',
+            secrets: '{}',
+          }).unwrap();
 
-        // Create a release for the live agent
-        await createAgentRelease({
-          agentId: newLiveAgent.id,
-          description: 'Initial release'
-        }).unwrap();
-      }
+          // Create a release for the live agent
+          await createAgentRelease({
+            agentId: newLiveAgent.id,
+            description: 'Initial release'
+          }).unwrap();
+        }
 
-      // In this scenario, we are assuming a project with one agent is currently live,
-      // Thus a draft should be created and a release should be made for the agent.
-      if (agents && agents.total === 1) {
-        // Create a draft agent
-        const agent = agents.data[0]
-        await createNewAgent({
-          rootSpell: agent?.rootSpell || "{}", // Depricated
-          publicVariables: '{}',
-          secrets: '{}',
-          name: 'Draft Agent',
-          enabled: false,
-          pingedAt: "",
-          projectId: agent?.projectId,
-          data: agent?.data || {},
-          runState: newAgent?.runState,
-          image: agent?.image || "",
-          rootSpellId: agent?.rootSpellId || "",
-          default: true,
-          currentSpellReleaseId: null,
-        }).unwrap();
+        // In this scenario, we are assuming a project with one agent is currently live,
+        // Thus a draft should be created and a release should be made for the agent.
+        if (agents && agents.total === 1) {
+          // Create a draft agent
+          const agent = agents.data[0]
+          await createNewAgent({
+            rootSpell: agent?.rootSpell || "{}", // Depricated
+            publicVariables: '{}',
+            secrets: '{}',
+            name: 'Draft Agent',
+            enabled: false,
+            pingedAt: "",
+            projectId: agent?.projectId,
+            data: agent?.data || {},
+            runState: newAgent?.runState,
+            image: agent?.image || "",
+            rootSpellId: agent?.rootSpellId || "",
+            default: true,
+            currentSpellReleaseId: null,
+          }).unwrap();
 
-        // Create a release for the live agent
-        await createAgentRelease({
-          agentId: agents[0].id,
-          description: 'Initial release'
-        }).unwrap();
+          // Create a release for the live agent
+          await createAgentRelease({
+            agentId: agents[0].id,
+            description: 'Initial release'
+          }).unwrap();
+        }
+      } catch (error: any) {
+        console.log(`Error in initial agent setup: ${error}`)
       }
     }
     handleInitialAgentSetup();
