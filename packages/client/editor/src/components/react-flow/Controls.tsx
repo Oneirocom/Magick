@@ -41,9 +41,9 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
   return (
     <>
       <Controls>
-        <ControlButton title="Help" onClick={() => setHelpModalOpen(true)}>
+        {/* <ControlButton title="Help" onClick={() => setHelpModalOpen(true)}>
           <FontAwesomeIcon icon={faQuestion} />
-        </ControlButton>
+        </ControlButton> */}
         <ControlButton title="Minimap" onClick={toggleMiniMap}>
           <FontAwesomeIcon icon={faSitemap} />
         </ControlButton>
