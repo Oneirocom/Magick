@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   // Create 'spellReleases' table
   await knex.schema.createTable('spellReleases', function (table) {
     table.uuid('id').primary()
-    table.string('versionName', 255).notNullable()
+    table.string('description').nullable()
     table.uuid('agentId').notNullable()
     table.uuid('spellId').nullable()
     table.timestamp('createdAt').defaultTo(knex.fn.now())
