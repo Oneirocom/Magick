@@ -171,8 +171,8 @@ const ChatWindow = ({ tab, spellId }) => {
   const { MESSAGE_AGENT } = events
 
   // Print to console callback function.
-  const printToConsole = useCallback(
-    (_, _text) => {
+  const printToConsole =
+    (_text) => {
       // check if _text is a string
       if (typeof _text !== 'string')
         return console.warn('could not split text, not a string', _text)
@@ -183,11 +183,8 @@ const ChatWindow = ({ tab, spellId }) => {
         content: text,
       }
 
-      const newHistory = [...history, newMessage]
-      setHistory(newHistory as [])
-    },
-    [history]
-  )
+      setHistory((prevHistory) => [...prevHistory, newMessage]);
+    }
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
@@ -196,10 +193,11 @@ const ChatWindow = ({ tab, spellId }) => {
     const { data, event } = lastEvent
     const { content } = data
 
+
     if (event?.runInfo?.spellId !== spellId) return
     if (event.channel !== spellId) return
 
-    printToConsole(null, content)
+    printToConsole(content)
   }, [lastEvent])
 
   // Set playtest options based on spell graph nodes with the playtestToggle set to true.
