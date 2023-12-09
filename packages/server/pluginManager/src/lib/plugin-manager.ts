@@ -8,6 +8,7 @@ import { getLogger } from 'server/logger'
 import Redis from 'ioredis'
 import * as plugins from './../../../../../plugins'
 import { RedisPubSub } from 'server/redis-pubsub'
+import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
@@ -206,7 +207,7 @@ export class PluginManager extends EventEmitter {
    * Retrieves a unified registry of all nodes, values, and dependencies from the plugins.
    * @returns A unified registry object.
    */
-  getRegistry(baseRegistry?: IRegistry): IRegistry {
+  getRegistry(spellCaster: SpellCaster, baseRegistry?: IRegistry): IRegistry {
     const unifiedRegistry: IRegistry = baseRegistry || {
       nodes: {},
       values: {},
@@ -214,8 +215,10 @@ export class PluginManager extends EventEmitter {
     }
 
     for (const plugin of this.plugins.values()) {
-      const { nodes, values, dependencies } =
-        plugin.getRegistry(unifiedRegistry)
+      const { nodes, values, dependencies } = plugin.getRegistry(
+        unifiedRegistry,
+        spellCaster
+      )
       Object.assign(unifiedRegistry.nodes, nodes)
       Object.assign(unifiedRegistry.values, values)
       Object.assign(unifiedRegistry.dependencies, dependencies)
