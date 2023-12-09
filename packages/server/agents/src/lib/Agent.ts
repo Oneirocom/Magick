@@ -1,4 +1,3 @@
-// DOCUMENTED
 import pino from 'pino'
 import {
   SpellManager,
@@ -21,7 +20,6 @@ import { Application } from 'server/core'
 import {
   type Job,
   type Worker,
-  type PubSub,
   type MessageQueue,
   BullQueue,
 } from 'server/communication'
@@ -144,6 +142,7 @@ export class Agent implements AgentInterface {
     const spells = spellsData.data
     this.spellbook.loadSpells(spells)
   }
+
   /*
    * Initializes the plugins for the Agent.
    * If no root spell is found, logs a warning and returns.

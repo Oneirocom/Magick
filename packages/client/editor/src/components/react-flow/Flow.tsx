@@ -64,7 +64,8 @@ export const Flow: React.FC<FlowProps> = ({
     onEdgesChange,
     onNodesChange,
     specJSON: specJson,
-    parentRef
+    parentRef,
+    tab
   });
 
   const togglePlay = () => {
