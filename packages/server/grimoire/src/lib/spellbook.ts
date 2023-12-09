@@ -17,6 +17,7 @@ interface IApplication extends FeathersApplication {
 
 interface IAgent extends IAgentLogger {
   id: string
+  projectId: string
 }
 
 /**
@@ -142,7 +143,44 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.initializePlugins()
 
     // Listen for spell changes
-    this.app.service('spells').on('updated', this.watchSpellHandler.bind(this))
+    this.app
+      .service('spells')
+      .on('updated', this.watchSpellUpdateHandler.bind(this))
+
+    this.app
+      .service('spells')
+      .on('created', this.watchSpellCreatedHandler.bind(this))
+  }
+
+  /**
+   * Handles watching spell updates that stream in from feathers server
+   * @param {SpellInterface} spell - The spell that was updated.
+   * @example
+   * this.app.service('spells').on('updated', this.watchSpellHandler.bind(this));
+   */
+  private watchSpellUpdateHandler(spell: SpellInterface) {
+    if (!this.watchSpells) return
+
+    if (this.hasSpellCaster(spell.id)) {
+      this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
+      this.updateSpell(spell)
+    }
+  }
+
+  /**
+   * Handles watching spell creations that stream in from feathers server
+   * @param {SpellInterface} spell - The spell that was created.
+   * @example
+   * this.app.service('spells').on('created', this.watchSpellHandler.bind(this));
+   */
+  private watchSpellCreatedHandler(spell: SpellInterface) {
+    if (!this.watchSpells) return
+    if (spell.type !== 'behave') return
+    if (this.hasSpellCaster(spell.id)) return
+    if (this.agent.projectId !== spell.projectId) return
+
+    this.logger.debug(`Creating spell ${spell.id} in agent ${this.agent.id}`)
+    this.loadSpell(spell)
   }
 
   /**
@@ -223,21 +261,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.agent.log(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
-  }
-
-  /**
-   * Handles watching spell updates that stream in from feathers server
-   * @param {SpellInterface} spell - The spell that was updated.
-   * @example
-   * this.app.service('spells').on('updated', this.watchSpellHandler.bind(this));
-   */
-  private watchSpellHandler(spell: SpellInterface) {
-    if (!this.watchSpells) return
-
-    if (this.hasSpellCaster(spell.id)) {
-      this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
-      this.updateSpell(spell)
-    }
   }
 
   /**
@@ -404,7 +427,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   onDestroy() {
     this.clear()
     //
-    this.app.service('spells').removeListener('updated', this.watchSpellHandler)
+    this.app
+      .service('spells')
+      .removeListener('updated', this.watchSpellUpdateHandler)
+
+    this.app
+      .service('spells')
+      .removeListener('created', this.watchSpellCreatedHandler)
   }
 
   /**
