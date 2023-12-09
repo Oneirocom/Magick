@@ -18,7 +18,7 @@ import styles from './menu.module.css'
 import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ContextMenu } from './ContextMenu'
-import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
+import { useCreateAgentMutation, useCreateAgentReleaseMutation, useGetAgentsQuery } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -45,12 +45,13 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   // State to keep track of the anchor element of the menu and cursor position
 
-  const config = useConfig()
   const { openModal } = useModal()
   const [data, setData] = useState([])
   const { setAgentUpdate } = useTreeData()
 
+  const config = useConfig()
   const [createNewAgent, { data: newAgent }] = useCreateAgentMutation()
+  const [createAgentRelease] = useCreateAgentReleaseMutation()
   const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
 
   const { currentTab } = useSelector((state: any) => state.tabLayout)
@@ -61,30 +62,71 @@ export function NewSidebar(DrawerProps): JSX.Element {
     setAgentUpdate(true)
   }, [newAgent])
 
-  /**
-   * get all agents
-   * if there areny any, create one
-   * this triggers cache reset on all agents and re-fetches them with the new agent included
-   */
+
   useEffect(() => {
-    if (!agents) return
+    const handleInitialAgentSetup = async () => {
+      // If there are no agents, create a draft agent and a live agent
+      if (agents && agents.total === 0) {
+        // Create a draft agent
+        await createNewAgent({
+          name: 'Draft Agent',
+          projectId: config.projectId,
+          enabled: false,
+          default: true,
+          publicVariables: '{}',
+          secrets: '{}',
+        }).unwrap();
 
-    if (agents.total === 0) {
-      createNewAgent({
-        name: 'Default Agent',
-        projectId: config.projectId,
-        enabled: false,
-        publicVariables: '{}',
-        secrets: '{}',
-        default: true,
-      })
+        // Create a live agent
+        const newLiveAgent = await createNewAgent({
+          name: 'My Live Agent',
+          projectId: config.projectId,
+          enabled: true,
+          default: false,
+          publicVariables: '{}',
+          secrets: '{}',
+        }).unwrap();
 
-      return
+        // Create a release for the live agent
+        await createAgentRelease({
+          agentId: newLiveAgent.id,
+          description: 'Initial release'
+        }).unwrap();
+      }
+
+      // In this scenario, we are assuming a project with one agent is currently live,
+      // Thus a draft should be created and a release should be made for the agent.
+      if (agents && agents.total === 1) {
+        // Create a draft agent
+        const agent = agents.data[0]
+        await createNewAgent({
+          rootSpell: agent?.rootSpell || "{}", // Depricated
+          publicVariables: '{}',
+          secrets: '{}',
+          name: 'Draft Agent',
+          enabled: false,
+          pingedAt: "",
+          projectId: agent?.projectId,
+          data: agent?.data || {},
+          runState: newAgent?.runState,
+          image: agent?.image || "",
+          rootSpellId: agent?.rootSpellId || "",
+          default: true,
+          currentSpellReleaseId: null,
+        }).unwrap();
+
+        // Create a release for the live agent
+        await createAgentRelease({
+          agentId: agents[0].id,
+          description: 'Initial release'
+        }).unwrap();
+      }
     }
+    handleInitialAgentSetup();
+    setData(agents?.data);
+  }, [agents, createNewAgent, createAgentRelease, config.projectId]);
 
-    setData(agents.data)
 
-  }, [agents])
 
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
