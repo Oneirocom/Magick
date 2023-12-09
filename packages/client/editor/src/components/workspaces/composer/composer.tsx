@@ -7,8 +7,6 @@ import {
   DockviewReadyEvent,
 
   IDockviewPanelProps,
-  SerializedDockview,
-  SerializedGridviewComponent,
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
@@ -239,7 +237,6 @@ export const Composer = ({ tab, theme, spellId }) => {
 
     console.log('Setting up layout change listener')
     api.onDidLayoutChange(() => {
-      console.log('layout changed!!!!!!!!!!!')
       const layout = api.toJSON()
 
       saveLayoutToLocalStorage(spellId, layout)

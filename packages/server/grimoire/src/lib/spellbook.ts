@@ -2,12 +2,10 @@ import { Application as FeathersApplication } from '@feathersjs/koa'
 import { IRegistry } from '@magickml/behave-graph'
 import type { BasePlugin, EventPayload } from 'server/plugin'
 import { SpellInterface } from 'server/schemas'
-import SpellCaster from './spellCaster'
+import { SpellCaster } from './spellCaster'
 import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { BullMQWorker } from 'server/communication'
-
-import { BaseRegistry } from './baseRegistry'
 import { PluginManager } from 'server/pluginManager'
 import { IAgentLogger } from 'server/agents'
 
@@ -230,17 +228,22 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private async handlePluginEvent(
     dependency: string,
     eventName: string,
-    payload: EventPayload
+    _payload: EventPayload
   ) {
     this.logger.trace(`Handling event ${eventName} for ${dependency}`)
     // Iterate over alll spell casters
     for (const [spellId, spellMap] of this.spellMap.entries()) {
+      this.logger.trace(`Handling event ${eventName} for ${spellId}`)
+
+      // Clone the payload so we don't mutate it when we pass it down to each spellcaster
+      const payload = { ..._payload }
+
       // Get the first available spell runner
-      const availableRunner = spellMap.find(runner => !runner.isBusy())
-      if (availableRunner) {
+      const availableCaster = spellMap.find(runner => !runner.isBusy())
+      if (availableCaster) {
         // Trigger the event in the spell runner
-        availableRunner.handleEvent(dependency, eventName, payload)
-        return
+        availableCaster.handleEvent(dependency, eventName, payload)
+        continue
       }
 
       // If there are no available spell runners, we create a new one
@@ -248,7 +251,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
       if (!spellCaster) {
         this.agent.error(`Error handling event ${eventName} for ${spellId}`)
-        return
+        continue
       }
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
@@ -272,6 +275,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * await spellbook.loadSpells(spells);
    */
   async loadSpells(spells: SpellInterface[]) {
+    this.logger.trace(`Loading spells for agent ${this.agent.id}`)
+    this.logger.trace(`Spells: ${JSON.stringify(spells.map(s => s.id))}`)
     await Promise.all(spells.map(spell => this.loadSpell(spell)))
   }
 
