@@ -7,7 +7,7 @@
  * @param {function} onClose Function to call when the close button is clicked.
  * @returns {JSX.Element} Modal component.
  */
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useModal } from '../../contexts/ModalProvider'
 import { Button } from 'client/core'
 import { Icon } from 'client/core'
@@ -15,13 +15,20 @@ import css from './modal.module.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 const Modal = ({
-  options = [],
+  options,
   title,
   icon,
-  onClose = () => {
-    /* null */
-  },
+  children,
+  onClose,
+  className,
   ...props
+}: {
+  title: string
+  icon?: string
+  options?: any[]
+  className?: string
+  children?: React.ReactNode
+  onClose?: () => void
 }) => {
   const { closeModal } = useModal()
 
@@ -30,21 +37,20 @@ const Modal = ({
    * It stops propagation, closes the modal window and calls the onClose function.
    * @param {Object} e The event object.
    */
-  const handleModalBackgroundClick = e => {
-    e.stopPropagation()
-    closeModal()
-    onClose()
-  }
+  const handleModalBackgroundClick = useCallback((e) => {
+    e.stopPropagation();
+    closeModal();
+    onClose();
+  }, [closeModal, onClose]);
 
   /**
    * Function to handle clicks on the modal panel.
    * It stops propagation to avoid closing the modal window and only interact with the panel elements.
    * @param {Object} e The event object.
    */
-  const handleModalPanelClick = e => {
-    e.stopPropagation()
-  }
-
+  const handleModalPanelClick = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
   /**
    * Function to render the options buttons inside the modal action strip.
    * It maps over the options array and generates a button for each item.
@@ -109,13 +115,14 @@ const Modal = ({
               marginTop: 0,
             }}
           >
-            {props.children}
+            {children}
           </div>
         </div>
         <div className={`${css['modal-action-strip']}`}>
           <Button onClick={handleModalBackgroundClick}>Close</Button>
           {renderOptions()}
         </div>
+
       </div>
     </div>
   )
