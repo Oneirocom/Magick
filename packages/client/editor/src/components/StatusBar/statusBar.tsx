@@ -11,7 +11,7 @@ export const StatusBar = () => {
       style={{
         height: '100%',
         padding: '0px 10px',
-        background: 'var(--dv-group-view-background-color)',
+        background: 'var(--foreground-color)',
         borderTop: '1px solid var(--deep-background-color)',
         display: 'flex',
         alignItems: 'center'
