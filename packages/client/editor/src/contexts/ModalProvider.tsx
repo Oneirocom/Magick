@@ -1,6 +1,6 @@
 // DOCUMENTED
 
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { getModals } from '../components/Modals'
 
@@ -56,15 +56,23 @@ const ModalContext: React.FC<React.PropsWithChildren<unknown>> = ({
   const [modalName, setModalName] = useState<string>('')
 
   // Open the modal with the specified options and attach closeModal function
-  const openModal = (modalOptions: { modal: string }) => {
-    setModalName(modalOptions.modal)
-    setActiveModal({ ...modalOptions, closeModal })
-  }
+  const openModal = useCallback((modalOptions) => {
+    if (modalName !== modalOptions.modal) {
+      setModalName(modalOptions.modal);
+    }
+    if (activeModal !== modalOptions) {
+      setActiveModal({ ...modalOptions, closeModal });
+    }
+  }, []);
 
-  // Close the currently active modal
-  const closeModal = () => {
-    setActiveModal(null)
-  }
+  const closeModal = useCallback(() => {
+    setActiveModal(prevModal => {
+      if (prevModal !== null) {
+        return null;
+      }
+      return prevModal;
+    });
+  }, []);
 
   // Get the Modal component by its name
   const Modal = modalList[modalName]
