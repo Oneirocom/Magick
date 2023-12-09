@@ -63,7 +63,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   ]
 
   return (
-    <List sx={{ padding: 0 }}>
+    <List sx={{ padding: 0, width: '100%' }}>
       {DrawerItems.map((item, index: {}) => {
         const isElement = React.isValidElement(item);
         const key = isElement ? `plugin-drawer-item-${index}` : (item as DrawerItem).name;
