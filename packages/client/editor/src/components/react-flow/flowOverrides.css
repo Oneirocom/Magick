@@ -6,10 +6,18 @@
   background-color: var(--background-color) !important;
 }
 
+.react-flow__controls svg {
+  fill: white !important;
+}
+
 .react-flow__controls-button {
   background-color: var(--background-color) !important;
 }
 
 .react-flow__controls-button svg {
+  color: white !important;
+}
+
+.react-flow__controls-zoomin {
   color: white !important;
 }
