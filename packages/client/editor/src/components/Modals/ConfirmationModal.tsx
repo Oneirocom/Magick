@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from '../Modal/Modal';
+import Input from '@mui/material/Input/Input';
 
 /**
  * Props for the ConfirmationModal component.
@@ -9,8 +10,6 @@ import Modal from '../Modal/Modal';
  * @property {Function} onConfirm - Callback function to execute on confirmation.
  * @property {string} title - Title of the confirmation modal.
  * @property {string} confirmButtonText - Text for the confirm button.
- * @property {string} cancelButtonText - Text for the cancel button.
- * @property {React.ReactNode} children - Optional children to render inside the modal.
  */
 
 /**
@@ -21,13 +20,19 @@ import Modal from '../Modal/Modal';
  */
 const ConfirmationModal = ({
   closeModal,
-  onConfirm, title,
+  onConfirm,
+  title,
   confirmButtonText = 'Confirm',
-  children
+}: {
+  closeModal: () => void
+  onConfirm: (description: string) => void
+  title: string
+  confirmButtonText: string
 }) => {
 
+  const [description, setDescription] = useState('');
   const onSubmit = () => {
-    onConfirm();
+    onConfirm(description);
     closeModal();
   };
 
@@ -44,9 +49,19 @@ const ConfirmationModal = ({
       title={title}
       options={options}
       icon="info"
-      className={'confirmation-modal'}
     >
-      {children}
+      <h3>
+        Please enter a description for what you changed in this release.
+      </h3>
+      <br />
+      <Input
+        type='text'
+        name="description"
+        style={{ width: '100%' }}
+        value={description}
+        onChange={(event) => setDescription(event.target.value)}
+        placeholder="Fixed bug where..."
+      />
     </Modal>
   );
 };
