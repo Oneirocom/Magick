@@ -3,13 +3,13 @@
 }
 
 .react-flow__minimap {
-  background-color: var(--midnight) !important;
+  background-color: var(--background-color) !important;
 }
 
 .react-flow__controls-button {
-  background-color: var(--slate) !important;
+  background-color: var(--background-color) !important;
 }
 
-/* .react-flow__controls-button svg {
+.react-flow__controls-button svg {
   color: white !important;
-} */
+}
