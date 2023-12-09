@@ -6,14 +6,14 @@ import CustomControls from './Controls.js';
 import { NodePicker } from './NodePicker.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
-import { Tab, useConfig, usePubSub } from '@magickml/providers';
+import { Tab, usePubSub } from '@magickml/providers';
 
 import './flowOverrides.css'
 import { SpellInterface } from 'server/schemas';
 import { getNodeSpec } from 'shared/nodeSpec';
 import { useSelector } from 'react-redux';
 import { RootState } from 'client/state';
-import { categoryColorMap, colors } from '../../utils/colors.js';
+import { nodeColor } from '../../utils/nodeColor.js';
 
 type FlowProps = {
   spell: SpellInterface;
@@ -136,50 +136,3 @@ export const Flow: React.FC<FlowProps> = ({
     </ReactFlow>
   );
 };
-
-function getCategory(node, specJson) {
-  return specJson.find(spec => spec.type === node.type).category
-}
-
-function nodeColor(node, specJson) {
-  console.log('getting node color')
-  const nodeCategory = getCategory(node, specJson)
-  let colorName = categoryColorMap[nodeCategory];
-
-  if (colorName === undefined) {
-    colorName = 'red';
-  }
-  let [backgroundColor] = colors[colorName];
-
-  const color = getHexColorFromTailwindClass(backgroundColor)
-
-  return color;
-}
-
-function getHexColorFromTailwindClass(className) {
-  // Create a temporary element
-  const tempElement = document.createElement('div');
-  tempElement.className = className;
-
-  // Append it to the body (it won't be visible)
-  document.body.appendChild(tempElement);
-
-  // Get the computed style
-  const style = window.getComputedStyle(tempElement);
-  const rgb = style.backgroundColor;
-
-  // Remove the element from the DOM
-  document.body.removeChild(tempElement);
-
-  // Convert RGB to Hex
-  const rgbMatch = rgb.match(/\d+/g);
-  if (!rgbMatch) return null;
-
-  const hex = `#${rgbMatch.map(x => {
-    const hex = parseInt(x).toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-  }).join('')}`;
-
-  return hex;
-}
-
