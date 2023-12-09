@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux'
 import { STANDALONE, } from 'shared/config'
 import { useFeathers } from '@magickml/providers'
 import { AgentInterface } from 'shared/core'
-import { setCurrentAgentId, useCreateAgentReleaseMutation } from 'client/state'
+import { setCurrentAgentId, setCurrentSpellReleaseId, useCreateAgentReleaseMutation } from 'client/state'
 import { Button } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
@@ -29,8 +29,8 @@ export function AgentMenu({ data }) {
   const [openMenu, setOpenMenu] = useState(null)
   const [currentAgent, _setCurrentAgent] = useState<AgentInterface | null>(null)
   const [selectedAgents, setSelectedAgents] = useState<string[]>([])
-  const [draftAgent, setDraftAgent] = useState(null);
-  const [publishedAgents, setPublishedAgents] = useState([]);
+  const [draftAgent, setDraftAgent] = useState(null)
+  const [publishedAgents, setPublishedAgents] = useState([])
 
   const [createAgentRelease] = useCreateAgentReleaseMutation()
 
@@ -40,15 +40,16 @@ export function AgentMenu({ data }) {
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
     dispatch(setCurrentAgentId(agent.id))
+    dispatch(setCurrentSpellReleaseId(agent.currentSpellReleaseId))
   }, [])
 
   // Update draftAgent and publishedAgents when data changes
   useEffect(() => {
     if (!data) return;
     const draft = data.find(agent => agent.default);
-    setDraftAgent(draft || null);
+    setDraftAgent(draft || null)
     const published = data.filter(agent => agent.currentSpellReleaseId);
-    setPublishedAgents(published);
+    setPublishedAgents(published)
   }, [data])
 
   const toggleMenu = (target = null) => {
@@ -74,37 +75,60 @@ export function AgentMenu({ data }) {
   }
 
 
-  const handleBatchPublish = async () => {
-    if (selectedAgents.length === 0) return;
-
+  const confirmPublish = async (onConfirm) => {
+    toggleMenu()
     openModal({
       modal: 'confirmationModal',
-      title: 'Publish to agents',
+      title: 'Publish to agent',
       confirmButtonText: 'Publish',
       cancelButtonText: 'Cancel',
-      children: <div><p>Are you sure you want to publish to the selected agents?</p></div>,
-      onConfirm: async () => {
-        try {
-          const releasePromises = selectedAgents.map(agentId =>
-            createAgentRelease({ agentId }).unwrap()
-          );
-          const results = await Promise.all(releasePromises);
-
-          results.forEach(result => {
-            if (!result) {
-              enqueueSnackbar('Failed to create release', { variant: 'error' });
-            } else {
-              enqueueSnackbar('Successfully updated agents', { variant: 'success' });
-            }
-          });
-        } catch (error) {
-          enqueueSnackbar('Error creating release!', { variant: 'error' });
-        } finally {
-          setSelectedAgents([]);
-          closeModal();
-        }
-      }
+      onConfirm,
     });
+  };
+
+  const publishToLiveAgent = async (description: string) => {
+    try {
+      console.log({
+        agentId: draftAgent.id,
+        versionName: description
+      })
+      const result = await createAgentRelease({ agentId: publishedAgents[0].id, description }).unwrap();
+      if (result) {
+        enqueueSnackbar('Successfully published to live agent', { variant: 'success' });
+      }
+    } catch (error) {
+      enqueueSnackbar('Error publishing to live agent!', { variant: 'error' });
+    }
+  };
+
+  const batchPublishToSelectedAgents = async (description: string) => {
+    try {
+      const releasePromises = selectedAgents.map(agentId =>
+        createAgentRelease({ agentId, description }).unwrap()
+      );
+      const results = await Promise.all(releasePromises);
+
+      results.forEach(result => {
+        if (!result) {
+          enqueueSnackbar('Failed to create release', { variant: 'error' });
+        } else {
+          enqueueSnackbar('Successfully updated agents', { variant: 'success' });
+        }
+      });
+    } catch (error) {
+      enqueueSnackbar('Error creating release!', { variant: 'error' });
+    } finally {
+      setSelectedAgents([]);
+      closeModal();
+    }
+  };
+
+  const handleBatchPublish = async () => {
+    if (publishedAgents.length === 1 && draftAgent) {
+      confirmPublish(publishToLiveAgent);
+    } else if (selectedAgents.length > 1) {
+      confirmPublish(batchPublishToSelectedAgents);
+    }
   };
 
 
@@ -120,9 +144,9 @@ export function AgentMenu({ data }) {
   }
 
   const BorderedAvatar = styled(Avatar)`
-    border: 1px solid lightseagreen;
-    ${STANDALONE && 'cursor: pointer;'}
-  `
+      border: 1px solid lightseagreen;
+      ${STANDALONE && 'cursor: pointer;'}
+      `
 
   const StyledDivider = styled(Divider)(({ theme }) => ({
     backgroundColor: '#3D454A',
@@ -226,6 +250,7 @@ export function AgentMenu({ data }) {
                     selectedAgents={selectedAgents}
                     onSelectAgent={handleSelectAgent}
                     onCheckboxChange={handleCheckboxChange}
+                    isSinglePublishedAgent={publishedAgents.length === 1}
                   />
                 )
               }
@@ -238,19 +263,22 @@ export function AgentMenu({ data }) {
         <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0 16px' }}>
 
           <Button
-            disabled={!(selectedAgents.length > 0)}
+            // disabled={!(selectedAgents.length > 0)}
             hoverStyle={{}}
             style={{
-              backgroundColor: selectedAgents.length > 0 ? '#0074a0' : 'grey',
+              backgroundColor: '#0074a0',
               border: 'none',
               marginTop: '8px',
-              marginBottom: '8px'
+              marginBottom: '8px',
+              width: '100%',
+              textAlign: 'center',
+              justifyContent: 'center',
             }}
             onClick={() => {
               void handleBatchPublish()
             }}
           >
-            Publish to selected agents
+            {publishedAgents.length === 1 ? 'Publish to Live Agent' : 'Publish to Selected Agents'}
           </Button>
         </div>
       </Menu >
