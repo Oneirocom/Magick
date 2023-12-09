@@ -73,7 +73,7 @@ interface IAgent {
  *     // Handle initialization errors
  *   });
  */
-class SpellCaster<Agent extends IAgent> {
+export class SpellCaster<Agent extends IAgent = IAgent> {
   registry!: IRegistry
   engine!: Engine
   graph!: IGraph
@@ -110,7 +110,10 @@ class SpellCaster<Agent extends IAgent> {
 
     // When we are done loading plugins, we build the registry
     const baseRegistry = new BaseRegistry(this.agent)
-    this.registry = this.pluginManager.getRegistry(baseRegistry.getRegistry())
+    this.registry = this.pluginManager.getRegistry(
+      this,
+      baseRegistry.getRegistry()
+    )
     this.graph = makeGraphApi(this.registry)
 
     // initialize the base registry once we have the full graph.
@@ -279,7 +282,7 @@ class SpellCaster<Agent extends IAgent> {
     payload: EventPayload
   ): void {
     this.logger.trace(
-      `SpellCaster: Handling event ${eventName} for ${dependency}`
+      `SpellCaster: Handling event ${eventName} for ${dependency} in spell ${this.spell.name}`
     )
     // we grab the dependency from the registry and trigger it
     const eventEmitter = this.registry.dependencies[dependency] as
@@ -290,6 +293,17 @@ class SpellCaster<Agent extends IAgent> {
       this.logger.error(`No dependency found for ${dependency}`)
       return
     }
+
+    // make a copy of the payload so we dont mutate the original
+
+    //tag payload with spellcaster information
+    payload.runInfo = {
+      spellId: this.spell.id,
+    }
+
+    this.logger.trace(
+      `SpellCaster: Setting run info for ${eventName} to spell ${this.spell.id}`
+    )
 
     // we set the current event in the event store for access in the state
     const eventStore = this.graph.getDependency<IEventStore>('IEventStore')
@@ -351,5 +365,3 @@ class SpellCaster<Agent extends IAgent> {
     this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
   }
 }
-
-export default SpellCaster
