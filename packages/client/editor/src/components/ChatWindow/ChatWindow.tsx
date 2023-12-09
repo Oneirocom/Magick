@@ -168,7 +168,7 @@ const ChatWindow = ({ tab, spellId }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
 
-  const { $PLAYTEST_PRINT, MESSAGE_AGENT } = events
+  const { MESSAGE_AGENT } = events
 
   // Print to console callback function.
   const printToConsole = useCallback(
@@ -196,6 +196,7 @@ const ChatWindow = ({ tab, spellId }) => {
     const { data, event } = lastEvent
     const { content } = data
 
+    if (event?.runInfo?.spellId !== spellId) return
     if (event.channel !== spellId) return
 
     printToConsole(null, content)
@@ -213,13 +214,6 @@ const ChatWindow = ({ tab, spellId }) => {
     if (!scrollbars.current) return
     scrollbars.current.scrollToBottom()
   }, [history])
-
-  useEffect(() => {
-    const unsubscribe = subscribe($PLAYTEST_PRINT(tab.id), printToConsole)
-
-    // Return a cleanup function.
-    return unsubscribe as () => void
-  }, [subscribe, printToConsole, $PLAYTEST_PRINT, tab.id])
 
   // Sync up localState into data field for persistence.
   useEffect(() => {
@@ -266,8 +260,6 @@ const ChatWindow = ({ tab, spellId }) => {
     }
     const newHistory = [...history, newMessage]
     setHistory(newHistory as [])
-
-    let toSend = value
     setValue('')
 
     const json = localState?.playtestData
