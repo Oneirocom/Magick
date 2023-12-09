@@ -13,6 +13,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
 import { sendMessage } from './nodes/actions/sendMessage'
 import { Job } from 'bullmq'
+import { SpellCaster } from 'server/grimoire'
 
 const pluginName = 'Core'
 
@@ -57,7 +58,7 @@ export class CorePlugin extends CoreEventsPlugin {
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  getDependencies() {
+  getDependencies(spellCaster: SpellCaster) {
     return {
       [pluginName]: new CoreEmitter(),
       coreActionService: new CoreActionService(
