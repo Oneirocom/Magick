@@ -7,8 +7,8 @@ import {
 } from '@magickml/behave-graph'
 import Redis from 'ioredis'
 import { AgentLoggingService, IAgentLogger } from 'server/agents'
-import { DefaultStateService } from './services/defaultStateService'
 import { EventStore } from './services/eventStore'
+import { KeyvStateService } from './services/keyvStateService'
 
 export class BaseRegistry {
   values: ValueType[] = []
@@ -20,7 +20,7 @@ export class BaseRegistry {
 
   constructor(agent: IAgentLogger, connection: Redis) {
     // Create the agent logger for the core registry
-    this.dependencies.IStateService = new DefaultStateService(connection)
+    this.dependencies.IStateService = new KeyvStateService(connection)
     this.dependencies.ILogger = new AgentLoggingService(agent)
   }
 
