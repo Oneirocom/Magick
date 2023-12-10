@@ -90,6 +90,7 @@ export const spellReleasePatchResolver = resolve<SpellRelease, HookContext>({})
 export const spellReleaseQueryProperties = Type.Pick(spellReleaseSchema, [
   'id',
   'spellId',
+  'agentId',
   'description',
   'createdAt',
 ])
