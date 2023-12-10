@@ -1,13 +1,20 @@
 import { IGraph, IStateService } from '@magickml/behave-graph'
+import Keyv from 'keyv'
+import KeyvRedis from '@keyv/redis'
+import Redis from 'ioredis'
+
 import { IEventStore } from './eventStore'
 import { EventPayload } from 'server/plugin'
 
-export class DefaultStateService implements IStateService {
+export class KeyvStateService implements IStateService {
   private stateStore: Record<string, any>
   private eventStore?: IEventStore
+  private keyv: Keyv
 
-  constructor() {
+  constructor(connection: Redis) {
     this.stateStore = {}
+    const keyvRedis = new KeyvRedis(connection)
+    this.keyv = new Keyv({ store: keyvRedis })
   }
 
   init(graph: IGraph) {
@@ -15,7 +22,7 @@ export class DefaultStateService implements IStateService {
   }
 
   formatKey(nodeId: string, event: EventPayload): string {
-    return `${nodeId}}`
+    return `${nodeId}:}`
   }
 
   storeEvent(event: any) {
@@ -23,31 +30,43 @@ export class DefaultStateService implements IStateService {
   }
 
   getState(nodeId: string): any {
+    // check first if the key is in the local store
+    if (this.stateStore[nodeId]) {
+      return this.stateStore[nodeId]
+    }
+
     if (this.eventStore) {
       const event = this.eventStore.currentEvent()
 
       if (event) {
         // const key = `${nodeId}:${event.channel}:${event.sender}`
         const key = `${nodeId}`
-        return this.stateStore[key] || null
+        return this.keyv.get(key) || null
       }
     }
 
-    return this.stateStore[nodeId] || null
+    return this.keyv.get(nodeId) || null
   }
 
   setState(nodeId: string, newState: any): void {
+    // check if newState is a function
+    // if it is, store it as a function in the local state store
+    if (typeof newState === 'function') {
+      this.stateStore[nodeId] = newState
+      return
+    }
+
     if (this.eventStore) {
       const event = this.eventStore.currentEvent()
 
       if (event) {
         // const key = `${nodeId}:${event.channel}:${event.sender}`
         const key = `${nodeId}`
-        this.stateStore[key] = newState
+        this.keyv.set(key, newState)
         return
       }
     }
 
-    this.stateStore[nodeId] = newState
+    this.keyv.set(nodeId, newState)
   }
 }
