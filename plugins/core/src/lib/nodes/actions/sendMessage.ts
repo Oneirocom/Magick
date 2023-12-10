@@ -14,7 +14,7 @@ export const sendMessage = makeFlowNodeDefinition({
     flow: 'flow',
   },
   initialState: undefined,
-  triggered: async ({ commit, read, graph: { getDependency } }) => {
+  triggered: ({ commit, read, graph: { getDependency } }) => {
     const coreActionService =
       getDependency<CoreActionService>('coreActionService')
     const eventStore = getDependency<IEventStore>('IEventStore')
