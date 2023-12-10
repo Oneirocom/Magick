@@ -1,13 +1,20 @@
 import { IGraph, IStateService } from '@magickml/behave-graph'
+import Keyv from 'keyv'
+import KeyvRedis from '@keyv/redis'
+import Redis from 'ioredis'
+
 import { IEventStore } from './eventStore'
 import { EventPayload } from 'server/plugin'
 
 export class DefaultStateService implements IStateService {
   private stateStore: Record<string, any>
   private eventStore?: IEventStore
+  private keyv: Keyv
 
-  constructor() {
+  constructor(connection: Redis) {
     this.stateStore = {}
+    const keyvRedis = new KeyvRedis(connection)
+    this.keyv = new Keyv({ store: keyvRedis })
   }
 
   init(graph: IGraph) {
@@ -29,7 +36,7 @@ export class DefaultStateService implements IStateService {
       if (event) {
         // const key = `${nodeId}:${event.channel}:${event.sender}`
         const key = `${nodeId}`
-        return this.stateStore[key] || null
+        return this.keyv.get(key) || null
       }
     }
 
@@ -43,7 +50,7 @@ export class DefaultStateService implements IStateService {
       if (event) {
         // const key = `${nodeId}:${event.channel}:${event.sender}`
         const key = `${nodeId}`
-        this.stateStore[key] = newState
+        this.keyv.set(key, newState)
         return
       }
     }

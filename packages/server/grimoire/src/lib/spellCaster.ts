@@ -1,5 +1,6 @@
 import EventEmitter from 'events'
 import pino from 'pino'
+import Redis from 'ioredis'
 
 import {
   Engine,
@@ -94,7 +95,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     limitInSteps = 100,
     agent,
     pluginManager,
+    connection,
   }: {
+    connection: Redis
     loopDelay?: number
     limitInSeconds?: number
     limitInSteps?: number
@@ -109,7 +112,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.limitInSteps = limitInSteps
 
     // When we are done loading plugins, we build the registry
-    const baseRegistry = new BaseRegistry(this.agent)
+    const baseRegistry = new BaseRegistry(this.agent, connection)
     this.registry = this.pluginManager.getRegistry(
       this,
       baseRegistry.getRegistry()
