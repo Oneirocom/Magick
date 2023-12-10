@@ -11,6 +11,9 @@ import { InputEdit } from './InputEdit'
 
 import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
 import { useGetSpellsQuery, useLazyGetSpellByJustIdQuery, useUpdateAgentMutation } from 'client/state'
+import SpellVersionSelector from './SpellVersionSelector'
+import { useGetSpellReleasesByAgentIdQuery } from 'client/state'
+import { SpellRelease } from 'packages/server/core/src/services/spellReleases/spellReleases'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -42,7 +45,9 @@ const AgentDetails = ({
 }: AgentDetailsProps) => {
   const [updateAgent] = useUpdateAgentMutation()
   const { data: spellListData } = useGetSpellsQuery({})
+  const { data: spellReleaseData } = useGetSpellReleasesByAgentIdQuery({ agentId: selectedAgentData?.id })
   const [spellList, setSpellList] = useState<SpellInterface[]>([])
+  const [spellReleaseList, setSpellReleaseList] = useState<SpellRelease[]>([])
 
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
@@ -65,6 +70,11 @@ const AgentDetails = ({
     if (!spellListData) return
     setSpellList(spellListData.data)
   }, [spellListData])
+
+  useEffect(() => {
+    if (!spellReleaseData) return
+    setSpellReleaseList(spellReleaseData.data)
+  }, [spellReleaseData])
 
   useEffect(() => {
     if (rootSpell) {
@@ -145,6 +155,23 @@ const AgentDetails = ({
       publicVariables: JSON.stringify(newPublicVariables),
       rootSpellId: spell.id,
     })
+  }
+
+  const onSpellVersionChange = async (spellReleaseId: string) => {
+    try {
+      await updateAgent({
+        currentSpellReleaseId: spellReleaseId,
+        id: selectedAgentData.id,
+      })
+      enqueueSnackbar('Updated agent', {
+        variant: 'success',
+      })
+    }
+    catch (e) {
+      enqueueSnackbar(e, {
+        variant: 'error',
+      })
+    }
   }
 
   return (
@@ -243,6 +270,15 @@ const AgentDetails = ({
                 )
               })}
         </select>
+      </div>
+      <div>
+        <SpellVersionSelector
+          spellReleaseList={spellReleaseList}
+          activeSpellReleaseId={selectedAgentData?.currentSpellReleaseId}
+          onChange={onSpellVersionChange}
+          tooltipText={''}
+        // tooltipText={tooltip_text.spellVersion}
+        />
       </div>
       <div>
         {(pluginManager as ClientPluginManager).getSecrets(true).map((value, index) => {
