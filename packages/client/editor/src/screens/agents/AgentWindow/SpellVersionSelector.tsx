@@ -1,31 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { SpellRelease } from 'packages/server/core/src/services/spellReleases/spellReleases.schema';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-/**
- * SpellVersionSelector component for selecting a spell version.
- *
- * @param {SpellRelease[]} spellReleaseList - List of spell releases.
- * @param {string} activeSpellReleaseId - Active spell release id.
- * @param {() => void} onChange - On change handler.
- * @param {string} tooltipText - Tooltip text.
- * @returns {JSX.Element} - SpellVersionSelector component.
- */
 const SpellVersionSelector = ({
   spellReleaseList,
   activeSpellReleaseId,
   onChange,
-  tooltipText
+  tooltipText,
 }: {
   spellReleaseList: SpellRelease[],
   activeSpellReleaseId: string,
-  onChange: () => void,
+  onChange: (spellReleaseId: string) => Promise<void>,
   tooltipText: string
 }): JSX.Element => {
 
-  const selectedRelease = spellReleaseList.find((spell) => spell.id === activeSpellReleaseId);
+  const [selectedRelease, setSelectedRelease] = useState<SpellRelease | null>(null);
 
-  const val = selectedRelease ? `Released on ${selectedRelease?.createdAt}` : 'Default';
+  const formatDate = (date: string) => {
+    if (!date) return '';
+    return formatDistanceToNow(new Date(date), { addSuffix: false });
+  };
+
+  useEffect(() => {
+    // Update the local state whenever activeSpellReleaseId changes
+    const release = spellReleaseList.find(release => release.id === activeSpellReleaseId);
+    setSelectedRelease(release || null);
+  }, [activeSpellReleaseId, spellReleaseList]);
+
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newReleaseId = event.target.value;
+    onChange(newReleaseId); // Invoke the passed onChange handler
+    const newSelectedRelease = spellReleaseList.find(release => release.id === newReleaseId);
+    setSelectedRelease(newSelectedRelease || null);
+  };
+
+  const sortedSpellReleaseList = [...spellReleaseList].sort((a, b) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <div className="form-item agent-select">
@@ -35,21 +48,28 @@ const SpellVersionSelector = ({
       <select
         name="spellRelease"
         id="spellReleaseId"
-        value={val}
-        onChange={onChange}
+        value={selectedRelease?.id || ''}
+        onChange={handleSelectChange}
+        style={{ maxWidth: '100%' }}
       >
-        <option disabled value="default">
-          Select Spell
+        <option value="" disabled>
+          Select Spell Release Version
         </option>
-        {spellReleaseList && spellReleaseList.length > 0 &&
-          spellReleaseList.sort((a, b) => a.createdAt < b.createdAt ? 1 : -1)
-            .map((spell, idx) => (
-              <option value={spell.id} key={idx}>
-                {`Released on ${selectedRelease?.createdAt}`}
-              </option>
-            ))
-        }
+        {sortedSpellReleaseList.map((spell, idx) => (
+          <option value={spell.id} key={spell.id}>
+            {`Version 0.0.${sortedSpellReleaseList.length - idx} - Released ${formatDate(spell.createdAt)}`}
+          </option>
+        ))}
       </select>
+      {selectedRelease?.description && (
+        <div style={{
+          marginTop: '8px',
+          marginBottom: '8px',
+        }}>
+          <p>Release Notes:</p>
+          <p>{selectedRelease.description}</p>
+        </div>
+      )}
     </div>
   );
 };
