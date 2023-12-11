@@ -37,18 +37,18 @@ export class AgentService<
     return await this._get(agentId, params)
   }
 
-  // Its easier to imagine an agent having many releases
-  // even though we actually version with the spellReleases table
-  async getAgentReleases(agentId: string) {
-    try {
-      const db = app.get('dbClient')
-      const query = await db('spellReleases').where({ agentId })
-      return { data: query }
-    } catch (error) {
-      console.error('Error fetching agent releases:', error)
-      throw error // or handle error as needed
-    }
-  }
+  // // Its easier to imagine an agent having many releases
+  // // even though we actually version with the spellReleases table
+  // async getAgentReleases(agentId: string) {
+  //   try {
+  //     const db = app.get('dbClient')
+  //     const query = await db('spellReleases').where({ agentId })
+  //     return { data: query }
+  //   } catch (error) {
+  //     console.error('Error fetching agent releases:', error)
+  //     throw error // or handle error as needed
+  //   }
+  // }
 
   async find(params?: ServiceParams) {
     return await this._find(params)
@@ -167,11 +167,12 @@ export class AgentService<
             id: uuidv4(),
             description: description || '',
             agentId: agentToUpdate.id,
+            projectId,
           })
           .returning('*')
 
         // Fetch spells based on the source determined
-        const allSpellsToCopy: SpellData[] = await fetchAllPages(
+        const allSpells: SpellData[] = await fetchAllPages(
           this.app.service('spells').find.bind(this.app.service('spells')),
           {
             query: {
@@ -182,8 +183,15 @@ export class AgentService<
           }
         )
 
+        const draftSpellsToCopy = allSpells.filter(
+          (spell: SpellData) => !spell.spellReleaseId
+        )
+
+        if (!draftSpellsToCopy.length)
+          throw new Error('No spells found to copy')
+
         // Duplicate spells for the new release
-        for (const spell of allSpellsToCopy) {
+        for (const spell of draftSpellsToCopy) {
           await trx('spells').insert({
             ...spell,
             id: uuidv4(),
