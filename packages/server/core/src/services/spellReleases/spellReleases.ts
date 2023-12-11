@@ -80,7 +80,7 @@ export const spellReleases = (app: Application) => {
 declare module '../../declarations' {
   interface ServiceTypes {
     spellReleases: SpellReleasesService
-    '/spellReleases/createRelease': {
+    '/spellReleases': {
       create: ReturnType<any>
     }
   }
