@@ -191,6 +191,15 @@ export async function initApp(environment: Environment = 'default') {
         logError,
         authenticateApiKey([API_ACCESS_KEY]),
         async (context: HookContext, next) => {
+          // if the route is to the slack service, skip auth
+          if (context.path === 'slack') {
+            context.params.user = {
+              id: 'slack',
+              permissions: ['admin', 'owner'],
+            }
+            return next()
+          }
+
           // if the route is to the api service, skip auth
           if (context.path === 'api') {
             context.params.user = {
