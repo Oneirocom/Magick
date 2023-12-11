@@ -9,7 +9,7 @@ import { FEATURE_FLAGS } from 'packages/shared/config/src'
 export const sendSlackMessage = makeFlowNodeDefinition({
   typeName: 'slack/sendMessage',
   category: NodeCategory.Action,
-  label: 'Send Message',
+  label: 'Send Slack Message',
   in: {
     flow: 'flow',
     content: 'string',

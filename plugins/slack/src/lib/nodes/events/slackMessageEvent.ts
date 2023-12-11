@@ -17,7 +17,7 @@ const makeInitialState = (): State => ({
 
 export const slackMessageEvent = makeEventNodeDefinition({
   typeName: 'slack/onMessage',
-  label: 'On Message',
+  label: 'On Slack Message',
   category: NodeCategory.Event,
   configuration: {
     numInputs: {
