@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('description').nullable()
     table.uuid('agentId').notNullable()
     table.uuid('spellId').nullable()
+    table.text('projectId').nullable()
     table.timestamp('createdAt').defaultTo(knex.fn.now())
     table.foreign('agentId').references('id').inTable('agents')
   })
