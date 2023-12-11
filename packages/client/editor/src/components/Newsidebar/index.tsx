@@ -18,8 +18,17 @@ import styles from './menu.module.css'
 import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ContextMenu } from './ContextMenu'
-import { useCreateAgentMutation, useCreateAgentReleaseMutation, useGetAgentsQuery } from 'client/state'
+import {
+  useCreateAgentMutation,
+  useCreateAgentReleaseMutation,
+  useGetAgentsQuery,
+  useNewSpellMutation
+} from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
+import { v4 as uuidv4 } from 'uuid';
+import md5 from 'md5';
+import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
+import { getTemplates } from 'client/core'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 7,
@@ -53,7 +62,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const [createNewAgent, { data: newAgent }] = useCreateAgentMutation()
   const [createAgentRelease] = useCreateAgentReleaseMutation()
   const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
-
+  const [newSpell] = useNewSpellMutation()
   const { currentTab } = useSelector((state: any) => state.tabLayout)
 
   // stopgap until I patch the agent menu with new redux stuff
@@ -66,16 +75,40 @@ export function NewSidebar(DrawerProps): JSX.Element {
   useEffect(() => {
     const handleInitialAgentSetup = async () => {
       try {
+        if (!agents) return
         // If there are no agents, create a draft agent and a live agent
-        if (agents && agents.total === 0) {
+        if (agents.total === 0) {
+          const agent = agents.data[0]
+          let rootSpellId = agent?.rootSpellId
+
+          if (!rootSpellId) {
+            const spellTemplate = getTemplates().spells[0] as any
+            const spellName = uniqueNamesGenerator({
+              dictionaries: [adjectives, colors],
+              separator: ' ',
+              length: 2,
+            })
+            const rootSpell = (await newSpell({
+              id: uuidv4(),
+              graph: spellTemplate.graph,
+              name: spellName,
+              type: spellTemplate.type,
+              projectId: config.projectId,
+              hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
+            })) as any
+
+            rootSpellId = rootSpell.data.id
+          }
+
           // Create a draft agent
-          await createNewAgent({
+          const draftAgent = await createNewAgent({
             name: 'Draft Agent',
             projectId: config.projectId,
             enabled: false,
             default: true,
             publicVariables: '{}',
             secrets: '{}',
+            rootSpellId: rootSpellId || "",
           }).unwrap();
 
           // Create a live agent
@@ -86,41 +119,79 @@ export function NewSidebar(DrawerProps): JSX.Element {
             default: false,
             publicVariables: '{}',
             secrets: '{}',
+            rootSpellId: rootSpellId || "",
           }).unwrap();
 
           // Create a release for the live agent
           await createAgentRelease({
             agentId: newLiveAgent.id,
-            description: 'Initial release'
-          }).unwrap();
-        }
-
-        // In this scenario, we are assuming a project with one agent is currently live,
-        // Thus a draft should be created and a release should be made for the agent.
-        if (agents && agents.total === 1) {
-          // Create a draft agent
-          const agent = agents.data[0]
-          await createNewAgent({
-            rootSpell: agent?.rootSpell || "{}", // Depricated
-            publicVariables: '{}',
-            secrets: '{}',
-            name: 'Draft Agent',
-            enabled: false,
-            pingedAt: "",
-            projectId: agent?.projectId,
-            data: agent?.data || {},
-            runState: newAgent?.runState,
-            image: agent?.image || "",
-            rootSpellId: agent?.rootSpellId || "",
-            default: true,
-            currentSpellReleaseId: null,
+            description: 'Initial Release',
+            agentToCopyId: draftAgent.id,
           }).unwrap();
 
-          // Create a release for the live agent
-          await createAgentRelease({
-            agentId: agents[0].id,
-            description: 'Initial release'
-          }).unwrap();
+          openModal({
+            modal: 'draftAgentCreatedModal',
+          })
+        } else {
+
+          // // In this scenario, we are assuming a project with one agent is currently live,
+          // // Thus a draft should be created and a release should be made for the agent.
+          if (agents.total === 1) {
+            // Create a draft agent
+            const draftAgent = agents.data.filter(agent => agent.name === 'Draft Agent')[0]
+            const agent = agents.data.filter(agent => agent.id !== draftAgent?.id)[0]
+
+            if (!draftAgent) {
+              let rootSpellId = agent?.rootSpellId
+              if (!rootSpellId) {
+                const spellTemplate = getTemplates().spells[0] as any
+
+                const spellName = uniqueNamesGenerator({
+                  dictionaries: [adjectives, colors],
+                  separator: ' ',
+                  length: 2,
+                })
+
+                const rootSpell = (await newSpell({
+                  id: uuidv4(),
+                  graph: spellTemplate.graph,
+                  name: spellName,
+                  type: spellTemplate.type,
+                  projectId: config.projectId,
+                  hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
+                })) as any
+
+                rootSpellId = rootSpell.data.id
+              }
+
+              await createNewAgent({
+                rootSpell: agent?.rootSpell || "{}", // Depricated
+                publicVariables: '{}',
+                secrets: '{}',
+                name: 'Draft Agent',
+                enabled: false,
+                pingedAt: "",
+                projectId: agent?.projectId,
+                data: agent?.data || {},
+                runState: newAgent?.runState,
+                image: agent?.image || "",
+                rootSpellId: rootSpellId || "",
+                default: true,
+                currentSpellReleaseId: null,
+              }).unwrap()
+            }
+
+            // Create a release for the live agent
+            await createAgentRelease({
+              agentId: agent.id,
+              description: 'Initial Release',
+              agentToCopyId: agent.id,
+            }).unwrap();
+
+            openModal({
+              modal: 'draftAgentCreatedModal',
+            })
+          }
         }
       } catch (error: any) {
         console.log(`Error in initial agent setup: ${error}`)
