@@ -28,9 +28,8 @@ export function AgentMenu({ data }) {
 
   const [openMenu, setOpenMenu] = useState(null)
   const [currentAgent, _setCurrentAgent] = useState<AgentInterface | null>(null)
-  const [selectedAgents, setSelectedAgents] = useState<string[]>([])
   const [draftAgent, setDraftAgent] = useState(null)
-  const [publishedAgents, setPublishedAgents] = useState([])
+  const [publishedAgent, setPublishedAgent] = useState(null);
 
   const [createAgentRelease] = useCreateAgentReleaseMutation()
 
@@ -42,26 +41,21 @@ export function AgentMenu({ data }) {
     dispatch(setCurrentSpellReleaseId(agent?.currentSpellReleaseId))
   }, [])
 
-  // Update draftAgent and publishedAgents when data changes
+  // Update draftAgent and publishedAgent when data changes
   useEffect(() => {
     if (!data) return;
-    if (!draftAgent) {
+    const draft = data.find(agent => agent.default && !agent.currentSpellReleaseId)
+    setDraftAgent(draft);
+    _setCurrentAgent(draft);
 
-      const draft = data.find(agent => agent.default);
-      setDraftAgent(draft)
-      _setCurrentAgent(draft)
-    }
-    if (!publishedAgents.length) {
-      const published = data.filter(agent => agent.currentSpellReleaseId || !agent.default);
-      setPublishedAgents(published)
-    }
-  }, [data])
+    const published = data.find(agent => agent.currentSpellReleaseId); // Find only one published agent
+    setPublishedAgent(published); // Set the published agent
+  }, [data]);
 
   const toggleMenu = (target = null) => {
     if (openMenu) {
       // Menu is currently open, so close it
       setOpenMenu(null);
-      setSelectedAgents([]);
     } else {
       // Menu is currently closed, so open it at the specified target
       setOpenMenu(target);
@@ -82,6 +76,7 @@ export function AgentMenu({ data }) {
 
   const confirmPublish = async (onConfirm) => {
     toggleMenu()
+    closeModal()
     openModal({
       modal: 'confirmationModal',
       title: 'Publish to agent',
@@ -93,56 +88,24 @@ export function AgentMenu({ data }) {
 
   const publishToLiveAgent = async (description: string) => {
     try {
-      const result = await createAgentRelease({ agentId: publishedAgents[0].id, description }).unwrap();
-      if (result) {
-        enqueueSnackbar('Successfully published to live agent', { variant: 'success' });
+      if (publishedAgent) {
+        const result = await createAgentRelease({ agentId: publishedAgent.id, description, agentToCopyId: draftAgent.id }).unwrap();
+        if (result) {
+          enqueueSnackbar('Successfully published to live agent', { variant: 'success' });
+        }
       }
     } catch (error) {
       enqueueSnackbar('Error publishing to live agent!', { variant: 'error' });
     }
   };
 
-  const batchPublishToSelectedAgents = async (description: string) => {
-    try {
-      const releasePromises = selectedAgents.map(agentId =>
-        createAgentRelease({ agentId, description }).unwrap()
-      );
-      const results = await Promise.all(releasePromises);
 
-      results.forEach(result => {
-        if (!result) {
-          enqueueSnackbar('Failed to create release', { variant: 'error' });
-        } else {
-          enqueueSnackbar('Successfully updated agents', { variant: 'success' });
-        }
-      });
-    } catch (error) {
-      enqueueSnackbar('Error creating release!', { variant: 'error' });
-    } finally {
-      setSelectedAgents([]);
-      closeModal();
-    }
-  };
-
-  const handleBatchPublish = async () => {
-    if (publishedAgents.length === 1 && draftAgent) {
+  const handleMakeRelease = async () => {
+    if (publishedAgent && draftAgent) { // Check if there is a published agent
       confirmPublish(publishToLiveAgent);
-    } else if (selectedAgents.length > 1) {
-      confirmPublish(batchPublishToSelectedAgents);
     }
   };
 
-
-  // Add a function to handle checkbox changes
-  const handleCheckboxChange = (agentId: string, isChecked: boolean) => {
-    if (isChecked) {
-      setSelectedAgents((prevSelected) => [...prevSelected, agentId]);
-    } else {
-      setSelectedAgents((prevSelected) =>
-        prevSelected.filter((id) => id !== agentId)
-      );
-    }
-  }
 
   const BorderedAvatar = styled(Avatar)`
       border: 1px solid lightseagreen;
@@ -233,7 +196,7 @@ export function AgentMenu({ data }) {
           )
         }
         {
-          publishedAgents && publishedAgents.length > 0 && (
+          publishedAgent && (
             <div>
               <StyledDivider />
               <h3 style={{
@@ -243,19 +206,14 @@ export function AgentMenu({ data }) {
               }}>
                 Published
               </h3>
-              {publishedAgents.map((agent, i) => {
-                return (
-                  <AgentListItem
-                    key={i + agent.id}
-                    agent={agent}
-                    selectedAgents={selectedAgents}
-                    onSelectAgent={handleSelectAgent}
-                    onCheckboxChange={handleCheckboxChange}
-                    isSinglePublishedAgent={publishedAgents.length === 1}
-                  />
-                )
-              }
-              )}
+              <AgentListItem
+                key={publishedAgent.id}
+                agent={publishedAgent}
+                selectedAgents={publishedAgent}
+                onSelectAgent={handleSelectAgent}
+                onCheckboxChange={() => { }}
+                isSinglePublishedAgent={true}
+              />
             </div>
           )
         }
@@ -264,7 +222,6 @@ export function AgentMenu({ data }) {
         <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0 16px' }}>
 
           <Button
-            // disabled={!(selectedAgents.length > 0)}
             hoverStyle={{}}
             style={{
               backgroundColor: '#0074a0',
@@ -276,10 +233,10 @@ export function AgentMenu({ data }) {
               justifyContent: 'center',
             }}
             onClick={() => {
-              void handleBatchPublish()
+              void handleMakeRelease()
             }}
           >
-            {publishedAgents.length === 1 ? 'Publish to Live Agent' : 'Publish to Selected Agents'}
+            Publish to Live Agent
           </Button>
         </div>
       </Menu >
