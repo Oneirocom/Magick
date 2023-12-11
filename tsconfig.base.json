@@ -202,6 +202,10 @@
       ],
       "client/state": ["packages/client/state/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
+      "plugin/openai": ["plugins/core/src/index.ts"],
+      "plugin/request": ["plugins/core/src/index.ts"],
+      "plugin/shared": ["plugins/core/src/index.ts"],
+      "plugins/slack": ["plugins/core/src/index.ts"],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
