@@ -20,6 +20,8 @@ import FileInput from '../FileInput/FileInput'
 import { FileUpload } from '@mui/icons-material'
 
 import behaveGraph from '../../graphs/graph.json'
+import behaveSlackGraph from '../../graphs/slack.json'
+
 import { FEATURE_FLAGS } from 'shared/config'
 import { useModal } from '../../contexts/ModalProvider'
 
@@ -33,7 +35,13 @@ export type Template = {
 const behave: Template = {
   name: 'Behave Graph',
   type: 'behave',
-  graph: behaveGraph
+  graph: behaveGraph,
+}
+
+const behaveSlack: Template = {
+  name: 'Behave Slack',
+  type: 'behave',
+  graph: behaveSlackGraph,
 }
 
 // Custom configuration for unique name generator
@@ -59,9 +67,9 @@ const CreateSpellModal = () => {
   const { register, handleSubmit } = useForm()
 
   /**
-  * Handles loading a selected file for opening a spell.
-  * @param event - FileReader onload event
-  */
+   * Handles loading a selected file for opening a spell.
+   * @param event - FileReader onload event
+   */
   const onReaderLoad = async (event): Promise<void> => {
     const spellData = JSON.parse(event.target.result)
 
@@ -119,7 +127,7 @@ const CreateSpellModal = () => {
     }
   })
 
-  const handleSpellResponse = (response) => {
+  const handleSpellResponse = response => {
     if (handleError(response)) return
     openTab({
       id: response.data.name,
@@ -128,15 +136,15 @@ const CreateSpellModal = () => {
       switchActive: true,
       type: response.data.type || 'spell',
       params: {
-        spellId: response.data.id
-      }
+        spellId: response.data.id,
+      },
     })
 
     closeModal()
     setLoading(false)
   }
 
-  const handleError = (response) => {
+  const handleError = response => {
     if ('error' in response) {
       if ('status' in response.error) {
         const err = response.error as any
@@ -151,10 +159,9 @@ const CreateSpellModal = () => {
     return false
   }
 
-
   const options = [
     {
-      component:
+      component: (
         <FileInput
           // todo fix this typing issue
           // @ts-ignore
@@ -170,13 +177,15 @@ const CreateSpellModal = () => {
           }
           innerText={'Import'}
         />
+      ),
     },
     {
       label: 'Create',
       onClick: onCreate,
       disabled: !selectedTemplate,
       className: css['create-btn'],
-    }]
+    },
+  ]
 
   return (
     <Modal
@@ -211,14 +220,20 @@ const CreateSpellModal = () => {
           flexWrap: 'wrap',
         }}
       >
-        {[...(getTemplates().spells as Template[]), (FEATURE_FLAGS.COMPOSER_V2 ? behave : null)].filter(Boolean).map((template, i) => (
-          <TemplatePanel
-            setSelectedTemplate={setSelectedTemplate}
-            selectedTemplate={selectedTemplate}
-            template={{ ...template, bg: template?.bg ?? emptyImg }}
-            key={i}
-          />
-        ))}
+        {[
+          ...(getTemplates().spells as Template[]),
+          FEATURE_FLAGS.COMPOSER_V2 ? behave : null,
+          FEATURE_FLAGS.COMPOSER_V2 ? behaveSlack : null,
+        ]
+          .filter(Boolean)
+          .map((template, i) => (
+            <TemplatePanel
+              setSelectedTemplate={setSelectedTemplate}
+              selectedTemplate={selectedTemplate}
+              template={{ ...template, bg: template?.bg ?? emptyImg }}
+              key={i}
+            />
+          ))}
       </div>
     </Modal>
   )

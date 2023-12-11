@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "3d51f7e3-0c0b-4533-8459-a90321976d87",
+      "type": "slack/sendMessage",
+      "metadata": {
+        "positionX": "327.8465968266344",
+        "positionY": "-467.43663046275003"
+      },
+      "parameters": {
+        "content": {
+          "link": {
+            "nodeId": "9e9bd1a1-a2b6-4628-bfd2-db571a4fdd63",
+            "socket": "content"
+          }
+        }
+      }
+    },
+    {
+      "id": "9e9bd1a1-a2b6-4628-bfd2-db571a4fdd63",
+      "type": "slack/onMessage",
+      "metadata": {
+        "positionX": "78.140582526997",
+        "positionY": "-483.0432563564774"
+      },
+      "flows": {
+        "flow": {
+          "nodeId": "3d51f7e3-0c0b-4533-8459-a90321976d87",
+          "socket": "flow"
+        }
+      }
+    }
+  ],
+  "variables": [],
+  "customEvents": []
+}
