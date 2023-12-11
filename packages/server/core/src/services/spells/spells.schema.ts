@@ -25,9 +25,7 @@ const spellDataSchemaProperties = {
   updatedAt: spellSchema.properties.updatedAt,
   hash: spellSchema.properties.hash,
   type: spellSchema.properties.type,
-  spellReleaseId: Type.Optional(
-    Type.Union([Type.Null(), spellSchema.properties.spellReleaseId])
-  ),
+  spellReleaseId: spellSchema.properties.spellReleaseId,
   id: spellSchema.properties.id,
 }
 
@@ -41,7 +39,7 @@ export const spellDataValidator = getDataValidator(
   dataValidator
 )
 export const spellDataResolver = resolve<SpellInterface, HookContext>({
-  createdAt: async () => Date.now().toString(),
+  createdAt: async () => new Date().toISOString(),
 })
 
 // Schema for updating existing entries, making all properties optional
