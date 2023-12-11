@@ -119,21 +119,6 @@ export const documentSchema = Type.Object(
 /** The interface for a document object that's based on the `documentSchema`. */
 export type Document = Static<typeof documentSchema>
 
-/**
- * Full data model schema for an agent.
- *
- * @property {string} id - The agent's ID.
- * @property {string} projectId - The ID of the project that the agent belongs to.
- * @property {string} name - The name of the agent.
- * @property {boolean} [enabled] - Whether the agent is enabled or not (optional).
- * @property {string} runState - The run state of the agent.
- * @property {string} updatedAt - The date when the agent was last updated.
- * @property {string} [pingedAt] - The date when the agent was last pinged (optional).
- * @property {any} [data] - The data stored in the agent (optional).
- * @property {any} [publicVariables] - The public variables of the agent (optional).
- * @property {string} [secrets] - The secrets of the agent (optional).
- * @property {string} [image] - The image of the agent (optional).
- */
 export const spellReleaseSchema = Type.Object(
   {
     id: Type.String(),
@@ -141,6 +126,8 @@ export const spellReleaseSchema = Type.Object(
     agentId: Type.Optional(Type.String()), // An agent will typically run the release which batches many spell releases
     spellId: Type.Optional(Type.String()), // A spell may in theory be release by the spell service
     createdAt: Type.String(),
+    projectId: Type.String(),
+    agentToCopyId: Type.Optional(Type.String()),
   },
   {
     $id: 'SpellRelease',
