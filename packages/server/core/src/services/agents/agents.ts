@@ -75,14 +75,17 @@ export const agent = (app: Application) => {
     create: async ({
       agentId,
       description,
+      agentToCopyId,
     }: {
       agentId: string
       description: string
+      agentToCopyId: string
     }) => {
       try {
         const result = await app.service('agents').createRelease({
           agentId: agentId,
           description: description,
+          agentToCopyId: agentToCopyId,
         })
         return result
       } catch (error: any) {
