@@ -52,7 +52,7 @@ export function AgentMenu({ data }) {
       _setCurrentAgent(draft)
     }
     if (!publishedAgents.length) {
-      const published = data.filter(agent => agent.currentSpellReleaseId);
+      const published = data.filter(agent => agent.currentSpellReleaseId || !agent.default);
       setPublishedAgents(published)
     }
   }, [data])
