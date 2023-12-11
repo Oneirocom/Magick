@@ -127,6 +127,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
             agentId: newLiveAgent.id,
             description: 'Initial Release',
             agentToCopyId: draftAgent.id,
+            projectId: config.projectId,
           }).unwrap();
 
           openModal({
@@ -157,7 +158,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
                   graph: spellTemplate.graph,
                   name: spellName,
                   type: spellTemplate.type,
-                  projectId: config.projectId,
+                  projectId: agent.projectId,
                   hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
                 })) as any
 
@@ -186,6 +187,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
               agentId: agent.id,
               description: 'Initial Release',
               agentToCopyId: agent.id,
+              projectId: agent.projectId,
             }).unwrap();
 
             openModal({
