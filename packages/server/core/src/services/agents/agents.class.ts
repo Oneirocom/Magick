@@ -142,54 +142,48 @@ export class AgentService<
     return true
   }
 
-  /**
-   * Creates a new spell release for the agent.
-   * Currently we only verison from the draft agent to the live agent.
-   * So agentId will be the draft agent untill we add publishing ot multiple agents.
-   * @param agentId - The id of the agent to create a release for.
-   * @param description - A description of the release.
-   * @returns An object containing the id of the new spell release.
-   */
   async createRelease({
     agentId,
     description,
+    agentToCopyId,
   }: {
     agentId: string
     description: string
+    agentToCopyId: string
   }): Promise<{ spellReleaseId: string }> {
     // Start a new transaction
     return this.app.get('dbClient').transaction(async trx => {
       try {
-        // this agent will have the project Id
-        const liveAgent = await trx('agents').where({ id: agentId }).first()
-        if (!liveAgent) throw new Error(`Agent with id ${agentId} not found`)
-        const projectId = liveAgent.projectId
-        const draftAgent = await trx('agents')
-          .where({ projectId, default: true })
+        const agentToUpdate = await trx('agents').where({ id: agentId }).first()
+        const agentToCopy = await trx('agents')
+          .where({ id: agentToCopyId })
           .first()
+        if (!agentToUpdate || !agentToCopy)
+          throw new Error(`Agent with id ${agentId} not found`)
+        const projectId = agentToUpdate.projectId
 
         const [spellRelease] = await trx('spellReleases')
           .insert({
             id: uuidv4(),
-            description,
-            agentId,
+            description: description || '',
+            agentId: agentToUpdate.id,
           })
           .returning('*')
 
-        // Get all draft spells for the project using fetchAllPages
-        const allDraftSpells: SpellData[] = await fetchAllPages(
+        // Fetch spells based on the source determined
+        const allSpellsToCopy: SpellData[] = await fetchAllPages(
           this.app.service('spells').find.bind(this.app.service('spells')),
           {
             query: {
               projectId,
-              agentId: draftAgent.id,
+              agentId: agentToCopy?.id,
             },
-            transaction: trx, // Pass the transaction object to fetchAllPages if needed
+            transaction: trx,
           }
         )
 
-        // Create new spells linked to the new spell release
-        for (const spell of allDraftSpells) {
+        // Duplicate spells for the new release
+        for (const spell of allSpellsToCopy) {
           await trx('spells').insert({
             ...spell,
             id: uuidv4(),
@@ -199,8 +193,9 @@ export class AgentService<
             type: spell.type ?? 'spell',
           })
         }
+
         // Update agent with new spell release ID
-        await trx('agents').where({ id: liveAgent.id }).update({
+        await trx('agents').where({ id: agentToUpdate.id }).update({
           currentSpellReleaseId: spellRelease.id,
           updatedAt: new Date().toISOString(),
         })
