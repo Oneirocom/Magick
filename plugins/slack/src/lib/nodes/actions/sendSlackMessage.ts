@@ -4,6 +4,8 @@ import { SlackActionService } from '../../services/slackActionService'
 import { WebClient, WebClientOptions } from '@slack/web-api'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
+import { FEATURE_FLAGS } from 'packages/shared/config/src'
+
 export const sendSlackMessage = makeFlowNodeDefinition({
   typeName: 'slack/sendMessage',
   category: NodeCategory.Action,
@@ -33,10 +35,7 @@ export const sendSlackMessage = makeFlowNodeDefinition({
       throw new Error('No event found')
     }
 
-    const slackToken =
-      'xoxb-5552942624129-5841550259043-eF2KlJJpQ7R6O1SKea0uZ5UV'
-
-    const web = new WebClient(slackToken, {
+    const web = new WebClient(FEATURE_FLAGS.SLACK_AGENT_TOKEN, {
       retryConfig: {
         retries: 3,
       },
