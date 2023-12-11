@@ -89,7 +89,12 @@ export function AgentMenu({ data }) {
   const publishToLiveAgent = async (description: string) => {
     try {
       if (publishedAgent) {
-        const result = await createAgentRelease({ agentId: publishedAgent.id, description, agentToCopyId: draftAgent.id }).unwrap();
+        const result = await createAgentRelease({
+          agentId: publishedAgent.id,
+          description,
+          agentToCopyId: draftAgent.id,
+          projectId: publishedAgent.projectId,
+        }).unwrap();
         if (result) {
           enqueueSnackbar('Successfully published to live agent', { variant: 'success' });
         }
