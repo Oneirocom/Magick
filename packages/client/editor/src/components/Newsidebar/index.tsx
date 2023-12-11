@@ -92,8 +92,10 @@ export function NewSidebar(DrawerProps): JSX.Element {
               id: uuidv4(),
               graph: spellTemplate.graph,
               name: spellName,
-              type: spellTemplate.type,
+              type: spellTemplate.type || "spell",
               projectId: config.projectId,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
               hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
             })) as any
 
@@ -109,6 +111,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
             publicVariables: '{}',
             secrets: '{}',
             rootSpellId: rootSpellId || "",
+            updatedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
           }).unwrap();
 
           // Create a live agent
@@ -120,6 +124,8 @@ export function NewSidebar(DrawerProps): JSX.Element {
             publicVariables: '{}',
             secrets: '{}',
             rootSpellId: rootSpellId || "",
+            updatedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
           }).unwrap();
 
           // Create a release for the live agent
@@ -157,8 +163,10 @@ export function NewSidebar(DrawerProps): JSX.Element {
                   id: uuidv4(),
                   graph: spellTemplate.graph,
                   name: spellName,
-                  type: spellTemplate.type,
-                  projectId: agent.projectId,
+                  type: spellTemplate.type || "spell",
+                  projectId: config.projectId,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
                   hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
                 })) as any
 
