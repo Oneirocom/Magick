@@ -134,7 +134,13 @@ export const AWS_BUCKET_ENDPOINT =
 // Feature flags
 export const FEATURE_FLAGS = {
   // Enable the new editor
-  COMPOSER_V2: getVarForEnvironment('COMPOSER_V2') === 'true' || false,
+  // COMPOSER_V2: getVarForEnvironment('COMPOSER_V2') === 'true' || false,
+  COMPOSER_V2: true,
+  V2_PLUGINS: getVarForEnvironment('V2_PLUGINS')?.split(',') ?? [],
+  SLACK_AGENT_TOKEN: getVarForEnvironment('SLACK_AGENT_TOKEN') || '',
+  SLACK_AGENT_ID: getVarForEnvironment('SLACK_AGENT_ID') || '',
+  SLACK_AGENT_SIGNING_SECRET:
+    getVarForEnvironment('SLACK_AGENT_SIGNING_SECRET') || '',
 }
 
 export const HEARTBEAT_MSEC =
