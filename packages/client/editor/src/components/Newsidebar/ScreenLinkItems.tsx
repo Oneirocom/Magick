@@ -1,14 +1,15 @@
-import List from "@mui/material/List"
-import { DrawerItem } from "./DrawerItem"
-import { PluginDrawerItems } from "./PluginDrawerItems"
+import List from '@mui/material/List'
+import { DrawerItem } from './DrawerItem'
+import { PluginDrawerItems } from './PluginDrawerItems'
 import BoltIcon from '@mui/icons-material/Bolt'
-import ArticleIcon from '@mui/icons-material/Article';
+import ArticleIcon from '@mui/icons-material/Article'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StorageIcon from '@mui/icons-material/Storage'
-import { useTabLayout } from "@magickml/providers"
-import { SetAPIKeys } from "client/core"
-import React from "react";
-import { ListItem } from "@mui/material";
+import { useTabLayout } from '@magickml/providers'
+import KeyIcon from '@mui/icons-material/Key';
+import { SetAPIKeys } from 'client/core'
+import React from 'react'
+import { ListItem } from '@mui/material'
 
 export const drawerTooltipText = {
   spells: 'Create and manage spell node graphs for agents to use. ',
@@ -20,9 +21,9 @@ export const drawerTooltipText = {
   tasks: 'Objectives for agents to iterate through and complete.',
   avatar: 'Chat with your agents embodied with a 3D avatar.',
   settings: 'Global settings used in the Playtest window.',
-  config: 'Configure your agents integrations, data, and more.'
+  config: 'Configure your agents integrations, data, and more.',
+  credentials: 'Set credentials for your editor v2 agents.',
 }
-
 
 type DrawerItem = {
   name: string
@@ -59,6 +60,12 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       Icon: SettingsIcon,
       tooltip: 'Settings Tooltip',
       tooltipText: drawerTooltipText.settings,
+    },
+    {
+      name: 'Credentials',
+      Icon: KeyIcon,
+      tooltip: 'Credentials Tooltip',
+      tooltipText: drawerTooltipText.credentials,
     },
   ]
 
@@ -98,5 +105,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       <ListItem key="set-api-keys" disablePadding sx={{ display: 'block' }}>
         {!isAPIKeysSet && <SetAPIKeys />}
       </ListItem>
-    </List>)
+    </List>
+  )
 }
