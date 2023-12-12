@@ -50,6 +50,61 @@
     "configuration": []
   },
   {
+    "type": "magick/request",
+    "category": "Action",
+    "label": "Request",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "method",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "headers",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "url",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "params",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "output",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "variables"
+      },
+      {
+        "name": "customEvents"
+      },
+      {
+        "name": "values"
+      },
+      {
+        "name": "getDependency"
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",

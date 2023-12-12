@@ -4,37 +4,61 @@ import { Tab, useDockviewTheme } from 'client/state';
 import { usePubSub } from '@magickml/providers';
 import { Composer } from './composer';
 
-const DraggableElement = (props) => (
-  <p
-    tabIndex={-1}
-    onDragStart={(event) => {
-      if (event.dataTransfer) {
-        event.dataTransfer.effectAllowed = 'move';
+const DraggableElement = (props) => {
+  const { tab } = props.params
+  const { publish, events } = usePubSub()
+  const windows = {
+    'Console': () => {
+      publish(events.$CREATE_CONSOLE(tab.id))
+    },
+    'TextEditor': () => {
+      publish(events.$CREATE_TEXT_EDITOR(tab.id))
+    },
+    'Inspector': () => {
+      publish(events.$CREATE_INSPECTOR(tab.id))
+    },
+    'Playtest': () => {
+      publish(events.$CREATE_PLAYTEST(tab.id))
+    }
+  }
 
-        event.dataTransfer.setData('text/plain', 'nothing');
-        event.dataTransfer.setData('component', props.window)
-        event.dataTransfer.setData('title', props.title)
-      }
-    }}
-    style={{
-      padding: '8px',
-      color: 'white',
-      cursor: 'pointer',
-    }}
-    draggable={true}
-  >
-    {props.window}
-  </p>
-);
+  const handleClick = () => {
+    windows[props.window]()
+  }
+
+  return (
+    <p
+      tabIndex={-1}
+      onDragStart={(event) => {
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = 'move';
+
+          event.dataTransfer.setData('text/plain', 'nothing');
+          event.dataTransfer.setData('component', props.window)
+          event.dataTransfer.setData('title', props.title)
+        }
+      }}
+      style={{
+        padding: '8px',
+        color: 'white',
+        cursor: 'pointer',
+      }}
+      draggable={true}
+      onClick={handleClick}
+    >
+      {props.window}
+    </p>
+  )
+};
 
 const composerLayoutComponents = {
   WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
       <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
-        <DraggableElement window="Console" />
-        <DraggableElement window="TextEditor" title="Text Editor" />
-        <DraggableElement window="Inspector" />
-        <DraggableElement window="Playtest" />
+        <DraggableElement window="Console" {...props} />
+        <DraggableElement window="TextEditor" title="Text Editor" {...props} />
+        <DraggableElement window="Inspector" {...props} />
+        <DraggableElement window="Playtest" {...props} />
       </div>
     )
   },
@@ -53,6 +77,9 @@ const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string,
       component: 'WindowBar',
       maximumHeight: 30,
       minimumHeight: 30,
+      params: {
+        ...props.params
+      }
     })
 
     event.api.addPanel({
