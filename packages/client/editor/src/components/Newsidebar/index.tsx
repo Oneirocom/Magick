@@ -59,7 +59,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const { setAgentUpdate } = useTreeData()
 
   const config = useConfig()
-  const [createNewAgent, { data: newAgent }] = useCreateAgentMutation()
+  const [createNewAgent, { data: newAgent, isLoading }] = useCreateAgentMutation()
   const [createAgentRelease] = useCreateAgentReleaseMutation()
   const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
   const [newSpell] = useNewSpellMutation()
@@ -75,7 +75,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
   useEffect(() => {
     const handleInitialAgentSetup = async () => {
       try {
-        if (!agents) return
+        if (!agents || isLoading) return
         // If there are no agents, create a draft agent and a live agent
         if (agents.total === 0) {
           const agent = agents.data[0]
@@ -208,6 +208,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
       }
     }
     handleInitialAgentSetup();
+    if (agents?.data === data) return;
     setData(agents?.data);
   }, [agents, createNewAgent, createAgentRelease, config.projectId]);
 
