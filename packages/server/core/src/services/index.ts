@@ -13,6 +13,7 @@ import type { Application } from '../declarations'
 import { pluginManager } from 'shared/core'
 import { slackApi } from 'plugins/slack/src/lib/api/slackApi'
 import { FEATURE_FLAGS } from 'shared/config'
+import { credentials } from './credentials/credentials'
 /**
  * Configures and registers services for the application.
  *
@@ -29,6 +30,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(document)
   app.configure(projects)
   app.configure(agentImage)
+  app.configure(credentials)
   if (FEATURE_FLAGS.V2_PLUGINS.includes('slack')) app.configure(slackApi)
 
   // Wait for a tick to handle race condition
