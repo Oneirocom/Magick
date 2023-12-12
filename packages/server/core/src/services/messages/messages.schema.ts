@@ -53,7 +53,7 @@ export const messageDataValidator = getDataValidator(
   messageDataSchema,
   dataValidator
 )
-export const messageDataResolver = resolve<MessageData, HookContext>({})
+export const messageDataResolver = resolve<Message, HookContext>({})
 
 // Define the messagePatchSchema to update existing entries
 export const messagePatchSchema = Type.Partial(messageDataSchema, {
@@ -66,7 +66,7 @@ export const messagePatchValidator = getDataValidator(
   messagePatchSchema,
   dataValidator
 )
-export const messagePatchResolver = resolve<MessagePatch, HookContext>({})
+export const messagePatchResolver = resolve<Message, HookContext>({})
 
 // Define the messageQueryProperties and messageQuerySchema
 export const messageQueryProperties = Type.Pick(messageSchema, [
