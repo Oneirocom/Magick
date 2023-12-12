@@ -155,3 +155,10 @@ export const SPELLRUNNER_BUSY_TIMEOUT_MSEC = getVarForEnvironment(
 )
   ? Number(getVarForEnvironment('SPELLRUNNER_BUSY_TIMEOUT_MS'))
   : 120000
+
+export const CREDENTIALS_ENCRYPTION_KEY =
+  getVarForEnvironment('CREDENTIALS_ENCRYPTION_KEY') ||
+  'ed625d1b5b273b1e48f6b915639096e857433da61b79e016727b4ed9f0285fd1'
+
+export const CREDENTIALS_ALGORITHM =
+  getVarForEnvironment('CREDENTIALS_ALGORITHM') || 'aes-256-cbc'
