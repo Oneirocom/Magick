@@ -49,6 +49,12 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells`,
       }),
     }),
+    getSpellsByReleaseId: builder.query({
+      providesTags: ['Spells'],
+      query: ({ spellReleaseId }) => ({
+        url: `spells?spellReleaseId=${spellReleaseId}`,
+      }),
+    }),
     // Api endpoint for getting a spell by name
     getSpell: builder.query({
       providesTags: ['Spell'],
@@ -63,7 +69,6 @@ export const spellApi = rootApi.injectEndpoints({
     getSpellById: builder.query({
       providesTags: ['Spell'],
       query: ({ spellName, id }) => {
-        console.log('GET SPELL BY ID', spellName, id)
         return {
           url: `spells?name=${spellName}&id=${id}`,
           params: {},
@@ -182,6 +187,7 @@ export const spellApi = rootApi.injectEndpoints({
 // Export the generated hooks for each API endpoint
 export const {
   useGetSpellsQuery,
+  useGetSpellsByReleaseIdQuery,
   useLazyGetSpellsQuery,
   useLazyGetSpellQuery,
   useLazyGetSpellByIdQuery,
