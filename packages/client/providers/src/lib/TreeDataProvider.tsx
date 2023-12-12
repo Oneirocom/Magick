@@ -92,7 +92,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     if (!fetchedSpells) return;
 
     updateTreeData(fetchedSpells.data);
-  }, [fetchedSpells]);
+  }, [fetchedSpells, currentSpellReleaseId]);
 
   return (
     <TreeDataContext.Provider
