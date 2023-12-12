@@ -56,7 +56,7 @@ export const agentHttp = (app: Application) => {
   })
 
   const recordMessage = (context: HookContext) => {
-    app.service('chatMessage').create({
+    app.service('chatMessages').create({
       agentId: context.params.query.agentId || context.data?.agentId,
       content: context.params.query.content || context.data?.content,
       sender: context.params.query.sender || context.data?.sender,
