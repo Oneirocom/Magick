@@ -63,6 +63,14 @@ export class SpellService<
   }
 
   async find(params: ServiceParams) {
+    // Convert 'null' strings to null values
+    if (params.query) {
+      Object.keys(params.query).forEach(key => {
+        if (params.query[key] === 'null') {
+          params.query[key] = null
+        }
+      })
+    }
     return this._find(params) as Promise<Paginated<SpellInterface>>
   }
 
