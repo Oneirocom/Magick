@@ -1,9 +1,4 @@
-import { Tooltip } from 'client/core'
-import { pluginManager } from 'shared/core'
-import { Clear } from '@mui/icons-material/'
-import { IconButton, Input, Button } from '@mui/material'
 import { useState } from 'react'
-import { useSnackbar } from 'notistack'
 import { useCreateCredentialMutation } from 'client/state'
 import { ChangeEvent } from 'react'
 
@@ -38,6 +33,7 @@ const CredentialsWindow = (props: Props): JSX.Element => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-semibold mb-4">Create Credential</h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
