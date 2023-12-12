@@ -45,8 +45,9 @@ export function AgentMenu({ data }) {
   useEffect(() => {
     if (!data) return;
     const draft = data.find(agent => agent.default && !agent.currentSpellReleaseId)
+    if (!draft) return
     setDraftAgent(draft);
-    _setCurrentAgent(draft);
+    setCurrentAgent(currentAgent || draft);
 
     const published = data.find(agent => agent.currentSpellReleaseId); // Find only one published agent
     setPublishedAgent(published); // Set the published agent
