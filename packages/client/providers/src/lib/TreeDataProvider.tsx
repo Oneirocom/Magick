@@ -3,7 +3,7 @@ import { NodeModel } from '@minoru/react-dnd-treeview'
 import {
   RootState,
   // useGetDocumentsQuery,
-  useGetSpellsQuery
+  useGetSpellsByReleaseIdQuery,
 } from 'client/state'
 import { useSelector } from 'react-redux'
 
@@ -56,11 +56,12 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     state => state.globalConfig
   )
 
-  const { data: fetchedSpells } = useGetSpellsQuery({
-    spellReleaseId: currentSpellReleaseId
+  const { data: fetchedSpells } = useGetSpellsByReleaseIdQuery({
+    spellReleaseId: currentSpellReleaseId || null,
+  }, {
+    refetchOnMountOrArgChange: true,
   })
 
-  // const { data: fetchedDocuments } = useGetDocumentsQuery({})
 
   const [treeData, setTreeData] = useState<TreeNode[]>([])
   const [toDelete, setToDelete] = useState(null)
@@ -75,8 +76,8 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
   // }
 
   const updateTreeData = (spells: Spell[]) => {
-    const filteredSpells = spells.filter(spell => spell.spellReleaseId === currentSpellReleaseId);
-    const newTreeData = filteredSpells.map(spell => ({
+    if (!fetchedSpells) return
+    const newTreeData = spells.map(spell => ({
       id: spell.id,
       parent: 0,
       droppable: false,
@@ -92,7 +93,7 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     if (!fetchedSpells) return;
 
     updateTreeData(fetchedSpells.data);
-  }, [fetchedSpells, currentSpellReleaseId]);
+  }, [fetchedSpells]);
 
   return (
     <TreeDataContext.Provider
