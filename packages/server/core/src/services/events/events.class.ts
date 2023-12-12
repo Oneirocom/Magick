@@ -6,7 +6,7 @@
 
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
-import { KnexService } from '@feathersjs/knex'
+import { KnexAdapter } from '@feathersjs/knex'
 import { app } from '../../app'
 import type { Application } from '../../declarations'
 import type { Event, EventData, EventPatch, EventQuery } from './events.schema'
@@ -21,18 +21,36 @@ export type EventParams = KnexAdapterParams<EventQuery>
  */
 export class EventService<
   ServiceParams extends Params = EventParams
-> extends KnexService<Event, EventData, ServiceParams, EventPatch> {
+> extends KnexAdapter<Event, EventData, ServiceParams, EventPatch> {
   /**
    * Create a new event.
    * Currently, this function simply returns the provided event data immediately.
    * @param {EventData} data - The event data object.
    * @returns {Promise<any>} - The created event data.
    */
-  // @ts-ignore
   async create(data: EventData): Promise<any> {
     const db = app.get('vectordb')
     await db.from('events').insert(data)
     return data
+  }
+
+  /**
+   * Patch an event.
+   * Currently, this function simply returns the provided event data immediately.
+   * @param {string} id - The ID of the event to patch.
+   * @param {EventPatch} data - The event patch data object.
+   * @returns {Promise<any>} - The patched event data.
+   */
+  async patch(id: string, data: EventPatch) {
+    return this._patch(id, data)
+  }
+
+  async get(id: string, params?: ServiceParams) {
+    return this._get(id, params)
+  }
+
+  async remove(id: string, params?: ServiceParams) {
+    return this._remove(id, params)
   }
 
   /**
@@ -45,10 +63,14 @@ export class EventService<
   async find(params?: ServiceParams) {
     const db = app.get('dbClient')
 
-    const entities = params?.query?.entities
-    // entities is an array of strings
+    if (!params?.query?.projectId) {
+      throw new Error('projectId is required')
+    }
 
-    const query = db.from('events').select('*')
+    const query = db
+      .from('events')
+      .select('*')
+      .where({ projectId: params?.query?.projectId })
 
     if (params?.query?.embedding) {
       const blob = atob(params.query.embedding)
@@ -65,27 +87,14 @@ export class EventService<
       // If not searching by embedding, perform a normal query
       query.orderBy('date', 'desc')
     }
-
-    if (entities && entities.length > 0) {
-      // Safely check if all entities are included in the `entities` column
-      entities.forEach(entity => {
-        query.whereRaw(`'${entity}' = ANY (entities)`)
-      })
-    }
-
     const param = params?.query
 
-    if (!param) {
-      return await db('events').select('*').limit(100)
-    }
-
     if (param.type) query.where({ type: param.type })
+    if (param.sender) query.where({ sender: param.sender })
+    if (param.observer) query.where({ observer: param.observer })
     if (param.id) query.where({ id: param.id })
     if (param.client) query.where({ client: param.client })
     if (param.channel) query.where({ channel: param.channel })
-    if (param.projectId) query.where({ projectId: param.projectId })
-    if (param.content && param.embedding)
-      query.where({ content: param.content })
 
     query.limit(param['$limit'])
 
