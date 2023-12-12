@@ -39,6 +39,8 @@ import { PluginEmbeddings } from './customEmbeddings'
 import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
 
+import { CredentialsManager } from 'server/credentials'
+
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
   return this.toString()
@@ -60,6 +62,7 @@ declare module './declarations' {
     logger: pino.Logger
     environment: Environment
     posthog: ReturnType<typeof createPosthogClient>
+    credentialsManager: CredentialsManager
   }
 }
 
@@ -67,6 +70,9 @@ export async function initApp(environment: Environment = 'default') {
   const logger = getLogger()
   logger.info('Initializing feathers app...')
   app.set('logger', logger)
+
+  const credentialsManager = new CredentialsManager()
+  app.set('credentialsManager', credentialsManager)
 
   app.set('posthog', createPosthogClient(app))
 
@@ -192,6 +198,14 @@ export async function initApp(environment: Environment = 'default') {
         authenticateApiKey([API_ACCESS_KEY]),
         async (context: HookContext, next) => {
           // if the route is to the slack service, skip auth
+          if (context.path === 'credentials') {
+            context.params.user = {
+              id: 'slack',
+              permissions: ['admin', 'owner'],
+            }
+            return next()
+          }
+
           if (context.path === 'slack') {
             context.params.user = {
               id: 'slack',
