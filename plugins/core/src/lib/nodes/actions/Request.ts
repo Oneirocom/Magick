@@ -34,11 +34,11 @@ export class RequestNode extends AsyncNode {
     )
   }
 
-  override triggered(
+  override async triggered(
     engine: Engine,
     triggeringSocketName: string,
     finished: () => void
-  ): void {
+  ): Promise<void> {
     const method = ((this.readInput<string>('method') as string) || '')
       .toLowerCase()
       .trim()
@@ -46,21 +46,22 @@ export class RequestNode extends AsyncNode {
     const url = (this.readInput<string>('url') as string) || ''
     const params = this.readInput<string>('params') || {}
 
-    axios({
-      url,
-      method,
-      data: params,
-      headers: headers,
-    })
-      .then((response: AxiosResponse<unknown>) => {
-        const responseData = JSON.stringify(response.data)
-        this.writeOutput('output', responseData)
-        engine.commitToNewFiber(this, 'flow')
-        finished()
+    try {
+      const response: AxiosResponse<unknown> = await axios({
+        url,
+        method,
+        data: params,
+        headers: headers,
       })
-      .catch(error => {
-        console.error('Request failed::::::::::::', error)
-        throw new Error(`Request failed with (${error})!`)
-      })
+
+      const responseData = JSON.stringify(response.data)
+
+      this.writeOutput('output', responseData)
+      engine.commitToNewFiber(this, 'flow')
+      finished()
+    } catch (error) {
+      console.error('Request failed::::::::::::', error)
+      throw new Error(`Request failed with (${error})!`)
+    }
   }
 }
