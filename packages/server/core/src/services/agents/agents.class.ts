@@ -37,25 +37,19 @@ export class AgentService<
     return await this._get(agentId, params)
   }
 
-  // // Its easier to imagine an agent having many releases
-  // // even though we actually version with the spellReleases table
-  // async getAgentReleases(agentId: string) {
-  //   try {
-  //     const db = app.get('dbClient')
-  //     const query = await db('spellReleases').where({ agentId })
-  //     return { data: query }
-  //   } catch (error) {
-  //     console.error('Error fetching agent releases:', error)
-  //     throw error // or handle error as needed
-  //   }
-  // }
-
   async find(params?: ServiceParams) {
+    // Convert 'null' strings to null values
+    if (params.query) {
+      Object.keys(params.query).forEach(key => {
+        if (params.query[key] === 'null') {
+          params.query[key] = null
+        }
+      })
+    }
     return await this._find(params)
   }
 
   async update(id: string, data: AgentInterface, params?: ServiceParams) {
-    // Call the original update method to handle other updates
     return this._update(id, data, params)
   }
 
