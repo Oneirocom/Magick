@@ -10,10 +10,16 @@ import { tooltip_text } from './tooltip_texts'
 import { InputEdit } from './InputEdit'
 
 import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
-import { useGetSpellsQuery, useLazyGetSpellByJustIdQuery, useUpdateAgentMutation } from 'client/state'
+import {
+  RootState,
+  useGetSpellsByReleaseIdQuery,
+  useLazyGetSpellByJustIdQuery,
+  useUpdateAgentMutation
+} from 'client/state'
 import SpellVersionSelector from './SpellVersionSelector'
 import { useGetSpellReleasesByAgentIdQuery } from 'client/state'
 import { SpellRelease } from 'packages/server/core/src/services/spellReleases/spellReleases'
+import { useDispatch, useSelector } from 'react-redux'
 
 /**
  * RenderComp renders the given component with the given props.
@@ -44,32 +50,41 @@ const AgentDetails = ({
   onLoadEnables,
 }: AgentDetailsProps) => {
   const [updateAgent] = useUpdateAgentMutation()
-  const { data: spellListData } = useGetSpellsQuery({})
+  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
+    state => state.globalConfig
+  )
+  const { data: spellListData } = useGetSpellsByReleaseIdQuery({
+    spellReleaseId: currentSpellReleaseId || null,
+  })
   const { data: spellReleaseData } = useGetSpellReleasesByAgentIdQuery({ agentId: selectedAgentData?.id })
+  const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
+
   const [spellList, setSpellList] = useState<SpellInterface[]>([])
   const [spellReleaseList, setSpellReleaseList] = useState<SpellRelease[]>([])
-
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
   const [enable] = useState(onLoadEnables)
 
-  const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
+
+  const isDraft = selectedAgentData?.currentSpellReleaseId === null;
 
   useEffect(() => {
-    if (!selectedAgentData) return
+    if (!selectedAgentData) return;
 
-    if (selectedAgentData?.rootSpellId)
-      getSpellById({ id: selectedAgentData.rootSpellId })
+    // Fetch root spell if available
+    selectedAgentData?.rootSpellId && getSpellById({ id: selectedAgentData.rootSpellId });
+    selectedAgentData?.rootSpell?.id && getSpellById(selectedAgentData.rootSpell.id);
 
-    if (selectedAgentData?.rootSpell?.id)
-      getSpellById(selectedAgentData.rootSpell.id)
-
-  }, [selectedAgentData])
+    // Set spell list and release list
+    spellListData && setSpellList(spellListData.data);
+    spellReleaseData && setSpellReleaseList(spellReleaseData.data);
+  }, [selectedAgentData, spellListData, spellReleaseData, getSpellById]);
 
   useEffect(() => {
-    if (!spellListData) return
-    setSpellList(spellListData.data)
-  }, [spellListData])
+    // Update public variables based on rootSpell
+    rootSpell && updatePublicVar(rootSpell);
+  }, [rootSpell]);
+
 
   useEffect(() => {
     if (!spellReleaseData) return
@@ -88,9 +103,8 @@ const AgentDetails = ({
    * @param id - Agent id to update.
    * @param data - Data to update.
    */
-  const update = (id: string, data = undefined) => {
-    const _data = data || { ...selectedAgentData }
-
+  const update = (data = {}) => {
+    const _data = { ...selectedAgentData, ...data }
     // Avoid server-side validation error
     _data.enabled = _data.enabled ? true : false
     _data.updatedAt = new Date().toISOString()
@@ -106,7 +120,8 @@ const AgentDetails = ({
         setSelectedAgentData(data)
       })
       .catch(e => {
-        enqueueSnackbar(e, {
+        console.error(e)
+        enqueueSnackbar('Error updating agent', {
           variant: 'error',
         })
       })
@@ -159,20 +174,12 @@ const AgentDetails = ({
 
   const onSpellVersionChange = async (spellReleaseId: string) => {
     try {
-      await updateAgent({
-        currentSpellReleaseId: spellReleaseId,
-        id: selectedAgentData.id,
-      })
-      enqueueSnackbar('Updated agent', {
-        variant: 'success',
-      })
+      await update({ currentSpellReleaseId: spellReleaseId });
+      enqueueSnackbar('Updated spell version', { variant: 'success' });
+    } catch (e) {
+      enqueueSnackbar('Error updating spell version', { variant: 'error' });
     }
-    catch (e) {
-      enqueueSnackbar(e, {
-        variant: 'error',
-      })
-    }
-  }
+  };
 
   return (
     <div style={{ overflowY: 'scroll', height: '100vh', padding: '40px 100px' }}>
@@ -209,8 +216,7 @@ const AgentDetails = ({
                 label={selectedAgentData.enabled ? 'On' : 'Off'}
                 checked={selectedAgentData.enabled ? true : false}
                 onChange={() => {
-                  update(selectedAgentData.id, {
-                    ...selectedAgentData,
+                  update({
                     enabled: selectedAgentData.enabled ? false : true,
                   })
                 }}
@@ -271,15 +277,17 @@ const AgentDetails = ({
               })}
         </select>
       </div>
-      <div>
-        <SpellVersionSelector
-          spellReleaseList={spellReleaseList}
-          activeSpellReleaseId={selectedAgentData?.currentSpellReleaseId}
-          onChange={onSpellVersionChange}
-          tooltipText={''}
-        // tooltipText={tooltip_text.spellVersion}
-        />
-      </div>
+      {!isDraft && (
+        <div>
+          <SpellVersionSelector
+            spellReleaseList={spellReleaseList}
+            activeSpellReleaseId={selectedAgentData?.currentSpellReleaseId}
+            onChange={onSpellVersionChange}
+            tooltipText={''}
+          // tooltipText={tooltip_text.spellVersion}
+          />
+        </div>
+      )}
       <div>
         {(pluginManager as ClientPluginManager).getSecrets(true).map((value, index) => {
 
@@ -315,6 +323,7 @@ const AgentDetails = ({
           )
         })}
       </div>
+
       {selectedAgentData.publicVariables &&
         selectedAgentData.publicVariables !== '{}' && (
           <AgentPubVariables
