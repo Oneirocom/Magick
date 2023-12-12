@@ -52,7 +52,7 @@ export const agentApi = rootApi.injectEndpoints({
       }),
     }),
     createAgentRelease: builder.mutation({
-      invalidatesTags: ['Agent', 'Agents'],
+      invalidatesTags: ['Agent', 'Agents', 'SpellReleases'],
       query: agent => ({
         url: `agents/createRelease`,
         method: 'POST',
