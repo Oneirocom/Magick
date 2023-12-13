@@ -38,13 +38,15 @@ export class AgentService<
   }
 
   async find(params?: ServiceParams) {
-    // Convert 'null' strings to null values
-    if (params.query) {
-      Object.keys(params.query).forEach(key => {
-        if (params.query[key] === 'null') {
-          params.query[key] = null
+    // Check if params and params.query exist before proceeding
+    if (params?.query) {
+      for (const key in params.query) {
+        if (Object.prototype.hasOwnProperty.call(params.query, key)) {
+          if (params.query[key] === 'null') {
+            params.query[key] = null
+          }
         }
-      })
+      }
     }
     return await this._find(params)
   }
@@ -180,17 +182,17 @@ export class AgentService<
           }
         )
 
-        const draftSpellsToCopy = allSpells.filter(
+        const draftSpellsToCopy: SpellData[] = allSpells.filter(
           (spell: SpellData) => !spell.spellReleaseId
         )
 
         if (!draftSpellsToCopy.length)
           throw new Error('No spells found to copy')
 
-        const newSpells = []
+        const newSpells: SpellData[] = []
         // Duplicate spells for the new release
         for (const spell of draftSpellsToCopy) {
-          const newSpell = await trx('spells')
+          const newSpell = (await trx('spells')
             .insert({
               ...spell,
               id: uuidv4(),
@@ -199,15 +201,15 @@ export class AgentService<
               createdAt: new Date().toISOString(),
               type: spell.type ?? 'spell',
             })
-            .returning('*')
+            .returning('*')) as SpellData[]
           newSpells.push(newSpell[0])
         }
         const rootSpell = draftSpellsToCopy.find(
           spell => spell.id === agentToCopy?.rootSpellId
-        )
+        ) as SpellData
         const newRootSpell = newSpells.find(spell => {
           return spell.name === rootSpell?.name
-        })
+        }) as SpellData
 
         // Update agent with new spell release ID
         await trx('agents').where({ id: agentToUpdate.id }).update({
