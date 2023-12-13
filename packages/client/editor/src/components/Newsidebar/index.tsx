@@ -19,6 +19,7 @@ import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ContextMenu } from './ContextMenu'
 import {
+  RootState,
   useCreateAgentMutation,
   useCreateAgentReleaseMutation,
   useGetAgentsQuery,
@@ -64,6 +65,9 @@ export function NewSidebar(DrawerProps): JSX.Element {
   const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
   const [newSpell] = useNewSpellMutation()
   const { currentTab } = useSelector((state: any) => state.tabLayout)
+  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
+    state => state.globalConfig
+  )
 
   // stopgap until I patch the agent menu with new redux stuff
   useEffect(() => {
@@ -243,10 +247,11 @@ export function NewSidebar(DrawerProps): JSX.Element {
       </div>
 
       <Divider sx={{ marginY: 2 }} />
-      <div className="px-4">
-        <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>
-
-      </div>
+      {!currentSpellReleaseId &&
+        <div className="px-4">
+          <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>
+        </div>
+      }
       <div className="overflow-y-scroll overflow-x-hidden pb-8">
         <FileTree currentTab={currentTab} />
 
