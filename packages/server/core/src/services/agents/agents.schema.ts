@@ -56,22 +56,23 @@ export const agentDataSchema = Type.Pick(
 /**
  * Agent patch data schema for creating new entries
  */
-export const agentPatchDataSchema = Type.Pick(
-  agentSchema,
-  [
-    'id',
-    'name',
-    'projectId',
-    'enabled',
-    'runState',
-    'updatedAt',
-    'pingedAt',
-    'data',
-    'publicVariables',
-    'secrets',
-    'currentSpellReleaseId',
-  ],
-  { $id: 'AgentPatch', additionalProperties: true }
+export const agentPatchDataSchema = Type.Partial(
+  Type.Pick(
+    agentSchema,
+    [
+      'name',
+      'enabled',
+      'runState',
+      'updatedAt',
+      'pingedAt',
+      'data',
+      'publicVariables',
+      'secrets',
+      'currentSpellReleaseId',
+      'rootSpellId',
+    ],
+    { $id: 'AgentPatch', additionalProperties: true }
+  )
 )
 
 /**
