@@ -1,3 +1,4 @@
+import { NotFound } from '@feathersjs/errors/lib'
 // DOCUMENTED
 /**
  * Imports
