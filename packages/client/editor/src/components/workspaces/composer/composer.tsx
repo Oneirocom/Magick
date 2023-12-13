@@ -26,6 +26,7 @@ import { useEditor } from '../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
+import LockIcon from '@mui/icons-material/Lock';
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -141,6 +142,10 @@ export const Composer = ({ tab, theme, spellId }) => {
   const { editor, serialize } = useEditor()
   const preferences = useSelector((state: RootState) => state.preferences)
 
+  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
+    state => state.globalConfig
+  )
+
   // Set up autosave for the workspaces
   useEffect(() => {
     if (!editor?.on) return
@@ -250,8 +255,38 @@ export const Composer = ({ tab, theme, spellId }) => {
     return true;
   };
 
+  const overlayStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 999,
+    background: 'rgba(0, 0, 0, 0.5)',
+    display: currentSpellReleaseId ? 'flex' : 'none',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  };
+
+  const overlayContentStyle: React.CSSProperties = {
+    textAlign: 'center',
+    // color: 'white',
+    // fontSize: '1.5rem',
+  };
+
   return (
     <>
+      {currentSpellReleaseId && (
+        <div style={overlayStyle} onClick={(e) => e.stopPropagation()}>
+          <div style={overlayContentStyle}>
+            <div><i className="fa fa-lock" aria-hidden="true"></i></div> {/* FontAwesome lock icon */}
+            <h2>Modifying live spells is currently unavailable</h2>
+            <p>Make changes to your draft agent and then publish a release!</p>
+          </div>
+          <LockIcon style={{ fontSize: '40px', marginTop: '8px' }} />
+        </div>
+      )}
       <EventHandler tab={tab} pubSub={pubSub} spellId={spellId} />
       <DockviewReact
         onDidDrop={onDidDrop}
