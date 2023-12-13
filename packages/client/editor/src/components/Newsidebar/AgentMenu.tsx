@@ -210,7 +210,7 @@ export function AgentMenu({ data }) {
                 marginBottom: 4,
                 marginLeft: 16,
               }}>
-                Published
+                Live Agent
               </h3>
               <AgentListItem
                 key={publishedAgent.id}
