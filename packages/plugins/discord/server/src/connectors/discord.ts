@@ -235,7 +235,7 @@ export class DiscordConnector {
     this.guildId = message.guild
     this.message = message
 
-    app.service('chatMessage').create({
+    app.service('chatMessages').create({
       agentId: this.agent.id,
       connector: 'discord',
       content: message.content,
