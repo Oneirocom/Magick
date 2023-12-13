@@ -15,6 +15,7 @@ import {
   MagickWorkerInputs,
   ModuleContext,
   ModuleWorkerOutput,
+  SpellInterface,
   WorkerData,
 } from '../../types'
 

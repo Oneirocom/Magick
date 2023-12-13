@@ -43,6 +43,7 @@ if (window === window.parent) {
       apiUrl,
       projectId,
       token: DEFAULT_USER_TOKEN,
+      email: undefined
     }
 
     const Root = () => <MagickIDE config={config} />
@@ -85,6 +86,7 @@ if (window === window.parent) {
       if (type === 'INIT') {
         // TODO: store configuration in localstorage
         const { config } = payload as { config: AppConfig }
+
         const Root = () => {
           if (POSTHOG_ENABLED && config?.posthogEnabled) {
             return (
@@ -92,6 +94,9 @@ if (window === window.parent) {
                 apiKey={POSTHOG_API_KEY}
                 options={{
                   api_host: 'https://app.posthog.com',
+                  loaded: (posthog_instance) => {
+                    posthog_instance.identify(config.email)
+                  },
                 }}
               >
                 <MagickIDE config={config} />

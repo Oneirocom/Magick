@@ -142,6 +142,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * @param {object} update - The updated spell object
    */
   const onSaveDiff = async (event, update) => {
+    // return
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current

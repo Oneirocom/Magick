@@ -267,7 +267,7 @@ export const CustomNode: React.FC<Props> = props => {
         )}
       </div>
       <div
-        className={`${styles.expandIconWrapper} 
+        className={`${styles.expandIconWrapper}
           }`}
       >
         {props.node.text === 'Spells & Prompts' && (

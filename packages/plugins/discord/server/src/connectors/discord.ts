@@ -256,6 +256,13 @@ export class DiscordConnector {
     this.guildId = message.guild
     this.message = message
 
+    app.service('chatMessage').create({
+      agentId: this.agent.id,
+      connector: 'discord',
+      content: message.content,
+      sender: message.author.id,
+    });
+
     const { content } = message
 
     const { author, mentions } = message

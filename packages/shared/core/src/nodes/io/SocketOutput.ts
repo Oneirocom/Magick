@@ -96,7 +96,7 @@ export class SocketOutput extends MagickComponent<void> {
     if (!inputs.input) throw new Error('No input provided to output component')
     console.log({ inputs })
 
-    const output = inputs.input.filter(Boolean)[0] as string
+    const output = inputs.input[0] as string
 
     return {
       output,

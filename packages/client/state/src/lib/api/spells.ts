@@ -1,6 +1,4 @@
 // DOCUMENTED
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
 import md5 from 'md5'
 
@@ -116,11 +114,8 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for saving a spell
     saveSpell: builder.mutation({
       invalidatesTags: ['Spell'],
-      async queryFn(
-        { spell, projectId },
-        { dispatch },
-        extraOptions,
-        baseQuery
+      query(
+        { spell, projectId }
       ) {
         const spellCopy = { ...spell } as any
         if (spellCopy.id) delete spellCopy.id
@@ -132,7 +127,7 @@ export const spellApi = rootApi.injectEndpoints({
 
         delete spellCopy.creatorId
 
-        const baseQueryOptions = {
+        return {
           url: 'spells/' + spell.id,
           body: spellCopy,
           method: 'PATCH',
