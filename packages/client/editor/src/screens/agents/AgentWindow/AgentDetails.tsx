@@ -12,6 +12,7 @@ import { InputEdit } from './InputEdit'
 import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
 import {
   RootState,
+  setCurrentSpellReleaseId,
   useGetSpellsByReleaseIdQuery,
   useLazyGetSpellByJustIdQuery,
   useUpdateAgentMutation
@@ -57,14 +58,14 @@ const AgentDetails = ({
     spellReleaseId: currentSpellReleaseId || null,
   })
   const { data: spellReleaseData } = useGetSpellReleasesByAgentIdQuery({ agentId: selectedAgentData?.id })
-  const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
-
   const [spellList, setSpellList] = useState<SpellInterface[]>([])
   const [spellReleaseList, setSpellReleaseList] = useState<SpellRelease[]>([])
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
   const [enable] = useState(onLoadEnables)
 
+  const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
+  const dispatch = useDispatch()
 
   const isDraft = selectedAgentData?.currentSpellReleaseId === null;
 
@@ -174,7 +175,7 @@ const AgentDetails = ({
 
   const onSpellVersionChange = async (spellReleaseId: string) => {
     try {
-      await update({ currentSpellReleaseId: spellReleaseId });
+      await dispatch(setCurrentSpellReleaseId(spellReleaseId));
       enqueueSnackbar('Updated spell version', { variant: 'success' });
     } catch (e) {
       enqueueSnackbar('Error updating spell version', { variant: 'error' });
