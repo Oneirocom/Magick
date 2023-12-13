@@ -5,7 +5,7 @@
 import otJson0 from 'ot-json0'
 import md5 from 'md5'
 import { KnexAdapter } from '@feathersjs/knex'
-import { BadRequest, NotFound } from '@feathersjs/errors/lib'
+import { BadRequest } from '@feathersjs/errors/lib'
 import type { Application } from '../../declarations'
 import type { Paginated, Params } from '@feathersjs/feathers'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
@@ -63,13 +63,15 @@ export class SpellService<
   }
 
   async find(params: ServiceParams) {
-    // Convert 'null' strings to null values
-    if (params.query) {
-      Object.keys(params.query).forEach(key => {
-        if (params.query[key] === 'null') {
-          params.query[key] = null
+    // Check if params and params.query exist before proceeding
+    if (params?.query) {
+      for (const key in params.query) {
+        if (Object.prototype.hasOwnProperty.call(params.query, key)) {
+          if (params.query[key] === 'null') {
+            params.query[key] = null
+          }
         }
-      })
+      }
     }
     return this._find(params) as Promise<Paginated<SpellInterface>>
   }
