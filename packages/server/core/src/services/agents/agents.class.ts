@@ -146,14 +146,17 @@ export class AgentService<
     agentToCopyId: string
   }): Promise<{ spellReleaseId: string }> {
     // Start a new transaction
-    return this.app.get('dbClient').transaction(async trx => {
-      try {
+    return this.app
+      .get('dbClient')
+      .transaction(async trx => {
         const agentToUpdate = await trx('agents').where({ id: agentId }).first()
         const agentToCopy = await trx('agents')
           .where({ id: agentToCopyId })
           .first()
-        if (!agentToUpdate || !agentToCopy)
+
+        if (!agentToUpdate || !agentToCopy) {
           throw new Error(`Agent with id ${agentId} not found`)
+        }
         const projectId = agentToUpdate.projectId
 
         const [spellRelease] = await trx('spellReleases')
@@ -184,31 +187,53 @@ export class AgentService<
         if (!draftSpellsToCopy.length)
           throw new Error('No spells found to copy')
 
+        const newSpells = []
         // Duplicate spells for the new release
         for (const spell of draftSpellsToCopy) {
-          await trx('spells').insert({
-            ...spell,
-            id: uuidv4(),
-            spellReleaseId: spellRelease.id,
-            updatedAt: new Date().toISOString(),
-            createdAt: new Date().toISOString(),
-            type: spell.type ?? 'spell',
-          })
+          const newSpell = await trx('spells')
+            .insert({
+              ...spell,
+              id: uuidv4(),
+              spellReleaseId: spellRelease.id,
+              updatedAt: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
+              type: spell.type ?? 'spell',
+            })
+            .returning('*')
+          newSpells.push(newSpell[0])
         }
+        const rootSpell = draftSpellsToCopy.find(
+          spell => spell.id === agentToCopy?.rootSpellId
+        )
+        const newRootSpell = newSpells.find(spell => {
+          return spell.name === rootSpell?.name
+        })
 
         // Update agent with new spell release ID
         await trx('agents').where({ id: agentToUpdate.id }).update({
           currentSpellReleaseId: spellRelease.id,
+          rootSpellId: newRootSpell?.id,
           updatedAt: new Date().toISOString(),
         })
 
-        return { spellReleaseId: spellRelease.id }
-      } catch (error: any) {
-        throw new Error(
-          `Error in agents.class:createRelease: ${error?.message}`
-        )
-      }
-    })
+        return {
+          spellReleaseId: spellRelease.id,
+          rootSpellId: newRootSpell?.id,
+          agentToUpdateId: agentToUpdate.id,
+        }
+      })
+      .then(({ spellReleaseId, rootSpellId, agentToUpdateId }) => {
+        this.app.service('agents').patch(agentToUpdateId, {
+          currentSpellReleaseId: spellReleaseId,
+          rootSpellId: rootSpellId,
+          updatedAt: new Date().toISOString(),
+        })
+
+        return { spellReleaseId }
+      })
+      .catch(err => {
+        throw new Error(`Error creating release: ${err.message}`)
+      })
   }
 
   async create(
