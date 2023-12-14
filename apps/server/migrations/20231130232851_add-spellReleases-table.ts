@@ -15,7 +15,6 @@ export async function up(knex: Knex): Promise<void> {
   // Alter 'agents' table to include 'createdAt', 'updatedAt', and 'currentSpellReleaseId' fields
   await knex.schema.alterTable('agents', (table) => {
     table.timestamp('createdAt').defaultTo(knex.fn.now())
-    table.timestamp('updatedAt').defaultTo(knex.fn.now())
     table.uuid('currentSpellReleaseId')
     table.foreign('currentSpellReleaseId').references('id').inTable('spellReleases')
   })
@@ -34,9 +33,6 @@ export async function down(knex: Knex): Promise<void> {
     table.dropColumn('currentSpellReleaseId')
     if (knex.schema.hasColumn('agents', 'createdAt')) {
       table.dropColumn('createdAt')
-    }
-    if (knex.schema.hasColumn('agents', 'updatedAt')) {
-      table.dropColumn('updatedAt')
     }
   })
 
