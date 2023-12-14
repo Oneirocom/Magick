@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Menu from '@mui/material/Menu'
-import Divider from '@mui/material/Divider'
+
 import { useDispatch } from 'react-redux'
 import { STANDALONE, } from 'shared/config'
 import { useFeathers } from '@magickml/providers'
@@ -18,6 +18,7 @@ import { Button } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
 import { useSnackbar } from 'notistack'
+import StyledDivider from './StyledDivider'
 
 export function AgentMenu({ data }) {
 
@@ -105,29 +106,16 @@ export function AgentMenu({ data }) {
     }
   };
 
-
   const handleMakeRelease = async () => {
     if (publishedAgent && draftAgent) { // Check if there is a published agent
       confirmPublish(publishToLiveAgent);
     }
   };
 
-
   const BorderedAvatar = styled(Avatar)`
       border: 1px solid lightseagreen;
       ${STANDALONE && 'cursor: pointer;'}
       `
-
-  const StyledDivider = styled(Divider)(({ theme }) => ({
-    backgroundColor: '#3D454A',
-    borderColor: '#3D454A',
-    height: '1px',
-    marginTop: '4px',
-    marginBottom: '4px',
-    marginLeft: '10px',
-    marginRight: '10px',
-  }))
-
 
   return (
     <div>
@@ -230,7 +218,7 @@ export function AgentMenu({ data }) {
           <Button
             hoverStyle={{}}
             style={{
-              backgroundColor: '#0074a0',
+              backgroundColor: 'var(--primary)',
               border: 'none',
               marginTop: '8px',
               marginBottom: '8px',

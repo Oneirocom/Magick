@@ -32,7 +32,6 @@ export const Button = ({
     filter: 'none',
   };
 
-
   // Function to merge styles
   const getButtonStyle = (): CSSProperties | undefined => {
     if (disabled) {
