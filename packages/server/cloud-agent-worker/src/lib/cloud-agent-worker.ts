@@ -1,8 +1,12 @@
 import { Worker, Job } from 'bullmq'
 
-import type { PubSub } from 'server/core'
-import type { AgentRunJob } from 'server/agents'
-import { BullMQWorker, RedisPubSubWrapper, app, BullQueue } from 'server/core'
+import {
+  BullMQWorker,
+  type PubSub,
+  RedisPubSubWrapper,
+  app,
+  BullQueue,
+} from 'server/core'
 import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -60,16 +64,21 @@ export class CloudAgentWorker extends AgentManager {
 
   async addAgent(agentId: string) {
     this.logger.info(`Creating agent ${agentId}...`)
-    const agentDBResult = await app.service('agents').get(agentId, {})
+    const agentDBResult = (
+      await app.service('agents').find({
+        query: {
+          id: agentId,
+        },
+      })
+    )?.data
 
-    if (!agentDBResult) {
+    if (agentDBResult.length == 0 || !agentDBResult) {
       this.logger.error(`Agent ${agentId} not found when creating agent`)
       throw new Error(`Agent ${agentId} not found when creating agent`)
     }
 
     const agentData = {
-      id: agentId,
-      ...agentDBResult,
+      ...agentDBResult[0],
       pingedAt: new Date().toISOString(),
     }
 
@@ -118,12 +127,20 @@ export class CloudAgentWorker extends AgentManager {
 
   async agentUpdated(agentId: string) {
     this.logger.info(`Updating agent ${agentId}`)
-    const agent = await app.service('agents').get(agentId, {})
+    const agentDBResult = (
+      await app.service('agents').find({
+        query: {
+          id: agentId,
+        },
+      })
+    )?.data
 
-    if (!agent) {
+    if (agentDBResult.length == 0 || !agentDBResult) {
       this.logger.error(`Agent ${agentId} not found when updating agent`)
       throw new Error(`Agent ${agentId} not found when updating agent`)
     }
+
+    const agent = agentDBResult[0]
 
     // start or stop the agent if the enabled state changed
     if (agent.enabled && !this.currentAgents[agentId]) {
@@ -150,7 +167,6 @@ export class CloudAgentWorker extends AgentManager {
   async listenForRun(agentId: string) {
     this.logger.debug(`Listening for run for agent ${agentId}`)
     this.logger.debug(AGENT_RUN_JOB(agentId))
-    this.logger.debug(agentId)
     this.pubSub.subscribe(AGENT_RUN_JOB(agentId), async (data: AgentRunJob) => {
       this.logger.info(
         `Running spell ${data.spellId} for agent ${data.agentId}`

@@ -1,3 +1,4 @@
+import { fetchAllPages } from 'shared/utils'
 // DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 import type { Params } from '@feathersjs/feathers'
@@ -9,7 +10,6 @@ import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
 import { AgentInterface } from '../../schemas'
-import { fetchAllPages } from 'shared/utils'
 import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 

@@ -13,7 +13,6 @@ import { chatMessages } from './messages/messages'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
 import { pluginManager } from 'shared/core'
-import { pluginManager } from 'shared/core'
 
 /**
  * Configures and registers services for the application.

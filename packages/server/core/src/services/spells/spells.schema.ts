@@ -15,7 +15,6 @@ export const spellResolver = resolve<SpellInterface, HookContext>({})
 export const spellExternalResolver = resolve<SpellInterface, HookContext>({})
 
 import { SpellInterface, spellSchema } from 'shared/core'
-import { SpellInterface, spellSchema } from 'shared/core'
 // Schema for creating new entries, removing additional fields
 // Define the properties for the new schema
 const spellDataSchemaProperties = {
