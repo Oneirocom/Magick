@@ -19,7 +19,6 @@ import { useConfig } from '@magickml/providers'
  * @returns {JSX.Element} The rendered Select element for selecting or creating modules.
  */
 const ModuleSelect = ({ control, updateData, initialValue }) => {
-  // const { openTab } = useTabLayout()
   const config = useConfig()
   const [getSpell, { data: spell }] = spellApi.useLazyGetSpellByJustIdQuery()
   const { data: spells } = spellApi.useGetSpellsQuery({

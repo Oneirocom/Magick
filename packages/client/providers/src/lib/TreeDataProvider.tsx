@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { NodeModel } from '@minoru/react-dnd-treeview'
 import {
   RootState,
-  // useGetDocumentsQuery,
   useGetSpellsByReleaseIdQuery,
 } from 'client/state'
 import { useSelector } from 'react-redux'
@@ -22,10 +21,6 @@ interface TreeDataContextType {
   agentUpdate: boolean
   setAgentUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
-// interface Document {
-//   id: string
-//   content: string
-// }
 
 interface Spell {
   id: string
@@ -62,18 +57,10 @@ export const TreeDataProvider = ({ children }: Props): JSX.Element => {
     refetchOnMountOrArgChange: true,
   })
 
-
   const [treeData, setTreeData] = useState<TreeNode[]>([])
   const [toDelete, setToDelete] = useState(null)
   const [openDoc, setOpenDoc] = useState<string | number>('')
   const [agentUpdate, setAgentUpdate] = useState(false)
-
-  // function truncateDocs(str, n) {
-  //   if (str.length > n) {
-  //     return str.substring(0, n) + '...'
-  //   }
-  //   return str
-  // }
 
   const updateTreeData = (spells: Spell[]) => {
     if (!fetchedSpells) return

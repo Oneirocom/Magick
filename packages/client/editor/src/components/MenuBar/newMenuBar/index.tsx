@@ -17,7 +17,6 @@ import {
 import { useModal } from '../../../contexts/ModalProvider'
 import { enqueueSnackbar } from 'notistack'
 import axios from 'axios'
-// import { SpellInterface } from 'shared/core'
 import { PRODUCTION } from 'shared/config'
 
 function toTitleCase(str) {
@@ -26,13 +25,6 @@ function toTitleCase(str) {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
     .join(' '); // Join the words with a space
 }
-
-// type DataState = {
-//   agents: any[]
-//   spells: SpellInterface[]
-//   documents: any[]
-// }
-
 
 /**
  * MenuBar component
@@ -50,13 +42,6 @@ const NewMenuBar = props => {
   const { openModal } = useModal()
   const hiddenFileInput = useRef<HTMLInputElement>(null)
   const token = globalConfig?.token
-
-  // const [data, setData] = useState<DataState>({
-  //   agents: [],
-  //   spells: [],
-  //   documents: [],
-  // })
-
   const activeTabRef = useRef<Tab | null>(null)
 
   useEffect(() => {
@@ -70,8 +55,6 @@ const NewMenuBar = props => {
     $EXPORT,
     $UNDO,
     $REDO,
-    // $MULTI_SELECT_COPY,
-    // $MULTI_SELECT_PASTE,
     $DELETE,
     TOGGLE_SNAP,
   } = events
@@ -80,7 +63,6 @@ const NewMenuBar = props => {
    * Save handler
    */
   const onSave = () => {
-    // if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
@@ -101,14 +83,6 @@ const NewMenuBar = props => {
       modal: 'createSpellModal',
     })
   }
-
-  /**
-   * Project window creation handler
-   */
-  // const onProjectWindowCreate = () => {
-  //   if (!openProjectWindow) setOpenDrawer(false)
-  //   setOpenProjectWindow(prevState => !prevState)
-  // }
 
   /**
    * Export handler
@@ -179,7 +153,6 @@ const NewMenuBar = props => {
     }
   }
 
-
   const onImportProject = () => {
     console.log('Clicking import project')
     hiddenFileInput.current?.click()
@@ -191,7 +164,6 @@ const NewMenuBar = props => {
     }
   }
 
-
   // Menu bar entries
   const menuBarItems = {
     file: {
@@ -200,26 +172,14 @@ const NewMenuBar = props => {
           onClick: onNew,
           hotKey: 'alt+n, ctrl+n',
         },
-        // open_spell: {
-        //   onClick: onOpen,
-        //   hotKey: 'alt+o, ctrl+o',
-        // },
         import_spell: {
           onClick: onImport,
           hotKey: 'alt+i, ctrl+i',
         },
-        // rename_spell: {
-        //   onClick: onEdit,
-        //   hotKey: 'alt+e, ctrl+e',
-        // },
         save_spell: {
           onClick: onSave,
           hotKey: 'alt+s, ctrl+s',
         },
-        // save_a_copy: {
-        //   onClick: onSaveAs,
-        //   hotKey: 'alt+shift+s, ctrl+shift+s',
-        // },
         export_spell: {
           onClick: onExport,
           hotKey: 'alt+shift+e, ctrl+shift+e',
@@ -239,14 +199,6 @@ const NewMenuBar = props => {
           onClick: onRedo,
           hotKey: 'alt+y, ctrl+y, alt+shift+z, ctrl+shift+z',
         },
-        // copy: {
-        //   onClick: onMultiSelectCopy,
-        //   hotKey: 'alt+c, ctrl+c',
-        // },
-        // paste: {
-        //   onClick: onMultiSelectPaste,
-        //   hotKey: 'alt+v, ctrl+v',
-        // },
         delete: {
           onClick: onDelete,
           hotKey: 'delete',
@@ -261,22 +213,6 @@ const NewMenuBar = props => {
         },
       },
     },
-    // layout: {
-    //   items: {
-    //     default: {
-    //       onClick: changeLayout,
-    //     },
-    //     full_screen: {
-    //       onClick: changeLayout,
-    //     },
-    //     prompt_engineering: {
-    //       onClick: changeLayout,
-    //     },
-    //     trouble_shooting: {
-    //       onClick: changeLayout,
-    //     },
-    //   },
-    // },
   }
 
   /**

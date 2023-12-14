@@ -254,7 +254,6 @@ export class AgentService<
         rest_api_key: md5(Math.random().toString()),
       })
     }
-
     return await this._create(data)
   }
 

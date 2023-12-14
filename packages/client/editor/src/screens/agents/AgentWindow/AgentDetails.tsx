@@ -285,7 +285,6 @@ const AgentDetails = ({
             activeSpellReleaseId={selectedAgentData?.currentSpellReleaseId}
             onChange={onSpellVersionChange}
             tooltipText={''}
-          // tooltipText={tooltip_text.spellVersion}
           />
         </div>
       )}

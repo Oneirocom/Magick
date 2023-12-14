@@ -1,4 +1,3 @@
-// import { Application } from 'server/core';
 import { Application } from 'server/core'
 import io from 'socket.io'
 import { getLogger } from 'shared/core'
@@ -6,11 +5,6 @@ import { getLogger } from 'shared/core'
 import { isEqual } from 'radash'
 import { MagickSpellInput, SpellInterface } from '../types'
 import SpellRunner from './SpellRunner'
-// import { Paginated } from '@feathersjs/feathers'
-// import { checkPaginated } from 'shared/utils'
-// import { Spell } from './Spell'
-// import { SpellData } from 'client/state'
-// import { SpellQuery } from 'packages/server/core/src/services/spells/spells.schema'
 
 type SpellManagerArgs = {
   socket?: io.Socket

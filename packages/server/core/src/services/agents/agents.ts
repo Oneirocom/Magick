@@ -21,6 +21,7 @@ import type { Application, HookContext } from '../../declarations'
 import { AgentService, getOptions } from './agents.class'
 import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
+import { checkPermissions } from '../../lib/feathersPermissions'
 
 // Re-export agents.class and agents.schema
 export * from './agents.class'
@@ -150,9 +151,9 @@ export const agent = (app: Application) => {
     },
     before: {
       all: [
-        /*checkPermissions({
+        checkPermissions({
           roles: ['owner', 'agent'],
-        }),*/
+        }),
         schemaHooks.validateQuery(agentQueryValidator),
         schemaHooks.resolveQuery(agentQueryResolver),
       ],
