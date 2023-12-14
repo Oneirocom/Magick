@@ -40,15 +40,19 @@ export class CloudAgentManager {
   async startup() {
     this.logger.info('Cloud Agent Manager Startup')
 
-    const enabledAgents = await app.service('agents').find({
+    const enabledAgentsData = await app.service('agents').find({
       query: {
         enabled: true,
       },
     })
 
-    this.logger.info(`Found ${enabledAgents.data.length} enabled agents`)
+    const enabledAgents = Array.isArray(enabledAgentsData)
+      ? enabledAgentsData
+      : enabledAgentsData.data
+
+    this.logger.info(`Found ${enabledAgents.length} enabled agents`)
     const agentPromises: Promise<any>[] = []
-    for (const agent of enabledAgents.data) {
+    for (const agent of enabledAgents) {
       this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
       agentPromises.push(
         this.newQueue.addJob(
@@ -119,7 +123,7 @@ export class CloudAgentManager {
         this.logger.info(
           `Agents on worker ${listData.id} changed: ${agentsDiff}`
         )
-        const agents = await app.service('agents').find({
+        const agentsData = await app.service('agents').find({
           query: {
             id: {
               $in: agentsDiff,
@@ -127,7 +131,9 @@ export class CloudAgentManager {
           },
         })
 
-        for (const agent of agents.data) {
+        const agents = Array.isArray(agentsData) ? agentsData : agentsData.data
+
+        for (const agent of agents) {
           if (agent.enabled) {
             this.pubSub.publish(
               'agent:updated',
