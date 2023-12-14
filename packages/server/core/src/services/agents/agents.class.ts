@@ -33,6 +33,18 @@ export class AgentService<
     this.app = app
   }
 
+  // we use this ping to avoid firing a patched event on the agent
+  // every time the agent is pinged
+  async ping(agentId: string) {
+    const db = app.get('dbClient')
+    // knex query to update the pingedAt field of the agent with the given id
+    const query = await db('agents').where({ id: agentId }).update({
+      pingedAt: new Date().toISOString(),
+    })
+
+    return { data: query }
+  }
+
   async get(agentId: string, params: ServiceParams) {
     return await this._get(agentId, params)
   }
@@ -53,18 +65,6 @@ export class AgentService<
 
   async update(id: string, data: AgentInterface, params?: ServiceParams) {
     return this._update(id, data, params)
-  }
-
-  // we use this ping to avoid firing a patched event on the agent
-  // every time the agent is pinged
-  async ping(agentId: string) {
-    const db = app.get('dbClient')
-    // knex query to update the pingedAt field of the agent with the given id
-    const query = await db('agents').where({ id: agentId }).update({
-      pingedAt: new Date().toISOString(),
-    })
-
-    return { data: query }
   }
 
   /**

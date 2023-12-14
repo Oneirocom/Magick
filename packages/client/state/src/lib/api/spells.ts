@@ -1,6 +1,4 @@
 // DOCUMENTED
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
-import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import { rootApi } from './api'
 import md5 from 'md5'
 
@@ -18,6 +16,7 @@ export interface Diff {
 export interface PatchArgs {
   spellName: string
   update: Partial<any>
+  update: Partial<any>
 }
 
 /**
@@ -34,6 +33,7 @@ export interface SpellData {
   limit: number
   skip: number
   total: number
+  data: any[]
   data: any[]
 }
 
@@ -59,7 +59,9 @@ export const spellApi = rootApi.injectEndpoints({
     getSpell: builder.query({
       providesTags: ['Spell'],
       query: ({ spellName }) => {
+      query: ({ spellName }) => {
         return {
+          url: `spells?name=${spellName}`,
           url: `spells?name=${spellName}`,
           params: {},
         }
@@ -71,6 +73,7 @@ export const spellApi = rootApi.injectEndpoints({
       query: ({ spellName, id }) => {
         return {
           url: `spells?name=${spellName}&id=${id}`,
+          url: `spells?name=${spellName}&id=${id}`,
           params: {},
         }
       },
@@ -80,7 +83,10 @@ export const spellApi = rootApi.injectEndpoints({
       providesTags: ['Spell'],
       query: ({ id }) => {
         console.log('Getting spell by just id', id)
+      query: ({ id }) => {
+        console.log('Getting spell by just id', id)
         return {
+          url: `spells/${id}`,
           url: `spells/${id}`,
           params: {},
         }
@@ -138,7 +144,7 @@ export const spellApi = rootApi.injectEndpoints({
 
         delete spellCopy.creatorId
 
-        const baseQueryOptions = {
+        return {
           url: 'spells/' + spell.id,
           body: spellCopy,
           method: 'PATCH',
@@ -163,6 +169,7 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for patching a spell
     patchSpell: builder.mutation({
       invalidatesTags: ['Spell', 'Spells'],
+      invalidatesTags: ['Spell', 'Spells'],
       query({ id, update }) {
         return {
           url: `spells/${id}`,
@@ -176,6 +183,8 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for deleting a spell
     deleteSpell: builder.mutation({
       invalidatesTags: ['Spells'],
+      query: ({ spellId }) => ({
+        url: `spells/${spellId}`,
       query: ({ spellId }) => ({
         url: `spells/${spellId}`,
         method: 'DELETE',
@@ -194,6 +203,7 @@ export const {
   useGetSpellQuery,
   useGetSpellByIdQuery,
   useGetSpellByJustIdQuery,
+  useLazyGetSpellByJustIdQuery,
   useLazyGetSpellByJustIdQuery,
   useRunSpellMutation,
   useSaveDiffMutation,

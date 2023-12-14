@@ -1,4 +1,3 @@
-import { Application } from '@feathersjs/feathers'
 import {
   createSlice,
   PayloadAction,

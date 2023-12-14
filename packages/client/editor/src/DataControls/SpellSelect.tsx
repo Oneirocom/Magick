@@ -8,10 +8,7 @@ import { GraphData } from 'shared/core'
 import { getTemplates } from 'client/core'
 import { spellApi } from 'client/state'
 
-import {
-  useConfig,
-  // useTabLayout
-} from '@magickml/providers'
+import { useConfig } from '@magickml/providers'
 
 /**
  * Component that renders the Select element for selecting and creating modules.
@@ -53,24 +50,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
       label: module.name,
     }))
   }
-
-  // /**
-  //  * Open a tab with the given spell.
-  //  * @param {Object} spell - The spell to open in a tab.
-  //  */
-  // const _openTab = async spell => {
-  //   const tab = {
-  //     id: spell.name,
-  //     name: spell.name,
-  //     spellName: spell.name,
-  //     type: 'spell',
-  //     params: {
-  //       spellId: spell.id,
-  //     }
-  //   }
-
-  //   openTab(tab)
-  // }
 
   const onChange = async e => {
     if (!e) return

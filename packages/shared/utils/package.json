@@ -2,9 +2,6 @@
   "name": "shared/utils",
   "version": "0.0.1",
   "dependencies": {
-    "vite": "^4.4.9",
-    "@nx/vite": "^16.7.4",
-    "vite-plugin-dts": "^2.3.0"
   },
   "main": "./index.js",
   "module": "./index.mjs",

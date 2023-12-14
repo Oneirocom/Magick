@@ -25,6 +25,7 @@ import {
   MessageQueue,
   Application,
 } from 'server/core'
+} from 'server/core'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { CommandHub } from './CommandHub'
 import { checkPaginated } from 'shared/utils'
@@ -46,6 +47,7 @@ export class Agent implements AgentInterface {
   logger: pino.Logger = getLogger()
   worker: Worker
   messageQueue: MessageQueue
+  commandHub: CommandHub
   commandHub: CommandHub
   pubsub: PubSub
   ready = false
@@ -84,6 +86,9 @@ export class Agent implements AgentInterface {
     this.commandHub = new CommandHub(this, this.pubsub)
 
     this.spellManager = new SpellManager({
+    this.commandHub = new CommandHub(this, this.pubsub)
+
+    this.spellManager = new SpellManager({
       cache: false,
       agent: this,
       app,
@@ -94,7 +99,15 @@ export class Agent implements AgentInterface {
 
       // initialize the plugin commands
       this.initializePluginCommands()
+      // initialize the plugins
+      await this.initializePlugins()
 
+      // initialize the plugin commands
+      this.initializePluginCommands()
+
+      // initialize the core commands
+      // These are used to remotely control the agent
+      this.initializeCoreCommands()
       // initialize the core commands
       // These are used to remotely control the agent
       this.initializeCoreCommands()
@@ -207,6 +220,16 @@ export class Agent implements AgentInterface {
       clearInterval(this.updateInterval)
     }
     this.removePlugins()
+  }
+
+  /**
+   * Clean up resources when the instance is destroyed.
+   */
+  async onDestroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval)
+    }
+    this.removePlugins()
     this.log('destroyed agent', { id: this.id })
   }
 
@@ -229,6 +252,7 @@ export class Agent implements AgentInterface {
   // published an event to the agents event stream
   publishEvent(event, message) {
     this.logger.trace('AGENT: publishing event %s', event)
+    this.logger.trace('AGENT: publishing event %s', event)
     this.pubsub.publish(event, {
       ...message,
       // make sure all events include the agent and project id
@@ -238,6 +262,7 @@ export class Agent implements AgentInterface {
   }
 
   // sends a log event along the event stream
+  log(message, data = {}) {
   log(message, data = {}) {
     this.logger.info(`${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_LOG(this.id), {
@@ -249,6 +274,7 @@ export class Agent implements AgentInterface {
     })
   }
 
+  warn(message, data = {}) {
   warn(message, data = {}) {
     this.logger.warn(`${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_LOG(this.id), {
@@ -274,10 +300,14 @@ export class Agent implements AgentInterface {
   async runWorker(job: Job<AgentRunJob>) {
     // the job name is the agent id.  Only run if the agent id matches.
     this.logger.debug({ id: this.id, data: job.data }, 'running worker')
+    this.logger.debug({ id: this.id, data: job.data }, 'running worker')
     if (this.id !== job.data.agentId) return
 
     const { data } = job
 
+    const spellRunner = await this.spellManager.loadById(
+      data.spellId || this.rootSpellId
+    )
     const spellRunner = await this.spellManager.loadById(
       data.spellId || this.rootSpellId
     )
@@ -315,6 +345,7 @@ export class Agent implements AgentInterface {
         runSubspell: data.runSubspell,
         app: this.app,
         isPlaytest: data.isPlaytest,
+        isPlaytest: data.isPlaytest,
       })
 
       this.publishEvent(AGENT_RUN_RESULT(this.id), {
@@ -325,6 +356,7 @@ export class Agent implements AgentInterface {
         result: output,
       })
     } catch (err) {
+      console.log('ERROR', err)
       console.log('ERROR', err)
       this.logger.error(
         { spellId: data.spellId, agent: { name: this.name, id: this.id } },
@@ -355,6 +387,7 @@ export interface AgentRunJob {
   runSubspell: boolean
   secrets: Record<string, string>
   publicVariables: Record<string, unknown>
+  isPlaytest?: boolean
   isPlaytest?: boolean
 }
 

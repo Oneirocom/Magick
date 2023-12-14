@@ -2,13 +2,8 @@ import { Worker, Job } from 'bullmq'
 
 import type { PubSub } from 'server/core'
 import type { AgentRunJob } from 'server/agents'
-import {
-  BullMQWorker,
-  RedisPubSubWrapper,
-  app,
-  BullQueue,
-} from 'server/core'
-import { Agent, AgentManager } from 'server/agents'
+import { BullMQWorker, RedisPubSubWrapper, app, BullQueue } from 'server/core'
+import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
   AGENT_DELETE,
@@ -123,9 +118,7 @@ export class CloudAgentWorker extends AgentManager {
 
   async agentUpdated(agentId: string) {
     this.logger.info(`Updating agent ${agentId}`)
-    const agent = (
-      await app.service('agents').get(agentId, {})
-    )
+    const agent = await app.service('agents').get(agentId, {})
 
     if (!agent) {
       this.logger.error(`Agent ${agentId} not found when updating agent`)

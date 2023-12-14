@@ -110,7 +110,9 @@ export class EventStore extends MagickComponent<Promise<void>> {
     const { projectId } = context
 
     const event = inputs['event'][0] as Event
-    const typeSocket = inputs['type'] && (inputs['type'][0] as string)
+    const typeSocket = (inputs['type'] && inputs['type'][0]) as
+      | string
+      | undefined
     let content = (inputs['content'] ? inputs['content'][0] : null) as string
     let embedding = (
       inputs['embedding'] ? inputs['embedding'][0] : undefined
@@ -120,13 +122,11 @@ export class EventStore extends MagickComponent<Promise<void>> {
       embedding = (embedding as string).split(',').map(x => parseFloat(x))
     }
 
-    const typeData = node?.data?.type as string
-
-    const type =
+    const typeData = node?.data?.type as string | undefined
+    const typeRaw =
       typeSocket ??
-      ((typeData !== undefined && typeData.length > 0
-        ? typeData.toLowerCase().trim()
-        : 'none') as string)
+      (typeData !== undefined && typeData.length > 0 ? typeData : 'none')
+    const type = typeRaw.trim()
 
     if (!content) {
       content = (event as Event).content || 'Error'
