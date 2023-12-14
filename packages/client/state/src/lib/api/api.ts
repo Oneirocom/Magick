@@ -1,5 +1,4 @@
 // DOCUMENTED
-// DOCUMENTED
 // Import necessary libraries and types from toolkit
 import {
   BaseQueryFn,
@@ -27,26 +26,8 @@ const dynamicBaseQuery: BaseQueryFn<
   // Get state from Redux store
   const state = api.getState() as RootState
   // Extract apiUrl, token, and projectId from state
-  // Extract apiUrl, token, and projectId from state
   const apiUrl = state.globalConfig.apiUrl
   const token = state.globalConfig.token
-  const projectId = state.globalConfig.projectId
-
-  // Append projectId as a query parameter if not already present in args.url
-  let endpointUrl = typeof args === 'string' ? args : args.url
-
-  const projectIdParam = `projectId=${projectId}`
-  if (!endpointUrl.includes(projectIdParam)) {
-    const separator = endpointUrl.includes('?') ? '&' : '?'
-    endpointUrl = `${endpointUrl}${separator}${projectIdParam}`
-  }
-
-  // Update the args.url if args is an object
-  if (typeof args === 'string') {
-    args = endpointUrl // Assigning the modified string URL back to args
-  } else {
-    args.url = endpointUrl // Updating the .url property of args object
-  }
   const projectId = state.globalConfig.projectId
 
   // Append projectId as a query parameter if not already present in args.url
