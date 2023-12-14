@@ -50,9 +50,9 @@
     "configuration": []
   },
   {
-    "type": "magick/request",
+    "type": "magick/fetch",
     "category": "Action",
-    "label": "Request",
+    "label": "Fetch",
     "inputs": [
       {
         "name": "flow",
@@ -89,20 +89,7 @@
         "valueType": "string"
       }
     ],
-    "configuration": [
-      {
-        "name": "variables"
-      },
-      {
-        "name": "customEvents"
-      },
-      {
-        "name": "values"
-      },
-      {
-        "name": "getDependency"
-      }
-    ]
+    "configuration": []
   },
   {
     "type": "logic/string",

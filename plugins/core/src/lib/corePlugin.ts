@@ -12,7 +12,7 @@ import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
 import { sendMessage } from './nodes/actions/sendMessage'
-import { RequestNode } from './nodes/actions/Request'
+import { FetchNode } from './nodes/actions/Fetch'
 import { Job } from 'bullmq'
 import { SpellCaster } from 'server/grimoire'
 
@@ -24,7 +24,7 @@ const pluginName = 'Core'
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage, RequestNode.Description]
+  nodes = [messageEvent, sendMessage, FetchNode.Description]
   values = []
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {

@@ -9,12 +9,12 @@ import {
 } from '@magickml/behave-graph'
 import axios, { AxiosResponse } from 'axios'
 
-export class RequestNode extends AsyncNode {
+export class FetchNode extends AsyncNode {
   public static Description = new NodeDescription2({
-    typeName: 'magick/request',
+    typeName: 'magick/fetch',
     category: NodeCategory.Action,
-    label: 'Request',
-    factory: (description, graph) => new RequestNode(description, graph),
+    label: 'Fetch',
+    factory: (description, graph) => new FetchNode(description, graph),
   })
 
   constructor(description: NodeDescription, graph: IGraph) {
@@ -29,8 +29,8 @@ export class RequestNode extends AsyncNode {
         new Socket('string', 'params'),
       ],
       [new Socket('flow', 'flow'), new Socket('string', 'output')],
-      graph,
-      'Request'
+      {},
+      'FetchNode'
     )
   }
 
