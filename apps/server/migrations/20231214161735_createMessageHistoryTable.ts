@@ -10,7 +10,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('sender').notNullable()
     table.string('connector').notNullable()
     table.string('content').notNullable()
-    table.string('coversation_id')
+    table.string('conversationId')
     table.timestamps(true, true)
   })
 }
