@@ -46,10 +46,6 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
       state: GlobalConfig,
       action: PayloadAction<GlobalConfig>
     ): void => {
-    setConfig: (
-      state: GlobalConfig,
-      action: PayloadAction<GlobalConfig>
-    ): void => {
       const { apiUrl, token, projectId } = action.payload
       state.apiUrl = apiUrl
       state.token = token
@@ -94,4 +90,3 @@ export const {
  * Export GlobalConfigSlice reducer.
  */
 export default globalConfigSlice.reducer
-
