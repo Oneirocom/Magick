@@ -15,6 +15,8 @@ export const agentHttpSchema = Type.Object(
     agentId: Type.String(),
     content: Type.String(),
     apiKey: Type.String(),
+    conversationId: Type.Optional(Type.String()),
+    sender: Type.Optional(Type.String()),
     isCloud: Type.Optional(Type.Boolean()),
   },
   { $id: 'AgentHttp', additionalProperties: false }
@@ -32,6 +34,8 @@ export const agentHttpDataSchema = Type.Object(
     agentId: Type.String(),
     content: Type.String(),
     isCloud: Type.Optional(Type.Boolean()),
+    conversationId: Type.Optional(Type.String()),
+    sender: Type.Optional(Type.String()),
   },
   {
     $id: 'AgentHttpData',
@@ -68,12 +72,16 @@ export const agentHttpQueryProperties = Type.Pick(agentHttpSchema, [
   'content',
   'apiKey',
   'isCloud',
+  'conversationId',
+  'sender',
 ])
 
 export const agentHttpQuerySchema = Type.Object(
   {
     spellId: Type.Optional(Type.String()),
     content: Type.String(),
+    conversationId: Type.Optional(Type.String()),
+    sender: Type.Optional(Type.String()),
   },
   { additionalProperties: false }
 )

@@ -7,17 +7,11 @@ import {
   getLogger,
 } from 'shared/core'
 import type { Reporter } from './Reporters'
-import {
-  type PubSub,
-  type MessageQueue,
-  app,
-  AgentInterface,
-} from 'server/core'
+import { type PubSub, type MessageQueue, app } from 'server/core'
 import type { AgentListRecord } from 'server/cloud-agent-worker'
 
 // todo probably fix this dependency
 import { Agent } from 'packages/server/core/src/services/agents/agents.schema'
-import { checkPaginated } from 'shared/utils'
 
 interface CloudAgentManagerConstructor {
   pubSub: PubSub
@@ -46,15 +40,13 @@ export class CloudAgentManager {
   async startup() {
     this.logger.info('Cloud Agent Manager Startup')
 
-    const enabledAgents = checkPaginated<AgentInterface>(
-      await app.service('agents').find({
-        query: {
-          enabled: true,
-        },
-      })
-    )
+    const enabledAgents = await app.service('agents').find({
+      query: {
+        enabled: true,
+      },
+    })
 
-    this.logger.info(`Found %i enabled agents`, enabledAgents.total)
+    this.logger.info(`Found ${enabledAgents.data.length} enabled agents`)
     const agentPromises: Promise<any>[] = []
     for (const agent of enabledAgents.data) {
       this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
@@ -127,15 +119,13 @@ export class CloudAgentManager {
         this.logger.info(
           `Agents on worker ${listData.id} changed: ${agentsDiff}`
         )
-        const agents = checkPaginated<AgentInterface>(
-          await app.service('agents').find({
-            query: {
-              id: {
-                $in: agentsDiff,
-              },
+        const agents = await app.service('agents').find({
+          query: {
+            id: {
+              $in: agentsDiff,
             },
-          })
-        )
+          },
+        })
 
         for (const agent of agents.data) {
           if (agent.enabled) {

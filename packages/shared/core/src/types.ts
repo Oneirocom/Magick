@@ -22,7 +22,7 @@ import { MagickConsole } from './plugins/consolePlugin/MagickConsole'
 import { Inspector } from './plugins/inspectorPlugin/Inspector'
 import { ModuleManager } from './plugins/modulePlugin/module-manager'
 import { Task, TaskOutputTypes, TaskStore } from './plugins/taskPlugin/task'
-import { SocketNameType, SocketType } from './sockets'
+import { SocketType } from './sockets'
 
 import { DataControl } from './plugins/inspectorPlugin'
 import { SpellInterface } from '../../../server/core/src/schemas'
@@ -124,7 +124,7 @@ export type GetEventArgs = {
   channelType?: string
   connector?: string
   rawData?: string
-  projectId?: string
+  projectId: string
   $limit?: number
 }
 

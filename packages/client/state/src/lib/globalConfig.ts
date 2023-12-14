@@ -1,4 +1,5 @@
 // DOCUMENTED
+// DOCUMENTED
 /**
  * Module that exports a Redux slice for the global config that carries the authentication, project id and API url information.
  * @module globalConfigSlice
@@ -41,6 +42,10 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
      * @param {PayloadAction<GlobalConfig>} action - Config to set on the global state.
      * @return {void}
      */
+    setConfig: (
+      state: GlobalConfig,
+      action: PayloadAction<GlobalConfig>
+    ): void => {
     setConfig: (
       state: GlobalConfig,
       action: PayloadAction<GlobalConfig>
@@ -89,3 +94,4 @@ export const {
  * Export GlobalConfigSlice reducer.
  */
 export default globalConfigSlice.reducer
+

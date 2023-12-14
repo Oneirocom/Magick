@@ -17,7 +17,8 @@ import {
 } from './agentHttp.schema'
 
 // Import types and classes
-import { checkPermissions, type Application } from 'server/core'
+import type { Application, HookContext } from 'server/core'
+import { checkPermissions } from 'server/core'
 import { AgentHttpService } from './agentHttp.class'
 
 // Add this service to the service type index
@@ -54,6 +55,20 @@ export const agentHttp = (app: Application) => {
     events: [],
   })
 
+  const recordMessage = (context: HookContext) => {
+    app.service('chatMessages').create({
+      agentId: context.params.query.agentId || context.data?.agentId,
+      content: context.params.query.content || context.data?.content,
+      sender: context.params.query.sender || context.data?.sender,
+      connector:
+        context.params.query.isCloud || context.data?.isCloud
+          ? 'cloud'
+          : 'agentHttp',
+      conversationId: (context.params.query.conversationId ||
+        context.data?.conversationId) as unknown as string | undefined,
+    })
+  }
+
   // Initialize hooks
   app.service(agentHttpPath).hooks({
     around: {
@@ -67,6 +82,7 @@ export const agentHttp = (app: Application) => {
         checkPermissions({
           roles: ['owner', 'agentHttp'],
         }),
+        recordMessage,
       ],
       get: [
         schemaHooks.validateQuery(agentHttpQueryValidator),

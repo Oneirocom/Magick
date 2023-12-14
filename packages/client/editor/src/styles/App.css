@@ -102,11 +102,11 @@ body,
 .socket.output.trigger,
 .socket.input.trigger,
 .expanding.trigger {
-  background: white;
+  background: var(--white);
 }
 
 .trigger .main-path {
-  stroke: white !important;
+  stroke: var(--white) !important;
 }
 
 .socket.output.event,
@@ -360,7 +360,7 @@ input:focus-visible {
 }
 
 .nav-item-active {
-  color: white;
+  color: var(--white);
 }
 
 .flex-container {
