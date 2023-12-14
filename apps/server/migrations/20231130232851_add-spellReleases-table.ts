@@ -12,18 +12,10 @@ export async function up(knex: Knex): Promise<void> {
     table.foreign('agentId').references('id').inTable('agents')
   })
 
-  // Check if the 'agents' table has the 'createdAt' and 'updatedAt' columns
-  const hasCreatedAtColumn = await knex.schema.hasColumn('agents', 'createdAt')
-  const hasUpdatedAtColumn = await knex.schema.hasColumn('agents', 'updatedAt')
-
   // Alter 'agents' table to include 'createdAt', 'updatedAt', and 'currentSpellReleaseId' fields
   await knex.schema.alterTable('agents', (table) => {
-    if (!hasCreatedAtColumn) {
-      table.timestamp('createdAt').defaultTo(knex.fn.now())
-    }
-    if (!hasUpdatedAtColumn) {
-      table.timestamp('updatedAt').defaultTo(knex.fn.now())
-    }
+    table.timestamp('createdAt').defaultTo(knex.fn.now())
+    table.timestamp('updatedAt').defaultTo(knex.fn.now())
     table.uuid('currentSpellReleaseId')
     table.foreign('currentSpellReleaseId').references('id').inTable('spellReleases')
   })
