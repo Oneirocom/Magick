@@ -220,10 +220,8 @@ export const Composer = ({ tab, theme, spellId }) => {
     setApi(event.api)
   }
 
-  useEffect(() => {
-    if (!api) return
-
-    const unsubscribe = subscribe(events.$CREATE_TEXT_EDITOR(tab.id), () => {
+  const windowBarMap = {
+    [events.$CREATE_TEXT_EDITOR(tab.id)]: () => {
       api.addPanel({
         id: 'Text Editor',
         component: 'TextEditor',
@@ -232,18 +230,63 @@ export const Composer = ({ tab, theme, spellId }) => {
           tab,
           spellId
         },
+        position: { referencePanel: 'Composer', direction: 'left' },
       })
+    },
+    [events.$CREATE_INSPECTOR(tab.id)]: () => {
+      api.addPanel({
+        id: 'Inspector',
+        component: 'Inspector',
+        params: {
+          title: 'Inspector',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Composer', direction: 'left' },
+      })
+    },
+    [events.$CREATE_PLAYTEST(tab.id)]: () => {
+      api.addPanel({
+        id: 'Playtest',
+        component: 'Playtest',
+        params: {
+          title: 'Playtest',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Composer', direction: 'below' },
+      })
+    },
+    [events.$CREATE_CONSOLE(tab.id)]: () => {
+      api.addPanel({
+        id: 'Console',
+        component: 'Console',
+        params: {
+          title: 'Console',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Composer', direction: 'below' },
+      })
+    },
+  }
+
+  useEffect(() => {
+    if (!api) return
+
+    const windowBarSubscriptions = Object.entries(windowBarMap).map(([event, handler]) => {
+      return subscribe(event, handler)
     })
 
-    console.log('Setting up layout change listener')
     api.onDidLayoutChange(() => {
       const layout = api.toJSON()
-
       saveLayoutToLocalStorage(spellId, layout)
     })
 
     return () => {
-      unsubscribe()
+      windowBarSubscriptions.forEach(unsubscribe => {
+        unsubscribe()
+      })
     }
   }, [api])
 

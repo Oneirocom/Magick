@@ -157,10 +157,8 @@ export const Composer = ({ tab, theme, spellId }) => {
     setApi(event.api)
   }
 
-  useEffect(() => {
-    if (!api) return
-
-    const unsubscribe = subscribe(events.$CREATE_TEXT_EDITOR(tab.id), () => {
+  const windowBarMap = {
+    [events.$CREATE_TEXT_EDITOR(tab.id)]: () => {
       api.addPanel({
         id: 'Text Editor',
         component: 'TextEditor',
@@ -169,7 +167,52 @@ export const Composer = ({ tab, theme, spellId }) => {
           tab,
           spellId
         },
+        position: { referencePanel: 'Graph', direction: 'left' },
       })
+    },
+    [events.$CREATE_INSPECTOR(tab.id)]: () => {
+      api.addPanel({
+        id: 'Inspector',
+        component: 'Inspector',
+        params: {
+          title: 'Inspector',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'left' },
+      })
+    },
+    [events.$CREATE_PLAYTEST(tab.id)]: () => {
+      api.addPanel({
+        id: 'Chat',
+        component: 'Chat',
+        params: {
+          title: 'Chat',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'below' },
+      })
+    },
+    [events.$CREATE_CONSOLE(tab.id)]: () => {
+      api.addPanel({
+        id: 'Console',
+        component: 'Console',
+        params: {
+          title: 'Console',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'below' },
+      })
+    },
+  }
+
+  useEffect(() => {
+    if (!api) return
+
+    const windowBarSubscriptions = Object.entries(windowBarMap).map(([event, handler]) => {
+      return subscribe(event, handler)
     })
 
     api.onDidLayoutChange(() => {
@@ -179,7 +222,9 @@ export const Composer = ({ tab, theme, spellId }) => {
     })
 
     return () => {
-      unsubscribe()
+      windowBarSubscriptions.forEach(unsubscribe => {
+        unsubscribe()
+      })
     }
   }, [api])
 
