@@ -179,6 +179,24 @@ const formatRequest = async (
   }
 }
 
+interface RecordMessageParams {
+  agentId: string
+  content: string
+  sender: string | undefined
+  connector: string
+  conversationId: string | undefined
+}
+
+const recordMessage = ({ agentId, content, sender, connector, conversationId }: RecordMessageParams) => {
+  app.service('chatMessages').create({
+    agentId,
+    content,
+    sender,
+    connector,
+    conversationId,
+  })
+};
+
 export class AgentHttpService<
   ServiceParams extends AgentHttpParams = AgentHttpParams
 > implements
@@ -202,9 +220,25 @@ export class AgentHttpService<
       throw new BadRequest('Query params are required')
     }
 
+    recordMessage({
+      agentId,
+      content: params.query.content,
+      sender: params.query.sender,
+      connector: 'REST API (GET)',
+      conversationId: params.query.conversationId,
+    })
+
     const request = await formatRequest('GET', agentId, params.query, params)
     try {
       const result = await agentCommander.runSpellWithResponse(request)
+
+      recordMessage({
+        agentId,
+        content: params.query.content,
+        sender: 'agent',
+        connector: 'REST API (GET)',
+        conversationId: params.query.conversationId,
+      })
 
       return {
         result: result as object,
@@ -225,12 +259,28 @@ export class AgentHttpService<
       throw new BadRequest('Agent ID is required')
     }
 
+    recordMessage({
+      agentId: data.agentId,
+      content: data.content,
+      sender: data.sender,
+      connector: 'REST API (POST)',
+      conversationId: data.conversationId,
+    })
+
     const agentCommander = app.get('agentCommander')
 
     const request = await formatRequest('POST', data.agentId, data, params)
 
     try {
       const result = await agentCommander.runSpellWithResponse(request)
+
+      recordMessage({
+        agentId: data.agentId,
+        content: data.content,
+        sender: 'agent',
+        connector: 'REST API (POST)',
+        conversationId: data.conversationId,
+      })
 
       return {
         result: result as object,
@@ -250,10 +300,26 @@ export class AgentHttpService<
   ): Promise<AgentHttpResponse | AgentHttpError> {
     const agentCommander = app.get('agentCommander')
 
+    recordMessage({
+      agentId,
+      content: data.content,
+      sender: data.sender,
+      connector: 'REST API (PUT)',
+      conversationId: data.conversationId,
+    })
+
     const request = await formatRequest('POST', agentId, data, params)
 
     try {
       const result = await agentCommander.runSpellWithResponse(request)
+
+      recordMessage({
+        agentId,
+        content: data.content,
+        sender: 'agent',
+        connector: 'REST API (PUT)',
+        conversationId: data.conversationId,
+      })
 
       return {
         result: result as object,
@@ -276,10 +342,26 @@ export class AgentHttpService<
       throw new BadRequest('Query params are required')
     }
 
+    params.query && recordMessage({
+      agentId,
+      content: params.query.content,
+      sender: params.query.sender,
+      connector: 'REST API (DELETE)',
+      conversationId: params.query.conversationId,
+    })
+
     const request = await formatRequest('DELETE', agentId, params.query, params)
 
     try {
       const result = await agentCommander.runSpellWithResponse(request)
+
+      params.query && recordMessage({
+        agentId,
+        content: params.query.content,
+        sender: 'agent',
+        connector: 'REST API (DELETE)',
+        conversationId: params.query.conversationId,
+      })
 
       return {
         result: result as object,

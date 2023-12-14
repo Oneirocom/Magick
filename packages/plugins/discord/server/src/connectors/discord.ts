@@ -304,6 +304,14 @@ export class DiscordConnector {
       content
     )
 
+    app.service('chatMessages').create({
+      agentId: this.agent.id,
+      content: JSON.stringify(message),
+      sender: author.id,
+      connector: 'discord',
+      conversationId: message.channel.id,
+    })
+
     app.get('agentCommander').runSpell({
       inputs: {
         [`Input - Discord (${inputType})`]: {
@@ -341,6 +349,15 @@ export class DiscordConnector {
       console.log('client not defined')
       return
     }
+
+    app.service('chatMessages').create({
+      agentId: this.agent.id,
+      content: msg,
+      sender: 'agent',
+      connector: 'discord',
+      conversationId: channelId,
+    })
+
     try {
       const channel = await this.client.channels.fetch(channelId)
       if (msg && msg !== '' && channel && channel !== undefined) {
