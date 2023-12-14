@@ -125,17 +125,20 @@ export class ProjectsService {
     // If replace is true, delete all agents, documents, and spells for this projectId
     if ((data as any).replace) {
       await Promise.all([
-        app.service('agents').remove(null, {
+        //TODO: This type cooersion is hacky but the feathers service type says it expects a string. maybe need to update types?
+        app.service('agents').remove(null as unknown as string, {
           query: {
             projectId,
           },
         }),
-        app.service('spells').remove(null, {
+        //TODO: This type cooersion is hacky but the feathers service type says it expects a string. maybe need to update types?
+        app.service('spells').remove(null as unknown as string, {
           query: {
             projectId,
           },
         }),
-        app.service('documents').remove(null, {
+        //TODO: This type cooersion is hacky but the feathers service type says it expects a string. maybe need to update types?
+        app.service('documents').remove(null as unknown as string, {
           query: {
             projectId,
           },

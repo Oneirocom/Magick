@@ -47,6 +47,12 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells`,
       }),
     }),
+    getSpellsByReleaseId: builder.query({
+      providesTags: ['Spells'],
+      query: ({ spellReleaseId }) => ({
+        url: `spells?spellReleaseId=${spellReleaseId}`,
+      }),
+    }),
     // Api endpoint for getting a spell by name
     getSpell: builder.query({
       providesTags: ['Spell'],
@@ -61,7 +67,6 @@ export const spellApi = rootApi.injectEndpoints({
     getSpellById: builder.query({
       providesTags: ['Spell'],
       query: ({ spellName, id }) => {
-        console.log('GET SPELL BY ID', spellName, id)
         return {
           url: `spells?name=${spellName}&id=${id}`,
           params: {},
@@ -72,7 +77,6 @@ export const spellApi = rootApi.injectEndpoints({
     getSpellByJustId: builder.query({
       providesTags: ['Spell'],
       query: ({ id }) => {
-        console.log('Getting spell by just id', id)
         return {
           url: `spells/${id}`,
           params: {},
@@ -114,9 +118,7 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for saving a spell
     saveSpell: builder.mutation({
       invalidatesTags: ['Spell'],
-      query(
-        { spell, projectId }
-      ) {
+      query({ spell, projectId }) {
         const spellCopy = { ...spell } as any
         if (spellCopy.id) delete spellCopy.id
         if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
@@ -170,6 +172,7 @@ export const spellApi = rootApi.injectEndpoints({
 // Export the generated hooks for each API endpoint
 export const {
   useGetSpellsQuery,
+  useGetSpellsByReleaseIdQuery,
   useLazyGetSpellsQuery,
   useLazyGetSpellQuery,
   useLazyGetSpellByIdQuery,

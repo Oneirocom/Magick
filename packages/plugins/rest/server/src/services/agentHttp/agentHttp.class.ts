@@ -42,7 +42,7 @@ const getAgent = async (
   apiKey: string,
   isCloud: boolean
 ): Promise<Agent> => {
-  const agent = await app.service('agents').get(agentId)
+  const agent = await app.service('agents').get(agentId, {})
   if (!agent) {
     throw new NotFound('Agent not found with id ' + agentId)
   }

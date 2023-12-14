@@ -1,6 +1,6 @@
 {
   "root": true,
-  "ignorePatterns": ["!**/*", "**/node_modules/**", "**/*.d.ts"],
+  "ignorePatterns": ["**/node_modules/**", "**/*.d.ts"],
   "plugins": ["@nx/eslint-plugin"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off"

@@ -17,6 +17,8 @@
     "start-docs": "npx nx serve @magickml/docs",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
+    "migrate:rollback": "nx run @magickml/server:migrate:rollback",
+    "migrate:list": "nx run @magickml/server:migrate:list",
     "lint": "npx nx run-many --all --target=lint --max-warnings=0",
     "lint-fix": "npx nx run-many --all --target=lint --fix --max-warnings=0",
     "lint:engine": "npx nx lint shared-core --fix",

@@ -114,7 +114,5 @@ export const createClient = <Configuration = any>(
   client.use('request', connection.service('request'), {
     methods: requestServiceMethods,
   })
-
-  // Return the configured client
   return client
 }

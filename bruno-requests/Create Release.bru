@@ -1,0 +1,39 @@
+meta {
+  name: Create Release
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/agents/createRelease/d9289fe5-71ad-4472-bcbe-f692ecd7d733?projectId=clp77m6sc0003ffjuezrwphn7
+  body: json
+  auth: none
+}
+
+query {
+  projectId: clp77m6sc0003ffjuezrwphn7
+}
+
+headers {
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0
+  Accept: */*
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate, br
+  Referer: http://localhost:4200/
+  authorization: Bearer {{authToken}}
+  Origin: http://localhost:4200
+  Connection: keep-alive
+  Sec-Fetch-Dest: empty
+  Sec-Fetch-Mode: cors
+  Sec-Fetch-Site: same-site
+  DNT: 1
+  Sec-GPC: 1
+}
+
+body:json {
+  {
+    "agentId": "d9289fe5-71ad-4472-bcbe-f692ecd7d733",
+    "versionTag": "Test",
+    "projectId": "clp77m6sc0003ffjuezrwphn7"
+  }
+}

@@ -63,40 +63,40 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   ]
 
   return (
-    <List
-      sx={{
-        padding: 0,
-        // todo - make this properly autosize
-      }}
-    >
-      {DrawerItems.map((_item, index) => {
-        // check that item is not a react element object
-        if (typeof _item === 'object' && !React.isValidElement(_item)) {
-          const item = _item as DrawerItem
+    <List sx={{ padding: 0, width: '100%' }}>
+      {DrawerItems.map((item, index: {}) => {
+        const isElement = React.isValidElement(item);
+        const key = isElement ? `plugin-drawer-item-${index}` : (item as DrawerItem).name;
 
+        if (!isElement) {
+          const drawerItem = item as DrawerItem;
           return (
             <DrawerItem
-              active={currentTab?.id === item.name}
-              Icon={item.Icon}
-              onClick={() => {
-                openTab({
-                  name: item.name,
-                  type: item.name,
-                  switchActive: true,
-                  id: item.name,
-                })
-              }}
-              text={item.name}
-              tooltip={item.tooltip}
-              tooltipText={item.tooltipText}
+              key={key} // Unique key for each DrawerItem
+              active={currentTab?.id === drawerItem.name}
+              Icon={drawerItem.Icon}
+              onClick={() => openTab({
+                name: drawerItem.name,
+                type: drawerItem.name,
+                switchActive: true,
+                id: drawerItem.name,
+              })}
+              text={drawerItem.name}
+              tooltip={drawerItem.tooltip}
+              tooltipText={drawerItem.tooltipText}
             />
-          )
+          );
         } else {
-          return _item as JSX.Element
+          // Directly return the element if it's a JSX element
+          return React.cloneElement(item, { key });
         }
       })}
-      <ListItem key="set-api-keys" disablePadding sx={{ display: 'block' }}>
-        {!isAPIKeysSet && <SetAPIKeys />}
-      </ListItem>
-    </List>)
+      {!isAPIKeysSet && (
+        <ListItem key="set-api-keys" disablePadding sx={{ display: 'block' }}>
+          <SetAPIKeys />
+        </ListItem>
+      )}
+    </List>
+
+  )
 }

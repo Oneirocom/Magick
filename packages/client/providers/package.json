@@ -11,7 +11,7 @@
     "@minoru/react-dnd-treeview": "^3.4.4",
     "react-redux": "8.0.5",
     "client/feathers-client": "*",
-    "client/state": "*"
+    "state": "*"
   },
   "main": "./index.js",
   "module": "./index.mjs",
