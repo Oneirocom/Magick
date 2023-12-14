@@ -16,7 +16,6 @@ export interface Diff {
 export interface PatchArgs {
   spellName: string
   update: Partial<any>
-  update: Partial<any>
 }
 
 /**
@@ -33,7 +32,6 @@ export interface SpellData {
   limit: number
   skip: number
   total: number
-  data: any[]
   data: any[]
 }
 
@@ -59,9 +57,7 @@ export const spellApi = rootApi.injectEndpoints({
     getSpell: builder.query({
       providesTags: ['Spell'],
       query: ({ spellName }) => {
-      query: ({ spellName }) => {
         return {
-          url: `spells?name=${spellName}`,
           url: `spells?name=${spellName}`,
           params: {},
         }
@@ -73,7 +69,6 @@ export const spellApi = rootApi.injectEndpoints({
       query: ({ spellName, id }) => {
         return {
           url: `spells?name=${spellName}&id=${id}`,
-          url: `spells?name=${spellName}&id=${id}`,
           params: {},
         }
       },
@@ -82,11 +77,7 @@ export const spellApi = rootApi.injectEndpoints({
     getSpellByJustId: builder.query({
       providesTags: ['Spell'],
       query: ({ id }) => {
-        console.log('Getting spell by just id', id)
-      query: ({ id }) => {
-        console.log('Getting spell by just id', id)
         return {
-          url: `spells/${id}`,
           url: `spells/${id}`,
           params: {},
         }
@@ -127,13 +118,7 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for saving a spell
     saveSpell: builder.mutation({
       invalidatesTags: ['Spell'],
-      async queryFn(
-        { spell, projectId },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        { dispatch },
-        extraOptions,
-        baseQuery
-      ) {
+      query({ spell, projectId }) {
         const spellCopy = { ...spell } as any
         if (spellCopy.id) delete spellCopy.id
         if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
@@ -149,12 +134,6 @@ export const spellApi = rootApi.injectEndpoints({
           body: spellCopy,
           method: 'PATCH',
         }
-
-        return baseQuery(baseQueryOptions) as QueryReturnValue<
-          Partial<any>,
-          FetchBaseQueryError,
-          unknown
-        >
       },
     }),
     // Api endpoint for creating a new spell
@@ -169,7 +148,6 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for patching a spell
     patchSpell: builder.mutation({
       invalidatesTags: ['Spell', 'Spells'],
-      invalidatesTags: ['Spell', 'Spells'],
       query({ id, update }) {
         return {
           url: `spells/${id}`,
@@ -183,8 +161,6 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for deleting a spell
     deleteSpell: builder.mutation({
       invalidatesTags: ['Spells'],
-      query: ({ spellId }) => ({
-        url: `spells/${spellId}`,
       query: ({ spellId }) => ({
         url: `spells/${spellId}`,
         method: 'DELETE',
@@ -203,7 +179,6 @@ export const {
   useGetSpellQuery,
   useGetSpellByIdQuery,
   useGetSpellByJustIdQuery,
-  useLazyGetSpellByJustIdQuery,
   useLazyGetSpellByJustIdQuery,
   useRunSpellMutation,
   useSaveDiffMutation,
