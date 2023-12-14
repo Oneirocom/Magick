@@ -1,4 +1,3 @@
-// import { Application } from 'server/core';
 import { Application } from 'server/core'
 import io from 'socket.io'
 import { getLogger } from 'shared/core'
@@ -146,7 +145,17 @@ export default class SpellManager {
   async loadById(spellId: string): Promise<SpellRunner | undefined> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
-      const spell = await this.app.service('spells').get(spellId)
+      const spellService = this.app.service('spells')
+      const query: { spellReleaseId?: string } = {}
+      const spell = await spellService.get(spellId, { query })
+
+      if (!spell) {
+        this.logger.error(
+          { spellId },
+          `Error loading spell %s with version %s: %s`,
+          spellId
+        )
+      }
 
       if (
         this.hasSpellRunner(spellId) &&
@@ -159,10 +168,15 @@ export default class SpellManager {
         return this.getReadySpellRunner(spellId)
       }
 
-      this.logger.debug(`Reloading spell ${spellId}`)
+      this.logger.debug({ spellId }, `Reloading spell %s`, spellId)
       return this.load(spell)
     } catch (error) {
-      this.logger.error(`Error loading spell ${spellId}: %o`, error)
+      this.logger.error(
+        { spellId },
+        `Error loading spell %s: %o`,
+        spellId,
+        error
+      )
       return
     }
   }

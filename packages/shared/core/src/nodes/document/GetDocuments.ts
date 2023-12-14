@@ -134,7 +134,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
         ? typeData.toLowerCase().trim()
         : 'none')
 
-    let max_count
+    let max_count = 1
     if (typeof node.data.max_count === 'string') {
       max_count = parseInt(node.data.max_count)
     } else if (typeof node.data.max_count === 'number') {
@@ -148,7 +148,7 @@ export class GetDocuments extends MagickComponent<Promise<InputReturn>> {
       query: {
         projectId,
         type,
-        $limit: max_count ?? 1,
+        $limit: max_count,
         embedding,
       },
     })

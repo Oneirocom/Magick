@@ -1,7 +1,8 @@
 {
-  "name": "shared/utils",
+  "name": "utils",
   "version": "0.0.1",
   "dependencies": {
+    "@feathersjs/feathers": "5.0.8"
   },
   "main": "./index.js",
   "module": "./index.mjs",

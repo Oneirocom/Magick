@@ -72,6 +72,29 @@ export const agent = (app: Application) => {
     events: AGENT_EVENTS,
   })
 
+  app.use('/agents/createRelease', {
+    create: async ({
+      agentId,
+      description,
+      agentToCopyId,
+    }: {
+      agentId: string
+      description: string
+      agentToCopyId: string
+    }) => {
+      try {
+        const result = await app.service('agents').createRelease({
+          agentId: agentId,
+          description: description,
+          agentToCopyId: agentToCopyId,
+        })
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:createRelease: ${error.message}`)
+      }
+    },
+  })
+
   const pubSub = app.get<'pubsub'>('pubsub')
 
   // this handles relaying all agent messages up to connected clients.
@@ -164,5 +187,8 @@ export const agent = (app: Application) => {
 declare module '../../declarations' {
   interface ServiceTypes {
     agents: AgentService
+    '/agents/createRelease': {
+      create: ReturnType<any>
+    }
   }
 }

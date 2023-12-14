@@ -1,13 +1,14 @@
+import { NotFound } from '@feathersjs/errors/lib'
 // DOCUMENTED
 /**
  * Imports
  */
 import otJson0 from 'ot-json0'
 import md5 from 'md5'
-import { KnexService } from '@feathersjs/knex'
+import { KnexAdapter } from '@feathersjs/knex'
 import { BadRequest } from '@feathersjs/errors/lib'
 import type { Application } from '../../declarations'
-import type { Params } from '@feathersjs/feathers'
+import type { Paginated, Params } from '@feathersjs/feathers'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { SpellData, SpellPatch, SpellQuery } from './spells.schema'
 import type { SpellInterface } from 'shared/core'
@@ -29,7 +30,70 @@ export type SaveDiffData = {
  */
 export class SpellService<
   ServiceParams extends Params = SpellParams
-> extends KnexService<SpellInterface, SpellData, ServiceParams, SpellPatch> {
+> extends KnexAdapter<SpellInterface, SpellData, ServiceParams, SpellPatch> {
+  /**
+   * @description Gets a spell by id or a versioned spell by spellReleaseId
+   * @param spellId
+   * @param params
+   * @returns
+   */
+  async get(spellId: string, params: ServiceParams): Promise<SpellInterface> {
+    const spellReleaseId = params.query?.spellReleaseId
+    const query = super.createQuery(params)
+
+    // Start building the query with the spell ID condition
+    let spellQuery = query.where('spells.id', '=', spellId)
+
+    // Conditionally add the spellReleaseId filter if it exists
+    if (spellReleaseId) {
+      spellQuery = spellQuery.andWhere(
+        'spells.spellReleaseId',
+        '=',
+        spellReleaseId
+      )
+    }
+
+    // Execute the query
+    const spell = await spellQuery.first()
+
+    if (!spell) {
+      throw new NotFound(`No record found for id '${spellId}'`)
+    }
+
+    return spell
+  }
+
+  async find(params: ServiceParams) {
+    // Check if params and params.query exist before proceeding
+    if (params?.query) {
+      for (const key in params.query) {
+        if (Object.prototype.hasOwnProperty.call(params.query, key)) {
+          if (params.query[key] === 'null') {
+            params.query[key] = null
+          }
+        }
+      }
+    }
+    return this._find(params) as Promise<Paginated<SpellInterface>>
+  }
+
+  async update(spellId: string, params: SpellData) {
+    return this._update(spellId, params)
+  }
+
+  async create(params: SpellData) {
+    app.get('logger').debug('Creating spell: %o', params)
+    return this._create(params)
+  }
+
+  async patch(spellId: string, params: SpellPatch) {
+    return this._patch(spellId, params)
+  }
+
+  async remove(spellId: string | null, params: ServiceParams) {
+    return this._remove(spellId, params)
+  }
+
   /**
    * Saves the diff of a spell
    */

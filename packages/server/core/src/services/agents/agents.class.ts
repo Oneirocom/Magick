@@ -1,13 +1,17 @@
+import { fetchAllPages } from 'shared/utils'
 // DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 import type { Params } from '@feathersjs/feathers'
-import { KnexService } from '@feathersjs/knex'
+import { KnexAdapter } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '../../app'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
 import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
+import { AgentInterface } from '../../schemas'
+import { SpellData } from '../spells/spells.schema'
+import { v4 as uuidv4 } from 'uuid'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -21,7 +25,7 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
  */
 export class AgentService<
   ServiceParams extends Params = AgentParams
-> extends KnexService<Agent, AgentData, ServiceParams, AgentPatch> {
+> extends KnexAdapter<AgentInterface, AgentData, ServiceParams, AgentPatch> {
   app: Application
 
   constructor(options: KnexAdapterOptions, app: Application) {
@@ -39,6 +43,28 @@ export class AgentService<
     })
 
     return { data: query }
+  }
+
+  async get(agentId: string, params: ServiceParams) {
+    return await this._get(agentId, params)
+  }
+
+  async find(params?: ServiceParams) {
+    // Check if params and params.query exist before proceeding
+    if (params?.query) {
+      for (const key in params.query) {
+        if (Object.prototype.hasOwnProperty.call(params.query, key)) {
+          if (params.query[key] === 'null') {
+            params.query[key] = null
+          }
+        }
+      }
+    }
+    return await this._find(params)
+  }
+
+  async update(id: string, data: AgentInterface, params?: ServiceParams) {
+    return this._update(id, data, params)
   }
 
   /**
@@ -112,13 +138,114 @@ export class AgentService<
     return true
   }
 
-  override async create(
+  async createRelease({
+    agentId,
+    description,
+    agentToCopyId,
+  }: {
+    agentId: string
+    description: string
+    agentToCopyId: string
+  }): Promise<{ spellReleaseId: string }> {
+    // Start a new transaction
+    return this.app
+      .get('dbClient')
+      .transaction(async trx => {
+        const agentToUpdate = await trx('agents').where({ id: agentId }).first()
+        const agentToCopy = await trx('agents')
+          .where({ id: agentToCopyId })
+          .first()
+
+        if (!agentToUpdate || !agentToCopy) {
+          throw new Error(`Agent with id ${agentId} not found`)
+        }
+        const projectId = agentToUpdate.projectId
+
+        const [spellRelease] = await trx('spellReleases')
+          .insert({
+            id: uuidv4(),
+            description: description || '',
+            agentId: agentToUpdate.id,
+            projectId,
+          })
+          .returning('*')
+
+        // Fetch spells based on the source determined
+        const allSpells: SpellData[] = await fetchAllPages(
+          this.app.service('spells').find.bind(this.app.service('spells')),
+          {
+            query: {
+              projectId,
+              agentId: agentToCopy?.id,
+            },
+            transaction: trx,
+          }
+        )
+
+        const draftSpellsToCopy: SpellData[] = allSpells.filter(
+          (spell: SpellData) => !spell.spellReleaseId
+        )
+
+        if (!draftSpellsToCopy.length)
+          throw new Error('No spells found to copy')
+
+        const newSpells: SpellData[] = []
+        // Duplicate spells for the new release
+        for (const spell of draftSpellsToCopy) {
+          const newSpell = (await trx('spells')
+            .insert({
+              ...spell,
+              id: uuidv4(),
+              spellReleaseId: spellRelease.id,
+              updatedAt: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
+              type: spell.type ?? 'spell',
+            })
+            .returning('*')) as SpellData[]
+          newSpells.push(newSpell[0])
+        }
+        const rootSpell = draftSpellsToCopy.find(
+          spell => spell.id === agentToCopy?.rootSpellId
+        ) as SpellData
+        const newRootSpell = newSpells.find(spell => {
+          return spell.name === rootSpell?.name
+        }) as SpellData
+
+        // Update agent with new spell release ID
+        await trx('agents').where({ id: agentToUpdate.id }).update({
+          currentSpellReleaseId: spellRelease.id,
+          rootSpellId: newRootSpell?.id,
+          updatedAt: new Date().toISOString(),
+        })
+
+        return {
+          spellReleaseId: spellRelease.id,
+          rootSpellId: newRootSpell?.id,
+          agentToUpdateId: agentToUpdate.id,
+        }
+      })
+      .then(({ spellReleaseId, rootSpellId, agentToUpdateId }) => {
+        this.app.service('agents').patch(agentToUpdateId, {
+          currentSpellReleaseId: spellReleaseId,
+          rootSpellId: rootSpellId,
+          updatedAt: new Date().toISOString(),
+        })
+
+        return { spellReleaseId }
+      })
+      .catch(err => {
+        throw new Error(`Error creating release: ${err.message}`)
+      })
+  }
+
+  async create(
     data: AgentData | AgentData[] | any
   ): Promise<Agent | Agent[] | any> {
     // ADDING REST API KEY TO AGENT's DATA
+
     if (data.data) {
       data.data = JSON.stringify({
-        ...JSON.parse(data.data),
+        ...(typeof data.data === 'string' ? JSON.parse(data.data) : data.data),
         rest_api_key: md5(Math.random().toString()),
       })
     } else {
@@ -127,8 +254,15 @@ export class AgentService<
         rest_api_key: md5(Math.random().toString()),
       })
     }
+    return await this._create(data)
+  }
 
-    return await super.create(data)
+  async patch(agentId: string, params: AgentPatch) {
+    return this._patch(agentId, params)
+  }
+
+  async remove(agentId: string, params: ServiceParams) {
+    return this._remove(agentId, params)
   }
 }
 

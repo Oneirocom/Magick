@@ -60,10 +60,14 @@ export const agentHttp = (app: Application) => {
       agentId: context.params.query.agentId || context.data?.agentId,
       content: context.params.query.content || context.data?.content,
       sender: context.params.query.sender || context.data?.sender,
-      connector: (context.params.query.isCloud || context.data?.isCloud) ? 'cloud' : 'agentHttp',
-      conversationId: (context.params.query.conversationId || context.data?.conversationId) as unknown as string | undefined,
+      connector:
+        context.params.query.isCloud || context.data?.isCloud
+          ? 'cloud'
+          : 'agentHttp',
+      conversationId: (context.params.query.conversationId ||
+        context.data?.conversationId) as unknown as string | undefined,
     })
-  };
+  }
 
   // Initialize hooks
   app.service(agentHttpPath).hooks({

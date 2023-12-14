@@ -38,12 +38,17 @@ export const agentDataSchema = Type.Pick(
     'name',
     'enabled',
     'updatedAt',
+    'createdAt',
     'pingedAt',
     'data',
     'publicVariables',
     'secrets',
     'rootSpellId',
+    'runState', //UNUSED right now
+    'image',
+    'currentSpellReleaseId',
     'default',
+    'rootSpell', //DEPRECATED
   ],
   { $id: 'AgentData' }
 )
@@ -51,21 +56,23 @@ export const agentDataSchema = Type.Pick(
 /**
  * Agent patch data schema for creating new entries
  */
-export const agentPatchDataSchema = Type.Pick(
-  agentSchema,
-  [
-    'id',
-    'name',
-    'projectId',
-    'enabled',
-    'runState',
-    'updatedAt',
-    'pingedAt',
-    'data',
-    'publicVariables',
-    'secrets',
-  ],
-  { $id: 'AgentPatch', additionalProperties: true }
+export const agentPatchDataSchema = Type.Partial(
+  Type.Pick(
+    agentSchema,
+    [
+      'name',
+      'enabled',
+      'runState',
+      'updatedAt',
+      'pingedAt',
+      'data',
+      'publicVariables',
+      'secrets',
+      'currentSpellReleaseId',
+      'rootSpellId',
+    ],
+    { $id: 'AgentPatch', additionalProperties: true }
+  )
 )
 
 /**
@@ -114,6 +121,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'runState',
   'name',
   'updatedAt',
+  'createdAt',
   'pingedAt',
   'data',
   'publicVariables',
@@ -121,6 +129,8 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'image',
   'rootSpellId',
   'default',
+  'frozen',
+  'currentSpellReleaseId',
 ])
 
 /**

@@ -89,6 +89,7 @@ export const rootApi = createApi({
     'Documents',
     'Request',
     'Requests',
+    'SpellReleases',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })
