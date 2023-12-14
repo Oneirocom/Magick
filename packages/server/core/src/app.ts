@@ -1,4 +1,5 @@
 // DOCUMENTED
+import checkPermissions from 'feathers-permissions'
 import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
@@ -252,9 +253,9 @@ export async function initApp(environment: Environment = 'default') {
     },
     before: {
       all: [
-        /*checkPermissions({
+        checkPermissions({
           roles: ['admin', 'owner', 'public'],
-        }),*/
+        }),
       ],
     },
     after: {},

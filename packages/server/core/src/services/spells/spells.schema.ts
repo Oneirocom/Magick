@@ -62,7 +62,6 @@ export const spellQueryProperties = Type.Pick(spellSchema, [
   'projectId',
   'graph',
   'type',
-  'type',
   'createdAt',
   'updatedAt',
   'hash',
