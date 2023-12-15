@@ -1,4 +1,4 @@
-import { NodeSpecJSON } from '@magickml/behave-graph';
+import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import React, { useEffect, useState } from 'react';
 import { NodeProps as FlowNodeProps, useEdges } from 'reactflow';
 
@@ -9,11 +9,13 @@ import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData.js';
 import { isHandleConnected } from '../../utils/isHandleConnected.js';
 import { useSelectAgentsSpell } from 'client/state';
 import { SpellInterface } from 'server/schemas';
+import { getConfig } from '../../utils/getNodeConfig.js';
 
 type NodeProps = FlowNodeProps & {
   spec: NodeSpecJSON;
   allSpecs: NodeSpecJSON[];
-  spell: SpellInterface
+  spell: SpellInterface,
+  nodeJSON: NodeJSON
 };
 
 const getPairs = <T, U>(arr1: T[], arr2: U[]) => {
@@ -32,14 +34,37 @@ export const Node: React.FC<NodeProps> = ({
   spec,
   selected,
   allSpecs,
-  spell
+  spell,
+  nodeJSON,
 }: NodeProps) => {
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const [eventName, setEventName] = useState<string | null>(null)
   const [fired, setFired] = useState(false)
   const edges = useEdges();
   const handleChange = useChangeNodeData(id);
-  const pairs = getPairs(spec.inputs, spec.outputs);
+
+  // if the node doesn't have a config yet, we need to make one for it and add it to the react flow node data
+  if (!data.configuration) {
+    const config = getConfig(nodeJSON, spec)
+    handleChange('configuration', config)
+  }
+
+  const { configuration: config } = data
+
+  const configInputs = config?.socketInputs || []
+  const configOutputs = config?.socketOutputs || []
+  const inputs = [...spec.inputs, ...configInputs]
+  const outputs = [...spec.outputs, ...configOutputs]
+
+  const flowInputs = inputs.filter(input => input.valueType === 'flow')
+  const flowOutputs = outputs.filter(output => output.valueType === 'flow')
+
+  const valueInputs = inputs.filter(input => input.valueType !== 'flow')
+  const valueOutputs = outputs.filter(output => output.valueType !== 'flow')
+
+  const pairs = getPairs(flowInputs, [...flowOutputs, ...valueOutputs]);
+
+  console.log(valueInputs)
 
   useEffect(() => {
     if (!spell || !id) return;
@@ -87,6 +112,22 @@ export const Node: React.FC<NodeProps> = ({
               connected={isHandleConnected(edges, id, output.name, 'source')}
             />
           )}
+        </div>
+      ))}
+
+      {valueInputs.map(input => (
+        <div
+          key={input.key}
+          className="flex flex-row justify-start gap-8 relative px-2"
+        // className={styles.container}
+        >
+          <InputSocket
+            {...input}
+            specJSON={allSpecs}
+            value={data[input.name] ?? input.defaultValue}
+            onChange={handleChange}
+            connected={isHandleConnected(edges, id, input.name, 'target')}
+          />
         </div>
       ))}
     </NodeContainer>
