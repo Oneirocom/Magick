@@ -56,6 +56,7 @@ export const createStore = (config?: any): ExtendedStore => {
     version: 1,
     storage,
     blacklist: [
+      'graph',
       spellApi.reducerPath,
       rootFeathers.rootReducerPath,
       'globalConfig',
