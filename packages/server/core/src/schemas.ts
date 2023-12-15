@@ -27,9 +27,9 @@ export const spellSchema = Type.Object(
       id: Type.Optional(Type.String()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
-    spellReleaseId: Type.Optional(Type.String() || Type.Null()),
-    createdAt: Type.Optional(Type.String() || Type.Null()),
-    updatedAt: Type.Optional(Type.String() || Type.Null()),
+    spellReleaseId: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+    createdAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+    updatedAt: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   },
   {
     $id: 'Spell',
