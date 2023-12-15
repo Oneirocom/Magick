@@ -95,7 +95,7 @@
   border-radius: var(--extraSmall) var(--extraSmall) 0px 0px;
 }
 .node-title {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+  font-family: 'Montserrat Variable', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
   /* text-transform: uppercase; */
   letter-spacing: 0.1em;
@@ -117,7 +117,7 @@
   padding: var(--extraSmall);
 }
 .bottom-container {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   border-top: 1px solid var(--dark-2);
   padding: var(--extraSmall);
   display: flex;
@@ -125,22 +125,22 @@
   gap: var(--extraSmall);
 }
 .bottom-container .control {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   flex: 1;
 }
 .bottom-container .control:last-child {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   flex: 0.5;
 }
 .bottom-container .control:first-child {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   flex: 1;
 }
 
 .control button {
   background-color: var(--primary);
   width: 100%;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
 }
 .control input {
   box-sizing: border-box;
@@ -198,7 +198,7 @@
 .input-title,
 .output-title,
 div.item {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+  font-family: 'Montserrat Variable', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
   font-size: 1.2rem !important;
 }

@@ -5,7 +5,6 @@ function getCategory(node, specJson) {
 }
 
 export function nodeColor(node, specJson) {
-  console.log('getting node color')
   const nodeCategory = getCategory(node, specJson)
   let colorName = categoryColorMap[nodeCategory]
 

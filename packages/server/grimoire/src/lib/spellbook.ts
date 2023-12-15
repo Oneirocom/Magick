@@ -194,7 +194,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         `Plugins loaded in Spellbook for agent ${this.agent.id}`
       )
       this.pluginManager.getPlugins().forEach(plugin => {
-        debugger
         this.setupPluginWorker(plugin)
       })
     })
