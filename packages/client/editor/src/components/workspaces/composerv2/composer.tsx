@@ -12,8 +12,6 @@ import { Tab } from '@magickml/providers';
 import { usePubSub } from '@magickml/providers'
 import EventHandler from '../../EventHandler/EventHandler'
 
-import Inspector from '../../InspectorWindow/InspectorWindow'
-
 import Console from '../../DebugConsole'
 import TextEditor from '../../TextEditorWindow'
 import ChatWindow from '../../ChatWindow/ChatWindow'
@@ -60,6 +58,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
         tab,
         spellId
       },
+
       position: { referencePanel: 'Graph', direction: 'left' },
     })
     .api.setSize({
@@ -117,9 +116,6 @@ const components = {
   },
   Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <ChatWindow {...props.params} />
-  },
-  Inspector: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <Inspector {...props.params} />
   },
   Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <PropertiesWindow {...props.params} />
