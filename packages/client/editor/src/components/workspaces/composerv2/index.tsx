@@ -36,7 +36,7 @@ const composerLayoutComponents = {
           <p style={{ padding: 8, color: 'grey', marginRight: 50 }}>Composer V2</p>
           <DraggableElement window="Console" />
           <DraggableElement window="TextEditor" title="Text Editor" />
-          <DraggableElement window="Inspector" />
+          <DraggableElement window="Properties" />
           <DraggableElement window="Playtest" />
         </div>
       </div >
