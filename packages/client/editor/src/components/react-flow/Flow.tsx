@@ -17,7 +17,6 @@ import { nodeColor } from '../../utils/nodeColor.js';
 
 type FlowProps = {
   spell: SpellInterface;
-  registry: IRegistry;
   parentRef: React.RefObject<HTMLDivElement>;
   tab: Tab
 };
