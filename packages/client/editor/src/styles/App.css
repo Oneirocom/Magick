@@ -170,7 +170,7 @@ button {
   padding: 9px 16px;
   padding-left: var(--small);
   padding-right: var(--small);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'sans-serif' !important;
   font-size: 11px;
   text-transform: uppercase;
   box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
@@ -238,7 +238,7 @@ button.disabled {
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono';
 }
 
 .flexlayout__tabset {
@@ -267,7 +267,7 @@ button.disabled {
 
 .flexlayout__tabset {
   font-size: 14px;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'sans-serif' !important;
 }
 
 .flexlayout__tab {
@@ -305,12 +305,12 @@ button.disabled {
 }
 
 /* .view-line span {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', sans-serif;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', sans-serif;
 } */
 
 input {
   box-sizing: border-box;
-  padding: var(--small);
+  /* padding: var(--small); */
   /* not using a var here to optically correct for base + cap of typeface */
   background-color: var(--foreground-light);
   padding-left: var(--small);
@@ -318,10 +318,10 @@ input {
   color: #fff;
   border-radius: 4px;
   cursor: default;
-  border: 1px solid var(---rich-blue);
+  border: none;
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
-  font-size: 16px;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
+  font-size: 12px;
 }
 
 input:focus-visible {
@@ -388,7 +388,7 @@ input:focus-visible {
 .form-item-label {
   display: block;
   margin-bottom: 0.5em;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
 
   color: var(---rich-blue);
 }
@@ -412,7 +412,7 @@ input:focus-visible {
   cursor: default;
   border: 1px solid var(--dark-3);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   font-size: 11px;
   height: var(--c4);
 }
@@ -553,14 +553,14 @@ input:focus-visible {
 .input-title,
 .output-title,
 div.item {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+  font-family: 'Montserrat Variable', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
 }
 
 .flexlayout__layout {
   background-color: var(--foreground-light) !important;
   color: var(---rich-blue);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono';
 }
 
 .MuiInputBase-root input,
