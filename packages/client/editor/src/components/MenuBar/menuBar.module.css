@@ -85,7 +85,7 @@ li.list-item:only-child {
   padding: var(--extraSmall);
   padding-left: var(--small);
   padding-right: var(--small);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono';
   text-transform: uppercase;
   list-style: none;
 
