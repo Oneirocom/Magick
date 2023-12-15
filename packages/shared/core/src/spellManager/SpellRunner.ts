@@ -106,7 +106,6 @@ class SpellRunner {
         'SPELLRUNNER: Emitting spell event from agent %o',
         AGENT_SPELL(this.agent.id)
       )
-      this.logger.trace('THIS IS THE AGENT ID', this.agent.id)
       this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
     }
   }
