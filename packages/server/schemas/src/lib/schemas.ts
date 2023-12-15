@@ -25,6 +25,7 @@ export const spellSchema = Type.Object(
     type: Type.Optional(Type.String()),
     graph: Type.Object({
       id: Type.Optional(Type.String()),
+      values: Type.Optional(Type.Any()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
     spellReleaseId: Type.Optional(Type.Union([Type.String(), Type.Null()])),
