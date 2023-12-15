@@ -50,6 +50,37 @@
     "configuration": []
   },
   {
+    "type": "logic/string/template",
+    "category": "Logic",
+    "label": "Text Template",
+    "inputs": [
+      {
+        "name": "template",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": [
+          {
+            "key": "variable 1",
+            "valueType": "string",
+            "defaultValue": "my variable"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
