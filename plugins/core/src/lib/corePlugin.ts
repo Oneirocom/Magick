@@ -14,6 +14,7 @@ import { CoreActionService } from './services/coreActionService'
 import { sendMessage } from './nodes/actions/sendMessage'
 import { Job } from 'bullmq'
 import { SpellCaster } from 'server/grimoire'
+import { textTemplate } from './nodes/functions/textTemplate'
 
 const pluginName = 'Core'
 
@@ -23,7 +24,7 @@ const pluginName = 'Core'
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage]
+  nodes = [messageEvent, sendMessage, textTemplate]
   values = []
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
