@@ -190,7 +190,7 @@ const AgentDetails = ({
             <InputEdit
               selectedAgentData={selectedAgentData}
               setSelectedAgentData={setSelectedAgentData}
-              update={update}
+              update={() => update()}
               setEditMode={setEditMode}
               setOldName={setOldName}
               oldName={oldName}
@@ -231,9 +231,7 @@ const AgentDetails = ({
         </div>
         <div className={styles.btns}>
           <Button
-            onClick={() => {
-              update(selectedAgentData?.id)
-            }}
+            onClick={() => update()}
             style={{
               margin: '1em',
               color: 'white',
@@ -333,8 +331,7 @@ const AgentDetails = ({
                 publicVariables: JSON.stringify(data),
               })
             }}
-            // todo we need to decide if we need to handle this.
-            setUpdateNeeded={() => { }}
+            setUpdateNeeded={() => {}}
             publicVars={JSON.parse(selectedAgentData.publicVariables)}
           />
         )}
@@ -354,7 +351,7 @@ const AgentDetails = ({
                 element={value}
                 selectedAgentData={selectedAgentData}
                 setSelectedAgentData={setSelectedAgentData}
-                update={update}
+                update={() => update()}
               />
             </Tooltip>
 
