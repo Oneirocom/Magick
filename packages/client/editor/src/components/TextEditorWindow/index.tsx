@@ -1,21 +1,36 @@
-import { Button, Window } from 'client/core'
+import { debounce } from 'lodash'
 import Editor from '@monaco-editor/react'
 import { useEffect, useRef, useState } from 'react'
-// import '../../../../styles/magick.module.css'
+import { useSelector } from 'react-redux'
+import { Button, Window } from 'client/core'
+import { selectActiveNode } from 'client/state'
+import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
-import { TextEditorData, useInspector } from '../../contexts/InspectorProvider'
 
 const TextEditor = props => {
   const [code, setCodeState] = useState<string | undefined>(undefined)
-  const [data, setData] = useState<TextEditorData | null>(null)
+
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
   })
-  const [unSavedChanges, setUnSavedChanged] = useState<boolean>(false)
   const codeRef = useRef<string>()
 
-  const { textEditorData, saveTextEditor, inspectorData } = useInspector()
+  const selectedNode = useSelector(selectActiveNode(props.tab.id))
+  const handleChange = useChangeNodeData(selectedNode?.id);
+
+  useEffect(() => {
+    if (!selectedNode) return
+    const { configuration } = selectedNode.data
+    const { textEditorData } = configuration
+    if (textEditorData === undefined) return
+    setCode(textEditorData)
+  }, [selectedNode])
+
+  if (!selectedNode) return null
+
+  const { configuration } = selectedNode.data
+  const { textEditorOptions, textEditorData } = configuration
 
   const handleEditorWillMount = monaco => {
     monaco.editor.defineTheme('sds-dark', {
@@ -24,39 +39,21 @@ const TextEditor = props => {
       rules: [],
       wordWrap: true,
       colors: {
-        'editor.background': '#272727',
+        'editor.background': "#171b1c",
       },
     })
   }
 
-  useEffect(() => {
-    setData(textEditorData)
-    setCode(textEditorData.data)
-  }, [textEditorData])
-
-  const save = code => {
-    const update = {
-      ...data,
-      data: code,
-    }
-    setData(update)
-    saveTextEditor(update)
-  }
-
-  const onSave = () => {
-    setUnSavedChanged(false)
-    save(codeRef.current)
-  }
+  const debounceSave = debounce((code) => {
+    handleChange('configuration', {
+      ...configuration,
+      textEditorData: code,
+    })
+  }, 1000)
 
   const updateCode = rawCode => {
-    if (!unSavedChanges) setUnSavedChanged(true)
     const code = rawCode.replace('\r\n', '\n')
-    setCode(code)
-    const update = {
-      ...data,
-      data: code,
-    }
-    setData(update)
+    debounceSave(code)
   }
 
   const setCode = update => {
@@ -64,37 +61,15 @@ const TextEditor = props => {
     codeRef.current = update
   }
 
-  const toolbar = (
-    <>
-      <div style={{ marginTop: 'var(--c1)' }}>
-        {textEditorData?.name && textEditorData?.name}
-      </div>
-      <Button onClick={onSave}>
-        SAVE
-        {unSavedChanges && (
-          <span
-            style={{
-              width: '6px',
-              height: '6px',
-              background: '#fff',
-              borderRadius: '50%',
-              marginLeft: '2px',
-            }}
-          />
-        )}
-      </Button>
-    </>
-  )
-
-  if (!textEditorData?.control)
+  if (textEditorData === undefined)
     return <WindowMessage content="Select a node with a text field" />
 
   return (
-    <Window key={inspectorData?.nodeId} toolbar={toolbar}>
+    <Window>
       <Editor
         theme="sds-dark"
         // height={height} // This seemed to have been causing issues.
-        language={textEditorData?.options?.language}
+        language={textEditorOptions?.options?.language}
         value={code}
         options={editorOptions}
         defaultValue={code}
