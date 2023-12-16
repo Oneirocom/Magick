@@ -1,4 +1,5 @@
 
+import cx from 'classnames';
 import { getNodeSpec } from 'shared/nodeSpec';
 import { Tab } from "@magickml/providers"
 import { selectActiveNode, useGetSpellByJustIdQuery } from "client/state"
@@ -23,6 +24,7 @@ export type ConfigurationComponentProps = {
 
 const ConfigurationComponents = {
   socketInputs: SocketConfig,
+  textEditorData: () => <div>Button to open text editor</div>,
   default: () => <div>default</div>
 }
 
@@ -36,6 +38,7 @@ export const PropertiesWindow = (props: Props) => {
 
   const spec = nodeSpecs.find(spec => spec.type === selectedNode.type)
   const { configuration } = selectedNode.data
+  const hiddenProperties = configuration.hiddenProperties || []
 
   if (!spellData || !spec) return null
 
@@ -52,7 +55,7 @@ export const PropertiesWindow = (props: Props) => {
       {spec && <div className="px-4 py-4">
         <h2>{spec.label}</h2>
       </div>}
-      {Object.entries(configuration || {}).map((config: [key: string, Record<string, any>]) => {
+      {Object.entries(configuration || {}).filter(([key]) => !hiddenProperties.includes(key)).map((config: [key: string, Record<string, any>], index) => {
         const [key] = config
         const Component = ConfigurationComponents[key] || ConfigurationComponents.default
 
@@ -63,8 +66,15 @@ export const PropertiesWindow = (props: Props) => {
           updateConfigKey
         }
 
+        // Check if the current element is the first or the last one in the array
+        const isFirstElement = index === 0;
+        const borderClass = cx(
+          "border-solid border-0 border-b border-[var(--background-color)] p-4",
+          isFirstElement && "border-t",
+        )
+
         return (
-          <div className="border-solid border-0 border-t border-b border-[var(--background-color)] p-4">
+          <div className={borderClass}>
             <Component {...componentProps} />
           </div>
         )
