@@ -38,6 +38,7 @@ const composerLayoutComponents = {
           <DraggableElement window="TextEditor" title="Text Editor" />
           <DraggableElement window="Properties" />
           <DraggableElement window="Playtest" />
+          <DraggableElement window="Chat" />
         </div>
       </div >
     )
