@@ -11,24 +11,30 @@ export const textTemplate = makeFunctionNodeDefinition({
   category: NodeCategory.Logic,
   label: 'Text Template',
   configuration: {
+    hiddenProperties: {
+      valueType: 'array',
+      defaultValue: ['hiddenProperties', 'textEditorOptions'],
+    },
+    textEditorData: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+    textEditorOptions: {
+      valueType: 'object',
+      defaultValue: {
+        options: {
+          language: 'handlebars',
+          name: 'Text template',
+        },
+      },
+    },
     socketInputs: {
       valueType: 'array',
-      defaultValue: [
-        {
-          key: 'variable 1',
-          valueType: 'string',
-          defaultValue: 'my variable',
-        },
-      ],
+      defaultValue: [],
     },
   },
   in: configuration => {
-    const startSockets = [
-      {
-        key: 'template',
-        valueType: 'string',
-      },
-    ]
+    const startSockets = []
 
     const socketArray = configuration?.socketInputs.length
       ? configuration.socketInputs
@@ -37,12 +43,11 @@ export const textTemplate = makeFunctionNodeDefinition({
     const sockets: SocketsList =
       socketArray.map((socketInput, index) => {
         return {
-          key: socketInput.key,
+          key: socketInput.name,
+          name: socketInput.name,
           valueType: socketInput.valueType,
         }
       }) || []
-
-    console.log('TEXT TEMPLATE SOCKERS', sockets)
 
     return [...startSockets, ...sockets]
   },
@@ -50,11 +55,12 @@ export const textTemplate = makeFunctionNodeDefinition({
     result: 'string',
   },
   exec: ({ write, read, configuration }) => {
-    const inputs = configuration.socketInputs.map((socketInput, index) =>
-      read(socketInput.key)
-    )
+    const inputs = configuration.socketInputs.reduce((acc, socketInput) => {
+      acc[socketInput.name] = read(socketInput.name)
+      return acc
+    }, {})
 
-    const string = (read('template') as string).replace('\r\n', '\n')
+    const string = configuration.textEditorData.replace('\r\n', '\n')
 
     const template = Handlebars.compile(string, { noEscape: true })
     const compiled = template(inputs)
