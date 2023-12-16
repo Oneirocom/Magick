@@ -53,13 +53,7 @@
     "type": "logic/string/template",
     "category": "Logic",
     "label": "Text Template",
-    "inputs": [
-      {
-        "name": "template",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
+    "inputs": [],
     "outputs": [
       {
         "name": "result",
@@ -68,15 +62,32 @@
     ],
     "configuration": [
       {
-        "name": "socketInputs",
+        "name": "hiddenProperties",
         "valueType": "array",
         "defaultValue": [
-          {
-            "key": "variable 1",
-            "valueType": "string",
-            "defaultValue": "my variable"
-          }
+          "hiddenProperties",
+          "textEditorOptions"
         ]
+      },
+      {
+        "name": "textEditorData",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "textEditorOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "options": {
+            "language": "handlebars",
+            "name": "Text template"
+          }
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
       }
     ]
   },
