@@ -172,12 +172,7 @@ export default class SpellManager {
       this.logger.debug({ spellId }, `Reloading spell %s`, spellId)
       return this.load(spell)
     } catch (error) {
-      this.logger.error(
-        { spellId },
-        `Error loading spell %s: %o`,
-        spellId,
-        error
-      )
+      this.logger.error(error, `SPELL MANAGER: Error loading spell ${spellId}`)
       return
     }
   }

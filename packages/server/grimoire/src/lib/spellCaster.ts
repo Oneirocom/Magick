@@ -191,7 +191,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    */
   emitNodeWork(node: INode) {
     const event = `${this.spell.id}-${node.id}`
-
     const message = {
       event,
       nodeId: node.id,

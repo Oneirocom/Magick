@@ -159,6 +159,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private watchSpellUpdateHandler(spell: SpellInterface) {
     if (!this.watchSpells) return
 
+    console.log('Spell saved', spell)
+
     if (this.hasSpellCaster(spell.id)) {
       this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
       this.updateSpell(spell)
@@ -302,7 +304,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       this.logger.debug(`Reloading spell ${spellId}`)
       return this.loadSpell(spell)
     } catch (error) {
-      this.logger.error(`Error loading spell ${spellId}: %o`, error)
+      this.logger.error(
+        error,
+        `SPELLBOOK: Error loading spell ${spellId} by id`
+      )
       return null
     }
   }
@@ -342,6 +347,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
       return spellCaster
     } catch (err) {
+      console.log('ERROR', err)
       this.agent?.error(`Error loading spell ${spell.id}`)
       return null
     }
