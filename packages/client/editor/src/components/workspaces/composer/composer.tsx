@@ -21,12 +21,12 @@ import Inspector from '../../InspectorWindow/InspectorWindow'
 import Playtest from '../../PlaytestWindow/PlaytestWindow'
 
 import Console from '../../DebugConsole'
-import TextEditor from '../../TextEditorWindow'
 import { useEditor } from '../../../contexts/EditorProvider'
 import { Tab } from '@magickml/providers';
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 import LockIcon from '@mui/icons-material/Lock';
+import TextEditor from '../../_DEPRICATED_/TextEditorWindow'
 
 const getLayoutFromLocalStorage = (spellId: string) => {
   const layout = localStorage.getItem(`composer_layout_${spellId}`)
