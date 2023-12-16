@@ -64,8 +64,6 @@ export const Node: React.FC<NodeProps> = ({
 
   const pairs = getPairs(flowInputs, [...flowOutputs, ...valueOutputs]);
 
-  console.log(valueInputs)
-
   useEffect(() => {
     if (!spell || !id) return;
     setEventName(`${spell.id}-${id}`)
