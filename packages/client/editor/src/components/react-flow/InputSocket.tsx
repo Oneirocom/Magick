@@ -122,6 +122,8 @@ const InputSocket: React.FC<InputSocketProps> = ({
   const instance = useReactFlow();
 
   const isFlowSocket = valueType === 'flow';
+  const isArraySocket = valueType === 'array';
+  const isObjectSocket = valueType === 'object';
 
   let colorName = valueTypeColorMap[valueType];
   if (colorName === undefined) {
@@ -141,7 +143,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
         </>
       )}
 
-      {!isFlowSocket && <InputFieldForValue connected={connected} {...rest} />}
+      {!isFlowSocket && !isArraySocket && !isObjectSocket && <InputFieldForValue connected={connected} {...rest} />}
       <Handle
         id={name}
         type="target"
