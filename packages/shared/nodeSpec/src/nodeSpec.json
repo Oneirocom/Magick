@@ -85,6 +85,13 @@
         }
       },
       {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string"
+        ]
+      },
+      {
         "name": "socketInputs",
         "valueType": "array",
         "defaultValue": []
@@ -2449,6 +2456,440 @@
         "name": "a",
         "valueType": "float",
         "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/assocPath/object",
+    "category": "Logic",
+    "label": "Assoc Path",
+    "inputs": [
+      {
+        "name": "path",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "newValue",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array",
+    "category": "Logic",
+    "label": "Array",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/equal/array",
+    "category": "Logic",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/concat/array/2",
+    "category": "Logic",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/concat/array/3",
+    "category": "Logic",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "c",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/object",
+    "category": "Logic",
+    "label": "Object",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/equal/object",
+    "category": "Logic",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/mergeDeep/object",
+    "category": "Logic",
+    "label": "Merge Deep",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/path/object",
+    "category": "Logic",
+    "label": "Path",
+    "inputs": [
+      {
+        "name": "pathToSearch",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/path/integer",
+    "category": "Logic",
+    "label": "Path",
+    "inputs": [
+      {
+        "name": "pathToSearch",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/path/string",
+    "category": "Logic",
+    "label": "Path",
+    "inputs": [
+      {
+        "name": "pathToSearch",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "debug/log/object",
+    "category": "Action",
+    "label": "Log",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "text",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "severity",
+        "valueType": "string",
+        "defaultValue": "info"
+      },
+      {
+        "name": "payload",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "debug/log/array",
+    "category": "Action",
+    "label": "Log",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "text",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "severity",
+        "valueType": "string",
+        "defaultValue": "info"
+      },
+      {
+        "name": "payload",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/validate/object",
+    "category": "Logic",
+    "label": "Validate",
+    "inputs": [
+      {
+        "name": "schema",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "data",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      },
+      {
+        "name": "errors",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toObject/string",
+    "category": "None",
+    "label": "To Object",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/object",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toArray/string",
+    "category": "None",
+    "label": "To Array",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/array",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [

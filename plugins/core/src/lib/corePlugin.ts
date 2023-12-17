@@ -7,7 +7,7 @@ import {
 import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { CoreEmitter } from './dependencies/coreEmitter'
-import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
+import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
@@ -15,6 +15,7 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { Job } from 'bullmq'
 import { SpellCaster } from 'server/grimoire'
 import { textTemplate } from './nodes/functions/textTemplate'
+import { registerStructProfile } from './registerStructProfile'
 
 const pluginName = 'Core'
 
@@ -74,7 +75,10 @@ export class CorePlugin extends CoreEventsPlugin {
    * @param registry The registry to provide.
    */
   override provideRegistry(registry: IRegistry): IRegistry {
-    return registerCoreProfile(registry)
+    const coreRegistry = registerCoreProfile(registry)
+    const logger = (coreRegistry.dependencies.ILogger as ILogger) || undefined
+
+    return registerStructProfile(coreRegistry, logger)
   }
 
   initializeFunctionalities() {
