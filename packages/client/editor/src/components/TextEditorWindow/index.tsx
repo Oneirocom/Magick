@@ -14,7 +14,6 @@ const TextEditor = props => {
     wordWrap: 'on',
     minimap: { enabled: false },
   })
-  const codeRef = useRef<string>()
 
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const handleChange = useChangeNodeData(selectedNode?.id);
@@ -26,6 +25,36 @@ const TextEditor = props => {
     if (textEditorData === undefined) return
     setCode(textEditorData)
   }, [selectedNode])
+
+  // listen for changes to the code and check if selected node is text template
+  // then we want to parse the template for sockets and add them to the node
+  useEffect(() => {
+    if (!code) return
+    if (!selectedNode) return
+    if (!selectedNode.data?.configuration?.textEditorOptions?.options?.language) return
+    const { configuration } = selectedNode.data
+    const { textEditorOptions } = configuration
+    const { options } = textEditorOptions
+    const { language } = options
+    if (language !== 'handlebars') return
+    // socket regex looks for handlebars style {{socketName}}
+    const socketRegex = /{{(.+?)}}/g
+    const socketMatches = code.matchAll(socketRegex)
+    const sockets = []
+    for (const match of socketMatches) {
+      const socketName = match[1]
+      const socket = {
+        name: socketName,
+        valueType: 'string',
+      }
+      sockets.push(socket)
+    }
+    handleChange('configuration', {
+      ...configuration,
+      socketInputs: sockets,
+    })
+    // handleChange('sockets', sockets)
+  }, [code])
 
   if (!selectedNode) return null
 
@@ -58,7 +87,6 @@ const TextEditor = props => {
 
   const setCode = update => {
     setCodeState(update)
-    codeRef.current = update
   }
 
   if (textEditorData === undefined)
