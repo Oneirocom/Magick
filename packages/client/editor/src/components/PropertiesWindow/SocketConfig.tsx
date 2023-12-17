@@ -9,7 +9,7 @@ import SingleElement from "./SingleElement"
  * @param {Function} props.addSocket - Function to add a new socket.
  * @returns {JSX.Element} Form input to add a new socket.
  */
-const AddNewSocket = ({ addSocket }) => {
+const AddNewSocket = ({ addSocket, valueTypes }) => {
   const [value, setValue] = useState('')
   const [valueType, setValueType] = useState('string')
 
@@ -58,9 +58,11 @@ const AddNewSocket = ({ addSocket }) => {
           value={valueType}
           onChange={e => setValueType(e.target.value)}
           className="flex flex-1 px-3 bg-[var(--background-color)] rounded-sm">
-          <option value="string">string</option>
-          <option value="integer">integer</option>
-          <option value="boolean">boolean</option>
+          {
+            valueTypes.map(type => (
+              <option value={type}>{type}</option>
+            ))
+          }
         </select>
         {/* Add button */}
         <button style={{ margin: 0 }} onClick={onAdd} type="submit">
@@ -72,8 +74,14 @@ const AddNewSocket = ({ addSocket }) => {
 }
 
 
-export const SocketConfig = ({ config, updateConfigKey }: ConfigurationComponentProps) => {
+export const SocketConfig = ({ config, updateConfigKey, fullConfig }: ConfigurationComponentProps) => {
+  const defaultValues = [
+    'string',
+    'integer',
+    'boolean'
+  ]
   const [configKey, sockets = []] = config
+  const { socketValues = defaultValues } = fullConfig
 
   const addSocket = useCallback((socket) => {
     const newValue = [
@@ -104,7 +112,7 @@ export const SocketConfig = ({ config, updateConfigKey }: ConfigurationComponent
         />
       ))}
       <div>
-        <AddNewSocket addSocket={addSocket} />
+        <AddNewSocket addSocket={addSocket} valueTypes={socketValues} />
         {/* <Input value={key} onChange={e => setKey(e.target.value)} />
         <select value={valueType} onChange={e => setValueType(e.target.value)}>
           <option value="string">string</option>

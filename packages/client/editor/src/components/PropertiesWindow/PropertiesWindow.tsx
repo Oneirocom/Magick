@@ -16,6 +16,7 @@ type Props = {
 }
 
 export type ConfigurationComponentProps = {
+  fullConfig: Record<string, any>
   config: [key: string, value: any]
   nodeSpec: NodeSpecJSON
   node: Node,
@@ -60,6 +61,7 @@ export const PropertiesWindow = (props: Props) => {
         const Component = ConfigurationComponents[key] || ConfigurationComponents.default
 
         const componentProps: ConfigurationComponentProps = {
+          fullConfig: configuration,
           config: config,
           nodeSpec: spec,
           node: selectedNode,
