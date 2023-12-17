@@ -28,6 +28,10 @@ export const textTemplate = makeFunctionNodeDefinition({
         },
       },
     },
+    socketValues: {
+      valueType: 'array',
+      defaultValue: ['string'],
+    },
     socketInputs: {
       valueType: 'array',
       defaultValue: [],
