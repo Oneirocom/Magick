@@ -185,6 +185,7 @@
     "pubsub-js": "1.9.4",
     "pyodide": "0.22.0",
     "radash": "11.0.0",
+    "rambdax": "^10.1.0",
     "react": "18.2.0",
     "react-chat-widget": "^3.1.4",
     "react-console-emulator": "5.0.2",

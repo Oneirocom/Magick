@@ -11,7 +11,7 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../config/validators'
-import { spellReleaseSchema } from 'shared/core'
+import { spellReleaseSchema } from 'server/schemas'
 
 /**
  * SpellRelease type

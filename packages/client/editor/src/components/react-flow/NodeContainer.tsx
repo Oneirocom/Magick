@@ -23,11 +23,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   if (colorName === undefined) {
     colorName = 'red';
   }
-  let [backgroundColor, borderColor, textColor] = colors[colorName];
-
-  if (selected) {
-    borderColor = 'border-gray-800';
-  }
+  let [backgroundColor, textColor] = colors[colorName];
 
   return (
     <div
@@ -41,7 +37,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
         {title}
       </div>
       <div
-        className={`flex flex-col gap-2 py-1 border-l border-r border-b ${borderColor} `}
+        className={`flex flex-col gap-2 py-1 border-l border-r border-b`}
       >
         {children}
       </div>
