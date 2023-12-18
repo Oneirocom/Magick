@@ -8,4 +8,4 @@ export const GOOGLEAI_ENDPOINT =
   process.env['NEXT_GOOGLEAI_ENDPOINT'] ||
   process.env['REACT_APP_GOOGLEAI_ENDPOINT'] ||
   process.env['GOOGLEAI_ENDPOINT'] ||
-  'https://generativelanguage.googleapis.com/v1beta2/models'
+  'https://generativelanguage.googleapis.com/v1beta/models'
