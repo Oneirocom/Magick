@@ -10,23 +10,23 @@ type ChatMessage = {
   content: string
 }
 
-interface ContentMessage {
-  contents: Content[]
-}
 interface Content  {
   parts: { text: string }[]
   role: string
 }
 
 async function makeGeminiChatCompletion(data: CompletionHandlerInputData): Promise<any> {
-  const { node, inputs, context } = data
+  const { node, inputs } = data
 
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as ChatMessage
   const conversation = inputs['conversation']?.[0] as any
 
+
   // Initialize conversationMessages array
   const conversationMessages: Content[] = []
+
+  conversationMessages.push({role: 'user', parts: [{text: system.content}]})
 
   // Add elements to conversationMessages
   conversation?.forEach(event => {
@@ -37,8 +37,6 @@ async function makeGeminiChatCompletion(data: CompletionHandlerInputData): Promi
 
   conversationMessages.push({ role: 'user', parts: [{text: input}]})
 
-  const examples = (inputs['examples']?.[0] as string[]) || []
-
   // Get or set default settings
   const request = {
     contents: conversationMessages,
@@ -47,11 +45,13 @@ async function makeGeminiChatCompletion(data: CompletionHandlerInputData): Promi
       top_p: parseFloat((node?.data?.top_p as string) ?? '0.95'),
       top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
     }
-  } as any
+  }
+
+  return request;
 }
 
 async function makePalmChatCompletion(data: CompletionHandlerInputData): Promise<any> {
-  const { node, inputs, context } = data
+  const { node, inputs } = data
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as ChatMessage
   const conversation = inputs['conversation']?.[0] as any
@@ -99,7 +99,7 @@ export async function makeChatCompletion(
   result?: string | null
   error?: string | null
 }> {
-  const { node, inputs, context } = data
+  const { node, context } = data
 
   let requestData: any = null;
   if ((node?.data?.model as string).includes('gemini')) {
