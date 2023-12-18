@@ -22,6 +22,7 @@ export type SaveDiffData = {
   name: string
   diff: Record<string, any>
   projectId: string
+  spellReleaseId?: string
 }
 
 /**
@@ -97,41 +98,37 @@ export class SpellService<
   /**
    * Saves the diff of a spell
    */
-  async saveDiff(data: SaveDiffData) {
-    const { name, diff, projectId } = data
+  async saveDiff(data: SaveDiffData): Promise<SpellInterface> {
+    const { name, diff, projectId, spellReleaseId } = data
+
+    // Modify query to include spellReleaseId
+    const query: Record<string, any> = { projectId, name }
+    if (spellReleaseId) {
+      query.spellReleaseId = spellReleaseId
+    }
 
     // Find spell data
-    const spellData = await app
-      .service('spells')
-      .find({ query: { projectId, name } })
+    const spellData = await app.service('spells').find({ query })
     const spell = spellData.data[0]
 
-    // Check if spell exists and that diff is available
-    if (!spell) throw new BadRequest(`No spell with ${name} name found.`)
-    if (!diff) throw new BadRequest('No diff provided in request body')
+    if (!spell) {
+      throw new NotFound(`No spell with name '${name}' found.`)
+    }
 
     // Apply diff to spell data
     const spellUpdate = otJson0.type.apply(spell, diff)
-
-    // Check if the graph would be cleared
     if (Object.keys(spellUpdate.graph.nodes).length === 0) {
       throw new BadRequest('Graph would be cleared. Aborting.')
     }
 
     // Calculate checksum of graph
     const hash = md5(JSON.stringify(spellUpdate.graph.nodes))
-
-    app.get('logger').trace('Saving spell diff: %o', {
-      name,
-      diff,
-    })
+    app.get('logger').trace('Saving spell diff: %o', { name, diff })
 
     // Update spell data
-    const updatedSpell = await app
+    return await app
       .service('spells')
       .update(spell.id, { ...spellUpdate, hash })
-
-    return updatedSpell
   }
 }
 
