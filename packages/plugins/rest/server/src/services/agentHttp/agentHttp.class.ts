@@ -234,7 +234,7 @@ export class AgentHttpService<
 
       recordMessage({
         agentId,
-        content: result.output,
+        content: result['Output - REST API (GET)'],
         sender: 'agent',
         connector: 'REST API (GET)',
         conversationId: params.query.conversationId,
@@ -276,7 +276,7 @@ export class AgentHttpService<
 
       recordMessage({
         agentId: data.agentId,
-        content: result.output,
+        content: result['Output - REST API (POST)'],
         sender: 'agent',
         connector: 'REST API (POST)',
         conversationId: data.conversationId,
@@ -315,7 +315,7 @@ export class AgentHttpService<
 
       recordMessage({
         agentId,
-        content: result.output,
+        content: result['Output - REST API (PUT)'],
         sender: 'agent',
         connector: 'REST API (PUT)',
         conversationId: data.conversationId,
@@ -357,7 +357,7 @@ export class AgentHttpService<
 
       params.query && recordMessage({
         agentId,
-        content: result.output,
+        content: result['Output - REST API (DELETE)'],
         sender: 'agent',
         connector: 'REST API (DELETE)',
         conversationId: params.query.conversationId,
