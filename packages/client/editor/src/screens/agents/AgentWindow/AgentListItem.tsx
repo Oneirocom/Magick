@@ -2,8 +2,7 @@ import React from 'react';
 import { MenuItem, Avatar, ListItemText, Box, Checkbox } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-
-import { AgentInterface } from 'server/core'; // Adjust the import path as necessary
+import { AgentInterface } from 'server/schemas';
 
 const AgentListItem = ({
   agent,
