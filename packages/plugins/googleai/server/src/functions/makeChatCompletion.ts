@@ -10,20 +10,48 @@ type ChatMessage = {
   content: string
 }
 
-/**
- * Generate a completion text based on prior chat conversation input.
- * @param data - CompletionHandlerInputData object.
- * @returns An object with success status and either a result or an error message.
- */
-export async function makeChatCompletion(
-  data: CompletionHandlerInputData
-): Promise<{
-  success: boolean
-  result?: string | null
-  error?: string | null
-}> {
+interface ContentMessage {
+  contents: Content[]
+}
+interface Content  {
+  parts: { text: string }[]
+  role: string
+}
+
+async function makeGeminiChatCompletion(data: CompletionHandlerInputData): Promise<any> {
   const { node, inputs, context } = data
 
+  // Get the system message and conversation inputs
+  const system = inputs['system']?.[0] as ChatMessage
+  const conversation = inputs['conversation']?.[0] as any
+
+  // Initialize conversationMessages array
+  const conversationMessages: Content[] = []
+
+  // Add elements to conversationMessages
+  conversation?.forEach(event => {
+    conversationMessages.push({ role: event.observer === event.sender ? 'model' : 'user', parts: [{ text: event.content }] })
+  });
+  // Get the user input
+  const input = inputs['input']?.[0] as string
+
+  conversationMessages.push({ role: 'user', parts: [{text: input}]})
+
+  const examples = (inputs['examples']?.[0] as string[]) || []
+
+  // Get or set default settings
+  const request = {
+    contents: conversationMessages,
+    generationConfig: {
+      temperature: parseFloat((node?.data?.temperature as string) ?? '0.0'),
+      top_p: parseFloat((node?.data?.top_p as string) ?? '0.95'),
+      top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
+    }
+  } as any
+}
+
+async function makePalmChatCompletion(data: CompletionHandlerInputData): Promise<any> {
+  const { node, inputs, context } = data
   // Get the system message and conversation inputs
   const system = inputs['system']?.[0] as ChatMessage
   const conversation = inputs['conversation']?.[0] as any
@@ -56,6 +84,30 @@ export async function makeChatCompletion(
     top_k: parseFloat((node?.data?.top_k as string) ?? '40'),
   } as any
 
+  return settings;
+}
+
+/**
+ * Generate a completion text based on prior chat conversation input.
+ * @param data - CompletionHandlerInputData object.
+ * @returns An object with success status and either a result or an error message.
+ */
+export async function makeChatCompletion(
+  data: CompletionHandlerInputData
+): Promise<{
+  success: boolean
+  result?: string | null
+  error?: string | null
+}> {
+  const { node, inputs, context } = data
+
+  let requestData: any = null;
+  if ((node?.data?.model as string).includes('gemini')) {
+    requestData = await makeGeminiChatCompletion(data);
+  } else {
+    requestData = await makePalmChatCompletion(data);
+  }
+
   const apiKey =
     (context?.module?.secrets &&
       context?.module?.secrets['googleai_api_key']) ||
@@ -70,18 +122,27 @@ export async function makeChatCompletion(
   }
 
   try {
+
+    let commandType = 'generateMessage';
+
+    // palm generates "messages" but gemini generates "content"
+    if ((node?.data?.model as string).includes('gemini')) {
+      commandType = 'generateContent';
+    }
+
     const start = Date.now()
-    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:generateMessage?key=${apiKey}`
+    const endpoint = `${GOOGLEAI_ENDPOINT}/${node?.data?.model}:${commandType}?key=${apiKey}`
     // Make the API call to GoogleAI
     const completion = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(settings),
+      body: JSON.stringify(requestData),
     })
 
     const completionData = await completion.json()
+    console.log(completionData)
 
     if (completionData.error) {
       console.error('GoogleAI Error', completionData.error)
@@ -97,13 +158,13 @@ export async function makeChatCompletion(
     saveRequest({
       projectId: context.projectId,
       agentId: context.agent?.id || 'preview',
-      requestData: JSON.stringify(settings),
+      requestData: JSON.stringify(requestData),
       responseData: JSON.stringify(completionData),
       startTime: start,
       statusCode: completion.status,
       status: completion.statusText,
       model: node?.data?.model as string,
-      parameters: JSON.stringify(settings),
+      parameters: JSON.stringify(requestData),
       type: 'completion',
       provider: 'googleai',
       totalTokens: 0, // usage.total_tokens,
