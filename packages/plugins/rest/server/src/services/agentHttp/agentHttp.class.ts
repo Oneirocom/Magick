@@ -230,11 +230,11 @@ export class AgentHttpService<
 
     const request = await formatRequest('GET', agentId, params.query, params)
     try {
-      const result = await agentCommander.runSpellWithResponse(request)
+      const result = await agentCommander.runSpellWithResponse(request) as { output: string }
 
       recordMessage({
         agentId,
-        content: params.query.content,
+        content: result.output,
         sender: 'agent',
         connector: 'REST API (GET)',
         conversationId: params.query.conversationId,
@@ -272,11 +272,11 @@ export class AgentHttpService<
     const request = await formatRequest('POST', data.agentId, data, params)
 
     try {
-      const result = await agentCommander.runSpellWithResponse(request)
+      const result = await agentCommander.runSpellWithResponse(request) as { output: string }
 
       recordMessage({
         agentId: data.agentId,
-        content: data.content,
+        content: result.output,
         sender: 'agent',
         connector: 'REST API (POST)',
         conversationId: data.conversationId,
@@ -311,11 +311,11 @@ export class AgentHttpService<
     const request = await formatRequest('POST', agentId, data, params)
 
     try {
-      const result = await agentCommander.runSpellWithResponse(request)
+      const result = await agentCommander.runSpellWithResponse(request) as { output: string }
 
       recordMessage({
         agentId,
-        content: data.content,
+        content: result.output,
         sender: 'agent',
         connector: 'REST API (PUT)',
         conversationId: data.conversationId,
@@ -353,11 +353,11 @@ export class AgentHttpService<
     const request = await formatRequest('DELETE', agentId, params.query, params)
 
     try {
-      const result = await agentCommander.runSpellWithResponse(request)
+      const result = await agentCommander.runSpellWithResponse(request) as { output: string }
 
       params.query && recordMessage({
         agentId,
-        content: params.query.content,
+        content: result.output,
         sender: 'agent',
         connector: 'REST API (DELETE)',
         conversationId: params.query.conversationId,
