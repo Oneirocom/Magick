@@ -51,6 +51,9 @@ export const useFlowHandlers = ({
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
   const [nodePickerVisibility, setNodePickerVisibility] = useState<XYPosition>()
+  const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
+  const [openNodeMenu, setOpenNodeMenu] = useState(false)
+  const [targetNode, setTargetNode] = useState<Node | undefined>(undefined)
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
@@ -104,12 +107,48 @@ export const useFlowHandlers = ({
     ]
   )
 
+  const handleRemoveNode = () => {
+    onNodesChange(tab.id)([
+      {
+        type: 'remove',
+        id: targetNode?.id,
+      },
+    ])
+    setTargetNode(undefined)
+  }
+
+  const cloneNode = () => {
+    if (targetNode === undefined) return
+    const newNode = {
+      ...targetNode,
+      id: uuidv4(),
+      position: {
+        x: targetNode.position.x + 10,
+        y: targetNode.position.y + 10,
+      },
+    }
+    onNodesChange(tab.id)([
+      {
+        type: 'add',
+        item: newNode,
+      },
+    ])
+    setTargetNode(undefined)
+  }
+
   const handleStartConnect = useCallback(
     (e: ReactMouseEvent, params: OnConnectStartParams) => {
       setLastConnectStart(params)
     },
     []
   )
+
+  const nodeMenuActions = [
+    { label: 'Delete', onClick: handleRemoveNode },
+    { label: 'Clone', onClick: cloneNode },
+    { label: 'Copy', onClick: () => {} },
+    { label: 'Paste', onClick: () => {} },
+  ]
 
   const handleStopConnect = useCallback((e: MouseEvent) => {
     blockClose = true
@@ -133,6 +172,7 @@ export const useFlowHandlers = ({
   const handlePaneClick = useCallback(() => {
     if (blockClose) return
     closeNodePicker()
+    setTargetNode(undefined)
   }, [closeNodePicker])
 
   const handlePaneContextMenu = useCallback(
@@ -155,6 +195,20 @@ export const useFlowHandlers = ({
     specJSON,
   })
 
+  const handleNodeContextMenu = useCallback(
+    (e: ReactMouseEvent, node: Node) => {
+      e.preventDefault()
+      e.stopPropagation()
+      setNodeMenuVisibility({
+        x: e.clientX,
+        y: e.clientY,
+      })
+      setTargetNode(node)
+      setOpenNodeMenu(true)
+    },
+    []
+  )
+
   return {
     handleStartConnect,
     handleStopConnect,
@@ -165,5 +219,11 @@ export const useFlowHandlers = ({
     handleAddNode,
     closeNodePicker,
     nodePickFilters,
+    handleNodeContextMenu,
+    nodeMenuVisibility,
+    setNodeMenuVisibility,
+    setOpenNodeMenu,
+    openNodeMenu,
+    nodeMenuActions,
   }
 }
