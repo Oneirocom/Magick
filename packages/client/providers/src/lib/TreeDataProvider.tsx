@@ -1,10 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { NodeModel } from '@minoru/react-dnd-treeview'
-import {
-  RootState,
-  useGetSpellsByReleaseIdQuery,
-} from 'client/state'
-import { useSelector } from 'react-redux'
+import { useGetSpellsQuery } from 'client/state'
 
 export interface TreeNode extends NodeModel {
   fileType: string
@@ -47,13 +43,7 @@ type Props = {
 }
 
 export const TreeDataProvider = ({ children }: Props): JSX.Element => {
-  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
-    state => state.globalConfig
-  )
-
-  const { data: fetchedSpells } = useGetSpellsByReleaseIdQuery({
-    spellReleaseId: currentSpellReleaseId || null,
-  }, {
+  const { data: fetchedSpells } = useGetSpellsQuery({}, {
     refetchOnMountOrArgChange: true,
   })
 
