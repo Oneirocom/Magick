@@ -25,22 +25,45 @@ type Socket = {
   name: string
 }
 
-function getSpellByIdData(state, spellId) {
+function getSpellByReleaseIdData(state, spellReleaseId) {
   // Access the RTK Query slice - replace 'spellApi' with the name of your api slice
   const queries = state.api.queries || {}
 
-  // Create a regex pattern to match the query key with the spellId
-  const pattern = new RegExp(`getSpellById.*?"id"s*:*"${spellId}"`)
+  // Create a regex pattern to match the query key with the spellId and draft status
+  const pattern = new RegExp(
+    `getSpellByReleaseId.*?"id"s*:*"${spellReleaseId}".*?"spellReleaseId":${spellReleaseId}`
+  )
 
-  // Find the key that matches the spellId
+  // Find the key that matches the spellId for draft spells
   const queryKey = Object.keys(queries).find(key => pattern.test(key))
 
   if (!queryKey) return null
 
   // Get the data from the query state using the found key
-  const queryState = queries[queryKey as string]
+  const queryState = queries[queryKey]
 
-  // Return the cached data
+  // Return the cached data for the draft spell
+  return queryState?.data.data
+}
+
+function getSpellByIdData(state, spellId) {
+  // Access the RTK Query slice - replace 'spellApi' with the name of your api slice
+  const queries = state.api.queries || {}
+
+  // Create a regex pattern to match the query key with the spellId and draft status
+  const pattern = new RegExp(
+    `getSpellById.*?"id"s*:*"${spellId}".*?"spellReleaseId":null`
+  )
+
+  // Find the key that matches the spellId for draft spells
+  const queryKey = Object.keys(queries).find(key => pattern.test(key))
+
+  if (!queryKey) return null
+
+  // Get the data from the query state using the found key
+  const queryState = queries[queryKey]
+
+  // Return the cached data for the draft spell
   return queryState?.data.data[0]
 }
 
@@ -135,7 +158,7 @@ export class SpellComponent extends MagickComponent<
     const state = this.editor?.store?.getState()
     if (!state) return
 
-    const spell = getSpellByIdData(state, spellId)
+    const spell = getSpellByReleaseIdData(state, spellId)
 
     if (!spell) return
 

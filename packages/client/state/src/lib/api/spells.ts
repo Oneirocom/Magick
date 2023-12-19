@@ -73,6 +73,16 @@ export const spellApi = rootApi.injectEndpoints({
         }
       },
     }),
+    // Api endpoint for getting a spell by name and ID
+    getSpellByReleaseId: builder.query({
+      providesTags: ['Spell'],
+      query: ({ spellName, spellReleaseId }) => {
+        return {
+          url: `spells?name=${spellName}&spellReleaseId=${spellReleaseId}`,
+          params: {},
+        }
+      },
+    }),
     // Api endpoint for getting a spell by ID only
     getSpellByJustId: builder.query({
       providesTags: ['Spell'],
@@ -115,11 +125,14 @@ export const spellApi = rootApi.injectEndpoints({
         },
       }),
     }),
-    // Api endpoint for saving a spell
     saveSpell: builder.mutation({
       invalidatesTags: ['Spell'],
       query({ spell, projectId }) {
         const spellCopy = { ...spell } as any
+
+        // Ensure we're saving as a draft spell
+        spellCopy.spellReleaseId = null
+
         if (spellCopy.id) delete spellCopy.id
         if (Object.keys(spellCopy).includes('modules')) delete spellCopy.modules
         if (!spellCopy.createdAt) spellCopy.createdAt = new Date().toISOString()
@@ -136,6 +149,7 @@ export const spellApi = rootApi.injectEndpoints({
         }
       },
     }),
+
     // Api endpoint for creating a new spell
     newSpell: builder.mutation({
       invalidatesTags: ['Spells'],
@@ -173,11 +187,14 @@ export const spellApi = rootApi.injectEndpoints({
 export const {
   useGetSpellsQuery,
   useGetSpellsByReleaseIdQuery,
+  useLazyGetSpellByReleaseIdQuery,
+  useLazyGetSpellsByReleaseIdQuery,
   useLazyGetSpellsQuery,
   useLazyGetSpellQuery,
   useLazyGetSpellByIdQuery,
   useGetSpellQuery,
   useGetSpellByIdQuery,
+  useGetSpellByReleaseIdQuery,
   useGetSpellByJustIdQuery,
   useLazyGetSpellByJustIdQuery,
   useRunSpellMutation,

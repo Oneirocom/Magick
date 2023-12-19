@@ -22,7 +22,6 @@ export type SaveDiffData = {
   name: string
   diff: Record<string, any>
   projectId: string
-  spellReleaseId?: string
 }
 
 /**
@@ -44,7 +43,12 @@ export class SpellService<
 
     // Start building the query with the spell ID condition
     let spellQuery = query.where('spells.id', '=', spellId)
-
+    console.log({
+      spellId,
+      spellReleaseId,
+      query,
+      spellQuery,
+    })
     // Conditionally add the spellReleaseId filter if it exists
     if (spellReleaseId) {
       spellQuery = spellQuery.andWhere(
@@ -65,6 +69,7 @@ export class SpellService<
   }
 
   async find(params: ServiceParams) {
+    console.log('FIND SPELLS', params)
     // Check if params and params.query exist before proceeding
     if (params?.query) {
       for (const key in params.query) {
@@ -99,17 +104,20 @@ export class SpellService<
    * Saves the diff of a spell
    */
   async saveDiff(data: SaveDiffData): Promise<SpellInterface> {
-    const { name, diff, projectId, spellReleaseId } = data
+    const { name, diff, projectId } = data
 
     // Modify query to include spellReleaseId
-    const query: Record<string, any> = { projectId, name }
-    if (spellReleaseId) {
-      query.spellReleaseId = spellReleaseId
+    const query: Record<string, any> = {
+      projectId,
+      name,
+      spellReleaseId: 'null',
     }
 
     // Find spell data
     const spellData = await app.service('spells').find({ query })
+
     const spell = spellData.data[0]
+    console.log('HAHA', spell, spellData)
 
     if (!spell) {
       throw new NotFound(`No spell with name '${name}' found.`)
@@ -121,14 +129,23 @@ export class SpellService<
       throw new BadRequest('Graph would be cleared. Aborting.')
     }
 
+    console.log({
+      spellUpdate,
+      spell,
+      diff,
+    })
+
     // Calculate checksum of graph
     const hash = md5(JSON.stringify(spellUpdate.graph.nodes))
     app.get('logger').trace('Saving spell diff: %o', { name, diff })
 
     // Update spell data
-    return await app
+    const update = await app
       .service('spells')
       .update(spell.id, { ...spellUpdate, hash })
+
+    console.log('UPDATE', update)
+    return update
   }
 }
 

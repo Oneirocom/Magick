@@ -138,7 +138,7 @@ export const Composer = ({ tab, theme, spellId }) => {
   const spellRef = useRef<SpellInterface>()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, publish, subscribe } = usePubSub()
-  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
+  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByReleaseIdQuery()
   const { editor, serialize } = useEditor()
   const preferences = useSelector((state: RootState) => state.preferences)
 
@@ -173,6 +173,7 @@ export const Composer = ({ tab, theme, spellId }) => {
         ...spellRef.current,
         graph: editor.toJSON(),
       }
+      console.log('THIS IS THE SPELL', spell)
       publish(events.$SUBSPELL_UPDATED(spellRef.current.id), spell)
     })
 
@@ -183,19 +184,21 @@ export const Composer = ({ tab, theme, spellId }) => {
 
   useEffect(() => {
     if (!spellData) return
+    console.log('SPELLData', spellData)
     spellRef.current = spellData.data[0]
   }, [spellData])
 
   useEffect(() => {
     // If there is no tab, or we already have a spell, return early
-    if (!tab || !tab.name || spellRef.current) return
+    if (!tab || !tab.name) return
 
     loadSpell({
       spellName: tab.name,
-      projectId: config.projectId,
-      id: spellId,
+      // projectId: config.projectId,
+      // id: spellId,
+      spellReleaseId: currentSpellReleaseId || 'null'
     })
-  }, [tab])
+  }, [tab, currentSpellReleaseId, spellId])
 
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;

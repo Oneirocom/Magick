@@ -21,7 +21,8 @@ import { zoomAt } from '../plugins/areaPlugin/zoom-at'
 import { useMagickInterface } from './MagickInterfaceProvider'
 import styles from './styles.module.scss'
 import { EngineComponent } from 'shared/rete'
-import { spellApi } from 'client/state'
+import { RootState, spellApi } from 'client/state'
+import { useSelector } from 'react-redux'
 
 /**
  * MagickTab type definition.
@@ -185,21 +186,25 @@ const EditorProvider = ({ children }) => {
  */
 const RawEditor = ({ tab, children, spellId }) => {
   const config = useConfig()
+  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
+    state => state.globalConfig
+  )
 
   const [getSpell, { data: spell, isLoading }] =
-    spellApi.useLazyGetSpellByIdQuery()
+    spellApi.useLazyGetSpellByReleaseIdQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   const reteInterface = useMagickInterface() as EditorContext
 
   useEffect(() => {
-    if (!tab || loaded) return
+    if (!tab) return
     getSpell({
       spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
+      // id: spellId,
+      // projectId: config.projectId,
+      spellReleaseId: currentSpellReleaseId || null,
     })
-  }, [tab])
+  }, [tab, currentSpellReleaseId, spellId])
 
   if (isLoading) return <LoadingScreen />
 

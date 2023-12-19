@@ -11,9 +11,11 @@ import { diff } from '../../utils/json0'
 import { useConfig, useFeathers } from '@magickml/providers'
 import {
   useLazyGetSpellByIdQuery,
+  useLazyGetSpellByReleaseIdQuery,
   useSaveSpellMutation,
   RootState,
   setSyncing,
+  useLazyGetSpellsByReleaseIdQuery,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -35,12 +37,12 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   )
 
   const [saveSpellMutation] = useSaveSpellMutation()
+  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
+    state => state.globalConfig
+  )
+
   // TODO: is this a bug?
-  const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
-    spellName: tab.name.split('--')[0],
-    id: spellId,
-    projectId: config.projectId,
-  } as any)
+  const [getSpell, { data: spell }] = useLazyGetSpellByReleaseIdQuery()
   // Spell ref because callbacks can't hold values from state without them
   const spellRef = useRef<SpellInterface | null>(null)
 
@@ -48,18 +50,31 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const client = FeathersContext.client
 
   useEffect(() => {
+    console.log('EVENT HANDLER', {
+      spellName: tab.name,
+      // id: spellId,
+      // projectId: config.projectId,
+      currentSpellReleaseId
+    })
     getSpell({
       spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
+      // id: spellId,
+      // projectId: config.projectId,
+      spellReleaseId: currentSpellReleaseId || "null"
     })
-  }, [config.projectId, getSpell, spellId, tab.name])
+  }, [config.projectId, getSpell, spellId, tab.name, currentSpellReleaseId])
 
   useEffect(() => {
     if (!spell) return
     const oldSpell = JSON.stringify(spellRef.current)
     const newSpell = JSON.stringify(spell?.data[0])
     if (oldSpell === newSpell) return
+
+    console.log({
+      oldSpell,
+      newSpell,
+      spell: spell?.data[0]
+    })
 
     spellRef.current = spell?.data[0]
   }, [spell])
@@ -109,9 +124,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       ...currentSpell,
       graph,
       hash: md5(JSON.stringify(graph)),
+      // Ensure we're updating the draft spell
+      spellReleaseId: 'null'
     }
 
-    if (!updatedSpell.type) updatedSpell.type = type
+    console.log('Saving spell', updatedSpell)
 
     const response = await saveSpellMutation({
       spell: updatedSpell,
@@ -129,8 +146,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     enqueueSnackbar('Spell saved', {
       variant: 'success',
     })
-
-    // onProcess()
   }
 
   /**
@@ -139,18 +154,18 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * @param {object} update - The updated spell object
    */
   const onSaveDiff = async (event, update) => {
-    // return
     if (!spellRef.current) return
-
     const currentSpell = spellRef.current
     const updatedSpell = {
       ...currentSpell,
       ...update,
     }
+    console.log('onSaveDiff', {
+      currentSpell,
+      updatedSpell,
+    })
 
     const jsonDiff = diff(currentSpell, updatedSpell)
-
-    // no point saving if nothing has changed
     if (jsonDiff.length === 0) {
       console.warn('No changes to save')
       return
@@ -163,18 +178,20 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
 
     try {
+      console.log('Saving diff')
       dispatch(setSyncing(true))
-      // We save the diff. Doing this via feathers but may want to switch to rtk query
+      // Save the diff for the draft spell
       const diffResponse = await client.service('spells').saveDiff({
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
         id: currentSpell.id,
+        // Ensure we're targeting the draft spell
+        spellReleaseId: 'null'
       })
 
       spellRef.current = diffResponse
 
-      // extend the timeout to 500ms to give the user a chance to see the sync icon
       setTimeout(() => {
         dispatch(setSyncing(false))
       }, 1000)
@@ -192,6 +209,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       return
     }
   }
+
 
   /**
    * Trigger the processing of the graph in the editor
