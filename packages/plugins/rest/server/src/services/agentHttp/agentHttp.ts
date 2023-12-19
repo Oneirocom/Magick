@@ -17,7 +17,7 @@ import {
 } from './agentHttp.schema'
 
 // Import types and classes
-import type { Application, HookContext } from 'server/core'
+import type { Application } from 'server/core'
 import { checkPermissions } from 'server/core'
 import { AgentHttpService } from './agentHttp.class'
 
