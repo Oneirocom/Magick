@@ -6,8 +6,8 @@
     "node": "18"
   },
   "scripts": {
-    "dev": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
-    "dev-nocache": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100 --skip-nx-cache",
+    "dev": "poetry run cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
+    "dev-nocache": "poetry run cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100 --skip-nx-cache",
     "cloud": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
     "cloud-nocache": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100 --skip-nx-cache",
     "start": "node scripts/start-server.js",
@@ -178,6 +178,7 @@
     "prism-react-renderer": "2.0.4",
     "pubsub-js": "1.9.4",
     "pyodide": "0.22.0",
+    "pythonia": "^1.1.1",
     "radash": "11.0.0",
     "react": "18.2.0",
     "react-chat-widget": "^3.1.4",
