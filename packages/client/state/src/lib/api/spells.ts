@@ -1,4 +1,5 @@
 // DOCUMENTED
+import { RootState } from '../store'
 import { rootApi } from './api'
 import md5 from 'md5'
 
@@ -35,6 +36,29 @@ export interface SpellData {
   data: any[]
 }
 
+// Reusable function to handle common query logic
+// Reusable function to handle common query logic
+const makeSpellQueryFn =
+  urlConstructor =>
+  async (args, { getState }, extraOptions, baseQuery) => {
+    // Access the spellReleaseId from the globalConfig state
+    const spellReleaseId = (getState() as RootState).globalConfig
+      .currentSpellReleaseId
+
+    // Construct the URL using the provided function
+    const url = urlConstructor(args, spellReleaseId)
+
+    // Make the API request
+    const result = await baseQuery({ url })
+
+    // Handle and return the response
+    if (result.error) {
+      return { error: result.error }
+    } else {
+      return { data: result.data }
+    }
+  }
+
 /**
  * @name spellApi Injects API endpoints used for spell management.
  */
@@ -43,9 +67,9 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for getting spells
     getSpells: builder.query({
       providesTags: ['Spells'],
-      query: () => ({
-        url: `spells`,
-      }),
+      queryFn: makeSpellQueryFn(
+        (_, spellReleaseId) => `spells?spellReleaseId=${spellReleaseId || null}`
+      ),
     }),
     getSpellsByReleaseId: builder.query({
       providesTags: ['Spells'],
@@ -56,32 +80,26 @@ export const spellApi = rootApi.injectEndpoints({
     // Api endpoint for getting a spell by name
     getSpell: builder.query({
       providesTags: ['Spell'],
-      query: ({ spellName }) => {
-        return {
-          url: `spells?name=${spellName}`,
-          params: {},
-        }
-      },
+      queryFn: makeSpellQueryFn(
+        ({ spellName }, spellReleaseId) =>
+          `spells?name=${spellName}&spellReleaseId=${spellReleaseId || null}`
+      ),
     }),
     // Api endpoint for getting a spell by name and ID
     getSpellById: builder.query({
       providesTags: ['Spell'],
-      query: ({ spellName, id }) => {
-        return {
-          url: `spells?name=${spellName}&id=${id}`,
-          params: {},
-        }
-      },
+      queryFn: makeSpellQueryFn(
+        ({ spellName, id }, spellReleaseId) =>
+          `spells?name=${spellName}&id=${id}`
+      ),
     }),
     // Api endpoint for getting a spell by ID only
     getSpellByJustId: builder.query({
       providesTags: ['Spell'],
-      query: ({ id }) => {
-        return {
-          url: `spells/${id}`,
-          params: {},
-        }
-      },
+      queryFn: makeSpellQueryFn(
+        ({ id }, spellReleaseId) =>
+          `spells?id=${id}&spellReleaseId=${spellReleaseId || null}`
+      ),
     }),
     // Api endpoint for running a spell
     runSpell: builder.mutation({
