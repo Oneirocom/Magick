@@ -63,12 +63,18 @@ const AgentDetails = ({
   const [spellReleaseList, setSpellReleaseList] = useState<SpellRelease[]>([])
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
+  const [rootSpell, setRootSpell] = useState<SpellInterface | null>(null)
   const [enable] = useState(onLoadEnables)
 
-  const [getSpellById, { data: rootSpell }] = useLazyGetSpellByJustIdQuery({})
+  const [getSpellById, { data: rootSpellResponse }] = useLazyGetSpellByJustIdQuery({})
   const dispatch = useDispatch()
 
   const isDraft = selectedAgentData?.currentSpellReleaseId === null;
+
+  useEffect(() => {
+    if (!rootSpellResponse) return;
+    setRootSpell(rootSpellResponse.data[0]);
+  }, [rootSpellResponse])
 
   useEffect(() => {
     if (!selectedAgentData) return;
@@ -332,7 +338,7 @@ const AgentDetails = ({
                 publicVariables: JSON.stringify(data),
               })
             }}
-            setUpdateNeeded={() => {}}
+            setUpdateNeeded={() => { }}
             publicVars={JSON.parse(selectedAgentData.publicVariables)}
           />
         )}
