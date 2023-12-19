@@ -8,7 +8,7 @@ import {
   stringSocket,
 } from 'shared/core'
 
-export const GPT4_MODELS = ['gpt-4', 'gpt-4-0613']
+export const GPT4_MODELS = ['gpt-4', 'gpt-4-0613', 'gpt-4-1106-preview']
 
 /**
  * An array of PluginSecret objects containing information about API key secrets.
@@ -141,7 +141,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: ['gpt-3.5-turbo', 'gpt-4'],
+    models: ['gpt-3.5-turbo', ...GPT4_MODELS],
   },
 ]
 
