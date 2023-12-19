@@ -9,20 +9,26 @@ const db = knex({
   },
   useNullAsDefault: true,
 })
+
 export type CredentialsPayload = {
   id: string
   projectId: string
   name: string
   serviceType: string
-  credentialType: 'oauth' | 'key'
+  credentialType: 'core' | 'plugin' | 'custom'
+  authType: 'oauth' | 'key' | null
   value: string
-  description: string | null
-  accessToken: string | null
-  refreshToken: string | null
-  expiresIn: Date | null
-  metadata: object | null
-  createdAt: Date
-  updatedAt: Date
+  description?: string
+  accessToken?: string
+  refreshToken?: string
+  expiresIn?: Date | null
+  scope?: string
+  tokenType?: string
+  authUrl?: string
+  tokenUrl?: string
+  metadata?: Record<string, any> | null
+  created_at?: Date
+  updated_at?: Date
 }
 
 class CredentialsManager {
@@ -41,11 +47,12 @@ class CredentialsManager {
     return credential
   }
 
+  // THIS DECRYPTS THE VALUE
   async retrieveCredentials(
     projectId: string,
     id?: string,
     serviceType?: string
-  ): Promise<CredentialsPayload | null> {
+  ): Promise<string | null> {
     try {
       let query = db<CredentialsPayload>('credentials').where({ projectId })
 
@@ -58,13 +65,10 @@ class CredentialsManager {
       }
 
       const result = await query.first()
-      if (!result) return null
-
-      const decryptedValue = decrypt(result.value, CREDENTIALS_ENCRYPTION_KEY)
-
-      return {
-        ...result,
-        value: JSON.parse(decryptedValue),
+      if (!result) {
+        return null
+      } else {
+        return decrypt(result.value, CREDENTIALS_ENCRYPTION_KEY)
       }
     } catch (error) {
       console.error('Error retrieving credentials:', error)
@@ -90,25 +94,26 @@ class CredentialsManager {
     }
   }
 
+  // This is used for the server to respond to client sided fetches
+  // This is not intended to be used for the server to retrieve credentials
+  // It does not return the encrypted value or decrypt it
+  // Agents can use retrieveCredentials() to get what they need
   async listCredentials(
     projectId: string
   ): Promise<Partial<CredentialsPayload>[]> {
-    const credentials = await db<CredentialsPayload>('credentials')
-      .where({
-        projectId,
-      })
+    return await db<CredentialsPayload>('credentials')
+      .where({ projectId: projectId })
       .select(
         'id',
         'projectId',
         'name',
         'serviceType',
         'credentialType',
+        'authType',
         'description',
-        'createdAt',
-        'updatedAt'
+        'created_at',
+        'updated_at'
       )
-
-    return credentials
   }
 }
 
