@@ -60,7 +60,7 @@ const completionProviders: CompletionProvider[] = [
         type: stringSocket,
       },
     ],
-    models: ['chat-bison-001'],
+    models: ['chat-bison-001', 'gemini-pro'],
   },
   {
     type: 'text',
