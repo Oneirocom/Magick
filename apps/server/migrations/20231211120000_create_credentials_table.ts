@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('projectId').notNullable()
     table.string('name').notNullable()
     table.string('serviceType').notNullable()
-    table.enu('credentialType', ['oauth', 'key'])
+    table.enu('credentialType', ['oauth', 'key', 'custom']).notNullable()
     table.text('value').notNullable()
     table.text('description').nullable()
     table.string('accessToken').nullable()
