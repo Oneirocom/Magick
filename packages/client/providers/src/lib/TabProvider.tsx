@@ -1,12 +1,12 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import {
   DockviewApi,
   SerializedDockview,
 } from 'dockview'
 import { useConfig, usePubSub } from '@magickml/providers'
 import { getWorkspaceLayout } from 'client/layouts'
-import { setCurrentTab, useDockviewTheme } from 'client/state'
-import { useDispatch } from 'react-redux'
+import { RootState, setCurrentTab, useDockviewTheme } from 'client/state'
+import { useDispatch, useSelector } from 'react-redux'
 
 export type Tab = {
   id: string
@@ -41,16 +41,28 @@ const Context = createContext<DocviewContext>(undefined!)
 // Helper hook to use Layout context
 export const useTabLayout = () => useContext(Context)
 
+const generateTabLayoutKey = (projectId: string, agentId?: string) => {
+  return `${projectId}/tab-layout/${agentId || 'draft-agent'}`
+}
+
 export const TabProvider = ({ children }) => {
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId: _currentAgentId } = globalConfig
+  const currentAgentRef = useRef(_currentAgentId)
+
   const { theme, setTheme } = useDockviewTheme()
   const { subscribe, events } = usePubSub()
   const config = useConfig()
   const [api, setApi] = useState<DockviewApi | undefined>()
   const dispatch = useDispatch()
 
-  const TAB_LAYOUT_KEY = `${config.projectId}/tab-layout`
+  useEffect(() => {
+    currentAgentRef.current = _currentAgentId
+  }, [_currentAgentId])
 
   const getLayout = () => {
+    const currentAgentId = currentAgentRef.current
+    const TAB_LAYOUT_KEY = generateTabLayoutKey(config.projectId, currentAgentId)
     const layout = localStorage.getItem(TAB_LAYOUT_KEY)
 
     if (!layout) {
@@ -62,8 +74,25 @@ export const TabProvider = ({ children }) => {
   }
 
   const setLayout = (layout: SerializedDockview) => {
+    const currentAgentId = currentAgentRef.current
+    const TAB_LAYOUT_KEY = generateTabLayoutKey(config.projectId, currentAgentId)
+    console.log('SETTING LAYOUT', layout)
     localStorage.setItem(TAB_LAYOUT_KEY, JSON.stringify(layout))
   }
+
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+
+    const layout = getLayout()
+
+    if (layout) {
+      api.fromJSON(layout)
+    } else {
+      api.clear()
+    }
+  }, [_currentAgentId])
 
   useEffect(() => {
     if (!api) {
@@ -142,8 +171,6 @@ export const TabProvider = ({ children }) => {
       ..._tab,
       layoutJson: getWorkspaceLayout(_tab?.workspace),
     }
-
-    console.log('OPENING TAB', tab)
 
     if (isTabOpen(tab.name)) {
       setActiveTab(tab.name)
