@@ -16,6 +16,7 @@ import statusBarReducer from './statusBarState'
 import rootFeathers, { configureFeathersStore } from './feathers/root'
 import { feathersEventMiddleware } from '@magickml/feathersRedux'
 import { tabReducer } from './tabs/tabReducer'
+import { cacheInvalidationMiddleware } from './middleware/spellCacheInvalidationMiddleware'
 
 // import { AppConfig } from '@magickml/client-core'
 
@@ -74,7 +75,8 @@ export const createStore = (config?: any): ExtendedStore => {
         serializableCheck: false,
       })
         .concat(rootApi.middleware)
-        .concat(feathersEventMiddleware),
+        .concat(feathersEventMiddleware)
+        .concat(cacheInvalidationMiddleware),
   }) as ExtendedStore
 
   setupListeners(store.dispatch)
