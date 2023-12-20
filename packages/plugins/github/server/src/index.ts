@@ -1,9 +1,6 @@
-import {
-  eventSocket,
-  ServerPlugin,
-  triggerSocket,
-  getLogger,
-} from 'shared/core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
+
+import { getLogger } from 'server/logger'
 
 import { GithubConnector } from './connectors/github'
 import { getNodes } from '@magickml/plugin-github-shared'

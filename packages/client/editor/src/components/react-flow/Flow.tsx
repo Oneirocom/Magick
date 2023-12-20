@@ -1,44 +1,50 @@
-import { IRegistry } from '@magickml/behave-graph';
 import React from 'react';
-import { Background, BackgroundVariant, ReactFlow } from 'reactflow';
+import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
 
 import CustomControls from './Controls.js';
 import { NodePicker } from './NodePicker.js';
-import { useNodeSpecJson } from '../../hooks/react-flow/useNodeSpecJson.js';
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
-import { useGraphRunner } from '../../hooks/react-flow/useGraphRunner.js';
-import { Tab } from '@magickml/providers';
+import { Tab, usePubSub } from '@magickml/providers';
 
 import './flowOverrides.css'
-import { SpellInterface } from 'shared/core';
+import { SpellInterface } from 'server/schemas';
+import { getNodeSpec } from 'shared/nodeSpec';
+import { useSelector } from 'react-redux';
+import { RootState } from 'client/state';
+import { nodeColor } from '../../utils/nodeColor.js';
 
 type FlowProps = {
   spell: SpellInterface;
-  registry: IRegistry;
   parentRef: React.RefObject<HTMLDivElement>;
   tab: Tab
 };
 
 export const Flow: React.FC<FlowProps> = ({
   spell,
-  registry,
   parentRef,
   tab
 }) => {
-  const specJson = useNodeSpecJson(registry);
+  const specJson = getNodeSpec()
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { projectId, currentAgentId } = globalConfig
+  const { publish, events } = usePubSub()
+
+  const [playing, setPlaying] = React.useState(false);
+  const [miniMapOpen, setMiniMapOpen] = React.useState(false);
+
+  const { SEND_COMMAND } = events
 
   const {
     nodes,
     edges,
     onNodesChange,
     onEdgesChange,
-    graphJson,
     setGraphJson,
     nodeTypes,
     onConnect
   } = useBehaveGraphFlow({
-    initialGraphJson: spell.graph,
+    spell,
     specJson,
     tab
   });
@@ -57,22 +63,41 @@ export const Flow: React.FC<FlowProps> = ({
     onEdgesChange,
     onNodesChange,
     specJSON: specJson,
-    parentRef
+    parentRef,
+    tab
   });
 
-  const { togglePlay, playing } = useGraphRunner({
-    graphJson,
-    registry
-  });
+  const togglePlay = () => {
+    if (playing) {
+      publish(SEND_COMMAND, {
+        projectId,
+        agentId: currentAgentId,
+        command: 'agent:core:pauseSpell',
+        data: {
+          spellId: spell.id
+        }
+      })
+    } else {
+      publish(SEND_COMMAND, {
+        projectId,
+        agentId: currentAgentId,
+        command: 'agent:core:playSpell',
+        data: {
+          spellId: spell.id
+        }
+      })
+    }
+    setPlaying(!playing);
+  };
 
   return (
     <ReactFlow
       nodeTypes={nodeTypes}
       nodes={nodes}
       edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
+      onNodesChange={onNodesChange(tab.id)}
+      onEdgesChange={onEdgesChange(tab.id)}
+      onConnect={onConnect(tab.id)}
       onConnectStart={handleStartConnect}
       onConnectEnd={handleStopConnect}
       fitView
@@ -86,12 +111,17 @@ export const Flow: React.FC<FlowProps> = ({
         togglePlay={togglePlay}
         setBehaviorGraph={setGraphJson}
         specJson={specJson}
+        miniMapOpen={miniMapOpen}
+        toggleMiniMap={() => setMiniMapOpen(!miniMapOpen)}
       />
       <Background
         variant={BackgroundVariant.Lines}
         color="var(--background-color)"
         style={{ backgroundColor: 'var(--deep-background-color)' }}
       />
+      {miniMapOpen &&
+        <MiniMap nodeStrokeWidth={3} maskColor="#69696930" nodeColor={(node) => nodeColor(node, specJson)} pannable zoomable />
+      }
       {nodePickerVisibility && (
         <NodePicker
           position={nodePickerVisibility}

@@ -13,8 +13,7 @@ import RightSidebar from '../layout/rightSidebar'
 import { useDockviewTheme } from 'client/state'
 import ModalProvider from '../contexts/ModalProvider'
 import { StatusBar } from '../components/StatusBar/statusBar';
-import { ReactFlowProvider } from 'reactflow'
-67
+
 const components = {
   MainPanel,
   FileDrawer,
@@ -30,7 +29,7 @@ const components = {
         style={{
           height: '100%',
           padding: '5px',
-          background: 'var(--dv-group-view-background-color)',
+          background: 'var(--background-color)',
         }}
       >
         Status Bar
@@ -112,19 +111,17 @@ const MagickV2 = () => {
   }
 
   return (
-    <ReactFlowProvider>
-      <ModalProvider>
-        <GridviewReact
-          components={components}
-          onReady={onReady}
-          disableAutoResizing={false}
-          proportionalLayout={false}
-          orientation={Orientation.VERTICAL}
-          hideBorders={true}
-          className={`global-layout ${theme}`}
-        />
-      </ModalProvider>
-    </ReactFlowProvider>
+    <ModalProvider>
+      <GridviewReact
+        components={components}
+        onReady={onReady}
+        disableAutoResizing={false}
+        proportionalLayout={false}
+        orientation={Orientation.VERTICAL}
+        hideBorders={true}
+        className={`global-layout ${theme}`}
+      />
+    </ModalProvider>
   )
 }
 

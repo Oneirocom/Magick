@@ -1,6 +1,6 @@
-import { type PubSub } from 'server/core'
 import Agent from './Agent'
 import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 export interface CommandListener<T> {
   callback: (data: T, agent: Agent) => void
@@ -21,14 +21,14 @@ export class CommandHub {
   /**
    * The worker instance.
    */
-  private pubsub: PubSub
+  private pubsub: RedisPubSub
 
   /**
    * Creates a new CommandHub instance.
    * @param agent - The agent instance.
    * @param worker - The worker instance.
    */
-  constructor(agent: Agent, pubsub: PubSub) {
+  constructor(agent: Agent, pubsub: RedisPubSub) {
     this.agent = agent
 
     // Generate queue name
@@ -80,6 +80,7 @@ export class CommandHub {
    * @returns True if the event type is valid, false otherwise.
    */
   private validateEventType(eventType: string): boolean {
+    if (!eventType) return false
     const parts = eventType.split(':')
     return parts.length === 3
   }
@@ -109,6 +110,12 @@ export class CommandHub {
    * @param domain - The domain to register the commands for.
    * @param subdomain - The subdomain to register the commands for.
    * @param commands - An object containing the commands to register.
+   * @example
+   * registerDomain('agent', 'core', {
+   *  toggleLive: async (data: any) => {
+   *   this.spellManager.toggleLive(data)
+   *  },
+   * });
    */
   registerDomain(
     domain: string,

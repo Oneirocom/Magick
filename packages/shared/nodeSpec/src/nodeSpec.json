@@ -1,0 +1,2897 @@
+[
+  {
+    "type": "magick/onMessage",
+    "category": "Event",
+    "label": "On Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "magick/sendMessage",
+    "category": "Action",
+    "label": "Send Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/string/template",
+    "category": "Logic",
+    "label": "Text Template",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions"
+        ]
+      },
+      {
+        "name": "textEditorData",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "textEditorOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "options": {
+            "language": "handlebars",
+            "name": "Text template"
+          }
+        }
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string"
+        ]
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/string",
+    "category": "None",
+    "label": "String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/concat/string",
+    "category": "None",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "b",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/includes/string",
+    "category": "None",
+    "label": "Includes",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "b",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/length/string",
+    "category": "None",
+    "label": "Length",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/equal/string",
+    "category": "None",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "b",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/boolean",
+    "category": "None",
+    "label": "Boolean",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/and/boolean",
+    "category": "None",
+    "label": "∧",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "b",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/or/boolean",
+    "category": "None",
+    "label": "∨",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "b",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/negate/boolean",
+    "category": "None",
+    "label": "¬",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toFloat/boolean",
+    "category": "None",
+    "label": "To Float",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/equal/boolean",
+    "category": "None",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "b",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toInteger/boolean",
+    "category": "None",
+    "label": "To Integer",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/integer",
+    "category": "None",
+    "label": "Integer",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/add/integer",
+    "category": "None",
+    "label": "+",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/subtract/integer",
+    "category": "None",
+    "label": "-",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/negate/integer",
+    "category": "None",
+    "label": "-",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/multiply/integer",
+    "category": "None",
+    "label": "×",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/divide/integer",
+    "category": "None",
+    "label": "÷",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/modulus/integer",
+    "category": "None",
+    "label": "MOD",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toFloat/integer",
+    "category": "None",
+    "label": "To Float",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/min/integer",
+    "category": "None",
+    "label": "MIN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/max/integer",
+    "category": "None",
+    "label": "MAX",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/clamp/integer",
+    "category": "None",
+    "label": "CLAMP",
+    "inputs": [
+      {
+        "name": "value",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "min",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "max",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/abs/integer",
+    "category": "None",
+    "label": "ABS",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/sign/integer",
+    "category": "None",
+    "label": "SIGN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/equal/integer",
+    "category": "None",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/greaterThan/integer",
+    "category": "None",
+    "label": ">",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/greaterThanOrEqual/integer",
+    "category": "None",
+    "label": "≥",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/lessThan/integer",
+    "category": "None",
+    "label": "<",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/lessThanOrEqual/integer",
+    "category": "None",
+    "label": "≤",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toBoolean/integer",
+    "category": "None",
+    "label": "To Boolean",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/float",
+    "category": "None",
+    "label": "Float",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/add/float",
+    "category": "None",
+    "label": "+",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/subtract/float",
+    "category": "None",
+    "label": "-",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/negate/float",
+    "category": "None",
+    "label": "-",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/multiply/float",
+    "category": "None",
+    "label": "×",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/divide/float",
+    "category": "None",
+    "label": "÷",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/modulus/float",
+    "category": "None",
+    "label": "MOD",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/pow/float",
+    "category": "None",
+    "label": "POW",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/sqrt/float",
+    "category": "None",
+    "label": "√",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/e/float",
+    "category": "None",
+    "label": "𝑒",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/exp/float",
+    "category": "None",
+    "label": "EXP",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/ln/float",
+    "category": "None",
+    "label": "LN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/log2/float",
+    "category": "None",
+    "label": "LOG2",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/log10/float",
+    "category": "None",
+    "label": "LOG10",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/pi/float",
+    "category": "None",
+    "label": "π",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/sin/float",
+    "category": "None",
+    "label": "SIN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/asin/float",
+    "category": "None",
+    "label": "ASIN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/cos/float",
+    "category": "None",
+    "label": "COS",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/acos/float",
+    "category": "None",
+    "label": "ACOS",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/tan/float",
+    "category": "None",
+    "label": "TAN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/radiansToDegrees/float",
+    "category": "None",
+    "label": "To Degrees",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/degreesToRadians/float",
+    "category": "None",
+    "label": "To Radians",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/atan/float",
+    "category": "None",
+    "label": "ATAN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/mix/float",
+    "category": "None",
+    "label": "MIX",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "c",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toFloat/float",
+    "category": "None",
+    "label": "To Float",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/min/float",
+    "category": "None",
+    "label": "MIN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/max/float",
+    "category": "None",
+    "label": "MAX",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/clamp/float",
+    "category": "None",
+    "label": "CLAMP",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "c",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/abs/float",
+    "category": "None",
+    "label": "ABS",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/sign/float",
+    "category": "None",
+    "label": "SIGN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/floor/float",
+    "category": "None",
+    "label": "FLOOR",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/ceil/float",
+    "category": "None",
+    "label": "CEIL",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/round/float",
+    "category": "None",
+    "label": "ROUND",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/trunc/float",
+    "category": "None",
+    "label": "TRUNC",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/random/float",
+    "category": "None",
+    "label": "RANDOM",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/equal/float",
+    "category": "None",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/equalTolerance/float",
+    "category": "None",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "c",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/greaterThan/float",
+    "category": "None",
+    "label": ">",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/greaterThanOrEqual/float",
+    "category": "None",
+    "label": "≥",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/lessThan/float",
+    "category": "None",
+    "label": "<",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/lessThanOrEqual/float",
+    "category": "None",
+    "label": "≤",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "b",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/isNaN/float",
+    "category": "None",
+    "label": "isNaN",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/isInf/float",
+    "category": "None",
+    "label": "isInf",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "customEvent/onTriggered",
+    "category": "Event",
+    "label": "On Triggered",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "customEventId",
+        "valueType": "string",
+        "defaultValue": "-1"
+      }
+    ]
+  },
+  {
+    "type": "customEvent/trigger",
+    "category": "Action",
+    "label": "Trigger",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "customEventId",
+        "valueType": "string",
+        "defaultValue": "-1"
+      }
+    ]
+  },
+  {
+    "type": "variable/get",
+    "category": "Query",
+    "label": "Get",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "value",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "variableId",
+        "valueType": "number"
+      }
+    ]
+  },
+  {
+    "type": "variable/set",
+    "category": "Action",
+    "label": "Set",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "value",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "variableId",
+        "valueType": "number"
+      }
+    ]
+  },
+  {
+    "type": "math/easing",
+    "category": "Logic",
+    "label": "Easing",
+    "inputs": [
+      {
+        "name": "easingFunction",
+        "valueType": "string",
+        "defaultValue": "linear"
+      },
+      {
+        "name": "easingMode",
+        "valueType": "string",
+        "defaultValue": "inOut"
+      },
+      {
+        "name": "t",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "t",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "debug/log",
+    "category": "Action",
+    "label": "Debug Log",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "text",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "severity",
+        "valueType": "string",
+        "defaultValue": "info",
+        "choices": [
+          {
+            "text": "verbose",
+            "value": "verbose"
+          },
+          {
+            "text": "info",
+            "value": "info"
+          },
+          {
+            "text": "warning",
+            "value": "warning"
+          },
+          {
+            "text": "error",
+            "value": "error"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "debug/expectTrue",
+    "category": "Action",
+    "label": "Assert Expect True",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "condition",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "lifecycle/onStart",
+    "category": "Event",
+    "label": "On Start",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "lifecycle/onEnd",
+    "category": "Event",
+    "label": "On End",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "lifecycle/onTick",
+    "category": "Event",
+    "label": "On Tick",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "deltaSeconds",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "time/delay",
+    "category": "Time",
+    "label": "Delay",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "duration",
+        "valueType": "float",
+        "defaultValue": 1
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "time/now",
+    "category": "None",
+    "label": "Now",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/branch",
+    "category": "Flow",
+    "label": "Branch",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "condition",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "true",
+        "valueType": "flow"
+      },
+      {
+        "name": "false",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/flipFlop",
+    "category": "Flow",
+    "label": "Flip Flop",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "on",
+        "valueType": "flow"
+      },
+      {
+        "name": "off",
+        "valueType": "flow"
+      },
+      {
+        "name": "isOn",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/forLoop",
+    "category": "Flow",
+    "label": "For Loop",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "startIndex",
+        "valueType": "integer",
+        "defaultValue": 0
+      },
+      {
+        "name": "endIndex",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "loopBody",
+        "valueType": "flow"
+      },
+      {
+        "name": "index",
+        "valueType": "integer"
+      },
+      {
+        "name": "completed",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/sequence",
+    "category": "None",
+    "label": "Sequence",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "numOutputs",
+        "valueType": "number"
+      }
+    ]
+  },
+  {
+    "type": "flow/switch/integer",
+    "category": "None",
+    "label": "Switch on Int",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "selection",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "default",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "numCases",
+        "valueType": "number"
+      }
+    ]
+  },
+  {
+    "type": "flow/switch/string",
+    "category": "None",
+    "label": "Switch on String",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "selection",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "default",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "numCases",
+        "valueType": "number"
+      }
+    ]
+  },
+  {
+    "type": "flow/debounce",
+    "category": "Flow",
+    "label": "Debounce",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "waitDuration",
+        "valueType": "float",
+        "defaultValue": 0
+      },
+      {
+        "name": "cancel",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/throttle",
+    "category": "Flow",
+    "label": "Throttle",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "duration",
+        "valueType": "float",
+        "defaultValue": 1
+      },
+      {
+        "name": "cancel",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/doN",
+    "category": "Flow",
+    "label": "DoN",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "n",
+        "valueType": "integer",
+        "defaultValue": 1
+      },
+      {
+        "name": "reset",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "count",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/doOnce",
+    "category": "Flow",
+    "label": "DoOnce",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reset",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/gate",
+    "category": "Flow",
+    "label": "Gate",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "open",
+        "valueType": "flow"
+      },
+      {
+        "name": "close",
+        "valueType": "flow"
+      },
+      {
+        "name": "toggle",
+        "valueType": "flow"
+      },
+      {
+        "name": "startClosed",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/multiGate",
+    "category": "Flow",
+    "label": "MultiGate",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reset",
+        "valueType": "flow"
+      },
+      {
+        "name": "loop",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "startIndex",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "1",
+        "valueType": "flow"
+      },
+      {
+        "name": "2",
+        "valueType": "flow"
+      },
+      {
+        "name": "3",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/waitAll",
+    "category": "Flow",
+    "label": "WaitAll",
+    "inputs": [
+      {
+        "name": "reset",
+        "valueType": "flow"
+      },
+      {
+        "name": "autoReset",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "numInputs",
+        "valueType": "number",
+        "defaultValue": 3
+      }
+    ]
+  },
+  {
+    "type": "flow/counter",
+    "category": "Flow",
+    "label": "Counter",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reset",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "count",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toBoolean/string",
+    "category": "None",
+    "label": "To Boolean",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/boolean",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toInteger/string",
+    "category": "None",
+    "label": "To Integer",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/integer",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toFloat/string",
+    "category": "None",
+    "label": "To Float",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "float"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/float",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "float",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/assocPath/object",
+    "category": "Logic",
+    "label": "Assoc Path",
+    "inputs": [
+      {
+        "name": "path",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "newValue",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array",
+    "category": "Logic",
+    "label": "Array",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/equal/array",
+    "category": "Logic",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/concat/array/2",
+    "category": "Logic",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/concat/array/3",
+    "category": "Logic",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "c",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/object",
+    "category": "Logic",
+    "label": "Object",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/equal/object",
+    "category": "Logic",
+    "label": "=",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/mergeDeep/object",
+    "category": "Logic",
+    "label": "Merge Deep",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "b",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/path/object",
+    "category": "Logic",
+    "label": "Path",
+    "inputs": [
+      {
+        "name": "pathToSearch",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/path/integer",
+    "category": "Logic",
+    "label": "Path",
+    "inputs": [
+      {
+        "name": "pathToSearch",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/path/string",
+    "category": "Logic",
+    "label": "Path",
+    "inputs": [
+      {
+        "name": "pathToSearch",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "obj",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "debug/log/object",
+    "category": "Action",
+    "label": "Log",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "text",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "severity",
+        "valueType": "string",
+        "defaultValue": "info"
+      },
+      {
+        "name": "payload",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "debug/log/array",
+    "category": "Action",
+    "label": "Log",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "text",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "severity",
+        "valueType": "string",
+        "defaultValue": "info"
+      },
+      {
+        "name": "payload",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/validate/object",
+    "category": "Logic",
+    "label": "Validate",
+    "inputs": [
+      {
+        "name": "schema",
+        "valueType": "object",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "data",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      },
+      {
+        "name": "errors",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toObject/string",
+    "category": "None",
+    "label": "To Object",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/object",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toArray/string",
+    "category": "None",
+    "label": "To Array",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "math/toString/array",
+    "category": "None",
+    "label": "To String",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  }
+]

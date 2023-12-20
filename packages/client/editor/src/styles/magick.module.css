@@ -50,7 +50,7 @@
   background-color: var(--background-color);
   color: rgba(150, 150, 150, 0.95);
   flex: 1;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'mono';
   overflow-y: hidden;
   display: flex;
   white-space: pre-line;
@@ -137,7 +137,7 @@
 }
 
 .node-bottom-container {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   padding: var(--extraSmall);
   display: flex;
   flex-direction: row;
@@ -169,7 +169,7 @@
   padding: var(--c1);
   border-radius: 4px;
   color: white;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'mono';
   white-space: pre-line;
   flex: 1;
   font-size: 14px;
@@ -187,7 +187,7 @@
   padding: var(--c1);
   border-radius: 4px;
   color: white;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'mono';
   white-space: pre-line;
   flex: 1;
   font-size: 14px;

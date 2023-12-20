@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
 
 @font-face {
-  font-family: 'BerkeleyMono-Regular';
-  src: url(https://lglrzlrsfxchbqsslvur.supabase.co/storage/v1/object/public/assets/BerkeleyMono-Regular.otf);
+  font-family: 'Montserrat Variable';
+  src: url(https://lglrzlrsfxchbqsslvur.supabase.co/storage/v1/object/public/assets/Montserrat Variable.otf);
 }
 
 * {
@@ -22,7 +22,7 @@ form,
 button,
 label,
 .flexlayout__tab_button_content {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+  font-family: 'Montserrat Variable', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif !important;
 }
 

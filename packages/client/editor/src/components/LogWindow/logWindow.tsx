@@ -3,7 +3,7 @@ import format from "date-fns/format"
 import { VariableSizeList } from "react-window";
 import ReactJson from 'react-json-view'
 import AutoSizer from "react-virtualized-auto-sizer";
-import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state";
+import { useSelectAgentsLog } from "client/state";
 
 export type Log = {
   type: string;
@@ -83,7 +83,7 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
     return () => resizeObserver.disconnect();
   }, [isRefAvailable]);
 
-  const textColor = log.messageType === 'error' ? 'text-red-500' : 'text-white';
+  const textColor = log.type === 'error' ? 'text-red-500' : 'text-white';
 
   return (
     <div className="flex flex-col justify-between p-1 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
@@ -132,14 +132,14 @@ const LogContainer = ({ logs, autoscroll }) => {
     listRef.current.resetAfterIndex(index);
   };
 
-  // useEffect(() => {
-  //   if (autoscroll && listRef.current) {
-  //     listRef.current.scrollToItem(logs.length - 1);  // Scroll to the last log
-  //   }
-  // }, [autoscroll, logs]);
+  useEffect(() => {
+    if (autoscroll && listRef.current) {
+      listRef.current.scrollToItem(logs.length - 1);  // Scroll to the last log
+    }
+  }, [autoscroll, logs]);
 
   return (
-    <div className="flex-grow border rounded border-[#262730] [background-color:var(--deep-background-color)]">
+    <div className="flex-grow border justify-between rounded border-[#262730] [background-color:var(--deep-background-color)]">
       <AutoSizer>
         {({ height, width }) => (
           <VariableSizeList
@@ -164,49 +164,51 @@ const LogContainer = ({ logs, autoscroll }) => {
   );
 };
 
-const LogFooter = ({ autoscroll, setAutoscroll }) => {
-  return (<div className="flex items-center mt-4 p-3 rounded border border-[#262730]">
-    <input
-      id="default-checkbox"
-      type="checkbox"
-      value=""
-      checked={autoscroll}
-      onChange={() => setAutoscroll(prev => !prev)}
-      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-    />
-    <label
-      htmlFor="default-checkbox"
-      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-    >
-      Autoscroll with output
-    </label>
+const LogFooter = ({ autoscroll, setAutoscroll, onClear }) => {
+  return (<div className="flex items-center justify-between mt-4 p-3 rounded border border-[#262730]">
+    <div>
+      <input
+        id="default-checkbox"
+        type="checkbox"
+        value=""
+        checked={autoscroll}
+        onChange={() => setAutoscroll(prev => !prev)}
+        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+      />
+      <label
+        htmlFor="default-checkbox"
+        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+      >
+        Autoscroll with output
+      </label>
+
+    </div>
+    <button className="flex" onClick={onClear}>Clear</button>
   </div>)
 }
 
 
 const LogsComponent = () => {
-  const { data: LogData } = useSelectAgentsLog()
-  const { data: spellData } = useSelectAgentsSpell()
-  const [combinedData, setCombinedData] = useState([]);
+  const { lastItem: lastLog } = useSelectAgentsLog()
+  // const { data: spellData } = useSelectAgentsSpell()
+  // const [combinedData, setCombinedData] = useState([]);
   const [autoscroll, setAutoscroll] = useState(true);
   const [showSpellLogs, setShowSpellLogs] = useState(true);
   const [showLogLogs, setShowLogLogs] = useState(true);
+  const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    if (!spellData || !LogData) return;
+    setLogs(prev => [...prev, lastLog]);
+  }, [lastLog]);
 
-    const merged = [...LogData, ...spellData].sort((a, b) => {
-      const dateA = new Date(a.timestamp);
-      const dateB = new Date(b.timestamp);
-
-      return dateA.getTime() - dateB.getTime();
-    });
-
-    setCombinedData(merged);
-  }, [spellData, LogData]);
+  const onClear = () => {
+    setLogs([]);
+  }
 
   const filterLogs = (logs) => {
+    if (logs.length === 0) return [];
     return logs.filter(log => {
+      if (!log) return false;
       if (log.messageType === 'spell' && showSpellLogs) return true;
       if (log.messageType === 'log' && showLogLogs) return true;
       return false;
@@ -217,8 +219,8 @@ const LogsComponent = () => {
     <div className="flex flex-col h-full p-4 text-white">
       {/* Clean up the props to this header */}
       <LogHeader showLogLogs={showLogLogs} showSpellLogs={showSpellLogs} setShowSpellLogs={setShowSpellLogs} setShowLogLogs={setShowLogLogs} />
-      <LogContainer logs={filterLogs(combinedData)} autoscroll={autoscroll} />
-      <LogFooter autoscroll={autoscroll} setAutoscroll={setAutoscroll} />
+      <LogContainer logs={filterLogs(logs)} autoscroll={autoscroll} />
+      <LogFooter autoscroll={autoscroll} setAutoscroll={setAutoscroll} onClear={onClear} />
     </div>
   );
 };

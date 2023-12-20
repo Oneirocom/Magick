@@ -12,31 +12,16 @@
   --slate-30: #69696930;
   --slate-15: #69696915;
   --neutral-light: #ffffff;
-  --gradient-1: linear-gradient(
-    -141deg,
-    rgb(13, 21, 51) 60%,
-    rgba(0, 11, 214, 0.178)
-  );
-  --gradient-2: linear-gradient(
-    0deg,
-    rgb(13, 21, 51) 20%,
-    rgba(0, 11, 214, 0.25)
-  );
   --gradient-3: linear-gradient(0deg, #1459fa, #7027dd);
   --gradient-4: linear-gradient(310deg, rgb(13, 21, 51), rgba(0, 11, 214, 0.3));
-  --gradient-5: linear-gradient(
-    121deg,
-    rgb(13, 21, 51) 0%,
-    rgba(0, 11, 214, 0.178)
-  );
 
   // Functional Variables
   --primary-color: var(--neutral-light); // Primary color for buttons, etc.
-  --deep-background-color: var(--abyss);
-  --background-color: var(--midnight); // Used for main backgrounds
-  --foreground-color: var(--charcoal); // Primary text color
-  --foreground-color-90: var(--charcoal-90);
-  --foreground-light: var(--charcoal-light);
+  --deep-background-color: #0b0d0e;
+  --background-color: #171b1c; // Used for main backgrounds
+  --foreground-color: #363d42; // Primary text color
+  --foreground-color-90: #262b2ece;
+  --foreground-light: #262b2e;
   --divider: var(--slate); // Divider color
   --sash-highlight: #3b6fd754;
   --active-font-color: var(--neutral-light); // Primary font color
@@ -50,7 +35,7 @@
 
   // fonts
 
-  --font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  --font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
 }
 
 @mixin dockview-theme-core-mixin {
@@ -107,12 +92,12 @@
       .tab.active-tab {
         border-top: 2px solid var(--primary);
         // background-color: var(--background-color) !important;
-        background: var(--gradient-2) !important;
+        background: var(--background-color) !important;
         color: var(--active-font-color) !important;
       }
 
       .tab.inactive-tab {
-        background-color: var(--midnight) !important;
+        background-color: var(--background-color) !important;
         color: var(--inactive-font-color) !important;
         border-bottom: 1px solid var(--deep-background-color) !important;
       }

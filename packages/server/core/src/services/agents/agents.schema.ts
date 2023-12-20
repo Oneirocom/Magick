@@ -11,7 +11,7 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../config/validators'
-import { agentSchema } from 'shared/core'
+import { agentSchema } from 'server/schemas'
 
 /**
  * Agent type

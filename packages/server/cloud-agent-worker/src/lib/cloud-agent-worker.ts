@@ -1,12 +1,9 @@
 import { Worker, Job } from 'bullmq'
 
-import {
-  BullMQWorker,
-  type PubSub,
-  RedisPubSubWrapper,
-  app,
-  BullQueue,
-} from 'server/core'
+import { app } from 'server/core'
+
+import { BullMQWorker, BullQueue } from 'server/communication'
+
 import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -15,6 +12,7 @@ import {
   AGENT_RUN_JOB,
   AGENT_UPDATE_JOB,
 } from 'shared/core'
+import { type RedisPubSub } from 'server/redis-pubsub'
 
 export interface AgentListRecord {
   id: string
@@ -25,7 +23,7 @@ export interface AgentListRecord {
 // get the functionality I want without having to rewrite a bunch of stuff.
 // Agent Managers just managed agents for a single instance of the server anyway
 export class CloudAgentWorker extends AgentManager {
-  pubSub: PubSub
+  pubSub: RedisPubSub
   subscriptions: Record<string, Function> = {}
 
   constructor() {
@@ -92,12 +90,12 @@ export class CloudAgentWorker extends AgentManager {
     const agent = new Agent(
       agentData,
       this,
-      new BullMQWorker(),
-      new RedisPubSubWrapper(),
+      new BullMQWorker(this.app.get('redis')),
+      this.app.get('pubsub'),
       app
     )
 
-    const agentQueue = new BullQueue()
+    const agentQueue = new BullQueue(this.app.get('redis'))
     agentQueue.initialize(AGENT_RUN_JOB(agent.id))
     this.listenForRun(agent.id)
     this.listenForChanges(agentId)

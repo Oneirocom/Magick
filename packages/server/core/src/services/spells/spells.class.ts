@@ -11,7 +11,7 @@ import type { Application } from '../../declarations'
 import type { Paginated, Params } from '@feathersjs/feathers'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { SpellData, SpellPatch, SpellQuery } from './spells.schema'
-import type { SpellInterface } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { app } from '../../app'
 
 /**
@@ -23,6 +23,7 @@ export type SaveDiffData = {
   diff: Record<string, any>
   projectId: string
   spellReleaseId?: string
+  spellId: string
 }
 
 /**
@@ -99,7 +100,7 @@ export class SpellService<
    * Saves the diff of a spell
    */
   async saveDiff(data: SaveDiffData): Promise<SpellInterface> {
-    const { name, diff, projectId, spellReleaseId } = data
+    const { name, diff, projectId, spellReleaseId, spellId } = data
 
     // Modify query to include spellReleaseId
     const query: Record<string, any> = { projectId, name }
@@ -108,8 +109,7 @@ export class SpellService<
     }
 
     // Find spell data
-    const spellData = await app.service('spells').find({ query })
-    const spell = spellData.data[0]
+    const spell = await app.service('spells').get(spellId, {})
 
     if (!spell) {
       throw new NotFound(`No spell with name '${name}' found.`)

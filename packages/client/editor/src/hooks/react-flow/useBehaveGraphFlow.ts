@@ -6,7 +6,7 @@ import { flowToBehave } from '../../utils/transformers/flowToBehave.js'
 import { autoLayout } from '../../utils/autoLayout.js'
 import { hasPositionMetaData } from '../../utils/hasPositionMetaData.js'
 import { useCustomNodeTypes } from './useCustomNodeTypes.js'
-import { Tab } from '@magickml/providers'
+import { Tab, usePubSub } from '@magickml/providers'
 import {
   selectTabEdges,
   selectTabNodes,
@@ -18,27 +18,25 @@ import {
 } from 'client/state'
 import { useSelector } from 'react-redux'
 import { debounce } from 'lodash'
-
-export const fetchBehaviorGraphJson = async (url: string) =>
-  // @eslint-ignore
-  (await (await fetch(url)).json()) as GraphJSON
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Hook that returns the nodes and edges for react-flow, and the graphJson for the behave-graph.
  * If nodes or edges are changes, the graph json is updated automatically.
  * The graph json can be set manually, in which case the nodes and edges are updated to match the graph json.
- * @param param0
+ * The graph json is also updated when the specJson changes.
  * @returns
  */
 export const useBehaveGraphFlow = ({
-  initialGraphJson,
+  spell,
   specJson,
   tab,
 }: {
-  initialGraphJson: GraphJSON
+  spell: SpellInterface
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
+  const { events, publish } = usePubSub()
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
 
@@ -52,16 +50,15 @@ export const useBehaveGraphFlow = ({
     if (hasPositionMetaData(graphJson) === false) {
       autoLayout(nodes, edges)
     }
-
-    setNodes(nodes)
-    setEdges(edges)
+    setNodes(tab.id, nodes)
+    setEdges(tab.id, edges)
     setStoredGraphJson(graphJson)
   }, [])
 
   useEffect(() => {
-    if (!initialGraphJson) return
-    setGraphJson(initialGraphJson)
-  }, [initialGraphJson, setGraphJson])
+    if (!spell) return
+    setGraphJson(spell.graph)
+  }, [spell, setGraphJson])
 
   // Make sure we are only doing this conversion when the graph changes
   // Debounce because changes stream in.
@@ -69,8 +66,9 @@ export const useBehaveGraphFlow = ({
     debounce(specJson => {
       const graphJson = flowToBehave(nodes, edges, specJson)
       setStoredGraphJson(graphJson)
+      publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: graphJson })
     }, 1000),
-    [] // Dependencies array is empty to ensure this function is created once
+    [nodes, edges] // Dependencies array is empty to ensure this function is created once
   )
 
   useEffect(() => {
@@ -85,6 +83,7 @@ export const useBehaveGraphFlow = ({
   }, [debouncedUpdate, nodes, edges, specJson])
 
   const nodeTypes = useCustomNodeTypes({
+    spell,
     specJson,
   })
 

@@ -49,7 +49,7 @@ function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
   return result
 }
 
-const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command']
+const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command', 'event']
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -68,6 +68,7 @@ export const agent = (app: Application) => {
       'command',
       'ping',
       'subscribe',
+      'message',
     ],
     events: AGENT_EVENTS,
   })
@@ -105,7 +106,7 @@ export const agent = (app: Application) => {
       const agentId = channel.split(':')[1]
 
       // parse the type of agent message
-      const messageType = channel.split(':')[2]
+      const messageType = channel.split(':')[3]
 
       // check if message type is an agent event
       if (!AGENT_EVENTS.includes(messageType)) {
@@ -126,7 +127,7 @@ export const agent = (app: Application) => {
         'spell',
       ])
 
-      app.get('logger').trace('AGENT SERVICE: Relaying message %s', channel)
+      // app.get('logger').trace('AGENT SERVICE: Relaying message %s', channel)
 
       // this is where we relay messages up based upon the time.
       // note for every custom type we need to add it to the above

@@ -14,11 +14,13 @@ module.exports = {
     extend: {
       fontFamily: {
         berkeleyMono: [
-          'BerkeleyMono-Regular',
+          'Montserrat Variable',
           'IBM Plex Sans',
           'IBM Plex Mono',
           'sans-serif',
         ],
+        montserrat: ['Montserrat'],
+        montserratAlt: ['var(--font-montserrat-alternates)'],
       },
     },
   },

@@ -1,4 +1,5 @@
 import type { Application } from 'server/core'
+import { SpellInterface } from 'server/schemas'
 import pino from 'pino'
 import io from 'socket.io'
 import { extractNodes, initSharedEngine, MagickEngine } from '../engine'
@@ -9,11 +10,10 @@ import {
   MagickNode,
   MagickSpellInput,
   ModuleComponent,
-  SpellInterface,
 } from '../types'
 import { extractModuleInputKeys } from './graphHelpers'
 import SpellManager from './SpellManager'
-import { getLogger } from '../logger'
+import { getLogger } from 'server/logger'
 import { NodeData } from 'shared/rete'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from 'shared/config'
 import { AGENT_SPELL } from '../communication/agentEventTypes'
@@ -71,6 +71,17 @@ class SpellRunner {
     })
   }
 
+  error(message: string, error: unknown | null = null) {
+    this.busy = false
+    if (!this.agent) return
+
+    this.agent.error(message, {
+      spellId: this.currentSpell.id,
+      projectId: this.currentSpell.projectId,
+      error,
+    })
+  }
+
   emit(_message) {
     // same message emitted from server or agent
     const message = {
@@ -95,7 +106,6 @@ class SpellRunner {
         'SPELLRUNNER: Emitting spell event from agent %o',
         AGENT_SPELL(this.agent.id)
       )
-      this.logger.trace('THIS IS THE AGENT ID', this.agent.id)
       this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
     }
   }
@@ -270,12 +280,6 @@ class SpellRunner {
 
   isBusy() {
     return this.busy
-  }
-  error(message: string, error: unknown | null = null) {
-    this.busy = false
-    this.logger.error(error, message)
-    if (error) throw error
-    throw new Error(message)
   }
 
   /**

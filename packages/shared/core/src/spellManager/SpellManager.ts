@@ -1,9 +1,10 @@
 import { Application } from 'server/core'
 import io from 'socket.io'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
+import { SpellInterface } from 'server/schemas'
 
 import { isEqual } from 'radash'
-import { MagickSpellInput, SpellInterface } from '../types'
+import { MagickSpellInput } from '../types'
 import SpellRunner from './SpellRunner'
 
 type SpellManagerArgs = {
@@ -171,12 +172,7 @@ export default class SpellManager {
       this.logger.debug({ spellId }, `Reloading spell %s`, spellId)
       return this.load(spell)
     } catch (error) {
-      this.logger.error(
-        { spellId },
-        `Error loading spell %s: %o`,
-        spellId,
-        error
-      )
+      this.logger.error(error, `SPELL MANAGER: Error loading spell ${spellId}`)
       return
     }
   }

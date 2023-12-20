@@ -4,6 +4,7 @@
  * @category Utility
  */
 import Rete from 'shared/rete'
+import { SpellInterface } from 'server/schemas'
 
 import { MagickComponent } from '../../engine'
 import { objectSocket, stringSocket, triggerSocket } from '../../sockets'
@@ -13,7 +14,6 @@ import {
   MagickWorkerInputs,
   MagickWorkerOutputs,
   ModuleContext,
-  SpellInterface,
   WorkerData,
 } from '../../types'
 
