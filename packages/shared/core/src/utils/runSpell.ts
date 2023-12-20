@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { SpellManager } from '../spellManager/index'
 import { GraphData } from 'shared/core'
-import { SpellInterface } from 'server/core'
+import { SpellInterface } from 'server/schemas'
 import { SpellError } from './SpellError'
 
 /**

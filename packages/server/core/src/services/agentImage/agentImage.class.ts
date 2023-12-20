@@ -7,7 +7,7 @@ import {
   AWS_BUCKET_ENDPOINT,
 } from 'shared/config'
 
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 
 type AgentImageData = {
   image: string

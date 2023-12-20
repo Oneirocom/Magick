@@ -25,13 +25,12 @@ import { Task, TaskOutputTypes, TaskStore } from './plugins/taskPlugin/task'
 import { SocketType } from './sockets'
 
 import { DataControl } from './plugins/inspectorPlugin'
-import { SpellInterface } from '../../../server/core/src/schemas'
+import { SpellInterface } from 'server/schemas'
 import { SpellManager } from './spellManager'
 import { ExtendedStore } from 'client/state'
 
 export { MagickComponent } from './engine'
 export type { InspectorData } from './plugins/inspectorPlugin/Inspector'
-export * from '../../../server/core/src/schemas'
 
 export type ImageType = {
   id: string
@@ -231,6 +230,7 @@ export type PubSubEvents = {
   RUN_AGENT: string
   SEND_COMMAND: string
   TOGGLE_FILE_DRAWER: string
+  MESSAGE_AGENT: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $RESET_HIGHLIGHTS: (tabId: string) => string

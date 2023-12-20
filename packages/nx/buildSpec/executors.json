@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "buildSpec": {
+      "implementation": "./src/executors/buildSpec/executor",
+      "schema": "./src/executors/buildSpec/schema.json",
+      "description": "Builds the node spec "
+    }
+  }
+}

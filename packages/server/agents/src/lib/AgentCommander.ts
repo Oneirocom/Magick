@@ -1,20 +1,23 @@
 import EventEmitter from 'events'
 import { Agent } from './Agent'
-import { type PubSub, type Job } from 'server/core'
+import { type Job } from 'server/communication'
 import {
   AGENT_RUN_JOB,
   AGENT_RUN_ERROR,
   AGENT_RUN_RESULT,
   AGENT_DELETE,
-  getLogger,
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
+  AGENT_MESSAGE,
 } from 'shared/core'
+import { getLogger } from 'server/logger'
 import type { MagickSpellInput } from 'shared/core'
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { AgentResult, AgentRunJob } from './Agent'
 import { AGENT_RESPONSE_TIMEOUT_MSEC } from 'shared/config'
+import { EventPayload } from 'server/plugin'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 export type RunRootSpellArgs = {
   agent?: Agent
@@ -30,6 +33,7 @@ export type RunRootSpellArgs = {
   subSpellDepth?: number
   sessionId?: string
   isPlaytest?: boolean
+  version?: string
 }
 
 export interface AgentCommandData {
@@ -40,11 +44,11 @@ export interface AgentCommandData {
 }
 
 interface AgentCommanderArgs {
-  pubSub: PubSub
+  pubSub: RedisPubSub
 }
 
 export class AgentCommander extends EventEmitter {
-  pubSub: PubSub
+  pubSub: RedisPubSub
   logger: pino.Logger = getLogger()
 
   constructor({ pubSub }: AgentCommanderArgs) {
@@ -108,6 +112,7 @@ export class AgentCommander extends EventEmitter {
       subSpellDepth,
       sessionId,
       isPlaytest = false,
+      version = 'v1',
     }: RunRootSpellArgs
   ) {
     return JSON.stringify({
@@ -122,6 +127,7 @@ export class AgentCommander extends EventEmitter {
       subSpellDepth,
       sessionId,
       isPlaytest,
+      version,
     })
   }
 
@@ -213,7 +219,19 @@ export class AgentCommander extends EventEmitter {
     return jobId
   }
 
+  message(agentId: string, data: EventPayload) {
+    const eventPayload: EventPayload = {
+      ...data,
+    }
+
+    this.logger.debug(
+      data,
+      `Sending message ${AGENT_MESSAGE(agentId)} to agent ${agentId} `
+    )
+    this.pubSub.publish(AGENT_MESSAGE(agentId), eventPayload)
+  }
+
   async removeAgent(agentId: string) {
-    this.pubSub.emit(AGENT_DELETE, agentId)
+    this.pubSub.publish(AGENT_DELETE, agentId)
   }
 }

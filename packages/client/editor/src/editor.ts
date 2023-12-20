@@ -14,7 +14,6 @@ import {
   RemotePlugin,
   RemotePluginArgs,
   SelectionPlugin,
-  SpellInterface,
   DebuggerPlugin,
 } from 'shared/core'
 import ReactRenderPlugin, {
@@ -41,6 +40,7 @@ import AreaPlugin from './plugins/areaPlugin'
 import AutoArrangePlugin from './plugins/autoArrangePlugin'
 import { initSharedEngine, MagickEngine } from 'shared/core'
 import { createStore } from 'client/state'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Extend MagickEngine with additional properties

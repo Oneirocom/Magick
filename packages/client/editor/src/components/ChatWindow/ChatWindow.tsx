@@ -2,17 +2,19 @@
 import { Button, Select, Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { usePubSub, useConfig } from '@magickml/providers'
 import css from '../../styles/magick.module.css'
 import {
+  RootState,
   addLocalState,
   selectStateBytabId,
   upsertLocalState,
   useAppSelector,
+  useSelectAgentsEvent,
 } from 'client/state'
 
 /**
@@ -149,12 +151,16 @@ type Message = {
 const ChatWindow = ({ tab, spellId }) => {
   const config = useConfig()
 
+  const { lastItem: lastEvent } = useSelectAgentsEvent()
+
   const scrollbars = useRef<any>()
   const [history, setHistory] = useState<Message[]>([])
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
 
-  const { publish, subscribe, events } = usePubSub()
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId } = globalConfig
+  const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -162,11 +168,11 @@ const ChatWindow = ({ tab, spellId }) => {
     return selectStateBytabId(state.localState, tab.id)
   })
 
-  const { $PLAYTEST_PRINT, $RUN_SPELL } = events
+  const { MESSAGE_AGENT } = events
 
   // Print to console callback function.
-  const printToConsole = useCallback(
-    (_, _text) => {
+  const printToConsole =
+    (_text) => {
       // check if _text is a string
       if (typeof _text !== 'string')
         return console.warn('could not split text, not a string', _text)
@@ -177,11 +183,22 @@ const ChatWindow = ({ tab, spellId }) => {
         content: text,
       }
 
-      const newHistory = [...history, newMessage]
-      setHistory(newHistory as [])
-    },
-    [history]
-  )
+      setHistory((prevHistory) => [...prevHistory, newMessage]);
+    }
+
+  // note here that we can do better than this by using things like a sessionId, etc.
+  useEffect(() => {
+    if (!lastEvent) return
+
+    const { data, event } = lastEvent
+    const { content } = data
+
+
+    if (event?.runInfo?.spellId !== spellId) return
+    if (event.channel !== spellId) return
+
+    printToConsole(content)
+  }, [lastEvent])
 
   // Set playtest options based on spell graph nodes with the playtestToggle set to true.
   const [playtestOptions] = useState<Record<
@@ -195,13 +212,6 @@ const ChatWindow = ({ tab, spellId }) => {
     if (!scrollbars.current) return
     scrollbars.current.scrollToBottom()
   }, [history])
-
-  useEffect(() => {
-    const unsubscribe = subscribe($PLAYTEST_PRINT(tab.id), printToConsole)
-
-    // Return a cleanup function.
-    return unsubscribe as () => void
-  }, [subscribe, printToConsole, $PLAYTEST_PRINT, tab.id])
 
   // Sync up localState into data field for persistence.
   useEffect(() => {
@@ -248,8 +258,6 @@ const ChatWindow = ({ tab, spellId }) => {
     }
     const newHistory = [...history, newMessage]
     setHistory(newHistory as [])
-
-    let toSend = value
     setValue('')
 
     const json = localState?.playtestData
@@ -271,39 +279,32 @@ const ChatWindow = ({ tab, spellId }) => {
       return
     }
 
-    const playtestInputName = 'Input - Default'
-
-
-    toSend = {
-      connector: playtestInputName,
+    const eventPayload = {
       content: value,
       sender: 'user',
       observer: 'assistant',
-      agentId: 'preview',
-      client: 'playtest',
-      channel: 'previewChannel',
+      client: 'cloud.magickml.com',
+      channel: spellId,
       projectId: config.projectId,
-      channelType: 'previewChannelType',
+      channelType: 'spell playtest',
       rawData: value,
-      entities: ['user', 'assistant'],
-      ...JSON.parse(json),
+      agentId: currentAgentId
     }
 
-    const data = {
-      spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
-      inputs: {
-        [playtestInputName as string]: toSend,
-      },
-      publicVariables: '{}',
-      secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
-    }
+    // const data = {
+    //   spellName: tab.name,
+    //   id: spellId,
+    //   projectId: config.projectId,
+    //   inputs: {
+    //     [playtestInputName as string]: toSend,
+    //   },
+    //   publicVariables: '{}',
+    //   version: 'v2',
+    //   secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
+    // }
 
     setValue('')
-
-    publish($RUN_SPELL(tab.id), data)
-    publish($RUN_SPELL(tab.id), data)
+    publish(MESSAGE_AGENT, eventPayload)
   }
 
   // Update state when playtest data is changed.

@@ -69,7 +69,7 @@ const getComponents = () => {
           style={{
             height: '100%',
             padding: '20px',
-            background: 'var(--dv-group-view-background-color)',
+            background: 'var(--background-color)',
           }}
         >
           {JSON.stringify(props.params)}

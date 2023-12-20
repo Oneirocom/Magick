@@ -50,7 +50,6 @@ export * from './spellManager'
 export * from './types'
 export * from './utils'
 export * from './plugins/inspectorPlugin'
-export * from './logger'
 
 export * from './cost-calculator'
 export * from './functions'

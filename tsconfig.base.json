@@ -1,5 +1,4 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
     "resolveJsonModule": true,
@@ -27,6 +26,7 @@
     ],
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
+      "@magickml/buildSpec": ["packages/nx/buildSpec/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/feathersRedux": [
@@ -201,6 +201,7 @@
         "packages/client/magickml-chatbox/src/index.ts"
       ],
       "client/state": ["packages/client/state/src/index.ts"],
+      "plugin/core": ["plugins/core/src/index.ts"],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
@@ -209,12 +210,18 @@
       "server/cloud-agent-worker": [
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
+      "server/communication": ["packages/server/communication/src/index.ts"],
       "server/core": ["packages/server/core/src/index.ts"],
       "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
+      "server/grimoire": ["packages/server/grimoire/src/index.ts"],
+      "server/logger": ["packages/server/logger/src/index.ts"],
+      "server/plugin": ["packages/server/plugin/src/index.ts"],
+      "server/pluginManager": ["packages/server/pluginManager/src/index.ts"],
       "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
+      "server/schemas": ["packages/server/schemas/src/index.ts"],
       "shared/config": ["packages/shared/config/src/index.ts"],
       "shared/core": ["packages/shared/core/src/index.ts"],
-      "shared/plugin": ["packages/shared/plugin/src/index.ts"],
+      "shared/nodeSpec": ["packages/shared/nodeSpec/src/index.ts"],
       "shared/rete": ["packages/shared/rete/src/index.ts"],
       "shared/utils": ["packages/shared/utils/src/index.ts"]
     }

@@ -1,7 +1,7 @@
 // DOCUMENTED
 /** @module ProjectWindow */
 
-import { SpellInterface } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { API_ROOT_URL, PRODUCTION } from 'shared/config'
 import {
   Apps,

@@ -4,6 +4,7 @@
  */
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import '@fontsource-variable/montserrat';
 
 import MagickV2 from './screens'
 

@@ -7,18 +7,33 @@ import {
   IDockviewPanelProps,
   positionToDirection,
 } from 'dockview'
-import { useEffect, useState } from 'react'
-import { Tab } from '@magickml/providers';
+import { useEffect, useRef, useState } from 'react'
+import { Tab, useConfig } from '@magickml/providers';
 import { usePubSub } from '@magickml/providers'
 import EventHandler from '../../EventHandler/EventHandler'
-
-import Inspector from '../../InspectorWindow/InspectorWindow'
 
 import Console from '../../DebugConsole'
 import TextEditor from '../../TextEditorWindow'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
+import { useSelector } from 'react-redux';
+import { RootState } from 'client/state';
+
+const generateLayoutKey = (spellid: string, agentId: string, projectId: string,) => {
+  return `${projectId}/composer_layout_${spellid}/${agentId || 'draft-agent'}`
+}
+
+const getLayoutFromLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string) => {
+  const key = generateLayoutKey(spellId, currentAgentId, projectId)
+  const layout = localStorage.getItem(key)
+  return layout ? JSON.parse(layout) : null
+}
+
+const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string, layout: any) => {
+  const key = generateLayoutKey(spellId, currentAgentId, projectId)
+  localStorage.setItem(key, JSON.stringify(layout))
+}
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
   const panel = api.addPanel({
@@ -51,6 +66,7 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
         tab,
         spellId
       },
+
       position: { referencePanel: 'Graph', direction: 'left' },
     })
     .api.setSize({
@@ -109,9 +125,6 @@ const components = {
   Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <ChatWindow {...props.params} />
   },
-  Inspector: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <Inspector {...props.params} />
-  },
   Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <PropertiesWindow {...props.params} />
   },
@@ -127,21 +140,34 @@ const components = {
 
 export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
+  const config = useConfig()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, subscribe } = usePubSub()
+
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId: _currentAgentId } = globalConfig
+  const currentAgentRef = useRef(_currentAgentId)
+
+  useEffect(() => {
+    currentAgentRef.current = _currentAgentId
+  }, [_currentAgentId])
+
+
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
+    const layout = getLayoutFromLocalStorage(spellId, currentAgentRef.current, config.projectId)
 
-    // let success = false;
+    let success = false;
 
-    // if (layout) {
-    //   event.api.fromJSON(layout);
-    //   success = true;
-    // }
+    if (layout) {
+      event.api.fromJSON(layout);
+      success = true;
+    }
 
-    // if (!success) {
-    loadDefaultLayout(event.api, tab, spellId)
-    // }
+    if (!success) {
+      loadDefaultLayout(event.api, tab, spellId)
+    }
+
     setApi(event.api)
   }
 
@@ -158,6 +184,12 @@ export const Composer = ({ tab, theme, spellId }) => {
           spellId
         },
       })
+    })
+
+    api.onDidLayoutChange(() => {
+      const layout = api.toJSON()
+
+      saveLayoutToLocalStorage(spellId, currentAgentRef.current, config.projectId, layout)
     })
 
     return () => {

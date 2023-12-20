@@ -1,11 +1,11 @@
 import { MagickComponent } from '../../engine'
+import { SpellInterface } from 'server/schemas'
 
 import {
   IRunContextEditor,
   MagickEditor,
   MagickNode,
   ModuleContext,
-  SpellInterface,
 } from '../../types'
 import { MagickConsole } from '../consolePlugin/MagickConsole'
 

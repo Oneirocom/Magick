@@ -1,7 +1,8 @@
 // DOCUMENTED
 import type { Application } from 'server/core'
 import { SpellRunner } from '../../src/spellManager'
-import { MagickSpellInput, SpellInterface } from '../../src/types'
+import { MagickSpellInput } from '../../src/types'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Runs a test spell and returns the outputs.

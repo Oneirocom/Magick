@@ -1,6 +1,5 @@
 import { IDockviewPanelProps } from "dockview";
 import { useEffect, useRef, useState } from "react";
-import { useRegistry } from "../../hooks/react-flow/useRegistry";
 import { Flow } from "../react-flow/Flow";
 
 import { Tab, useConfig } from "@magickml/providers";
@@ -39,13 +38,10 @@ const GraphWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) 
     }
   })
 
-  const registry = useRegistry();
-
   if (!spell?.data) return null
 
   return (<div style={{ height, width }} ref={parentRef}>
     <Flow
-      registry={registry}
       parentRef={parentRef}
       tab={props.params.tab}
       spell={spell.data[0]}

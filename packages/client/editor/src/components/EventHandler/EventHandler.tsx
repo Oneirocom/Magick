@@ -1,7 +1,7 @@
 // DOCUMENTED
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { GraphData, SpellInterface } from 'shared/core'
+import { GraphData } from 'shared/core'
 
 import md5 from 'md5'
 
@@ -16,6 +16,7 @@ import {
   setSyncing,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -139,7 +140,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * @param {object} update - The updated spell object
    */
   const onSaveDiff = async (event, update) => {
-    // return
     if (!spellRef.current) return
 
     const currentSpell = spellRef.current
@@ -169,7 +169,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
-        id: currentSpell.id,
+        spellId: currentSpell.id,
       })
 
       spellRef.current = diffResponse

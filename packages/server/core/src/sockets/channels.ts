@@ -95,10 +95,6 @@ export default function (app: Application): void {
     // Lets not relay up all the patch events
     // if (context.method === 'patch' || !agentId) return
 
-    logger.trace(
-      `CHANNELS: Publishing event path ${context.path} to agent %s!`,
-      agentId
-    )
     // Publish all events to the authenticated user channel
     // const projectChannel = app.channel(projectId)
     const agentChannel = app.channel(`agent:${agentId}`)

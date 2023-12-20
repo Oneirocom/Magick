@@ -1,9 +1,8 @@
 import { GridviewReact, IGridviewPanelProps, Orientation } from 'dockview';
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
-import { Tab, createStore, injectReducer, tabReducer, useDockviewTheme } from 'client/state';
+import { Tab, useDockviewTheme } from 'client/state';
 import { usePubSub } from '@magickml/providers';
 import { Composer } from './composer';
-import { useEffect } from 'react';
 
 const DraggableElement = (props) => (
   <p
@@ -29,15 +28,16 @@ const DraggableElement = (props) => (
 );
 
 const composerLayoutComponents = {
-  WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
+  WindowBar: () => {
     return (
       <div>
         <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
           <p style={{ padding: 8, color: 'grey', marginRight: 50 }}>Composer V2</p>
           <DraggableElement window="Console" />
           <DraggableElement window="TextEditor" title="Text Editor" />
-          <DraggableElement window="Inspector" />
+          <DraggableElement window="Properties" />
           <DraggableElement window="Playtest" />
+          <DraggableElement window="Chat" />
         </div>
       </div >
     )
@@ -48,20 +48,8 @@ const composerLayoutComponents = {
 }
 
 const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string }>) => {
-  const { tab } = props.params
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
-
-  // We need to inject the tab reducer into the root reducer here.
-  // This will give us a state namespaces by the tab id.
-  useEffect(() => {
-    if (!tab) return
-
-    const store = createStore()
-
-    injectReducer(store, tab.id, tabReducer)
-
-  }, [tab])
 
   const onReady = (event) => {
     event.api.addPanel({

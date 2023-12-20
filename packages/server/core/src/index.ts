@@ -43,10 +43,6 @@ export * from './servers/tiktalknet'
 
 // Export metering functions
 export * from './metering'
-// tools for intrasystem communication
-export * from './communication'
 
 export * from './lib/feathersPermissions'
 export * from './types'
-
-export * from './schemas'

@@ -1,5 +1,6 @@
 // DOCUMENTED
-import { SpellInterface, SpellError } from 'shared/core'
+import { SpellError } from 'shared/core'
+import { SpellInterface } from 'server/schemas'
 import { app } from '../app'
 import Koa from 'koa'
 import otJson0 from 'ot-json0'

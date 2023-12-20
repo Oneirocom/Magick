@@ -1,10 +1,6 @@
 // DOCUMENTED
-import {
-  eventSocket,
-  getLogger,
-  ServerPlugin,
-  triggerSocket,
-} from 'shared/core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { app } from 'server/core'
 import { LoopHandler } from './loopHandler'
 import { Agent } from 'server/agents'

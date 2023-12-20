@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useConfig } from './ConfigProvider'
 import { feathersClient } from 'client/feathers-client'

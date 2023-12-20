@@ -14,8 +14,9 @@ import {
   WorkerData,
   objectSocket,
   MagickWorkerOutputs,
-  getLogger,
 } from 'shared/core'
+
+import { getLogger } from 'server/logger'
 
 import axios from 'axios'
 

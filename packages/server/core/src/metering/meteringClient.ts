@@ -5,7 +5,7 @@ import {
   OPENMETER_TOKEN,
   OPENMETER_SOURCE,
 } from 'shared/config'
-import { getLogger } from 'shared/core'
+import { getLogger } from 'server/logger'
 import { v4 as uuidv4 } from 'uuid'
 
 /**

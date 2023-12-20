@@ -170,7 +170,7 @@ button {
   padding: 9px 16px;
   padding-left: var(--small);
   padding-right: var(--small);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'sans-serif' !important;
   font-size: 11px;
   text-transform: uppercase;
   box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
@@ -191,7 +191,7 @@ button.primary {
 }
 
 button.list {
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
   padding: 3px;
   padding-left: var(--small);
   padding-right: var(--small);
@@ -225,7 +225,7 @@ button.disabled {
   box-shadow: none;
   pointer-events: none;
   opacity: 0.5;
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
 }
 
 .node.selected button {
@@ -238,7 +238,7 @@ button.disabled {
   border-radius: 0px 0px 4px 4px;
   border: 1px solid #333;
   border-top: 0;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono';
 }
 
 .flexlayout__tabset {
@@ -258,7 +258,7 @@ button.disabled {
 
 .flexlayout__tabset_tabbar_inner_tab_container_top {
   border-top: none;
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
 }
 
 .flexlayout__tabset_tabbar_outer_top {
@@ -267,7 +267,7 @@ button.disabled {
 
 .flexlayout__tabset {
   font-size: 14px;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', 'sans-serif' !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'sans-serif' !important;
 }
 
 .flexlayout__tab {
@@ -275,7 +275,7 @@ button.disabled {
 }
 
 .flexlayout__tab_toolbar {
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
 }
 
 .flexlayout__tab_button {
@@ -305,23 +305,23 @@ button.disabled {
 }
 
 /* .view-line span {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', sans-serif;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', sans-serif;
 } */
 
 input {
   box-sizing: border-box;
-  padding: var(--small);
+  /* padding: var(--small); */
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
   padding-left: var(--small);
   padding-right: var(--small);
   color: #fff;
   border-radius: 4px;
   cursor: default;
-  border: 1px solid var(---rich-blue);
+  border: none;
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
-  font-size: 16px;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
+  font-size: 12px;
 }
 
 input:focus-visible {
@@ -388,7 +388,7 @@ input:focus-visible {
 .form-item-label {
   display: block;
   margin-bottom: 0.5em;
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
 
   color: var(---rich-blue);
 }
@@ -406,13 +406,13 @@ input:focus-visible {
   box-sizing: border-box;
   padding: var(--extraSmall);
   /* not using a var here to optically correct for base + cap of typeface */
-  background-color: var(--midnight);
+  background-color: var(--foreground-light);
   color: #fff;
   border-radius: 4px;
   cursor: default;
   border: 1px solid var(--dark-3);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono', monospace !important;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
   font-size: 11px;
   height: var(--c4);
 }
@@ -553,14 +553,14 @@ input:focus-visible {
 .input-title,
 .output-title,
 div.item {
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Sans', 'IBM Plex Mono',
+  font-family: 'Montserrat Variable', 'IBM Plex Sans', 'IBM Plex Mono',
     sans-serif;
 }
 
 .flexlayout__layout {
-  background-color: var(--midnight) !important;
+  background-color: var(--foreground-light) !important;
   color: var(---rich-blue);
-  font-family: 'BerkeleyMono-Regular', 'IBM Plex Mono';
+  font-family: 'Montserrat Variable', 'IBM Plex Mono';
 }
 
 .MuiInputBase-root input,

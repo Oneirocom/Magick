@@ -157,7 +157,7 @@ export const createFeathersReduxToolkit = () => {
             const actionType = generateActionType(name, event)
             builder.addCase(actionType, (state, action: PayloadAction<any>) => {
               ;(state[event]['data'] as any[]).push(action.payload)
-              ;(state as any).lastItem = action.payload
+              state[event]['lastItem'] = action.payload
             })
           })
         },

@@ -16,6 +16,7 @@ import statusBarReducer from './statusBarState'
 import rootFeathers, { configureFeathersStore } from './feathers/root'
 import { feathersEventMiddleware } from '@magickml/feathersRedux'
 import { tabReducer } from './tabs/tabReducer'
+import { cacheInvalidationMiddleware } from './middleware/spellCacheInvalidationMiddleware'
 
 // import { AppConfig } from '@magickml/client-core'
 
@@ -31,6 +32,7 @@ const initialReducers = {
   preferences: preferencesReducer,
   localState: localStateReducer,
   statusBar: statusBarReducer,
+  graph: tabReducer,
 }
 const rootReducer = combineReducers(initialReducers)
 
@@ -55,6 +57,7 @@ export const createStore = (config?: any): ExtendedStore => {
     version: 1,
     storage,
     blacklist: [
+      'graph',
       spellApi.reducerPath,
       rootFeathers.rootReducerPath,
       'globalConfig',
@@ -72,7 +75,8 @@ export const createStore = (config?: any): ExtendedStore => {
         serializableCheck: false,
       })
         .concat(rootApi.middleware)
-        .concat(feathersEventMiddleware),
+        .concat(feathersEventMiddleware)
+        .concat(cacheInvalidationMiddleware),
   }) as ExtendedStore
 
   setupListeners(store.dispatch)
