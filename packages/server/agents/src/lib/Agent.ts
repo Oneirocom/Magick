@@ -129,7 +129,11 @@ export class Agent implements AgentInterface {
   }
 
   private async initializeSpellbook() {
-    this.logger.debug('Initializing spellbook for agent %s', this.id)
+    this.logger.debug(
+      `Initializing spellbook for agent ${this.id} with version ${
+        this.currentSpellReleaseId || 'draft-agent'
+      }`
+    )
     const spellsData = await this.app.service('spells').find({
       query: {
         projectId: this.projectId,
@@ -138,7 +142,7 @@ export class Agent implements AgentInterface {
       },
     })
     if (!spellsData.data.length) {
-      this.error(`No spells found for agent ${this.id}to load into spellbook.`)
+      this.error(`No spells found for agent ${this.id} to load into spellbook.`)
       return
     }
 

@@ -75,7 +75,6 @@ export function AgentMenu({ data }) {
     }
   }
 
-
   const confirmPublish = async (onConfirm) => {
     toggleMenu()
     closeModal()
@@ -138,6 +137,7 @@ export function AgentMenu({ data }) {
           </ListItemAvatar>
           <ListItemText
             primary={currentAgent ? currentAgent?.name : 'New agent'}
+          // secondary={`Version: ${currentAgent.}`}
           />
           <IconButton
             aria-label="expand"
