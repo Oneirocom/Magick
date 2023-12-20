@@ -58,10 +58,7 @@
       {
         "name": "hiddenProperties",
         "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "textEditorOptions"
-        ]
+        "defaultValue": ["hiddenProperties", "textEditorOptions"]
       },
       {
         "name": "textEditorData",
@@ -81,9 +78,7 @@
       {
         "name": "socketValues",
         "valueType": "array",
-        "defaultValue": [
-          "string"
-        ]
+        "defaultValue": ["string"]
       },
       {
         "name": "socketInputs",
@@ -91,6 +86,84 @@
         "defaultValue": []
       }
     ]
+  },
+  {
+    "type": "magick/generateText",
+    "category": "Action",
+    "label": "Generate Text",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "model",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "messages",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "options",
+        "valueType": "object",
+        "defaultValue": "[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "response",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "magick/streamGenerateText",
+    "category": "Action",
+    "label": "Stream Generate Text",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "model",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "messages",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "options",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "response",
+        "valueType": "string"
+      },
+      {
+        "name": "end",
+        "valueType": "signal"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/string",
