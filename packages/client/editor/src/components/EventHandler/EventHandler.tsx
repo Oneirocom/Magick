@@ -170,7 +170,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         projectId: config.projectId,
         diff: jsonDiff,
         name: currentSpell.name,
-        id: currentSpell.id,
+        spellId: currentSpell.id,
       })
 
       spellRef.current = diffResponse
