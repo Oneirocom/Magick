@@ -1,9 +1,8 @@
 import { GridviewReact, IGridviewPanelProps, Orientation } from 'dockview';
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
-import { Tab, createStore, injectReducer, tabReducer, useDockviewTheme } from 'client/state';
+import { Tab, useDockviewTheme } from 'client/state';
 import { usePubSub } from '@magickml/providers';
 import { Composer } from './composer';
-import { useEffect } from 'react';
 
 const DraggableElement = (props) => (
   <p
@@ -29,7 +28,7 @@ const DraggableElement = (props) => (
 );
 
 const composerLayoutComponents = {
-  WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
+  WindowBar: () => {
     return (
       <div>
         <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
@@ -49,7 +48,6 @@ const composerLayoutComponents = {
 }
 
 const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string }>) => {
-  const { tab } = props.params
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
 

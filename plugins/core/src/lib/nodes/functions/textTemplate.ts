@@ -2,7 +2,6 @@ import Handlebars from 'handlebars'
 import {
   NodeCategory,
   SocketsList,
-  Variable,
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 
@@ -45,7 +44,7 @@ export const textTemplate = makeFunctionNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map((socketInput, index) => {
+      socketArray.map(socketInput => {
         return {
           key: socketInput.name,
           name: socketInput.name,

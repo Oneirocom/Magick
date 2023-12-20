@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux'
 import graphSlice, { GraphState } from './graphSlice'
 
 export const tabReducer = graphSlice

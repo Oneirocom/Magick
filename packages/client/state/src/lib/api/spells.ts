@@ -40,7 +40,7 @@ export interface SpellData {
 // Reusable function to handle common query logic
 const makeSpellQueryFn =
   urlConstructor =>
-  async (args, { getState }, extraOptions, baseQuery) => {
+  async (args, { getState }, _, baseQuery) => {
     // Access the spellReleaseId from the globalConfig state
     const spellReleaseId = (getState() as RootState).globalConfig
       .currentSpellReleaseId
@@ -89,8 +89,7 @@ export const spellApi = rootApi.injectEndpoints({
     getSpellById: builder.query({
       providesTags: ['Spell'],
       queryFn: makeSpellQueryFn(
-        ({ spellName, id }, spellReleaseId) =>
-          `spells?name=${spellName}&id=${id}`
+        ({ spellName, id }) => `spells?name=${spellName}&id=${id}`
       ),
     }),
     // Api endpoint for getting a spell by ID only

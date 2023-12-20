@@ -1,4 +1,6 @@
+// eslint-disable-next-line
 const fs = require('fs')
+// eslint-disable-next-line
 const path = require('path')
 import * as pluginModules from '../../../../../plugins'
 import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
@@ -35,7 +37,7 @@ const loadPlugins = () => {
   const pubSub = new RedisPubSub()
 
   const plugins = []
-  for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
+  for (const [, pluginGetter] of Object.entries(pluginModules)) {
     // Get the actual class from the getter
     const PluginClass = pluginGetter
 
