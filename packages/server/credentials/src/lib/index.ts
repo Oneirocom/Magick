@@ -10,6 +10,12 @@ const db = knex({
   useNullAsDefault: true,
 })
 
+export type PluginCredential = {
+  name: string
+  serviceType: string
+  credentialType: 'core' | 'plugin' | 'custom'
+}
+
 export type CredentialsPayload = {
   id: string
   projectId: string
@@ -29,6 +35,11 @@ export type CredentialsPayload = {
   metadata?: Record<string, any> | null
   created_at?: Date
   updated_at?: Date
+}
+
+type AgentCredentialsPayload = {
+  agentId: string
+  credentialId: string
 }
 
 class CredentialsManager {
@@ -97,7 +108,7 @@ class CredentialsManager {
   // This is used for the server to respond to client sided fetches
   // This is not intended to be used for the server to retrieve credentials
   // It does not return the encrypted value or decrypt it
-  // Agents can use retrieveCredentials() to get what they need
+  // Agents can use retrieveAgentCredentials() to get what they need
   async listCredentials(
     projectId: string
   ): Promise<Partial<CredentialsPayload>[]> {
@@ -114,6 +125,28 @@ class CredentialsManager {
         'created_at',
         'updated_at'
       )
+  }
+
+  async linkCredentialToAgent(payload: AgentCredentialsPayload): Promise<void> {
+    await db('agent_credentials').insert(payload)
+  }
+
+  // THIS DECRYPTS THE VALUE
+  async retrieveAgentCredentials(
+    agentId: string
+  ): Promise<CredentialsPayload[]> {
+    const agentCredentials = await db('agent_credentials')
+      .where({ agentId })
+      .select('credentialId')
+
+    const credentialIds = agentCredentials.map(ac => ac.credentialId)
+
+    return Promise.all(
+      credentialIds.map(async credentialId => {
+        const credential = await this.retrieveCredentials('', credentialId)
+        return credential ? JSON.parse(credential) : null
+      })
+    ).then(credentials => credentials.filter(Boolean) as CredentialsPayload[])
   }
 }
 
