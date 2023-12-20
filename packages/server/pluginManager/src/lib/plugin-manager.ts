@@ -122,7 +122,7 @@ export class PluginManager extends EventEmitter {
    *
    */
   async loadPlugins(): Promise<void> {
-    for (const [pluginName, pluginGetter] of Object.entries(plugins)) {
+    for (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
 
@@ -167,8 +167,8 @@ export class PluginManager extends EventEmitter {
         this.logger.debug(`PLUGIN-MANAGER: loading package ${packageName}`)
 
         try {
+          // eslint-disable-next-line
           const PluginClassPackage = require(packageName)
-          console.log('PACKAGE LOADE')
           // const PluginClassPackage = await import(packageName)
           const pluginInstance = new PluginClassPackage.default(config)
           this.registerPlugin(pluginInstance)

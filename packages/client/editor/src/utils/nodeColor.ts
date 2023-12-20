@@ -11,7 +11,7 @@ export function nodeColor(node, specJson) {
   if (colorName === undefined) {
     colorName = 'red'
   }
-  let [backgroundColor] = colors[colorName]
+  const [backgroundColor] = colors[colorName]
 
   const color = getHexColorFromTailwindClass(backgroundColor)
 

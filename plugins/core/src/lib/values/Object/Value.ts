@@ -12,10 +12,6 @@ import { equals } from 'rambdax'
 //   }
 // );
 
-const isObject = object => {
-  return object != null && typeof object === 'object'
-}
-
 // rewrite object value in new formattaking into account we are manipulating objects
 export const ObjectValue: ValueType = {
   name: 'object',

@@ -2,7 +2,8 @@
   "name": "utils",
   "version": "0.0.1",
   "dependencies": {
-    "@feathersjs/feathers": "5.0.8"
+    "@feathersjs/feathers": "5.0.8",
+    "@magickml/behave-graph": "^0.13.0"
   },
   "main": "./index.js",
   "module": "./index.mjs",

@@ -1,8 +1,4 @@
-import {
-  NodeCategory,
-  makeFunctionNodeDefinition,
-  makeInNOutFunctionDesc,
-} from '@magickml/behave-graph'
+import { NodeCategory, makeInNOutFunctionDesc } from '@magickml/behave-graph'
 import { concat } from 'rambdax'
 
 /**

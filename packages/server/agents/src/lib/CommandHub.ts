@@ -1,4 +1,3 @@
-import { type PubSub } from 'server/communication'
 import Agent from './Agent'
 import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
 import { RedisPubSub } from 'server/redis-pubsub'

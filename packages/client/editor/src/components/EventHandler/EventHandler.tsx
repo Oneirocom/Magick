@@ -17,7 +17,6 @@ import {
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
-import { getStringConversionsForValueType } from '@magickml/behave-graph'
 
 /**
  * Event Handler component for handling various events in the editor
