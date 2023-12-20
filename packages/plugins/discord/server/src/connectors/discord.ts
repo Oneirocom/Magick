@@ -3,12 +3,10 @@ import { getLogger } from 'server/logger'
 import { app } from 'server/core'
 import Discord, {
   Client,
-  AttachmentBuilder,
   EmbedBuilder,
   GatewayIntentBits,
   Partials,
   Message,
-  ChannelType,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
 import {
@@ -261,7 +259,7 @@ export class DiscordConnector {
       connector: 'discord',
       content: message.content,
       sender: message.author.id,
-    });
+    })
 
     const { content } = message
 

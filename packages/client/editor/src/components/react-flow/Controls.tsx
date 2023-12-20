@@ -3,10 +3,7 @@ import {
   faDownload,
   faPause,
   faPlay,
-  faQuestion,
   faSitemap,
-  faTrash,
-  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
@@ -14,7 +11,6 @@ import React from 'react';
 import { ControlButton, Controls } from 'reactflow';
 
 import { ClearModal } from './modals/ClearModal.js';
-import { HelpModal } from './modals/HelpModal.js';
 import { SaveModal } from './modals/SaveModal.js';
 
 export type CustomControlsProps = {
@@ -30,12 +26,9 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
   playing,
   togglePlay,
   specJson,
-  miniMapOpen,
   toggleMiniMap,
 }) => {
-  const [, setLoadModalOpen] = useState(false);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
-  const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [clearModalOpen, setClearModalOpen] = useState(false);
 
   return (

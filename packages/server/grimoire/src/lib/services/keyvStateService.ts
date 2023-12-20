@@ -21,7 +21,8 @@ export class KeyvStateService implements IStateService {
     this.eventStore = graph.getDependency('IEventStore')
   }
 
-  formatKey(nodeId: string, event: EventPayload): string {
+  // eslint-disable-next-line
+  formatKey(nodeId: string, _: EventPayload): string {
     return `${nodeId}:}`
   }
 

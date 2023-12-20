@@ -276,8 +276,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * await spellbook.loadSpells(spells);
    */
   async loadSpells(spells: SpellInterface[]) {
-    this.logger.trace(`Loading spells for agent ${this.agent.id}`)
-    this.logger.trace(`Spells: ${JSON.stringify(spells.map(s => s.id))}`)
+    this.logger.trace(`SPELLBOOK: Loading spells for agent ${this.agent.id}`)
+    this.logger.trace(
+      `SPELLBOOK: Spells: ${JSON.stringify(spells.map(s => s.id))}`
+    )
     await Promise.all(spells.map(spell => this.loadSpell(spell)))
   }
 

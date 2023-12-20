@@ -216,6 +216,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       this.spell.id
     )
 
+    // eslint-disable-next-line
     while (true) {
       // Always loop
       if (this.isRunning || this.executeGraph) {

@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { Agent } from './Agent'
-import { type PubSub, type Job } from 'server/communication'
+import { type Job } from 'server/communication'
 import {
   AGENT_RUN_JOB,
   AGENT_RUN_ERROR,

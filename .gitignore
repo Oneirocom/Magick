@@ -61,3 +61,4 @@ data.json
 docstore.json
 .vercel
 .nx
+**/docs/api

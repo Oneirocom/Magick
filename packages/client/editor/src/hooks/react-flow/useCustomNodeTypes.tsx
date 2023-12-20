@@ -1,7 +1,6 @@
 import { NodeSpecJSON } from '@magickml/behave-graph';
-import React from 'react';
 import { useEffect, useState } from 'react';
-import { NodeTypes, NodeProps } from 'reactflow';
+import { NodeTypes } from 'reactflow';
 
 import { Node } from '../../components/react-flow/Node';
 import { SpellInterface } from 'server/schemas';

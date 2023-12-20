@@ -37,6 +37,7 @@ export class Agent implements AgentInterface {
   id: any
   secrets: any
   publicVariables!: Record<string, string>
+  currentSpellReleaseId: string | null = null
   data!: AgentInterface
   spellManager: SpellManager
   projectId!: string
@@ -118,6 +119,7 @@ export class Agent implements AgentInterface {
    */
   update(data: AgentInterface) {
     this.data = data
+    this.currentSpellReleaseId = data.currentSpellReleaseId || null
     this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
     this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
@@ -127,15 +129,20 @@ export class Agent implements AgentInterface {
   }
 
   private async initializeSpellbook() {
-    this.logger.debug('Initializing spellbook for agent %s', this.id)
+    this.logger.debug(
+      `Initializing spellbook for agent ${this.id} with version ${
+        this.currentSpellReleaseId || 'draft-agent'
+      }`
+    )
     const spellsData = await this.app.service('spells').find({
       query: {
         projectId: this.projectId,
         type: 'behave',
+        spellReleaseId: this.currentSpellReleaseId || 'null',
       },
     })
     if (!spellsData.data.length) {
-      this.error(`No spells found for agent ${this.id}to load into spellbook.`)
+      this.error(`No spells found for agent ${this.id} to load into spellbook.`)
       return
     }
 

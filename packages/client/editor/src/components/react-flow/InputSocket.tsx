@@ -2,12 +2,11 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Connection, Handle, Position, useReactFlow } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
 import { isValidConnection } from '../../utils/isValidConnection.js';
-import { AutoSizeInput } from './AutoSizeInput.js';
 
 export type InputSocketProps = {
   connected: boolean;

@@ -13,8 +13,7 @@ import RightSidebar from '../layout/rightSidebar'
 import { useDockviewTheme } from 'client/state'
 import ModalProvider from '../contexts/ModalProvider'
 import { StatusBar } from '../components/StatusBar/statusBar';
-import { ReactFlowProvider } from 'reactflow'
-67
+
 const components = {
   MainPanel,
   FileDrawer,

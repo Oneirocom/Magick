@@ -23,7 +23,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   if (colorName === undefined) {
     colorName = 'red';
   }
-  let [backgroundColor, textColor] = colors[colorName];
+  const [backgroundColor, textColor] = colors[colorName];
 
   return (
     <div
