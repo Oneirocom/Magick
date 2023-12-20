@@ -27,6 +27,8 @@ function getVarForEnvironment(env: string): string | undefined {
 }
 
 // Define and export constants from environment variables
+export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
+export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
