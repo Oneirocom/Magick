@@ -76,7 +76,6 @@ export const TabProvider = ({ children }) => {
   const setLayout = (layout: SerializedDockview) => {
     const currentAgentId = currentAgentRef.current
     const TAB_LAYOUT_KEY = generateTabLayoutKey(config.projectId, currentAgentId)
-    console.log('SETTING LAYOUT', layout)
     localStorage.setItem(TAB_LAYOUT_KEY, JSON.stringify(layout))
   }
 

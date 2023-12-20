@@ -18,12 +18,6 @@ export const messageEvent = makeEventNodeDefinition({
   typeName: 'magick/onMessage',
   label: 'On Message',
   category: NodeCategory.Event,
-  configuration: {
-    numInputs: {
-      valueType: 'number',
-      defaultValue: 3,
-    },
-  },
   in: {},
   out: {
     flow: 'flow',

@@ -18,13 +18,7 @@
         "valueType": "object"
       }
     ],
-    "configuration": [
-      {
-        "name": "numInputs",
-        "valueType": "number",
-        "defaultValue": 3
-      }
-    ]
+    "configuration": []
   },
   {
     "type": "magick/sendMessage",
