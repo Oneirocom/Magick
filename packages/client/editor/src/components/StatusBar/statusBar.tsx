@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 export const StatusBar = () => {
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
   const { syncing, connected } = useSelector((state: RootState) => state.statusBar)
+  const { currentAgentId } = useSelector((state: RootState) => state.globalConfig)
 
   return (
     <div
@@ -14,6 +15,7 @@ export const StatusBar = () => {
         background: 'var(--foreground-color)',
         borderTop: '1px solid var(--deep-background-color)',
         display: 'flex',
+        gap: 10,
         alignItems: 'center'
       }}
     >
@@ -35,6 +37,12 @@ export const StatusBar = () => {
       />
       <p>
         Current Tab: {currentTab?.title}
+      </p>
+      <p>
+        Current agent: {currentAgentId}
+      </p>
+      <p>
+        Current spell id: {currentTab?.params.spellId as string}
       </p>
     </div>
   )
