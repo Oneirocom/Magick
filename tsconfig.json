@@ -5,8 +5,7 @@
     "paths": {
       "@magickml/ui": ["packages/ui/src/index.ts"],
       "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
-      "@magickml/ui/components": ["packages/ui/src/components"],
-      
+      "@magickml/ui/components": ["packages/ui/src/components"]
     }
   }
 }
