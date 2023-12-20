@@ -1,5 +1,5 @@
 import type { Application, HookContext } from '../../declarations'
-import { CredentialsService, getOptions } from './credentials.class'
+import { CredentialsService } from './credentials.class'
 
 export * from './credentials.class'
 
@@ -9,22 +9,12 @@ export * from './credentials.class'
  */
 export const credentials = (app: Application): void => {
   app.use('credentials', new CredentialsService(app), {
-    methods: ['create', 'remove'],
+    methods: ['create', 'remove', 'find'],
     events: [],
   })
 
   app.service('credentials').hooks({
-    before: {
-      create: [
-        async (context: HookContext) => {
-          context.data = {
-            ...context.data,
-            projectId: context.params.query.projectId,
-          }
-          return context
-        },
-      ],
-    },
+    before: {},
   })
 }
 
