@@ -37,6 +37,7 @@ export class Agent implements AgentInterface {
   id: any
   secrets: any
   publicVariables!: Record<string, string>
+  currentSpellReleaseId: string | null = null
   data!: AgentInterface
   spellManager: SpellManager
   projectId!: string
@@ -118,6 +119,7 @@ export class Agent implements AgentInterface {
    */
   update(data: AgentInterface) {
     this.data = data
+    this.currentSpellReleaseId = data.currentSpellReleaseId
     this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
     this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
@@ -132,6 +134,7 @@ export class Agent implements AgentInterface {
       query: {
         projectId: this.projectId,
         type: 'behave',
+        spellReleaseId: this.currentSpellReleaseId || 'null',
       },
     })
     if (!spellsData.data.length) {
