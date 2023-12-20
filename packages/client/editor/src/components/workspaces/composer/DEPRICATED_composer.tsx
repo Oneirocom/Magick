@@ -28,13 +28,19 @@ import { RootState } from 'client/state'
 import LockIcon from '@mui/icons-material/Lock';
 import TextEditor from '../../_DEPRICATED_/TextEditorWindow'
 
-const getLayoutFromLocalStorage = (spellId: string) => {
-  const layout = localStorage.getItem(`composer_layout_${spellId}`)
+const generateLayoutKey = (spellid: string, agentId: string, projectId: string,) => {
+  return `${projectId}/composer_layout_${spellid}/${agentId || 'draft-agent'}`
+}
+
+const getLayoutFromLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string) => {
+  const key = generateLayoutKey(spellId, currentAgentId, projectId)
+  const layout = localStorage.getItem(key)
   return layout ? JSON.parse(layout) : null
 }
 
-const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
-  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
+const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string, layout: any) => {
+  const key = generateLayoutKey(spellId, currentAgentId, projectId)
+  localStorage.setItem(key, JSON.stringify(layout))
 }
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
@@ -150,6 +156,13 @@ export const Composer = ({ tab, theme, spellId }) => {
   const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
   const { editor, serialize } = useEditor()
   const preferences = useSelector((state: RootState) => state.preferences)
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId: _currentAgentId } = globalConfig
+  const currentAgentRef = useRef(_currentAgentId)
+
+  useEffect(() => {
+    currentAgentRef.current = _currentAgentId
+  }, [_currentAgentId])
 
   const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
     state => state.globalConfig
@@ -208,7 +221,7 @@ export const Composer = ({ tab, theme, spellId }) => {
 
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
-    const layout = getLayoutFromLocalStorage(spellId)
+    const layout = getLayoutFromLocalStorage(spellId, currentAgentRef.current, config.projectId)
 
     let success = false;
 
@@ -221,7 +234,6 @@ export const Composer = ({ tab, theme, spellId }) => {
       loadDefaultLayout(event.api, tab, spellId)
     }
 
-    console.log('READY!!!!!!!!!! Setting api')
     setApi(event.api)
   }
 
@@ -240,11 +252,12 @@ export const Composer = ({ tab, theme, spellId }) => {
       })
     })
 
-    console.log('Setting up layout change listener')
     api.onDidLayoutChange(() => {
       const layout = api.toJSON()
 
-      saveLayoutToLocalStorage(spellId, layout)
+      console.log('SETTING LAYOUT', layout)
+
+      saveLayoutToLocalStorage(spellId, currentAgentRef.current, config.projectId, layout)
     })
 
     return () => {
