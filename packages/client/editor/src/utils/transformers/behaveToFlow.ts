@@ -30,8 +30,6 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
       } as { [key: string]: any },
     }
 
-    console.log('NODE!!!!!!!!!!!!!!', node)
-
     nodes.push(node)
 
     if (nodeJSON.parameters) {
