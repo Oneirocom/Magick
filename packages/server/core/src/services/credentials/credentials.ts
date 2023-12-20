@@ -9,12 +9,21 @@ export * from './credentials.class'
  */
 export const credentials = (app: Application): void => {
   app.use('credentials', new CredentialsService(app), {
-    methods: ['create', 'remove', 'find'],
+    methods: [
+      'create',
+      'remove',
+      'find',
+      'linkCredentialToAgent',
+      'listAgentCredentials',
+      'removeAgentCredential',
+    ],
     events: [],
   })
 
   app.service('credentials').hooks({
     before: {},
+    after: {},
+    error: {},
   })
 }
 
