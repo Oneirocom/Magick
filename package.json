@@ -2,9 +2,6 @@
   "name": "magick",
   "version": "0.1.0",
   "license": "Apache 2.0",
-  "engines": {
-    "node": "18"
-  },
   "scripts": {
     "common-setup": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
     "dev-base": "npm run common-setup && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
@@ -134,7 +131,7 @@
     "diff-match-patch": "1.0.5",
     "discord.js": "^14.13.0",
     "dockview": "^0.0.0-experimental-806ff2a9-20230927",
-    "docusaurus-plugin-typedoc": "0.19.2",
+    "docusaurus-plugin-typedoc": "1.0.0-next.23",
     "dotenv-flow": "3.2.0",
     "downshift": "^8.2.3",
     "emoji-dictionary": "1.0.11",
@@ -232,8 +229,8 @@
     "tslib": "^2.3.0",
     "twitter-api-v2": "1.14.3",
     "typechat": "^0.0.10",
-    "typedoc": "0.24.7",
-    "typedoc-plugin-markdown": "3.15.3",
+    "typedoc": "0.25.4",
+    "typedoc-plugin-markdown": "next",
     "unique-names-generator": "4.7.1",
     "unirest": "0.6.0",
     "uuid": "^9.0.0",

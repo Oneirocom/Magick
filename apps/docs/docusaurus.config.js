@@ -17,12 +17,14 @@ const config = {
 
       // Plugin / TypeDoc options
       {
-        id: 'shared-core',
-        entryPoints: ['./packages/core/shared/src/index.ts'],
-        tsconfig: './packages/core/shared/tsconfig.lib.json',
+        id: 'behave-plugins',
+        entryPoints: ['./plugins/index.ts'],
+        exclude: ["*.test.ts", "**/test"],
+        tsconfig: './tsconfig.base.json',
+        skipErrorChecking: true,
         readme: 'none',
         sidebar: {
-          categoryLabel: 'API Documentation',
+          categoryLabel: 'Plugin Documentation',
           collapsed: false,
           position: 100,
           fullNames: true,
