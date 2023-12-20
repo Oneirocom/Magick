@@ -119,7 +119,7 @@ export class Agent implements AgentInterface {
    */
   update(data: AgentInterface) {
     this.data = data
-    this.currentSpellReleaseId = data.currentSpellReleaseId
+    this.currentSpellReleaseId = data.currentSpellReleaseId || null
     this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
     this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
