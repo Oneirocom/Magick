@@ -2,7 +2,7 @@ import { GridviewReact, IGridviewPanelProps, Orientation } from 'dockview';
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { Tab, useDockviewTheme } from 'client/state';
 import { usePubSub } from '@magickml/providers';
-import { Composer } from './composer';
+import { Composer } from './DEPRICATED_composer';
 
 const DraggableElement = (props) => (
   <p
