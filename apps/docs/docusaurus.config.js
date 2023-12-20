@@ -2,6 +2,9 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 /** @type {import('@docusaurus/types').Config} */
 const config = {
+  markdown: {
+    format: 'detect',
+  },
   title: 'Magick',
   tagline: 'Documentation for Magick.',
   url: 'https://magickml.com',
@@ -17,12 +20,15 @@ const config = {
 
       // Plugin / TypeDoc options
       {
-        id: 'shared-core',
-        entryPoints: ['./packages/core/shared/src/index.ts'],
-        tsconfig: './packages/core/shared/tsconfig.lib.json',
+        id: 'behave-plugins',
+        out: './apps/docs/docs/api',
+        entryPoints: ['./plugins/index.ts', './packages/**/index.ts'],
+        exclude: ["*.test.ts", "**/test"],
+        tsconfig: './tsconfig.base.json',
+        skipErrorChecking: true,
         readme: 'none',
         sidebar: {
-          categoryLabel: 'API Documentation',
+          categoryLabel: 'Plugin Documentation',
           collapsed: false,
           position: 100,
           fullNames: true,
@@ -93,13 +99,12 @@ const config = {
             position: 'right',
             label: 'Developer Guides',
           },
-          // Will add this back when the api plugin is working again
-          // {
-          //   type: 'doc',
-          //   docId: 'api/index',
-          //   position: 'right',
-          //   label: 'API Documentation',
-          // },
+          {
+            type: 'doc',
+            docId: 'api/index',
+            position: 'right',
+            label: 'API Documentation',
+          },
         ],
       },
       footer: {

@@ -1,4 +1,4 @@
-import { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
+import { GraphJSON } from '@magickml/behave-graph'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { Edge, Node } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
@@ -29,8 +29,6 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
         configuration,
       } as { [key: string]: any },
     }
-
-    console.log('NODE!!!!!!!!!!!!!!', node)
 
     nodes.push(node)
 

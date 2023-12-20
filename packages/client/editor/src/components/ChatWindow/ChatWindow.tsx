@@ -2,7 +2,7 @@
 import { Button, Select, Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
@@ -160,7 +160,7 @@ const ChatWindow = ({ tab, spellId }) => {
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
-  const { publish, subscribe, events } = usePubSub()
+  const { publish, events } = usePubSub()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
 
