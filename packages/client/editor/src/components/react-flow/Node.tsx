@@ -10,6 +10,7 @@ import { isHandleConnected } from '../../utils/isHandleConnected.js';
 import { useSelectAgentsSpell } from 'client/state';
 import { SpellInterface } from 'server/schemas';
 import { getConfig } from '../../utils/getNodeConfig.js';
+import { socketsFromNumInputs } from '../../utils/socketsFromNum.js';
 
 type NodeProps = FlowNodeProps & {
   spec: NodeSpecJSON;
@@ -52,9 +53,11 @@ export const Node: React.FC<NodeProps> = ({
   const { configuration: config } = data
 
   const configInputs = config?.socketInputs || []
+  const numInputs = socketsFromNumInputs(config?.numInputs || 0)
+  const numOutputs = socketsFromNumInputs(config?.numOutputs || 0)
   const configOutputs = config?.socketOutputs || []
-  const inputs = [...spec.inputs, ...configInputs]
-  const outputs = [...spec.outputs, ...configOutputs]
+  const inputs = [...spec.inputs, ...configInputs, ...numInputs]
+  const outputs = [...spec.outputs, ...configOutputs, ...numOutputs]
 
   const flowInputs = inputs.filter(input => input.valueType === 'flow')
   const flowOutputs = outputs.filter(output => output.valueType === 'flow')
