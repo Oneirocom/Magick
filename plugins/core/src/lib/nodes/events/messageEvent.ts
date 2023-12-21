@@ -5,6 +5,7 @@ import {
 } from '@magickml/behave-graph'
 import { BaseEmitter, EventPayload, ON_MESSAGE } from 'server/plugin'
 import { CorePluginEvents } from '../../corePlugin'
+import { makeMagickEventNodeDefinition } from 'server/grimoire'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
@@ -14,7 +15,7 @@ const makeInitialState = (): State => ({
   onStartEvent: undefined,
 })
 
-export const messageEvent = makeEventNodeDefinition({
+export const messageEvent = makeMagickEventNodeDefinition({
   typeName: 'magick/onMessage',
   label: 'On Message',
   category: NodeCategory.Event,
