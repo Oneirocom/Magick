@@ -75,13 +75,13 @@ type CompletionResponse = {
   model: string
   usage: {
     prompt_tokens: number
-    completin_tokens: number
+    completion_tokens: number
     total_tokens: number
   }
 }
 
 interface ICoreLLMService {
-  completion: (request: CompletionRequest) => Promise<string>
+  completion: (request: CompletionRequest) => Promise<CompletionResponse>
   streamCompletion: (request: CompletionRequest) => Promise<string>
 }
 
@@ -103,7 +103,7 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
   // Method to handle standard completion
-  async completion(request: CompletionRequest): Promise<string> {
+  async completion(request: CompletionRequest): Promise<CompletionResponse> {
     try {
       const { completions } = await this.liteLLM
       // Construct the request body
@@ -118,7 +118,7 @@ export class CoreLLMService implements ICoreLLMService {
 
       // Process and return the response
       // Note: Adjust the response processing as per the actual API response structure
-      return response.choices.map(choice => choice.message.content).join('\n')
+      return response
     } catch (error) {
       console.error('Error in completion request:', error)
       throw error
