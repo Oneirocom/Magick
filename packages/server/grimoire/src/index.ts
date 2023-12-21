@@ -1,3 +1,4 @@
+export * from './lib/nodes/magickEvent'
 export * from './lib/grimoire'
 export * from './lib/spellCaster'
 export * from './lib/spellbook'
