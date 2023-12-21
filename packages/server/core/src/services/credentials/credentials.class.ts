@@ -45,7 +45,6 @@ export class CredentialsService {
   }
 
   async remove(id: string): Promise<{ id: string }> {
-    console.log('Received ID for removing credentials:', id)
     const deletedId = await this.credentialsManager.deleteCredentials(
       getProjectId({ query: { projectId: id } })
     )
@@ -60,10 +59,7 @@ export class CredentialsService {
   }
 
   // The following are agent scoped
-  async linkCredentialToAgent(
-    data: AgentCredentialsPayload,
-    params?: Params
-  ): Promise<void> {
+  async linkCredentialToAgent(data: AgentCredentialsPayload): Promise<void> {
     const { agentId, credentialId } = data
     await this.credentialsManager.linkCredentialToAgent({
       agentId,
@@ -71,17 +67,17 @@ export class CredentialsService {
     })
   }
 
-  async listAgentCredentials(
-    data: { agentId: string; serviceType?: string },
-    params?: Params
-  ): Promise<AgentCredentialsPayload[]> {
+  async listAgentCredentials(data: {
+    agentId: string
+    serviceType?: string
+  }): Promise<AgentCredentialsPayload[]> {
     return await this.credentialsManager.listAgentCredentials(data.agentId)
   }
 
-  async removeAgentCredential(
-    data: { agentId: string; credentialId: string },
-    params?: Params
-  ): Promise<void> {
+  async removeAgentCredential(data: {
+    agentId: string
+    credentialId: string
+  }): Promise<void> {
     const { agentId, credentialId } = data
     await this.credentialsManager.deleteAgentCredential(agentId, credentialId)
   }
