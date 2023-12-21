@@ -3,9 +3,17 @@ import {
   MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react'
-import { Node, OnConnectStartParams, XYPosition } from 'reactflow'
+import {
+  Node,
+  OnConnectStartParams,
+  XYPosition,
+  useStore,
+  NodeChange,
+  useReactFlow,
+} from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
 import { calculateNewEdge } from '../../utils/calculateNewEdge.js'
@@ -53,7 +61,27 @@ export const useFlowHandlers = ({
   const [nodePickerVisibility, setNodePickerVisibility] = useState<XYPosition>()
   const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
-  const [targetNode, setTargetNode] = useState<Node | undefined>(undefined)
+  const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
+  const rfDomNode = useStore(state => state.domNode)
+  const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
+  const { screenToFlowPosition, getNodes } = useReactFlow()
+
+  useEffect(() => {
+    if (rfDomNode) {
+      const onMouseMove = (event: MouseEvent) => {
+        mousePosRef.current = {
+          x: event.clientX,
+          y: event.clientY,
+        }
+      }
+
+      rfDomNode.addEventListener('mousemove', onMouseMove)
+
+      return () => {
+        rfDomNode.removeEventListener('mousemove', onMouseMove)
+      }
+    }
+  }, [rfDomNode])
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
@@ -108,46 +136,72 @@ export const useFlowHandlers = ({
   )
 
   const handleRemoveNode = () => {
-    onNodesChange(tab.id)([
-      {
-        type: 'remove',
-        id: targetNode?.id,
-      },
-    ])
-    setTargetNode(undefined)
+    if (!targetNodes.length) return
+    const newNodes: NodeChange[] = targetNodes.map(node => {
+      return { id: node.id, type: 'remove' }
+    })
+    onNodesChange(tab.id)(newNodes)
+    setTargetNodes(undefined)
   }
 
   const cloneNode = () => {
-    if (targetNode === undefined) return
-    const newNode = {
-      ...targetNode,
-      id: uuidv4(),
-      position: {
-        x: targetNode.position.x + 10,
-        y: targetNode.position.y + 10,
-      },
-    }
-    onNodesChange(tab.id)([
-      {
-        type: 'add',
-        item: newNode,
-      },
-    ])
-    setTargetNode(undefined)
+    if (!targetNodes.length) return
+    const newNodes: NodeChange[] = targetNodes.map(node => {
+      const id = uuidv4()
+      const x = node.position.x + 10
+      const y = node.position.y + 10
+
+      return { item: { ...node, id, position: { x, y } }, type: 'add' }
+    })
+
+    onNodesChange(tab.id)(newNodes)
+    setTargetNodes(undefined)
   }
+
+  const copy = useCallback(() => {
+    const selectedNodes = getNodes().filter(node => node.selected)
+    if (!selectedNodes.length) return
+    localStorage.setItem('copiedNodes', JSON.stringify(selectedNodes))
+    setTargetNodes(undefined)
+  }, [nodes])
 
   const handleStartConnect = useCallback(
     (e: ReactMouseEvent, params: OnConnectStartParams) => {
       setLastConnectStart(params)
     },
-    []
+    [getNodes]
   )
+
+  const paste = useCallback(() => {
+    const copiedNodes = localStorage.getItem('copiedNodes')
+    if (!copiedNodes) return
+
+    const { x: pasteX, y: pasteY } = screenToFlowPosition({
+      x: mousePosRef.current.x,
+      y: mousePosRef.current.y,
+    })
+
+    const bufferedNodes = JSON.parse(copiedNodes) as Node[]
+    const minX = Math.min(...bufferedNodes.map(node => node.position.x))
+    const minY = Math.min(...bufferedNodes.map(node => node.position.y))
+
+    const newNodes: NodeChange[] = bufferedNodes.map(node => {
+      const id = uuidv4()
+      const x = pasteX + (node.position.x - minX)
+      const y = pasteY + (node.position.y - minY)
+
+      return { item: { ...node, id, position: { x, y } }, type: 'add' }
+    })
+
+    onNodesChange(tab.id)(newNodes)
+    localStorage.removeItem('copiedNodes')
+  }, [screenToFlowPosition, onNodesChange, tab])
 
   const nodeMenuActions = [
     { label: 'Delete', onClick: handleRemoveNode },
     { label: 'Clone', onClick: cloneNode },
-    { label: 'Copy', onClick: () => {} },
-    { label: 'Paste', onClick: () => {} },
+    { label: 'Copy', onClick: copy },
+    { label: 'Paste', onClick: paste },
   ]
 
   const handleStopConnect = useCallback((e: MouseEvent) => {
@@ -172,7 +226,6 @@ export const useFlowHandlers = ({
   const handlePaneClick = useCallback(() => {
     if (blockClose) return
     closeNodePicker()
-    setTargetNode(undefined)
   }, [closeNodePicker])
 
   const handlePaneContextMenu = useCallback(
@@ -197,17 +250,24 @@ export const useFlowHandlers = ({
 
   const handleNodeContextMenu = useCallback(
     (e: ReactMouseEvent, node: Node) => {
+      const selectedNodes = getNodes().filter(node => node.selected)
       e.preventDefault()
       e.stopPropagation()
+
       setNodeMenuVisibility({
         x: e.clientX,
         y: e.clientY,
       })
-      setTargetNode(node)
+
+      setTargetNodes(selectedNodes)
       setOpenNodeMenu(true)
     },
     []
   )
+
+  //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
+  // useHotkeys('meta+c, ctrl+c', copy)
+  // useHotkeys('meta+v, ctrl+v', paste)
 
   return {
     handleStartConnect,
