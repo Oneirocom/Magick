@@ -15,10 +15,14 @@ import EventEmitter from 'events'
  * }
  */
 export abstract class CoreEventsPlugin<
+  PluginEvents extends Record<string, (...args: any[]) => void> = Record<
+    string,
+    (...args: any[]) => void
+  >,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>
-> extends BasePlugin<Payload, Data, Metadata> {
+> extends BasePlugin<PluginEvents, Payload, Data, Metadata> {
   constructor(name: string, connection: Redis, agentId: string) {
     super(name, connection, agentId)
     // Initialize CoreEventPlugin specific stuff if needed

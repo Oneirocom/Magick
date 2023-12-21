@@ -11,6 +11,7 @@ import {
 import { BullMQWorker, BullQueue } from 'server/communication'
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
+import { BaseEmitter } from './baseEmitter'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -155,6 +156,10 @@ export type EventPayload<
  * @property enabled - The enabled state of the plugin.
  */
 export abstract class BasePlugin<
+  PluginEvents extends Record<string, (...args: any[]) => void> = Record<
+    string,
+    (...args: any[]) => void
+  >,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>
@@ -301,6 +306,7 @@ export abstract class BasePlugin<
     const pluginValues = this.getPluginValues()
     const pluginNodes = this.getPluginNodes()
     const pluginDependencies = this.getDependencies(spellCaster)
+    pluginDependencies[this.name] = new BaseEmitter<PluginEvents>()
 
     // Merge the plugin's registry with the existing registry
     const registry = {
