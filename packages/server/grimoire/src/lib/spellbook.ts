@@ -159,8 +159,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private watchSpellUpdateHandler(spell: SpellInterface) {
     if (!this.watchSpells) return
 
-    console.log('Spell saved', spell)
-
     if (this.hasSpellCaster(spell.id)) {
       this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
       this.updateSpell(spell)
@@ -306,6 +304,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       this.logger.debug(`Reloading spell ${spellId}`)
       return this.loadSpell(spell)
     } catch (error) {
+      console.log('Error!', error)
       this.logger.error(
         error,
         `SPELLBOOK: Error loading spell ${spellId} by id`
