@@ -1,8 +1,8 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import {
-  CompletionOptions,
   CoreLLMService,
   Message,
+  CompletionOptions,
 } from '../../services/coreLLMService'
 
 export const generateText = makeFlowNodeDefinition({
@@ -13,11 +13,14 @@ export const generateText = makeFlowNodeDefinition({
     flow: 'flow',
     model: 'string',
     messages: 'array',
-    options: 'object',
+    options: 'object', // Includes the useStreaming flag
   },
   out: {
-    flow: 'flow',
-    response: 'string',
+    response: 'object',
+    completion: 'string',
+    done: 'flow', // Output: signal when the process is finished
+    onStream: 'flow', // Output: signal when a chunk is received (only for streaming)
+    stream: 'string', // Streamed data (only for streaming)
   },
   initialState: undefined,
   triggered: ({ commit, read, write, graph: { getDependency } }) => {
@@ -33,23 +36,32 @@ export const generateText = makeFlowNodeDefinition({
         const messages: Message[] = read('messages') || []
         const options: CompletionOptions = read('options') || {}
 
-        // Call the CoreLLMService's completion method
-        const response = await coreLLMService.completion({
-          model,
-          messages,
-          options,
-        })
+        if (options?.stream) {
+          options.stream = true
+          const stream = await coreLLMService.streamCompletion({
+            model,
+            messages,
+            options,
+          })
 
-        if (!response) {
-          throw new Error('No response from CoreLLMService')
+          for await (const chunk of stream) {
+            write('stream', chunk)
+            commit('onStream') // Commit for each chunk
+          }
+        } else {
+          const response = await coreLLMService.completion({
+            model,
+            messages,
+            options,
+          })
+
+          write('response', response)
         }
 
-        console.log('RESPONSE:', response)
-
-        write('response', response)
-        commit('flow')
+        // Signal end of process
+        commit('done')
       } catch (error) {
-        console.error('Error generating text:', error)
+        console.error('Error in generateText:', error)
         throw error
       }
     }
