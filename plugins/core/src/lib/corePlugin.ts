@@ -1,11 +1,9 @@
+import { CoreLLMService } from './services/coreLLMService'
 import {
   ActionPayload,
   CoreEventsPlugin,
   EventPayload,
-  ON_COMPLETION,
   ON_MESSAGE,
-  ON_STREAM_START,
-  ON_STREAM_END,
 } from 'server/plugin'
 import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
@@ -46,21 +44,6 @@ export class CorePlugin extends CoreEventsPlugin {
       eventName: ON_MESSAGE,
       displayName: 'Message Received',
     })
-
-    this.registerEvent({
-      eventName: ON_COMPLETION,
-      displayName: 'Completion Received',
-    })
-
-    this.registerEvent({
-      eventName: ON_STREAM_START,
-      displayName: 'Streamed Completion Started',
-    })
-
-    this.registerEvent({
-      eventName: ON_STREAM_END,
-      displayName: 'Streamed Completion Ended',
-    })
   }
 
   /**
@@ -72,21 +55,6 @@ export class CorePlugin extends CoreEventsPlugin {
       actionName: 'sendMessage',
       displayName: 'Send Message',
       handler: this.handleSendMessage.bind(this),
-    })
-    this.registerAction({
-      actionName: 'completion',
-      displayName: 'Generate Completion',
-      handler: this.handleCompletion.bind(this), // Bind to a new handler for generateText
-    })
-    this.registerAction({
-      actionName: 'streamStart',
-      displayName: 'Stream Start',
-      handler: this.handleStreamStart.bind(this),
-    })
-    this.registerAction({
-      actionName: 'streamEnd',
-      displayName: 'Stream End',
-      handler: this.handleStreamEnd.bind(this),
     })
   }
 
@@ -100,6 +68,7 @@ export class CorePlugin extends CoreEventsPlugin {
         this.connection,
         this.actionQueueName
       ),
+      coreLLMService: new CoreLLMService(),
     }
   }
 
@@ -117,21 +86,6 @@ export class CorePlugin extends CoreEventsPlugin {
   initializeFunctionalities() {
     this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
     this.client.onMessage(this.handleOnMessage.bind(this))
-  }
-
-  handleStreamStart(payload: EventPayload) {
-    const event = this.formatMessageEvent(ON_STREAM_START, payload)
-    this.emitEvent(ON_STREAM_START, event)
-  }
-
-  handleStreamEnd(payload: EventPayload) {
-    const event = this.formatMessageEvent(ON_STREAM_END, payload)
-    this.emitEvent(ON_STREAM_END, event)
-  }
-
-  handleCompletion(payload: EventPayload) {
-    const event = this.formatMessageEvent(ON_COMPLETION, payload)
-    this.emitEvent(ON_COMPLETION, event)
   }
 
   handleOnMessage(payload: EventPayload) {
