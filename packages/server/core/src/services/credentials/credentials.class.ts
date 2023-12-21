@@ -44,18 +44,14 @@ export class CredentialsService {
     return { id: newCredentialId }
   }
 
-  async remove(id: string): Promise<{ id: string }> {
-    const deletedId = await this.credentialsManager.deleteCredentials(
-      getProjectId({ query: { projectId: id } })
+  async remove(id: string, params: Params): Promise<any> {
+    return await this.credentialsManager.deleteCredentials(
+      params?.query?.credentialId as string
     )
-    return { id: deletedId }
   }
 
   async find(params: any): Promise<Partial<CredentialsPayload>[]> {
-    const x = await this.credentialsManager.listCredentials(
-      getProjectId(params)
-    )
-    return x
+    return await this.credentialsManager.listCredentials(getProjectId(params))
   }
 
   // The following are agent scoped
