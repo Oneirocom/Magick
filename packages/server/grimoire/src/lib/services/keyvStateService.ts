@@ -30,7 +30,7 @@ export class KeyvStateService implements IStateService {
     this.eventStore?.setEvent(event)
   }
 
-  getState(nodeId: string): any {
+  async getState(nodeId: string): Promise<any> {
     // check first if the key is in the local store
     if (this.stateStore[nodeId]) {
       return this.stateStore[nodeId]
@@ -42,14 +42,14 @@ export class KeyvStateService implements IStateService {
       if (event) {
         // const key = `${nodeId}:${event.channel}:${event.sender}`
         const key = `${nodeId}`
-        return this.keyv.get(key) || null
+        return (await this.keyv.get(key)) || null
       }
     }
 
-    return this.keyv.get(nodeId) || null
+    return (await this.keyv.get(nodeId)) || null
   }
 
-  setState(nodeId: string, newState: any): void {
+  async setState(nodeId: string, newState: any): Promise<void> {
     // check if newState is a function
     // if it is, store it as a function in the local state store
     if (typeof newState === 'function') {
@@ -63,11 +63,11 @@ export class KeyvStateService implements IStateService {
       if (event) {
         // const key = `${nodeId}:${event.channel}:${event.sender}`
         const key = `${nodeId}`
-        this.keyv.set(key, newState)
+        await this.keyv.set(key, newState)
         return
       }
     }
 
-    this.keyv.set(nodeId, newState)
+    await this.keyv.set(nodeId, newState)
   }
 }
