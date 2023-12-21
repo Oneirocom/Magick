@@ -6,7 +6,6 @@ import {
 } from 'server/plugin'
 import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
-import { CoreEmitter } from './dependencies/coreEmitter'
 import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
@@ -15,6 +14,7 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { Job } from 'bullmq'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
+import { useGetSpellByJustIdQuery } from 'client/state'
 
 const pluginName = 'Core'
 
@@ -23,6 +23,10 @@ const pluginName = 'Core'
 // node is removed because we have our own nodes that do
 // the same thing but  more specific.
 const removedNodes = ['variable/get', 'variable/set']
+
+export type CorePluginEvents = {
+  [ON_MESSAGE]: (payload: EventPayload) => void
+}
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -67,7 +71,6 @@ export class CorePlugin extends CoreEventsPlugin {
    */
   getDependencies() {
     return {
-      [pluginName]: new CoreEmitter(),
       coreActionService: new CoreActionService(
         this.connection,
         this.actionQueueName
