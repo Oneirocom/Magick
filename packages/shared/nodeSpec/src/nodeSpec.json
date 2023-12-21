@@ -18,7 +18,28 @@
         "valueType": "object"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "string",
+        "defaultValue": "channel"
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "channel"
+        ]
+      }
+    ]
   },
   {
     "type": "magick/sendMessage",
