@@ -37,7 +37,7 @@ export type CredentialsPayload = {
   updated_at?: Date
 }
 
-type AgentCredentialsPayload = {
+export type AgentCredentialsPayload = {
   agentId: string
   credentialId: string
 }
@@ -54,7 +54,6 @@ class CredentialsManager {
       })
       .returning('id')
 
-    console.log('credential:', credential)
     return credential
   }
 
@@ -82,7 +81,6 @@ class CredentialsManager {
         return decrypt(result.value, CREDENTIALS_ENCRYPTION_KEY)
       }
     } catch (error) {
-      console.error('Error retrieving credentials:', error)
       throw new Error('Failed to retrieve credentials')
     }
   }
@@ -100,7 +98,6 @@ class CredentialsManager {
 
       return deleted[0] // Return the ID of the deleted credential
     } catch (error: any) {
-      console.error('Error deleting credentials:', error)
       throw new Error(`Failed to delete credentials: ${error?.message}`)
     }
   }
@@ -128,25 +125,78 @@ class CredentialsManager {
   }
 
   async linkCredentialToAgent(payload: AgentCredentialsPayload): Promise<void> {
+    const existingLinkedCredentials = await db('agent_credentials')
+      .join('credentials', 'credentials.id', 'agent_credentials.credentialId')
+      .where('agent_credentials.agentId', payload.agentId)
+      .select(
+        'credentials.name',
+        'credentials.serviceType',
+        'credentials.credentialType',
+        'agent_credentials.credentialId'
+      )
+
+    const credentialToLink = await db('credentials')
+      .where('id', payload.credentialId)
+      .first()
+
+    const duplicate = existingLinkedCredentials.find(
+      ec =>
+        ec.name === credentialToLink.name &&
+        ec.serviceType === credentialToLink.serviceType &&
+        ec.credentialType === credentialToLink.credentialType
+    )
+
+    if (duplicate) {
+      await db('agent_credentials')
+        .where({ credentialId: duplicate.credentialId })
+        .delete()
+    }
+
     await db('agent_credentials').insert(payload)
   }
 
   // THIS DECRYPTS THE VALUE
   async retrieveAgentCredentials(
-    agentId: string
+    agentId: string,
+    serviceType?: string
   ): Promise<CredentialsPayload[]> {
-    const agentCredentials = await db('agent_credentials')
-      .where({ agentId })
-      .select('credentialId')
+    let query = db('agent_credentials')
+      .join('credentials', 'credentials.id', 'agent_credentials.credentialId')
+      .where('agent_credentials.agentId', agentId)
 
-    const credentialIds = agentCredentials.map(ac => ac.credentialId)
+    if (serviceType) {
+      query = query.andWhere('credentials.serviceType', serviceType)
+    }
+
+    const agentCredentials = await query.select('credentials.*')
 
     return Promise.all(
-      credentialIds.map(async credentialId => {
-        const credential = await this.retrieveCredentials('', credentialId)
-        return credential ? JSON.parse(credential) : null
+      agentCredentials.map(async credential => {
+        const decryptedValue = decrypt(
+          credential.value,
+          CREDENTIALS_ENCRYPTION_KEY
+        )
+        return { ...credential, value: decryptedValue }
       })
-    ).then(credentials => credentials.filter(Boolean) as CredentialsPayload[])
+    )
+  }
+
+  async listAgentCredentials(
+    agentId: string
+  ): Promise<AgentCredentialsPayload[]> {
+    return await db('agent_credentials').where({ agentId }).select('*')
+  }
+
+  async deleteAgentCredential(
+    agentId: string,
+    credentialId: string
+  ): Promise<void> {
+    await db('agent_credentials')
+      .where({
+        agentId: agentId,
+        credentialId: credentialId,
+      })
+      .delete()
   }
 }
 
