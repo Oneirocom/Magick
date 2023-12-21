@@ -14,7 +14,6 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { Job } from 'bullmq'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
-import { useGetSpellByJustIdQuery } from 'client/state'
 
 const pluginName = 'Core'
 
