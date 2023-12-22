@@ -3,17 +3,27 @@ import {
   CoreLLMService,
   Message,
   CompletionOptions,
+  ModelNames,
 } from '../../services/coreLLMService'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
   category: NodeCategory.Action,
   label: 'Generate Text',
+  configuration: {
+    modelChoices: {
+      valueType: 'array',
+      defaultValue: Object.values(ModelNames),
+    },
+  },
   in: {
     flow: 'flow',
-    model: 'string',
+    model: {
+      valueType: 'string',
+      choices: Object.values(ModelNames),
+    },
     messages: 'array',
-    options: 'object', // Includes the useStreaming flag
+    options: 'object',
   },
   out: {
     response: 'object',
