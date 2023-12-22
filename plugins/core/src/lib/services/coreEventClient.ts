@@ -152,7 +152,6 @@ class CoreEventClient {
   }
 
   sendMessage(payload: ActionPayload): void {
-    console.log('Sending message from core client!!!', payload)
     this.pubSub.publish(`agent:${this.agentId}:Core:event`, payload)
   }
 
