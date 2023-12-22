@@ -1,6 +1,5 @@
 import { createClient, RedisClientOptions } from 'redis'
 import { EventEmitter } from 'events'
-import { REDISCLOUD_URL } from 'shared/config'
 
 /**
  * A class for managing Redis Publish/Subscribe operations.

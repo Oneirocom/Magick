@@ -11,7 +11,6 @@ import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
 import { sendMessage } from './nodes/actions/sendMessage'
-import { Job } from 'bullmq'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 
@@ -71,7 +70,7 @@ export class CorePlugin extends CoreEventsPlugin {
   getDependencies() {
     return {
       coreActionService: new CoreActionService(
-        this.connection,
+        this.centralEventBus,
         this.actionQueueName
       ),
     }
@@ -106,16 +105,17 @@ export class CorePlugin extends CoreEventsPlugin {
     this.emitEvent(ON_MESSAGE, event)
   }
 
-  handleSendMessage(actionPayload: Job<ActionPayload>) {
-    const { actionName, event } = actionPayload.data
+  handleSendMessage(actionPayload: ActionPayload) {
+    const { actionName, event } = actionPayload
     const { plugin } = event
     const eventName = `${plugin}:${actionName}`
+    this.logger.trace(`Sending message to ${eventName} on core plugin`)
     // handle sending a message back out.
 
     if (plugin === 'Core') {
-      this.client.sendMessage(actionPayload.data)
+      this.client.sendMessage(actionPayload)
     } else {
-      this.centralEventBus.emit(eventName, actionPayload.data)
+      this.centralEventBus.emit(eventName, actionPayload)
     }
   }
 

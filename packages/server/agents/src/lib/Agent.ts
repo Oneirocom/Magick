@@ -13,8 +13,6 @@ import {
 } from 'shared/core'
 
 import { getLogger } from 'server/logger'
-
-import { AgentManager } from './AgentManager'
 import { Application } from 'server/core'
 
 import {
@@ -28,6 +26,7 @@ import { CommandHub } from './CommandHub'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
+import { CloudAgentWorker } from 'server/cloud-agent-worker'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -42,7 +41,6 @@ export class Agent implements AgentInterface {
   spellManager: SpellManager
   projectId!: string
   rootSpellId!: string
-  agentManager: AgentManager
   spellRunner?: SpellRunner
   logger: pino.Logger = getLogger()
   worker: Worker
@@ -52,9 +50,9 @@ export class Agent implements AgentInterface {
   ready = false
   app: Application
   spellbook: Spellbook<Agent, Application>
+  agentManager: CloudAgentWorker
 
   outputTypes: any[] = []
-  updateInterval: any
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
@@ -63,14 +61,14 @@ export class Agent implements AgentInterface {
    */
   constructor(
     agentData: AgentInterface,
-    agentManager: AgentManager,
+    agentManager: CloudAgentWorker,
     worker: Worker,
     pubsub: RedisPubSub,
     app: Application
   ) {
     this.id = agentData.id
-    this.agentManager = agentManager
     this.app = app
+    this.agentManager = agentManager
 
     this.update(agentData)
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
@@ -243,9 +241,6 @@ export class Agent implements AgentInterface {
    * Clean up resources when the instance is destroyed.
    */
   async onDestroy() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval)
-    }
     this.removePlugins()
     this.log('destroyed agent', { id: this.id })
   }
