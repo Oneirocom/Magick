@@ -1,24 +1,25 @@
 import { EventEmitter } from 'events'
-import Redis from 'ioredis'
-import { BullQueue } from 'server/communication'
 import { ActionPayload, EventPayload } from 'server/plugin'
+import { getLogger } from 'server/logger'
 
 export class CoreActionService {
-  protected queueName: string
+  protected actionQueueName: string
   protected eventBus: EventEmitter
-  protected emitEvent: (eventName: string, payload: ActionPayload) => void
+  protected logger = getLogger()
+  protected emitAction: (payload: ActionPayload) => void
 
-  constructor(eventBus: EventEmitter, queueName: string) {
+  constructor(eventBus: EventEmitter, actionQueueName: string) {
     this.eventBus = eventBus
-    this.queueName = queueName
-    this.emitEvent = (eventName: string, payload: ActionPayload) => {
-      this.eventBus.emit(eventName, payload)
+    this.actionQueueName = actionQueueName
+    this.emitAction = (payload: ActionPayload) => {
+      this.eventBus.emit(this.actionQueueName, payload)
     }
   }
 
   async sendMessage(event: EventPayload, messageContent: any) {
     // Enqueue the message
-    await this.emitEvent('sendMessage', {
+    this.logger.trace('CORE ACTION SERVICE: Sending message')
+    await this.emitAction({
       actionName: 'sendMessage',
       event,
       data: messageContent,
