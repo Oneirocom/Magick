@@ -20,7 +20,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import sync from 'feathers-sync'
 import { configureManager, globalsManager } from 'shared/core'
 
-import { REDISCLOUD_URL, API_ACCESS_KEY, bullMQConnection } from 'shared/config'
+import { REDISCLOUD_URL, API_ACCESS_KEY } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'

@@ -11,7 +11,6 @@ import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
 import { sendMessage } from './nodes/actions/sendMessage'
-import { Job } from 'bullmq'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 
