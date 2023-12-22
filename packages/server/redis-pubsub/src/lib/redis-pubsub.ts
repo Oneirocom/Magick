@@ -50,10 +50,13 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
    */
-  async initialize(_options: RedisClientOptions): Promise<void> {
+  async initialize(
+    redisCloudUrl: string,
+    _options: RedisClientOptions = {}
+  ): Promise<void> {
     const options: RedisClientOptions = {
       ..._options,
-      url: REDISCLOUD_URL,
+      url: redisCloudUrl,
       socket: {
         ..._options?.socket,
         reconnectStrategy: this.retryStrategy,

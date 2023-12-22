@@ -7,7 +7,6 @@ import {
 } from 'server/plugin'
 import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
-import { CoreEmitter } from './dependencies/coreEmitter'
 import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
@@ -19,6 +18,16 @@ import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 
 const pluginName = 'Core'
+
+// These nodes are removed from the core plugin because we have others that
+// do the same thing but are more specific. For example, the variable/get
+// node is removed because we have our own nodes that do
+// the same thing but  more specific.
+const removedNodes = ['variable/get', 'variable/set']
+
+export type CorePluginEvents = {
+  [ON_MESSAGE]: (payload: EventPayload) => void
+}
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -63,7 +72,6 @@ export class CorePlugin extends CoreEventsPlugin {
    */
   getDependencies() {
     return {
-      [pluginName]: new CoreEmitter(),
       coreActionService: new CoreActionService(
         this.connection,
         this.actionQueueName
@@ -77,7 +85,15 @@ export class CorePlugin extends CoreEventsPlugin {
    * @param registry The registry to provide.
    */
   override provideRegistry(registry: IRegistry): IRegistry {
-    const coreRegistry = registerCoreProfile(registry)
+    const _coreRegistry = registerCoreProfile(registry)
+    const coreRegistry = {
+      ..._coreRegistry,
+      // turn nodes map into array to filter
+      nodes: Object.entries(_coreRegistry.nodes).reduce((acc, [key, value]) => {
+        if (removedNodes.includes(key)) return acc
+        return { ...acc, [key]: value }
+      }, {}),
+    }
     const logger = (coreRegistry.dependencies.ILogger as ILogger) || undefined
 
     return registerStructProfile(coreRegistry, logger)
