@@ -80,6 +80,37 @@ type CompletionResponse = {
   }
 }
 
+export enum ModelNames {
+  GPT35Turbo = 'gpt-3.5-turbo',
+  GPT3 = 'gpt-3',
+  Davinci = 'davinci',
+  Curie = 'curie',
+  Babbage = 'babbage',
+  Ada = 'ada',
+  GeminiPro = 'gemini-pro',
+  Palm = 'palm',
+  Mistral = 'mistral',
+  Anthropic = 'anthropic',
+  Sagemaker = 'sagemaker',
+  Bedrock = 'bedrock',
+  Anyscale = 'anyscale',
+  PerplexityAI = 'perplexity-ai',
+  VLLM = 'vllm',
+  DeepInfra = 'deepinfra',
+  J2Light = 'j2-light',
+  J2Mid = 'j2-mid',
+  J2Ultra = 'j2-ultra',
+  NLPCloud = 'nlpc-cloud',
+  Replicate = 'replicate',
+  Cohere = 'cohere',
+  TogetherAI = 'together-ai',
+  AlephAlpha = 'aleph-alpha',
+  Baseten = 'baseten',
+  OpenRouter = 'openrouter',
+  CustomAPI = 'custom-api',
+  Petals = 'petals',
+}
+
 interface ICoreLLMService {
   completion: (request: CompletionRequest) => Promise<CompletionResponse>
   streamCompletion: (request: CompletionRequest) => Promise<string>
