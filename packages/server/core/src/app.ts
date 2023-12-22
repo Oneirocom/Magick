@@ -106,8 +106,6 @@ export async function initApp(environment: Environment = 'default') {
     await next()
   })
 
-  // Initialize pubsub redis client
-  const pubsub = new RedisPubSub()
   // sync up messages between the app and the runner
   logger.info('SETTING UP REDIS')
   app.configure(
@@ -118,14 +116,13 @@ export async function initApp(environment: Environment = 'default') {
     })
   )
 
-  await pubsub.initialize({
-    url: REDISCLOUD_URL,
-  })
+  // Initialize pubsub redis client
+  const pubsub = new RedisPubSub()
+  await pubsub.initialize(REDISCLOUD_URL)
 
   app.set('pubsub', pubsub)
 
-  const redis = new Redis({
-    ...bullMQConnection,
+  const redis = new Redis(REDISCLOUD_URL, {
     maxRetriesPerRequest: null,
   })
   app.set('redis', redis)

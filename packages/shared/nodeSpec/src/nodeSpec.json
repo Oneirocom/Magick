@@ -1792,52 +1792,6 @@
     ]
   },
   {
-    "type": "variable/get",
-    "category": "Query",
-    "label": "Get",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "value",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "variableId",
-        "valueType": "number"
-      }
-    ]
-  },
-  {
-    "type": "variable/set",
-    "category": "Action",
-    "label": "Set",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "value",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "variableId",
-        "valueType": "number"
-      }
-    ]
-  },
-  {
     "type": "math/easing",
     "category": "Logic",
     "label": "Easing",

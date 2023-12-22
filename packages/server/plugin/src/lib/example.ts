@@ -14,7 +14,9 @@ type DiscordPayload = {
   observer: string
 }
 
-class DiscordPlugin extends CoreEventsPlugin<DiscordPayload> {
+type PluginEvents = {}
+
+class DiscordPlugin extends CoreEventsPlugin<PluginEvents, DiscordPayload> {
   private client: Discord.Client
 
   nodes = []

@@ -18,7 +18,8 @@ export const getNodePickerFilters = (
     ? getSocketsByNodeTypeAndHandleType(
         specJSON,
         originNode.type,
-        params.handleType
+        params.handleType,
+        originNode.data.configuration || {}
       )
     : undefined
 

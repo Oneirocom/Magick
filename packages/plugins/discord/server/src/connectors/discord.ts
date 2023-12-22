@@ -312,10 +312,10 @@ export class DiscordConnector {
           sender: author.username,
           observer: this.client.user.username,
           client: 'discord',
-          channel: message?.channel['name']
+          channelName: message?.channel['name']
             ? message.channel['name']
             : author.id,
-          channelId: message.channel.id,
+          channel: message.channel.id,
           agentId: this.agent.id,
           entities: entities,
           channelType: inputType,
