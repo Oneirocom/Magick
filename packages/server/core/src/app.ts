@@ -124,10 +124,7 @@ export async function initApp(environment: Environment = 'default') {
 
   app.set('pubsub', pubsub)
 
-  const redis = new Redis({
-    ...bullMQConnection,
-    maxRetriesPerRequest: null,
-  })
+  const redis = new Redis(REDISCLOUD_URL)
   app.set('redis', redis)
 
   // Configure app spell management settings
