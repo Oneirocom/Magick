@@ -210,10 +210,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private setupPluginWorker(plugin: BasePlugin) {
     this.logger.trace(`Setting up plugin worker for ${plugin.name}`)
     // Set up a Bull queue to process events from the plugin
-    const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
-    queue.initialize(plugin.queueName, async job => {
-      const { eventName } = job.data
-      this.handlePluginEvent(plugin.name, eventName, job.data)
+    this.pluginManager.centralEventBus.on(plugin.eventQueueName, data => {
+      this.handlePluginEvent(plugin.name, data.eventName, data)
     })
   }
 
@@ -453,5 +451,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   clear() {
     this.spellMap = new Map()
+    this.pluginManager.centralEventBus.removeAllListeners()
   }
 }
