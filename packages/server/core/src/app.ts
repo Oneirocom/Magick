@@ -270,4 +270,6 @@ export async function initApp(environment: Environment = 'default') {
     teardown: [],
   })
   logger.info('Feathers app initialized')
+
+  return app
 }

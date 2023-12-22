@@ -1,10 +1,10 @@
 import { Worker, Job } from 'bullmq'
-
-import { app } from 'server/core'
+import { getLogger } from 'server/logger'
+import { Application, app } from 'server/core'
 
 import { BullMQWorker, BullQueue } from 'server/communication'
 
-import { Agent, AgentManager, type AgentRunJob } from 'server/agents'
+import { Agent, type AgentRunJob } from 'server/agents'
 import { v4 as uuidv4 } from 'uuid'
 import {
   AGENT_DELETE,
@@ -13,6 +13,7 @@ import {
   AGENT_UPDATE_JOB,
 } from 'shared/core'
 import { type RedisPubSub } from 'server/redis-pubsub'
+import pino from 'pino'
 
 export interface AgentListRecord {
   id: string
@@ -22,13 +23,17 @@ export interface AgentListRecord {
 // I get that it's confusing extending AgentManager, but it's the best way to
 // get the functionality I want without having to rewrite a bunch of stuff.
 // Agent Managers just managed agents for a single instance of the server anyway
-export class CloudAgentWorker extends AgentManager {
+export class CloudAgentWorker {
   pubSub: RedisPubSub
   subscriptions: Record<string, Function> = {}
+  logger: pino.Logger = getLogger()
+  currentAgents: string[] = []
+  addHandlers: any = []
+  removeHandlers: any = []
+  app: Application
 
-  constructor() {
-    super(app, false)
-
+  constructor(app: Application) {
+    this.app = app
     this.pubSub = app.get('pubsub')
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
@@ -45,7 +50,6 @@ export class CloudAgentWorker extends AgentManager {
     })
 
     this.addAgent = this.addAgent.bind(this)
-    this.updateAgents = this.updateAgents.bind(this)
   }
 
   heartbeat() {
@@ -58,6 +62,10 @@ export class CloudAgentWorker extends AgentManager {
         })
       )
     })
+  }
+
+  getAgent(agentId: string) {
+    return this.currentAgents[agentId]
   }
 
   async addAgent(agentId: string) {
@@ -109,6 +117,23 @@ export class CloudAgentWorker extends AgentManager {
     this.logger.debug(`Finished running agent add handlers for ${agentId}`)
 
     this.logger.info(`Updated agent ${agentId}`)
+  }
+
+  /**
+   * Register a handler to be called when an agent is added.
+   * @param handler - The handler function to be called.
+   */
+  registerAddAgentHandler(handler) {
+    this.logger.debug('Registering add agent handler')
+    this.addHandlers.push(handler)
+  }
+  /**
+   * Register a handler to be called when an agent is removed.
+   * @param handler - The handler function to be called.
+   */
+  registerRemoveAgentHandler(handler) {
+    this.logger.debug('Registering remove agent handler')
+    this.removeHandlers.push(handler)
   }
 
   async removeAgent(agentId: string) {
