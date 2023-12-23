@@ -5,7 +5,6 @@ import { SpellInterface } from 'server/schemas'
 import { SpellCaster } from './spellCaster'
 import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
-import { BullMQWorker } from 'server/communication'
 import { PluginManager } from 'server/pluginManager'
 import { IAgentLogger } from 'server/agents'
 
@@ -19,18 +18,18 @@ interface IAgent extends IAgentLogger {
 }
 
 /**
- * The `Spellbook` serves as the orchestrator within an event-driven architecture, 
- * managing the execution lifecycle of `SpellCasters`—dedicated executors for units 
- * of logic termed as spells. It adeptly assigns tasks to `SpellCasters` in response 
+ * The `Spellbook` serves as the orchestrator within an event-driven architecture,
+ * managing the execution lifecycle of `SpellCasters`—dedicated executors for units
+ * of logic termed as spells. It adeptly assigns tasks to `SpellCasters` in response
  * to events triggered by plugins, ensuring efficient resource management and responsiveness.
  * These spells casters are horizontally scalable, allowing for the execution of multiple
  * spells in parallel.
  *
  * Featuring real-time synchronization, the `Spellbook` enables dynamic spell updates,
- * reflecting changes instantaneously. This architecture not only bolsters modularity 
- * and scalability but also delineates a clear operational boundary within the application, 
+ * reflecting changes instantaneously. This architecture not only bolsters modularity
+ * and scalability but also delineates a clear operational boundary within the application,
  * paving the way for a robust and maintainable codebase.
- * 
+ *
  * @example
  * const spellbook = new Spellbook({
  * app,
@@ -38,13 +37,13 @@ interface IAgent extends IAgentLogger {
  * plugins,
  * watchSpells: true,
  * });
- * 
+ *
  * @example
  * spellbook.loadSpells(spells);
- *  
+ *
  * @example
  * spellbook.updateSpell(spell);
- * 
+ *
 
  */
 export class Spellbook<Agent extends IAgent, Application extends IApplication> {
@@ -210,10 +209,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private setupPluginWorker(plugin: BasePlugin) {
     this.logger.trace(`Setting up plugin worker for ${plugin.name}`)
     // Set up a Bull queue to process events from the plugin
-    const queue = new BullMQWorker<EventPayload>(this.app.get('redis'))
-    queue.initialize(plugin.queueName, async job => {
-      const { eventName } = job.data
-      this.handlePluginEvent(plugin.name, eventName, job.data)
+    this.pluginManager.centralEventBus.on(plugin.eventQueueName, data => {
+      this.handlePluginEvent(plugin.name, data.eventName, data)
     })
   }
 
@@ -453,5 +450,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   clear() {
     this.spellMap = new Map()
+    this.pluginManager.centralEventBus.removeAllListeners()
   }
 }
