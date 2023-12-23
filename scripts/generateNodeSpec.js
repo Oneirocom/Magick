@@ -38,9 +38,7 @@ const loadPlugins = async () => {
   const connection = new Redis()
   const pubSub = new RedisPubSub()
 
-  await pubSub.initialize({
-    url: REDISCLOUD_URL,
-  })
+  await pubSub.initialize(REDISCLOUD_URL)
 
   const plugins = []
   for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {

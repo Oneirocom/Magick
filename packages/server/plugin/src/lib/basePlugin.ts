@@ -166,8 +166,6 @@ export abstract class BasePlugin<
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
-  protected eventQueue: BullQueue
-  protected actionQueue: BullMQWorker
   protected centralEventBus!: EventEmitter
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
@@ -176,6 +174,28 @@ export abstract class BasePlugin<
   public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
+
+  /**
+   * Returns the name of the BullMQ queue for the plugin.
+   * Format: event:pluginName
+   * @returns The name of the queue.
+   * @example
+   * const queueName = this.getQueueName();
+   */
+  get eventQueueName() {
+    return `agent:${this.agentId}:${this.name}:event`
+  }
+
+  /**
+   * Returns the name of the BullMQ queue for the plugin's actions.
+   * Format: action:pluginName
+   * @returns The name of the queue.
+   * @example
+   * const queueName = this.getActionQueueName();
+   */
+  get actionQueueName() {
+    return `agent:${this.agentId}:${this.name}:action`
+  }
 
   /**
    * Creates an instance of BasePlugin.
@@ -188,13 +208,6 @@ export abstract class BasePlugin<
     this.agentId = agentId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
-    this.eventQueue = new BullQueue(connection)
-    this.eventQueue.initialize(this.queueName)
-    this.actionQueue = new BullMQWorker(connection)
-    this.actionQueue.initialize(
-      this.actionQueueName,
-      this.handleAction.bind(this)
-    )
     this.events = []
   }
 
@@ -206,7 +219,32 @@ export abstract class BasePlugin<
     this.defineEvents()
     this.defineActions()
     this.initializeFunctionalities()
-    this.mapEventsToQueue()
+    this.mapEventsToEventBus()
+    this.mapActionsToEventBus()
+  }
+
+  /**
+   * Maps registered events to a BullMQ queue.
+   * Each event emission will create a job in the BullMQ queue.
+   */
+  mapEventsToEventBus() {
+    this.events.forEach(event => {
+      this.eventEmitter.on(event.eventName, async payload => {
+        payload.eventName = event.eventName
+        this.logger.debug(
+          `Sending event ${event.eventName} to central message bus`
+        )
+        this.centralEventBus.emit(this.eventQueueName, payload)
+        // await this.eventQueue.addJob(event.eventName, payload)
+      })
+    })
+  }
+
+  /**
+   * Maps registered actions to the action queue.
+   */
+  mapActionsToEventBus() {
+    this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
   }
 
   /**
@@ -244,10 +282,14 @@ export abstract class BasePlugin<
    * Handles an action from the action queue.
    * @param job The job to handle.
    */
-  protected async handleAction(job) {
-    const action = this.actions.find(action => action.actionName === job.name)
+  protected async handleAction(data: ActionPayload) {
+    this.logger.trace(`Handling action ${data.actionName}`)
+    const action = this.actions.find(
+      action => action.actionName === data.actionName
+    )
     if (!action) return
-    await action.handler(job as ActionPayload)
+    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
+    await action.handler(data as ActionPayload)
   }
 
   /**
@@ -260,28 +302,6 @@ export abstract class BasePlugin<
   protected emitEvent(eventName: string, payload: EventPayload) {
     if (!this.enabled) return
     this.eventEmitter.emit(eventName, payload)
-  }
-
-  /**
-   * Returns the name of the BullMQ queue for the plugin.
-   * Format: event:pluginName
-   * @returns The name of the queue.
-   * @example
-   * const queueName = this.getQueueName();
-   */
-  get queueName() {
-    return `agent:${this.agentId}:${this.name}:event`
-  }
-
-  /**
-   * Returns the name of the BullMQ queue for the plugin's actions.
-   * Format: action:pluginName
-   * @returns The name of the queue.
-   * @example
-   * const queueName = this.getActionQueueName();
-   */
-  get actionQueueName() {
-    return `agent:${this.agentId}:${this.name}:action`
   }
 
   /**
@@ -427,20 +447,6 @@ export abstract class BasePlugin<
    * }
    */
   abstract initializeFunctionalities(): void
-
-  /**
-   * Maps registered events to a BullMQ queue.
-   * Each event emission will create a job in the BullMQ queue.
-   */
-  mapEventsToQueue() {
-    this.events.forEach(event => {
-      this.eventEmitter.on(event.eventName, async payload => {
-        payload.eventName = event.eventName
-        this.logger.debug(`Sending event ${event.eventName} to queue`)
-        await this.eventQueue.addJob(event.eventName, payload)
-      })
-    })
-  }
 
   /**
    * Abstract method for formatting the event payload.

@@ -19,7 +19,7 @@ if (PRODUCTION) {
 }
 const logger = getLogger()
 
-await initApp()
+const app = await initApp()
 
 await initAgentCommander()
 
@@ -45,5 +45,5 @@ if (PRODUCTION || DONT_CRASH_ON_ERROR) {
 await loadPlugins()
 
 logger.info('Starting worker')
-const worker = new CloudAgentWorker()
+const worker = new CloudAgentWorker(app)
 worker.startWork()
