@@ -72,6 +72,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@frigade/react": "^1.38.27",
     "@google-cloud/speech": "5.5.0",
     "@google-cloud/text-to-speech": "4.2.2",
     "@hyperdx/node-opentelemetry": "^0.2.3",
