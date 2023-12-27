@@ -119,6 +119,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     // initialize the base registry once we have the full graph.
     // This sets up the state service properly.
     baseRegistry.init(this.graph)
+
+    this.pluginManager.getPlugins().forEach(plugin => {
+      plugin.setUpdateDependencyHandler(this.updateDependency.bind(this));
+    });
   }
 
   /**
@@ -363,5 +367,14 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     }
 
     this.agent.publishEvent(AGENT_SPELL(this.agent.id), message)
+  }
+
+  /**
+   * Updates a dependency in the registry.
+   * @param key The key of the dependency to update.
+   * @param dependency The new dependency.
+   */
+  updateDependency(key: string, dependency: any) {
+    this.registry.dependencies[key] = dependency
   }
 }
