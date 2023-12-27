@@ -615,3 +615,7 @@ button.rcw-launcher.rcw-hide-sm {
   justify-content: center;
   align-items: center;
 }
+
+.react-flow {
+  z-index: 1000 !important;
+}
