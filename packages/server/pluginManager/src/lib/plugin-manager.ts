@@ -138,7 +138,7 @@ export class PluginManager extends EventEmitter {
           this.agentId,
           this.pubSub
         )
-        this.registerPlugin(pluginInstance)
+        await this.registerPlugin(pluginInstance)
       }
     }
   }
@@ -171,7 +171,7 @@ export class PluginManager extends EventEmitter {
           console.log('PACKAGE LOADE')
           // const PluginClassPackage = await import(packageName)
           const pluginInstance = new PluginClassPackage.default(config)
-          this.registerPlugin(pluginInstance)
+          await this.registerPlugin(pluginInstance)
         } catch (err) {
           this.logger.error(
             err,
@@ -186,7 +186,7 @@ export class PluginManager extends EventEmitter {
    * Registers a plugin with the Plugin Manager.
    * @param plugin The plugin instance to register.
    */
-  registerPlugin(plugin: BasePlugin): void {
+  async registerPlugin(plugin: BasePlugin): Promise<void> {
     this.logger.debug(`Registering plugin ${plugin.name}`)
     this.plugins.set(plugin.name, plugin)
     this.setupPluginEventForwarding(plugin)

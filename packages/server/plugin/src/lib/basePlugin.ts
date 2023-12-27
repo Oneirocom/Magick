@@ -11,6 +11,8 @@ import {
 import { BullMQWorker, BullQueue } from 'server/communication'
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
+import { CredentialsManager, PluginCredential } from 'server/credentials'
+import { MeterManager } from 'server/meter'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -83,6 +85,12 @@ export type EventPayload<
   }
   data: T
   metadata: Y
+}
+export type WebhookEvent = {
+  eventType: string
+  eventName: string
+  validateInput: (input: any) => boolean
+  validateEvent: (event: any) => boolean
 }
 
 /**
@@ -164,13 +172,18 @@ export abstract class BasePlugin<
   protected eventQueue: BullQueue
   protected actionQueue: BullMQWorker
   protected centralEventBus!: EventEmitter
+  protected credentialsManager!: CredentialsManager
+  protected credentials: PluginCredential[] = []
+  protected meterManager!: MeterManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
+  abstract webhookEvents?: WebhookEvent[]
   protected agentId: string
   public connection: Redis
   public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
+  private updateDependencyHandler?: (key: string, dependency: any) => void
 
   /**
    * Creates an instance of BasePlugin.
@@ -191,6 +204,8 @@ export abstract class BasePlugin<
       this.handleAction.bind(this)
     )
     this.events = []
+    this.credentialsManager = new CredentialsManager()
+    this.meterManager = new MeterManager(agentId)
   }
 
   /**
@@ -475,6 +490,35 @@ export abstract class BasePlugin<
       metadata: messageDetails.metadata || ({} as Metadata),
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
+    }
+  }
+
+  /**
+   * Sets the credentials for the plugin.
+   * @param newCredentials Array of credentials to set.
+   */
+  setCredentials(newCredentials: PluginCredential[]) {
+    this.credentials = newCredentials
+  }
+
+  /**
+   * Sets the handler function for updating dependencies in the spell caster.
+   * @param handler The dependency update handler function.
+   */
+  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
+    this.updateDependencyHandler = handler
+  }
+
+  /**
+   * Requests an update of a dependency in the spell caster.
+   * @param key The key of the dependency to update.
+   * @param dependency The new dependency object.
+   */
+  updateDependency(key: string, dependency: any) {
+    if (this.updateDependencyHandler) {
+      this.updateDependencyHandler(key, dependency)
+    } else {
+      throw new Error('Dependency update handler is not set.')
     }
   }
 }

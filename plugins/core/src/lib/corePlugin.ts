@@ -2,6 +2,7 @@ import {
   ActionPayload,
   CoreEventsPlugin,
   EventPayload,
+  WebhookEvent,
   ON_MESSAGE,
 } from 'server/plugin'
 import { messageEvent } from './nodes/events/messageEvent'
@@ -25,6 +26,7 @@ export class CorePlugin extends CoreEventsPlugin {
   client: CoreEventClient
   nodes = [messageEvent, sendMessage]
   values = []
+  webhookEvents?: WebhookEvent[] | undefined
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
