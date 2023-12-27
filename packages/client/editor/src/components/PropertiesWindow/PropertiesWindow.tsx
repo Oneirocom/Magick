@@ -9,6 +9,7 @@ import { SocketConfig } from './SocketConfig';
 import { NodeSpecJSON } from '@magickml/behave-graph';
 import { Node } from 'reactflow';
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData';
+import { EventStateProperties } from './EventStateProperties';
 
 type Props = {
   tab: Tab
@@ -26,6 +27,7 @@ export type ConfigurationComponentProps = {
 const ConfigurationComponents = {
   socketInputs: SocketConfig,
   textEditorData: () => <div>Button to open text editor</div>,
+  eventStateProperties: EventStateProperties,
   default: () => <div>default</div>
 }
 
