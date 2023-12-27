@@ -173,3 +173,9 @@ export type SlackEventPayload = {
   is_ext_shared_channel: boolean
   event_context: string
 }
+
+export type SlackCredentials = {
+  token: string | undefined
+  signingSecret: string | undefined
+  appToken: string | undefined
+}
