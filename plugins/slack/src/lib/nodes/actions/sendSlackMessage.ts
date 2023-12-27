@@ -1,10 +1,9 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'packages/server/grimoire/src'
 import { SlackActionService } from '../../services/slackActionService'
-import { WebClient, WebClientOptions } from '@slack/web-api'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
-import { FEATURE_FLAGS } from 'packages/shared/config/src'
+import { SlackClient } from '../../services/slackClient'
 
 export const sendSlackMessage = makeFlowNodeDefinition({
   typeName: 'slack/sendMessage',
@@ -22,9 +21,18 @@ export const sendSlackMessage = makeFlowNodeDefinition({
     const slackActionService =
       getDependency<SlackActionService>('slackActionService')
     const eventStore = getDependency<IEventStore>('IEventStore')
+    const slack = getDependency<SlackClient>('slackClient')
 
-    if (!slackActionService || !eventStore) {
-      throw new Error('No slackActionService or eventStore provided')
+    if (!slackActionService || !eventStore || !slack) {
+      throw new Error(
+        `Missing required dependencies: ${[
+          'slackActionService',
+          'IEventStore',
+          'slackClient',
+        ]
+          .filter(key => !getDependency(key))
+          .join(', ')}`
+      )
     }
 
     const content = read('content') as string
@@ -35,14 +43,8 @@ export const sendSlackMessage = makeFlowNodeDefinition({
       throw new Error('No event found')
     }
 
-    const web = new WebClient(FEATURE_FLAGS.SLACK_AGENT_TOKEN, {
-      retryConfig: {
-        retries: 3,
-      },
-    } as WebClientOptions)
-
     try {
-      await web.chat.postMessage({
+      await slack.getClient().client.chat.postMessage({
         text: content,
         channel,
       })

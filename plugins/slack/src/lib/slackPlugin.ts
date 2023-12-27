@@ -5,8 +5,9 @@ import {
   ActionPayload,
   CoreEventsPlugin,
   EventPayload,
+  WebhookEvent,
 } from 'packages/server/plugin/src'
-import { ON_SLACK_MESSAGE } from './events'
+import { SLACK_MESSAGES } from './constants'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import { SlackActionService } from './services/slackActionService'
 import SlackEventClient from './services/slackEventClient'
@@ -14,24 +15,42 @@ import { sendSlackMessage } from './nodes/actions/sendSlackMessage'
 import { slackMessageEvent } from './nodes/events/slackMessageEvent'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 import { SpellCaster } from 'packages/server/grimoire/src'
-
-const pluginName = 'Slack'
+import { pluginName, pluginCredentials } from './constants'
+import { SlackClient } from './services/slackClient'
+import { SlackCredentials } from './types'
+import { sendSlackImage } from './nodes/actions/sendSlackImage'
 
 export class SlackPlugin extends CoreEventsPlugin {
   override enabled = true
-  client: SlackEventClient
-  nodes = [slackMessageEvent, sendSlackMessage]
+  event: SlackEventClient
+  nodes = [slackMessageEvent, sendSlackMessage, sendSlackImage]
   values = []
+  webhookEvents?: WebhookEvent[] | undefined
+  slack: SlackClient | undefined = undefined
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
+    this.event = new SlackEventClient(pubSub, agentId)
+    this.meterManager.initializeMeters({})
+    this.setCredentials(pluginCredentials)
+    this.initalizeSlack().catch(error =>
+      this.logger.error(
+        `Failed to initialize Slack Plugin for agent ${agentId}`
+      )
+    )
+  }
 
-    this.client = new SlackEventClient(pubSub, agentId)
+  override initializeFunctionalities(): void {
+    this.centralEventBus.on(
+      SLACK_MESSAGES.message,
+      this.handleOnMessage.bind(this)
+    )
+    this.event.onMessage(this.handleOnMessage.bind(this))
   }
 
   defineEvents(): void {
     this.registerEvent({
-      eventName: ON_SLACK_MESSAGE,
+      eventName: SLACK_MESSAGES.message,
       displayName: 'Slack Message Received',
     })
   }
@@ -46,7 +65,7 @@ export class SlackPlugin extends CoreEventsPlugin {
 
   getDependencies(spellCaster: SpellCaster) {
     return {
-      [pluginName]: new SlackEmitter(),
+      [pluginName]: SlackEmitter,
       slackActionService: new SlackActionService(
         this.connection,
         this.actionQueueName
@@ -58,15 +77,28 @@ export class SlackPlugin extends CoreEventsPlugin {
     return registerCoreProfile(registry)
   }
 
-  initializeFunctionalities() {
-    this.centralEventBus.on(ON_SLACK_MESSAGE, this.handleOnMessage.bind(this))
-    this.client.onMessage(this.handleOnMessage.bind(this))
+  async initalizeSlack() {
+    try {
+      const credentials = await this.getCredentials()
+      this.slack = new SlackClient(
+        credentials,
+        this.agentId,
+        this.emitEvent.bind(this)
+      )
+
+      await this.slack.init()
+
+      this.updateDependency('slackClient', this.slack)
+    } catch (error) {
+      console.error('Failed during initialization:', error)
+    }
   }
 
   handleOnMessage(payload: EventPayload) {
-    console.log('handleOnSlackMessage', payload)
-    const event = this.formatMessageEvent(ON_SLACK_MESSAGE, payload)
-    this.emitEvent(ON_SLACK_MESSAGE, event)
+    this.logger.debug('Received message:', payload)
+    console.log('Received message:', payload)
+    const event = this.formatMessageEvent(SLACK_MESSAGES.message, payload)
+    this.emitEvent(SLACK_MESSAGES.message, event)
   }
 
   handleSendMessage(actionPayload: Job<ActionPayload>) {
@@ -75,7 +107,7 @@ export class SlackPlugin extends CoreEventsPlugin {
     const eventName = `${plugin}:${actionName}`
 
     if (plugin === 'Slack') {
-      this.client.sendMessage(actionPayload.data)
+      this.event.sendMessage(actionPayload.data)
     } else {
       this.centralEventBus.emit(eventName, actionPayload.data)
     }
@@ -83,5 +115,20 @@ export class SlackPlugin extends CoreEventsPlugin {
 
   formatPayload(event, payload) {
     return payload
+  }
+
+  async getCredentials(): Promise<SlackCredentials> {
+    try {
+      const tokens = ['slack-token', 'slack-signing-secret', 'slack-app-token']
+      const [token, signingSecret, appToken] = await Promise.all(
+        tokens.map(t =>
+          this.credentialsManager.retrieveAgentCredentials(this.agentId, t)
+        )
+      )
+      return { token, signingSecret, appToken }
+    } catch (error) {
+      console.error('Failed to retrieve credentials:', error)
+      throw error
+    }
   }
 }
