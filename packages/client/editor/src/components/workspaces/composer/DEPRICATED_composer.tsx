@@ -7,8 +7,6 @@ import {
   DockviewReadyEvent,
 
   IDockviewPanelProps,
-  SerializedDockview,
-  SerializedGridviewComponent,
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
@@ -43,15 +41,6 @@ const getLayoutFromLocalStorage = (spellId: string, currentAgentId: string | und
 const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string, layout: any) => {
   const key = generateLayoutKey(spellId, currentAgentId, projectId)
   localStorage.setItem(key, JSON.stringify(layout))
-}
-
-const getLayoutFromLocalStorage = (spellId: string) => {
-  const layout = localStorage.getItem(`composer_layout_${spellId}`)
-  return layout ? JSON.parse(layout) : null
-}
-
-const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
-  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
 }
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
