@@ -34,16 +34,11 @@ const getUnifiedRegistry = plugins => {
   return unifiedRegistry
 }
 
-<<<<<<< HEAD
 const loadPlugins = async () => {
   const connection = new Redis()
   const pubSub = new RedisPubSub()
 
   await pubSub.initialize(REDISCLOUD_URL)
-=======
-const loadPlugins = () => {
-  const connection = new Redis()
->>>>>>> 67b0cbec1 (Got node spec autobuilding on plugins change)
 
   const plugins = []
   for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
@@ -52,32 +47,19 @@ const loadPlugins = () => {
 
     // Check if PluginClass is a subclass of CorePlugin
     if (checkIfCorePlugin(PluginClass)) {
-<<<<<<< HEAD
       // Create an instance of the plugin
       const pluginInstance = new PluginClass(connection, '000000000', pubSub)
-=======
-      console.log(`PLUGIN MANAGER: loading plugin ${pluginName}`)
-
-      // Create an instance of the plugin
-      const pluginInstance = new PluginClass(connection)
->>>>>>> 67b0cbec1 (Got node spec autobuilding on plugins change)
       plugins.push(pluginInstance)
     }
   }
   return plugins
 }
 
-<<<<<<< HEAD
 async function writeNodeSpecsToFile(fileLocation) {
   // Get the registry from all plugins
   const plugins = await loadPlugins()
 
   const registry = getUnifiedRegistry(plugins)
-=======
-function writeNodeSpecsToFile(fileLocation) {
-  // Get the registry from all plugins
-  const registry = getUnifiedRegistry(loadPlugins())
->>>>>>> 67b0cbec1 (Got node spec autobuilding on plugins change)
 
   // Write the registry to JSON
   const nodeSpecsJson = writeNodeSpecsToJSON(registry)
