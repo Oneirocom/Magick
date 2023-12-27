@@ -8,7 +8,6 @@ import {
   ValueTypeMap,
   memo,
 } from '@magickml/behave-graph'
-import { BullMQWorker, BullQueue } from 'server/communication'
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
