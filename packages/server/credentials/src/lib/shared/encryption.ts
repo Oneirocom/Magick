@@ -29,5 +29,5 @@ export const decrypt = (hash: string, secretKey: string): string => {
     decipher.final(),
   ])
 
-  return decrypted.toString()
+  return decrypted.toString().replace(/^"|"$/g, '')
 }
