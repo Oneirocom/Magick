@@ -1,5 +1,6 @@
 import {
   EventNodeInstance,
+  EventNodeSetupParams,
   IEventNodeDefinition,
   INodeDefinition,
   NodeConfigurationDescription,
@@ -7,10 +8,11 @@ import {
   SocketsDefinition,
   makeCommonProps,
 } from '@magickml/behave-graph'
+import { BaseEmitter, EventPayload } from 'server/plugin'
 
 type OmitFactoryAndType<T extends INodeDefinition> = Omit<
   T,
-  'nodeFactory' | 'nodeType'
+  'nodeFactory' | 'nodeType' | 'init' | 'dispose' | 'definition'
 >
 
 interface ExtendedConfig extends NodeConfigurationDescription {
@@ -28,6 +30,19 @@ interface ExtendedConfig extends NodeConfigurationDescription {
   }
 }
 
+type CustomEventNodeConfig<
+  TInput extends SocketsDefinition,
+  TOutput extends SocketsDefinition,
+  TState
+> = {
+  handleEvent: (
+    event: EventPayload,
+    args: EventNodeSetupParams<TInput, TOutput, TState>
+  ) => void // Define the type more precisely if possible
+  dependencyName: string
+  eventName: string
+}
+
 export function makeMagickEventNodeDefinition<
   TInput extends SocketsDefinition,
   TOutput extends SocketsDefinition,
@@ -36,8 +51,12 @@ export function makeMagickEventNodeDefinition<
 >(
   definition: OmitFactoryAndType<
     IEventNodeDefinition<TInput, TOutput, TConfig, TState>
-  >
-): IEventNodeDefinition<TInput, TOutput, TConfig, TState> {
+  >,
+  eventConfig: CustomEventNodeConfig<TInput, TOutput, TState>
+): Omit<
+  IEventNodeDefinition<TInput, TOutput, TConfig, TState>,
+  'init' | 'dispose'
+> {
   definition.configuration = {
     ...definition.configuration,
     hiddenProperties: {
@@ -60,8 +79,39 @@ export function makeMagickEventNodeDefinition<
       new EventNodeInstance({
         ...makeCommonProps(NodeType.Event, definition, config, graph, id),
         initialState: definition.initialState,
-        init: definition.init,
-        dispose: definition.dispose,
+        init: args => {
+          const {
+            node,
+            engine,
+            graph: { getDependency },
+          } = args
+
+          // Using the config object
+          const onStartEvent = (event: EventPayload) => {
+            eventConfig.handleEvent(event, args) // Pass all init args and the event to the callback
+            if (!node || !engine) return
+            engine.onNodeExecutionEnd.emit(node)
+          }
+
+          // todo we should hard type this base emitter better
+          const customEventEmitter = getDependency<BaseEmitter>(
+            eventConfig.dependencyName
+          )
+          customEventEmitter?.on(eventConfig.eventName, onStartEvent)
+
+          return {
+            onStartEvent,
+          }
+        },
+        dispose: ({ state: { onStartEvent }, graph: { getDependency } }) => {
+          // ... existing dispose setup ...
+          const customEventEmitter = getDependency<BaseEmitter>(
+            config.dependencyName
+          )
+          if (onStartEvent)
+            customEventEmitter?.removeListener(config.eventName, onStartEvent)
+          return {}
+        },
       }),
   }
 }
