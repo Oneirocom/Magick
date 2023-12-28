@@ -23,13 +23,11 @@ type ItemType = {
 }
 
 type Props = {
-  item: ItemType, onPickNode: Function, position: XYPosition, index: number
-  focusedIndex: number
-  setFocusedIndex: Function
+  item: ItemType, onPickNode: Function, position: XYPosition
 }
 
 
-const Item = ({ focusedIndex, index, setFocusedIndex, item, position, onPickNode }: Props) => {
+const Item = ({ item, position, onPickNode }: Props) => {
   const instance = useReactFlow();
   const [visibleSubitems, setVisibleSubitems] = useState(false);
 
@@ -42,11 +40,9 @@ const Item = ({ focusedIndex, index, setFocusedIndex, item, position, onPickNode
   return (
     <div
       className={
-        `p-2 capitalize text-base border-b border-gray-600 cursor-pointer hover:bg-gray-600 ${index === focusedIndex ? 'bg-gray-700' : 'hover:bg-gray-600'
-        } ` + styles['item'] + ' ' + (item.subItems ? styles['hasSubitems'] : '')
+        "p-2 capitalize text-base border-b border-gray-600 cursor-pointer " + styles['item'] + ' ' + (item.subItems ? styles['hasSubitems'] : '')
       }
       key={item.title}
-      onMouseEnter={() => setFocusedIndex(index)}
       onClick={handleClick}
       onMouseOver={() => setVisibleSubitems(true)}
       onMouseLeave={() => setVisibleSubitems(false)}
@@ -55,7 +51,7 @@ const Item = ({ focusedIndex, index, setFocusedIndex, item, position, onPickNode
       {item.subItems && visibleSubitems && (
         <div className={styles['subitems']}>
           {item.subItems.map(subitem =>
-            <Item key={subitem.title} item={subitem} onPickNode={onPickNode} position={position} focusedIndex={focusedIndex} index={index} setFocusedIndex={setFocusedIndex} />
+            <Item key={subitem.title} item={subitem} onPickNode={onPickNode} position={position} />
           )}
         </div>
       )}
@@ -78,6 +74,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   // Your existing filter logic
   let filtered = specJSON;
+  let groupedData = []
 
   if (filters !== undefined) {
     filtered = filtered?.filter((node) => {
@@ -150,36 +147,38 @@ export const NodePicker: React.FC<NodePickerProps> = ({
     };
   }, [filtered, focusedIndex, onPickNode, instance, position, onClose]);
 
-  // Group the nodes by category and subcategory
-  const groupedData = filtered.reduce((result, node) => {
-    const typeParts = node.type.split('/');
-    let category = node.category as string;
-    let subcategory = undefined;
+  // Group the nodes by category and subcategory when not searching
+  if (!search) {
+    groupedData = filtered.reduce((result, node) => {
+      const typeParts = node.type.split('/');
+      let category = node.category as string;
+      let subcategory = undefined;
 
-    if (category === 'None') {
-      category = typeParts[0].charAt(0).toUpperCase() + typeParts[0].slice(1);
-      subcategory = typeParts[2] ? typeParts[2] : typeParts[1];
-    }
-
-    let categoryIndex = result.findIndex(item => item.title === category);
-    if (categoryIndex === -1) {
-      result.push({ title: category, subItems: [] });
-      categoryIndex = result.length - 1;
-    }
-
-    if (subcategory) {
-      let subcategoryIndex = result[categoryIndex].subItems.findIndex(item => item.title === subcategory);
-      if (subcategoryIndex === -1) {
-        result[categoryIndex].subItems.push({ title: subcategory, subItems: [] });
-        subcategoryIndex = result[categoryIndex].subItems.length - 1;
+      if (category === 'None') {
+        category = typeParts[0].charAt(0).toUpperCase() + typeParts[0].slice(1);
+        subcategory = typeParts[2] ? typeParts[2] : typeParts[1];
       }
-      result[categoryIndex].subItems[subcategoryIndex].subItems.push(node);
-    } else {
-      result[categoryIndex].subItems.push(node);
-    }
 
-    return result;
-  }, []);
+      let categoryIndex = result.findIndex(item => item.title === category);
+      if (categoryIndex === -1) {
+        result.push({ title: category, subItems: [] });
+        categoryIndex = result.length - 1;
+      }
+
+      if (subcategory) {
+        let subcategoryIndex = result[categoryIndex].subItems.findIndex(item => item.title === subcategory);
+        if (subcategoryIndex === -1) {
+          result[categoryIndex].subItems.push({ title: subcategory, subItems: [] });
+          subcategoryIndex = result[categoryIndex].subItems.length - 1;
+        }
+        result[categoryIndex].subItems[subcategoryIndex].subItems.push(node);
+      } else {
+        result[categoryIndex].subItems.push(node);
+      }
+
+      return result;
+    }, []);
+  }
 
   return (
     <div
@@ -197,11 +196,32 @@ export const NodePicker: React.FC<NodePickerProps> = ({
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <div className={styles['context-menu']} >
-        {groupedData.map((item, index) => (
-          <Item key={item.title} item={item} onPickNode={onPickNode} position={position} index={index} setFocusedIndex={setFocusedIndex} focusedIndex={focusedIndex} />
+      {search && (
+        <>
+          <div className="p-2 text-xs text-gray-400">
+            Press <span className="font-bold">Tab</span> to autocomplete
+          </div>
+          <div className="overflow-y-scroll max-h-48">
+            {filtered.map(({ type }, index) => (
+              <div
+                key={type}
+                className={`p-2 text-base cursor-pointer border-b border-gray-600 ${index === focusedIndex ? 'bg-gray-700' : 'hover:bg-gray-600'
+                  }`}
+                onMouseEnter={() => setFocusedIndex(index)}
+                onClick={() => onPickNode(type, instance.project(position))}
+              >
+                {type}
+              </div>
+            ))}
+          </div>
+        </>
+      )
+      }
+      {!search && <div className={styles['context-menu']} >
+        {groupedData.map((item) => (
+          <Item key={item.title} item={item} onPickNode={onPickNode} position={position} />
         ))}
-      </div>
+      </div>}
     </div>
   );
 };
