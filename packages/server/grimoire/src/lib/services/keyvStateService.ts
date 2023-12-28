@@ -21,9 +21,11 @@ export class KeyvStateService implements IStateService {
     this.eventStore = graph.getDependency('IEventStore')
   }
 
-  // eslint-disable-next-line
-  formatKey(nodeId: string, _: EventPayload): string {
-    return `${nodeId}:}`
+  // warning: if we change this key, all agents will lose access to their state
+  formatKey(nodeId: string, event: EventPayload): string {
+    const stateKey = event.stateKey || 'state'
+    const key = `${nodeId}:${stateKey}`
+    return key
   }
 
   storeEvent(event: any) {
@@ -40,8 +42,7 @@ export class KeyvStateService implements IStateService {
       const event = this.eventStore.currentEvent()
 
       if (event) {
-        // const key = `${nodeId}:${event.channel}:${event.sender}`
-        const key = `${nodeId}`
+        const key = this.formatKey(nodeId, event)
         return (await this.keyv.get(key)) || null
       }
     }
@@ -61,8 +62,7 @@ export class KeyvStateService implements IStateService {
       const event = this.eventStore.currentEvent()
 
       if (event) {
-        // const key = `${nodeId}:${event.channel}:${event.sender}`
-        const key = `${nodeId}`
+        const key = this.formatKey(nodeId, event)
         await this.keyv.set(key, newState)
         return
       }
