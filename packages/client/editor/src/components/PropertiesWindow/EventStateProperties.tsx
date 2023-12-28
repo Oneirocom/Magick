@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { ConfigurationComponentProps } from "./PropertiesWindow"
 
-const eventProperties = [
-  'connector',
-  'client',
-  'channel',
-  'agentId',
-  'sender'
-];
-
 export const EventStateProperties = (props: ConfigurationComponentProps) => {
   const { updateConfigKey, config, fullConfig } = props;
   const [, eventProperties] = config
