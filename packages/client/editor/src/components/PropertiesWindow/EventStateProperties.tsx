@@ -11,16 +11,18 @@ const eventProperties = [
 ];
 
 export const EventStateProperties = (props: ConfigurationComponentProps) => {
-  const { updateConfigKey, config } = props;
-  const [key, value] = config
-  const [selectedEvents, setSelectedEvents] = useState(value || []);
+  const { updateConfigKey, config, fullConfig } = props;
+  const [, eventProperties] = config
+  const eventStateValue = fullConfig.eventState
+  const [selectedEvents, setSelectedEvents] = useState(eventStateValue || []);
 
   const handleChange = (event, eventProperty) => {
     const newSelection = event.target.checked
       ? [...selectedEvents, eventProperty]
       : selectedEvents.filter(e => e !== eventProperty);
     setSelectedEvents(newSelection);
-    updateConfigKey(key, newSelection);
+    // would rather not hard code this string here
+    updateConfigKey('eventState', newSelection);
   };
 
   return (
