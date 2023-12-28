@@ -78,6 +78,7 @@ export type EventPayload<
   channelType: string
   rawData: unknown
   timestamp: string
+  stateKey?: string
   runInfo?: {
     spellId: string
   }
