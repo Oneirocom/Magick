@@ -29,14 +29,18 @@
       },
       {
         "name": "eventState",
-        "valueType": "string",
-        "defaultValue": "channel"
+        "valueType": "array",
+        "defaultValue": []
       },
       {
         "name": "eventStateProperties",
         "valueType": "array",
         "defaultValue": [
-          "channel"
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
         ]
       }
     ]

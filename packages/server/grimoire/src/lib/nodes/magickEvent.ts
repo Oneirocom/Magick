@@ -9,6 +9,7 @@ import {
   makeCommonProps,
 } from '@magickml/behave-graph'
 import { BaseEmitter, EventPayload } from 'server/plugin'
+import { IEventStore } from '../services/eventStore'
 
 type OmitFactoryAndType<T extends INodeDefinition> = Omit<
   T,
@@ -18,7 +19,7 @@ type OmitFactoryAndType<T extends INodeDefinition> = Omit<
 interface ExtendedConfig extends NodeConfigurationDescription {
   eventState: {
     valueType: string
-    defaultValue: string
+    defaultValue: string[]
   }
   eventStateProperties: {
     valueType: string
@@ -64,12 +65,12 @@ export function makeMagickEventNodeDefinition<
       defaultValue: ['hiddenProperties', 'eventState'],
     },
     eventState: {
-      valueType: 'string',
-      defaultValue: 'channel',
+      valueType: 'array',
+      defaultValue: [] as string[],
     },
     eventStateProperties: {
       valueType: 'array',
-      defaultValue: ['channel'],
+      defaultValue: ['connector', 'client', 'channel', 'agentId', 'sender'],
     },
   } as TConfig & ExtendedConfig
 
@@ -88,6 +89,22 @@ export function makeMagickEventNodeDefinition<
 
           // Using the config object
           const onStartEvent = (event: EventPayload) => {
+            // attach event key to the event here
+            // we set the current event in the event store for access in the state
+            const eventStore = getDependency<IEventStore>('IEventStore')
+            const eventState = node?.configuration.eventState
+
+            // set the event key  by sorting the event state properties alphabetically and then joining them
+            // warning: if we change this key, all agents will lose access to their state
+            const eventKey = eventState.sort().join('-')
+
+            const eventWithKey = {
+              ...event,
+              eventKey,
+            }
+
+            eventStore?.setEvent(eventWithKey)
+
             eventConfig.handleEvent(event, args) // Pass all init args and the event to the callback
             if (!node || !engine) return
             engine.onNodeExecutionEnd.emit(node)
