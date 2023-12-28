@@ -1,6 +1,5 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { BaseEmitter, EventPayload, ON_MESSAGE } from 'server/plugin'
-import { CorePluginEvents } from '../../corePlugin'
+import { EventPayload, ON_MESSAGE } from 'server/plugin'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 
 type State = {
