@@ -1,10 +1,5 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import {
-  CoreLLMService,
-  Message,
-  CompletionOptions,
-  ModelNames,
-} from '../../services/coreLLMService'
+import { CoreLLMService, ModelNames } from '../../services/coreLLMService'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -22,18 +17,42 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'string',
       choices: Object.values(ModelNames),
     },
-    messages: 'array',
-    options: 'object',
+    temperature: {
+      valueType: 'number',
+      defaultValue: 0.5,
+    },
+    top_p: {
+      valueType: 'number',
+      defaultValue: 1,
+    },
+    stream: {
+      valueType: 'boolean',
+      defaultValue: false,
+    },
+    seed: {
+      valueType: 'number',
+      defaultValue: 42,
+    },
+    stop: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+    prompt: {
+      valueType: 'string',
+      defaultValue: '',
+    },
   },
+
   out: {
     response: 'object',
     completion: 'string',
-    done: 'flow', // Output: signal when the process is finished
-    onStream: 'flow', // Output: signal when a chunk is received (only for streaming)
-    stream: 'string', // Streamed data (only for streaming)
+    done: 'flow',
+    onStream: 'flow',
+    stream: 'string',
   },
   initialState: undefined,
   triggered: ({ commit, read, write, graph: { getDependency } }) => {
+    console.log('HELLO!!!!!')
     const generateText = async () => {
       try {
         const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
@@ -43,15 +62,21 @@ export const generateText = makeFlowNodeDefinition({
         }
 
         const model: string = read('model') || 'gemini-pro'
-        const messages: Message[] = read('messages') || []
-        const options: CompletionOptions = read('options') || {}
+        const prompt: string = read('prompt') || ''
+        const temperature: number = read('temperature') || 0.5
+        const top_p: number = read('top_p') || 1
+        const stream: boolean = read('stream') || false
 
-        if (options?.stream) {
-          options.stream = true
+        console.log('PROMPT:', prompt)
+
+        if (stream) {
           const stream = await coreLLMService.streamCompletion({
             model,
-            messages,
-            options,
+            messages: [{ role: 'prompt', content: prompt }],
+            options: {
+              temperature,
+              top_p,
+            },
           })
 
           for await (const chunk of stream) {
@@ -61,8 +86,11 @@ export const generateText = makeFlowNodeDefinition({
         } else {
           const response = await coreLLMService.completion({
             model,
-            messages,
-            options,
+            messages: [{ role: 'prompt', content: prompt }],
+            options: {
+              temperature,
+              top_p,
+            },
           })
 
           write('response', response)
@@ -75,7 +103,7 @@ export const generateText = makeFlowNodeDefinition({
         throw error
       }
     }
-
+    console.log('IRAN')
     void generateText()
   },
 })
