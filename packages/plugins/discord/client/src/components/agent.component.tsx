@@ -110,21 +110,15 @@ export const DiscordAgentWindow: FC<any> = props => {
             label={null}
             checked={checked}
             onChange={e => {
-              setChecked(!checked)
-              debouncedFunction(selectedAgentData.id, {
+              setChecked(e.target.checked)
+              console.log('SWITCHING DISCORD')
+              update({
                 ...selectedAgentData,
                 data: {
                   ...selectedAgentData.data,
                   discord_enabled: e.target.checked,
                 },
-              })
-              setSelectedAgentData({
-                ...selectedAgentData,
-                data: {
-                  ...selectedAgentData.data,
-                  discord_enabled: e.target.checked,
-                },
-              })
+              });
             }}
             style={{ float: 'right' }}
           />

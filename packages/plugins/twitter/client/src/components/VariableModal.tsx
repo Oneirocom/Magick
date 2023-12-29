@@ -38,7 +38,7 @@ const VariableModal = ({
       },
     }
 
-    update(selectedAgentData.id, data)
+    update(data)
   }
 
   const handleClose = () => {
