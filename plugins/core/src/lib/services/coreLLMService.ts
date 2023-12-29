@@ -125,7 +125,7 @@ export class CoreLLMService implements ICoreLLMService {
 
   private async initializeLiteLLM() {
     try {
-      this.liteLLM = await python('liteLLM')
+      this.liteLLM = await python('litellm')
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
       this.liteLLM.vertex_location = VERTEXAI_LOCATION
     } catch (error) {
