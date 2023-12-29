@@ -118,6 +118,224 @@
     ]
   },
   {
+    "type": "magick/generateText",
+    "category": "Action",
+    "label": "Generate Text",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "model",
+        "valueType": "string",
+        "defaultValue": "",
+        "choices": [
+          {
+            "text": "gpt-3.5-turbo",
+            "value": "gpt-3.5-turbo"
+          },
+          {
+            "text": "gpt-3",
+            "value": "gpt-3"
+          },
+          {
+            "text": "davinci",
+            "value": "davinci"
+          },
+          {
+            "text": "curie",
+            "value": "curie"
+          },
+          {
+            "text": "babbage",
+            "value": "babbage"
+          },
+          {
+            "text": "ada",
+            "value": "ada"
+          },
+          {
+            "text": "gemini-pro",
+            "value": "gemini-pro"
+          },
+          {
+            "text": "palm",
+            "value": "palm"
+          },
+          {
+            "text": "mistral",
+            "value": "mistral"
+          },
+          {
+            "text": "anthropic",
+            "value": "anthropic"
+          },
+          {
+            "text": "sagemaker",
+            "value": "sagemaker"
+          },
+          {
+            "text": "bedrock",
+            "value": "bedrock"
+          },
+          {
+            "text": "anyscale",
+            "value": "anyscale"
+          },
+          {
+            "text": "perplexity-ai",
+            "value": "perplexity-ai"
+          },
+          {
+            "text": "vllm",
+            "value": "vllm"
+          },
+          {
+            "text": "deepinfra",
+            "value": "deepinfra"
+          },
+          {
+            "text": "j2-light",
+            "value": "j2-light"
+          },
+          {
+            "text": "j2-mid",
+            "value": "j2-mid"
+          },
+          {
+            "text": "j2-ultra",
+            "value": "j2-ultra"
+          },
+          {
+            "text": "nlpc-cloud",
+            "value": "nlpc-cloud"
+          },
+          {
+            "text": "replicate",
+            "value": "replicate"
+          },
+          {
+            "text": "cohere",
+            "value": "cohere"
+          },
+          {
+            "text": "together-ai",
+            "value": "together-ai"
+          },
+          {
+            "text": "aleph-alpha",
+            "value": "aleph-alpha"
+          },
+          {
+            "text": "baseten",
+            "value": "baseten"
+          },
+          {
+            "text": "openrouter",
+            "value": "openrouter"
+          },
+          {
+            "text": "custom-api",
+            "value": "custom-api"
+          },
+          {
+            "text": "petals",
+            "value": "petals"
+          }
+        ]
+      },
+      {
+        "name": "temperature",
+        "valueType": "number",
+        "defaultValue": 0.5
+      },
+      {
+        "name": "top_p",
+        "valueType": "number",
+        "defaultValue": 1
+      },
+      {
+        "name": "stream",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "seed",
+        "valueType": "number",
+        "defaultValue": 42
+      },
+      {
+        "name": "stop",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "prompt",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "response",
+        "valueType": "object"
+      },
+      {
+        "name": "completion",
+        "valueType": "string"
+      },
+      {
+        "name": "done",
+        "valueType": "flow"
+      },
+      {
+        "name": "onStream",
+        "valueType": "flow"
+      },
+      {
+        "name": "stream",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "modelChoices",
+        "valueType": "array",
+        "defaultValue": [
+          "gpt-3.5-turbo",
+          "gpt-3",
+          "davinci",
+          "curie",
+          "babbage",
+          "ada",
+          "gemini-pro",
+          "palm",
+          "mistral",
+          "anthropic",
+          "sagemaker",
+          "bedrock",
+          "anyscale",
+          "perplexity-ai",
+          "vllm",
+          "deepinfra",
+          "j2-light",
+          "j2-mid",
+          "j2-ultra",
+          "nlpc-cloud",
+          "replicate",
+          "cohere",
+          "together-ai",
+          "aleph-alpha",
+          "baseten",
+          "openrouter",
+          "custom-api",
+          "petals"
+        ]
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
