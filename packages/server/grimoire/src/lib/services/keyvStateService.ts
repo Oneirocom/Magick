@@ -23,7 +23,7 @@ export class KeyvStateService implements IStateService {
 
   // warning: if we change this key, all agents will lose access to their state
   formatKey(nodeId: string, event: EventPayload): string {
-    let baseKey = `${nodeId}`
+    const baseKey = `${nodeId}`
     const stateKey = event.stateKey
 
     if (stateKey === undefined) return baseKey
