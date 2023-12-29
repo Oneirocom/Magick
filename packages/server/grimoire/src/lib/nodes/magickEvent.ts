@@ -96,7 +96,6 @@ export function makeMagickEventNodeDefinition<
 
             // set the event key  by sorting the event state properties alphabetically and then joining them
             // warning: if we change this key, all agents will lose access to their state
-            debugger
             const stateKey = eventState.sort().reduce((acc, key) => {
               const property = event[key]
               if (property === undefined) return acc
