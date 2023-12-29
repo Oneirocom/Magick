@@ -221,14 +221,34 @@
         ]
       },
       {
-        "name": "messages",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "name": "temperature",
+        "valueType": "number",
+        "defaultValue": 0.5
       },
       {
-        "name": "options",
-        "valueType": "object",
-        "defaultValue": "[]"
+        "name": "top_p",
+        "valueType": "number",
+        "defaultValue": 1
+      },
+      {
+        "name": "stream",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "seed",
+        "valueType": "number",
+        "defaultValue": 42
+      },
+      {
+        "name": "stop",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "prompt",
+        "valueType": "string",
+        "defaultValue": ""
       }
     ],
     "outputs": [
