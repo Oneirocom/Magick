@@ -207,7 +207,10 @@ export class PluginManager extends EventEmitter {
    * Retrieves a unified registry of all nodes, values, and dependencies from the plugins.
    * @returns A unified registry object.
    */
-  getRegistry(spellCaster: SpellCaster, baseRegistry?: IRegistry): IRegistry {
+  async getRegistry(
+    spellCaster: SpellCaster,
+    baseRegistry?: IRegistry
+  ): Promise<IRegistry> {
     const unifiedRegistry: IRegistry = baseRegistry || {
       nodes: {},
       values: {},
@@ -215,7 +218,7 @@ export class PluginManager extends EventEmitter {
     }
 
     for (const plugin of this.plugins.values()) {
-      const { nodes, values, dependencies } = plugin.getRegistry(
+      const { nodes, values, dependencies } = await plugin.getRegistry(
         unifiedRegistry,
         spellCaster
       )
