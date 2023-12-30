@@ -119,11 +119,7 @@ interface ICoreLLMService {
 export class CoreLLMService implements ICoreLLMService {
   protected liteLLM: any
 
-  constructor() {
-    this.initializeLiteLLM()
-  }
-
-  private async initializeLiteLLM() {
+  async initialize() {
     try {
       this.liteLLM = await python('litellm')
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
@@ -136,7 +132,6 @@ export class CoreLLMService implements ICoreLLMService {
   // Method to handle standard completion
   async completion(request: CompletionRequest): Promise<CompletionResponse> {
     try {
-      const { completions } = await this.liteLLM
       // Construct the request body
       const body = {
         //TODO: Make gemini default model: "gemini-pro"
@@ -145,11 +140,14 @@ export class CoreLLMService implements ICoreLLMService {
         ...request.options,
       }
 
-      const response = (await completions(body)) as CompletionResponse
+      // get the raw response from the python bridge
+      const rawResponse = await this.liteLLM.completion$(body)
 
-      // Process and return the response
-      // Note: Adjust the response processing as per the actual API response structure
-      return response
+      // process the response into jsonand return it
+      const response = await rawResponse.json()
+
+      // return the actual value as a JS object
+      return await response.valueOf()
     } catch (error) {
       console.error('Error in completion request:', error)
       throw error
