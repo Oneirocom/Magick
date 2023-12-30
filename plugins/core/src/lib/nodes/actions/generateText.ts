@@ -16,6 +16,7 @@ export const generateText = makeFlowNodeDefinition({
     model: {
       valueType: 'string',
       choices: Object.values(ModelNames),
+      defaultValue: ModelNames['gemini-pro'],
     },
     temperature: {
       valueType: 'number',
@@ -51,59 +52,48 @@ export const generateText = makeFlowNodeDefinition({
     stream: 'string',
   },
   initialState: undefined,
-  triggered: ({ commit, read, write, graph: { getDependency } }) => {
-    console.log('HELLO!!!!!')
-    const generateText = async () => {
-      try {
-        const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
+  triggered: async ({ commit, read, write, graph: { getDependency } }) => {
+    try {
+      const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
 
-        if (!coreLLMService) {
-          throw new Error('No coreLLMService provided')
-        }
-
-        const model: string = read('model') || 'gemini-pro'
-        const prompt: string = read('prompt') || ''
-        const temperature: number = read('temperature') || 0.5
-        const top_p: number = read('top_p') || 1
-        const stream: boolean = read('stream') || false
-
-        console.log('PROMPT:', prompt)
-
-        if (stream) {
-          const stream = await coreLLMService.streamCompletion({
-            model,
-            messages: [{ role: 'prompt', content: prompt }],
-            options: {
-              temperature,
-              top_p,
-            },
-          })
-
-          for await (const chunk of stream) {
-            write('stream', chunk)
-            commit('onStream') // Commit for each chunk
-          }
-        } else {
-          const response = await coreLLMService.completion({
-            model,
-            messages: [{ role: 'prompt', content: prompt }],
-            options: {
-              temperature,
-              top_p,
-            },
-          })
-
-          write('response', response)
-        }
-
-        // Signal end of process
-        commit('done')
-      } catch (error) {
-        console.error('Error in generateText:', error)
-        throw error
+      if (!coreLLMService) {
+        throw new Error('No coreLLMService provided')
       }
+
+      const model: string = read('model') || 'gemini-pro'
+      const prompt: string = read('prompt') || ''
+      const temperature: number = read('temperature') || 0.5
+      const top_p: number = read('top_p') || 1
+      const stream: boolean = read('stream') || false
+
+      const request = {
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        options: {
+          temperature,
+          top_p,
+        },
+      }
+
+      if (stream) {
+        const stream = await coreLLMService.streamCompletion(request)
+
+        for await (const chunk of stream) {
+          write('stream', chunk)
+          commit('onStream') // Commit for each chunk
+        }
+      } else {
+        const response = await coreLLMService.completion(request)
+
+        write('response', response)
+        write('completion', response.choices[0].message.content)
+      }
+
+      // Signal end of process
+      commit('done')
+    } catch (error) {
+      console.error('Error in generateText:', error)
+      throw error
     }
-    console.log('IRAN')
-    void generateText()
   },
 })
