@@ -69,13 +69,16 @@ export class CorePlugin extends CoreEventsPlugin {
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  getDependencies() {
+  async getDependencies() {
+    const coreLLMService = new CoreLLMService()
+    await coreLLMService.initialize()
+
     return {
       coreActionService: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
       ),
-      coreLLMService: new CoreLLMService(),
+      coreLLMService,
     }
   }
 
