@@ -15,6 +15,7 @@ import { generateText } from './nodes/actions/generateText'
 import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
+import { streamMessage } from './nodes/actions/streamMessage'
 
 const pluginName = 'Core'
 
@@ -34,7 +35,7 @@ export type CorePluginEvents = {
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage, textTemplate, generateText]
+  nodes = [messageEvent, sendMessage, textTemplate, generateText, streamMessage]
   values = []
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
@@ -62,6 +63,11 @@ export class CorePlugin extends CoreEventsPlugin {
     this.registerAction({
       actionName: 'sendMessage',
       displayName: 'Send Message',
+      handler: this.handleSendMessage.bind(this),
+    })
+    this.registerAction({
+      actionName: 'streamMessage',
+      displayName: 'Stream Message',
       handler: this.handleSendMessage.bind(this),
     })
   }
