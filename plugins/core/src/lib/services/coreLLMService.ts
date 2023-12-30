@@ -113,7 +113,10 @@ export enum ModelNames {
 
 interface ICoreLLMService {
   completion: (request: CompletionRequest) => Promise<CompletionResponse>
-  streamCompletion: (request: CompletionRequest) => Promise<string>
+  streamCompletion: (
+    request: CompletionRequest,
+    callback: (chunk, text) => void
+  ) => Promise<void>
 }
 
 export class CoreLLMService implements ICoreLLMService {
@@ -135,7 +138,7 @@ export class CoreLLMService implements ICoreLLMService {
       // Construct the request body
       const body = {
         //TODO: Make gemini default model: "gemini-pro"
-        model: request.model || 'gemini-pro',
+        model: request.model || 'gpt-3.5-turbo',
         messages: request.messages,
         ...request.options,
       }
@@ -155,7 +158,10 @@ export class CoreLLMService implements ICoreLLMService {
   }
 
   // Method to handle streaming completion
-  async streamCompletion(request: CompletionRequest): Promise<string> {
+  async streamCompletion(
+    request: CompletionRequest,
+    callback: (chunk, text) => void
+  ): Promise<void> {
     try {
       // Ensure that streaming is enabled in the request options
       const body = {
@@ -165,20 +171,16 @@ export class CoreLLMService implements ICoreLLMService {
         stream: true, // Ensure streaming is true
       }
 
-      const stream = await this.liteLLM.acompletion(body)
-      let fullResponse = ''
-
+      const stream = await this.liteLLM.completion$(body)
       // Async iteration over the streaming object
       for await (const chunk of stream) {
         // Handle each chunk as it arrives
         // Assuming chunk structure is similar to the non-streaming response
-        const chunkContent = chunk.choices
-          .map(choice => choice.message.content)
-          .join('\n')
-        fullResponse += chunkContent + '\n' // Concatenate chunk content
+        const rawChunk = await chunk.json()
+        const chunkResponse = await rawChunk.valueOf()
+        const chunkText = chunkResponse.choices[0].delta.content || ''
+        callback(chunkResponse, chunkText)
       }
-
-      return fullResponse.trim() // Remove trailing newline
     } catch (error) {
       console.error('Error in stream completion request:', error)
       throw error
