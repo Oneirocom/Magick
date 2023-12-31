@@ -127,6 +127,11 @@
         "valueType": "flow"
       },
       {
+        "name": "prompt",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
         "name": "model",
         "valueType": "string",
         "defaultValue": "",
@@ -251,14 +256,14 @@
         "defaultValue": 0.5
       },
       {
-        "name": "top_p",
-        "valueType": "number",
-        "defaultValue": 1
-      },
-      {
         "name": "stream",
         "valueType": "boolean",
         "defaultValue": false
+      },
+      {
+        "name": "top_p",
+        "valueType": "number",
+        "defaultValue": 1
       },
       {
         "name": "seed",
@@ -267,11 +272,6 @@
       },
       {
         "name": "stop",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "prompt",
         "valueType": "string",
         "defaultValue": ""
       }

@@ -13,6 +13,10 @@ export const generateText = makeFlowNodeDefinition({
   },
   in: {
     flow: 'flow',
+    prompt: {
+      valueType: 'string',
+      defaultValue: '',
+    },
     model: {
       valueType: 'string',
       choices: Object.values(ModelNames),
@@ -22,23 +26,19 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'number',
       defaultValue: 0.5,
     },
-    top_p: {
-      valueType: 'number',
-      defaultValue: 1,
-    },
     stream: {
       valueType: 'boolean',
       defaultValue: false,
+    },
+    top_p: {
+      valueType: 'number',
+      defaultValue: 1,
     },
     seed: {
       valueType: 'number',
       defaultValue: 42,
     },
     stop: {
-      valueType: 'string',
-      defaultValue: '',
-    },
-    prompt: {
       valueType: 'string',
       defaultValue: '',
     },
@@ -76,7 +76,6 @@ export const generateText = makeFlowNodeDefinition({
       }
 
       if (stream) {
-        console.log('STREAMING TEXT')
         const chunksQueue = [] as any[] // Queue to manage chunks
         let isProcessing = false // Flag to check if a chunk is being processed
 
