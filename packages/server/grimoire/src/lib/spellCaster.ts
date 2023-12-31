@@ -240,12 +240,18 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the graph is executed.
    */
   async executeGraphOnce(isEnd = false): Promise<void> {
-    if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
-    if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
-    this.busy = true
-    await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
-    this.busy = false
-    this.executeGraph = false // Reset the flag after execution
+    try {
+      if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
+      if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
+      this.busy = true
+      await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
+      this.busy = false
+      this.executeGraph = false // Reset the flag after execution
+    } catch (err) {
+      this.logger.error('Error executing graph from logger!!!!', err)
+      this.busy = false
+      this.executeGraph = false // Reset the flag after execution
+    }
   }
 
   /**
