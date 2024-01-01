@@ -2,7 +2,7 @@
 import cx from 'classnames';
 import { getNodeSpec } from 'shared/nodeSpec';
 import { Tab } from "@magickml/providers"
-import { selectActiveNode, useGetSpellByJustIdQuery } from "client/state"
+import { selectActiveNode, useGetSpellQuery } from "client/state"
 import { useSelector } from "react-redux"
 import { Window } from 'client/core';
 import { SocketConfig } from './SocketConfig';
@@ -32,7 +32,7 @@ const ConfigurationComponents = {
 }
 
 export const PropertiesWindow = (props: Props) => {
-  const { data: spellData } = useGetSpellByJustIdQuery({ id: props.spellId })
+  const { data: spellData } = useGetSpellQuery({ id: props.spellId })
   const nodeSpecs = getNodeSpec()
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const handleChange = useChangeNodeData(selectedNode?.id);
