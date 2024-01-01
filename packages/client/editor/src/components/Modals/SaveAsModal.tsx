@@ -33,15 +33,9 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const [newSpell] = spellApi.useNewSpellMutation()
 
   // Fetch the spell by ID
-  const { data: spell } = spellApi.useGetSpellByIdQuery(
-    {
-      spellName: tab.name,
-      id: tab.id,
-      projectId: config.projectId,
-    },
-    {
-      skip: !tab.name,
-    }
+  const { data: spell } = spellApi.useGetSpellQuery(
+    { id: tab.id },
+    { skip: !tab.name }
   )
 
   // Snackbar for showing notifications
@@ -69,7 +63,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
     // Save the spell
     const saveResponse: any = await saveSpell({
-      spell: { ...spell.data[0], name: data.name, id },
+      spell: { ...spell.data, name: data.name, id },
       projectId: config.projectId,
     })
 

@@ -35,7 +35,7 @@ const MagickInterfaceProvider: React.FC<{
   const config = useConfig()
   const { events, publish, subscribe } = usePubSub()
   const [_runSpell] = spellApi.useRunSpellMutation()
-  const [_getSpell] = spellApi.useLazyGetSpellByIdQuery()
+  const [_getSpell] = spellApi.useLazyGetSpellQuery()
 
   // Destructure event types
   const {
@@ -122,15 +122,11 @@ const MagickInterfaceProvider: React.FC<{
   }
 
   const getSpell: GetSpell = async spellName => {
-    const spell = await _getSpell({
-      spellName,
-      id: spellId,
-      projectId: config.projectId,
-    })
+    const spell = await _getSpell({ id: spellId })
 
     if (!spell.data) return null
 
-    return spell.data[0] as SpellInterface
+    return spell.data as SpellInterface
   }
 
   const processCode: ProcessCode = async (

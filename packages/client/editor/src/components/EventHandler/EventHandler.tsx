@@ -10,7 +10,7 @@ import { diff } from '../../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/providers'
 import {
-  useLazyGetSpellByIdQuery,
+  useLazyGetSpellQuery,
   useSaveSpellMutation,
   RootState,
   setSyncing,
@@ -37,10 +37,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
   const [saveSpellMutation] = useSaveSpellMutation()
   // TODO: is this a bug?
-  const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
-    spellName: tab.name.split('--')[0],
+  const [getSpell, { data: spell }] = useLazyGetSpellQuery({
     id: spellId,
-    projectId: config.projectId,
   } as any)
   // Spell ref because callbacks can't hold values from state without them
   const spellRef = useRef<SpellInterface | null>(null)
@@ -49,20 +47,16 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const client = FeathersContext.client
 
   useEffect(() => {
-    getSpell({
-      spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
-    })
+    getSpell({ id: spellId })
   }, [config.projectId, getSpell, spellId, tab.name])
 
   useEffect(() => {
     if (!spell) return
     const oldSpell = JSON.stringify(spellRef.current)
-    const newSpell = JSON.stringify(spell?.data[0])
+    const newSpell = JSON.stringify(spell)
     if (oldSpell === newSpell) return
 
-    spellRef.current = spell?.data[0]
+    spellRef.current = spell
   }, [spell])
 
 
