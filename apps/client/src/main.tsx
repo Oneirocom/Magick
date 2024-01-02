@@ -42,6 +42,7 @@ if (window === window.parent) {
       apiUrl,
       projectId,
       token: DEFAULT_USER_TOKEN,
+      userId: '',
       email: undefined
     }
 
@@ -108,6 +109,9 @@ if (window === window.parent) {
         const container = document.getElementById('root') as Element
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
           ; (window as any).root = root
+
+        const userId = config.userId;
+        document.cookie = `magick-userId=${userId};path=/;max-age=31536000;SameSite=Strict;Secure`;
 
         root.render(<Root />)
       }

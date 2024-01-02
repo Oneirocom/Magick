@@ -65,7 +65,7 @@ export const EthereumAgentWindow: FC<PluginProps> = ({
       },
     }
 
-    update(selectedAgentData.id, data)
+    update(data)
   }
 
   return (
@@ -107,7 +107,7 @@ export const EthereumAgentWindow: FC<PluginProps> = ({
       </div>
 
       {editMode && (
-        <Modal open={editMode} setOpen={setEditMode} handleAction={handleSave}>
+        <Modal open={editMode} onClose={() => { }} handleAction={handleSave}>
           <div>
             <span className="form-item-label">Private Key</span>
             <KeyInput

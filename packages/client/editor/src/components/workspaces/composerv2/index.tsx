@@ -81,7 +81,8 @@ const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string,
         hideBorders={true}
         onReady={onReady}
         className={`global-layout ${theme}`}
-      /></WorkspaceProvider>)
+      />
+    </WorkspaceProvider>)
 }
 
 export default ComposerContainer

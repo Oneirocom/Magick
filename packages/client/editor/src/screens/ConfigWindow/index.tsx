@@ -17,7 +17,7 @@ const ConfigWindow = () => {
 
   // Handle data from initial loading of the agent data
   useEffect(() => {
-    if (!agentData) return
+    if (!agentData || selectedAgent) return
 
     const spellAgent = agentData.data.rootSpell ?? {}
     const inputs = (pluginManager as ClientPluginManager).getInputByName()

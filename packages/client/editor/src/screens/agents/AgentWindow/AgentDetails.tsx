@@ -79,6 +79,9 @@ const AgentDetails = ({
   useEffect(() => {
     if (!selectedAgentData) return;
 
+    // if root spell is the same as the last one, return
+    if (rootSpell && rootSpell.id === selectedAgentData.rootSpellId) return;
+
     // Fetch root spell if available
     selectedAgentData?.rootSpellId && getSpellById({ id: selectedAgentData.rootSpellId });
     selectedAgentData?.rootSpell?.id && getSpellById(selectedAgentData.rootSpell.id);
@@ -358,7 +361,7 @@ const AgentDetails = ({
                 element={value}
                 selectedAgentData={selectedAgentData}
                 setSelectedAgentData={setSelectedAgentData}
-                update={() => update()}
+                update={update}
               />
             </Tooltip>
 

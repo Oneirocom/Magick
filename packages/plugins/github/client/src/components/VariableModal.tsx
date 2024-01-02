@@ -33,7 +33,7 @@ const VariableModal = ({
     json['github_repos'] = state.github_repos
     localStorage.setItem('secrets', JSON.stringify(json))
 
-    update(selectedAgentData.id, data)
+    update(data)
   }
 
   const handleAccessToken = async e => {
