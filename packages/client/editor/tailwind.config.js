@@ -4,11 +4,16 @@ const { join } = require('path')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    'node_modules/flowbite-react/lib/esm/**/*.js',
     join(
       __dirname,
       '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
     ),
     ...createGlobPatternsForDependencies(__dirname),
+  ],
+  plugins: [
+    // ...
+    require('flowbite/plugin'),
   ],
   theme: {
     extend: {
@@ -24,5 +29,4 @@ module.exports = {
       },
     },
   },
-  plugins: [],
 }

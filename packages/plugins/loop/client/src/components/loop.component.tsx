@@ -13,7 +13,7 @@ type PluginProps = {
     selectedAgentData: any
     setSelectedAgentData: any
     enable: boolean
-    update: (id: string, data: object) => void
+    update: (data: object) => void
   }
 }
 
@@ -26,7 +26,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
     props.props
 
   // Initialize the state variables
-  const debouncedFunction = debounce((id, data) => update(id, data), 500)
+  const debouncedFunction = debounce((id, data) => update(data), 500)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data?.loop_enabled)
   const [disable, setDisable] = useState(false)
@@ -71,7 +71,7 @@ export const AgentLoopWindow: FC<PluginProps> = props => {
       },
     }
 
-    update(selectedAgentData.id, data)
+    update(data)
   }
 
   // Render the component

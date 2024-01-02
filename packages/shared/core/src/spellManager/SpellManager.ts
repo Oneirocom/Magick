@@ -184,8 +184,8 @@ export default class SpellManager {
    */
   async load(spell: SpellInterface): Promise<SpellRunner | undefined> {
     if (!spell) {
-      this.agent?.error('No spell provided')
-      console.error('No spell provided')
+      this.agent?.error(`No spell provided to agent ${this.agent.id}`)
+      console.error(`No spell provided to agent ${this.agent.id}`)
       return
     }
 
