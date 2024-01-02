@@ -1,6 +1,6 @@
 import { VariableJSON } from '@magickml/behave-graph';
 import { Tab, useConfig, usePubSub } from '@magickml/providers';
-import { Button, Input, Tabs, TabsContent, TabsList, TabsTrigger } from '@magickml/ui';
+import { Button, Input } from '@magickml/ui';
 import { Window } from 'client/core'
 import { useGetSpellQuery, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
