@@ -63,8 +63,8 @@ export const useBehaveGraphFlow = ({
   // Make sure we are only doing this conversion when the graph changes
   // Debounce because changes stream in.
   const debouncedUpdate = useCallback(
-    debounce(specJson => {
-      const graphJson = flowToBehave(nodes, edges, specJson)
+    debounce((specJson, spell) => {
+      const graphJson = flowToBehave(nodes, edges, specJson, spell.graph)
       setStoredGraphJson(graphJson)
       publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: graphJson })
     }, 1000),
@@ -72,15 +72,15 @@ export const useBehaveGraphFlow = ({
   )
 
   useEffect(() => {
-    if (!specJson) return
+    if (!specJson || !spell) return
 
-    debouncedUpdate(specJson)
+    debouncedUpdate(specJson, spell)
 
     // Cleanup function to cancel the debounced call if component unmounts
     return () => {
       debouncedUpdate.cancel()
     }
-  }, [debouncedUpdate, nodes, edges, specJson])
+  }, [debouncedUpdate, nodes, edges, specJson, spell])
 
   const nodeTypes = useCustomNodeTypes({
     spell,
