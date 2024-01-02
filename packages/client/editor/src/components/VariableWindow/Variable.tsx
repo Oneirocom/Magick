@@ -1,12 +1,11 @@
 import { VariableJSON } from "@magickml/behave-graph";
-import { Input } from "@magickml/ui";
 import { cx } from "class-variance-authority";
 import { Icon } from "client/core";
 import { debounce } from "lodash";
 import { useState } from "react";
 
 const inputClass = cx(
-  'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm justify-start flex',
+  'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-md justify-start flex',
 );
 
 // todo we need to centralize these types
@@ -103,7 +102,7 @@ const DefaultInput = ({ valueType, initialValue, onChange, choices = [], showCho
       {valueType === 'boolean' && !showChoices && (
         <input
           type="checkbox"
-          className={inputClass + ' w-auto mr-auto'}
+          className={inputClass + ' mr-auto justify-start flex order-first'}
           value={value || 0}
           onChange={(e) => updateValue(e.currentTarget.checked)}
         />
@@ -148,7 +147,8 @@ export const Variable = ({ variable, updateVariable, deleteVariable }: VariableP
         <div className="flex flex-column mb2 py-2 gap-2 w-full">
           <div className="flex">
             <p className="w-2/5">Name</p>
-            <Input
+            <input
+              className={inputClass}
               value={variable.name}
               onChange={(e) => {
                 updateProperty('name')(e.target.value)
