@@ -7,32 +7,26 @@ import {
   IDockviewPanelProps,
   positionToDirection,
 } from 'dockview'
-import { useEffect, useRef, useState } from 'react'
-import { Tab, useConfig } from '@magickml/providers';
+import { useEffect, useState } from 'react'
+import { Tab } from '@magickml/providers';
 import { usePubSub } from '@magickml/providers'
 import EventHandler from '../../EventHandler/EventHandler'
+
+import Inspector from '../../InspectorWindow/InspectorWindow'
 
 import Console from '../../DebugConsole'
 import TextEditor from '../../TextEditorWindow'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
-import { useSelector } from 'react-redux';
-import { RootState } from 'client/state';
 
-const generateLayoutKey = (spellid: string, agentId: string, projectId: string,) => {
-  return `${projectId}/composer_layout_${spellid}/${agentId || 'draft-agent'}`
-}
-
-const getLayoutFromLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string) => {
-  const key = generateLayoutKey(spellId, currentAgentId, projectId)
-  const layout = localStorage.getItem(key)
+const getLayoutFromLocalStorage = (spellId: string) => {
+  const layout = localStorage.getItem(`composer_layout_${spellId}`)
   return layout ? JSON.parse(layout) : null
 }
 
-const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string, layout: any) => {
-  const key = generateLayoutKey(spellId, currentAgentId, projectId)
-  localStorage.setItem(key, JSON.stringify(layout))
+const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
+  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
 }
 
 function loadDefaultLayout(api: DockviewApi, tab, spellId) {
@@ -66,7 +60,6 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
         tab,
         spellId
       },
-
       position: { referencePanel: 'Graph', direction: 'left' },
     })
     .api.setSize({
@@ -125,6 +118,9 @@ const components = {
   Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <ChatWindow {...props.params} />
   },
+  Inspector: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    return <Inspector {...props.params} />
+  },
   Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <PropertiesWindow {...props.params} />
   },
@@ -140,22 +136,12 @@ const components = {
 
 export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
-  const config = useConfig()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, subscribe } = usePubSub()
 
-  const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { currentAgentId: _currentAgentId } = globalConfig
-  const currentAgentRef = useRef(_currentAgentId)
-
-  useEffect(() => {
-    currentAgentRef.current = _currentAgentId
-  }, [_currentAgentId])
-
-
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
-    const layout = getLayoutFromLocalStorage(spellId, currentAgentRef.current, config.projectId)
+    const layout = getLayoutFromLocalStorage(spellId)
 
     let success = false;
 
@@ -171,10 +157,8 @@ export const Composer = ({ tab, theme, spellId }) => {
     setApi(event.api)
   }
 
-  useEffect(() => {
-    if (!api) return
-
-    const unsubscribe = subscribe(events.$CREATE_TEXT_EDITOR(tab.id), () => {
+  const windowBarMap = {
+    [events.$CREATE_TEXT_EDITOR(tab.id)]: () => {
       api.addPanel({
         id: 'Text Editor',
         component: 'TextEditor',
@@ -183,17 +167,64 @@ export const Composer = ({ tab, theme, spellId }) => {
           tab,
           spellId
         },
+        position: { referencePanel: 'Graph', direction: 'left' },
       })
+    },
+    [events.$CREATE_INSPECTOR(tab.id)]: () => {
+      api.addPanel({
+        id: 'Inspector',
+        component: 'Inspector',
+        params: {
+          title: 'Inspector',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'left' },
+      })
+    },
+    [events.$CREATE_PLAYTEST(tab.id)]: () => {
+      api.addPanel({
+        id: 'Chat',
+        component: 'Chat',
+        params: {
+          title: 'Chat',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'below' },
+      })
+    },
+    [events.$CREATE_CONSOLE(tab.id)]: () => {
+      api.addPanel({
+        id: 'Console',
+        component: 'Console',
+        params: {
+          title: 'Console',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'below' },
+      })
+    },
+  }
+
+  useEffect(() => {
+    if (!api) return
+
+    const windowBarSubscriptions = Object.entries(windowBarMap).map(([event, handler]) => {
+      return subscribe(event, handler)
     })
 
     api.onDidLayoutChange(() => {
       const layout = api.toJSON()
 
-      saveLayoutToLocalStorage(spellId, currentAgentRef.current, config.projectId, layout)
+      saveLayoutToLocalStorage(spellId, layout)
     })
 
     return () => {
-      unsubscribe()
+      windowBarSubscriptions.forEach(unsubscribe => {
+        unsubscribe()
+      })
     }
   }, [api])
 
