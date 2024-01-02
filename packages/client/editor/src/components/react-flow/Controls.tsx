@@ -11,7 +11,6 @@ import React from 'react';
 import { ControlButton, Controls } from 'reactflow';
 
 import { ClearModal } from './modals/ClearModal.js';
-import { SaveModal } from './modals/SaveModal.js';
 
 export type CustomControlsProps = {
   playing: boolean;
@@ -25,10 +24,8 @@ export type CustomControlsProps = {
 export const CustomControls: React.FC<CustomControlsProps> = ({
   playing,
   togglePlay,
-  specJson,
   toggleMiniMap,
 }) => {
-  const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [clearModalOpen, setClearModalOpen] = useState(false);
 
   return (
@@ -43,9 +40,6 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
         {/* <ControlButton title="Load" onClick={() => setLoadModalOpen(true)}>
           <FontAwesomeIcon icon={faUpload} />
         </ControlButton> */}
-        <ControlButton title="Save" onClick={() => setSaveModalOpen(true)}>
-          <FontAwesomeIcon icon={faDownload} />
-        </ControlButton>
         {/* <ControlButton title="Clear" onClick={() => setClearModalOpen(true)}>
           <FontAwesomeIcon icon={faTrash} />
         </ControlButton> */}
@@ -53,13 +47,6 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
           <FontAwesomeIcon icon={playing ? faPause : faPlay} />
         </ControlButton>
       </Controls>
-      {specJson && (
-        <SaveModal
-          open={saveModalOpen}
-          specJson={specJson}
-          onClose={() => setSaveModalOpen(false)}
-        />
-      )}
       <ClearModal
         open={clearModalOpen}
         onClose={() => setClearModalOpen(false)}
