@@ -64,7 +64,8 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     handleStopConnect,
     handlePaneClick,
     handlePaneContextMenu,
-    nodePickerVisibility,
+    nodePickerPosition,
+    pickedNodeVisibility,
     handleAddNode,
     closeNodePicker,
     nodePickFilters,
@@ -146,9 +147,10 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
           zoomable
         />
       )}
-      {nodePickerVisibility && (
+      {nodePickerPosition && (
         <NodePicker
-          position={nodePickerVisibility}
+          position={nodePickerPosition}
+          pickedNodePosition={pickedNodeVisibility}
           filters={nodePickFilters}
           onPickNode={handleAddNode}
           onClose={closeNodePicker}

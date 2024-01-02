@@ -115,7 +115,7 @@ const Input = props => {
         type="text"
         value={props.value}
         onChange={props.onChange}
-        placeholder="Type play test input here"
+        placeholder="Type chat input here"
       ></input>
       <Button
         className={`small ${css['playtest-input-send']}`}

@@ -58,7 +58,8 @@ export const useFlowHandlers = ({
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
-  const [nodePickerVisibility, setNodePickerVisibility] = useState<XYPosition>()
+  const [pickedNodeVisibility, setPickedNodeVisibility] = useState<XYPosition>()
+  const [nodePickerPosition, setNodePickerPosition] = useState<XYPosition>()
   const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
@@ -85,7 +86,8 @@ export const useFlowHandlers = ({
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
-    setNodePickerVisibility(undefined)
+    setNodePickerPosition(undefined)
+    setPickedNodeVisibility(undefined)
   }, [])
 
   let blockClose = false
@@ -210,9 +212,13 @@ export const useFlowHandlers = ({
     const element = e.target as HTMLElement
     if (element.classList.contains('react-flow__pane')) {
       const bounds = parentRef.current.getBoundingClientRect()
-      setNodePickerVisibility({
+      setPickedNodeVisibility({
         x: e.clientX - bounds.left + window.scrollX,
         y: e.clientY - bounds.top + window.scrollY,
+      })
+      setNodePickerPosition({
+        x: e.clientX,
+        y: e.clientY,
       })
 
       setTimeout(() => {
@@ -233,9 +239,13 @@ export const useFlowHandlers = ({
       e.preventDefault()
       if (parentRef && parentRef.current) {
         const bounds = parentRef.current.getBoundingClientRect()
-        setNodePickerVisibility({
+        setPickedNodeVisibility({
           x: e.clientX - bounds.left + window.scrollX,
           y: e.clientY - bounds.top + window.scrollY,
+        })
+        setNodePickerPosition({
+          x: e.clientX,
+          y: e.clientY,
         })
       }
     },
@@ -275,7 +285,8 @@ export const useFlowHandlers = ({
     handlePaneClick,
     handlePaneContextMenu,
     lastConnectStart,
-    nodePickerVisibility,
+    nodePickerPosition,
+    pickedNodeVisibility,
     handleAddNode,
     closeNodePicker,
     nodePickFilters,
