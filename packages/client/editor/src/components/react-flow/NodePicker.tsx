@@ -10,6 +10,7 @@ export type NodePickerFilters = {
 
 type NodePickerProps = {
   position: XYPosition;
+  pickedNodePosition: XYPosition;
   filters?: NodePickerFilters;
   onPickNode: (type: string, position: XYPosition) => void;
   onClose: () => void;
@@ -61,6 +62,7 @@ const Item = ({ item, position, onPickNode }: Props) => {
 
 export const NodePicker: React.FC<NodePickerProps> = ({
   position,
+  pickedNodePosition,
   onPickNode,
   onClose,
   filters,
@@ -135,7 +137,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
       } else if (event.key === 'ArrowUp') {
         setFocusedIndex((prev) => Math.max(prev - 1, 0));
       } else if (event.key === 'Enter' && filtered.length > 0) {
-        onPickNode(filtered[focusedIndex].type, instance.project(position));
+        onPickNode(filtered[focusedIndex].type, instance.project(pickedNodePosition));
         onClose(); // Close the picker after selection
       }
     };
@@ -182,7 +184,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   return (
     <div
-      className="fixed z-10 text-sm text-white bg-gray-800 border border-gray-500 rounded node-picker"
+      className="fixed z-10 text-sm text-white bg-gray-800 border border-gray-500 rounded node-picker "
       style={{ top: position.y, left: position.x }}
     >
       <div className="p-2 bg-gray-500">Add Node</div>
@@ -208,7 +210,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
                 className={`p-2 text-base cursor-pointer border-b border-gray-600 ${index === focusedIndex ? 'bg-gray-700' : 'hover:bg-gray-600'
                   }`}
                 onMouseEnter={() => setFocusedIndex(index)}
-                onClick={() => onPickNode(type, instance.project(position))}
+                onClick={() => onPickNode(type, instance.project(pickedNodePosition))}
               >
                 {type}
               </div>
@@ -219,7 +221,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
       }
       {!search && <div className={styles['context-menu']} >
         {groupedData.map((item) => (
-          <Item key={item.title} item={item} onPickNode={onPickNode} position={position} />
+          <Item key={item.title} item={item} onPickNode={onPickNode} position={pickedNodePosition} />
         ))}
       </div>}
     </div>
