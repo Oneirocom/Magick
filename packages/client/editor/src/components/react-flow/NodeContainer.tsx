@@ -37,7 +37,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
         {title}
       </div>
       <div
-        className={`flex flex-col gap-2 py-1 border-l border-r border-b`}
+        className={`flex flex-col gap-2 py-1`}
       >
         {children}
       </div>
