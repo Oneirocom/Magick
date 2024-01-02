@@ -2,7 +2,7 @@ import pino from 'pino'
 import { getLogger } from 'packages/server/logger/src'
 import { ActionPayload, EventPayload } from 'packages/server/plugin/src'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
-import { SLACK_MESSAGES } from '../constants'
+import { SLACK_EVENTS } from '../constants'
 
 class SlackEventClient {
   private logger: pino.Logger = getLogger()
@@ -37,7 +37,7 @@ class SlackEventClient {
   }
 
   registerHandler(
-    eventType: string,
+    eventType: keyof typeof SLACK_EVENTS,
     handler: (message: EventPayload) => void
   ): void {
     if (!this.eventHandlers.has(eventType)) {
@@ -47,8 +47,7 @@ class SlackEventClient {
   }
 
   onMessage(handler: (event: EventPayload) => void): void {
-    this.logger.debug('Registering handler for slack onMessage event')
-    this.registerHandler(SLACK_MESSAGES.message, handler)
+    this.registerHandler(SLACK_EVENTS.message, handler)
   }
 
   sendMessage(payload: ActionPayload): void {

@@ -158,27 +158,23 @@ class CredentialsManager {
   // THIS DECRYPTS THE VALUE
   async retrieveAgentCredentials(
     agentId: string,
+    name: string,
     serviceType?: string
-  ): Promise<CredentialsPayload[]> {
-    let query = db('agent_credentials')
+  ): Promise<string | undefined> {
+    const query = db('agent_credentials')
       .join('credentials', 'credentials.id', 'agent_credentials.credentialId')
+      .where('credentials.name', name)
       .where('agent_credentials.agentId', agentId)
 
     if (serviceType) {
-      query = query.andWhere('credentials.serviceType', serviceType)
+      query.andWhere('credentials.serviceType', serviceType)
     }
 
-    const agentCredentials = await query.select('credentials.*')
+    const credential = await query.first('credentials.*')
 
-    return Promise.all(
-      agentCredentials.map(async credential => {
-        const decryptedValue = decrypt(
-          credential.value,
-          CREDENTIALS_ENCRYPTION_KEY
-        )
-        return { ...credential, value: decryptedValue }
-      })
-    )
+    if (!credential) return undefined
+
+    return decrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY)
   }
 
   async listAgentCredentials(
