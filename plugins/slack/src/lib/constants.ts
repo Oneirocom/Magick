@@ -1,3 +1,4 @@
+import { createEventsEnum } from 'plugins/factory'
 import { PluginCredential } from 'server/credentials'
 
 export const pluginName = 'Slack'
@@ -20,22 +21,18 @@ export const pluginCredentials: PluginCredential[] = [
   },
 ]
 
-function createEnum<T extends string>(types: T[]): { [K in T]: K } {
-  return types.reduce((acc, key) => {
-    acc[key] = key
-    return acc
-  }, Object.create(null))
-}
-
-export const SLACK_MESSAGES = createEnum([
-  'app_mention',
+export const SLACK_EVENTS = createEventsEnum([
   'message',
   'message_im',
   'message_mpim',
-  'message',
-  'reaction_added',
-  'reaction_removed',
-  'team_join',
-  'channel_joined',
-  'channel_left',
 ])
+
+export const SLACK_ACTIONS = createEventsEnum([
+  'sendMessage',
+  'sendImage',
+  'generateImage',
+])
+
+export const SLACK_KEY = 'slackClient'
+
+export const SLACK_DEVELOPER_MODE = false
