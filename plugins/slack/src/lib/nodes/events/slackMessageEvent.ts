@@ -4,7 +4,7 @@ import {
   makeEventNodeDefinition,
 } from '@magickml/behave-graph'
 import { SlackEmitterType } from '../../dependencies/slackEmitter'
-import { SLACK_MESSAGES } from '../../constants'
+import { SLACK_EVENTS } from '../../constants'
 import { EventPayload } from 'packages/server/plugin/src'
 
 type State = {
@@ -68,7 +68,7 @@ export const slackMessageEvent = makeEventNodeDefinition({
     const slackEventEmitter = getDependency<SlackEmitterType>('Slack')
 
     if (onStartEvent)
-      slackEventEmitter?.removeListener(SLACK_MESSAGES.message, onStartEvent)
+      slackEventEmitter?.removeListener(SLACK_EVENTS.message, onStartEvent)
 
     return {}
   },

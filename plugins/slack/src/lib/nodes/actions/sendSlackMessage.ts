@@ -1,58 +1,48 @@
-import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import { IEventStore } from 'packages/server/grimoire/src'
-import { SlackActionService } from '../../services/slackActionService'
+import { createAction } from 'plugins/factory'
+import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
-import { SlackClient } from '../../services/slackClient'
+import { SocketDefinition } from '@magickml/behave-graph'
+import { SLACK_KEY } from '../../constants'
+import { IEventStore } from 'server/grimoire'
 
-export const sendSlackMessage = makeFlowNodeDefinition({
-  typeName: 'slack/sendMessage',
-  category: NodeCategory.Action,
+type Inputs = {
+  flow: SocketDefinition
+  content: SocketDefinition
+}
+
+type Outputs = {
+  flow: SocketDefinition
+}
+
+export const sendSlackMessage = createAction<
+  Inputs,
+  Outputs,
+  [typeof SLACK_KEY, 'IEventStore']
+>({
   label: 'Send Slack Message',
-  in: {
-    flow: 'flow',
-    content: 'string',
+  typeName: 'slack/sendMessage',
+  dependencyKeys: [SLACK_KEY, 'IEventStore'],
+  inputs: {
+    flow: { valueType: 'flow' },
+    content: { valueType: 'string' },
   },
-  out: {
-    flow: 'flow',
+  outputs: {
+    flow: { valueType: 'flow' },
   },
-  initialState: undefined,
-  triggered: async ({ commit, read, graph: { getDependency } }) => {
-    const slackActionService =
-      getDependency<SlackActionService>('slackActionService')
-    const eventStore = getDependency<IEventStore>('IEventStore')
-    const slack = getDependency<SlackClient>('slackClient')
+  process: async (
+    dependencies: { [SLACK_KEY]: SlackClient; IEventStore: IEventStore },
+    inputs: { content: string },
+    write: (key: keyof Outputs, value: any) => void,
+    commit: (key: string) => void
+  ) => {
+    const event =
+      dependencies.IEventStore.currentEvent() as EventPayload<SlackEventPayload>
 
-    if (!slackActionService || !eventStore || !slack) {
-      throw new Error(
-        `Missing required dependencies: ${[
-          'slackActionService',
-          'IEventStore',
-          'slackClient',
-        ]
-          .filter(key => !getDependency(key))
-          .join(', ')}`
-      )
-    }
-
-    const content = read('content') as string
-    const event = eventStore.currentEvent() as EventPayload<SlackEventPayload>
-    const channel = event.channel
-
-    if (!event || !channel) {
-      throw new Error('No event found')
-    }
-
-    try {
-      await slack.getClient().client.chat.postMessage({
-        text: content,
-        channel,
-      })
-    } catch (e) {
-      console.log(e)
-    }
-
-    slackActionService?.sendMessage(event, { content })
+    await dependencies[SLACK_KEY].getClient().client.chat.postMessage({
+      text: inputs.content,
+      channel: event.channel,
+    })
 
     commit('flow')
   },
