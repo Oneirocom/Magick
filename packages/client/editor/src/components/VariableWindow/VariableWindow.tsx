@@ -1,13 +1,11 @@
 import { VariableJSON } from '@magickml/behave-graph';
 import { Tab, useConfig, usePubSub } from '@magickml/providers';
-import { Button, Input } from '@magickml/ui';
 import { Window } from 'client/core'
 import { useGetSpellQuery, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
 import { IDockviewPanelProps } from 'dockview';
 import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
-import { VariableControl } from '../PropertiesWindow/VariableForm';
 import { Variable } from './Variable';
 
 export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
@@ -113,8 +111,13 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
           )
         })}
         <div className="flex flex-row px-2 mt-2">
-          <Input onChange={onInputChange} value={newVariableName} placeholder="New variable" />
-          <Button size="icon" onClick={createNewVariable}>+</Button>
+          <input
+            className="flex-grow"
+            onChange={onInputChange}
+            value={newVariableName}
+            placeholder="New variable"
+          />
+          <button onClick={createNewVariable}>+</button>
         </div>
       </div >
     </Window >
