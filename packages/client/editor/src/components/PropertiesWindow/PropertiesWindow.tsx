@@ -25,6 +25,7 @@ export type ConfigurationComponentProps = {
   node: Node,
   updateConfigKey: (key: string, value: any) => void
   spell: SpellInterface
+  tab: Tab
 }
 
 const ConfigurationComponents = {
@@ -72,6 +73,7 @@ export const PropertiesWindow = (props: Props) => {
           config: config,
           nodeSpec: spec,
           node: selectedNode,
+          tab: props.tab,
           updateConfigKey
         }
 
