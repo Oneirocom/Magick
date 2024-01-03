@@ -2,16 +2,16 @@ import { cx } from "class-variance-authority";
 import { ConfigurationComponentProps } from "./PropertiesWindow";
 import { useEffect, useState } from "react";
 import { VariableJSON } from "@magickml/behave-graph";
-import { set } from "lodash";
+import { useReactFlow } from "reactflow";
 
 const inputClass = cx(
   'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-md justify-start flex',
 );
 
-export const VariableNames = ({ spell, fullConfig, updateConfigKey, node }: ConfigurationComponentProps) => {
+export const VariableNames = ({ spell, fullConfig, updateConfigKey }: ConfigurationComponentProps) => {
   const { variableId } = fullConfig
-  const [value, setValue] = useState<string | null>(null);
   const [selectedVariable, setSelectedVariable] = useState<VariableJSON>(null)
+  const reactFlow = useReactFlow()
 
   useEffect(() => {
     if (!spell && !fullConfig) return
@@ -33,6 +33,7 @@ export const VariableNames = ({ spell, fullConfig, updateConfigKey, node }: Conf
   const updateValue = (value) => {
     const variable = spell.graph.variables.find(variable => variable.id === value) as VariableJSON
 
+    reactFlow.setEdges(edges => edges.filter(edge => edge.sourceHandle !== selectedVariable?.name))
     updateConfigKey('variableId', value)
     setSelectedVariable(variable)
   }
