@@ -2,7 +2,7 @@ import { VariableJSON } from "@magickml/behave-graph";
 import { cx } from "class-variance-authority";
 import { Icon } from "client/core";
 import { debounce } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const inputClass = cx(
   'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-md justify-start flex',
@@ -46,6 +46,10 @@ const DefaultInput = ({ valueType, initialValue, onChange, choices = [], showCho
     setValue(value)
     onChange(value)
   }
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
 
 
   return (
