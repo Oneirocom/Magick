@@ -18,6 +18,7 @@ import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
 import { PluginCredential } from 'server/credentials'
 import { LLMProviders } from './services/coreLLMService/types'
+import { variableGet } from './nodes/query/variableGet'
 
 const pluginName = 'Core'
 
@@ -45,7 +46,14 @@ export type CorePluginEvents = {
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage, textTemplate, generateText, streamMessage]
+  nodes = [
+    messageEvent,
+    sendMessage,
+    textTemplate,
+    generateText,
+    streamMessage,
+    variableGet,
+  ]
   values = []
   coreLLMService = new CoreLLMService()
 
