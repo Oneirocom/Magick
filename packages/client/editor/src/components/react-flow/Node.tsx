@@ -91,19 +91,19 @@ export const Node: React.FC<NodeProps> = ({
       category={spec.category}
       selected={selected}
     >
-      {pairs.map(([input, output], ix) => (
+      {pairs.map(([flowInput, output], ix) => (
         <div
           key={ix}
           className="flex flex-row justify-between gap-8 relative px-2"
         // className={styles.container}
         >
-          {input && (
+          {flowInput && (
             <InputSocket
-              {...input}
+              {...flowInput}
               specJSON={allSpecs}
-              value={data[input.name] ?? input.defaultValue}
+              value={data[flowInput.name] ?? flowInput.defaultValue}
               onChange={handleChange}
-              connected={isHandleConnected(edges, id, input.name, 'target')}
+              connected={isHandleConnected(edges, id, flowInput.name, 'target')}
             />
           )}
           {output && (
