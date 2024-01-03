@@ -22,12 +22,19 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
   const saveVariable = (variable: VariableJSON) => {
     const graph = spell.graph
 
+    // update the variable but keep the array in order
+    const variables = graph.variables.map((v) => {
+      if (v.id === variable.id) {
+        return variable
+      }
+      return v
+    })
+
+
     const newGraph = {
       ...graph,
-      variables: [
-        ...graph.variables.filter((v) => v.id !== variable.id),
-        variable,
-      ],
+      // updat ethe variable but keep the array order
+      variables
     }
 
     const newSpell = {
@@ -92,9 +99,36 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
       initialValue: []
     }
 
-    saveVariable(newVariable)
+    const graph = spell.graph
+
+    const newGraph = {
+      ...graph,
+      variables: [
+        ...graph.variables,
+        newVariable
+      ]
+    }
+
+    const newSpell = {
+      ...spell,
+      graph: newGraph,
+    }
+
+    return saveSpellMutation({
+      projectId,
+      spell: newSpell
+    })
       .then(() => {
+        enqueueSnackbar('Variable saved', {
+          variant: 'success',
+        })
         setNewVariableName('')
+      })
+      .catch((err) => {
+        console.error(err)
+        enqueueSnackbar('Error saving variable', {
+          variant: 'error',
+        })
       })
   }
 
