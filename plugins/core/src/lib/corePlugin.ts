@@ -19,6 +19,7 @@ import { streamMessage } from './nodes/actions/streamMessage'
 import { PluginCredential } from 'server/credentials'
 import { LLMProviders } from './services/coreLLMService/types'
 import { variableGet } from './nodes/query/variableGet'
+import { IVariableService } from './services/variableService'
 
 const pluginName = 'Core'
 
@@ -104,6 +105,7 @@ export class CorePlugin extends CoreEventsPlugin {
         this.actionQueueName
       ),
       coreLLMService: this.coreLLMService,
+      IVariableService: new IVariableService(this.connection),
     }
   }
 
