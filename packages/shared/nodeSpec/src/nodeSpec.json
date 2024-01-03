@@ -331,7 +331,36 @@
           "openrouter",
           "custom-api",
           "petals"
+        ],
+    "type": "variables/get",
+    "category": "Query",
+    "label": "Get",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs"
         ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
       }
     ]
   },
