@@ -10,6 +10,8 @@ import { NodeSpecJSON } from '@magickml/behave-graph';
 import { Node } from 'reactflow';
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData';
 import { EventStateProperties } from './EventStateProperties';
+import { SpellInterface } from 'server/schemas';
+import { VariableNames } from './variableNames';
 
 type Props = {
   tab: Tab
@@ -22,12 +24,14 @@ export type ConfigurationComponentProps = {
   nodeSpec: NodeSpecJSON
   node: Node,
   updateConfigKey: (key: string, value: any) => void
+  spell: SpellInterface
 }
 
 const ConfigurationComponents = {
   socketInputs: SocketConfig,
   textEditorData: () => <div>Button to open text editor</div>,
   eventStateProperties: EventStateProperties,
+  variableNames: VariableNames,
   default: () => <div>default</div>
 }
 
@@ -63,6 +67,7 @@ export const PropertiesWindow = (props: Props) => {
         const Component = ConfigurationComponents[key] || ConfigurationComponents.default
 
         const componentProps: ConfigurationComponentProps = {
+          spell: spellData,
           fullConfig: configuration,
           config: config,
           nodeSpec: spec,
