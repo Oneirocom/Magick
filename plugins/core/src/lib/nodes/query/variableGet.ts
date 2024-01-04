@@ -13,7 +13,12 @@ export const variableGet = makeFunctionNodeDefinition({
   configuration: {
     hiddenProperties: {
       valueType: 'array',
-      defaultValue: ['hiddenProperties', 'variableId', 'socketOutputs'],
+      defaultValue: [
+        'hiddenProperties',
+        'variableId',
+        'socketOutputs',
+        'label',
+      ],
     },
     variableId: {
       valueType: 'string',
@@ -30,18 +35,6 @@ export const variableGet = makeFunctionNodeDefinition({
   },
   in: {},
   out: (configuration, graph) => {
-    const variable = graph.variables[configuration.variableId]
-
-    if (!variable) return []
-
-    return [
-      {
-        key: variable.name,
-        name: variable.name,
-        valueType: variable.valueTypeName,
-      },
-    ]
-
     const socketArray = configuration?.socketOutputs.length
       ? configuration.socketOutputs
       : []
