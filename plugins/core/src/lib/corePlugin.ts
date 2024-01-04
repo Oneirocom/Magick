@@ -20,6 +20,7 @@ import { PluginCredential } from 'server/credentials'
 import { LLMProviders } from './services/coreLLMService/types'
 import { variableGet } from './nodes/query/variableGet'
 import { IVariableService } from './services/variableService'
+import { variableSet } from './nodes/query/variableSet'
 
 const pluginName = 'Core'
 
@@ -54,6 +55,7 @@ export class CorePlugin extends CoreEventsPlugin {
     generateText,
     streamMessage,
     variableGet,
+    variableSet,
   ]
   values = []
   coreLLMService = new CoreLLMService()
