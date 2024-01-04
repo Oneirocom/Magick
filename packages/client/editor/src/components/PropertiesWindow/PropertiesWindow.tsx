@@ -24,6 +24,7 @@ export type ConfigurationComponentProps = {
   nodeSpec: NodeSpecJSON
   node: Node,
   updateConfigKey: (key: string, value: any) => void
+  updateConfigKeys: (keys: Record<string, any>) => void
   spell: SpellInterface
   tab: Tab
 }
@@ -58,6 +59,14 @@ export const PropertiesWindow = (props: Props) => {
     handleChange('configuration', newConfig)
   }
 
+  const updateConfigKeys = (keys: Record<string, any>) => {
+    const newConfig = {
+      ...configuration,
+      ...keys
+    }
+    handleChange('configuration', newConfig)
+  }
+
   return (
     <Window borderless>
       {spec && <div className="px-4 py-4">
@@ -74,7 +83,8 @@ export const PropertiesWindow = (props: Props) => {
           nodeSpec: spec,
           node: selectedNode,
           tab: props.tab,
-          updateConfigKey
+          updateConfigKey,
+          updateConfigKeys
         }
 
         // Check if the current element is the first or the last one in the array
