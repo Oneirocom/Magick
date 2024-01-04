@@ -1,17 +1,32 @@
-import { categoryColorMap, colors } from './colors'
+import { categoryColorMap, colors, valueTypeColorMap } from './colors'
 
 function getCategory(node, specJson) {
   return specJson.find(spec => spec.type === node.type).category
 }
 
-export function nodeColor(node, specJson) {
+export function nodeColor(node, specJson, spell) {
   const nodeCategory = getCategory(node, specJson)
   let colorName = categoryColorMap[nodeCategory]
+
+  const { configuration } = node.data
 
   if (colorName === undefined) {
     colorName = 'red'
   }
-  const [backgroundColor] = colors[colorName]
+  let [backgroundColor] = colors[colorName]
+
+  if (configuration.variableId) {
+    const variable = spell.graph.variables.find(
+      variable => variable.id === configuration.variableId
+    )
+
+    if (variable) {
+      const colorName = valueTypeColorMap[variable.valueTypeName]
+      if (colorName) {
+        ;[backgroundColor] = colors[colorName]
+      }
+    }
+  }
 
   const color = getHexColorFromTailwindClass(backgroundColor)
 
