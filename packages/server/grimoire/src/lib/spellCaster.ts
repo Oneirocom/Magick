@@ -21,6 +21,9 @@ import { PluginManager } from 'server/pluginManager'
 import { IEventStore } from './services/eventStore'
 interface IAgent {
   id: string
+  log: (message: string, data: Record<string, any>) => void
+  warn: (message: string, data: Record<string, any>) => void
+  error: (message: string, data: Record<string, any>) => void
 }
 
 /**
@@ -151,6 +154,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     // This sets up the state service properly.
     baseRegistry.init(this.graph)
 
+    const message = `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
+    this.logger.debug(message)
+    this.agent.log(message, spell)
     this.spell = spell
     const graph = readGraphFromJSON({
       graphJson: this.spell.graph as GraphJSON,
@@ -240,18 +246,20 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the graph is executed.
    */
   async executeGraphOnce(isEnd = false): Promise<void> {
+    if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
+    if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
+    this.busy = true
+
     try {
-      if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
-      if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
-      this.busy = true
       await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
-      this.busy = false
-      this.executeGraph = false // Reset the flag after execution
-    } catch (err) {
-      this.logger.error('Error executing graph from logger!!!!', err)
-      this.busy = false
-      this.executeGraph = false // Reset the flag after execution
+    } catch (err: any) {
+      this.agent.error(
+        `Error executing graph on spell ${this.spell.id} ${this.spell.name}`,
+        err.toString()
+      )
     }
+    this.busy = false
+    this.executeGraph = false // Reset the flag after execution
   }
 
   /**
@@ -296,9 +304,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     eventName: string,
     payload: EventPayload
   ): void {
-    this.logger.trace(
-      `SpellCaster: Handling event ${eventName} for ${dependency} in spell ${this.spell.name}`
-    )
+    const message = `SpellCaster: Handling event ${eventName} for ${dependency} in spell ${this.spell.name}`
+    this.logger.trace(message)
+    this.agent.log(message, payload)
     // we grab the dependency from the registry and trigger it
     const eventEmitter = this.registry.dependencies[dependency] as
       | EventEmitter
