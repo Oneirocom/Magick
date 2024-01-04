@@ -28,7 +28,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   const { publish, events } = usePubSub()
 
   const [playing, setPlaying] = React.useState(false)
-  const [miniMapOpen, setMiniMapOpen] = React.useState(false)
+  const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
   const { SEND_COMMAND } = events
 
@@ -126,7 +126,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
         <MiniMap
           nodeStrokeWidth={3}
           maskColor="#69696930"
-          nodeColor={node => nodeColor(node, specJson)}
+          nodeColor={node => nodeColor(node, specJson, spell)}
           pannable
           zoomable
         />
