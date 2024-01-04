@@ -50,7 +50,7 @@ const InputFieldForValue = ({
     <div style={{ borderRadius: 5 }} className={containerClass}>
       {/* flex layout these divs 50 50 */}
       <div className="flex flex-1 items-center h-full">
-        <p className="flex">{name}</p>
+        <p className="flex capitalize">{name}</p>
       </div>
       {!hideValueInput && (
         <div className="flex-1 justify-center">
