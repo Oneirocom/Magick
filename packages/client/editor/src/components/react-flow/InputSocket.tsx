@@ -30,7 +30,7 @@ const InputFieldForValue = ({
   'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
 >) => {
   const showChoices = choices?.length;
-  const inputVal = (String(value) ?? defaultValue ?? '') as string;
+  const inputVal = (value ? String(value) : defaultValue ?? '') as string;
   const hideValueInput = hideValue || connected
 
   const inputClass = cx(
