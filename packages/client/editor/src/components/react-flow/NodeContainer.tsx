@@ -36,7 +36,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
 
   let [backgroundColor, textColor] = colors[colorName];
 
-  if (config.variableId) {
+  if (config?.variableId) {
     const variable = graph.variables.find(variable => variable.id === config.variableId) as VariableJSON
     if (variable) {
       const colorName = valueTypeColorMap[variable.valueTypeName]
@@ -59,7 +59,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
         {title}{config?.label && ` - ${config.label}`}
       </div>
       <div
-        className={`flex flex-col gap-2 py-1`}
+        className={`flex flex-col gap-1 py-1`}
       >
         {children}
       </div>
