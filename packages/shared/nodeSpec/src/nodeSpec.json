@@ -389,6 +389,126 @@
     "configuration": []
   },
   {
+    "type": "logic/array/push",
+    "category": "Action",
+    "label": "Array Push",
+    "inputs": [
+      {
+        "name": "array",
+        "valueType": "array"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "action/json/stringify",
+    "category": "Action",
+    "label": "Json Stringify",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "string",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
@@ -2746,8 +2866,7 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       }
     ],
     "outputs": [
@@ -2765,13 +2884,11 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       },
       {
         "name": "b",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       }
     ],
     "outputs": [
@@ -2789,13 +2906,11 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       },
       {
         "name": "b",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       }
     ],
     "outputs": [
@@ -2813,18 +2928,15 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       },
       {
         "name": "b",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       },
       {
         "name": "c",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       }
     ],
     "outputs": [
@@ -3028,8 +3140,7 @@
       },
       {
         "name": "payload",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       }
     ],
     "outputs": [
@@ -3132,8 +3243,7 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array",
-        "defaultValue": "[]"
+        "valueType": "array"
       }
     ],
     "outputs": [
