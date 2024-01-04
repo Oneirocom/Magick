@@ -126,6 +126,10 @@
       background-color: var(--foreground-color) !important;
     }
 
+    .dv-resize-container {
+      box-shadow: none !important;
+    }
+
     .groupview > .content-container {
       overflow: initial !important;
       background: var(--foreground-color) !important;
