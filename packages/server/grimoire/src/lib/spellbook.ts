@@ -157,11 +157,16 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   private watchSpellUpdateHandler(spell: SpellInterface) {
     if (!this.watchSpells) return
+    if (this.agent.projectId !== spell.projectId) return
 
     if (this.hasSpellCaster(spell.id)) {
       this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
       this.updateSpell(spell)
+      return
     }
+
+    this.logger.debug(`Creating spell ${spell.id} in agent ${this.agent.id}`)
+    this.loadSpell(spell)
   }
 
   /**
