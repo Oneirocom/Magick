@@ -90,6 +90,8 @@ export const Node: React.FC<NodeProps> = ({
       title={spec.label}
       category={spec.category}
       selected={selected}
+      graph={spell.graph}
+      config={config}
     >
       {pairs.map(([flowInput, output], ix) => (
         <div
