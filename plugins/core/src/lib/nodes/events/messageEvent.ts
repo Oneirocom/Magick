@@ -1,6 +1,7 @@
 import { NodeCategory } from '@magickml/behave-graph'
 import { EventPayload, ON_MESSAGE } from 'server/plugin'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { saveGraphEvent } from 'shared/core'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
@@ -18,6 +19,15 @@ const messageEventConfig = {
     write('event', event)
     write('content', event.content)
     commit('flow')
+
+    saveGraphEvent({
+      sender: event.sender,
+      agentId: event.agentId,
+      connector: 'onMessage',
+      connectorData: JSON.stringify(event.data),
+      content: event.content,
+      eventType: 'Message',
+    })
   },
   dependencyName: 'Core', // specify the dependency name for the Core Event Emitter
   eventName: ON_MESSAGE, // specify the event name to listen to
