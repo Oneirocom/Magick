@@ -21,6 +21,8 @@ import { LLMProviders } from './services/coreLLMService/types'
 import { variableGet } from './nodes/query/variableGet'
 import { IVariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
+import { arrayPush } from './values/Array/Push'
+import { jsonStringify } from './nodes/actions/jsonStringify'
 
 const pluginName = 'Core'
 
@@ -56,6 +58,8 @@ export class CorePlugin extends CoreEventsPlugin {
     streamMessage,
     variableGet,
     variableSet,
+    arrayPush,
+    jsonStringify,
   ]
   values = []
   coreLLMService = new CoreLLMService()
