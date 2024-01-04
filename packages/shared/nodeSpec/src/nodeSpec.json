@@ -344,7 +344,8 @@
         "defaultValue": [
           "hiddenProperties",
           "variableId",
-          "socketOutputs"
+          "socketOutputs",
+          "label"
         ]
       },
       {
