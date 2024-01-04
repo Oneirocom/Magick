@@ -331,7 +331,34 @@
           "openrouter",
           "custom-api",
           "petals"
-        ],
+        ]
+      }
+    ]
+  },
+  {
+    "type": "magick/streamMessage",
+    "category": "Action",
+    "label": "Stream Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "variables/get",
     "category": "Query",
     "label": "Get",
@@ -366,18 +393,13 @@
     ]
   },
   {
-    "type": "magick/streamMessage",
-    "category": "Action",
-    "label": "Stream Message",
+    "type": "variables/set",
+    "category": "Query",
+    "label": "Set",
     "inputs": [
       {
         "name": "flow",
         "valueType": "flow"
-      },
-      {
-        "name": "content",
-        "valueType": "string",
-        "defaultValue": ""
       }
     ],
     "outputs": [
@@ -386,7 +408,39 @@
         "valueType": "flow"
       }
     ],
-    "configuration": []
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs",
+          "socketInputs",
+          "label"
+        ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
   },
   {
     "type": "logic/array/push",
@@ -395,7 +449,8 @@
     "inputs": [
       {
         "name": "array",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       },
       {
         "name": "flow",
@@ -2866,7 +2921,8 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [
@@ -2884,11 +2940,13 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       },
       {
         "name": "b",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [
@@ -2906,11 +2964,13 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       },
       {
         "name": "b",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [
@@ -2928,15 +2988,18 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       },
       {
         "name": "b",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       },
       {
         "name": "c",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [
@@ -3140,7 +3203,8 @@
       },
       {
         "name": "payload",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [
@@ -3243,7 +3307,8 @@
     "inputs": [
       {
         "name": "a",
-        "valueType": "array"
+        "valueType": "array",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [
