@@ -5,7 +5,8 @@
   "scripts": {
     "common-setup": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
     "dev-base": "npm run common-setup && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
-    "dev": "poetry run concurrently --raw \"npm run dev-base\" \"tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateClientConfig.ts\"",
+    "dev": "peotry run concurrently --raw \"npm run dev-base\" \"npm run generate-node-specs\"",
+    "generate-node-specs": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.ts",
     "dev-nocache": "poetry run npm run dev-base -- --skip-nx-cache",
     "cloud": "npm run dev-base",
     "cloud-nocache": "npm run dev-base -- --skip-nx-cache",
@@ -90,7 +91,7 @@
     "@koa/cors": "4.0.0",
     "@koa/multer": "^3.0.2",
     "@koa/router": "12.0.0",
-    "@magickml/behave-graph": "^0.13.4",
+    "@magickml/behave-graph": "^0.13.5",
     "@magickml/behave-graph-scene": "0.11.0",
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@monaco-editor/react": "4.5.1",
