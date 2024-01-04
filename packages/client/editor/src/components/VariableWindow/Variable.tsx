@@ -152,6 +152,7 @@ export const Variable = ({ variable, updateVariable, deleteVariable }: VariableP
           <div className="flex">
             <p className="w-2/5">Name</p>
             <input
+              disabled
               className={inputClass}
               value={variable.name}
               onChange={(e) => {
