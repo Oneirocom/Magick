@@ -16,7 +16,7 @@ function enableWhyDidYouRender(React: any): void {
   // If in development
   if (NODE_ENV === 'development') {
     console.log('*******************running WDYR!')
-    whyDidYouRender(React)
+    // whyDidYouRender(React)
   }
 }
 
