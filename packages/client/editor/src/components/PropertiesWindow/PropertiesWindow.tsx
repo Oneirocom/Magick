@@ -12,6 +12,7 @@ import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData';
 import { EventStateProperties } from './EventStateProperties';
 import { SpellInterface } from 'server/schemas';
 import { VariableNames } from './variableNames';
+import { ValueType } from './ValueType';
 
 type Props = {
   tab: Tab
@@ -34,6 +35,7 @@ const ConfigurationComponents = {
   textEditorData: () => <div>Button to open text editor</div>,
   eventStateProperties: EventStateProperties,
   variableNames: VariableNames,
+  valueType: ValueType,
   default: () => <div>default</div>
 }
 
@@ -72,7 +74,7 @@ export const PropertiesWindow = (props: Props) => {
       {spec && <div className="px-4 py-4">
         <h2>{spec.label}</h2>
       </div>}
-      {Object.entries(configuration || {}).filter(([key]) => !hiddenProperties.includes(key)).map((config: [key: string, Record<string, any>], index) => {
+      {Object.entries(configuration || {}).filter(([key, value]) => !hiddenProperties.includes(key)).map((config: [key: string, Record<string, any>], index) => {
         const [key] = config
         const Component = ConfigurationComponents[key] || ConfigurationComponents.default
 
