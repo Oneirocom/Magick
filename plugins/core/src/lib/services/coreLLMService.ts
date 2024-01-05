@@ -61,24 +61,24 @@ type CompletionRequest = {
   options?: CompletionOptions
 }
 
-type CompletionResponse = {
-  choices: {
-    finish_reason: string
-    index: number
-    message: {
-      role: string
-      content: string
-    }
-  }[]
+// type CompletionResponse = {
+//   choices: {
+//     finish_reason: string
+//     index: number
+//     message: {
+//       role: string
+//       content: string
+//     }
+//   }[]
 
-  created: string
-  model: string
-  usage: {
-    prompt_tokens: number
-    completion_tokens: number
-    total_tokens: number
-  }
-}
+//   created: string
+//   model: string
+//   usage: {
+//     prompt_tokens: number
+//     completion_tokens: number
+//     total_tokens: number
+//   }
+// }
 
 export enum ModelNames {
   GPT35Turbo = 'gpt-3.5-turbo',
@@ -112,11 +112,17 @@ export enum ModelNames {
 }
 
 interface ICoreLLMService {
-  completion: (request: CompletionRequest) => Promise<CompletionResponse>
-  streamCompletion: (
+  /**
+   * Handles completion requests in streaming mode. Accumulates the text from each chunk and returns the complete text.
+   *
+   * @param request The completion request parameters.
+   * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
+   * @returns A promise that resolves to the complete text after all chunks have been received.
+   */
+  completion: (
     request: CompletionRequest,
-    callback: (chunk, text) => void
-  ) => Promise<void>
+    callback: (chunk: string, isDone: boolean) => void
+  ) => Promise<string>
 }
 
 export class CoreLLMService implements ICoreLLMService {
@@ -127,63 +133,41 @@ export class CoreLLMService implements ICoreLLMService {
       this.liteLLM = await python('litellm')
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
       this.liteLLM.vertex_location = VERTEXAI_LOCATION
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error initializing LiteLLM:', error)
-      throw error
-    }
-  }
-  // Method to handle standard completion
-  async completion(request: CompletionRequest): Promise<CompletionResponse> {
-    try {
-      // Construct the request body
-      const body = {
-        //TODO: Make gemini default model: "gemini-pro"
-        model: request.model || 'gpt-3.5-turbo',
-        messages: request.messages,
-        ...request.options,
-      }
-
-      // get the raw response from the python bridge
-      const rawResponse = await this.liteLLM.completion$(body)
-
-      // process the response into jsonand return it
-      const response = await rawResponse.json()
-
-      // return the actual value as a JS object
-      return await response.valueOf()
-    } catch (error) {
-      console.error('Error in completion request:', error)
-      throw error
+      throw new Error(`Initialization failed: ${error}`)
     }
   }
 
-  // Method to handle streaming completion
-  async streamCompletion(
+  // Method to handle completion (always in streaming mode)
+  async completion(
     request: CompletionRequest,
-    callback: (chunk, text) => void
-  ): Promise<void> {
+    callback: (chunk: string, isDone: boolean) => void
+  ): Promise<string> {
     try {
-      // Ensure that streaming is enabled in the request options
       const body = {
         model: request.model || 'gemini-pro',
         messages: request.messages,
         ...request.options,
-        stream: true, // Ensure streaming is true
+        stream: true, // Always use streaming
       }
 
+      let fullText = '' // To accumulate the full text
+
       const stream = await this.liteLLM.completion$(body)
-      // Async iteration over the streaming object
       for await (const chunk of stream) {
-        // Handle each chunk as it arrives
-        // Assuming chunk structure is similar to the non-streaming response
         const rawChunk = await chunk.json()
         const chunkResponse = await rawChunk.valueOf()
         const chunkText = chunkResponse.choices[0].delta.content || ''
-        callback(chunkResponse, chunkText)
+        fullText += chunkText // Append each chunk to fullText
+        callback(chunkText, false) // Indicate that streaming is not done yet
       }
-    } catch (error) {
-      console.error('Error in stream completion request:', error)
-      throw error
+
+      callback('', true) // Indicate that streaming is done
+      return fullText // Return the accumulated full text
+    } catch (error: any) {
+      console.error('Error in completion request:', error)
+      throw new Error(`Completion request failed: ${error}`)
     }
   }
 }
