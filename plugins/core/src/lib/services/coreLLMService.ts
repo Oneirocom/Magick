@@ -142,32 +142,44 @@ export class CoreLLMService implements ICoreLLMService {
   // Method to handle completion (always in streaming mode)
   async completion(
     request: CompletionRequest,
-    callback: (chunk: string, isDone: boolean) => void
+    callback: (chunk: string, isDone: boolean) => void,
+    maxRetries: number = 3 // Default number of retries
   ): Promise<string> {
-    try {
-      const body = {
-        model: request.model || 'gemini-pro',
-        messages: request.messages,
-        ...request.options,
-        stream: true, // Always use streaming
+    let attempts = 0
+
+    while (attempts < maxRetries) {
+      try {
+        const body = {
+          model: request.model || 'gemini-pro',
+          messages: request.messages,
+          ...request.options,
+          stream: true,
+        }
+
+        let fullText = ''
+
+        const stream = await this.liteLLM.completion$(body)
+        for await (const chunk of stream) {
+          const rawChunk = await chunk.json()
+          const chunkResponse = await rawChunk.valueOf()
+          const chunkText = chunkResponse.choices[0].delta.content || ''
+          fullText += chunkText
+          callback(chunkText, false)
+        }
+
+        callback('', true)
+        return fullText
+      } catch (error: any) {
+        console.error(`Attempt ${attempts + 1} failed:`, error)
+        attempts++
+
+        if (attempts >= maxRetries) {
+          throw new Error(
+            `Completion request failed after ${maxRetries} attempts: ${error}`
+          )
+        }
       }
-
-      let fullText = '' // To accumulate the full text
-
-      const stream = await this.liteLLM.completion$(body)
-      for await (const chunk of stream) {
-        const rawChunk = await chunk.json()
-        const chunkResponse = await rawChunk.valueOf()
-        const chunkText = chunkResponse.choices[0].delta.content || ''
-        fullText += chunkText // Append each chunk to fullText
-        callback(chunkText, false) // Indicate that streaming is not done yet
-      }
-
-      callback('', true) // Indicate that streaming is done
-      return fullText // Return the accumulated full text
-    } catch (error: any) {
-      console.error('Error in completion request:', error)
-      throw new Error(`Completion request failed: ${error}`)
     }
+    throw new Error('Unexpected error in completion method')
   }
 }
