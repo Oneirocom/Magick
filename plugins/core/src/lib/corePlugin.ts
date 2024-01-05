@@ -23,6 +23,10 @@ import { IVariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
 import { arrayPush } from './values/Array/Push'
 import { jsonStringify } from './nodes/actions/jsonStringify'
+import { SpellCaster } from 'server/grimoire'
+import { forEach } from './values/Array/ForEach'
+import { arrayLength } from './values/Array/Length'
+import { arrayClear } from './values/Array/Clear'
 
 const pluginName = 'Core'
 
@@ -60,6 +64,9 @@ export class CorePlugin extends CoreEventsPlugin {
     variableSet,
     arrayPush,
     jsonStringify,
+    forEach,
+    arrayLength,
+    arrayClear,
   ]
   values = []
   coreLLMService = new CoreLLMService()
@@ -102,7 +109,7 @@ export class CorePlugin extends CoreEventsPlugin {
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  async getDependencies() {
+  async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
     await this.getLLMCredentials()
     return {
@@ -110,8 +117,11 @@ export class CorePlugin extends CoreEventsPlugin {
         this.centralEventBus,
         this.actionQueueName
       ),
-      coreLLMService: this.coreLLMService,
-      IVariableService: new IVariableService(this.connection),
+      IVariableService: new IVariableService(
+        this.connection,
+        this.agentId,
+        spellCaster
+      ),
     }
   }
 
