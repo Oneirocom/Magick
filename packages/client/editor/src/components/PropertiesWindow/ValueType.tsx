@@ -11,9 +11,8 @@ const inputClass = cx(
 export const ValueType = (props: ConfigurationComponentProps) => {
   const defaultValues = ['number', 'string', 'boolean']
   const { config, updateConfigKeys, fullConfig } = props
-  const { valueTypeOptions: options } = fullConfig
+  const { valueTypeOptions: options, socketInputs, socketOutputs } = fullConfig
   const [configKey, configValue] = config
-  console.log('CONFIG VALUE', configValue)
   const [valueType, setValueType] = useState(configValue || '')
 
   const reactFlow = useReactFlow()
@@ -29,16 +28,27 @@ export const ValueType = (props: ConfigurationComponentProps) => {
     const type = e.target.value
     setValueType(type)
 
-    const socket = {
-      name: options.socketName || 'Value',
-      key: options.socketName || 'Value',
-      valueType: type
+    const configUpdate: Record<string, any> = {
+      [configKey]: type
     }
 
-    updateConfigKeys({
-      [configKey]: type,
-      socketInputs: [socket]
-    })
+    if (socketInputs) {
+      configUpdate['socketInputs'] = [{
+        name: options.socketName || 'Value',
+        key: options.socketName || 'Value',
+        valueType: type
+      }]
+    }
+
+    if (socketOutputs) {
+      configUpdate['socketOutputs'] = [{
+        name: options.socketName || 'Value',
+        key: options.socketName || 'Value',
+        valueType: type
+      }]
+    }
+
+    updateConfigKeys(configUpdate)
 
     reactFlow.setEdges(setEdges)
   }
