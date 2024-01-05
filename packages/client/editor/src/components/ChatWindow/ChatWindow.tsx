@@ -16,7 +16,6 @@ import {
   useAppSelector,
   useSelectAgentsEvent,
 } from 'client/state'
-import { set } from 'lodash'
 
 /**
  * Input component - Receives and sends playtest input.
@@ -224,7 +223,7 @@ const ChatWindow = ({ tab, spellId }) => {
     typingInterval.current = setInterval(() => {
       const internalI = i
       setHistory(prevHistory => {
-        let newHistory = [...prevHistory];
+        const newHistory = [...prevHistory];
         const lastMessageIndex = newHistory.length - 1;
         const lastMessage = newHistory[lastMessageIndex];
 

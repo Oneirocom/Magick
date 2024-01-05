@@ -2,7 +2,7 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Connection, Handle, Position, useReactFlow } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
