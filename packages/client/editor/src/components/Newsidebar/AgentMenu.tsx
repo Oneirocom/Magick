@@ -12,7 +12,7 @@ import Menu from '@mui/material/Menu'
 import { useDispatch } from 'react-redux'
 import { STANDALONE, } from 'shared/config'
 import { useFeathers } from '@magickml/providers'
-import { setCurrentAgentId, setCurrentSpellReleaseId, useCreateAgentReleaseMutation } from 'client/state'
+import { setCurrentAgentId, setCurrentSpellReleaseId, useCreateAgentReleaseMutation, useUpdateAgentMutation } from 'client/state'
 import { Button } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
@@ -33,6 +33,7 @@ export function AgentMenu({ data }) {
   const [publishedAgent, setPublishedAgent] = useState(null);
 
   const [createAgentRelease] = useCreateAgentReleaseMutation()
+  const [updateAgent] = useUpdateAgentMutation()
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
     client.service('agents').subscribe(agent.id)
@@ -44,15 +45,38 @@ export function AgentMenu({ data }) {
 
   // Update draftAgent and publishedAgent when data changes
   useEffect(() => {
-    if (!data) return;
-    const draft = data.find(agent => agent.default && !agent.currentSpellReleaseId)
-    if (!draft) return
-    setDraftAgent(draft);
-    setCurrentAgent(currentAgent || draft);
+    // Draft agents should always be enabled
+    const updateDraftAgentIfNeeded = async (draft) => {
+      if (!draft.enabled) {
+        try {
+          await updateAgent({
+            id: draft.id,
+            enabled: true,
+          });
+          console.log('Draft agent enabled');
+        } catch (error) {
+          console.error('Error updating draft agent:', error);
+        }
+      }
+    };
 
-    const published = data.find(agent => agent.currentSpellReleaseId); // Find only one published agent
-    setPublishedAgent(published); // Set the published agent
-  }, [data]);
+    const handleDataUpdate = async () => {
+      if (!data) return;
+
+      const draft = data.find(agent => agent.default && !agent.currentSpellReleaseId);
+      if (draft) {
+        await updateDraftAgentIfNeeded(draft);
+        setDraftAgent(draft);
+        setCurrentAgent(currentAgent || draft);
+      }
+
+      const published = data.find(agent => agent.currentSpellReleaseId); // Find only one published agent
+      setPublishedAgent(published); // Set the published agent
+    };
+
+    handleDataUpdate();
+  }, [data, updateAgent, currentAgent, setCurrentAgent]);
+
 
   const toggleMenu = (target = null) => {
     if (openMenu) {
