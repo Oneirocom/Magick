@@ -330,11 +330,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     }
 
     try {
-      const spellCaster = await new SpellCaster<Agent>({
+      const spellCaster = new SpellCaster<Agent>({
         agent: this.agent,
         pluginManager: this.pluginManager,
         connection: this.app.get('redis'),
-      }).initialize(spell)
+      })
+
+      await spellCaster.initialize(spell)
 
       const spellCasterList = this.spellMap.get(spell.id)
       if (spellCasterList) {

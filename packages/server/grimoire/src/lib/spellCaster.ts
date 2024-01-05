@@ -88,6 +88,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   private loopDelay: number
   private limitInSeconds: number
   private limitInSteps: number
+  private connection: Redis
 
   constructor({
     loopDelay = 100,
@@ -104,24 +105,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     agent: Agent
     pluginManager: PluginManager
   }) {
+    this.connection = connection
     this.agent = agent
     this.pluginManager = pluginManager
     this.logger = getLogger()
     this.loopDelay = loopDelay
     this.limitInSeconds = limitInSeconds
     this.limitInSteps = limitInSteps
-
-    // When we are done loading plugins, we build the registry
-    const baseRegistry = new BaseRegistry(this.agent, connection)
-    this.registry = this.pluginManager.getRegistry(
-      this,
-      baseRegistry.getRegistry()
-    )
-    this.graph = makeGraphApi(this.registry)
-
-    // initialize the base registry once we have the full graph.
-    // This sets up the state service properly.
-    baseRegistry.init(this.graph)
   }
 
   /**
@@ -145,6 +135,22 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.logger.debug(
       `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
     )
+    // build the base registry
+    const baseRegistry = new BaseRegistry(this.agent, this.connection)
+
+    // Await the plugin manager to get the registry.  Made this async to allow dependencies to be async
+    this.registry = await this.pluginManager.getRegistry(
+      this,
+      baseRegistry.getRegistry()
+    )
+
+    // build the graph api
+    this.graph = makeGraphApi(this.registry)
+
+    // initialize the base registry once we have the full graph.
+    // This sets up the state service properly.
+    baseRegistry.init(this.graph)
+
     this.spell = spell
     const graph = readGraphFromJSON({
       graphJson: this.spell.graph as GraphJSON,
@@ -234,12 +240,18 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the graph is executed.
    */
   async executeGraphOnce(isEnd = false): Promise<void> {
-    if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
-    if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
-    this.busy = true
-    await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
-    this.busy = false
-    this.executeGraph = false // Reset the flag after execution
+    try {
+      if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
+      if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
+      this.busy = true
+      await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
+      this.busy = false
+      this.executeGraph = false // Reset the flag after execution
+    } catch (err) {
+      this.logger.error('Error executing graph from logger!!!!', err)
+      this.busy = false
+      this.executeGraph = false // Reset the flag after execution
+    }
   }
 
   /**
