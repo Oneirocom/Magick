@@ -38,6 +38,7 @@ import { PluginEmbeddings } from './customEmbeddings'
 
 import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
+import { CredentialsManager } from 'server/credentials'
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -60,6 +61,7 @@ declare module './declarations' {
     logger: pino.Logger
     environment: Environment
     posthog: ReturnType<typeof createPosthogClient>
+    credentialsManager: CredentialsManager
   }
 }
 
@@ -67,6 +69,9 @@ export async function initApp(environment: Environment = 'default') {
   const logger = getLogger()
   logger.info('Initializing feathers app...')
   app.set('logger', logger)
+
+  const credentialsManager = new CredentialsManager()
+  app.set('credentialsManager', credentialsManager)
 
   app.set('posthog', createPosthogClient(app))
 
