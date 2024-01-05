@@ -111,6 +111,12 @@ export enum ModelNames {
   Petals = 'petals',
 }
 
+type CompletionParams = {
+  request: CompletionRequest
+  callback: (chunk: string, isDone: boolean) => void
+  maxRetries: number
+}
+
 interface ICoreLLMService {
   /**
    * Handles completion requests in streaming mode. Accumulates the text from each chunk and returns the complete text.
@@ -119,10 +125,7 @@ interface ICoreLLMService {
    * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
    * @returns A promise that resolves to the complete text after all chunks have been received.
    */
-  completion: (
-    request: CompletionRequest,
-    callback: (chunk: string, isDone: boolean) => void
-  ) => Promise<string>
+  completion: (params: CompletionParams) => Promise<string>
 }
 
 export class CoreLLMService implements ICoreLLMService {
@@ -140,11 +143,11 @@ export class CoreLLMService implements ICoreLLMService {
   }
 
   // Method to handle completion (always in streaming mode)
-  async completion(
-    request: CompletionRequest,
-    callback: (chunk: string, isDone: boolean) => void,
-    maxRetries: number = 3 // Default number of retries
-  ): Promise<string> {
+  async completion({
+    request,
+    callback,
+    maxRetries = 3,
+  }: CompletionParams): Promise<string> {
     let attempts = 0
 
     while (attempts < maxRetries) {
