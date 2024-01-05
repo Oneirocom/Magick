@@ -11,6 +11,7 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
+import { CredentialsManager, PluginCredential } from 'server/credentials'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -167,6 +168,8 @@ export abstract class BasePlugin<
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected centralEventBus!: EventEmitter
+  protected credentials: PluginCredential[] = []
+  protected credentialsManager!: CredentialsManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -209,6 +212,7 @@ export abstract class BasePlugin<
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
+    this.credentialsManager = new CredentialsManager()
   }
 
   /**
@@ -488,6 +492,14 @@ export abstract class BasePlugin<
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
     }
+  }
+
+  /**
+   * Sets the credentials for the plugin.
+   * @param newCredentials Array of credentials to set.
+   */
+  setCredentials(newCredentials: PluginCredential[]) {
+    this.credentials = newCredentials
   }
 }
 
