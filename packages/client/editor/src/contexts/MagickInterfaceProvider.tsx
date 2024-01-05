@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { useConfig, usePubSub } from '@magickml/providers'
+import { usePubSub } from '@magickml/providers'
 import {
   EditorContext,
   GetSpell,
@@ -32,7 +32,6 @@ const MagickInterfaceProvider: React.FC<{
   tab: any,
   spellId: string
 }> = ({ children, tab, spellId }) => {
-  const config = useConfig()
   const { events, publish, subscribe } = usePubSub()
   const [_runSpell] = spellApi.useRunSpellMutation()
   const [_getSpell] = spellApi.useLazyGetSpellQuery()

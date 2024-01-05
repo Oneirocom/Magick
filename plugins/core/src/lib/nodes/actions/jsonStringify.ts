@@ -50,8 +50,6 @@ export const jsonStringify = makeFlowNodeDefinition({
   triggered: ({ commit, read, write, configuration }) => {
     const options = configuration?.valueTypeOptions
     const value = read(options.socketName)
-
-    debugger
     const string = JSON.stringify(value)
     write('string', string)
     commit('flow')

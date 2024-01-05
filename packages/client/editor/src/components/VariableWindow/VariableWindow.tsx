@@ -1,5 +1,5 @@
 import { VariableJSON } from '@magickml/behave-graph';
-import { Tab, useConfig, usePubSub } from '@magickml/providers';
+import { Tab, useConfig } from '@magickml/providers';
 import { Window } from 'client/core'
 import { useGetSpellQuery, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
@@ -9,7 +9,7 @@ import { enqueueSnackbar } from 'notistack';
 import { Variable } from './Variable';
 
 export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-  const { tab, spellId } = props.params
+  const { spellId } = props.params
   const [newVariableName, setNewVariableName] = useState<string>('')
   const { data: spell } = useGetSpellQuery({ id: spellId })
   const { projectId } = useConfig()
@@ -133,8 +133,6 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
   }
 
   if (!spell) return null
-
-  const tabsTriggerClassname = "w-full text-center border-b-2 border-b-solid border-b-[var(--background-color)]"
 
   return (
     <Window borderless>

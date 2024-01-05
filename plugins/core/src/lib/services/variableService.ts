@@ -1,7 +1,7 @@
 import Keyv from 'keyv'
 import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
-import { IEventStore, SpellCaster } from 'server/grimoire'
+import { SpellCaster } from 'server/grimoire'
 
 // This is the interface you'll use to get and set variables.
 export interface IVariableService {
@@ -10,7 +10,7 @@ export interface IVariableService {
 }
 
 // This is the class you'll use to get and set variables.
-export class IVariableService {
+export class VariableService {
   private keyv: Keyv
   private spellCaster: SpellCaster
   private agentId: string

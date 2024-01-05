@@ -2,12 +2,10 @@ import { IDockviewPanelProps } from "dockview";
 import { useEffect, useRef, useState } from "react";
 import { Flow } from "../react-flow/Flow";
 
-import { Tab, useConfig } from "@magickml/providers";
+import { Tab } from "@magickml/providers";
 import { spellApi } from "client/state";
 
 const GraphWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-
-  const config = useConfig()
   const parentRef = useRef();
   const [loadSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
   const { tab, spellId } = props.params

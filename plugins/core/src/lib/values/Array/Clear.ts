@@ -13,7 +13,7 @@ export const arrayClear = makeFlowNodeDefinition({
     array: 'array',
   },
   initialState: undefined,
-  triggered: ({ commit, read, write, configuration }) => {
+  triggered: ({ commit, write }) => {
     const array = []
     write('array', array)
     commit('flow')

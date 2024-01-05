@@ -1,7 +1,6 @@
 import {
   NodeCategory,
   SocketsList,
-  Variable,
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
@@ -34,7 +33,7 @@ export const variableGet = makeFunctionNodeDefinition({
     },
   },
   in: {},
-  out: (configuration, graph) => {
+  out: configuration => {
     const socketArray = configuration?.socketOutputs.length
       ? configuration.socketOutputs
       : []

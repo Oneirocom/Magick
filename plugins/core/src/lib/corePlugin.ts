@@ -19,7 +19,7 @@ import { streamMessage } from './nodes/actions/streamMessage'
 import { PluginCredential } from 'server/credentials'
 import { LLMProviders } from './services/coreLLMService/types'
 import { variableGet } from './nodes/query/variableGet'
-import { IVariableService } from './services/variableService'
+import { VariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
 import { arrayPush } from './values/Array/Push'
 import { jsonStringify } from './nodes/actions/jsonStringify'
@@ -117,7 +117,7 @@ export class CorePlugin extends CoreEventsPlugin {
         this.centralEventBus,
         this.actionQueueName
       ),
-      IVariableService: new IVariableService(
+      IVariableService: new VariableService(
         this.connection,
         this.agentId,
         spellCaster

@@ -1,7 +1,7 @@
 // DOCUMENTED
 
 import { NODE_ENV } from 'shared/config'
-import whyDidYouRender from '@welldone-software/why-did-you-render'
+// import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 /**
  * Enables the 'why-did-you-render' package in a React development environment
