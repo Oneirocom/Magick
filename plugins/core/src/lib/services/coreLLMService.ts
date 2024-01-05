@@ -136,6 +136,7 @@ export class CoreLLMService implements ICoreLLMService {
       this.liteLLM = await python('litellm')
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
       this.liteLLM.vertex_location = VERTEXAI_LOCATION
+      this.liteLLM.set_verbose = true
     } catch (error: any) {
       console.error('Error initializing LiteLLM:', error)
       throw new Error(`Initialization failed: ${error}`)
@@ -170,6 +171,7 @@ export class CoreLLMService implements ICoreLLMService {
           callback(chunkText, false)
         }
 
+        fullText += '<<END>>'
         callback('', true)
         return fullText
       } catch (error: any) {
