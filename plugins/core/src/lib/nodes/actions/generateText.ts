@@ -22,6 +22,10 @@ export const generateText = makeFlowNodeDefinition({
       choices: Object.values(ModelNames),
       defaultValue: ModelNames['gemini-pro'],
     },
+    maxRetries: {
+      valueType: 'number',
+      defaultValue: 3,
+    },
     temperature: {
       valueType: 'number',
       defaultValue: 0.5,
@@ -60,6 +64,7 @@ export const generateText = makeFlowNodeDefinition({
       const prompt: string = read('prompt') || ''
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1
+      const maxRetries: number = read('maxRetries') || 3
 
       const request = {
         model,
@@ -73,13 +78,17 @@ export const generateText = makeFlowNodeDefinition({
       let fullResponse = '' // Variable to accumulate the full response
 
       // Using the modified completion method
-      await coreLLMService.completion(request, (chunk, isDone) => {
-        fullResponse += chunk // Append each chunk to fullResponse
-        if (!isDone) {
-          // If streaming is not done, handle the chunk
-          write('stream', chunk)
-          commit('onStream')
-        }
+      await coreLLMService.completion({
+        request,
+        callback: (chunk, isDone) => {
+          fullResponse += chunk // Append each chunk to fullResponse
+          if (!isDone) {
+            // If streaming is not done, handle the chunk
+            write('stream', chunk)
+            commit('onStream')
+          }
+        },
+        maxRetries,
       })
 
       // Once streaming is complete, handle the full response
