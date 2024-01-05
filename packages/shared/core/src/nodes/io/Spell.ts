@@ -41,7 +41,7 @@ function getSpellByIdData(state, spellId) {
   const queryState = queries[queryKey as string]
 
   // Return the cached data
-  return queryState?.data.data[0]
+  return queryState?.data?.data[0]
 }
 
 export const createNameFromSocket = (type: 'inputs' | 'outputs') => {

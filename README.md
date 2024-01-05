@@ -103,16 +103,35 @@ Before you start, ensure you have the following software installed on your machi
 
 Follow the respective installation guides to set up each piece of software.
 
+- Install **pipx**: A tool for installing and running Python applications in isolated environments.
+
+On Unix and macOS: Open a terminal and run the following command:
+
+```
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+```
+
+On Windows: Open a command prompt and execute:
+
+```
+py -m pip install --user pipx
+py -m pipx ensurepath
+```
+
+Install Poetry (Manages python packages)
+
+```
+pipx install poetry
+```
+
+Verify Installation
+
+```
+pipx --version
+```
+
 Once installed, proceed to set up Magick.
-
-### Next, run the following commands:
-
-```
-git clone https://github.com/Oneirocom/Magick
-cd Magick
-npm install
-npm run dev
-```
 
 ## Setup
 
@@ -122,6 +141,7 @@ Clone and set up Magick
 git clone https://github.com/Oneirocom/Magick
 cd Magick
 npm install
+npm run dev
 ```
 
 ## Run Magick!

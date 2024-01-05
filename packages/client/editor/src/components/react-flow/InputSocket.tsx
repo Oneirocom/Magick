@@ -24,14 +24,14 @@ const InputFieldForValue = ({
   name,
   valueType,
   connected,
-  hideValue
+  hideValue = false
 }: Pick<
   InputSocketProps,
   'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
 >) => {
   const showChoices = choices?.length;
   const inputVal = (String(value) ?? defaultValue ?? '') as string;
-  const hideValueInput = hideValue ?? !connected
+  const hideValueInput = hideValue || connected
 
   const inputClass = cx(
     'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm',
@@ -41,6 +41,10 @@ const InputFieldForValue = ({
     "flex w-full rounded-lg items-center pl-4",
     !hideValueInput && "bg-[var(--foreground-color)]"
   )
+
+  const handleChange = (key: string, value: any) => {
+    onChange(key, value);
+  }
 
   return (
     <div style={{ borderRadius: 5 }} className={containerClass}>
@@ -54,7 +58,7 @@ const InputFieldForValue = ({
             <select
               className={inputClass}
               value={value ?? defaultValue ?? ''}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              onChange={(e) => handleChange(name, e.currentTarget.value)}
             >
               <>
                 {choices.map((choice) => (
