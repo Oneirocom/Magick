@@ -81,7 +81,6 @@ export const variableSet = makeFlowNodeDefinition({
     graph: { variables, getDependency },
     configuration,
   }) => {
-    debugger
     const variable = variables[configuration.variableId]
     const output = configuration.socketOutputs[0]
     const inputName = configuration.socketInputs[0]

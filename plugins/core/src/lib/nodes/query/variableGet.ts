@@ -55,7 +55,6 @@ export const variableGet = makeFunctionNodeDefinition({
     graph: { variables, getDependency },
     configuration,
   }) => {
-    debugger
     const variable = variables[configuration.variableId]
     const output = configuration.socketOutputs[0]
 
@@ -65,6 +64,7 @@ export const variableGet = makeFunctionNodeDefinition({
 
     if (!variableService) return
 
+    // pass in config object as well.  Lets us check things like if the variable is stored globally, on event, etc.
     const value = await variableService.getVariable(variable.name)
 
     if (!value) {
