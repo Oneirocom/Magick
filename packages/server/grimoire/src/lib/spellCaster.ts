@@ -156,7 +156,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
 
     const message = `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
     this.logger.debug(message)
-    this.agent.log(message, spell)
     this.spell = spell
     const graph = readGraphFromJSON({
       graphJson: this.spell.graph as GraphJSON,
