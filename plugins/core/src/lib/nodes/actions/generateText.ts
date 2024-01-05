@@ -26,10 +26,6 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'number',
       defaultValue: 0.5,
     },
-    stream: {
-      valueType: 'boolean',
-      defaultValue: false,
-    },
     top_p: {
       valueType: 'number',
       defaultValue: 1,
@@ -64,7 +60,6 @@ export const generateText = makeFlowNodeDefinition({
       const prompt: string = read('prompt') || ''
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1
-      const stream: boolean = read('stream') || false
 
       const request = {
         model,
@@ -75,44 +70,22 @@ export const generateText = makeFlowNodeDefinition({
         },
       }
 
-      if (stream) {
-        const chunksQueue = [] as any[] // Queue to manage chunks
-        let isProcessing = false // Flag to check if a chunk is being processed
+      let fullResponse = '' // Variable to accumulate the full response
 
-        const processNextChunk = () => {
-          if (isProcessing) return // If a chunk is being processed, do nothing
-          if (chunksQueue.length === 0) {
-            commit('done')
-            return
-          }
-
-          const chunk = chunksQueue.shift() // Get the next chunk
-          isProcessing = true
+      // Using the modified completion method
+      await coreLLMService.completion(request, (chunk, isDone) => {
+        fullResponse += chunk // Append each chunk to fullResponse
+        if (!isDone) {
+          // If streaming is not done, handle the chunk
           write('stream', chunk)
-
-          // Now commit the chunk for processing
-          commit('onStream', () => {
-            // This callback is called when commit is done processing the chunk
-            isProcessing = false
-            processNextChunk() // Process the next one after current is done
-          })
+          commit('onStream')
         }
+      })
 
-        // Stream and receive chunks
-        await coreLLMService.streamCompletion(request, (chunk, text) => {
-          chunksQueue.push(text) // Instead of directly writing, queue the text
-          processNextChunk() // Try to process next chunk
-        })
-
-        // Signifies the end of the streaming
-      } else {
-        const response = await coreLLMService.completion(request)
-
-        write('response', response)
-        write('completion', response.choices[0].message.content)
-        // Signal end of process
-        commit('done')
-      }
+      // Once streaming is complete, handle the full response
+      write('response', fullResponse)
+      write('completion', fullResponse) // Assuming fullResponse is the desired completion format
+      commit('done') // Signal end of process
     } catch (error) {
       console.error('Error in generateText:', error)
       throw error
