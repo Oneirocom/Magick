@@ -31,7 +31,6 @@ export const arrayPush = makeFlowNodeDefinition({
     },
     socketInputs: {
       valueType: 'array',
-
       defaultValue: [],
     },
   },
