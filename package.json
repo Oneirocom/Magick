@@ -5,11 +5,12 @@
   "scripts": {
     "common-setup": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
     "dev-base": "npm run common-setup && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
-    "dev": "poetry run concurrently --raw \"npm run dev-base\" \"tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.js\"",
+    "dev": "poetry run concurrently --raw \"npm run dev-base\" \"tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateClientConfig.js\"",
     "dev-nocache": "poetry run npm run dev-base -- --skip-nx-cache",
     "cloud": "npm run dev-base",
     "cloud-nocache": "npm run dev-base -- --skip-nx-cache",
     "dev:nodeSpec": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.js",
+    "dev:clientConfig": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateClientConfig.js",
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-cloud-agent-manager": "OTEL_SERVICE_NAME=agent-manager node -r './instrument.js' dist/apps/cloud-agent-manager/main.js",
