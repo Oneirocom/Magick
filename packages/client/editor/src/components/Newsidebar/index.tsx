@@ -110,7 +110,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
           const draftAgent = await createNewAgent({
             name: 'Draft Agent',
             projectId: config.projectId,
-            enabled: false,
+            enabled: true,
             default: true,
             publicVariables: '{}',
             secrets: '{}',
@@ -182,7 +182,7 @@ export function NewSidebar(DrawerProps): JSX.Element {
                 publicVariables: '{}',
                 secrets: '{}',
                 name: 'Draft Agent',
-                enabled: false,
+                enabled: true,
                 pingedAt: "",
                 projectId: agent?.projectId,
                 data: agent?.data || {},
