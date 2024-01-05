@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
-import { useFeathers, useConfig, usePubSub } from '@magickml/providers'
+import { useFeathers, usePubSub } from '@magickml/providers'
 import {
   EditorContext,
   GraphData,
@@ -184,8 +184,6 @@ const EditorProvider = ({ children }) => {
  * RawEditor component.
  */
 const RawEditor = ({ tab, children, spellId }) => {
-  const config = useConfig()
-
   const [getSpell, { data: spell, isLoading }] =
     spellApi.useLazyGetSpellQuery()
   const [loaded, setLoaded] = useState(false)

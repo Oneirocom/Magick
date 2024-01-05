@@ -1,5 +1,4 @@
 import { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import { spell } from 'packages/server/core/src/services/spells/spells'
 import { Edge, Node } from 'reactflow'
 
 const isNullish = (value: any): value is null | undefined =>

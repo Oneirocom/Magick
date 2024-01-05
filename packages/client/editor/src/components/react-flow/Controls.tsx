@@ -1,6 +1,5 @@
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import {
-  faDownload,
   faPause,
   faPlay,
   faSitemap,

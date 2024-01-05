@@ -1,9 +1,7 @@
 import {
   NodeCategory,
   SocketsList,
-  Variable,
   makeFlowNodeDefinition,
-  makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
 

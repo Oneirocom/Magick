@@ -16,9 +16,9 @@ import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { AGENT_SPELL } from 'shared/core'
-import { BaseRegistry } from './baseRegistry'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore } from './services/eventStore'
+import { BaseRegistry } from './baseRegistry'
 interface IAgent {
   id: string
   log: (message: string, data: Record<string, any>) => void

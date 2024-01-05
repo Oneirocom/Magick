@@ -10,7 +10,6 @@ import { isHandleConnected } from '../../utils/isHandleConnected.js';
 import { useSelectAgentsSpell } from 'client/state';
 import { SpellInterface } from 'server/schemas';
 import { getConfig } from '../../utils/getNodeConfig.js';
-import { socketsFromNumInputs } from '../../utils/socketsFromNum.js';
 import { configureSockets } from '../../utils/configureSockets.js';
 
 type NodeProps = FlowNodeProps & {
