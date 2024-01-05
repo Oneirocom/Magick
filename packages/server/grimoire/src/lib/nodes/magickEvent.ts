@@ -92,7 +92,7 @@ export function makeMagickEventNodeDefinition<
             // attach event key to the event here
             // we set the current event in the event store for access in the state
             const eventStore = getDependency<IEventStore>('IEventStore')
-            const eventState = node?.configuration.eventState
+            const eventState = node?.configuration?.eventState || []
 
             // set the event key  by sorting the event state properties alphabetically and then joining them
             // warning: if we change this key, all agents will lose access to their state
