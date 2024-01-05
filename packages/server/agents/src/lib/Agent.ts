@@ -225,12 +225,12 @@ export class Agent implements AgentInterface {
     })
   }
 
-  removePlugins() {
+  async removePlugins() {
     this.logger.debug('Removing all plugins on agent %s', this.id)
     const agentStopMethods = pluginManager.getAgentStopMethods()
     if (agentStopMethods)
       for (const method of Object.keys(agentStopMethods)) {
-        agentStopMethods[method]({
+        await agentStopMethods[method]({
           agentManager: this.agentManager,
           agent: this,
           spellRunner: this.spellRunner,
@@ -242,7 +242,7 @@ export class Agent implements AgentInterface {
    * Clean up resources when the instance is destroyed.
    */
   async onDestroy() {
-    this.removePlugins()
+    await this.removePlugins()
     this.log('destroyed agent', { id: this.id })
   }
 
