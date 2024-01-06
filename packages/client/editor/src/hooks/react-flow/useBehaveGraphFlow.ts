@@ -15,8 +15,9 @@ import {
   onEdgesChange,
   onNodesChange,
   onConnect,
+  graphActions,
 } from 'client/state'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'
 import { SpellInterface } from 'server/schemas'
 
@@ -37,6 +38,7 @@ export const useBehaveGraphFlow = ({
   tab: Tab
 }) => {
   const { events, publish } = usePubSub()
+  const dispatch = useDispatch()
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
 
@@ -59,6 +61,11 @@ export const useBehaveGraphFlow = ({
     if (!spell) return
     setGraphJson(spell.graph)
   }, [spell, setGraphJson])
+
+  useEffect(() => {
+    if (!graphJson) return
+    dispatch(graphActions.setGraphJson({ tabId: tab.id, graphJson }))
+  }, [graphJson])
 
   // Make sure we are only doing this conversion when the graph changes
   // Debounce because changes stream in.
