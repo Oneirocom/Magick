@@ -79,7 +79,7 @@ export class CredentialsService {
   }
 }
 
-export const getOptions = (app: Application) => {
+export const getOptions = () => {
   return {
     name: 'credentials',
   }
