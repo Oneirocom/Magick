@@ -677,6 +677,62 @@
     "configuration": []
   },
   {
+    "type": "flow/whileLoop",
+    "category": "Flow",
+    "label": "While Loop",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "condition",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "loopBody",
+        "valueType": "flow"
+      },
+      {
+        "name": "completed",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "maxIterations",
+        "valueType": "number",
+        "defaultValue": 10
+      }
+    ]
+  },
+  {
+    "type": "logic/string/regex",
+    "category": "Logic",
+    "label": "Regex",
+    "inputs": [
+      {
+        "name": "key",
+        "valueType": "regex"
+      },
+      {
+        "name": "key",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "key",
+        "valueType": "match"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
