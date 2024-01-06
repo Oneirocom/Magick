@@ -13,6 +13,7 @@ import { EventStateProperties } from './EventStateProperties';
 import { SpellInterface } from 'server/schemas';
 import { VariableNames } from './variableNames';
 import { ValueType } from './ValueType';
+import { DefaultConfig } from './DefaultConfig';
 
 type Props = {
   tab: Tab
@@ -24,6 +25,7 @@ export type ConfigurationComponentProps = {
   config: [key: string, value: any]
   nodeSpec: NodeSpecJSON
   node: Node,
+  valueType: string,
   updateConfigKey: (key: string, value: any) => void
   updateConfigKeys: (keys: Record<string, any>) => void
   spell: SpellInterface
@@ -36,7 +38,7 @@ const ConfigurationComponents = {
   eventStateProperties: EventStateProperties,
   variableNames: VariableNames,
   valueType: ValueType,
-  default: () => <div>default</div>
+  default: DefaultConfig
 }
 
 export const PropertiesWindow = (props: Props) => {
@@ -78,6 +80,8 @@ export const PropertiesWindow = (props: Props) => {
         const [key] = config
         const Component = ConfigurationComponents[key] || ConfigurationComponents.default
 
+        const valueType = spec.configuration.find((conf) => conf.name === key)?.valueType
+
         const componentProps: ConfigurationComponentProps = {
           spell: spellData,
           fullConfig: configuration,
@@ -86,7 +90,8 @@ export const PropertiesWindow = (props: Props) => {
           node: selectedNode,
           tab: props.tab,
           updateConfigKey,
-          updateConfigKeys
+          updateConfigKeys,
+          valueType
         }
 
         // Check if the current element is the first or the last one in the array
