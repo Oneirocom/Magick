@@ -55,7 +55,6 @@ const CreateSpellModal = () => {
   const [, setLoading] = useState<boolean>(false)
   const { enqueueSnackbar } = useSnackbar()
   const [newSpell] = spellApi.useNewSpellMutation()
-  const [spellExists] = spellApi.useLazyGetSpellQuery()
   const { register, handleSubmit } = useForm()
 
   /**
