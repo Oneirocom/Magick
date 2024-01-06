@@ -18,3 +18,8 @@ export const selectActiveNode = tabId => state => {
   const tabState = selectTabState(tabId)(state)
   return tabState?.nodes.find(node => node.selected)
 }
+
+export const selectGraphJson = tabId => state => {
+  const tabState = selectTabState(tabId)(state)
+  return tabState?.graphJson
+}
