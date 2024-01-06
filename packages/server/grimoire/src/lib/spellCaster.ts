@@ -135,37 +135,45 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the spell caster is initialized.
    */
   async initialize(spell: SpellInterface): Promise<this> {
-    this.logger.debug(
-      `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
-    )
-    // build the base registry
-    const baseRegistry = new BaseRegistry(this.agent, this.connection)
+    try {
+      const message = `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
+      this.logger.debug(message)
+      this.spell = spell
 
-    // Await the plugin manager to get the registry.  Made this async to allow dependencies to be async
-    this.registry = await this.pluginManager.getRegistry(
-      this,
-      baseRegistry.getRegistry()
-    )
+      // build the base registry
+      const baseRegistry = new BaseRegistry(this.agent, this.connection)
 
-    // build the graph api
-    this.graph = makeGraphApi(this.registry)
+      // Await the plugin manager to get the registry.  Made this async to allow dependencies to be async
+      this.registry = await this.pluginManager.getRegistry(
+        this,
+        baseRegistry.getRegistry()
+      )
 
-    // initialize the base registry once we have the full graph.
-    // This sets up the state service properly.
-    baseRegistry.init(this.graph)
+      // build the graph api
+      this.graph = makeGraphApi(this.registry)
 
-    const message = `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
-    this.logger.debug(message)
-    this.spell = spell
-    const graph = readGraphFromJSON({
-      graphJson: this.spell.graph as GraphJSON,
-      registry: this.registry,
-    })
+      // initialize the base registry once we have the full graph.
+      // This sets up the state service properly.
+      baseRegistry.init(this.graph)
 
-    this.engine = new Engine(graph.nodes)
-    this.initializeHandlers()
-    this.start()
-    return this
+      this.spell = spell
+
+      const graph = readGraphFromJSON({
+        graphJson: this.spell.graph as GraphJSON,
+        registry: this.registry,
+      })
+
+      this.engine = new Engine(graph.nodes)
+      this.initializeHandlers()
+      this.start()
+      return this
+    } catch (err: any) {
+      this.agent.error(
+        err.toString(),
+        `Error initializing spell ${this.spell.id} ${this.spell.name}`
+      )
+      return this
+    }
   }
 
   /**
@@ -349,7 +357,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   dispose() {
     this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
     this.stopRunLoop()
-    this.engine.dispose()
+    if (this.engine) this.engine.dispose()
   }
 
   /**
