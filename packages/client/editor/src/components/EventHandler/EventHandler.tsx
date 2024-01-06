@@ -92,7 +92,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * Save the current spell
    */
   const saveSpell = async () => {
-    console.log('Saving!')
+
     if (!spellRef.current) return
     const type = spellRef.current.type || 'spell'
 
@@ -165,6 +165,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         name: currentSpell.name,
         spellId: currentSpell.id,
       })
+
 
       spellRef.current = diffResponse
 
