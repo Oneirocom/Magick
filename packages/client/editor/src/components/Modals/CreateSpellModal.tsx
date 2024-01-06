@@ -93,17 +93,17 @@ const CreateSpellModal = () => {
       const placeholderName = uniqueNamesGenerator(customConfig)
       const name = data.name || placeholderName
       setLoading(true)
-      const spellCheck = await spellExists({
-        spellName: name,
-        projectId: config.projectId,
-        hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      })
-      if (spellCheck.data.total > 0) {
-        enqueueSnackbar('A spell with that name already exists', {
-          variant: 'error',
-        })
-        return
-      }
+      // const spellCheck = await spellExists({
+      //   name,
+      //   projectId: config.projectId,
+      //   hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
+      // })
+      // if (spellCheck.data.total > 0) {
+      //   enqueueSnackbar('A spell with that name already exists', {
+      //     variant: 'error',
+      //   })
+      //   return
+      // }
       const response = (await newSpell({
         id: uuidv4(),
         graph: selectedTemplate.graph,
