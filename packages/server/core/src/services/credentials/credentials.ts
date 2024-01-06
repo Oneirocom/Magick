@@ -1,6 +1,6 @@
 import { getLogger } from 'server/logger'
-import type { Application, HookContext } from '../../declarations'
-import { CredentialsService, getOptions } from './credentials.class'
+import type { Application } from '../../declarations'
+import { CredentialsService } from './credentials.class'
 import { Params } from '@feathersjs/feathers'
 
 export * from './credentials.class'
