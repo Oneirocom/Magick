@@ -1,4 +1,8 @@
-import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
+import {
+  ILogger,
+  NodeCategory,
+  makeFlowNodeDefinition,
+} from '@magickml/behave-graph'
 import { CoreLLMService, ModelNames } from '../../services/coreLLMService'
 
 export const generateText = makeFlowNodeDefinition({
@@ -95,7 +99,14 @@ export const generateText = makeFlowNodeDefinition({
       write('response', fullResponse)
       write('completion', fullResponse) // Assuming fullResponse is the desired completion format
       commit('done') // Signal end of process
-    } catch (error) {
+    } catch (error: any) {
+      const loggerService = getDependency<ILogger>('ILogger')
+
+      if (!loggerService) {
+        throw new Error('No loggerService provided')
+      }
+
+      loggerService?.log('error', error.toString())
       console.error('Error in generateText:', error)
       throw error
     }
