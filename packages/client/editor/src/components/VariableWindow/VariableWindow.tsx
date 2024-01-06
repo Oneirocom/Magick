@@ -1,5 +1,5 @@
 import { VariableJSON } from '@magickml/behave-graph';
-import { Tab, useConfig, usePubSub } from '@magickml/providers';
+import { Tab, useConfig } from '@magickml/providers';
 import { Window } from 'client/core'
 import { selectGraphJson, useGetSpellQuery, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
