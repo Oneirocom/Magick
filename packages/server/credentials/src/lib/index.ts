@@ -2,6 +2,9 @@ import knex from 'knex'
 import { CREDENTIALS_ENCRYPTION_KEY, DATABASE_URL } from 'shared/config'
 import { encrypt, decrypt } from './shared'
 
+/**
+ * Initializes a Knex instance for Postgres database connection.
+ */
 const db = knex({
   client: 'pg',
   connection: {
@@ -10,12 +13,18 @@ const db = knex({
   useNullAsDefault: true,
 })
 
+/**
+ * Type definition for plugin credentials.
+ */
 export type PluginCredential = {
   name: string
   serviceType: string
   credentialType: 'core' | 'plugin' | 'custom'
 }
 
+/**
+ * Type definition for credentials payload.
+ */
 export type CredentialsPayload = {
   id: string
   projectId: string
@@ -37,12 +46,23 @@ export type CredentialsPayload = {
   updated_at?: Date
 }
 
+/**
+ * Type definition for agent credentials payload.
+ */
 export type AgentCredentialsPayload = {
   agentId: string
   credentialId: string
 }
 
+/**
+ * Manages operations related to credentials in the database.
+ */
 class CredentialsManager {
+  /**
+   * Stores a new credential in the database.
+   * @param payload The credential data to store.
+   * @returns The ID of the newly stored credential.
+   */
   async storeCredentials(payload: CredentialsPayload): Promise<string> {
     const [credential] = await db('credentials')
       .insert({
@@ -57,7 +77,13 @@ class CredentialsManager {
     return credential
   }
 
-  // THIS DECRYPTS THE VALUE
+  /**
+   * Retrieves credentials from the database.
+   * @param projectId The ID of the project.
+   * @param id Optional ID of the credential.
+   * @param serviceType Optional service type of the credential.
+   * @returns The decrypted credential value.
+   */
   async retrieveCredentials(
     projectId: string,
     id?: string,
@@ -85,6 +111,11 @@ class CredentialsManager {
     }
   }
 
+  /**
+   * Deletes a credential from the database.
+   * @param id The ID of the credential to delete.
+   * @returns The ID of the deleted credential.
+   */
   async deleteCredentials(id: string): Promise<string> {
     try {
       const deleted: string[] = await db<CredentialsPayload>('credentials')
@@ -102,10 +133,11 @@ class CredentialsManager {
     }
   }
 
-  // This is used for the server to respond to client sided fetches
-  // This is not intended to be used for the server to retrieve credentials
-  // It does not return the encrypted value or decrypt it
-  // Agents can use retrieveAgentCredentials() to get what they need
+  /**
+   * Lists all credentials for a given project.
+   * @param projectId The ID of the project.
+   * @returns A list of credentials with sensitive data removed.
+   */
   async listCredentials(
     projectId: string
   ): Promise<Partial<CredentialsPayload>[]> {
@@ -124,6 +156,10 @@ class CredentialsManager {
       )
   }
 
+  /**
+   * Links a credential to an agent.
+   * @param payload The agent and credential IDs to link.
+   */
   async linkCredentialToAgent(payload: AgentCredentialsPayload): Promise<void> {
     const existingLinkedCredentials = await db('agent_credentials')
       .join('credentials', 'credentials.id', 'agent_credentials.credentialId')
@@ -155,7 +191,13 @@ class CredentialsManager {
     await db('agent_credentials').insert(payload)
   }
 
-  // THIS DECRYPTS THE VALUE
+  /**
+   * Retrieves credentials linked to an agent.
+   * @param agentId The ID of the agent.
+   * @param name The name of the credential.
+   * @param serviceType Optional service type.
+   * @returns The decrypted credential value.
+   */
   async retrieveAgentCredentials(
     agentId: string,
     name: string,
@@ -177,12 +219,22 @@ class CredentialsManager {
     return decrypt(credential.value, CREDENTIALS_ENCRYPTION_KEY)
   }
 
+  /**
+   * Lists all credentials linked to an agent.
+   * @param agentId The ID of the agent.
+   * @returns A list of agent credentials.
+   */
   async listAgentCredentials(
     agentId: string
   ): Promise<AgentCredentialsPayload[]> {
     return await db('agent_credentials').where({ agentId }).select('*')
   }
 
+  /**
+   * Deletes a credential linked to an agent.
+   * @param agentId The ID of the agent.
+   * @param credentialId The ID of the credential.
+   */
   async deleteAgentCredential(
     agentId: string,
     credentialId: string
