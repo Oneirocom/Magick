@@ -8,6 +8,7 @@
     "redux": "4.2.1",
     "client/feathers-client": "*",
     "@magickml/feathersRedux": "*",
+    "@magickml/behave-graph": "*",
     "shared/config": "*",
     "reactflow": "^11.9.4",
     "md5": "^2.3.0"
