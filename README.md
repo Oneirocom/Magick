@@ -107,27 +107,36 @@ Follow the respective installation guides to set up each piece of software.
 
 On Unix and macOS: Open a terminal and run the following command:
 
-```
+```bash
 python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 ```
 
 On Windows: Open a command prompt and execute:
 
-```
+```bash
 py -m pip install --user pipx
 py -m pipx ensurepath
 ```
 
+If you using Conda you can set up a new environment for Magick:
+
+```bash
+conda create -n magick python=3.12
+cond activate magick
+pip install pipx
+pipx ensurepath
+```
+
 Install Poetry (Manages python packages)
 
-```
+```bash
 pipx install poetry
 ```
 
 Verify Installation
 
-```
+```bash
 pipx --version
 ```
 
@@ -137,7 +146,7 @@ Once installed, proceed to set up Magick.
 
 Clone and set up Magick
 
-```
+```bash
 git clone https://github.com/Oneirocom/Magick
 cd Magick
 npm install
@@ -146,7 +155,7 @@ npm run dev
 
 ## Run Magick!
 
-```
+```bash
 npm run dev
 ```
 
