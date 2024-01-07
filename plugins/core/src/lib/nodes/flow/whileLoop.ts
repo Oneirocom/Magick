@@ -23,13 +23,12 @@ export const whileLoop = makeAsyncNodeDefinition({
     },
   },
   out: {
-    loopBody: 'flow',
     completed: 'flow',
+    loopBody: 'flow',
   },
   initialState: undefined,
   triggered: ({ configuration, finished = () => {}, commit, read }) => {
     const { maxIterations } = configuration
-
     const stop = maxIterations < hardStop ? maxIterations : hardStop
 
     const loopBodyIteration = (i: number) => {
