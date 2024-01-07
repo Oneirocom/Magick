@@ -28,7 +28,7 @@ import { forEach } from './values/Array/ForEach'
 import { arrayLength } from './values/Array/Length'
 import { arrayClear } from './values/Array/Clear'
 import { whileLoop } from './nodes/flow/whileLoop'
-import { regex } from './nodes/logic/regex'
+import { regex } from './nodes/logic/match'
 
 const pluginName = 'Core'
 

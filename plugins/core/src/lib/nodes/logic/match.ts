@@ -2,27 +2,11 @@ import { NodeCategory, makeInNOutFunctionDesc } from '@magickml/behave-graph'
 
 export const regex = makeInNOutFunctionDesc({
   name: 'logic/string/regex',
+  aliases: ['logic/string/match'],
   category: NodeCategory.Logic,
-  label: 'Regex',
-  in: [
-    {
-      key: 'regex',
-      valueType: 'string',
-      descriptiosn: 'Regular expression to match.',
-    },
-    {
-      key: 'string',
-      valueType: 'string',
-      description: 'String to test the regular expression against.',
-    },
-  ],
-  out: [
-    {
-      key: 'match',
-      valueType: 'boolean',
-      description: 'Whether the string matches the regular expression.',
-    },
-  ],
+  label: 'Match',
+  in: [{ match: 'string' }, { string: 'string' }],
+  out: [{ result: 'boolean' }],
   exec: (regexInput, stringInput) => {
     try {
       // Create a RegExp object from the input string
