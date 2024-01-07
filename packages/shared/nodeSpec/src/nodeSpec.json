@@ -693,11 +693,11 @@
     ],
     "outputs": [
       {
-        "name": "loopBody",
+        "name": "completed",
         "valueType": "flow"
       },
       {
-        "name": "completed",
+        "name": "loopBody",
         "valueType": "flow"
       }
     ],
@@ -712,22 +712,23 @@
   {
     "type": "logic/string/regex",
     "category": "Logic",
-    "label": "Regex",
+    "label": "Match",
     "inputs": [
       {
-        "name": "key",
-        "valueType": "regex"
+        "name": "match",
+        "valueType": "string",
+        "defaultValue": ""
       },
       {
-        "name": "key",
+        "name": "string",
         "valueType": "string",
         "defaultValue": ""
       }
     ],
     "outputs": [
       {
-        "name": "key",
-        "valueType": "match"
+        "name": "result",
+        "valueType": "boolean"
       }
     ],
     "configuration": []
