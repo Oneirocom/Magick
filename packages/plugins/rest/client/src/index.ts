@@ -38,7 +38,7 @@ const outputSockets = [
  */
 const RestPlugin = new ClientPlugin({
   name: 'RestPlugin',
-  // agentComponents: [RestAgentWindow],
+  agentComponents: [RestAgentWindow],
   // spellTemplates: [RestSpellTemplate],
   inputTypes: [
     { name: 'REST API (GET)', sockets: inputSockets },
