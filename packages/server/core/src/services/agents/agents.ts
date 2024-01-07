@@ -114,6 +114,7 @@ export const agent = (app: Application) => {
         app.service('agents').emit('log', {
           channel,
           agentId,
+          timestamp: new Date().toISOString(),
           data: {
             message: `Unknown message type ${messageType}`,
           },
