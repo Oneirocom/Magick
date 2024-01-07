@@ -30,7 +30,7 @@ const InputFieldForValue = ({
   'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
 >) => {
   const showChoices = choices?.length;
-  const inputVal = (value ? String(value) : defaultValue ?? '') as string;
+  const inputVal = (value ? value : defaultValue ?? '') as string;
   const hideValueInput = hideValue || connected
 
   const inputClass = cx(
@@ -73,7 +73,7 @@ const InputFieldForValue = ({
             <input
               type="text"
               className={inputClass}
-              value={inputVal || ''}
+              value={String(inputVal) || ''}
               onChange={(e) => {
                 onChange(name, e.currentTarget.value)
               }}
@@ -83,7 +83,7 @@ const InputFieldForValue = ({
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
+              value={Number(inputVal) || 0}
               onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -91,7 +91,7 @@ const InputFieldForValue = ({
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
+              value={Number(inputVal) || 0}
               onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -99,7 +99,7 @@ const InputFieldForValue = ({
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
+              value={Number(inputVal) || 0}
               onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -107,7 +107,7 @@ const InputFieldForValue = ({
             <input
               type="checkbox"
               className={inputClass}
-              value={inputVal || 0}
+              checked={Boolean(inputVal)}
               onChange={(e) => onChange(name, e.currentTarget.checked)}
             />
           )}
