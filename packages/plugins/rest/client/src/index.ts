@@ -5,6 +5,7 @@
  */
 
 import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
+import { RestAgentWindow } from './components/rest.component'
 
 /**
  * Input sockets that are common to all REST API request types.
