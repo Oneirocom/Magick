@@ -25,7 +25,7 @@ export class VariableService {
   getKey(name: string) {
     // also grab event from eventstore in dependencies
     // check
-    return `agent:${this.agentId}:variable:${name}`
+    return `agent:${this.agentId}:spell:${this.spellCaster.spell.id}:variable:${name}`
   }
 
   // Set a variable in the storage.
@@ -37,6 +37,7 @@ export class VariableService {
   // Get a variable from the storage.
   async getVariable(name: string): Promise<any> {
     const key = this.getKey(name)
-    return await this.keyv.get(key)
+    const value = await this.keyv.get(key)
+    return value
   }
 }
