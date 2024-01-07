@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import format from "date-fns/format"
 import { VariableSizeList } from "react-window";
 import ReactJson from 'react-json-view'
 import AutoSizer from "react-virtualized-auto-sizer";
-import { useSelectAgentsLog } from "client/state";
+import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state";
 
 export type Log = {
   type: string;
@@ -190,20 +190,31 @@ const LogFooter = ({ autoscroll, setAutoscroll, onClear }) => {
 
 const LogsComponent = () => {
   const { lastItem: lastLog } = useSelectAgentsLog()
-  // const { data: spellData } = useSelectAgentsSpell()
-  // const [combinedData, setCombinedData] = useState([]);
+  const { lastItem: lastSpellLog } = useSelectAgentsSpell()
+  const [combinedData, setCombinedData] = useState([]);
   const [autoscroll, setAutoscroll] = useState(true);
   const [showSpellLogs, setShowSpellLogs] = useState(true);
   const [showLogLogs, setShowLogLogs] = useState(true);
-  const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    setLogs(prev => [...prev, lastLog]);
-  }, [lastLog]);
+    // Create a new entry only if the new log item is not undefined
+    const newEntries = [];
+    if (lastLog) {
+      newEntries.push({ ...lastLog, messageType: 'log' });
+    }
+    if (lastSpellLog) {
+      newEntries.push({ ...lastSpellLog, messageType: 'spell' });
+    }
+
+    // Update the combinedData state with new entries if any
+    if (newEntries.length > 0) {
+      setCombinedData(prev => [...prev, ...newEntries]);
+    }
+  }, [lastLog, lastSpellLog]); // Dependencies array
 
   const onClear = () => {
-    setLogs([]);
-  }
+    setCombinedData([]); // Clear combinedData instead of logs
+  };
 
   const filterLogs = (logs) => {
     if (logs.length === 0) return [];
@@ -212,14 +223,17 @@ const LogsComponent = () => {
       if (log.messageType === 'spell' && showSpellLogs) return true;
       if (log.messageType === 'log' && showLogLogs) return true;
       return false;
-    });
+    })
   }
+
+  // If you're filtering logs for display, you can use a memoized version of combinedData
+  const logs = useMemo(() => filterLogs(combinedData), [combinedData, showSpellLogs, showLogLogs]);
 
   return (
     <div className="flex flex-col h-full p-4 text-white">
       {/* Clean up the props to this header */}
       <LogHeader showLogLogs={showLogLogs} showSpellLogs={showSpellLogs} setShowSpellLogs={setShowSpellLogs} setShowLogLogs={setShowLogLogs} />
-      <LogContainer logs={filterLogs(logs)} autoscroll={autoscroll} />
+      <LogContainer logs={logs} autoscroll={autoscroll} />
       <LogFooter autoscroll={autoscroll} setAutoscroll={setAutoscroll} onClear={onClear} />
     </div>
   );
