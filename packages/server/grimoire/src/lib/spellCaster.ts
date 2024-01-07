@@ -87,7 +87,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   pluginManager: PluginManager
   private agent
   private logger: pino.Logger
-  private isRunning: boolean = false
+  private isRunning: boolean = true
   private loopDelay: number
   private limitInSeconds: number
   private limitInSteps: number
@@ -212,6 +212,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     const event = `${this.spell.id}-${node.id}`
     const message = {
       event,
+      timestamp: new Date().toISOString(),
       nodeId: node.id,
       type: node.description.typeName,
       outputs: node.outputs,
