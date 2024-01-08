@@ -70,6 +70,7 @@ const CreateSpellModal = () => {
       graph: spellData.graph,
       name: `${spellData.name}-copy`,
       projectId: config.projectId,
+      type: spellData.type,
       hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
     })) as any
 
