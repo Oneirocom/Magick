@@ -17,7 +17,7 @@ import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
 import { PluginCredential } from 'server/credentials'
-import { LLMCredential, LLMProviders } from './services/coreLLMService/types'
+import { LLMProviders } from './services/coreLLMService/types'
 
 const pluginName = 'Core'
 
