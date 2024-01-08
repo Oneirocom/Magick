@@ -12,7 +12,7 @@ type ImageProps = {
  * @param props Component props.
  * @returns Image component.
  */
-export default function Image(props: ImageProps): JSX.Element {
+export default function Image(props: ImageProps): React.JSX.Element {
   const { imgSRC } = props
   return <img src={imgSRC} alt="Preview" />
 }

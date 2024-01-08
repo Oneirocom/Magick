@@ -14,7 +14,7 @@ import { Button } from 'client/core'
 /**
  * Form component that renders a form with an input field and a button to add input value
  * @param {Props} props - props for Form component
- * @returns {JSX.Element} - rendered Form component
+ * @returns {React.JSX.Element} - rendered Form component
  */
 const Form = ({
   value,
@@ -22,7 +22,7 @@ const Form = ({
   type = 'text',
   onChange,
   onAdd,
-}): JSX.Element => {
+}): React.JSX.Element => {
   return (
     <form>
       {/* Flexbox container for input field and add button */}

@@ -7,7 +7,7 @@ import { useGetDocumentsQuery } from 'client/state'
  * DocumentWindow component displays the documents of a project.
  * @returns JSX Element
  */
-const DocumentWindow = (): JSX.Element => {
+const DocumentWindow = (): React.JSX.Element => {
   const { data: documents, isLoading } = useGetDocumentsQuery({})
 
   return (

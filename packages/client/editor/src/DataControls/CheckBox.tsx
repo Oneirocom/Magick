@@ -7,7 +7,7 @@
  * @param {Object} props.control - The "control" object that contains the dataKey and data.
  * @param {Function} props.updateData - The function that updates the data based on user input.
  * @param {Boolean} props.initialValue - The initial value of the checkbox.
- * @returns {JSX.Element} - The JSX code that renders the CheckboxControl component.
+ * @returns {React.JSX.Element} - The JSX code that renders the CheckboxControl component.
  */
 import { useState } from 'react'
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'

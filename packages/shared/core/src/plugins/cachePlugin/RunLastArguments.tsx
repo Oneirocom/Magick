@@ -5,7 +5,7 @@ import { Control } from 'shared/rete'
 /**
  * React component for the run button.
  * @param {Object} props - The properties passed to the component.
- * @returns {JSX.Element} - The rendered react component.
+ * @returns {React.JSX.Element} - The rendered react component.
  */
 const ReactRunButton = props => {
   /**
@@ -34,7 +34,7 @@ const ReactRunButton = props => {
  */
 export class RunButtonControl extends Control {
   render: string
-  component: (props: any) => JSX.Element
+  component: (props: any) => React.JSX.Element
   props: any
   /**
    * Creates a new RunButtonControl instance.

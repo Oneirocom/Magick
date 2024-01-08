@@ -19,7 +19,7 @@ const defaultGraph = getTemplates().spells[0].graph
  * @param {Object} props - Component properties
  * @param {Object} props.tab - Tab data
  * @param {Function} props.closeModal - Function to close the component modal
- * @returns {JSX.Element} - EditSpellModal component
+ * @returns {React.JSX.Element} - EditSpellModal component
  */
 const EditSpellModal = ({ tab, closeModal }) => {
   // Get config from context

@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx turbo typecheck depcheck --output-logs=errors-only --no-daemon
+npm run lint
+npx turbo shake
+

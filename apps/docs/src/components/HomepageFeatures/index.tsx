@@ -1,11 +1,11 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * Represents a single feature item, with a title, SVG icon and description.
  */
 type FeatureItem = {
   title: string;
   Svg: React.ComponentType<React.ComponentProps<'svg'>>;
-  description: JSX.Element;
+  description: React.JSX.Element;
 };
 
 /**
@@ -46,9 +46,9 @@ const FeatureList: FeatureItem[] = [
  *
  * @param {FeatureItem} feature - The feature to be rendered.
  *
- * @returns {JSX.Element} The Feature react element.
+ * @returns {React.JSX.Element} The Feature react element.
  */
-function Feature({ title, Svg, description }: FeatureItem): JSX.Element {
+function Feature({ title, Svg, description }: FeatureItem): React.JSX.Element {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
@@ -66,10 +66,10 @@ function Feature({ title, Svg, description }: FeatureItem): JSX.Element {
 
 /**
  * Renders a section containing all features of the product, using the Feature component.
- * 
- * @returns {JSX.Element} The HomepageFeatures react element.
+ *
+ * @returns {React.JSX.Element} The HomepageFeatures react element.
  */
-export default function HomepageFeatures(): JSX.Element {
+export default function HomepageFeatures(): React.JSX.Element {
   return (
     <section className={styles.features}>
       <div className="container">

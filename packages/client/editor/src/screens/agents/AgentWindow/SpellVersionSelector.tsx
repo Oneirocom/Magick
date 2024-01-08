@@ -13,7 +13,7 @@ const SpellVersionSelector = ({
   activeSpellReleaseId: string,
   onChange: (spellReleaseId: string) => Promise<void>,
   tooltipText: string
-}): JSX.Element => {
+}): React.JSX.Element => {
 
   const [selectedRelease, setSelectedRelease] = useState<SpellRelease | null>(null);
 
