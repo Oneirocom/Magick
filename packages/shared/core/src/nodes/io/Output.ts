@@ -142,7 +142,7 @@ export class Output extends MagickComponent<void> {
     if (
       outputType === 'Subspell' ||
       module.isPlaytest ||
-      outputType.match(/REST API/)
+      (outputType && outputType.match(/REST API/))
     ) {
       return { output }
     }
