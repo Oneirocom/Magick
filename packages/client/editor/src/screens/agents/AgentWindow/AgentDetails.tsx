@@ -79,6 +79,9 @@ const AgentDetails = ({
   useEffect(() => {
     if (!selectedAgentData) return;
 
+    // if root spell is the same as the last one, return
+    if (rootSpell && rootSpell.id === selectedAgentData.rootSpellId) return;
+
     // Fetch root spell if available
     selectedAgentData?.rootSpellId && getSpellById({ id: selectedAgentData.rootSpellId });
     selectedAgentData?.rootSpell?.id && getSpellById(selectedAgentData.rootSpell.id);
@@ -209,32 +212,34 @@ const AgentDetails = ({
               setOldName={setOldName}
             />
           )}
-          <Tooltip
-            title={
-              !selectedAgentData.rootSpellId
-                ? 'Root Spell must be set before enabling the agent'
-                : ''
-            }
-            placement="right-start"
-            disableInteractive
-            arrow
-          >
-            <span style={{ marginLeft: '20px' }}>
-              <CustomizedSwitch
-                label={selectedAgentData.enabled ? 'On' : 'Off'}
-                checked={selectedAgentData.enabled ? true : false}
-                onChange={() => {
-                  update({
-                    enabled: selectedAgentData.enabled ? false : true,
-                  })
-                }}
-                disabled={!selectedAgentData.rootSpellId}
-                style={{
-                  alignSelf: 'self-start',
-                }}
-              />
-            </span>
-          </Tooltip>
+          {!isDraft && (
+            <Tooltip
+              title={
+                !selectedAgentData.rootSpellId
+                  ? 'Root Spell must be set before enabling the agent'
+                  : ''
+              }
+              placement="right-start"
+              disableInteractive
+              arrow
+            >
+              <span style={{ marginLeft: '20px' }}>
+                <CustomizedSwitch
+                  label={selectedAgentData.enabled ? 'On' : 'Off'}
+                  checked={selectedAgentData.enabled ? true : false}
+                  onChange={() => {
+                    update({
+                      enabled: selectedAgentData.enabled ? false : true,
+                    })
+                  }}
+                  disabled={!selectedAgentData.rootSpellId}
+                  style={{
+                    alignSelf: 'self-start',
+                  }}
+                />
+              </span>
+            </Tooltip>
+          )}
         </div>
         <div className={styles.btns}>
           <Button
@@ -358,7 +363,7 @@ const AgentDetails = ({
                 element={value}
                 selectedAgentData={selectedAgentData}
                 setSelectedAgentData={setSelectedAgentData}
-                update={() => update()}
+                update={update}
               />
             </Tooltip>
 

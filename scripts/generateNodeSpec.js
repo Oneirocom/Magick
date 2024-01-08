@@ -17,7 +17,7 @@ const checkIfCorePlugin = PluginClass => {
   )
 }
 
-const getUnifiedRegistry = plugins => {
+const getUnifiedRegistry = async plugins => {
   const unifiedRegistry = {
     nodes: {},
     values: {},
@@ -25,7 +25,9 @@ const getUnifiedRegistry = plugins => {
   }
 
   for (const plugin of plugins) {
-    const { nodes, values, dependencies } = plugin.getRegistry(unifiedRegistry)
+    const { nodes, values, dependencies } = await plugin.getRegistry(
+      unifiedRegistry
+    )
     Object.assign(unifiedRegistry.nodes, nodes)
     Object.assign(unifiedRegistry.values, values)
     Object.assign(unifiedRegistry.dependencies, dependencies)
@@ -59,7 +61,7 @@ async function writeNodeSpecsToFile(fileLocation) {
   // Get the registry from all plugins
   const plugins = await loadPlugins()
 
-  const registry = getUnifiedRegistry(plugins)
+  const registry = await getUnifiedRegistry(plugins)
 
   // Write the registry to JSON
   const nodeSpecsJson = writeNodeSpecsToJSON(registry)

@@ -8,7 +8,6 @@ import {
   ValueTypeMap,
   memo,
 } from '@magickml/behave-graph'
-import { BullMQWorker, BullQueue } from 'server/communication'
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
@@ -79,6 +78,7 @@ export type EventPayload<
   channelType: string
   rawData: unknown
   timestamp: string
+  stateKey?: string
   runInfo?: {
     spellId: string
   }
@@ -318,14 +318,14 @@ export abstract class BasePlugin<
    * @param existingRegistry An existing registry to merge with the plugin's registry.
    * @returns A merged registry object.
    */
-  getRegistry(
+  async getRegistry(
     existingRegistry: IRegistry,
     spellCaster: SpellCaster
-  ): IRegistry {
+  ): Promise<IRegistry> {
     // Define the plugin-specific values, nodes, and dependencies
-    const pluginValues = this.getPluginValues()
-    const pluginNodes = this.getPluginNodes()
-    const pluginDependencies = this.getDependencies(spellCaster)
+    const pluginValues = await this.getPluginValues()
+    const pluginNodes = await this.getPluginNodes()
+    const pluginDependencies = await this.getDependencies(spellCaster)
     pluginDependencies[this.name] = new BaseEmitter<PluginEvents>()
 
     // Merge the plugin's registry with the existing registry
@@ -335,7 +335,7 @@ export abstract class BasePlugin<
       dependencies: { ...existingRegistry.dependencies, ...pluginDependencies },
     }
 
-    return this.provideRegistry(registry)
+    return await this.provideRegistry(registry)
   }
 
   /**

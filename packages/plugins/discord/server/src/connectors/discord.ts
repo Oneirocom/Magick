@@ -316,6 +316,7 @@ export class DiscordConnector {
             ? message.channel['name']
             : author.id,
           channel: message.channel.id,
+          channelId: message.channel.id,
           agentId: this.agent.id,
           entities: entities,
           channelType: inputType,

@@ -1,37 +1,34 @@
 import React from 'react';
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
 
-import CustomControls from './Controls.js';
-import { NodePicker } from './NodePicker.js';
-import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js';
-import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js';
-import { Tab, usePubSub } from '@magickml/providers';
+import CustomControls from './Controls.js'
+import { NodePicker } from './NodePicker.js'
+import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js'
+import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js'
+import { Tab, usePubSub } from '@magickml/providers'
 
 import './flowOverrides.css'
-import { SpellInterface } from 'server/schemas';
-import { getNodeSpec } from 'shared/nodeSpec';
-import { useSelector } from 'react-redux';
-import { RootState } from 'client/state';
-import { nodeColor } from '../../utils/nodeColor.js';
+import { SpellInterface } from 'server/schemas'
+import { getNodeSpec } from 'shared/nodeSpec'
+import { useSelector } from 'react-redux'
+import { RootState } from 'client/state'
+import { nodeColor } from '../../utils/nodeColor.js'
+import { ContextNodeMenu } from './ContextNodeMenu'
 
 type FlowProps = {
   spell: SpellInterface;
   parentRef: React.RefObject<HTMLDivElement>;
   tab: Tab
-};
+}
 
-export const Flow: React.FC<FlowProps> = ({
-  spell,
-  parentRef,
-  tab
-}) => {
+export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   const specJson = getNodeSpec()
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { projectId, currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
 
-  const [playing, setPlaying] = React.useState(false);
-  const [miniMapOpen, setMiniMapOpen] = React.useState(false);
+  const [playing, setPlaying] = React.useState(false)
+  const [miniMapOpen, setMiniMapOpen] = React.useState(false)
 
   const { SEND_COMMAND } = events
 
@@ -42,12 +39,12 @@ export const Flow: React.FC<FlowProps> = ({
     onEdgesChange,
     setGraphJson,
     nodeTypes,
-    onConnect
+    onConnect,
   } = useBehaveGraphFlow({
     spell,
     specJson,
-    tab
-  });
+    tab,
+  })
 
   const {
     handleStartConnect,
@@ -57,15 +54,20 @@ export const Flow: React.FC<FlowProps> = ({
     nodePickerVisibility,
     handleAddNode,
     closeNodePicker,
-    nodePickFilters
+    nodePickFilters,
+    nodeMenuVisibility,
+    handleNodeContextMenu,
+    openNodeMenu,
+    setOpenNodeMenu,
+    nodeMenuActions
   } = useFlowHandlers({
     nodes,
     onEdgesChange,
     onNodesChange,
     specJSON: specJson,
     parentRef,
-    tab
-  });
+    tab,
+  })
 
   const togglePlay = () => {
     if (playing) {
@@ -74,8 +76,8 @@ export const Flow: React.FC<FlowProps> = ({
         agentId: currentAgentId,
         command: 'agent:core:pauseSpell',
         data: {
-          spellId: spell.id
-        }
+          spellId: spell.id,
+        },
       })
     } else {
       publish(SEND_COMMAND, {
@@ -83,12 +85,12 @@ export const Flow: React.FC<FlowProps> = ({
         agentId: currentAgentId,
         command: 'agent:core:playSpell',
         data: {
-          spellId: spell.id
-        }
+          spellId: spell.id,
+        },
       })
     }
-    setPlaying(!playing);
-  };
+    setPlaying(!playing)
+  }
 
   return (
     <ReactFlow
@@ -105,6 +107,7 @@ export const Flow: React.FC<FlowProps> = ({
       minZoom={0.1}
       onPaneClick={handlePaneClick}
       onPaneContextMenu={handlePaneContextMenu}
+      onNodeContextMenu={handleNodeContextMenu}
     >
       <CustomControls
         playing={playing}
@@ -119,9 +122,15 @@ export const Flow: React.FC<FlowProps> = ({
         color="var(--background-color)"
         style={{ backgroundColor: 'var(--deep-background-color)' }}
       />
-      {miniMapOpen &&
-        <MiniMap nodeStrokeWidth={3} maskColor="#69696930" nodeColor={(node) => nodeColor(node, specJson)} pannable zoomable />
-      }
+      {miniMapOpen && (
+        <MiniMap
+          nodeStrokeWidth={3}
+          maskColor="#69696930"
+          nodeColor={node => nodeColor(node, specJson)}
+          pannable
+          zoomable
+        />
+      )}
       {nodePickerVisibility && (
         <NodePicker
           position={nodePickerVisibility}
@@ -131,6 +140,15 @@ export const Flow: React.FC<FlowProps> = ({
           specJSON={specJson}
         />
       )}
+
+      {openNodeMenu && (
+        <ContextNodeMenu
+          position={nodeMenuVisibility}
+          isOpen={openNodeMenu}
+          onClose={() => setOpenNodeMenu(false)}
+          actions={nodeMenuActions}
+        />
+      )}
     </ReactFlow>
-  );
-};
+  )
+}
