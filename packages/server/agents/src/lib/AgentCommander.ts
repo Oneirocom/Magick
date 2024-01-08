@@ -96,6 +96,7 @@ export class AgentCommander extends EventEmitter {
           })
 
           jobId = await this.runSpell(args)
+          return jobId
         } catch (error) {
           console.error('ERROR IN RUN SPELL WITH RESPONSE', error)
           return null
