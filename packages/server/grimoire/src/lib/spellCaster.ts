@@ -169,8 +169,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       return this
     } catch (err: any) {
       this.agent.error(
-        err.toString(),
-        `Error initializing spell ${this.spell.id} ${this.spell.name}`
+        `Error initializing spell ${this.spell.id} ${this.spell.name}`,
+        err.toString()
       )
       return this
     }
@@ -331,6 +331,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     payload.runInfo = {
       spellId: this.spell.id,
     }
+
+    debugger
 
     this.logger.trace(
       `SpellCaster: Setting run info for ${eventName} to spell ${this.spell.id}`

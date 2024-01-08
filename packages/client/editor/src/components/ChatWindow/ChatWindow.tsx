@@ -386,7 +386,9 @@ const ChatWindow = ({ tab, spellId }) => {
       projectId: config.projectId,
       channelType: 'spell playtest',
       rawData: value,
-      agentId: currentAgentId
+      agentId: currentAgentId,
+      spellId: spellId,
+      isPlaytest: true
     }
 
     // const data = {
