@@ -17,7 +17,7 @@ export * from './graphEvents.class'
 export * from './graphEvents.schema'
 
 export const graphEvents = (app: Application) => {
-  app.use('graphEvents', new GraphEventService(getOptions(app)), {
+  app.use('graphEvents', new GraphEventService(getOptions(app), app), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
   })
 
