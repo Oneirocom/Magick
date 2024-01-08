@@ -1,7 +1,7 @@
 import { categoryColorMap, colors, valueTypeColorMap } from './colors'
 
 function getCategory(node, specJson) {
-  return specJson.find(spec => spec.type === node.type).category
+  return specJson.find(spec => spec.type === node.type)?.category || 'None'
 }
 
 export function nodeColor(node, specJson, spell) {
