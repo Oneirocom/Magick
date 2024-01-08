@@ -18,7 +18,7 @@ import enableWhyDidYouRender from './wdyr'
 
 enableWhyDidYouRender(React)
 
-function App(): React.React.JSX.Element {
+function App(): React.JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<MagickV2 />} />
