@@ -100,19 +100,12 @@ export class CorePlugin extends CoreEventsPlugin {
   }
 
   async getLLMCredentials() {
-    console.log('Getting LLM credentials')
     try {
       // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
       for (const providerKey of Object.keys(LLMProviders).filter(
         key => LLMProviders[key] !== LLMProviders.Unknown
       )) {
         const provider = LLMProviders[providerKey]
-        console.log(
-          'Getting credentials for provider:',
-          provider,
-          ' ',
-          this.agentId
-        )
 
         // Retrieve credentials for each provider
         const credential =
@@ -121,8 +114,6 @@ export class CorePlugin extends CoreEventsPlugin {
             provider,
             'llm'
           )
-
-        console.log('Credential:', credential)
 
         // Check if credentials are retrieved and valid
         if (credential) {
@@ -133,12 +124,10 @@ export class CorePlugin extends CoreEventsPlugin {
             serviceType: 'llm',
             credentialType: 'core',
           })
-          console.log('Added credential:', credential)
         }
       }
     } catch (error) {
-      console.error('Error retrieving LLM credentials:', error)
-      throw error
+      this.logger.error('Error retrieving LLM credentials:', error)
     }
   }
 
