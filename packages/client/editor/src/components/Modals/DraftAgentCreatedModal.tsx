@@ -12,7 +12,7 @@ import Modal from '../Modal/Modal';
  * Displays a modal informing the user about the creation of a draft agent.
  *
  * @param {DraftAgentCreatedModalProps} props
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 const DraftAgentCreatedModal = ({ closeModal }) => {
 

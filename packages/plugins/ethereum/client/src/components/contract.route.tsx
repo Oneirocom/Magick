@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 import { ethers } from 'ethers';
 import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -19,7 +19,7 @@ import contractABI from './contract.json';
  * ContractComponent to interact with Ethereum contracts
  * @component
  * @param {any} props
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 export const ContractComponent: FC<any> = (props) => {
   props = props.props;
@@ -172,10 +172,10 @@ export const ContractComponent: FC<any> = (props) => {
             <span>{contractChain}</span>
           </div>
           <div>
-          ...
-          {rest code is same}
-          ...
-      </div>
-    </div>
-  );
+            ...
+            {rest code is same}
+            ...
+          </div>
+        </div>
+        );
 };

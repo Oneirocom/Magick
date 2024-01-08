@@ -1,4 +1,4 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A React component that allows the user to input a secret value, such as a private key
  * If a value is inputted, it can be revealed or removed.
@@ -6,10 +6,10 @@
  * @param {string} props.value - The value of the input field
  * @param {function} props.setValue - Callback function to update the {@link value} state
  * @param {boolean} props.secret - Whether the input value should be obfuscated
- * @return {JSX.Element} Key input React component
+ * @return {React.JSX.Element} Key input React component
  */
 
-import React, {ChangeEvent} from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface KeyInputProps {
   value: string;

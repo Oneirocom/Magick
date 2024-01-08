@@ -57,9 +57,9 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
  * @param {string} title - The title text of the info dialog.
  * @param {string} body - The body text of the info dialog.
  * @param {React.CSSProperties} [style] - Custom styles to apply to the info dialog.
- * @returns {JSX.Element} The info dialog component.
+ * @returns {React.JSX.Element} The info dialog component.
  */
-const InfoDialog = ({ title, body, style }): JSX.Element => {
+const InfoDialog = ({ title, body, style }): React.JSX.Element => {
   const anchorRef = useRef<null | HTMLDivElement>(null)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLDivElement>(null)
   const open = Boolean(anchorEl)

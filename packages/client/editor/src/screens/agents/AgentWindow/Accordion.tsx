@@ -60,7 +60,7 @@ interface Props {
  *
  * @param {string} title - The title of the accordion.
  * @param {React.ReactNode} children - The children to be displayed inside the accordion.
- * @returns {JSX.Element} The CustomizedAccordion component.
+ * @returns {React.JSX.Element} The CustomizedAccordion component.
  */
 export default function CustomizedAccordion({ title, children }: Props) {
   const [expanded, setExpanded] = React.useState<string | false>('panel1')
