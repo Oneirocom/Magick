@@ -1,4 +1,4 @@
-import { CoreLLMService } from './services/coreLLMService'
+import { CoreLLMService } from './services/coreLLMService/coreLLMService'
 import {
   ActionPayload,
   CoreEventsPlugin,
@@ -16,8 +16,18 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
+import { PluginCredential } from 'server/credentials'
+import { LLMProviders } from './services/coreLLMService/types'
 
 const pluginName = 'Core'
+
+const pluginCredentials: PluginCredential[] = [
+  {
+    name: 'openai-token',
+    serviceType: 'llm',
+    credentialType: 'core',
+  },
+]
 
 // These nodes are removed from the core plugin because we have others that
 // do the same thing but are more specific. For example, the variable/get
@@ -37,11 +47,13 @@ export class CorePlugin extends CoreEventsPlugin {
   client: CoreEventClient
   nodes = [messageEvent, sendMessage, textTemplate, generateText, streamMessage]
   values = []
+  coreLLMService = new CoreLLMService()
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
 
     this.client = new CoreEventClient(pubSub, agentId)
+    this.setCredentials(pluginCredentials)
   }
 
   /**
@@ -76,15 +88,46 @@ export class CorePlugin extends CoreEventsPlugin {
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
   async getDependencies() {
-    const coreLLMService = new CoreLLMService()
-    await coreLLMService.initialize()
-
+    await this.coreLLMService.initialize()
+    await this.getLLMCredentials()
     return {
       coreActionService: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
       ),
-      coreLLMService,
+      coreLLMService: this.coreLLMService,
+    }
+  }
+
+  async getLLMCredentials() {
+    try {
+      // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
+      for (const providerKey of Object.keys(LLMProviders).filter(
+        key => LLMProviders[key] !== LLMProviders.Unknown
+      )) {
+        const provider = LLMProviders[providerKey]
+
+        // Retrieve credentials for each provider
+        const credential =
+          await this.credentialsManager.retrieveAgentCredentials(
+            this.agentId,
+            provider,
+            'llm'
+          )
+
+        // Check if credentials are retrieved and valid
+        if (credential) {
+          // Add each credential to the CoreLLMService instance
+          this.coreLLMService.addCredential({
+            name: provider,
+            value: credential,
+            serviceType: 'llm',
+            credentialType: 'core',
+          })
+        }
+      }
+    } catch (error) {
+      this.logger.error('Error retrieving LLM credentials:', error)
     }
   }
 

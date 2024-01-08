@@ -1,13 +1,12 @@
 const dotenv = require('dotenv-flow')
 dotenv.config('../')
-
 const fs = require('fs')
 const path = require('path')
-const pluginModules = require('../plugins')
-const { writeNodeSpecsToJSON } = require('@magickml/behave-graph')
-const Redis = require('ioredis')
-const { RedisPubSub } = require('server/redis-pubsub')
-const { REDISCLOUD_URL } = require('shared/config')
+import * as pluginModules from '../plugins'
+import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
+import Redis from 'ioredis'
+import { PluginCredential } from 'packages/server/credentials/src'
+import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 
 const checkIfCorePlugin = PluginClass => {
   return (
@@ -40,7 +39,7 @@ const loadPlugins = async () => {
   const connection = new Redis()
   const pubSub = new RedisPubSub()
 
-  await pubSub.initialize(REDISCLOUD_URL)
+  await pubSub.initialize(process.env.REDISCLOUD_URL)
 
   const plugins = []
   for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
@@ -50,6 +49,7 @@ const loadPlugins = async () => {
     // Check if PluginClass is a subclass of CorePlugin
     if (checkIfCorePlugin(PluginClass)) {
       // Create an instance of the plugin
+
       const pluginInstance = new PluginClass(connection, '000000000', pubSub)
       plugins.push(pluginInstance)
     }
@@ -57,7 +57,16 @@ const loadPlugins = async () => {
   return plugins
 }
 
-async function writeNodeSpecsToFile(fileLocation) {
+const getCredentials = plugins => {
+  const credentials: PluginCredential[] = []
+  for (const plugin of plugins) {
+    const pluginCredentials = plugin.credentials
+    credentials.push(...pluginCredentials)
+  }
+  return credentials
+}
+
+async function writeConfig(fileLocation: string) {
   // Get the registry from all plugins
   const plugins = await loadPlugins()
 
@@ -68,19 +77,23 @@ async function writeNodeSpecsToFile(fileLocation) {
 
   console.log('WRITING NODE SPECS')
 
-  // Write the JSON to file
+  //
   fs.writeFileSync(
     path.join(fileLocation),
     JSON.stringify(nodeSpecsJson, null, 2)
   )
 
-  console.log('DONE WRITING NODE SPECS')
+  const credentials = getCredentials(plugins)
+  // Write the credentials to file
+  console.log('WRITING CREDENTIALS')
+  fs.writeFileSync(
+    path.join('./packages/shared/nodeSpec/src/credentials.json'),
+    JSON.stringify(credentials, null, 2)
+  )
 }
 
-writeNodeSpecsToFile(
-  path.resolve('./packages/shared/nodeSpec/src/nodeSpec.json')
-)
+writeConfig(path.resolve('./packages/shared/nodeSpec/src/nodeSpec.json'))
 
 module.exports = {
-  writeNodeSpecsToFile,
+  writeConfig,
 }
