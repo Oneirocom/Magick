@@ -710,7 +710,7 @@
     ]
   },
   {
-    "type": "logic/string/regex",
+    "type": "logic/string/match",
     "category": "Logic",
     "label": "Match",
     "inputs": [
