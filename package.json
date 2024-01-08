@@ -38,10 +38,20 @@
     "sortPackage": "npx sort-package-json",
     "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
     "postinstall": "node scripts/config-plugins.js",
-    "prepare": "husky install || true"
+    "prepare": "husky install || true",
+    "lint-staged": "lint-staged"
   },
   "resolutions": {
     "@types/react": "18.0.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss,html,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.5.0",
@@ -158,6 +168,7 @@
     "koa-router": "12.0.0",
     "koa-static": "5.0.0",
     "langchain": "0.0.83",
+    "lint-staged": "^15.2.0",
     "lodash": "4.17.21",
     "mammoth": "1.5.1",
     "md5": "2.3.0",
