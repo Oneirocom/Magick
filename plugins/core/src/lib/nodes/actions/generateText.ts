@@ -65,7 +65,7 @@ export const generateText = makeFlowNodeDefinition({
         throw new Error('No coreLLMService provided')
       }
 
-      const model: LLMModels = read('model') || 'gpt-3.5-turbo'
+      const model: LLMModels = read('model') || LLMModels.GPT35Turbo
       const prompt: string = read('prompt') || ''
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1
