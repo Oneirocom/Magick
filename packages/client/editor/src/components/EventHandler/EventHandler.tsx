@@ -14,6 +14,7 @@ import {
   useSaveSpellMutation,
   RootState,
   setSyncing,
+  spellApi,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
@@ -173,6 +174,9 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       setTimeout(() => {
         dispatch(setSyncing(false))
       }, 1000)
+
+      // invalidate the spell cache in rtk query
+      // dispatch(spellApi.util.invalidateTags(['Spell']))
 
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
