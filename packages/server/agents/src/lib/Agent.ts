@@ -350,6 +350,8 @@ export class Agent implements AgentInterface {
         isPlaytest: data.isPlaytest,
       })
 
+      console.log('OUTPUT FROM SPELLRUNNER', this.rootSpellId, output)
+
       this.publishEvent(AGENT_RUN_RESULT(this.id), {
         jobId: job.data.jobId,
         agentId: this.id,
