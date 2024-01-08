@@ -7,7 +7,7 @@ import { useGetEventsQuery } from 'client/state'
  * EventWindow component displays the events of a project.
  * @returns JSX Element
  */
-const EventWindow = (): JSX.Element => {
+const EventWindow = (): React.JSX.Element => {
   const { data, isLoading, refetch } = useGetEventsQuery({})
 
   if (isLoading) return <LoadingScreen />

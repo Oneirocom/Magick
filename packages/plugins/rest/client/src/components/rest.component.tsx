@@ -79,7 +79,7 @@ const fetchPostExample = (selectedAgentData, content) => `
 /**
  * RestAgentWindow component enables users to control the REST API settings.
  * @param {object} props - Props for the RestAgentWindow component.
- * @returns {JSX.Element} - RestAgentWindow component.
+ * @returns {React.JSX.Element} - RestAgentWindow component.
  */
 export const RestAgentWindow: FC<any> = props => {
   props = props.props

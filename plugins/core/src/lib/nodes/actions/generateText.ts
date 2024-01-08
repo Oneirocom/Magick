@@ -3,7 +3,8 @@ import {
   NodeCategory,
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
-import { CoreLLMService, ModelNames } from '../../services/coreLLMService'
+import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
+import { LLMModels } from '../../services/coreLLMService/types'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -12,7 +13,7 @@ export const generateText = makeFlowNodeDefinition({
   configuration: {
     modelChoices: {
       valueType: 'array',
-      defaultValue: Object.values(ModelNames),
+      defaultValue: Object.values(LLMModels),
     },
   },
   in: {
@@ -23,8 +24,8 @@ export const generateText = makeFlowNodeDefinition({
     },
     model: {
       valueType: 'string',
-      choices: Object.values(ModelNames),
-      defaultValue: ModelNames['gemini-pro'],
+      choices: Object.values(LLMModels),
+      defaultValue: LLMModels['gemini-pro'],
     },
     maxRetries: {
       valueType: 'number',
@@ -64,7 +65,7 @@ export const generateText = makeFlowNodeDefinition({
         throw new Error('No coreLLMService provided')
       }
 
-      const model: string = read('model') || 'gpt-3.5-turbo'
+      const model: LLMModels = read('model') || LLMModels.GPT35Turbo
       const prompt: string = read('prompt') || ''
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1

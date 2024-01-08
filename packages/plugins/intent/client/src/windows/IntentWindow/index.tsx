@@ -10,7 +10,7 @@ import IntentTable from './IntentTable'
  * IntentWindow component displays the intents of a project.
  * @returns JSX Element
  */
-const IntentWindow = (): JSX.Element => {
+const IntentWindow = (): React.JSX.Element => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()

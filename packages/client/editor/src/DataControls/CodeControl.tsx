@@ -13,7 +13,7 @@ type Props = {
  * CodeControl component.
  * Renders a button that when clicked will open a code editor.
  */
-const CodeControl: React.FC = ({ tab }: Props): JSX.Element => {
+const CodeControl: React.FC = ({ tab }: Props): React.JSX.Element => {
   const { publish, events } = usePubSub()
 
   /**

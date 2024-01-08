@@ -4,7 +4,7 @@ import NewMenuBar from './newMenuBar'
 /**
  * MenuBar component
  *
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 const MenuBar = () => {
 
