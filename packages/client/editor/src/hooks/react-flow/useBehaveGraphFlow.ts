@@ -58,7 +58,9 @@ export const useBehaveGraphFlow = ({
   }, [])
 
   useEffect(() => {
-    if (!spell) return
+    // we only want to do this on initial load
+    // since the graph json is kept in sync with the nodes and edges
+    if (!spell || graphJson) return
     setGraphJson(spell.graph)
   }, [spell, setGraphJson])
 
