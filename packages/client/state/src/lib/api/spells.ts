@@ -77,27 +77,16 @@ export const spellApi = rootApi.injectEndpoints({
         url: `spells?spellReleaseId=${spellReleaseId}`,
       }),
     }),
-    // Api endpoint for getting a spell by name
     getSpell: builder.query({
+      providesTags: ['Spell'],
+      queryFn: makeSpellQueryFn(({ id }) => `spells/${id}`),
+    }),
+    // Api endpoint for getting a spell by name
+    getSpellByName: builder.query({
       providesTags: ['Spell'],
       queryFn: makeSpellQueryFn(
         ({ spellName }, spellReleaseId) =>
           `spells?name=${spellName}&spellReleaseId=${spellReleaseId || null}`
-      ),
-    }),
-    // Api endpoint for getting a spell by name and ID
-    getSpellById: builder.query({
-      providesTags: ['Spell'],
-      queryFn: makeSpellQueryFn(
-        ({ spellName, id }) => `spells?name=${spellName}&id=${id}`
-      ),
-    }),
-    // Api endpoint for getting a spell by ID only
-    getSpellByJustId: builder.query({
-      providesTags: ['Spell'],
-      queryFn: makeSpellQueryFn(
-        ({ id }, spellReleaseId) =>
-          `spells?id=${id}&spellReleaseId=${spellReleaseId || null}`
       ),
     }),
     // Api endpoint for running a spell
@@ -192,11 +181,9 @@ export const {
   useGetSpellsByReleaseIdQuery,
   useLazyGetSpellsQuery,
   useLazyGetSpellQuery,
-  useLazyGetSpellByIdQuery,
   useGetSpellQuery,
-  useGetSpellByIdQuery,
-  useGetSpellByJustIdQuery,
-  useLazyGetSpellByJustIdQuery,
+  useGetSpellByNameQuery,
+  useLazyGetSpellByNameQuery,
   useRunSpellMutation,
   useSaveDiffMutation,
   useSpellExistsMutation,

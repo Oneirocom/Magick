@@ -33,11 +33,9 @@ const composerLayoutComponents = {
       <div>
         <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
           <p style={{ padding: 8, color: 'grey', marginRight: 50 }}>Composer V2</p>
-          <DraggableElement window="Console" />
           <DraggableElement window="TextEditor" title="Text Editor" />
-          <DraggableElement window="Properties" />
-          <DraggableElement window="Playtest" />
-          <DraggableElement window="Chat" />
+          <DraggableElement window="Test" />
+          <DraggableElement window="Variables" />
         </div>
       </div >
     )

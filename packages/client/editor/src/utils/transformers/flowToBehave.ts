@@ -9,9 +9,14 @@ const USED_DATA_PROPERTIES = ['configuration']
 export const flowToBehave = (
   nodes: Node[],
   edges: Edge[],
-  nodeSpecJSON: NodeSpecJSON[]
+  nodeSpecJSON: NodeSpecJSON[],
+  spellGraph: GraphJSON
 ): GraphJSON => {
-  const graph: GraphJSON = { nodes: [], variables: [], customEvents: [] }
+  const graph: GraphJSON = {
+    nodes: [],
+    variables: spellGraph?.variables || [],
+    customEvents: spellGraph?.customEvents || [],
+  }
 
   nodes.forEach(node => {
     if (node.type === undefined) return

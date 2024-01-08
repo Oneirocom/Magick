@@ -412,8 +412,8 @@ class SpellRunner {
 
       this.busy = false
       return this.outputData
-    } catch (error: any) {
-      this.error(error, `Error running spell ${this.currentSpell.id}`)
+    } catch (error) {
+      this.error(`Error running spell ${this.currentSpell.id}`, error)
       return
     }
   }

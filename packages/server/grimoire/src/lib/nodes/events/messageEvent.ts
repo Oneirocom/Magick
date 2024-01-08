@@ -4,7 +4,7 @@ import {
   makeEventNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreEmitter } from '../../dependencies/coreEmitter'
-import { EventPayload } from 'shared/plugin'
+import { EventPayload } from 'server/plugin'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
