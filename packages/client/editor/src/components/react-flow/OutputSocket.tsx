@@ -13,12 +13,13 @@ export type OutputSocketProps = {
   specJSON: NodeSpecJSON[];
 } & OutputSocketSpecJSON;
 
-export default function OutputSocket({
-  specJSON,
-  connected,
-  valueType,
-  name
-}: OutputSocketProps) {
+export default function OutputSocket(props: OutputSocketProps) {
+  const {
+    specJSON,
+    connected,
+    valueType,
+    name
+  } = props
   const instance = useReactFlow();
   const isFlowSocket = valueType === 'flow';
   let colorName = valueTypeColorMap[valueType];

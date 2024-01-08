@@ -70,6 +70,7 @@ export const generateText = makeFlowNodeDefinition({
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1
       const maxRetries: number = read('maxRetries') || 3
+      const stop: string = read('stop') || ''
 
       const request = {
         model,
@@ -77,6 +78,7 @@ export const generateText = makeFlowNodeDefinition({
         options: {
           temperature,
           top_p,
+          stop,
         },
       }
 

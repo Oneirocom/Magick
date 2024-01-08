@@ -18,6 +18,17 @@ import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
 import { PluginCredential } from 'server/credentials'
 import { LLMProviders } from './services/coreLLMService/types'
+import { variableGet } from './nodes/query/variableGet'
+import { VariableService } from './services/variableService'
+import { variableSet } from './nodes/query/variableSet'
+import { arrayPush } from './values/Array/Push'
+import { jsonStringify } from './nodes/actions/jsonStringify'
+import { SpellCaster } from 'server/grimoire'
+import { forEach } from './values/Array/ForEach'
+import { arrayLength } from './values/Array/Length'
+import { arrayClear } from './values/Array/Clear'
+import { whileLoop } from './nodes/flow/whileLoop'
+import { regex } from './nodes/logic/match'
 
 const pluginName = 'Core'
 
@@ -45,7 +56,22 @@ export type CorePluginEvents = {
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage, textTemplate, generateText, streamMessage]
+  nodes = [
+    messageEvent,
+    sendMessage,
+    textTemplate,
+    generateText,
+    streamMessage,
+    variableGet,
+    variableSet,
+    arrayPush,
+    jsonStringify,
+    forEach,
+    arrayLength,
+    arrayClear,
+    whileLoop,
+    regex,
+  ]
   values = []
   coreLLMService = new CoreLLMService()
 
@@ -87,7 +113,7 @@ export class CorePlugin extends CoreEventsPlugin {
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  async getDependencies() {
+  async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
     await this.getLLMCredentials()
     return {
@@ -95,7 +121,11 @@ export class CorePlugin extends CoreEventsPlugin {
         this.centralEventBus,
         this.actionQueueName
       ),
-      coreLLMService: this.coreLLMService,
+      IVariableService: new VariableService(
+        this.connection,
+        this.agentId,
+        spellCaster
+      ),
     }
   }
 
