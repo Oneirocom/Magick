@@ -72,10 +72,10 @@ export class AgentCommander extends EventEmitter {
         const agentMessageName = AGENT_RUN_RESULT(id)
 
         this.pubSub.subscribe(agentMessageName, (data: AgentResult) => {
-          if (data.result.error) {
-            this.logger.error(data.result.error)
+          if (data?.result?.error) {
+            this.logger.error(data?.result?.error)
             throw new Error(
-              `Error running spell on agent: ${data.result.error}`
+              `Error running spell on agent: ${data?.result?.error}`
             )
           }
 
