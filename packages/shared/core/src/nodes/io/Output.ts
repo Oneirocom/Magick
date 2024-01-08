@@ -132,13 +132,18 @@ export class Output extends MagickComponent<void> {
 
     const output = inputs.input.filter(Boolean)[0] as string
     const outputType =
-      (node.data.outputType !== 'Default' && node.data.outputType) ||
+      (node.data.outputType !== 'Default' &&
+        (node.data.outputType as string)) ||
       inputName?.replace('Input - ', '') ||
       event.connector
 
     // handle this being a subspell returning out
     // or if this is coming from playest, just return the output
-    if (outputType === 'Subspell' || module.isPlaytest) {
+    if (
+      outputType === 'Subspell' ||
+      module.isPlaytest ||
+      (outputType && outputType.match(/REST API/))
+    ) {
       return { output }
     }
 

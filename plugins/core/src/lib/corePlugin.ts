@@ -1,3 +1,4 @@
+import { CoreLLMService } from './services/coreLLMService'
 import {
   ActionPayload,
   CoreEventsPlugin,
@@ -10,9 +11,11 @@ import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
+import { generateText } from './nodes/actions/generateText'
 import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
+import { streamMessage } from './nodes/actions/streamMessage'
 
 const pluginName = 'Core'
 
@@ -32,7 +35,7 @@ export type CorePluginEvents = {
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage, textTemplate]
+  nodes = [messageEvent, sendMessage, textTemplate, generateText, streamMessage]
   values = []
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
@@ -62,17 +65,26 @@ export class CorePlugin extends CoreEventsPlugin {
       displayName: 'Send Message',
       handler: this.handleSendMessage.bind(this),
     })
+    this.registerAction({
+      actionName: 'streamMessage',
+      displayName: 'Stream Message',
+      handler: this.handleSendMessage.bind(this),
+    })
   }
 
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  getDependencies() {
+  async getDependencies() {
+    const coreLLMService = new CoreLLMService()
+    await coreLLMService.initialize()
+
     return {
       coreActionService: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
       ),
+      coreLLMService,
     }
   }
 

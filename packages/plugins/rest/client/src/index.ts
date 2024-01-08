@@ -5,6 +5,7 @@
  */
 
 import { ClientPlugin, eventSocket, triggerSocket } from 'shared/core'
+import { RestAgentWindow } from './components/rest.component'
 
 /**
  * Input sockets that are common to all REST API request types.
@@ -38,7 +39,7 @@ const outputSockets = [
  */
 const RestPlugin = new ClientPlugin({
   name: 'RestPlugin',
-  // agentComponents: [RestAgentWindow],
+  agentComponents: [RestAgentWindow],
   // spellTemplates: [RestSpellTemplate],
   inputTypes: [
     { name: 'REST API (GET)', sockets: inputSockets },

@@ -13,6 +13,7 @@ export type InputSocketProps = {
   value: any | undefined;
   onChange: (key: string, value: any) => void;
   specJSON: NodeSpecJSON[];
+  hideValue?: boolean;
 } & InputSocketSpecJSON;
 
 const InputFieldForValue = ({
@@ -22,13 +23,15 @@ const InputFieldForValue = ({
   onChange,
   name,
   valueType,
-  connected
+  connected,
+  hideValue = false
 }: Pick<
   InputSocketProps,
-  'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected'
+  'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
 >) => {
   const showChoices = choices?.length;
   const inputVal = (String(value) ?? defaultValue ?? '') as string;
+  const hideValueInput = hideValue || connected
 
   const inputClass = cx(
     'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm',
@@ -36,8 +39,12 @@ const InputFieldForValue = ({
 
   const containerClass = cx(
     "flex w-full rounded-lg items-center pl-4",
-    !connected && "bg-[var(--foreground-color)]"
+    !hideValueInput && "bg-[var(--foreground-color)]"
   )
+
+  const handleChange = (key: string, value: any) => {
+    onChange(key, value);
+  }
 
   return (
     <div style={{ borderRadius: 5 }} className={containerClass}>
@@ -45,13 +52,13 @@ const InputFieldForValue = ({
       <div className="flex flex-1 items-center h-full">
         <p className="flex">{name}</p>
       </div>
-      {!connected && (
+      {!hideValueInput && (
         <div className="flex-1 justify-center">
           {showChoices && (
             <select
               className={inputClass}
               value={value ?? defaultValue ?? ''}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              onChange={(e) => handleChange(name, e.currentTarget.value)}
             >
               <>
                 {choices.map((choice) => (
@@ -142,7 +149,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
         </>
       )}
 
-      {!isFlowSocket && !isArraySocket && !isObjectSocket && <InputFieldForValue connected={connected} {...rest} />}
+      {!isFlowSocket && <InputFieldForValue connected={connected} hideValue={isArraySocket || isObjectSocket} {...rest} />}
       <Handle
         id={name}
         type="target"

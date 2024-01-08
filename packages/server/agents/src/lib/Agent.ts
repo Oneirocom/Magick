@@ -13,6 +13,7 @@ import {
 } from 'shared/core'
 
 import { getLogger } from 'server/logger'
+
 import { Application } from 'server/core'
 
 import {
@@ -348,6 +349,8 @@ export class Agent implements AgentInterface {
         app: this.app,
         isPlaytest: data.isPlaytest,
       })
+
+      console.log('OUTPUT FROM SPELLRUNNER', this.rootSpellId, output)
 
       this.publishEvent(AGENT_RUN_RESULT(this.id), {
         jobId: job.data.jobId,
