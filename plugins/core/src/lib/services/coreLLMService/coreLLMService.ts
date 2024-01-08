@@ -3,7 +3,6 @@ import { VERTEXAI_LOCATION, VERTEXAI_PROJECT } from 'shared/config'
 
 import {
   CompletionRequest,
-  CompletionResponse,
   LLMCredential,
   LLMProviders,
   LLMModels,
@@ -42,31 +41,6 @@ export class CoreLLMService implements ICoreLLMService {
       throw error
     }
   }
-  // Method to handle standard completion
-  async completion(request: CompletionRequest): Promise<CompletionResponse> {
-    try {
-      // Construct the request body
-      const body = {
-        //TODO: Make gemini default model: "gemini-pro"
-        model: request.model || 'gpt-3.5-turbo',
-        messages: request.messages,
-        ...request.options,
-        api_key: this.getCredential(request.model),
-      }
-
-      // get the raw response from the python bridge
-      const rawResponse = await this.liteLLM.completion$(body)
-
-      // process the response into jsonand return it
-      const response = await rawResponse.json()
-
-      // return the actual value as a JS object
-      return await response.valueOf()
-    } catch (error) {
-      console.error('Error in completion request:', error)
-      throw error
-    }
-  }
 
   // Method to handle completion (always in streaming mode)
   async completion({
@@ -83,6 +57,7 @@ export class CoreLLMService implements ICoreLLMService {
           messages: request.messages,
           ...request.options,
           stream: true,
+          api_key: this.getCredential(request.model),
         }
 
         let fullText = ''
