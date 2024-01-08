@@ -234,6 +234,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.logger.trace(`Handling event ${eventName} for ${dependency}`)
     // Iterate over alll spell casters
     for (const [spellId, spellMap] of this.spellMap.entries()) {
+      if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
+
       this.logger.trace(`Handling event ${eventName} for ${spellId}`)
 
       // Clone the payload so we don't mutate it when we pass it down to each spellcaster

@@ -55,6 +55,8 @@ export type EventFormat<
   channelType: string
   observer: string
   client: string
+  isPlaytest?: boolean
+  spellId?: string
   data: Data
   metadata?: Y
   status?: 'success' | 'error' | 'pending' | 'unknown'
@@ -74,7 +76,8 @@ export type EventPayload<
   channel: string
   plugin: string
   agentId: string
-  // agentId: string
+  isPlaytest?: boolean
+  spellId?: string
   // entities: any[]
   channelType: string
   rawData: unknown
@@ -485,6 +488,8 @@ export abstract class BasePlugin<
       observer: messageDetails.observer,
       channel: messageDetails.channel,
       agentId: this.agentId,
+      isPlaytest: messageDetails?.isPlaytest || false,
+      spellId: messageDetails?.spellId,
       // entities: messageDetails.entities,
       channelType: messageDetails.channelType,
       rawData: messageDetails.rawData,
