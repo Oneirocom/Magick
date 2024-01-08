@@ -5,7 +5,7 @@
  * @param {Function} props.updateData - Function to update the data.
  * @param {Object} props.control - Provides access to the `data` and `dataKey`.
  * @param {Array} props.initialValue - Initial values that will populate the input fields.
- * @returns {JSX.Element} A component that generates multiple input fields.
+ * @returns {React.JSX.Element} A component that generates multiple input fields.
  */
 
 import React, { useState, useEffect } from 'react'

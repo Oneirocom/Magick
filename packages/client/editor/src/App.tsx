@@ -4,7 +4,7 @@
  */
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import '@fontsource-variable/montserrat';
+// import '@fontsource-variable/montserrat';
 
 import MagickV2 from './screens'
 
@@ -18,7 +18,7 @@ import enableWhyDidYouRender from './wdyr'
 
 enableWhyDidYouRender(React)
 
-function App(): JSX.Element {
+function App(): React.React.JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<MagickV2 />} />

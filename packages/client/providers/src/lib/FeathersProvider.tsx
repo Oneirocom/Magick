@@ -24,7 +24,7 @@ export const useFeathers = (): FeathersContext => useContext(Context)
  * FeathersProvider component
  * @props children, token
  */
-export const FeathersProvider = ({ children, token }): JSX.Element | null => {
+export const FeathersProvider = ({ children, token }): React.JSX.Element | null => {
   const dispatch = useDispatch()
   const config = useConfig()
   const [client, setClient] = useState<FeathersContext['client']>(null)

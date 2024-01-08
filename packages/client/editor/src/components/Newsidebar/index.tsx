@@ -51,7 +51,7 @@ type DrawerProps = {
 /**
  * The main Drawer component that wraps around the application content.
  */
-export function NewSidebar(DrawerProps): JSX.Element {
+export function NewSidebar(DrawerProps): React.JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   // State to keep track of the anchor element of the menu and cursor position
 

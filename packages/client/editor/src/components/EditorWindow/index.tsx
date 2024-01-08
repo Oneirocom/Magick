@@ -7,7 +7,7 @@ import css from './editorwindow.module.css'
  * EditorWindow functional component
  * @param {Object} props - Component properties
  * @param {Object} props.tab - Tab object
- * @returns {JSX.Element} EditorWindow component JSX
+ * @returns {React.JSX.Element} EditorWindow component JSX
  */
 const EditorWindow = ({ tab, spellId }) => {
   // Destructure required methods and properties from the useEditor hook
@@ -92,7 +92,7 @@ const EditorWindow = ({ tab, spellId }) => {
   /**
    * EditorToolbar functional component
    * Renders the editor toolbar with buttons and select options
-   * @returns {JSX.Element} EditorToolbar component JSX
+   * @returns {React.JSX.Element} EditorToolbar component JSX
    */
   // const EditorToolbar = () => {
   //   return (

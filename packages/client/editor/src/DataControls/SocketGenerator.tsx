@@ -8,7 +8,7 @@ import SingleElement from './SingleElement'
  *
  * @param {Object} props - Component properties.
  * @param {Function} props.addSocket - Function to add a new socket.
- * @returns {JSX.Element} Form input to add a new socket.
+ * @returns {React.JSX.Element} Form input to add a new socket.
  */
 const AddNewSocket = ({ addSocket }) => {
   const [value, setValue] = useState('')
@@ -51,7 +51,7 @@ const AddNewSocket = ({ addSocket }) => {
  * @param {Function} props.updateData - Function to update data outside the component.
  * @param {Object} props.control - Control object containing data and dataKey.
  * @param {Array} props.initialValue - Initial value of the sockets.
- * @returns {JSX.Element} List of sockets with input to add new sockets.
+ * @returns {React.JSX.Element} List of sockets with input to add new sockets.
  */
 const SocketGenerator = ({ updateData, control, initialValue }) => {
   const [sockets, setSockets] = useState([...initialValue])

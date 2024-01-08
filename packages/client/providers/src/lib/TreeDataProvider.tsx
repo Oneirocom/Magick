@@ -42,7 +42,7 @@ type Props = {
   children: React.ReactNode
 }
 
-export const TreeDataProvider = ({ children }: Props): JSX.Element => {
+export const TreeDataProvider = ({ children }: Props): React.JSX.Element => {
   const { data: fetchedSpells } = useGetSpellsQuery({}, {
     refetchOnMountOrArgChange: true,
   })

@@ -16,8 +16,8 @@ type ContextType = {
 const ProjectWindowContext = createContext<ContextType>({
   openProjectWindow: false,
   openDrawer: false,
-  setOpenDrawer: () => {},
-  setOpenProjectWindow: () => {},
+  setOpenDrawer: () => { },
+  setOpenProjectWindow: () => { },
 })
 
 export const useProjectWindow = () => useContext(ProjectWindowContext)
@@ -26,7 +26,7 @@ type Props = {
   children: React.ReactNode
 }
 
-export const ProjectWindowProvider = ({ children }: Props): JSX.Element => {
+export const ProjectWindowProvider = ({ children }: Props): React.JSX.Element => {
   const [openProjectWindow, setOpenProjectWindow] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(true)
 

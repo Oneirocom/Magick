@@ -34,7 +34,7 @@ type DrawerItem = {
 export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const { openTab } = useTabLayout()
 
-  const DrawerItems: (DrawerItem | JSX.Element)[] = [
+  const DrawerItems: (DrawerItem | React.JSX.Element)[] = [
     {
       name: 'Events',
       Icon: BoltIcon,

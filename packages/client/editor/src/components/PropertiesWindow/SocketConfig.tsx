@@ -7,7 +7,7 @@ import SingleElement from "./SingleElement"
  *
  * @param {Object} props - Component properties.
  * @param {Function} props.addSocket - Function to add a new socket.
- * @returns {JSX.Element} Form input to add a new socket.
+ * @returns {React.JSX.Element} Form input to add a new socket.
  */
 const AddNewSocket = ({ addSocket, valueTypes }) => {
   const [value, setValue] = useState('')

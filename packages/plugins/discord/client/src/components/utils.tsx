@@ -1,10 +1,10 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
  * A functional React component to be used for inputting and displaying private keys.
  * @param value - The private key string value.
  * @param setValue - A function to set the state value of the private key.
  * @param secret - A boolean value indicating whether or not to obfuscate the private key.
- * @returns A JSX.Element of either the private key input field or a display of the private key value.
+ * @returns A React.JSX.Element of either the private key input field or a display of the private key value.
  */
 import React from 'react';
 
@@ -49,15 +49,15 @@ export const KeyInput: React.FC<{ value: string, setValue: React.Dispatch<React.
       <button onClick={removeKey} style={{ cursor: 'pointer' }}>remove</button>
     </>
   ) : (
-      // Render input field
-      <input
-        type={secret ? 'password' : 'input'}
-        defaultValue={value}
-        placeholder="Insert your key here"
-        onChange={e => {
-          addKey(e.target.value);
-        }}
-      />
-    )
+    // Render input field
+    <input
+      type={secret ? 'password' : 'input'}
+      defaultValue={value}
+      placeholder="Insert your key here"
+      onChange={e => {
+        addKey(e.target.value);
+      }}
+    />
+  )
   );
 }

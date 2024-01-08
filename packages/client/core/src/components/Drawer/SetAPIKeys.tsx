@@ -10,9 +10,9 @@ const body =
 
 /**
  * SetAPIKeys component to show a warning about setting API keys.
- * @returns {JSX.Element} The SetAPIKeys component.
+ * @returns {React.JSX.Element} The SetAPIKeys component.
  */
-export const SetAPIKeys = (): JSX.Element => {
+export const SetAPIKeys = (): React.JSX.Element => {
   // Declare state variables
   const [showWarning, setShowWarning] = useState(false)
 
