@@ -1,8 +1,8 @@
 import { NodeCategory, makeInNOutFunctionDesc } from '@magickml/behave-graph'
 
 export const regex = makeInNOutFunctionDesc({
-  name: 'logic/string/regex',
-  aliases: ['logic/string/match'],
+  name: 'logic/string/match',
+  aliases: ['logic/string/regex'],
   category: NodeCategory.Logic,
   label: 'Match',
   in: [{ match: 'string' }, { string: 'string' }],
