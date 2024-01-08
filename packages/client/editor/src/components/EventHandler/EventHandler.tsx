@@ -240,7 +240,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
-    spell.graph = serialize() as GraphData
+    if (spell.type !== 'behave') spell.graph = serialize() as GraphData
 
     // remove secrets, if there are any
     function recurse(obj) {
