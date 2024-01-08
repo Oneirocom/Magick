@@ -332,8 +332,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       spellId: this.spell.id,
     }
 
-    debugger
-
     this.logger.trace(
       `SpellCaster: Setting run info for ${eventName} to spell ${this.spell.id}`
     )
