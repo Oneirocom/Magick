@@ -14,7 +14,6 @@ import {
   useSaveSpellMutation,
   RootState,
   setSyncing,
-  spellApi,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
