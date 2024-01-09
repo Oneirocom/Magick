@@ -3,6 +3,8 @@ import {
   SocketsList,
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
+import { ArrayVariable } from './ArrayVariable'
+import { IVariableService } from '../../services/variableService'
 
 export const arrayPush = makeFlowNodeDefinition({
   typeName: 'logic/array/push',
@@ -50,11 +52,24 @@ export const arrayPush = makeFlowNodeDefinition({
     array: 'array',
   },
   initialState: undefined,
-  triggered: async ({ commit, read, write, configuration }) => {
+  triggered: async ({
+    commit,
+    read,
+    write,
+    configuration,
+    graph: { getDependency },
+  }) => {
     const options = configuration?.valueTypeOptions
     const value = read(options.socketName)
-    const array = read('array') as any[]
+    const array = read('array') as ArrayVariable<any>
     array.push(value)
+
+    // mutate the original array in memory if we are interacting with an array variable
+    if (ArrayVariable.isInstance(array) && array.key) {
+      const variableService =
+        getDependency<IVariableService>('IVariableService')
+      await variableService?.setByKey(array.key, array)
+    }
     write('array', array)
     commit('flow')
   },
