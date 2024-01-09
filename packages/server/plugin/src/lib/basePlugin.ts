@@ -12,6 +12,7 @@ import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
+import { MeterManager } from 'packages/server/meter/src'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -173,6 +174,7 @@ export abstract class BasePlugin<
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
   protected credentialsManager!: CredentialsManager
+  protected meterManager!: MeterManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -216,6 +218,7 @@ export abstract class BasePlugin<
     this.eventEmitter = new EventEmitter()
     this.events = []
     this.credentialsManager = new CredentialsManager()
+    this.meterManager = new MeterManager(agentId)
   }
 
   /**
