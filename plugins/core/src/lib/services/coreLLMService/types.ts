@@ -81,7 +81,7 @@ export type CompletionResponse = {
 }
 
 export enum LLMProviders {
-  OpenAI = 'openai-token',
+  OpenAI = 'OPENAI_API_KEY',
   Unknown = 'unknown',
 }
 
