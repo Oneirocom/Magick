@@ -24,7 +24,7 @@ import { useForm } from 'react-hook-form'
  * Displays a modal with confirmation of deletion and handles user input using react-hook-form
  *
  * @param {DeleteModalProps} props
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  * @throws Will throw an error if the required props are not passed
  */
 const DeleteModal = ({ closeModal, handledelete, id }) => {

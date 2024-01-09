@@ -28,8 +28,9 @@ export const onEdgesChange = (tabId: string) => {
 }
 
 export const onConnect = (tabId: string) => {
-  return (connection: Connection) => {
+  return (_connection: Connection) => {
     const store = createStore()
+    const connection = { ..._connection, type: 'custom-edge' }
     store.dispatch(graphActions.onConnect({ tabId, connection }))
   }
 }

@@ -6,7 +6,7 @@ import loader from './magick-loading.svg'
  * A loading screen component that displays a centered loading animation
  * with a "Please wait..." message.
  */
-export const LoadingScreen = (): JSX.Element => {
+export const LoadingScreen = (): React.JSX.Element => {
   const [loaded, setLoaded] = React.useState(false)
 
   const handleLoad = () => {

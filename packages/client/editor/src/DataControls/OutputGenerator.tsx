@@ -12,7 +12,7 @@ import SingleElement from './SingleElement'
  * @param {Object} props - The props object
  * @param {Function} props.addOutput - The function to add new outputs to the component
  *
- * @returns {JSX.Element} The add new output component
+ * @returns {React.JSX.Element} The add new output component
  */
 const AddNewOutput = ({ addOutput }) => {
   /*
@@ -59,7 +59,7 @@ const AddNewOutput = ({ addOutput }) => {
  * @param {Object} props.control - The control object
  * @param {Array} props.initialValue - The initial value of the outputs array
  *
- * @returns {JSX.Element} The output generator component
+ * @returns {React.JSX.Element} The output generator component
  */
 const OutputGenerator = ({ updateData, control, initialValue }) => {
   /*

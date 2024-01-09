@@ -1,7 +1,7 @@
 // DOCUMENTED
 
 import { NODE_ENV } from 'shared/config'
-import whyDidYouRender from '@welldone-software/why-did-you-render'
+// import whyDidYouRender from '@welldone-software/why-did-you-render'
 
 /**
  * Enables the 'why-did-you-render' package in a React development environment
@@ -16,7 +16,7 @@ function enableWhyDidYouRender(React: any): void {
   // If in development
   if (NODE_ENV === 'development') {
     console.log('*******************running WDYR!')
-    whyDidYouRender(React)
+    // whyDidYouRender(React)
   }
 }
 

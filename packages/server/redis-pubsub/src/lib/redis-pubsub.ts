@@ -142,8 +142,7 @@ export class RedisPubSub extends EventEmitter {
         callback(deserializedMessage)
       } catch (err) {
         console.error('Failed to deserialize message:', err)
-        callback(null)
-        return
+        throw err
       }
     }
 

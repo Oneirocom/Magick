@@ -26,7 +26,7 @@ const InfoModal = ({
   title,
   content,
   checkbox,
-}: InfoModalProps): JSX.Element => {
+}: InfoModalProps): React.JSX.Element => {
   return (
     <Modal title={title} icon="info">
       {/* Use white-space pre-line to preserve line breaks in content */}

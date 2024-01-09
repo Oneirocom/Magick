@@ -194,7 +194,7 @@ type DrawerProps = {
 /**
  * The main Drawer component that wraps around the application content.
  */
-export function OldSidebar({ children }: DrawerProps): JSX.Element {
+export function OldSidebar({ children }: DrawerProps): React.JSX.Element {
   const location = useLocation()
   const navigate = useNavigate()
   const { openProjectWindow, openDrawer, setOpenDrawer, setOpenProjectWindow } =

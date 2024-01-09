@@ -6,7 +6,7 @@ import SingleElement from './SingleElement'
 /**
  * Renders a single socket component.
  * @param {object} props - Component properties.
- * @returns {JSX.Element} - Single socket JSX element.
+ * @returns {React.JSX.Element} - Single socket JSX element.
  */
 const SingleSocket = (props: {
   name: string
@@ -26,7 +26,7 @@ const SingleSocket = (props: {
 /**
  * Renders an AddNewSocket component.
  * @param {object} props - Component properties.
- * @returns {JSX.Element} - Add new socket JSX element.
+ * @returns {React.JSX.Element} - Add new socket JSX element.
  */
 const AddNewSocket = (props: { addSocket: Function }) => {
   const [value, setValue] = useState('')
@@ -53,7 +53,7 @@ const AddNewSocket = (props: { addSocket: Function }) => {
 /**
  * MultiSocketGenerator component that generates sockets.
  * @param {object} props - Component properties.
- * @returns {JSX.Element} - Socket generator JSX element.
+ * @returns {React.JSX.Element} - Socket generator JSX element.
  */
 const MultiSocketGenerator = ({
   updateData,

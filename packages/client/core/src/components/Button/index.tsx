@@ -22,7 +22,7 @@ export const Button = ({
   disabled,
   style,
   ...props
-}: ButtonProps): JSX.Element => {
+}: ButtonProps): React.JSX.Element => {
   const [isHovered, setIsHovered] = useState(false);
 
   const disabledStyle: React.CSSProperties = {

@@ -20,7 +20,7 @@ interface Props {
  */
 export const IconBtn: React.FunctionComponent<Props> = (
   props: Props
-): JSX.Element => {
+): React.JSX.Element => {
   const { Icon, label, onClick, style } = props
 
   return (

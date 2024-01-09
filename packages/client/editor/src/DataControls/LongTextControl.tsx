@@ -13,7 +13,7 @@ type Props = {
 /**
  * LongText component
  */
-const LongText = ({ tab }: Props): JSX.Element => {
+const LongText = ({ tab }: Props): React.JSX.Element => {
   /**
    * Destructuring the createOrFocus and windowTypes functions from the useLayout hook
    */

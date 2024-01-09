@@ -9,13 +9,13 @@ import css from './templatePanel.module.css'
  * @param {object} props.template - The template object for the panel.
  * @param {function} props.setSelectedTemplate - A function to set the selected template.
  * @param {object} props.selectedTemplate - The currently selected template.
- * @returns {JSX.Element} The TemplatePanel component.
+ * @returns {React.JSX.Element} The TemplatePanel component.
  */
 const TemplatePanel = ({
   template,
   setSelectedTemplate,
   selectedTemplate,
-}): JSX.Element => {
+}): React.JSX.Element => {
   // Determine if the current template is selected
   const isSelected =
     selectedTemplate?.name && selectedTemplate.name === template.name

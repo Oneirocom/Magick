@@ -12,6 +12,7 @@ import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { saveGraphEvent } from 'shared/core'
+import { CredentialsManager, PluginCredential } from 'server/credentials'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -55,6 +56,8 @@ export type EventFormat<
   channelType: string
   observer: string
   client: string
+  isPlaytest?: boolean
+  spellId?: string
   data: Data
   metadata?: Y
   status?: 'success' | 'error' | 'pending' | 'unknown'
@@ -74,7 +77,8 @@ export type EventPayload<
   channel: string
   plugin: string
   agentId: string
-  // agentId: string
+  isPlaytest?: boolean
+  spellId?: string
   // entities: any[]
   channelType: string
   rawData: unknown
@@ -168,6 +172,8 @@ export abstract class BasePlugin<
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected centralEventBus!: EventEmitter
+  protected credentials: PluginCredential[] = []
+  protected credentialsManager!: CredentialsManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -210,6 +216,7 @@ export abstract class BasePlugin<
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
+    this.credentialsManager = new CredentialsManager()
   }
 
   /**
@@ -329,14 +336,14 @@ export abstract class BasePlugin<
    * @param existingRegistry An existing registry to merge with the plugin's registry.
    * @returns A merged registry object.
    */
-  getRegistry(
+  async getRegistry(
     existingRegistry: IRegistry,
     spellCaster: SpellCaster
-  ): IRegistry {
+  ): Promise<IRegistry> {
     // Define the plugin-specific values, nodes, and dependencies
-    const pluginValues = this.getPluginValues()
-    const pluginNodes = this.getPluginNodes()
-    const pluginDependencies = this.getDependencies(spellCaster)
+    const pluginValues = await this.getPluginValues()
+    const pluginNodes = await this.getPluginNodes()
+    const pluginDependencies = await this.getDependencies(spellCaster)
     pluginDependencies[this.name] = new BaseEmitter<PluginEvents>()
 
     // Merge the plugin's registry with the existing registry
@@ -346,7 +353,7 @@ export abstract class BasePlugin<
       dependencies: { ...existingRegistry.dependencies, ...pluginDependencies },
     }
 
-    return this.provideRegistry(registry)
+    return await this.provideRegistry(registry)
   }
 
   /**
@@ -492,6 +499,8 @@ export abstract class BasePlugin<
       observer: messageDetails.observer,
       channel: messageDetails.channel,
       agentId: this.agentId,
+      isPlaytest: messageDetails?.isPlaytest || false,
+      spellId: messageDetails?.spellId,
       // entities: messageDetails.entities,
       channelType: messageDetails.channelType,
       rawData: messageDetails.rawData,
@@ -499,6 +508,14 @@ export abstract class BasePlugin<
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
     }
+  }
+
+  /**
+   * Sets the credentials for the plugin.
+   * @param newCredentials Array of credentials to set.
+   */
+  setCredentials(newCredentials: PluginCredential[]) {
+    this.credentials = newCredentials
   }
 }
 

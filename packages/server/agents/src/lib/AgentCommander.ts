@@ -71,30 +71,36 @@ export class AgentCommander extends EventEmitter {
 
         const agentMessageName = AGENT_RUN_RESULT(id)
 
-        this.pubSub.subscribe(agentMessageName, (data: AgentResult) => {
-          if (data.result.error) {
-            this.logger.error(data.result.error)
-            throw new Error(
-              `Error running spell on agent: ${data.result.error}`
-            )
-          }
+        try {
+          this.pubSub.subscribe(agentMessageName, (data: AgentResult) => {
+            if (data?.result?.error) {
+              this.logger.error(data?.result?.error)
+              throw new Error(
+                `Error running spell on agent: ${data?.result?.error}`
+              )
+            }
 
-          if (data.jobId === jobId) {
-            this.pubSub.unsubscribe(agentMessageName)
-            resolve(data.result)
-          }
-        })
+            if (data.jobId === jobId) {
+              this.pubSub.unsubscribe(agentMessageName)
+              resolve(data.result)
+            }
+          })
 
-        const agentErrorName = AGENT_RUN_ERROR(id)
-        this.pubSub.subscribe(agentErrorName, (data: AgentResult) => {
-          if (data.jobId === jobId) {
-            this.pubSub.unsubscribe(agentErrorName)
-            this.pubSub.unsubscribe(agentMessageName)
-            reject(`Error running spell on agent: ${data.result.error}`)
-          }
-        })
+          const agentErrorName = AGENT_RUN_ERROR(id)
+          this.pubSub.subscribe(agentErrorName, (data: AgentResult) => {
+            if (data.jobId === jobId) {
+              this.pubSub.unsubscribe(agentErrorName)
+              this.pubSub.unsubscribe(agentMessageName)
+              reject(`Error running spell on agent: ${data.result.error}`)
+            }
+          })
 
-        jobId = await this.runSpell(args)
+          jobId = await this.runSpell(args)
+          return jobId
+        } catch (error) {
+          console.error('ERROR IN RUN SPELL WITH RESPONSE', error)
+          return null
+        }
       })()
     })
   }
