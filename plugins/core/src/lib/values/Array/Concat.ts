@@ -1,9 +1,30 @@
 import { NodeCategory, makeInNOutFunctionDesc } from '@magickml/behave-graph'
-import { concat } from 'rambdax'
+import { ArrayVariable } from './ArrayVariable' // Assuming this is the path to your ArrayVariable class
 
-/**
- * Returns the result of concatenating the given lists or strings. See [Rambdax's concat](https://selfrefactor.github.io/rambdax/#/?id=concat)
- */
+type ArrayOrArrayVariable<T> = ArrayVariable<T> | T[]
+
+function customConcat<T>(
+  ...arrays: ArrayOrArrayVariable<T>[]
+): ArrayVariable<T> {
+  // Check if the first array is an ArrayVariable to decide the key
+  const key = arrays[0] instanceof ArrayVariable ? arrays[0].key : undefined
+
+  // Create a new ArrayVariable with the correct constructor signature
+  const concatenated = new ArrayVariable<T>([], key)
+
+  // Concatenate all arrays into the new ArrayVariable
+  arrays.forEach(array => {
+    if (array instanceof ArrayVariable) {
+      concatenated.push(...array)
+    } else {
+      // If it's a standard array, just spread its elements into the ArrayVariable
+      concatenated.push(...array)
+    }
+  })
+
+  return concatenated
+}
+
 export const Concat = makeInNOutFunctionDesc({
   name: 'logic/concat/array/2',
   aliases: ['logic/concat/array'],
@@ -11,17 +32,21 @@ export const Concat = makeInNOutFunctionDesc({
   label: 'Concat',
   in: ['array', 'array'],
   out: 'array',
-  exec: (a: unknown[], b: unknown[]) => concat(a, b),
+  exec: (
+    a: ArrayVariable<unknown> | unknown[],
+    b: ArrayVariable<unknown> | unknown[]
+  ) => customConcat(a, b),
 })
 
-/**
- * Returns the result of concatenating the given lists or strings. See [Rambdax's concat](https://selfrefactor.github.io/rambdax/#/?id=concat)
- */
 export const Concat3 = makeInNOutFunctionDesc({
   name: 'logic/concat/array/3',
   category: NodeCategory.Logic,
   label: 'Concat',
   in: ['array', 'array', 'array'],
   out: 'array',
-  exec: (a: unknown[], b: unknown[], c: unknown[]) => concat(concat(a, b), c),
+  exec: (
+    a: ArrayVariable<unknown> | unknown[],
+    b: ArrayVariable<unknown> | unknown[],
+    c: ArrayVariable<unknown> | unknown[]
+  ) => customConcat(a, b, c),
 })

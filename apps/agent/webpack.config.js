@@ -1,7 +1,7 @@
 const { merge } = require('webpack-merge')
 const CopyPlugin = require('copy-webpack-plugin')
 
-module.exports = (config, context) => {
+module.exports = (config) => {
   return merge(config, {
     experiments: {
       topLevelAwait: true

@@ -16,11 +16,11 @@ import { useConfig } from '@magickml/providers'
  * @param {Object} props.control - Controller object for the input field.
  * @param {Function} props.updateData - Function to update the data when a module is selected or created.
  * @param {string} props.initialValue - Initial value of the Select element.
- * @returns {JSX.Element} The rendered Select element for selecting or creating modules.
+ * @returns {React.JSX.Element} The rendered Select element for selecting or creating modules.
  */
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const config = useConfig()
-  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellByJustIdQuery()
+  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
   const { data: spells } = spellApi.useGetSpellsQuery({
     projectId: config.projectId,
   })
@@ -53,10 +53,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const onChange = async e => {
     if (!e) return
     const spell = { ...e.value }
-    getSpell({
-      projectId: config.projectId,
-      id: spell.id,
-    })
+    getSpell({ id: spell.id })
   }
 
   /**
@@ -92,7 +89,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   /**
    * Function to render message with empty options.
    * @param {string} inputValue - The input value.
-   * @returns {JSX.Element} The rendered message.
+   * @returns {React.JSX.Element} The rendered message.
    */
   const noOptionsMessage = inputValue => {
     return <span>Start typing to create a module</span>

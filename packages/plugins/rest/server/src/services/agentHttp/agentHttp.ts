@@ -20,6 +20,7 @@ import {
 import type { Application, HookContext } from 'server/core'
 import { checkPermissions } from 'server/core'
 import { AgentHttpService } from './agentHttp.class'
+import { getLogger } from 'server/logger'
 
 // Add this service to the service type index
 declare module 'server/core' {
@@ -47,6 +48,7 @@ export * from './agentHttp.schema'
  * @param app - The Feathers application
  */
 export const agentHttp = (app: Application) => {
+  const logger = getLogger()
   // Register our service on the Feathers application
   app.use(agentHttpPath, new AgentHttpService(), {
     // A list of all methods this service exposes externally
@@ -56,17 +58,21 @@ export const agentHttp = (app: Application) => {
   })
 
   const recordMessage = (context: HookContext) => {
-    app.service('chatMessages').create({
-      agentId: context.params.query.agentId || context.data?.agentId,
-      content: context.params.query.content || context.data?.content,
-      sender: context.params.query.sender || context.data?.sender,
-      connector:
-        context.params.query.isCloud || context.data?.isCloud
-          ? 'cloud'
-          : 'agentHttp',
-      conversationId: (context.params.query.conversationId ||
-        context.data?.conversationId) as unknown as string | undefined,
-    })
+    try {
+      app.service('chatMessages').create({
+        agentId: context.params.query.agentId || context.data?.agentId,
+        content: context.params.query.content || context.data?.content,
+        sender: context.params.query.sender || context.data?.sender,
+        connector:
+          context.params.query.isCloud || context.data?.isCloud
+            ? 'cloud'
+            : 'agentHttp',
+        conversationId: (context.params.query.conversationId ||
+          context.data?.conversationId) as unknown as string | undefined,
+      })
+    } catch (err) {
+      logger.error(err, 'Error recording message in agentHttp service')
+    }
   }
 
   // Initialize hooks

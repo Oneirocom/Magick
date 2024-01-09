@@ -5,6 +5,11 @@ import {
   createJsonTranslator,
   TypeChatLanguageModel,
 } from 'typechat'
+import { GPT4_MODELS } from '@magickml/plugin-openai-shared'
+import {
+  DEFAULT_OPENAI_KEY,
+  PRODUCTION,
+} from 'shared/config'
 
 /**
  * Generate a completion text based on prior chat conversation input.
@@ -28,8 +33,18 @@ export async function makeTypeChatCompletion(
 
   const openaiKey = context.module.secrets!['openai_api_key']
 
+
+  if (PRODUCTION && GPT4_MODELS.includes(modelName) && !openaiKey) {
+    return {
+      success: false,
+      error: 'OpenAI API key is required for GPT-4 models',
+    }
+  }
+
+  const finalKey = openaiKey ? openaiKey : DEFAULT_OPENAI_KEY
+
   const modelConfig = {
-    OPENAI_API_KEY: openaiKey,
+    OPENAI_API_KEY: finalKey,
     OPENAI_MODEL: modelName,
   }
 

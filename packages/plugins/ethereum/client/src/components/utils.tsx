@@ -1,6 +1,6 @@
-// DOCUMENTED 
+// DOCUMENTED
 /**
- * KeyInput component receives value, setValue, secret and style props to render a key input field or a key text with a remove button.  
+ * KeyInput component receives value, setValue, secret and style props to render a key input field or a key text with a remove button.
  * @typedef {{
  *   value: string;
  *   setValue: any;
@@ -8,13 +8,13 @@
  *   style: any;
  * }} KeyInputProps
  * @param {KeyInputProps} props - Destructured props for KeyInput component.
- * @returns {JSX.Element} - React component element to render.
+ * @returns {React.JSX.Element} - React component element to render.
  */
 import React from 'react';
 
-export const KeyInput = ({ value, setValue, secret, style }: KeyInputProps): JSX.Element => {
+export const KeyInput = ({ value, setValue, secret, style }: KeyInputProps): React.JSX.Element => {
   /**
-   * If a string is longer than 31 characters, set it as a value for the input field. 
+   * If a string is longer than 31 characters, set it as a value for the input field.
    * @param {string} str - String to be set as input field value
    */
   const addKey = (str: string): void => {
@@ -25,7 +25,7 @@ export const KeyInput = ({ value, setValue, secret, style }: KeyInputProps): JSX
     }
   };
 
-  /** 
+  /**
    * Set value prop's value as empty string.
    */
   const removeKey = (): void => {
@@ -33,7 +33,7 @@ export const KeyInput = ({ value, setValue, secret, style }: KeyInputProps): JSX
   };
 
   /**
-   * Obfuscate part of a string to hide the sensitive information. 
+   * Obfuscate part of a string to hide the sensitive information.
    * @param {string} str - String to be obfuscated.
    * @returns {string} - Obfuscated string.
    */
@@ -53,7 +53,7 @@ export const KeyInput = ({ value, setValue, secret, style }: KeyInputProps): JSX
       type={secret ? 'password' : 'input'}
       style={style}
       defaultValue={value}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {addKey(e.target.value)}}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>): void => { addKey(e.target.value) }}
       placeholder="Insert your key here"
     />
   );

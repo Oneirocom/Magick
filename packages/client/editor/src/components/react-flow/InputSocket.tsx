@@ -24,14 +24,14 @@ const InputFieldForValue = ({
   name,
   valueType,
   connected,
-  hideValue
+  hideValue = false
 }: Pick<
   InputSocketProps,
   'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
 >) => {
   const showChoices = choices?.length;
-  const inputVal = (String(value) ?? defaultValue ?? '') as string;
-  const hideValueInput = hideValue ?? !connected
+  const inputVal = (value ? value : defaultValue ?? '') as string;
+  const hideValueInput = hideValue || connected
 
   const inputClass = cx(
     'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm',
@@ -42,11 +42,15 @@ const InputFieldForValue = ({
     !hideValueInput && "bg-[var(--foreground-color)]"
   )
 
+  const handleChange = (key: string, value: any) => {
+    onChange(key, value);
+  }
+
   return (
     <div style={{ borderRadius: 5 }} className={containerClass}>
       {/* flex layout these divs 50 50 */}
       <div className="flex flex-1 items-center h-full">
-        <p className="flex">{name}</p>
+        <p className="flex capitalize">{name}</p>
       </div>
       {!hideValueInput && (
         <div className="flex-1 justify-center">
@@ -54,7 +58,7 @@ const InputFieldForValue = ({
             <select
               className={inputClass}
               value={value ?? defaultValue ?? ''}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              onChange={(e) => handleChange(name, e.currentTarget.value)}
             >
               <>
                 {choices.map((choice) => (
@@ -69,7 +73,7 @@ const InputFieldForValue = ({
             <input
               type="text"
               className={inputClass}
-              value={inputVal || ''}
+              value={String(inputVal) || ''}
               onChange={(e) => {
                 onChange(name, e.currentTarget.value)
               }}
@@ -79,7 +83,7 @@ const InputFieldForValue = ({
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
+              value={Number(inputVal) || 0}
               onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -87,7 +91,7 @@ const InputFieldForValue = ({
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
+              value={Number(inputVal) || 0}
               onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -95,7 +99,7 @@ const InputFieldForValue = ({
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
+              value={Number(inputVal) || 0}
               onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -103,7 +107,7 @@ const InputFieldForValue = ({
             <input
               type="checkbox"
               className={inputClass}
-              value={inputVal || 0}
+              checked={Boolean(inputVal)}
               onChange={(e) => onChange(name, e.currentTarget.checked)}
             />
           )}

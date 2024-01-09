@@ -30,7 +30,7 @@ import { useDeleteEventMutation, useDeleteEventsMutation } from 'client/state'
 /**
  * GlobalFilter component for applying search filter on the whole table.
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -67,7 +67,7 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
 /**
  * EventTable component for displaying events in a table with sorting, filtering, and pagination.
  * @param {{ events: any[] }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 function EventTable({ events, refetchEvents }) {
   const [deleteEvents] = useDeleteEventsMutation()

@@ -15,7 +15,7 @@ import {
   RootState,
   setCurrentSpellReleaseId,
   useGetSpellsByReleaseIdQuery,
-  useLazyGetSpellByJustIdQuery,
+  useLazyGetSpellQuery,
   useUpdateAgentMutation
 } from 'client/state'
 import SpellVersionSelector from './SpellVersionSelector'
@@ -63,18 +63,12 @@ const AgentDetails = ({
   const [spellReleaseList, setSpellReleaseList] = useState<SpellRelease[]>([])
   const [editMode, setEditMode] = useState<boolean>(false)
   const [oldName, setOldName] = useState<string>('')
-  const [rootSpell, setRootSpell] = useState<SpellInterface | null>(null)
   const [enable] = useState(onLoadEnables)
 
-  const [getSpellById, { data: rootSpellResponse }] = useLazyGetSpellByJustIdQuery({})
+  const [getSpellById, { data: rootSpell }] = useLazyGetSpellQuery({})
   const dispatch = useDispatch()
 
   const isDraft = selectedAgentData?.currentSpellReleaseId === null;
-
-  useEffect(() => {
-    if (!rootSpellResponse) return;
-    setRootSpell(rootSpellResponse.data[0]);
-  }, [rootSpellResponse])
 
   useEffect(() => {
     if (!selectedAgentData) return;
@@ -84,11 +78,11 @@ const AgentDetails = ({
 
     // Fetch root spell if available
     selectedAgentData?.rootSpellId && getSpellById({ id: selectedAgentData.rootSpellId });
-    selectedAgentData?.rootSpell?.id && getSpellById(selectedAgentData.rootSpell.id);
+    selectedAgentData?.rootSpell?.id && getSpellById({ id: selectedAgentData.rootSpell.id });
 
     // Set spell list and release list
-    spellListData && setSpellList(spellListData.data);
-    spellReleaseData && setSpellReleaseList(spellReleaseData.data);
+    spellListData && setSpellList(spellListData);
+    spellReleaseData && setSpellReleaseList(spellReleaseData);
   }, [selectedAgentData, spellListData, spellReleaseData, getSpellById]);
 
   useEffect(() => {
@@ -212,32 +206,34 @@ const AgentDetails = ({
               setOldName={setOldName}
             />
           )}
-          <Tooltip
-            title={
-              !selectedAgentData.rootSpellId
-                ? 'Root Spell must be set before enabling the agent'
-                : ''
-            }
-            placement="right-start"
-            disableInteractive
-            arrow
-          >
-            <span style={{ marginLeft: '20px' }}>
-              <CustomizedSwitch
-                label={selectedAgentData.enabled ? 'On' : 'Off'}
-                checked={selectedAgentData.enabled ? true : false}
-                onChange={() => {
-                  update({
-                    enabled: selectedAgentData.enabled ? false : true,
-                  })
-                }}
-                disabled={!selectedAgentData.rootSpellId}
-                style={{
-                  alignSelf: 'self-start',
-                }}
-              />
-            </span>
-          </Tooltip>
+          {!isDraft && (
+            <Tooltip
+              title={
+                !selectedAgentData.rootSpellId
+                  ? 'Root Spell must be set before enabling the agent'
+                  : ''
+              }
+              placement="right-start"
+              disableInteractive
+              arrow
+            >
+              <span style={{ marginLeft: '20px' }}>
+                <CustomizedSwitch
+                  label={selectedAgentData.enabled ? 'On' : 'Off'}
+                  checked={selectedAgentData.enabled ? true : false}
+                  onChange={() => {
+                    update({
+                      enabled: selectedAgentData.enabled ? false : true,
+                    })
+                  }}
+                  disabled={!selectedAgentData.rootSpellId}
+                  style={{
+                    alignSelf: 'self-start',
+                  }}
+                />
+              </span>
+            </Tooltip>
+          )}
         </div>
         <div className={styles.btns}>
           <Button

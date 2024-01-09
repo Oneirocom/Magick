@@ -5,7 +5,7 @@
  * @param {string} title Title of the modal window.
  * @param {string} icon Name of the icon to display next to the title of the modal window.
  * @param {function} onClose Function to call when the close button is clicked.
- * @returns {JSX.Element} Modal component.
+ * @returns {React.JSX.Element} Modal component.
  */
 import React, { useCallback } from 'react'
 import { useModal } from '../../contexts/ModalProvider'
@@ -54,7 +54,7 @@ const Modal = ({
   /**
    * Function to render the options buttons inside the modal action strip.
    * It maps over the options array and generates a button for each item.
-   * @returns {JSX.Element[]} Array of option buttons JSX elements.
+   * @returns {React.JSX.Element[]} Array of option buttons JSX elements.
    */
   const renderOptions = () => {
     return (

@@ -14,12 +14,25 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 import { nodeColor } from '../../utils/nodeColor.js'
 import { ContextNodeMenu } from './ContextNodeMenu'
+import CustomEdge from './CustomEdge.js';
 
 type FlowProps = {
   spell: SpellInterface;
   parentRef: React.RefObject<HTMLDivElement>;
   tab: Tab
 }
+
+const edgeTypes = {
+  'custom-edge': CustomEdge,
+};
+
+const proOptions = {
+  // passing in the account property will enable hiding the attribution
+  // for versions < 10.2 you can use account: 'paid-enterprise'
+  account: 'paid-pro',
+  // in combination with the account property, hideAttribution: true will remove the attribution
+  hideAttribution: true,
+};
 
 export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   const specJson = getNodeSpec()
@@ -28,7 +41,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   const { publish, events } = usePubSub()
 
   const [playing, setPlaying] = React.useState(false)
-  const [miniMapOpen, setMiniMapOpen] = React.useState(false)
+  const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
   const { SEND_COMMAND } = events
 
@@ -95,12 +108,14 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
 
   return (
     <ReactFlow
+      proOptions={proOptions}
       nodeTypes={nodeTypes}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange(tab.id)}
       onEdgesChange={onEdgesChange(tab.id)}
       onConnect={onConnect(tab.id)}
+      edgeTypes={edgeTypes}
       onConnectStart={handleStartConnect}
       onConnectEnd={handleStopConnect}
       fitView
@@ -127,7 +142,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
         <MiniMap
           nodeStrokeWidth={3}
           maskColor="#69696930"
-          nodeColor={node => nodeColor(node, specJson)}
+          nodeColor={node => nodeColor(node, specJson, spell)}
           pannable
           zoomable
         />

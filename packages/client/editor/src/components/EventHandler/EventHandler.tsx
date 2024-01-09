@@ -10,7 +10,7 @@ import { diff } from '../../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/providers'
 import {
-  useLazyGetSpellByIdQuery,
+  useLazyGetSpellQuery,
   useSaveSpellMutation,
   RootState,
   setSyncing,
@@ -37,10 +37,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
   const [saveSpellMutation] = useSaveSpellMutation()
   // TODO: is this a bug?
-  const [getSpell, { data: spell }] = useLazyGetSpellByIdQuery({
-    spellName: tab.name.split('--')[0],
+  const [getSpell, { data: spell }] = useLazyGetSpellQuery({
     id: spellId,
-    projectId: config.projectId,
   } as any)
   // Spell ref because callbacks can't hold values from state without them
   const spellRef = useRef<SpellInterface | null>(null)
@@ -49,20 +47,16 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const client = FeathersContext.client
 
   useEffect(() => {
-    getSpell({
-      spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
-    })
+    getSpell({ id: spellId })
   }, [config.projectId, getSpell, spellId, tab.name])
 
   useEffect(() => {
     if (!spell) return
     const oldSpell = JSON.stringify(spellRef.current)
-    const newSpell = JSON.stringify(spell?.data[0])
+    const newSpell = JSON.stringify(spell)
     if (oldSpell === newSpell) return
 
-    spellRef.current = spell?.data[0]
+    spellRef.current = spell
   }, [spell])
 
 
@@ -98,7 +92,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * Save the current spell
    */
   const saveSpell = async () => {
-    console.log('Saving!')
+
     if (!spellRef.current) return
     const type = spellRef.current.type || 'spell'
 
@@ -172,12 +166,16 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         spellId: currentSpell.id,
       })
 
+
       spellRef.current = diffResponse
 
       // extend the timeout to 500ms to give the user a chance to see the sync icon
       setTimeout(() => {
         dispatch(setSyncing(false))
       }, 1000)
+
+      // invalidate the spell cache in rtk query
+      // dispatch(spellApi.util.invalidateTags(['Spell']))
 
       if ('error' in diffResponse) {
         enqueueSnackbar('Error Updating spell', {
@@ -242,7 +240,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
-    spell.graph = serialize() as GraphData
+    if (spell.type !== 'behave') spell.graph = serialize() as GraphData
 
     // remove secrets, if there are any
     function recurse(obj) {

@@ -29,7 +29,7 @@ function toTitleCase(str) {
 /**
  * MenuBar component
  *
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 const NewMenuBar = props => {
   const dispatch = useAppDispatch()
@@ -246,7 +246,7 @@ const NewMenuBar = props => {
    * ListItem component
    *
    * @param {any} props
-   * @returns {JSX.Element}
+   * @returns {React.JSX.Element}
    */
   const ListItem = ({
     item,

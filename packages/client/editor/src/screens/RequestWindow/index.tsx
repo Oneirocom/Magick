@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux'
 /**
  * The RequestWindow functional component fetches and renders a table containing
  * a list of all the requests belonging to the provided projectId.
- * @returns {JSX.Element} A React component that renders a request table.
+ * @returns {React.JSX.Element} A React component that renders a request table.
  */
 const RequestWindow = () => {
   const config = useConfig()

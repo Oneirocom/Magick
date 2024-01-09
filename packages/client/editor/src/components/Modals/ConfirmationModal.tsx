@@ -16,7 +16,7 @@ import Input from '@mui/material/Input/Input';
  * Displays a modal for general confirmation purposes.
  *
  * @param {ConfirmationModalProps} props
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 const ConfirmationModal = ({
   closeModal,

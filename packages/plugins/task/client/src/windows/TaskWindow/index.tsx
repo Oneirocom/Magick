@@ -18,7 +18,7 @@ interface Task {
  * TaskWindow component displays the tasks of a project.
  * @returns JSX Element
  */
-const TaskWindow = (): JSX.Element => {
+const TaskWindow = (): React.JSX.Element => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const token = globalConfig?.token
   const config = useConfig()
