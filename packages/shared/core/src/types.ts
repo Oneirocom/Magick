@@ -672,6 +672,7 @@ export type GraphEventPayload = {
   connectorData: string
   content: string
   eventType: string
+  event: Event
 }
 
 export type AppService = (app: FeathersApplication) => void

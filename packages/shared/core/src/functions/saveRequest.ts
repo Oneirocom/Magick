@@ -88,6 +88,7 @@ export function saveGraphEvent({
   connectorData,
   content,
   eventType,
+  event,
 }: GraphEventPayload) {
   const app = globalsManager.get('feathers') as any
 
@@ -98,5 +99,6 @@ export function saveGraphEvent({
     connectorData,
     content,
     eventType,
+    event,
   })
 }

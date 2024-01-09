@@ -17,6 +17,7 @@ export const graphEventsSchemaPrototype = {
   connectorData: Type.Optional(Type.String()),
   content: Type.String(),
   eventType: Type.String(),
+  event: Type.Optional(Type.Object({})),
 }
 
 export const graphEventsSchema = Type.Object(graphEventsSchemaPrototype, {
@@ -30,7 +31,15 @@ export const graphEventsExternalResolver = resolve<GraphEvents, HookContext>({})
 
 export const graphEventsDataSchema = Type.Pick(
   graphEventsSchema,
-  ['sender', 'agentId', 'connector', 'connectorData', 'content', 'eventType'],
+  [
+    'sender',
+    'agentId',
+    'connector',
+    'connectorData',
+    'content',
+    'eventType',
+    'event',
+  ],
   {
     $id: 'GraphEventsData',
   }
@@ -61,6 +70,7 @@ export const graphEventsQueryProperties = Type.Pick(graphEventsSchema, [
   'connectorData',
   'content',
   'eventType',
+  'event',
 ])
 
 export const graphEventsQuerySchema = Type.Intersect(
