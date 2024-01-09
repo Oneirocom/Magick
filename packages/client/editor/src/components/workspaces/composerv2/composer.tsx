@@ -22,8 +22,6 @@ import TextEditor from '../../TextEditorWindow'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
-import { useSelector } from 'react-redux';
-import { RootState } from 'client/state';
 import { VariableWindow } from '../../VariableWindow/VariableWindow';
 
 const getLayoutFromLocalStorage = (spellId: string) => {
