@@ -450,7 +450,7 @@
       {
         "name": "array",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "flow",
@@ -575,7 +575,7 @@
       {
         "name": "array",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -638,7 +638,7 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -661,7 +661,7 @@
       {
         "name": "array",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -3092,7 +3092,7 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -3111,12 +3111,12 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "b",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -3135,12 +3135,12 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "b",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -3159,17 +3159,17 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "b",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "c",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -3374,7 +3374,7 @@
       {
         "name": "payload",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -3478,7 +3478,7 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
