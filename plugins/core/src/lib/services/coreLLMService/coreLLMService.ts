@@ -1,5 +1,5 @@
 import { python } from 'pythonia'
-import { VERTEXAI_LOCATION, VERTEXAI_PROJECT } from 'shared/config'
+import { PRODUCTION, VERTEXAI_LOCATION, VERTEXAI_PROJECT } from 'shared/config'
 
 import {
   CompletionRequest,
@@ -35,7 +35,7 @@ export class CoreLLMService implements ICoreLLMService {
       this.liteLLM = await python('litellm')
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
       this.liteLLM.vertex_location = VERTEXAI_LOCATION
-      this.liteLLM.set_verbose = true
+      this.liteLLM.set_verbose = false
     } catch (error: any) {
       console.error('Error initializing LiteLLM:', error)
       throw error
@@ -107,7 +107,12 @@ export class CoreLLMService implements ICoreLLMService {
   private getCredential = (model: LLMModels): string => {
     const provider = this.findProvider(model)
 
-    const credential = this.credentials.find(c => c.name === provider)?.value
+    let credential = this.credentials.find(c => c.name === provider)?.value
+
+    if (!credential && !PRODUCTION) {
+      credential = process.env[provider]
+    }
+
     if (!credential) {
       throw new Error(`No credential found for ${provider}`)
     }
