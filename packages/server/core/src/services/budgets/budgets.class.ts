@@ -61,6 +61,20 @@ export class BudgetService<
     }
   }
 
+  async remove(agentId: string): Promise<{ success: boolean }> {
+    const budget = await this._get(agentId)
+    if (!budget) {
+      throw new Error('Budget not found')
+    }
+    const deletedBudget = await this._remove(agentId)
+    if (!deletedBudget) {
+      throw new Error('Error deleting budget')
+    }
+    return {
+      success: true,
+    }
+  }
+
   async get(agentId: string): Promise<Budget> {
     const budget = await this._get(agentId)
     if (!budget) {
