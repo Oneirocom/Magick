@@ -11,10 +11,7 @@ module.exports = {
     ),
     ...createGlobPatternsForDependencies(__dirname),
   ],
-  plugins: [
-    // ...
-    require('flowbite/plugin'),
-  ],
+  plugins: [require('flowbite/plugin')],
   theme: {
     extend: {
       fontFamily: {
