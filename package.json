@@ -101,7 +101,7 @@
     "@mui/x-date-pickers": "6.5.0",
     "@nx/devkit": "17.1.3",
     "@octokit/rest": "^19.0.13",
-    "@openmeter/sdk": "^1.0.0-beta.8",
+    "@openmeter/sdk": "^1.0.0-beta.35",
     "@panva/hkdf": "1.1.1",
     "@pinecone-database/pinecone": "0.1.6",
     "@pixiv/three-vrm": "1.0.9",
