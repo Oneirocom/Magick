@@ -29,6 +29,8 @@ import { arrayLength } from './values/Array/Length'
 import { arrayClear } from './values/Array/Clear'
 import { whileLoop } from './nodes/flow/whileLoop'
 import { regex } from './nodes/logic/match'
+import { UserService } from './services/userService/userService'
+import { CoreBudgetManagerService } from './services/coreBudgetManagerService.ts/coreBudgetMangerService'
 
 const pluginName = 'Core'
 
@@ -74,6 +76,8 @@ export class CorePlugin extends CoreEventsPlugin {
   ]
   values = []
   coreLLMService = new CoreLLMService()
+  coreBudgetManagerService = new CoreBudgetManagerService()
+  userService = new UserService()
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
@@ -115,6 +119,7 @@ export class CorePlugin extends CoreEventsPlugin {
    */
   async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
+    await this.coreBudgetManagerService.initialize()
     await this.getLLMCredentials()
     return {
       coreActionService: new CoreActionService(
@@ -127,6 +132,7 @@ export class CorePlugin extends CoreEventsPlugin {
         spellCaster
       ),
       coreLLMService: this.coreLLMService,
+      coreBudgetManagerService: this.coreBudgetManagerService,
     }
   }
 
