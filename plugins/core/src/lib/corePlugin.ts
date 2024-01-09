@@ -126,6 +126,7 @@ export class CorePlugin extends CoreEventsPlugin {
         this.agentId,
         spellCaster
       ),
+      coreLLMService: this.coreLLMService,
     }
   }
 
