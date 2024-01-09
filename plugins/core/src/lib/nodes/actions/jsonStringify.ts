@@ -3,6 +3,10 @@ import {
   SocketsList,
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
+import {
+  ArrayVariable,
+  ArrayVariableData,
+} from '../../values/Array/ArrayVariable'
 
 export const jsonStringify = makeFlowNodeDefinition({
   typeName: 'action/json/stringify',
@@ -50,7 +54,13 @@ export const jsonStringify = makeFlowNodeDefinition({
   triggered: ({ commit, read, write, configuration }) => {
     const options = configuration?.valueTypeOptions
     const value = read(options.socketName)
-    const string = JSON.stringify(value)
+    const string = JSON.stringify(value, (_, value) => {
+      if (ArrayVariable.isInstance(value)) {
+        return (value as ArrayVariableData).data
+      }
+
+      return value
+    })
     write('string', string)
     commit('flow')
   },
