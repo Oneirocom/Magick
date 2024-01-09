@@ -1,8 +1,11 @@
 import {
   DockviewApi,
+  DockviewDefaultTab,
   DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
+
+  IDockviewPanelHeaderProps,
 
   IDockviewPanelProps,
   positionToDirection,
@@ -19,6 +22,7 @@ import TextEditor from '../../TextEditorWindow'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
+import { VariableWindow } from '../../VariableWindow/VariableWindow';
 
 const getLayoutFromLocalStorage = (spellId: string) => {
   const layout = localStorage.getItem(`composer_layout_${spellId}`)
@@ -55,12 +59,42 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     .addPanel({
       id: 'Properties',
       component: 'Properties',
+      tabComponent: 'permanentTab',
       params: {
         title: 'Properties',
         tab,
         spellId
       },
       position: { referencePanel: 'Graph', direction: 'left' },
+    })
+
+
+  const propertyGroup = api.getPanel('Properties').group
+  propertyGroup.api.setConstraints({
+    minimumWidth: 300
+  })
+
+  api.addPanel({
+    id: 'Variables',
+    component: 'Variables',
+    params: {
+      title: 'Variables',
+      tab,
+      spellId
+    },
+    position: { referencePanel: 'Properties', direction: 'below' },
+  })
+
+  api
+    .addPanel({
+      id: 'Test',
+      component: 'Test',
+      params: {
+        title: 'Test',
+        tab,
+        spellId
+      },
+      position: { referencePanel: 'Graph', direction: 'right' },
     })
     .api.setSize({
       width: 300,
@@ -74,39 +108,11 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
       tab,
       spellId
     },
-    position: { referencePanel: 'Properties', direction: 'below' },
-  })
-
-  // panel5.group!.model.header.hidden = true;
-  // panel5.group!.model.locked = true;
-
-  api
-    .addPanel({
-      id: 'Chat',
-      component: 'Chat',
-      params: {
-        title: 'Chat',
-        tab,
-        spellId
-      },
-      position: { referencePanel: 'Graph', direction: 'below' },
-    })
-    .api.setSize({
-      height: 300,
-    })
-
-  api.addPanel({
-    id: 'Console',
-    component: 'Console',
-    params: {
-      title: 'Console',
-      tab,
-      spellId
-    },
-    position: { referencePanel: 'Chat', direction: 'right' },
+    position: { referencePanel: 'Test', direction: 'below' },
   })
 }
 
+// todo refactore these components to take in the full dockview panel props
 const components = {
   default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
     return (
@@ -115,6 +121,10 @@ const components = {
       </div>
     )
   },
+  Test: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    return <ChatWindow {...props.params} />
+  },
+  // depricating this one
   Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <ChatWindow {...props.params} />
   },
@@ -128,11 +138,21 @@ const components = {
     return <TextEditor {...props.params} />
   },
   Graph: GraphWindow,
+  Variables: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    return <VariableWindow {...props} />
+  },
   Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <Console {...props.params} />
   },
-  // AgentControls
 }
+
+const PermanentTab = (props: IDockviewPanelHeaderProps) => {
+  return <DockviewDefaultTab hideClose {...props} />;
+};
+
+const tabComponents = {
+  permanentTab: PermanentTab,
+};
 
 export const Composer = ({ tab, theme, spellId }) => {
   const pubSub = usePubSub()
@@ -256,6 +276,7 @@ export const Composer = ({ tab, theme, spellId }) => {
       <DockviewReact
         onDidDrop={onDidDrop}
         components={components}
+        tabComponents={tabComponents}
         onReady={onReady}
         className={theme}
         showDndOverlay={showDndOverlay}

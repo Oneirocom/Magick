@@ -1,6 +1,6 @@
 import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import React, { useEffect, useState } from 'react';
-import { NodeProps as FlowNodeProps, useEdges } from 'reactflow';
+import { NodeProps as FlowNodeProps, useEdges, useUpdateNodeInternals } from 'reactflow';
 
 import InputSocket from './InputSocket.js';
 import NodeContainer from './NodeContainer.js';
@@ -10,23 +10,13 @@ import { isHandleConnected } from '../../utils/isHandleConnected.js';
 import { useSelectAgentsSpell } from 'client/state';
 import { SpellInterface } from 'server/schemas';
 import { getConfig } from '../../utils/getNodeConfig.js';
-import { socketsFromNumInputs } from '../../utils/socketsFromNum.js';
+import { configureSockets } from '../../utils/configureSockets.js';
 
 type NodeProps = FlowNodeProps & {
   spec: NodeSpecJSON;
   allSpecs: NodeSpecJSON[];
   spell: SpellInterface,
   nodeJSON: NodeJSON
-};
-
-const getPairs = <T, U>(arr1: T[], arr2: U[]) => {
-  const max = Math.max(arr1.length, arr2.length);
-  const pairs = [];
-  for (let i = 0; i < max; i++) {
-    const pair: [T | undefined, U | undefined] = [arr1[i], arr2[i]];
-    pairs.push(pair);
-  }
-  return pairs;
 };
 
 export const Node: React.FC<NodeProps> = ({
@@ -38,6 +28,7 @@ export const Node: React.FC<NodeProps> = ({
   spell,
   nodeJSON,
 }: NodeProps) => {
+  const updateNodeInternals = useUpdateNodeInternals();
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const [eventName, setEventName] = useState<string | null>(null)
   const [fired, setFired] = useState(false)
@@ -50,22 +41,12 @@ export const Node: React.FC<NodeProps> = ({
     handleChange('configuration', config)
   }
 
+  useEffect(() => {
+    updateNodeInternals(id);
+  }, [data])
+
   const { configuration: config } = data
-
-  const configInputs = config?.socketInputs || []
-  const numInputs = socketsFromNumInputs(config?.numInputs || 0)
-  const numOutputs = socketsFromNumInputs(config?.numOutputs || 0)
-  const configOutputs = config?.socketOutputs || []
-  const inputs = [...spec.inputs, ...configInputs, ...numInputs]
-  const outputs = [...spec.outputs, ...configOutputs, ...numOutputs]
-
-  const flowInputs = inputs.filter(input => input.valueType === 'flow')
-  const flowOutputs = outputs.filter(output => output.valueType === 'flow')
-
-  const valueInputs = inputs.filter(input => input.valueType !== 'flow')
-  const valueOutputs = outputs.filter(output => output.valueType !== 'flow')
-
-  const pairs = getPairs(flowInputs, [...flowOutputs, ...valueOutputs]);
+  const { pairs, valueInputs } = configureSockets(data, spec)
 
   useEffect(() => {
     if (!spell || !id) return;
@@ -90,20 +71,22 @@ export const Node: React.FC<NodeProps> = ({
       title={spec.label}
       category={spec.category}
       selected={selected}
+      graph={spell.graph}
+      config={config}
     >
-      {pairs.map(([input, output], ix) => (
+      {pairs.map(([flowInput, output], ix) => (
         <div
           key={ix}
           className="flex flex-row justify-between gap-8 relative px-2"
         // className={styles.container}
         >
-          {input && (
+          {flowInput && (
             <InputSocket
-              {...input}
+              {...flowInput}
               specJSON={allSpecs}
-              value={data[input.name] ?? input.defaultValue}
+              value={data[flowInput.name] ?? flowInput.defaultValue}
               onChange={handleChange}
-              connected={isHandleConnected(edges, id, input.name, 'target')}
+              connected={isHandleConnected(edges, id, flowInput.name, 'target')}
             />
           )}
           {output && (

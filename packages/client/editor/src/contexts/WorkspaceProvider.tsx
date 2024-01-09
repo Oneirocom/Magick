@@ -41,7 +41,7 @@ function ComposeProviders({ providers, children, ...parentProps }) {
  * @param {Object} params - Parameters object
  * @param {React.ReactNode} params.children - Child components
  * @param {Object} params.props - Additional properties
- * @returns {JSX.Element} Composed providers and their children
+ * @returns {React.JSX.Element} Composed providers and their children
  */
 const WorkspaceProvider = ({ children, ...props }) => (
   <ComposeProviders providers={providers} {...props}>

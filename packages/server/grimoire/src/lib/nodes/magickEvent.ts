@@ -44,6 +44,8 @@ type CustomEventNodeConfig<
   eventName: string
 }
 
+const DEFAULT_EVENT_STATE_PROPERTY = 'channel'
+
 export function makeMagickEventNodeDefinition<
   TInput extends SocketsDefinition,
   TOutput extends SocketsDefinition,
@@ -92,23 +94,24 @@ export function makeMagickEventNodeDefinition<
             // attach event key to the event here
             // we set the current event in the event store for access in the state
             const eventStore = getDependency<IEventStore>('IEventStore')
-            const eventState = node?.configuration.eventState
+            const eventState = node?.configuration?.eventState || []
 
             // set the event key  by sorting the event state properties alphabetically and then joining them
             // warning: if we change this key, all agents will lose access to their state
-            const stateKey = eventState.sort().reduce((acc, key) => {
-              const property = event[key]
-              if (property === undefined) return acc
+            const stateKey =
+              eventState.sort().reduce((acc, key) => {
+                const property = event[key]
+                if (property === undefined) return acc
 
-              // only add the : if there is already a key
-              if (acc.length > 0) {
-                acc = `${acc}:${property}`
-              } else {
-                acc = `${property}`
-              }
+                // only add the : if there is already a key
+                if (acc.length > 0) {
+                  acc = `${acc}:${property}`
+                } else {
+                  acc = `${property}`
+                }
 
-              return acc
-            }, '')
+                return acc
+              }, '') || event[DEFAULT_EVENT_STATE_PROPERTY]
 
             const eventWithKey = {
               ...event,

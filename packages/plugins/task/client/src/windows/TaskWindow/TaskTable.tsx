@@ -38,7 +38,7 @@ import { useConfig } from '@magickml/providers'
 /**
  * GlobalFilter component for applying search filter on the whole table.
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -62,7 +62,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 /**
  * DefaultColumnFilter component for applying filter on each column.
  * @param {{ column: { filterValue: any, setFilter: Function, Header: string } }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 const DefaultColumnFilter = ({
   column: { filterValue, setFilter, Header },
@@ -87,7 +87,7 @@ const DefaultColumnFilter = ({
 /**
  * TaskTable component for displaying tasks in a table with sorting, filtering, and pagination.
  * @param {{ tasks: any[], updateCallback: Function }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 function TaskTable({ tasks, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()

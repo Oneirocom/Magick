@@ -16,11 +16,14 @@ import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { AGENT_SPELL } from 'shared/core'
-import { BaseRegistry } from './baseRegistry'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore } from './services/eventStore'
+import { BaseRegistry } from './baseRegistry'
 interface IAgent {
   id: string
+  log: (message: string, data: Record<string, any>) => void
+  warn: (message: string, data: Record<string, any>) => void
+  error: (message: string, data: Record<string, any>) => void
 }
 
 /**
@@ -84,10 +87,11 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   pluginManager: PluginManager
   private agent
   private logger: pino.Logger
-  private isRunning: boolean = false
+  private isRunning: boolean = true
   private loopDelay: number
   private limitInSeconds: number
   private limitInSteps: number
+  private connection: Redis
 
   constructor({
     loopDelay = 100,
@@ -104,24 +108,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     agent: Agent
     pluginManager: PluginManager
   }) {
+    this.connection = connection
     this.agent = agent
     this.pluginManager = pluginManager
     this.logger = getLogger()
     this.loopDelay = loopDelay
     this.limitInSeconds = limitInSeconds
     this.limitInSteps = limitInSteps
-
-    // When we are done loading plugins, we build the registry
-    const baseRegistry = new BaseRegistry(this.agent, connection)
-    this.registry = this.pluginManager.getRegistry(
-      this,
-      baseRegistry.getRegistry()
-    )
-    this.graph = makeGraphApi(this.registry)
-
-    // initialize the base registry once we have the full graph.
-    // This sets up the state service properly.
-    baseRegistry.init(this.graph)
   }
 
   /**
@@ -142,19 +135,45 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the spell caster is initialized.
    */
   async initialize(spell: SpellInterface): Promise<this> {
-    this.logger.debug(
-      `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
-    )
-    this.spell = spell
-    const graph = readGraphFromJSON({
-      graphJson: this.spell.graph as GraphJSON,
-      registry: this.registry,
-    })
+    try {
+      const message = `SPELLBOOK: Initializing spellcaster for ${spell.id} in agent ${this.agent.id}`
+      this.logger.debug(message)
+      this.spell = spell
 
-    this.engine = new Engine(graph.nodes)
-    this.initializeHandlers()
-    this.start()
-    return this
+      // build the base registry
+      const baseRegistry = new BaseRegistry(this.agent, this.connection)
+
+      // Await the plugin manager to get the registry.  Made this async to allow dependencies to be async
+      this.registry = await this.pluginManager.getRegistry(
+        this,
+        baseRegistry.getRegistry()
+      )
+
+      // build the graph api
+      this.graph = makeGraphApi(this.registry)
+
+      // initialize the base registry once we have the full graph.
+      // This sets up the state service properly.
+      baseRegistry.init(this.graph)
+
+      this.spell = spell
+
+      const graph = readGraphFromJSON({
+        graphJson: this.spell.graph as GraphJSON,
+        registry: this.registry,
+      })
+
+      this.engine = new Engine(graph.nodes)
+      this.initializeHandlers()
+      this.start()
+      return this
+    } catch (err: any) {
+      this.agent.error(
+        `Error initializing spell ${this.spell.id} ${this.spell.name}`,
+        err.toString()
+      )
+      return this
+    }
   }
 
   /**
@@ -193,6 +212,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     const event = `${this.spell.id}-${node.id}`
     const message = {
       event,
+      timestamp: new Date().toISOString(),
       nodeId: node.id,
       type: node.description.typeName,
       outputs: node.outputs,
@@ -237,7 +257,15 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
     if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
     this.busy = true
-    await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
+
+    try {
+      await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
+    } catch (err: any) {
+      this.agent.error(
+        `Error executing graph on spell ${this.spell.id} ${this.spell.name}`,
+        err.toString()
+      )
+    }
     this.busy = false
     this.executeGraph = false // Reset the flag after execution
   }
@@ -284,9 +312,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     eventName: string,
     payload: EventPayload
   ): void {
-    this.logger.trace(
-      `SpellCaster: Handling event ${eventName} for ${dependency} in spell ${this.spell.name}`
-    )
+    const message = `SpellCaster: Handling event ${eventName} for ${dependency} in spell ${this.spell.name}`
+    this.logger.trace(message)
+    this.agent.log(message, payload)
     // we grab the dependency from the registry and trigger it
     const eventEmitter = this.registry.dependencies[dependency] as
       | EventEmitter
@@ -330,7 +358,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   dispose() {
     this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
     this.stopRunLoop()
-    this.engine.dispose()
+    if (this.engine) this.engine.dispose()
   }
 
   /**

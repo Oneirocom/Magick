@@ -86,7 +86,7 @@ class Plugin {
   }
 }
 
-export type PageLayout = LazyExoticComponent<() => JSX.Element> | null
+export type PageLayout = LazyExoticComponent<() => React.JSX.Element> | null
 export class ClientPlugin extends Plugin {
   agentComponents: FC[]
   drawerItems?: Array<PluginDrawerItem>

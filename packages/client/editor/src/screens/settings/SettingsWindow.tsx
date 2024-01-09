@@ -15,7 +15,7 @@ import styles from './styles.module.scss'
  * @param {string} props.getUrl - The URL where the user can find the API key.
  * @param {(key: string, value: string) => void} props.setKey - Function to set service key in local storage.
  * @param {(key: string) => string} props.getKey - Function to get service key from local storage.
- * @return {JSX.Element} The rendered component.
+ * @return {React.JSX.Element} The rendered component.
  */
 
 const SettingsWindowChild = ({

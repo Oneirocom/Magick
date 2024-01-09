@@ -153,7 +153,7 @@ export const Composer = ({ tab, theme, spellId }) => {
   const spellRef = useRef<SpellInterface>()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, publish, subscribe } = usePubSub()
-  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellByIdQuery()
+  const [loadSpell, { data: spellData }] = spellApi.useLazyGetSpellQuery()
   const { editor, serialize } = useEditor()
   const preferences = useSelector((state: RootState) => state.preferences)
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
@@ -205,18 +205,14 @@ export const Composer = ({ tab, theme, spellId }) => {
 
   useEffect(() => {
     if (!spellData) return
-    spellRef.current = spellData.data[0]
+    spellRef.current = spellData
   }, [spellData])
 
   useEffect(() => {
     // If there is no tab, or we already have a spell, return early
     if (!tab || !tab.name || spellRef.current) return
 
-    loadSpell({
-      spellName: tab.name,
-      projectId: config.projectId,
-      id: spellId,
-    })
+    loadSpell({ id: spellId })
   }, [tab])
 
   const onReady = (event: DockviewReadyEvent) => {

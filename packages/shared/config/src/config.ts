@@ -27,6 +27,8 @@ function getVarForEnvironment(env: string): string | undefined {
 }
 
 // Define and export constants from environment variables
+export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
+export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
@@ -149,3 +151,9 @@ export const SPELLRUNNER_BUSY_TIMEOUT_MSEC = getVarForEnvironment(
 )
   ? Number(getVarForEnvironment('SPELLRUNNER_BUSY_TIMEOUT_MS'))
   : 120000
+
+export const CREDENTIALS_ENCRYPTION_KEY =
+  getVarForEnvironment('CREDENTIALS_ENCRYPTION_KEY') || 'key'
+
+export const CREDENTIALS_ALGORITHM =
+  getVarForEnvironment('CREDENTIALS_ALGORITHM') || 'aes-256-cbc'

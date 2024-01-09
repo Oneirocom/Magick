@@ -25,4 +25,14 @@ export class CoreActionService {
       data: messageContent,
     })
   }
+
+  async streamMessage(event: EventPayload, messageContent: any) {
+    // Enqueue the message
+    this.logger.trace('CORE ACTION SERVICE: Streaming message')
+    await this.emitAction({
+      actionName: 'streamMessage',
+      event,
+      data: messageContent,
+    })
+  }
 }

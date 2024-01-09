@@ -1,3 +1,4 @@
+import { CoreLLMService } from './services/coreLLMService/coreLLMService'
 import {
   ActionPayload,
   CoreEventsPlugin,
@@ -10,11 +11,34 @@ import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventClient from './services/coreEventClient'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
+import { generateText } from './nodes/actions/generateText'
 import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
+import { streamMessage } from './nodes/actions/streamMessage'
+import { PluginCredential } from 'server/credentials'
+import { LLMProviders } from './services/coreLLMService/types'
+import { variableGet } from './nodes/query/variableGet'
+import { VariableService } from './services/variableService'
+import { variableSet } from './nodes/query/variableSet'
+import { arrayPush } from './values/Array/Push'
+import { jsonStringify } from './nodes/actions/jsonStringify'
+import { SpellCaster } from 'server/grimoire'
+import { forEach } from './values/Array/ForEach'
+import { arrayLength } from './values/Array/Length'
+import { arrayClear } from './values/Array/Clear'
+import { whileLoop } from './nodes/flow/whileLoop'
+import { regex } from './nodes/logic/match'
 
 const pluginName = 'Core'
+
+const pluginCredentials: PluginCredential[] = [
+  {
+    name: 'openai-token',
+    serviceType: 'llm',
+    credentialType: 'core',
+  },
+]
 
 // These nodes are removed from the core plugin because we have others that
 // do the same thing but are more specific. For example, the variable/get
@@ -32,13 +56,30 @@ export type CorePluginEvents = {
 export class CorePlugin extends CoreEventsPlugin {
   override enabled = true
   client: CoreEventClient
-  nodes = [messageEvent, sendMessage, textTemplate]
+  nodes = [
+    messageEvent,
+    sendMessage,
+    textTemplate,
+    generateText,
+    streamMessage,
+    variableGet,
+    variableSet,
+    arrayPush,
+    jsonStringify,
+    forEach,
+    arrayLength,
+    arrayClear,
+    whileLoop,
+    regex,
+  ]
   values = []
+  coreLLMService = new CoreLLMService()
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
 
     this.client = new CoreEventClient(pubSub, agentId)
+    this.setCredentials(pluginCredentials)
   }
 
   /**
@@ -62,17 +103,61 @@ export class CorePlugin extends CoreEventsPlugin {
       displayName: 'Send Message',
       handler: this.handleSendMessage.bind(this),
     })
+    this.registerAction({
+      actionName: 'streamMessage',
+      displayName: 'Stream Message',
+      handler: this.handleSendMessage.bind(this),
+    })
   }
 
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  getDependencies() {
+  async getDependencies(spellCaster: SpellCaster) {
+    await this.coreLLMService.initialize()
+    await this.getLLMCredentials()
     return {
       coreActionService: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
       ),
+      IVariableService: new VariableService(
+        this.connection,
+        this.agentId,
+        spellCaster
+      ),
+    }
+  }
+
+  async getLLMCredentials() {
+    try {
+      // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
+      for (const providerKey of Object.keys(LLMProviders).filter(
+        key => LLMProviders[key] !== LLMProviders.Unknown
+      )) {
+        const provider = LLMProviders[providerKey]
+
+        // Retrieve credentials for each provider
+        const credential =
+          await this.credentialsManager.retrieveAgentCredentials(
+            this.agentId,
+            provider,
+            'llm'
+          )
+
+        // Check if credentials are retrieved and valid
+        if (credential) {
+          // Add each credential to the CoreLLMService instance
+          this.coreLLMService.addCredential({
+            name: provider,
+            value: credential,
+            serviceType: 'llm',
+            credentialType: 'core',
+          })
+        }
+      }
+    } catch (error) {
+      this.logger.error(error, 'Error retrieving LLM credentials:')
     }
   }
 
