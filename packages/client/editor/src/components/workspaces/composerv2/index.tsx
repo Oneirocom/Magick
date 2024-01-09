@@ -15,10 +15,10 @@ const DraggableElement = (props) => {
     'TextEditor': () => {
       publish(events.$CREATE_TEXT_EDITOR(tab.id))
     },
-    'Properties': () => {
+    'Variables': () => {
       publish(events.$CREATE_INSPECTOR(tab.id))
     },
-    'Chat': () => {
+    'Test': () => {
       publish(events.$CREATE_PLAYTEST(tab.id))
     }
   }
@@ -56,8 +56,8 @@ const composerLayoutComponents = {
           <p style={{ padding: 8, color: 'grey', marginRight: 50 }}>Composer V2</p>
           <DraggableElement window="Console" {...props} />
           <DraggableElement window="TextEditor" title="Text Editor" {...props} />
-          <DraggableElement window="Properties" {...props} />
-          <DraggableElement window="Chat" {...props} />
+          <DraggableElement window="Test" {...props} />
+          <DraggableElement window="Variables" {...props} />
         </div>
       </div >
     )
