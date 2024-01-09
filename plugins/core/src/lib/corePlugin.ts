@@ -157,7 +157,7 @@ export class CorePlugin extends CoreEventsPlugin {
         }
       }
     } catch (error) {
-      this.logger.error('Error retrieving LLM credentials:', error)
+      this.logger.error(error, 'Error retrieving LLM credentials:')
     }
   }
 
