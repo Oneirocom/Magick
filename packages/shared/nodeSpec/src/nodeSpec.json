@@ -118,6 +118,622 @@
     ]
   },
   {
+    "type": "magick/generateText",
+    "category": "Action",
+    "label": "Generate Text",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "prompt",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "model",
+        "valueType": "string",
+        "defaultValue": "",
+        "choices": [
+          {
+            "text": "gpt-3.5-turbo",
+            "value": "gpt-3.5-turbo"
+          },
+          {
+            "text": "gpt-3",
+            "value": "gpt-3"
+          },
+          {
+            "text": "davinci",
+            "value": "davinci"
+          },
+          {
+            "text": "curie",
+            "value": "curie"
+          },
+          {
+            "text": "babbage",
+            "value": "babbage"
+          },
+          {
+            "text": "ada",
+            "value": "ada"
+          },
+          {
+            "text": "gemini-pro",
+            "value": "gemini-pro"
+          },
+          {
+            "text": "palm",
+            "value": "palm"
+          },
+          {
+            "text": "mistral",
+            "value": "mistral"
+          },
+          {
+            "text": "anthropic",
+            "value": "anthropic"
+          },
+          {
+            "text": "sagemaker",
+            "value": "sagemaker"
+          },
+          {
+            "text": "bedrock",
+            "value": "bedrock"
+          },
+          {
+            "text": "anyscale",
+            "value": "anyscale"
+          },
+          {
+            "text": "perplexity-ai",
+            "value": "perplexity-ai"
+          },
+          {
+            "text": "vllm",
+            "value": "vllm"
+          },
+          {
+            "text": "deepinfra",
+            "value": "deepinfra"
+          },
+          {
+            "text": "j2-light",
+            "value": "j2-light"
+          },
+          {
+            "text": "j2-mid",
+            "value": "j2-mid"
+          },
+          {
+            "text": "j2-ultra",
+            "value": "j2-ultra"
+          },
+          {
+            "text": "nlpc-cloud",
+            "value": "nlpc-cloud"
+          },
+          {
+            "text": "replicate",
+            "value": "replicate"
+          },
+          {
+            "text": "cohere",
+            "value": "cohere"
+          },
+          {
+            "text": "together-ai",
+            "value": "together-ai"
+          },
+          {
+            "text": "aleph-alpha",
+            "value": "aleph-alpha"
+          },
+          {
+            "text": "baseten",
+            "value": "baseten"
+          },
+          {
+            "text": "openrouter",
+            "value": "openrouter"
+          },
+          {
+            "text": "custom-api",
+            "value": "custom-api"
+          },
+          {
+            "text": "petals",
+            "value": "petals"
+          }
+        ]
+      },
+      {
+        "name": "maxRetries",
+        "valueType": "number",
+        "defaultValue": 3
+      },
+      {
+        "name": "temperature",
+        "valueType": "number",
+        "defaultValue": 0.5
+      },
+      {
+        "name": "top_p",
+        "valueType": "number",
+        "defaultValue": 1
+      },
+      {
+        "name": "seed",
+        "valueType": "number",
+        "defaultValue": 42
+      },
+      {
+        "name": "stop",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "response",
+        "valueType": "object"
+      },
+      {
+        "name": "completion",
+        "valueType": "string"
+      },
+      {
+        "name": "done",
+        "valueType": "flow"
+      },
+      {
+        "name": "onStream",
+        "valueType": "flow"
+      },
+      {
+        "name": "stream",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "modelChoices",
+        "valueType": "array",
+        "defaultValue": [
+          "gpt-3.5-turbo",
+          "gpt-3",
+          "davinci",
+          "curie",
+          "babbage",
+          "ada",
+          "gemini-pro",
+          "palm",
+          "mistral",
+          "anthropic",
+          "sagemaker",
+          "bedrock",
+          "anyscale",
+          "perplexity-ai",
+          "vllm",
+          "deepinfra",
+          "j2-light",
+          "j2-mid",
+          "j2-ultra",
+          "nlpc-cloud",
+          "replicate",
+          "cohere",
+          "together-ai",
+          "aleph-alpha",
+          "baseten",
+          "openrouter",
+          "custom-api",
+          "petals"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "magick/streamMessage",
+    "category": "Action",
+    "label": "Stream Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "variables/get",
+    "category": "Query",
+    "label": "Get",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs",
+          "label"
+        ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "variables/set",
+    "category": "Query",
+    "label": "Set",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs",
+          "socketInputs",
+          "label"
+        ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/push",
+    "category": "Action",
+    "label": "Array Push",
+    "inputs": [
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "action/json/stringify",
+    "category": "Action",
+    "label": "Json Stringify",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "string",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "flow/array/forEach",
+    "category": "Flow",
+    "label": "For Loop",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "completed",
+        "valueType": "flow"
+      },
+      {
+        "name": "loopBody",
+        "valueType": "flow"
+      },
+      {
+        "name": "index",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Array Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/length",
+    "category": "Logic",
+    "label": "Length",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/array/clear",
+    "category": "Action",
+    "label": "Clear",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/whileLoop",
+    "category": "Flow",
+    "label": "While Loop",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "condition",
+        "valueType": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "completed",
+        "valueType": "flow"
+      },
+      {
+        "name": "loopBody",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "maxIterations",
+        "valueType": "number",
+        "defaultValue": 10
+      }
+    ]
+  },
+  {
+    "type": "logic/string/match",
+    "category": "Logic",
+    "label": "Match",
+    "inputs": [
+      {
+        "name": "match",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
@@ -2476,7 +3092,7 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -2495,12 +3111,12 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "b",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -2519,12 +3135,12 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "b",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -2543,17 +3159,17 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "b",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       },
       {
         "name": "c",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -2758,7 +3374,7 @@
       {
         "name": "payload",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [
@@ -2862,7 +3478,7 @@
       {
         "name": "a",
         "valueType": "array",
-        "defaultValue": "[]"
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
       }
     ],
     "outputs": [

@@ -157,11 +157,16 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   private watchSpellUpdateHandler(spell: SpellInterface) {
     if (!this.watchSpells) return
+    if (this.agent.projectId !== spell.projectId) return
 
     if (this.hasSpellCaster(spell.id)) {
       this.logger.debug(`Updating spell ${spell.id} in agent ${this.agent.id}`)
       this.updateSpell(spell)
+      return
     }
+
+    this.logger.debug(`Creating spell ${spell.id} in agent ${this.agent.id}`)
+    this.loadSpell(spell)
   }
 
   /**
@@ -229,6 +234,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.logger.trace(`Handling event ${eventName} for ${dependency}`)
     // Iterate over alll spell casters
     for (const [spellId, spellMap] of this.spellMap.entries()) {
+      if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
+
       this.logger.trace(`Handling event ${eventName} for ${spellId}`)
 
       // Clone the payload so we don't mutate it when we pass it down to each spellcaster
@@ -330,11 +337,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     }
 
     try {
-      const spellCaster = await new SpellCaster<Agent>({
+      const spellCaster = new SpellCaster<Agent>({
         agent: this.agent,
         pluginManager: this.pluginManager,
         connection: this.app.get('redis'),
-      }).initialize(spell)
+      })
+
+      await spellCaster.initialize(spell)
 
       const spellCasterList = this.spellMap.get(spell.id)
       if (spellCasterList) {

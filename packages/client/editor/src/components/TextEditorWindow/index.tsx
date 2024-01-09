@@ -13,6 +13,7 @@ const TextEditor = props => {
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
+    fontSize: 16
   })
 
   const selectedNode = useSelector(selectActiveNode(props.tab.id))

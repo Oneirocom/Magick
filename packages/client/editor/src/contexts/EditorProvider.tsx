@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
-import { useFeathers, useConfig, usePubSub } from '@magickml/providers'
+import { useFeathers, usePubSub } from '@magickml/providers'
 import {
   EditorContext,
   GraphData,
@@ -184,21 +184,15 @@ const EditorProvider = ({ children }) => {
  * RawEditor component.
  */
 const RawEditor = ({ tab, children, spellId }) => {
-  const config = useConfig()
-
   const [getSpell, { data: spell, isLoading }] =
-    spellApi.useLazyGetSpellByIdQuery()
+    spellApi.useLazyGetSpellQuery()
   const [loaded, setLoaded] = useState(false)
   const { buildEditor } = useEditor()
   const reteInterface = useMagickInterface() as EditorContext
 
   useEffect(() => {
     if (!tab || loaded) return
-    getSpell({
-      spellName: tab.name,
-      id: spellId,
-      projectId: config.projectId,
-    })
+    getSpell({ id: spellId })
   }, [tab])
 
   if (isLoading) return <LoadingScreen />
@@ -211,7 +205,7 @@ const RawEditor = ({ tab, children, spellId }) => {
         className={styles['editor-container']}
         ref={el => {
           if (el && !loaded && spell) {
-            buildEditor(el, spell.data[0], tab, reteInterface)
+            buildEditor(el, spell, tab, reteInterface)
             setLoaded(true)
           }
         }}

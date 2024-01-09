@@ -157,6 +157,15 @@ const ChatWindow = ({ tab, spellId }) => {
   const [history, setHistory] = useState<Message[]>([])
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
+  const isStreaming = useRef(false)
+  const accumulatedTextRef = useRef(""); // Ref to hold the accumulated text
+
+  const setIsStreaming = (value) => {
+    isStreaming.current = value;
+  }
+
+  const messageQueue = useRef([]); // Queue to hold incoming text chunks
+  const typingInterval = useRef(null); // Ref to manage the interval
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
@@ -186,18 +195,104 @@ const ChatWindow = ({ tab, spellId }) => {
       setHistory((prevHistory) => [...prevHistory, newMessage]);
     }
 
+  const processNextChunk = () => {
+    console.log('processing next chunk');
+    if (messageQueue.current.length === 0) {
+      accumulatedTextRef.current = "";
+      setIsStreaming(false); // Mark the end of the streaming session
+      return;
+    }
+
+    const nextChunk = messageQueue.current.shift();
+
+    if (typingInterval.current) {
+      clearInterval(typingInterval.current); // Clear any previous interval
+    }
+
+    let i = accumulatedTextRef.current.length; // Start from the last character of the accumulated text
+
+    // Update the accumulated text based on the current streaming state
+    if (isStreaming.current) {
+      accumulatedTextRef.current += nextChunk; // Append new chunk to the accumulated text
+    } else {
+      accumulatedTextRef.current = nextChunk; // Start fresh for a new message
+    }
+
+    setIsStreaming(true);
+
+    typingInterval.current = setInterval(() => {
+      const internalI = i
+      setHistory(prevHistory => {
+        const newHistory = [...prevHistory];
+        const lastMessageIndex = newHistory.length - 1;
+        const lastMessage = newHistory[lastMessageIndex];
+
+        if (lastMessage.sender === 'agent') {
+          newHistory[lastMessageIndex] = {
+            ...newHistory[lastMessageIndex],
+            content: accumulatedTextRef.current.slice(0, internalI + 1),
+          };
+        } else {
+          newHistory.push({
+            sender: 'agent',
+            content: "Agent:",
+          });
+        }
+
+        return newHistory;
+      });
+
+      i++
+
+      // Move to the next chunk only after the current one is fully displayed
+      if (internalI >= accumulatedTextRef.current.length - 1) { // -1 because we want to wait until the last character is processed
+        clearInterval(typingInterval.current);
+        typingInterval.current = null;
+
+        // Now check if there are more chunks to process
+        if (messageQueue.current.length > 0) {
+          processNextChunk(); // Move to the next chunk if available
+        } else {
+          setIsStreaming(false); // Mark the end of the streaming session
+        }
+      }
+    }, 20);
+  };
+
+  const streamToConsole = (_text) => {
+    if (typeof _text !== 'string') {
+      console.warn('Could not stream text, not a string', _text);
+      return;
+    }
+
+    // Add new text to the queue
+    messageQueue.current.push(_text);
+    if (!isStreaming.current) {
+      // If not currently streaming, start processing
+      setIsStreaming(false)
+      processNextChunk();
+    }
+  };
+
+
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
     if (!lastEvent) return
 
-    const { data, event } = lastEvent
+    const { data, event, actionName } = lastEvent
     const { content } = data
 
 
     if (event?.runInfo?.spellId !== spellId) return
     if (event.channel !== spellId) return
 
-    printToConsole(content)
+    if (actionName === 'sendMessage') {
+      printToConsole(content)
+    }
+
+    if (actionName === 'streamMessage') {
+      streamToConsole(content)
+    }
   }, [lastEvent])
 
   // Set playtest options based on spell graph nodes with the playtestToggle set to true.
@@ -260,6 +355,9 @@ const ChatWindow = ({ tab, spellId }) => {
     setHistory(newHistory as [])
     setValue('')
 
+    // make sure when a user sends a message, we stop streaming mode from the agent
+    setIsStreaming(false)
+
     const json = localState?.playtestData
 
     if (!json) {
@@ -288,7 +386,9 @@ const ChatWindow = ({ tab, spellId }) => {
       projectId: config.projectId,
       channelType: 'spell playtest',
       rawData: value,
-      agentId: currentAgentId
+      agentId: currentAgentId,
+      spellId: spellId,
+      isPlaytest: true
     }
 
     // const data = {

@@ -21,9 +21,9 @@ type Props = {
  * `SingleElement` renders a single line item of of a socket that has been added by the socket generator.
  * TODO - Add support for selecting socket types here
  *  @param {Props} props - The props needed for the SingleElement component.
- * @returns {JSX.Element} The rendered SingleElement component.
+ * @returns {React.JSX.Element} The rendered SingleElement component.
  */
-const SingleElement = ({ name, delete: handleDelete }: Props): JSX.Element => {
+const SingleElement = ({ name, delete: handleDelete }: Props): React.JSX.Element => {
   return (
     <div className={`${styles.flexCenterBtn} ${styles.inputContainer}`}>
       <div className={styles.flexCenterBtn}>

@@ -14,6 +14,7 @@ import { graphEvents } from './graphEvents/graphEvents'
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
 import { pluginManager } from 'shared/core'
+import { credentials } from './credentials/credentials'
 
 /**
  * Configures and registers services for the application.
@@ -34,6 +35,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(chatMessages)
   app.configure(spellReleases)
   app.configure(graphEvents)
+  app.configure(credentials)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better

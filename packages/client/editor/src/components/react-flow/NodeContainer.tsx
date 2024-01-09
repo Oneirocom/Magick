@@ -1,8 +1,14 @@
-import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph';
+import { NodeCategory, NodeSpecJSON, VariableJSON } from '@magickml/behave-graph';
 import cx from 'classnames';
 import React, { PropsWithChildren } from 'react';
 
-import { categoryColorMap, colors } from '../../utils/colors.js';
+import { categoryColorMap, colors, valueTypeColorMap } from '../../utils/colors.js';
+import { SpellInterface } from 'server/schemas';
+
+type Config = {
+  label?: string
+  variableId?: string
+}
 
 type NodeProps = {
   title: string;
@@ -10,6 +16,8 @@ type NodeProps = {
   selected: boolean;
   onClick?: () => void;
   fired: boolean;
+  config: Config
+  graph: SpellInterface['graph']
 };
 
 const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
@@ -17,13 +25,27 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   category = NodeCategory.None,
   selected,
   children,
-  fired
+  fired,
+  config,
+  graph
 }) => {
   let colorName = categoryColorMap[category];
   if (colorName === undefined) {
     colorName = 'red';
   }
-  const [backgroundColor, textColor] = colors[colorName];
+
+  let [backgroundColor, textColor] = colors[colorName];
+
+  if (config?.variableId) {
+    const variable = graph.variables.find(variable => variable.id === config.variableId) as VariableJSON
+    if (variable) {
+      const colorName = valueTypeColorMap[variable.valueTypeName]
+      if (colorName) {
+        [backgroundColor, textColor] = colors[colorName]
+      }
+    }
+  }
+
 
   return (
     <div
@@ -34,10 +56,10 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
       )}
     >
       <div className={`${backgroundColor} ${textColor} px-2 py-1 rounded-t`}>
-        {title}
+        {title}{config?.label && ` - ${config.label}`}
       </div>
       <div
-        className={`flex flex-col gap-2 py-1 border-l border-r border-b`}
+        className={`flex flex-col gap-1 py-1`}
       >
         {children}
       </div>

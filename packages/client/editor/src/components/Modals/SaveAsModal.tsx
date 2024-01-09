@@ -19,7 +19,7 @@ const defaultGraph = getTemplates().spells[0].graph
  * @param {Object} props - Component properties
  * @param {Object} props.tab - Tab data
  * @param {Function} props.closeModal - Function to close the component modal
- * @returns {JSX.Element} - EditSpellModal component
+ * @returns {React.JSX.Element} - EditSpellModal component
  */
 const EditSpellModal = ({ tab, closeModal }) => {
   // Get config from context
@@ -33,15 +33,9 @@ const EditSpellModal = ({ tab, closeModal }) => {
   const [newSpell] = spellApi.useNewSpellMutation()
 
   // Fetch the spell by ID
-  const { data: spell } = spellApi.useGetSpellByIdQuery(
-    {
-      spellName: tab.name,
-      id: tab.id,
-      projectId: config.projectId,
-    },
-    {
-      skip: !tab.name,
-    }
+  const { data: spell } = spellApi.useGetSpellQuery(
+    { id: tab.id },
+    { skip: !tab.name }
   )
 
   // Snackbar for showing notifications
@@ -69,7 +63,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
     // Save the spell
     const saveResponse: any = await saveSpell({
-      spell: { ...spell.data[0], name: data.name, id },
+      spell: { ...spell.data, name: data.name, id },
       projectId: config.projectId,
     })
 

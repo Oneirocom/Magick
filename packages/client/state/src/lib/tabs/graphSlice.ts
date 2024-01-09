@@ -1,3 +1,4 @@
+import { GraphJSON } from '@magickml/behave-graph'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import {
   applyEdgeChanges,
@@ -13,6 +14,7 @@ import {
 export type GraphState = {
   nodes: Node[]
   edges: Edge[]
+  graphJson: GraphJSON
 }
 
 const initialState = {}
@@ -37,6 +39,11 @@ const onConnect = createAction<{
   tabId: string
   connection: Connection
 }>('graph/onConnect')
+
+const setGraphJson = createAction<{
+  tabId: string
+  graphJson: GraphJSON
+}>('graph/onGraphChange')
 
 const graphReducer = createReducer(initialState, builder => {
   builder
@@ -68,6 +75,12 @@ const graphReducer = createReducer(initialState, builder => {
         state[tabId].edges = addEdge(connection, state[tabId].edges)
       }
     })
+    .addCase(setGraphJson, (state, action) => {
+      const { tabId, graphJson } = action.payload
+      if (state[tabId]) {
+        state[tabId].graphJson = graphJson
+      }
+    })
 })
 
 export const graphActions = {
@@ -76,6 +89,7 @@ export const graphActions = {
   onEdgesChange,
   onNodesChange,
   onConnect,
+  setGraphJson,
 }
 
 export default graphReducer

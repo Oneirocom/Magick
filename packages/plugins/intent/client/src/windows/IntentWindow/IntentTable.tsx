@@ -33,7 +33,7 @@ import IntentModal from './IntentModal'
 /**
  * GlobalFilter component for applying search filter on the whole table.
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter)
@@ -70,7 +70,7 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
 /**
  * IntentTable component for displaying intent documents in a table with sorting, filtering, and pagination.
  * @param {{ intents: any[], updateCallback: Function }} param0
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 function IntentTable({ intents, updateCallback }) {
   const { enqueueSnackbar } = useSnackbar()

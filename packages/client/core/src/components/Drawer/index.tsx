@@ -9,7 +9,7 @@ type DrawerProps = {
 /**
  * The main Drawer component that wraps around the application content.
  */
-export function Drawer({ children }: DrawerProps): JSX.Element {
+export function Drawer({ children }: DrawerProps): React.JSX.Element {
   return (
     <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
       <OldSidebar children={children} />
