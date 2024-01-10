@@ -44,10 +44,8 @@ export class CredentialsService {
     return { id: newCredentialId }
   }
 
-  async remove(id: string, params: Params): Promise<any> {
-    return await this.credentialsManager.deleteCredentials(
-      params?.query?.credentialId as string
-    )
+  async remove(id: string): Promise<any> {
+    return await this.credentialsManager.deleteCredentials(id)
   }
 
   async find(params: any): Promise<Partial<CredentialsPayload>[]> {
