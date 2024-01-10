@@ -182,12 +182,25 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the handlers are initialized.
    */
   initializeHandlers() {
-    // this.engine.onNodeExecutionStart.addListener(node => {
-    //   this.logger.trace(`<< ${node.description.typeName} >> START`)
-    // })
+    this.engine.onNodeExecutionStart.addListener(
+      this.executionStartHandler.bind(this)
+    )
     this.engine.onNodeExecutionEnd.addListener(
       this.executionEndHandler.bind(this)
     )
+  }
+
+  /**
+   * This is the handler for the node execution start event. We emit the
+   * node work event here to be sent up to appropriate clients.
+   * @param node - The node that just started executing.
+   * @returns A promise that resolves when the node work event is emitted.
+   */
+  executionStartHandler = async (node: any) => {
+    const event = `${this.spell.id}-${node.id}-start`
+
+    console.log('Emitting start work!')
+    this.emitNodeWork(node, event)
   }
 
   /**
@@ -197,7 +210,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionEndHandler = async (node: any) => {
-    this.emitNodeWork(node)
+    const event = `${this.spell.id}-${node.id}-end`
+
+    this.emitNodeWork(node, event)
   }
 
   /**
@@ -208,8 +223,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @example
    * spellCaster.emitNodeWork(nodeId, node)
    */
-  emitNodeWork(node: INode) {
-    const event = `${this.spell.id}-${node.id}`
+  emitNodeWork(node: INode, event: string) {
     const message = {
       event,
       timestamp: new Date().toISOString(),
