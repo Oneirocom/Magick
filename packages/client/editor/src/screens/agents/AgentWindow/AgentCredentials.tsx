@@ -14,7 +14,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@magickml/ui'
 import credentialsJson from 'packages/shared/nodeSpec/src/credentials.json'
 import { FC, useState } from 'react'
@@ -257,11 +256,11 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
   const pluginCredentials: PluginCredential[] =
     credentialsJson as PluginCredential[]
   const config = useConfig()
-  const { data: c, isLoading: cLoading } = useListCredentialsQuery({
+  const { data: c } = useListCredentialsQuery({
     projectId: config.projectId,
   })
 
-  const { data: ac, isLoading: acLoading } = useListAgentCredentialsQuery({
+  const { data: ac } = useListAgentCredentialsQuery({
     projectId: config.projectId,
     agentId,
   })
