@@ -174,7 +174,6 @@ export abstract class BasePlugin<
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
   protected credentialsManager!: CredentialsManager
-  protected meterManager!: MeterManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -218,7 +217,6 @@ export abstract class BasePlugin<
     this.eventEmitter = new EventEmitter()
     this.events = []
     this.credentialsManager = new CredentialsManager()
-    this.meterManager = new MeterManager(agentId)
   }
 
   /**
