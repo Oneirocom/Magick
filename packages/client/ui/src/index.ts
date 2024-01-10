@@ -14,6 +14,10 @@ export * from './components/ui/switch'
 export * from './components/ui/checkbox'
 export * from './components/ui/card'
 export * from './components/ui/tabs'
-export * from './components/ui/context-menu'
-export * from './utils'
+export * from './components/ui/textarea'
+export * from './components/ui/avatar'
+export * from './components/ui/table'
+export * from './components/table'
 
+
+export * from './utils'
