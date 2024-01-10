@@ -14,11 +14,11 @@ type CreateBudgetParams = {
 }
 
 interface ICoreBudgetManagerService {
-  createBudget(params: CreateBudgetParams): Promise<void>
+  createBudget(params: CreateBudgetParams): Promise<{ success: boolean }>
   updateCost(
     completionObj: CompletionResponse,
     projectId: string
-  ): Promise<void>
+  ): Promise<{ success: boolean }>
   resetCost(projectId: string): Promise<void>
   getCurrentCost(projectId: string): Promise<number>
   projectedCost(
@@ -58,14 +58,15 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     totalBudget: number
     projectId: string
     duration: BudgetDuration
-  }): Promise<void> {
+  }): Promise<{ success: boolean }> {
     // Implement logic to create a budget
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     await this.liteLLMBudgetManager?.create_budget$(
       totalBudget,
       user.id,
       duration
     )
+    return { success: true }
   }
 
   // Method to compute the projected cost for a session
@@ -76,16 +77,17 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       messages,
       'magickml'
     )
+
     if (!baseCost) {
       throw new Error('Error getting base cost')
     }
     const totalCost = baseCost + baseCost * profit
     console.log('TOTAL COST', totalCost)
-    return totalCost
+    return totalCost as number
   }
 
   async getTotalBudget(projectId: string): Promise<number> {
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     const totalBudget = await this.liteLLMBudgetManager?.get_total_budget$(
       user.id
     )
@@ -97,13 +99,14 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   async updateCost(
     completionObj: CompletionResponse,
     projectId: string
-  ): Promise<void> {
-    const user = await this.userService.getUserInfo(projectId)
+  ): Promise<{ success: boolean }> {
+    const user = await this.userService.getUser(projectId)
     await this.liteLLMBudgetManager?.update_cost$(completionObj, user.id)
+    return { success: true }
   }
 
   async getCurrentCost(projectId: string): Promise<number> {
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     const currentCost = await this.liteLLMBudgetManager?.get_current_cost$(
       user.id
     )
@@ -113,7 +116,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   }
 
   async getModelCost(projectId: string): Promise<number> {
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     const modelCost = await this.liteLLMBudgetManager?.get_model_cost$(user.id)
     //TODO: Handle the data here
     console.log('MODEL COST', modelCost, typeof modelCost)
@@ -121,7 +124,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   }
 
   async isValidUser(projectId: string): Promise<boolean> {
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     const isValid = await this.liteLLMBudgetManager?.is_valid_user$(user.id)
     //TODO: Handle the data here
     console.log('IS VALID', isValid)
@@ -136,12 +139,12 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   }
 
   async resetCost(projectId: string): Promise<void> {
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     await this.liteLLMBudgetManager?.reset_cost$(user.id)
   }
 
   async resetOnDuration(projectId: string): Promise<void> {
-    const user = await this.userService.getUserInfo(projectId)
+    const user = await this.userService.getUser(projectId)
     await this.liteLLMBudgetManager?.reset_on_duration$(user.id)
   }
 
