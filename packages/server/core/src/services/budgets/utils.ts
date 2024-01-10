@@ -28,11 +28,11 @@ export function shouldSendAlert(
   currentBudget: Budget
 ): boolean {
   const alertThreshold =
-    currentBudget.total_budget * currentBudget.alert_threshold
+    currentBudget.total_budget * (currentBudget.alert_threshold || 0.75)
   const alertThresholdMet = updatedCost >= alertThreshold
   const nextAlertTime = calculateNextAlertTime(
     currentBudget.alert_frequency,
-    currentBudget.alerted_at
+    currentBudget?.alerted_at || new Date().toISOString()
   )
 
   if (!nextAlertTime) {
