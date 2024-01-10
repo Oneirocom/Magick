@@ -28,19 +28,19 @@ export const generateText = makeFlowNodeDefinition({
       defaultValue: LLMModels['gemini-pro'],
     },
     maxRetries: {
-      valueType: 'number',
+      valueType: 'integer',
       defaultValue: 3,
     },
     temperature: {
-      valueType: 'number',
+      valueType: 'integer',
       defaultValue: 0.5,
     },
     top_p: {
-      valueType: 'number',
+      valueType: 'integer',
       defaultValue: 1,
     },
     seed: {
-      valueType: 'number',
+      valueType: 'integer',
       defaultValue: 42,
     },
     stop: {
@@ -83,6 +83,7 @@ export const generateText = makeFlowNodeDefinition({
       }
 
       let fullResponse = '' // Variable to accumulate the full response
+      let chunkQueue
 
       // Using the modified completion method
       await coreLLMService.completion({
