@@ -37,8 +37,13 @@ const pluginName = 'Core'
 const pluginCredentials: PluginCredential[] = [
   {
     name: 'openai-token',
-    serviceType: 'llm',
+    serviceType: 'openai',
     credentialType: 'core',
+    clientName: 'OpenAI',
+    initials: 'OA',
+    description: 'OpenAI API Key',
+    icon: 'https://openai.com/favicon.ico',
+    helpLink: 'https://platform.openai.com/api-keys',
   },
 ]
 
@@ -156,10 +161,9 @@ export class CorePlugin extends CoreEventsPlugin {
         if (credential) {
           // Add each credential to the CoreLLMService instance
           this.coreLLMService.addCredential({
+            ...pluginCredentials[0],
             name: provider,
             value: credential,
-            serviceType: 'llm',
-            credentialType: 'core',
           })
         }
       }
