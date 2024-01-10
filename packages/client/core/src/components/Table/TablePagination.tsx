@@ -11,7 +11,7 @@ TablePagination.displayName = 'TablePagination'
 
 TablePagination.defaultProps = {
   count: 100,
-  onPageChange: () => {},
+  onPageChange: () => { },
   page: 1,
   rowsPerPage: 10,
 }
