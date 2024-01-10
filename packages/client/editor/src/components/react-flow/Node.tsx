@@ -30,8 +30,10 @@ export const Node: React.FC<NodeProps> = ({
 }: NodeProps) => {
   const updateNodeInternals = useUpdateNodeInternals();
   const { lastItem: spellEvent } = useSelectAgentsSpell()
-  const [eventName, setEventName] = useState<string | null>(null)
-  const [fired, setFired] = useState(false)
+  const [endEventName, setEndEventName] = useState<string | null>(null)
+  const [startEventName, setStartEventName] = useState<string | null>(null)
+  const [running, setRunning] = useState(false)
+  const [done, setDone] = useState(false)
   const edges = useEdges();
   const handleChange = useChangeNodeData(id);
 
@@ -50,24 +52,35 @@ export const Node: React.FC<NodeProps> = ({
 
   useEffect(() => {
     if (!spell || !id) return;
-    setEventName(`${spell.id}-${id}`)
+    setEndEventName(`${spell.id}-${id}-end`)
+    setStartEventName(`${spell.id}-${id}-start`)
   }, [spell, id])
 
   useEffect(() => {
     if (!spellEvent) return;
-    if (spellEvent.event === eventName) {
+    if (spellEvent.event === endEventName) {
       // handleChange('eventName', spellEvent.eventName)
-      setFired(true)
+      setRunning(false)
+      setDone(true)
 
       setTimeout(() => {
-        setFired(false)
+        setDone(false)
       }, 3000)
+    }
+  }, [spellEvent])
+
+  useEffect(() => {
+    if (!spellEvent) return;
+    if (spellEvent.event === startEventName) {
+      // handleChange('eventName', spellEvent.eventName)
+      setRunning(true)
     }
   }, [spellEvent])
 
   return (
     <NodeContainer
-      fired={fired}
+      fired={done}
+      running={running}
       title={spec.label}
       category={spec.category}
       selected={selected}
