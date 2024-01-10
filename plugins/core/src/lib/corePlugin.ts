@@ -32,6 +32,8 @@ import { regex } from './nodes/logic/match'
 import { split } from './nodes/logic/strings/split'
 import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
+import { UserService } from './services/userService/userService'
+import { CoreBudgetManagerService } from './services/coreBudgetManagerService.ts/coreBudgetMangerService'
 
 const pluginName = 'Core'
 
@@ -81,6 +83,8 @@ export class CorePlugin extends CoreEventsPlugin {
   ]
   values = []
   coreLLMService = new CoreLLMService()
+  coreBudgetManagerService = new CoreBudgetManagerService()
+  userService = new UserService()
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
@@ -122,6 +126,7 @@ export class CorePlugin extends CoreEventsPlugin {
    */
   async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
+    await this.coreBudgetManagerService.initialize()
     await this.getLLMCredentials()
     return {
       coreActionService: new CoreActionService(
@@ -134,6 +139,7 @@ export class CorePlugin extends CoreEventsPlugin {
         spellCaster
       ),
       coreLLMService: this.coreLLMService,
+      coreBudgetManagerService: this.coreBudgetManagerService,
     }
   }
 
