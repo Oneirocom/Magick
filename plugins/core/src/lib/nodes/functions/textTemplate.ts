@@ -29,7 +29,7 @@ export const textTemplate = makeFunctionNodeDefinition({
     },
     socketValues: {
       valueType: 'array',
-      defaultValue: ['string'],
+      defaultValue: ['string', 'array', 'boolean', 'integer'],
     },
     socketInputs: {
       valueType: 'array',
