@@ -1,27 +1,28 @@
-interface IUserService {
-  getUserInfo(jwt: string): Promise<User>
-  getUserBudget(userId): Promise<number>
+import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
-  getBalance(): Promise<number>
-  subtractBalance(amount: number): Promise<void>
+interface User {
+  id: string
+}
+interface IUserService {
+  getUserInfo(projectId: string): Promise<User>
+  // getUserBudget(userId): Promise<number>
+  // getUserBalance(): Promise<number>
+  // subtractBalance(amount: number): Promise<void>
 }
 
 export class UserService implements IUserService {
-  async getUserInfo(): Promise<User> {
-    return {
-      name: 'John Doe',
-      email: '',
-    }
-  }
+  async getUserInfo(projectId: string): Promise<User> {
+    const userData = await fetch(`${PORTAL_URL}/api/magick/user`, {
+      method: 'POST',
+      body: JSON.stringify({
+        projectId,
+        token: CLOUD_AGENT_KEY,
+      }),
+    })
 
-  async getUserBudget(userId): Promise<number> {
-    const user = await this.getUserInfo()
-    if (!user) {
+    if (!userData.ok) {
       throw new Error('User not found')
     }
-
-    return user
+    return await userData.json()
   }
-
-  constructor() {}
 }
