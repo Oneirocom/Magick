@@ -29,6 +29,9 @@ import { arrayLength } from './values/Array/Length'
 import { arrayClear } from './values/Array/Clear'
 import { whileLoop } from './nodes/flow/whileLoop'
 import { regex } from './nodes/logic/match'
+import { split } from './nodes/logic/strings/split'
+import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
+import { arrayMerge } from './values/Array/Merge'
 
 const pluginName = 'Core'
 
@@ -71,6 +74,10 @@ export class CorePlugin extends CoreEventsPlugin {
     arrayClear,
     whileLoop,
     regex,
+    split,
+    arrayRemoveFirst,
+    arrayRemoveLast,
+    arrayMerge,
   ]
   values = []
   coreLLMService = new CoreLLMService()
