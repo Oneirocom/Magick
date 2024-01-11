@@ -1,10 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from '@radix-ui/react-icons'
-import { Button } from '../../ui/button'
+import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { Button, buttonVariants } from '../../ui/button'
 import { Checkbox } from '../../ui/checkbox'
 import {
   DropdownMenu,
@@ -27,12 +23,25 @@ export type Credential = {
 import { useConfig } from '@magickml/providers'
 import { useDeleteCredentialMutation } from 'client/state'
 
+const ButtonHeader = ({ column, name }: { column: any; name: string }) => {
+  return (
+    <div
+      className={buttonVariants({
+        variant: 'ghost',
+      })}
+      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    >
+      {name}
+      <CaretSortIcon className="ml-2 h-4 w-4" />
+    </div>
+  )
+}
+
 export const columns: ColumnDef<Credential>[] = [
   {
     id: 'select',
     header: ({ table }) => (
       <Checkbox
-        // @ts-ignore
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -53,19 +62,27 @@ export const columns: ColumnDef<Credential>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => <ButtonHeader column={column} name="Name" />,
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     accessorKey: 'serviceType',
-    header: 'Service Type',
+    header: ({ column }) => <ButtonHeader column={column} name="Type" />,
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     accessorKey: 'description',
     header: 'Description',
+    enableSorting: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'created_at',
-    header: 'Created At',
+    header: ({ column }) => <ButtonHeader column={column} name="Created" />,
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     id: 'actions',

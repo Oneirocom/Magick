@@ -11,7 +11,6 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table'
 import { Button } from '../../ui/button'
-import { Checkbox } from '../../ui/checkbox'
 import { Input } from '../../ui/input'
 import {
   Table,
@@ -21,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '../../ui/table'
-import { Credential, columns } from './columns'
+import { Credential } from './columns'
 
 import {
   DropdownMenu,
@@ -71,7 +70,7 @@ export const CredentialsTable = ({ columns, data }: CredentialsTableProps) => {
           onChange={event =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm bg-white/10"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -129,23 +128,38 @@ export const CredentialsTable = ({ columns, data }: CredentialsTableProps) => {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className="flex items-center w-full justify-between py-4">
+        <div>
+          Showing{' '}
+          {table.getState().pagination.pageIndex *
+            table.getState().pagination.pageSize +
+            1}{' '}
+          to{' '}
+          {Math.min(
+            (table.getState().pagination.pageIndex + 1) *
+              table.getState().pagination.pageSize,
+            table.getPreFilteredRowModel().rows.length
+          )}{' '}
+          of {table.getPreFilteredRowModel().rows.length} entries
+        </div>
+        <div className="inline-flex space-x-2 justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   )
