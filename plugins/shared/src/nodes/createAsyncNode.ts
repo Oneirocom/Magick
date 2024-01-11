@@ -68,8 +68,7 @@ export const createAsyncNode = <
         console.log(e)
       }
     },
-    // @ts-ignore
-    dispose: ({ state: { onStartEvent }, graph: { getDependency } }) => {
+    dispose: () => {
       return {}
     },
   })
