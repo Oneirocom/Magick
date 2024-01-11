@@ -6,12 +6,18 @@ import {
   LLMCredential,
   LLMProviders,
   LLMModels,
+  CompletionResponse,
+  Choice,
 } from './types'
 import { modelMap } from './constants'
 
 type CompletionParams = {
   request: CompletionRequest
-  callback: (chunk: string, isDone: boolean) => void
+  callback: (
+    chunk: Choice | null,
+    isDone: boolean,
+    completionResponse: CompletionResponse | null
+  ) => void
   maxRetries: number
 }
 
@@ -23,7 +29,10 @@ interface ICoreLLMService {
    * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
    * @returns A promise that resolves to the complete text after all chunks have been received.
    */
-  completion: (params: CompletionParams) => Promise<string>
+  completion: (params: CompletionParams) => Promise<{
+    fullText: string
+    completionResponse: CompletionResponse
+  }>
 }
 
 export class CoreLLMService implements ICoreLLMService {
@@ -47,8 +56,13 @@ export class CoreLLMService implements ICoreLLMService {
     request,
     callback,
     maxRetries = 3,
-  }: CompletionParams): Promise<string> {
+  }: CompletionParams): Promise<{
+    fullText: string
+    completionResponse: CompletionResponse
+  }> {
     let attempts = 0
+    let fullText = ''
+    const chunks: Choice[] = [] // Array to collect chunks
 
     while (attempts < maxRetries) {
       try {
@@ -60,20 +74,24 @@ export class CoreLLMService implements ICoreLLMService {
           api_key: this.getCredential(request.model),
         }
 
-        let fullText = ''
-
         const stream = await this.liteLLM.completion$(body)
+
         for await (const chunk of stream) {
           const rawChunk = await chunk.json()
-          const chunkResponse = await rawChunk.valueOf()
-          const chunkText = chunkResponse.choices[0].delta.content || ''
+          chunks.push(rawChunk) // Collect each chunk
+          const chunkText = rawChunk.choices[0].delta.content || ''
           fullText += chunkText
-          callback(chunkText, false)
+          callback(chunkText, false, null) // Pass null for completionResponse for now
         }
 
         fullText += '<<END>>'
-        callback('', true)
-        return fullText
+        const completionResponse = await this.liteLLM.stream_chunk_builder$({
+          chunks: chunks, // Pass the collected chunks
+          messages: body.messages, // Pass the original messages
+        })
+
+        callback(null, true, completionResponse)
+        return { fullText, completionResponse }
       } catch (error: any) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
@@ -85,6 +103,7 @@ export class CoreLLMService implements ICoreLLMService {
         }
       }
     }
+
     throw new Error('Unexpected error in completion method')
   }
 

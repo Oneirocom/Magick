@@ -21,11 +21,18 @@ interface ICoreBudgetManagerService {
   ): Promise<{ success: boolean }>
   resetCost(projectId: string): Promise<void>
   getCurrentCost(projectId: string): Promise<number>
-  projectedCost(
-    model: string,
-    messages: any[],
+  projectedCost({
+    model,
+    messages,
+    projectId,
+  }: {
+    model: string
+    messages: {
+      role: string
+      content: string
+    }[]
     projectId: string
-  ): Promise<number>
+  }): Promise<number>
 }
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
@@ -70,12 +77,24 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   }
 
   // Method to compute the projected cost for a session
-  async projectedCost(model: string, messages: any[]): Promise<number> {
+  async projectedCost({
+    model,
+    messages,
+    projectId,
+  }: {
+    model: string
+    messages: {
+      role: string
+      content: string
+    }[]
+    projectId: string
+  }): Promise<number> {
+    const user = await this.userService.getUser(projectId)
     const profit = 0.2
     const baseCost = await this.liteLLMBudgetManager?.projected_cost$(
       model,
       messages,
-      'magickml'
+      user.id
     )
 
     if (!baseCost) {

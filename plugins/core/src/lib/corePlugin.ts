@@ -33,8 +33,9 @@ import { split } from './nodes/logic/strings/split'
 import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { UserService } from './services/userService/userService'
-import { CoreBudgetManagerService } from './services/coreBudgetManagerService.ts/coreBudgetMangerService'
 import { arrayCreate } from './values/Array/Create'
+import { CoreBudgetManagerService } from './services/coreBudgetManagerService/coreBudgetMangerService'
+import { budgetManager } from './nodes/billing/budgetManager'
 
 const pluginName = 'Core'
 
@@ -72,6 +73,7 @@ export class CorePlugin extends CoreEventsPlugin {
     sendMessage,
     textTemplate,
     generateText,
+    budgetManager,
     streamMessage,
     variableGet,
     variableSet,
