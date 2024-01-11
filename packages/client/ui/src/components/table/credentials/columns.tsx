@@ -42,6 +42,7 @@ export const columns: ColumnDef<Credential>[] = [
     id: 'select',
     header: ({ table }) => (
       <Checkbox
+        // @ts-ignore
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && 'indeterminate')
