@@ -4,6 +4,7 @@ import { PluginDrawerItems } from "./PluginDrawerItems"
 import BoltIcon from '@mui/icons-material/Bolt'
 import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings'
+import SecretsIcon from '@mui/icons-material/Password'
 import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
 import { SetAPIKeys } from "client/core"
@@ -20,7 +21,8 @@ export const drawerTooltipText = {
   tasks: 'Objectives for agents to iterate through and complete.',
   avatar: 'Chat with your agents embodied with a 3D avatar.',
   settings: 'Global settings used in the Playtest window.',
-  config: 'Configure your agents integrations, data, and more.'
+  config: 'Configure your agents integrations, data, and more.',
+  secrets: 'Manage your secrets',
 }
 
 
@@ -60,6 +62,12 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       tooltip: 'Settings Tooltip',
       tooltipText: drawerTooltipText.settings,
     },
+    {
+      name: 'Secrets',
+      Icon: SecretsIcon,
+      tooltip: 'Secrets Tooltip',
+      tooltipText: drawerTooltipText.secrets,
+    }
   ]
 
   return (

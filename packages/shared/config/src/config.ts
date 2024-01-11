@@ -158,3 +158,11 @@ export const CREDENTIALS_ENCRYPTION_KEY =
 
 export const CREDENTIALS_ALGORITHM =
   getVarForEnvironment('CREDENTIALS_ALGORITHM') || 'aes-256-cbc'
+
+export const OPENMETER = {
+  enabled: getVarForEnvironment('OPENMETER_ENABLED') === 'true',
+  endpoint:
+    getVarForEnvironment('OPENMETER_ENDPOINT') || 'http://localhost:8888',
+  token: getVarForEnvironment('OPENMETER_TOKEN') || '',
+  source: getVarForEnvironment('OPENMETER_SOURCE') || 'cloud-dev',
+}
