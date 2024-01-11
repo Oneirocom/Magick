@@ -12,6 +12,7 @@ export type Credential = {
 }
 
 export type CredentialsWithValue = Credential & { value: string }
+
 export type AgentCredential = {
   agentId: string
   credentialId: string
