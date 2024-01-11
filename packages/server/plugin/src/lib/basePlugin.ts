@@ -181,6 +181,7 @@ export abstract class BasePlugin<
   public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
+  private updateDependencyHandler?: (key: string, dependency: any) => void
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -506,6 +507,27 @@ export abstract class BasePlugin<
    */
   setCredentials(newCredentials: PluginCredential[]) {
     this.credentials = newCredentials
+  }
+
+  /**
+   * Sets the handler function for updating dependencies in the spell caster.
+   * @param handler The dependency update handler function.
+   */
+  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
+    this.updateDependencyHandler = handler
+  }
+
+  /**
+   * Requests an update of a dependency in the spell caster.
+   * @param key The key of the dependency to update.
+   * @param dependency The new dependency object.
+   */
+  updateDependency(key: string, dependency: any) {
+    if (this.updateDependencyHandler) {
+      this.updateDependencyHandler(key, dependency)
+    } else {
+      throw new Error('Dependency update handler is not set.')
+    }
   }
 }
 
