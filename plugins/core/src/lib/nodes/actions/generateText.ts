@@ -86,7 +86,7 @@ export const generateText = makeFlowNodeDefinition({
       let isProcessing = false
       let fullResponse = ''
 
-      function processChunk() {
+      const processChunk = () => {
         if (isProcessing) {
           return // Exit if already processing a chunk or if there are no chunks
         }
