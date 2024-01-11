@@ -187,8 +187,9 @@
       "@magickml/providers": ["packages/client/providers/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
-      "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
-      "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
+      "@magickml/ui": ["packages/client/ui/src/index.ts"],
+      "@magickml/ui/components": ["packages/client/ui/src/components/*.tsx"],
+      "@magickml/ui/utils": ["packages/client/ui/src/utils.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
       "client/editor": ["packages/client/editor/src/index.ts"],
       "client/feathers-client": [
