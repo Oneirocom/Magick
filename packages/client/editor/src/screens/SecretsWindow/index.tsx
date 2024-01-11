@@ -26,7 +26,6 @@ import {
 import {
   useListCredentialsQuery,
   useCreateCredentialMutation,
-  useDeleteCredentialMutation,
 } from 'client/state'
 import pluginCredentials from 'packages/shared/nodeSpec/src/credentials.json'
 
@@ -276,7 +275,7 @@ const ServiceSelector = ({ selectedService, setSelectedService }) => {
                     className="hover:bg-white/20 focus:bg-white/20"
                   >
                     <div className="inline-flex gap-x-0.5 items-center justify-center">
-                      <img src={service.icon} className="w-4 h-4 mr-2" />
+                      <img alt="" src={service.icon} className="w-4 h-4 mr-2" />
                       {service.clientName}
                     </div>
                   </SelectItem>
