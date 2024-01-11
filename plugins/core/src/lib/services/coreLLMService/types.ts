@@ -61,16 +61,16 @@ export type CompletionRequest = {
   api_key?: string
 }
 
+export type Choice = {
+  finish_reason: string
+  index: number
+  message: {
+    role: string
+    content: string
+  }
+}
 export type CompletionResponse = {
-  choices: {
-    finish_reason: string
-    index: number
-    message: {
-      role: string
-      content: string
-    }
-  }[]
-
+  choices: Choice[]
   created: string
   model: string
   usage: {
