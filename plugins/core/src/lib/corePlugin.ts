@@ -29,14 +29,25 @@ import { arrayLength } from './values/Array/Length'
 import { arrayClear } from './values/Array/Clear'
 import { whileLoop } from './nodes/flow/whileLoop'
 import { regex } from './nodes/logic/match'
+import { split } from './nodes/logic/strings/split'
+import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
+import { arrayMerge } from './values/Array/Merge'
+import { UserService } from './services/userService/userService'
+import { CoreBudgetManagerService } from './services/coreBudgetManagerService.ts/coreBudgetMangerService'
+import { arrayCreate } from './values/Array/Create'
 
 const pluginName = 'Core'
 
 const pluginCredentials: PluginCredential[] = [
   {
     name: 'openai-token',
-    serviceType: 'llm',
-    credentialType: 'core',
+    serviceType: 'openai',
+    credentialType: 'plugin',
+    clientName: 'OpenAI',
+    initials: 'OA',
+    description: 'OpenAI API Key',
+    icon: 'https://openai.com/favicon.ico',
+    helpLink: 'https://platform.openai.com/api-keys',
   },
 ]
 
@@ -71,9 +82,16 @@ export class CorePlugin extends CoreEventsPlugin {
     arrayClear,
     whileLoop,
     regex,
+    split,
+    arrayRemoveFirst,
+    arrayRemoveLast,
+    arrayMerge,
+    arrayCreate,
   ]
   values = []
   coreLLMService = new CoreLLMService()
+  coreBudgetManagerService = new CoreBudgetManagerService()
+  userService = new UserService()
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
@@ -115,6 +133,7 @@ export class CorePlugin extends CoreEventsPlugin {
    */
   async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
+    await this.coreBudgetManagerService.initialize()
     await this.getLLMCredentials()
     return {
       coreActionService: new CoreActionService(
@@ -126,6 +145,8 @@ export class CorePlugin extends CoreEventsPlugin {
         this.agentId,
         spellCaster
       ),
+      coreLLMService: this.coreLLMService,
+      coreBudgetManagerService: this.coreBudgetManagerService,
     }
   }
 
@@ -149,10 +170,9 @@ export class CorePlugin extends CoreEventsPlugin {
         if (credential) {
           // Add each credential to the CoreLLMService instance
           this.coreLLMService.addCredential({
+            ...pluginCredentials[0],
             name: provider,
             value: credential,
-            serviceType: 'llm',
-            credentialType: 'core',
           })
         }
       }

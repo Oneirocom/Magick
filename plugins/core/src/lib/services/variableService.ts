@@ -46,16 +46,19 @@ export class VariableService {
   }
 
   // Set a variable in the storage.
-  async setVariable(name: string, value: any, _key?: string): Promise<void> {
-    const key = _key || this.getKey(name)
-    console.log('typeof value', typeof value)
-    console.log('VALUE', value)
+  async setVariable(name: string, value: any): Promise<void> {
+    const key = this.getKey(name)
+
+    if (Array.isArray(value)) {
+      value = new ArrayVariable(value, key)
+    }
+
     await this.keyv.set(key, value)
   }
 
   // Get a variable from the storage.
-  async getVariable(name: string, _key?: string): Promise<any> {
-    const key = _key || this.getKey(name)
+  async getVariable(name: string): Promise<any> {
+    const key = this.getKey(name)
     let value = await this.keyv.get(key)
 
     if (value && Array.isArray(value)) {
@@ -67,8 +70,6 @@ export class VariableService {
       value = ArrayVariable.fromJSON(value as ArrayVariableData)
       return value
     }
-
-    console.log('GETTING VARIABLE', name, value)
 
     return value
   }

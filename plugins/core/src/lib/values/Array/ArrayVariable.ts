@@ -10,7 +10,6 @@ export class ArrayVariable<T> extends Array<T> {
   key?: string // Optional key, can be assigned later
 
   constructor(elements?: T[], key?: string) {
-    console.log('CONSTRUCTING ARRAY VARIABLE')
     super(...(elements || []))
     this.key = key
   }
@@ -22,7 +21,6 @@ export class ArrayVariable<T> extends Array<T> {
 
   // Custom toJSON method
   toJSON(): ArrayVariableData {
-    console.log('TO JSON!!!')
     return {
       typeSignature: this.typeSignature,
       data: [...this], // Spread the array elements into a new array

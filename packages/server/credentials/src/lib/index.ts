@@ -20,6 +20,11 @@ export type PluginCredential = {
   name: string
   serviceType: string
   credentialType: 'core' | 'plugin' | 'custom'
+  clientName?: string
+  initials: string
+  description?: string
+  icon?: string
+  helpLink?: string
 }
 
 /**
@@ -31,16 +36,8 @@ export type CredentialsPayload = {
   name: string
   serviceType: string
   credentialType: 'core' | 'plugin' | 'custom'
-  authType: 'oauth' | 'key' | null
   value: string
   description?: string
-  accessToken?: string
-  refreshToken?: string
-  expiresIn?: Date | null
-  scope?: string
-  tokenType?: string
-  authUrl?: string
-  tokenUrl?: string
   metadata?: Record<string, any> | null
   created_at?: Date
   updated_at?: Date
@@ -149,7 +146,6 @@ class CredentialsManager {
         'name',
         'serviceType',
         'credentialType',
-        'authType',
         'description',
         'created_at',
         'updated_at'
