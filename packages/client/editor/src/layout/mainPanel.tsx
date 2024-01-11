@@ -14,6 +14,7 @@ import Settings from '../screens/settings/SettingsWindow'
 import Config from '../screens/ConfigWindow'
 import Documents from '../screens/DocumentWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
+import Secrets from '../screens/SecretsWindow'
 import { ClientPluginManager, pluginManager } from 'shared/core'
 import Composer from '../components/workspaces/composer'
 import ComposerV2 from '../components/workspaces/composerv2'
@@ -61,6 +62,7 @@ const getComponents = () => {
       acc[obj.name] = obj.component
       return acc
     }, {}),
+    Secrets,
     spell: Composer,
     behave: ComposerV2,
     default: (props: IDockviewPanelProps<{ title: string }>) => {

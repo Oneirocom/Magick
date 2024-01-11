@@ -15,8 +15,6 @@ import { PostHogProvider } from 'posthog-js/react'
 import plugins from './plugins'
 import { AppConfig } from '@magickml/providers'
 
-// We want to add this back in eventually, but it's causing some visual bugs
-//import './globals.css'
 console.info('loaded with plugins %o', plugins)
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
