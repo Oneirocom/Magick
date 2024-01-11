@@ -34,6 +34,7 @@ import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { UserService } from './services/userService/userService'
 import { CoreBudgetManagerService } from './services/coreBudgetManagerService.ts/coreBudgetMangerService'
+import { arrayCreate } from './values/Array/Create'
 
 const pluginName = 'Core'
 
@@ -80,6 +81,7 @@ export class CorePlugin extends CoreEventsPlugin {
     arrayRemoveFirst,
     arrayRemoveLast,
     arrayMerge,
+    arrayCreate,
   ]
   values = []
   coreLLMService = new CoreLLMService()
