@@ -52,11 +52,6 @@ function separateCredentials(
   return [corePluginCredentials, customCredentials]
 }
 
-// Function to check if a name is already taken in the array of credentials
-function isNameTaken(credentials: Credential[], name: string): boolean {
-  return credentials.some(credential => credential.name === name)
-}
-
 // Function to check if there is a linked AgentCredential for a given Credential name
 function hasLinkedAgentCredential(
   name: string,
@@ -147,15 +142,13 @@ const CredentialAction: FC<CredentialActionProps> = ({
   const [unlinkCredentialFromAgent] = useUnlinkCredentialFromAgentMutation()
 
   const handleSelect = (credentialId: string) => {
-    console.log('selected:', credentialId)
     setSelectedCredentialId(credentialId)
   }
 
   const handleLink = async () => {
     if (!selectedCredentialId) return
     try {
-      console.log('linking:', selectedCredentialId)
-      const x = await linkAgentCredential({
+      await linkAgentCredential({
         projectId: projectId,
         agentId: agentId,
         credentialId: selectedCredentialId || '',
@@ -192,7 +185,7 @@ const CredentialAction: FC<CredentialActionProps> = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{isLinked ? 'Unlink' : 'Link'} Credential</DialogTitle>
-          <DialogDescription className='text-white/90'>
+          <DialogDescription className="text-white/90">
             Select a credential to {isLinked ? 'unlink' : 'link'} to this agent.
           </DialogDescription>
         </DialogHeader>
@@ -297,13 +290,13 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
   const pluginCredentials: PluginCredential[] =
     credentialsJson as PluginCredential[]
   const config = useConfig()
-  const { data: c, isLoading: cLoading } = useListCredentialsQuery({
+  const { data: c } = useListCredentialsQuery({
     projectId: config.projectId,
   })
 
-  const [credentials, customCredentials] = separateCredentials(c || [])
+  const [credentials] = separateCredentials(c || [])
 
-  const { data: ac, isLoading: acLoading } = useListAgentCredentialsQuery({
+  const { data: ac } = useListAgentCredentialsQuery({
     projectId: config.projectId,
     agentId,
   })
