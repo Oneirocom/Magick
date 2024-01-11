@@ -58,7 +58,6 @@ export class VariableService {
 
   // Get a variable from the storage.
   async getVariable(name: string): Promise<any> {
-    debugger
     const key = this.getKey(name)
     let value = await this.keyv.get(key)
 

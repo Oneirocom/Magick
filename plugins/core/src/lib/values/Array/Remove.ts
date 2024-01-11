@@ -123,7 +123,6 @@ export const arrayRemoveFirst = makeFlowNodeDefinition({
     configuration,
     graph: { getDependency },
   }) => {
-    debugger
     const options = configuration?.valueTypeOptions
     const array = read('array') as ArrayVariable<any>
     const item = array.shift()
