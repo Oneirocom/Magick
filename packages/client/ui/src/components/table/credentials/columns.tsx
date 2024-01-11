@@ -1,6 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import {
+  CaretSortIcon,
+  ChevronDownIcon,
+  DotsHorizontalIcon,
+} from '@radix-ui/react-icons'
 import { Button } from '../../ui/button'
+import { Checkbox } from '../../ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,19 +23,34 @@ export type Credential = {
   created_at: string
   updated_at: string
 }
-import { useConfig } from '@magickml/providers'
 
+import { useConfig } from '@magickml/providers'
 import { useDeleteCredentialMutation } from 'client/state'
 
 export const columns: ColumnDef<Credential>[] = [
-  // {
-  //   accessorKey: 'id',
-  //   header: 'ID',
-  // },
-  // {
-  //   accessorKey: 'projectId',
-  //   header: 'Project ID',
-  // },
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        // @ts-ignore
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={value => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'name',
     header: 'Name',
@@ -39,10 +59,6 @@ export const columns: ColumnDef<Credential>[] = [
     accessorKey: 'serviceType',
     header: 'Service Type',
   },
-  // {
-  //   accessorKey: 'credentialType',
-  //   header: 'Credential Type',
-  // },
   {
     accessorKey: 'description',
     header: 'Description',
@@ -51,10 +67,6 @@ export const columns: ColumnDef<Credential>[] = [
     accessorKey: 'created_at',
     header: 'Created At',
   },
-  // {
-  //   accessorKey: 'updated_at',
-  //   header: 'Updated At',
-  // },
   {
     id: 'actions',
     cell: ({ row }) => {
