@@ -107,7 +107,10 @@
         "name": "socketValues",
         "valueType": "array",
         "defaultValue": [
-          "string"
+          "string",
+          "array",
+          "boolean",
+          "integer"
         ]
       },
       {
@@ -252,22 +255,22 @@
       },
       {
         "name": "maxRetries",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 3
       },
       {
         "name": "temperature",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 0.5
       },
       {
         "name": "top_p",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 1
       },
       {
         "name": "seed",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 42
       },
       {
@@ -732,6 +735,229 @@
       }
     ],
     "configuration": []
+  },
+  {
+    "type": "logic/split/string",
+    "category": "None",
+    "label": "Split",
+    "inputs": [
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "seperator",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array/removeFirst",
+    "category": "Action",
+    "label": "Remove First",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/removeLast",
+    "category": "Action",
+    "label": "Remove Last",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/merge",
+    "category": "Logic",
+    "label": "Merge",
+    "inputs": [
+      {
+        "name": "array1",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "array2",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/array/create",
+    "category": "Action",
+    "label": "Array Create",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
   },
   {
     "type": "logic/string",
