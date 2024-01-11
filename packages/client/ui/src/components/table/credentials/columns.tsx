@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { Button } from '../../ui/button'
+import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { Button, buttonVariants } from '../../ui/button'
+import { Checkbox } from '../../ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,43 +19,72 @@ export type Credential = {
   created_at: string
   updated_at: string
 }
-import { useConfig } from '@magickml/providers'
 
+import { useConfig } from '@magickml/providers'
 import { useDeleteCredentialMutation } from 'client/state'
 
+const ButtonHeader = ({ column, name }: { column: any; name: string }) => {
+  return (
+    <div
+      className={buttonVariants({
+        variant: 'ghost',
+      })}
+      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    >
+      {name}
+      <CaretSortIcon className="ml-2 h-4 w-4" />
+    </div>
+  )
+}
+
 export const columns: ColumnDef<Credential>[] = [
-  // {
-  //   accessorKey: 'id',
-  //   header: 'ID',
-  // },
-  // {
-  //   accessorKey: 'projectId',
-  //   header: 'Project ID',
-  // },
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        // @ts-ignore
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={value => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => <ButtonHeader column={column} name="Name" />,
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     accessorKey: 'serviceType',
-    header: 'Service Type',
+    header: ({ column }) => <ButtonHeader column={column} name="Type" />,
+    enableSorting: true,
+    enableHiding: true,
   },
-  // {
-  //   accessorKey: 'credentialType',
-  //   header: 'Credential Type',
-  // },
   {
     accessorKey: 'description',
     header: 'Description',
+    enableSorting: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'created_at',
-    header: 'Created At',
+    header: ({ column }) => <ButtonHeader column={column} name="Created" />,
+    enableSorting: true,
+    enableHiding: true,
   },
-  // {
-  //   accessorKey: 'updated_at',
-  //   header: 'Updated At',
-  // },
   {
     id: 'actions',
     cell: ({ row }) => {
