@@ -82,7 +82,7 @@ export const generateText = makeFlowNodeDefinition({
         },
       }
 
-      let chunkQueue = [] as string[]
+      const chunkQueue = [] as string[]
       let isProcessing = false
       let fullResponse = ''
 
@@ -90,8 +90,6 @@ export const generateText = makeFlowNodeDefinition({
         if (isProcessing) {
           return // Exit if already processing a chunk or if there are no chunks
         }
-
-        console.log('PROCESS CHUNK')
 
         if (chunkQueue.length === 0) {
           write('response', fullResponse)
