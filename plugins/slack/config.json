@@ -1,0 +1,5 @@
+{
+  "name": "slack",
+  "packageName": "plugin/slack",
+  "main": "./src/lib/slackPlugin.ts"
+}
