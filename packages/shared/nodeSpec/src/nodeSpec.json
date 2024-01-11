@@ -903,6 +903,63 @@
     "configuration": []
   },
   {
+    "type": "action/array/create",
+    "category": "Action",
+    "label": "Array Create",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
