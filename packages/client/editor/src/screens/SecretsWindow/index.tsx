@@ -62,7 +62,7 @@ const SecretWindow: FC = () => {
   }
 
   return (
-    <>
+    <div className="w-full h-full overflow-y-auto overflow-x-hidden">
       <div className="inline-flex w-full justify-between items-center space-x-2 p-8">
         <Header sortType={'All'} />
         <CreateCredential
@@ -76,7 +76,7 @@ const SecretWindow: FC = () => {
       <div className="grid gap-6 p-8">
         <CredentialsTable columns={columns} data={credentials} />
       </div>
-    </>
+    </div>
   )
 }
 
