@@ -51,10 +51,11 @@ export const generateText = makeFlowNodeDefinition({
 
   out: {
     response: 'object',
-    completion: 'string',
+    completionResponse: 'object',
     done: 'flow',
     onStream: 'flow',
     stream: 'string',
+    modelUsed: 'string',
   },
   initialState: undefined,
   triggered: async ({ commit, read, write, graph: { getDependency } }) => {
@@ -69,7 +70,7 @@ export const generateText = makeFlowNodeDefinition({
       const prompt: string = read('prompt') || ''
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1
-      const maxRetries: number = read('maxRetries') || 3
+      const maxRetries: number = read('maxRetries') || 1
       const stop: string = read('stop') || ''
 
       const request = {
@@ -82,63 +83,52 @@ export const generateText = makeFlowNodeDefinition({
         },
       }
 
-      const chunkQueue = [] as string[]
+      const chunkQueue = [] as any[]
       let isProcessing = false
       let fullResponse = ''
 
       const processChunk = () => {
         if (isProcessing) {
-          return // Exit if already processing a chunk or if there are no chunks
+          return
         }
 
         if (chunkQueue.length === 0) {
-          write('response', fullResponse)
-          write('completion', fullResponse) // Assuming fullResponse is the desired completion format
-          commit('done') // Signal end of process
           return
         }
 
         isProcessing = true
-        const chunk = chunkQueue.shift() // Get the next chunk from the queue
+        const chunk = chunkQueue.shift()
 
-        // Process the chunk here...
-        fullResponse += chunk // Append each chunk to fullResponse
-        write('stream', chunk)
-
-        console.log('processing chunk', chunk)
-        // Assume commit calls the provided callback once it's done
+        if (chunk) {
+          fullResponse += chunk.choices[0].delta.content || ''
+          write('stream', chunk.choices[0].delta.content || '')
+        }
         commit('onStream', () => {
-          // Callback after processing the chunk
           isProcessing = false
-          processChunk() // Call processChunk again to process the next chunk
+          processChunk()
         })
       }
 
-      // Using the modified completion method
       await coreLLMService.completion({
         request,
-        callback: (chunk, isDone) => {
+        callback: (chunk, isDone, completionResponse) => {
           if (isDone) {
-            // Handle the end of the stream
-            processChunk() // Make sure to process the last chunk
+            write('response', fullResponse)
+            write('completionResponse', completionResponse)
+            write('modelUsed', model)
+            commit('done')
           } else {
-            // Add the chunk to the queue and attempt to process it
-            console.log('chunk:', chunk)
-            chunkQueue.push(chunk)
+            if (chunk) chunkQueue.push(chunk)
             processChunk()
           }
         },
         maxRetries,
       })
-
-      // Once streaming is complete, handle the full response
     } catch (error: any) {
       const loggerService = getDependency<ILogger>('ILogger')
-
       if (!loggerService) {
         throw new Error('No loggerService provided')
       }
-
       loggerService?.log('error', error.toString())
       console.error('Error in generateText:', error)
       throw error
