@@ -285,10 +285,6 @@
         "valueType": "object"
       },
       {
-        "name": "completion",
-        "valueType": "string"
-      },
-      {
         "name": "completionResponse",
         "valueType": "object"
       },
