@@ -4,7 +4,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { LLMModels, Choice } from '../../services/coreLLMService/types'
+import { LLMModels } from '../../services/coreLLMService/types'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -51,7 +51,6 @@ export const generateText = makeFlowNodeDefinition({
 
   out: {
     response: 'object',
-    completion: 'string',
     completionResponse: 'object',
     done: 'flow',
     onStream: 'flow',
@@ -71,7 +70,7 @@ export const generateText = makeFlowNodeDefinition({
       const prompt: string = read('prompt') || ''
       const temperature: number = read('temperature') || 0.5
       const top_p: number = read('top_p') || 1
-      const maxRetries: number = read('maxRetries') || 3
+      const maxRetries: number = read('maxRetries') || 1
       const stop: string = read('stop') || ''
 
       const request = {
@@ -84,7 +83,7 @@ export const generateText = makeFlowNodeDefinition({
         },
       }
 
-      const chunkQueue = [] as Choice[]
+      const chunkQueue = [] as any[]
       let isProcessing = false
       let fullResponse = ''
 
@@ -94,14 +93,16 @@ export const generateText = makeFlowNodeDefinition({
         }
 
         if (chunkQueue.length === 0) {
-          write('response', fullResponse)
-          commit('done')
+          return
         }
+
         isProcessing = true
         const chunk = chunkQueue.shift()
 
-        fullResponse += chunk?.message.content || ''
-        write('stream', chunk?.message.content || '')
+        if (chunk) {
+          fullResponse += chunk.choices[0].delta.content || ''
+          write('stream', chunk.choices[0].delta.content || '')
+        }
         commit('onStream', () => {
           isProcessing = false
           processChunk()
