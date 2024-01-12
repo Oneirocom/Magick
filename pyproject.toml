@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 litellm = "^1.15.1"
+setuptools = "^69.0.3"
 
 
 [build-system]
