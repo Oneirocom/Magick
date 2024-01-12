@@ -285,8 +285,8 @@
         "valueType": "object"
       },
       {
-        "name": "completion",
-        "valueType": "string"
+        "name": "completionResponse",
+        "valueType": "object"
       },
       {
         "name": "done",
@@ -298,6 +298,10 @@
       },
       {
         "name": "stream",
+        "valueType": "string"
+      },
+      {
+        "name": "modelUsed",
         "valueType": "string"
       }
     ],
@@ -337,6 +341,103 @@
         ]
       }
     ]
+  },
+  {
+    "type": "magick/budgetManager",
+    "category": "Action",
+    "label": "Budget Manager",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "model",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "projectId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "completionObj",
+        "valueType": "object",
+        "defaultValue": "{}"
+      },
+      {
+        "name": "messages",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "totalBudget",
+        "valueType": "number",
+        "defaultValue": 0
+      },
+      {
+        "name": "duration",
+        "valueType": "string",
+        "defaultValue": "hourly",
+        "choices": [
+          {
+            "text": "daily",
+            "value": "daily"
+          },
+          {
+            "text": "weekly",
+            "value": "weekly"
+          },
+          {
+            "text": "monthly",
+            "value": "monthly"
+          },
+          {
+            "text": "yearly",
+            "value": "yearly"
+          }
+        ]
+      },
+      {
+        "name": "operation",
+        "valueType": "string",
+        "defaultValue": "createBudget",
+        "choices": [
+          {
+            "text": "createBudget",
+            "value": "createBudget"
+          },
+          {
+            "text": "updateCost",
+            "value": "updateCost"
+          },
+          {
+            "text": "resetCost",
+            "value": "resetCost"
+          },
+          {
+            "text": "getCurrentCost",
+            "value": "getCurrentCost"
+          },
+          {
+            "text": "projectedCost",
+            "value": "projectedCost"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      },
+      {
+        "name": "done",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "magick/streamMessage",
