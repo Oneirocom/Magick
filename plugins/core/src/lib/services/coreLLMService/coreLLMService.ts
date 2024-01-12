@@ -19,6 +19,7 @@ type CompletionParams = {
     completionResponse: CompletionResponse | null
   ) => void
   maxRetries: number
+  delayMs?: number
 }
 
 interface ICoreLLMService {
@@ -55,14 +56,18 @@ export class CoreLLMService implements ICoreLLMService {
   async completion({
     request,
     callback,
-    maxRetries = 3,
+    maxRetries = 1,
+    delayMs = 1000,
   }: CompletionParams): Promise<{
     fullText: string
     completionResponse: CompletionResponse
   }> {
     let attempts = 0
     let fullText = ''
-    const chunks: Choice[] = [] // Array to collect chunks
+    const chunks: any[] = []
+    const messages = request.messages.filter(Boolean)
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
     while (attempts < maxRetries) {
       try {
@@ -77,19 +82,22 @@ export class CoreLLMService implements ICoreLLMService {
         const stream = await this.liteLLM.completion$(body)
 
         for await (const chunk of stream) {
-          const rawChunk = await chunk.json()
-          chunks.push(rawChunk) // Collect each chunk
-          const chunkText = rawChunk.choices[0].delta.content || ''
+          const chunkJSON = await chunk.json()
+          const chunkVal = await chunkJSON.valueOf()
+          chunks.push(chunkVal)
+
+          const chunkText = await chunk.choices[0].delta.content
           fullText += chunkText
-          callback(chunkText, false, null) // Pass null for completionResponse for now
+          //TODO: The full text probably needs to be passed in here
+          callback(chunkVal, false, null)
         }
+        // Use LiteLLM's helper method to reconstruct the completion response
+        const completionResponse = await this.liteLLM.stream_chunk_builder$(
+          chunks,
+          { messages }
+        )
 
         fullText += '<<END>>'
-        const completionResponse = await this.liteLLM.stream_chunk_builder$({
-          chunks: chunks, // Pass the collected chunks
-          messages: body.messages, // Pass the original messages
-        })
-
         callback(null, true, completionResponse)
         return { fullText, completionResponse }
       } catch (error: any) {
@@ -97,6 +105,7 @@ export class CoreLLMService implements ICoreLLMService {
         attempts++
 
         if (attempts >= maxRetries) {
+          await sleep(delayMs)
           throw new Error(
             `Completion request failed after ${maxRetries} attempts: ${error}`
           )
