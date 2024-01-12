@@ -64,15 +64,20 @@ export type CompletionRequest = {
 export type Choice = {
   finish_reason: string
   index: number
-  message: {
-    role: string
+  delta: {
+    function_call: string
+    tool_calls: string
     content: string
+    role: string
   }
 }
 export type CompletionResponse = {
+  id: string
   choices: Choice[]
   created: string
   model: string
+  object: string
+  system_fingerprint: any | null
   usage: {
     prompt_tokens: number
     completion_tokens: number
