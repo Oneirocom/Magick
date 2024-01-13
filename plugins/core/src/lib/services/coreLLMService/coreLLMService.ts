@@ -97,9 +97,10 @@ export class CoreLLMService implements ICoreLLMService {
           { messages }
         )
 
-        fullText += '<<END>>'
-        callback(null, true, completionResponse)
-        return { fullText, completionResponse }
+        const compRes = await completionResponse.json()
+        const compResVal = await compRes.valueOf()
+        callback(null, true, compRes)
+        return { fullText, completionResponse: compResVal }
       } catch (error: any) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
