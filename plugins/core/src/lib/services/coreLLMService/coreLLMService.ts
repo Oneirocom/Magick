@@ -86,7 +86,7 @@ export class CoreLLMService implements ICoreLLMService {
           const chunkVal = await chunkJSON.valueOf()
           chunks.push(chunkVal)
 
-          const chunkText = await chunk.choices[0].delta.content
+          const chunkText = chunkVal.choices[0].delta.content
           fullText += chunkText
           //TODO: The full text probably needs to be passed in here
           callback(chunkVal, false, null)
