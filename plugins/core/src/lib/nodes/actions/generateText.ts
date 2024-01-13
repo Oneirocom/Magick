@@ -4,7 +4,10 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { LLMModels } from '../../services/coreLLMService/types'
+import {
+  CompletionResponse,
+  LLMModels,
+} from '../../services/coreLLMService/types'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -50,7 +53,7 @@ export const generateText = makeFlowNodeDefinition({
   },
 
   out: {
-    response: 'object',
+    response: 'string',
     completionResponse: 'object',
     done: 'flow',
     onStream: 'flow',
@@ -86,6 +89,7 @@ export const generateText = makeFlowNodeDefinition({
       const chunkQueue = [] as any[]
       let isProcessing = false
       let fullResponse = ''
+      let completionResponse: CompletionResponse | null = null
 
       const processChunk = () => {
         if (isProcessing) {
@@ -93,6 +97,10 @@ export const generateText = makeFlowNodeDefinition({
         }
 
         if (chunkQueue.length === 0) {
+          write('response', fullResponse)
+          write('completionResponse', completionResponse)
+          write('modelUsed', model)
+          commit('done')
           return
         }
 
@@ -103,6 +111,7 @@ export const generateText = makeFlowNodeDefinition({
           fullResponse += chunk.choices[0].delta.content || ''
           write('stream', chunk.choices[0].delta.content || '')
         }
+
         commit('onStream', () => {
           isProcessing = false
           processChunk()
@@ -111,16 +120,12 @@ export const generateText = makeFlowNodeDefinition({
 
       await coreLLMService.completion({
         request,
-        callback: (chunk, isDone, completionResponse) => {
+        callback: (chunk, isDone, _completionResponse) => {
           if (isDone) {
-            write('response', fullResponse)
-            write('completionResponse', completionResponse)
-            write('modelUsed', model)
-            commit('done')
-          } else {
-            if (chunk) chunkQueue.push(chunk)
-            processChunk()
+            completionResponse = _completionResponse as CompletionResponse
           }
+          if (chunk) chunkQueue.push(chunk)
+          processChunk()
         },
         maxRetries,
       })
