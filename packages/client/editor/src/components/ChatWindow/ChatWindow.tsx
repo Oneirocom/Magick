@@ -132,12 +132,6 @@ const Input = props => {
 const defaultPlaytestData = {
   sender: 'user',
   observer: 'assistant',
-  type: 'playtest',
-  client: 'playtest',
-  channel: 'playtest',
-  channelType: 'playtest',
-  agentId: 'preview',
-  entities: ['user', 'assistant'],
 }
 
 type Message = {
@@ -158,14 +152,14 @@ const ChatWindow = ({ tab, spellId }) => {
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
   const isStreaming = useRef(false)
-  const accumulatedTextRef = useRef(""); // Ref to hold the accumulated text
+  const messageQueue = useRef([]); // Queue to hold incoming text chunks
+  const typingTimer = useRef(null); // Timer for typing out messages
+  const queueTimer = useRef(null); // Timer for processing the queue
+
 
   const setIsStreaming = (value) => {
     isStreaming.current = value;
   }
-
-  const messageQueue = useRef([]); // Queue to hold incoming text chunks
-  const typingInterval = useRef(null); // Ref to manage the interval
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
@@ -195,68 +189,28 @@ const ChatWindow = ({ tab, spellId }) => {
       setHistory((prevHistory) => [...prevHistory, newMessage]);
     }
 
-  const processNextChunk = () => {
-    console.log('processing next chunk');
-    if (messageQueue.current.length === 0) {
-      accumulatedTextRef.current = "";
-      setIsStreaming(false); // Mark the end of the streaming session
-      return;
-    }
+  const typeChunk = () => {
+    // Process all messages in the queue at once
+    const messagesToProcess = [...messageQueue.current];
+    messageQueue.current = []; // Clear the queue as we're processing all messages
 
-    const nextChunk = messageQueue.current.shift();
-
-    if (typingInterval.current) {
-      clearInterval(typingInterval.current); // Clear any previous interval
-    }
-
-    let i = accumulatedTextRef.current.length; // Start from the last character of the accumulated text
-
-    // Update the accumulated text based on the current streaming state
-    if (isStreaming.current) {
-      accumulatedTextRef.current += nextChunk; // Append new chunk to the accumulated text
-    } else {
-      accumulatedTextRef.current = nextChunk; // Start fresh for a new message
-    }
-
-    setIsStreaming(true);
-
-    typingInterval.current = setInterval(() => {
-      const internalI = i
-      setHistory(prevHistory => {
-        const newHistory = [...prevHistory];
-        const lastMessageIndex = newHistory.length - 1;
-        const lastMessage = newHistory[lastMessageIndex];
-
-        if (lastMessage.sender === 'agent') {
-          newHistory[lastMessageIndex] = {
-            ...newHistory[lastMessageIndex],
-            content: accumulatedTextRef.current.slice(0, internalI + 1),
-          };
+    setHistory(prevHistory => {
+      let newHistory = [...prevHistory];
+      messagesToProcess.forEach(currentMessage => {
+        if (newHistory.length === 0 || newHistory[newHistory.length - 1].sender !== 'agent') {
+          newHistory.push({ sender: 'agent', content: currentMessage });
         } else {
-          newHistory.push({
-            sender: 'agent',
-            content: "Agent:",
-          });
+          newHistory[newHistory.length - 1].content += currentMessage;
         }
-
-        return newHistory;
       });
+      return newHistory;
+    });
+  };
 
-      i++
-
-      // Move to the next chunk only after the current one is fully displayed
-      if (internalI >= accumulatedTextRef.current.length - 1) { // -1 because we want to wait until the last character is processed
-        clearInterval(typingInterval.current);
-        typingInterval.current = null;
-
-        // Now check if there are more chunks to process
-        if (messageQueue.current.length > 0) {
-          processNextChunk(); // Move to the next chunk if available
-        } else {
-          setIsStreaming(false); // Mark the end of the streaming session
-        }
-      }
-    }, 20);
+  const processQueue = () => {
+    if (messageQueue.current.length > 0) {
+      typeChunk(); // Directly call typeChunk to process all messages
+    }
   };
 
   const streamToConsole = (_text) => {
@@ -265,15 +219,17 @@ const ChatWindow = ({ tab, spellId }) => {
       return;
     }
 
-    // Add new text to the queue
     messageQueue.current.push(_text);
-    if (!isStreaming.current) {
-      // If not currently streaming, start processing
-      setIsStreaming(false)
-      processNextChunk();
-    }
+    processQueue();
   };
 
+  useEffect(() => {
+    queueTimer.current = setInterval(processQueue, 100);
+    return () => {
+      if (queueTimer.current) clearInterval(queueTimer.current);
+      if (typingTimer.current) clearInterval(typingTimer.current);
+    };
+  }, [])
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
@@ -281,7 +237,6 @@ const ChatWindow = ({ tab, spellId }) => {
 
     const { data, event, actionName } = lastEvent
     const { content } = data
-
 
     if (event?.runInfo?.spellId !== spellId) return
     if (event.channel !== spellId) return
@@ -377,10 +332,12 @@ const ChatWindow = ({ tab, spellId }) => {
       return
     }
 
+    const data = JSON.parse(json)
+
     const eventPayload = {
       content: value,
-      sender: 'user',
-      observer: 'assistant',
+      sender: data.sender || 'user',
+      observer: data.observer || 'assistant',
       client: 'cloud.magickml.com',
       channel: spellId,
       projectId: config.projectId,
