@@ -2,7 +2,6 @@ import {
   ILogger,
   NodeCategory,
   makeAsyncNodeDefinition,
-  makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import {
@@ -163,7 +162,7 @@ export const generateText = makeAsyncNodeDefinition({
       throw error
     }
   },
-  dispose: ({ state }) => {
+  dispose: () => {
     return {
       chunkQueue: [],
       isDone: false,

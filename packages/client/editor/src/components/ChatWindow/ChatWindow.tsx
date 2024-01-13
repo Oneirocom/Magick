@@ -195,7 +195,7 @@ const ChatWindow = ({ tab, spellId }) => {
     messageQueue.current = []; // Clear the queue as we're processing all messages
 
     setHistory(prevHistory => {
-      let newHistory = [...prevHistory];
+      const newHistory = [...prevHistory];
       messagesToProcess.forEach(currentMessage => {
         if (newHistory.length === 0 || newHistory[newHistory.length - 1].sender !== 'agent') {
           newHistory.push({ sender: 'agent', content: currentMessage });
