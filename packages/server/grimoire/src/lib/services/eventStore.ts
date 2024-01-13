@@ -14,7 +14,7 @@ export class EventStore implements IEventStore {
     this._currentEvent = null
   }
 
-  public init(nodes: GraphNodes) {
+  public init() {
     this._currentEvent = null
   }
 
