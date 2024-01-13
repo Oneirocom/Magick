@@ -79,14 +79,6 @@ const InputFieldForValue = ({
               }}
             />
           )}
-          {valueType === 'number' && !showChoices && (
-            <input
-              type="number"
-              className={inputClass}
-              value={Number(inputVal) || 0}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
-            />
-          )}
           {valueType === 'float' && !showChoices && (
             <input
               type="number"
