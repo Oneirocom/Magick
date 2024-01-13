@@ -134,8 +134,8 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       />
       <Background
         variant={BackgroundVariant.Lines}
-        color="var(--background-color)"
-        style={{ backgroundColor: 'var(--deep-background-color)' }}
+        color="var(--background-color-light)"
+        style={{ backgroundColor: 'var(--background-color)' }}
       />
       {miniMapOpen && (
         <MiniMap
