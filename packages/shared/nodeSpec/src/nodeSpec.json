@@ -282,7 +282,7 @@
     "outputs": [
       {
         "name": "response",
-        "valueType": "object"
+        "valueType": "string"
       },
       {
         "name": "completionResponse",
