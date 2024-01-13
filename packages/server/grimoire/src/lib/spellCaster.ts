@@ -152,16 +152,16 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       // build the graph api
       this.graph = makeGraphApi(this.registry)
 
-      // initialize the base registry once we have the full graph.
-      // This sets up the state service properly.
-      baseRegistry.init(this.graph)
-
       this.spell = spell
 
       const graph = readGraphFromJSON({
         graphJson: this.spell.graph as GraphJSON,
         registry: this.registry,
       })
+
+      // initialize the base registry once we have the full graph.
+      // This sets up the state service properly.
+      baseRegistry.init(this.graph, graph.nodes)
 
       this.engine = new Engine(graph.nodes)
       this.initializeHandlers()
