@@ -254,23 +254,23 @@
         ]
       },
       {
+        "name": "maxRetries",
+        "valueType": "integer",
+        "defaultValue": 3
+      },
+      {
         "name": "temperature",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 0.5
       },
       {
-        "name": "stream",
-        "valueType": "boolean",
-        "defaultValue": false
-      },
-      {
         "name": "top_p",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 1
       },
       {
         "name": "seed",
-        "valueType": "number",
+        "valueType": "integer",
         "defaultValue": 42
       },
       {
