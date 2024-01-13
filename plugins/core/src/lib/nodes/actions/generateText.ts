@@ -1,6 +1,7 @@
 import {
   ILogger,
   NodeCategory,
+  makeAsyncNodeDefinition,
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
@@ -9,7 +10,7 @@ import {
   LLMModels,
 } from '../../services/coreLLMService/types'
 
-export const generateText = makeFlowNodeDefinition({
+export const generateText = makeAsyncNodeDefinition({
   typeName: 'magick/generateText',
   category: NodeCategory.Action,
   label: 'Generate Text',
@@ -60,8 +61,21 @@ export const generateText = makeFlowNodeDefinition({
     stream: 'string',
     modelUsed: 'string',
   },
-  initialState: undefined,
-  triggered: async ({ commit, read, write, graph: { getDependency } }) => {
+  initialState: {
+    chunkQueue: [] as any[],
+    isProcessing: false,
+    fullResponse: '',
+    isDone: false,
+    completionResponse: null as CompletionResponse | null,
+  },
+  triggered: async ({
+    state,
+    finished = () => {},
+    commit,
+    read,
+    write,
+    graph: { getDependency },
+  }) => {
     try {
       const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
 
@@ -86,49 +100,59 @@ export const generateText = makeFlowNodeDefinition({
         },
       }
 
-      const chunkQueue = [] as any[]
-      let isProcessing = false
-      let fullResponse = ''
-      let completionResponse: CompletionResponse | null = null
-
       const processChunk = () => {
-        if (isProcessing) {
-          return
-        }
+        if (state.isProcessing) return
 
-        if (chunkQueue.length === 0) {
-          write('response', fullResponse)
-          write('completionResponse', completionResponse)
+        if (state.chunkQueue.length === 0 && state.isDone) {
+          console.log('CHUNK LENGRH IS ZERO>  ENDIONG')
+          write('response', state.fullResponse)
+          write('completionResponse', state.completionResponse)
           write('modelUsed', model)
           commit('done')
+          finished()
           return
         }
 
-        isProcessing = true
-        const chunk = chunkQueue.shift()
+        const chunk = state.chunkQueue.shift()
+
+        if (!chunk) {
+          console.log('NO CHUNK')
+          state.isProcessing = false
+          return
+        }
+
+        state.isProcessing = true
 
         if (chunk) {
-          fullResponse += chunk.choices[0].delta.content || ''
+          state.fullResponse += chunk.choices[0].delta.content || ''
           write('stream', chunk.choices[0].delta.content || '')
         }
 
         commit('onStream', () => {
-          isProcessing = false
+          console.log('ON STREAM IN GENERATE TEXT COMMIT')
+          state.isProcessing = false
           processChunk()
         })
       }
 
-      await coreLLMService.completion({
+      coreLLMService.completion({
         request,
         callback: (chunk, isDone, _completionResponse) => {
+          console.log('RECEIVED CHUNK', chunk)
           if (isDone) {
-            completionResponse = _completionResponse as CompletionResponse
+            console.log('DONE')
+            state.completionResponse = _completionResponse as CompletionResponse
+            state.isDone = true
+            processChunk()
+            return
           }
-          if (chunk) chunkQueue.push(chunk)
+          if (chunk) state.chunkQueue.push(chunk)
           processChunk()
         },
         maxRetries,
       })
+
+      return state
     } catch (error: any) {
       const loggerService = getDependency<ILogger>('ILogger')
       if (!loggerService) {
@@ -137,6 +161,15 @@ export const generateText = makeFlowNodeDefinition({
       loggerService?.log('error', error.toString())
       console.error('Error in generateText:', error)
       throw error
+    }
+  },
+  dispose: ({ state }) => {
+    return {
+      chunkQueue: [],
+      isDone: false,
+      isProcessing: false,
+      fullResponse: '',
+      completionResponse: null,
     }
   },
 })
