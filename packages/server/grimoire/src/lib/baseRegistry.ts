@@ -1,4 +1,5 @@
 import {
+  GraphNodes,
   IGraph,
   IRegistry,
   ManualLifecycleEventEmitter,
@@ -11,28 +12,39 @@ import { EventStore } from './services/eventStore'
 import { KeyvStateService } from './services/keyvStateService'
 
 export class BaseRegistry {
+  connection: Redis
+  agent: IAgentLogger
   values: ValueType[] = []
   nodes: NodeDefinition[] = []
-  dependencies: Record<string, any> = {
-    ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
-    IEventStore: new EventStore(),
-  }
+  graphNodes!: GraphNodes
+  dependencies: Record<string, any> = {}
 
   constructor(agent: IAgentLogger, connection: Redis) {
-    // Create the agent logger for the core registry
-    this.dependencies.IStateService = new KeyvStateService(connection)
+    this.connection = connection
+    this.agent = agent
     this.dependencies.ILogger = new AgentLoggingService(agent)
+    this.dependencies.IEventStore = new EventStore()
+    this.dependencies.IStateService = new KeyvStateService(connection)
   }
 
-  init(graph: IGraph) {
+  init(graph: IGraph, graphNodes: GraphNodes) {
     this.dependencies.IStateService.init(graph)
+    this.dependencies.IEventStore.init(graph, graphNodes)
+  }
+
+  getDependencies(): Record<string, any> {
+    return {
+      ...this.dependencies,
+      ILifecycleEventEmitter: new ManualLifecycleEventEmitter(),
+      ILogger: new AgentLoggingService(this.agent),
+    }
   }
 
   getRegistry(): IRegistry {
     return {
       values: {},
       nodes: {},
-      dependencies: this.dependencies,
+      dependencies: this.getDependencies(),
     }
   }
 }
