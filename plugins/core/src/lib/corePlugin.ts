@@ -40,7 +40,7 @@ const pluginName = 'Core'
 
 const pluginCredentials: PluginCredential[] = [
   {
-    name: 'openai-token',
+    name: 'OPENAI_API_KEY',
     serviceType: 'openai',
     credentialType: 'core',
     clientName: 'OpenAI',
