@@ -14,3 +14,21 @@ export const AGENT_DELETE = `agent:delete`
 // This cant be hardcodded
 export const AGENT_MESSAGE = (agentId: string) =>
   `agent:${agentId}:Core:messageReceived`
+
+// Messages for plugins
+export const AGENT_PLUGIN_ENABLE = (agentId: string, pluginName: string) =>
+  `agent:${agentId}:plugin:${pluginName}:enable`
+
+export const AGENT_PLUGIN_DISABLE = (agentId: string, pluginName: string) =>
+  `agent:${agentId}:plugin:${pluginName}:disable`
+
+export const AGENT_PLUGIN_STATUS = (agentId: string, pluginName: string) =>
+  `agent:${agentId}:plugin:${pluginName}:status`
+
+export const AGENT_PLUGIN_RESET = (agentId: string, pluginName: string) =>
+  `agent:${agentId}:plugin:${pluginName}:reset`
+
+export const AGENT_PLUGIN_REFETCH_CREDENTIALS = (
+  agentId: string,
+  pluginName: string
+) => `agent:${agentId}:plugin:${pluginName}:refetchCredentials`
