@@ -11,5 +11,6 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/build": true
-  }
+  },
+  "eslint.validate": ["json"]
 }
