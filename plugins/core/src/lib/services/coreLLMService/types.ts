@@ -61,7 +61,11 @@ export type CompletionRequest = {
   api_key?: string
 }
 
-export type Choice = {
+export type Chunk = {
+  choices: ChunkChoice[]
+}
+
+export type ChunkChoice = {
   finish_reason: string
   index: number
   delta: {
@@ -71,6 +75,16 @@ export type Choice = {
     role: string
   }
 }
+
+export type Choice = {
+  finish_reason: string
+  index: number
+  message: {
+    role: string
+    content: string
+  }
+}
+
 export type CompletionResponse = {
   id: string
   choices: Choice[]
@@ -88,6 +102,12 @@ export type CompletionResponse = {
 export enum LLMProviders {
   OpenAI = 'OPENAI_API_KEY',
   Unknown = 'unknown',
+}
+
+export type Models = EmbeddingModels | LLMModels
+
+export enum EmbeddingModels {
+  Ada002 = 'text-embedding-ada-002',
 }
 
 export enum LLMModels {
