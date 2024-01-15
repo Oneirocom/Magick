@@ -59,7 +59,6 @@ export const generateText = makeFlowNodeDefinition({
     response: 'string',
     completionResponse: 'object',
     done: 'flow',
-    start: 'flow',
     onStream: 'flow',
     stream: 'string',
     modelUsed: 'string',
@@ -125,14 +124,11 @@ export const generateText = makeFlowNodeDefinition({
          * why we loop inside the commit callback
          */
         const processChunk = () => {
-          debugger
           // If we are processing a chunk, return and don't process
           if (isProcessing) return
 
           // We break the loop if the queue is empty and we are done streaming
-          console.log('checking chunk queue length:', chunkQueue.length)
           if (chunkQueue.length === 0 && done) {
-            console.log('DONE STREAMING')
             write('response', fullResponse)
             write('completionResponse', completionResponse)
             write('modelUsed', model)
@@ -143,6 +139,7 @@ export const generateText = makeFlowNodeDefinition({
           // grab the next available chunk
           const chunk = chunkQueue.shift()
 
+          // Important that is chunk is undefined, we keep processing the queue
           if (!chunk) {
             processChunk()
           }
@@ -151,16 +148,11 @@ export const generateText = makeFlowNodeDefinition({
           isProcessing = true
 
           // Write the content out to the stream socket
-          console.log(
-            'Writing chunk content to stream:',
-            chunk.choices[0].delta.content || ''
-          )
           if (chunk) write('stream', chunk.choices[0].delta.content || '')
 
           // Here we commit the next chunk to the fiber to be processed.
           // When the whole chain is done, we resolve with the callback.
           commit('onStream', () => {
-            console.log('COMMITTING CHUNK TO FIBER')
             // set processsing flag to false so the next call of processChunk
             // goes through
             isProcessing = false
@@ -168,7 +160,6 @@ export const generateText = makeFlowNodeDefinition({
             // Loop process chunk to keep processing chunks from the queue
             processChunk()
           })
-          resolve(undefined)
         }
 
         /**
@@ -179,8 +170,10 @@ export const generateText = makeFlowNodeDefinition({
         coreLLMService.completion({
           request,
           callback: (chunk, isDone, _completionResponse) => {
+            // if streaming, add the chunk to the queue
             chunkQueue.push(chunk)
 
+            // Check for done state
             if (isDone) {
               completionResponse = _completionResponse
               fullResponse = _completionResponse!.choices[0].message.content
@@ -195,13 +188,8 @@ export const generateText = makeFlowNodeDefinition({
                 resolve(undefined)
               }
             }
-
-            // if streaming, add the chunk to the queue
             if (stream) {
-              console.log('CHUNK QUEUE:', chunkQueue)
-
               // Kick off the main loop of processing
-
               processChunk()
 
               /**
@@ -210,6 +198,8 @@ export const generateText = makeFlowNodeDefinition({
                * processing the fiber queue while the messages are still streaming in,
                * causing them to be processed by the processChunk loop.
                */
+
+              resolve(undefined)
             }
           },
           maxRetries,
