@@ -5,7 +5,6 @@ import {
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import {
-  Chunk,
   CompletionResponse,
   LLMModels,
 } from '../../services/coreLLMService/types'
@@ -56,7 +55,6 @@ export const generateText = makeFlowNodeDefinition({
       defaultValue: false,
     },
   },
-
   out: {
     response: 'string',
     completionResponse: 'object',
@@ -66,14 +64,7 @@ export const generateText = makeFlowNodeDefinition({
     stream: 'string',
     modelUsed: 'string',
   },
-  initialState: {
-    started: false,
-    chunkQueue: [] as any[],
-    isProcessing: false,
-    fullResponse: '',
-    isDone: false,
-    completionResponse: null as CompletionResponse | null,
-  },
+  initialState: undefined,
   triggered: async ({
     state,
     commit,
@@ -81,17 +72,23 @@ export const generateText = makeFlowNodeDefinition({
     write,
     graph: { getDependency },
   }) => {
-    const resetState = state => {
-      state.started = false
-      state.chunkQueue = []
-      state.isProcessing = false
-      state.fullResponse = ''
-      state.isDone = false
-      state.completionResponse = null
-    }
+    const chunkQueue = [] as any[]
+    let done = false
+    let fullResponse = ''
+    let isProcessing = false
+    let completionResponse = null as CompletionResponse | null
 
-    resetState(state)
-
+    /**
+     * This promise wrapper is super important. If we await the whole LLM
+     * completion, it will block continued fiber execution, which will prevent
+     * the onStream callback from being called more than once.  This is because
+     * the LLMServer will only send one chunk at a time, and will wait for the
+     * previous chunk to be processed before sending the next one.  By wrapping
+     * the completion in a promise, we can await the promise, but the promise
+     * will resolve immediately, allowing the onStream callback to be called
+     * multiple times.  We resolve the promise after commiting the first stream
+     * event to the fiber
+     */
     return new Promise((resolve, reject) => {
       try {
         const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
@@ -118,77 +115,101 @@ export const generateText = makeFlowNodeDefinition({
           },
         }
 
+        /**
+         * This is the main loop of processing chunks.  It will process a chunk
+         * and then call itself recursively until the chunk queue is empty and
+         * the isDone flag is set.  Since the work done after calling onStream
+         * could take an unknown amount of time, we need to make sure we are
+         * separating the incoming stream from the processing. We accumulate the
+         * chunks in the chunkQueue, and then process them one at a time. This is
+         * why we loop inside the commit callback
+         */
         const processChunk = () => {
-          console.log('CHECKING PROCESSING', state.isProcessing)
-          if (state.isProcessing) return
-          console.log('PROCESSING CHUNK')
+          debugger
+          // If we are processing a chunk, return and don't process
+          if (isProcessing) return
 
-          if (
-            state.chunkQueue.length === 0 ||
-            !state.chunkQueue[state.chunkQueue.length - 1]
-          ) {
-            console.log('NO CHUNKS LEFT')
-            write('response', state.fullResponse)
-            write('completionResponse', state.completionResponse)
+          // We break the loop if the queue is empty and we are done streaming
+          console.log('checking chunk queue length:', chunkQueue.length)
+          if (chunkQueue.length === 0 && done) {
+            console.log('DONE STREAMING')
+            write('response', fullResponse)
+            write('completionResponse', completionResponse)
             write('modelUsed', model)
             commit('done')
-            resetState(state)
-            state.isProcessing = false
             return
           }
 
-          const chunk = state.chunkQueue.shift() as Chunk
+          // grab the next available chunk
+          const chunk = chunkQueue.shift()
 
           if (!chunk) {
-            state.isProcessing = false
-            return
+            processChunk()
           }
 
-          state.isProcessing = true
+          // set processing flag to true so we don't process another chunk
+          isProcessing = true
 
-          if (chunk) {
-            console.log('writing chunk', chunk)
-            write('stream', chunk.choices[0].delta.content || '')
-          }
+          // Write the content out to the stream socket
+          console.log(
+            'Writing chunk content to stream:',
+            chunk.choices[0].delta.content || ''
+          )
+          if (chunk) write('stream', chunk.choices[0].delta.content || '')
 
-          console.log('COMMITTING ON STREAM')
+          // Here we commit the next chunk to the fiber to be processed.
+          // When the whole chain is done, we resolve with the callback.
           commit('onStream', () => {
-            console.log('COMMIT CALLBACK')
-            state.isProcessing = false
+            console.log('COMMITTING CHUNK TO FIBER')
+            // set processsing flag to false so the next call of processChunk
+            // goes through
+            isProcessing = false
+
+            // Loop process chunk to keep processing chunks from the queue
             processChunk()
           })
+          resolve(undefined)
         }
 
+        /**
+         * Important that we DON'T await this in full because it blocks execution
+         * of the built of commit fiber until the whole completion comes in,
+         * defeating the point of streaming.
+         */
         coreLLMService.completion({
           request,
           callback: (chunk, isDone, _completionResponse) => {
-            if (isDone) {
-              debugger
-              state.completionResponse = _completionResponse
-              state.fullResponse =
-                _completionResponse!.choices[0].message.content
-              state.isDone = true
+            chunkQueue.push(chunk)
 
+            if (isDone) {
+              completionResponse = _completionResponse
+              fullResponse = _completionResponse!.choices[0].message.content
+              done = true
+
+              // If we arent streaming, we can just resolve here
               if (!stream) {
-                write('response', state.fullResponse)
-                write('completionResponse', state.completionResponse)
+                write('response', fullResponse)
+                write('completionResponse', completionResponse)
                 write('modelUsed', model)
                 commit('done')
-                resetState(state)
-                resolve(state)
+                resolve(undefined)
               }
-
-              return
             }
 
+            // if streaming, add the chunk to the queue
             if (stream) {
-              state.chunkQueue.push(chunk)
+              console.log('CHUNK QUEUE:', chunkQueue)
 
-              if (state.started) {
-                processChunk()
-                state.started = true
-                resolve(state)
-              }
+              // Kick off the main loop of processing
+
+              processChunk()
+
+              /**
+               * Super important that we resolve the promise wrapper AFTER we commit
+               * the first flow to the fiber.  This will cause the engine to keep
+               * processing the fiber queue while the messages are still streaming in,
+               * causing them to be processed by the processChunk loop.
+               */
             }
           },
           maxRetries,
