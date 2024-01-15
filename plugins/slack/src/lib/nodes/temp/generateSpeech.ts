@@ -1,4 +1,4 @@
-import { createAction, createAsyncNode, testAsyncNode } from 'plugins/shared'
+import { createAction, createAsyncNode, testAsyncNode } from 'plugins/shared/src'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'server/grimoire'
