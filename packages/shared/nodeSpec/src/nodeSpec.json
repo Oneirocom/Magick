@@ -254,14 +254,19 @@
         ]
       },
       {
-        "name": "maxRetries",
-        "valueType": "integer",
-        "defaultValue": 3
+        "name": "stop",
+        "valueType": "string",
+        "defaultValue": ""
       },
       {
         "name": "temperature",
         "valueType": "integer",
         "defaultValue": 0.5
+      },
+      {
+        "name": "maxRetries",
+        "valueType": "integer",
+        "defaultValue": 3
       },
       {
         "name": "top_p",
@@ -274,9 +279,9 @@
         "defaultValue": 42
       },
       {
-        "name": "stop",
-        "valueType": "string",
-        "defaultValue": ""
+        "name": "stream",
+        "valueType": "boolean",
+        "defaultValue": false
       }
     ],
     "outputs": [
@@ -290,6 +295,10 @@
       },
       {
         "name": "done",
+        "valueType": "flow"
+      },
+      {
+        "name": "start",
         "valueType": "flow"
       },
       {
@@ -1059,6 +1068,237 @@
         "defaultValue": []
       }
     ]
+  },
+  {
+    "type": "action/knowledge/add",
+    "category": "Action",
+    "label": "Add Knowledge",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "knowledge",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "dataType",
+        "valueType": "string",
+        "defaultValue": "auto",
+        "choices": [
+          {
+            "text": "auto",
+            "value": "auto"
+          },
+          {
+            "text": "text",
+            "value": "text"
+          },
+          {
+            "text": "youtube_video",
+            "value": "youtube_video"
+          },
+          {
+            "text": "pdf_file",
+            "value": "pdf_file"
+          },
+          {
+            "text": "web_page",
+            "value": "web_page"
+          },
+          {
+            "text": "sitemap",
+            "value": "sitemap"
+          },
+          {
+            "text": "xml",
+            "value": "xml"
+          },
+          {
+            "text": "docx",
+            "value": "docx"
+          },
+          {
+            "text": "docs_site",
+            "value": "docs_site"
+          },
+          {
+            "text": "notion",
+            "value": "notion"
+          },
+          {
+            "text": "csv",
+            "value": "csv"
+          },
+          {
+            "text": "mdx",
+            "value": "mdx"
+          },
+          {
+            "text": "qna_pair",
+            "value": "qna_pair"
+          },
+          {
+            "text": "image",
+            "value": "image"
+          },
+          {
+            "text": "unstructured",
+            "value": "unstructured"
+          },
+          {
+            "text": "json",
+            "value": "json"
+          },
+          {
+            "text": "openapi",
+            "value": "openapi"
+          },
+          {
+            "text": "gmail",
+            "value": "gmail"
+          },
+          {
+            "text": "substack",
+            "value": "substack"
+          },
+          {
+            "text": "youtube_channel",
+            "value": "youtube_channel"
+          },
+          {
+            "text": "discord",
+            "value": "discord"
+          },
+          {
+            "text": "custom",
+            "value": "custom"
+          },
+          {
+            "text": "rss_feed",
+            "value": "rss_feed"
+          },
+          {
+            "text": "beehiiv",
+            "value": "beehiiv"
+          },
+          {
+            "text": "google_drive",
+            "value": "google_drive"
+          },
+          {
+            "text": "directory",
+            "value": "directory"
+          },
+          {
+            "text": "slack",
+            "value": "slack"
+          },
+          {
+            "text": "dropbox",
+            "value": "dropbox"
+          },
+          {
+            "text": "text_file",
+            "value": "text_file"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/knowledge/query",
+    "category": "Action",
+    "label": "Query Knowledge",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "query",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "knowledge",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/knowledge/search",
+    "category": "Action",
+    "label": "Search Knowledge",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "query",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "knowledge",
+        "valueType": "array"
+      },
+      {
+        "name": "data",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/knowledge/searchMany ",
+    "category": "Action",
+    "label": "Search Many Knowledge",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "queries",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "knowledge",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/string",
