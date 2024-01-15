@@ -36,6 +36,11 @@ import { UserService } from './services/userService/userService'
 import { arrayCreate } from './values/Array/Create'
 import { CoreBudgetManagerService } from './services/coreBudgetManagerService/coreBudgetMangerService'
 import { budgetManager } from './nodes/billing/budgetManager'
+import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
+import { addKnowledge } from './nodes/actions/addKnowledge'
+import { queryKnowledge } from './nodes/actions/queryKnowledge'
+import { searchKnowledge } from './nodes/actions/searchKnowledge'
+import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
 
 const pluginName = 'Core'
 
@@ -89,9 +94,14 @@ export class CorePlugin extends CoreEventsPlugin {
     arrayRemoveLast,
     arrayMerge,
     arrayCreate,
+    addKnowledge,
+    queryKnowledge,
+    searchKnowledge,
+    searchManyKnowledge,
   ]
   values = []
   coreLLMService = new CoreLLMService()
+  coreMemoryService = new CoreMemoryService()
   coreBudgetManagerService = new CoreBudgetManagerService()
   userService = new UserService()
 
@@ -136,7 +146,9 @@ export class CorePlugin extends CoreEventsPlugin {
   async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
     await this.coreBudgetManagerService.initialize()
+    await this.coreMemoryService.initialize(this.agentId)
     await this.getLLMCredentials()
+
     return {
       coreActionService: new CoreActionService(
         this.centralEventBus,
@@ -149,6 +161,7 @@ export class CorePlugin extends CoreEventsPlugin {
       ),
       coreLLMService: this.coreLLMService,
       coreBudgetManagerService: this.coreBudgetManagerService,
+      coreMemoryService: this.coreMemoryService,
     }
   }
 
@@ -172,6 +185,11 @@ export class CorePlugin extends CoreEventsPlugin {
         if (credential) {
           // Add each credential to the CoreLLMService instance
           this.coreLLMService.addCredential({
+            ...pluginCredentials[0],
+            name: provider,
+            value: credential,
+          })
+          this.coreMemoryService.addCredential({
             ...pluginCredentials[0],
             name: provider,
             value: credential,
