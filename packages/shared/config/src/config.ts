@@ -166,3 +166,7 @@ export const OPENMETER = {
   token: getVarForEnvironment('OPENMETER_TOKEN') || '',
   source: getVarForEnvironment('OPENMETER_SOURCE') || 'cloud-dev',
 }
+
+export const PLUGIN_SETTINGS = {
+  SLACK_DEVELOPER_MODE: getVarForEnvironment('SLACK_DEVELOPER_MODE') === 'true',
+}

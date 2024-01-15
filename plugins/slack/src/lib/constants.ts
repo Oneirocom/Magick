@@ -1,5 +1,6 @@
-import { createEventsEnum } from 'plugins/shared'
+import { createEventsEnum } from 'plugins/shared/src'
 import { PluginCredential } from 'server/credentials'
+import { PLUGIN_SETTINGS } from 'shared/config'
 
 export const pluginName = 'Slack'
 
@@ -52,4 +53,4 @@ export const SLACK_ACTIONS = createEventsEnum([
 
 export const SLACK_KEY = 'slackClient'
 
-export const SLACK_DEVELOPER_MODE = false
+export const SLACK_DEVELOPER_MODE = PLUGIN_SETTINGS.SLACK_DEVELOPER_MODE
