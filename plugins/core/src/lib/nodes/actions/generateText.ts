@@ -1,15 +1,16 @@
 import {
   ILogger,
   NodeCategory,
-  makeAsyncNodeDefinition,
+  makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import {
+  Chunk,
   CompletionResponse,
   LLMModels,
 } from '../../services/coreLLMService/types'
 
-export const generateText = makeAsyncNodeDefinition({
+export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
   category: NodeCategory.Action,
   label: 'Generate Text',
@@ -30,13 +31,17 @@ export const generateText = makeAsyncNodeDefinition({
       choices: Object.values(LLMModels),
       defaultValue: LLMModels['gemini-pro'],
     },
-    maxRetries: {
-      valueType: 'integer',
-      defaultValue: 3,
+    stop: {
+      valueType: 'string',
+      defaultValue: '',
     },
     temperature: {
       valueType: 'integer',
       defaultValue: 0.5,
+    },
+    maxRetries: {
+      valueType: 'integer',
+      defaultValue: 3,
     },
     top_p: {
       valueType: 'integer',
@@ -46,9 +51,9 @@ export const generateText = makeAsyncNodeDefinition({
       valueType: 'integer',
       defaultValue: 42,
     },
-    stop: {
-      valueType: 'string',
-      defaultValue: '',
+    stream: {
+      valueType: 'boolean',
+      defaultValue: false,
     },
   },
 
@@ -56,11 +61,13 @@ export const generateText = makeAsyncNodeDefinition({
     response: 'string',
     completionResponse: 'object',
     done: 'flow',
+    start: 'flow',
     onStream: 'flow',
     stream: 'string',
     modelUsed: 'string',
   },
   initialState: {
+    started: false,
     chunkQueue: [] as any[],
     isProcessing: false,
     fullResponse: '',
@@ -69,106 +76,134 @@ export const generateText = makeAsyncNodeDefinition({
   },
   triggered: async ({
     state,
-    finished = () => {},
     commit,
     read,
     write,
     graph: { getDependency },
   }) => {
-    try {
-      const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
+    const resetState = state => {
+      state.started = false
+      state.chunkQueue = []
+      state.isProcessing = false
+      state.fullResponse = ''
+      state.isDone = false
+      state.completionResponse = null
+    }
 
-      if (!coreLLMService) {
-        throw new Error('No coreLLMService provided')
-      }
+    resetState(state)
 
-      const model: LLMModels = read('model') || LLMModels.GPT35Turbo
-      const prompt: string = read('prompt') || ''
-      const temperature: number = read('temperature') || 0.5
-      const top_p: number = read('top_p') || 1
-      const maxRetries: number = read('maxRetries') || 1
-      const stop: string = read('stop') || ''
+    return new Promise((resolve, reject) => {
+      try {
+        const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
 
-      const request = {
-        model,
-        messages: [{ role: 'user', content: prompt }],
-        options: {
-          temperature,
-          top_p,
-          stop,
-        },
-      }
-
-      const processChunk = () => {
-        if (state.isProcessing) return
-
-        if (state.chunkQueue.length === 0 && state.isDone) {
-          console.log('CHUNK LENGRH IS ZERO>  ENDIONG')
-          write('response', state.fullResponse)
-          write('completionResponse', state.completionResponse)
-          write('modelUsed', model)
-          commit('done')
-          finished()
-          return
+        if (!coreLLMService) {
+          throw new Error('No coreLLMService provided')
         }
 
-        const chunk = state.chunkQueue.shift()
+        const stream: boolean = read('stream') || false
+        const model: LLMModels = read('model') || LLMModels.GPT35Turbo
+        const prompt: string = read('prompt') || ''
+        const temperature: number = read('temperature') || 0.5
+        const top_p: number = read('top_p') || 1
+        const maxRetries: number = read('maxRetries') || 1
+        const stop: string = read('stop') || ''
 
-        if (!chunk) {
-          console.log('NO CHUNK')
-          state.isProcessing = false
-          return
+        const request = {
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          options: {
+            temperature,
+            top_p,
+            stop,
+          },
         }
 
-        state.isProcessing = true
+        const processChunk = () => {
+          console.log('CHECKING PROCESSING', state.isProcessing)
+          if (state.isProcessing) return
+          console.log('PROCESSING CHUNK')
 
-        if (chunk) {
-          state.fullResponse += chunk.choices[0].delta.content || ''
-          write('stream', chunk.choices[0].delta.content || '')
-        }
-
-        commit('onStream', () => {
-          console.log('ON STREAM IN GENERATE TEXT COMMIT')
-          state.isProcessing = false
-          processChunk()
-        })
-      }
-
-      coreLLMService.completion({
-        request,
-        callback: (chunk, isDone, _completionResponse) => {
-          console.log('RECEIVED CHUNK', chunk)
-          if (isDone) {
-            console.log('DONE')
-            state.completionResponse = _completionResponse as CompletionResponse
-            state.isDone = true
-            processChunk()
+          if (
+            state.chunkQueue.length === 0 ||
+            !state.chunkQueue[state.chunkQueue.length - 1]
+          ) {
+            console.log('NO CHUNKS LEFT')
+            write('response', state.fullResponse)
+            write('completionResponse', state.completionResponse)
+            write('modelUsed', model)
+            commit('done')
+            resetState(state)
+            state.isProcessing = false
             return
           }
-          if (chunk) state.chunkQueue.push(chunk)
-          processChunk()
-        },
-        maxRetries,
-      })
+
+          const chunk = state.chunkQueue.shift() as Chunk
+
+          if (!chunk) {
+            state.isProcessing = false
+            return
+          }
+
+          state.isProcessing = true
+
+          if (chunk) {
+            console.log('writing chunk', chunk)
+            write('stream', chunk.choices[0].delta.content || '')
+          }
+
+          console.log('COMMITTING ON STREAM')
+          commit('onStream', () => {
+            console.log('COMMIT CALLBACK')
+            state.isProcessing = false
+            processChunk()
+          })
+        }
+
+        coreLLMService.completion({
+          request,
+          callback: (chunk, isDone, _completionResponse) => {
+            if (isDone) {
+              debugger
+              state.completionResponse = _completionResponse
+              state.fullResponse =
+                _completionResponse!.choices[0].message.content
+              state.isDone = true
+
+              if (!stream) {
+                write('response', state.fullResponse)
+                write('completionResponse', state.completionResponse)
+                write('modelUsed', model)
+                commit('done')
+                resetState(state)
+                resolve(state)
+              }
+
+              return
+            }
+
+            if (stream) {
+              state.chunkQueue.push(chunk)
+
+              if (state.started) {
+                processChunk()
+                state.started = true
+                resolve(state)
+              }
+            }
+          },
+          maxRetries,
+        })
+      } catch (error: any) {
+        const loggerService = getDependency<ILogger>('ILogger')
+        if (!loggerService) {
+          throw new Error('No loggerService provided')
+        }
+        loggerService?.log('error', error.toString())
+        console.error('Error in generateText:', error)
+        reject(error)
+      }
 
       return state
-    } catch (error: any) {
-      const loggerService = getDependency<ILogger>('ILogger')
-      if (!loggerService) {
-        throw new Error('No loggerService provided')
-      }
-      loggerService?.log('error', error.toString())
-      console.error('Error in generateText:', error)
-      throw error
-    }
-  },
-  dispose: () => {
-    return {
-      chunkQueue: [],
-      isDone: false,
-      isProcessing: false,
-      fullResponse: '',
-      completionResponse: null,
-    }
+    })
   },
 })
