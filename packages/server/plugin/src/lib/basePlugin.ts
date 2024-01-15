@@ -12,7 +12,6 @@ import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
-import { MeterManager } from 'packages/server/meter/src'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -342,6 +341,19 @@ export abstract class BasePlugin<
       values: { ...existingRegistry.values, ...pluginValues },
       nodes: { ...existingRegistry.nodes, ...pluginNodes },
       dependencies: { ...existingRegistry.dependencies, ...pluginDependencies },
+    }
+
+    return await this.provideRegistry(registry)
+  }
+
+  async getRegistryForNodeSpec(existingRegistry: IRegistry) {
+    const pluginValues = await this.getPluginValues()
+    const pluginNodes = await this.getPluginNodes()
+    // // return a registry that has empty dependencies
+    const registry = {
+      values: { ...existingRegistry.values, ...pluginValues },
+      nodes: { ...existingRegistry.nodes, ...pluginNodes },
+      dependencies: {},
     }
 
     return await this.provideRegistry(registry)
