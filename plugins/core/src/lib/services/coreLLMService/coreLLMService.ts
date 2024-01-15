@@ -7,14 +7,14 @@ import {
   LLMProviders,
   LLMModels,
   CompletionResponse,
-  Choice,
+  Chunk,
 } from './types'
 import { modelMap } from './constants'
 
 type CompletionParams = {
   request: CompletionRequest
   callback: (
-    chunk: Choice | null,
+    chunk: Chunk | null,
     isDone: boolean,
     completionResponse: CompletionResponse | null
   ) => void
@@ -99,7 +99,7 @@ export class CoreLLMService implements ICoreLLMService {
 
         const compRes = await completionResponse.json()
         const compResVal = await compRes.valueOf()
-        callback(null, true, compRes)
+        callback(null, true, compResVal)
         return { fullText, completionResponse: compResVal }
       } catch (error: any) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
