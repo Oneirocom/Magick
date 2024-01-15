@@ -14,7 +14,6 @@ import {
   Textarea,
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectLabel,
   SelectSeparator,
@@ -266,8 +265,10 @@ const ServiceSelector = ({ selectedService, setSelectedService }) => {
           </SelectTrigger>
           <SelectContent className="bg-[#2b2b30]">
             {Object.keys(groupedServices).map(service => (
-              <SelectGroup key={service}>
-                <SelectLabel>Type</SelectLabel>
+              <div key={service} className="w-full">
+                <SelectLabel>
+                  {groupedServices[service][0].clientName}
+                </SelectLabel>
                 {groupedServices[service].map(service => (
                   <SelectItem
                     key={service.clientName}
@@ -280,7 +281,7 @@ const ServiceSelector = ({ selectedService, setSelectedService }) => {
                     </div>
                   </SelectItem>
                 ))}
-              </SelectGroup>
+              </div>
             ))}
             <SelectSeparator />
             <SelectItem
