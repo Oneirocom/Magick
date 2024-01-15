@@ -1,4 +1,4 @@
-import { createAction } from 'plugins/shared'
+import { createAction } from 'plugins/shared/src'
 import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
