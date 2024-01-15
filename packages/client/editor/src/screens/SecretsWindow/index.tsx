@@ -15,7 +15,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -264,25 +263,20 @@ const ServiceSelector = ({ selectedService, setSelectedService }) => {
             <SelectValue placeholder="Select a type" />
           </SelectTrigger>
           <SelectContent className="bg-[#2b2b30]">
-            {Object.keys(groupedServices).map(service => (
-              <div key={service} className="w-full">
-                <SelectLabel>
-                  {groupedServices[service][0].clientName}
-                </SelectLabel>
-                {groupedServices[service].map(service => (
-                  <SelectItem
-                    key={service.clientName}
-                    value={service.clientName}
-                    className="hover:bg-white/20 focus:bg-white/20"
-                  >
-                    <div className="inline-flex gap-x-0.5 items-center justify-center">
-                      <img alt="" src={service.icon} className="w-4 h-4 mr-2" />
-                      {service.clientName}
-                    </div>
-                  </SelectItem>
-                ))}
-              </div>
-            ))}
+            {Object.keys(groupedServices).map(service =>
+              groupedServices[service].map(service => (
+                <SelectItem
+                  key={service.name}
+                  value={service.clientName}
+                  className="hover:bg-white/20 focus:bg-white/20"
+                >
+                  <div className="inline-flex gap-x-0.5 items-center justify-center">
+                    <img alt="" src={service.icon} className="w-4 h-4 mr-2" />
+                    {service.clientName}
+                  </div>
+                </SelectItem>
+              ))
+            )}
             <SelectSeparator />
             <SelectItem
               className="hover:bg-white/20 focus:bg-white/20"
