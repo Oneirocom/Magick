@@ -19,12 +19,6 @@ export const slackMessageEvent = makeEventNodeDefinition({
   typeName: 'slack/onMessage',
   label: 'On Slack Message',
   category: NodeCategory.Event,
-  configuration: {
-    numInputs: {
-      valueType: 'number',
-      defaultValue: 3,
-    },
-  },
   in: {},
   out: {
     flow: 'flow',
