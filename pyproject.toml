@@ -7,9 +7,10 @@ license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">3.10,<3.12"
 litellm = "^1.15.1"
 setuptools = "^69.0.3"
+embedchain = {extras = ["weaviate"], version = "^0.1.65"}
 
 
 [build-system]
