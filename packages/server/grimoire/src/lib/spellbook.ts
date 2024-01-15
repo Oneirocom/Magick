@@ -75,7 +75,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *   this.agent.id
    * );
    */
-  private pluginManager!: PluginManager
+  private pluginManager: PluginManager
 
   /**
    * Flag to enable/disable watching spells.  We use this to keep the spells in sync with the server.
@@ -121,21 +121,22 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *  watchSpells: true,
    * });
    */
-  constructor({ app, agent }: { app: Application; agent: any }) {
+  constructor({
+    app,
+    agent,
+    pluginManager,
+  }: {
+    app: Application
+    agent: any
+    pluginManager: PluginManager
+  }) {
+    this.pluginManager = pluginManager
     this.app = app
     this.agent = agent
     this.init()
   }
 
   init() {
-    const pluginDirectory = process.env.PLUGIN_DIRECTORY || './plugins'
-    this.pluginManager = new PluginManager(
-      pluginDirectory,
-      this.app.get('redis'),
-      this.agent.id,
-      this.app.get('pubsub')
-    )
-
     // Initialize the plugins first
     this.initializePlugins()
 

@@ -28,6 +28,7 @@ import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
+import { PluginManager } from 'server/pluginManager'
 
 /**
  * The Agent class that implements AgentInterface.
@@ -52,6 +53,7 @@ export class Agent implements AgentInterface {
   app: Application
   spellbook: Spellbook<Agent, Application>
   agentManager: CloudAgentWorker
+  pluginManager: PluginManager
 
   outputTypes: any[] = []
 
@@ -90,9 +92,17 @@ export class Agent implements AgentInterface {
       app,
     })
 
+    this.pluginManager = new PluginManager(
+      process.env.PLUGIN_DIRECTORY || './plugins',
+      this.app.get('redis'),
+      this.id,
+      this.app.get('pubsub')
+    )
+
     this.spellbook = new Spellbook({
       agent: this,
       app,
+      pluginManager: this.pluginManager,
     })
     ;(async () => {
       // initialize the plugins
