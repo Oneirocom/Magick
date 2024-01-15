@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const dotenv = require('dotenv-flow')
 dotenv.config('../')
 const fs = require('fs')
@@ -25,7 +26,7 @@ const getUnifiedRegistry = async plugins => {
   }
 
   for (const plugin of plugins) {
-    const { nodes, values, dependencies } = await plugin.getRegistry(
+    const { nodes, values, dependencies } = await plugin.getRegistryForNodeSpec(
       unifiedRegistry
     )
     Object.assign(unifiedRegistry.nodes, nodes)
@@ -42,7 +43,7 @@ const loadPlugins = async () => {
 
   await pubSub.initialize(process.env.REDISCLOUD_URL)
 
-  for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
+  for (const [, pluginGetter] of Object.entries(pluginModules)) {
     // Get the actual class from the getter
     const PluginClass = pluginGetter
 
@@ -74,6 +75,7 @@ const clearPlugins = async () => {
 }
 
 async function writeConfig(fileLocation: string) {
+  console.log('WRITING CONFIG!!!!!!!!!!!!!!!!!!!')
   // Get the registry from all plugins
   const plugins = await loadPlugins()
 
