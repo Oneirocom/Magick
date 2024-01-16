@@ -1,7 +1,12 @@
 import * as events from './isEvent'
 import { MessageEvent } from '@slack/bolt'
 
-const typeGuardMap: { [key: string]: (event: MessageEvent) => boolean } = {
+const typeGuardMap: {
+  [key: string]: (event: MessageEvent) => {
+    match: boolean
+    event: string
+  }
+} = {
   GenericMessageEvent: events.isGenericMessageEvent,
   GenericIMMessageEvent: events.isGenericIMMessageEvent,
   GenericMPIMMessageEvent: events.isGenericMPIMMessageEvent,
@@ -17,8 +22,10 @@ const typeGuardMap: { [key: string]: (event: MessageEvent) => boolean } = {
 
 export function identifyMessageType(event: MessageEvent): string | undefined {
   for (const [type, guard] of Object.entries(typeGuardMap)) {
-    if (guard(event)) {
-      return type
+    const m = guard(event)
+    if (m.match) {
+      console.log('identified message type', type)
+      return m.event
     }
   }
 
