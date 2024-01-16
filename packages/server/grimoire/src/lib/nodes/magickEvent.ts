@@ -156,12 +156,12 @@ export function makeMagickEventNodeDefinition<
               return
             }
 
-            commit(outflowName, async () => {
+            commit(outflowName, async resolveSockets => {
               // When the event is done, we sync the state and clear it
               // This sets the state for the next run of this event on this or another engine
               await stateService.syncAndClearState()
 
-              completedListener?.()
+              completedListener?.(resolveSockets)
             })
           }
 
