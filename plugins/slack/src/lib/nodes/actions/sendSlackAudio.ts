@@ -1,11 +1,10 @@
-import { createAction } from 'plugins/shared/src'
+import { createActionNode } from 'plugins/shared/src'
 import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { SLACK_KEY } from '../../constants'
 import { IEventStore } from 'server/grimoire'
-import { Readable } from 'stream'
 
 type Inputs = {
   flow: SocketDefinition
@@ -16,7 +15,7 @@ type Outputs = {
   flow: SocketDefinition
 }
 
-export const sendSlackAudio = createAction<
+export const sendSlackAudio = createActionNode<
   Inputs,
   Outputs,
   [typeof SLACK_KEY, 'IEventStore']
