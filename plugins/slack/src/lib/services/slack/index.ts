@@ -56,7 +56,7 @@ export class SlackClient {
   }
 
   async setupListeners(agentId: string) {
-    Object.entries(SLACK_EVENTS).forEach(([messageType, eventName]) => {
+    Object.entries(SLACK_EVENTS).forEach(([, eventName]) => {
       this.client.event(
         eventName,
         async (
@@ -88,7 +88,7 @@ export class SlackClient {
     messageType: string,
     rest: AllMiddlewareArgs
   ): EventPayload<AllMiddlewareArgs> {
-    let payload: EventPayload<AllMiddlewareArgs> = {
+    const payload: EventPayload<AllMiddlewareArgs> = {
       connector: 'slack',
       eventName: messageType,
       status: 'success',

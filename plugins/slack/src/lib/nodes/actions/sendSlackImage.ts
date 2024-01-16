@@ -29,7 +29,7 @@ const process = async (
   const event =
     dependencies.IEventStore.currentEvent() as EventPayload<SlackEventPayload>
 
-  let blocks: any[] = []
+  const blocks: any[] = []
 
   inputs.images.forEach(image => {
     blocks.push({

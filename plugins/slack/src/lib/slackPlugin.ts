@@ -35,7 +35,7 @@ export class SlackPlugin extends CoreEventsPlugin<
     this.setCredentials(pluginCredentials)
     this.initalizeSlack().catch(error =>
       this.logger.error(
-        `Failed to initialize Slack Plugin for agent ${agentId}`
+        `Failed to initialize Slack Plugin for agent ${agentId}: ${error}`
       )
     )
   }
