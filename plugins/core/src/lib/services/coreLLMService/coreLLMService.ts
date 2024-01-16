@@ -22,6 +22,8 @@ type CompletionParams = {
   delayMs?: number
 }
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 interface ICoreLLMService {
   /**
    * Handles completion requests in streaming mode. Accumulates the text from each chunk and returns the complete text.
@@ -34,6 +36,9 @@ interface ICoreLLMService {
     fullText: string
     completionResponse: CompletionResponse
   }>
+  completionGenerator: (
+    params: CompletionParams
+  ) => AsyncGenerator<Chunk, CompletionResponse, undefined>
 }
 
 export class CoreLLMService implements ICoreLLMService {
@@ -66,8 +71,6 @@ export class CoreLLMService implements ICoreLLMService {
     let fullText = ''
     const chunks: any[] = []
     const messages = request.messages.filter(Boolean)
-
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
     while (attempts < maxRetries) {
       try {
@@ -110,6 +113,51 @@ export class CoreLLMService implements ICoreLLMService {
           throw new Error(
             `Completion request failed after ${maxRetries} attempts: ${error}`
           )
+        }
+      }
+    }
+
+    throw new Error('Unexpected error in completion method')
+  }
+
+  async *completionGenerator({ request, maxRetries = 1, delayMs = 1000 }) {
+    let attempts = 0
+    const chunks: any[] = []
+    const messages = request.messages.filter(Boolean)
+
+    while (attempts < maxRetries) {
+      try {
+        const body = {
+          model: request.model || 'gemini-pro',
+          messages: request.messages,
+          ...request.options,
+          stream: true,
+          api_key: this.getCredential(request.model),
+        }
+
+        const stream = await this.liteLLM.completion$(body)
+
+        for await (const chunk of stream) {
+          const chunkJSON = await chunk.json()
+          const chunkVal = await chunkJSON.valueOf()
+          chunks.push(chunkVal)
+
+          yield chunkVal
+        }
+
+        const completionResponsePython =
+          await this.liteLLM.stream_chunk_builder$(chunks, { messages })
+
+        const fullResponseJson = await completionResponsePython.json()
+        const completionResponse =
+          (await fullResponseJson.valueOf()) as CompletionResponse
+        return completionResponse
+      } catch (error) {
+        console.error(`Attempt ${attempts + 1} failed:`, error)
+        attempts++
+        if (attempts >= maxRetries) {
+          await sleep(delayMs)
+          throw error
         }
       }
     }
