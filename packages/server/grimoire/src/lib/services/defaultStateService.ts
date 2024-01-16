@@ -58,4 +58,8 @@ export class DefaultStateService implements IStateService {
 
     this.stateStore[nodeId] = newState
   }
+
+  async rehydrateState(): Promise<void> {}
+
+  async syncAndClearState(): Promise<void> {}
 }
