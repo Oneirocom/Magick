@@ -33,7 +33,6 @@ import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { UserService } from './services/userService/userService'
 import { arrayCreate } from './values/Array/Create'
-import { CoreBudgetManagerService } from './services/coreBudgetManagerService/coreBudgetMangerService'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
 import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
@@ -85,13 +84,18 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
   ]
   values = []
-  coreLLMService = new CoreLLMService()
+  coreLLMService = new CoreLLMService({ projectId: this.projectId })
   coreMemoryService = new CoreMemoryService()
-  coreBudgetManagerService = new CoreBudgetManagerService()
+  // coreBudgetManagerService = new CoreBudgetManagerService()
   userService = new UserService()
 
-  constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
-    super(corePluginName, connection, agentId)
+  constructor(
+    connection: Redis,
+    agentId: string,
+    pubSub: RedisPubSub,
+    projectId: string
+  ) {
+    super(corePluginName, connection, agentId, projectId)
     this.client = new CoreEventClient(pubSub, agentId)
     this.setCredentials(corePluginCredentials)
   }
@@ -129,7 +133,7 @@ export class CorePlugin extends CoreEventsPlugin<
    */
   async getDependencies(spellCaster: SpellCaster) {
     await this.coreLLMService.initialize()
-    await this.coreBudgetManagerService.initialize()
+    // await this.coreBudgetManagerService.initialize()
     await this.coreMemoryService.initialize(this.agentId)
     await this.getLLMCredentials()
 
@@ -144,7 +148,7 @@ export class CorePlugin extends CoreEventsPlugin<
         spellCaster
       ),
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
-      [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
+      // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
     }
   }

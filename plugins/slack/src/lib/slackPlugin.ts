@@ -27,9 +27,14 @@ export class SlackPlugin extends CoreEventsPlugin<
   values = []
   slack: SlackClient | undefined = undefined
 
-  constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
-    super(pluginName, connection, agentId)
-    this.client = new SlackEventClient(pubSub, agentId)
+  constructor(
+    connection: Redis,
+    agentId: string,
+    pubSub: RedisPubSub,
+    projectId: string
+  ) {
+    super(pluginName, connection, agentId, projectId)
+    this.event = new SlackEventClient(pubSub, agentId)
     // this.meterManager.initializeMeters({})
     this.setCredentials(pluginCredentials)
     this.initalizeSlack().catch(error =>
