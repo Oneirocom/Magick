@@ -4,6 +4,7 @@ import {
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
+import { CORE_DEP_KEYS } from '../../constants'
 
 export const variableGet = makeFunctionNodeDefinition({
   typeName: 'variables/get',
@@ -59,7 +60,9 @@ export const variableGet = makeFunctionNodeDefinition({
 
     if (!variable) return
 
-    const variableService = getDependency<IVariableService>('IVariableService')
+    const variableService = getDependency<IVariableService>(
+      CORE_DEP_KEYS.I_VARIABLE_SERVICE
+    )
 
     if (!variableService) return
 

@@ -4,6 +4,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreBudgetManagerService } from '../../services/coreBudgetManagerService/coreBudgetMangerService'
+import { CORE_DEP_KEYS } from '../../constants'
 // import { CompletionResponse } from '../../services/coreLLMService/types'
 
 export const budgetManager = makeFlowNodeDefinition({
@@ -64,7 +65,7 @@ export const budgetManager = makeFlowNodeDefinition({
   triggered: async ({ commit, read, write, graph: { getDependency } }) => {
     try {
       const coreBudgetManagerService = getDependency<CoreBudgetManagerService>(
-        'coreBudgetManagerService'
+        CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE
       )
 
       if (!coreBudgetManagerService) {
@@ -138,7 +139,7 @@ export const budgetManager = makeFlowNodeDefinition({
       write('result', result?.toString())
       commit('done')
     } catch (error: any) {
-      const loggerService = getDependency<ILogger>('ILogger')
+      const loggerService = getDependency<ILogger>(CORE_DEP_KEYS.LOGGER)
 
       if (!loggerService) {
         throw new Error('No loggerService provided')
