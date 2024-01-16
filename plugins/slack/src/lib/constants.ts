@@ -41,6 +41,14 @@ export const SLACK_EVENTS = createEventsEnum([
   'message',
   'message_im',
   'message_mpim',
+  'bot_message',
+  'channel_join',
+  'channel_leave',
+  'file_share',
+  'me_message',
+  'message_changed',
+  'message_deleted',
+  'message_replied',
 ])
 
 export const SLACK_ACTIONS = createEventsEnum([
