@@ -3,6 +3,8 @@ import { MessageEvent } from '@slack/bolt'
 
 const typeGuardMap: { [key: string]: (event: MessageEvent) => boolean } = {
   GenericMessageEvent: events.isGenericMessageEvent,
+  GenericIMMessageEvent: events.isGenericIMMessageEvent,
+  GenericMPIMMessageEvent: events.isGenericMPIMMessageEvent,
   BotMessageEvent: events.isBotMessageEvent,
   ChannelJoinMessageEvent: events.isChannelJoinMessageEvent,
   ChannelLeaveMessageEvent: events.isChannelLeaveMessageEvent,

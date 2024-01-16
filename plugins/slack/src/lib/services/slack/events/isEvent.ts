@@ -11,10 +11,23 @@ import {
   MessageEvent,
 } from '@slack/bolt'
 
+type Test = GenericMessageEvent
 export function isGenericMessageEvent(
   event: MessageEvent
 ): event is GenericMessageEvent {
   return event.type === 'message' && event.subtype === undefined
+}
+
+export function isGenericIMMessageEvent(
+  event: MessageEvent
+): event is GenericMessageEvent {
+  return event.type === 'message' && event.channel_type === 'im'
+}
+
+export function isGenericMPIMMessageEvent(
+  event: MessageEvent
+): event is GenericMessageEvent {
+  return event.type === 'message' && event.channel_type === 'mpim'
 }
 
 export function isBotMessageEvent(
