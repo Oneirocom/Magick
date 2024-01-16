@@ -5,23 +5,34 @@ interface User {
   email: string
   name: string
 }
+
+interface UserResponse {
+  status: string
+  user: User
+}
 interface IUserService {
-  getUser(projectId: string): Promise<User>
+  getUser(projectId: string): Promise<UserResponse>
 }
 
 export class UserService implements IUserService {
-  async getUser(projectId: string): Promise<User> {
-    const userData: User = await fetch(`${PORTAL_URL}/api/magick/user`, {
-      method: 'POST',
-      body: JSON.stringify({
-        projectId,
-        token: CLOUD_AGENT_KEY,
-      }),
-    }).then(res => res.json())
+  async getUser(projectId: string): Promise<UserResponse> {
+    const url = `${PORTAL_URL}/api/magick/user/${projectId}`
+    try {
+      const userData: UserResponse = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + CLOUD_AGENT_KEY,
+        },
+      }).then(res => res.json())
 
-    if (!userData) {
-      throw new Error('User not found')
+      if (!userData) {
+        throw new Error('User not found')
+      }
+      return userData
+    } catch (error: any) {
+      console.error('Error getting user:', error)
+      throw error
     }
-    return userData
   }
 }
