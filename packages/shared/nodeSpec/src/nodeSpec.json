@@ -22,7 +22,10 @@
       {
         "name": "hiddenProperties",
         "valueType": "array",
-        "defaultValue": ["hiddenProperties", "eventState"]
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
       },
       {
         "name": "eventState",
@@ -32,7 +35,13 @@
       {
         "name": "eventStateProperties",
         "valueType": "array",
-        "defaultValue": ["connector", "client", "channel", "agentId", "sender"]
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
       }
     ]
   },
@@ -74,7 +83,10 @@
       {
         "name": "hiddenProperties",
         "valueType": "array",
-        "defaultValue": ["hiddenProperties", "textEditorOptions"]
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions"
+        ]
       },
       {
         "name": "textEditorData",
@@ -94,7 +106,12 @@
       {
         "name": "socketValues",
         "valueType": "array",
-        "defaultValue": ["string", "array", "boolean", "integer"]
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer"
+        ]
       },
       {
         "name": "socketInputs",
@@ -599,7 +616,14 @@
         "name": "valueTypeOptions",
         "valueType": "object",
         "defaultValue": {
-          "values": ["string", "number", "float", "boolean", "object", "array"],
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
           "socketName": "Item"
         }
       },
@@ -650,7 +674,14 @@
         "name": "valueTypeOptions",
         "valueType": "object",
         "defaultValue": {
-          "values": ["string", "number", "float", "boolean", "object", "array"],
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
           "socketName": "Item"
         }
       },
@@ -710,7 +741,14 @@
         "name": "valueTypeOptions",
         "valueType": "object",
         "defaultValue": {
-          "values": ["string", "number", "float", "boolean", "object", "array"],
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
           "socketName": "Array Item"
         }
       },
@@ -889,7 +927,14 @@
         "name": "valueTypeOptions",
         "valueType": "object",
         "defaultValue": {
-          "values": ["string", "number", "float", "boolean", "object", "array"],
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
           "socketName": "Item"
         }
       },
@@ -941,7 +986,14 @@
         "name": "valueTypeOptions",
         "valueType": "object",
         "defaultValue": {
-          "values": ["string", "number", "float", "boolean", "object", "array"],
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
           "socketName": "Item"
         }
       },
@@ -1000,7 +1052,11 @@
       {
         "name": "hiddenProperties",
         "valueType": "array",
-        "defaultValue": ["hiddenProperties", "valueTypes", "valueTypeOptions"]
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
       },
       {
         "name": "valueType",
@@ -1011,7 +1067,14 @@
         "name": "valueTypeOptions",
         "valueType": "object",
         "defaultValue": {
-          "values": ["string", "number", "float", "boolean", "object", "array"],
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
           "socketName": "Item"
         }
       },
