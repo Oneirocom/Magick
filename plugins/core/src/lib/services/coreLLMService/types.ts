@@ -97,6 +97,7 @@ export type CompletionResponse = {
     completion_tokens: number
     total_tokens: number
   }
+  _python_object: any
 }
 
 export enum LLMProviders {

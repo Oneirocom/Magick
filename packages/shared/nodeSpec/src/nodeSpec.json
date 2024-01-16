@@ -482,12 +482,32 @@
             "value": "resetCost"
           },
           {
+            "text": "resetOnDuration",
+            "value": "resetOnDuration"
+          },
+          {
             "text": "getCurrentCost",
             "value": "getCurrentCost"
           },
           {
             "text": "projectedCost",
             "value": "projectedCost"
+          },
+          {
+            "text": "getTotalBudget",
+            "value": "getTotalBudget"
+          },
+          {
+            "text": "getModelCost",
+            "value": "getModelCost"
+          },
+          {
+            "text": "isValidUser",
+            "value": "isValidUser"
+          },
+          {
+            "text": "getUsers",
+            "value": "getUsers"
           }
         ]
       }
@@ -4108,6 +4128,143 @@
       {
         "name": "result",
         "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/onMessage",
+    "category": "Event",
+    "label": "On Slack Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/onDirectMessage",
+    "category": "Event",
+    "label": "On Slack Direct Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/onGroupMessage",
+    "category": "Event",
+    "label": "On Slack Group Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/sendMessage",
+    "category": "Action",
+    "label": "Send Slack Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/sendImage",
+    "category": "Action",
+    "label": "Send Slack Image",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "images",
+        "valueType": "string[]"
+      },
+      {
+        "name": "comment",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
       }
     ],
     "configuration": []

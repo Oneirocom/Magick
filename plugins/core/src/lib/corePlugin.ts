@@ -57,6 +57,9 @@ const pluginCredentials: PluginCredential[] = [
   },
 ]
 
+// add any state that you want to persist between restarts here
+interface State extends Record<string, unknown> {}
+
 // These nodes are removed from the core plugin because we have others that
 // do the same thing but are more specific. For example, the variable/get
 // node is removed because we have our own nodes that do
@@ -70,7 +73,13 @@ export type CorePluginEvents = {
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
-export class CorePlugin extends CoreEventsPlugin {
+export class CorePlugin extends CoreEventsPlugin<
+  CorePluginEvents,
+  EventPayload,
+  Record<string, unknown>,
+  Record<string, unknown>,
+  State
+> {
   override enabled = true
   client: CoreEventClient
   nodes = [
@@ -107,9 +116,15 @@ export class CorePlugin extends CoreEventsPlugin {
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
-
     this.client = new CoreEventClient(pubSub, agentId)
     this.setCredentials(pluginCredentials)
+  }
+
+  private getCredentialByName(
+    credentials: PluginCredential[],
+    name: string
+  ): PluginCredential | undefined {
+    return credentials.find(credential => credential.name === name)
   }
 
   /**
@@ -166,6 +181,7 @@ export class CorePlugin extends CoreEventsPlugin {
   }
 
   async getLLMCredentials() {
+    if (this.agentId === '000000000') return
     try {
       // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
       for (const providerKey of Object.keys(LLMProviders).filter(
@@ -174,12 +190,7 @@ export class CorePlugin extends CoreEventsPlugin {
         const provider = LLMProviders[providerKey]
 
         // Retrieve credentials for each provider
-        const credential =
-          await this.credentialsManager.retrieveAgentCredentials(
-            this.agentId,
-            provider,
-            'llm'
-          )
+        const credential = await this.getCredential(provider, 'llm')
 
         // Check if credentials are retrieved and valid
         if (credential) {
