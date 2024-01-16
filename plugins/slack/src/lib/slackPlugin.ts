@@ -8,14 +8,11 @@ import {
 import { SLACK_ACTIONS, SLACK_EVENTS, SLACK_KEY } from './constants'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
-import { sendSlackMessage } from './nodes/actions/sendSlackMessage'
-import { onSlackMessageNodes } from './nodes/events/onSlackMessage'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 import { pluginName, pluginCredentials } from './constants'
 import { SlackClient } from './services/slack'
 import { SlackCredentials, SlackState } from './types'
-import { sendSlackImage } from './nodes/actions/sendSlackImage'
-import { sendSlackMessageV2 } from './nodes/actions/sendSlackImageV2'
+import { sendSlackImage, sendSlackMessage, onSlackMessageNodes } from './nodes'
 import { CorePluginEvents } from 'plugins/core/src'
 
 export class SlackPlugin extends CoreEventsPlugin<
@@ -27,12 +24,7 @@ export class SlackPlugin extends CoreEventsPlugin<
 > {
   override enabled = true
   event: SlackEventClient
-  nodes = [
-    ...onSlackMessageNodes,
-    sendSlackMessage,
-    sendSlackImage,
-    sendSlackMessageV2,
-  ]
+  nodes = [...onSlackMessageNodes, sendSlackMessage, sendSlackImage]
   values = []
   slack: SlackClient | undefined = undefined
 
@@ -96,12 +88,14 @@ export class SlackPlugin extends CoreEventsPlugin<
 
   private async getCredentials(): Promise<SlackCredentials> {
     try {
-      const tokens = ['slack-token', 'slack-signing-secret', 'slack-app-token']
+      const tokens = Object.values(pluginCredentials).map(c => c.name)
+      console.log('getting credentials')
       const [token, signingSecret, appToken] = await Promise.all(
         tokens.map(t =>
           this.credentialsManager.retrieveAgentCredentials(this.agentId, t)
         )
       )
+
       return { token, signingSecret, appToken }
     } catch (error) {
       console.error('Failed to retrieve credentials:', error)
