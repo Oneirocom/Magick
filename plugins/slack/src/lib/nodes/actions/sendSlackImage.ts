@@ -1,4 +1,4 @@
-import { createAction } from 'plugins/shared/src'
+import { createActionNode } from 'plugins/shared/src'
 import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
@@ -54,7 +54,7 @@ const process = async (
   commit('flow') // Commit the flow after sending the message
 }
 
-export const sendSlackImage = createAction<
+export const sendSlackImage = createActionNode<
   Inputs,
   Outputs,
   [typeof SLACK_KEY, 'IEventStore', 'slackActionService']

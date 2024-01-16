@@ -1,4 +1,4 @@
-import { createAction } from 'plugins/shared/src'
+import { createActionNode } from 'plugins/shared/src'
 import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEventPayload } from '../../types'
@@ -15,7 +15,7 @@ type Outputs = {
   flow: SocketDefinition
 }
 
-export const sendSlackMessage = createAction<
+export const sendSlackMessage = createActionNode<
   Inputs,
   Outputs,
   [typeof SLACK_KEY, 'IEventStore']
@@ -47,4 +47,3 @@ export const sendSlackMessage = createAction<
     commit('flow')
   },
 })
-
