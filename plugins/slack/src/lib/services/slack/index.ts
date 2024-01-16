@@ -62,10 +62,6 @@ export class SlackClient {
         async (
           args: SlackEventMiddlewareArgs<typeof eventName> & AllMiddlewareArgs
         ) => {
-          if (!('type' in args.event && args.event.type === 'message')) {
-            return
-          }
-
           const eventType = identifyMessageType(args.event)
 
           if (!eventType) {
@@ -78,6 +74,7 @@ export class SlackClient {
             eventType,
             args
           )
+
           this.emitEvent(eventName, eventPayload)
         }
       )
@@ -108,6 +105,7 @@ export class SlackClient {
       metadata: {},
     }
 
+    // TODO: fix typing so we don't have to do this
     if ('text' in message) {
       payload.content = message.text || ''
     }

@@ -10,7 +10,7 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
   constructor(agentId: string, plugin: string) {
     this.plugin = plugin
     this.agentId = agentId
-    this.initState()
+    // this.initState()
   }
 
   private async initState(): Promise<void> {
