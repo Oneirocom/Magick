@@ -49,6 +49,29 @@ export class CommandHub {
       agentProjectEvent,
       this.handleIncomingCommand.bind(this)
     )
+
+    // for (const plugin of Object.keys(this.agent.pluginManager.getPlugins())) {
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_ENABLE(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_DISABLE(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_STATUS(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_RESET(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_REFETCH_CREDENTIALS(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    // }
   }
 
   /**EventHandles incoming commands and publishes events to listeners.
@@ -167,4 +190,17 @@ export class CommandHub {
       listeners.forEach(listener => listener.callback(data, this.agent))
     }
   }
+
+  /**
+   * Method to handle plugin control commands (enable/disable).
+   * @param data - The command data containing plugin name and desired state.
+   */
+  // private handlePluginControlCommand(data: {
+  //   pluginName: string
+  //   enable: boolean
+  // }) {
+  //   const { pluginName, enable } = data
+  //   // temp disable
+  //   // this.agent.pluginManager.setPluginStatus(pluginName, enable)
+  // }
 }

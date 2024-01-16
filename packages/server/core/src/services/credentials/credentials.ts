@@ -2,6 +2,8 @@ import { getLogger } from 'server/logger'
 import type { Application } from '../../declarations'
 import { CredentialsService } from './credentials.class'
 import { Params } from '@feathersjs/feathers'
+import { RedisPubSub } from 'server/redis-pubsub'
+import { REDISCLOUD_URL } from 'shared/config'
 
 export * from './credentials.class'
 
@@ -11,6 +13,8 @@ export * from './credentials.class'
  */
 export const credentials = (app: Application): void => {
   const logger = getLogger()
+  const pubsub = new RedisPubSub()
+  pubsub.initialize(REDISCLOUD_URL)
 
   app.use('credentials', new CredentialsService(app), {
     methods: ['create', 'remove', 'find'],

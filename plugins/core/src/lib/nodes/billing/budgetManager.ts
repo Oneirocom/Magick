@@ -4,7 +4,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreBudgetManagerService } from '../../services/coreBudgetManagerService/coreBudgetMangerService'
-import { CompletionResponse } from '../../services/coreLLMService/types'
+// import { CompletionResponse } from '../../services/coreLLMService/types'
 
 export const budgetManager = makeFlowNodeDefinition({
   typeName: 'magick/budgetManager',
@@ -43,8 +43,13 @@ export const budgetManager = makeFlowNodeDefinition({
         'createBudget',
         'updateCost',
         'resetCost',
+        'resetOnDuration',
         'getCurrentCost',
         'projectedCost',
+        'getTotalBudget',
+        'getModelCost',
+        'isValidUser',
+        'getUsers',
       ],
       defaultValue: 'createBudget',
     },
@@ -68,39 +73,60 @@ export const budgetManager = makeFlowNodeDefinition({
       // TODO: remove my project id from the fallback
       const projectId: string = read('projectId') || 'clpna2wlx0005smpgehs9fz3m'
       const operation: string = read('operation') || 'createBudget'
+      const totalBudget: number = read('totalBudget') || 10
+      const durationVal: string = read('duration') || 'monthly'
+      const model: string = read('model') || 'gpt-3.5-turbo'
+      const completionObj: any = read('completionObj') || ({} as any)
+      // const completionObj = await completionObject
 
+      console.log('completionObj', {
+        completionObj,
+        messages: await completionObj._python_object.choices,
+        messages2: completionObj.choices,
+      })
+      const messages = completionObj.choices || []
       let result
 
       // Handle different budget operations
       switch (operation) {
         case 'createBudget':
-          // Additional logic for creating a budget
           result = await coreBudgetManagerService.createBudget({
-            totalBudget: read('totalBudget') || 0,
+            totalBudget,
             projectId,
-            duration: read('duration') || 'monthly',
+            duration: durationVal as any,
           })
           break
+        case 'getTotalBudget':
+          result = await coreBudgetManagerService.getTotalBudget(projectId)
+          break
+        case 'getModelCost':
+          result = await coreBudgetManagerService.getModelCost(projectId)
+          break
+        case 'resetOnDuration':
+          result = await coreBudgetManagerService.resetOnDuration(projectId)
+          break
+        case 'getUsers':
+          result = await coreBudgetManagerService.getUsers()
+          break
+        case 'isValidUser':
+          result = await coreBudgetManagerService.isValidUser(projectId)
+          break
         case 'updateCost':
-          // Additional logic for updating cost
           result = await coreBudgetManagerService.updateCost(
-            read('completionObj') || ({} as CompletionResponse),
-            projectId
+            projectId,
+            completionObj._python_object
           )
           break
         case 'resetCost':
-          // Additional logic for resetting cost
           result = await coreBudgetManagerService.resetCost(projectId)
           break
         case 'getCurrentCost':
-          // Additional logic for getting current cost
           result = await coreBudgetManagerService.getCurrentCost(projectId)
           break
         case 'projectedCost':
-          // Additional logic for calculating projected cost
           result = await coreBudgetManagerService.projectedCost({
-            model: read('model') || '',
-            messages: read('messages') || [],
+            model,
+            messages,
             projectId,
           })
           break
@@ -109,7 +135,7 @@ export const budgetManager = makeFlowNodeDefinition({
       }
 
       // Output the result and signal the end of the process
-      write('result', result.toString())
+      write('result', result?.toString())
       commit('done')
     } catch (error: any) {
       const loggerService = getDependency<ILogger>('ILogger')

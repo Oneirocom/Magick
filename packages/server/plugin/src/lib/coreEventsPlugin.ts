@@ -21,8 +21,9 @@ export abstract class CoreEventsPlugin<
   >,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
-  Metadata = Record<string, unknown>
-> extends BasePlugin<PluginEvents, Payload, Data, Metadata> {
+  Metadata = Record<string, unknown>,
+  State extends object = Record<string, unknown>
+> extends BasePlugin<PluginEvents, Payload, Data, Metadata, State> {
   constructor(name: string, connection: Redis, agentId: string) {
     super(name, connection, agentId)
     // Initialize CoreEventPlugin specific stuff if needed

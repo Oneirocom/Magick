@@ -23,7 +23,7 @@ type ActionNodeConfig<
   ) => Promise<void>
 }
 
-export const createAction = <
+export const createActionNode = <
   TInputs extends Record<string, SocketDefinition>,
   TOutputs extends Record<string, SocketDefinition>,
   TDependencies extends string[]
