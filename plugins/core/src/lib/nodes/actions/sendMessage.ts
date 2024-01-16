@@ -1,6 +1,7 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { CoreActionService } from '../../services/coreActionService'
 import { IEventStore } from 'server/grimoire'
+import { CORE_DEP_KEYS } from '../../constants'
 
 export const sendMessage = makeFlowNodeDefinition({
   typeName: 'magick/sendMessage',
@@ -15,8 +16,9 @@ export const sendMessage = makeFlowNodeDefinition({
   },
   initialState: undefined,
   triggered: ({ commit, read, graph: { getDependency } }) => {
-    const coreActionService =
-      getDependency<CoreActionService>('coreActionService')
+    const coreActionService = getDependency<CoreActionService>(
+      CORE_DEP_KEYS.ACTION_SERVICE
+    )
     const eventStore = getDependency<IEventStore>('IEventStore')
 
     if (!coreActionService || !eventStore) {
