@@ -21,7 +21,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     try {
       const liteLLM = await python('litellm')
       this.liteLLM = liteLLM
-      this.liteLLM.set_verbose = true
+      this.liteLLM.set_verbose = false
       this.liteLLMBudgetManager = (await liteLLM.BudgetManager({
         client_type: 'local',
         api_base: PORTAL_URL,
