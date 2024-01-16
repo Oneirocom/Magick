@@ -144,6 +144,26 @@
             "value": "gpt-3.5-turbo"
           },
           {
+            "text": "gpt-3.5-turbo-1106",
+            "value": "gpt-3.5-turbo-1106"
+          },
+          {
+            "text": "gpt-3.5-turbo-0301",
+            "value": "gpt-3.5-turbo-0301"
+          },
+          {
+            "text": "gpt-3.5-turbo-0613",
+            "value": "gpt-3.5-turbo-0613"
+          },
+          {
+            "text": "gpt-3.5-turbo-16k",
+            "value": "gpt-3.5-turbo-16k"
+          },
+          {
+            "text": "gpt-3.5-turbo-16k-0613",
+            "value": "gpt-3.5-turbo-16k-0613"
+          },
+          {
             "text": "gpt-3",
             "value": "gpt-3"
           },
@@ -162,6 +182,34 @@
           {
             "text": "ada",
             "value": "ada"
+          },
+          {
+            "text": "gpt-4",
+            "value": "gpt-4"
+          },
+          {
+            "text": "gpt-4-1106-preview",
+            "value": "gpt-4-1106-preview"
+          },
+          {
+            "text": "gpt-4-0314",
+            "value": "gpt-4-0314"
+          },
+          {
+            "text": "gpt-4-0613",
+            "value": "gpt-4-0613"
+          },
+          {
+            "text": "gpt-4-32k",
+            "value": "gpt-4-32k"
+          },
+          {
+            "text": "gpt-4-32k-0314",
+            "value": "gpt-4-32k-0314"
+          },
+          {
+            "text": "gpt-4-32k-0613",
+            "value": "gpt-4-32k-0613"
           },
           {
             "text": "gemini-pro",
@@ -316,11 +364,23 @@
         "valueType": "array",
         "defaultValue": [
           "gpt-3.5-turbo",
+          "gpt-3.5-turbo-1106",
+          "gpt-3.5-turbo-0301",
+          "gpt-3.5-turbo-0613",
+          "gpt-3.5-turbo-16k",
+          "gpt-3.5-turbo-16k-0613",
           "gpt-3",
           "davinci",
           "curie",
           "babbage",
           "ada",
+          "gpt-4",
+          "gpt-4-1106-preview",
+          "gpt-4-0314",
+          "gpt-4-0613",
+          "gpt-4-32k",
+          "gpt-4-32k-0314",
+          "gpt-4-32k-0613",
           "gemini-pro",
           "palm",
           "mistral",
