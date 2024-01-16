@@ -88,19 +88,22 @@ export class CoreLLMService implements ICoreLLMService {
 
           const chunkText = chunkVal.choices[0].delta.content
           fullText += chunkText
-          //TODO: The full text probably needs to be passed in here
           callback(chunkVal, false, null)
         }
         // Use LiteLLM's helper method to reconstruct the completion response
-        const completionResponse = await this.liteLLM.stream_chunk_builder$(
+        const python_response = await this.liteLLM.stream_chunk_builder$(
           chunks,
           { messages }
         )
 
-        const compRes = await completionResponse.json()
+        const compRes = await python_response.json()
         const compResVal = await compRes.valueOf()
-        callback(null, true, compResVal)
-        return { fullText, completionResponse: compResVal }
+        const completionResponse = {
+          ...compResVal,
+          _python_object: python_response,
+        }
+        callback(null, true, completionResponse)
+        return { fullText, completionResponse: completionResponse }
       } catch (error: any) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
