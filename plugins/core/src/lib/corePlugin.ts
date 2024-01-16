@@ -34,7 +34,6 @@ import { arrayMerge } from './values/Array/Merge'
 import { UserService } from './services/userService/userService'
 import { arrayCreate } from './values/Array/Create'
 import { CoreBudgetManagerService } from './services/coreBudgetManagerService/coreBudgetMangerService'
-import { budgetManager } from './nodes/billing/budgetManager'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
 import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
@@ -65,7 +64,6 @@ export class CorePlugin extends CoreEventsPlugin<
     sendMessage,
     textTemplate,
     generateText,
-    budgetManager,
     streamMessage,
     variableGet,
     variableSet,
