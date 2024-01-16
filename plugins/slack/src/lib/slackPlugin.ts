@@ -23,14 +23,14 @@ export class SlackPlugin extends CoreEventsPlugin<
   SlackState
 > {
   override enabled = true
-  event: SlackEventClient
+  client: SlackEventClient
   nodes = [...onSlackMessageNodes, sendSlackMessage, sendSlackImage]
   values = []
   slack: SlackClient | undefined = undefined
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
-    this.event = new SlackEventClient(pubSub, agentId)
+    this.client = new SlackEventClient(pubSub, agentId)
     // this.meterManager.initializeMeters({})
     this.setCredentials(pluginCredentials)
     this.initalizeSlack().catch(error =>
@@ -102,13 +102,14 @@ export class SlackPlugin extends CoreEventsPlugin<
 
   initializeFunctionalities(): void {}
   handleOnMessage() {}
+
   handleSendMessage(actionPayload: Job<ActionPayload>) {
     const { actionName, event } = actionPayload.data
     const { plugin } = event
     const eventName = `${plugin}:${actionName}`
 
     if (plugin === 'Slack') {
-      this.event.sendMessage(actionPayload.data)
+      this.client.sendMessage(actionPayload.data)
     } else {
       this.centralEventBus.emit(eventName, actionPayload.data)
     }
