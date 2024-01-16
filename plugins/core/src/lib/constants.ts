@@ -1,4 +1,3 @@
-import { createEventsEnum } from 'plugins/shared/src'
 import { PluginCredential } from 'server/credentials'
 
 export const corePluginName = 'Core'
