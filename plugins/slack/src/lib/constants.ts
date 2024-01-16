@@ -54,8 +54,6 @@ export const SLACK_EVENTS = createEventsEnum([
 export const SLACK_ACTIONS = createEventsEnum([
   'sendMessage',
   'sendImage',
-  'generateImage',
-  'generateSpeech',
   'sendAudio',
 ])
 
