@@ -325,11 +325,6 @@
         "name": "seed",
         "valueType": "integer",
         "defaultValue": 42
-      },
-      {
-        "name": "stream",
-        "valueType": "boolean",
-        "defaultValue": false
       }
     ],
     "outputs": [
