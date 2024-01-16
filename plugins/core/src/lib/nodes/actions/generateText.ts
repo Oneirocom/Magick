@@ -47,10 +47,6 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'integer',
       defaultValue: 42,
     },
-    stream: {
-      valueType: 'boolean',
-      defaultValue: false,
-    },
   },
   out: {
     response: 'string',
