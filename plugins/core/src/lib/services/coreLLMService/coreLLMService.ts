@@ -154,7 +154,10 @@ export class CoreLLMService implements ICoreLLMService {
         const fullResponseJson = await completionResponsePython.json()
         const completionResponse =
           (await fullResponseJson.valueOf()) as CompletionResponse
-        return completionResponse
+        return {
+          ...completionResponse,
+          _python_object: completionResponsePython,
+        }
       } catch (error) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
