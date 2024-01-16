@@ -1,13 +1,5 @@
 import Agent from './Agent'
-import {
-  AGENT_COMMAND,
-  AGENT_COMMAND_PROJECT,
-  AGENT_PLUGIN_ENABLE,
-  AGENT_PLUGIN_DISABLE,
-  AGENT_PLUGIN_STATUS,
-  AGENT_PLUGIN_RESET,
-  AGENT_PLUGIN_REFETCH_CREDENTIALS,
-} from 'shared/core'
+import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 export interface CommandListener<T> {
@@ -203,12 +195,12 @@ export class CommandHub {
    * Method to handle plugin control commands (enable/disable).
    * @param data - The command data containing plugin name and desired state.
    */
-  private handlePluginControlCommand(data: {
-    pluginName: string
-    enable: boolean
-  }) {
-    const { pluginName, enable } = data
-    // temp disable
-    // this.agent.pluginManager.setPluginStatus(pluginName, enable)
-  }
+  // private handlePluginControlCommand(data: {
+  //   pluginName: string
+  //   enable: boolean
+  // }) {
+  //   const { pluginName, enable } = data
+  //   // temp disable
+  //   // this.agent.pluginManager.setPluginStatus(pluginName, enable)
+  // }
 }
