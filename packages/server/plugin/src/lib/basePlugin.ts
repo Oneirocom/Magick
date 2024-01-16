@@ -11,6 +11,7 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
+import { saveGraphEvent } from 'shared/core'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
 // import { MeterManager } from 'packages/server/meter/src'
 // import { PluginStateManager } from 'packages/server/pluginState/src'
@@ -253,6 +254,16 @@ export abstract class BasePlugin<
         )
         this.centralEventBus.emit(this.eventQueueName, payload)
         // await this.eventQueue.addJob(event.eventName, payload)
+
+        saveGraphEvent({
+          sender: payload.sender,
+          agentId: payload.agentId,
+          connector: payload.connector,
+          connectorData: JSON.stringify(payload.data),
+          content: payload.content,
+          eventType: 'Message', // TO DO: change this event type when we have different type of events
+          event: payload,
+        })
       })
     })
   }

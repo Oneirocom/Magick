@@ -665,6 +665,16 @@ export type RequestData = {
   nodeId: number
 }
 
+export type GraphEventPayload = {
+  sender: string
+  agentId: string
+  connector: string
+  connectorData: string
+  content: string
+  eventType: string
+  event: Event
+}
+
 export type AppService = (app: FeathersApplication) => void
 
 // todo this is deprecated and needs to be checked and removed
