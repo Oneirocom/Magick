@@ -1,0 +1,12 @@
+{
+    "clpn9lgpo0001smpgpz15pyq7": {
+        "total_budget": 10,
+        "duration": 365,
+        "created_at": 1705362560.8461509,
+        "last_updated_at": 1705362560.8461509,
+        "current_cost": 3e-05,
+        "model_cost": {
+            "gpt-3.5-turbo": 3e-05
+        }
+    }
+}
