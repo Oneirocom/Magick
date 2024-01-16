@@ -3,44 +3,38 @@ import { Job } from 'bullmq'
 import {
   ActionPayload,
   CoreEventsPlugin,
-  // WebhookEvent,
+  EventPayload,
 } from 'packages/server/plugin/src'
 import { SLACK_ACTIONS, SLACK_EVENTS, SLACK_KEY } from './constants'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 import { sendSlackMessage } from './nodes/actions/sendSlackMessage'
-import { slackMessageEvent } from './nodes/events/slackMessageEvent'
+import { onSlackMessageNodes } from './nodes/events/onSlackMessage'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 import { pluginName, pluginCredentials } from './constants'
 import { SlackClient } from './services/slack'
-import { SlackCredentials } from './types'
+import { SlackCredentials, SlackState } from './types'
 import { sendSlackImage } from './nodes/actions/sendSlackImage'
-import LCMCLient from './services/lcmClient'
-import { generateImage } from './nodes/actions/generateImage'
-import { getCredentials } from './nodes/temp/credentials'
 import { sendSlackMessageV2 } from './nodes/actions/sendSlackImageV2'
-import { generateImageV2 } from './nodes/temp/generateImageV2'
-import { generateSpeech } from './nodes/temp/generateSpeech'
-import { sendSlackAudio } from './nodes/actions/sendSlackAudio'
+import { CorePluginEvents } from 'plugins/core/src'
 
-export class SlackPlugin extends CoreEventsPlugin {
+export class SlackPlugin extends CoreEventsPlugin<
+  CorePluginEvents,
+  EventPayload,
+  Record<string, unknown>,
+  Record<string, unknown>,
+  SlackState
+> {
   override enabled = true
   event: SlackEventClient
   nodes = [
-    slackMessageEvent,
+    ...onSlackMessageNodes,
     sendSlackMessage,
     sendSlackImage,
     sendSlackMessageV2,
-    generateImage,
-    generateImageV2,
-    getCredentials,
-    generateSpeech,
-    sendSlackAudio,
   ]
   values = []
-  // webhookEvents?: WebhookEvent[] | undefined
   slack: SlackClient | undefined = undefined
-  lcmClient = new LCMCLient('http://34.48.65.58:5000/predictions', this.agentId)
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
     super(pluginName, connection, agentId)
@@ -78,7 +72,6 @@ export class SlackPlugin extends CoreEventsPlugin {
   getDependencies() {
     return {
       [pluginName]: SlackEmitter,
-      lcmClient: this.lcmClient,
       slackClient: this.slack,
       credentialsManager: this.credentialsManager,
     }
