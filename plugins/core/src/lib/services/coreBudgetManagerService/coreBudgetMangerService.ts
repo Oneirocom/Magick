@@ -1,39 +1,13 @@
 import { python } from 'pythonia'
 
-import { CompletionResponse } from '../coreLLMService/types'
+import { Choice, CompletionResponse, LLMModels } from '../coreLLMService/types'
 import { UserService } from '../userService/userService'
-import { IBudgetManagerService } from '../types'
+import {
+  BudgetDuration,
+  IBudgetManagerService,
+  ICoreBudgetManagerService,
+} from '../types'
 import { PORTAL_URL } from 'shared/config'
-
-type BudgetDuration = 'daily' | 'weekly' | 'monthly' | 'yearly'
-
-type CreateBudgetParams = {
-  totalBudget: number
-  projectId: string
-  duration: BudgetDuration
-}
-
-interface ICoreBudgetManagerService {
-  createBudget(params: CreateBudgetParams): Promise<{ success: boolean }>
-  updateCost(
-    completionObj: CompletionResponse,
-    projectId: string
-  ): Promise<{ success: boolean }>
-  resetCost(projectId: string): Promise<void>
-  getCurrentCost(projectId: string): Promise<number>
-  projectedCost({
-    model,
-    messages,
-    projectId,
-  }: {
-    model: string
-    messages: {
-      role: string
-      content: string
-    }[]
-    projectId: string
-  }): Promise<number>
-}
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
@@ -47,6 +21,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     try {
       const liteLLM = await python('litellm')
       this.liteLLM = liteLLM
+      this.liteLLM.set_verbose = true
       this.liteLLMBudgetManager = (await liteLLM.BudgetManager({
         client_type: 'local',
         api_base: PORTAL_URL,
@@ -57,6 +32,14 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     }
   }
 
+  /**
+   * Create a budget for a user or project
+   * @param totalBudget - Total budget for the project
+   * @param projectId - Project ID
+   * @param duration - Duration of the budget 'daily', 'weekly', 'monthly', 'yearly'
+   * @returns Promise<boolean>
+   */
+
   async createBudget({
     totalBudget,
     projectId,
@@ -65,113 +48,198 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     totalBudget: number
     projectId: string
     duration: BudgetDuration
-  }): Promise<{ success: boolean }> {
+  }): Promise<boolean> {
     // Implement logic to create a budget
-    const user = await this.userService.getUser(projectId)
-    await this.liteLLMBudgetManager?.create_budget$(
+    const userData = await this.userService.getUser(projectId)
+    await this.liteLLMBudgetManager?.create_budget(
       totalBudget,
-      user.id,
+      userData.user.id,
       duration
     )
-    return { success: true }
+    await this.saveData()
+    return true
   }
 
-  // Method to compute the projected cost for a session
+  /**
+   * Get the projected cost of a completion
+   * @param model - Model to use for completion
+   * @param messages - Messages to use for completion
+   * @param projectId - Project ID
+   * @returns Promise<number>
+   */
   async projectedCost({
     model,
     messages,
     projectId,
   }: {
     model: string
-    messages: {
-      role: string
-      content: string
-    }[]
+    messages: Choice[]
     projectId: string
   }): Promise<number> {
-    const user = await this.userService.getUser(projectId)
+    const userData = await this.userService.getUser(projectId)
     const profit = 0.2
-    const baseCost = await this.liteLLMBudgetManager?.projected_cost$(
+    const baseCost = await this.liteLLMBudgetManager?.projected_cost(
       model,
       messages,
-      user.id
+      userData.user.id
     )
-
     if (!baseCost) {
       throw new Error('Error getting base cost')
     }
     const totalCost = baseCost + baseCost * profit
-    console.log('TOTAL COST', totalCost)
-    return totalCost as number
+    return totalCost
   }
 
+  /**
+   * Get the total budget for a project
+   * @param projectId - Project ID
+   * @returns Promise<number>
+   */
   async getTotalBudget(projectId: string): Promise<number> {
-    const user = await this.userService.getUser(projectId)
-    const totalBudget = await this.liteLLMBudgetManager?.get_total_budget$(
-      user.id
+    const userData = await this.userService.getUser(projectId)
+    const totalBudget = await this.liteLLMBudgetManager?.get_total_budget(
+      userData.user.id
     )
-    //TODO: Handle the data here
-    console.log('TOTAL BUDGET', totalBudget, typeof totalBudget)
-    return totalBudget as number
+    if (!totalBudget) {
+      throw new Error('Error getting total budget')
+    }
+    return totalBudget
   }
 
+  /**
+   * Update the cost of a completion. Adds an expense to the user's budget.
+   * @param projectId - Project ID
+   * @param completionObj - Completion response object
+   * @returns Promise<boolean>
+   */
   async updateCost(
-    completionObj: CompletionResponse,
-    projectId: string
-  ): Promise<{ success: boolean }> {
-    const user = await this.userService.getUser(projectId)
-    await this.liteLLMBudgetManager?.update_cost$(completionObj, user.id)
-    return { success: true }
-  }
+    projectId: string,
+    completionObj: CompletionResponse
+  ): Promise<boolean> {
+    const userData = await this.userService.getUser(projectId)
 
-  async getCurrentCost(projectId: string): Promise<number> {
-    const user = await this.userService.getUser(projectId)
-    const currentCost = await this.liteLLMBudgetManager?.get_current_cost$(
-      user.id
+    await this.liteLLMBudgetManager?.update_cost(
+      userData.user.id,
+      completionObj
     )
-    //TODO: Handle the data here
-    console.log('CURRENT COST', currentCost, typeof currentCost)
-    return currentCost as number
+    await this.saveData()
+    return true
   }
 
-  async getModelCost(projectId: string): Promise<number> {
-    const user = await this.userService.getUser(projectId)
-    const modelCost = await this.liteLLMBudgetManager?.get_model_cost$(user.id)
-    //TODO: Handle the data here
-    console.log('MODEL COST', modelCost, typeof modelCost)
-    return modelCost as number
+  /**
+   * Get the current cost of a project or user
+   * @param projectId - Project ID
+   * @returns Promise<number>
+   */
+  async getCurrentCost(projectId: string): Promise<number> {
+    const userData = await this.userService.getUser(projectId)
+    const currentCost = await this.liteLLMBudgetManager?.get_current_cost(
+      userData.user.id
+    )
+    if (currentCost === null || currentCost === undefined) {
+      throw new Error('Error getting current cost')
+    }
+    return currentCost
   }
 
+  /**
+   * Get the model cost for a project or user
+   * @param projectId - Project ID
+   * @returns Promise<number>
+   */
+  async getModelCost(projectId: string): Promise<Record<LLMModels, number>> {
+    const userData = await this.userService.getUser(projectId)
+    const modelCost = await this.liteLLMBudgetManager?.get_model_cost(
+      userData.user.id
+    )
+    if (modelCost === null || modelCost === undefined) {
+      throw new Error('Error getting model cost')
+    }
+    return modelCost
+  }
+
+  /**
+   * Check if a user is valid
+   * @param projectId - Project ID
+   * @returns Promise<boolean>
+   */
   async isValidUser(projectId: string): Promise<boolean> {
-    const user = await this.userService.getUser(projectId)
-    const isValid = await this.liteLLMBudgetManager?.is_valid_user$(user.id)
-    //TODO: Handle the data here
-    console.log('IS VALID', isValid)
-    return isValid as boolean
+    const userData = await this.userService.getUser(projectId)
+    const isValid = await this.liteLLMBudgetManager?.is_valid_user(
+      userData.user.id
+    )
+    if (isValid === undefined) {
+      throw new Error('Error getting user validity')
+    }
+    return isValid
   }
 
+  /**
+   * Get a list of users
+   * @returns Promise<string[]>
+   */
   async getUsers(): Promise<string[]> {
-    const users = await this.liteLLMBudgetManager?.get_users$()
-    //TODO: Handle the data here
-    console.log('USERS', users)
-    return users as string[]
+    const users = await this.liteLLMBudgetManager?.get_users()
+    if (!users) {
+      throw new Error('Error getting users')
+    }
+    return users
   }
 
-  async resetCost(projectId: string): Promise<void> {
-    const user = await this.userService.getUser(projectId)
-    await this.liteLLMBudgetManager?.reset_cost$(user.id)
+  /**
+   * Reset the cost of a project or user
+   * @param projectId - Project ID
+   * @returns Promise<boolean>
+   */
+  async resetCost(projectId: string): Promise<boolean> {
+    const userData = await this.userService.getUser(projectId)
+    await this.liteLLMBudgetManager?.reset_cost(userData.user.id)
+    await this.saveData()
+    return true
   }
 
-  async resetOnDuration(projectId: string): Promise<void> {
-    const user = await this.userService.getUser(projectId)
-    await this.liteLLMBudgetManager?.reset_on_duration$(user.id)
+  /**
+   * Reset the cost of a project or user based on their budget duration
+   * @param projectId - Project ID
+   * @returns Promise<boolean>
+   */
+  async resetOnDuration(projectId: string): Promise<boolean> {
+    const userData = await this.userService.getUser(projectId)
+    await this.liteLLMBudgetManager?.reset_on_duration(userData.user.id)
+    await this.saveData()
+    return true
   }
 
+  /*
+   * Usage of update_budget_all_users in BudgetManager:
+   *
+   * 1. Regular Budget Resets: Use for periodic resets or updates of budgets for all users,
+   *    e.g., at the start of a new month or billing cycle.
+   *
+   * 2. Global Budget Changes: Apply changes in budget policy or allocation strategy that affect
+   *    all users, like increasing budget limits due to pricing or service term changes.
+   *
+   * 3. Automated Maintenance: Incorporate in automated tasks for maintaining consistency in user
+   *    budgets, especially after system upgrades or significant changes.
+   *
+   * 4. Scheduled Tasks: Utilize in scheduled jobs or cron jobs for regular updates or resets,
+   *    ensuring budgets align with current policies or adjustments.
+   *
+   * Note:
+   * - Assess the impact on users before using, as it might affect user experience or billing.
+   * - Notify users of significant budget changes or resets.
+   * - Test thoroughly in a controlled environment to understand its behavior and impact.
+   * - Review additional documentation or source code for detailed understanding of functionality.
+   */
   async updateBudgetAllUsers(): Promise<void> {
-    await this.liteLLMBudgetManager?.update_budget_all_users$()
+    await this.liteLLMBudgetManager?.update_budget_all_users()
   }
 
+  /**
+   * Save the data for the budget manager. This should be called after any changes to the budget manager.
+   * @returns Promise<void>
+   */
   async saveData(): Promise<void> {
-    await this.liteLLMBudgetManager?.save_data$()
+    await this.liteLLMBudgetManager?.save_data()
   }
 }
