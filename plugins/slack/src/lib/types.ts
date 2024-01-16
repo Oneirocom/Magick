@@ -179,3 +179,7 @@ export type SlackCredentials = {
   signingSecret: string | undefined
   appToken: string | undefined
 }
+
+export interface SlackState extends Record<string, unknown> {
+  enabled: boolean
+}
