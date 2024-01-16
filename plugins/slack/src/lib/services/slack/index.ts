@@ -67,6 +67,7 @@ export class SlackClient {
           if (!eventType) {
             return
           }
+          console.log('identified message type', eventType)
 
           const eventPayload = this.createEventPayload(
             args.event,
@@ -99,7 +100,7 @@ export class SlackClient {
       plugin: 'slack',
       agentId: agentId,
       channelType: message.channel_type,
-      rawData: (rest as any).body,
+      rawData: message,
       timestamp: new Date().toISOString(),
       data: rest,
       metadata: {},
