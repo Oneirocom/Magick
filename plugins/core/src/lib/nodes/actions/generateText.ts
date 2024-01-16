@@ -5,6 +5,7 @@ import {
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { LLMModels } from '../../services/coreLLMService/types'
+import { CORE_DEP_KEYS } from '../../constants'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -71,8 +72,9 @@ export const generateText = makeFlowNodeDefinition({
      */
     return new Promise((outerResolve, outerReject) => {
       try {
-        const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
-
+        const coreLLMService = getDependency<CoreLLMService>(
+          CORE_DEP_KEYS.LLM_SERVICE
+        )
         if (!coreLLMService) {
           throw new Error('No coreLLMService provided')
         }
@@ -127,7 +129,7 @@ export const generateText = makeFlowNodeDefinition({
           throw new Error(error)
         })
       } catch (error: any) {
-        const loggerService = getDependency<ILogger>('ILogger')
+        const loggerService = getDependency<ILogger>(CORE_DEP_KEYS.LOGGER)
         if (!loggerService) {
           throw new Error('No loggerService provided')
         }

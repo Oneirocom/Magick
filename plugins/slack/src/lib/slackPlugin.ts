@@ -13,8 +13,7 @@ import { pluginName, pluginCredentials } from './constants'
 import { SlackClient } from './services/slack'
 import { SlackCredentials, SlackState } from './types'
 import { sendSlackImage, sendSlackMessage, onSlackMessageNodes } from './nodes'
-import { CorePluginEvents } from 'plugins/core/src'
-
+import { CorePluginEvents } from 'plugins/core/src/lib/types'
 export class SlackPlugin extends CoreEventsPlugin<
   CorePluginEvents,
   EventPayload,

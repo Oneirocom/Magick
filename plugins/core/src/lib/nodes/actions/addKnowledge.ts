@@ -2,6 +2,7 @@ import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 
 import { ICoreMemoryService } from '../../services/coreMemoryService/coreMemoryService'
 import { DataType } from '../../services/coreMemoryService/coreMemoryTypes'
+import { CORE_DEP_KEYS } from '../../constants'
 
 export const addKnowledge = makeFlowNodeDefinition({
   typeName: 'action/knowledge/add',
@@ -25,8 +26,9 @@ export const addKnowledge = makeFlowNodeDefinition({
     const { getDependency } = graph
     const _dataType = read('dataType') as string
     const dataType = _dataType === 'auto' ? undefined : _dataType
-    const coreMemoryService =
-      getDependency<ICoreMemoryService>('coreMemoryService')
+    const coreMemoryService = getDependency<ICoreMemoryService>(
+      CORE_DEP_KEYS.MEMORY_SERVICE
+    )
     const knowledge = read('knowledge') as string
 
     await coreMemoryService?.add(knowledge, dataType)

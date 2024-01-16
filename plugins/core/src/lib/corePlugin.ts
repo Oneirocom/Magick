@@ -16,7 +16,6 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
-import { PluginCredential } from 'server/credentials'
 import { LLMProviders } from './services/coreLLMService/types'
 import { variableGet } from './nodes/query/variableGet'
 import { VariableService } from './services/variableService'
@@ -41,34 +40,13 @@ import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
-
-const pluginName = 'Core'
-
-const pluginCredentials: PluginCredential[] = [
-  {
-    name: 'OPENAI_API_KEY',
-    serviceType: 'openai',
-    credentialType: 'plugin',
-    clientName: 'OpenAI',
-    initials: 'OA',
-    description: 'OpenAI API Key',
-    icon: 'https://openai.com/favicon.ico',
-    helpLink: 'https://platform.openai.com/api-keys',
-  },
-]
-
-// add any state that you want to persist between restarts here
-interface State extends Record<string, unknown> {}
-
-// These nodes are removed from the core plugin because we have others that
-// do the same thing but are more specific. For example, the variable/get
-// node is removed because we have our own nodes that do
-// the same thing but  more specific.
-const removedNodes = ['variable/get', 'variable/set']
-
-export type CorePluginEvents = {
-  [ON_MESSAGE]: (payload: EventPayload) => void
-}
+import { CorePluginEvents, CorePluginState } from './types'
+import {
+  CORE_DEP_KEYS,
+  corePluginCredentials,
+  corePluginName,
+  coreRemovedNodes,
+} from './constants'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -78,7 +56,7 @@ export class CorePlugin extends CoreEventsPlugin<
   EventPayload,
   Record<string, unknown>,
   Record<string, unknown>,
-  State
+  CorePluginState
 > {
   override enabled = true
   client: CoreEventClient
@@ -115,16 +93,9 @@ export class CorePlugin extends CoreEventsPlugin<
   userService = new UserService()
 
   constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
-    super(pluginName, connection, agentId)
+    super(corePluginName, connection, agentId)
     this.client = new CoreEventClient(pubSub, agentId)
-    this.setCredentials(pluginCredentials)
-  }
-
-  private getCredentialByName(
-    credentials: PluginCredential[],
-    name: string
-  ): PluginCredential | undefined {
-    return credentials.find(credential => credential.name === name)
+    this.setCredentials(corePluginCredentials)
   }
 
   /**
@@ -165,18 +136,18 @@ export class CorePlugin extends CoreEventsPlugin<
     await this.getLLMCredentials()
 
     return {
-      coreActionService: new CoreActionService(
+      [CORE_DEP_KEYS.ACTION_SERVICE]: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
       ),
-      IVariableService: new VariableService(
+      [CORE_DEP_KEYS.I_VARIABLE_SERVICE]: new VariableService(
         this.connection,
         this.agentId,
         spellCaster
       ),
-      coreLLMService: this.coreLLMService,
-      coreBudgetManagerService: this.coreBudgetManagerService,
-      coreMemoryService: this.coreMemoryService,
+      [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
+      [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
+      [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
     }
   }
 
@@ -196,12 +167,12 @@ export class CorePlugin extends CoreEventsPlugin<
         if (credential) {
           // Add each credential to the CoreLLMService instance
           this.coreLLMService.addCredential({
-            ...pluginCredentials[0],
+            ...corePluginCredentials[0],
             name: provider,
             value: credential,
           })
           this.coreMemoryService.addCredential({
-            ...pluginCredentials[0],
+            ...corePluginCredentials[0],
             name: provider,
             value: credential,
           })
@@ -222,7 +193,7 @@ export class CorePlugin extends CoreEventsPlugin<
       ..._coreRegistry,
       // turn nodes map into array to filter
       nodes: Object.entries(_coreRegistry.nodes).reduce((acc, [key, value]) => {
-        if (removedNodes.includes(key)) return acc
+        if (coreRemovedNodes.includes(key)) return acc
         return { ...acc, [key]: value }
       }, {}),
     }
