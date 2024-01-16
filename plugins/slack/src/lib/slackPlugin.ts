@@ -42,7 +42,6 @@ export class SlackPlugin extends CoreEventsPlugin<
 
   defineEvents(): void {
     for (const [messageType, eventName] of Object.entries(SLACK_EVENTS)) {
-      console.log('registering event', eventName)
       this.registerEvent({
         eventName,
         displayName: `Slack ${messageType}`,
@@ -52,7 +51,6 @@ export class SlackPlugin extends CoreEventsPlugin<
 
   defineActions(): void {
     for (const [actionName] of Object.entries(SLACK_ACTIONS)) {
-      console.log('registering action', actionName)
       this.registerAction({
         actionName,
         displayName: `Slack ${actionName}`,
@@ -82,14 +80,13 @@ export class SlackPlugin extends CoreEventsPlugin<
 
       this.updateDependency(SLACK_KEY, this.slack)
     } catch (error) {
-      console.error('Failed during initialization:', error)
+      this.logger.error('Failed during initialization:', error)
     }
   }
 
   private async getCredentials(): Promise<SlackCredentials> {
     try {
       const tokens = Object.values(pluginCredentials).map(c => c.name)
-      console.log('getting credentials')
       const [token, signingSecret, appToken] = await Promise.all(
         tokens.map(t =>
           this.credentialsManager.retrieveAgentCredentials(this.agentId, t)
@@ -98,7 +95,7 @@ export class SlackPlugin extends CoreEventsPlugin<
 
       return { token, signingSecret, appToken }
     } catch (error) {
-      console.error('Failed to retrieve credentials:', error)
+      this.logger.error('Failed to retrieve credentials:', error)
       throw error
     }
   }
