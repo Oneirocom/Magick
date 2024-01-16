@@ -12,6 +12,8 @@ import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
+// import { MeterManager } from 'packages/server/meter/src'
+// import { PluginStateManager } from 'packages/server/pluginState/src'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -166,13 +168,15 @@ export abstract class BasePlugin<
   >,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
-  Metadata = Record<string, unknown>
+  Metadata = Record<string, unknown>,
+  State extends object = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
   protected credentialsManager!: CredentialsManager
+  // protected pluginStateManager!: PluginStateManager<State>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -212,11 +216,16 @@ export abstract class BasePlugin<
    */
   constructor(name: string, connection: Redis, agentId: string) {
     super({ name })
+
     this.agentId = agentId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
     this.credentialsManager = new CredentialsManager()
+    // this.pluginStateManager = new PluginStateManager<State>(
+    //   this.agentId,
+    //   this.name
+    // )
   }
 
   /**
@@ -539,6 +548,42 @@ export abstract class BasePlugin<
       this.updateDependencyHandler(key, dependency)
     } else {
       throw new Error('Dependency update handler is not set.')
+    }
+  }
+
+  /**
+   * Method to handle enable/disable commands for the plugin.
+   * @param enable - Boolean indicating whether to enable or disable the plugin.
+   */
+  handleEnableCommand(enable: boolean): void {
+    if (enable) {
+      this.activate()
+    } else {
+      this.deactivate()
+    }
+  }
+
+  // /**
+  //  * Method to get the current status of the plugin.
+  //  * @returns The status of the plugin (enabled/disabled).
+  //  */
+  // getStatus(): boolean {
+  //   return this.enabled
+  // }
+
+  async getCredential(
+    name: string,
+    serviceType: string | undefined
+  ): Promise<string | undefined> {
+    try {
+      return await this.credentialsManager.retrieveAgentCredentials(
+        this.agentId,
+        name,
+        serviceType
+      )
+    } catch (error) {
+      this.logger.error(`Error retrieving credential '${name}': ${error}`)
+      return
     }
   }
 }

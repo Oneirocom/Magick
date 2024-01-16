@@ -58,28 +58,28 @@ export class CommandHub {
       this.handleIncomingCommand.bind(this)
     )
 
-    for (const plugin of Object.keys(this.agent.pluginManager.getPlugins())) {
-      this.pubsub.subscribe(
-        AGENT_PLUGIN_ENABLE(this.agent.id, plugin),
-        this.handlePluginControlCommand.bind(this)
-      )
-      this.pubsub.subscribe(
-        AGENT_PLUGIN_DISABLE(this.agent.id, plugin),
-        this.handlePluginControlCommand.bind(this)
-      )
-      this.pubsub.subscribe(
-        AGENT_PLUGIN_STATUS(this.agent.id, plugin),
-        this.handlePluginControlCommand.bind(this)
-      )
-      this.pubsub.subscribe(
-        AGENT_PLUGIN_RESET(this.agent.id, plugin),
-        this.handlePluginControlCommand.bind(this)
-      )
-      this.pubsub.subscribe(
-        AGENT_PLUGIN_REFETCH_CREDENTIALS(this.agent.id, plugin),
-        this.handlePluginControlCommand.bind(this)
-      )
-    }
+    // for (const plugin of Object.keys(this.agent.pluginManager.getPlugins())) {
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_ENABLE(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_DISABLE(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_STATUS(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_RESET(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    //   this.pubsub.subscribe(
+    //     AGENT_PLUGIN_REFETCH_CREDENTIALS(this.agent.id, plugin),
+    //     this.handlePluginControlCommand.bind(this)
+    //   )
+    // }
   }
 
   /**EventHandles incoming commands and publishes events to listeners.
