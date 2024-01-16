@@ -76,7 +76,7 @@ export class SlackClient {
             args
           )
 
-          this.emitEvent(eventName, eventPayload)
+          this.emitEvent(eventType, eventPayload)
         }
       )
     })

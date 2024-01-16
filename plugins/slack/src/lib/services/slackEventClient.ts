@@ -51,7 +51,6 @@ class SlackEventClient {
   }
 
   sendMessage(payload: ActionPayload): void {
-    console.log('Sending message from slack client!!!', payload)
     this.pubSub.publish(`agent:${this.agentId}:Slack:event`, payload)
   }
 
