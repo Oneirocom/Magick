@@ -34,7 +34,8 @@ export const whileLoop = makeAsyncNodeDefinition({
     const loopBodyIteration = (i: number) => {
       const condition = read('condition')
       if (i < stop && !condition) {
-        commit('loopBody', () => {
+        commit('loopBody', async resolveSockets => {
+          await resolveSockets()
           loopBodyIteration(i + 1)
         })
       } else {
