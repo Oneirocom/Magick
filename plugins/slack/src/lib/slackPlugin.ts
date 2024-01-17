@@ -12,7 +12,12 @@ import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 import { pluginName, pluginCredentials } from './constants'
 import { SlackClient } from './services/slack'
 import { SlackCredentials, SlackState } from './types'
-import { sendSlackImage, sendSlackMessage, onSlackMessageNodes } from './nodes'
+import {
+  sendSlackImage,
+  sendSlackMessage,
+  onSlackMessageNodes,
+  sendSlackAudio,
+} from './nodes'
 import { CorePluginEvents } from 'plugins/core/src/lib/types'
 export class SlackPlugin extends CoreEventsPlugin<
   CorePluginEvents,
@@ -23,7 +28,12 @@ export class SlackPlugin extends CoreEventsPlugin<
 > {
   override enabled = true
   client: SlackEventClient
-  nodes = [...onSlackMessageNodes, sendSlackMessage, sendSlackImage]
+  nodes = [
+    ...onSlackMessageNodes,
+    sendSlackMessage,
+    sendSlackImage,
+    sendSlackAudio,
+  ]
   values = []
   slack: SlackClient | undefined = undefined
 
@@ -66,8 +76,7 @@ export class SlackPlugin extends CoreEventsPlugin<
   getDependencies() {
     return {
       [pluginName]: SlackEmitter,
-      slackClient: this.slack,
-      credentialsManager: this.credentialsManager,
+      [SLACK_KEY]: this.slack,
     }
   }
 
