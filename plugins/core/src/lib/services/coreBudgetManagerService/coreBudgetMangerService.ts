@@ -1,6 +1,6 @@
 import { python } from 'pythonia'
 
-import { Choice, CompletionResponse, LLMModels } from '../coreLLMService/types'
+import { CompletionResponse, LLMModels, Message } from '../coreLLMService/types'
 import { UserService } from '../userService/userService'
 import {
   BudgetDuration,
@@ -13,9 +13,11 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
   protected liteLLM: any
   protected userService: UserService
+  projectId: string
 
-  constructor() {
+  constructor(projectId: string) {
     this.userService = new UserService()
+    this.projectId = projectId
   }
   async initialize() {
     try {
@@ -23,9 +25,26 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       this.liteLLM = liteLLM
       this.liteLLM.set_verbose = false
       this.liteLLMBudgetManager = (await liteLLM.BudgetManager({
-        client_type: 'local',
-        api_base: PORTAL_URL,
+        client_type: 'hosted',
+        api_base: `${PORTAL_URL}/magick/budget`,
       })) as IBudgetManagerService
+
+      const userData = await this.userService.getUser(this.projectId)
+      if (!userData || !userData.user) {
+        throw new Error('User data not found')
+      }
+      const userId = userData.user.id
+      const hasBudget = await this.liteLLMBudgetManager.is_valid_user(userId)
+
+      if (!hasBudget) {
+        // Default initial balance setup
+        const initialBalance = userData.user.balance || 0 // Assuming 'balance' is part of user data
+        await this.createBudget({
+          totalBudget: initialBalance,
+          projectId: this.projectId,
+          duration: BudgetDuration.yearly,
+        })
+      }
     } catch (error: any) {
       console.error('Error initializing LiteLLM Budget Manager:', error)
       throw error
@@ -73,11 +92,11 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     projectId,
   }: {
     model: string
-    messages: Choice[]
+    messages: Message[]
     projectId: string
   }): Promise<number> {
     const userData = await this.userService.getUser(projectId)
-    const profit = 0.2
+
     const baseCost = await this.liteLLMBudgetManager?.projected_cost(
       model,
       messages,
@@ -86,8 +105,8 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     if (!baseCost) {
       throw new Error('Error getting base cost')
     }
-    const totalCost = baseCost + baseCost * profit
-    return totalCost
+
+    return baseCost
   }
 
   /**
@@ -100,7 +119,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     const totalBudget = await this.liteLLMBudgetManager?.get_total_budget(
       userData.user.id
     )
-    if (!totalBudget) {
+    if (totalBudget === null || totalBudget === undefined) {
       throw new Error('Error getting total budget')
     }
     return totalBudget
@@ -168,7 +187,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     const isValid = await this.liteLLMBudgetManager?.is_valid_user(
       userData.user.id
     )
-    if (isValid === undefined) {
+    if (isValid === undefined || isValid === null) {
       throw new Error('Error getting user validity')
     }
     return isValid
@@ -231,15 +250,18 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * - Test thoroughly in a controlled environment to understand its behavior and impact.
    * - Review additional documentation or source code for detailed understanding of functionality.
    */
-  async updateBudgetAllUsers(): Promise<void> {
+  async updateBudgetAllUsers(): Promise<boolean> {
     await this.liteLLMBudgetManager?.update_budget_all_users()
+    await this.saveData()
+    return true
   }
 
   /**
    * Save the data for the budget manager. This should be called after any changes to the budget manager.
    * @returns Promise<void>
    */
-  async saveData(): Promise<void> {
+  async saveData(): Promise<boolean> {
     await this.liteLLMBudgetManager?.save_data()
+    return true
   }
 }
