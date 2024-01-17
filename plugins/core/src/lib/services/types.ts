@@ -102,4 +102,7 @@ export interface ICoreLLMService {
     completionResponse: CompletionResponse
   }>
   initialize: () => Promise<void>
+  completionGenerator: (
+    params: CompletionParams
+  ) => AsyncGenerator<Chunk, CompletionResponse, undefined>
 }
