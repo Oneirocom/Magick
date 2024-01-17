@@ -4,6 +4,7 @@ interface User {
   id: string
   email: string
   name: string
+  balance: number
 }
 
 interface UserResponse {
