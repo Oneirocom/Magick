@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { ConfigurationComponentProps } from "./PropertiesWindow"
 import { cx } from "class-variance-authority";
 import { useReactFlow } from "reactflow";
@@ -10,19 +10,12 @@ const inputClass = cx(
 
 export const ValueType = (props: ConfigurationComponentProps) => {
   const defaultValues = ['number', 'string', 'boolean']
-  const { config, updateConfigKeys, fullConfig } = props
+  const { config, updateConfigKeys, fullConfig, node } = props
   const { valueTypeOptions: options, socketInputs, socketOutputs } = fullConfig
   const [configKey, configValue] = config
   const [valueType, setValueType] = useState(configValue || '')
 
   const reactFlow = useReactFlow()
-
-  const setEdges = useCallback((edges) => {
-    const filtered = edges.filter(edge => edge.sourceHandle !== valueType && edge.targetHandle !== valueType)
-
-    return filtered
-  }
-    , [valueType])
 
   const handleValueTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const type = e.target.value
@@ -48,9 +41,13 @@ export const ValueType = (props: ConfigurationComponentProps) => {
       }]
     }
 
+
     updateConfigKeys(configUpdate)
 
-    reactFlow.setEdges(setEdges)
+    // Disconnect any connected dges
+    reactFlow.setEdges((edges) => {
+      return edges.filter((edge) => (edge.source !== node.id && edge.target !== node.id) || edge.targetHandle === 'flow')
+    })
   }
 
   return (
