@@ -2,7 +2,7 @@ import pino from 'pino'
 import {
   SpellManager,
   SpellRunner,
-  pluginManager,
+  pluginManager as v1PluginManager,
   MagickSpellInput,
   AGENT_RUN_RESULT,
   AGENT_RUN_ERROR,
@@ -185,7 +185,7 @@ export class Agent implements AgentInterface {
 
     this.spellRunner = await this.spellManager.load(spell)
 
-    const agentStartMethods = pluginManager.getAgentStartMethods()
+    const agentStartMethods = v1PluginManager.getAgentStartMethods()
 
     this.logger.debug('Initializing plugins on agent %s', this.id)
 
@@ -202,12 +202,12 @@ export class Agent implements AgentInterface {
       }
     }
 
-    const outputTypes = pluginManager.getOutputTypes()
+    const outputTypes = v1PluginManager.getOutputTypes()
     this.outputTypes = outputTypes
   }
 
   private initializePluginCommands() {
-    const pluginCommands = pluginManager.getAgentCommands()
+    const pluginCommands = v1PluginManager.getAgentCommands()
     for (const pluginName of Object.keys(pluginCommands)) {
       this.commandHub.registerPlugin(pluginName, pluginCommands[pluginName])
     }
@@ -237,7 +237,7 @@ export class Agent implements AgentInterface {
 
   async removePlugins() {
     this.logger.debug('Removing all plugins on agent %s', this.id)
-    const agentStopMethods = pluginManager.getAgentStopMethods()
+    const agentStopMethods = v1PluginManager.getAgentStopMethods()
     if (agentStopMethods)
       for (const method of Object.keys(agentStopMethods)) {
         await agentStopMethods[method]({
