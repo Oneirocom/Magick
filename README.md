@@ -119,15 +119,6 @@ py -m pip install --user pipx
 py -m pipx ensurepath
 ```
 
-If you using Conda you can set up a new environment for Magick:
-
-```bash
-conda create -n magick python=3.12
-cond activate magick
-pip install pipx
-pipx ensurepath
-```
-
 Install Poetry (Manages python packages)
 
 ```bash
