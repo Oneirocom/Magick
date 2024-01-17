@@ -13,6 +13,7 @@ import {
   useStore,
   NodeChange,
   useReactFlow,
+  Edge,
 } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -20,6 +21,7 @@ import { calculateNewEdge } from '../../utils/calculateNewEdge.js'
 import { getNodePickerFilters } from '../../utils/getPickerFilters.js'
 import { useBehaveGraphFlow } from './useBehaveGraphFlow.js'
 import { Tab } from '@magickml/providers'
+import { setEdges, setNodes } from 'client/state'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
@@ -47,11 +49,13 @@ export const useFlowHandlers = ({
   onEdgesChange,
   onNodesChange,
   nodes,
+  edges,
   specJSON,
   parentRef,
   tab,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
   nodes: Node[]
+  edges: Edge[]
   specJSON: NodeSpecJSON[] | undefined
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
@@ -137,10 +141,20 @@ export const useFlowHandlers = ({
 
   const handleRemoveNode = () => {
     if (!targetNodes.length) return
-    const newNodes: NodeChange[] = targetNodes.map(node => {
-      return { id: node.id, type: 'remove' }
-    })
-    onNodesChange(tab.id)(newNodes)
+
+    const newNodes = nodes.filter(
+      node => !targetNodes.some(targetNode => targetNode.id === node.id)
+    )
+
+    const newEdges = edges.filter(
+      edge =>
+        !targetNodes.some(
+          node => node.id === edge.source || node.id === edge.target
+        )
+    )
+
+    setNodes(tab.id, newNodes)
+    setEdges(tab.id, newEdges)
     setTargetNodes(undefined)
   }
 
@@ -264,7 +278,6 @@ export const useFlowHandlers = ({
     },
     []
   )
-
   //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
   // useHotkeys('meta+c, ctrl+c', copy)
   // useHotkeys('meta+v, ctrl+v', paste)

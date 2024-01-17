@@ -75,6 +75,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     nodeMenuActions
   } = useFlowHandlers({
     nodes,
+    edges,
     onEdgesChange,
     onNodesChange,
     specJSON: specJson,
