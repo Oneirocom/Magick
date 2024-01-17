@@ -34,10 +34,7 @@ export type CreateEventNodeInputs<T> = {
   process: CreateEventNodeProcess<T>
 }
 
-export const createEventNode = <
-  E extends EventEmitter,
-  T extends Record<string, unknown>
->(
+export const createEventNode = <E extends EventEmitter, T extends any>(
   inputs: CreateEventNodeInputs<T>
 ) => {
   return makeEventNodeDefinition({
