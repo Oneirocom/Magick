@@ -2,7 +2,7 @@
 name = "magick"
 version = "0.1.0"
 description = "More than just a rabbit in a hat"
-authors = ["Your Name <you@example.com>"]
+authors = ["Your Name  <you@example.com>"]
 license = "Apache 2.0"
 readme = "README.md"
 
