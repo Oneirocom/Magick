@@ -93,6 +93,12 @@ export type EventPayload<
   metadata: Y
 }
 
+export type PluginCommand = {
+  commandName: string
+  displayName: string
+  handler: (enable: boolean) => void
+}
+
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
  * within the system. It encapsulates common functionalities and structures that
@@ -175,6 +181,7 @@ export abstract class BasePlugin<
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
+  protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
   protected credentialsManager!: CredentialsManager
@@ -223,6 +230,7 @@ export abstract class BasePlugin<
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
+    this.commands = []
     this.credentialsManager = new CredentialsManager()
     // this.pluginStateManager = new PluginStateManager<State>(
     //   this.agentId,
@@ -240,6 +248,21 @@ export abstract class BasePlugin<
     this.initializeFunctionalities()
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
+    this.initializeBaseCommands()
+  }
+
+  initializeBaseCommands() {
+    this.registerCommand({
+      commandName: 'enable',
+      displayName: 'Enable',
+      handler: this.handleEnableCommand.bind(this),
+    })
+
+    this.registerCommand({
+      commandName: 'disable',
+      displayName: 'Disable',
+      handler: this.handleEnableCommand.bind(this),
+    })
   }
 
   /**
@@ -561,6 +584,34 @@ export abstract class BasePlugin<
     } else {
       throw new Error('Dependency update handler is not set.')
     }
+  }
+
+  /**
+   * Registers a command with the plugin.
+   * @param command The command definition to register.
+   * @example
+   * this.registerCommand({
+   *   commandName: 'enable',
+   *   displayName: 'Enable',
+   *   handler: this.handleEnableCommand.bind(this)
+   * });
+   */
+  registerCommand(command: PluginCommand) {
+    this.commands.push(command)
+  }
+
+  /**
+   * Returns the list of registered commands.
+   * @returns An array of PluginCommand objects.
+   * @example
+   * const commands = this.getCommands();
+   */
+  getCommands(): Record<string, PluginCommand['handler']> {
+    // reduce over command array to make object iof name and handler
+    return this.commands.reduce((acc, command) => {
+      acc[command.commandName] = command.handler
+      return acc
+    }, {} as Record<string, PluginCommand['handler']>)
   }
 
   /**
