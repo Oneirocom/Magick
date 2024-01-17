@@ -109,13 +109,16 @@ export class Agent implements AgentInterface {
       await this.initializeV1Plugins()
 
       // initialize the plugin commands
-      this.initializePluginCommands()
+      this.initializeV1PluginCommands()
 
       // initialize the core commands
       // These are used to remotely control the agent
       this.initializeCoreCommands()
 
       this.initializeSpellbook()
+
+      // initialize the plugin commands
+      this.intializePluginCommands()
 
       this.logger.info('New agent created: %s | %s', this.name, this.id)
       this.ready = true
@@ -206,10 +209,17 @@ export class Agent implements AgentInterface {
     this.outputTypes = outputTypes
   }
 
-  private initializePluginCommands() {
+  private initializeV1PluginCommands() {
     const pluginCommands = v1PluginManager.getAgentCommands()
     for (const pluginName of Object.keys(pluginCommands)) {
       this.commandHub.registerPlugin(pluginName, pluginCommands[pluginName])
+    }
+  }
+
+  private intializePluginCommands() {
+    const plugins = this.pluginManager.getPlugins()
+    for (const plugin of plugins) {
+      this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
     }
   }
 
