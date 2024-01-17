@@ -10,12 +10,11 @@ import { SlackCredentials } from '../../types'
 import { identifyMessageType } from './events'
 export class SlackClient {
   private client: App
-  emitEvent: (eventName: string, payload: EventPayload<any>) => void = () => {}
 
   constructor(
     private credentials: SlackCredentials,
     private agentId: string,
-    emitEvent: (eventName: string, payload: EventPayload<any>) => void
+    private emitEvent: (eventName: string, payload: EventPayload<any>) => void
   ) {
     this.client = new App({
       token: credentials.token,
