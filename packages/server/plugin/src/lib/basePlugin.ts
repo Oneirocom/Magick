@@ -170,6 +170,7 @@ export abstract class BasePlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
+  //eslint-disable-next-line
   State extends object = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
@@ -261,7 +262,7 @@ export abstract class BasePlugin<
           connector: payload.connector,
           connectorData: JSON.stringify(payload.data),
           content: payload.content,
-          eventType: 'Message', // TO DO: change this event type when we have different type of events
+          eventType: payload.eventName,
           event: payload,
         })
       })
