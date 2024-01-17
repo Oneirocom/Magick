@@ -1,4 +1,10 @@
-import { Choice, CompletionResponse, LLMModels } from './coreLLMService/types'
+import {
+  Chunk,
+  CompletionRequest,
+  CompletionResponse,
+  LLMModels,
+  Message,
+} from './coreLLMService/types'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
@@ -46,20 +52,54 @@ export type CreateBudgetParams = {
 }
 
 export interface ICoreBudgetManagerService {
+  initialize(): Promise<void>
   createBudget(params: CreateBudgetParams): Promise<boolean>
-  updateCost(
-    projectId: string,
-    completionObj: CompletionResponse
-  ): Promise<boolean>
-  resetCost(projectId: string): Promise<boolean>
-  getCurrentCost(projectId: string): Promise<number>
   projectedCost({
     model,
     messages,
     projectId,
   }: {
     model: string
-    messages: Choice[]
+    messages: Message[]
     projectId: string
   }): Promise<number>
+  getTotalBudget(projectId: string): Promise<number>
+  updateCost(
+    projectId: string,
+    completionObj: CompletionResponse
+  ): Promise<boolean>
+  getCurrentCost(projectId: string): Promise<number>
+  getModelCost(projectId: string): Promise<Record<LLMModels, number>>
+  isValidUser(projectId: string): Promise<boolean>
+  getUsers(): Promise<string[]>
+  resetCost(projectId: string): Promise<boolean>
+  resetOnDuration(projectId: string): Promise<boolean>
+  updateBudgetAllUsers(): Promise<boolean>
+  saveData(): Promise<boolean>
+}
+
+export type CompletionParams = {
+  request: CompletionRequest
+  callback: (
+    chunk: Chunk | null,
+    isDone: boolean,
+    completionResponse: CompletionResponse | null
+  ) => void
+  maxRetries: number
+  delayMs?: number
+}
+
+export interface ICoreLLMService {
+  /**
+   * Handles completion requests in streaming mode. Accumulates the text from each chunk and returns the complete text.
+   *
+   * @param request The completion request parameters.
+   * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
+   * @returns A promise that resolves to the complete text after all chunks have been received.
+   */
+  completion: (params: CompletionParams) => Promise<{
+    fullText: string
+    completionResponse: CompletionResponse
+  }>
+  initialize: () => Promise<void>
 }
