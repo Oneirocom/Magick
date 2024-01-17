@@ -79,7 +79,7 @@ export class SlackPlugin extends CoreEventsPlugin<
 
       this.updateDependency(SLACK_KEY, this.slack)
     } catch (error) {
-      this.logger.error('Failed during initialization:', error)
+      this.logger.error(error, 'Failed during initialization:')
     }
   }
 
