@@ -6,6 +6,7 @@ import {
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { LLMModels } from '../../services/coreLLMService/types'
 import { CORE_DEP_KEYS } from '../../constants'
+import { IEventStore } from 'server/grimoire'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -117,11 +118,15 @@ export const generateText = makeFlowNodeDefinition({
           outerResolve(undefined)
         }
 
+        const eventStore = getDependency<IEventStore>('IEventStore')
+        const spellId = eventStore?.currentEvent()?.spellId
+
         // our iterator is a generator function that will yield a chunk of data
         // each time it is called
         const iterator = coreLLMService.completionGenerator({
           request,
           maxRetries,
+          spellId,
         })
 
         // Start the processing loop and pass in the iterator
