@@ -34,13 +34,16 @@ export type CreateEventNodeInputs<T> = {
   process: CreateEventNodeProcess<T>
 }
 
-export const createEventNode = <E extends EventEmitter>(
-  inputs: CreateEventNodeInputs<any>
+export const createEventNode = <
+  E extends EventEmitter,
+  T extends Record<string, any> | object
+>(
+  inputs: CreateEventNodeInputs<T>
 ) => {
   return makeEventNodeDefinition({
     ...inputs.base,
     category: NodeCategory.Event,
-    initialState: makeInitialState<any>(),
+    initialState: makeInitialState<T>(),
     init: args => {
       const {
         write,
@@ -49,7 +52,7 @@ export const createEventNode = <E extends EventEmitter>(
         engine,
         graph: { getDependency },
       } = args
-      const onStartEvent = (event: EventPayload<any>) => {
+      const onStartEvent = (event: EventPayload<T>) => {
         inputs.process(write, commit, event)
 
         if (!node || !engine) return
