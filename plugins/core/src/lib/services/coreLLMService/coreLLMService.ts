@@ -20,6 +20,7 @@ import {
 } from '../types'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { UserService } from '../userService/userService'
+import { saveRequest } from 'shared/core'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -28,10 +29,12 @@ export class CoreLLMService implements ICoreLLMService {
   protected coreBudgetManagerService: ICoreBudgetManagerService | undefined
   protected credentials: LLMCredential[] = []
   protected projectId: string
+  protected agentId: string
   protected userService: UserService
 
-  constructor({ projectId }) {
+  constructor({ projectId, agentId }) {
     this.projectId = projectId
+    this.agentId = agentId || ''
     this.userService = new UserService()
   }
   async initialize() {
@@ -39,7 +42,7 @@ export class CoreLLMService implements ICoreLLMService {
       this.liteLLM = await python('litellm')
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
       this.liteLLM.vertex_location = VERTEXAI_LOCATION
-      this.liteLLM.set_verbose = false
+      this.liteLLM.set_verbose = true
       this.coreBudgetManagerService = new CoreBudgetManagerService(
         this.projectId
       )
@@ -145,10 +148,16 @@ export class CoreLLMService implements ICoreLLMService {
     throw new Error('Unexpected error in completion method')
   }
 
-  async *completionGenerator({ request, maxRetries = 1, delayMs = 1000 }) {
+  async *completionGenerator({
+    request,
+    maxRetries = 1,
+    delayMs = 1000,
+    spellId,
+  }) {
     let attempts = 0
     const chunks: any[] = []
     const messages = request.messages.filter(Boolean)
+    const startTime = Date.now()
 
     while (attempts < maxRetries) {
       try {
@@ -201,6 +210,24 @@ export class CoreLLMService implements ICoreLLMService {
         const fullResponseJson = await completionResponsePython.json()
         const completionResponse =
           (await fullResponseJson.valueOf()) as CompletionResponse
+        saveRequest({
+          projectId: this.projectId,
+          agentId: this.agentId,
+          requestData: JSON.stringify(request.options),
+          responseData: JSON.stringify(completionResponse),
+          model: request.model,
+          startTime: startTime,
+          status: '',
+          statusCode: 200,
+          parameters: JSON.stringify(request.options),
+          provider: this.findProvider(request.model),
+          type: 'completion',
+          hidden: false,
+          processed: false,
+          totalTokens: fullResponseJson.usage.total_tokens,
+          spell: spellId,
+          nodeId: null,
+        })
         return {
           ...completionResponse,
           _python_object: completionResponsePython,
