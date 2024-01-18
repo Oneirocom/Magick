@@ -34,6 +34,7 @@ export const Node: React.FC<NodeProps> = ({
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
+  const [lastEvent, setLastEvent] = useState<Record<string, any> | null>(null)
   const [running, setRunning] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(false)
@@ -63,6 +64,8 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === endEventName) {
+      console.log('end event', spellEvent)
+      setLastEvent(spellEvent)
       setRunning(false)
       setDone(true)
 
@@ -75,6 +78,7 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === startEventName) {
+      setLastEvent(spellEvent)
       setRunning(true)
     }
   }, [spellEvent])
@@ -82,6 +86,7 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === errorEventName) {
+      setLastEvent(spellEvent)
       setRunning(false)
       setError(spellEvent)
 
@@ -130,6 +135,9 @@ export const Node: React.FC<NodeProps> = ({
             <OutputSocket
               {...output}
               specJSON={allSpecs}
+              lastEventOutput={
+                lastEvent?.outputs.find((event: any) => event.name === output.name)?.value
+              }
               connected={isHandleConnected(edges, id, output.name, 'source')}
             />
           )}
@@ -146,6 +154,9 @@ export const Node: React.FC<NodeProps> = ({
             {...input}
             specJSON={allSpecs}
             value={data[input.name] ?? input.defaultValue}
+            lastEventOutput={
+              lastEvent?.inputs.find((event: any) => event.name === input.name)?.value
+            }
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}
           />
