@@ -18,6 +18,7 @@ type NodeProps = {
   selected: boolean;
   onClick?: () => void;
   fired: boolean;
+  error: boolean;
   running: boolean;
   config: Config
   graph: SpellInterface['graph']
@@ -31,7 +32,8 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   fired,
   config,
   running,
-  graph
+  graph,
+  error
 }) => {
   let colorName = categoryColorMap[category];
   if (colorName === undefined) {
@@ -58,7 +60,8 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
           'rounded text-white text-sm bg-[var(--foreground-color)] w-[150px] transition-all duration-300 opacity-100',
           selected && 'outline outline-1',
           fired && 'outline outline-2 outline-green-500',
-          running && css.running
+          running && css.running,
+          error && 'outline outline-2 outline-red-500',
         )}
       >
         <div className={cx(
