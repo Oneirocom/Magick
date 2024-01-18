@@ -10,6 +10,8 @@ import {
   AGENT_RUN_JOB,
   MagickSpellOutput,
   type Event,
+  AGENT_ERROR,
+  AGENT_WARN,
 } from 'shared/core'
 
 import { getLogger } from 'server/logger'
@@ -307,7 +309,7 @@ export class Agent implements AgentInterface {
 
   warn(message, data = {}) {
     this.logger.warn(data, `${message} ${JSON.stringify(data)}`)
-    this.publishEvent(AGENT_LOG(this.id), {
+    this.publishEvent(AGENT_WARN(this.id), {
       agentId: this.id,
       projectId: this.projectId,
       type: 'warn',
@@ -318,12 +320,12 @@ export class Agent implements AgentInterface {
 
   error(message, data = {}) {
     this.logger.error(data, `${message}`)
-    this.publishEvent(AGENT_LOG(this.id), {
+    this.publishEvent(AGENT_ERROR(this.id), {
       agentId: this.id,
       projectId: this.projectId,
       type: 'error',
       message,
-      data: { error: data },
+      data,
     })
   }
 
