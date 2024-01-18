@@ -7,11 +7,14 @@ import { Connection, Handle, Position, useReactFlow } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
 import { isValidConnection } from '../../utils/isValidConnection.js';
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui';
+import ReactJson from 'react-json-view';
 
 export type InputSocketProps = {
   connected: boolean;
   value: any | undefined;
   onChange: (key: string, value: any) => void;
+  lastEventOutput: any;
   specJSON: NodeSpecJSON[];
   hideValue?: boolean;
 } & InputSocketSpecJSON;
@@ -114,6 +117,7 @@ const InputFieldForValue = ({
 const InputSocket: React.FC<InputSocketProps> = ({
   connected,
   specJSON,
+  lastEventOutput,
   ...rest
 }) => {
   const { name, valueType } = rest;
@@ -142,15 +146,40 @@ const InputSocket: React.FC<InputSocketProps> = ({
       )}
 
       {!isFlowSocket && <InputFieldForValue connected={connected} hideValue={isArraySocket || isObjectSocket} {...rest} />}
-      <Handle
-        id={name}
-        type="target"
-        position={Position.Left}
-        className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
-        isValidConnection={(connection: Connection) =>
-          isValidConnection(connection, instance, specJSON)
-        }
-      />
+
+
+      <Popover>
+        <PopoverTrigger asChild>
+          <Handle
+            id={name}
+            type="target"
+            position={Position.Left}
+            className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
+            isValidConnection={(connection: Connection) =>
+              isValidConnection(connection, instance, specJSON)
+            }
+          />
+        </PopoverTrigger>
+        {lastEventOutput && <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
+          <ReactJson
+            src={{
+              [name]: lastEventOutput
+            }}
+            style={{ width: 400, overflow: 'scroll' }}
+            theme="tomorrow"
+            name={false}
+            collapsed={1}
+            collapseStringsAfterLength={20}
+            shouldCollapse={(field: any) => {
+              console.log('Should collapse', field)
+              return typeof field === 'string' && field.length > 20
+            }}
+            enableClipboard={true}
+            displayObjectSize={false}
+            displayDataTypes={false}
+          />
+        </PopoverContent>}
+      </Popover>
     </div>
   );
 };
