@@ -10,18 +10,6 @@ type DiscordEventProcess<K extends keyof DiscordEventPayload> = (
   event: EventPayload<DiscordEventPayload[K]>
 ) => void
 
-const processDiscordEvent: DiscordEventProcess<keyof DiscordEventPayload> = (
-  write,
-  commit,
-  event
-) => {
-  write('event', event.eventName)
-  write('content', event.content)
-  write('sender', event.sender)
-  write('channel', event.channel)
-  commit('flow')
-}
-
 const createDiscordEventNode = <
   K extends keyof DiscordEventPayload = keyof DiscordEventPayload
 >(
