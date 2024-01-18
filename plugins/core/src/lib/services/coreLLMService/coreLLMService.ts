@@ -1,5 +1,10 @@
 import { python } from 'pythonia'
-import { PRODUCTION, VERTEXAI_LOCATION, VERTEXAI_PROJECT } from 'shared/config'
+import {
+  NODE_ENV,
+  PRODUCTION,
+  VERTEXAI_LOCATION,
+  VERTEXAI_PROJECT,
+} from 'shared/config'
 
 import {
   LLMCredential,
@@ -16,35 +21,7 @@ import {
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { UserService } from '../userService/userService'
 
-type CompletionParams = {
-  request: CompletionRequest
-  callback: (
-    chunk: Chunk | null,
-    isDone: boolean,
-    completionResponse: CompletionResponse | null
-  ) => void
-  maxRetries: number
-  delayMs?: number
-}
-
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-interface ICoreLLMService {
-  /**
-   * Handles completion requests in streaming mode. Accumulates the text from each chunk and returns the complete text.
-   *
-   * @param request The completion request parameters.
-   * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
-   * @returns A promise that resolves to the complete text after all chunks have been received.
-   */
-  completion: (params: CompletionParams) => Promise<{
-    fullText: string
-    completionResponse: CompletionResponse
-  }>
-  completionGenerator: (
-    params: CompletionParams
-  ) => AsyncGenerator<Chunk, CompletionResponse, undefined>
-}
 
 export class CoreLLMService implements ICoreLLMService {
   protected liteLLM: any
@@ -93,31 +70,31 @@ export class CoreLLMService implements ICoreLLMService {
 
     while (attempts < maxRetries) {
       try {
-        const user = await this.userService.getUser(projectId)
+        const user = await this.userService.getUser(this.projectId)
         const budgetManagerUser =
           await this.coreBudgetManagerService?.getUsers()
 
         const liteLLMBudget =
-          await this.coreBudgetManagerService?.getTotalBudget(projectId)
+          await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
         console.log('USER', user, budgetManagerUser, liteLLMBudget)
         // console.log('BUDGET USER', budgetUser, budgetUser?.length)
-        // const estimatedCost =
-        //   await this.coreBudgetManagerService?.projectedCost({
-        //     model: request.model,
-        //     messages: request.messages,
-        //     projectId,
-        //   })
+        const estimatedCost =
+          await this.coreBudgetManagerService?.projectedCost({
+            model: request.model,
+            messages: request.messages,
+            projectId: this.projectId,
+          })
 
-        // const totalBudget = await this.coreBudgetManagerService?.getTotalBudget(
-        //   projectId
-        // )
-        // if (estimatedCost === undefined || totalBudget === undefined) {
-        //   throw new Error('Invalid user')
-        // }
+        const totalBudget = await this.coreBudgetManagerService?.getTotalBudget(
+          this.projectId
+        )
+        if (estimatedCost === undefined || totalBudget === undefined) {
+          throw new Error('Invalid user')
+        }
 
-        // if (estimatedCost > totalBudget) {
-        //   throw new Error('Budget limit exceeded or invalid user')
-        // }
+        if (estimatedCost > totalBudget) {
+          throw new Error('Budget limit exceeded')
+        }
 
         const body = {
           model: request.model || 'gemini-pro',
@@ -175,6 +152,25 @@ export class CoreLLMService implements ICoreLLMService {
 
     while (attempts < maxRetries) {
       try {
+        if (NODE_ENV !== 'development') {
+          const estimatedCost =
+            await this.coreBudgetManagerService?.projectedCost({
+              model: request.model,
+              messages: request.messages,
+              projectId: this.projectId,
+            })
+
+          const totalBudget =
+            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
+          if (estimatedCost === undefined || totalBudget === undefined) {
+            throw new Error('Invalid user')
+          }
+
+          if (estimatedCost > totalBudget) {
+            throw new Error('Budget limit exceeded or invalid user')
+          }
+        }
+
         const body = {
           model: request.model || 'gemini-pro',
           messages: request.messages,
@@ -189,12 +185,18 @@ export class CoreLLMService implements ICoreLLMService {
           const chunkJSON = await chunk.json()
           const chunkVal = await chunkJSON.valueOf()
           chunks.push(chunkVal)
-
           yield chunkVal
         }
 
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
+
+        if (NODE_ENV !== 'development') {
+          await this.coreBudgetManagerService?.updateCost(
+            this.projectId,
+            completionResponsePython
+          )
+        }
 
         const fullResponseJson = await completionResponsePython.json()
         const completionResponse =
