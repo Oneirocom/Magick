@@ -168,12 +168,25 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       this.start()
       return this
     } catch (err: any) {
-      this.agent.error(
+      this.error(
         `Error initializing spell ${this.spell.id} ${this.spell.name}`,
-        err.toString()
+        err
       )
       return this
     }
+  }
+
+  /**
+   * Log an error to the agent whichg is broadcast to the server, and relaye to clients
+   * @param message - The message to log.
+   * @param err - The error to log.w
+   */
+  error(message, err: any) {
+    this.agent.error(err.toString(), {
+      message,
+      spellId: this.spell.id,
+      projectId: this.spell.projectId,
+    })
   }
 
   /**
@@ -188,6 +201,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.engine.onNodeExecutionEnd.addListener(
       this.executionEndHandler.bind(this)
     )
+
+    this.engine.onNodeExecutionError.addListener(
+      this.executionErrorhandler.bind(this)
+    )
   }
 
   /**
@@ -199,8 +216,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executionStartHandler = async (node: any) => {
     const event = `${this.spell.id}-${node.id}-start`
 
-    console.log('Emitting start work!')
-    this.emitNodeWork(node, event)
+    this.emitNodeWork({ node, event, log: false })
   }
 
   /**
@@ -212,7 +228,23 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executionEndHandler = async (node: any) => {
     const event = `${this.spell.id}-${node.id}-end`
 
-    this.emitNodeWork(node, event)
+    this.emitNodeWork({ node, event })
+  }
+
+  executionErrorhandler = async ({ node, error }) => {
+    console.log('################ERROR HANDLER#################', error)
+    const event = `${this.spell.id}-${node.id}-error`
+
+    const message = `Node ${
+      node.description.label
+    } errored: ${error.toString()}`
+
+    this.emitNodeWork({
+      node,
+      event,
+      type: 'error',
+      data: { message, error },
+    })
   }
 
   /**
@@ -223,14 +255,30 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @example
    * spellCaster.emitNodeWork(nodeId, node)
    */
-  emitNodeWork(node: INode, event: string) {
+  emitNodeWork({
+    node,
+    event,
+    log = true,
+    type = 'log',
+    data = {},
+  }: {
+    node: INode
+    event: string
+    log?: boolean
+    type?: string
+    data?: Record<string, any>
+  }) {
     const message = {
       event,
+      log,
+      message: `Node ${node.description.label} executed`,
       timestamp: new Date().toISOString(),
       nodeId: node.id,
-      type: node.description.typeName,
+      typeName: node.description.typeName,
+      type,
       outputs: node.outputs,
       inputs: node.inputs,
+      ...data,
     }
 
     this.emitAgentSpellEvent(message)
@@ -275,9 +323,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     try {
       await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
     } catch (err: any) {
-      this.agent.error(
+      this.error(
         `Error executing graph on spell ${this.spell.id} ${this.spell.name}`,
-        err.toString()
+        err
       )
     }
     this.busy = false
