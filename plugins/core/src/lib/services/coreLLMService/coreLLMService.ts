@@ -163,6 +163,7 @@ export class CoreLLMService implements ICoreLLMService {
         attempts++
         if (attempts >= maxRetries) {
           await sleep(delayMs)
+        } else {
           throw error
         }
       }
