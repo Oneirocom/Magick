@@ -13,7 +13,7 @@ import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
-import { NotAuthenticated, NotFound } from '@feathersjs/errors'
+import { BadRequest, NotFound } from '@feathersjs/errors'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -91,15 +91,16 @@ export class AgentService<
    * @returns An object containing the response from the agent.
    */
   async command(data: AgentCommandData, params?: ServiceParams) {
+    if (!data.agentId) throw new BadRequest('agentId is required')
     // validate user owns the agent
     const agent = await this._get(data.agentId, params)
 
     if (!agent) throw new NotFound('Agent not found')
 
-    const projectId = params?.connection.projectId
-    if (agent.projectId !== projectId) {
-      throw new NotAuthenticated("You don't have access to this agent")
-    }
+    // const projectId = params?.connection.projectId
+    // if (agent.projectId !== projectId) {
+    //   throw new NotAuthenticated("You don't have access to this agent")
+    // }
 
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.command(data)
