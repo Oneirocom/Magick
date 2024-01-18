@@ -49,7 +49,16 @@ function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
   return result
 }
 
-const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command', 'event']
+const AGENT_EVENTS = [
+  'log',
+  'result',
+  'spell',
+  'run',
+  'command',
+  'event',
+  'error',
+  'warn',
+]
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -110,15 +119,8 @@ export const agent = (app: Application) => {
 
       // check if message type is an agent event
       if (!AGENT_EVENTS.includes(messageType)) {
-        // notify connected clients via log message that an unknown message type was received
-        app.service('agents').emit('log', {
-          channel,
-          agentId,
-          timestamp: new Date().toISOString(),
-          data: {
-            message: `Unknown message type ${messageType}`,
-          },
-        })
+        app.get('logger').trace('AGENT SERVICE: Skipping message %s', channel)
+        return
       }
 
       // remove unwanted properties from the message
