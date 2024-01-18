@@ -86,6 +86,7 @@ export type CompletionParams = {
     completionResponse: CompletionResponse | null
   ) => void
   maxRetries: number
+  spellId: string
   delayMs?: number
 }
 
