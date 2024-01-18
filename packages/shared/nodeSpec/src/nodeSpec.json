@@ -4254,5 +4254,113 @@
       }
     ],
     "configuration": []
+  },
+  {
+    "type": "slack/sendAudio",
+    "category": "Action",
+    "label": "Send Slack Audio",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "audioFile",
+        "valueType": "buffer"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "discord/onMessage",
+    "category": "Event",
+    "label": "On Discord Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "discord/onReactionAdd",
+    "category": "Event",
+    "label": "On Discord Reaction Add",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reaction",
+        "valueType": "string"
+      },
+      {
+        "name": "count",
+        "valueType": "number"
+      },
+      {
+        "name": "messageId",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "discord/sendMessage",
+    "category": "Action",
+    "label": "Send Discord Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "channel",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
   }
 ]
