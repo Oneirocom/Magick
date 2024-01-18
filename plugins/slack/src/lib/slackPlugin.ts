@@ -34,7 +34,7 @@ export class SlackPlugin extends CoreEventsPlugin<
     projectId: string
   ) {
     super(pluginName, connection, agentId, projectId)
-    this.event = new SlackEventClient(pubSub, agentId)
+    this.client = new SlackEventClient(pubSub, agentId)
     // this.meterManager.initializeMeters({})
     this.setCredentials(pluginCredentials)
     this.initalizeSlack().catch(error =>
