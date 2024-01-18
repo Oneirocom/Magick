@@ -92,11 +92,11 @@ export class AgentService<
    */
   async command(data: AgentCommandData, params?: ServiceParams) {
     // validate user owns the agent
-    const agent = await this._get(data.agentId, params)
+    const agent = await this._get(data.agentId as string, params)
 
     if (!agent) throw new NotFound('Agent not found')
 
-    const projectId = params?.connection.projectId
+    const projectId = params?.connection?.projectId
     if (agent.projectId !== projectId) {
       throw new NotAuthenticated("You don't have access to this agent")
     }
