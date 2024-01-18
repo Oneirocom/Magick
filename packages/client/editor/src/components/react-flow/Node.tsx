@@ -11,6 +11,7 @@ import { useSelectAgentsSpell } from 'client/state';
 import { SpellInterface } from 'server/schemas';
 import { getConfig } from '../../utils/getNodeConfig.js';
 import { configureSockets } from '../../utils/configureSockets.js';
+import { enqueueSnackbar } from 'notistack';
 
 type NodeProps = FlowNodeProps & {
   spec: NodeSpecJSON;
@@ -32,8 +33,10 @@ export const Node: React.FC<NodeProps> = ({
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
+  const [errorEventName, setErrorEventName] = useState<string | null>(null)
   const [running, setRunning] = useState(false)
   const [done, setDone] = useState(false)
+  const [error, setError] = useState(false)
   const edges = useEdges();
   const handleChange = useChangeNodeData(id);
 
@@ -54,12 +57,12 @@ export const Node: React.FC<NodeProps> = ({
     if (!spell || !id) return;
     setEndEventName(`${spell.id}-${id}-end`)
     setStartEventName(`${spell.id}-${id}-start`)
+    setErrorEventName(`${spell.id}-${id}-error`)
   }, [spell, id])
 
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === endEventName) {
-      // handleChange('eventName', spellEvent.eventName)
       setRunning(false)
       setDone(true)
 
@@ -72,14 +75,35 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === startEventName) {
-      // handleChange('eventName', spellEvent.eventName)
       setRunning(true)
+    }
+  }, [spellEvent])
+
+  useEffect(() => {
+    if (!spellEvent) return;
+    if (spellEvent.event === errorEventName) {
+      setRunning(false)
+      setError(spellEvent)
+
+      const truncatedMessage = spellEvent.message.length > 100 ? spellEvent.message.substring(
+        0,
+        spellEvent.message.lastIndexOf(' ', 10)
+      ) + '...' : spellEvent.message
+
+      enqueueSnackbar(truncatedMessage, {
+        variant: 'error',
+      })
+
+      setTimeout(() => {
+        setError(null)
+      }, 5000)
     }
   }, [spellEvent])
 
   return (
     <NodeContainer
       fired={done}
+      error={error}
       running={running}
       title={spec.label}
       category={spec.category}
