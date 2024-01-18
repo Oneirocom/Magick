@@ -1,16 +1,18 @@
 import { NodeSpecJSON, OutputSocketSpecJSON } from '@magickml/behave-graph';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReactJson from 'react-json-view'
 import cx from 'classnames';
-import React from 'react';
 import { Connection, Handle, Position, useReactFlow } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
 import { isValidConnection } from '../../utils/isValidConnection.js';
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui';
 
 export type OutputSocketProps = {
   connected: boolean;
   specJSON: NodeSpecJSON[];
+  lastEventOutput: any;
 } & OutputSocketSpecJSON;
 
 export default function OutputSocket(props: OutputSocketProps) {
@@ -42,15 +44,35 @@ export default function OutputSocket(props: OutputSocketProps) {
         />
       )}
 
-      <Handle
-        id={name}
-        type="source"
-        position={Position.Right}
-        className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
-        isValidConnection={(connection: Connection) =>
-          isValidConnection(connection, instance, specJSON)
-        }
-      />
+      <Popover>
+        <PopoverTrigger asChild>
+          <Handle
+            onClick={() => console.log(name)}
+            id={name}
+            type="source"
+            position={Position.Right}
+            className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
+            isValidConnection={(connection: Connection) =>
+              isValidConnection(connection, instance, specJSON)
+            }
+          />
+        </PopoverTrigger>
+        {props.lastEventOutput && <PopoverContent className="w-120" style={{ zIndex: 150 }} side="right">
+          <ReactJson
+            src={{
+              [name]: props.lastEventOutput
+            }}
+            theme="tomorrow"
+            name={false}
+            style={{ width: 400, overflow: 'scroll' }}
+            collapsed={1}
+            collapseStringsAfterLength={20}
+            enableClipboard={true}
+            displayObjectSize={false}
+            displayDataTypes={false}
+          />
+        </PopoverContent>}
+      </Popover>
     </div>
   );
 }
