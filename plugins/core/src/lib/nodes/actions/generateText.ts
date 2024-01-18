@@ -126,7 +126,7 @@ export const generateText = makeFlowNodeDefinition({
 
         // Start the processing loop and pass in the iterator
         processNextChunk(iterator).catch(error => {
-          throw new Error(error)
+          outerReject(error)
         })
       } catch (error: any) {
         const loggerService = getDependency<ILogger>(CORE_DEP_KEYS.LOGGER)
