@@ -66,7 +66,7 @@ export type EventFormat<
 }
 
 export type EventPayload<
-  T = Record<string, unknown>,
+  T = Record<string, unknown> | Object,
   Y = Record<string, unknown>
 > = {
   connector: string
