@@ -84,9 +84,11 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
   ]
   values = []
-  coreLLMService = new CoreLLMService({ projectId: this.projectId })
+  coreLLMService = new CoreLLMService({
+    projectId: this.projectId,
+    agentId: this.agentId,
+  })
   coreMemoryService = new CoreMemoryService()
-  // coreBudgetManagerService = new CoreBudgetManagerService()
   userService = new UserService()
 
   constructor(
