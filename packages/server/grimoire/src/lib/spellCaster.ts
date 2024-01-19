@@ -19,6 +19,7 @@ import { AGENT_SPELL } from 'shared/core'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
+import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 interface IAgent {
   id: string
   log: (message: string, data: Record<string, any>) => void
@@ -176,6 +177,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     }
   }
 
+  getDependency<T>(key: string): T | undefined {
+    return this.graph.getDependency<T>(key)
+  }
+
   /**
    * Log an error to the agent whichg is broadcast to the server, and relaye to clients
    * @param message - The message to log.
@@ -232,7 +237,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   }
 
   executionErrorhandler = async ({ node, error }) => {
-    console.log('################ERROR HANDLER#################', error)
     const event = `${this.spell.id}-${node.id}-error`
 
     const message = `Node ${
@@ -327,6 +331,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
         `Error executing graph on spell ${this.spell.id} ${this.spell.name}`,
         err
       )
+      // stop the run loop if we have an error
+      this.isRunning = false
     }
     this.busy = false
     this.executeGraph = false // Reset the flag after execution
@@ -399,7 +405,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     )
 
     // we set the current event in the event store for access in the state
-    const eventStore = this.graph.getDependency<IEventStore>('IEventStore')
+    const eventStore = this.graph.getDependency<IEventStore>(
+      CORE_DEP_KEYS.EVENT_STORE
+    )
 
     if (eventStore) eventStore.setEvent(payload)
 

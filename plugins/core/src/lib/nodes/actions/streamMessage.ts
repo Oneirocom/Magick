@@ -19,7 +19,7 @@ export const streamMessage = makeFlowNodeDefinition({
     const coreActionService = getDependency<CoreActionService>(
       CORE_DEP_KEYS.ACTION_SERVICE
     )
-    const eventStore = getDependency<IEventStore>('IEventStore')
+    const eventStore = getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
 
     if (!coreActionService || !eventStore) {
       throw new Error('No coreActionService or eventStore provided')
