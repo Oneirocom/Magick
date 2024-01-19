@@ -4,6 +4,7 @@ interface User {
   id: string
   email: string
   name: string
+  balance: number
 }
 
 interface UserResponse {
@@ -22,7 +23,7 @@ export class UserService implements IUserService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + CLOUD_AGENT_KEY,
+          'x-api-key': CLOUD_AGENT_KEY,
         },
       }).then(res => res.json())
 

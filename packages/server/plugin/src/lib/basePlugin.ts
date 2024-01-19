@@ -66,7 +66,7 @@ export type EventFormat<
 }
 
 export type EventPayload<
-  T = Record<string, unknown>,
+  T = Record<string, unknown> | Object,
   Y = Record<string, unknown>
 > = {
   connector: string
@@ -99,6 +99,12 @@ export type PluginCommand = {
   handler: (enable: boolean) => void
 }
 
+export interface BasePluginInit {
+  name: string
+  agentId: string
+  connection: Redis
+  projectId: string
+}
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
  * within the system. It encapsulates common functionalities and structures that
@@ -176,7 +182,8 @@ export abstract class BasePlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  //eslint-disable-next-line
+  //TODO: should this be getting passed in anywhere?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   State extends object = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
@@ -189,6 +196,8 @@ export abstract class BasePlugin<
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
+  protected projectId: string
+
   public connection: Redis
   public enabled: boolean = false
   public logger = getLogger()
@@ -223,10 +232,11 @@ export abstract class BasePlugin<
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor(name: string, connection: Redis, agentId: string) {
+  constructor({ name, agentId, connection, projectId }: BasePluginInit) {
     super({ name })
 
     this.agentId = agentId
+    this.projectId = projectId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []

@@ -1,4 +1,7 @@
-import Discord, { GatewayIntentBits, MessagePayload } from 'discord.js'
+import Discord, {
+  GatewayIntentBits,
+  // MessagePayload
+} from 'discord.js'
 import Redis from 'ioredis'
 
 import { EventFormat } from './basePlugin'
@@ -23,8 +26,8 @@ class DiscordPlugin extends CoreEventsPlugin<PluginEvents, DiscordPayload> {
   values = []
   dependencies = {}
 
-  constructor(connection: Redis, agentId: string) {
-    super('discord', connection, agentId)
+  constructor(connection: Redis, agentId: string, projectId: string) {
+    super('discord', connection, agentId, projectId)
     this.client = new Discord.Client({
       intents: [
         GatewayIntentBits.Guilds,

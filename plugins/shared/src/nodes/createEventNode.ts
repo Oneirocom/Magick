@@ -36,7 +36,7 @@ export type CreateEventNodeInputs<T> = {
 
 export const createEventNode = <
   E extends EventEmitter,
-  T extends Record<string, unknown>
+  T extends Record<string, any> | object
 >(
   inputs: CreateEventNodeInputs<T>
 ) => {
