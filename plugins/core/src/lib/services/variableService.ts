@@ -44,6 +44,9 @@ export class VariableService {
     const baseKey = `agent:${this.agentId}:spell:${this.spellCaster.spell.id}:variable:${name}`
     const eventKey = this.getEventKey()
 
+    console.log('EVENT KEY', eventKey)
+    console.log('############NEW KEY', `${baseKey}:${eventKey}`)
+
     if (!eventKey) return baseKey
 
     return `${baseKey}:${eventKey}`
