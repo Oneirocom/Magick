@@ -1,7 +1,7 @@
 import { VariableJSON } from '@magickml/behave-graph';
 import { Tab, useConfig } from '@magickml/providers';
 import { Window } from 'client/core'
-import { selectGraphJson, useGetSpellQuery, useSaveSpellMutation } from 'client/state';
+import { selectGraphJson, selectTabEdges, selectTabNodes, setEdges, setNodes, useGetSpellQuery, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
 import { IDockviewPanelProps } from 'dockview';
 import { useCallback, useState } from 'react';
@@ -11,6 +11,11 @@ import { useSelector } from 'react-redux';
 
 export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
   const { spellId, tab } = props.params
+
+  const nodes = useSelector(selectTabNodes(tab.id))
+  const edges = useSelector(selectTabEdges(tab.id))
+
+
   const [newVariableName, setNewVariableName] = useState<string>('')
   const graphJson = useSelector(selectGraphJson(tab.id))
   const { data: spell } = useGetSpellQuery({ id: spellId })
@@ -20,6 +25,23 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewVariableName(e.target.value)
   }
+
+  const deleteAllVariableNodes = useCallback((variable: VariableJSON) => {
+    const newNodes = nodes.filter(
+      node => !node.type.includes(variable.name))
+
+    const removedNodes = nodes.filter(
+      node => node.type.includes(variable.name)
+    ).map(node => node.id)
+
+    const newEdges = edges.filter(
+      edge => !removedNodes.includes(edge.source) && !removedNodes.includes(edge.target)
+    )
+
+    setNodes(tab.id, newNodes)
+    setEdges(tab.id, newEdges)
+  }, [nodes, edges])
+
 
 
   const saveVariable = useCallback((variable: VariableJSON) => {
@@ -39,8 +61,16 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
 
   const deleteVariable = useCallback((variableId: string) => {
     const graph = graphJson
+    const variable = graph.variables.find((v) => v.id === variableId);
     const newGraph = { ...graph, variables: graph.variables.filter((v) => v.id !== variableId) };
-    const newSpell = { ...spell, graph: newGraph };
+    const updatedGraph = {
+      ...newGraph,
+      nodes: graph.nodes.filter((node) => !node.type.includes(variable.name)),
+    }
+
+    const newSpell = { ...spell, graph: updatedGraph };
+
+    deleteAllVariableNodes(variable)
 
     return saveSpellMutation({ projectId, spell: newSpell })
       .then(() => enqueueSnackbar('Variable deleted', { variant: 'success' }))
