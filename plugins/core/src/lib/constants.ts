@@ -17,6 +17,8 @@ export const corePluginCredentials: PluginCredential[] = [
 
 export const CORE_DEP_KEYS = {
   ACTION_SERVICE: 'coreActionService',
+  STATE_SERVICE: 'IStateService',
+  EVENT_STORE: 'IEventStore',
   I_VARIABLE_SERVICE: 'IVariableService',
   LLM_SERVICE: 'coreLLMService',
   BUDGET_MANAGER_SERVICE: 'coreBudgetManagerService',
