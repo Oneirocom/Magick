@@ -5,6 +5,7 @@ import Redis from 'ioredis'
 
 import { IEventStore } from './eventStore'
 import { EventPayload } from 'server/plugin'
+import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 
 /**
  * @class KeyvStateService
@@ -94,7 +95,7 @@ export class KeyvStateService implements IStateService {
    * stateService.init(graph, graphNodes);
    */
   init(graph: IGraph) {
-    this.eventStore = graph.getDependency('IEventStore')
+    this.eventStore = graph.getDependency(CORE_DEP_KEYS.EVENT_STORE)
   }
 
   /**

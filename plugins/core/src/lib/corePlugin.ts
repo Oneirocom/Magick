@@ -87,6 +87,9 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
   ]
   values = []
+
+  // remember these are all global plugins and only have oe shared instance across
+  // all spells in the engine.
   coreLLMService = new CoreLLMService()
   coreMemoryService = new CoreMemoryService()
   coreBudgetManagerService = new CoreBudgetManagerService()
@@ -130,6 +133,7 @@ export class CorePlugin extends CoreEventsPlugin<
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
   async getDependencies(spellCaster: SpellCaster) {
+    // Initialize all global dependencies
     await this.coreLLMService.initialize()
     await this.coreBudgetManagerService.initialize()
     await this.coreMemoryService.initialize(this.agentId)

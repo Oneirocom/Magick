@@ -11,6 +11,7 @@ import {
 } from '@magickml/behave-graph'
 import { BaseEmitter, EventPayload } from 'server/plugin'
 import { IEventStore } from '../services/eventStore'
+import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 
 type OmitFactoryAndType<T extends INodeDefinition> = Omit<
   T,
@@ -176,9 +177,13 @@ export function makeMagickEventNodeDefinition<
           const onStartEvent = async (event: EventPayload) => {
             // attach event key to the event here
             // we set the current event in the event store for access in the state
-            const eventStore = getDependency<IEventStore>('IEventStore')
+            const eventStore = getDependency<IEventStore>(
+              CORE_DEP_KEYS.EVENT_STORE
+            )
             // we use the state service to rehydrate the state for the graph
-            const stateService = getDependency<IStateService>('IStateService')
+            const stateService = getDependency<IStateService>(
+              CORE_DEP_KEYS.STATE_SERVICE
+            )
 
             // We check for the event state properties and use them to create the state key
             const eventState = node?.configuration?.eventState || []
