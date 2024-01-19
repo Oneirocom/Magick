@@ -89,7 +89,9 @@ export class CorePlugin extends CoreEventsPlugin<
     agentId: this.agentId,
   })
   coreMemoryService = new CoreMemoryService()
-  userService = new UserService()
+  userService = new UserService({
+    projectId: this.projectId,
+  })
 
   constructor(
     connection: Redis,
