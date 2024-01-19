@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
 
 import CustomControls from './Controls.js'
@@ -15,6 +15,7 @@ import { RootState } from 'client/state'
 import { nodeColor } from '../../utils/nodeColor.js'
 import { ContextNodeMenu } from './ContextNodeMenu'
 import CustomEdge from './CustomEdge.js';
+import { NodeSpecJSON } from '@magickml/behave-graph';
 
 type FlowProps = {
   spell: SpellInterface;
@@ -34,16 +35,27 @@ const proOptions = {
   hideAttribution: true,
 };
 
+function isEmptyObject(obj: object): boolean {
+  return Object.keys(obj).length === 0;
+}
+
 export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
-  const specJson = getNodeSpec()
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { projectId, currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
 
+  const [specJson, setSpecJson] = React.useState<NodeSpecJSON[]>([])
   const [playing, setPlaying] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
   const { SEND_COMMAND } = events
+
+  useEffect(() => {
+    if (!spell) return
+
+    const specs = getNodeSpec(spell)
+    setSpecJson(specs)
+  }, [spell])
 
   const {
     nodes,
@@ -105,6 +117,8 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     }
     setPlaying(!playing)
   }
+
+  if (!nodeTypes || isEmptyObject(nodeTypes)) return null
 
   return (
     <ReactFlow
