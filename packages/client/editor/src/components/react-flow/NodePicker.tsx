@@ -34,8 +34,15 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   if (filters !== undefined) {
     filtered = filtered?.filter((node) => {
+      const inputs = [...node.inputs, ...(node?.configuration
+        .filter(c => c.name === 'socketInputs')
+        .flatMap(c => c.defaultValue) || [])]
+      const outputs = [...node.outputs, ...(node?.configuration
+        .filter(c => c.name === 'socketOutputs')
+        .flatMap(c => c.defaultValue) || [])]
+
       const sockets =
-        filters?.handleType === 'source' ? node.outputs : node.inputs;
+        filters?.handleType === 'source' ? outputs : inputs;
       return sockets.some((socket) => socket.valueType === filters?.valueType);
     });
   }
