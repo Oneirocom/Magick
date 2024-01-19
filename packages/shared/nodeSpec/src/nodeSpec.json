@@ -4215,6 +4215,114 @@
     "configuration": []
   },
   {
+    "type": "slack/onBotMessage",
+    "category": "Event",
+    "label": "On Slack Bot Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/onChannelJoin",
+    "category": "Event",
+    "label": "On Slack Channel Join",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/onChannelLeave",
+    "category": "Event",
+    "label": "On Slack Channel Leave",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "slack/onFileShared",
+    "category": "Event",
+    "label": "On Slack File Shared",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "slack/sendMessage",
     "category": "Action",
     "label": "Send Slack Message",
