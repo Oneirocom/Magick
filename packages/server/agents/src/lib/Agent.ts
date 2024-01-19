@@ -98,7 +98,8 @@ export class Agent implements AgentInterface {
       process.env.PLUGIN_DIRECTORY || './plugins',
       this.app.get('redis'),
       this.id,
-      this.app.get('pubsub')
+      this.app.get('pubsub'),
+      this.projectId
     )
 
     this.spellbook = new Spellbook({

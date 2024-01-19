@@ -1,31 +1,50 @@
 import { python } from 'pythonia'
 
-import { Choice, CompletionResponse, LLMModels } from '../coreLLMService/types'
+import { CompletionResponse, LLMModels, Message } from '../coreLLMService/types'
 import { UserService } from '../userService/userService'
 import {
   BudgetDuration,
   IBudgetManagerService,
   ICoreBudgetManagerService,
 } from '../types'
-import { PORTAL_URL } from 'shared/config'
+import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
-  protected liteLLM: any
-  protected userService: UserService
 
-  constructor() {
+  protected userService: UserService
+  projectId: string
+
+  constructor(projectId: string) {
     this.userService = new UserService()
+    this.projectId = projectId
   }
   async initialize() {
     try {
       const liteLLM = await python('litellm')
-      this.liteLLM = liteLLM
-      this.liteLLM.set_verbose = false
-      this.liteLLMBudgetManager = (await liteLLM.BudgetManager({
-        client_type: 'local',
-        api_base: PORTAL_URL,
-      })) as IBudgetManagerService
+      liteLLM.set_verbose = false
+
+      const userData = await this.userService.getUser(this.projectId)
+      if (!userData || !userData.user) {
+        throw new Error('User data not found')
+      }
+      const userId = userData.user.id
+      this.liteLLMBudgetManager = (await liteLLM.BudgetManager(
+        this.projectId,
+        'hosted',
+        `${PORTAL_URL}/api/magick/budget`,
+        { 'x-api-key': CLOUD_AGENT_KEY }
+      )) as IBudgetManagerService
+      const isValidUser = await this.isValidUser(userId)
+      if (!isValidUser) {
+        const initialBalance = userData.user.balance || 0
+        //TODO: We need to figure out duration
+        await this.createBudget({
+          totalBudget: initialBalance,
+          projectId: this.projectId,
+          duration: BudgetDuration.yearly,
+        })
+      }
     } catch (error: any) {
       console.error('Error initializing LiteLLM Budget Manager:', error)
       throw error
@@ -50,13 +69,11 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     duration: BudgetDuration
   }): Promise<boolean> {
     // Implement logic to create a budget
-    const userData = await this.userService.getUser(projectId)
     await this.liteLLMBudgetManager?.create_budget(
       totalBudget,
-      userData.user.id,
+      projectId,
       duration
     )
-    await this.saveData()
     return true
   }
 
@@ -73,21 +90,19 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     projectId,
   }: {
     model: string
-    messages: Choice[]
+    messages: Message[]
     projectId: string
   }): Promise<number> {
-    const userData = await this.userService.getUser(projectId)
-    const profit = 0.2
     const baseCost = await this.liteLLMBudgetManager?.projected_cost(
       model,
       messages,
-      userData.user.id
+      projectId
     )
     if (!baseCost) {
       throw new Error('Error getting base cost')
     }
-    const totalCost = baseCost + baseCost * profit
-    return totalCost
+
+    return baseCost
   }
 
   /**
@@ -96,11 +111,10 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @returns Promise<number>
    */
   async getTotalBudget(projectId: string): Promise<number> {
-    const userData = await this.userService.getUser(projectId)
     const totalBudget = await this.liteLLMBudgetManager?.get_total_budget(
-      userData.user.id
+      projectId
     )
-    if (!totalBudget) {
+    if (totalBudget === null || totalBudget === undefined) {
       throw new Error('Error getting total budget')
     }
     return totalBudget
@@ -116,13 +130,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     projectId: string,
     completionObj: CompletionResponse
   ): Promise<boolean> {
-    const userData = await this.userService.getUser(projectId)
-
-    await this.liteLLMBudgetManager?.update_cost(
-      userData.user.id,
-      completionObj
-    )
-    await this.saveData()
+    await this.liteLLMBudgetManager?.update_cost(projectId, completionObj)
     return true
   }
 
@@ -132,9 +140,8 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @returns Promise<number>
    */
   async getCurrentCost(projectId: string): Promise<number> {
-    const userData = await this.userService.getUser(projectId)
     const currentCost = await this.liteLLMBudgetManager?.get_current_cost(
-      userData.user.id
+      projectId
     )
     if (currentCost === null || currentCost === undefined) {
       throw new Error('Error getting current cost')
@@ -148,10 +155,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @returns Promise<number>
    */
   async getModelCost(projectId: string): Promise<Record<LLMModels, number>> {
-    const userData = await this.userService.getUser(projectId)
-    const modelCost = await this.liteLLMBudgetManager?.get_model_cost(
-      userData.user.id
-    )
+    const modelCost = await this.liteLLMBudgetManager?.get_model_cost(projectId)
     if (modelCost === null || modelCost === undefined) {
       throw new Error('Error getting model cost')
     }
@@ -164,11 +168,8 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @returns Promise<boolean>
    */
   async isValidUser(projectId: string): Promise<boolean> {
-    const userData = await this.userService.getUser(projectId)
-    const isValid = await this.liteLLMBudgetManager?.is_valid_user(
-      userData.user.id
-    )
-    if (isValid === undefined) {
+    const isValid = await this.liteLLMBudgetManager?.is_valid_user(projectId)
+    if (isValid === undefined || isValid === null) {
       throw new Error('Error getting user validity')
     }
     return isValid
@@ -192,8 +193,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @returns Promise<boolean>
    */
   async resetCost(projectId: string): Promise<boolean> {
-    const userData = await this.userService.getUser(projectId)
-    await this.liteLLMBudgetManager?.reset_cost(userData.user.id)
+    await this.liteLLMBudgetManager?.reset_cost(projectId)
     await this.saveData()
     return true
   }
@@ -204,8 +204,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @returns Promise<boolean>
    */
   async resetOnDuration(projectId: string): Promise<boolean> {
-    const userData = await this.userService.getUser(projectId)
-    await this.liteLLMBudgetManager?.reset_on_duration(userData.user.id)
+    await this.liteLLMBudgetManager?.reset_on_duration(projectId)
     await this.saveData()
     return true
   }
@@ -231,15 +230,17 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * - Test thoroughly in a controlled environment to understand its behavior and impact.
    * - Review additional documentation or source code for detailed understanding of functionality.
    */
-  async updateBudgetAllUsers(): Promise<void> {
+  async updateBudgetAllUsers(): Promise<boolean> {
     await this.liteLLMBudgetManager?.update_budget_all_users()
+    return true
   }
 
   /**
    * Save the data for the budget manager. This should be called after any changes to the budget manager.
    * @returns Promise<void>
    */
-  async saveData(): Promise<void> {
+  async saveData(): Promise<boolean> {
     await this.liteLLMBudgetManager?.save_data()
+    return true
   }
 }

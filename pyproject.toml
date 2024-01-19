@@ -2,12 +2,13 @@
 name = "magick"
 version = "0.1.0"
 description = "More than just a rabbit in a hat"
-authors = ["Your Name <you@example.com>"]
+authors = ["Your Name  <you@example.com>"]
 license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">3.10,<3.12"
+# litellm = { path = "./packages/litellm/litellm", develop = true }
 litellm = "^1.15.1"
 setuptools = "^69.0.3"
 embedchain = {extras = ["weaviate"], version = "^0.1.65"}

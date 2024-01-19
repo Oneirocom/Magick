@@ -33,8 +33,6 @@ import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { UserService } from './services/userService/userService'
 import { arrayCreate } from './values/Array/Create'
-import { CoreBudgetManagerService } from './services/coreBudgetManagerService/coreBudgetMangerService'
-import { budgetManager } from './nodes/billing/budgetManager'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
 import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
@@ -65,7 +63,6 @@ export class CorePlugin extends CoreEventsPlugin<
     sendMessage,
     textTemplate,
     generateText,
-    budgetManager,
     streamMessage,
     variableGet,
     variableSet,
@@ -87,16 +84,20 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
   ]
   values = []
-
-  // remember these are all global plugins and only have oe shared instance across
-  // all spells in the engine.
-  coreLLMService = new CoreLLMService()
+  coreLLMService = new CoreLLMService({
+    projectId: this.projectId,
+    agentId: this.agentId,
+  })
   coreMemoryService = new CoreMemoryService()
-  coreBudgetManagerService = new CoreBudgetManagerService()
   userService = new UserService()
 
-  constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
-    super(corePluginName, connection, agentId)
+  constructor(
+    connection: Redis,
+    agentId: string,
+    pubSub: RedisPubSub,
+    projectId: string
+  ) {
+    super(corePluginName, connection, agentId, projectId)
     this.client = new CoreEventClient(pubSub, agentId)
     this.setCredentials(corePluginCredentials)
   }
@@ -135,7 +136,7 @@ export class CorePlugin extends CoreEventsPlugin<
   async getDependencies(spellCaster: SpellCaster) {
     // Initialize all global dependencies
     await this.coreLLMService.initialize()
-    await this.coreBudgetManagerService.initialize()
+    // await this.coreBudgetManagerService.initialize()
     await this.coreMemoryService.initialize(this.agentId)
     await this.getLLMCredentials()
 
@@ -150,7 +151,7 @@ export class CorePlugin extends CoreEventsPlugin<
         spellCaster
       ),
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
-      [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
+      // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
     }
   }

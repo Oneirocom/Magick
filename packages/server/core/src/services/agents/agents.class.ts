@@ -93,7 +93,7 @@ export class AgentService<
   async command(data: AgentCommandData, params?: ServiceParams) {
     if (!data.agentId) throw new BadRequest('agentId is required')
     // validate user owns the agent
-    const agent = await this._get(data.agentId, params)
+    const agent = await this._get(data.agentId as string, params)
 
     if (!agent) throw new NotFound('Agent not found')
 

@@ -1,4 +1,3 @@
-// onSlackMessage.ts
 import { SLACK_EVENTS, pluginName } from '../../constants'
 import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEmitterType } from '../../dependencies/slackEmitter'
@@ -24,8 +23,10 @@ const createSlackEventNode = (
   typeName: string,
   label: string,
   eventKey: keyof typeof SLACK_EVENTS,
-  out?: Record<string, string>
+  out?: Record<string, string>,
+  process?: SlackEventProcess
 ) =>
+  // TODO: replace any with proper type, it should be the type that gets passed to EventPayload<T> for slack
   createEventNode<SlackEmitterType, any>({
     base: {
       typeName,
@@ -40,7 +41,7 @@ const createSlackEventNode = (
       },
     },
     emitterDependencyKey: pluginName,
-    process: processSlackEvent,
+    process: process ?? processSlackEvent,
     event: SLACK_EVENTS[eventKey],
   })
 
