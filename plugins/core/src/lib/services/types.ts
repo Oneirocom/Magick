@@ -98,10 +98,6 @@ export interface ICoreLLMService {
    * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
    * @returns A promise that resolves to the complete text after all chunks have been received.
    */
-  completion: (params: CompletionParams) => Promise<{
-    fullText: string
-    completionResponse: CompletionResponse
-  }>
   completionGenerator: (
     params: CompletionParams
   ) => AsyncGenerator<Chunk, CompletionResponse, undefined>
