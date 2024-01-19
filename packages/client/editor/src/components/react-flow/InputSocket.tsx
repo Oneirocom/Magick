@@ -87,7 +87,7 @@ const InputFieldForValue = ({
               type="number"
               className={inputClass}
               value={Number(inputVal) || 0}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              onChange={(e) => onChange(name, Number(e.currentTarget.value))}
             />
           )}
           {valueType === 'integer' && !showChoices && (
@@ -95,7 +95,7 @@ const InputFieldForValue = ({
               type="number"
               className={inputClass}
               value={Number(inputVal) || 0}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              onChange={(e) => onChange(name, Number(e.currentTarget.value))}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
@@ -103,7 +103,7 @@ const InputFieldForValue = ({
               type="checkbox"
               className={inputClass}
               checked={Boolean(inputVal)}
-              onChange={(e) => onChange(name, e.currentTarget.checked)}
+              onChange={(e) => onChange(name, Boolean(e.currentTarget.checked))}
             />
           )}
 
