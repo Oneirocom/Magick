@@ -6,6 +6,19 @@ const isNullish = (value: any): value is null | undefined =>
 
 const USED_DATA_PROPERTIES = ['configuration']
 
+function formatVariableNode(nodeType: string): string {
+  if (
+    nodeType.startsWith('variables/set') ||
+    nodeType.startsWith('variables/get')
+  ) {
+    // Split the string by '/'
+    const parts = nodeType.split('/')
+    // Return only the first two parts joined by '/'
+    return parts.slice(0, 2).join('/')
+  }
+  return nodeType
+}
+
 export const flowToBehave = (
   nodes: Node[],
   edges: Edge[],
@@ -27,7 +40,7 @@ export const flowToBehave = (
 
     const behaveNode: NodeJSON = {
       id: node.id,
-      type: node.type,
+      type: formatVariableNode(node.type),
       metadata: {
         positionX: String(node.position.x),
         positionY: String(node.position.y),
