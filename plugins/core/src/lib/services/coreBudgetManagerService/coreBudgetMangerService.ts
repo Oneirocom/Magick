@@ -16,7 +16,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   projectId: string
 
   constructor(projectId: string) {
-    this.userService = new UserService()
+    this.userService = new UserService({ projectId })
     this.projectId = projectId
   }
   async initialize() {
@@ -24,10 +24,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       const liteLLM = await python('litellm')
       liteLLM.set_verbose = false
 
-      const userData = await this.userService.getUser(this.projectId)
-      if (!userData || !userData.user) {
-        throw new Error('User data not found')
-      }
+      const userData = await this.userService.getUser()
       const userId = userData.user.id
       this.liteLLMBudgetManager = (await liteLLM.BudgetManager(
         this.projectId,
