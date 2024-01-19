@@ -8,8 +8,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">3.10,<3.12"
-litellm = { path = "./pythonPackages/liteLLM", develop = true }
-# litellm = "^1.15.1"
+# litellm = { path = "./pythonPackages/liteLLM", develop = true }
+litellm = { git = "git@github.com:HaruHunab1320/litellm.git", branch="main"}
 setuptools = "^69.0.3"
 embedchain = {extras = ["weaviate"], version = "^0.1.65"}
 bs4 = "^0.0.2"
@@ -17,7 +17,8 @@ html5lib = "^1.1"
 lxml = "^5.1.0"
 
 [tool.poetry.dev-dependencies]
-litellm = { path = "./pythonPackages/liteLLM", develop = true }
+#litellm = { path = "./pythonPackages/liteLLM", develop = true }
+litellm = { git = "git@github.com:HaruHunab1320/litellm.git", branch="main"}
 
 [build-system]
 requires = ["poetry-core"]
