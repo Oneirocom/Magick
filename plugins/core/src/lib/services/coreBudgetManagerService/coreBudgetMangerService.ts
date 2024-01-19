@@ -7,11 +7,11 @@ import {
   IBudgetManagerService,
   ICoreBudgetManagerService,
 } from '../types'
-import { PORTAL_URL } from 'shared/config'
+import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
-  protected liteLLM: any
+
   protected userService: UserService
   projectId: string
 
@@ -22,8 +22,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   async initialize() {
     try {
       const liteLLM = await python('litellm')
-      this.liteLLM = liteLLM
-      this.liteLLM.set_verbose = true
+      liteLLM.set_verbose = false
 
       const userData = await this.userService.getUser(this.projectId)
       if (!userData || !userData.user) {
@@ -33,7 +32,8 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       this.liteLLMBudgetManager = (await liteLLM.BudgetManager(
         this.projectId,
         'hosted',
-        `${PORTAL_URL}/api/magick/budget`
+        `${PORTAL_URL}/api/magick/budget`,
+        { 'x-api-key': CLOUD_AGENT_KEY }
       )) as IBudgetManagerService
       const isValidUser = await this.isValidUser(userId)
       if (!isValidUser) {
