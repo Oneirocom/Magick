@@ -5,6 +5,8 @@ interface User {
   email: string
   name: string
   balance: number
+  hasSubscription: boolean
+  subscriptionName?: string
 }
 
 interface UserResponse {
@@ -12,12 +14,16 @@ interface UserResponse {
   user: User
 }
 interface IUserService {
-  getUser(projectId: string): Promise<UserResponse>
+  getUser(): Promise<UserResponse>
 }
 
 export class UserService implements IUserService {
-  async getUser(projectId: string): Promise<UserResponse> {
-    const url = `${PORTAL_URL}/api/magick/user/${projectId}`
+  projectId: string
+  constructor({ projectId }) {
+    this.projectId = projectId
+  }
+  async getUser(): Promise<UserResponse> {
+    const url = `${PORTAL_URL}/api/magick/user/${this.projectId}`
     try {
       const userData: UserResponse = await fetch(url, {
         method: 'GET',
