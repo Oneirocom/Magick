@@ -1,5 +1,6 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { socketsFromNumInputs } from './socketsFromNum'
+import { getConfigFromNodeSpec } from './getNodeConfig'
 
 // export const getSocketsByNodeTypeAndHandleType = (
 //   nodes: NodeSpecJSON[],
@@ -16,10 +17,15 @@ export const getSocketsByNodeTypeAndHandleType = (
   nodes: NodeSpecJSON[],
   nodeType: string | undefined,
   handleType: 'source' | 'target' | null,
-  configuration: Record<string, any> = {}
+  configuration: Record<string, any> = undefined
 ) => {
   const nodeSpec = nodes.find(node => node.type === nodeType)
   if (nodeSpec === undefined) return
+
+  // if a config wasn't passed in, lets try getting it from the node spec
+  if (!configuration) {
+    configuration = getConfigFromNodeSpec(nodeSpec)
+  }
 
   // Extracting sockets from nodeSpec based on handleType
   const mainSockets =
