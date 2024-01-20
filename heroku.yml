@@ -5,6 +5,7 @@ run:
   web:
     command:
       - start-server
+    image: worker
   manager:
     command:
       - start-cloud-agent-manager
