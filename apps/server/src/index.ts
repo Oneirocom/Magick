@@ -6,7 +6,7 @@
 import cors from '@koa/cors'
 import Router from '@koa/router'
 import { pluginManager } from 'shared/core'
-import { apis, initApp, app, Handler, initFileServer, Method, Middleware, Route, spells } from 'server/core'
+import { apis, initApp, app, Handler, Method, Middleware, Route, spells } from 'server/core'
 import { initLogger, getLogger } from 'server/logger'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
@@ -68,10 +68,6 @@ async function init() {
         .join(', ')
     )
   })()
-
-  // initSpeechServer()
-  await initFileServer()
-  // await initTextToSpeech()
 
   const serverInits: Record<string, any> = pluginManager.getServerInits()
 
