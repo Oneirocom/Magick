@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "scripts": {
-    "common-setup": "cross-env NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
+    "common-setup": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
     "dev-base": "npm run common-setup && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
     "dev": "poetry run concurrently --raw \"npm run dev-base\" \"npm run dev:clientConfig\"",
     "generate-node-specs": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.ts",
@@ -28,7 +28,7 @@
     "lint:server-core": "npx nx lint @magickml/server-core",
     "build": "npx nx run-many --target=build --projects=@magickml/server,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app",
     "build-client": "npx nx build @magickml/client",
-    "heroku-prebuild": "npm i -g @nrwl/cli",
+    "heroku-prebuild": "npm i -g @nrwl/cli && poetry install",
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",
