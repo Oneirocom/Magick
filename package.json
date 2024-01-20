@@ -33,6 +33,8 @@
     "build-client": "npx nx build @magickml/client",
     "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-server": "npx nx build @magickml/server",
+    "build-cloud-agent-manager": "npx nx build @magickml/cloud-agent-manager-app",
+    "build-cloud-agent-worker": "npx nx build @magickml/cloud-agent-worker-app",
     "build-docs": "npx nx build @magickml/docs",
     "build-engine": "npx nx build shared-core",
     "test": "npx nx test",
