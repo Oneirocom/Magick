@@ -9,11 +9,23 @@ import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 import { BullQueue } from 'server/communication'
 
+const PINO_LOG_LEVEL =
+  (typeof process !== 'undefined' && process.env['PINO_LOG_LEVEL']) || 'info'
+
 if (PRODUCTION) {
   initLogger({
     name: 'cloud-agent-manager',
     transport: {
-      targets: [getPinoTransport('info')],
+      targets: [
+        getPinoTransport('trace'),
+        {
+          target: 'pino-pretty',
+          level: PINO_LOG_LEVEL,
+          options: {
+            colorize: true,
+          },
+        },
+      ],
     },
     level: 'info',
   })
@@ -43,7 +55,11 @@ if (PRODUCTION || DONT_CRASH_ON_ERROR) {
     logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
   })
 }
-
+console.log('INIT APP')
 await initApp()
+
+console.log('INIT AGENT COMMANDER')
 await initAgentCommander()
+
+console.log('START')
 start()
