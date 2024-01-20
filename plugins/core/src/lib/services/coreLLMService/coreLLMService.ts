@@ -35,7 +35,7 @@ export class CoreLLMService implements ICoreLLMService {
   constructor({ projectId, agentId }) {
     this.projectId = projectId
     this.agentId = agentId || ''
-    this.userService = new UserService()
+    this.userService = new UserService(projectId)
   }
   async initialize() {
     try {
@@ -73,7 +73,7 @@ export class CoreLLMService implements ICoreLLMService {
 
     while (attempts < maxRetries) {
       try {
-        const user = await this.userService.getUser(this.projectId)
+        const user = await this.userService.getUser()
         const budgetManagerUser =
           await this.coreBudgetManagerService?.getUsers()
 
