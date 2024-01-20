@@ -25,8 +25,6 @@
       "/node_modules/@types"
     ],
     "paths": {
-      "plugins/*": ["plugins/*"],
-      "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/feathersRedux": [
@@ -202,6 +200,7 @@
       ],
       "client/state": ["packages/client/state/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
+      "plugins/*": ["plugins/*"],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [

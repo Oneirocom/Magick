@@ -30,7 +30,6 @@
     "build-client": "npx nx build @magickml/client",
     "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-server": "npx nx build @magickml/server",
-    "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",
     "build-engine": "npx nx build shared-core",
     "test": "npx nx test",
@@ -38,7 +37,7 @@
     "nukefromorbit": "rimraf ./packages/**/node_modules && rimraf ./node_modules && rimraf ./apps/**/node_modules",
     "remove": "npx nx generate @nx/workspace:remove",
     "sortPackage": "npx sort-package-json",
-    "find unused deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
+    "find-unused-deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
     "postinstall": "node scripts/config-plugins.js",
     "prepare": "husky install || true",
     "lint-staged": "lint-staged"

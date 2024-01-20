@@ -141,6 +141,7 @@ Clone and set up Magick
 git clone https://github.com/Oneirocom/Magick
 cd Magick
 npm install
+poetry install --no-root
 npm run dev
 ```
 
