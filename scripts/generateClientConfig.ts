@@ -51,7 +51,12 @@ const loadPlugins = async () => {
     if (checkIfCorePlugin(PluginClass)) {
       // Create an instance of the plugin
       // @ts-ignore
-      const pluginInstance = new PluginClass(connection, '000000000', pubSub)
+      const pluginInstance = new PluginClass(
+        connection,
+        '000000000',
+        pubSub,
+        '000000000'
+      )
       plugins.push(pluginInstance)
     }
   }
