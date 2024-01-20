@@ -6,31 +6,6 @@
 
 import Koa from 'koa'
 import { Route } from '../config/types'
-import { tts } from '../servers/googleTextToSpeech'
-import { tts_tiktalknet } from '../servers/tiktalknet'
-
-/**
- * Retrieves a URL of the audio pronunciation of the given text input, using either Google or TikTalkNet.
- * @function
- * @async
- * @param {Koa.Context} ctx - Context object representing a RESTful HTTP request/response
- * @returns {Promise<void>} Nothing
- */
-const getTextToSpeech = async (ctx: Koa.Context): Promise<void> => {
-  const text = ctx.request.query.text as string
-  const voice_provider = ctx.request.query.voice_provider as string
-  const voice_character = ctx.request.query.voice_character as string
-  const voice_endpoint = ctx.request.query.voice_endpoint as string
-  let url = ''
-
-  if (voice_provider === 'google') {
-    url = await tts(text, voice_character as string)
-  } else {
-    url = await tts_tiktalknet(text, voice_character, voice_endpoint)
-  }
-
-  ctx.body = url
-}
 
 /**
  * Generates an image from the supplied image data.
@@ -102,10 +77,6 @@ const image_generation = async (ctx: Koa.Context): Promise<void> => {
 
 // Export a list of REST APIs
 export const apis: Route[] = [
-  {
-    path: '/text_to_speech',
-    get: getTextToSpeech,
-  },
   {
     path: '/image_generation',
     post: image_generation,
