@@ -84,14 +84,9 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
   ]
   values = []
-  coreLLMService = new CoreLLMService({
-    projectId: this.projectId,
-    agentId: this.agentId,
-  })
+  coreLLMService: CoreLLMService
   coreMemoryService = new CoreMemoryService()
-  userService = new UserService({
-    projectId: this.projectId,
-  })
+  userService: UserService
 
   constructor(
     connection: Redis,
@@ -102,6 +97,13 @@ export class CorePlugin extends CoreEventsPlugin<
     super(corePluginName, connection, agentId, projectId)
     this.client = new CoreEventClient(pubSub, agentId)
     this.setCredentials(corePluginCredentials)
+
+    this.coreLLMService = new CoreLLMService({
+      projectId,
+      agentId,
+    })
+
+    this.userService = new UserService({ projectId })
   }
 
   /**

@@ -23,8 +23,13 @@ export class DiscordPlugin extends CoreEventsPlugin {
   values = []
   discord: DiscordClient | undefined = undefined
 
-  constructor(connection: Redis, agentId: string, pubSub: RedisPubSub) {
-    super(discordPluginName, connection, agentId)
+  constructor(
+    connection: Redis,
+    agentId: string,
+    pubSub: RedisPubSub,
+    projectId: string
+  ) {
+    super(discordPluginName, connection, agentId, projectId)
     this.event = new DiscordEventClient(pubSub, agentId)
     this.setCredentials(discordPluginCredentials)
     this.initalizeDiscord().catch(error =>
