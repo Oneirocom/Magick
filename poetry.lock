@@ -1466,7 +1466,7 @@ proxy = ["backoff", "fastapi (>=0.104.1,<0.105.0)", "gunicorn (>=21.2.0,<22.0.0)
 
 [package.source]
 type = "git"
-url = "git@github.com:HaruHunab1320/litellm.git"
+url = "https://github.com/HaruHunab1320/litellm.git"
 reference = "main"
 resolved_reference = "7ba7272a9a9ee1dd889fe855c3892d2ec9d21630"
 
@@ -3566,4 +3566,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">3.10,<3.12"
-content-hash = "98c0765b7485e90c31fb476f4d0264a39a685d58030468b65f645607761d2c58"
+content-hash = "a02ee511c235faf9cf4a4ffdaa3fec032ec5fc92069834f3512c65e1fc9f4931"
