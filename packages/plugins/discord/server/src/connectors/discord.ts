@@ -9,11 +9,6 @@ import Discord, {
   Message,
 } from 'discord.js'
 import emoji from 'emoji-dictionary'
-import {
-  initSpeechClient,
-  stopSpeechClient,
-  recognizeSpeech,
-} from './discord-voice'
 
 type ExtendedClient = Client & {
   embed?: EmbedBuilder
@@ -64,23 +59,7 @@ export class DiscordConnector {
 
       this.client.embed = embed
 
-      const { client, agent, spellRunner } = this
-      ;(async () => {
-        if (typeof window === 'undefined') {
-          this.client = initSpeechClient({
-            client,
-            agent,
-            spellRunner,
-          })
-        }
-      })()
-      this.client.on('joinvc', async voiceChannel => {
-        console.log('joinvc', voiceChannel)
-        return recognizeSpeech(voiceChannel, this.agent.id)
-      })
-      this.client.on('leavevc', async voiceChannel => {
-        stopSpeechClient(voiceChannel, this.agent.id)
-      })
+      const { agent } = this
 
       this.client.on('messageCreate', async message => {
         console.log('messageCreate', message)
