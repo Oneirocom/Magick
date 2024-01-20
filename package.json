@@ -18,7 +18,7 @@
     "start": "node scripts/start-server.js",
     "start-server": "node dist/apps/server/main.js",
     "start-cloud-agent-manager": "OTEL_SERVICE_NAME=agent-manager node -r './instrument.js' dist/apps/cloud-agent-manager/main.js",
-    "start-cloud-agent-worker": "OTEL_SERVICE_NAME=agent-worker node -r './instrument.js' dist/apps/cloud-agent-worker/main.js",
+    "start-cloud-agent-worker": "OTEL_SERVICE_NAME=agent-worker poetry run node -r './instrument.js' dist/apps/cloud-agent-worker/main.js",
     "start-docs": "npx nx serve @magickml/docs",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
