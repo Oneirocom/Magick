@@ -1,13 +1,15 @@
 build:
   docker:
-    web: Dockerfile
+    worker: Dockerfile
 run:
-  web: start-server
+  web:
+    command:
+      - start-server
   manager:
     command:
       - start-cloud-agent-manager
-    image: web
+    image: worker
   worker:
     command:
       - start-cloud-agent-worker
-    image: web
+    image: worker
