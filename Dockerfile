@@ -14,5 +14,6 @@ RUN poetry install --no-interaction --no-ansi -vvv
 
 RUN npm install
 
+RUN npm run build
+
 ENTRYPOINT [ "npm", "run" ]
-CMD [ "start-server" ]
