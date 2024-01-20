@@ -1,12 +1,6 @@
 // DOCUMENTED
-import {
-  audioSocket,
-  eventSocket,
-  ServerPlugin,
-  triggerSocket,
-} from 'shared/core'
+import { eventSocket, ServerPlugin, triggerSocket } from 'shared/core'
 import { DiscordConnector } from './connectors/discord'
-import { handleVoiceResponse } from './connectors/discord-voice'
 
 import { getNodes } from '@magickml/plugin-discord-shared'
 import { AgentEvents } from 'server/event-tracker'
@@ -109,14 +103,6 @@ const outputSockets = [
   },
 ]
 
-const audioOutputSockets = [
-  {
-    socket: 'output',
-    name: 'output',
-    type: audioSocket,
-  },
-]
-
 /**
  * DiscordPlugin: Handles the integration with Discord,
  * including voice and text interactions.
@@ -142,17 +128,6 @@ const DiscordPlugin = new ServerPlugin({
     },
   ],
   outputTypes: [
-    {
-      name: 'Discord (Voice)',
-      sockets: audioOutputSockets,
-      handler: async ({ output, agent, event }) => {
-        const metadata = {
-          channel: 'discord_voice',
-        }
-        agent.trackEvent(AgentEvents.AGENT_DISCORD_MESSAGE, metadata, event)
-        await handleVoiceResponse({ output, agent, event })
-      },
-    },
     {
       name: 'Discord (DM)',
       sockets: outputSockets,
