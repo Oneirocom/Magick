@@ -28,7 +28,7 @@
     "lint:server-core": "npx nx lint @magickml/server-core",
     "build": "npx nx run-many --target=build --projects=@magickml/server,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app",
     "build-client": "npx nx build @magickml/client",
-    "heroku-prebuild": "npm i -g @nrwl/cli && poetry install",
+    "heroku-prebuild": "npm i -g @nrwl/cli",
     "build-server": "npx nx build @magickml/server",
     "build-agent": "npx nx build @magickml/agent",
     "build-docs": "npx nx build @magickml/docs",
