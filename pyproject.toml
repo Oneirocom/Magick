@@ -7,7 +7,7 @@ license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.11"
+python = "3.11.2"
 # litellm = { path = "./pythonPackages/liteLLM", develop = true }
 litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
 # setuptools = "^69.0.3"
