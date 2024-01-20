@@ -1,6 +1,6 @@
-import deepEqual from 'deep-equal'
-import Rete, { Input, Output } from 'shared/rete'
+import _ from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
+import { Input, Output } from 'rete'
 
 import { MagickComponent } from '../../engine'
 import * as socketMap from '../../sockets'
@@ -163,9 +163,9 @@ export class Inspector {
 
         // handle removing the socket, either output or input
         if (isOutput) {
-          this.node.removeOutput(socket as Output)
+          this.node.removeOutput(socket as any)
         } else {
-          this.node.removeInput(socket as Input)
+          this.node.removeInput(socket as any)
         }
       })
 
@@ -190,7 +190,7 @@ export class Inspector {
     // Iterate over any new sockets and add them
     newSockets.forEach(socket => {
       // get the right constructor method for the socket
-      const SocketConstructor = isOutput ? Rete.Output : Rete.Input
+      const SocketConstructor = isOutput ? Output : Input
 
       // use the provided information from the socket to generate it
       const newSocket = new SocketConstructor(
@@ -201,9 +201,9 @@ export class Inspector {
       )
 
       if (isOutput) {
-        this.node.addOutput(newSocket as Output)
+        this.node.addOutput(newSocket as any)
       } else {
-        this.node.addInput(newSocket as Input)
+        this.node.addInput(newSocket as any)
       }
     })
   }
@@ -241,7 +241,7 @@ export class Inspector {
     // go over each data control
     const dataControlArray = Array.from(this.dataControls)
     for (const [key, control] of dataControlArray) {
-      const isEqual = deepEqual(this.cache[key], data[key])
+      const isEqual = _.isEqual(this.cache[key], data[key])
 
       // compare agains the cache to see if it has changed
       if (isEqual) continue
