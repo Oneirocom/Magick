@@ -1,6 +1,9 @@
 {
   "name": "magick",
   "version": "0.1.0",
+  "engines": {
+    "node": "20.x"
+  },
   "license": "Apache 2.0",
   "scripts": {
     "common-setup": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
@@ -63,7 +66,7 @@
     "@docusaurus/preset-classic": "3.0.1",
     "@emotion/styled": "^11.11.0",
     "@esbuild-plugins/node-globals-polyfill": "0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "0.2.2",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@feathersjs/adapter-commons": "5.0.8",
     "@feathersjs/authentication": "5.0.8",
     "@feathersjs/client": "5.0.8",
