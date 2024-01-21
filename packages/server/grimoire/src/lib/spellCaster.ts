@@ -210,6 +210,14 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.engine.onNodeExecutionError.addListener(
       this.executionErrorhandler.bind(this)
     )
+
+    this.engine.onNodeCommit.addListener(this.nodeCommitHandler.bind(this))
+  }
+
+  nodeCommitHandler = async payload => {
+    const event = `${this.spell.id}-${payload.node.id}-commit`
+
+    this.emitNodeWork({ node: payload.node, event, log: false, data: payload })
   }
 
   /**
