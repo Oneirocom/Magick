@@ -265,7 +265,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Toggles the watchSpells flag.
    */
   toggleLive(data) {
-    this.agent.log(`Toggling watchSpells to ${data.live}`)
+    this.logger.trace(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
   }

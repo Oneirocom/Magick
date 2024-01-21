@@ -117,7 +117,7 @@ export default class SpellManager {
    * Toggles the watchSpells flag.
    */
   toggleLive(data) {
-    this.agent.log(`Toggling watchSpells to ${data.live}`)
+    this.agent.trace(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
   }
