@@ -4,7 +4,7 @@ import { Edge, Node } from 'reactflow'
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null
 
-const USED_DATA_PROPERTIES = ['configuration']
+const USED_DATA_PROPERTIES = ['configuration', 'nodeSpec']
 
 function formatVariableNode(nodeType: string): string {
   if (
