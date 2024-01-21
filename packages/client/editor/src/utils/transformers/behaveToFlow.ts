@@ -41,6 +41,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
             source: input.link.nodeId,
             sourceHandle: input.link.socket,
             target: nodeJSON.id,
+            type: 'custom-edge',
             targetHandle: inputKey,
             updatable: 'target',
           })
@@ -57,6 +58,8 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
           id: uuidv4(),
           source: nodeJSON.id,
           sourceHandle: inputKey,
+          type: 'custom-edge',
+
           target: link.nodeId,
           targetHandle: link.socket,
           updatable: 'target',
