@@ -137,6 +137,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       onEdgeUpdate={onEdgeUpdate}
       onConnectStart={handleStartConnect}
       onConnectEnd={handleStopConnect}
+      elevateEdgesOnSelect={true}
       fitView
       fitViewOptions={{ maxZoom: 2, minZoom: 0.1 }}
       minZoom={0.1}
