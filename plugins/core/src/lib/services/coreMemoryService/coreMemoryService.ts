@@ -45,7 +45,8 @@ const defaultParams = {
 
 class CoreMemoryService {
   private embedchain: any
-  private app: any
+  private agentId!: string
+  private app!: any
   private credentials: EmbedchainCredential[] = []
 
   private baseConfig: any = {
@@ -69,6 +70,7 @@ class CoreMemoryService {
   }
 
   async initialize(agentId: string) {
+    this.agentId = agentId
     try {
       // Use Pythonia to create an instance of the Embedchain App
       this.embedchain = await python('embedchain')
@@ -85,6 +87,7 @@ class CoreMemoryService {
       })
     } catch (error: any) {
       console.error('Error initializing Embedchain with Pythonia:', error)
+      this.app = null
       throw error
     }
   }
@@ -181,6 +184,8 @@ class CoreMemoryService {
     try {
       let result
 
+      if (!this.app) this.initialize(this.agentId)
+
       if (dataType) {
         result = await this.app.add$(data, kwargs)
       } else {
@@ -196,6 +201,7 @@ class CoreMemoryService {
 
   async query(query: string) {
     try {
+      if (!this.app) this.initialize(this.agentId)
       const pythonResponse = await this.app.query$(query, { citations: true })
       const response = await pythonResponse.valueOf()
       return response
@@ -207,6 +213,7 @@ class CoreMemoryService {
 
   async search(query: string) {
     try {
+      if (!this.app) this.initialize(this.agentId)
       const pythonResponse = await this.app._retrieve_from_database$(query, {
         citations: true,
       })
@@ -221,6 +228,7 @@ class CoreMemoryService {
 
   async searchMany(queries: string[]) {
     try {
+      if (!this.app) this.initialize(this.agentId)
       const responses = await Promise.all(
         queries.map(async query => await this.search(query))
       )
