@@ -26,6 +26,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
           : 0,
       },
       data: {
+        nodeSpec: spec,
         configuration,
       } as { [key: string]: any },
     }
@@ -41,6 +42,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
             sourceHandle: input.link.socket,
             target: nodeJSON.id,
             targetHandle: inputKey,
+            updatable: 'target',
           })
         }
         if ('value' in input) {
@@ -57,6 +59,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
           sourceHandle: inputKey,
           target: link.nodeId,
           targetHandle: link.socket,
+          updatable: 'target',
         })
       }
     }
