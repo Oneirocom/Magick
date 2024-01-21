@@ -210,7 +210,6 @@ const LogsComponent = () => {
     // Create a new entry only if the new log item is not undefined
     const newEntries = [];
     if (lastLog) {
-      console.log('lastLog', lastLog)
       newEntries.push({ ...lastLog, messageType: 'log' });
     }
     if (lastSpellLog) {
