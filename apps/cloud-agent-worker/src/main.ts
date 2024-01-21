@@ -14,7 +14,7 @@ if (PRODUCTION) {
     name: 'cloud-agent-worker',
     transport: {
       targets: [
-        getPinoTransport('trace'),
+        getPinoTransport(PINO_LOG_LEVEL),
         {
           target: 'pino-pretty',
           level: PINO_LOG_LEVEL,
@@ -24,7 +24,7 @@ if (PRODUCTION) {
         },
       ],
     },
-    level: 'trace',
+    level: PINO_LOG_LEVEL,
   })
 } else {
   initLogger({ name: 'cloud-agent-worker' })
