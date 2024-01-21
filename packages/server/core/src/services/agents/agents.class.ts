@@ -77,7 +77,27 @@ export class AgentService<
           }
         }
       }
+
+      // Check for 'paginate' parameter
+      const paginate = params.query.paginate
+
+      // Remove 'paginate' from query to avoid conflicts
+      if (params.query.hasOwnProperty('paginate')) {
+        delete params.query.paginate
+      }
+
+      // If 'paginate' parameter is set to 'false', bypass pagination
+      if (paginate === 'false') {
+        // Override default pagination settings
+        const nonPaginatedParams = {
+          ...params,
+          paginate: false,
+        }
+        return await this._find(nonPaginatedParams)
+      }
     }
+
+    // Proceed with normal behavior (paginated find)
     return await this._find(params)
   }
 
