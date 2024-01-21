@@ -3,10 +3,9 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React from 'react';
-import { Connection, Handle, Position, useReactFlow } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
-import { isValidConnection } from '../../utils/isValidConnection.js';
 import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui';
 import ReactJson from 'react-json-view';
 
@@ -121,7 +120,6 @@ const InputSocket: React.FC<InputSocketProps> = ({
   ...rest
 }) => {
   const { name, valueType } = rest;
-  const instance = useReactFlow();
 
   const isFlowSocket = valueType === 'flow';
   const isArraySocket = valueType === 'array';
@@ -155,9 +153,6 @@ const InputSocket: React.FC<InputSocketProps> = ({
             type="target"
             position={Position.Left}
             className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
-            isValidConnection={(connection: Connection) =>
-              isValidConnection(connection, instance, specJSON)
-            }
           />
         </PopoverTrigger>
         {lastEventOutput && <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
