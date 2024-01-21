@@ -97,10 +97,6 @@ export const generateVariableNodeSpecs = (
 
   const variableNodeSpecs = spell.graph.variables
     .map(variable => {
-      console.log(
-        'VARIABLE CONFIG',
-        getVariableConfig(variable, getConfiguration)
-      )
       const getSpec = updateDefaultValues(
         getVariableSpec,
         getVariableConfig(variable, getConfiguration)
