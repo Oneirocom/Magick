@@ -1,4 +1,4 @@
-import { Edge } from 'reactflow';
+import { Edge } from 'reactflow'
 
 export const isHandleConnected = (
   edges: Edge[],
@@ -7,6 +7,6 @@ export const isHandleConnected = (
   type: 'source' | 'target'
 ) => {
   return edges.some(
-    (edge) => edge[type] === nodeId && edge[`${type}Handle`] === handleId
-  );
-};
+    edge => edge[type] === nodeId && edge[`${type}Handle`] === handleId
+  )
+}
