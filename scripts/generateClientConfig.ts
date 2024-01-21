@@ -41,7 +41,7 @@ const loadPlugins = async () => {
   const connection = new Redis()
   const pubSub = new RedisPubSub()
 
-  await pubSub.initialize(process.env.REDISCLOUD_URL)
+  await pubSub.initialize(process.env.REDIS_URL)
 
   for (const [, pluginGetter] of Object.entries(pluginModules)) {
     // Get the actual class from the getter
