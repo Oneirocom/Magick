@@ -120,28 +120,17 @@ export const useFlowHandlers = ({
       const sourceNode = nodes.find(node => node.id === connection.source)
       const sourceSocket = getSourceSocket(connection, sourceNode, specJSON)
 
-      // if the source socket is not a flow socket, we don't need to do anything special
-      if (sourceSocket === undefined || sourceSocket.valueType !== 'flow') {
-        onConnectState(tab.id)(connection)
-        return
-      }
-
       const sourceEdge = edges.find(
         edge =>
           edge.source === connection.source &&
           edge.sourceHandle === connection.sourceHandle
       )
 
-      if (sourceEdge) {
+      if (sourceEdge && sourceSocket.valueType !== 'flow') {
         // If we make it here, we know that the source socket is a flow socket
         // We want to remove any existing edges that are connected to the source socket
         // and replace them with the new flow type edge
-        onEdgesChange(tab.id)([
-          {
-            type: 'remove',
-            id: sourceEdge.id,
-          },
-        ])
+        onEdgesChange(tab.id)([{ type: 'remove', id: sourceEdge.id }])
       }
 
       onConnectState(tab.id)(connection)
@@ -332,6 +321,8 @@ export const useFlowHandlers = ({
 
   const handleNodeContextMenu = useCallback(
     (e: ReactMouseEvent, node: Node) => {
+      if (lastConnectStart) return
+
       const selectedNodes = getNodes().filter(node => node.selected)
       e.preventDefault()
       e.stopPropagation()
