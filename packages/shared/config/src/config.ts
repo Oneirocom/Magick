@@ -51,7 +51,8 @@ export const SPEECH_SERVER_URL =
   getVarForEnvironment('SPEECH_SERVER_URL') || 'http://localhost:65532'
 export const TRUSTED_PARENT_URL =
   getVarForEnvironment('TRUSTED_PARENT_URL') || 'https://localhost:3000'
-export const PORTAL_URL = 'http://localhost:3000'
+export const PORTAL_URL =
+  getVarForEnvironment('PORTAL_URL') || 'http://localhost:3000'
 export const API_ROOT_URL =
   getVarForEnvironment('API_URL') || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
