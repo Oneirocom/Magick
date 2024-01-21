@@ -92,6 +92,7 @@ export const useBehaveGraphFlow = ({
   }, [debouncedUpdate, nodes, edges, specJson, spell])
 
   const nodeTypes = useCustomNodeTypes({
+    tab,
     spell,
     specJson,
   })
