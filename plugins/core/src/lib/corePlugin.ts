@@ -138,11 +138,15 @@ export class CorePlugin extends CoreEventsPlugin<
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
   async getDependencies(spellCaster: SpellCaster) {
-    // Initialize all global dependencies
-    await this.coreLLMService.initialize()
-    // await this.coreBudgetManagerService.initialize()
-    await this.coreMemoryService.initialize(this.agentId)
-    await this.getLLMCredentials()
+    try {
+      await this.coreLLMService.initialize()
+      // await this.coreBudgetManagerService.initialize()
+      await this.coreMemoryService.initialize(this.agentId)
+      await this.getLLMCredentials()
+    } catch (error) {
+      console.error('Error initializing dependencies:')
+      console.error(error)
+    }
 
     return {
       [CORE_DEP_KEYS.ACTION_SERVICE]: new CoreActionService(
