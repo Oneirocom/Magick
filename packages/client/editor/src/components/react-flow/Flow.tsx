@@ -48,6 +48,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   const [playing, setPlaying] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
+
   const { SEND_COMMAND } = events
 
   useEffect(() => {
@@ -64,7 +65,6 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     onEdgesChange,
     setGraphJson,
     nodeTypes,
-    onConnect,
   } = useBehaveGraphFlow({
     spell,
     specJson,
@@ -72,6 +72,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   })
 
   const {
+    handleOnConnect,
     handleStartConnect,
     handleStopConnect,
     handlePaneClick,
@@ -84,7 +85,9 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     handleNodeContextMenu,
     openNodeMenu,
     setOpenNodeMenu,
-    nodeMenuActions
+    nodeMenuActions,
+    isValidConnectionHandler,
+    onEdgeUpdate
   } = useFlowHandlers({
     nodes,
     edges,
@@ -128,8 +131,10 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       edges={edges}
       onNodesChange={onNodesChange(tab.id)}
       onEdgesChange={onEdgesChange(tab.id)}
-      onConnect={onConnect(tab.id)}
+      onConnect={handleOnConnect}
       edgeTypes={edgeTypes}
+      isValidConnection={isValidConnectionHandler}
+      onEdgeUpdate={onEdgeUpdate}
       onConnectStart={handleStartConnect}
       onConnectEnd={handleStopConnect}
       fitView
