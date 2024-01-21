@@ -47,6 +47,10 @@ export const Node: React.FC<NodeProps> = ({
     handleChange('configuration', config)
   }
 
+  if (!data.nodeSpec) {
+    handleChange('nodeSpec', spec)
+  }
+
   useEffect(() => {
     updateNodeInternals(id);
   }, [data])
