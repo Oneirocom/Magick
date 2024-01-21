@@ -5,7 +5,6 @@ import { Application, app } from 'server/core'
 import { BullMQWorker, BullQueue } from 'server/communication'
 
 import { Agent, type AgentRunJob } from 'server/agents'
-import { v4 as uuidv4 } from 'uuid'
 import {
   AGENT_DELETE,
   AGENT_DELETE_JOB,
@@ -50,18 +49,6 @@ export class CloudAgentWorker {
     })
 
     this.addAgent = this.addAgent.bind(this)
-  }
-
-  heartbeat() {
-    this.pubSub.subscribe('cloud-agents:ping', async () => {
-      this.pubSub.publish(
-        'cloud-agents:pong',
-        JSON.stringify({
-          id: uuidv4(),
-          currentAgents: Object.keys(this.currentAgents),
-        })
-      )
-    })
   }
 
   getAgent(agentId: string) {
