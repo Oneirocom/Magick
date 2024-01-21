@@ -42,8 +42,8 @@ export class CloudAgentWorker {
       await this.removeAgent(agentId)
     })
 
+    this.logger.debug('Subscribing to heartbeat-ping')
     this.pubSub.subscribe('heartbeat-ping', async () => {
-      this.logger.trace('Got heartbeat ping')
       const agentIds = Object.keys(this.currentAgents)
       this.pubSub.publish('heartbeat-pong', JSON.stringify(agentIds))
     })

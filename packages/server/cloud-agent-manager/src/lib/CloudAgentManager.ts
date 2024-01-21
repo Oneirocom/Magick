@@ -90,17 +90,16 @@ export class CloudAgentManager {
     this.logger.debug('Started heartbeat')
     let agentsOfWorkers: string[] = []
     this.pubSub.subscribe('heartbeat-pong', async (agents: string[]) => {
-      this.logger.trace('Got heartbeat pong')
       agents.forEach(a => agentsOfWorkers.push(a))
       agentsOfWorkers = await this.dedupeAgents(agentsOfWorkers)
     })
 
     await this.pubSub.publish('heartbeat-ping', '{}')
 
+    this.logger.trace(`Starting Heartbeat update`)
     setTimeout(
       () =>
         setInterval(async () => {
-          this.logger.trace(`Starting Heartbeat update`)
           const enabledAgents = (await app.service('agents').find({
             paginate: false,
             query: {
