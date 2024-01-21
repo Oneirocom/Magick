@@ -1,17 +1,17 @@
 import pino from 'pino'
-import { diff } from 'radash'
-import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'shared/core'
-import { getLogger } from 'server/logger'
+import { diff, unique } from 'radash'
 import type { Reporter } from './Reporters'
+import { getLogger } from 'server/logger'
+import { RedisPubSub } from 'server/redis-pubsub'
+import { MessageQueue } from 'server/communication'
 import { app } from 'server/core'
-import { type PubSub, type MessageQueue } from 'server/communication'
-import type { AgentListRecord } from 'server/cloud-agent-worker'
-
-// todo probably fix this dependency
-import { Agent } from 'packages/server/core/src/services/agents/agents.schema'
+import { AgentInterface } from 'server/schemas'
+import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'shared/core'
+import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from 'shared/config'
+// import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from '@magickml/config'
 
 interface CloudAgentManagerConstructor {
-  pubSub: PubSub
+  pubSub: RedisPubSub
   newQueue: MessageQueue
   agentStateReporter: Reporter
 }
@@ -22,69 +22,34 @@ export class CloudAgentManager {
   logger: pino.Logger = getLogger()
   newQueue: MessageQueue
   agentStateReporter: Reporter
-  pubSub: PubSub
+  pubSub: RedisPubSub
   workerToAgents: AgentList = {}
 
   constructor(args: CloudAgentManagerConstructor) {
+    this.logger.info('Cloud Agent Manager Startup')
     this.newQueue = args.newQueue
     this.newQueue.initialize('agent:new')
     this.agentStateReporter = args.agentStateReporter
     this.pubSub = app.get('pubsub')
 
-    this.startup()
-  }
+    this.run = this.run.bind(this)
+    this.heartbeat = this.heartbeat.bind(this)
+    this.dedupeAgents = this.dedupeAgents.bind(this)
 
-  async startup() {
-    this.logger.info('Cloud Agent Manager Startup')
-
-    const enabledAgentsData = await app.service('agents').find({
-      query: {
-        enabled: true,
-      },
-    })
-
-    const enabledAgents = Array.isArray(enabledAgentsData)
-      ? enabledAgentsData
-      : enabledAgentsData.data
-
-    this.logger.info(`Found ${enabledAgents.length} enabled agents`)
-    const agentPromises: Promise<any>[] = []
-    for (const agent of enabledAgents) {
-      this.logger.debug(`Adding agent ${agent.id} to cloud agent worker`)
-      agentPromises.push(
-        this.newQueue.addJob(
-          'agent:new',
-          {
-            agentId: agent.id,
-          },
-          `agent-new-${agent.id}-${new Date().getTime()}}`
-        )
-      )
-    }
-
-    await Promise.all(agentPromises)
+    this.heartbeat()
   }
 
   async run() {
     this.agentStateReporter.on('agent:updated', async (data: unknown) => {
-      const agent = data as Agent
+      const agent = data as AgentInterface
 
       this.logger.info(`Agent Updated: ${agent.id}`)
-      const agentUpdatedAt = agent.updatedAt
-        ? new Date(agent.updatedAt)
-        : new Date()
 
       if (agent.enabled) {
         this.logger.info(
           `Agent ${agent.id} enabled, adding to cloud agent worker`
         )
-        await this.newQueue.addJob(
-          'agent:new',
-          {
-            agentId: agent.id,
-          },
-          `agent-new-${agent.id}-${agentUpdatedAt.getTime()}`
-        )
+        await this.newQueue.addJob('agent:new', { agentId: agent.id })
         this.logger.debug(`Agent create job for ${agent.id} added`)
         return
       }
@@ -96,7 +61,7 @@ export class CloudAgentManager {
     })
 
     this.agentStateReporter.on(AGENT_DELETE, async (data: unknown) => {
-      const agent = data as Agent
+      const agent = data as AgentInterface
       this.pubSub.publish(
         AGENT_DELETE_JOB(agent.id),
         JSON.stringify({ agentId: agent.id })
@@ -104,56 +69,71 @@ export class CloudAgentManager {
     })
   }
 
-  // Eventually we'll need this heartbeat to keep track of running agents on workers
-  async heartbeat() {
-    this.pubSub.subscribe('cloud-agent-manager:pong', async list => {
-      const listData = JSON.parse(list) as AgentListRecord
+  async dedupeAgents(agents: string[]) {
+    const deduped = unique(agents)
+    const diffAgents = diff(agents, deduped)
 
-      const lastAgentsOnWorker = this.workerToAgents[listData.id] || []
-      const agentsOnWorker = listData.currentAgents
-
-      const agentsDiff = diff(lastAgentsOnWorker, agentsOnWorker)
-
-      const agentsRestarted: string[] = []
-
-      if (agentsDiff.length > 0) {
-        this.logger.info(
-          `Agents on worker ${listData.id} changed: ${agentsDiff}`
-        )
-        const agentsData = await app.service('agents').find({
-          query: {
-            id: {
-              $in: agentsDiff,
-            },
-          },
-        })
-
-        const agents = Array.isArray(agentsData) ? agentsData : agentsData.data
-
-        for (const agent of agents) {
-          if (agent.enabled) {
-            this.pubSub.publish(
-              'agent:updated',
-              JSON.stringify({
-                agentId: agent.id,
-              })
-            )
-            agentsRestarted.push(agent.id)
-          }
-        }
-
-        this.workerToAgents[listData.id] = agentsOnWorker
-      } else {
-        this.workerToAgents[listData.id] = [
-          ...agentsOnWorker,
-          ...agentsRestarted,
-        ]
-      }
+    this.logger.trace('deduping agents %o', diffAgents)
+    diffAgents.forEach(async agentId => {
+      await this.pubSub.publish(
+        AGENT_DELETE_JOB(agentId),
+        JSON.stringify({ agentId: agentId })
+      )
+      await this.newQueue.addJob('agent:new', { agentId: agentId })
     })
 
-    setInterval(async () => {
-      this.logger.trace('Heartbeat')
-      this.pubSub.publish('cloud-agent-manager:ping', '')
-    }, 1000 * 60 * 5)
+    return deduped
+  }
+
+  // Eventually we'll need this heartbeat to keep track of running agents on workers
+  async heartbeat() {
+    this.logger.debug('Started heartbeat')
+    let agentsOfWorkers: string[] = []
+    this.pubSub.subscribe('heartbeat-pong', async (agents: string[]) => {
+      this.logger.trace('Got heartbeat pong')
+      agents.forEach(a => agentsOfWorkers.push(a))
+      agentsOfWorkers = await this.dedupeAgents(agentsOfWorkers)
+    })
+
+    await this.pubSub.publish('heartbeat-ping', '{}')
+
+    setTimeout(
+      () =>
+        setInterval(async () => {
+          this.logger.trace(`Starting Heartbeat update`)
+          const enabledAgents = (await app.service('agents').find({
+            paginate: false,
+            query: {
+              enabled: true,
+            },
+          })) as AgentInterface[]
+
+          const agentDiff = diff(
+            enabledAgents.map(a => a.id),
+            Array.from(agentsOfWorkers)
+          )
+          const agentsToUpdate = enabledAgents.filter(a =>
+            agentDiff.includes(a.id)
+          )
+
+          if (agentDiff.length > 0) {
+            this.logger.info(`Found ${agentDiff.length} agents to Update`)
+            const agentPromises: Promise<any>[] = []
+            for (const agent of agentsToUpdate) {
+              this.logger.debug(
+                `Adding agent ${agent.id} to cloud agent worker`
+              )
+              agentPromises.push(
+                this.newQueue.addJob('agent:new', { agentId: agent.id })
+              )
+            }
+
+            await Promise.all(agentPromises)
+          }
+          agentsOfWorkers = []
+          this.pubSub.publish('heartbeat-ping', '{}')
+        }, HEARTBEAT_MSEC),
+      MANAGER_WARM_UP_MSEC
+    )
   }
 }
