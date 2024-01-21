@@ -73,7 +73,10 @@ export class CloudAgentManager {
     const deduped = unique(agents)
     const diffAgents = diff(agents, deduped)
 
-    this.logger.trace('deduping agents %o', diffAgents)
+    if (diffAgents.length === 0) return deduped
+
+    this.logger.info(`Found ${diffAgents.length} agents to Update`)
+
     diffAgents.forEach(async agentId => {
       await this.pubSub.publish(
         AGENT_DELETE_JOB(agentId),
