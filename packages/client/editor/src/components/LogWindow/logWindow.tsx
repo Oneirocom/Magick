@@ -209,15 +209,16 @@ const LogsComponent = () => {
   useEffect(() => {
     // Create a new entry only if the new log item is not undefined
     const newEntries = [];
-    if (lastLog) {
-      newEntries.push({ ...lastLog, messageType: 'log' });
-    }
-    if (lastSpellLog) {
-      newEntries.push({ ...lastSpellLog, messageType: 'spell' });
-    }
-    if (lastErrorLog) {
-      newEntries.push({ ...lastErrorLog, messageType: 'error' });
-    }
+
+    const addIfUnique = (newLog, type) => {
+      if (newLog && !combinedData.some(log => log.timestamp === newLog.timestamp && log.message === newLog.message)) {
+        newEntries.push({ ...newLog, messageType: type });
+      }
+    };
+
+    addIfUnique(lastLog, 'log');
+    addIfUnique(lastSpellLog, 'spell');
+    addIfUnique(lastErrorLog, 'error');
 
     // Update the combinedData state with new entries if any
     if (newEntries.length > 0) {
