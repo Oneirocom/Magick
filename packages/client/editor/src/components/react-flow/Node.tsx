@@ -39,7 +39,9 @@ export const Node: React.FC<NodeProps> = ({
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
   const [commitEventname, setCommitEventName] = useState<string | null>(null)
-  const [lastEvent, setLastEvent] = useState<Record<string, any> | null>(null)
+  const [lastInputs, setLastInputs] = useState<Record<string, any> | null>(null)
+  const [lastOutputs, setLastOutputs] = useState<Record<string, any> | null>(null)
+
   const [running, setRunning] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(false)
@@ -99,9 +101,6 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === commitEventname) {
-      console.log('Committed event', spellEvent)
-      setLastEvent(spellEvent)
-
       const commitedSocket = spellEvent.socket
 
       const connectedEdge = edges.find(edge => {
@@ -114,7 +113,6 @@ export const Node: React.FC<NodeProps> = ({
       setEdges(tab.id, edges => {
         const newEdges = edges.map(edge => {
           if (edge.id === connectedEdge.id) {
-            console.log('Found edge', edge)
             return {
               ...edge,
               animated: true,
@@ -139,7 +137,7 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === startEventName) {
-      setLastEvent(spellEvent)
+      setLastInputs(spellEvent.inputs)
       setRunning(true)
     }
   }, [spellEvent])
@@ -148,8 +146,7 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === endEventName) {
-      handleChange('runState', 'done')
-      setLastEvent(spellEvent)
+      setLastOutputs(spellEvent.outputs)
       setRunning(false)
       setDone(true)
 
@@ -161,7 +158,6 @@ export const Node: React.FC<NodeProps> = ({
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === errorEventName) {
-      setLastEvent(spellEvent)
       setRunning(false)
       setError(spellEvent)
 
@@ -211,8 +207,7 @@ export const Node: React.FC<NodeProps> = ({
               {...output}
               specJSON={allSpecs}
               lastEventOutput={
-                lastEvent?.outputs.find((event: any) => event.name === output.name)?.value
-              }
+                lastOutputs ? lastOutputs.find((event: any) => event.name === output.name)?.value : undefined}
               connected={isHandleConnected(edges, id, output.name, 'source')}
             />
           )}
@@ -230,7 +225,7 @@ export const Node: React.FC<NodeProps> = ({
             specJSON={allSpecs}
             value={data[input.name] ?? input.defaultValue}
             lastEventOutput={
-              lastEvent?.inputs.find((event: any) => event.name === input.name)?.value
+              lastInputs ? lastInputs.find((event: any) => event.name === input.name)?.value : undefined
             }
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}
