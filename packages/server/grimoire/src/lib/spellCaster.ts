@@ -154,8 +154,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       // build the graph api
       this.graph = makeGraphApi(this.registry)
 
-      this.spell = spell
-
       const graph = readGraphFromJSON({
         graphJson: this.spell.graph as GraphJSON,
         registry: this.registry,
@@ -221,7 +219,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.emitNodeWork({
       node: payload.node,
       event,
-      log: false,
       data: {
         socket: payload.socket,
       },
@@ -240,9 +237,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.emitNodeWork({
       node,
       event,
-      log: false,
       data: {
-        input: node.inputs,
+        inputs: node.inputs,
       },
     })
   }
@@ -259,6 +255,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.emitNodeWork({
       node,
       event,
+      log: true,
       data: {
         outputs: node.outputs,
       },
@@ -275,6 +272,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.emitNodeWork({
       node,
       event,
+      log: true,
       type: 'error',
       data: { message, error },
     })
@@ -291,7 +289,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   emitNodeWork({
     node,
     event,
-    log = true,
+    log = false,
     type = 'log',
     data = {},
   }: {
