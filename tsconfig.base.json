@@ -22,9 +22,11 @@
       "packages/@types",
       "./node_modules/@types",
       "./node_modules",
-      "/node_modules/@types"
+      "/node_modules/@types",
+      "packages/portal/types/src/lib/next-auth"
     ],
     "paths": {
+      "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/feathersRedux": [
@@ -201,6 +203,27 @@
       "client/state": ["packages/client/state/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/*": ["plugins/*"],
+      "@magickml/portal-api": ["packages/portal/api/src/index.ts"],
+      "@magickml/portal-api-client": [
+        "packages/portal/api-client/src/index.ts"
+      ],
+      "@magickml/portal-auth": ["packages/portal/auth/src/index.ts"],
+      "@magickml/portal-billing": ["packages/portal/billing/src/index.ts"],
+      "@magickml/portal-chat": ["packages/portal/chat/src/index.ts"],
+      "@magickml/portal-config": ["packages/portal/config/src/index.ts"],
+      "@magickml/portal-db": ["packages/portal/db/src/index.ts"],
+      "@magickml/portal-hooks": ["packages/portal/hooks/src/index.ts"],
+      "@magickml/portal-layout": ["packages/portal/layout/src/index.ts"],
+      "@magickml/portal-mail": ["packages/portal/mail/src/index.ts"],
+      "@magickml/portal-state": ["packages/portal/state/src/index.ts"],
+      "@magickml/portal-types": ["packages/portal/types/src/index.ts"],
+      "@magickml/portal-ui": ["packages/portal/ui/src/index.ts"],
+      "@magickml/portal-utils-server": [
+        "packages/portal/utils/server/src/index.ts"
+      ],
+      "@magickml/portal-utils-shared": [
+        "packages/portal/utils/shared/src/index.ts"
+      ],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
