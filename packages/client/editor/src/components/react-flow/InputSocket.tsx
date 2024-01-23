@@ -2,7 +2,7 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
@@ -13,7 +13,7 @@ export type InputSocketProps = {
   connected: boolean;
   value: any | undefined;
   onChange: (key: string, value: any) => void;
-  lastEventOutput: any;
+  lastEventInput: any;
   specJSON: NodeSpecJSON[];
   hideValue?: boolean;
 } & InputSocketSpecJSON;
@@ -116,7 +116,7 @@ const InputFieldForValue = ({
 const InputSocket: React.FC<InputSocketProps> = ({
   connected,
   specJSON,
-  lastEventOutput,
+  lastEventInput,
   ...rest
 }) => {
   const { name, valueType } = rest;
@@ -128,7 +128,13 @@ const InputSocket: React.FC<InputSocketProps> = ({
   let colorName = valueTypeColorMap[valueType];
   if (colorName === undefined) {
     colorName = 'red';
+
+
   }
+
+  useEffect(() => {
+    console.log('lastEventInput', lastEventInput)
+  }, [lastEventInput])
 
   // @ts-ignore
   const [backgroundColor, borderColor] = colors[colorName];
@@ -155,10 +161,10 @@ const InputSocket: React.FC<InputSocketProps> = ({
             className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
           />
         </PopoverTrigger>
-        {lastEventOutput && <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
+        <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
           <ReactJson
             src={{
-              [name]: lastEventOutput
+              [name]: lastEventInput || undefined
             }}
             style={{ width: 400, overflow: 'scroll' }}
             theme="tomorrow"
@@ -173,7 +179,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
             displayObjectSize={false}
             displayDataTypes={false}
           />
-        </PopoverContent>}
+        </PopoverContent>
       </Popover>
     </div>
   );

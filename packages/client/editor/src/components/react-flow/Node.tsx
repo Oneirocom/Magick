@@ -224,8 +224,10 @@ export const Node: React.FC<NodeProps> = ({
             {...input}
             specJSON={allSpecs}
             value={data[input.name] ?? input.defaultValue}
-            lastEventOutput={
-              lastInputs ? lastInputs.find((event: any) => event.name === input.name)?.value : undefined
+            lastEventInput={
+              lastInputs ? lastInputs.find((event: any) => {
+                return event.name === input.name
+              })?.value : undefined
             }
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}

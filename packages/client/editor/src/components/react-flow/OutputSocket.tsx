@@ -44,17 +44,16 @@ export default function OutputSocket(props: OutputSocketProps) {
       <Popover>
         <PopoverTrigger asChild>
           <Handle
-            onClick={() => console.log(name)}
             id={name}
             type="source"
             position={Position.Right}
             className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
           />
         </PopoverTrigger>
-        {props.lastEventOutput && <PopoverContent className="w-120" style={{ zIndex: 150 }} side="right">
+        <PopoverContent className="w-120" style={{ zIndex: 150 }} side="right">
           <ReactJson
             src={{
-              [name]: props.lastEventOutput
+              [name]: props.lastEventOutput || undefined
             }}
             theme="tomorrow"
             name={false}
@@ -65,7 +64,7 @@ export default function OutputSocket(props: OutputSocketProps) {
             displayObjectSize={false}
             displayDataTypes={false}
           />
-        </PopoverContent>}
+        </PopoverContent>
       </Popover>
     </div>
   );
