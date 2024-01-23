@@ -142,7 +142,6 @@ export class CorePlugin extends CoreEventsPlugin<
       await this.coreLLMService.initialize()
       // await this.coreBudgetManagerService.initialize()
       await this.coreMemoryService.initialize(this.agentId)
-      await this.getLLMCredentials()
     } catch (error) {
       console.error('Error initializing dependencies:')
       console.error(error)
@@ -174,7 +173,7 @@ export class CorePlugin extends CoreEventsPlugin<
         const provider = LLMProviders[providerKey]
 
         // Retrieve credentials for each provider
-        const credential = await this.getCredential(provider, 'llm')
+        const credential = await this.getCredential(provider)
 
         // Check if credentials are retrieved and valid
         if (credential) {
@@ -215,7 +214,9 @@ export class CorePlugin extends CoreEventsPlugin<
     return registerStructProfile(coreRegistry, logger)
   }
 
-  initializeFunctionalities() {
+  async initializeFunctionalities() {
+    await this.getLLMCredentials()
+
     this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
     this.client.onMessage(this.handleOnMessage.bind(this))
   }

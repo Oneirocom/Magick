@@ -20,6 +20,7 @@ import { PluginManager } from 'server/pluginManager'
 import { IEventStore } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
+
 interface IAgent {
   id: string
   log: (message: string, data: Record<string, any>) => void
@@ -217,7 +218,14 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   nodeCommitHandler = async payload => {
     const event = `${this.spell.id}-${payload.node.id}-commit`
 
-    this.emitNodeWork({ node: payload.node, event, log: false, data: payload })
+    this.emitNodeWork({
+      node: payload.node,
+      event,
+      log: false,
+      data: {
+        socket: payload.socket,
+      },
+    })
   }
 
   /**
@@ -229,7 +237,14 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executionStartHandler = async (node: any) => {
     const event = `${this.spell.id}-${node.id}-start`
 
-    this.emitNodeWork({ node, event, log: false })
+    this.emitNodeWork({
+      node,
+      event,
+      log: false,
+      data: {
+        input: node.inputs,
+      },
+    })
   }
 
   /**
@@ -241,7 +256,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executionEndHandler = async (node: any) => {
     const event = `${this.spell.id}-${node.id}-end`
 
-    this.emitNodeWork({ node, event })
+    this.emitNodeWork({
+      node,
+      event,
+      data: {
+        outputs: node.outputs,
+      },
+    })
   }
 
   executionErrorhandler = async ({ node, error }) => {
@@ -288,8 +309,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       nodeId: node.id,
       typeName: node.description.typeName,
       type,
-      outputs: node.outputs,
-      inputs: node.inputs,
       ...data,
     }
 

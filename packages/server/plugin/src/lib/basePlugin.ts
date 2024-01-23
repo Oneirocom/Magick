@@ -646,7 +646,7 @@ export abstract class BasePlugin<
 
   async getCredential(
     name: string,
-    serviceType: string | undefined
+    serviceType?: string | undefined
   ): Promise<string | undefined> {
     try {
       return await this.credentialsManager.retrieveAgentCredentials(
