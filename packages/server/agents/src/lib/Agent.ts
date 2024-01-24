@@ -101,13 +101,13 @@ export class Agent implements AgentInterface {
       app,
     })
 
-    this.pluginManager = new PluginManager(
-      process.env.PLUGIN_DIRECTORY || './plugins',
-      this.app.get('redis'),
-      this.id,
-      this.app.get('pubsub'),
-      this.projectId
-    )
+    this.pluginManager = new PluginManager({
+      pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
+      connection: this.app.get('redis'),
+      agentId: this.id,
+      pubSub: this.app.get('pubsub'),
+      projectId: this.projectId,
+    })
 
     this.spellbook = new Spellbook({
       agent: this,

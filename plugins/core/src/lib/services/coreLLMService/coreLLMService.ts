@@ -8,11 +8,11 @@ import {
 
 import {
   LLMCredential,
-  LLMProviders,
+  LLMProviderKeys,
   LLMModels,
   CompletionResponse,
 } from './types'
-import { modelMap } from './constants'
+import { modelProviderMap } from './constants'
 import {
   CompletionParams,
   ICoreBudgetManagerService,
@@ -43,6 +43,7 @@ export class CoreLLMService implements ICoreLLMService {
       this.liteLLM.vertex_project = VERTEXAI_PROJECT
       this.liteLLM.vertex_location = VERTEXAI_LOCATION
       this.liteLLM.set_verbose = true
+      this.liteLLM.drop_params = true
       this.coreBudgetManagerService = new CoreBudgetManagerService(
         this.projectId
       )
@@ -269,8 +270,8 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
 
-  private findProvider = (model: LLMModels): LLMProviders => {
-    return modelMap[model]
+  private findProvider = (model: LLMModels): LLMProviderKeys => {
+    return modelProviderMap[model]
   }
 
   private getCredential = (model: LLMModels): string => {

@@ -95,13 +95,19 @@ export class PluginManager extends EventEmitter {
    */
 
   projectId: string
-  constructor(
-    pluginDirectory: string,
-    connection: Redis,
-    agentId: string,
-    pubSub: RedisPubSub,
+  constructor({
+    pluginDirectory,
+    connection,
+    agentId,
+    pubSub,
+    projectId,
+  }: {
+    pluginDirectory: string
+    connection: Redis
+    agentId: string
+    pubSub: RedisPubSub
     projectId: string
-  ) {
+  }) {
     super()
     this.agentId = agentId
     this.projectId = projectId
@@ -137,12 +143,12 @@ export class PluginManager extends EventEmitter {
         PluginClass.prototype instanceof BasePlugin
       ) {
         // Create an instance of the plugin
-        const pluginInstance = new PluginClass(
-          this.connection,
-          this.agentId,
-          this.pubSub,
-          this.projectId
-        )
+        const pluginInstance = new PluginClass({
+          agentId: this.agentId,
+          connection: this.connection,
+          pubSub: this.pubSub,
+          projectId: this.projectId,
+        })
         this.registerPlugin(pluginInstance)
       }
     }
