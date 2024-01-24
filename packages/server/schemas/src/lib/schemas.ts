@@ -139,7 +139,7 @@ export const spellReleaseSchema = Type.Object(
 )
 
 /** The type for an agent object that's based on the `agentSchema`. */
-export type SpellReleaseSchema = Static<typeof spellSchema>
+export type SpellReleaseSchema = Static<typeof spellReleaseSchema>
 /** The interface for an agent object that's based on the `agentSchema`. */
 export type SpellReleaseInterface = SpellReleaseSchema
 
