@@ -1,17 +1,19 @@
 import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
+import { SubscriptionNames } from './types'
 
 interface User {
   id: string
   email: string
-  name: string
+  name?: string
   balance: number
   hasSubscription: boolean
-  subscriptionName?: string
+  subscriptionName?: SubscriptionNames
 }
 
-interface UserResponse {
+export interface UserResponse {
   status: string
   user: User
+  message?: string
 }
 interface IUserService {
   getUser(): Promise<UserResponse>
