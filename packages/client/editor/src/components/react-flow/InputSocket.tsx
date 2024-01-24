@@ -2,7 +2,7 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Handle, Position } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
@@ -128,13 +128,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
   let colorName = valueTypeColorMap[valueType];
   if (colorName === undefined) {
     colorName = 'red';
-
-
   }
-
-  useEffect(() => {
-    console.log('lastEventInput', lastEventInput)
-  }, [lastEventInput])
 
   // @ts-ignore
   const [backgroundColor, borderColor] = colors[colorName];
