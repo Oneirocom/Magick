@@ -14,6 +14,7 @@ import { SpellInterface } from 'server/schemas';
 import { VariableNames } from './variableNames';
 import { ValueType } from './ValueType';
 import { DefaultConfig } from './DefaultConfig';
+import { LLMProviderSelect } from './LLMProviderSelect';
 
 type Props = {
   tab: Tab
@@ -38,7 +39,8 @@ const ConfigurationComponents = {
   eventStateProperties: EventStateProperties,
   variableNames: VariableNames,
   valueType: ValueType,
-  default: DefaultConfig
+  default: DefaultConfig,
+  modelProviders: LLMProviderSelect,
 }
 
 export const PropertiesWindow = (props: Props) => {
@@ -46,6 +48,7 @@ export const PropertiesWindow = (props: Props) => {
   const nodeSpecs = getNodeSpec()
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const handleChange = useChangeNodeData(selectedNode?.id);
+
 
   if (!selectedNode) return null
 
