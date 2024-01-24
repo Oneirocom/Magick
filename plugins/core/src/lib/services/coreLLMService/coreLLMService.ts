@@ -161,7 +161,18 @@ export class CoreLLMService implements ICoreLLMService {
 
     while (attempts < maxRetries) {
       try {
-        if (NODE_ENV !== 'development') {
+        if (PRODUCTION) {
+          const user = await this.userService.getUser()
+          const budgetManagerUser =
+            await this.coreBudgetManagerService?.getUsers()
+
+          const liteLLMBudget =
+            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
+
+          console.log('###PROJECT ID', this.projectId)
+
+          console.log('USER', user, budgetManagerUser, liteLLMBudget)
+
           const estimatedCost =
             await this.coreBudgetManagerService?.projectedCost({
               model: request.model,
