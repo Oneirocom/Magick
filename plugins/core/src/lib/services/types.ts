@@ -2,7 +2,7 @@ import {
   Chunk,
   CompletionRequest,
   CompletionResponse,
-  LLMModels,
+  CompletionModels,
   Message,
 } from './coreLLMService/types'
 
@@ -23,7 +23,7 @@ export interface IBudgetManagerService {
   // Returns the current cost of a user
   get_current_cost(user: string): Promise<number>
   // Returns the model cost of a user
-  get_model_cost(user: string): Promise<Record<LLMModels, number>>
+  get_model_cost(user: string): Promise<Record<CompletionModels, number>>
   // Checks if a user is valid
   is_valid_user(user: string): Promise<boolean>
   // Returns a list of all users
@@ -69,7 +69,7 @@ export interface ICoreBudgetManagerService {
     completionObj: CompletionResponse
   ): Promise<boolean>
   getCurrentCost(projectId: string): Promise<number>
-  getModelCost(projectId: string): Promise<Record<LLMModels, number>>
+  getModelCost(projectId: string): Promise<Record<CompletionModels, number>>
   isValidUser(projectId: string): Promise<boolean>
   getUsers(): Promise<string[]>
   resetCost(projectId: string): Promise<boolean>
