@@ -6,17 +6,13 @@ import {
   VERTEXAI_PROJECT,
 } from 'shared/config'
 
-import {
-  LLMCredential,
-  LLMProviderKeys,
-  LLMModels,
-  CompletionResponse,
-} from './types'
-import { modelProviderMap } from './constants'
+import { LLMCredential, CompletionResponse, AllModels } from './types'
+
 import { ICoreBudgetManagerService, ICoreLLMService } from '../types'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { UserService } from '../userService/userService'
 import { saveRequest } from 'shared/core'
+import { findProviderKey, findProviderName } from './findProvider'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -139,7 +135,7 @@ export class CoreLLMService implements ICoreLLMService {
           status: '',
           statusCode: 200,
           parameters: JSON.stringify(request.options),
-          provider: this.findProvider(request.model),
+          provider: findProviderName(request.model),
           type: 'completion',
           hidden: false,
           processed: false,
@@ -177,25 +173,17 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
 
-  private findProvider = (model: LLMModels): LLMProviderKeys => {
-    return modelProviderMap[model]
-  }
+  private getCredential = (model: AllModels): string => {
+    const providerKey = findProviderKey(model)
 
-  private getCredential = (model: LLMModels): string => {
-    const provider = this.findProvider(model)
+    let credential = this.credentials.find(c => c.name === providerKey)?.value
 
-    let credential = this.credentials.find(c => c.name === provider)?.value
-
-    if (!credential && PRODUCTION) {
-      credential = process.env[provider]
-    }
-
-    if (!credential && NODE_ENV === 'development' && !PRODUCTION) {
-      credential = process.env[provider]
+    if (!credential && !PRODUCTION && providerKey) {
+      credential = process.env[providerKey]
     }
 
     if (!credential) {
-      throw new Error(`No credential found for ${provider}`)
+      throw new Error(`No credential found for ${providerKey}`)
     }
     return credential
   }
