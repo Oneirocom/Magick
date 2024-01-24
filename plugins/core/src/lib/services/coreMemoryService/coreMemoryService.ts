@@ -1,18 +1,19 @@
 import { python } from 'pythonia'
 import { PRODUCTION } from 'shared/config'
 import {
-  EmbeddingModels,
   LLMCredential,
   LLMModels,
-  LLMProviders,
+  LLMProviderKeys,
   Models,
+  OpenAIChatCompletionModels,
 } from '../coreLLMService/types'
-import {
-  embeddingProviderMap,
-  modelMap,
-  modelProviderMap,
-} from '../coreLLMService/constants'
+import { modelProviderMap } from '../coreLLMService/constants'
 import { DataType } from './coreMemoryTypes'
+import {
+  EmbeddingModels,
+  OpenAIEmbeddingModels,
+} from '../coreEmbeddingService/types'
+import { embeddingProviderMap } from '../coreEmbeddingService/constants'
 
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
@@ -76,8 +77,8 @@ class CoreMemoryService {
       this.embedchain = await python('embedchain')
 
       // Ste initial LLM and Embedder models
-      this.setLLM(LLMModels.GPT35Turbo)
-      this.setEmbedder(EmbeddingModels.Ada002)
+      this.setLLM(OpenAIChatCompletionModels.GPT35Turbo)
+      this.setEmbedder(OpenAIEmbeddingModels.TextEmbeddingAda002)
 
       // Set agent ID to namespace the app
       this.baseConfig.app.config.id = agentId
@@ -135,8 +136,8 @@ class CoreMemoryService {
     return newParams
   }
 
-  private findProvider = (model: Models): LLMProviders => {
-    return modelMap[model]
+  private findProvider = (model: Models): LLMProviderKeys => {
+    return modelProviderMap[model]
   }
 
   private findProviderName = (model: Models) => {

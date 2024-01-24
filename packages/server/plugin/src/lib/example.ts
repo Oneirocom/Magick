@@ -26,8 +26,16 @@ class DiscordPlugin extends CoreEventsPlugin<PluginEvents, DiscordPayload> {
   values = []
   dependencies = {}
 
-  constructor(connection: Redis, agentId: string, projectId: string) {
-    super('discord', connection, agentId, projectId)
+  constructor({
+    connection,
+    agentId,
+    projectId,
+  }: {
+    connection: Redis
+    agentId: string
+    projectId: string
+  }) {
+    super({ name: 'discord', connection, agentId, projectId })
     this.client = new Discord.Client({
       intents: [
         GatewayIntentBits.Guilds,

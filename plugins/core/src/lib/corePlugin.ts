@@ -16,7 +16,7 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
-import { LLMProviders } from './services/coreLLMService/types'
+import { LLMProviderKeys } from './services/coreLLMService/types'
 import { variableGet } from './nodes/query/variableGet'
 import { VariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
@@ -88,14 +88,19 @@ export class CorePlugin extends CoreEventsPlugin<
   coreMemoryService = new CoreMemoryService()
   userService: UserService
 
-  constructor(
-    connection: Redis,
-    agentId: string,
-    pubSub: RedisPubSub,
+  constructor({
+    connection,
+    agentId,
+    pubSub,
+    projectId,
+  }: {
+    connection: Redis
+    agentId: string
+    pubSub: RedisPubSub
     projectId: string
-  ) {
-    super(corePluginName, connection, agentId, projectId)
-    this.client = new CoreEventClient(pubSub, agentId)
+  }) {
+    super({ name: corePluginName, connection, agentId, projectId })
+    this.client = new CoreEventClient({ pubSub, agentId })
     this.setCredentials(corePluginCredentials)
 
     this.coreLLMService = new CoreLLMService({
@@ -167,10 +172,10 @@ export class CorePlugin extends CoreEventsPlugin<
     if (this.agentId === '000000000') return
     try {
       // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
-      for (const providerKey of Object.keys(LLMProviders).filter(
-        key => LLMProviders[key] !== LLMProviders.Unknown
+      for (const providerKey of Object.keys(LLMProviderKeys).filter(
+        key => LLMProviderKeys[key] !== LLMProviderKeys.Unknown
       )) {
-        const provider = LLMProviders[providerKey]
+        const provider = LLMProviderKeys[providerKey]
 
         // Retrieve credentials for each provider
         const credential = await this.getCredential(provider)

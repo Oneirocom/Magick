@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { calculateCompletionCost } from '../cost-calculator'
+// import { calculateCompletionCost } from '../cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
 import { GraphEventPayload, RequestPayload } from '../types'
@@ -41,15 +41,16 @@ export function saveRequest({
   totalTokens,
   spell,
   nodeId,
+  cost,
 }: RequestPayload) {
   // Calculate the request cost based on total tokens and model.
-  const cost =
-    totalTokens !== undefined && totalTokens > 0
-      ? calculateCompletionCost({
-          totalTokens: totalTokens as number,
-          model: model as any,
-        })
-      : 0
+  // const cost =
+  //   totalTokens !== undefined && totalTokens > 0
+  //     ? calculateCompletionCost({
+  //         totalTokens: totalTokens as number,
+  //         model: model as any,
+  //       })
+  //     : 0
 
   // Calculate the request duration.
   const end = Date.now()

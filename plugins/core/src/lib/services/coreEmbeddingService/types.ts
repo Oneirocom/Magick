@@ -1,5 +1,12 @@
+import {
+  AzureModel,
+  BedrockModels,
+  CustomOpenAIModel,
+  LLMProviders,
+} from '../coreLLMService/types'
+
 export interface BaseEmbeddingOptions {
-  model: string
+  model: EmbeddingModels | string
   input: string[]
 }
 
@@ -12,75 +19,58 @@ export interface EmbeddingOptions {
   api_type?: string // Type of API to use
 }
 
-export enum EmbeddingProviderType {
-  OpenAI = 'OpenAI',
-  Azure = 'Azure',
-  CustomOpenAI = 'CustomOpenAI',
-  Bedrock = 'Bedrock',
-  Cohere = 'Cohere',
-  HuggingFace = 'HuggingFace',
-  Mistral = 'Mistral',
-  Voyage = 'Voyage',
-}
-
 export type GenerateEmbeddingParams =
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.OpenAI
+      provider: LLMProviders.OpenAI
       options: OpenAIEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.Azure
+      provider: LLMProviders.Azure
       options: AzureEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.CustomOpenAI
+      provider: LLMProviders.CustomOpenAI
       options: CustomOpenAIEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.Bedrock
+      provider: LLMProviders.Bedrock
       options: BedrockEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.Cohere
+      provider: LLMProviders.Cohere
       options: CohereEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.HuggingFace
+      provider: LLMProviders.HuggingFace
       options: HuggingFaceEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.Mistral
+      provider: LLMProviders.Mistral
       options: MistralEmbeddingOptions
     })
   | (BaseEmbeddingOptions & {
-      provider: EmbeddingProviderType.Voyage
+      provider: LLMProviders.VoyageAI
       options: VoyageEmbeddingOptions
     })
 
-type IOpenAIEmbeddingOptions = 'text-embedding-ada-002'
-
 // Azure-specific embedding options
 export interface AzureEmbeddingOptions extends BaseEmbeddingOptions {
-  model: string // e.g., 'azure/custom-model-name'
+  model: AzureModel
   api_key: string
   api_base: string
   api_version: string
 }
 
 export interface OpenAIEmbeddingOptions extends BaseEmbeddingOptions {
-  model: IOpenAIEmbeddingOptions
+  model: OpenAIEmbeddingModels
 }
 
 // Use this for calling /embedding endpoints on OpenAI Compatible Servers
 export interface CustomOpenAIEmbeddingOptions extends BaseEmbeddingOptions {
-  model: string // e.g., 'openai/<your-llm-name>'
+  model: CustomOpenAIModel
   api_base: string // The API endpoint "http://0.0.0.0:8000/"
 }
 
-export type BedrockModels =
-  | 'amazon.titan-embed-text-v1'
-  | 'cohere.embed-english-v3'
-  | 'cohere.embed-multilingual-v3'
 // Bedrock Embedding Options
 export interface BedrockEmbeddingOptions extends BaseEmbeddingOptions {
   models: BedrockModels
@@ -89,18 +79,10 @@ export interface BedrockEmbeddingOptions extends BaseEmbeddingOptions {
   aws_region_name?: string
 }
 
-export type CohereModels =
-  | 'embed-english-v3.0'
-  | 'embed-english-light-v3.0'
-  | 'embed-multilingual-v3.0'
-  | 'embed-multilingual-light-v3.0'
-  | 'embed-english-v2.0'
-  | 'embed-english-light-v2.0'
-  | 'embed-multilingual-v2.0'
 // Cohere-specific embedding options
 export interface CohereEmbeddingOptions extends BaseEmbeddingOptions {
-  model: CohereModels // e.g., 'cohere.embed-english-v3.0'
-  input_type?: string // Optional parameter for Cohere
+  model: CohereEmbeddingModels
+  input_type?: string
 }
 
 // HuggingFace-specific embedding options
@@ -108,19 +90,19 @@ export interface HuggingFaceEmbeddingOptions extends BaseEmbeddingOptions {
   api_base: string // The API endpoint "https://p69xlsj6rpno5drq.us-east-1.aws.endpoints.huggingface.cloud"
 }
 
-type MistralModels = 'mistral/mistral-embed'
 // Mistral AI Embedding Options
 export interface MistralEmbeddingOptions extends BaseEmbeddingOptions {
-  model: MistralModels
+  model: MistralEmbeddingModels
 }
 
-type VoyageModels =
-  | 'voyage/voyage-02'
-  | 'voyage/voyage-code-02'
-  | 'voyage-lite-01-instruct'
 // Voyage-specific embedding options
 export interface VoyageEmbeddingOptions extends BaseEmbeddingOptions {
-  model: VoyageModels
+  model: VoyageEmbeddingModels
+}
+
+// OpenAI embedding options
+export interface OpenAIEmbeddingOptions extends BaseEmbeddingOptions {
+  model: OpenAIEmbeddingModels
 }
 
 export interface EmbeddingOutput {
@@ -168,3 +150,46 @@ export interface IEmbeddingService {
     options: VoyageEmbeddingOptions
   ): Promise<EmbeddingOutput>
 }
+
+export enum BedrockEmbeddingModels {
+  AmazonTitanEmbedTextV1 = 'amazon.titan-embed-text-v1',
+  CohereEmbedEnglishV3 = 'cohere.embed-english-v3',
+  CohereEmbedMultilingualV3 = 'cohere.embed-multilingual-v3',
+}
+
+export enum CohereEmbeddingModels {
+  EmbedEnglishV30 = 'embed-english-v3.0',
+  EmbedEnglishLightV30 = 'embed-english-light-v3.0',
+  EmbedMultilingualV30 = 'embed-multilingual-v3.0',
+  EmbedMultilingualLightV30 = 'embed-multilingual-light-v3.0',
+  EmbedEnglishV20 = 'embed-english-v2.0',
+  EmbedEnglishLightV20 = 'embed-english-light-v2.0',
+  EmbedMultilingualV20 = 'embed-multilingual-v2.0',
+}
+
+export enum MistralEmbeddingModels {
+  MistralEmbed = 'mistral/mistral-embed',
+}
+
+export enum VoyageEmbeddingModels {
+  Voyage02 = 'voyage/voyage-02',
+  VoyageCode02 = 'voyage/voyage-code-02',
+  VoyageLite01Instruct = 'voyage-lite-01-instruct',
+}
+
+export enum OpenAIEmbeddingModels {
+  TextEmbeddingAda002 = 'text-embedding-ada-002',
+}
+
+export enum HuggingFaceEmbeddingModels {
+  HuggingFaceMicrosoftCodebertBase = 'huggingface/microsoft/codebert-base',
+  HuggingFaceBAAIBgeLargeZh = 'huggingface/BAAI/bge-large-zh',
+  HuggingFaceAnyHfEmbeddingModel = 'huggingface/any-hf-embedding-model',
+}
+export type EmbeddingModels =
+  | BedrockEmbeddingModels
+  | CohereEmbeddingModels
+  | MistralEmbeddingModels
+  | VoyageEmbeddingModels
+  | OpenAIEmbeddingModels
+  | HuggingFaceEmbeddingModels

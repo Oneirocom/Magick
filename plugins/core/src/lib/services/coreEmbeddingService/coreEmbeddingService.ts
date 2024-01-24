@@ -5,7 +5,6 @@ import {
   CohereEmbeddingOptions,
   CustomOpenAIEmbeddingOptions,
   EmbeddingOutput,
-  EmbeddingProviderType,
   GenerateEmbeddingParams,
   HuggingFaceEmbeddingOptions,
   IEmbeddingService,
@@ -13,7 +12,7 @@ import {
   OpenAIEmbeddingOptions,
   VoyageEmbeddingOptions,
 } from './types'
-// import { IEmbeddingService } from '../types'; // Define this interface based on your needs
+import { LLMProviders } from '../coreLLMService/types'
 
 export class EmbeddingService implements IEmbeddingService {
   protected liteLLM: any
@@ -42,21 +41,21 @@ export class EmbeddingService implements IEmbeddingService {
   ): Promise<EmbeddingOutput> {
     try {
       switch (params.provider) {
-        case EmbeddingProviderType.OpenAI:
+        case LLMProviders.OpenAI:
           return this.openAIEmbeddingHandler(params.options)
-        case EmbeddingProviderType.Azure:
+        case LLMProviders.Azure:
           return this.azureEmbeddingHandler(params.options)
-        case EmbeddingProviderType.CustomOpenAI:
+        case LLMProviders.CustomOpenAI:
           return this.customOpenAIEmbeddingHandler(params.options)
-        case EmbeddingProviderType.Bedrock:
+        case LLMProviders.Bedrock:
           return this.bedrockEmbeddingHandler(params.options)
-        case EmbeddingProviderType.Cohere:
+        case LLMProviders.Cohere:
           return this.cohereEmbeddingHandler(params.options)
-        case EmbeddingProviderType.HuggingFace:
+        case LLMProviders.HuggingFace:
           return this.huggingFaceEmbeddingHandler(params.options)
-        case EmbeddingProviderType.Mistral:
+        case LLMProviders.Mistral:
           return this.mistralEmbeddingHandler(params.options)
-        case EmbeddingProviderType.Voyage:
+        case LLMProviders.VoyageAI:
           return this.voyageEmbeddingHandler(params.options)
         // ... other cases ...
         default:
