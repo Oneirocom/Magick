@@ -1,19 +1,21 @@
 import { python } from 'pythonia'
 import { PRODUCTION } from 'shared/config'
 import {
+  CompletionModels,
   LLMCredential,
-  LLMModels,
-  LLMProviderKeys,
   Models,
   OpenAIChatCompletionModels,
 } from '../coreLLMService/types'
-import { modelProviderMap } from '../coreLLMService/constants'
+
 import { DataType } from './coreMemoryTypes'
 import {
   EmbeddingModels,
   OpenAIEmbeddingModels,
 } from '../coreEmbeddingService/types'
-import { embeddingProviderMap } from '../coreEmbeddingService/constants'
+import {
+  findProviderKey,
+  findProviderName,
+} from '../coreLLMService/findProvider'
 
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
@@ -93,12 +95,12 @@ class CoreMemoryService {
     }
   }
 
-  setModel(model: LLMModels) {
+  setModel(model: CompletionModels) {
     this.setLLM(model)
   }
 
-  private setLLM(model: LLMModels) {
-    const providerName = this.findProviderName(model)
+  private setLLM(model: CompletionModels) {
+    const providerName = findProviderName(model)
     const credential = this.getCredential(model)
     const params = this.changeLLMParams()
 
@@ -113,7 +115,7 @@ class CoreMemoryService {
   }
 
   private setEmbedder(model: EmbeddingModels) {
-    const providerName = this.findEmbeddingProviderName(model)
+    const providerName = findProviderName(model)
     const credential = this.getCredential(model)
 
     this.baseConfig.embedder = {
@@ -136,18 +138,6 @@ class CoreMemoryService {
     return newParams
   }
 
-  private findProvider = (model: Models): LLMProviderKeys => {
-    return modelProviderMap[model]
-  }
-
-  private findProviderName = (model: Models) => {
-    return modelProviderMap[model]
-  }
-
-  private findEmbeddingProviderName = (model: EmbeddingModels) => {
-    return embeddingProviderMap[model]
-  }
-
   addCredential(credential: LLMCredential): void {
     const existingCredentialIndex = this.credentials.findIndex(
       c => c.serviceType === credential.serviceType
@@ -165,12 +155,12 @@ class CoreMemoryService {
   }
 
   private getCredential(model: Models): string {
-    const provider = this.findProvider(model)
+    const provider = findProviderKey(model)
     let credential = this.credentials.find(
       c => c.serviceType === provider
     )?.value
 
-    if (!credential && !PRODUCTION) {
+    if (!credential && !PRODUCTION && provider) {
       credential = process.env[provider]
     }
 
