@@ -14,7 +14,8 @@ import { SpellInterface } from 'server/schemas';
 import { VariableNames } from './variableNames';
 import { ValueType } from './ValueType';
 import { DefaultConfig } from './DefaultConfig';
-import { LLMProviderSelect } from './LLMProviderSelect';
+import { CompletionProviderOptions } from './CompletionProviderOptions';
+
 
 type Props = {
   tab: Tab
@@ -40,7 +41,7 @@ const ConfigurationComponents = {
   variableNames: VariableNames,
   valueType: ValueType,
   default: DefaultConfig,
-  modelProviders: LLMProviderSelect,
+  modelProviders: CompletionProviderOptions,
 }
 
 export const PropertiesWindow = (props: Props) => {
