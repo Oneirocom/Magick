@@ -43,3 +43,21 @@ export const embeddingProviderMap: Record<EmbeddingModels, LLMProviders> = {
   [HuggingFaceEmbeddingModels.HuggingFaceAnyHfEmbeddingModel]:
     LLMProviders.HuggingFace,
 }
+
+const bedrockEmbeddingModelsArray = Object.values(BedrockEmbeddingModels)
+const cohereEmbeddingModelsArray = Object.values(CohereEmbeddingModels)
+const mistralEmbeddingModelsArray = Object.values(MistralEmbeddingModels)
+const voyageEmbeddingModelsArray = Object.values(VoyageEmbeddingModels)
+const openAIEmbeddingModelsArray = Object.values(OpenAIEmbeddingModels)
+const huggingFaceEmbeddingModelsArray = Object.values(
+  HuggingFaceEmbeddingModels
+)
+
+export const allEmbeddingModels: EmbeddingModels[] = [
+  ...bedrockEmbeddingModelsArray,
+  ...cohereEmbeddingModelsArray,
+  ...mistralEmbeddingModelsArray,
+  ...voyageEmbeddingModelsArray,
+  ...openAIEmbeddingModelsArray,
+  ...huggingFaceEmbeddingModelsArray,
+]
