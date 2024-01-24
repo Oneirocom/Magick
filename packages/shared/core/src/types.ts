@@ -657,6 +657,7 @@ export type RequestPayload = {
   spell?: SpellInterface
   nodeId?: number | null
   customModel?: string
+  cost?: number
 }
 
 export type RequestData = {
