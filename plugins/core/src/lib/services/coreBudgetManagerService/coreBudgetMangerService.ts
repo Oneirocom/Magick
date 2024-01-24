@@ -1,6 +1,10 @@
 import { python } from 'pythonia'
 
-import { CompletionResponse, LLMModels, Message } from '../coreLLMService/types'
+import {
+  CompletionResponse,
+  CompletionModels,
+  Message,
+} from '../coreLLMService/types'
 import { UserService } from '../userService/userService'
 import {
   BudgetDuration,
@@ -151,7 +155,9 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    * @param projectId - Project ID
    * @returns Promise<number>
    */
-  async getModelCost(projectId: string): Promise<Record<LLMModels, number>> {
+  async getModelCost(
+    projectId: string
+  ): Promise<Record<CompletionModels, number>> {
     const modelCost = await this.liteLLMBudgetManager?.get_model_cost(projectId)
     if (modelCost === null || modelCost === undefined) {
       throw new Error('Error getting model cost')
