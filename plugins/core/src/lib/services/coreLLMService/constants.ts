@@ -1,3 +1,5 @@
+import { allEmbeddingModels } from '../coreEmbeddingService/constants'
+import { EmbeddingModels } from '../coreEmbeddingService/types'
 import {
   AI21Models,
   AlephAlphaModels,
@@ -246,3 +248,69 @@ export const modelProviderMap: Record<LLMModels, LLMProviderKeys> = {
   [AlephAlphaModels.LuminousSupreme]: LLMProviderKeys.AlephAlpha,
   [AlephAlphaModels.LuminousSupremeControl]: LLMProviderKeys.AlephAlpha,
 }
+
+const openAIChatCompletionModelsArray = Object.values(
+  OpenAIChatCompletionModels
+)
+const openAITextCompletionInstructModelsArray = Object.values(
+  OpenAITextCompletionInstructModels
+)
+const openAIVisionModelsArray = Object.values(OpenAIVisionModels)
+const huggingFaceModelsWithPromptFormattingArray = Object.values(
+  HuggingFaceModelsWithPromptFormatting
+)
+const ollamaModelsArray = Object.values(OllamaModels)
+const ollamaVisionModelsArray = Object.values(OllamaVisionModels)
+const vertexAIGoogleModelsArray = Object.values(VertexAIGoogleModels)
+const palmModelsArray = Object.values(PalmModels)
+const googleAIStudioModelsArray = Object.values(GoogleAIStudioModels)
+const mistralAIModelsArray = Object.values(MistralAIModels)
+const anthropicModelsArray = Object.values(AnthropicModels)
+const sageMakerModelsArray = Object.values(SageMakerModels)
+const bedrockModelsArray = Object.values(BedrockModels)
+const perplexityAIModelsArray = Object.values(PerplexityAIModels)
+const vllmModelsArray = Object.values(VLLMModels)
+const xinferenceModelsArray = Object.values(XinferenceModels)
+const cloudflareWorkersAIModelsArray = Object.values(CloudflareWorkersAIModels)
+const ai21ModelsArray = Object.values(AI21Models)
+const nlpCloudModelsArray = Object.values(NLPCloudModels)
+const deepInfraChatModelsArray = Object.values(DeepInfraChatModels)
+const togetherAIModelsArray = Object.values(TogetherAIModels)
+const baseTenModelsArray = Object.values(BaseTenModels)
+const petalsModelsArray = Object.values(PetalsModels)
+const voyageAIModelsArray = Object.values(VoyageAIModels)
+const alephAlphaModelsArray = Object.values(AlephAlphaModels)
+
+export const allTextCompletionModels: LLMModels[] = [
+  ...openAIChatCompletionModelsArray,
+  ...openAITextCompletionInstructModelsArray,
+  ...openAIVisionModelsArray,
+  ...huggingFaceModelsWithPromptFormattingArray,
+  ...ollamaModelsArray,
+  ...ollamaVisionModelsArray,
+  ...vertexAIGoogleModelsArray,
+  ...palmModelsArray,
+  ...googleAIStudioModelsArray,
+  ...mistralAIModelsArray,
+  ...anthropicModelsArray,
+  ...sageMakerModelsArray,
+  ...bedrockModelsArray,
+  ...perplexityAIModelsArray,
+  ...vllmModelsArray,
+  ...xinferenceModelsArray,
+  ...cloudflareWorkersAIModelsArray,
+  ...ai21ModelsArray,
+  ...nlpCloudModelsArray,
+  ...deepInfraChatModelsArray,
+  ...togetherAIModelsArray,
+  ...baseTenModelsArray,
+  ...petalsModelsArray,
+  ...voyageAIModelsArray,
+  ...alephAlphaModelsArray,
+]
+
+// TODO: Filter these out by provided environment variables so we only show what we have enabled.
+export const allModels: (LLMModels | EmbeddingModels)[] = [
+  ...allTextCompletionModels,
+  ...allEmbeddingModels,
+]
