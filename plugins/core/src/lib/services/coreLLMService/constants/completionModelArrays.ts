@@ -32,6 +32,12 @@ export const openAIChatCompletionModelsArray = Object.values(
 export const openAITextCompletionInstructModelsArray = Object.values(
   OpenAITextCompletionInstructModels
 )
+
+export const allOpenAICompletionModelsArray = [
+  ...openAIChatCompletionModelsArray,
+  ...openAITextCompletionInstructModelsArray,
+]
+
 export const openAIVisionModelsArray = Object.values(OpenAIVisionModels)
 export const huggingFaceModelsWithPromptFormattingArray = Object.values(
   HuggingFaceModelsWithPromptFormatting
