@@ -88,14 +88,19 @@ export class CorePlugin extends CoreEventsPlugin<
   coreMemoryService = new CoreMemoryService()
   userService: UserService
 
-  constructor(
-    connection: Redis,
-    agentId: string,
-    pubSub: RedisPubSub,
+  constructor({
+    connection,
+    agentId,
+    pubSub,
+    projectId,
+  }: {
+    connection: Redis
+    agentId: string
+    pubSub: RedisPubSub
     projectId: string
-  ) {
-    super(corePluginName, connection, agentId, projectId)
-    this.client = new CoreEventClient(pubSub, agentId)
+  }) {
+    super({ name: corePluginName, connection, agentId, projectId })
+    this.client = new CoreEventClient({ pubSub, agentId })
     this.setCredentials(corePluginCredentials)
 
     this.coreLLMService = new CoreLLMService({
