@@ -16,6 +16,10 @@ export type Message = {
     function: FunctionType
   }
 }
+export interface ModelProviderMapping {
+  provider: LLMProviders
+  apiKey: LLMProviderKeys
+}
 
 export type LiteLLMOptions = {
   api_base?: string
@@ -56,7 +60,7 @@ export type CompletionOptions = {
 } & LiteLLMOptions
 
 export type CompletionRequest = {
-  model: LLMModels
+  model: CompletionModels
   messages: Message[]
   options?: CompletionOptions
   api_key?: string
@@ -168,13 +172,13 @@ export enum LLMProviders {
   VertexAI = 'VertexAI',
 }
 
-export type Models = EmbeddingModels | LLMModels
+export type Models = EmbeddingModels | CompletionModels
 
 export type LLMCredential = PluginCredential & {
   value: string
 }
 
-export type LLMModel = [LLMModels, LLMProviderKeys]
+export type LLMModel = [CompletionModels, LLMProviderKeys]
 
 export enum OpenAIChatCompletionModels {
   GPT35Turbo1106Preview = 'gpt-4-1106-preview',
@@ -423,7 +427,7 @@ export enum PetalsModels {
   HuggyLlamaLlama65 = 'petals/huggyllama/llama-65b',
 }
 
-export type LLMModels =
+export type CompletionModels =
   | OpenAIChatCompletionModels
   | OpenAITextCompletionInstructModels
   | OpenAIVisionModels
@@ -449,3 +453,5 @@ export type LLMModels =
   | AlephAlphaModels
   | BaseTenModels
   | PetalsModels
+
+export type AllModels = CompletionModels | EmbeddingModels
