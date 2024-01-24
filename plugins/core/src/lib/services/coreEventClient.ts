@@ -39,7 +39,7 @@ class CoreEventClient {
    * @param redisConnection The Redis connection to use for subscribing to channels.
    * @param agentId The agent ID to use for subscribing to channels.
    */
-  constructor(pubSub: RedisPubSub, agentId: string) {
+  constructor({ pubSub, agentId }: { pubSub: RedisPubSub; agentId: string }) {
     this.pubSub = pubSub
     this.agentId = agentId
     this.eventHandlers = new Map()
