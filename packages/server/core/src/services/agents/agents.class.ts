@@ -13,13 +13,30 @@ import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
-import { BadRequest, NotFound } from '@feathersjs/errors'
+import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
 
 type MessagePayload = EventPayload & {
   agentId: string
+}
+
+const authorizeAgentPermissions = async (
+  agentId: string,
+  params?: AgentParams
+) => {
+  const agent = await app.service('agents').get(agentId, params)
+
+  if (!agent) throw new NotFound('Agent not found')
+
+  const projectId = agent.projectId
+
+  if (params?.provider) {
+    if (agent.projectId !== projectId) {
+      throw new NotAuthenticated("You don't have access to this agent")
+    }
+  }
 }
 
 /**
@@ -39,8 +56,11 @@ export class AgentService<
     this.app = app
   }
 
-  async message(data: MessagePayload) {
+  async message(data: MessagePayload, params?: ServiceParams) {
     const agentId = data.agentId
+
+    authorizeAgentPermissions(agentId, params)
+
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.message(agentId, data)
 
@@ -63,7 +83,7 @@ export class AgentService<
     return { data: query }
   }
 
-  async get(agentId: string, params: ServiceParams) {
+  async get(agentId: string, params?: ServiceParams) {
     return await this._get(agentId, params)
   }
 
@@ -105,7 +125,7 @@ export class AgentService<
     return this._update(id, data, params)
   }
 
-  /**
+  /**p
    * Executes a command on the agent.
    * @param data - The data required to execute the command.
    * @returns An object containing the response from the agent.
@@ -113,14 +133,8 @@ export class AgentService<
   async command(data: AgentCommandData, params?: ServiceParams) {
     if (!data.agentId) throw new BadRequest('agentId is required')
     // validate user owns the agent
-    const agent = await this._get(data.agentId as string, params)
 
-    if (!agent) throw new NotFound('Agent not found')
-
-    // const projectId = params?.connection.projectId
-    // if (agent.projectId !== projectId) {
-    //   throw new NotAuthenticated("You don't have access to this agent")
-    // }
+    authorizeAgentPermissions(data.agentId, params)
 
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.command(data)
@@ -128,10 +142,10 @@ export class AgentService<
     return { response }
   }
 
-  async run(data: Omit<RunRootSpellArgs, 'agent'>) {
+  async run(data: Omit<RunRootSpellArgs, 'agent'>, params?: ServiceParams) {
     if (!data.agentId) throw new Error('agentId is required')
-    // probably need to authenticate the request here against project id
-    // add the job to the queueD
+
+    authorizeAgentPermissions(data.agentId, params)
 
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.runSpellWithResponse(data)
@@ -140,13 +154,18 @@ export class AgentService<
     return { response }
   }
 
-  async subscribe(agentId: string, params: ServiceParams) {
+  async subscribe(agentId: string, params?: ServiceParams) {
     // check for socket io
-    if (!params.provider)
+    if (!params?.provider)
       throw new Error('subscribe is only available via socket io')
 
+    // check for agentId
+    if (!agentId) throw new Error('agentId is required')
+
+    authorizeAgentPermissions(agentId, params)
+
     // get the socket from the params
-    const connection = params.connection
+    const connection = params?.connection
 
     if (!connection) throw new Error('connection is required')
 
@@ -187,15 +206,20 @@ export class AgentService<
     return true
   }
 
-  async createRelease({
-    agentId,
-    description,
-    agentToCopyId,
-  }: {
-    agentId: string
-    description: string
-    agentToCopyId: string
-  }): Promise<{ spellReleaseId: string }> {
+  async createRelease(
+    {
+      agentId,
+      description,
+      agentToCopyId,
+    }: {
+      agentId: string
+      description: string
+      agentToCopyId: string
+    },
+    params?: ServiceParams
+  ): Promise<{ spellReleaseId: string }> {
+    authorizeAgentPermissions(agentId, params)
+
     // Start a new transaction
     return this.app
       .get('dbClient')
@@ -310,7 +334,7 @@ export class AgentService<
     return this._patch(agentId, params)
   }
 
-  async remove(agentId: string, params: ServiceParams) {
+  async remove(agentId: string, params?: ServiceParams) {
     return this._remove(agentId, params)
   }
 }
