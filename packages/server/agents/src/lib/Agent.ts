@@ -31,6 +31,12 @@ import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { PluginManager } from 'server/pluginManager'
+// import { StateService } from './StateService'
+
+// type AgentData = {
+//   state: {
+
+//   }
 
 /**
  * The Agent class that implements AgentInterface.
@@ -53,6 +59,7 @@ export class Agent implements AgentInterface {
   pubsub: RedisPubSub
   ready = false
   app: Application
+  // stateService: StateService
   spellbook: Spellbook<Agent, Application>
   agentManager: CloudAgentWorker
   pluginManager: PluginManager
@@ -107,25 +114,23 @@ export class Agent implements AgentInterface {
       app,
       pluginManager: this.pluginManager,
     })
-    ;(async () => {
-      // initialize the plugins
-      await this.initializeV1Plugins()
+    // initialize the plugins
+    this.initializeV1Plugins()
 
-      // initialize the plugin commands
-      this.initializeV1PluginCommands()
+    // initialize the plugin commands
+    this.initializeV1PluginCommands()
 
-      // initialize the core commands
-      // These are used to remotely control the agent
-      this.initializeCoreCommands()
+    // initialize the core commands
+    // These are used to remotely control the agent
+    this.initializeCoreCommands()
 
-      this.initializeSpellbook()
+    this.initializeSpellbook()
 
-      // initialize the plugin commands
-      this.intializePluginCommands()
+    // initialize the plugin commands
+    this.intializePluginCommands()
 
-      this.logger.info('New agent created: %s | %s', this.name, this.id)
-      this.ready = true
-    })()
+    this.logger.info('New agent created: %s | %s', this.name, this.id)
+    this.ready = true
   }
 
   /**
@@ -141,6 +146,14 @@ export class Agent implements AgentInterface {
     this.projectId = data.projectId
     this.rootSpellId = data.rootSpellId as string
     this.logger.info('Updated agent: %s | %s', this.name, this.id)
+  }
+
+  async updateData(data: Record<string, any>) {
+    this.data = {
+      ...this.data,
+      ...data,
+    }
+    await this.app.service('agents').patch(this.id, data)
   }
 
   private async initializeSpellbook() {
