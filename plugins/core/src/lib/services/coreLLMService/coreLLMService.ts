@@ -13,16 +13,17 @@ import {
   CompletionResponse,
 } from './types'
 import { modelProviderMap } from './constants'
-import {
-  CompletionParams,
-  ICoreBudgetManagerService,
-  ICoreLLMService,
-} from '../types'
+import { ICoreBudgetManagerService, ICoreLLMService } from '../types'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { UserService } from '../userService/userService'
 import { saveRequest } from 'shared/core'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+type ConstructorParams = {
+  projectId: string
+  agentId?: string
+}
 
 export class CoreLLMService implements ICoreLLMService {
   protected liteLLM: any
@@ -32,10 +33,15 @@ export class CoreLLMService implements ICoreLLMService {
   protected agentId: string
   protected userService: UserService
 
-  constructor({ projectId, agentId }) {
+  constructor({ projectId, agentId }: ConstructorParams) {
+    console.log(
+      '&&&&&&&&&&&&&&&&&&&&&&&&&&CORE LLM SERVICE',
+      projectId,
+      agentId
+    )
     this.projectId = projectId
     this.agentId = agentId || ''
-    this.userService = new UserService(projectId)
+    this.userService = new UserService({ projectId })
   }
   async initialize() {
     try {
@@ -53,100 +59,6 @@ export class CoreLLMService implements ICoreLLMService {
       console.error('Error initializing LiteLLM:', error)
       throw error
     }
-  }
-
-  // Method to handle completion (always in streaming mode)
-  async completion({
-    request,
-    callback,
-    maxRetries = 1,
-    delayMs = 1000,
-  }: CompletionParams): Promise<{
-    fullText: string
-    completionResponse: CompletionResponse
-  }> {
-    let attempts = 0
-    let fullText = ''
-    const chunks: any[] = []
-    const messages = request.messages.filter(Boolean)
-
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-    while (attempts < maxRetries) {
-      try {
-        const user = await this.userService.getUser()
-        const budgetManagerUser =
-          await this.coreBudgetManagerService?.getUsers()
-
-        const liteLLMBudget =
-          await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
-        console.log('USER', user, budgetManagerUser, liteLLMBudget)
-        // console.log('BUDGET USER', budgetUser, budgetUser?.length)
-        const estimatedCost =
-          await this.coreBudgetManagerService?.projectedCost({
-            model: request.model,
-            messages: request.messages,
-            projectId: this.projectId,
-          })
-
-        const totalBudget = await this.coreBudgetManagerService?.getTotalBudget(
-          this.projectId
-        )
-        if (estimatedCost === undefined || totalBudget === undefined) {
-          throw new Error('Invalid user')
-        }
-
-        if (estimatedCost > totalBudget) {
-          throw new Error('Budget limit exceeded')
-        }
-
-        const body = {
-          model: request.model || 'gemini-pro',
-          messages: request.messages,
-          ...request.options,
-          stream: true,
-          api_key: this.getCredential(request.model),
-        }
-
-        const stream = await this.liteLLM.completion$(body)
-
-        for await (const chunk of stream) {
-          const chunkJSON = await chunk.json()
-          const chunkVal = await chunkJSON.valueOf()
-          chunks.push(chunkVal)
-
-          const chunkText = chunkVal.choices[0].delta.content
-          fullText += chunkText
-          callback(chunkVal, false, null)
-        }
-        // Use LiteLLM's helper method to reconstruct the completion response
-        const python_response = await this.liteLLM.stream_chunk_builder$(
-          chunks,
-          { messages }
-        )
-
-        const compRes = await python_response.json()
-        const compResVal = await compRes.valueOf()
-        const completionResponse = {
-          ...compResVal,
-          _python_object: python_response,
-        }
-        callback(null, true, completionResponse)
-        return { fullText, completionResponse: completionResponse }
-      } catch (error: any) {
-        console.error(`Attempt ${attempts + 1} failed:`, error)
-        attempts++
-
-        if (attempts >= maxRetries) {
-          await sleep(delayMs)
-          throw new Error(
-            `Completion request failed after ${maxRetries} attempts: ${error}`
-          )
-        }
-      }
-    }
-
-    throw new Error('Unexpected error in completion method')
   }
 
   async *completionGenerator({
@@ -212,7 +124,7 @@ export class CoreLLMService implements ICoreLLMService {
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
 
-        if (NODE_ENV !== 'development') {
+        if (PRODUCTION) {
           await this.coreBudgetManagerService?.updateCost(
             this.projectId,
             completionResponsePython
@@ -279,7 +191,11 @@ export class CoreLLMService implements ICoreLLMService {
 
     let credential = this.credentials.find(c => c.name === provider)?.value
 
-    if (!credential && !PRODUCTION) {
+    if (!credential && PRODUCTION) {
+      credential = process.env[provider]
+    }
+
+    if (!credential && NODE_ENV === 'development' && !PRODUCTION) {
       credential = process.env[provider]
     }
 
