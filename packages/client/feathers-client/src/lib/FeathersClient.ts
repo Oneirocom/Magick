@@ -60,8 +60,9 @@ const configureCustomServices = (
       'subscribe',
       'command',
       'message',
+      'ping',
     ],
-    events: ['log', 'result', 'spell', 'event', 'error', 'warn'],
+    events: ['log', 'result', 'spell', 'event', 'error', 'warn', 'heartbeat'],
   })
   app.use('request', socketClient.service('request'), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],

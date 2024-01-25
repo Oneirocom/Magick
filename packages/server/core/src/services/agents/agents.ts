@@ -58,6 +58,7 @@ const AGENT_EVENTS = [
   'event',
   'error',
   'warn',
+  'heartbeat',
 ]
 
 /**
@@ -111,7 +112,7 @@ export const agent = (app: Application) => {
   // Only subscribe on the main server not any workers.
   if (app.get('environment') === 'server')
     pubSub.patternSubscribe('agent*', (message, channel) => {
-      // parse  the channel from agent:agentId:messageType
+      // parse  the channel from agent:agentId:domain:messageType
       const agentId = channel.split(':')[1]
 
       // parse the type of agent message
@@ -122,6 +123,8 @@ export const agent = (app: Application) => {
         app.get('logger').trace('AGENT SERVICE: Skipping message %s', channel)
         return
       }
+
+      console.log('EVENT', messageType, channel, message)
 
       // remove unwanted properties from the message
       // embeddings and spells are large data packages we don't need on the client

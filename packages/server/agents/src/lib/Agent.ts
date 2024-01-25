@@ -12,6 +12,7 @@ import {
   type Event,
   AGENT_ERROR,
   AGENT_WARN,
+  AGENT_PONG,
 } from 'shared/core'
 
 import { getLogger } from 'server/logger'
@@ -257,6 +258,15 @@ export class Agent implements AgentInterface {
       },
       playSpell: async (data: any) => {
         this.spellbook.playSpell(data)
+      },
+      ping: async (data: any) => {
+        console.log('PING RECEIVED!!')
+        const isLive = this.spellbook.isLive
+        this.pubsub.publish(AGENT_PONG(this.id), {
+          agentId: this.id,
+          projectId: this.projectId,
+          isLive,
+        })
       },
     })
   }

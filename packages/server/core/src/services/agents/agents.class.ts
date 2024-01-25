@@ -70,14 +70,17 @@ export class AgentService<
 
   // we use this ping to avoid firing a patched event on the agent
   // every time the agent is pinged
-  async ping(agentId: string) {
-    const db = app.get('dbClient')
-    // knex query to update the pingedAt field of the agent with the given id
-    const query = await db('agents').where({ id: agentId }).update({
-      pingedAt: new Date().toISOString(),
-    })
+  async ping(agentId: string, params?: ServiceParams) {
+    this.authorizeAgentPermissions(agentId, params)
 
-    return { data: query }
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.ping(agentId)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
   }
 
   async get(agentId: string, params?: ServiceParams) {
