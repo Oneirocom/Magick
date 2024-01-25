@@ -214,9 +214,9 @@ export const Node: React.FC<NodeProps> = ({
         </div>
       ))}
 
-      {valueInputs.map(input => (
+      {valueInputs.map((input, ix) => (
         <div
-          key={input.key}
+          key={ix}
           className="flex flex-row justify-start gap-8 relative px-2"
         // className={styles.container}
         >

@@ -1,5 +1,4 @@
 // DOCUMENTED
-import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
@@ -74,7 +73,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
         name: value,
         graph: defaultGraph as unknown as GraphData,
         projectId: config.projectId,
-        hash: md5(Math.random()),
       })
 
       getSpell({
