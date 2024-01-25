@@ -24,7 +24,10 @@ import {
   PetalsModels,
   VoyageAIModels,
   AlephAlphaModels,
-} from '../types'
+  AnyscaleModels,
+  OpenRouterModels,
+  ReplicateModels,
+} from '../types/completionModels'
 
 export const openAIChatCompletionModelsArray = Object.values(
   OpenAIChatCompletionModels
@@ -65,3 +68,6 @@ export const baseTenModelsArray = Object.values(BaseTenModels)
 export const petalsModelsArray = Object.values(PetalsModels)
 export const voyageAIModelsArray = Object.values(VoyageAIModels)
 export const alephAlphaModelsArray = Object.values(AlephAlphaModels)
+export const anyscaleModelsArray = Object.values(AnyscaleModels)
+export const openRouterModelsArray = Object.values(OpenRouterModels)
+export const replicateModelsArray = Object.values(ReplicateModels)
