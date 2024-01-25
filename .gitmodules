@@ -1,7 +1,7 @@
 [submodule "pythonPackages/liteLLM"]
 	path = pythonPackages/liteLLM
-	url = git@github.com:HaruHunab1320/litellm.git
+	url = https://github.com/HaruHunab1320/litellm
 	
-[submodule "portal"]
-	path = portal
+[submodule "portal/platform"]
+	path = portal/platform
 	url = https://github.com/Oneirocom/Portal
