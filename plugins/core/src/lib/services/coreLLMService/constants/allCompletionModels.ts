@@ -1,4 +1,4 @@
-import { CompletionModels } from '../types'
+import { CompletionModels } from '../types/completionModels'
 import {
   openAIChatCompletionModelsArray,
   openAITextCompletionInstructModelsArray,
