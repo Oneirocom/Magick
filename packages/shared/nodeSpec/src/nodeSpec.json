@@ -137,8 +137,12 @@
       {
         "name": "model",
         "valueType": "string",
-        "defaultValue": "",
+        "defaultValue": "gpt-3.5-turbo",
         "choices": [
+          {
+            "text": "gpt-4-1106-preview",
+            "value": "gpt-4-1106-preview"
+          },
           {
             "text": "gpt-3.5-turbo",
             "value": "gpt-3.5-turbo"
@@ -164,32 +168,8 @@
             "value": "gpt-3.5-turbo-16k-0613"
           },
           {
-            "text": "gpt-3",
-            "value": "gpt-3"
-          },
-          {
-            "text": "davinci",
-            "value": "davinci"
-          },
-          {
-            "text": "curie",
-            "value": "curie"
-          },
-          {
-            "text": "babbage",
-            "value": "babbage"
-          },
-          {
-            "text": "ada",
-            "value": "ada"
-          },
-          {
             "text": "gpt-4",
             "value": "gpt-4"
-          },
-          {
-            "text": "gpt-4-1106-preview",
-            "value": "gpt-4-1106-preview"
           },
           {
             "text": "gpt-4-0314",
@@ -198,106 +178,6 @@
           {
             "text": "gpt-4-0613",
             "value": "gpt-4-0613"
-          },
-          {
-            "text": "gpt-4-32k",
-            "value": "gpt-4-32k"
-          },
-          {
-            "text": "gpt-4-32k-0314",
-            "value": "gpt-4-32k-0314"
-          },
-          {
-            "text": "gpt-4-32k-0613",
-            "value": "gpt-4-32k-0613"
-          },
-          {
-            "text": "gemini-pro",
-            "value": "gemini-pro"
-          },
-          {
-            "text": "palm",
-            "value": "palm"
-          },
-          {
-            "text": "mistral",
-            "value": "mistral"
-          },
-          {
-            "text": "anthropic",
-            "value": "anthropic"
-          },
-          {
-            "text": "sagemaker",
-            "value": "sagemaker"
-          },
-          {
-            "text": "bedrock",
-            "value": "bedrock"
-          },
-          {
-            "text": "anyscale",
-            "value": "anyscale"
-          },
-          {
-            "text": "perplexity-ai",
-            "value": "perplexity-ai"
-          },
-          {
-            "text": "vllm",
-            "value": "vllm"
-          },
-          {
-            "text": "deepinfra",
-            "value": "deepinfra"
-          },
-          {
-            "text": "j2-light",
-            "value": "j2-light"
-          },
-          {
-            "text": "j2-mid",
-            "value": "j2-mid"
-          },
-          {
-            "text": "j2-ultra",
-            "value": "j2-ultra"
-          },
-          {
-            "text": "nlpc-cloud",
-            "value": "nlpc-cloud"
-          },
-          {
-            "text": "replicate",
-            "value": "replicate"
-          },
-          {
-            "text": "cohere",
-            "value": "cohere"
-          },
-          {
-            "text": "together-ai",
-            "value": "together-ai"
-          },
-          {
-            "text": "aleph-alpha",
-            "value": "aleph-alpha"
-          },
-          {
-            "text": "baseten",
-            "value": "baseten"
-          },
-          {
-            "text": "openrouter",
-            "value": "openrouter"
-          },
-          {
-            "text": "custom-api",
-            "value": "custom-api"
-          },
-          {
-            "text": "petals",
-            "value": "petals"
           }
         ]
       },
@@ -358,46 +238,16 @@
         "name": "modelChoices",
         "valueType": "array",
         "defaultValue": [
+          "gpt-4-1106-preview",
           "gpt-3.5-turbo",
           "gpt-3.5-turbo-1106",
           "gpt-3.5-turbo-0301",
           "gpt-3.5-turbo-0613",
           "gpt-3.5-turbo-16k",
           "gpt-3.5-turbo-16k-0613",
-          "gpt-3",
-          "davinci",
-          "curie",
-          "babbage",
-          "ada",
           "gpt-4",
-          "gpt-4-1106-preview",
           "gpt-4-0314",
-          "gpt-4-0613",
-          "gpt-4-32k",
-          "gpt-4-32k-0314",
-          "gpt-4-32k-0613",
-          "gemini-pro",
-          "palm",
-          "mistral",
-          "anthropic",
-          "sagemaker",
-          "bedrock",
-          "anyscale",
-          "perplexity-ai",
-          "vllm",
-          "deepinfra",
-          "j2-light",
-          "j2-mid",
-          "j2-ultra",
-          "nlpc-cloud",
-          "replicate",
-          "cohere",
-          "together-ai",
-          "aleph-alpha",
-          "baseten",
-          "openrouter",
-          "custom-api",
-          "petals"
+          "gpt-4-0613"
         ]
       }
     ]
