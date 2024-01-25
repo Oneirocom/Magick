@@ -42,7 +42,10 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/server/cloud-agent-manager/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/cloud-agent-manager",
+          "packages/server/cloud-agent-manager/**/*.ts"
+        ]
       }
     },
     "test": {
