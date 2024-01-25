@@ -142,7 +142,7 @@ type Message = {
 /**
  * Playtest component - The main component for handling playtesting functionality.
  */
-const ChatWindow = ({ tab, spellId }) => {
+const ChatWindow = ({ tab, spell }) => {
   const config = useConfig()
 
   const { lastItem: lastEvent } = useSelectAgentsEvent()
@@ -235,11 +235,12 @@ const ChatWindow = ({ tab, spellId }) => {
   useEffect(() => {
     if (!lastEvent) return
 
+
     const { data, event, actionName } = lastEvent
     const { content } = data
 
-    if (event?.runInfo?.spellId !== spellId) return
-    if (event.channel !== spellId) return
+    if (event?.runInfo?.spellId !== spell.id) return
+    if (event.channel !== spell.id) return
 
     if (actionName === 'sendMessage') {
       printToConsole(content)
@@ -339,12 +340,12 @@ const ChatWindow = ({ tab, spellId }) => {
       sender: data.sender || 'user',
       observer: data.observer || 'assistant',
       client: 'cloud.magickml.com',
-      channel: spellId,
+      channel: spell.id,
       projectId: config.projectId,
       channelType: 'spell playtest',
       rawData: value,
       agentId: currentAgentId,
-      spellId: spellId,
+      spellId: spell.id,
       isPlaytest: true
     }
 

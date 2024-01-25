@@ -1,16 +1,22 @@
 import { VariableJSON } from '@magickml/behave-graph';
 import { Tab, useConfig } from '@magickml/providers';
 import { Window } from 'client/core'
-import { selectGraphJson, selectTabEdges, selectTabNodes, setEdges, setNodes, useGetSpellQuery, useSaveSpellMutation } from 'client/state';
+import { selectGraphJson, selectTabEdges, selectTabNodes, setEdges, setNodes, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
 import { IDockviewPanelProps } from 'dockview';
 import { useCallback, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { Variable } from './Variable';
 import { useSelector } from 'react-redux';
+import { SpellInterface } from 'server/schemas';
 
-export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-  const { spellId, tab } = props.params
+type Props = IDockviewPanelProps<{ tab: Tab, spellId: string }> & {
+  spell: SpellInterface
+}
+
+export const VariableWindow = (props: Props) => {
+  const { spell } = props
+  const { tab } = props.params
 
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
@@ -18,7 +24,6 @@ export const VariableWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: s
 
   const [newVariableName, setNewVariableName] = useState<string>('')
   const graphJson = useSelector(selectGraphJson(tab.id))
-  const { data: spell } = useGetSpellQuery({ id: spellId })
   const { projectId } = useConfig()
   const [saveSpellMutation] = useSaveSpellMutation()
 
