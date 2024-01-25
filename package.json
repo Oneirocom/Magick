@@ -51,7 +51,7 @@
     "portal:dev": "npm run portal:db && npx nx serve portal",
     "portal:db": "npx nx run @magickml/portal-db:generate",
     "portal:build": "npm run portal:db && npx nx build portal",
-    "portal:update": "git submodule update --remote --merge"
+    "portal:update": "git submodule update --remote --merge portal/platform"
   },
   "resolutions": {
     "@types/react": "18.0.2"
