@@ -1,12 +1,5 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "namedInputs": {
-    "default": [
-      {
-        "runtime": "node ./scripts/calculateHash.js globs --list apps/client/src/plugins.ts apps/server/src/plugins.ts apps/agent/src/plugins.ts"
-      }
-    ]
-  },
   "affected": {
     "defaultBase": "main"
   },
