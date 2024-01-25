@@ -203,20 +203,15 @@ export class AgentService<
     return true
   }
 
-  async createRelease(
-    {
-      agentId,
-      description,
-      agentToCopyId,
-    }: {
-      agentId: string
-      description: string
-      agentToCopyId: string
-    },
-    params?: ServiceParams
-  ): Promise<{ spellReleaseId: string }> {
-    this.authorizeAgentPermissions(agentId, params)
-
+  async createRelease({
+    agentId,
+    description,
+    agentToCopyId,
+  }: {
+    agentId: string
+    description: string
+    agentToCopyId: string
+  }): Promise<{ spellReleaseId: string }> {
     // Start a new transaction
     return this.app
       .get('dbClient')
@@ -277,6 +272,7 @@ export class AgentService<
         const rootSpell = draftSpellsToCopy.find(
           spell => spell.id === agentToCopy?.rootSpellId
         ) as SpellData
+
         const newRootSpell = newSpells.find(spell => {
           return spell.name === rootSpell?.name
         }) as SpellData
