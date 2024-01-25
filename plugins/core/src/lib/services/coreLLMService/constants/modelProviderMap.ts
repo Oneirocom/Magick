@@ -7,7 +7,6 @@ import {
   HuggingFaceEmbeddingModels,
 } from '../../coreEmbeddingService/types'
 import {
-  LLMProviders,
   OpenAIChatCompletionModels,
   OpenAITextCompletionInstructModels,
   OpenAIVisionModels,
@@ -33,10 +32,15 @@ import {
   PetalsModels,
   VoyageAIModels,
   AlephAlphaModels,
+  AnyscaleModels,
+  OpenRouterModels,
+} from '../types/completionModels'
+import { AllModels } from '../types/models'
+import {
   ModelProviderMapping,
+  LLMProviders,
   LLMProviderKeys,
-  AllModels,
-} from '../types'
+} from '../types/providerTypes'
 
 export const modelProviderMap: Record<AllModels, ModelProviderMapping> = {
   /// OpenAI Chat Completion Models
@@ -772,5 +776,70 @@ export const modelProviderMap: Record<AllModels, ModelProviderMapping> = {
   [HuggingFaceEmbeddingModels.HuggingFaceMicrosoftCodebertBase]: {
     provider: LLMProviders.HuggingFace,
     apiKey: LLMProviderKeys.HuggingFace,
+  },
+  [AnyscaleModels.AnyscaleCodellamaCodeLlama34bInstructHf]: {
+    provider: LLMProviders.Anyscale,
+    apiKey: LLMProviderKeys.Anyscale,
+  },
+
+  [AnyscaleModels.AnyscaleMetaLlamaLlama213bChatHf]: {
+    provider: LLMProviders.Anyscale,
+    apiKey: LLMProviderKeys.Anyscale,
+  },
+  [AnyscaleModels.AnyscaleMetaLlamaLlama270bChatHf]: {
+    provider: LLMProviders.Anyscale,
+    apiKey: LLMProviderKeys.Anyscale,
+  },
+  [AnyscaleModels.AnyscaleMetaLlamaLlama27bChatHf]: {
+    provider: LLMProviders.Anyscale,
+    apiKey: LLMProviderKeys.Anyscale,
+  },
+  [AnyscaleModels.AnyscaleZephyr7BBeta]: {
+    provider: LLMProviders.Anyscale,
+    apiKey: LLMProviderKeys.Anyscale,
+  },
+  [AnyscaleModels.AnyscaleMistral7BInstructV01]: {
+    provider: LLMProviders.Anyscale,
+    apiKey: LLMProviderKeys.Anyscale,
+  },
+  [OpenRouterModels.OpenRouterAnthropicClaud2]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterAnthropicClaudInstantV1]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterMetaLlamaLlama213bChat]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterMetaLlamaLlama270bChat]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterOpenAIGpt35turbo]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterOpenAIGpt35turbo16k]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterOpenAIGpt4]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterOpenAIGpt432k]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterPalm2ChatBison]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
+  },
+  [OpenRouterModels.OpenRouterPalm2CodeChatBison]: {
+    provider: LLMProviders.OpenRouter,
+    apiKey: LLMProviderKeys.OpenRouter,
   },
 }

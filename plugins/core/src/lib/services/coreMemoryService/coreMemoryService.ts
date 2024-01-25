@@ -1,11 +1,5 @@
 import { python } from 'pythonia'
 import { PRODUCTION } from 'shared/config'
-import {
-  CompletionModels,
-  LLMCredential,
-  Models,
-  OpenAIChatCompletionModels,
-} from '../coreLLMService/types'
 
 import { DataType } from './coreMemoryTypes'
 import {
@@ -16,6 +10,12 @@ import {
   findProviderKey,
   findProviderName,
 } from '../coreLLMService/findProvider'
+import {
+  OpenAIChatCompletionModels,
+  CompletionModels,
+} from '../coreLLMService/types/completionModels'
+import { Models } from '../coreLLMService/types/models'
+import { LLMCredential } from '../coreLLMService/types/providerTypes'
 
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
@@ -78,6 +78,11 @@ class CoreMemoryService {
       // Use Pythonia to create an instance of the Embedchain App
       this.embedchain = await python('embedchain')
 
+      console.log(
+        '#########Pythonia Embedchain:',
+        OpenAIChatCompletionModels.GPT35Turbo,
+        OpenAIEmbeddingModels.TextEmbeddingAda002
+      )
       // Ste initial LLM and Embedder models
       this.setLLM(OpenAIChatCompletionModels.GPT35Turbo)
       this.setEmbedder(OpenAIEmbeddingModels.TextEmbeddingAda002)
@@ -156,6 +161,7 @@ class CoreMemoryService {
 
   private getCredential(model: Models): string {
     const provider = findProviderKey(model)
+    console.log('PROVIDER', provider)
     let credential = this.credentials.find(
       c => c.serviceType === provider
     )?.value

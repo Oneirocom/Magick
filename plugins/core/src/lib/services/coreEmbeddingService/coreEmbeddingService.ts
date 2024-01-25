@@ -12,7 +12,7 @@ import {
   OpenAIEmbeddingOptions,
   VoyageEmbeddingOptions,
 } from './types'
-import { LLMProviders } from '../coreLLMService/types'
+import { LLMProviders } from '../coreLLMService/types/providerTypes'
 
 export class EmbeddingService implements IEmbeddingService {
   protected liteLLM: any
