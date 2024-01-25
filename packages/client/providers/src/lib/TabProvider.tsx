@@ -124,6 +124,7 @@ export const TabProvider = ({ children }) => {
         type: 'spell',
         params: {
           spellId: data.spellId,
+          spellName: data.name,
         }
       })
     })
@@ -183,6 +184,7 @@ export const TabProvider = ({ children }) => {
       params: {
         tab,
         theme,
+        spellName: tab.name,
         ...tab.params
       },
     })

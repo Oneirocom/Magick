@@ -21,8 +21,9 @@ import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
 import { useSelector } from 'react-redux';
-import { RootState } from 'client/state';
+import { RootState, useGetSpellByNameQuery } from 'client/state';
 import { VariableWindow } from '../../VariableWindow/VariableWindow';
+import { SpellInterface } from 'server/schemas';
 
 const generateLayoutKey = (spellid: string, agentId: string, projectId: string,) => {
   return `${projectId}/composer_layout_${spellid}/${agentId || 'draft-agent'}`
@@ -39,7 +40,7 @@ const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | unde
   localStorage.setItem(key, JSON.stringify(layout))
 }
 
-function loadDefaultLayout(api: DockviewApi, tab, spellId) {
+function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
   const panel = api.addPanel({
     id: 'panel_1',
     component: 'default',
@@ -57,7 +58,8 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     params: {
       title: 'Graph',
       tab,
-      spellId
+      spellId,
+      spellName
     },
   })
 
@@ -69,7 +71,8 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
       params: {
         title: 'Properties',
         tab,
-        spellId
+        spellId,
+        spellName
       },
 
       position: { referencePanel: 'Graph', direction: 'left' },
@@ -87,7 +90,8 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     params: {
       title: 'Variables',
       tab,
-      spellId
+      spellId,
+      spellName
     },
     position: { referencePanel: 'Properties', direction: 'below' },
   })
@@ -99,7 +103,8 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
       params: {
         title: 'Test',
         tab,
-        spellId
+        spellId,
+        spellName
       },
       position: { referencePanel: 'Graph', direction: 'right' },
     })
@@ -113,41 +118,48 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     params: {
       title: 'Text Editor',
       tab,
-      spellId
+      spellId,
+      spellName
     },
     position: { referencePanel: 'Test', direction: 'below' },
   })
 }
 
 // todo refactore these components to take in the full dockview panel props
-const components = {
-  default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
-    return (
-      <div style={{ padding: '20px', color: 'white' }}>
-        {props.params.title}
-      </div>
-    )
-  },
-  Test: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <ChatWindow {...props.params} />
-  },
-  // depricating this one
-  Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <ChatWindow {...props.params} />
-  },
-  Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <PropertiesWindow {...props.params} />
-  },
-  TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <TextEditor {...props.params} />
-  },
-  Graph: GraphWindow,
-  Variables: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <VariableWindow {...props} />
-  },
-  Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-    return <Console {...props.params} />
-  },
+const componentFactory = (spell: SpellInterface) => {
+  console.log('SPELL!', spell)
+
+  return {
+    default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
+      return (
+        <div style={{ padding: '20px', color: 'white' }}>
+          {props.params.title}
+        </div>
+      )
+    },
+    Test: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <ChatWindow {...props.params} spell={spell} />
+    },
+    // depricating this one
+    Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <ChatWindow {...props.params} spell={spell} />
+    },
+    Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <PropertiesWindow {...props.params} />
+    },
+    TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <TextEditor {...props.params} />
+    },
+    Graph: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <GraphWindow {...props} spell={spell} />
+    },
+    Variables: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <VariableWindow {...props} spell={spell} />
+    },
+    Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+      return <Console {...props.params} />
+    },
+  }
 }
 
 const PermanentTab = (props: IDockviewPanelHeaderProps) => {
@@ -158,15 +170,26 @@ const tabComponents = {
   permanentTab: PermanentTab,
 };
 
-export const Composer = ({ tab, theme, spellId }) => {
+export const Composer = ({ tab, theme, spellId, spellName }) => {
   const pubSub = usePubSub()
   const config = useConfig()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, subscribe } = usePubSub()
+  const [components, setComponents] = useState(null)
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId: _currentAgentId } = globalConfig
   const currentAgentRef = useRef(_currentAgentId)
+
+  const { data: spell } = useGetSpellByNameQuery({ spellName }, {
+    skip: !spellName
+  })
+
+  useEffect(() => {
+    if (!spell) return
+
+    setComponents(componentFactory(spell.data[0]))
+  }, [spell])
 
   useEffect(() => {
     currentAgentRef.current = _currentAgentId
@@ -185,7 +208,7 @@ export const Composer = ({ tab, theme, spellId }) => {
     }
 
     if (!success) {
-      loadDefaultLayout(event.api, tab, spellId)
+      loadDefaultLayout(event.api, tab, spellId, spellName)
     }
 
     setApi(event.api)
@@ -238,6 +261,8 @@ export const Composer = ({ tab, theme, spellId }) => {
   const showDndOverlay = () => {
     return true;
   };
+
+  if (!components) return null
 
   return (
     <>
