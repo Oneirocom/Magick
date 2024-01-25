@@ -50,7 +50,7 @@
     "portal:cli:install": "npm link dist/apps/cli",
     "portal:dev": "npm run portal:db && npx nx serve portal",
     "portal:db": "npx nx run @magickml/portal-db:generate",
-    "portal:build": "npm run portal:db && npx nx build portal",
+    "portal:build": "npm run portal:db && npx nx build @magickml/portal",
     "portal:update": "git submodule update --remote --merge portal/platform"
   },
   "resolutions": {
