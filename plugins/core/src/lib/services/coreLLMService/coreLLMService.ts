@@ -6,13 +6,18 @@ import {
   VERTEXAI_PROJECT,
 } from 'shared/config'
 
-import { LLMCredential, CompletionResponse, AllModels } from './types'
-
-import { ICoreBudgetManagerService, ICoreLLMService } from '../types'
+import {
+  CompletionParams,
+  ICoreBudgetManagerService,
+  ICoreLLMService,
+} from '../types'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { UserService } from '../userService/userService'
 import { saveRequest } from 'shared/core'
 import { findProviderKey, findProviderName } from './findProvider'
+import { LLMCredential } from './types/providerTypes'
+import { CompletionResponse } from './types/completionTypes'
+import { AllModels } from './types/models'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
