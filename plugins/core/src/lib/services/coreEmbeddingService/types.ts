@@ -1,9 +1,12 @@
 import {
-  AzureModel,
-  BedrockModels,
-  CustomOpenAIModel,
-  LLMProviders,
-} from '../coreLLMService/types'
+  AzureSlug,
+  BedrockSlug,
+  CustomOpenAISlug,
+  HuggingFaceSlug,
+  MistralAISlug,
+  VoyageAISlug,
+} from '../coreLLMService/types/completionModels'
+import { LLMProviders } from '../coreLLMService/types/providerTypes'
 
 export interface BaseEmbeddingOptions {
   model: EmbeddingModels | string
@@ -55,7 +58,7 @@ export type GenerateEmbeddingParams =
 
 // Azure-specific embedding options
 export interface AzureEmbeddingOptions extends BaseEmbeddingOptions {
-  model: AzureModel
+  model: AzureSlug
   api_key: string
   api_base: string
   api_version: string
@@ -67,13 +70,13 @@ export interface OpenAIEmbeddingOptions extends BaseEmbeddingOptions {
 
 // Use this for calling /embedding endpoints on OpenAI Compatible Servers
 export interface CustomOpenAIEmbeddingOptions extends BaseEmbeddingOptions {
-  model: CustomOpenAIModel
+  model: CustomOpenAISlug
   api_base: string // The API endpoint "http://0.0.0.0:8000/"
 }
 
 // Bedrock Embedding Options
 export interface BedrockEmbeddingOptions extends BaseEmbeddingOptions {
-  models: BedrockModels
+  models: BedrockSlug
   aws_access_key_id?: string
   aws_secret_access_key?: string
   aws_region_name?: string
@@ -87,17 +90,18 @@ export interface CohereEmbeddingOptions extends BaseEmbeddingOptions {
 
 // HuggingFace-specific embedding options
 export interface HuggingFaceEmbeddingOptions extends BaseEmbeddingOptions {
+  model: HuggingFaceSlug
   api_base: string // The API endpoint "https://p69xlsj6rpno5drq.us-east-1.aws.endpoints.huggingface.cloud"
 }
 
 // Mistral AI Embedding Options
 export interface MistralEmbeddingOptions extends BaseEmbeddingOptions {
-  model: MistralEmbeddingModels
+  model: MistralAISlug
 }
 
 // Voyage-specific embedding options
 export interface VoyageEmbeddingOptions extends BaseEmbeddingOptions {
-  model: VoyageEmbeddingModels
+  model: VoyageAISlug
 }
 
 // OpenAI embedding options
@@ -168,7 +172,7 @@ export enum CohereEmbeddingModels {
 }
 
 export enum MistralEmbeddingModels {
-  MistralEmbed = 'mistral/mistral-embed',
+  MistralEmbed = 'mistral-embed',
 }
 
 export enum VoyageEmbeddingModels {
@@ -182,9 +186,9 @@ export enum OpenAIEmbeddingModels {
 }
 
 export enum HuggingFaceEmbeddingModels {
-  HuggingFaceMicrosoftCodebertBase = 'huggingface/microsoft/codebert-base',
-  HuggingFaceBAAIBgeLargeZh = 'huggingface/BAAI/bge-large-zh',
-  HuggingFaceAnyHfEmbeddingModel = 'huggingface/any-hf-embedding-model',
+  HuggingFaceMicrosoftCodebertBase = 'microsoft/codebert-base',
+  HuggingFaceBAAIBgeLargeZh = 'BAAI/bge-large-zh',
+  HuggingFaceAnyHfEmbeddingModel = 'any-hf-embedding-model',
 }
 export type EmbeddingModels =
   | BedrockEmbeddingModels
