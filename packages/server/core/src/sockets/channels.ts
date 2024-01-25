@@ -1,7 +1,7 @@
 // DOCUMENTED
 import '@feathersjs/transport-commons'
 import { Application } from '../declarations'
-import { RealTimeConnection } from '@feathersjs/transport-commons'
+import { Channel, RealTimeConnection } from '@feathersjs/transport-commons'
 
 /**
  * Configure channels for real-time functionality.
@@ -68,7 +68,7 @@ export default function (app: Application): void {
     // get the user from the context
     if (app.get('environment') !== 'server') return
 
-    const channels = []
+    const channels = [] as Channel[]
 
     const sessionId =
       context.params?.sessionId ||
