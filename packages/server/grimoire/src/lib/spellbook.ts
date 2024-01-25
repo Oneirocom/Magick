@@ -105,6 +105,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   mainRegistry!: IRegistry
 
+  get isLive() {
+    return this.watchSpells
+  }
+
   /**
    * Constructs a SpellManager.
    * @param app - The application instance.

@@ -237,6 +237,14 @@ export class AgentCommander extends EventEmitter {
     this.pubSub.publish(AGENT_MESSAGE(agentId), eventPayload)
   }
 
+  ping(agentId: string) {
+    this.command({
+      agentId,
+      command: 'ping',
+      data: {},
+    })
+  }
+
   async removeAgent(agentId: string) {
     this.pubSub.publish(AGENT_DELETE, agentId)
   }
