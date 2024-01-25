@@ -49,7 +49,7 @@
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
     "portal:dev": "npm run portal:db && npx nx serve portal",
-    "portal:db": "npx nx build db",
+    "portal:db": "npx nx run @magickml/portal-db:generate",
     "portal:build": "npm run portal:db && npx nx build portal",
     "portal:update": "git submodule update --remote --merge"
   },
