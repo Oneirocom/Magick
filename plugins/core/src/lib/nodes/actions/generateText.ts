@@ -4,7 +4,10 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { LLMModels } from '../../services/coreLLMService/types'
+import {
+  LLMModels,
+  OpenAIChatCompletionModels,
+} from '../../services/coreLLMService/types'
 import { CORE_DEP_KEYS } from '../../constants'
 import { IEventStore } from 'server/grimoire'
 
@@ -15,7 +18,7 @@ export const generateText = makeFlowNodeDefinition({
   configuration: {
     modelChoices: {
       valueType: 'array',
-      defaultValue: Object.values(LLMModels),
+      defaultValue: Object.values(OpenAIChatCompletionModels),
     },
   },
   in: {
@@ -26,8 +29,8 @@ export const generateText = makeFlowNodeDefinition({
     },
     model: {
       valueType: 'string',
-      choices: Object.values(LLMModels),
-      defaultValue: LLMModels['gemini-pro'],
+      choices: Object.values(OpenAIChatCompletionModels) as string[],
+      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
     },
     stop: {
       valueType: 'string',
@@ -80,7 +83,8 @@ export const generateText = makeFlowNodeDefinition({
           throw new Error('No coreLLMService provided')
         }
 
-        const model: LLMModels = read('model') || LLMModels.GPT35Turbo
+        const model: LLMModels =
+          read('model') || OpenAIChatCompletionModels.GPT35Turbo
         const prompt: string = read('prompt') || ''
         const temperature: number = read('temperature') || 0.5
         const top_p: number = read('top_p') || 1
