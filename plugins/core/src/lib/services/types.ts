@@ -1,10 +1,9 @@
+import { CompletionModels } from './coreLLMService/types/completionModels'
 import {
-  Chunk,
-  CompletionRequest,
   CompletionResponse,
-  CompletionModels,
-  Message,
-} from './coreLLMService/types'
+  CompletionRequest,
+} from './coreLLMService/types/completionTypes'
+import { Chunk, Message } from './coreLLMService/types/messageTypes'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
