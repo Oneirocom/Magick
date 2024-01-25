@@ -1,3 +1,9 @@
+import {
+  HuggingFaceEmbeddingModels,
+  MistralEmbeddingModels,
+  VoyageEmbeddingModels,
+} from '../../coreEmbeddingService/types'
+
 export enum OpenAIChatCompletionModels {
   GPT35Turbo1106Preview = 'gpt-4-1106-preview',
   GPT35Turbo = 'gpt-3.5-turbo',
@@ -30,14 +36,22 @@ export type CustomOpenAISlug = `openai/${string}`
 export type CustomReplicateSlug = `replicate/${string}`
 export type ReplicateDeploymentModelSlug = `replicate/deployments/${string}`
 
+export type HuggingFaceWithPromptFormattingSlug =
+  `huggingface/${HuggingFaceModelsWithPromptFormatting}`
+
+export type HuggingFaceSlug = `huggingface/${
+  | HuggingFaceEmbeddingModels
+  | HuggingFaceWithPromptFormattingSlug
+  | string}`
+
 export enum HuggingFaceModelsWithPromptFormatting {
-  HuggingFaceMistral7BInstructV01 = 'huggingface/mistralai/Mistral-7B-Instruct-v0.1',
-  HuggingFaceMetaLlamaLlama27bChat = 'huggingface/meta-llama/Llama-2-7b-chat',
-  HuggingFaceTiiuaeFalcon7bInstruct = 'huggingface/tiiuae/falcon-7b-instruct',
-  HuggingFaceMosaicmlMpt7bChat = 'huggingface/mosaicml/mpt-7b-chat',
-  HuggingFaceCodellamaCodeLlama34bInstructHf = 'huggingface/codellama/CodeLlama-34b-Instruct-hf',
-  HuggingFaceWizardLMWizardCoderPython34BV10 = 'huggingface/WizardLM/WizardCoder-Python-34B-V1.0',
-  HuggingFacePhindPhindCodeLlama34Bv2 = 'huggingface/Phind/Phind-CodeLlama-34B-v2',
+  HuggingFaceMistral7BInstructV01 = 'mistralai/Mistral-7B-Instruct-v0.1',
+  HuggingFaceMetaLlamaLlama27bChat = 'meta-llama/Llama-2-7b-chat',
+  HuggingFaceTiiuaeFalcon7bInstruct = 'tiiuae/falcon-7b-instruct',
+  HuggingFaceMosaicmlMpt7bChat = 'mosaicml/mpt-7b-chat',
+  HuggingFaceCodellamaCodeLlama34bInstructHf = 'codellama/CodeLlama-34b-Instruct-hf',
+  HuggingFaceWizardLMWizardCoderPython34BV10 = 'WizardLM/WizardCoder-Python-34B-V1.0',
+  HuggingFacePhindPhindCodeLlama34Bv2 = 'Phind/Phind-CodeLlama-34B-v2',
 }
 
 export enum OllamaVisionModels {
@@ -73,10 +87,13 @@ export enum GoogleAIStudioModels {
   GeminiProVision = 'gemini-pro-vision',
 }
 
+export type MistralAISlug = `mistral/${
+  | MistralAIModels
+  | MistralEmbeddingModels}`
 export enum MistralAIModels {
-  MistralTiny = 'mistral/mistral-tiny',
-  MistralSmall = 'mistral/mistral-small',
-  MistralMedium = 'mistral/mistral-medium',
+  MistralTiny = 'mistral-tiny',
+  MistralSmall = 'mistral-small',
+  MistralMedium = 'mistral-medium',
 }
 
 export enum AnthropicModels {
@@ -183,10 +200,11 @@ export enum DeepInfraChatModels {
   JondurbinAiroborosL270bGpt4141 = 'deepinfra/jondurbin/airoboros-l2-70b-gpt4-1.4.1',
 }
 
+export type VoyageAISlug = `voyage-ai/${VoyageAIModels | VoyageEmbeddingModels}`
 export enum VoyageAIModels {
-  Voyage01 = 'voyage-ai/voyage-01',
-  VoyageLite01 = 'voyage-ai/voyage-lite-01',
-  VoyageLite01Instruct = 'voyage-ai/voyage-lite-01-instruct',
+  Voyage01 = 'voyage-01',
+  VoyageLite01 = 'voyage-lite-01',
+  VoyageLite01Instruct = 'voyage-lite-01-instruct',
 }
 
 export type TogetherAISlug = `together_ai/${TogetherAIModels}`
