@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setDockviewTheme } from 'client/state'
+import { useDispatch } from 'react-redux'
+import { setDockviewTheme } from 'client/state'
 import { DOCKVIEW_THEME } from 'shared/config';
 
 export const useDockviewTheme = () => {
