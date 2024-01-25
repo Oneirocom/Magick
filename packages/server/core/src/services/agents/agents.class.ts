@@ -21,24 +21,6 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
 type MessagePayload = EventPayload & {
   agentId: string
 }
-
-const authorizeAgentPermissions = async (
-  agentId: string,
-  params?: AgentParams
-) => {
-  const agent = await app.service('agents').get(agentId, params)
-
-  if (!agent) throw new NotFound('Agent not found')
-
-  const projectId = agent.projectId
-
-  if (params?.provider) {
-    if (agent.projectId !== projectId) {
-      throw new NotAuthenticated("You don't have access to this agent")
-    }
-  }
-}
-
 /**
  * Default AgentService class.
  * Calls the standard Knex adapter service methods but can be customized with your own functionality.
@@ -56,10 +38,25 @@ export class AgentService<
     this.app = app
   }
 
+  async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
+    console.log('CHECKING FOR AGENTS!!!')
+    const agent = await this._get(agentId, params)
+
+    if (!agent) throw new NotFound('Agent not found')
+
+    const projectId = agent.projectId
+
+    if (params?.provider) {
+      if (agent.projectId !== projectId) {
+        throw new NotAuthenticated("You don't have access to this agent")
+      }
+    }
+  }
+
   async message(data: MessagePayload, params?: ServiceParams) {
     const agentId = data.agentId
 
-    authorizeAgentPermissions(agentId, params)
+    this.authorizeAgentPermissions(agentId, params)
 
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.message(agentId, data)
@@ -134,7 +131,7 @@ export class AgentService<
     if (!data.agentId) throw new BadRequest('agentId is required')
     // validate user owns the agent
 
-    authorizeAgentPermissions(data.agentId, params)
+    this.authorizeAgentPermissions(data.agentId, params)
 
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.command(data)
@@ -145,7 +142,7 @@ export class AgentService<
   async run(data: Omit<RunRootSpellArgs, 'agent'>, params?: ServiceParams) {
     if (!data.agentId) throw new Error('agentId is required')
 
-    authorizeAgentPermissions(data.agentId, params)
+    this.authorizeAgentPermissions(data.agentId, params)
 
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.runSpellWithResponse(data)
@@ -162,7 +159,7 @@ export class AgentService<
     // check for agentId
     if (!agentId) throw new Error('agentId is required')
 
-    authorizeAgentPermissions(agentId, params)
+    this.authorizeAgentPermissions(agentId, params)
 
     // get the socket from the params
     const connection = params?.connection
@@ -218,7 +215,7 @@ export class AgentService<
     },
     params?: ServiceParams
   ): Promise<{ spellReleaseId: string }> {
-    authorizeAgentPermissions(agentId, params)
+    this.authorizeAgentPermissions(agentId, params)
 
     // Start a new transaction
     return this.app
