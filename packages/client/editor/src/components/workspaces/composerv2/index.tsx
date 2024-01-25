@@ -40,12 +40,18 @@ const composerLayoutComponents = {
       </div >
     )
   },
-  Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string, spellId: string }>) => {
-    return <Composer {...props.params} spellId={props.params.spellId} theme={`composer-layout ${props.params.theme}`} tab={props.params.tab} />
+  Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string, spellId: string, spellName: string }>) => {
+    return <Composer
+      {...props.params}
+      spellId={props.params.spellId}
+      theme={`composer-layout ${props.params.theme}`}
+      tab={props.params.tab}
+      spellName={props.params.spellName}
+    />
   }
 }
 
-const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string }>) => {
+const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string, spellName: string }>) => {
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
 
