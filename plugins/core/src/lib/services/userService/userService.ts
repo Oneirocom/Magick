@@ -19,9 +19,13 @@ interface IUserService {
   getUser(): Promise<UserResponse>
 }
 
+type ConstructorParams = {
+  projectId: string
+}
+
 export class UserService implements IUserService {
   projectId: string
-  constructor({ projectId }) {
+  constructor({ projectId }: ConstructorParams) {
     this.projectId = projectId
   }
   async getUser(): Promise<UserResponse> {
