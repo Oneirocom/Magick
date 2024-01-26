@@ -6,10 +6,10 @@ export function findProviderKey(model: AllModels): LLMProviderKeys | undefined {
   // console.log('MODEL', {
   //   model,
   //   providerMap: modelProviderMap[model],
-  //   apikey: modelProviderMap[model].apiKey,
+  //   apikeyName: modelProviderMap[model].apiKeyName,
   // })
 
-  return modelProviderMap[model].apiKey
+  return modelProviderMap[model].apiKeyName
 }
 
 export function findProviderName(model: AllModels): LLMProviders | undefined {
