@@ -29,13 +29,12 @@ import {
   // xinferenceModelsArray
 } from "plugins/core/src/lib/services/coreLLMService/constants/completionModelArrays";
 import { CompletionModels } from "plugins/core/src/lib/services/coreLLMService/types/completionModels";
-import { ActiveProviders, LLMProviders } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes';
-import { activeProviders } from "plugins/core/src/lib/services/coreLLMService/constants/providers";
+import { LLMProviders } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes';
+import { ActiveProviders, activeProviders } from "plugins/core/src/lib/services/coreLLMService/constants/providers";
 
 export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
-  console.log('!!!PROPS', props)
-  const [selectedProvider, setSelectedProvider] = useState<ActiveProviders>(LLMProviders.OpenAI);
-  const [selectedModel, setSelectedModel] = useState<CompletionModels | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<ActiveProviders>(props.fullConfig.modelProvider);
+  const [selectedModel, setSelectedModel] = useState<CompletionModels | null>(props.fullConfig.model);
   const [filteredModels, setFilteredModels] = useState<CompletionModels[]>([]);
 
   useEffect(() => {

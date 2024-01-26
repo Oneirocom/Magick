@@ -14,8 +14,9 @@ import {
   OpenAIChatCompletionModels,
   CompletionModels,
 } from '../coreLLMService/types/completionModels'
-import { Models } from '../coreLLMService/types/models'
+
 import { LLMCredential } from '../coreLLMService/types/providerTypes'
+import { AllModels } from '../coreLLMService/types/models'
 
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
@@ -159,9 +160,8 @@ class CoreMemoryService {
     return Object.values(DataType)
   }
 
-  private getCredential(model: Models): string {
+  private getCredential(model: AllModels): string {
     const provider = findProviderKey(model)
-    console.log('PROVIDER', provider)
     let credential = this.credentials.find(
       c => c.serviceType === provider
     )?.value
