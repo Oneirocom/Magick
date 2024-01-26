@@ -67,15 +67,9 @@ export enum LLMProviderKeys {
   Unknown = 'unknown',
 }
 
-export type ActiveProviders =
-  | LLMProviders.OpenAI
-  | LLMProviders.GoogleAIStudio
-  | LLMProviders.TogetherAI
-// | LLMProviders.VertexAI
-
 export interface ModelProviderMapping {
   provider: LLMProviders
-  apiKey: LLMProviderKeys
+  apiKeyName: LLMProviderKeys
 }
 export type LLMCredential = PluginCredential & {
   value: string
