@@ -7,8 +7,7 @@ export const AGENT_LOG = (agentId: string) => `agent:${agentId}:event:log`
 export const AGENT_WARN = (agentId: string) => `agent:${agentId}:event:warn`
 export const AGENT_ERROR = (agentId: string) => `agent:${agentId}:event:error`
 
-export const AGENT_PONG = (agentId: string) =>
-  `agent:${agentId}:event:heartbeat`
+export const AGENT_PONG = (agentId: string) => `agent:${agentId}:event:pong`
 
 export const AGENT_COMMAND = (agentId: string) =>
   `agent:${agentId}:event:command`

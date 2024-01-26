@@ -6,6 +6,9 @@ import { feathersClient } from 'client/feathers-client'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setConnected } from 'client/state'
 
+const PING_INTERVAL_MS = 5000;
+const PONG_TIMEOUT_MS = 1000;
+
 interface FeathersContext {
   client: any | null
 }
@@ -29,6 +32,7 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
   const dispatch = useDispatch()
   const config = useConfig()
   const [client, setClient] = useState<FeathersContext['client']>(null)
+  const pongReceivedRef = useRef(true);
   const logger = getLogger()
 
   const currentAgentIdRef = useRef(currentAgentId)
@@ -39,8 +43,8 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
 
   useEffect(() => {
     ; (async (): Promise<void> => {
-      const client = await feathersClient.initialize(token, config)
       dispatch(setConnected(false))
+      const client = await feathersClient.initialize(token, config)
 
       client.io.on('connect', async (): Promise<void> => {
         logger.info('Connected to the server')
@@ -54,7 +58,6 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
 
       client.io.on('reconnect', (): void => {
         logger.info('Reconnected to the server')
-        dispatch(setConnected(true))
         setClient(client)
       })
 
@@ -84,9 +87,7 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
     // check just to be sure we are reporting properly
     const intervalId = setInterval((): void => {
       if (!client) return
-      if (client.io.connected) {
-        dispatch(setConnected(true))
-      } else {
+      if (!client.io.connected) {
         dispatch(setConnected(false))
       }
     }, 1000)
@@ -95,6 +96,47 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
       clearInterval(intervalId)
     }
   }, [])
+
+  useEffect(() => {
+    if (!client) return
+
+    const pingInterval = setInterval(() => {
+      console.log('Sending ping');
+      client.service('agents').ping(currentAgentIdRef.current)
+      pongReceivedRef.current = false;
+
+      // Set timeout to check for pong
+      setTimeout(() => {
+        if (!pongReceivedRef.current) {
+          console.error('Pong not received within the expected time');
+          dispatch(setConnected(false))
+          // Handle timeout situation here (e.g., retry, alert user)
+        }
+      }, PONG_TIMEOUT_MS);
+    }, PING_INTERVAL_MS);
+
+    return () => clearInterval(pingInterval);
+  }, [client])
+
+  useEffect(() => {
+    if (!client) return
+
+    const handler = (data): void => {
+      pongReceivedRef.current = true;
+      dispatch(setConnected(true))
+
+      // if watching ever fails we should reconnect here.
+      if (!data.isLive) {
+        console.error('Agent is not live');
+        client.service('agents').subscribe(currentAgentIdRef.current)
+      }
+    }
+
+    client.service('agents').on('pong', handler)
+
+    return () => client.service('agents').removeListener('pong', handler)
+
+  }, [client])
 
   const publicInterface: FeathersContext = {
     client,
