@@ -127,6 +127,14 @@ interface Usage {
   total_tokens: number
 }
 
+export type EmbeddingModels =
+  | OpenAIEmbeddingModels
+  | BedrockEmbeddingModels
+  | CohereEmbeddingModels
+  | HuggingFaceEmbeddingModels
+  | MistralEmbeddingModels
+  | VoyageEmbeddingModels
+
 export interface IEmbeddingService {
   initialize(): Promise<void>
   generateEmbedding(
@@ -190,10 +198,3 @@ export enum HuggingFaceEmbeddingModels {
   HuggingFaceBAAIBgeLargeZh = 'BAAI/bge-large-zh',
   HuggingFaceAnyHfEmbeddingModel = 'any-hf-embedding-model',
 }
-export type EmbeddingModels =
-  | BedrockEmbeddingModels
-  | CohereEmbeddingModels
-  | MistralEmbeddingModels
-  | VoyageEmbeddingModels
-  | OpenAIEmbeddingModels
-  | HuggingFaceEmbeddingModels
