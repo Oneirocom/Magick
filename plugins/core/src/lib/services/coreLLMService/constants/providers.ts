@@ -4,5 +4,5 @@ export const activeProviders: ActiveProviders[] = [
   LLMProviders.OpenAI,
   LLMProviders.TogetherAI,
   LLMProviders.GoogleAIStudio,
-  LLMProviders.VertexAI,
+  // LLMProviders.VertexAI,
 ]

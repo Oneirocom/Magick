@@ -71,7 +71,7 @@ export type ActiveProviders =
   | LLMProviders.OpenAI
   | LLMProviders.GoogleAIStudio
   | LLMProviders.TogetherAI
-  | LLMProviders.VertexAI
+// | LLMProviders.VertexAI
 
 export interface ModelProviderMapping {
   provider: LLMProviders
