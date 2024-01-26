@@ -260,7 +260,6 @@ export class Agent implements AgentInterface {
         this.spellbook.playSpell(data)
       },
       ping: async () => {
-        console.log('PING RECEIVED!!')
         const isLive = this.spellbook.isLive
         this.pubsub.publish(AGENT_PONG(this.id), {
           agentId: this.id,

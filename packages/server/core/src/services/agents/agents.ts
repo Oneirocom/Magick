@@ -58,7 +58,7 @@ const AGENT_EVENTS = [
   'event',
   'error',
   'warn',
-  'heartbeat',
+  'pong',
 ]
 
 /**
@@ -123,8 +123,6 @@ export const agent = (app: Application) => {
         app.get('logger').trace('AGENT SERVICE: Skipping message %s', channel)
         return
       }
-
-      console.log('EVENT', messageType, channel, message)
 
       // remove unwanted properties from the message
       // embeddings and spells are large data packages we don't need on the client

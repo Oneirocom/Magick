@@ -39,7 +39,6 @@ export class AgentService<
   }
 
   async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
-    console.log('CHECKING FOR AGENTS!!!')
     const agent = await this._get(agentId, params)
 
     if (!agent) throw new NotFound('Agent not found')
