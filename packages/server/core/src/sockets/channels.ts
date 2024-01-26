@@ -91,7 +91,7 @@ export default function (app: Application): void {
 
     // if the channel type is a session, we are running a spell in a session
     // Which mean sthe channel is a session ID we can broadcast to.
-    if (data.event.channelType === 'session') {
+    if (data?.event?.channelType === 'session') {
       const channel = app.channel(data.event.channel)
       channels.push(channel)
     }
