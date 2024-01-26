@@ -1,4 +1,5 @@
 import {
+  BedrockEmbeddingModels,
   HuggingFaceEmbeddingModels,
   MistralEmbeddingModels,
   VoyageEmbeddingModels,
@@ -112,7 +113,7 @@ export enum SageMakerModels {
   MetaLlama270BChatFineTuned = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b-b-f',
 }
 
-export type BedrockSlug = `bedrock/${BedrockModels}`
+export type BedrockSlug = `bedrock/${BedrockModels | BedrockEmbeddingModels}`
 export enum BedrockModels {
   BedrockAnthropicClaudeV21 = 'anthropic.claude-v2:1',
   BedrockAnthropicClaudeV2 = 'anthropic.claude-v2',
