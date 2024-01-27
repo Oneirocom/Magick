@@ -16,6 +16,7 @@ interface IApplication extends FeathersApplication {
 interface IAgent extends IAgentLogger {
   id: string
   projectId: string
+  currentSpellReleaseId: string
 }
 
 /**
@@ -219,13 +220,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       },
       refreshSpells: async () => {
         this.clearAllSpellCasters()
-        this.loadSpells(
-          await this.app.service('spells').find({
-            query: {
-              projectId: this.agent.projectId,
-            },
-          })
-        )
+
+        const spellsData = await this.app.service('spells').find({
+          query: {
+            projectId: this.agent.projectId,
+            type: 'behave',
+            spellReleaseId: this.agent.currentSpellReleaseId || 'null',
+          },
+        })
+        this.loadSpells(spellsData.data)
       },
     })
   }
@@ -323,6 +326,12 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * await spellbook.loadSpells(spells);
    */
   async loadSpells(spells: SpellInterface[]) {
+    if (!spells) {
+      this.logger.error(
+        `SPELLBOOK: No spells provided for agent ${this.agent.id}`
+      )
+      return
+    }
     this.logger.trace(`SPELLBOOK: Loading spells for agent ${this.agent.id}`)
     this.logger.trace(
       `SPELLBOOK: Spells: ${JSON.stringify(spells.map(s => s.id))}`
