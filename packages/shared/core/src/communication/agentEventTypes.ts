@@ -9,10 +9,14 @@ export const AGENT_ERROR = (agentId: string) => `agent:${agentId}:event:error`
 
 export const AGENT_PONG = (agentId: string) => `agent:${agentId}:event:pong`
 
+export const AGENT_SPELL_STATE = (agentId: string) =>
+  `agent:${agentId}:event:spell`
+
 export const AGENT_COMMAND = (agentId: string) =>
   `agent:${agentId}:event:command`
 export const AGENT_COMMAND_PROJECT = (projectId: string) =>
   `agent:${projectId}:command`
+
 export const AGENT_DELETE = `agent:delete`
 
 // This cant be hardcodded
