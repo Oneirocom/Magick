@@ -239,6 +239,14 @@ export class AgentCommander extends EventEmitter {
     })
   }
 
+  syncState(agentId: string) {
+    this.command({
+      agentId,
+      command: `agent:spellbook:syncState`,
+      data: {},
+    })
+  }
+
   async removeAgent(agentId: string) {
     this.pubSub.publish(AGENT_DELETE, agentId)
   }
