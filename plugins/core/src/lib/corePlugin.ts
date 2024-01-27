@@ -139,6 +139,13 @@ export class CorePlugin extends CoreEventsPlugin<
     })
   }
 
+  async initializeFunctionalities() {
+    await this.getLLMCredentials()
+
+    this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
+    this.client.onMessage(this.handleOnMessage.bind(this))
+  }
+
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
@@ -217,13 +224,6 @@ export class CorePlugin extends CoreEventsPlugin<
     const logger = (coreRegistry.dependencies.ILogger as ILogger) || undefined
 
     return registerStructProfile(coreRegistry, logger)
-  }
-
-  async initializeFunctionalities() {
-    await this.getLLMCredentials()
-
-    this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
-    this.client.onMessage(this.handleOnMessage.bind(this))
   }
 
   handleOnMessage(payload: EventPayload) {
