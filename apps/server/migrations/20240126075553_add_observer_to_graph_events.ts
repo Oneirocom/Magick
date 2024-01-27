@@ -2,7 +2,7 @@ import { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('graphEvents', (table) => {
-    table.string('observer').notNullable()
+    table.string('observer').nullable()
   })
 }
 
