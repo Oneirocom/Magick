@@ -1,13 +1,8 @@
 import { python } from 'pythonia'
-import {
-  NODE_ENV,
-  PRODUCTION,
-  VERTEXAI_LOCATION,
-  VERTEXAI_PROJECT,
-} from 'shared/config'
+import { NODE_ENV, PRODUCTION } from 'shared/config'
 
 import {
-  CompletionParams,
+  // CompletionParams,
   ICoreBudgetManagerService,
   ICoreLLMService,
 } from '../types'
@@ -42,8 +37,6 @@ export class CoreLLMService implements ICoreLLMService {
   async initialize() {
     try {
       this.liteLLM = await python('litellm')
-      this.liteLLM.vertex_project = VERTEXAI_PROJECT
-      this.liteLLM.vertex_location = VERTEXAI_LOCATION
       this.liteLLM.set_verbose = true
       this.liteLLM.drop_params = true
       this.coreBudgetManagerService = new CoreBudgetManagerService(
@@ -192,4 +185,11 @@ export class CoreLLMService implements ICoreLLMService {
     }
     return credential
   }
+
+  // getProvidersWithCredentials(): LLMProviders[] {
+  //   const credentialsArray = this.credentials
+  //   const credentials = credentialsArray.map(cred => cred.name) as any
+  //   const providers = getProvidersWithUserKeys(credentials)
+  //   return providers
+  // }
 }
