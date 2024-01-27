@@ -21,6 +21,7 @@ import { PluginManager } from 'server/pluginManager'
 import { IEventStore } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
+import { SpellState } from './spellbook'
 
 interface IAgent {
   id: string
@@ -88,13 +89,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   spell!: SpellInterface
   executeGraph = false
   pluginManager: PluginManager
+  busy: boolean = false
   private agent
   private logger: pino.Logger
   private loopDelay: number
   private limitInSeconds: number
   private limitInSteps: number
   private connection: Redis
-  busy: boolean = false
   private isRunning: boolean = true
 
   constructor({
@@ -104,6 +105,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     agent,
     pluginManager,
     connection,
+    initialState,
   }: {
     connection: Redis
     loopDelay?: number
@@ -111,6 +113,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     limitInSteps?: number
     agent: Agent
     pluginManager: PluginManager
+    initialState?: SpellState
   }) {
     this.connection = connection
     this.agent = agent
@@ -119,6 +122,11 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.loopDelay = loopDelay
     this.limitInSeconds = limitInSeconds
     this.limitInSteps = limitInSteps
+
+    // set the initial state if it is passed in
+    if (initialState) {
+      this.isRunning = initialState.isRunning
+    }
   }
 
   /**
