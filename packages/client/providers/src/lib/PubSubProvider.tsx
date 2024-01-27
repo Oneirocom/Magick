@@ -3,8 +3,10 @@
 // Import required modules
 import { PubSubContext, PubSubData, PubSubEvents } from 'shared/core'
 import PubSub from 'pubsub-js'
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext, useEffect, useRef } from 'react'
 import { useFeathers } from './FeathersProvider'
+import { useSelector } from 'react-redux'
+import { RootState } from 'client/state'
 
 // Create new context for PubSub
 const Context = createContext<PubSubContext>(undefined!)
@@ -63,6 +65,13 @@ export const events: PubSubEvents = {
 // Create the PubSubProvider component
 export const PubSubProvider = ({ children }) => {
   const { client } = useFeathers()
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const globalConfigRef = useRef(globalConfig)
+
+  useEffect(() => {
+    if (!globalConfig) return
+    globalConfigRef.current = globalConfig
+  }, [globalConfig])
 
   // Publish function
   const publish = (event: string, data?: PubSubData) => {
@@ -94,13 +103,16 @@ export const PubSubProvider = ({ children }) => {
     })
 
     const unsubscribeCommand = subscribe(events.SEND_COMMAND, (event, data) => {
-      client.service('agents').command(data)
+      const command = {
+        ...data,
+        agentId: globalConfigRef?.current?.currentAgentId,
+      }
+      client.service('agents').command(command)
     })
 
     const unsubscribeMessage = subscribe(events.MESSAGE_AGENT, (event, data) => {
       client.service('agents').message(data)
     })
-
 
     return () => {
       unsubscribeRun()
