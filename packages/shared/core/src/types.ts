@@ -107,7 +107,7 @@ export type Event = {
   agentId?: number | string
   embedding?: number[]
   date?: string
-  rawData?: string
+  rawData?: unknown
 }
 
 export type CreateEventArgs = Event
@@ -671,6 +671,7 @@ export type GraphEventPayload = {
   agentId: string
   connector: string
   connectorData: string
+  observer: string
   content: string
   eventType: string
   event: Event
