@@ -14,6 +14,8 @@ import { SpellInterface } from 'server/schemas';
 import { VariableNames } from './variableNames';
 import { ValueType } from './ValueType';
 import { DefaultConfig } from './DefaultConfig';
+import { CompletionProviderOptions } from './CompletionProviderOptions';
+
 
 type Props = {
   tab: Tab
@@ -38,7 +40,8 @@ const ConfigurationComponents = {
   eventStateProperties: EventStateProperties,
   variableNames: VariableNames,
   valueType: ValueType,
-  default: DefaultConfig
+  default: DefaultConfig,
+  modelProviders: CompletionProviderOptions,
 }
 
 export const PropertiesWindow = (props: Props) => {
@@ -46,6 +49,7 @@ export const PropertiesWindow = (props: Props) => {
   const nodeSpecs = getNodeSpec()
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const handleChange = useChangeNodeData(selectedNode?.id);
+
 
   if (!selectedNode) return null
 

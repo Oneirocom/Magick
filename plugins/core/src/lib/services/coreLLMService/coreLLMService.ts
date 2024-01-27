@@ -1,22 +1,18 @@
 import { python } from 'pythonia'
-import {
-  NODE_ENV,
-  PRODUCTION,
-  VERTEXAI_LOCATION,
-  VERTEXAI_PROJECT,
-} from 'shared/config'
+import { PRODUCTION } from 'shared/config'
 
 import {
-  LLMCredential,
-  LLMProviderKeys,
-  LLMModels,
-  CompletionResponse,
-} from './types'
-import { modelProviderMap } from './constants'
-import { ICoreBudgetManagerService, ICoreLLMService } from '../types'
+  // CompletionParams,
+  ICoreBudgetManagerService,
+  ICoreLLMService,
+} from '../types'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { UserService } from '../userService/userService'
 import { saveRequest } from 'shared/core'
+import { findProviderKey, findProviderName } from './findProvider'
+import { LLMCredential } from './types/providerTypes'
+import { CompletionResponse } from './types/completionTypes'
+import { AllModels } from './types/models'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -41,8 +37,6 @@ export class CoreLLMService implements ICoreLLMService {
   async initialize() {
     try {
       this.liteLLM = await python('litellm')
-      this.liteLLM.vertex_project = VERTEXAI_PROJECT
-      this.liteLLM.vertex_location = VERTEXAI_LOCATION
       this.liteLLM.set_verbose = true
       this.liteLLM.drop_params = true
       this.coreBudgetManagerService = new CoreBudgetManagerService(
@@ -139,7 +133,7 @@ export class CoreLLMService implements ICoreLLMService {
           status: '',
           statusCode: 200,
           parameters: JSON.stringify(request.options),
-          provider: this.findProvider(request.model),
+          provider: findProviderName(request.model),
           type: 'completion',
           hidden: false,
           processed: false,
@@ -177,26 +171,25 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
 
-  private findProvider = (model: LLMModels): LLMProviderKeys => {
-    return modelProviderMap[model]
-  }
+  private getCredential = (model: AllModels): string => {
+    const providerKey = findProviderKey(model)
 
-  private getCredential = (model: LLMModels): string => {
-    const provider = this.findProvider(model)
+    let credential = this.credentials.find(c => c.name === providerKey)?.value
 
-    let credential = this.credentials.find(c => c.name === provider)?.value
-
-    if (!credential && PRODUCTION) {
-      credential = process.env[provider]
-    }
-
-    if (!credential && NODE_ENV === 'development' && !PRODUCTION) {
-      credential = process.env[provider]
+    if (!credential && !PRODUCTION && providerKey) {
+      credential = process.env[providerKey]
     }
 
     if (!credential) {
-      throw new Error(`No credential found for ${provider}`)
+      throw new Error(`No credential found for ${providerKey}`)
     }
     return credential
   }
+
+  // getProvidersWithCredentials(): LLMProviders[] {
+  //   const credentialsArray = this.credentials
+  //   const credentials = credentialsArray.map(cred => cred.name) as any
+  //   const providers = getProvidersWithUserKeys(credentials)
+  //   return providers
+  // }
 }

@@ -4,21 +4,44 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import {
-  LLMModels,
-  OpenAIChatCompletionModels,
-} from '../../services/coreLLMService/types'
+import { allCompletionModels } from '../../services/coreLLMService/constants/allCompletionModels'
+
 import { CORE_DEP_KEYS } from '../../constants'
 import { IEventStore } from 'server/grimoire'
+import {
+  OpenAIChatCompletionModels,
+  CompletionModels,
+} from '../../services/coreLLMService/types/completionModels'
+
+import { activeProviders } from '../../services/coreLLMService/constants/providers'
+import { LLMProviders } from '../../services/coreLLMService/types/providerTypes'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
   category: NodeCategory.Action,
   label: 'Generate Text',
   configuration: {
-    modelChoices: {
+    modelProviders: {
       valueType: 'array',
-      defaultValue: Object.values(OpenAIChatCompletionModels),
+      defaultValue: activeProviders,
+    },
+    modelProvider: {
+      valueType: 'string',
+      //TODO: default to google when ready
+      defaultValue: LLMProviders.OpenAI,
+    },
+    models: {
+      valueType: 'array',
+      defaultValue: allCompletionModels,
+    },
+    model: {
+      valueType: 'string',
+      //TODO: default to google when ready
+      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
+    },
+    hiddenProperties: {
+      valueType: 'string',
+      defaultValue: ['hiddenProperties', 'modelProvider', 'model', 'models'],
     },
   },
   in: {
@@ -27,10 +50,9 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'string',
       defaultValue: '',
     },
-    model: {
+    modelOverride: {
       valueType: 'string',
-      choices: Object.values(OpenAIChatCompletionModels) as string[],
-      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
+      defaultValue: '',
     },
     stop: {
       valueType: 'string',
@@ -59,10 +81,15 @@ export const generateText = makeFlowNodeDefinition({
     done: 'flow',
     onStream: 'flow',
     stream: 'string',
-    modelUsed: 'string',
   },
   initialState: undefined,
-  triggered: async ({ commit, read, write, graph: { getDependency } }) => {
+  triggered: async ({
+    commit,
+    read,
+    write,
+    configuration,
+    graph: { getDependency },
+  }) => {
     /**
      * This promise wrapper is super important. If we await the whole LLM
      * completion, it will block continued fiber execution, which will prevent
@@ -83,8 +110,8 @@ export const generateText = makeFlowNodeDefinition({
           throw new Error('No coreLLMService provided')
         }
 
-        const model: LLMModels =
-          read('model') || OpenAIChatCompletionModels.GPT35Turbo
+        const model: CompletionModels =
+          read('modelOverride') || configuration.model
         const prompt: string = read('prompt') || ''
         const temperature: number = read('temperature') || 0.5
         const top_p: number = read('top_p') || 1
@@ -106,7 +133,6 @@ export const generateText = makeFlowNodeDefinition({
           if (result.done) {
             write('response', result.value.choices[0].message.content || '')
             write('completionResponse', result.value) // Assuming the last value is the completion response
-            write('modelUsed', model)
             commit('done')
           } else {
             const chunk = result.value
