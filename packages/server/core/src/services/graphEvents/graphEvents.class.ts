@@ -41,6 +41,9 @@ export class GraphEventService<
     const param = params?.query || {}
     if (param.eventType) query.where({ eventType: param.eventType })
     if (param.sender) query.where({ sender: param.sender })
+    if (param.connector) query.where({ connector: param.connector })
+    if (param.observer) query.where({ observer: param.observer })
+    if (param.connectorData) query.where({ connectorData: param.connectorData })
 
     query.limit(param['$limit'])
 
