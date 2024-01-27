@@ -54,22 +54,30 @@ export const Node: React.FC<NodeProps> = ({
     setDone(false)
   }, DELAY)
 
-  const debounceAnimateEdge = debounce((connectedEdge) => {
-    setEdges(tab.id, edges => {
-      const newEdges = edges.map(edge => {
-        if (edge.id === connectedEdge.id) {
-          return {
-            ...edge,
-            animated: false,
+  const debounceAnimateEgdeFactory = (status) => {
+    return debounce((connectedEdge,) => {
+      setEdges(tab.id, edges => {
+        const newEdges = edges.map(edge => {
+          if (edge.id === connectedEdge.id) {
+            return {
+              ...edge,
+              animated: status,
+              style: {
+                stroke: 'white'
+              }
+            }
           }
-        }
 
-        return edge
+          return edge
+        })
+
+        return newEdges
       })
+    }, DELAY)
+  }
 
-      return newEdges
-    })
-  }, DELAY)
+  // const debounceAnimateEdgeStart = debounceAnimateEgdeFactory(true)
+  const debounceAnimateEdgeDone = debounceAnimateEgdeFactory(false)
 
   // if the node doesn't have a config yet, we need to make one for it and add it to the react flow node data
   if (!data.configuration) {
@@ -128,7 +136,7 @@ export const Node: React.FC<NodeProps> = ({
         return newEdges
       })
 
-      debounceAnimateEdge(connectedEdge)
+      debounceAnimateEdgeDone(connectedEdge)
     }
 
   }, [spellEvent])
