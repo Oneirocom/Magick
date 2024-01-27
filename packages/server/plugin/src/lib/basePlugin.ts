@@ -291,6 +291,7 @@ export abstract class BasePlugin<
 
         saveGraphEvent({
           sender: payload.sender,
+          observer: payload.agentId,
           agentId: payload.agentId,
           connector: payload.connector,
           connectorData: JSON.stringify(payload.data),
@@ -307,6 +308,34 @@ export abstract class BasePlugin<
    */
   mapActionsToEventBus() {
     this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
+  }
+
+  /**
+   * Handles an action from the action queue.
+   * @param job The job to handle.
+   */
+  protected async handleAction(data: ActionPayload) {
+    this.logger.trace(`Handling action ${data.actionName}`)
+    const action = this.actions.find(
+      action => action.actionName === data.actionName
+    )
+    if (!action) return
+    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
+    await action.handler(data as ActionPayload)
+
+    // const { actionName, event } = data
+    saveGraphEvent({
+      sender: data.event.agentId,
+      // we are assuming here that the observer of this action is the
+      //  original sender.  We may be wrong.
+      observer: data.event.sender,
+      agentId: data.event.agentId,
+      connector: data.event.connector,
+      connectorData: JSON.stringify(data.event.data),
+      content: data.event.content,
+      eventType: data.event.eventName,
+      event: data.event as EventPayload,
+    })
   }
 
   /**
@@ -339,20 +368,6 @@ export abstract class BasePlugin<
       ])
     )
   })
-
-  /**
-   * Handles an action from the action queue.
-   * @param job The job to handle.
-   */
-  protected async handleAction(data: ActionPayload) {
-    this.logger.trace(`Handling action ${data.actionName}`)
-    const action = this.actions.find(
-      action => action.actionName === data.actionName
-    )
-    if (!action) return
-    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
-    await action.handler(data as ActionPayload)
-  }
 
   /**
    * Emits an event with the given name and payload.
