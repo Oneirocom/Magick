@@ -34,11 +34,6 @@ export class CoreLLMService implements ICoreLLMService {
   protected userService: UserService
 
   constructor({ projectId, agentId }: ConstructorParams) {
-    console.log(
-      '&&&&&&&&&&&&&&&&&&&&&&&&&&CORE LLM SERVICE',
-      projectId,
-      agentId
-    )
     this.projectId = projectId
     this.agentId = agentId || ''
     this.userService = new UserService({ projectId })
