@@ -1,6 +1,7 @@
 import EventEmitter from 'events'
 import pino from 'pino'
 import Redis from 'ioredis'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   Engine,
@@ -80,20 +81,21 @@ interface IAgent {
  *   });
  */
 export class SpellCaster<Agent extends IAgent = IAgent> {
+  id: string = uuidv4()
   registry!: IRegistry
   engine!: Engine
   graph!: IGraph
-  busy = false
   spell!: SpellInterface
   executeGraph = false
   pluginManager: PluginManager
   private agent
   private logger: pino.Logger
-  private isRunning: boolean = true
   private loopDelay: number
   private limitInSeconds: number
   private limitInSteps: number
   private connection: Redis
+  busy: boolean = false
+  private isRunning: boolean = true
 
   constructor({
     loopDelay = 100,
@@ -176,6 +178,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     }
   }
 
+  /**
+   * Returns a dependency from the registry.
+   * @param key - The key of the dependency.
+   * @returns The dependency from the registry.
+   * @example
+   * const eventStore = spellCaster.getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
+   */
   getDependency<T>(key: string): T | undefined {
     return this.graph.getDependency<T>(key)
   }
@@ -345,7 +354,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the graph is executed.
    */
   async executeGraphOnce(isEnd = false): Promise<void> {
-    if (isEnd) this.lifecycleEventEmitter.endEvent.emit()
     if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
     this.busy = true
 
@@ -386,7 +394,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    */
   stopRunLoop(): void {
     // onnly execute once for the end event if it is running
-    if (this.isRunning) this.executeGraphOnce(true)
+    if (this.isRunning) {
+      this.lifecycleEventEmitter.endEvent.emit()
+    }
     this.isRunning = false
   }
 
