@@ -26,12 +26,12 @@ import {
   BullQueue,
 } from 'server/communication'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
-import { CommandHub } from './CommandHub'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { PluginManager } from 'server/pluginManager'
+import { CommandHub } from 'server/command-hub'
 // import { StateService } from './StateService'
 
 // type AgentData = {
@@ -114,6 +114,7 @@ export class Agent implements AgentInterface {
       agent: this,
       app,
       pluginManager: this.pluginManager,
+      commandHub: this.commandHub,
     })
     // initialize the plugins
     this.initializeV1Plugins()
@@ -251,13 +252,6 @@ export class Agent implements AgentInterface {
     this.commandHub.registerDomain('agent', 'core', {
       toggleLive: async (data: any) => {
         this.spellManager.toggleLive(data)
-        this.spellbook.toggleLive(data)
-      },
-      pauseSpell: async (data: any) => {
-        this.spellbook.pauseSpell(data)
-      },
-      playSpell: async (data: any) => {
-        this.spellbook.playSpell(data)
       },
       ping: async () => {
         const isLive = this.spellbook.isLive
