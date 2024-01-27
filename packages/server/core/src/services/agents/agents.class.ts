@@ -67,6 +67,19 @@ export class AgentService<
     }
   }
 
+  async syncState(agentId: string, params?: ServiceParams) {
+    this.authorizeAgentPermissions(agentId, params)
+
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.syncState(agentId)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
+  }
+
   // we use this ping to avoid firing a patched event on the agent
   // every time the agent is pinged
   async ping(agentId: string, params?: ServiceParams) {
