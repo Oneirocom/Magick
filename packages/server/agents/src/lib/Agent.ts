@@ -110,6 +110,7 @@ export class Agent implements AgentInterface {
       projectId: this.projectId,
     })
 
+    // @ts-ignore
     this.spellbook = new Spellbook({
       agent: this,
       app,
