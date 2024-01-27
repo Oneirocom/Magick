@@ -1,11 +1,26 @@
+import { usePubSub } from '@magickml/providers';
+import { Button } from '@magickml/ui';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { RootState } from "client/state"
 import { useSelector } from "react-redux"
 
+const VerticalDivider = () => (
+  <div
+    className="inline-block h-[250px] min-h-[1em] w-0.5 self-stretch bg-[var(--background-color)] opacity-100 dark:opacity-50"></div>
+
+)
+
 export const StatusBar = () => {
+  const { publish, events } = usePubSub()
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
   const { syncing, connected } = useSelector((state: RootState) => state.statusBar)
   const { currentAgentId } = useSelector((state: RootState) => state.globalConfig)
+
+  const onKill = () => {
+    publish(events.SEND_COMMAND, {
+      command: 'agent:spellbook:kill'
+    })
+  }
 
   return (
     <div
@@ -16,10 +31,13 @@ export const StatusBar = () => {
         borderTop: '1px solid var(--deep-background-color)',
         display: 'flex',
         gap: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'flex-start'
       }}
     >
-      <span style={{ color: connected ? 'green' : 'red', marginRight: 20, fontSize: 22 }}>●</span>
+      <span style={{ color: connected ? 'green' : 'red', fontSize: 22 }}>●</span>
+      <p style={{ marginRight: 20 }}>{connected ? 'Online' : 'Offline'}</p>
+      <VerticalDivider />
       <p>Syncing: </p>
       <AutorenewIcon
         sx={{
@@ -35,15 +53,22 @@ export const StatusBar = () => {
           },
         }}
       />
+      <VerticalDivider />
       <p>
         Current Tab: {currentTab?.title}
       </p>
+      <VerticalDivider />
       <p>
         Current agent: {currentAgentId}
       </p>
+      <VerticalDivider />
       <p>
         Current spell id: {currentTab?.params.spellId as string}
       </p>
+      <VerticalDivider />
+      <div className="flex flex-grow justify-end">
+        <Button className="h-7" variant="destructive" onClick={onKill}>Kill</Button>
+      </div>
     </div>
   )
 }
