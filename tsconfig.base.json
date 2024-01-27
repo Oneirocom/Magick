@@ -238,6 +238,7 @@
       "server/cloud-agent-worker": [
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
+      "server/command-hub": ["packages/server/command-hub/src/index.ts"],
       "server/communication": ["packages/server/communication/src/index.ts"],
       "server/core": ["packages/server/core/src/index.ts"],
       "server/credentials": ["packages/server/credentials/src/index.ts"],
