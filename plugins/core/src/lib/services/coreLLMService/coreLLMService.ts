@@ -1,5 +1,5 @@
 import { python } from 'pythonia'
-import { NODE_ENV, PRODUCTION } from 'shared/config'
+import { PRODUCTION } from 'shared/config'
 
 import {
   // CompletionParams,
