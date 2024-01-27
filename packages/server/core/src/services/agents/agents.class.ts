@@ -182,7 +182,7 @@ export class AgentService<
       // turn off the old agent
       this.command({
         agentId: oldAgentId,
-        command: 'agent:core:toggleLive',
+        command: 'agent:spellbook:toggleLive',
         data: {
           live: false,
         },
@@ -196,7 +196,7 @@ export class AgentService<
     // turn on the new agent
     this.command({
       agentId,
-      command: 'agent:core:toggleLive',
+      command: 'agent:spellbook:toggleLive',
       data: {
         live: true,
       },
