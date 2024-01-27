@@ -103,7 +103,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       publish(SEND_COMMAND, {
         projectId,
         agentId: currentAgentId,
-        command: 'agent:core:pauseSpell',
+        command: 'agent:spellbook:pauseSpell',
         data: {
           spellId: spell.id,
         },
@@ -112,7 +112,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       publish(SEND_COMMAND, {
         projectId,
         agentId: currentAgentId,
-        command: 'agent:core:playSpell',
+        command: 'agent:spellbook:playSpell',
         data: {
           spellId: spell.id,
         },
