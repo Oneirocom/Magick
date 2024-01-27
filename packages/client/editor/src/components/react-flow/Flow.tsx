@@ -11,7 +11,7 @@ import './flowOverrides.css'
 import { SpellInterface } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { useSelector } from 'react-redux'
-import { RootState } from 'client/state'
+import { RootState, useSelectAgentsSpell } from 'client/state'
 import { nodeColor } from '../../utils/nodeColor.js'
 import { ContextNodeMenu } from './ContextNodeMenu'
 import CustomEdge from './CustomEdge.js';
@@ -41,13 +41,13 @@ function isEmptyObject(obj: object): boolean {
 
 export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
   const { projectId, currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
 
   const [specJson, setSpecJson] = React.useState<NodeSpecJSON[]>([])
   const [playing, setPlaying] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(true)
-
 
   const { SEND_COMMAND } = events
 
@@ -56,7 +56,27 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
 
     const specs = getNodeSpec(spell)
     setSpecJson(specs)
+
+    // trigger initial sync
+    publish(events.SEND_COMMAND, {
+      agentId: currentAgentId,
+      command: 'agent:spellbook:syncState',
+      data: {
+        spellId: spell.id,
+      },
+    })
   }, [spell])
+
+  useEffect(() => {
+    if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
+
+    if (lastSpellEvent.state.isRunning) {
+      setPlaying(true)
+    } else if (!lastSpellEvent.state.isRunning) {
+      setPlaying(false)
+    }
+
+  }, [lastSpellEvent])
 
   const {
     nodes,
