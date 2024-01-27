@@ -2,6 +2,7 @@ import { usePubSub } from '@magickml/providers';
 import { Button } from '@magickml/ui';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { RootState } from "client/state"
+import { enqueueSnackbar } from 'notistack';
 import { useSelector } from "react-redux"
 
 const VerticalDivider = () => (
@@ -18,7 +19,21 @@ export const StatusBar = () => {
 
   const onKill = () => {
     publish(events.SEND_COMMAND, {
-      command: 'agent:spellbook:kill'
+      command: 'agent:spellbook:killSpells'
+    })
+
+    enqueueSnackbar('All spells stopped.  Send an event to start them again.', {
+      variant: 'success'
+    })
+  }
+
+  const onRefresh = () => {
+    publish(events.SEND_COMMAND, {
+      command: 'agent:spellbook:refreshSpells'
+    })
+
+    enqueueSnackbar('All spells refreshed.', {
+      variant: 'success'
     })
   }
 
@@ -66,7 +81,9 @@ export const StatusBar = () => {
         Current spell id: {currentTab?.params.spellId as string}
       </p>
       <VerticalDivider />
+
       <div className="flex flex-grow justify-end">
+        <Button className="h-7 mr-4" variant="secondary" onClick={onRefresh}>Refresh</Button>
         <Button className="h-7" variant="destructive" onClick={onKill}>Kill</Button>
       </div>
     </div>
