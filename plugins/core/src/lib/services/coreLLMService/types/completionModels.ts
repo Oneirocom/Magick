@@ -1,180 +1,9 @@
-import { type PluginCredential } from 'server/credentials'
-import { EmbeddingModels } from '../coreEmbeddingService/types'
-
-export type FunctionType = {
-  name: string
-  description?: string
-  parameters: Record<string, unknown>
-}
-
-export type Message = {
-  role: string
-  content: string | null
-  name?: string
-  function_call?: {
-    type: string
-    function: FunctionType
-  }
-}
-
-export type LiteLLMOptions = {
-  api_base?: string
-  api_version?: string
-  api_key?: string
-  num_retries?: number
-  context_window_fallback_dict?: Record<string, string>
-  fallbacks?: Array<Record<string, unknown>>
-  metadata?: Record<string, unknown>
-}
-
-export type ToolType = {
-  type: string
-  function: FunctionType
-}
-
-export type CompletionOptions = {
-  temperature?: number
-  top_p?: number
-  n?: number
-  stream?: boolean
-  stop?: string | string[]
-  max_tokens?: number
-  presence_penalty?: number
-  frequency_penalty?: number
-  logit_bias?: Record<string, number>
-  user?: string
-  deployment_id?: string
-  request_timeout?: number
-  response_format?: {
-    type: string
-  }
-  seed?: number
-  tools?: ToolType[]
-  tool_choice?: string | ToolType
-  functions?: FunctionType[]
-  function_call?: string
-} & LiteLLMOptions
-
-export type CompletionRequest = {
-  model: LLMModels
-  messages: Message[]
-  options?: CompletionOptions
-  api_key?: string
-}
-
-export type Chunk = {
-  choices: ChunkChoice[]
-}
-
-export type ChunkChoice = {
-  finish_reason: string
-  index: number
-  delta: {
-    function_call: string
-    tool_calls: string
-    content: string
-    role: string
-  }
-}
-
-export type Choice = {
-  finish_reason: string
-  index: number
-  message: {
-    role: string
-    content: string
-  }
-}
-
-export type CompletionResponse = {
-  id: string
-  choices: Choice[]
-  created: string
-  model: string
-  object: string
-  system_fingerprint: any | null
-  usage: {
-    prompt_tokens: number
-    completion_tokens: number
-    total_tokens: number
-  }
-  _python_object: any
-}
-
-export enum LLMProviderKeys {
-  OpenAI = 'OPENAI_API_KEY',
-  Azure = 'AZURE_API_KEY',
-  Anthropic = 'ANTHROPIC_API_KEY',
-  Sagemaker = 'SAGEMAKER_API_KEY',
-  Bedrock = 'BEDROCK_API_KEY',
-  Anyscale = 'ANYSCALE_API_KEY',
-  PerplexityAI = 'PERPLEXITY_API_KEY',
-  VLLM = 'VLLM_API_KEY',
-  DeepInfra = 'DEEPINFRA_API_KEY',
-  Cohere = 'COHERE_API_KEY',
-  TogetherAI = 'TOGETHER_AI_API_KEY',
-  AlephAlpha = 'ALEPH_ALPHA_API_KEY',
-  Baseten = 'BASETEN_API_KEY',
-  OpenRouter = 'OPENROUTER_API_KEY',
-  CustomAPI = 'CUSTOM_API_KEY',
-  CustomOpenAI = 'CUSTOM_OPEN_API_KEY',
-  Petals = 'PETALS_API_KEY',
-  Ollama = 'OLLAMA_API_KEY',
-  GoogleAIStudio = 'GOOGLEAISTUDIO_API_KEY',
-  Palm = 'PALM_API_KEY',
-  HuggingFace = 'HUGGINGFACE_API_KEY',
-  Xinference = 'XINFERENCE_API_KEY',
-  CloudflareWorkersAI = 'CLOUDFLAREWORKERSAI_API_KEY',
-  AI21 = 'AI21_API_KEY',
-  NLPCloud = 'NLPCLOUD_API_KEY',
-  VoyageAI = 'VOYAGEAI_API_KEY',
-  Replicate = 'REPLICATE_API_KEY',
-  Meta = 'META_API_KEY',
-  Mistral = 'MISTRAL_API_KEY',
-  VertexAI = 'VERTEXAI_API_KEY',
-  Unknown = 'unknown',
-}
-
-export enum LLMProviders {
-  OpenAI = 'OpenAI',
-  Azure = 'Azure',
-  Anthropic = 'Anthropic',
-  Sagemaker = 'Sagemaker',
-  Bedrock = 'Bedrock',
-  Anyscale = 'Anyscale',
-  PerplexityAI = 'PerplexityAI',
-  VLLM = 'VLLM',
-  DeepInfra = 'DeepInfra',
-  Cohere = 'Cohere',
-  TogetherAI = 'TogetherAI',
-  AlephAlpha = 'AlephAlpha',
-  Baseten = 'Baseten',
-  OpenRouter = 'OpenRouter',
-  CustomAPI = 'CustomAPI',
-  CustomOpenAI = 'CustomOpenAI',
-  Petals = 'Petals',
-  Ollama = 'Ollama',
-  GoogleAIStudio = 'GoogleAIStudio',
-  Palm = 'Palm',
-  HuggingFace = 'HuggingFace',
-  Xinference = 'Xinference',
-  CloudflareWorkersAI = 'CloudflareWorkersAI',
-  AI21 = 'AI21',
-  NLPCloud = 'NLPCloud',
-  VoyageAI = 'VoyageAI',
-  Replicate = 'Replicate',
-  Meta = 'Meta',
-  Mistral = 'Mistral',
-  VertexAI = 'VertexAI',
-}
-
-export type Models = EmbeddingModels | LLMModels
-
-export type LLMCredential = PluginCredential & {
-  value: string
-}
-
-export type LLMModel = [LLMModels, LLMProviderKeys]
+import {
+  BedrockEmbeddingModels,
+  HuggingFaceEmbeddingModels,
+  MistralEmbeddingModels,
+  VoyageEmbeddingModels,
+} from '../../coreEmbeddingService/types'
 
 export enum OpenAIChatCompletionModels {
   GPT35Turbo1106Preview = 'gpt-4-1106-preview',
@@ -203,35 +32,27 @@ export enum OpenAITextCompletionInstructModels {
   Davinci002 = 'davinci-002',
 }
 
-export type AzureModel = `azure/${string}`
-export type CustomOpenAIModel = `openai/${string}`
+export type AzureSlug = `azure/${string}`
+export type CustomOpenAISlug = `openai/${string}`
+export type CustomReplicateSlug = `replicate/${string}`
+export type ReplicateDeploymentModelSlug = `replicate/deployments/${string}`
 
-// export enum AzureOpenAIChatCompletionModels {
-//   Gpt4 = 'azure/gpt-4',
-//   Gpt40314 = 'azure/gpt-4-0314',
-//   Gpt40613 = 'azure/gpt-4-0613',
-//   Gpt432k = 'azure/gpt-4-32k',
-//   Gpt432k0314 = 'azure/gpt-4-32k-0314',
-//   Gpt432k0613 = 'azure/gpt-4-32k-0613',
-//   Gpt35Turbo = 'azure/gpt-3.5-turbo',
-//   Gpt35Turbo0301 = 'azure/gpt-3.5-turbo-0301',
-//   Gpt35Turbo0613 = 'azure/gpt-3.5-turbo-0613',
-//   Gpt35Turbo16k = 'azure/gpt-3.5-turbo-16k',
-//   Gpt35Turbo16k0613 = 'azure/gpt-3.5-turbo-16k-0613',
-// }
+export type HuggingFaceWithPromptFormattingSlug =
+  `huggingface/${HuggingFaceModelsWithPromptFormatting}`
 
-// export enum AzureOpenAIVisionModels {
-//   GPT4Vision = 'gpt-4-vision',
-// }
+export type HuggingFaceSlug = `huggingface/${
+  | HuggingFaceEmbeddingModels
+  | HuggingFaceWithPromptFormattingSlug
+  | string}`
 
 export enum HuggingFaceModelsWithPromptFormatting {
-  HuggingFaceMistral7BInstructV01 = 'huggingface/mistralai/Mistral-7B-Instruct-v0.1',
-  HuggingFaceMetaLlamaLlama27bChat = 'huggingface/meta-llama/Llama-2-7b-chat',
-  HuggingFaceTiiuaeFalcon7bInstruct = 'huggingface/tiiuae/falcon-7b-instruct',
-  HuggingFaceMosaicmlMpt7bChat = 'huggingface/mosaicml/mpt-7b-chat',
-  HuggingFaceCodellamaCodeLlama34bInstructHf = 'huggingface/codellama/CodeLlama-34b-Instruct-hf',
-  HuggingFaceWizardLMWizardCoderPython34BV10 = 'huggingface/WizardLM/WizardCoder-Python-34B-V1.0',
-  HuggingFacePhindPhindCodeLlama34Bv2 = 'huggingface/Phind/Phind-CodeLlama-34B-v2',
+  HuggingFaceMistral7BInstructV01 = 'mistralai/Mistral-7B-Instruct-v0.1',
+  HuggingFaceMetaLlamaLlama27bChat = 'meta-llama/Llama-2-7b-chat',
+  HuggingFaceTiiuaeFalcon7bInstruct = 'tiiuae/falcon-7b-instruct',
+  HuggingFaceMosaicmlMpt7bChat = 'mosaicml/mpt-7b-chat',
+  HuggingFaceCodellamaCodeLlama34bInstructHf = 'codellama/CodeLlama-34b-Instruct-hf',
+  HuggingFaceWizardLMWizardCoderPython34BV10 = 'WizardLM/WizardCoder-Python-34B-V1.0',
+  HuggingFacePhindPhindCodeLlama34Bv2 = 'Phind/Phind-CodeLlama-34B-v2',
 }
 
 export enum OllamaVisionModels {
@@ -261,15 +82,19 @@ export enum PalmModels {
   ChatBison = 'chat-bison',
 }
 
+export type GoogleAIStudioSlug = `gemini/${GoogleAIStudioModels}`
 export enum GoogleAIStudioModels {
-  GeminiGeminiPro = 'gemini/gemini-pro',
-  GeminiGeminiProVision = '/gemini/gemini-pro-vision',
+  GeminiPro = 'gemini-pro',
+  GeminiProVision = 'gemini-pro-vision',
 }
 
+export type MistralAISlug = `mistral/${
+  | MistralAIModels
+  | MistralEmbeddingModels}`
 export enum MistralAIModels {
-  MistralTiny = 'mistral/mistral-tiny',
-  MistralSmall = 'mistral/mistral-small',
-  MistralMedium = 'mistral/mistral-medium',
+  MistralTiny = 'mistral-tiny',
+  MistralSmall = 'mistral-small',
+  MistralMedium = 'mistral-medium',
 }
 
 export enum AnthropicModels {
@@ -288,33 +113,35 @@ export enum SageMakerModels {
   MetaLlama270BChatFineTuned = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b-b-f',
 }
 
+export type BedrockSlug = `bedrock/${BedrockModels | BedrockEmbeddingModels}`
 export enum BedrockModels {
-  BedrockAnthropicClaudeV21 = 'bedrock/anthropic.claude-v2:1',
-  BedrockAnthropicClaudeV2 = 'bedrock/anthropic.claude-v2',
-  BedrockAnthropicClaudeInstantV1 = 'bedrock/anthropic.claude-instant-v1',
-  BedrockAnthropicClaudeV1 = 'bedrock/anthropic.claude-v1',
-  BedrockAmazonTitanLite = 'bedrock/amazon.titan-text-lite-v1',
-  BedrockAmazonTitanExpress = 'bedrock/amazon.titan-text-express-v1',
-  BedrockCohereCommand = 'bedrock/cohere.command-text-v14',
-  BedrockAI21J2Mid = 'bedrock/ai21.j2-mid-v1',
-  BedrockAI21J2Ultra = 'bedrock/ai21.j2-ultra-v1',
-  BedrockMetaLlama2Chat13b = 'bedrock/meta.llama2-13b-chat-v1',
-  BedrockMetaLlama2Chat70b = 'bedrock/meta.llama2-70b-chat-v1',
+  BedrockAnthropicClaudeV21 = 'anthropic.claude-v2:1',
+  BedrockAnthropicClaudeV2 = 'anthropic.claude-v2',
+  BedrockAnthropicClaudeInstantV1 = 'anthropic.claude-instant-v1',
+  BedrockAnthropicClaudeV1 = 'anthropic.claude-v1',
+  BedrockAmazonTitanLite = 'amazon.titan-text-lite-v1',
+  BedrockAmazonTitanExpress = 'amazon.titan-text-express-v1',
+  BedrockCohereCommand = 'cohere.command-text-v14',
+  BedrockAI21J2Mid = 'ai21.j2-mid-v1',
+  BedrockAI21J2Ultra = 'ai21.j2-ultra-v1',
+  BedrockMetaLlama2Chat13b = 'meta.llama2-13b-chat-v1',
+  BedrockMetaLlama2Chat70b = 'meta.llama2-70b-chat-v1',
 }
 
+export type PerplexityAISlug = `perplexity/${PerplexityAIModels}`
 export enum PerplexityAIModels {
-  Pplx7bChat = 'perplexity/pplx-7b-chat',
-  Pplx70bChat = 'perplexity/pplx-70b-chat',
-  Pplx7bOnline = 'perplexity/pplx-7b-online',
-  Pplx70bOnline = 'perplexity/pplx-70b-online',
-  PplxCodeLlama34bInstruct = 'perplexity/codellama-34b-instruct',
-  PplxLlama213bChat = 'perplexity/llama-2-13b-chat',
-  PplxLlama270bChat = 'perplexity/llama-2-70b-chat',
-  PplxMistral7bInstruct = 'perplexity/mistral-7b-instruct',
-  PplxOpenhermes2Mistral7b = 'perplexity/openhermes-2-mistral-7b',
-  PplxOpenhermes25Mistral7b = 'perplexity/openhermes-2.5-mistral-7b',
-  Pplx7bChatAlpha = 'perplexity/pplx-7b-chat-alpha',
-  Pplx70bChatAlpha = 'perplexity/pplx-70b-chat-alpha',
+  Pplx7bChat = 'pplx-7b-chat',
+  Pplx70bChat = 'pplx-70b-chat',
+  Pplx7bOnline = 'pplx-7b-online',
+  Pplx70bOnline = 'pplx-70b-online',
+  PplxCodeLlama34bInstruct = 'codellama-34b-instruct',
+  PplxLlama213bChat = 'llama-2-13b-chat',
+  PplxLlama270bChat = 'llama-2-70b-chat',
+  PplxMistral7bInstruct = 'mistral-7b-instruct',
+  PplxOpenhermes2Mistral7b = 'openhermes-2-mistral-7b',
+  PplxOpenhermes25Mistral7b = 'openhermes-2.5-mistral-7b',
+  Pplx7bChatAlpha = 'pplx-7b-chat-alpha',
+  Pplx70bChatAlpha = 'pplx-70b-chat-alpha',
 }
 
 export enum VLLMModels {
@@ -374,11 +201,14 @@ export enum DeepInfraChatModels {
   JondurbinAiroborosL270bGpt4141 = 'deepinfra/jondurbin/airoboros-l2-70b-gpt4-1.4.1',
 }
 
+export type VoyageAISlug = `voyage-ai/${VoyageAIModels | VoyageEmbeddingModels}`
 export enum VoyageAIModels {
-  Voyage01 = 'voyage-ai/voyage-01',
-  VoyageLite01 = 'voyage-ai/voyage-lite-01',
-  VoyageLite01Instruct = 'voyage-ai/voyage-lite-01-instruct',
+  Voyage01 = 'voyage-01',
+  VoyageLite01 = 'voyage-lite-01',
+  VoyageLite01Instruct = 'voyage-lite-01-instruct',
 }
+
+export type TogetherAISlug = `together_ai/${TogetherAIModels}`
 
 export enum TogetherAIModels {
   TogetherLlama270bChat = 'togethercomputer/llama-2-70b-chat',
@@ -423,7 +253,36 @@ export enum PetalsModels {
   HuggyLlamaLlama65 = 'petals/huggyllama/llama-65b',
 }
 
-export type LLMModels =
+export enum AnyscaleModels {
+  AnyscaleMistral7BInstructV01 = 'anyscale/mistralai/Mistral-7B-Instruct-v0.1',
+  AnyscaleZephyr7BBeta = 'anyscale/HuggingFaceH4/zephyr-7b-beta',
+  AnyscaleMetaLlamaLlama27bChatHf = 'anyscale/meta-llama/Llama-2-7b-chat-hf',
+  AnyscaleMetaLlamaLlama213bChatHf = 'anyscale/meta-llama/Llama-2-13b-chat-hf',
+  AnyscaleMetaLlamaLlama270bChatHf = 'anyscale/meta-llama/Llama-2-70b-chat-hf',
+  AnyscaleCodellamaCodeLlama34bInstructHf = 'anyscale/codellama/CodeLlama-34b-Instruct-hf',
+}
+
+export enum OpenRouterModels {
+  OpenRouterOpenAIGpt35turbo = 'openrouter/openai/gpt-3.5-turbo',
+  OpenRouterOpenAIGpt35turbo16k = 'openrouter/openai/gpt-3.5-turbo-16k',
+  OpenRouterOpenAIGpt4 = 'openrouter/openai/gpt-4',
+  OpenRouterOpenAIGpt432k = 'openrouter/openai/gpt-4-32k',
+  OpenRouterAnthropicClaud2 = 'openrouter/anthropic/claude-2',
+  OpenRouterAnthropicClaudInstantV1 = 'openrouter/anthropic/claude-instant-v1',
+  OpenRouterPalm2ChatBison = 'openrouter/google/palm-2-chat-bison',
+  OpenRouterPalm2CodeChatBison = 'openrouter/google/palm-2-codechat-bison',
+  OpenRouterMetaLlamaLlama213bChat = 'openrouter/meta-llama/llama-2-13b-chat',
+  OpenRouterMetaLlamaLlama270bChat = 'openrouter/meta-llama/llama-2-70b-chat',
+}
+
+export enum ReplicateModels {
+  ReplicateLlama270bChat = 'replicate/llama-2-70b-chat',
+  ReplicateLlama213bChat = 'replicate/a16z-infra/llama-2-13b-chat',
+  ReplicateVicuna13b = 'replicate/vicuna-13b',
+  ReplicateFlanT5Large = 'replicate/daanelson/flan-t5-large',
+}
+
+export type CompletionModels =
   | OpenAIChatCompletionModels
   | OpenAITextCompletionInstructModels
   | OpenAIVisionModels
@@ -432,7 +291,6 @@ export type LLMModels =
   | OllamaVisionModels
   | VertexAIGoogleModels
   | PalmModels
-  | GoogleAIStudioModels
   | MistralAIModels
   | AnthropicModels
   | SageMakerModels
@@ -445,7 +303,10 @@ export type LLMModels =
   | NLPCloudModels
   | DeepInfraChatModels
   | VoyageAIModels
-  | TogetherAIModels
   | AlephAlphaModels
   | BaseTenModels
   | PetalsModels
+  | AnyscaleModels
+  | OpenRouterModels
+  | GoogleAIStudioModels
+  | TogetherAIModels
