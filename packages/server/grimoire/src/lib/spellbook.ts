@@ -7,6 +7,7 @@ import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
 import { IAgentLogger } from 'server/agents'
+import { type CommandHub } from 'server/command-hub'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -52,6 +53,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * We use this to scale spell runners and to keep track of them.
    */
   private spellMap: Map<string, SpellCaster<Agent>[]> = new Map()
+
+  private stateMap: Map<string, any> = new Map()
+
+  private commandHub: CommandHub
 
   /**
    * Application instance.  Typed to main app.
@@ -129,12 +134,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     app,
     agent,
     pluginManager,
+    commandHub,
   }: {
     app: Application
     agent: any
     pluginManager: PluginManager
+    commandHub: CommandHub
   }) {
     this.pluginManager = pluginManager
+    this.commandHub = commandHub
     this.app = app
     this.agent = agent
     this.init()
@@ -143,6 +151,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   init() {
     // Initialize the plugins first
     this.initializePlugins()
+    this.initializeCommands()
 
     // Listen for spell changes
     this.app
@@ -188,6 +197,37 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
     this.logger.debug(`Creating spell ${spell.id} in agent ${this.agent.id}`)
     this.loadSpell(spell)
+  }
+
+  initializeCommands() {
+    this.commandHub.registerDomain('agent', 'spellbook', {
+      toggleLive: async (data: any) => {
+        console.log('TOGGLE LIVE')
+        this.toggleLive(data)
+      },
+      pauseSpell: async (data: any) => {
+        this.pauseSpell(data)
+      },
+      playSpell: async (data: any) => {
+        this.playSpell(data)
+      },
+      killSpell: async (data: any) => {
+        this.killSpell(data)
+      },
+      killSpells: async () => {
+        this.killSpells()
+      },
+      refreshSpells: async () => {
+        this.clearAllSpellCasters()
+        this.loadSpells(
+          await this.app.service('spells').find({
+            query: {
+              projectId: this.agent.projectId,
+            },
+          })
+        )
+      },
+    })
   }
 
   /**
@@ -421,6 +461,21 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Clears all spell runners.
+   * We run through all spellcasters held in memory and clear them.
+   * This stops the loop, disposes the engine, and then deletes the spellcasters from the map.
+   */
+  clearAllSpellCasters() {
+    // go over each spellcaster and clear it
+    for (const spellCasterList of this.spellMap.values()) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.dispose()
+      }
+    }
+    this.spellMap.clear()
+  }
+
+  /**
    * Starts the spell runner for the given spell id.
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
@@ -442,6 +497,31 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     for (const spellCaster of this.spellMap.get(spellId) || []) {
       spellCaster.stopRunLoop()
     }
+  }
+
+  /**
+   * Kills the spell runner for the given spell id.
+   * Used by the agent to control the spell runner via commands.
+   * @param {string} spellId - Id of the spell.
+   * @example
+   * spellbook.killSpell(spellId);
+   */
+  killSpells() {
+    this.agent.log(`Killing all spells in agent ${this.agent.id}`)
+    console.log('KILLING SPELLS')
+    this.clearAllSpellCasters()
+  }
+
+  /**
+   * Kills the spell runner for the given spell id.
+   * Used by the agent to control the spell runner via commands.
+   * @param {string} spellId - Id of the spell.
+   * @example
+   * spellbook.killSpell(spellId);
+   */
+  killSpell(data) {
+    const { spellId } = data
+    this.clearSpellCasters(spellId)
   }
 
   /**
