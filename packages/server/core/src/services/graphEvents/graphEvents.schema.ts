@@ -14,6 +14,7 @@ export const graphEventsSchemaPrototype = {
   sender: Type.Optional(Type.String()),
   agentId: Type.String(),
   connector: Type.Optional(Type.String()),
+  observer: Type.Optional(Type.String()),
   connectorData: Type.Optional(Type.String()),
   content: Type.String(),
   eventType: Type.String(),
@@ -39,6 +40,7 @@ export const graphEventsDataSchema = Type.Pick(
     'content',
     'eventType',
     'event',
+    'observer',
   ],
   {
     $id: 'GraphEventsData',
@@ -71,6 +73,7 @@ export const graphEventsQueryProperties = Type.Pick(graphEventsSchema, [
   'content',
   'eventType',
   'event',
+  'observer',
 ])
 
 export const graphEventsQuerySchema = Type.Intersect(
