@@ -5,13 +5,24 @@ export interface IEventStore {
   currentEvent: () => EventPayload | null
   setEvent: (event: EventPayload) => void
   init: (nodes: GraphNodes) => void
+  getStatus: () => StatusEnum
+  done: () => void
+}
+
+export enum StatusEnum {
+  INIT = 'INIT',
+  RUNNING = 'RUNNING',
+  DONE = 'DONE',
+  ERRORED = 'ERRORED',
 }
 
 export class EventStore implements IEventStore {
   private _currentEvent: EventPayload | null
+  private status: StatusEnum
 
   constructor() {
     this._currentEvent = null
+    this.status = StatusEnum.INIT
   }
 
   public init() {
@@ -24,5 +35,17 @@ export class EventStore implements IEventStore {
 
   public setEvent(event: EventPayload) {
     this._currentEvent = event
+
+    if (this.status === StatusEnum.INIT) {
+      this.status = StatusEnum.RUNNING
+    }
+  }
+
+  public getStatus() {
+    return this.status
+  }
+
+  public done() {
+    this.status = StatusEnum.DONE
   }
 }
