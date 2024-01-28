@@ -151,16 +151,13 @@ export function makeMagickEventNodeDefinition<
             completedListener: CommitArgs[1]
           ) => {
             const stateService = getDependency<IStateService>('IStateService')
-
-            if (!stateService) {
-              commit(outflowName, completedListener)
-              return
-            }
+            const eventStore = getDependency<IEventStore>('IEventStore')
 
             commit(outflowName, async resolveSockets => {
               // When the event is done, we sync the state and clear it
               // This sets the state for the next run of this event on this or another engine
-              await stateService.syncAndClearState()
+              if (stateService) await stateService.syncAndClearState()
+              if (eventStore) eventStore.done()
 
               completedListener?.(resolveSockets)
             })
@@ -206,7 +203,8 @@ export function makeMagickEventNodeDefinition<
               await stateService.rehydrateState(engine!.nodes, stateKey)
             }
 
-            eventConfig.handleEvent(event, newArgs) // Pass all init args and the event to the callback
+            // Pass all init args and the event to the callback
+            eventConfig.handleEvent(event, newArgs)
             if (!node || !engine) return
 
             // This allows us to send up the signal that the event node has been triggered by the listener
