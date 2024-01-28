@@ -18,7 +18,7 @@ import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { AGENT_SPELL } from 'shared/core'
 import { PluginManager } from 'server/pluginManager'
-import { IEventStore } from './services/eventStore'
+import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 import { SpellState } from './spellbook'
@@ -293,6 +293,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       type: 'error',
       data: { message, error },
     })
+
+    // make sure we set the event store to done so we can process the next event
+    this.graph.getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)?.done()
   }
 
   /**
@@ -363,7 +366,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    */
   async executeGraphOnce(isEnd = false): Promise<void> {
     if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
-    this.busy = true
 
     try {
       await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
@@ -375,7 +377,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       // stop the run loop if we have an error
       this.isRunning = false
     }
-    this.busy = false
+
     this.executeGraph = false // Reset the flag after execution
   }
 
@@ -484,7 +486,11 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * }
    */
   isBusy() {
-    return this.busy
+    const status = this.graph
+      .getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
+      ?.getStatus()
+
+    return status === StatusEnum.RUNNING
   }
 
   /*
