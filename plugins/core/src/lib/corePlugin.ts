@@ -26,7 +26,7 @@ import { regex } from './nodes/logic/match'
 import { split } from './nodes/logic/strings/split'
 import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
-import { UserService } from './services/userService/userService'
+import { CoreUserService } from './services/userService/coreUserService'
 import { arrayCreate } from './values/Array/Create'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
 import { addKnowledge } from './nodes/actions/addKnowledge'
@@ -82,7 +82,7 @@ export class CorePlugin extends CoreEventsPlugin<
   values = []
   coreLLMService: CoreLLMService
   coreMemoryService = new CoreMemoryService()
-  userService: UserService
+  userService: CoreUserService
 
   constructor({
     connection,
@@ -104,7 +104,7 @@ export class CorePlugin extends CoreEventsPlugin<
       agentId,
     })
 
-    this.userService = new UserService({ projectId })
+    this.userService = new CoreUserService({ projectId })
   }
 
   /**
