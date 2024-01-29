@@ -16,7 +16,7 @@ import {
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
-import { AGENT_SPELL } from 'shared/core'
+import { AGENT_SPELL } from 'communication'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'

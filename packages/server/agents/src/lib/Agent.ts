@@ -4,16 +4,19 @@ import {
   SpellRunner,
   pluginManager as v1PluginManager,
   MagickSpellInput,
+  MagickSpellOutput,
+  type Event,
+} from 'shared/core'
+
+import {
+  AGENT_ERROR,
+  AGENT_WARN,
+  AGENT_PONG,
   AGENT_RUN_RESULT,
   AGENT_RUN_ERROR,
   AGENT_LOG,
   AGENT_RUN_JOB,
-  MagickSpellOutput,
-  type Event,
-  AGENT_ERROR,
-  AGENT_WARN,
-  AGENT_PONG,
-} from 'shared/core'
+} from 'communication'
 
 import { getLogger } from 'server/logger'
 

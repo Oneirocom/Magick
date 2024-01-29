@@ -1,0 +1,30 @@
+{
+  "name": "communication",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/communication/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shared/communication",
+        "main": "packages/shared/communication/src/index.ts",
+        "tsConfig": "packages/shared/communication/tsconfig.lib.json",
+        "assets": ["packages/shared/communication/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/shared/communication/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

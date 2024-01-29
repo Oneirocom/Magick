@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
+import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 export interface CommandListener<T> {

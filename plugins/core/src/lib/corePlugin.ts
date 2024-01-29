@@ -1,10 +1,5 @@
 import { CoreLLMService } from './services/coreLLMService/coreLLMService'
-import {
-  ActionPayload,
-  CoreEventsPlugin,
-  EventPayload,
-  ON_MESSAGE,
-} from 'server/plugin'
+import { ActionPayload, CoreEventsPlugin, EventPayload } from 'server/plugin'
 import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
@@ -45,6 +40,7 @@ import {
   corePluginName,
   coreRemovedNodes,
 } from './constants'
+import { ON_MESSAGE, SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -128,12 +124,12 @@ export class CorePlugin extends CoreEventsPlugin<
   defineActions() {
     // Define actions here
     this.registerAction({
-      actionName: 'sendMessage',
+      actionName: SEND_MESSAGE,
       displayName: 'Send Message',
       handler: this.handleSendMessage.bind(this),
     })
     this.registerAction({
-      actionName: 'streamMessage',
+      actionName: STREAM_MESSAGE,
       displayName: 'Stream Message',
       handler: this.handleSendMessage.bind(this),
     })

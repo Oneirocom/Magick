@@ -1,4 +1,4 @@
-import { AGENT_DELETE } from 'shared/core'
+import { AGENT_DELETE } from 'communication'
 import { getLogger } from 'server/logger'
 import { app } from 'server/core'
 import { Reporter } from '.'

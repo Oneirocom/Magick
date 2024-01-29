@@ -6,7 +6,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import { MessageQueue } from 'server/communication'
 import { app } from 'server/core'
 import { AgentInterface } from 'server/schemas'
-import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'shared/core'
+import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
 import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from 'shared/config'
 // import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from '@magickml/config'
 

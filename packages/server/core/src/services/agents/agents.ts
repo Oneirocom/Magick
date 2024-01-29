@@ -115,12 +115,22 @@ export const agent = (app: Application) => {
       // parse  the channel from agent:agentId:domain:messageType
       const agentId = channel.split(':')[1]
 
+      // parse the domain of the agent message
+      const domain = channel.split(':')[2]
+
       // parse the type of agent message
       const messageType = channel.split(':')[3]
 
+      // check the domain
+
       // check if message type is an agent event
       if (!AGENT_EVENTS.includes(messageType)) {
-        app.get('logger').trace('AGENT SERVICE: Skipping message %s', channel)
+        console.log('AGENT SERVICE: Skipping message', message, channel)
+        app
+          .get('logger')
+          .trace(
+            `AGENT SERVICE: Skipping message ${message} on channel ${channel}`
+          )
         return
       }
 

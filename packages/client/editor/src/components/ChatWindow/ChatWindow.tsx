@@ -16,6 +16,7 @@ import {
   useAppSelector,
   useSelectAgentsEvent,
 } from 'client/state'
+import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 
 /**
  * Input component - Receives and sends playtest input.
@@ -242,11 +243,11 @@ const ChatWindow = ({ tab, spell }) => {
     if (event?.runInfo?.spellId !== spell.id) return
     if (event.channel !== spell.id) return
 
-    if (actionName === 'sendMessage') {
+    if (actionName === SEND_MESSAGE) {
       printToConsole(content)
     }
 
-    if (actionName === 'streamMessage') {
+    if (actionName === STREAM_MESSAGE) {
       streamToConsole(content)
     }
   }, [lastEvent])

@@ -53,4 +53,3 @@ export * from './plugins/inspectorPlugin'
 
 // export * from './cost-calculator'
 export * from './functions'
-export * from './communication'

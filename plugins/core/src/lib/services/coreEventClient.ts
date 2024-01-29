@@ -1,6 +1,7 @@
+import { ON_MESSAGE } from 'communication'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
-import { ActionPayload, EventPayload, ON_MESSAGE } from 'server/plugin'
+import { ActionPayload, EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 /**
