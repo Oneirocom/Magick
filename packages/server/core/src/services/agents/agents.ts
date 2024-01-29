@@ -116,7 +116,7 @@ export const agent = (app: Application) => {
       const agentId = channel.split(':')[1]
 
       // parse the domain of the agent message
-      const domain = channel.split(':')[2]
+      // const domain = channel.split(':')[2]
 
       // parse the type of agent message
       const messageType = channel.split(':')[3]
