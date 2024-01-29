@@ -8,7 +8,7 @@ import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
 import { IAgentLogger } from 'server/agents'
 import { type CommandHub } from 'server/command-hub'
-import { AGENT_SPELL_STATE } from 'shared/core'
+import { AGENT_SPELL_STATE } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 interface IApplication extends FeathersApplication {

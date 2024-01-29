@@ -69,7 +69,9 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
 
   useEffect(() => {
     if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
+    if (!lastSpellEvent.state) return
 
+    // Process only spell state events here
     if (lastSpellEvent.state.isRunning) {
       setPlaying(true)
     } else if (!lastSpellEvent.state.isRunning) {

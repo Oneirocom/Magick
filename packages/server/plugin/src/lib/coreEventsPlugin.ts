@@ -1,7 +1,7 @@
 import Redis from 'ioredis'
 import { BasePlugin, EventPayload } from './basePlugin'
-import { ON_MESSAGE } from './coreEventTypes'
 import EventEmitter from 'events'
+import { ON_MESSAGE } from 'communication'
 
 /**
  * CorePlugin is the base class for all plugins that are used to

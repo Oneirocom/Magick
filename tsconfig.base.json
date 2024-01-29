@@ -228,6 +228,7 @@
         "packages/client/magickml-chatbox/src/index.ts"
       ],
       "client/state": ["packages/client/state/src/index.ts"],
+      "communication": ["packages/shared/communication/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/*": ["plugins/*"],
       "rete": ["packages/rete/src/index.ts"],

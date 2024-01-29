@@ -9,7 +9,7 @@ import {
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
   AGENT_MESSAGE,
-} from 'shared/core'
+} from 'communication'
 import { getLogger } from 'server/logger'
 import type { MagickSpellInput } from 'shared/core'
 import { v4 as uuidv4 } from 'uuid'

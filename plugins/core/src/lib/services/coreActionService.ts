@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
+import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 
 export class CoreActionService {
   protected actionQueueName: string
@@ -20,7 +21,7 @@ export class CoreActionService {
     // Enqueue the message
     this.logger.trace('CORE ACTION SERVICE: Sending message')
     await this.emitAction({
-      actionName: 'sendMessage',
+      actionName: SEND_MESSAGE,
       event,
       data: messageContent,
     })
@@ -30,7 +31,7 @@ export class CoreActionService {
     // Enqueue the message
     this.logger.trace('CORE ACTION SERVICE: Streaming message')
     await this.emitAction({
-      actionName: 'streamMessage',
+      actionName: STREAM_MESSAGE,
       event,
       data: messageContent,
     })

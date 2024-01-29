@@ -10,7 +10,7 @@ import {
   AGENT_DELETE_JOB,
   AGENT_RUN_JOB,
   AGENT_UPDATE_JOB,
-} from 'shared/core'
+} from 'communication'
 import { type RedisPubSub } from 'server/redis-pubsub'
 import pino from 'pino'
 
