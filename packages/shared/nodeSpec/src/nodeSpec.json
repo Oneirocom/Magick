@@ -194,7 +194,8 @@
         "defaultValue": [
           "openai",
           "together",
-          "google"
+          "google",
+          "palm"
         ]
       },
       {
