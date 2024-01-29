@@ -193,3 +193,23 @@ export const budgetSchema = Type.Object(
   },
   { $id: 'Budget' }
 )
+
+export const userSchema = Type.Object(
+  {
+    id: Type.String(),
+    email: Type.String(),
+    name: Type.Optional(Type.String()),
+    balance: Type.Number(),
+    hasSubscription: Type.Boolean(),
+    subscriptionName: Type.Optional(Type.String()),
+    projectId: Type.Optional(Type.String()),
+  },
+  {
+    $id: 'User',
+  }
+)
+
+/** The type for an agent object that's based on the `agentSchema`. */
+export type UserSchema = Static<typeof userSchema>
+/** The interface for an agent object that's based on the `agentSchema`. */
+export type UserInterface = UserSchema
