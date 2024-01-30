@@ -134,7 +134,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * Returns the lifecycle event emitter from the registry for easy access.
    * @returns The lifecycle event emitter.
    */
-  get lifecycleEventEmitter(): ILifecycleEventEmitter {
+  get lifecycleEventEmitter(): ILifecycleEventEmitter | null {
+    if (!this.registry?.dependencies['ILifecycleEventEmitter']) return null
     return this.registry.dependencies[
       'ILifecycleEventEmitter'
     ] as ILifecycleEventEmitter
@@ -366,7 +367,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the graph is executed.
    */
   async executeGraphOnce(isEnd = false): Promise<void> {
-    if (!isEnd) this.lifecycleEventEmitter.tickEvent.emit()
+    if (!isEnd) this.lifecycleEventEmitter?.tickEvent.emit()
 
     try {
       await this.engine.executeAllAsync(this.limitInSeconds, this.limitInSteps)
@@ -396,7 +397,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * Starts the run loop.  This is called by the spellbook when the spell is started.
    */
   startRunLoop(): void {
-    this.lifecycleEventEmitter.startEvent.emit()
+    this.lifecycleEventEmitter?.startEvent.emit()
     this.isRunning = true
   }
 
@@ -406,7 +407,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   stopRunLoop(): void {
     // onnly execute once for the end event if it is running
     if (this.isRunning) {
-      this.lifecycleEventEmitter.endEvent.emit()
+      this.lifecycleEventEmitter?.endEvent.emit()
     }
     this.isRunning = false
   }
