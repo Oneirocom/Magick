@@ -281,14 +281,6 @@ export class Agent implements AgentInterface {
       }
   }
 
-  /**
-   * Clean up resources when the instance is destroyed.
-   */
-  async onDestroy() {
-    await this.removePlugins()
-    this.log('destroyed agent', { id: this.id })
-  }
-
   trackEvent(
     eventName: AgentEvents,
     metadata: EventMetadata = {},
@@ -456,6 +448,20 @@ export class Agent implements AgentInterface {
 
     if (job.data.version === 'v1') this.runV1Job(job)
     if (job.data.version === 'v2') this.runV2Job(job)
+  }
+
+  /**
+   * Clean up resources when the instance is destroyed.
+   */
+  async onDestroy() {
+    await this.removePlugins()
+    await this.spellbook.onDestroy()
+    await this.pluginManager.onDestroy()
+    await this.worker.close()
+    await this.messageQueue.close()
+    await this.commandHub.onDestroy()
+
+    this.log('destroyed agent', { id: this.id })
   }
 }
 
