@@ -20,16 +20,17 @@ export class BaseRegistry {
   dependencies: Record<string, any> = {}
 
   constructor(agent: IAgentLogger, connection: Redis) {
+    const stateService = new KeyvStateService(connection)
     this.connection = connection
     this.agent = agent
     this.dependencies.ILogger = new AgentLoggingService(agent)
-    this.dependencies.IEventStore = new EventStore()
-    this.dependencies.IStateService = new KeyvStateService(connection)
+    this.dependencies.IStateService = stateService
+    this.dependencies.IEventStore = new EventStore(stateService)
   }
 
   init(graph: IGraph, graphNodes: GraphNodes) {
-    this.dependencies.IStateService.init(graph)
-    this.dependencies.IEventStore.init(graph, graphNodes)
+    this.dependencies.IEventStore.init(graphNodes)
+    this.dependencies.IStateService.init(this.dependencies.IEventStore)
   }
 
   getDependencies(): Record<string, any> {
