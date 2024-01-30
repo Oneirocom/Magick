@@ -27,8 +27,7 @@ function getVarForEnvironment(env: string): string | undefined {
 }
 
 // Define and export constants from environment variables
-export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
-export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
+
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
@@ -171,3 +170,11 @@ export const OPENMETER = {
 export const PLUGIN_SETTINGS = {
   SLACK_DEVELOPER_MODE: getVarForEnvironment('SLACK_DEVELOPER_MODE') === 'true',
 }
+
+export const MAGICK_OPENAI_API_KEY = getVarForEnvironment('OPENAI_API_KEY')
+export const MAGICK_GEMINI_API_KEY = getVarForEnvironment('GEMINI_API_KEY')
+export const MAGICK_PALM_API_KEY = getVarForEnvironment('PALM_API_KEY')
+export const MAGICK_TOGETHERAI_API_KEY =
+  getVarForEnvironment('TOGETHERAI_API_KEY')
+export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
+export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
