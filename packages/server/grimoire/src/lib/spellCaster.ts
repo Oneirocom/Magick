@@ -12,6 +12,7 @@ import {
   INode,
   IGraph,
   makeGraphApi,
+  IStateService,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
@@ -484,6 +485,12 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       ?.getStatus()
 
     return status === StatusEnum.RUNNING
+  }
+
+  resetState() {
+    this.graph
+      .getDependency<IStateService>(CORE_DEP_KEYS.STATE_SERVICE)
+      ?.resetState()
   }
 
   /*

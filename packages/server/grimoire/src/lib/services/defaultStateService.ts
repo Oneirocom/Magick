@@ -31,6 +31,10 @@ export class DefaultStateService implements IStateService {
     this.eventStore?.setEvent(event)
   }
 
+  async resetState() {
+    this.stateStore = {}
+  }
+
   getState(nodeId: string): any {
     if (this.eventStore) {
       const event = this.eventStore.currentEvent()
