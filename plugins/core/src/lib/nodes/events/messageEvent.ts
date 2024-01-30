@@ -1,6 +1,7 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { EventPayload, ON_MESSAGE } from 'server/plugin'
+import { EventPayload } from 'server/plugin'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { ON_MESSAGE } from 'communication'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined

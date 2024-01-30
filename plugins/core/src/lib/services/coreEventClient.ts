@@ -1,6 +1,7 @@
+import { AGENT_EVENT, ON_MESSAGE } from 'communication'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
-import { ActionPayload, EventPayload, ON_MESSAGE } from 'server/plugin'
+import { ActionPayload, EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 /**
@@ -39,7 +40,7 @@ class CoreEventClient {
    * @param redisConnection The Redis connection to use for subscribing to channels.
    * @param agentId The agent ID to use for subscribing to channels.
    */
-  constructor(pubSub: RedisPubSub, agentId: string) {
+  constructor({ pubSub, agentId }: { pubSub: RedisPubSub; agentId: string }) {
     this.pubSub = pubSub
     this.agentId = agentId
     this.eventHandlers = new Map()
@@ -152,7 +153,7 @@ class CoreEventClient {
   }
 
   sendMessage(payload: ActionPayload): void {
-    this.pubSub.publish(`agent:${this.agentId}:Core:event`, payload)
+    this.pubSub.publish(AGENT_EVENT(this.agentId), payload)
   }
 
   /**

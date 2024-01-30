@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import { SpellRelease } from 'packages/server/core/src/services/spellReleases/spellReleases.schema';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { SpellReleaseInterface } from 'server/schemas';
 
 const SpellVersionSelector = ({
   spellReleaseList,
@@ -9,13 +9,13 @@ const SpellVersionSelector = ({
   onChange,
   tooltipText,
 }: {
-  spellReleaseList: SpellRelease[],
+  spellReleaseList: SpellReleaseInterface[],
   activeSpellReleaseId: string,
   onChange: (spellReleaseId: string) => Promise<void>,
   tooltipText: string
 }): React.JSX.Element => {
 
-  const [selectedRelease, setSelectedRelease] = useState<SpellRelease | null>(null);
+  const [selectedRelease, setSelectedRelease] = useState<SpellReleaseInterface | null>(null);
 
   const formatDate = (date: string) => {
     if (!date) return '';

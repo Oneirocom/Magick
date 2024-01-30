@@ -93,14 +93,24 @@ export class PluginManager extends EventEmitter {
    * )
    * @memberof PluginManager
    */
-  constructor(
-    pluginDirectory: string,
-    connection: Redis,
-    agentId: string,
+
+  projectId: string
+  constructor({
+    pluginDirectory,
+    connection,
+    agentId,
+    pubSub,
+    projectId,
+  }: {
+    pluginDirectory: string
+    connection: Redis
+    agentId: string
     pubSub: RedisPubSub
-  ) {
+    projectId: string
+  }) {
     super()
     this.agentId = agentId
+    this.projectId = projectId
     this.pubSub = pubSub
     this.connection = connection
     this.pluginDirectory = pluginDirectory
@@ -133,11 +143,12 @@ export class PluginManager extends EventEmitter {
         PluginClass.prototype instanceof BasePlugin
       ) {
         // Create an instance of the plugin
-        const pluginInstance = new PluginClass(
-          this.connection,
-          this.agentId,
-          this.pubSub
-        )
+        const pluginInstance = new PluginClass({
+          agentId: this.agentId,
+          connection: this.connection,
+          pubSub: this.pubSub,
+          projectId: this.projectId,
+        })
         this.registerPlugin(pluginInstance)
       }
     }
@@ -273,5 +284,55 @@ export class PluginManager extends EventEmitter {
     }
   }
 
-  // Additional methods for handling activation, deactivation, and unloading of plugins...
+  /**
+   * Cleans up resources and performs necessary teardown tasks before destroying the PluginManager instance.
+   */
+  async onDestroy(): Promise<void> {
+    this.logger.debug('Destroying PluginManager and cleaning up resources')
+
+    // Unload all plugins
+    for (const pluginName of this.plugins.keys()) {
+      this.unloadPlugin(pluginName)
+    }
+
+    // Remove all listeners from the central event bus
+    this.centralEventBus.removeAllListeners()
+
+    // Remove all listeners from this instance of PluginManager (if any)
+    this.removeAllListeners()
+
+    this.logger.debug('PluginManager destroyed')
+  }
+
+  // /**
+  //  * Method to enable/disable a specific plugin.
+  //  * @param pluginName - The name of the plugin to enable/disable.
+  //  * @param enable - Boolean indicating whether to enable or disable the plugin.
+  //  */
+  // setPluginStatus(pluginName: string, enable: boolean): void {
+  //   const plugin = this.plugins.get(pluginName)
+  //   if (plugin) {
+  //     plugin.handleEnableCommand(enable)
+  //     this.logger.debug(
+  //       `Plugin ${pluginName} ${enable ? 'enabled' : 'disabled'}`
+  //     )
+  //   } else {
+  //     this.logger.warn(`Plugin ${pluginName} not found for status change.`)
+  //   }
+  // }
+
+  // /**
+  //  * Method to get the status of a specific plugin.
+  //  * @param pluginName - The name of the plugin to check the status of.
+  //  * @returns The status of the plugin (enabled/disabled).
+  //  */
+  // getPluginStatus(pluginName: string): boolean | null {
+  //   const plugin = this.plugins.get(pluginName)
+  //   if (plugin) {
+  //     return plugin.getStatus()
+  //   } else {
+  //     this.logger.warn(`Plugin ${pluginName} not found for status check.`)
+  //     return null
+  //   }
+  // }
 }

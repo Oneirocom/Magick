@@ -159,7 +159,7 @@ function TaskTable({ tasks, updateCallback }) {
   }) => {
     const [val, setVal] = useState(value)
     const onChange = e => typeof val !== 'object' && setVal(e.target.value)
-    const onBlur = e => updateTask(row, id, val)
+    const onBlur = () => updateTask(row, id, val)
     useEffect(() => setVal(value), [value])
     return (
       <input

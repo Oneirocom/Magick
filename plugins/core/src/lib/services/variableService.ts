@@ -1,8 +1,9 @@
 import Keyv from 'keyv'
 import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
-import { SpellCaster } from 'server/grimoire'
+import { EventStore, SpellCaster } from 'server/grimoire'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
+import { CORE_DEP_KEYS } from '../constants'
 
 // This is the interface you'll use to get and set variables.
 export interface IVariableService {
@@ -26,10 +27,26 @@ export class VariableService {
     this.spellCaster = spellCaster
   }
 
+  getEventKey(): string | undefined {
+    const eventStore = this.spellCaster.graph.getDependency<EventStore>(
+      CORE_DEP_KEYS.EVENT_STORE
+    )
+
+    if (!eventStore) return undefined
+
+    const event = eventStore.currentEvent()
+    if (!event || !event.stateKey) return undefined
+
+    return event.stateKey
+  }
+
   getKey(name: string) {
-    // also grab event from eventstore in dependencies
-    // check
-    return `agent:${this.agentId}:spell:${this.spellCaster.spell.id}:variable:${name}`
+    const baseKey = `agent:${this.agentId}:spell:${this.spellCaster.spell.id}:variable:${name}`
+    const eventKey = this.getEventKey()
+
+    if (!eventKey) return baseKey
+
+    return `${baseKey}:${eventKey}`
   }
 
   async setByKey(key: string, value: any): Promise<void> {

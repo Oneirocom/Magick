@@ -107,7 +107,7 @@ export type Event = {
   agentId?: number | string
   embedding?: number[]
   date?: string
-  rawData?: string
+  rawData?: unknown
 }
 
 export type CreateEventArgs = Event
@@ -231,6 +231,7 @@ export type PubSubEvents = {
   SEND_COMMAND: string
   TOGGLE_FILE_DRAWER: string
   MESSAGE_AGENT: string
+  RESET_NODE_STATE: string
   $SUBSPELL_UPDATED: (spellName: string) => string
   $TRIGGER: (tabId: string, nodeId?: number) => string
   $RESET_HIGHLIGHTS: (tabId: string) => string
@@ -655,14 +656,26 @@ export type RequestPayload = {
   processed?: boolean
   totalTokens?: number
   spell?: SpellInterface
-  nodeId?: number
+  nodeId?: number | null
   customModel?: string
+  cost?: number
 }
 
 export type RequestData = {
   spell: string
   projectId: string
   nodeId: number
+}
+
+export type GraphEventPayload = {
+  sender: string
+  agentId: string
+  connector: string
+  connectorData: string
+  observer: string
+  content: string
+  eventType: string
+  event: Event
 }
 
 export type AppService = (app: FeathersApplication) => void

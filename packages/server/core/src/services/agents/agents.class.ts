@@ -13,6 +13,7 @@ import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
+import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -20,7 +21,6 @@ export type AgentParams = KnexAdapterParams<AgentQuery>
 type MessagePayload = EventPayload & {
   agentId: string
 }
-
 /**
  * Default AgentService class.
  * Calls the standard Knex adapter service methods but can be customized with your own functionality.
@@ -38,8 +38,25 @@ export class AgentService<
     this.app = app
   }
 
-  async message(data: MessagePayload) {
+  async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
+    const agent = await this._get(agentId, params)
+
+    if (!agent) throw new NotFound('Agent not found')
+
+    const projectId = agent.projectId
+
+    if (params?.provider) {
+      if (agent.projectId !== projectId) {
+        throw new NotAuthenticated("You don't have access to this agent")
+      }
+    }
+  }
+
+  async message(data: MessagePayload, params?: ServiceParams) {
     const agentId = data.agentId
+
+    this.authorizeAgentPermissions(agentId, params)
+
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.message(agentId, data)
 
@@ -50,19 +67,35 @@ export class AgentService<
     }
   }
 
-  // we use this ping to avoid firing a patched event on the agent
-  // every time the agent is pinged
-  async ping(agentId: string) {
-    const db = app.get('dbClient')
-    // knex query to update the pingedAt field of the agent with the given id
-    const query = await db('agents').where({ id: agentId }).update({
-      pingedAt: new Date().toISOString(),
-    })
+  async syncState(agentId: string, params?: ServiceParams) {
+    this.authorizeAgentPermissions(agentId, params)
 
-    return { data: query }
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.syncState(agentId)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
   }
 
-  async get(agentId: string, params: ServiceParams) {
+  // we use this ping to avoid firing a patched event on the agent
+  // every time the agent is pinged
+  async ping(agentId: string, params?: ServiceParams) {
+    this.authorizeAgentPermissions(agentId, params)
+
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.ping(agentId)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
+  }
+
+  async get(agentId: string, params?: ServiceParams) {
     return await this._get(agentId, params)
   }
 
@@ -76,7 +109,27 @@ export class AgentService<
           }
         }
       }
+
+      // Check for 'paginate' parameter
+      const paginate = params.query.paginate
+
+      // Remove 'paginate' from query to avoid conflicts
+      if (params.query.hasOwnProperty('paginate')) {
+        delete params.query.paginate
+      }
+
+      // If 'paginate' parameter is set to 'false', bypass pagination
+      if (paginate === 'false') {
+        // Override default pagination settings
+        const nonPaginatedParams = {
+          ...params,
+          paginate: false,
+        }
+        return await this._find(nonPaginatedParams)
+      }
     }
+
+    // Proceed with normal behavior (paginated find)
     return await this._find(params)
   }
 
@@ -84,22 +137,27 @@ export class AgentService<
     return this._update(id, data, params)
   }
 
-  /**
+  /**p
    * Executes a command on the agent.
    * @param data - The data required to execute the command.
    * @returns An object containing the response from the agent.
    */
-  async command(data: AgentCommandData) {
+  async command(data: AgentCommandData, params?: ServiceParams) {
+    if (!data.agentId) throw new BadRequest('agentId is required')
+    // validate user owns the agent
+
+    this.authorizeAgentPermissions(data.agentId, params)
+
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.command(data)
 
     return { response }
   }
 
-  async run(data: Omit<RunRootSpellArgs, 'agent'>) {
+  async run(data: Omit<RunRootSpellArgs, 'agent'>, params?: ServiceParams) {
     if (!data.agentId) throw new Error('agentId is required')
-    // probably need to authenticate the request here against project id
-    // add the job to the queueD
+
+    this.authorizeAgentPermissions(data.agentId, params)
 
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.runSpellWithResponse(data)
@@ -108,13 +166,18 @@ export class AgentService<
     return { response }
   }
 
-  async subscribe(agentId: string, params: ServiceParams) {
+  async subscribe(agentId: string, params?: ServiceParams) {
     // check for socket io
-    if (!params.provider)
+    if (!params?.provider)
       throw new Error('subscribe is only available via socket io')
 
+    // check for agentId
+    if (!agentId) throw new Error('agentId is required')
+
+    this.authorizeAgentPermissions(agentId, params)
+
     // get the socket from the params
-    const connection = params.connection
+    const connection = params?.connection
 
     if (!connection) throw new Error('connection is required')
 
@@ -132,7 +195,7 @@ export class AgentService<
       // turn off the old agent
       this.command({
         agentId: oldAgentId,
-        command: 'agent:core:toggleLive',
+        command: 'agent:spellbook:toggleLive',
         data: {
           live: false,
         },
@@ -146,7 +209,7 @@ export class AgentService<
     // turn on the new agent
     this.command({
       agentId,
-      command: 'agent:core:toggleLive',
+      command: 'agent:spellbook:toggleLive',
       data: {
         live: true,
       },
@@ -224,6 +287,7 @@ export class AgentService<
         const rootSpell = draftSpellsToCopy.find(
           spell => spell.id === agentToCopy?.rootSpellId
         ) as SpellData
+
         const newRootSpell = newSpells.find(spell => {
           return spell.name === rootSpell?.name
         }) as SpellData
@@ -278,7 +342,7 @@ export class AgentService<
     return this._patch(agentId, params)
   }
 
-  async remove(agentId: string, params: ServiceParams) {
+  async remove(agentId: string, params?: ServiceParams) {
     return this._remove(agentId, params)
   }
 }

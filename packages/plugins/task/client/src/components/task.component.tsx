@@ -28,7 +28,7 @@ export const AgentTaskWindow: FC<PluginProps> = props => {
   // Initialize the state variables
   const debouncedFunction = debounce((id, data) => update(id, data), 500)
   const [checked, setChecked] = useState(selectedAgentData.data?.task_enabled)
-  const [disable, setDisable] = useState(false)
+  const [, setDisable] = useState(false)
 
   // Handle enable/disable of the task plugin
   useEffect(() => {

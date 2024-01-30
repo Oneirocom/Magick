@@ -35,7 +35,7 @@ export const requestSchema = Type.Object(
     processed: Type.Boolean(),
     cost: Type.Optional(Type.Number()),
     spell: Type.Optional(Type.String()),
-    nodeId: Type.Optional(Type.Number()),
+    nodeId: Type.Union([Type.Number(), Type.Null()]),
   },
   { $id: 'Request', additionalProperties: false }
 )

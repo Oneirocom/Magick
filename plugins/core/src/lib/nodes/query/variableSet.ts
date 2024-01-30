@@ -4,6 +4,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
+import { CORE_DEP_KEYS } from '../../constants'
 
 export const variableSet = makeFlowNodeDefinition({
   typeName: 'variables/set',
@@ -86,7 +87,9 @@ export const variableSet = makeFlowNodeDefinition({
 
     if (!variable) return
 
-    const variableService = getDependency<IVariableService>('IVariableService')
+    const variableService = getDependency<IVariableService>(
+      CORE_DEP_KEYS.I_VARIABLE_SERVICE
+    )
 
     if (!variableService) return
 

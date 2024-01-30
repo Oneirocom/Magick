@@ -3,8 +3,9 @@ import Keyv from 'keyv'
 import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 
-import { IEventStore } from './eventStore'
+import { EventStore, IEventStore } from './eventStore'
 import { EventPayload } from 'server/plugin'
+import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 
 export class DefaultStateService implements IStateService {
   private stateStore: Record<string, any>
@@ -18,7 +19,7 @@ export class DefaultStateService implements IStateService {
   }
 
   init(graph: IGraph) {
-    this.eventStore = graph.getDependency('IEventStore')
+    this.eventStore = graph.getDependency<EventStore>(CORE_DEP_KEYS.EVENT_STORE)
   }
 
   // eslint-disable-next-line
@@ -28,6 +29,10 @@ export class DefaultStateService implements IStateService {
 
   storeEvent(event: any) {
     this.eventStore?.setEvent(event)
+  }
+
+  async resetState() {
+    this.stateStore = {}
   }
 
   getState(nodeId: string): any {
@@ -58,4 +63,8 @@ export class DefaultStateService implements IStateService {
 
     this.stateStore[nodeId] = newState
   }
+
+  async rehydrateState(): Promise<void> {}
+
+  async syncAndClearState(): Promise<void> {}
 }

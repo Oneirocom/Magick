@@ -3,7 +3,7 @@ import format from "date-fns/format"
 import { VariableSizeList } from "react-window";
 import ReactJson from 'react-json-view'
 import AutoSizer from "react-virtualized-auto-sizer";
-import { useSelectAgentsLog, useSelectAgentsSpell } from "client/state";
+import { useSelectAgentsError, useSelectAgentsLog, useSelectAgentsSpell } from "client/state";
 
 export type Log = {
   type: string;
@@ -14,7 +14,7 @@ export type Log = {
 
 const LIST_ITEM_HEIGHT = 25;
 
-const LogHeader = ({ showSpellLogs, showLogLogs, setShowLogLogs, setShowSpellLogs }) => {
+const LogHeader = ({ showSpellLogs, showLogLogs, showErrorLogs, setShowLogLogs, setShowSpellLogs, setShowErrorLogs }) => {
   return (<div className="flex justify-between mb-6 border-b border-gray-800 pb-5">
     <h1 className="text-l font-semibold">Application Logs</h1>
     <div className="flex gap-4">
@@ -36,11 +36,19 @@ const LogHeader = ({ showSpellLogs, showLogLogs, setShowLogLogs, setShowSpellLog
         />
         <span>Info</span>
       </label>
+      <label className="flex items-center">
+        <input
+          type="checkbox"
+          checked={showErrorLogs}
+          onChange={() => setShowErrorLogs(prev => !prev)}
+          className="w-5 h-5 mr-2 border rounded border-gray-700 focus:border-blue-500"
+        />
+        <span>Error</span>
+      </label>
     </div>
   </div>
   )
 }
-
 
 const LogMessage = ({ log, style, onExpandCollapse }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -89,7 +97,7 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
     <div className="flex flex-col justify-between p-1 border-b border-[#262730] items-start cursor-pointer hover:[background-color:var(--slate-15)]" style={style} ref={containerRef}>
       <div className="flex flex-row justify-between w-full items-center gap-5 " onClick={() => setIsExpanded(!isExpanded)}>
         <span className="text-md text-[#328597] whitespace-nowrap">{timestamp}</span>
-        <span className={`text-md ${textColor} break-all flex-grow truncate`}>{log.message}</span>
+        <span className={`text-md ${textColor} break-all flex-grow truncate`}>{log.messageType}: {log.message}</span>
         <div>
           {isExpanded ? (
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -191,26 +199,32 @@ const LogFooter = ({ autoscroll, setAutoscroll, onClear }) => {
 const LogsComponent = () => {
   const { lastItem: lastLog } = useSelectAgentsLog()
   const { lastItem: lastSpellLog } = useSelectAgentsSpell()
+  const { lastItem: lastErrorLog } = useSelectAgentsError()
   const [combinedData, setCombinedData] = useState([]);
   const [autoscroll, setAutoscroll] = useState(true);
   const [showSpellLogs, setShowSpellLogs] = useState(true);
   const [showLogLogs, setShowLogLogs] = useState(true);
+  const [showErrorLogs, setShowErrorLogs] = useState(true);
 
   useEffect(() => {
     // Create a new entry only if the new log item is not undefined
     const newEntries = [];
-    if (lastLog) {
-      newEntries.push({ ...lastLog, messageType: 'log' });
-    }
-    if (lastSpellLog) {
-      newEntries.push({ ...lastSpellLog, messageType: 'spell' });
-    }
+
+    const addIfUnique = (newLog, type) => {
+      if (newLog && !combinedData.some(log => log.timestamp === newLog.timestamp && log.message === newLog.message)) {
+        newEntries.push({ ...newLog, messageType: type });
+      }
+    };
+
+    addIfUnique(lastLog, 'log');
+    addIfUnique(lastSpellLog, 'spell');
+    addIfUnique(lastErrorLog, 'error');
 
     // Update the combinedData state with new entries if any
     if (newEntries.length > 0) {
       setCombinedData(prev => [...prev, ...newEntries]);
     }
-  }, [lastLog, lastSpellLog]); // Dependencies array
+  }, [lastLog, lastSpellLog, lastErrorLog]); // Dependencies array
 
   const onClear = () => {
     setCombinedData([]); // Clear combinedData instead of logs
@@ -220,8 +234,10 @@ const LogsComponent = () => {
     if (logs.length === 0) return [];
     return logs.filter(log => {
       if (!log) return false;
+      if (!log.log && typeof log.log !== 'undefined') return false;
       if (log.messageType === 'spell' && showSpellLogs) return true;
       if (log.messageType === 'log' && showLogLogs) return true;
+      if (log.messageType === 'error' && showErrorLogs) return true;
       return false;
     })
   }
@@ -232,7 +248,7 @@ const LogsComponent = () => {
   return (
     <div className="flex flex-col h-full p-4 text-white">
       {/* Clean up the props to this header */}
-      <LogHeader showLogLogs={showLogLogs} showSpellLogs={showSpellLogs} setShowSpellLogs={setShowSpellLogs} setShowLogLogs={setShowLogLogs} />
+      <LogHeader showLogLogs={showLogLogs} showSpellLogs={showSpellLogs} setShowSpellLogs={setShowSpellLogs} setShowLogLogs={setShowLogLogs} setShowErrorLogs={setShowErrorLogs} showErrorLogs={showErrorLogs} />
       <LogContainer logs={logs} autoscroll={autoscroll} />
       <LogFooter autoscroll={autoscroll} setAutoscroll={setAutoscroll} onClear={onClear} />
     </div>
