@@ -1,0 +1,11 @@
+*.psd
+*.pdf
+/test
+/spec
+apps/client
+apps/docs
+docs
+bruno-requests
+.vscode
+packages/client
+files

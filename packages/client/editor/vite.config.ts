@@ -10,6 +10,7 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
+  root: __dirname,
   cacheDir: '../../../node_modules/.vite/editor',
   assetsInclude: ['**/*.vrm', '**/*.svg'],
   resolve: {
@@ -54,6 +55,9 @@ export default defineConfig({
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
+    outDir: '../../../dist/packages/client/editor',
+    reportCompressedSize: true,
+    commonjsOptions: { transformMixedEsModules: true },
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',

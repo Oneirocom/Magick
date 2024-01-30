@@ -6,7 +6,6 @@
 import './wdyr'
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import { WagmiConfig } from 'wagmi'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -14,7 +13,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import 'regenerator-runtime/runtime'
 
 import App from './App'
-import { config as wagmiConfig } from './contexts/wagmi'
 import AppProviders from './contexts/AppProviders'
 import { AppConfig } from '@magickml/providers'
 import { MagickmlChatbox } from 'client/magickml-chatbox'
@@ -54,10 +52,8 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
       <Provider store={createStore(config)}>
         <AppProviders config={config}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <WagmiConfig config={wagmiConfig}>
-              <App />
-              <MagickmlChatbox />
-            </WagmiConfig>
+            <App />
+            <MagickmlChatbox />
           </LocalizationProvider>
         </AppProviders>
       </Provider>

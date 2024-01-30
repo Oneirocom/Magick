@@ -7,6 +7,9 @@ import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
 import { IAgentLogger } from 'server/agents'
+import { type CommandHub } from 'server/command-hub'
+import { AGENT_SPELL_STATE } from 'communication'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -15,6 +18,12 @@ interface IApplication extends FeathersApplication {
 interface IAgent extends IAgentLogger {
   id: string
   projectId: string
+  currentSpellReleaseId: string | null
+  pubsub: RedisPubSub
+}
+
+export type SpellState = {
+  isRunning: boolean
 }
 
 /**
@@ -53,6 +62,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   private spellMap: Map<string, SpellCaster<Agent>[]> = new Map()
 
+  private stateMap: Map<string, SpellState> = new Map()
+
+  private commandHub: CommandHub
+
   /**
    * Application instance.  Typed to main app.
    * @example
@@ -75,7 +88,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *   this.agent.id
    * );
    */
-  private pluginManager!: PluginManager
+  private pluginManager: PluginManager
 
   /**
    * Flag to enable/disable watching spells.  We use this to keep the spells in sync with the server.
@@ -105,6 +118,16 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   mainRegistry!: IRegistry
 
+  get isLive() {
+    return this.watchSpells && this.spellMap.size > 0
+  }
+
+  get initialState() {
+    return {
+      isRunning: true,
+    }
+  }
+
   /**
    * Constructs a SpellManager.
    * @param app - The application instance.
@@ -121,23 +144,28 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *  watchSpells: true,
    * });
    */
-  constructor({ app, agent }: { app: Application; agent: any }) {
+  constructor({
+    app,
+    agent,
+    pluginManager,
+    commandHub,
+  }: {
+    app: Application
+    agent: any
+    pluginManager: PluginManager
+    commandHub: CommandHub
+  }) {
+    this.pluginManager = pluginManager
+    this.commandHub = commandHub
     this.app = app
     this.agent = agent
     this.init()
   }
 
   init() {
-    const pluginDirectory = process.env.PLUGIN_DIRECTORY || './plugins'
-    this.pluginManager = new PluginManager(
-      pluginDirectory,
-      this.app.get('redis'),
-      this.agent.id,
-      this.app.get('pubsub')
-    )
-
     // Initialize the plugins first
     this.initializePlugins()
+    this.initializeCommands()
 
     // Listen for spell changes
     this.app
@@ -183,6 +211,35 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
     this.logger.debug(`Creating spell ${spell.id} in agent ${this.agent.id}`)
     this.loadSpell(spell)
+  }
+
+  /**
+   * Updates the spell state for the given spell id.
+   * @param {string} spellId - Id of the spell.
+   * @param {Partial<SpellState>} update - Partial update to the spell state.
+   * @example
+   * spellbook.updateSpellState(spellId, { isRunning: true });
+   */
+  updateSpellState(spellId: string, update: Partial<SpellState>) {
+    const state = this.stateMap.get(spellId) || { isRunning: false }
+    this.stateMap.set(spellId, { ...state, ...update })
+  }
+
+  /**
+   * Initializes the commands for the Spellbook.  These can be sent by the agentCommander
+   * to control the spellbook.
+   *
+   */
+  initializeCommands() {
+    this.commandHub.registerDomain('agent', 'spellbook', {
+      toggleLive: this.toggleLive.bind(this),
+      pauseSpell: this.pauseSpell.bind(this),
+      playSpell: this.playSpell.bind(this),
+      killSpell: this.killSpell.bind(this),
+      killSpells: this.killSpells.bind(this),
+      syncState: this.syncState.bind(this),
+      refreshSpells: this.refreshSpells.bind(this),
+    })
   }
 
   /**
@@ -261,10 +318,45 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Syncs the state of the spell with the server.
+   * @param {any} data - Data payload.
+   * @example
+   * this.syncState(data);
+   */
+  syncState(data) {
+    const { spellId } = data
+
+    if (!this.hasSpellCaster(spellId)) return
+
+    const state = this.stateMap.get(spellId)
+
+    if (!state) return
+
+    this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
+      spellId,
+      state,
+    })
+  }
+
+  async refreshSpells() {
+    this.clearAllSpellCasters()
+    this.resetAllSpellCasterStates()
+
+    const spellsData = await this.app.service('spells').find({
+      query: {
+        projectId: this.agent.projectId,
+        type: 'behave',
+        spellReleaseId: this.agent.currentSpellReleaseId || 'null',
+      },
+    })
+    this.loadSpells(spellsData.data)
+  }
+
+  /**
    * Toggles the watchSpells flag.
    */
   toggleLive(data) {
-    this.agent.log(`Toggling watchSpells to ${data.live}`)
+    this.logger.trace(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
   }
@@ -278,6 +370,12 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * await spellbook.loadSpells(spells);
    */
   async loadSpells(spells: SpellInterface[]) {
+    if (!spells) {
+      this.logger.error(
+        `SPELLBOOK: No spells provided for agent ${this.agent.id}`
+      )
+      return
+    }
     this.logger.trace(`SPELLBOOK: Loading spells for agent ${this.agent.id}`)
     this.logger.trace(
       `SPELLBOOK: Spells: ${JSON.stringify(spells.map(s => s.id))}`
@@ -336,20 +434,24 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       return null
     }
 
+    const initialState = this.stateMap.get(spell.id) || this.initialState
+
     try {
       const spellCaster = new SpellCaster<Agent>({
         agent: this.agent,
         pluginManager: this.pluginManager,
         connection: this.app.get('redis'),
+        initialState,
       })
 
-      await spellCaster.initialize(spell)
+      spellCaster.initialize(spell)
 
       const spellCasterList = this.spellMap.get(spell.id)
       if (spellCasterList) {
         spellCasterList.push(spellCaster)
       } else {
         this.spellMap.set(spell.id, [spellCaster])
+        this.stateMap.set(spell.id, { isRunning: true })
       }
 
       return spellCaster
@@ -360,7 +462,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     }
   }
 
-  /**
+  /**bas
    * Updates the spell runner for the given spell. Called from the watchSpellHandler.
    * @param {SpellInterface} spell - Spell instance.
    * @returns {Promise<void>} - Promise that resolves when the spell runner is updated.
@@ -413,6 +515,49 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       }
     }
     this.spellMap.delete(spellId)
+    this.stateMap.delete(spellId)
+  }
+
+  /**
+   * Resets the spell runner states for the given spell id.
+   * This will go into the state service and wipe all keys from memory.
+   * @param {string} spellId - Id of the spell.
+   */
+  resetSpellCasterStates(spellId: string) {
+    const spellCasterList = this.spellMap.get(spellId)
+    if (spellCasterList) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.resetState()
+      }
+    }
+  }
+
+  /**
+   * Clears all spell runners.
+   * We run through all spellcasters held in memory and clear them.
+   * This stops the loop, disposes the engine, and then deletes the spellcasters from the map.
+   */
+  clearAllSpellCasters() {
+    // go over each spellcaster and clear it
+    for (const spellCasterList of this.spellMap.values()) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.dispose()
+      }
+    }
+    this.spellMap.clear()
+    this.stateMap.clear()
+  }
+
+  /*
+   * Resets all spell runner states.
+   * This will go into the state service and wipe all keys from memory.
+   */
+  resetAllSpellCasterStates() {
+    for (const spellCasterList of this.spellMap.values()) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.resetState()
+      }
+    }
   }
 
   /**
@@ -425,6 +570,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     for (const spellCaster of this.spellMap.get(spellId) || []) {
       spellCaster.startRunLoop()
     }
+    this.updateSpellState(spellId, { isRunning: true })
   }
 
   /**
@@ -437,6 +583,34 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     for (const spellCaster of this.spellMap.get(spellId) || []) {
       spellCaster.stopRunLoop()
     }
+    this.updateSpellState(spellId, { isRunning: false })
+  }
+
+  /**
+   * Kills the spell runner for the given spell id.
+   * Used by the agent to control the spell runner via commands.
+   * @param {string} spellId - Id of the spell.
+   * @example
+   * spellbook.killSpell(spellId);
+   */
+  killSpells() {
+    this.agent.log(`Killing all spells in agent ${this.agent.id}`)
+    this.clearAllSpellCasters()
+    this.resetAllSpellCasterStates()
+  }
+
+  /**
+   * Kills the spell runner for the given spell id.
+   * Used by the agent to control the spell runner via commands.
+   * @param {string} spellId - Id of the spell.
+   * @example
+   * spellbook.killSpell(spellId);
+   */
+  killSpell(data) {
+    const { spellId } = data
+    this.agent.log(`Killing spell ${spellId} in agent ${this.agent.id}`)
+    this.clearSpellCasters(spellId)
+    this.resetSpellCasterStates(spellId)
   }
 
   /**
@@ -444,6 +618,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   onDestroy() {
     this.clear()
+    this.resetAllSpellCasterStates()
     //
     this.app
       .service('spells')
@@ -459,6 +634,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   clear() {
     this.spellMap = new Map()
+    this.stateMap = new Map()
     this.pluginManager.centralEventBus.removeAllListeners()
   }
 }

@@ -9,6 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "sourceMap": true,
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/apps/cloud-agent-manager",
@@ -27,6 +28,7 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
+        "port": 8090,
         "buildTarget": "@magickml/cloud-agent-manager-app:build"
       },
       "configurations": {
@@ -42,7 +44,10 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/server/cloud-agent-manager/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/cloud-agent-manager",
+          "packages/server/cloud-agent-manager/**/*.ts"
+        ]
       }
     },
     "test": {

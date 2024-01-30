@@ -92,6 +92,7 @@ export const rootApi = createApi({
     'SpellReleases',
     'Credentials',
     'Credential',
+    'User',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })

@@ -3,20 +3,20 @@ import { useEffect, useRef, useState } from "react";
 import { Flow } from "../react-flow/Flow";
 
 import { Tab } from "@magickml/providers";
-import { spellApi } from "client/state";
+// import { spellApi } from "client/state";
+import { SpellInterface } from "server/schemas";
 
-const GraphWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+type Props = IDockviewPanelProps<{ tab: Tab, spellId: string }> & {
+  spell: SpellInterface
+}
+
+const GraphWindow = (props: Props) => {
   const parentRef = useRef();
-  const [loadSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
-  const { tab, spellId } = props.params
 
-  useEffect(() => {
-    // If there is no tab, or we already have a spell, return early
-    if (!tab || !tab.name) return
-
-    loadSpell({ id: spellId })
-  }, [tab])
-
+  // const { data: spell } = spellApi.useGetSpellQuery(
+  //   { id: props.params.spellId },
+  //   { skip: !props?.params?.spellId, refetchOnMountOrArgChange: true }
+  // )
 
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
@@ -32,13 +32,13 @@ const GraphWindow = (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) 
     }
   })
 
-  if (!spell) return null
+  if (!props.spell) return null
 
   return (<div style={{ height, width }} ref={parentRef}>
     <Flow
       parentRef={parentRef}
       tab={props.params.tab}
-      spell={spell}
+      spell={props.spell}
     />;
   </div>)
 }

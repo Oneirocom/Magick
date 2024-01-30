@@ -2,15 +2,21 @@ import pino from 'pino'
 import {
   SpellManager,
   SpellRunner,
-  pluginManager,
+  pluginManager as v1PluginManager,
   MagickSpellInput,
+  MagickSpellOutput,
+  type Event,
+} from 'shared/core'
+
+import {
+  AGENT_ERROR,
+  AGENT_WARN,
+  AGENT_PONG,
   AGENT_RUN_RESULT,
   AGENT_RUN_ERROR,
   AGENT_LOG,
   AGENT_RUN_JOB,
-  MagickSpellOutput,
-  type Event,
-} from 'shared/core'
+} from 'communication'
 
 import { getLogger } from 'server/logger'
 
@@ -23,11 +29,18 @@ import {
   BullQueue,
 } from 'server/communication'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
-import { CommandHub } from './CommandHub'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
+import { PluginManager } from 'server/pluginManager'
+import { CommandHub } from 'server/command-hub'
+// import { StateService } from './StateService'
+
+// type AgentData = {
+//   state: {
+
+//   }
 
 /**
  * The Agent class that implements AgentInterface.
@@ -50,8 +63,10 @@ export class Agent implements AgentInterface {
   pubsub: RedisPubSub
   ready = false
   app: Application
+  // stateService: StateService
   spellbook: Spellbook<Agent, Application>
   agentManager: CloudAgentWorker
+  pluginManager: PluginManager
 
   outputTypes: any[] = []
 
@@ -90,26 +105,38 @@ export class Agent implements AgentInterface {
       app,
     })
 
+    this.pluginManager = new PluginManager({
+      pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
+      connection: this.app.get('redis'),
+      agentId: this.id,
+      pubSub: this.app.get('pubsub'),
+      projectId: this.projectId,
+    })
+
+    // @ts-ignore
     this.spellbook = new Spellbook({
       agent: this,
       app,
+      pluginManager: this.pluginManager,
+      commandHub: this.commandHub,
     })
-    ;(async () => {
-      // initialize the plugins
-      await this.initializeV1Plugins()
+    // initialize the plugins
+    this.initializeV1Plugins()
 
-      // initialize the plugin commands
-      this.initializePluginCommands()
+    // initialize the plugin commands
+    this.initializeV1PluginCommands()
 
-      // initialize the core commands
-      // These are used to remotely control the agent
-      this.initializeCoreCommands()
+    // initialize the core commands
+    // These are used to remotely control the agent
+    this.initializeCoreCommands()
 
-      this.initializeSpellbook()
+    this.initializeSpellbook()
 
-      this.logger.info('New agent created: %s | %s', this.name, this.id)
-      this.ready = true
-    })()
+    // initialize the plugin commands
+    this.intializePluginCommands()
+
+    this.logger.info('New agent created: %s | %s', this.name, this.id)
+    this.ready = true
   }
 
   /**
@@ -125,6 +152,14 @@ export class Agent implements AgentInterface {
     this.projectId = data.projectId
     this.rootSpellId = data.rootSpellId as string
     this.logger.info('Updated agent: %s | %s', this.name, this.id)
+  }
+
+  async updateData(data: Record<string, any>) {
+    this.data = {
+      ...this.data,
+      ...data,
+    }
+    await this.app.service('agents').patch(this.id, data)
   }
 
   private async initializeSpellbook() {
@@ -174,7 +209,7 @@ export class Agent implements AgentInterface {
 
     this.spellRunner = await this.spellManager.load(spell)
 
-    const agentStartMethods = pluginManager.getAgentStartMethods()
+    const agentStartMethods = v1PluginManager.getAgentStartMethods()
 
     this.logger.debug('Initializing plugins on agent %s', this.id)
 
@@ -191,14 +226,21 @@ export class Agent implements AgentInterface {
       }
     }
 
-    const outputTypes = pluginManager.getOutputTypes()
+    const outputTypes = v1PluginManager.getOutputTypes()
     this.outputTypes = outputTypes
   }
 
-  private initializePluginCommands() {
-    const pluginCommands = pluginManager.getAgentCommands()
+  private initializeV1PluginCommands() {
+    const pluginCommands = v1PluginManager.getAgentCommands()
     for (const pluginName of Object.keys(pluginCommands)) {
       this.commandHub.registerPlugin(pluginName, pluginCommands[pluginName])
+    }
+  }
+
+  private intializePluginCommands() {
+    const plugins = this.pluginManager.getPlugins()
+    for (const plugin of plugins) {
+      this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
     }
   }
 
@@ -213,20 +255,21 @@ export class Agent implements AgentInterface {
     this.commandHub.registerDomain('agent', 'core', {
       toggleLive: async (data: any) => {
         this.spellManager.toggleLive(data)
-        this.spellbook.toggleLive(data)
       },
-      pauseSpell: async (data: any) => {
-        this.spellbook.pauseSpell(data)
-      },
-      playSpell: async (data: any) => {
-        this.spellbook.playSpell(data)
+      ping: async () => {
+        const isLive = this.spellbook.isLive
+        this.pubsub.publish(AGENT_PONG(this.id), {
+          agentId: this.id,
+          projectId: this.projectId,
+          isLive,
+        })
       },
     })
   }
 
   async removePlugins() {
     this.logger.debug('Removing all plugins on agent %s', this.id)
-    const agentStopMethods = pluginManager.getAgentStopMethods()
+    const agentStopMethods = v1PluginManager.getAgentStopMethods()
     if (agentStopMethods)
       for (const method of Object.keys(agentStopMethods)) {
         await agentStopMethods[method]({
@@ -235,14 +278,6 @@ export class Agent implements AgentInterface {
           spellRunner: this.spellRunner,
         })
       }
-  }
-
-  /**
-   * Clean up resources when the instance is destroyed.
-   */
-  async onDestroy() {
-    await this.removePlugins()
-    this.log('destroyed agent', { id: this.id })
   }
 
   trackEvent(
@@ -286,7 +321,7 @@ export class Agent implements AgentInterface {
 
   warn(message, data = {}) {
     this.logger.warn(data, `${message} ${JSON.stringify(data)}`)
-    this.publishEvent(AGENT_LOG(this.id), {
+    this.publishEvent(AGENT_WARN(this.id), {
       agentId: this.id,
       projectId: this.projectId,
       type: 'warn',
@@ -297,12 +332,12 @@ export class Agent implements AgentInterface {
 
   error(message, data = {}) {
     this.logger.error(data, `${message}`)
-    this.publishEvent(AGENT_LOG(this.id), {
+    this.publishEvent(AGENT_ERROR(this.id), {
       agentId: this.id,
       projectId: this.projectId,
       type: 'error',
       message,
-      data: { error: data },
+      data,
     })
   }
 
@@ -412,6 +447,20 @@ export class Agent implements AgentInterface {
 
     if (job.data.version === 'v1') this.runV1Job(job)
     if (job.data.version === 'v2') this.runV2Job(job)
+  }
+
+  /**
+   * Clean up resources when the instance is destroyed.
+   */
+  async onDestroy() {
+    await this.removePlugins()
+    await this.spellbook.onDestroy()
+    await this.pluginManager.onDestroy()
+    await this.worker.close()
+    await this.messageQueue.close()
+    await this.commandHub.onDestroy()
+
+    this.log('destroyed agent', { id: this.id })
   }
 }
 

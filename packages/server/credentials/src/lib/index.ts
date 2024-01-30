@@ -8,7 +8,7 @@ import { encrypt, decrypt } from './shared'
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: DATABASE_URL,
+    connectionString: DATABASE_URL || '',
   },
   useNullAsDefault: true,
 })

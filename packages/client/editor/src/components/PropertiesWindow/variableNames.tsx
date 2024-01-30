@@ -1,6 +1,6 @@
 import { cx } from "class-variance-authority";
 import { ConfigurationComponentProps } from "./PropertiesWindow";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { VariableJSON } from "@magickml/behave-graph";
 import { useReactFlow } from "reactflow";
 
@@ -8,16 +8,10 @@ const inputClass = cx(
   'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-md justify-start flex',
 );
 
-export const VariableNames = ({ spell, fullConfig, updateConfigKeys }: ConfigurationComponentProps) => {
+export const VariableNames = ({ spell, fullConfig, updateConfigKeys, node }: ConfigurationComponentProps) => {
   const { variableId, socketInputs, socketOutputs } = fullConfig
   const [selectedVariable, setSelectedVariable] = useState<VariableJSON>(null)
   const reactFlow = useReactFlow()
-
-  const setEdges = useCallback((edges) => {
-    const filtered = edges.filter(edge => edge.sourceHandle !== selectedVariable?.name && edge.targetHandle !== selectedVariable?.name)
-
-    return filtered
-  }, [selectedVariable])
 
   useEffect(() => {
     if (!spell && !fullConfig) return
@@ -30,7 +24,9 @@ export const VariableNames = ({ spell, fullConfig, updateConfigKeys }: Configura
   const updateValue = (value) => {
     const variable = spell.graph.variables.find(variable => variable.id === value) as VariableJSON
 
-    reactFlow.setEdges(setEdges)
+    reactFlow.setEdges((edges) => {
+      return edges.filter((edge) => (edge.source !== node.id && edge.target !== node.id) || edge.targetHandle === 'flow')
+    })
 
     setSelectedVariable(variable)
   }
@@ -64,7 +60,9 @@ export const VariableNames = ({ spell, fullConfig, updateConfigKeys }: Configura
 
   return (
     <div>
+      <label htmlFor="variable">Select a variable</label>
       <select
+        name="variable"
         className={inputClass}
         value={selectedVariable?.id || 'default'}
         onChange={(e) => updateValue(e.currentTarget.value)}

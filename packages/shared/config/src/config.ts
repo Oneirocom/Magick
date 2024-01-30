@@ -27,8 +27,7 @@ function getVarForEnvironment(env: string): string | undefined {
 }
 
 // Define and export constants from environment variables
-export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
-export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
+
 export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const DEFAULT_PROJECT_ID =
@@ -51,7 +50,8 @@ export const SPEECH_SERVER_URL =
   getVarForEnvironment('SPEECH_SERVER_URL') || 'http://localhost:65532'
 export const TRUSTED_PARENT_URL =
   getVarForEnvironment('TRUSTED_PARENT_URL') || 'https://localhost:3000'
-export const PORTAL_URL = 'https://localhost:3000'
+export const PORTAL_URL =
+  getVarForEnvironment('PORTAL_URL') || 'http://localhost:3000'
 export const API_ROOT_URL =
   getVarForEnvironment('API_URL') || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
@@ -78,8 +78,8 @@ export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 export const REDISCLOUD_HOST = getVarForEnvironment('REDISCLOUD_HOST') || ''
 export const REDISCLOUD_PORT =
   Number(getVarForEnvironment('REDISCLOUD_PORT')) || 6379
-export const REDISCLOUD_URL =
-  getVarForEnvironment('REDISCLOUD_URL') ||
+export const REDIS_URL =
+  getVarForEnvironment('REDIS_URL') ||
   `redis://${REDISCLOUD_HOST}:${REDISCLOUD_PORT}`
 
 export const REDISCLOUD_DB = Number(getVarForEnvironment('REDISCLOUD_DB')) || 0
@@ -166,3 +166,15 @@ export const OPENMETER = {
   token: getVarForEnvironment('OPENMETER_TOKEN') || '',
   source: getVarForEnvironment('OPENMETER_SOURCE') || 'cloud-dev',
 }
+
+export const PLUGIN_SETTINGS = {
+  SLACK_DEVELOPER_MODE: getVarForEnvironment('SLACK_DEVELOPER_MODE') === 'true',
+}
+
+export const MAGICK_OPENAI_API_KEY = getVarForEnvironment('OPENAI_API_KEY')
+export const MAGICK_GEMINI_API_KEY = getVarForEnvironment('GEMINI_API_KEY')
+export const MAGICK_PALM_API_KEY = getVarForEnvironment('PALM_API_KEY')
+export const MAGICK_TOGETHERAI_API_KEY =
+  getVarForEnvironment('TOGETHERAI_API_KEY')
+export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
+export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')

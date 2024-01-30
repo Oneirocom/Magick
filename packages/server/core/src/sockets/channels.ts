@@ -1,7 +1,7 @@
 // DOCUMENTED
 import '@feathersjs/transport-commons'
 import { Application } from '../declarations'
-import { RealTimeConnection } from '@feathersjs/transport-commons'
+import { Channel, RealTimeConnection } from '@feathersjs/transport-commons'
 
 /**
  * Configure channels for real-time functionality.
@@ -68,12 +68,15 @@ export default function (app: Application): void {
     // get the user from the context
     if (app.get('environment') !== 'server') return
 
+    const channels = [] as Channel[]
+
     const sessionId =
       context.params?.sessionId ||
       data.sessionId ||
       data.originalData?.sessionId
     // Session IDs are used when we are running a spell in a session
     // Currently this is only used for the cloud web client
+    // DEPIRECATED in favor of channelType/channel in data
     if (sessionId) {
       // conly send the right events up the right channel
       logger.trace(`CHANNELS: Publishing to session ${sessionId}!`)
@@ -83,21 +86,28 @@ export default function (app: Application): void {
 
       // Publish all events to the authenticated user channel
       const channel = app.channel(sessionId)
-      return channel
+      channels.push(channel)
     }
 
+    // if the channel type is a session, we are running a spell in a session
+    // Which mean sthe channel is a session ID we can broadcast to.
+    if (data?.event?.channelType === 'session') {
+      const channel = app.channel(data.event.channel)
+      channels.push(channel)
+    }
+
+    // Now we need to check for the agent and broadcast to the agent channel
     const agentId =
       context.params?.agentId ||
       context.result.agentId ||
       context.data?.agentId ||
       data.agentId
 
-    // Lets not relay up all the patch events
-    // if (context.method === 'patch' || !agentId) return
+    if (agentId) {
+      const agentChannel = app.channel(`agent:${agentId}`)
+      channels.push(agentChannel)
+    }
 
-    // Publish all events to the authenticated user channel
-    // const projectChannel = app.channel(projectId)
-    const agentChannel = app.channel(`agent:${agentId}`)
-    return agentChannel
+    return channels
   })
 }

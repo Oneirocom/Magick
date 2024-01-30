@@ -76,6 +76,7 @@ export const agentSchema = Type.Object(
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
     ),
+    embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
   },
@@ -138,7 +139,7 @@ export const spellReleaseSchema = Type.Object(
 )
 
 /** The type for an agent object that's based on the `agentSchema`. */
-export type SpellReleaseSchema = Static<typeof spellSchema>
+export type SpellReleaseSchema = Static<typeof spellReleaseSchema>
 /** The interface for an agent object that's based on the `agentSchema`. */
 export type SpellReleaseInterface = SpellReleaseSchema
 
@@ -192,3 +193,23 @@ export const budgetSchema = Type.Object(
   },
   { $id: 'Budget' }
 )
+
+export const userSchema = Type.Object(
+  {
+    id: Type.String(),
+    email: Type.String(),
+    name: Type.Optional(Type.String()),
+    balance: Type.Number(),
+    hasSubscription: Type.Boolean(),
+    subscriptionName: Type.Optional(Type.String()),
+    projectId: Type.Optional(Type.String()),
+  },
+  {
+    $id: 'User',
+  }
+)
+
+/** The type for an agent object that's based on the `agentSchema`. */
+export type UserSchema = Static<typeof userSchema>
+/** The interface for an agent object that's based on the `agentSchema`. */
+export type UserInterface = UserSchema

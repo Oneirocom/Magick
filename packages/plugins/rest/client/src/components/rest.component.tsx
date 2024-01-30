@@ -2,7 +2,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import { Modal, Switch } from 'client/core'
-import md5 from 'md5'
 import { Button, Input } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
@@ -44,7 +43,7 @@ const fetchDeleteExample = (selectedAgentData, content) => `
     });
 `
 
-const fetchPutExample = (selectedAgentData, content) => `
+const fetchPutExample = (selectedAgentData) => `
     fetch("${removeTrailingSlash(API_ROOT_URL)}/api/${selectedAgentData.id}", {
     method: 'PUT',
     headers: {
@@ -60,7 +59,7 @@ const fetchPutExample = (selectedAgentData, content) => `
     });
 `
 
-const fetchPostExample = (selectedAgentData, content) => `
+const fetchPostExample = (selectedAgentData) => `
     fetch("${removeTrailingSlash(API_ROOT_URL)}/api", {
     method: 'POST',
     headers: {
@@ -91,7 +90,7 @@ export const RestAgentWindow: FC<any> = props => {
   const [showDeleteExample, setShowDeleteExample] = useState(false)
   const [viewMode, setViewMode] = useState<boolean>(false)
   const [checked, setChecked] = useState(selectedAgentData.data?.rest_enabled)
-  const [disable, setDisable] = useState(false)
+  const [, setDisable] = useState(false)
 
   const handleClose = () => {
     setViewMode(false)
@@ -299,14 +298,13 @@ export const RestAgentWindow: FC<any> = props => {
                     </span>
                     <Input
                       value={fetchPostExample(
-                        selectedAgentData,
-                        'Hello, World'
+                        selectedAgentData
                       )}
                       readOnly
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          fetchPostExample(selectedAgentData, 'Hello, World')
+                          fetchPostExample(selectedAgentData)
                         )
                       }}
                       className="modal-element"
@@ -349,12 +347,12 @@ export const RestAgentWindow: FC<any> = props => {
                       Fetch
                     </span>
                     <Input
-                      value={fetchPutExample(selectedAgentData, 'Hello, World')}
+                      value={fetchPutExample(selectedAgentData)}
                       readOnly
                       onClick={() => {
                         // copy the value of the input
                         navigator.clipboard.writeText(
-                          fetchPutExample(selectedAgentData, 'Hello, World')
+                          fetchPutExample(selectedAgentData)
                         )
                       }}
                       className="modal-element"

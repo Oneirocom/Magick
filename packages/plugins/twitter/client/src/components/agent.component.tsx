@@ -12,7 +12,7 @@ export const TwitterAgentWindow: FC<any> = props => {
   const [checked, setChecked] = useState(
     selectedAgentData.data?.twitter_enabled
   )
-  const [disable, setDisable] = useState(false)
+  const [, setDisable] = useState(false)
 
   useEffect(() => {
     if (props.enable['TwitterPlugin'] == false) {

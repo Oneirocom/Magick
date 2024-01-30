@@ -49,7 +49,17 @@ function removeUnwantedProperties(obj: any, keysToRemove: string[]): any {
   return result
 }
 
-const AGENT_EVENTS = ['log', 'result', 'spell', 'run', 'command', 'event']
+const AGENT_EVENTS = [
+  'log',
+  'result',
+  'spell',
+  'run',
+  'command',
+  'event',
+  'error',
+  'warn',
+  'pong',
+]
 
 /**
  * Configure the agent service by registering it, its hooks, and its options.
@@ -102,23 +112,27 @@ export const agent = (app: Application) => {
   // Only subscribe on the main server not any workers.
   if (app.get('environment') === 'server')
     pubSub.patternSubscribe('agent*', (message, channel) => {
-      // parse  the channel from agent:agentId:messageType
+      // parse  the channel from agent:agentId:domain:messageType
       const agentId = channel.split(':')[1]
+
+      // parse the domain of the agent message
+      const domain = channel.split(':')[2]
 
       // parse the type of agent message
       const messageType = channel.split(':')[3]
 
+      // check the domain
+      if (domain !== 'server') return
+
       // check if message type is an agent event
       if (!AGENT_EVENTS.includes(messageType)) {
-        // notify connected clients via log message that an unknown message type was received
-        app.service('agents').emit('log', {
-          channel,
-          agentId,
-          timestamp: new Date().toISOString(),
-          data: {
-            message: `Unknown message type ${messageType}`,
-          },
-        })
+        console.log('AGENT SERVICE: Skipping message', message, channel)
+        app
+          .get('logger')
+          .trace(
+            `AGENT SERVICE: Skipping message ${message} on channel ${channel}`
+          )
+        return
       }
 
       // remove unwanted properties from the message

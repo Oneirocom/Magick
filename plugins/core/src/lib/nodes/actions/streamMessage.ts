@@ -1,6 +1,7 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { CoreActionService } from '../../services/coreActionService'
 import { IEventStore } from 'server/grimoire'
+import { CORE_DEP_KEYS } from '../../constants'
 
 export const streamMessage = makeFlowNodeDefinition({
   typeName: 'magick/streamMessage',
@@ -15,9 +16,10 @@ export const streamMessage = makeFlowNodeDefinition({
   },
   initialState: undefined,
   triggered: ({ commit, read, graph: { getDependency } }) => {
-    const coreActionService =
-      getDependency<CoreActionService>('coreActionService')
-    const eventStore = getDependency<IEventStore>('IEventStore')
+    const coreActionService = getDependency<CoreActionService>(
+      CORE_DEP_KEYS.ACTION_SERVICE
+    )
+    const eventStore = getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
 
     if (!coreActionService || !eventStore) {
       throw new Error('No coreActionService or eventStore provided')

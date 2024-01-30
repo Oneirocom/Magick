@@ -11,8 +11,10 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
+import { saveGraphEvent } from 'shared/core'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
-import { MeterManager } from 'packages/server/meter/src'
+// import { MeterManager } from 'packages/server/meter/src'
+// import { PluginStateManager } from 'packages/server/pluginState/src'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -64,7 +66,7 @@ export type EventFormat<
 }
 
 export type EventPayload<
-  T = Record<string, unknown>,
+  T = Record<string, unknown> | Object,
   Y = Record<string, unknown>
 > = {
   connector: string
@@ -91,6 +93,18 @@ export type EventPayload<
   metadata: Y
 }
 
+export type PluginCommand = {
+  commandName: string
+  displayName: string
+  handler: (enable: boolean) => void
+}
+
+export interface BasePluginInit {
+  name: string
+  agentId: string
+  connection: Redis
+  projectId: string
+}
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
  * within the system. It encapsulates common functionalities and structures that
@@ -167,20 +181,28 @@ export abstract class BasePlugin<
   >,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
-  Metadata = Record<string, unknown>
+  Metadata = Record<string, unknown>,
+  //TODO: should this be getting passed in anywhere?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  State extends object = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
+  protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
   protected credentialsManager!: CredentialsManager
+  // protected pluginStateManager!: PluginStateManager<State>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
+  protected projectId: string
+
   public connection: Redis
   public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
+  private updateDependencyHandler?: (key: string, dependency: any) => void
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -210,13 +232,20 @@ export abstract class BasePlugin<
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor(name: string, connection: Redis, agentId: string) {
+  constructor({ name, agentId, connection, projectId }: BasePluginInit) {
     super({ name })
+
     this.agentId = agentId
+    this.projectId = projectId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
+    this.commands = []
     this.credentialsManager = new CredentialsManager()
+    // this.pluginStateManager = new PluginStateManager<State>(
+    //   this.agentId,
+    //   this.name
+    // )
   }
 
   /**
@@ -229,6 +258,21 @@ export abstract class BasePlugin<
     this.initializeFunctionalities()
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
+    this.initializeBaseCommands()
+  }
+
+  initializeBaseCommands() {
+    this.registerCommand({
+      commandName: 'enable',
+      displayName: 'Enable',
+      handler: this.handleEnableCommand.bind(this),
+    })
+
+    this.registerCommand({
+      commandName: 'disable',
+      displayName: 'Disable',
+      handler: this.handleEnableCommand.bind(this),
+    })
   }
 
   /**
@@ -244,6 +288,17 @@ export abstract class BasePlugin<
         )
         this.centralEventBus.emit(this.eventQueueName, payload)
         // await this.eventQueue.addJob(event.eventName, payload)
+
+        saveGraphEvent({
+          sender: payload.sender,
+          observer: payload.agentId,
+          agentId: payload.agentId,
+          connector: payload.connector,
+          connectorData: JSON.stringify(payload.data),
+          content: payload.content,
+          eventType: payload.eventName,
+          event: payload,
+        })
       })
     })
   }
@@ -253,6 +308,34 @@ export abstract class BasePlugin<
    */
   mapActionsToEventBus() {
     this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
+  }
+
+  /**
+   * Handles an action from the action queue.
+   * @param job The job to handle.
+   */
+  protected async handleAction(data: ActionPayload) {
+    this.logger.trace(`Handling action ${data.actionName}`)
+    const action = this.actions.find(
+      action => action.actionName === data.actionName
+    )
+    if (!action) return
+    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
+    await action.handler(data as ActionPayload)
+
+    // const { actionName, event } = data
+    saveGraphEvent({
+      sender: data.event.agentId,
+      // we are assuming here that the observer of this action is the
+      //  original sender.  We may be wrong.
+      observer: data.event.sender,
+      agentId: data.event.agentId,
+      connector: data.event.connector,
+      connectorData: JSON.stringify(data.event.data),
+      content: data.event.content,
+      eventType: data.event.eventName,
+      event: data.event as EventPayload,
+    })
   }
 
   /**
@@ -285,20 +368,6 @@ export abstract class BasePlugin<
       ])
     )
   })
-
-  /**
-   * Handles an action from the action queue.
-   * @param job The job to handle.
-   */
-  protected async handleAction(data: ActionPayload) {
-    this.logger.trace(`Handling action ${data.actionName}`)
-    const action = this.actions.find(
-      action => action.actionName === data.actionName
-    )
-    if (!action) return
-    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
-    await action.handler(data as ActionPayload)
-  }
 
   /**
    * Emits an event with the given name and payload.
@@ -341,6 +410,19 @@ export abstract class BasePlugin<
       values: { ...existingRegistry.values, ...pluginValues },
       nodes: { ...existingRegistry.nodes, ...pluginNodes },
       dependencies: { ...existingRegistry.dependencies, ...pluginDependencies },
+    }
+
+    return await this.provideRegistry(registry)
+  }
+
+  async getRegistryForNodeSpec(existingRegistry: IRegistry) {
+    const pluginValues = await this.getPluginValues()
+    const pluginNodes = await this.getPluginNodes()
+    // // return a registry that has empty dependencies
+    const registry = {
+      values: { ...existingRegistry.values, ...pluginValues },
+      nodes: { ...existingRegistry.nodes, ...pluginNodes },
+      dependencies: {},
     }
 
     return await this.provideRegistry(registry)
@@ -506,6 +588,91 @@ export abstract class BasePlugin<
    */
   setCredentials(newCredentials: PluginCredential[]) {
     this.credentials = newCredentials
+  }
+
+  /**
+   * Sets the handler function for updating dependencies in the spell caster.
+   * @param handler The dependency update handler function.
+   */
+  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
+    this.updateDependencyHandler = handler
+  }
+
+  /**
+   * Requests an update of a dependency in the spell caster.
+   * @param key The key of the dependency to update.
+   * @param dependency The new dependency object.
+   */
+  updateDependency(key: string, dependency: any) {
+    if (this.updateDependencyHandler) {
+      this.updateDependencyHandler(key, dependency)
+    } else {
+      throw new Error('Dependency update handler is not set.')
+    }
+  }
+
+  /**
+   * Registers a command with the plugin.
+   * @param command The command definition to register.
+   * @example
+   * this.registerCommand({
+   *   commandName: 'enable',
+   *   displayName: 'Enable',
+   *   handler: this.handleEnableCommand.bind(this)
+   * });
+   */
+  registerCommand(command: PluginCommand) {
+    this.commands.push(command)
+  }
+
+  /**
+   * Returns the list of registered commands.
+   * @returns An array of PluginCommand objects.
+   * @example
+   * const commands = this.getCommands();
+   */
+  getCommands(): Record<string, PluginCommand['handler']> {
+    // reduce over command array to make object iof name and handler
+    return this.commands.reduce((acc, command) => {
+      acc[command.commandName] = command.handler
+      return acc
+    }, {} as Record<string, PluginCommand['handler']>)
+  }
+
+  /**
+   * Method to handle enable/disable commands for the plugin.
+   * @param enable - Boolean indicating whether to enable or disable the plugin.
+   */
+  handleEnableCommand(enable: boolean): void {
+    if (enable) {
+      this.activate()
+    } else {
+      this.deactivate()
+    }
+  }
+
+  // /**
+  //  * Method to get the current status of the plugin.
+  //  * @returns The status of the plugin (enabled/disabled).
+  //  */
+  // getStatus(): boolean {
+  //   return this.enabled
+  // }
+
+  async getCredential(
+    name: string,
+    serviceType?: string | undefined
+  ): Promise<string | undefined> {
+    try {
+      return await this.credentialsManager.retrieveAgentCredentials(
+        this.agentId,
+        name,
+        serviceType
+      )
+    } catch (error) {
+      this.logger.error(`Error retrieving credential '${name}': ${error}`)
+      return
+    }
   }
 }
 

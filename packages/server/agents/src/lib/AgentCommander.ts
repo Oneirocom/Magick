@@ -9,7 +9,7 @@ import {
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
   AGENT_MESSAGE,
-} from 'shared/core'
+} from 'communication'
 import { getLogger } from 'server/logger'
 import type { MagickSpellInput } from 'shared/core'
 import { v4 as uuidv4 } from 'uuid'
@@ -206,12 +206,6 @@ export class AgentCommander extends EventEmitter {
 
     if (!event) throw new Error('Agent ID or project ID is required')
 
-    this.logger.debug(
-      `AgentCommander sending event ${event} to agent ${agentId} with data ${JSON.stringify(
-        data
-      )}`
-    )
-
     const jobId = uuidv4()
     await this.pubSub.publish(
       event,
@@ -235,6 +229,22 @@ export class AgentCommander extends EventEmitter {
       `Sending message ${AGENT_MESSAGE(agentId)} to agent ${agentId} `
     )
     this.pubSub.publish(AGENT_MESSAGE(agentId), eventPayload)
+  }
+
+  ping(agentId: string) {
+    this.command({
+      agentId,
+      command: `agent:core:ping`,
+      data: {},
+    })
+  }
+
+  syncState(agentId: string) {
+    this.command({
+      agentId,
+      command: `agent:spellbook:syncState`,
+      data: {},
+    })
   }
 
   async removeAgent(agentId: string) {
