@@ -449,13 +449,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       `SpellCaster: Setting run info for ${eventName} to spell ${this.spell.id}`
     )
 
-    // we set the current event in the event store for access in the state
-    const eventStore = this.graph.getDependency<IEventStore>(
-      CORE_DEP_KEYS.EVENT_STORE
-    )
-
-    if (eventStore) eventStore.setEvent(payload)
-
     // we emit the event to the dependency which will commit the event to the engine
     eventEmitter.emit(eventName, payload)
 
