@@ -32,6 +32,8 @@ export const getAvailableModelsForProvider = provider => {
   switch (provider) {
     case LLMProviders.OpenAI:
       return allOpenAICompletionModelsArray
+    case LLMProviders.CustomOpenAI:
+      return allOpenAICompletionModelsArray
     case LLMProviders.GoogleAIStudio:
       return googleAIStudioModelsArray
     case LLMProviders.TogetherAI:

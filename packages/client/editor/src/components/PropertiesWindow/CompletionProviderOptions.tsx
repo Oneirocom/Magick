@@ -11,6 +11,7 @@ import { getAvailableModelsForProvider } from "plugins/core/src/lib/services/cor
 import { useListCredentialsQuery } from "client/state";
 import { useGetUserQuery } from "client/state";
 import { SubscriptionNames } from "plugins/core/src/lib/services/userService/types";
+import { LLMProviders } from "plugins/core/src/lib/services/coreLLMService/types/providerTypes";
 
 
 export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
@@ -20,6 +21,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
   const [filteredModels, setFilteredModels] = useState<CompletionModels[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState([])
   const [filteredProviders, setFilteredProviders] = useState<ActiveProviders[]>([])
+  const [openAIAPIBase, setOpenAIAPIBase] = useState('');
 
   const config = useConfig()
   const { data: credentials } = useListCredentialsQuery({
@@ -88,6 +90,11 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     props.updateConfigKey("model", model);
   };
 
+  const handleCustomOpenAIChange = (e) => {
+    const value = e.target.value;
+    setOpenAIAPIBase(value);
+    props.updateConfigKey("customBaseUrl", value);
+  };
 
   const renderProviderOptions = () => {
     return activeProviders.map((provider) => {
@@ -111,6 +118,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     });
   };
 
+  const isCustomOpenAISelected = selectedProvider === LLMProviders.CustomOpenAI;
 
   return (
     <div>
@@ -124,16 +132,29 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
           {renderProviderOptions()}
         </select>
       </div>
-      <br />
-      <h3>Model</h3>
-      <div className="flex flex-col mt-1">
-        <select
-          className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
-          value={selectedModel}
-          onChange={(e) => onModelChange(e.target.value as CompletionModels)}
-        >
-          {renderModelOptions()}
-        </select>
+      {isCustomOpenAISelected && (
+        <div className="mt-4">
+          <h3>Custom API URL</h3>
+          <input
+            type="text"
+            id="customOpenAI"
+            className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
+            value={openAIAPIBase}
+            onChange={handleCustomOpenAIChange}
+          />
+        </div>
+      )}
+      <div className="mt-4">
+        <h3>Model</h3>
+        <div className="flex flex-col mt-1">
+          <select
+            className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
+            value={selectedModel}
+            onChange={(e) => onModelChange(e.target.value as CompletionModels)}
+          >
+            {renderModelOptions()}
+          </select>
+        </div>
       </div>
     </div>
   );
