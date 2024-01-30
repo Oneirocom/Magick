@@ -19,7 +19,6 @@ const providerKeyMap = {
   [LLMProviderKeys.Baseten]: LLMProviders.Baseten,
   [LLMProviderKeys.OpenRouter]: LLMProviders.OpenRouter,
   [LLMProviderKeys.CustomAPI]: LLMProviders.CustomAPI,
-  [LLMProviderKeys.CustomOpenAI]: LLMProviders.CustomOpenAI,
   [LLMProviderKeys.Petals]: LLMProviders.Petals,
   [LLMProviderKeys.Ollama]: LLMProviders.Ollama,
   [LLMProviderKeys.GoogleAIStudio]: LLMProviders.GoogleAIStudio,
