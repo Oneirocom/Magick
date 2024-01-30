@@ -31,8 +31,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     projectId: config.projectId,
   })
 
-
-
   useEffect(() => {
     if (credentials) {
       const creds = credentials.map(cred => cred.name);
@@ -47,7 +45,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
 
       let filteredProviders
 
-      if (!hasSubscription) {
+      if (hasSubscription) {
         const userSubscriptionName = String(userData.user.subscriptionName || '').trim();
         const wizard = String(SubscriptionNames.Wizard).trim();
         const apprentice = String(SubscriptionNames.Apprentice).trim();
@@ -62,7 +60,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
         }
         setFilteredProviders(filteredProviders);
       } else {
-
         const budget = userData.user.balance
         if (budget > 0) {
           filteredProviders = activeProviders
