@@ -1,6 +1,6 @@
 import { python } from 'pythonia'
 
-import { UserService } from '../userService/userService'
+import { CoreUserService } from '../userService/coreUserService'
 import {
   BudgetDuration,
   IBudgetManagerService,
@@ -15,11 +15,11 @@ import { Message } from '../coreLLMService/types/messageTypes'
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
 
-  protected userService: UserService
+  protected userService: CoreUserService
   projectId: string
 
   constructor(projectId: string) {
-    this.userService = new UserService({ projectId })
+    this.userService = new CoreUserService({ projectId })
     this.projectId = projectId
   }
   async initialize() {

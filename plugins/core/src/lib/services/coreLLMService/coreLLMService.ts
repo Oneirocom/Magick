@@ -7,7 +7,7 @@ import {
   ICoreLLMService,
 } from '../types'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
-import { UserService } from '../userService/userService'
+import { CoreUserService } from '../userService/coreUserService'
 import { saveRequest } from 'shared/core'
 import { findProviderKey, findProviderName } from './findProvider'
 import { LLMCredential } from './types/providerTypes'
@@ -27,12 +27,12 @@ export class CoreLLMService implements ICoreLLMService {
   protected credentials: LLMCredential[] = []
   protected projectId: string
   protected agentId: string
-  protected userService: UserService
+  protected userService: CoreUserService
 
   constructor({ projectId, agentId }: ConstructorParams) {
     this.projectId = projectId
     this.agentId = agentId || ''
-    this.userService = new UserService({ projectId })
+    this.userService = new CoreUserService({ projectId })
   }
   async initialize() {
     try {
@@ -185,11 +185,4 @@ export class CoreLLMService implements ICoreLLMService {
     }
     return credential
   }
-
-  // getProvidersWithCredentials(): LLMProviders[] {
-  //   const credentialsArray = this.credentials
-  //   const credentials = credentialsArray.map(cred => cred.name) as any
-  //   const providers = getProvidersWithUserKeys(credentials)
-  //   return providers
-  // }
 }
