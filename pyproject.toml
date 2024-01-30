@@ -16,6 +16,8 @@ bs4 = "^0.0.2"
 # html5lib = "^1.1"
 # lxml = "^5.1.0"
 litellm = "^1.19.2"
+google-generativeai = "^0.3.2"
+google-cloud-aiplatform = "^1.40.0"
 
 [tool.poetry.dev-dependencies]
 #litellm = { path = "./pythonPackages/liteLLM", develop = true }
