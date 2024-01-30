@@ -119,7 +119,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   mainRegistry!: IRegistry
 
   get isLive() {
-    return this.watchSpells
+    return this.watchSpells && this.spellMap.size > 0
   }
 
   get initialState() {
@@ -443,7 +443,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         initialState,
       })
 
-      await spellCaster.initialize(spell)
+      spellCaster.initialize(spell)
 
       const spellCasterList = this.spellMap.get(spell.id)
       if (spellCasterList) {
