@@ -27,6 +27,7 @@ export const events: PubSubEvents = {
   SEND_COMMAND: 'sendCommand',
   MESSAGE_AGENT: 'messageAgent',
   TOGGLE_FILE_DRAWER: 'toggleFileDrawer',
+  RESET_NODE_STATE: 'resetNodeState',
   $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
   $PLAYTEST_INPUT: tabId => `playtestInput:${tabId}`,

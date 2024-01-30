@@ -22,6 +22,8 @@ export const StatusBar = () => {
       command: 'agent:spellbook:killSpells'
     })
 
+    publish(events.RESET_NODE_STATE)
+
     enqueueSnackbar('All spells stopped.  Send an event to start them again.', {
       variant: 'success'
     })
@@ -31,6 +33,8 @@ export const StatusBar = () => {
     publish(events.SEND_COMMAND, {
       command: 'agent:spellbook:refreshSpells'
     })
+
+    publish(events.RESET_NODE_STATE)
 
     enqueueSnackbar('All spells refreshed.', {
       variant: 'success'
@@ -83,7 +87,7 @@ export const StatusBar = () => {
       <VerticalDivider />
 
       <div className="flex flex-grow justify-end">
-        <Button className="h-7 mr-4" variant="secondary" onClick={onRefresh}>Refresh</Button>
+        <Button className="h-7 mr-4" variant="secondary" onClick={onRefresh}>Reset</Button>
         <Button className="h-7" variant="destructive" onClick={onKill}>Kill</Button>
       </div>
     </div>

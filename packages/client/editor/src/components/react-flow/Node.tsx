@@ -13,7 +13,7 @@ import { getConfig } from '../../utils/getNodeConfig.js';
 import { configureSockets } from '../../utils/configureSockets.js';
 import { enqueueSnackbar } from 'notistack';
 import { debounce } from 'lodash';
-import { Tab } from '@magickml/providers';
+import { Tab, usePubSub } from '@magickml/providers';
 
 type NodeProps = FlowNodeProps & {
   tab: Tab;
@@ -33,6 +33,7 @@ export const Node: React.FC<NodeProps> = ({
   spell,
   nodeJSON,
 }: NodeProps) => {
+  const { events, subscribe } = usePubSub()
   const updateNodeInternals = useUpdateNodeInternals();
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const [endEventName, setEndEventName] = useState<string | null>(null)
@@ -47,6 +48,19 @@ export const Node: React.FC<NodeProps> = ({
   const [error, setError] = useState(false)
   const edges = useEdges();
   const handleChange = useChangeNodeData(id);
+
+  // Hook into to event to reset node states and stop animations
+  useEffect(() => {
+    const unsubscribe = subscribe(events.RESET_NODE_STATE, (event) => {
+      setRunning(false)
+      setDone(false)
+      setError(false)
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
   const DELAY = 3000
 
