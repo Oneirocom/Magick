@@ -39,9 +39,19 @@ export const generateText = makeFlowNodeDefinition({
       //TODO: default to google when ready
       defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
     },
+    customBaseUrl: {
+      valueType: 'string',
+      defaultValue: '',
+    },
     hiddenProperties: {
       valueType: 'string',
-      defaultValue: ['hiddenProperties', 'modelProvider', 'model', 'models'],
+      defaultValue: [
+        'hiddenProperties',
+        'modelProvider',
+        'model',
+        'models',
+        'customBaseUrl',
+      ],
     },
   },
   in: {
@@ -117,6 +127,7 @@ export const generateText = makeFlowNodeDefinition({
         const top_p: number = read('top_p') || 1
         const maxRetries: number = read('maxRetries') || 1
         const stop: string = read('stop') || ''
+        const customBaseUrl: string = configuration.customBaseUrl || ''
 
         const request = {
           model,
@@ -125,6 +136,7 @@ export const generateText = makeFlowNodeDefinition({
             temperature,
             top_p,
             stop,
+            base_url: customBaseUrl || undefined,
           },
         }
 

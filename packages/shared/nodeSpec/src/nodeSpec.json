@@ -193,6 +193,7 @@
         "valueType": "array",
         "defaultValue": [
           "openai",
+          "custom_openai",
           "together",
           "google",
           "palm"
@@ -366,13 +367,19 @@
         "defaultValue": "gpt-3.5-turbo"
       },
       {
+        "name": "customBaseUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
         "name": "hiddenProperties",
         "valueType": "string",
         "defaultValue": [
           "hiddenProperties",
           "modelProvider",
           "model",
-          "models"
+          "models",
+          "customBaseUrl"
         ]
       }
     ]
