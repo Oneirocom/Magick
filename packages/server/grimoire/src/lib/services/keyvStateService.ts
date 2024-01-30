@@ -1,11 +1,10 @@
-import { GraphNodes, IGraph, IStateService } from '@magickml/behave-graph'
+import { GraphNodes, IStateService } from '@magickml/behave-graph'
 import Keyv from 'keyv'
 import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 
 import { IEventStore } from './eventStore'
 import { EventPayload } from 'server/plugin'
-import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 
 /**
  * @class KeyvStateService
@@ -94,8 +93,8 @@ export class KeyvStateService implements IStateService {
    * @example
    * stateService.init(graph, graphNodes);
    */
-  init(graph: IGraph) {
-    this.eventStore = graph.getDependency(CORE_DEP_KEYS.EVENT_STORE)
+  init(eventStore: IEventStore) {
+    this.eventStore = eventStore
   }
 
   /**
@@ -185,8 +184,8 @@ export class KeyvStateService implements IStateService {
    * persistent layer. Effective caching is crucial for high-performance applications.
    */
   getState(nodeId: string): any {
-    // check first if the key is in the local store
-    if (this.tempStateCache[nodeId]) {
+    // check first if the key is in the local store. Since this value can be boolean, we need to check for undefined
+    if (this.tempStateCache[nodeId] !== undefined) {
       return this.tempStateCache[nodeId]
     }
   }
