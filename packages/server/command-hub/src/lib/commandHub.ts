@@ -168,6 +168,35 @@ export class CommandHub {
   }
 
   /**
+   * Cleans up resources and performs necessary teardown tasks before destroying the CommandHub instance.
+   */
+  async onDestroy(): Promise<void> {
+    // Generate queue names
+    const agentCommandEventName = AGENT_COMMAND(this.agent.id)
+    const agentProjectEvent = AGENT_COMMAND_PROJECT(this.agent.projectId)
+
+    // Unsubscribe from the Redis PubSub channels
+    try {
+      await this.pubsub.unsubscribe(agentCommandEventName)
+      await this.pubsub.unsubscribe(agentProjectEvent)
+      this.agent.logger.debug(
+        `CommandHub: Unsubscribed from Redis PubSub channels for agent ${this.agent.id}`
+      )
+    } catch (error) {
+      this.agent.logger.error(
+        `CommandHub: Error unsubscribing from Redis PubSub channels: ${error}`
+      )
+    }
+
+    // Clear the eventMap to remove all listeners
+    this.eventMap = {}
+
+    this.agent.logger.info(
+      `CommandHub: CommandHub instance for agent ${this.agent.id} destroyed`
+    )
+  }
+
+  /**
    * Method to handle plugin control commands (enable/disable).
    * @param data - The command data containing plugin name and desired state.
    */
