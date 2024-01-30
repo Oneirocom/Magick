@@ -91,51 +91,39 @@ export class CloudAgentManager {
   // Eventually we'll need this heartbeat to keep track of running agents on workers
   async heartbeat() {
     this.logger.debug('Started heartbeat')
-    let agentsOfWorkers: string[] = []
-    this.pubSub.subscribe('heartbeat-pong', async (agents: string[]) => {
-      agents.forEach(a => agentsOfWorkers.push(a))
-      agentsOfWorkers = await this.dedupeAgents(agentsOfWorkers)
+    const agentsOfWorkers = new Set<string>()
+
+    this.pubSub.subscribe('heartbeat-pong', (agents: string[]) => {
+      agents.forEach(agent => agentsOfWorkers.add(agent))
     })
 
     await this.pubSub.publish('heartbeat-ping', '{}')
 
-    this.logger.trace(`Starting Heartbeat update`)
-    setTimeout(
-      () =>
-        setInterval(async () => {
-          const enabledAgents = (await app.service('agents').find({
-            paginate: false,
-            query: {
-              enabled: true,
-            },
-          })) as AgentInterface[]
+    this.logger.trace('Starting Heartbeat update')
+    setTimeout(() => {
+      setInterval(async () => {
+        const enabledAgents = (await app.service('agents').find({
+          paginate: false,
+          query: { enabled: true },
+        })) as AgentInterface[]
 
-          const agentDiff = diff(
-            enabledAgents.map(a => a.id),
-            Array.from(agentsOfWorkers)
+        const enabledAgentIds = new Set(enabledAgents.map(agent => agent.id))
+        const agentsToUpdate = [...enabledAgentIds].filter(
+          agentId => !agentsOfWorkers.has(agentId)
+        )
+
+        if (agentsToUpdate.length > 0) {
+          this.logger.info(`Found ${agentsToUpdate.length} agents to update`)
+          // Instead of deduping again, directly handle the discrepancy
+          const updatePromises = agentsToUpdate.map(agentId =>
+            this.newQueue.addJob('agent:new', { agentId })
           )
-          const agentsToUpdate = enabledAgents.filter(a =>
-            agentDiff.includes(a.id)
-          )
+          await Promise.all(updatePromises)
+        }
 
-          if (agentDiff.length > 0) {
-            this.logger.info(`Found ${agentDiff.length} agents to Update`)
-            const agentPromises: Promise<any>[] = []
-            for (const agent of agentsToUpdate) {
-              this.logger.debug(
-                `Adding agent ${agent.id} to cloud agent worker`
-              )
-              agentPromises.push(
-                this.newQueue.addJob('agent:new', { agentId: agent.id })
-              )
-            }
-
-            await Promise.all(agentPromises)
-          }
-          agentsOfWorkers = []
-          this.pubSub.publish('heartbeat-ping', '{}')
-        }, HEARTBEAT_MSEC),
-      MANAGER_WARM_UP_MSEC
-    )
+        agentsOfWorkers.clear()
+        this.pubSub.publish('heartbeat-ping', '{}')
+      }, HEARTBEAT_MSEC)
+    }, MANAGER_WARM_UP_MSEC)
   }
 }
