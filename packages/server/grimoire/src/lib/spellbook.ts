@@ -340,6 +340,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
   async refreshSpells() {
     this.clearAllSpellCasters()
+    this.resetAllSpellCasterStates()
 
     const spellsData = await this.app.service('spells').find({
       query: {
@@ -461,7 +462,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     }
   }
 
-  /**
+  /**bas
    * Updates the spell runner for the given spell. Called from the watchSpellHandler.
    * @param {SpellInterface} spell - Spell instance.
    * @returns {Promise<void>} - Promise that resolves when the spell runner is updated.
@@ -518,6 +519,20 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Resets the spell runner states for the given spell id.
+   * This will go into the state service and wipe all keys from memory.
+   * @param {string} spellId - Id of the spell.
+   */
+  resetSpellCasterStates(spellId: string) {
+    const spellCasterList = this.spellMap.get(spellId)
+    if (spellCasterList) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.resetState()
+      }
+    }
+  }
+
+  /**
    * Clears all spell runners.
    * We run through all spellcasters held in memory and clear them.
    * This stops the loop, disposes the engine, and then deletes the spellcasters from the map.
@@ -531,6 +546,18 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     }
     this.spellMap.clear()
     this.stateMap.clear()
+  }
+
+  /*
+   * Resets all spell runner states.
+   * This will go into the state service and wipe all keys from memory.
+   */
+  resetAllSpellCasterStates() {
+    for (const spellCasterList of this.spellMap.values()) {
+      for (const spellCaster of spellCasterList) {
+        spellCaster.resetState()
+      }
+    }
   }
 
   /**
@@ -569,6 +596,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   killSpells() {
     this.agent.log(`Killing all spells in agent ${this.agent.id}`)
     this.clearAllSpellCasters()
+    this.resetAllSpellCasterStates()
   }
 
   /**
@@ -582,6 +610,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     const { spellId } = data
     this.agent.log(`Killing spell ${spellId} in agent ${this.agent.id}`)
     this.clearSpellCasters(spellId)
+    this.resetSpellCasterStates(spellId)
   }
 
   /**

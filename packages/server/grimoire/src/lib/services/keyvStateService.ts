@@ -244,6 +244,27 @@ export class KeyvStateService implements IStateService {
   }
 
   /**
+   * Resets the state of all nodes to their initial state.
+   *
+   * @remarks
+   * This method is part of the reset strategy, where the state of all nodes is reset to
+   * their initial state.
+   * This approach is useful when the system needs to be reset to a known state, for
+   * example, after a system crash.
+   */
+  async resetState() {
+    const nodeIds = Object.keys(this.tempStateCache)
+
+    for await (const nodeId of nodeIds) {
+      const key = this.formatKey(nodeId)
+      await this.keyv.delete(key)
+    }
+
+    // Clearing the temporary state cache
+    this.tempStateCache = {}
+  }
+
+  /**
    * Synchronizes the in-memory state with the persistent store and then clears the cache.
    *
    * @remarks
