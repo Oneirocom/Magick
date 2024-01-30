@@ -41,6 +41,7 @@ import {
   coreRemovedNodes,
 } from './constants'
 import { ON_MESSAGE, SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { delay } from './nodes/time/delay'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -78,6 +79,7 @@ export class CorePlugin extends CoreEventsPlugin<
     queryKnowledge,
     searchKnowledge,
     searchManyKnowledge,
+    delay,
   ]
   values = []
   coreLLMService: CoreLLMService
