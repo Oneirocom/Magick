@@ -618,6 +618,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   onDestroy() {
     this.clear()
+    this.resetAllSpellCasterStates()
     //
     this.app
       .service('spells')
