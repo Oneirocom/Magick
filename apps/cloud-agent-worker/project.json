@@ -11,6 +11,7 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
+        "sourceMap": true,
         "outputPath": "dist/apps/cloud-agent-worker",
         "main": "apps/cloud-agent-worker/src/main.ts",
         "tsConfig": "apps/cloud-agent-worker/tsconfig.app.json",

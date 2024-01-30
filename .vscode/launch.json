@@ -23,44 +23,25 @@
       "url": "http://localhost:4200"
     },
     {
-      "name": "SpellCaster",
-      "type": "node",
-      "request": "attach",
-      "port": 7777
-    },
-    {
       "name": "CloudAgentWorker",
       "type": "node",
       "request": "attach",
       "port": 8089,
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+      "cwd": "${workspaceFolder}/apps/cloud-agent-worker"
+    },
+    {
+      "name": "CloudAgentManager",
+      "type": "node",
+      "request": "attach",
+      "port": 8090,
+      "cwd": "${workspaceFolder}/apps/cloud-agent-manager"
     },
     {
       "name": "Server",
       "type": "node",
       "request": "attach",
       "port": 7778,
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
-    },
-    {
-      "name": "AgentServer",
-      "type": "node",
-      "request": "attach",
-      "port": 7779,
-      //   "websocketAddress": "127.0.0.1:7779",
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "outFiles": ["${workspaceFolder}/dist/**/*", "!**/node_modules/**"]
+      "cwd": "${workspaceFolder}/apps/server"
     }
   ]
 }
