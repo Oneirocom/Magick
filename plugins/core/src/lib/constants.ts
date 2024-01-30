@@ -31,4 +31,4 @@ export const CORE_DEP_KEYS = {
 // do the same thing but are more specific. For example, the variable/get
 // node is removed because we have our own nodes that do
 // the same thing but  more specific.
-export const coreRemovedNodes = ['variable/get', 'variable/set']
+export const coreRemovedNodes = ['variable/get', 'variable/set', 'time/delay']

@@ -3025,29 +3025,6 @@
     "configuration": []
   },
   {
-    "type": "time/delay",
-    "category": "Time",
-    "label": "Delay",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "duration",
-        "valueType": "float",
-        "defaultValue": 1
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": []
-  },
-  {
     "type": "time/now",
     "category": "None",
     "label": "Now",
