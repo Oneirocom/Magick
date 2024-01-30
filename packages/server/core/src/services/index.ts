@@ -10,6 +10,7 @@ import { agentImage } from './agentImage/agentImage'
 import { spellReleases } from './spellReleases/spellReleases'
 import { chatMessages } from './messages/messages'
 import { graphEvents } from './graphEvents/graphEvents'
+import { users } from './users/users'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
@@ -36,6 +37,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(spellReleases)
   app.configure(graphEvents)
   app.configure(credentials)
+  app.configure(users)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better

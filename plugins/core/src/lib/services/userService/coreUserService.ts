@@ -15,7 +15,7 @@ export interface UserResponse {
   user: User
   message?: string
 }
-interface IUserService {
+export interface ICoreUserService {
   getUser(): Promise<UserResponse>
 }
 
@@ -23,7 +23,7 @@ type ConstructorParams = {
   projectId: string
 }
 
-export class UserService implements IUserService {
+export class CoreUserService implements ICoreUserService {
   projectId: string
   constructor({ projectId }: ConstructorParams) {
     this.projectId = projectId
