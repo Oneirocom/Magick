@@ -245,6 +245,16 @@ export class RedisPubSub extends EventEmitter {
     }
   }
 
+  async unsubscribeAll() {
+    const channels = Array.from(this.channelRefCount.keys())
+    const patterns = Array.from(this.patternRefCount.keys())
+
+    await Promise.all([
+      ...channels.map(channel => this.unsubscribe(channel)),
+      ...patterns.map(pattern => this.patternUnsubscribe(pattern)),
+    ])
+  }
+
   /**
    * Removes a specific callback from a given channel.
    * This method is useful when you need to detach a particular callback from a channel
@@ -367,5 +377,10 @@ export class RedisPubSub extends EventEmitter {
     }
     // Use exponential backoff
     return Math.min(attempt * 100, 3000)
+  }
+
+  onDestroy() {
+    this.unsubscribeAll()
+    this.close()
   }
 }
