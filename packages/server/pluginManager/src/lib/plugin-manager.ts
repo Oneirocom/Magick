@@ -284,6 +284,26 @@ export class PluginManager extends EventEmitter {
     }
   }
 
+  /**
+   * Cleans up resources and performs necessary teardown tasks before destroying the PluginManager instance.
+   */
+  async onDestroy(): Promise<void> {
+    this.logger.debug('Destroying PluginManager and cleaning up resources')
+
+    // Unload all plugins
+    for (const pluginName of this.plugins.keys()) {
+      this.unloadPlugin(pluginName)
+    }
+
+    // Remove all listeners from the central event bus
+    this.centralEventBus.removeAllListeners()
+
+    // Remove all listeners from this instance of PluginManager (if any)
+    this.removeAllListeners()
+
+    this.logger.debug('PluginManager destroyed')
+  }
+
   // /**
   //  * Method to enable/disable a specific plugin.
   //  * @param pluginName - The name of the plugin to enable/disable.
