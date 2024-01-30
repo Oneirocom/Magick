@@ -3,7 +3,6 @@ import {
   EventNodeSetupParams,
   IEventNodeDefinition,
   INodeDefinition,
-  IStateService,
   NodeConfigurationDescription,
   NodeType,
   SocketsDefinition,
@@ -68,6 +67,7 @@ const getEventStateKey = (event: EventPayload, eventState: string[]) => {
 
   return stateKey
 }
+
 /**
  * The makeMagickEventNodeDefinition function is a factory function that creates a new event node definition
  * We use this for all magick events going into our system  This allows us to define the event configuration
@@ -150,13 +150,11 @@ export function makeMagickEventNodeDefinition<
             outflowName: CommitArgs[0],
             completedListener: CommitArgs[1]
           ) => {
-            const stateService = getDependency<IStateService>('IStateService')
             const eventStore = getDependency<IEventStore>('IEventStore')
 
             commit(outflowName, async resolveSockets => {
               // When the event is done, we sync the state and clear it
               // This sets the state for the next run of this event on this or another engine
-              if (stateService) await stateService.syncAndClearState()
               if (eventStore) eventStore.done()
 
               completedListener?.(resolveSockets)
@@ -177,10 +175,6 @@ export function makeMagickEventNodeDefinition<
             const eventStore = getDependency<IEventStore>(
               CORE_DEP_KEYS.EVENT_STORE
             )
-            // we use the state service to rehydrate the state for the graph
-            const stateService = getDependency<IStateService>(
-              CORE_DEP_KEYS.STATE_SERVICE
-            )
 
             // We check for the event state properties and use them to create the state key
             const eventState = node?.configuration?.eventState || []
@@ -195,13 +189,8 @@ export function makeMagickEventNodeDefinition<
             }
 
             // Store the event in the event store to be used during the processing of the event
+            // this also rehydrates the state for the graph
             eventStore?.setEvent(eventWithKey)
-
-            // Rehydrate the state for the graph when we start the run
-            // This loads up any state from the last run of this event on this or another engine
-            if (stateService) {
-              await stateService.rehydrateState(engine!.nodes, stateKey)
-            }
 
             // Pass all init args and the event to the callback
             eventConfig.handleEvent(event, newArgs)
