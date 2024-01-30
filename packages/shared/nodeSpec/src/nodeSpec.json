@@ -1229,6 +1229,29 @@
     "configuration": []
   },
   {
+    "type": "flow/delay",
+    "category": "Time",
+    "label": "Delay",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "duration",
+        "valueType": "float",
+        "defaultValue": 1
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
