@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'shared/core'
+import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 export interface CommandListener<T> {
@@ -55,9 +55,9 @@ export class CommandHub {
    * @param job - The job data.
    */
   private async handleIncomingCommand(job: any) {
-    this.agent.log(
-      `Received command: ${job.command} with data: ${JSON.stringify(job.data)}`
-    )
+    // this.agent.log(
+    //   `Received command: ${job.command} with data: ${JSON.stringify(job.data)}`
+    // )
     const { command } = job
 
     // if (!commandId) {
@@ -124,7 +124,6 @@ export class CommandHub {
   ) {
     for (const command of Object.keys(commands)) {
       const eventType = `${domain}:${subdomain}:${command}`
-      this.agent.log(`Registering event type: ${eventType}`)
       this.on(eventType, { callback: commands[command] })
     }
   }
@@ -167,4 +166,17 @@ export class CommandHub {
       listeners.forEach(listener => listener.callback(data, this.agent))
     }
   }
+
+  /**
+   * Method to handle plugin control commands (enable/disable).
+   * @param data - The command data containing plugin name and desired state.
+   */
+  // private handlePluginControlCommand(data: {
+  //   pluginName: string
+  //   enable: boolean
+  // }) {
+  //   const { pluginName, enable } = data
+  //   // temp disable
+  //   // this.agent.pluginManager.setPluginStatus(pluginName, enable)
+  // }
 }

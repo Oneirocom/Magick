@@ -17,6 +17,7 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
+        "sourceMap": true,
         "port": 7778,
         "inspect": true,
         "outputPath": "dist/apps/server",
@@ -58,12 +59,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": [
         "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/server/**/*.ts"
-        ]
-      }
+      ]
     },
     "test": {
       "executor": "@nx/jest:jest",

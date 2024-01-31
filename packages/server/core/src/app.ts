@@ -20,7 +20,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import sync from 'feathers-sync'
 import { configureManager, globalsManager } from 'shared/core'
 
-import { REDISCLOUD_URL, API_ACCESS_KEY } from 'shared/config'
+import { REDIS_URL, API_ACCESS_KEY } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'
@@ -115,7 +115,7 @@ export async function initApp(environment: Environment = 'default') {
   logger.info('SETTING UP REDIS')
   app.configure(
     sync({
-      uri: REDISCLOUD_URL,
+      uri: REDIS_URL,
       serialize: stringify,
       deserialize: parse,
     })
@@ -123,11 +123,11 @@ export async function initApp(environment: Environment = 'default') {
 
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub()
-  await pubsub.initialize(REDISCLOUD_URL)
+  await pubsub.initialize(REDIS_URL)
 
   app.set('pubsub', pubsub)
 
-  const redis = new Redis(REDISCLOUD_URL, {
+  const redis = new Redis(REDIS_URL, {
     maxRetriesPerRequest: null,
   })
   app.set('redis', redis)

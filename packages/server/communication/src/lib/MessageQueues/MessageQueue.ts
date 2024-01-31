@@ -8,6 +8,7 @@ export interface MessageQueue {
   ): Promise<void>
 
   initialize(queueName: string): void
+  close(): Promise<void>
 }
 
 export interface MessageWorker extends EventEmitter {}

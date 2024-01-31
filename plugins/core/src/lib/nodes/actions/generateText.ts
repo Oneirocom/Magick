@@ -4,16 +4,54 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { LLMModels } from '../../services/coreLLMService/types'
+import { allCompletionModels } from '../../services/coreLLMService/constants/allCompletionModels'
+
+import { CORE_DEP_KEYS } from '../../constants'
+import { IEventStore } from 'server/grimoire'
+import {
+  OpenAIChatCompletionModels,
+  CompletionModels,
+} from '../../services/coreLLMService/types/completionModels'
+
+import { activeProviders } from '../../services/coreLLMService/constants/providers'
+import { LLMProviders } from '../../services/coreLLMService/types/providerTypes'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
   category: NodeCategory.Action,
   label: 'Generate Text',
   configuration: {
-    modelChoices: {
+    modelProviders: {
       valueType: 'array',
-      defaultValue: Object.values(LLMModels),
+      defaultValue: activeProviders,
+    },
+    modelProvider: {
+      valueType: 'string',
+      //TODO: default to google when ready
+      defaultValue: LLMProviders.OpenAI,
+    },
+    models: {
+      valueType: 'array',
+      defaultValue: allCompletionModels,
+    },
+    model: {
+      valueType: 'string',
+      //TODO: default to google when ready
+      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
+    },
+    customBaseUrl: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+    hiddenProperties: {
+      valueType: 'string',
+      defaultValue: [
+        'hiddenProperties',
+        'modelProvider',
+        'model',
+        'models',
+        'customBaseUrl',
+      ],
     },
   },
   in: {
@@ -22,94 +60,130 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'string',
       defaultValue: '',
     },
-    model: {
+    modelOverride: {
       valueType: 'string',
-      choices: Object.values(LLMModels),
-      defaultValue: LLMModels['gemini-pro'],
-    },
-    maxRetries: {
-      valueType: 'number',
-      defaultValue: 3,
-    },
-    temperature: {
-      valueType: 'number',
-      defaultValue: 0.5,
-    },
-    top_p: {
-      valueType: 'number',
-      defaultValue: 1,
-    },
-    seed: {
-      valueType: 'number',
-      defaultValue: 42,
+      defaultValue: '',
     },
     stop: {
       valueType: 'string',
       defaultValue: '',
     },
+    temperature: {
+      valueType: 'integer',
+      defaultValue: 0.5,
+    },
+    maxRetries: {
+      valueType: 'integer',
+      defaultValue: 3,
+    },
+    top_p: {
+      valueType: 'integer',
+      defaultValue: 1,
+    },
+    seed: {
+      valueType: 'integer',
+      defaultValue: 42,
+    },
   },
-
   out: {
-    response: 'object',
-    completion: 'string',
+    response: 'string',
+    completionResponse: 'object',
     done: 'flow',
     onStream: 'flow',
     stream: 'string',
   },
   initialState: undefined,
-  triggered: async ({ commit, read, write, graph: { getDependency } }) => {
-    try {
-      const coreLLMService = getDependency<CoreLLMService>('coreLLMService')
+  triggered: async ({
+    commit,
+    read,
+    write,
+    configuration,
+    graph: { getDependency },
+  }) => {
+    /**
+     * This promise wrapper is super important. If we await the whole LLM
+     * completion, it will block continued fiber execution, which will prevent
+     * the onStream callback from being called more than once.  This is because
+     * the LLMServer will only send one chunk at a time, and will wait for the
+     * previous chunk to be processed before sending the next one.  By wrapping
+     * the completion in a promise, we can await the promise, but the promise
+     * will resolve immediately, allowing the onStream callback to be called
+     * multiple times.  We resolve the promise after commiting the first stream
+     * event to the fiber
+     */
+    return new Promise((outerResolve, outerReject) => {
+      try {
+        const coreLLMService = getDependency<CoreLLMService>(
+          CORE_DEP_KEYS.LLM_SERVICE
+        )
+        if (!coreLLMService) {
+          throw new Error('No coreLLMService provided')
+        }
 
-      if (!coreLLMService) {
-        throw new Error('No coreLLMService provided')
-      }
+        const model: CompletionModels =
+          read('modelOverride') || configuration.model
+        const prompt: string = read('prompt') || ''
+        const temperature: number = read('temperature') || 0.5
+        const top_p: number = read('top_p') || 1
+        const maxRetries: number = read('maxRetries') || 1
+        const stop: string = read('stop') || ''
+        const customBaseUrl: string = configuration.customBaseUrl || ''
 
-      const model: LLMModels = read('model') || LLMModels.GPT35Turbo
-      const prompt: string = read('prompt') || ''
-      const temperature: number = read('temperature') || 0.5
-      const top_p: number = read('top_p') || 1
-      const maxRetries: number = read('maxRetries') || 3
+        const request = {
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          options: {
+            temperature,
+            top_p,
+            stop,
+            base_url: customBaseUrl || undefined,
+          },
+        }
 
-      const request = {
-        model,
-        messages: [{ role: 'user', content: prompt }],
-        options: {
-          temperature,
-          top_p,
-        },
-      }
+        const processNextChunk = async iterator => {
+          const result = await iterator.next()
+          if (result.done) {
+            write('response', result.value.choices[0].message.content || '')
+            write('completionResponse', result.value) // Assuming the last value is the completion response
+            commit('done')
+          } else {
+            const chunk = result.value
+            write('stream', chunk.choices[0].delta.content || '')
 
-      let fullResponse = '' // Variable to accumulate the full response
-
-      // Using the modified completion method
-      await coreLLMService.completion({
-        request,
-        callback: (chunk, isDone) => {
-          fullResponse += chunk // Append each chunk to fullResponse
-          if (!isDone) {
-            // If streaming is not done, handle the chunk
-            write('stream', chunk)
-            commit('onStream')
+            // Commit the 'onStream' event and call the processing function recursively for the next chunk
+            commit('onStream', async () => {
+              await processNextChunk(iterator)
+            })
           }
-        },
-        maxRetries,
-      })
 
-      // Once streaming is complete, handle the full response
-      write('response', fullResponse)
-      write('completion', fullResponse) // Assuming fullResponse is the desired completion format
-      commit('done') // Signal end of process
-    } catch (error: any) {
-      const loggerService = getDependency<ILogger>('ILogger')
+          // We resolve and move the engine on after we process out first chunk
+          outerResolve(undefined)
+        }
 
-      if (!loggerService) {
-        throw new Error('No loggerService provided')
+        const eventStore = getDependency<IEventStore>('IEventStore')
+        const spellId = eventStore?.currentEvent()?.spellId
+
+        // our iterator is a generator function that will yield a chunk of data
+        // each time it is called
+        const iterator = coreLLMService.completionGenerator({
+          request,
+          maxRetries,
+          spellId,
+        })
+
+        // Start the processing loop and pass in the iterator
+        processNextChunk(iterator).catch(error => {
+          outerReject(error)
+        })
+      } catch (error: any) {
+        const loggerService = getDependency<ILogger>(CORE_DEP_KEYS.LOGGER)
+        if (!loggerService) {
+          throw new Error('No loggerService provided')
+        }
+        loggerService?.log('error', error.toString())
+        console.error('Error in generateText:', error)
+        outerReject(error)
       }
-
-      loggerService?.log('error', error.toString())
-      console.error('Error in generateText:', error)
-      throw error
-    }
+    })
   },
 })

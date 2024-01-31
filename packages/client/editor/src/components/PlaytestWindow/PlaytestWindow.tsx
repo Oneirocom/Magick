@@ -163,11 +163,9 @@ const Playtest = ({ tab, spellId }) => {
   const dispatch = useDispatch()
   const { serialize } = useEditor()
   const { enqueueSnackbar } = useSnackbar()
-  const { data: spellData } = spellApi.useGetSpellByIdQuery(
+  const { data: spellData } = spellApi.useGetSpellQuery(
     {
-      spellName: tab.name,
       id: spellId,
-      projectId: config.projectId,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -221,14 +219,10 @@ const Playtest = ({ tab, spellId }) => {
   }, [inspectorData])
 
   useEffect(() => {
-
-    console.log('PLAYTEST SPELL DATA', spellData)
-    if (!spellData || spellData.data.length === 0 || !spellData.data[0].graph)
+    if (!spellData || !spellData.graph)
       return
 
-
-
-    const graph = spellData.data[0].graph
+    const graph = spellData.graph
     const options = Object.values(graph.nodes)
       .filter((node: any) => {
         return node.data.isInput

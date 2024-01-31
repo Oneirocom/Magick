@@ -1,8 +1,8 @@
 // DOCUMENTED
-import { calculateCompletionCost } from '../cost-calculator'
+// import { calculateCompletionCost } from '../cost-calculator'
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
-import { RequestPayload } from '../types'
+import { GraphEventPayload, RequestPayload } from '../types'
 
 /**
  * Calculate and save request details in the module.
@@ -41,15 +41,16 @@ export function saveRequest({
   totalTokens,
   spell,
   nodeId,
+  cost,
 }: RequestPayload) {
   // Calculate the request cost based on total tokens and model.
-  const cost =
-    totalTokens !== undefined && totalTokens > 0
-      ? calculateCompletionCost({
-          totalTokens: totalTokens as number,
-          model: model as any,
-        })
-      : 0
+  // const cost =
+  //   totalTokens !== undefined && totalTokens > 0
+  //     ? calculateCompletionCost({
+  //         totalTokens: totalTokens as number,
+  //         model: model as any,
+  //       })
+  //     : 0
 
   // Calculate the request duration.
   const end = Date.now()
@@ -78,5 +79,27 @@ export function saveRequest({
     // If spell is JSON, stringify it, otherwise keep the string value.
     spell: typeof spell === 'string' ? spell : JSON.stringify(spell),
     nodeId,
+  })
+}
+
+export function saveGraphEvent({
+  sender,
+  agentId,
+  connector,
+  connectorData,
+  content,
+  eventType,
+  event,
+}: GraphEventPayload) {
+  const app = globalsManager.get('feathers') as any
+
+  return app.service('graphEvents').create({
+    sender,
+    agentId,
+    connector,
+    connectorData,
+    content,
+    eventType,
+    event,
   })
 }

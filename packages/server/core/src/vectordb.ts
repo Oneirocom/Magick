@@ -1,3 +1,4 @@
+// @ts-nocheck
 // DOCUMENTED
 /* 
 
@@ -19,12 +20,13 @@ export type ExtendedEmbeddings = Embeddings & {
     args: EmbeddingArgs
   ) => Promise<any>
 }
+
 /**
  * Custom implementation of SupabaseVectorStore
  * @extends {PostgresVectorStore}
  */
 export class PostgresVectorStoreCustom extends SupabaseVectorStore {
-  constructor(embeddings: ExtendedEmbeddings, args: Record<string, any>) {
+  constructor(embeddings: ExtendedEmbeddings, args: any) {
     super(embeddings, args as any)
 
     this.client = args.client

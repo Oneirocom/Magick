@@ -13,6 +13,7 @@ const TextEditor = props => {
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
+    fontSize: 16
   })
 
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
@@ -38,20 +39,41 @@ const TextEditor = props => {
     const { language } = options
     if (language !== 'handlebars') return
     // socket regex looks for handlebars style {{socketName}}
-    const socketRegex = /{{(.+?)}}/g
+    const socketRegex = /{{(.+?)}}/g;
+
+
     const socketMatches = code.matchAll(socketRegex)
     const sockets = []
     for (const match of socketMatches) {
-      const socketName = match[1]
+      if (!match[1]) continue
+      const socketName = match[1].split(' ')
+        .filter(name =>
+          !name.startsWith('#') &&
+          !name.startsWith('/') &&
+          !name.startsWith('@') &&
+          name !== 'this'
+        ).join('').trim()
+
+      console.log('Socket name', socketName)
+
+      if (!socketName) continue
+
       const socket = {
         name: socketName,
         valueType: 'string',
       }
+
+      if (configuration.socketInputs.find(input => input.name === socketName)) continue
+
       sockets.push(socket)
     }
+
     handleChange('configuration', {
       ...configuration,
-      socketInputs: sockets,
+      socketInputs: [
+        ...configuration.socketInputs,
+        ...sockets.filter(Boolean),
+      ],
     })
     // handleChange('sockets', sockets)
   }, [code])

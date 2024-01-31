@@ -16,7 +16,7 @@ import SpellManager from './SpellManager'
 import { getLogger } from 'server/logger'
 import { NodeData } from 'shared/rete'
 import { SPELLRUNNER_BUSY_TIMEOUT_MSEC } from 'shared/config'
-import { AGENT_SPELL } from '../communication/agentEventTypes'
+import { AGENT_SPELL } from 'communication'
 
 export type RunComponentArgs = {
   sessionId?: string
@@ -412,8 +412,8 @@ class SpellRunner {
 
       this.busy = false
       return this.outputData
-    } catch (error: any) {
-      this.error(error, `Error running spell ${this.currentSpell.id}`)
+    } catch (error) {
+      this.error(`Error running spell ${this.currentSpell.id}`, error)
       return
     }
   }

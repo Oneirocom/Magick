@@ -1,7 +1,7 @@
 import Redis from 'ioredis'
 import { BasePlugin, EventPayload } from './basePlugin'
-import { ON_MESSAGE } from './coreEventTypes'
 import EventEmitter from 'events'
+import { ON_MESSAGE } from 'communication'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
@@ -21,10 +21,21 @@ export abstract class CoreEventsPlugin<
   >,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
-  Metadata = Record<string, unknown>
-> extends BasePlugin<PluginEvents, Payload, Data, Metadata> {
-  constructor(name: string, connection: Redis, agentId: string) {
-    super(name, connection, agentId)
+  Metadata = Record<string, unknown>,
+  State extends object = Record<string, unknown>
+> extends BasePlugin<PluginEvents, Payload, Data, Metadata, State> {
+  constructor({
+    name,
+    connection,
+    agentId,
+    projectId,
+  }: {
+    name: string
+    connection: Redis
+    agentId: string
+    projectId: string
+  }) {
+    super({ name, connection, agentId, projectId })
     // Initialize CoreEventPlugin specific stuff if needed
   }
 

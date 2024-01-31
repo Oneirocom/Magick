@@ -1,11 +1,10 @@
-import { Switch, Modal } from 'client/core'
+import { Modal } from 'client/core'
 import { useState } from 'react'
 import { Tooltip } from '@mui/material'
 
 const VariableModal = ({
   selectedAgentData,
   editMode,
-  testVoice,
   setEditMode,
   update,
 }) => {

@@ -1,5 +1,4 @@
 // DOCUMENTED
-import md5 from 'md5'
 import { useSnackbar } from 'notistack'
 import { useEffect } from 'react'
 
@@ -20,7 +19,7 @@ import { useConfig } from '@magickml/providers'
  */
 const ModuleSelect = ({ control, updateData, initialValue }) => {
   const config = useConfig()
-  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellByJustIdQuery()
+  const [getSpell, { data: spell }] = spellApi.useLazyGetSpellQuery()
   const { data: spells } = spellApi.useGetSpellsQuery({
     projectId: config.projectId,
   })
@@ -53,10 +52,7 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
   const onChange = async e => {
     if (!e) return
     const spell = { ...e.value }
-    getSpell({
-      projectId: config.projectId,
-      id: spell.id,
-    })
+    getSpell({ id: spell.id })
   }
 
   /**
@@ -77,7 +73,6 @@ const ModuleSelect = ({ control, updateData, initialValue }) => {
         name: value,
         graph: defaultGraph as unknown as GraphData,
         projectId: config.projectId,
-        hash: md5(Math.random()),
       })
 
       getSpell({

@@ -1,0 +1,5 @@
+{
+  "name": "shared",
+  "packageName": "plugin/shared",
+  "main": "./src/index.ts"
+}
