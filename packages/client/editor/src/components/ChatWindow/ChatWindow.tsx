@@ -18,7 +18,6 @@ import {
   useSelectAgentsEvent,
 } from 'client/state'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
-import { SpellInterface } from 'server/schemas'
 
 /**
  * Input component - Receives and sends playtest input.
@@ -148,9 +147,11 @@ type Message = {
 const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
 
-  const spell = useGetSpellByNameQuery({ spellName }, {
+  const { spell } = useGetSpellByNameQuery({ spellName }, {
     skip: !spellName,
-    selectFromResult: ({ data }) => data?.data[0] as SpellInterface
+    selectFromResult: (data) => ({
+      spell: data?.data?.data[0]
+    })
   })
 
   const { lastItem: lastEvent } = useSelectAgentsEvent()
