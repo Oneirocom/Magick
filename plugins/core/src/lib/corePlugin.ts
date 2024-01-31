@@ -40,7 +40,12 @@ import {
   corePluginName,
   coreRemovedNodes,
 } from './constants'
-import { ON_MESSAGE, SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import {
+  ON_ERROR,
+  ON_MESSAGE,
+  SEND_MESSAGE,
+  STREAM_MESSAGE,
+} from 'communication'
 import { delay } from './nodes/time/delay'
 
 /**
@@ -134,6 +139,11 @@ export class CorePlugin extends CoreEventsPlugin<
       actionName: STREAM_MESSAGE,
       displayName: 'Stream Message',
       handler: this.handleSendMessage.bind(this),
+    })
+    this.registerAction({
+      actionName: ON_ERROR,
+      displayName: 'Error Received',
+      handler: this.handleOnMessage.bind(this),
     })
   }
 
@@ -234,6 +244,25 @@ export class CorePlugin extends CoreEventsPlugin<
     const { plugin } = event
     const eventName = `${plugin}:${actionName}`
     this.logger.trace(`Sending message to ${eventName} on core plugin`)
+    // handle sending a message back out.
+
+    if (plugin === 'Core') {
+      this.client.sendMessage(actionPayload)
+    } else {
+      this.centralEventBus.emit(eventName, actionPayload)
+    }
+  }
+
+  /**
+   * Handles errors by sending them to the appropriate event.
+   * This allows us to send errors back to the originating plugin so they can handle reporting
+   * and logging of the error.
+   */
+  handleOnError(actionPayload: ActionPayload) {
+    const { actionName, event } = actionPayload
+    const { plugin } = event
+    const eventName = `${plugin}:${actionName}`
+    this.logger.trace(`Sending error to ${eventName} on core plugin`)
     // handle sending a message back out.
 
     if (plugin === 'Core') {
