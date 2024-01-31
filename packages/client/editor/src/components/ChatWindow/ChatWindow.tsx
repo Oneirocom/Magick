@@ -14,9 +14,11 @@ import {
   selectStateBytabId,
   upsertLocalState,
   useAppSelector,
+  useGetSpellByNameQuery,
   useSelectAgentsEvent,
 } from 'client/state'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { SpellInterface } from 'server/schemas'
 
 /**
  * Input component - Receives and sends playtest input.
@@ -143,8 +145,13 @@ type Message = {
 /**
  * Playtest component - The main component for handling playtesting functionality.
  */
-const ChatWindow = ({ tab, spell }) => {
+const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
+
+  const spell = useGetSpellByNameQuery({ spellName }, {
+    skip: !spellName,
+    selectFromResult: ({ data }) => data?.data[0] as SpellInterface
+  })
 
   const { lastItem: lastEvent } = useSelectAgentsEvent()
 
@@ -156,7 +163,6 @@ const ChatWindow = ({ tab, spell }) => {
   const messageQueue = useRef([]); // Queue to hold incoming text chunks
   const typingTimer = useRef(null); // Timer for typing out messages
   const queueTimer = useRef(null); // Timer for processing the queue
-
 
   const setIsStreaming = (value) => {
     isStreaming.current = value;
@@ -349,18 +355,6 @@ const ChatWindow = ({ tab, spell }) => {
       spellId: spell.id,
       isPlaytest: true
     }
-
-    // const data = {
-    //   spellName: tab.name,
-    //   id: spellId,
-    //   projectId: config.projectId,
-    //   inputs: {
-    //     [playtestInputName as string]: toSend,
-    //   },
-    //   publicVariables: '{}',
-    //   version: 'v2',
-    //   secrets: JSON.parse(localStorage.getItem('secrets') || '{}'),
-    // }
 
     setValue('')
     publish(MESSAGE_AGENT, eventPayload)

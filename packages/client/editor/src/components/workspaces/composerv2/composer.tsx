@@ -21,9 +21,8 @@ import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
 import { useSelector } from 'react-redux';
-import { RootState, useGetSpellByNameQuery } from 'client/state';
+import { RootState } from 'client/state';
 import { VariableWindow } from '../../VariableWindow/VariableWindow';
-import { SpellInterface } from 'server/schemas';
 
 const getLayoutFromLocalStorage = (spellId: string) => {
   const layout = localStorage.getItem(`composer_layout_${spellId}`)
@@ -119,40 +118,34 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
 }
 
 // todo refactore these components to take in the full dockview panel props
-const componentFactory = (spell: SpellInterface) => {
-  console.log('SPELL!', spell)
-
-  return {
-    default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
-      return (
-        <div style={{ padding: '20px', color: 'white' }}>
-          {props.params.title}
-        </div>
-      )
-    },
-    Test: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <ChatWindow {...props.params} spell={spell} />
-    },
-    // depricating this one
-    Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <ChatWindow {...props.params} spell={spell} />
-    },
-    Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <PropertiesWindow {...props.params} />
-    },
-    TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <TextEditor {...props.params} />
-    },
-    Graph: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <GraphWindow {...props} spell={spell} />
-    },
-    Variables: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <VariableWindow {...props} spell={spell} />
-    },
-    Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
-      return <Console {...props.params} />
-    },
-  }
+const components = {
+  default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
+    return (
+      <div style={{ padding: '20px', color: 'white' }}>
+        {props.params.title}
+      </div>
+    )
+  },
+  Test: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
+    return <ChatWindow {...props.params} />
+  },
+  // depricating this one
+  Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
+    return <ChatWindow {...props.params} />
+  },
+  Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
+    return <PropertiesWindow {...props.params} />
+  },
+  TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+    return <TextEditor {...props.params} />
+  },
+  Graph: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
+    return <GraphWindow {...props} />
+  },
+  Variables: VariableWindow,
+  Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName }>) => {
+    return <Console {...props.params} />
+  },
 }
 
 const PermanentTab = (props: IDockviewPanelHeaderProps) => {
@@ -167,21 +160,10 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
   const pubSub = usePubSub()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, subscribe } = usePubSub()
-  const [components, setComponents] = useState(null)
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId: _currentAgentId } = globalConfig
   const currentAgentRef = useRef(_currentAgentId)
-
-  const { data: spell } = useGetSpellByNameQuery({ spellName }, {
-    skip: !spellName
-  })
-
-  useEffect(() => {
-    if (!spell) return
-
-    setComponents(componentFactory(spell.data[0]))
-  }, [spell])
 
   useEffect(() => {
     currentAgentRef.current = _currentAgentId
@@ -219,18 +201,6 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
         position: { referencePanel: 'Graph', direction: 'left' },
       })
     },
-    [events.$CREATE_INSPECTOR(tab.id)]: () => {
-      api.addPanel({
-        id: 'Inspector',
-        component: 'Inspector',
-        params: {
-          title: 'Inspector',
-          tab,
-          spellId
-        },
-        position: { referencePanel: 'Graph', direction: 'left' },
-      })
-    },
     [events.$CREATE_PLAYTEST(tab.id)]: () => {
       api.addPanel({
         id: 'Chat',
@@ -250,7 +220,8 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
         params: {
           title: 'Console',
           tab,
-          spellId
+          spellId,
+          spellName
         },
         position: { referencePanel: 'Graph', direction: 'below' },
       })
@@ -290,7 +261,8 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
       params: {
         title: title ? title : component,
         tab,
-        spellId
+        spellId,
+        spellName
       }
     });
   };
