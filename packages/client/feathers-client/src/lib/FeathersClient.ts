@@ -60,8 +60,9 @@ const configureCustomServices = (
       'subscribe',
       'command',
       'message',
+      'ping',
     ],
-    events: ['log', 'result', 'spell', 'event'],
+    events: ['log', 'result', 'spell', 'event', 'error', 'warn', 'pong'],
   })
   app.use('request', socketClient.service('request'), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
@@ -91,7 +92,7 @@ const buildFeathersClient = async (config, token): Promise<any> => {
   configureCustomServices(app, socketClient)
 
   // No idea how to type feathers to add io properties to root client.
-  return app
+  return app as any
 }
 
 // FeathersClientSingleton.js

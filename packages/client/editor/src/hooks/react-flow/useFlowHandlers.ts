@@ -13,13 +13,19 @@ import {
   useStore,
   NodeChange,
   useReactFlow,
+  Edge,
+  updateEdge,
+  Connection,
 } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
 import { calculateNewEdge } from '../../utils/calculateNewEdge.js'
 import { getNodePickerFilters } from '../../utils/getPickerFilters.js'
+import { isValidConnection } from '../../utils/isValidConnection'
 import { useBehaveGraphFlow } from './useBehaveGraphFlow.js'
 import { Tab } from '@magickml/providers'
+import { onConnect as onConnectState, setEdges, setNodes } from 'client/state'
+import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType.js'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
@@ -47,24 +53,28 @@ export const useFlowHandlers = ({
   onEdgesChange,
   onNodesChange,
   nodes,
+  edges,
   specJSON,
   parentRef,
   tab,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
   nodes: Node[]
+  edges: Edge[]
   specJSON: NodeSpecJSON[] | undefined
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
-  const [nodePickerVisibility, setNodePickerVisibility] = useState<XYPosition>()
+  const [pickedNodeVisibility, setPickedNodeVisibility] = useState<XYPosition>()
+  const [nodePickerPosition, setNodePickerPosition] = useState<XYPosition>()
   const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
   const rfDomNode = useStore(state => state.domNode)
   const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
-  const { screenToFlowPosition, getNodes } = useReactFlow()
+  const instance = useReactFlow()
+  const { screenToFlowPosition, getNodes } = instance
 
   useEffect(() => {
     if (rfDomNode) {
@@ -85,8 +95,72 @@ export const useFlowHandlers = ({
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
-    setNodePickerVisibility(undefined)
+    setNodePickerPosition(undefined)
+    setPickedNodeVisibility(undefined)
   }, [])
+
+  const onEdgeUpdate = useCallback(
+    (oldEdge, newConnection) => {
+      console.log('onEdgeUpdate', oldEdge, newConnection)
+      return setEdges(tab.id, edges => {
+        const newEdges = updateEdge(oldEdge, newConnection, edges)
+        return newEdges
+      })
+    },
+    [nodes, instance]
+  )
+
+  const handleOnConnect = useCallback(
+    (_connection: Connection) => {
+      const connection = {
+        ..._connection,
+        type: 'custom-edge',
+        updatable: 'target',
+      }
+
+      // get source node
+      const sourceNode = nodes.find(node => node.id === connection.source)
+      const sourceSocket = getSourceSocket(connection, sourceNode, specJSON)
+
+      // if the source socket is not a flow socket, we don't need to do anything special
+      if (sourceSocket === undefined || sourceSocket.valueType !== 'flow') {
+        onConnectState(tab.id)(connection)
+        return
+      }
+
+      const sourceEdge = edges.find(
+        edge =>
+          edge.source === connection.source &&
+          edge.sourceHandle === connection.sourceHandle
+      )
+
+      if (sourceEdge) {
+        // If we make it here, we know that the source socket is a flow socket
+        // We want to remove any existing edges that are connected to the source socket
+        // and replace them with the new flow type edge
+        onEdgesChange(tab.id)([
+          {
+            type: 'remove',
+            id: sourceEdge.id,
+          },
+        ])
+      }
+
+      onConnectState(tab.id)(connection)
+      return
+    },
+    [tab, nodes, edges]
+  )
+
+  const isValidConnectionHandler = useCallback(
+    (connection: Connection) => {
+      console.log('validating connection')
+      const newNode = nodes.find(node => node.id === connection.target)
+      if (!newNode) return false
+      return isValidConnection(connection, instance, specJSON)
+    },
+    [instance, nodes, specJSON]
+  )
 
   let blockClose = false
 
@@ -137,10 +211,20 @@ export const useFlowHandlers = ({
 
   const handleRemoveNode = () => {
     if (!targetNodes.length) return
-    const newNodes: NodeChange[] = targetNodes.map(node => {
-      return { id: node.id, type: 'remove' }
-    })
-    onNodesChange(tab.id)(newNodes)
+
+    const newNodes = nodes.filter(
+      node => !targetNodes.some(targetNode => targetNode.id === node.id)
+    )
+
+    const newEdges = edges.filter(
+      edge =>
+        !targetNodes.some(
+          node => node.id === edge.source || node.id === edge.target
+        )
+    )
+
+    setNodes(tab.id, newNodes)
+    setEdges(tab.id, newEdges)
     setTargetNodes(undefined)
   }
 
@@ -168,6 +252,7 @@ export const useFlowHandlers = ({
   const handleStartConnect = useCallback(
     (e: ReactMouseEvent, params: OnConnectStartParams) => {
       setLastConnectStart(params)
+      e
     },
     [getNodes]
   )
@@ -210,9 +295,13 @@ export const useFlowHandlers = ({
     const element = e.target as HTMLElement
     if (element.classList.contains('react-flow__pane')) {
       const bounds = parentRef.current.getBoundingClientRect()
-      setNodePickerVisibility({
+      setPickedNodeVisibility({
         x: e.clientX - bounds.left + window.scrollX,
         y: e.clientY - bounds.top + window.scrollY,
+      })
+      setNodePickerPosition({
+        x: e.clientX,
+        y: e.clientY,
       })
 
       setTimeout(() => {
@@ -233,9 +322,13 @@ export const useFlowHandlers = ({
       e.preventDefault()
       if (parentRef && parentRef.current) {
         const bounds = parentRef.current.getBoundingClientRect()
-        setNodePickerVisibility({
+        setPickedNodeVisibility({
           x: e.clientX - bounds.left + window.scrollX,
           y: e.clientY - bounds.top + window.scrollY,
+        })
+        setNodePickerPosition({
+          x: e.clientX,
+          y: e.clientY,
         })
       }
     },
@@ -250,6 +343,8 @@ export const useFlowHandlers = ({
 
   const handleNodeContextMenu = useCallback(
     (e: ReactMouseEvent, node: Node) => {
+      if (lastConnectStart) return
+
       const selectedNodes = getNodes().filter(node => node.selected)
       e.preventDefault()
       e.stopPropagation()
@@ -264,18 +359,21 @@ export const useFlowHandlers = ({
     },
     []
   )
-
   //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
   // useHotkeys('meta+c, ctrl+c', copy)
   // useHotkeys('meta+v, ctrl+v', paste)
 
   return {
+    handleOnConnect,
+    onEdgeUpdate,
+    isValidConnectionHandler,
     handleStartConnect,
     handleStopConnect,
     handlePaneClick,
     handlePaneContextMenu,
     lastConnectStart,
-    nodePickerVisibility,
+    nodePickerPosition,
+    pickedNodeVisibility,
     handleAddNode,
     closeNodePicker,
     nodePickFilters,

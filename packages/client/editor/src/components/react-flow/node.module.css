@@ -1,0 +1,48 @@
+/* .nodeWrapper::after {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+} */
+
+@property --r2 {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --x {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+.running::after {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 4px;
+  inset: -2px;
+  z-index: -1;
+  will-change: transform; /* Optimizes for changes in transform */
+  transform: translateZ(0); /* Promotes the element to its own layer */
+
+  background: conic-gradient(
+    from calc(var(--r2)),
+    #22222200 5%,
+    #00ff15 90%,
+    #22222200 5%
+  );
+  animation: rotating2 1s linear infinite;
+}
+
+@keyframes rotating2 {
+  0% {
+    --r2: 0deg;
+  }
+  100% {
+    --r2: 360deg;
+  }
+}

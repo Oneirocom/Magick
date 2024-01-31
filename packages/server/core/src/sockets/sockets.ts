@@ -47,8 +47,15 @@ const handleSockets = (app: any) => {
         )
 
         const user = payload.user
+        if (!user) {
+          logger.error('No user found for socket connection')
+          socket.emit('auth_error', 'Authentication failed.')
+          return
+        }
+
         // Attach the user info to the params for use in services
         socket.feathers.user = user
+        socket.feathers.projectId = payload.project
         if (payload.sessionId) socket.feathers.sessionId = payload.sessionId
 
         // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.

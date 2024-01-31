@@ -1,15 +1,17 @@
 import root from './root'
 
-const feathersService = root.injectService<
+const agentEventService = root.injectService<
   'agents',
-  ['log', 'results', 'spell', 'event']
+  ['log', 'results', 'spell', 'event', 'warn', 'error']
 >({
   name: 'agents',
-  events: ['log', 'results', 'spell', 'event'],
+  events: ['log', 'results', 'spell', 'event', 'warn', 'error'],
 })
 
 export const {
   useSelectAgentsLog,
   useSelectAgentsSpell,
   useSelectAgentsEvent,
-} = feathersService.selectors
+  useSelectAgentsWarn,
+  useSelectAgentsError,
+} = agentEventService.selectors

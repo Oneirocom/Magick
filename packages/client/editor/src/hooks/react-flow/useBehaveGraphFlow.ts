@@ -15,8 +15,9 @@ import {
   onEdgesChange,
   onNodesChange,
   onConnect,
+  graphActions,
 } from 'client/state'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'
 import { SpellInterface } from 'server/schemas'
 
@@ -37,6 +38,7 @@ export const useBehaveGraphFlow = ({
   tab: Tab
 }) => {
   const { events, publish } = usePubSub()
+  const dispatch = useDispatch()
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
 
@@ -56,15 +58,22 @@ export const useBehaveGraphFlow = ({
   }, [])
 
   useEffect(() => {
-    if (!spell) return
+    // we only want to do this on initial load
+    // since the graph json is kept in sync with the nodes and edges
+    if (!spell || graphJson) return
     setGraphJson(spell.graph)
   }, [spell, setGraphJson])
+
+  useEffect(() => {
+    if (!graphJson) return
+    dispatch(graphActions.setGraphJson({ tabId: tab.id, graphJson }))
+  }, [graphJson])
 
   // Make sure we are only doing this conversion when the graph changes
   // Debounce because changes stream in.
   const debouncedUpdate = useCallback(
-    debounce(specJson => {
-      const graphJson = flowToBehave(nodes, edges, specJson)
+    debounce((specJson, spell) => {
+      const graphJson = flowToBehave(nodes, edges, specJson, spell.graph)
       setStoredGraphJson(graphJson)
       publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: graphJson })
     }, 1000),
@@ -72,17 +81,18 @@ export const useBehaveGraphFlow = ({
   )
 
   useEffect(() => {
-    if (!specJson) return
+    if (!specJson || !spell) return
 
-    debouncedUpdate(specJson)
+    debouncedUpdate(specJson, spell)
 
     // Cleanup function to cancel the debounced call if component unmounts
     return () => {
       debouncedUpdate.cancel()
     }
-  }, [debouncedUpdate, nodes, edges, specJson])
+  }, [debouncedUpdate, nodes, edges, specJson, spell])
 
   const nodeTypes = useCustomNodeTypes({
+    tab,
     spell,
     specJson,
   })

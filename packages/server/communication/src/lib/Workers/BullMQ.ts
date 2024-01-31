@@ -20,4 +20,8 @@ export class BullMQWorker<T = any> extends Worker {
       concurrency: 10,
     })
   }
+
+  async close(): Promise<void> {
+    this.worker.close(true)
+  }
 }

@@ -9,9 +9,9 @@ import SingleElement from "./SingleElement"
  * @param {Function} props.addSocket - Function to add a new socket.
  * @returns {React.JSX.Element} Form input to add a new socket.
  */
-const AddNewSocket = ({ addSocket, valueTypes }) => {
+const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
   const [value, setValue] = useState('')
-  const [valueType, setValueType] = useState('string')
+  const [selectedValueType, setSelectedValueType] = useState('string')
 
   /**
    * Update the input value when changed.
@@ -29,11 +29,10 @@ const AddNewSocket = ({ addSocket, valueTypes }) => {
    */
   const onAdd = e => {
     if (!value) return
-    console.log('ADDING SOCKET', value, valueType)
     e.preventDefault()
-    addSocket({ name: value, valueType: valueType })
+    addSocket({ name: value, valueType: definedValueType || selectedValueType })
     setValue('')
-    setValueType('string')
+    setSelectedValueType('string')
   }
 
   return (
@@ -54,16 +53,19 @@ const AddNewSocket = ({ addSocket, valueTypes }) => {
             }
           }}
         />
-        <select
-          value={valueType}
-          onChange={e => setValueType(e.target.value)}
-          className="flex flex-1 px-3 bg-[var(--background-color)] rounded-sm">
-          {
-            valueTypes.map(type => (
-              <option value={type}>{type}</option>
-            ))
-          }
-        </select>
+        {!definedValueType &&
+          <select
+            value={selectedValueType}
+            onChange={e => setSelectedValueType(e.target.value)}
+            className="flex flex-1 px-3 bg-[var(--background-color)] rounded-sm">
+            {
+              valueTypes.map(type => (
+                <option value={type}>{type}</option>
+              ))
+            }
+          </select>
+
+        }
         {/* Add button */}
         <button style={{ margin: 0 }} onClick={onAdd} type="submit">
           Add
@@ -81,7 +83,7 @@ export const SocketConfig = ({ config, updateConfigKey, fullConfig }: Configurat
     'boolean'
   ]
   const [configKey, sockets = []] = config
-  const { socketValues = defaultValues } = fullConfig
+  const { socketValues = defaultValues, valueType = null } = fullConfig
 
   const addSocket = useCallback((socket) => {
     const newValue = [
@@ -112,7 +114,7 @@ export const SocketConfig = ({ config, updateConfigKey, fullConfig }: Configurat
         />
       ))}
       <div>
-        <AddNewSocket addSocket={addSocket} valueTypes={socketValues} />
+        <AddNewSocket addSocket={addSocket} valueTypes={socketValues} definedValueType={valueType} />
         {/* <Input value={key} onChange={e => setKey(e.target.value)} />
         <select value={valueType} onChange={e => setValueType(e.target.value)}>
           <option value="string">string</option>

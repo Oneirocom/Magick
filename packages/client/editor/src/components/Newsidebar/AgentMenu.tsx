@@ -46,26 +46,26 @@ export function AgentMenu({ data }) {
   // Update draftAgent and publishedAgent when data changes
   useEffect(() => {
     // Draft agents should always be enabled
-    const updateDraftAgentIfNeeded = async (draft) => {
-      if (!draft.enabled) {
-        try {
-          await updateAgent({
-            id: draft.id,
-            enabled: true,
-          });
-          console.log('Draft agent enabled');
-        } catch (error) {
-          console.error('Error updating draft agent:', error);
-        }
-      }
-    };
+    // const updateDraftAgentIfNeeded = async (draft) => {
+    //   if (!draft.enabled) {
+    //     try {
+    //       await updateAgent({
+    //         id: draft.id,
+    //         enabled: true,
+    //       });
+    //       console.log('Draft agent enabled');
+    //     } catch (error) {
+    //       console.error('Error updating draft agent:', error);
+    //     }
+    //   }
+    // };
 
     const handleDataUpdate = async () => {
       if (!data) return;
 
       const draft = data.find(agent => agent.default && !agent.currentSpellReleaseId);
       if (draft) {
-        await updateDraftAgentIfNeeded(draft);
+        // await updateDraftAgentIfNeeded(draft);
         setDraftAgent(draft);
         setCurrentAgent(currentAgent || draft);
       }

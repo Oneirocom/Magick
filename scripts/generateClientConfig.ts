@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const dotenv = require('dotenv-flow')
 dotenv.config('../')
 const fs = require('fs')
@@ -8,11 +9,12 @@ import Redis from 'ioredis'
 import { PluginCredential } from 'packages/server/credentials/src'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 
+let plugins = []
+
 const checkIfCorePlugin = PluginClass => {
   return (
     typeof PluginClass.prototype.init === 'function' &&
-    typeof PluginClass.prototype.getRegistry === 'function' &&
-    typeof PluginClass.prototype.onMessage === 'function'
+    typeof PluginClass.prototype.getRegistry === 'function'
   )
 }
 
@@ -24,7 +26,7 @@ const getUnifiedRegistry = async plugins => {
   }
 
   for (const plugin of plugins) {
-    const { nodes, values, dependencies } = await plugin.getRegistry(
+    const { nodes, values, dependencies } = await plugin.getRegistryForNodeSpec(
       unifiedRegistry
     )
     Object.assign(unifiedRegistry.nodes, nodes)
@@ -39,18 +41,22 @@ const loadPlugins = async () => {
   const connection = new Redis()
   const pubSub = new RedisPubSub()
 
-  await pubSub.initialize(process.env.REDISCLOUD_URL)
+  await pubSub.initialize(process.env.REDIS_URL)
 
-  const plugins = []
-  for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
+  for (const [, pluginGetter] of Object.entries(pluginModules)) {
     // Get the actual class from the getter
     const PluginClass = pluginGetter
 
     // Check if PluginClass is a subclass of CorePlugin
     if (checkIfCorePlugin(PluginClass)) {
       // Create an instance of the plugin
-
-      const pluginInstance = new PluginClass(connection, '000000000', pubSub)
+      // @ts-ignore
+      const pluginInstance = new PluginClass({
+        connection,
+        agentId: '000000000',
+        pubSub,
+        projectId: '000000000',
+      })
       plugins.push(pluginInstance)
     }
   }
@@ -66,7 +72,15 @@ const getCredentials = plugins => {
   return credentials
 }
 
+const clearPlugins = async () => {
+  plugins.forEach(plugin => {
+    plugin.destroy()
+  })
+  plugins = []
+}
+
 async function writeConfig(fileLocation: string) {
+  console.log('WRITING CONFIG!!!!!!!!!!!!!!!!!!!')
   // Get the registry from all plugins
   const plugins = await loadPlugins()
 
@@ -90,6 +104,9 @@ async function writeConfig(fileLocation: string) {
     path.join('./packages/shared/nodeSpec/src/credentials.json'),
     JSON.stringify(credentials, null, 2)
   )
+
+  console.log('DONE WRITING NODE SPECS')
+  clearPlugins()
 }
 
 writeConfig(path.resolve('./packages/shared/nodeSpec/src/nodeSpec.json'))

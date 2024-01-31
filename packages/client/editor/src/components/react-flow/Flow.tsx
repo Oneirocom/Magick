@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
 
 import CustomControls from './Controls.js'
@@ -11,9 +11,11 @@ import './flowOverrides.css'
 import { SpellInterface } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { useSelector } from 'react-redux'
-import { RootState } from 'client/state'
+import { RootState, useSelectAgentsSpell } from 'client/state'
 import { nodeColor } from '../../utils/nodeColor.js'
 import { ContextNodeMenu } from './ContextNodeMenu'
+import CustomEdge from './CustomEdge.js';
+import { NodeSpecJSON } from '@magickml/behave-graph';
 
 type FlowProps = {
   spell: SpellInterface;
@@ -21,16 +23,62 @@ type FlowProps = {
   tab: Tab
 }
 
+const edgeTypes = {
+  'custom-edge': CustomEdge,
+};
+
+const proOptions = {
+  // passing in the account property will enable hiding the attribution
+  // for versions < 10.2 you can use account: 'paid-enterprise'
+  account: 'paid-pro',
+  // in combination with the account property, hideAttribution: true will remove the attribution
+  hideAttribution: true,
+};
+
+function isEmptyObject(obj: object): boolean {
+  return Object.keys(obj).length === 0;
+}
+
 export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
-  const specJson = getNodeSpec()
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
   const { projectId, currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
 
+  const [specJson, setSpecJson] = React.useState<NodeSpecJSON[]>([])
   const [playing, setPlaying] = React.useState(false)
-  const [miniMapOpen, setMiniMapOpen] = React.useState(false)
+  const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
   const { SEND_COMMAND } = events
+
+  useEffect(() => {
+    if (!spell) return
+
+    const specs = getNodeSpec(spell)
+    setSpecJson(specs)
+
+    // trigger initial sync
+    publish(events.SEND_COMMAND, {
+      agentId: currentAgentId,
+      command: 'agent:spellbook:syncState',
+      data: {
+        spellId: spell.id,
+      },
+    })
+  }, [spell])
+
+  useEffect(() => {
+    if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
+    if (!lastSpellEvent.state) return
+
+    // Process only spell state events here
+    if (lastSpellEvent.state.isRunning) {
+      setPlaying(true)
+    } else if (!lastSpellEvent.state.isRunning) {
+      setPlaying(false)
+    }
+
+  }, [lastSpellEvent])
 
   const {
     nodes,
@@ -39,7 +87,6 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     onEdgesChange,
     setGraphJson,
     nodeTypes,
-    onConnect,
   } = useBehaveGraphFlow({
     spell,
     specJson,
@@ -47,11 +94,13 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
   })
 
   const {
+    handleOnConnect,
     handleStartConnect,
     handleStopConnect,
     handlePaneClick,
     handlePaneContextMenu,
-    nodePickerVisibility,
+    nodePickerPosition,
+    pickedNodeVisibility,
     handleAddNode,
     closeNodePicker,
     nodePickFilters,
@@ -59,9 +108,12 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     handleNodeContextMenu,
     openNodeMenu,
     setOpenNodeMenu,
-    nodeMenuActions
+    nodeMenuActions,
+    isValidConnectionHandler,
+    onEdgeUpdate
   } = useFlowHandlers({
     nodes,
+    edges,
     onEdgesChange,
     onNodesChange,
     specJSON: specJson,
@@ -74,7 +126,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       publish(SEND_COMMAND, {
         projectId,
         agentId: currentAgentId,
-        command: 'agent:core:pauseSpell',
+        command: 'agent:spellbook:pauseSpell',
         data: {
           spellId: spell.id,
         },
@@ -83,7 +135,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       publish(SEND_COMMAND, {
         projectId,
         agentId: currentAgentId,
-        command: 'agent:core:playSpell',
+        command: 'agent:spellbook:playSpell',
         data: {
           spellId: spell.id,
         },
@@ -92,16 +144,23 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     setPlaying(!playing)
   }
 
+  if (!nodeTypes || isEmptyObject(nodeTypes)) return null
+
   return (
     <ReactFlow
+      proOptions={proOptions}
       nodeTypes={nodeTypes}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange(tab.id)}
       onEdgesChange={onEdgesChange(tab.id)}
-      onConnect={onConnect(tab.id)}
+      onConnect={handleOnConnect}
+      edgeTypes={edgeTypes}
+      isValidConnection={isValidConnectionHandler}
+      onEdgeUpdate={onEdgeUpdate}
       onConnectStart={handleStartConnect}
       onConnectEnd={handleStopConnect}
+      elevateEdgesOnSelect={true}
       fitView
       fitViewOptions={{ maxZoom: 2, minZoom: 0.1 }}
       minZoom={0.1}
@@ -119,21 +178,22 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       />
       <Background
         variant={BackgroundVariant.Lines}
-        color="var(--background-color)"
-        style={{ backgroundColor: 'var(--deep-background-color)' }}
+        color="var(--background-color-light)"
+        style={{ backgroundColor: 'var(--background-color)' }}
       />
       {miniMapOpen && (
         <MiniMap
           nodeStrokeWidth={3}
           maskColor="#69696930"
-          nodeColor={node => nodeColor(node, specJson)}
+          nodeColor={node => nodeColor(node, specJson, spell)}
           pannable
           zoomable
         />
       )}
-      {nodePickerVisibility && (
+      {nodePickerPosition && (
         <NodePicker
-          position={nodePickerVisibility}
+          position={nodePickerPosition}
+          pickedNodePosition={pickedNodeVisibility}
           filters={nodePickFilters}
           onPickNode={handleAddNode}
           onClose={closeNodePicker}

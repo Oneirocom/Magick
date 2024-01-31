@@ -1,14 +1,17 @@
 import {
   DockviewApi,
+  DockviewDefaultTab,
   DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
+
+  IDockviewPanelHeaderProps,
 
   IDockviewPanelProps,
   positionToDirection,
 } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
-import { Tab, useConfig } from '@magickml/providers';
+import { Tab } from '@magickml/providers';
 import { usePubSub } from '@magickml/providers'
 import EventHandler from '../../EventHandler/EventHandler'
 
@@ -19,23 +22,18 @@ import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
 import { useSelector } from 'react-redux';
 import { RootState } from 'client/state';
+import { VariableWindow } from '../../VariableWindow/VariableWindow';
 
-const generateLayoutKey = (spellid: string, agentId: string, projectId: string,) => {
-  return `${projectId}/composer_layout_${spellid}/${agentId || 'draft-agent'}`
-}
-
-const getLayoutFromLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string) => {
-  const key = generateLayoutKey(spellId, currentAgentId, projectId)
-  const layout = localStorage.getItem(key)
+const getLayoutFromLocalStorage = (spellId: string) => {
+  const layout = localStorage.getItem(`composer_layout_${spellId}`)
   return layout ? JSON.parse(layout) : null
 }
 
-const saveLayoutToLocalStorage = (spellId: string, currentAgentId: string | undefined, projectId: string, layout: any) => {
-  const key = generateLayoutKey(spellId, currentAgentId, projectId)
-  localStorage.setItem(key, JSON.stringify(layout))
+const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
+  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
 }
 
-function loadDefaultLayout(api: DockviewApi, tab, spellId) {
+function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
   const panel = api.addPanel({
     id: 'panel_1',
     component: 'default',
@@ -53,7 +51,8 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     params: {
       title: 'Graph',
       tab,
-      spellId
+      spellId,
+      spellName
     },
   })
 
@@ -61,13 +60,45 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     .addPanel({
       id: 'Properties',
       component: 'Properties',
+      tabComponent: 'permanentTab',
       params: {
         title: 'Properties',
         tab,
-        spellId
+        spellId,
+        spellName
       },
-
       position: { referencePanel: 'Graph', direction: 'left' },
+    })
+
+
+  const propertyGroup = api.getPanel('Properties').group
+  propertyGroup.api.setConstraints({
+    minimumWidth: 300
+  })
+
+  api.addPanel({
+    id: 'Variables',
+    component: 'Variables',
+    params: {
+      title: 'Variables',
+      tab,
+      spellId,
+      spellName
+    },
+    position: { referencePanel: 'Properties', direction: 'below' },
+  })
+
+  api
+    .addPanel({
+      id: 'Test',
+      component: 'Test',
+      params: {
+        title: 'Test',
+        tab,
+        spellId,
+        spellName
+      },
+      position: { referencePanel: 'Graph', direction: 'right' },
     })
     .api.setSize({
       width: 300,
@@ -79,41 +110,14 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId) {
     params: {
       title: 'Text Editor',
       tab,
-      spellId
+      spellId,
+      spellName
     },
-    position: { referencePanel: 'Properties', direction: 'below' },
-  })
-
-  // panel5.group!.model.header.hidden = true;
-  // panel5.group!.model.locked = true;
-
-  api
-    .addPanel({
-      id: 'Chat',
-      component: 'Chat',
-      params: {
-        title: 'Chat',
-        tab,
-        spellId
-      },
-      position: { referencePanel: 'Graph', direction: 'below' },
-    })
-    .api.setSize({
-      height: 300,
-    })
-
-  api.addPanel({
-    id: 'Console',
-    component: 'Console',
-    params: {
-      title: 'Console',
-      tab,
-      spellId
-    },
-    position: { referencePanel: 'Chat', direction: 'right' },
+    position: { referencePanel: 'Test', direction: 'below' },
   })
 }
 
+// todo refactore these components to take in the full dockview panel props
 const components = {
   default: (props: IDockviewPanelProps<{ title: string, spellId: string }>) => {
     return (
@@ -122,25 +126,38 @@ const components = {
       </div>
     )
   },
-  Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+  Test: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
     return <ChatWindow {...props.params} />
   },
-  Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+  // depricating this one
+  Chat: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
+    return <ChatWindow {...props.params} />
+  },
+  Properties: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
     return <PropertiesWindow {...props.params} />
   },
   TextEditor: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
     return <TextEditor {...props.params} />
   },
-  Graph: GraphWindow,
-  Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string }>) => {
+  Graph: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>) => {
+    return <GraphWindow {...props} />
+  },
+  Variables: VariableWindow,
+  Console: (props: IDockviewPanelProps<{ tab: Tab, spellId: string, spellName }>) => {
     return <Console {...props.params} />
   },
-  // AgentControls
 }
 
-export const Composer = ({ tab, theme, spellId }) => {
+const PermanentTab = (props: IDockviewPanelHeaderProps) => {
+  return <DockviewDefaultTab hideClose {...props} />;
+};
+
+const tabComponents = {
+  permanentTab: PermanentTab,
+};
+
+export const Composer = ({ tab, theme, spellId, spellName }) => {
   const pubSub = usePubSub()
-  const config = useConfig()
   const [api, setApi] = useState<DockviewApi>(null)
   const { events, subscribe } = usePubSub()
 
@@ -155,7 +172,7 @@ export const Composer = ({ tab, theme, spellId }) => {
 
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
-    const layout = getLayoutFromLocalStorage(spellId, currentAgentRef.current, config.projectId)
+    const layout = getLayoutFromLocalStorage(spellId)
 
     let success = false;
 
@@ -165,16 +182,14 @@ export const Composer = ({ tab, theme, spellId }) => {
     }
 
     if (!success) {
-      loadDefaultLayout(event.api, tab, spellId)
+      loadDefaultLayout(event.api, tab, spellId, spellName)
     }
 
     setApi(event.api)
   }
 
-  useEffect(() => {
-    if (!api) return
-
-    const unsubscribe = subscribe(events.$CREATE_TEXT_EDITOR(tab.id), () => {
+  const windowBarMap = {
+    [events.$CREATE_TEXT_EDITOR(tab.id)]: () => {
       api.addPanel({
         id: 'Text Editor',
         component: 'TextEditor',
@@ -183,17 +198,53 @@ export const Composer = ({ tab, theme, spellId }) => {
           tab,
           spellId
         },
+        position: { referencePanel: 'Graph', direction: 'left' },
       })
+    },
+    [events.$CREATE_PLAYTEST(tab.id)]: () => {
+      api.addPanel({
+        id: 'Chat',
+        component: 'Chat',
+        params: {
+          title: 'Chat',
+          tab,
+          spellId
+        },
+        position: { referencePanel: 'Graph', direction: 'below' },
+      })
+    },
+    [events.$CREATE_CONSOLE(tab.id)]: () => {
+      api.addPanel({
+        id: 'Console',
+        component: 'Console',
+        params: {
+          title: 'Console',
+          tab,
+          spellId,
+          spellName
+        },
+        position: { referencePanel: 'Graph', direction: 'below' },
+      })
+    },
+  }
+
+  useEffect(() => {
+    if (!api) return
+
+    const windowBarSubscriptions = Object.entries(windowBarMap).map(([event, handler]) => {
+      return subscribe(event, handler)
     })
 
     api.onDidLayoutChange(() => {
       const layout = api.toJSON()
 
-      saveLayoutToLocalStorage(spellId, currentAgentRef.current, config.projectId, layout)
+      saveLayoutToLocalStorage(spellId, layout)
     })
 
     return () => {
-      unsubscribe()
+      windowBarSubscriptions.forEach(unsubscribe => {
+        unsubscribe()
+      })
     }
   }, [api])
 
@@ -210,7 +261,8 @@ export const Composer = ({ tab, theme, spellId }) => {
       params: {
         title: title ? title : component,
         tab,
-        spellId
+        spellId,
+        spellName
       }
     });
   };
@@ -219,12 +271,15 @@ export const Composer = ({ tab, theme, spellId }) => {
     return true;
   };
 
+  if (!components) return null
+
   return (
     <>
       <EventHandler tab={tab} pubSub={pubSub} spellId={spellId} />
       <DockviewReact
         onDidDrop={onDidDrop}
         components={components}
+        tabComponents={tabComponents}
         onReady={onReady}
         className={theme}
         showDndOverlay={showDndOverlay}

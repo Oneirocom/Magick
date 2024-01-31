@@ -11,6 +11,7 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
+        "sourceMap": true,
         "outputPath": "dist/apps/cloud-agent-worker",
         "main": "apps/cloud-agent-worker/src/main.ts",
         "tsConfig": "apps/cloud-agent-worker/tsconfig.app.json",
@@ -44,7 +45,10 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/server/cloud-agent-worker/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/cloud-agent-worker",
+          "packages/server/cloud-agent-worker/**/*.ts"
+        ]
       }
     },
     "test": {

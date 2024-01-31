@@ -1,8 +1,16 @@
-import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph';
+import { NodeCategory, NodeSpecJSON, VariableJSON } from '@magickml/behave-graph';
 import cx from 'classnames';
 import React, { PropsWithChildren } from 'react';
 
-import { categoryColorMap, colors } from '../../utils/colors.js';
+import { categoryColorMap, colors, valueTypeColorMap } from '../../utils/colors.js';
+import { SpellInterface } from 'server/schemas';
+
+import css from './node.module.css'
+
+type Config = {
+  label?: string
+  variableId?: string
+}
 
 type NodeProps = {
   title: string;
@@ -10,6 +18,10 @@ type NodeProps = {
   selected: boolean;
   onClick?: () => void;
   fired: boolean;
+  error: boolean;
+  running: boolean;
+  config: Config
+  graph: SpellInterface['graph']
 };
 
 const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
@@ -17,29 +29,51 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   category = NodeCategory.None,
   selected,
   children,
-  fired
+  fired,
+  config,
+  running,
+  graph,
+  error
 }) => {
   let colorName = categoryColorMap[category];
   if (colorName === undefined) {
     colorName = 'red';
   }
-  const [backgroundColor, textColor] = colors[colorName];
+
+  let [backgroundColor, textColor] = colors[colorName];
+
+  if (config?.variableId) {
+    const variable = graph.variables.find(variable => variable.id === config.variableId) as VariableJSON
+    if (variable) {
+      const colorName = valueTypeColorMap[variable.valueTypeName]
+      if (colorName) {
+        [backgroundColor, textColor] = colors[colorName]
+      }
+    }
+  }
+
 
   return (
-    <div
-      className={cx(
-        'rounded text-white text-sm bg-[var(--background-color)] w-[150px] transition-all duration-300',
-        selected && 'outline outline-1',
-        fired && 'outline outline-2 outline-green-500'
-      )}
-    >
-      <div className={`${backgroundColor} ${textColor} px-2 py-1 rounded-t`}>
-        {title}
-      </div>
+    <div className={cx("relative")}>
       <div
-        className={`flex flex-col gap-2 py-1 border-l border-r border-b`}
+        className={cx(
+          'rounded text-white text-sm bg-[var(--foreground-color)] w-[150px] transition-all duration-300 opacity-100',
+          selected && 'outline outline-1',
+          fired && 'outline outline-2 outline-green-500',
+          running && css.running,
+          error && 'outline outline-2 outline-red-500',
+        )}
       >
-        {children}
+        <div className={cx(
+          `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100`
+        )}>
+          {title}{config?.label && ` - ${config.label}`}
+        </div>
+        <div
+          className={`flex flex-col gap-1 py-1`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

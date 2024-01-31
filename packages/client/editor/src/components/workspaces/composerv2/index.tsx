@@ -4,50 +4,76 @@ import { Tab, useDockviewTheme } from 'client/state';
 import { usePubSub } from '@magickml/providers';
 import { Composer } from './composer';
 
-const DraggableElement = (props) => (
-  <p
-    tabIndex={-1}
-    onDragStart={(event) => {
-      if (event.dataTransfer) {
-        event.dataTransfer.effectAllowed = 'move';
 
-        event.dataTransfer.setData('text/plain', 'nothing');
-        event.dataTransfer.setData('component', props.window)
-        event.dataTransfer.setData('title', props.title)
-      }
-    }}
-    style={{
-      padding: '8px',
-      color: 'white',
-      cursor: 'pointer',
-    }}
-    draggable={true}
-  >
-    {props.window}
-  </p>
-);
+const DraggableElement = (props) => {
+  const { tab } = props.params
+  const { publish, events } = usePubSub()
+  const windows = {
+    'Console': () => {
+      publish(events.$CREATE_CONSOLE(tab.id))
+    },
+    'TextEditor': () => {
+      publish(events.$CREATE_TEXT_EDITOR(tab.id))
+    },
+    'Variables': () => {
+      publish(events.$CREATE_INSPECTOR(tab.id))
+    },
+    'Test': () => {
+      publish(events.$CREATE_PLAYTEST(tab.id))
+    }
+  }
+
+  const handleClick = () => {
+    windows[props.window]()
+  }
+
+  return (
+    <p
+      tabIndex={-1}
+      onDragStart={(event) => {
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = 'move';
+
+          event.dataTransfer.setData('text/plain', 'nothing');
+          event.dataTransfer.setData('component', props.window)
+          event.dataTransfer.setData('title', props.title)
+        }
+      }}
+      onClick={handleClick}
+      draggable={true}
+      className='p-2 text-white transition-all cursor-pointer hover:bg-gray-600'
+    >
+      {props.window}
+    </p>
+  )
+};
 
 const composerLayoutComponents = {
-  WindowBar: () => {
+  WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
       <div>
         <div style={{ width: '100%', display: 'inline-flex', justifyContent: 'flex-end', flexDirection: 'row', gap: '8px', padding: "0 16px" }}>
           <p style={{ padding: 8, color: 'grey', marginRight: 50 }}>Composer V2</p>
-          <DraggableElement window="Console" />
-          <DraggableElement window="TextEditor" title="Text Editor" />
-          <DraggableElement window="Properties" />
-          <DraggableElement window="Playtest" />
-          <DraggableElement window="Chat" />
+          <DraggableElement window="Console" {...props} />
+          <DraggableElement window="TextEditor" title="Text Editor" {...props} />
+          <DraggableElement window="Test" {...props} />
+          <DraggableElement window="Variables" {...props} />
         </div>
       </div >
     )
   },
-  Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string, spellId: string }>) => {
-    return <Composer {...props.params} spellId={props.params.spellId} theme={`composer-layout ${props.params.theme}`} tab={props.params.tab} />
+  Composer: (props: IGridviewPanelProps<{ tab: Tab, theme: string, spellId: string, spellName: string }>) => {
+    return <Composer
+      {...props.params}
+      spellId={props.params.spellId}
+      theme={`composer-layout ${props.params.theme}`}
+      tab={props.params.tab}
+      spellName={props.params.spellName}
+    />
   }
 }
 
-const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string }>) => {
+const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string, spellName: string }>) => {
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
 
@@ -57,6 +83,9 @@ const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string,
       component: 'WindowBar',
       maximumHeight: 30,
       minimumHeight: 30,
+      params: {
+        ...props.params
+      }
     })
 
     event.api.addPanel({
@@ -81,8 +110,7 @@ const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string,
         hideBorders={true}
         onReady={onReady}
         className={`global-layout ${theme}`}
-      />
-    </WorkspaceProvider>)
+      /></WorkspaceProvider>)
 }
 
 export default ComposerContainer

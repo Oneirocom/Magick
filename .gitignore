@@ -62,3 +62,6 @@ docstore.json
 .vercel
 .nx
 **/docs/api
+
+# Next.js
+.next

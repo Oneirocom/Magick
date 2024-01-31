@@ -5,13 +5,12 @@ import { Application, app } from 'server/core'
 import { BullMQWorker, BullQueue } from 'server/communication'
 
 import { Agent, type AgentRunJob } from 'server/agents'
-import { v4 as uuidv4 } from 'uuid'
 import {
   AGENT_DELETE,
   AGENT_DELETE_JOB,
   AGENT_RUN_JOB,
   AGENT_UPDATE_JOB,
-} from 'shared/core'
+} from 'communication'
 import { type RedisPubSub } from 'server/redis-pubsub'
 import pino from 'pino'
 
@@ -43,25 +42,13 @@ export class CloudAgentWorker {
       await this.removeAgent(agentId)
     })
 
+    this.logger.debug('Subscribing to heartbeat-ping')
     this.pubSub.subscribe('heartbeat-ping', async () => {
-      this.logger.trace('Got heartbeat ping')
       const agentIds = Object.keys(this.currentAgents)
       this.pubSub.publish('heartbeat-pong', JSON.stringify(agentIds))
     })
 
     this.addAgent = this.addAgent.bind(this)
-  }
-
-  heartbeat() {
-    this.pubSub.subscribe('cloud-agents:ping', async () => {
-      this.pubSub.publish(
-        'cloud-agents:pong',
-        JSON.stringify({
-          id: uuidv4(),
-          currentAgents: Object.keys(this.currentAgents),
-        })
-      )
-    })
   }
 
   getAgent(agentId: string) {

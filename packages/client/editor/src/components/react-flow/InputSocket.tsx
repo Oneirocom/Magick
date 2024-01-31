@@ -3,15 +3,17 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import React from 'react';
-import { Connection, Handle, Position, useReactFlow } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 
 import { colors, valueTypeColorMap } from '../../utils/colors.js';
-import { isValidConnection } from '../../utils/isValidConnection.js';
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui';
+import ReactJson from 'react-json-view';
 
 export type InputSocketProps = {
   connected: boolean;
   value: any | undefined;
   onChange: (key: string, value: any) => void;
+  lastEventInput: any;
   specJSON: NodeSpecJSON[];
   hideValue?: boolean;
 } & InputSocketSpecJSON;
@@ -30,7 +32,7 @@ const InputFieldForValue = ({
   'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
 >) => {
   const showChoices = choices?.length;
-  const inputVal = (String(value) ?? defaultValue ?? '') as string;
+  const inputVal = (value ? value : defaultValue ?? '') as string;
   const hideValueInput = hideValue || connected
 
   const inputClass = cx(
@@ -50,7 +52,7 @@ const InputFieldForValue = ({
     <div style={{ borderRadius: 5 }} className={containerClass}>
       {/* flex layout these divs 50 50 */}
       <div className="flex flex-1 items-center h-full">
-        <p className="flex">{name}</p>
+        <p className="flex capitalize">{name}</p>
       </div>
       {!hideValueInput && (
         <div className="flex-1 justify-center">
@@ -73,42 +75,34 @@ const InputFieldForValue = ({
             <input
               type="text"
               className={inputClass}
-              value={inputVal || ''}
+              value={String(inputVal) || ''}
               onChange={(e) => {
                 onChange(name, e.currentTarget.value)
               }}
-            />
-          )}
-          {valueType === 'number' && !showChoices && (
-            <input
-              type="number"
-              className={inputClass}
-              value={inputVal || 0}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
             />
           )}
           {valueType === 'float' && !showChoices && (
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              value={Number(inputVal) || 0}
+              onChange={(e) => onChange(name, Number(e.currentTarget.value))}
             />
           )}
           {valueType === 'integer' && !showChoices && (
             <input
               type="number"
               className={inputClass}
-              value={inputVal || 0}
-              onChange={(e) => onChange(name, e.currentTarget.value)}
+              value={Number(inputVal) || 0}
+              onChange={(e) => onChange(name, Number(e.currentTarget.value))}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
             <input
               type="checkbox"
               className={inputClass}
-              value={inputVal || 0}
-              onChange={(e) => onChange(name, e.currentTarget.checked)}
+              checked={Boolean(inputVal)}
+              onChange={(e) => onChange(name, Boolean(e.currentTarget.checked))}
             />
           )}
 
@@ -122,10 +116,10 @@ const InputFieldForValue = ({
 const InputSocket: React.FC<InputSocketProps> = ({
   connected,
   specJSON,
+  lastEventInput,
   ...rest
 }) => {
   const { name, valueType } = rest;
-  const instance = useReactFlow();
 
   const isFlowSocket = valueType === 'flow';
   const isArraySocket = valueType === 'array';
@@ -150,15 +144,37 @@ const InputSocket: React.FC<InputSocketProps> = ({
       )}
 
       {!isFlowSocket && <InputFieldForValue connected={connected} hideValue={isArraySocket || isObjectSocket} {...rest} />}
-      <Handle
-        id={name}
-        type="target"
-        position={Position.Left}
-        className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
-        isValidConnection={(connection: Connection) =>
-          isValidConnection(connection, instance, specJSON)
-        }
-      />
+
+
+      <Popover>
+        <PopoverTrigger asChild>
+          <Handle
+            id={name}
+            type="target"
+            position={Position.Left}
+            className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
+          />
+        </PopoverTrigger>
+        <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
+          <ReactJson
+            src={{
+              [name]: lastEventInput || undefined
+            }}
+            style={{ width: 400, overflow: 'scroll' }}
+            theme="tomorrow"
+            name={false}
+            collapsed={1}
+            collapseStringsAfterLength={20}
+            shouldCollapse={(field: any) => {
+              console.log('Should collapse', field)
+              return typeof field === 'string' && field.length > 20
+            }}
+            enableClipboard={true}
+            displayObjectSize={false}
+            displayDataTypes={false}
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

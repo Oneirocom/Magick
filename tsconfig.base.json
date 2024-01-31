@@ -16,13 +16,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "inlineSources": true,
     "noPropertyAccessFromIndexSignature": false,
     "strict": false,
     "typeRoots": [
       "packages/@types",
       "./node_modules/@types",
       "./node_modules",
-      "/node_modules/@types"
+      "/node_modules/@types",
+      "portal/platform/packages/types/src/lib/next-auth"
     ],
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
@@ -184,12 +186,39 @@
       "@magickml/plugin-twitter-server": [
         "packages/plugins/twitter/server/src/index.ts"
       ],
+      "@magickml/portal-api": ["portal/platform/packages/api/src/index.ts"],
+      "@magickml/portal-api-client": [
+        "portal/platform/packages/api-client/src/index.ts"
+      ],
+      "@magickml/portal-auth": ["portal/platform/packages/auth/src/index.ts"],
+      "@magickml/portal-billing": [
+        "portal/platform/packages/billing/src/index.ts"
+      ],
+      "@magickml/portal-chat": ["portal/platform/packages/chat/src/index.ts"],
+      "@magickml/portal-config": [
+        "portal/platform/packages/config/src/index.ts"
+      ],
+      "@magickml/portal-db": ["portal/platform/packages/db/src/index.ts"],
+      "@magickml/portal-hooks": ["portal/platform/packages/hooks/src/index.ts"],
+      "@magickml/portal-layout": [
+        "portal/platform/packages/layout/src/index.ts"
+      ],
+      "@magickml/portal-mail": ["portal/platform/packages/mail/src/index.ts"],
+      "@magickml/portal-state": ["portal/platform/packages/state/src/index.ts"],
+      "@magickml/portal-types": ["portal/platform/packages/types/src/index.ts"],
+      "@magickml/portal-ui": ["portal/platform/packages/ui/src/index.ts"],
+      "@magickml/portal-utils-server": [
+        "portal/platform/packages/utils/server/src/index.ts"
+      ],
+      "@magickml/portal-utils-shared": [
+        "portal/platform/packages/utils/shared/src/index.ts"
+      ],
       "@magickml/providers": ["packages/client/providers/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/ui": ["packages/client/ui/src/index.ts"],
-      "@magickml/ui/components": ["packages/utils/components/src/index.ts"],
-      "@magickml/ui/utils": ["packages/ui/src/utils.ts"],
+      "@magickml/ui/components": ["packages/client/ui/src/components/*.tsx"],
+      "@magickml/ui/utils": ["packages/client/ui/src/utils.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
       "client/editor": ["packages/client/editor/src/index.ts"],
       "client/feathers-client": [
@@ -200,7 +229,9 @@
         "packages/client/magickml-chatbox/src/index.ts"
       ],
       "client/state": ["packages/client/state/src/index.ts"],
+      "communication": ["packages/shared/communication/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
+      "plugins/*": ["plugins/*"],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
@@ -209,6 +240,7 @@
       "server/cloud-agent-worker": [
         "packages/server/cloud-agent-worker/src/index.ts"
       ],
+      "server/command-hub": ["packages/server/command-hub/src/index.ts"],
       "server/communication": ["packages/server/communication/src/index.ts"],
       "server/core": ["packages/server/core/src/index.ts"],
       "server/credentials": ["packages/server/credentials/src/index.ts"],

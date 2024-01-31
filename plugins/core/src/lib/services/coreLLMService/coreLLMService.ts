@@ -1,57 +1,98 @@
 import { python } from 'pythonia'
-import { VERTEXAI_LOCATION, VERTEXAI_PROJECT } from 'shared/config'
+import { PRODUCTION } from 'shared/config'
 
 import {
-  CompletionRequest,
-  LLMCredential,
-  LLMProviders,
-  LLMModels,
-} from './types'
-import { modelMap } from './constants'
+  // CompletionParams,
+  ICoreBudgetManagerService,
+  ICoreLLMService,
+} from '../types'
+import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
+import { CoreUserService } from '../userService/coreUserService'
+import { saveRequest } from 'shared/core'
+import { findProviderKey, findProviderName } from './findProvider'
+import { LLMCredential } from './types/providerTypes'
+import { CompletionResponse } from './types/completionTypes'
+import { AllModels } from './types/models'
 
-type CompletionParams = {
-  request: CompletionRequest
-  callback: (chunk: string, isDone: boolean) => void
-  maxRetries: number
-}
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-interface ICoreLLMService {
-  /**
-   * Handles completion requests in streaming mode. Accumulates the text from each chunk and returns the complete text.
-   *
-   * @param request The completion request parameters.
-   * @param callback A callback function that receives each chunk of text and a flag indicating if the streaming is done.
-   * @returns A promise that resolves to the complete text after all chunks have been received.
-   */
-  completion: (params: CompletionParams) => Promise<string>
+type ConstructorParams = {
+  projectId: string
+  agentId?: string
 }
 
 export class CoreLLMService implements ICoreLLMService {
   protected liteLLM: any
+  protected coreBudgetManagerService: ICoreBudgetManagerService | undefined
   protected credentials: LLMCredential[] = []
+  protected projectId: string
+  protected agentId: string
+  protected userService: CoreUserService
 
+  constructor({ projectId, agentId }: ConstructorParams) {
+    this.projectId = projectId
+    this.agentId = agentId || ''
+    this.userService = new CoreUserService({ projectId })
+  }
   async initialize() {
     try {
       this.liteLLM = await python('litellm')
-      this.liteLLM.vertex_project = VERTEXAI_PROJECT
-      this.liteLLM.vertex_location = VERTEXAI_LOCATION
       this.liteLLM.set_verbose = true
+      this.liteLLM.drop_params = true
+      this.coreBudgetManagerService = new CoreBudgetManagerService(
+        this.projectId
+      )
+
+      await this.coreBudgetManagerService.initialize()
     } catch (error: any) {
       console.error('Error initializing LiteLLM:', error)
       throw error
     }
   }
 
-  // Method to handle completion (always in streaming mode)
-  async completion({
+  async *completionGenerator({
     request,
-    callback,
-    maxRetries = 3,
-  }: CompletionParams): Promise<string> {
+    maxRetries = 1,
+    delayMs = 1000,
+    spellId,
+  }) {
     let attempts = 0
+    const chunks: any[] = []
+    const messages = request.messages.filter(Boolean)
+    const startTime = Date.now()
 
     while (attempts < maxRetries) {
       try {
+        if (PRODUCTION) {
+          const user = await this.userService.getUser()
+          const budgetManagerUser =
+            await this.coreBudgetManagerService?.getUsers()
+
+          const liteLLMBudget =
+            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
+
+          console.log('###PROJECT ID', this.projectId)
+
+          console.log('USER', user, budgetManagerUser, liteLLMBudget)
+
+          const estimatedCost =
+            await this.coreBudgetManagerService?.projectedCost({
+              model: request.model,
+              messages: request.messages,
+              projectId: this.projectId,
+            })
+
+          const totalBudget =
+            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
+          if (estimatedCost === undefined || totalBudget === undefined) {
+            throw new Error('Invalid user')
+          }
+
+          if (estimatedCost > totalBudget) {
+            throw new Error('Budget limit exceeded or invalid user')
+          }
+        }
+
         const body = {
           model: request.model || 'gemini-pro',
           messages: request.messages,
@@ -60,31 +101,61 @@ export class CoreLLMService implements ICoreLLMService {
           api_key: this.getCredential(request.model),
         }
 
-        let fullText = ''
-
         const stream = await this.liteLLM.completion$(body)
+
         for await (const chunk of stream) {
-          const rawChunk = await chunk.json()
-          const chunkResponse = await rawChunk.valueOf()
-          const chunkText = chunkResponse.choices[0].delta.content || ''
-          fullText += chunkText
-          callback(chunkText, false)
+          const chunkJSON = await chunk.json()
+          const chunkVal = await chunkJSON.valueOf()
+          chunks.push(chunkVal)
+          yield chunkVal
         }
 
-        fullText += '<<END>>'
-        callback('', true)
-        return fullText
-      } catch (error: any) {
+        const completionResponsePython =
+          await this.liteLLM.stream_chunk_builder$(chunks, { messages })
+
+        if (PRODUCTION) {
+          await this.coreBudgetManagerService?.updateCost(
+            this.projectId,
+            completionResponsePython
+          )
+        }
+
+        const fullResponseJson = await completionResponsePython.json()
+        const completionResponse =
+          (await fullResponseJson.valueOf()) as CompletionResponse
+        saveRequest({
+          projectId: this.projectId,
+          agentId: this.agentId,
+          requestData: JSON.stringify(request.options),
+          responseData: JSON.stringify(completionResponse),
+          model: request.model,
+          startTime: startTime,
+          status: '',
+          statusCode: 200,
+          parameters: JSON.stringify(request.options),
+          provider: findProviderName(request.model),
+          type: 'completion',
+          hidden: false,
+          processed: false,
+          totalTokens: fullResponseJson.usage.total_tokens,
+          spell: spellId,
+          nodeId: null,
+        })
+        return {
+          ...completionResponse,
+          _python_object: completionResponsePython,
+        }
+      } catch (error) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
-
         if (attempts >= maxRetries) {
-          throw new Error(
-            `Completion request failed after ${maxRetries} attempts: ${error}`
-          )
+          await sleep(delayMs)
+        } else {
+          throw error
         }
       }
     }
+
     throw new Error('Unexpected error in completion method')
   }
 
@@ -100,16 +171,17 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
 
-  private findProvider = (model: LLMModels): LLMProviders => {
-    return modelMap[model]
-  }
+  private getCredential = (model: AllModels): string => {
+    const providerKey = findProviderKey(model)
 
-  private getCredential = (model: LLMModels): string => {
-    const provider = this.findProvider(model)
+    let credential = this.credentials.find(c => c.name === providerKey)?.value
 
-    const credential = this.credentials.find(c => c.name === provider)?.value
+    if (!credential && !PRODUCTION && providerKey) {
+      credential = process.env[providerKey]
+    }
+
     if (!credential) {
-      throw new Error(`No credential found for ${provider}`)
+      throw new Error(`No credential found for ${providerKey}`)
     }
     return credential
   }

@@ -27,7 +27,7 @@ function ComposeProviders({ config, children }) {
     [ThemeProvider, { theme: darkTheme }],
     [FeathersProvider, { token: config.token }],
     PubSubProvider,
-    ToastProvider,
+    [ToastProvider, { autoHideDuration: 3000 }],
     GlobalLayoutProvider,
     TabProvider,
     FrigadeProvider

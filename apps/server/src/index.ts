@@ -6,7 +6,7 @@
 import cors from '@koa/cors'
 import Router from '@koa/router'
 import { pluginManager } from 'shared/core'
-import { apis, initApp, app, Handler, initFileServer, Method, Middleware, Route, spells } from 'server/core'
+import { apis, initApp, app, Handler, Method, Middleware, Route, spells } from 'server/core'
 import { initLogger, getLogger } from 'server/logger'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
@@ -17,11 +17,22 @@ import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 import { PRODUCTION } from 'shared/config'
 
+const PINO_LOG_LEVEL = (typeof process !== 'undefined' && process.env['PINO_LOG_LEVEL']) || 'info'
+
 if (PRODUCTION) {
   initLogger({
     name: 'cloud-agent-worker',
     transport: {
-      targets: [getPinoTransport('info')]
+      targets: [
+        getPinoTransport('info'),
+        {
+          target: 'pino-pretty',
+          level: PINO_LOG_LEVEL,
+          options: {
+            colorize: true
+          }
+        }
+      ]
     },
     level: 'info'
   })
@@ -68,10 +79,6 @@ async function init() {
         .join(', ')
     )
   })()
-
-  // initSpeechServer()
-  await initFileServer()
-  // await initTextToSpeech()
 
   const serverInits: Record<string, any> = pluginManager.getServerInits()
 

@@ -39,7 +39,8 @@
         "no-param-reassign": "off",
         "no-case-declarations": "off",
         "no-prototype-builtins": "off",
-        "prefer-rest-params": "off"
+        "prefer-rest-params": "off",
+        "no-inner-declarations": "off"
       }
     },
     {

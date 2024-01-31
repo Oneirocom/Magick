@@ -26,4 +26,8 @@ export class BullQueue implements MessageQueue {
     await this.queue.add(jobName, job, { jobId })
     this.logger.info(`Added job ${jobName} to queue ${this.queue.name}`)
   }
+
+  async close(): Promise<void> {
+    await this.queue.close()
+  }
 }

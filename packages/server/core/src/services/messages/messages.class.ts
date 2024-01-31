@@ -13,7 +13,12 @@ export type MessageParams = KnexAdapterParams<MessageQuery>
 
 export class ChatMessageService<
   ServiceParams extends Params = MessageParams
-> extends KnexService<MessageParams, MessageData, ServiceParams, MessagePatch> { }
+> extends KnexService<
+  MessageParams,
+  MessageData,
+  ServiceParams,
+  MessagePatch
+> {}
 
 /**
  * Get options for the message service.
