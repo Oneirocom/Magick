@@ -47,9 +47,11 @@ const ConfigurationComponents = {
 
 export const PropertiesWindow = (props: Props) => {
   const spellName = props.spellName
-  const spell = useGetSpellByNameQuery({ spellName }, {
+  const { spell } = useGetSpellByNameQuery({ spellName }, {
     skip: !spellName,
-    selectFromResult: ({ data }) => data?.data[0]
+    selectFromResult: (data) => ({
+      spell: data?.data?.data[0]
+    })
   })
 
   const nodeSpecs = getNodeSpec()
