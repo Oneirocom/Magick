@@ -1,4 +1,4 @@
-import { FrigadeProvider as FrigadeProviderOG } from "@frigade/react";
+import { FrigadeAnnouncement, FrigadeProvider as FrigadeProviderOG } from "@frigade/react";
 import { useNavigate } from "react-router-dom";
 import { FRIGADE_KEY } from 'shared/config'
 import { useSelector } from "react-redux"
@@ -12,8 +12,7 @@ const FrigadeProvider = ({ children }: Props) => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
   const navigate = useNavigate();
 
-
-
+  console.log("FRIGADE_KEY", FRIGADE_KEY)
 
   return (
     <FrigadeProviderOG
@@ -33,7 +32,7 @@ const FrigadeProvider = ({ children }: Props) => {
             colorTextSecondary: "white",
             colorTextOnPrimaryBackground: "#fff",
             colorPrimary: "#1BC5EB",
-            colorBackground: "#262730",
+            colorBackground: "#262b2e",
           },
           styleOverrides: {
             button: {
@@ -44,6 +43,10 @@ const FrigadeProvider = ({ children }: Props) => {
         },
       }}
     >
+      <FrigadeAnnouncement
+        flowId='flow_8ZIGBYvK0fP6r4Fa'
+        modalPosition="center"
+      />
       {children}
     </FrigadeProviderOG>
   );
