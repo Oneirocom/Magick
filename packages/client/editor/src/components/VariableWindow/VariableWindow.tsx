@@ -14,11 +14,12 @@ type Props = IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string 
 export const VariableWindow = (props: Props) => {
   const { tab, spellName } = props.params
 
-  const spell = useGetSpellByNameQuery({ spellName }, {
+  const { spell } = useGetSpellByNameQuery({ spellName }, {
     skip: !spellName,
-    selectFromResult: ({ data }) => data?.data[0]
+    selectFromResult: (data) => ({
+      spell: data?.data?.data[0]
+    })
   })
-
 
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))

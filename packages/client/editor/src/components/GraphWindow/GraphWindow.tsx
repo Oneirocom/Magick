@@ -11,11 +11,12 @@ const GraphWindow = (props: Props) => {
   const { spellName } = props.params
   const parentRef = useRef();
 
-  const spell = useGetSpellByNameQuery({ spellName }, {
+  const { spell } = useGetSpellByNameQuery({ spellName }, {
     skip: !spellName,
-    selectFromResult: ({ data }) => data?.data[0]
+    selectFromResult: (data) => ({
+      spell: data?.data?.data[0]
+    })
   })
-
 
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)

@@ -235,6 +235,7 @@ const LogsComponent = () => {
     return logs.filter(log => {
       if (!log) return false;
       if (!log.log && typeof log.log !== 'undefined') return false;
+      if (!log.message) return false;
       if (log.messageType === 'spell' && showSpellLogs) return true;
       if (log.messageType === 'log' && showLogLogs) return true;
       if (log.messageType === 'error' && showErrorLogs) return true;
