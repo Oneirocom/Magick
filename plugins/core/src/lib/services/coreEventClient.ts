@@ -1,4 +1,4 @@
-import { AGENT_EVENT, ON_MESSAGE } from 'communication'
+import { AGENT_ERROR, AGENT_EVENT, ON_MESSAGE } from 'communication'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
 import { ActionPayload, EventPayload } from 'server/plugin'
@@ -154,6 +154,10 @@ class CoreEventClient {
 
   sendMessage(payload: ActionPayload): void {
     this.pubSub.publish(AGENT_EVENT(this.agentId), payload)
+  }
+
+  onError(payload: ActionPayload): void {
+    this.pubSub.publish(AGENT_ERROR(this.agentId), payload)
   }
 
   /**
