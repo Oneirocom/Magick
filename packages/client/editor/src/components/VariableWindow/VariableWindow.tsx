@@ -1,26 +1,27 @@
 import { VariableJSON } from '@magickml/behave-graph';
 import { Tab, useConfig } from '@magickml/providers';
 import { Window } from 'client/core'
-import { selectGraphJson, selectTabEdges, selectTabNodes, setEdges, setNodes, useSaveSpellMutation } from 'client/state';
+import { selectGraphJson, selectTabEdges, selectTabNodes, setEdges, setNodes, useGetSpellByNameQuery, useSaveSpellMutation } from 'client/state';
 import { v4 as uuidv4 } from 'uuid'
 import { IDockviewPanelProps } from 'dockview';
 import { useCallback, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { Variable } from './Variable';
 import { useSelector } from 'react-redux';
-import { SpellInterface } from 'server/schemas';
 
-type Props = IDockviewPanelProps<{ tab: Tab, spellId: string }> & {
-  spell: SpellInterface
-}
+type Props = IDockviewPanelProps<{ tab: Tab, spellId: string, spellName: string }>
 
 export const VariableWindow = (props: Props) => {
-  const { spell } = props
-  const { tab } = props.params
+  const { tab, spellName } = props.params
+
+  const spell = useGetSpellByNameQuery({ spellName }, {
+    skip: !spellName,
+    selectFromResult: ({ data }) => data?.data[0]
+  })
+
 
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
-
 
   const [newVariableName, setNewVariableName] = useState<string>('')
   const graphJson = useSelector(selectGraphJson(tab.id))
@@ -47,10 +48,8 @@ export const VariableWindow = (props: Props) => {
     setEdges(tab.id, newEdges)
   }, [nodes, edges])
 
-
-
   const saveVariable = useCallback((variable: VariableJSON) => {
-    const graph = graphJson
+    const graph = spell.graph
     const variables = graph.variables.map((v) => v.id === variable.id ? variable : v);
 
     const newGraph = { ...graph, variables };
@@ -65,7 +64,7 @@ export const VariableWindow = (props: Props) => {
   }, [spell, projectId, enqueueSnackbar, graphJson]);  // dependencies
 
   const deleteVariable = useCallback((variableId: string) => {
-    const graph = graphJson
+    const graph = spell.graph
     const variable = graph.variables.find((v) => v.id === variableId);
     const newGraph = { ...graph, variables: graph.variables.filter((v) => v.id !== variableId) };
     const updatedGraph = {
@@ -93,7 +92,7 @@ export const VariableWindow = (props: Props) => {
       initialValue: []
     };
 
-    const graph = graphJson
+    const graph = spell.graph
     const newGraph = { ...graph, variables: [...graph.variables, newVariable] };
     const newSpell = { ...spell, graph: newGraph };
 
@@ -107,7 +106,8 @@ export const VariableWindow = (props: Props) => {
         enqueueSnackbar('Error creating variable', { variant: 'error' });
       });
   }, [spell, projectId, enqueueSnackbar, newVariableName, graphJson]);  // dependencies
-  if (!spell) return null
+
+  if (!spell?.graph) return null
 
   return (
     <Window borderless>

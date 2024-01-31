@@ -136,6 +136,10 @@
       background: var(--foreground-color) !important;
     }
 
+    .split-view-container .view-container .view {
+      z-index: 1;
+    }
+
     .split-view-container .sash-container .sash:hover {
       background-color: var(--sash-highlight) !important;
     }

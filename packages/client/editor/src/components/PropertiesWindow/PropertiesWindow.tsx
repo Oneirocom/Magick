@@ -2,7 +2,7 @@
 import cx from 'classnames';
 import { getNodeSpec } from 'shared/nodeSpec';
 import { Tab } from "@magickml/providers"
-import { selectActiveNode, useGetSpellQuery } from "client/state"
+import { selectActiveNode, useGetSpellByNameQuery } from "client/state"
 import { useSelector } from "react-redux"
 import { Window } from 'client/core';
 import { SocketConfig } from './SocketConfig';
@@ -20,6 +20,7 @@ import { CompletionProviderOptions } from './CompletionProviderOptions';
 type Props = {
   tab: Tab
   spellId: string
+  spellName: string
 }
 
 export type ConfigurationComponentProps = {
@@ -45,11 +46,15 @@ const ConfigurationComponents = {
 }
 
 export const PropertiesWindow = (props: Props) => {
-  const { data: spellData } = useGetSpellQuery({ id: props.spellId })
+  const spellName = props.spellName
+  const spell = useGetSpellByNameQuery({ spellName }, {
+    skip: !spellName,
+    selectFromResult: ({ data }) => data?.data[0]
+  })
+
   const nodeSpecs = getNodeSpec()
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const handleChange = useChangeNodeData(selectedNode?.id);
-
 
   if (!selectedNode) return null
 
@@ -57,7 +62,7 @@ export const PropertiesWindow = (props: Props) => {
   const { configuration } = selectedNode.data
   const hiddenProperties = configuration.hiddenProperties || []
 
-  if (!spellData || !spec) return null
+  if (!spell || !spec) return null
 
   const updateConfigKey = (key: string, value: any) => {
     const newConfig = {
@@ -87,7 +92,7 @@ export const PropertiesWindow = (props: Props) => {
         const valueType = spec.configuration.find((conf) => conf.name === key)?.valueType
 
         const componentProps: ConfigurationComponentProps = {
-          spell: spellData,
+          spell,
           fullConfig: configuration,
           config: config,
           nodeSpec: spec,

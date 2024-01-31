@@ -101,7 +101,6 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
     if (!client) return
 
     const pingInterval = setInterval(() => {
-      console.log('Sending ping');
       client.service('agents').ping(currentAgentIdRef.current)
       pongReceivedRef.current = false;
 
