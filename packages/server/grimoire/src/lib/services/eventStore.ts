@@ -5,14 +5,15 @@ export interface IEventStore {
   currentEvent: () => EventPayload | null
   setEvent: (event: EventWithKey) => void
   init: (nodes: GraphNodes) => void
-  getStatus: () => StatusEnum
   finish: () => void
   done: () => void
   await: () => void
+  getStatus: () => StatusEnum
 }
 
 export enum StatusEnum {
   INIT = 'INIT',
+  READY = 'READY',
   AWAIT = 'AWAIT',
   RUNNING = 'RUNNING',
   DONE = 'DONE',
@@ -37,6 +38,7 @@ export class EventStore implements IEventStore {
   public init(graphNodes: GraphNodes) {
     this._currentEvent = null
     this.graphNodes = graphNodes
+    this.status = StatusEnum.READY
   }
 
   public currentEvent(): EventPayload | null {
@@ -51,6 +53,28 @@ export class EventStore implements IEventStore {
     // We rehydrate the state from the state service when the event is set.
     // This allows us to have the state available for the event.
     await this.stateService.rehydrateState(this.graphNodes, event.stateKey)
+  }
+
+  /**
+   * Check if the event is ready
+   *
+   * @returns {boolean} True if the event is ready
+   */
+  public isReady() {
+    return this.status === StatusEnum.READY
+  }
+
+  /**
+   * Check if the event is running
+   *
+   * @returns {boolean} True if the event is running
+   */
+  public isRunning() {
+    return (
+      this.status === StatusEnum.RUNNING ||
+      this.status === StatusEnum.AWAIT ||
+      this.status === StatusEnum.DONE
+    )
   }
 
   public getStatus() {
@@ -82,7 +106,8 @@ export class EventStore implements IEventStore {
     await this.stateService.syncAndClearState()
 
     if (this.asyncNodeCounter === 0) {
-      this.status = StatusEnum.DONE
+      // If there are no async nodes, we can change the status ready, showing it is ready for the next event.
+      this.status = StatusEnum.READY
     }
   }
 }
