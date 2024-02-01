@@ -18,7 +18,7 @@ export const queryEventHistory = makeFlowNodeDefinition({
     },
     eventStateProperties: {
       valueType: 'array',
-      defaultValue: ['connector', 'client', 'channel', 'sender', 'agentId'],
+      defaultValue: ['client', 'connector', 'channel', 'from user', 'to user'],
     },
     availableEvents: {
       valueType: 'array',
@@ -42,7 +42,7 @@ export const queryEventHistory = makeFlowNodeDefinition({
     strings: 'array',
   },
   initialState: undefined,
-  triggered: async ({ configuration, graph, read, write }) => {
+  triggered: async ({ configuration, graph, read, write, commit }) => {
     const { eventState, selectedEvents } = configuration
 
     const eventStore = graph.getDependency<IEventStore>('IEventStore')
@@ -65,5 +65,6 @@ export const queryEventHistory = makeFlowNodeDefinition({
 
     write('events', events)
     write('strings', eventStrings)
+    commit('flow')
   },
 })
