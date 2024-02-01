@@ -9,7 +9,7 @@ import {
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { CoreUserService } from '../userService/coreUserService'
 import { saveRequest } from 'shared/core'
-import { findProviderKey, findProviderName } from './findProvider'
+import { findProvider } from './findProvider'
 import { LLMCredential } from './types/providerTypes'
 
 import { AllModels } from './types/models'
@@ -85,7 +85,7 @@ export class CoreLLMService implements ICoreLLMService {
         }
 
         const userData = await this.userService.getUser()
-        const credential = this.getCredentialForUser({
+        const credential = await this.getCredentialForUser({
           userData,
           model: request.model,
         })
@@ -102,7 +102,6 @@ export class CoreLLMService implements ICoreLLMService {
           api_key: credential,
         }
 
-        // console.log('BODY', body)
         const stream = await this.liteLLM.completion$(body)
 
         for await (const chunk of stream) {
@@ -135,7 +134,7 @@ export class CoreLLMService implements ICoreLLMService {
           status: '',
           statusCode: 200,
           parameters: JSON.stringify(request.options),
-          provider: findProviderName(request.model),
+          provider: findProvider(request.model)?.provider,
           type: 'completion',
           hidden: false,
           processed: false,
@@ -173,14 +172,14 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
 
-  private getCredentialForUser = ({
+  private getCredentialForUser = async ({
     userData,
     model,
   }: {
     userData: any
     model: AllModels
   }) => {
-    const providerKey = findProviderKey(model)
+    const providerKey = findProvider(model)?.keyName
     if (!providerKey) {
       throw new Error(`No provider key found for ${model}`)
     }
