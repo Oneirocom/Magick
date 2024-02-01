@@ -1,4 +1,4 @@
-import { ON_MESSAGE } from './coreEventTypes'
+import { EventTypes } from './coreEventTypes'
 
 export const AGENT_RUN_ERROR = (agentId: string) => `agent:${agentId}:run:error`
 export const AGENT_RUN_RESULT = (agentId: string) =>
@@ -25,7 +25,7 @@ export const AGENT_DELETE = `agent:delete`
 
 // This cant be hardcodded
 export const AGENT_MESSAGE = (agentId: string) =>
-  `agent:${agentId}:Core:${ON_MESSAGE}`
+  `agent:${agentId}:Core:${EventTypes.ON_MESSAGE}`
 
 export const AGENT_PLUGIN_REFETCH_CREDENTIALS = (
   agentId: string,

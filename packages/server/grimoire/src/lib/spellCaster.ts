@@ -481,6 +481,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * }
    */
   isBusy() {
+    if (!this.graph) return false
     const status = this.graph
       .getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
       ?.getStatus()

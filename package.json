@@ -92,6 +92,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@frigade/react": "^1.38.31",
+    "@google-cloud/speech": "5.5.0",
+    "@google-cloud/text-to-speech": "4.2.2",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^3.3.4",
@@ -99,7 +101,7 @@
     "@keyv/redis": "^2.8.0",
     "@koa/cors": "4.0.0",
     "@koa/router": "12.0.0",
-    "@magickml/behave-graph": "^0.14.7",
+    "@magickml/behave-graph": "^0.14.8",
     "@magickml/behave-graph-scene": "0.11.0",
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@monaco-editor/react": "4.5.1",
@@ -359,6 +361,7 @@
     "@types/ink": "^2.0.3",
     "@types/jest": "29.5.1",
     "@types/js-cookie": "^3.0.6",
+    "@types/knex": "^0.16.1",
     "@types/koa": "^2.13.6",
     "@types/koa__router": "12.0.0",
     "@types/lodash": "4.14.195",
@@ -434,12 +437,6 @@
     "vitest": "0.34.6",
     "webpack-merge": "5.9.0",
     "xo": "^0.53.1"
-  },
-  "optionalDependencies": {
-    "@esbuild/darwin-arm64": "0.17.19",
-    "@esbuild/linux-x64": "0.17.19",
-    "@nx/nx-linux-x64-gnu": "16.3.1",
-    "@nx/nx-win32-x64-msvc": "16.3.1"
   },
   "overrides": {
     "vite-plugin-markdown": {

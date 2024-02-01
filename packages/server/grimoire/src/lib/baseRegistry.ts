@@ -7,25 +7,29 @@ import {
   ValueType,
 } from '@magickml/behave-graph'
 import Redis from 'ioredis'
-import { AgentLoggingService, IAgentLogger } from 'server/agents'
+import { AgentLoggingService, type Agent } from 'server/agents'
 import { EventStore } from './services/eventStore'
 import { KeyvStateService } from './services/keyvStateService'
 
 export class BaseRegistry {
   connection: Redis
-  agent: IAgentLogger
+  agent: Agent
   values: ValueType[] = []
   nodes: NodeDefinition[] = []
   graphNodes!: GraphNodes
   dependencies: Record<string, any> = {}
 
-  constructor(agent: IAgentLogger, connection: Redis) {
+  constructor(agent: Agent, connection: Redis) {
     const stateService = new KeyvStateService(connection)
     this.connection = connection
     this.agent = agent
     this.dependencies.ILogger = new AgentLoggingService(agent)
     this.dependencies.IStateService = stateService
-    this.dependencies.IEventStore = new EventStore(stateService)
+    this.dependencies.IEventStore = new EventStore(
+      stateService,
+      agent.app,
+      agent.id
+    )
   }
 
   init(graph: IGraph, graphNodes: GraphNodes) {

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
-import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { ON_ERROR, SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 
 export class CoreActionService {
   protected actionQueueName: string
@@ -15,6 +15,20 @@ export class CoreActionService {
     this.emitAction = (payload: ActionPayload) => {
       this.eventBus.emit(this.actionQueueName, payload)
     }
+  }
+
+  async sendError(event: EventPayload, error: Error) {
+    this.logger.trace('CORE ACTION SERVICE: Sending error')
+    await this.emitAction({
+      actionName: ON_ERROR,
+      event,
+      data: error,
+    })
+    await this.emitAction({
+      actionName: SEND_MESSAGE,
+      event,
+      data: error,
+    })
   }
 
   async sendMessage(event: EventPayload, messageContent: any) {
