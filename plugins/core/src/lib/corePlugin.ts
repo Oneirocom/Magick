@@ -40,13 +40,9 @@ import {
   corePluginName,
   coreRemovedNodes,
 } from './constants'
-import {
-  ON_ERROR,
-  ON_MESSAGE,
-  SEND_MESSAGE,
-  STREAM_MESSAGE,
-} from 'communication'
+import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
+import { queryEventHistory } from './nodes/events/eventHistory'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -85,6 +81,7 @@ export class CorePlugin extends CoreEventsPlugin<
     searchKnowledge,
     searchManyKnowledge,
     delay,
+    queryEventHistory,
   ]
   values = []
   coreLLMService: CoreLLMService
@@ -120,7 +117,7 @@ export class CorePlugin extends CoreEventsPlugin<
   defineEvents() {
     // Define events here
     this.registerEvent({
-      eventName: ON_MESSAGE,
+      eventName: EventTypes.ON_MESSAGE,
       displayName: 'Message Received',
     })
   }
@@ -131,12 +128,12 @@ export class CorePlugin extends CoreEventsPlugin<
   defineActions() {
     // Define actions here
     this.registerAction({
-      actionName: SEND_MESSAGE,
+      actionName: EventTypes.SEND_MESSAGE,
       displayName: 'Send Message',
       handler: this.handleSendMessage.bind(this),
     })
     this.registerAction({
-      actionName: STREAM_MESSAGE,
+      actionName: EventTypes.STREAM_MESSAGE,
       displayName: 'Stream Message',
       handler: this.handleSendMessage.bind(this),
     })
@@ -150,7 +147,10 @@ export class CorePlugin extends CoreEventsPlugin<
   async initializeFunctionalities() {
     await this.getLLMCredentials()
 
-    this.centralEventBus.on(ON_MESSAGE, this.handleOnMessage.bind(this))
+    this.centralEventBus.on(
+      EventTypes.ON_MESSAGE,
+      this.handleOnMessage.bind(this)
+    )
     this.client.onMessage(this.handleOnMessage.bind(this))
   }
 
@@ -235,8 +235,8 @@ export class CorePlugin extends CoreEventsPlugin<
   }
 
   handleOnMessage(payload: EventPayload) {
-    const event = this.formatMessageEvent(ON_MESSAGE, payload)
-    this.emitEvent(ON_MESSAGE, event)
+    const event = this.formatMessageEvent(EventTypes.ON_MESSAGE, payload)
+    this.emitEvent(EventTypes.ON_MESSAGE, event)
   }
 
   handleSendMessage(actionPayload: ActionPayload) {

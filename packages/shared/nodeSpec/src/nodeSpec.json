@@ -1260,6 +1260,80 @@
     "configuration": []
   },
   {
+    "type": "queries/events/eventHistory",
+    "category": "Flow",
+    "label": "Event History",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "entries",
+        "valueType": "integer",
+        "defaultValue": 10
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "events",
+        "valueType": "array"
+      },
+      {
+        "name": "strings",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState",
+          "availableEvents"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": [
+          "sender",
+          "agentId"
+        ]
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "sender",
+          "agentId"
+        ]
+      },
+      {
+        "name": "availableEvents",
+        "valueType": "array",
+        "defaultValue": [
+          "messageReceived",
+          "messageSend",
+          "messageStream"
+        ]
+      },
+      {
+        "name": "selectedEvents",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
