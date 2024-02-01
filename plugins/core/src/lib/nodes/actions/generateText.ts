@@ -120,16 +120,16 @@ export const generateText = makeFlowNodeDefinition({
         const maxRetries: number = read('maxRetries') || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
-        const modelProvider: LLMProviders = configuration.modelProvider
+        // const modelProvider: LLMProviders = configuration.modelProvider
         const model: CompletionModels =
           read('modelOverride') || configuration.model
 
         // Check for custom OpenAI and empty base URL
-        if (modelProvider === LLMProviders.CustomOpenAI && !customBaseUrl) {
-          throw new Error(
-            'Custom base URL is required for Custom OpenAI provider'
-          )
-        }
+        // if (modelProvider === LLMProviders.CustomOpenAI && !customBaseUrl) {
+        //   throw new Error(
+        //     'Custom base URL is required for Custom OpenAI provider'
+        //   )
+        // }
 
         const request = {
           model,
