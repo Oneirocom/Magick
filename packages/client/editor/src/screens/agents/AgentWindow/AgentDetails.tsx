@@ -129,7 +129,7 @@ const AgentDetails = ({
           <Tooltip
             title={
               isDraft ?
-                'Disablign your draft agent will disable your environment.  Proceed with caution.'
+                'Disabling your draft agent will disable your environment. Proceed with caution.'
                 : ''
             }
             placement="right-start"
