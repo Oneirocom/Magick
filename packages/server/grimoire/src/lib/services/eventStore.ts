@@ -3,10 +3,18 @@ import { Application } from 'server/core'
 import { EventPayload } from 'server/plugin'
 import { getEventProperties } from '../utils'
 
+type EventProperties =
+  | 'sender'
+  | 'agentId'
+  | 'connector'
+  | 'channel'
+  | 'from user'
+  | 'to user'
+
 export interface IEventStore {
   currentEvent: () => EventPayload | null
   queryEvents: (
-    eventPropertyKeys: string[],
+    eventPropertyKeys: EventProperties[],
     messageTypes: string[],
     limit?: number
   ) => any
@@ -53,17 +61,27 @@ export class EventStore implements IEventStore {
   }
 
   public async queryEvents(
-    eventPropertyKeys: string[],
+    eventPropertyKeys: EventProperties[],
     messageTypes: string[],
     limit: number = 100
   ) {
     if (!this._currentEvent) return null
 
     const graphEventsService = this.app.service('graphEvents')
+
+    const fromUser = eventPropertyKeys['from user']
+    const toUser = eventPropertyKeys['to user']
+
+    delete eventPropertyKeys['from user']
+    delete eventPropertyKeys['to user']
+
     const eventProperties = getEventProperties(
       this._currentEvent,
       eventPropertyKeys
     )
+
+    if (fromUser) eventProperties['fromUser'] = this._currentEvent.sender
+    if (toUser) eventProperties['toUser'] = this._currentEvent.sender
 
     const query = {
       agentId: this.agentId,
@@ -72,8 +90,6 @@ export class EventStore implements IEventStore {
     }
 
     query['$limit'] = limit
-
-    console.log('QUERY', query)
 
     const results = await graphEventsService.find({ query })
 
