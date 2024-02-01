@@ -4,17 +4,15 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { allCompletionModels } from '../../services/coreLLMService/constants/allCompletionModels'
-
 import { CORE_DEP_KEYS } from '../../constants'
 import { IEventStore } from 'server/grimoire'
 import {
-  OpenAIChatCompletionModels,
   CompletionModels,
+  GoogleAIStudioModels,
 } from '../../services/coreLLMService/types/completionModels'
-
-import { activeProviders } from '../../services/coreLLMService/constants/providers'
 import { LLMProviders } from '../../services/coreLLMService/types/providerTypes'
+import { appendPrefixToModel } from '../../services/coreLLMService/constants/completionModelArrays'
+import { providers } from '../../services/coreLLMService/types/providers'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -23,21 +21,19 @@ export const generateText = makeFlowNodeDefinition({
   configuration: {
     modelProviders: {
       valueType: 'array',
-      defaultValue: activeProviders,
+      defaultValue: [],
     },
     modelProvider: {
       valueType: 'string',
-      //TODO: default to google when ready
-      defaultValue: LLMProviders.OpenAI,
+      defaultValue: LLMProviders.GoogleAIStudio,
     },
     models: {
       valueType: 'array',
-      defaultValue: allCompletionModels,
+      defaultValue: [],
     },
     model: {
       valueType: 'string',
-      //TODO: default to google when ready
-      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
+      defaultValue: GoogleAIStudioModels.GeminiPro,
     },
     customBaseUrl: {
       valueType: 'string',
@@ -120,14 +116,27 @@ export const generateText = makeFlowNodeDefinition({
           throw new Error('No coreLLMService provided')
         }
 
-        const model: CompletionModels =
-          read('modelOverride') || configuration.model
         const prompt: string = read('prompt') || ''
         const temperature: number = read('temperature') || 0.5
         const top_p: number = read('top_p') || 1
         const maxRetries: number = read('maxRetries') || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
+        const modelProvider: LLMProviders = configuration.modelProvider
+        const modelData: CompletionModels =
+          read('modelOverride') || configuration.model
+
+        // Check for custom OpenAI and empty base URL
+        if (modelProvider === LLMProviders.CustomOpenAI && !customBaseUrl) {
+          throw new Error(
+            'Custom base URL is required for Custom OpenAI provider'
+          )
+        }
+
+        const model = appendPrefixToModel(
+          modelData,
+          providers[modelProvider].vendorModelPrefix
+        )
 
         const request = {
           model,
