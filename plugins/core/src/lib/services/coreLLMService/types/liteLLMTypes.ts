@@ -1,3 +1,5 @@
+import { CompletionModels } from './completionModels'
+
 export type LiteLLMOptions = {
   api_base?: string
   api_version?: string
@@ -40,3 +42,59 @@ export type CompletionOptions = {
   functions?: FunctionType[]
   function_call?: string
 } & LiteLLMOptions
+
+export type CompletionRequest = {
+  model: CompletionModels
+  messages: Message[]
+  options?: CompletionOptions
+  api_key?: string
+}
+
+export type CompletionResponse = {
+  id: string
+  choices: Choice[]
+  created: string
+  model: string
+  object: string
+  system_fingerprint: any | null
+  usage: {
+    prompt_tokens: number
+    completion_tokens: number
+    total_tokens: number
+  }
+  _python_object: any
+}
+
+export type Message = {
+  role: string
+  content: string | null
+  name?: string
+  function_call?: {
+    type: string
+    function: FunctionType
+  }
+}
+
+export type Chunk = {
+  choices: ChunkChoice[]
+}
+
+export type ChunkChoice = {
+  finish_reason: string
+  index: number
+  delta: {
+    function_call: string
+    tool_calls: string
+    content: string
+    role: string
+  }
+}
+
+export type Choice = {
+  finish_reason: string
+  index: number
+  message: {
+    role: string
+    content: string
+  }
+}
