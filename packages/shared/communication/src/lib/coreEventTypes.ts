@@ -7,3 +7,9 @@ export const SEND_MESSAGE = 'messageSend'
 export const STREAM_MESSAGE = 'messageStream'
 
 export const ON_ERROR = 'error'
+
+export enum EventTypes {
+  ON_MESSAGE = 'messageReceived',
+  SEND_MESSAGE = 'messageSend',
+  STREAM_MESSAGE = 'messageStream',
+}
