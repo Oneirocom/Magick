@@ -1,7 +1,7 @@
 import Redis from 'ioredis'
 import { BasePlugin, EventPayload } from './basePlugin'
 import EventEmitter from 'events'
-import { ON_MESSAGE } from 'communication'
+import { EventTypes } from 'communication'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
@@ -72,7 +72,7 @@ export abstract class CoreEventsPlugin<
    * myPlugin.onMessage({ message: 'Hello World' });
    */
   onMessage(pluginPayload: Payload) {
-    const event = ON_MESSAGE
+    const event = EventTypes.ON_MESSAGE
     const payload = this.formatPayload(event, pluginPayload)
     this.centralEventBus.emit(event, payload)
   }

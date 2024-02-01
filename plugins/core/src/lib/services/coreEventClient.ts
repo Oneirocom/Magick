@@ -1,4 +1,4 @@
-import { AGENT_ERROR, AGENT_EVENT, ON_MESSAGE } from 'communication'
+import { AGENT_ERROR, AGENT_EVENT, EventTypes } from 'communication'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
 import { ActionPayload, EventPayload } from 'server/plugin'
@@ -149,7 +149,7 @@ class CoreEventClient {
    */
   onMessage(handler: (event: EventPayload) => void): void {
     this.logger.debug('Registering handler for core onMessage event')
-    this.registerHandler(ON_MESSAGE, handler)
+    this.registerHandler(EventTypes.ON_MESSAGE, handler)
   }
 
   sendMessage(payload: ActionPayload): void {
