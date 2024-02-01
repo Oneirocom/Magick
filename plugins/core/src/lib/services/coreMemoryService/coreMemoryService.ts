@@ -6,10 +6,7 @@ import {
   EmbeddingModels,
   OpenAIEmbeddingModels,
 } from '../coreEmbeddingService/types'
-import {
-  findProviderKey,
-  findProviderName,
-} from '../coreLLMService/findProvider'
+import { findProvider } from '../coreLLMService/findProvider'
 import {
   OpenAIChatCompletionModels,
   CompletionModels,
@@ -100,7 +97,7 @@ class CoreMemoryService {
   }
 
   private setLLM(model: CompletionModels) {
-    const providerName = findProviderName(model)
+    const providerName = findProvider(model)?.provider
     const credential = this.getCredential(model)
     const params = this.changeLLMParams()
 
@@ -115,7 +112,7 @@ class CoreMemoryService {
   }
 
   private setEmbedder(model: EmbeddingModels) {
-    const providerName = findProviderName(model)
+    const providerName = findProvider(model)?.provider
     const credential = this.getCredential(model)
 
     this.baseConfig.embedder = {
@@ -155,7 +152,7 @@ class CoreMemoryService {
   }
 
   private getCredential(model: AllModels): string {
-    const provider = findProviderKey(model)
+    const provider = findProvider(model)?.keyName
     let credential = this.credentials.find(
       c => c.serviceType === provider
     )?.value
