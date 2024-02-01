@@ -34,31 +34,31 @@ export enum OpenAITextCompletionInstructModels {
 }
 
 export enum HuggingFaceModelsWithPromptFormatting {
-  HuggingFaceMistral7BInstructV01 = 'mistralai/Mistral-7B-Instruct-v0.1',
-  HuggingFaceMetaLlamaLlama27bChat = 'meta-llama/Llama-2-7b-chat',
-  HuggingFaceTiiuaeFalcon7bInstruct = 'tiiuae/falcon-7b-instruct',
-  HuggingFaceMosaicmlMpt7bChat = 'mosaicml/mpt-7b-chat',
-  HuggingFaceCodellamaCodeLlama34bInstructHf = 'codellama/CodeLlama-34b-Instruct-hf',
-  HuggingFaceWizardLMWizardCoderPython34BV10 = 'WizardLM/WizardCoder-Python-34B-V1.0',
-  HuggingFacePhindPhindCodeLlama34Bv2 = 'Phind/Phind-CodeLlama-34B-v2',
+  HuggingFaceMistral7BInstructV01 = 'huggingface/mistralai/Mistral-7B-Instruct-v0.1',
+  HuggingFaceMetaLlamaLlama27bChat = 'huggingface/meta-llama/Llama-2-7b-chat',
+  HuggingFaceTiiuaeFalcon7bInstruct = 'huggingface/tiiuae/falcon-7b-instruct',
+  HuggingFaceMosaicmlMpt7bChat = 'huggingface/mosaicml/mpt-7b-chat',
+  HuggingFaceCodellamaCodeLlama34bInstructHf = 'huggingface/codellama/CodeLlama-34b-Instruct-hf',
+  HuggingFaceWizardLMWizardCoderPython34BV10 = 'huggingface/WizardLM/WizardCoder-Python-34B-V1.0',
+  HuggingFacePhindPhindCodeLlama34Bv2 = 'huggingface/Phind/Phind-CodeLlama-34B-v2',
 }
 
 export enum OllamaVisionModels {
-  LLAVA = 'llama-va',
+  LLAVA = 'ollama/llama-va',
 }
 
 export enum OllamaModels {
-  OlamaMistral = 'mistral',
-  OlamaLlama27B = 'llama2',
-  OlamaLlama213B = 'llama2:13b',
-  OlamaLlama270B = 'llama2:70b',
-  OlamaLlama2Uncensored = 'llama2-uncensored',
-  OlamaCodeLlama = 'codellama',
-  OlamaOrcaMini = 'orca-mini',
-  OlamaVicuna = 'vicuna',
-  OlamaNousHermes = 'nous-hermes',
-  OlamaNousHermes13B = 'nous-hermes:13b',
-  OlamaWizardVicunaUncensored = 'wizard-vicuna',
+  OlamaMistral = 'ollama/mistral',
+  OlamaLlama27B = 'ollama/llama2',
+  OlamaLlama213B = 'ollama/llama2:13b',
+  OlamaLlama270B = 'ollama/llama2:70b',
+  OlamaLlama2Uncensored = 'ollama/llama2-uncensored',
+  OlamaCodeLlama = 'ollama/codellama',
+  OlamaOrcaMini = 'ollama/orca-mini',
+  OlamaVicuna = 'ollama/vicuna',
+  OlamaNousHermes = 'ollama/nous-hermes',
+  OlamaNousHermes13B = 'ollama/nous-hermes:13b',
+  OlamaWizardVicunaUncensored = 'ollama/wizard-vicuna',
 }
 
 export enum VertexAIGoogleModels {
@@ -67,18 +67,18 @@ export enum VertexAIGoogleModels {
 }
 
 export enum PalmModels {
-  ChatBison = 'chat-bison',
+  ChatBison = 'palm/chat-bison',
 }
 
 export enum GoogleAIStudioModels {
-  GeminiPro = 'gemini-pro',
-  GeminiProVision = 'gemini-pro-vision',
+  GeminiPro = 'gemini/gemini-pro',
+  GeminiProVision = 'gemini/gemini-pro-vision',
 }
 
 export enum MistralAIModels {
-  MistralTiny = 'mistral-tiny',
-  MistralSmall = 'mistral-small',
-  MistralMedium = 'mistral-medium',
+  MistralTiny = 'mistral/mistral-tiny',
+  MistralSmall = 'mistral/mistral-small',
+  MistralMedium = 'mistral/mistral-medium',
 }
 
 export enum AnthropicModels {
@@ -89,41 +89,41 @@ export enum AnthropicModels {
 }
 
 export enum SageMakerModels {
-  MetaLlama27B = 'jumpstart-dft-meta-textgeneration-llama-2-7b',
-  MetaLlama27BChatFineTuned = 'jumpstart-dft-meta-textgeneration-llama-2-7b-f',
-  MetaLlama213B = 'jumpstart-dft-meta-textgeneration-llama-2-13b',
-  MetaLlama213BChatFineTuned = 'jumpstart-dft-meta-textgeneration-llama-2-13b-f',
-  MetaLlama270B = 'jumpstart-dft-meta-textgeneration-llama-2-70b',
-  MetaLlama270BChatFineTuned = 'jumpstart-dft-meta-textgeneration-llama-2-70b-b-f',
+  MetaLlama27B = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-7b',
+  MetaLlama27BChatFineTuned = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-7b-f',
+  MetaLlama213B = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-13b',
+  MetaLlama213BChatFineTuned = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-13b-f',
+  MetaLlama270B = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b',
+  MetaLlama270BChatFineTuned = 'sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b-b-f',
 }
 
 export enum BedrockModels {
-  BedrockAnthropicClaudeV21 = 'anthropic.claude-v2:1',
-  BedrockAnthropicClaudeV2 = 'anthropic.claude-v2',
-  BedrockAnthropicClaudeInstantV1 = 'anthropic.claude-instant-v1',
-  BedrockAnthropicClaudeV1 = 'anthropic.claude-v1',
-  BedrockAmazonTitanLite = 'amazon.titan-text-lite-v1',
-  BedrockAmazonTitanExpress = 'amazon.titan-text-express-v1',
-  BedrockCohereCommand = 'cohere.command-text-v14',
-  BedrockAI21J2Mid = 'ai21.j2-mid-v1',
-  BedrockAI21J2Ultra = 'ai21.j2-ultra-v1',
-  BedrockMetaLlama2Chat13b = 'meta.llama2-13b-chat-v1',
-  BedrockMetaLlama2Chat70b = 'meta.llama2-70b-chat-v1',
+  BedrockAnthropicClaudeV21 = 'bedrock/anthropic.claude-v2:1',
+  BedrockAnthropicClaudeV2 = 'bedrock/anthropic.claude-v2',
+  BedrockAnthropicClaudeInstantV1 = 'bedrock/anthropic.claude-instant-v1',
+  BedrockAnthropicClaudeV1 = 'bedrock/anthropic.claude-v1',
+  BedrockAmazonTitanLite = 'bedrock/amazon.titan-text-lite-v1',
+  BedrockAmazonTitanExpress = 'bedrock/amazon.titan-text-express-v1',
+  BedrockCohereCommand = 'bedrock/cohere.command-text-v14',
+  BedrockAI21J2Mid = 'bedrock/ai21.j2-mid-v1',
+  BedrockAI21J2Ultra = 'bedrock/ai21.j2-ultra-v1',
+  BedrockMetaLlama2Chat13b = 'bedrock/meta.llama2-13b-chat-v1',
+  BedrockMetaLlama2Chat70b = 'bedrock/meta.llama2-70b-chat-v1',
 }
 
 export enum PerplexityAIModels {
-  Pplx7bChat = 'pplx-7b-chat',
-  Pplx70bChat = 'pplx-70b-chat',
-  Pplx7bOnline = 'pplx-7b-online',
-  Pplx70bOnline = 'pplx-70b-online',
-  PplxCodeLlama34bInstruct = 'codellama-34b-instruct',
-  PplxLlama213bChat = 'llama-2-13b-chat',
-  PplxLlama270bChat = 'llama-2-70b-chat',
-  PplxMistral7bInstruct = 'mistral-7b-instruct',
-  PplxOpenhermes2Mistral7b = 'openhermes-2-mistral-7b',
-  PplxOpenhermes25Mistral7b = 'openhermes-2.5-mistral-7b',
-  Pplx7bChatAlpha = 'pplx-7b-chat-alpha',
-  Pplx70bChatAlpha = 'pplx-70b-chat-alpha',
+  Pplx7bChat = 'perplexity/pplx-7b-chat',
+  Pplx70bChat = 'perplexity/pplx-70b-chat',
+  Pplx7bOnline = 'perplexity/pplx-7b-online',
+  Pplx70bOnline = 'perplexity/pplx-70b-online',
+  PplxCodeLlama34bInstruct = 'perplexity/codellama-34b-instruct',
+  PplxLlama213bChat = 'perplexity/llama-2-13b-chat',
+  PplxLlama270bChat = 'perplexity/llama-2-70b-chat',
+  PplxMistral7bInstruct = 'perplexity/mistral-7b-instruct',
+  PplxOpenhermes2Mistral7b = 'perplexity/openhermes-2-mistral-7b',
+  PplxOpenhermes25Mistral7b = 'perplexity/openhermes-2.5-mistral-7b',
+  Pplx7bChatAlpha = 'perplexity/pplx-7b-chat-alpha',
+  Pplx70bChatAlpha = 'perplexity/pplx-70b-chat-alpha',
 }
 
 export enum VLLMModels {
@@ -157,10 +157,10 @@ export enum XinferenceModels {
 }
 
 export enum CloudflareWorkersAIModels {
-  MetaLlama27bChatFp16 = '@cf/meta/llama-2-7b-chat-fp16',
-  MetaLlama27bChatInt8 = '@cf/meta/llama-2-7b-chat-int8',
-  Mistral7bInstructV01 = '@cf/mistral/mistral-7b-instruct-v0.1',
-  TheBlokeCodellama7bInstructAwq = '@hf/thebloke/codellama-7b-instruct-awq',
+  MetaLlama27bChatFp16 = 'cloudflare/@cf/meta/llama-2-7b-chat-fp16',
+  MetaLlama27bChatInt8 = 'cloudflare/@cf/meta/llama-2-7b-chat-int8',
+  Mistral7bInstructV01 = 'cloudflare/@cf/mistral/mistral-7b-instruct-v0.1',
+  TheBlokeCodellama7bInstructAwq = 'cloudflare/@hf/thebloke/codellama-7b-instruct-awq',
 }
 
 export enum AI21Models {
@@ -175,41 +175,41 @@ export enum NLPCloudModels {
 }
 
 export enum DeepInfraChatModels {
-  MetaLlamaLlama270bChatHf = 'meta-llama/Llama-2-70b-chat-hf',
-  MetaLlamaLlama27bChatHf = 'meta-llama/Llama-2-7b-chat-hf',
-  MetaLlamaLlama213bChatHf = 'meta-llama/Llama-2-13b-chat-hf',
-  CodellamaCodeLlama34bInstructHf = 'codellama/CodeLlama-34b-Instruct-hf',
-  MistralaiMistral7BInstructV01 = 'mistralai/Mistral-7B-Instruct-v0.1',
-  JondurbinAiroborosL270bGpt4141 = 'jondurbin/airoboros-l2-70b-gpt4-1.4.1',
+  MetaLlamaLlama270bChatHf = 'deepinfra/meta-llama/Llama-2-70b-chat-hf',
+  MetaLlamaLlama27bChatHf = 'deepinfra/meta-llama/Llama-2-7b-chat-hf',
+  MetaLlamaLlama213bChatHf = 'deepinfra/meta-llama/Llama-2-13b-chat-hf',
+  CodellamaCodeLlama34bInstructHf = 'deepinfra/codellama/CodeLlama-34b-Instruct-hf',
+  MistralaiMistral7BInstructV01 = 'deepinfra/mistralai/Mistral-7B-Instruct-v0.1',
+  JondurbinAiroborosL270bGpt4141 = 'deepinfra/jondurbin/airoboros-l2-70b-gpt4-1.4.1',
 }
 
 export enum VoyageAIModels {
-  Voyage01 = 'voyage-01',
-  VoyageLite01 = 'voyage-lite-01',
-  VoyageLite01Instruct = 'voyage-lite-01-instruct',
+  Voyage01 = 'voyage/voyage-01',
+  VoyageLite01 = 'voyage/voyage-lite-01',
+  VoyageLite01Instruct = 'voyage/voyage-lite-01-instruct',
 }
 
 export enum TogetherAIModels {
-  TogetherLlama270bChat = 'togethercomputer/llama-2-70b-chat',
-  TogetherLlama270b = 'togethercomputer/llama-2-70b',
-  TogetherLlama27B32K = 'togethercomputer/LLaMA-2-7B-32K',
-  TogetherLlama27B32KInstruct = 'togethercomputer/Llama-2-7B-32K-Instruct',
-  TogetherLlama27b = 'togethercomputer/llama-2-7b',
-  TogetherFalcon40bInstruct = 'togethercomputer/falcon-40b-instruct',
-  TogetherFalcon7bInstruct = 'togethercomputer/falcon-7b-instruct',
-  TogetherAlpaca7b = 'togethercomputer/alpaca-7b',
-  TogetherStarchatAlpha = 'HuggingFaceH4/starchat-alpha',
-  TogetherCodeLlama34b = 'togethercomputer/CodeLlama-34b',
-  TogetherCodeLlama34bInstruct = 'togethercomputer/CodeLlama-34b-Instruct',
-  TogetherCodeLlama34bPython = 'togethercomputer/CodeLlama-34b-Python',
-  TogetherSqlCoder = 'defog/sqlcoder',
-  TogetherNSQLLlama27B = 'NumbersStation/nsql-llama-2-7B',
-  TogetherWizardCoder15BV10 = 'WizardLM/WizardCoder-15B-V1.0',
-  TogetherWizardCoderPython34BV10 = 'WizardLM/WizardCoder-Python-34B-V1.0',
-  TogetherNousHermesLlama213b = 'NousResearch/Nous-Hermes-Llama2-13b',
-  TogetherChronosHermes13b = 'Austism/chronos-hermes-13b',
-  TogetherSolar070b16bit = 'upstage/SOLAR-0-70b-16bit',
-  TogetherWizardLM70BV10 = 'WizardLM/WizardLM-70B-V1.0',
+  TogetherLlama270bChat = 'together_ai/togethercomputer/llama-2-70b-chat',
+  TogetherLlama270b = 'together_ai/togethercomputer/llama-2-70b',
+  TogetherLlama27B32K = 'together_ai/togethercomputer/LLaMA-2-7B-32K',
+  TogetherLlama27B32KInstruct = 'together_ai/togethercomputer/Llama-2-7B-32K-Instruct',
+  TogetherLlama27b = 'together_ai/togethercomputer/llama-2-7b',
+  TogetherFalcon40bInstruct = 'together_ai/togethercomputer/falcon-40b-instruct',
+  TogetherFalcon7bInstruct = 'together_ai/togethercomputer/falcon-7b-instruct',
+  TogetherAlpaca7b = 'together_ai/togethercomputer/alpaca-7b',
+  TogetherStarchatAlpha = 'together_ai/HuggingFaceH4/starchat-alpha',
+  TogetherCodeLlama34b = 'together_ai/togethercomputer/CodeLlama-34b',
+  TogetherCodeLlama34bInstruct = 'together_ai/togethercomputer/CodeLlama-34b-Instruct',
+  TogetherCodeLlama34bPython = 'together_ai/togethercomputer/CodeLlama-34b-Python',
+  TogetherSqlCoder = 'together_ai/defog/sqlcoder',
+  TogetherNSQLLlama27B = 'together_ai/NumbersStation/nsql-llama-2-7B',
+  TogetherWizardCoder15BV10 = 'together_ai/WizardLM/WizardCoder-15B-V1.0',
+  TogetherWizardCoderPython34BV10 = 'together_ai/WizardLM/WizardCoder-Python-34B-V1.0',
+  TogetherNousHermesLlama213b = 'together_ai/NousResearch/Nous-Hermes-Llama2-13b',
+  TogetherChronosHermes13b = 'together_ai/Austism/chronos-hermes-13b',
+  TogetherSolar070b16bit = 'together_ai/upstage/SOLAR-0-70b-16bit',
+  TogetherWizardLM70BV10 = 'together_ai/WizardLM/WizardLM-70B-V1.0',
 }
 
 export enum AlephAlphaModels {
@@ -242,16 +242,16 @@ export enum AnyscaleModels {
 }
 
 export enum OpenRouterModels {
-  OpenRouterOpenAIGpt35turbo = 'openai/gpt-3.5-turbo',
-  OpenRouterOpenAIGpt35turbo16k = 'openai/gpt-3.5-turbo-16k',
-  OpenRouterOpenAIGpt4 = 'openai/gpt-4',
-  OpenRouterOpenAIGpt432k = 'openai/gpt-4-32k',
-  OpenRouterAnthropicClaud2 = 'anthropic/claude-2',
-  OpenRouterAnthropicClaudInstantV1 = 'anthropic/claude-instant-v1',
-  OpenRouterPalm2ChatBison = 'google/palm-2-chat-bison',
-  OpenRouterPalm2CodeChatBison = 'google/palm-2-codechat-bison',
-  OpenRouterMetaLlamaLlama213bChat = 'meta-llama/llama-2-13b-chat',
-  OpenRouterMetaLlamaLlama270bChat = 'meta-llama/llama-2-70b-chat',
+  OpenRouterOpenAIGpt35turbo = 'openrouter/openai/gpt-3.5-turbo',
+  OpenRouterOpenAIGpt35turbo16k = 'openrouter/openai/gpt-3.5-turbo-16k',
+  OpenRouterOpenAIGpt4 = 'openrouter/openai/gpt-4',
+  OpenRouterOpenAIGpt432k = 'openrouter/openai/gpt-4-32k',
+  OpenRouterAnthropicClaud2 = 'openrouter/anthropic/claude-2',
+  OpenRouterAnthropicClaudInstantV1 = 'openrouter/anthropic/claude-instant-v1',
+  OpenRouterPalm2ChatBison = 'openrouter/google/palm-2-chat-bison',
+  OpenRouterPalm2CodeChatBison = 'openrouter/google/palm-2-codechat-bison',
+  OpenRouterMetaLlamaLlama213bChat = 'openrouter/meta-llama/llama-2-13b-chat',
+  OpenRouterMetaLlamaLlama270bChat = 'openrouter/meta-llama/llama-2-70b-chat',
 }
 
 export enum ReplicateModels {
