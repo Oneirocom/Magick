@@ -11,8 +11,6 @@ import {
   GoogleAIStudioModels,
 } from '../../services/coreLLMService/types/completionModels'
 import { LLMProviders } from '../../services/coreLLMService/types/providerTypes'
-import { appendPrefixToModel } from '../../services/coreLLMService/constants/completionModelArrays'
-import { providers } from '../../services/coreLLMService/types/providers'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
@@ -123,7 +121,7 @@ export const generateText = makeFlowNodeDefinition({
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
         const modelProvider: LLMProviders = configuration.modelProvider
-        const modelData: CompletionModels =
+        const model: CompletionModels =
           read('modelOverride') || configuration.model
 
         // Check for custom OpenAI and empty base URL
@@ -132,11 +130,6 @@ export const generateText = makeFlowNodeDefinition({
             'Custom base URL is required for Custom OpenAI provider'
           )
         }
-
-        const model = appendPrefixToModel(
-          modelData,
-          providers[modelProvider].vendorModelPrefix
-        )
 
         const request = {
           model,
