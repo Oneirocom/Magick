@@ -87,6 +87,7 @@ export function saveGraphEvent({
   agentId,
   connector,
   connectorData,
+  observer,
   content,
   eventType,
   event,
@@ -99,6 +100,7 @@ export function saveGraphEvent({
     connector,
     connectorData,
     content,
+    observer,
     eventType,
     event,
   })
