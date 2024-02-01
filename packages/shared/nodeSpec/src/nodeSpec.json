@@ -206,7 +206,7 @@
       {
         "name": "model",
         "valueType": "string",
-        "defaultValue": "gemini-pro"
+        "defaultValue": "gemini/gemini-pro"
       },
       {
         "name": "customBaseUrl",
