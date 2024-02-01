@@ -1,6 +1,6 @@
 export enum SubscriptionNames {
-  Apprentice = 'Apprentice MP Subscription',
-  Wizard = 'Wizard MP Subscription',
+  Apprentice = 'Apprentice Subscription',
+  Wizard = 'Wizard Subscription',
 }
 
 interface StripeProduct {
