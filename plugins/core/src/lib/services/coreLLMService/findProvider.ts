@@ -6,7 +6,7 @@ import {
   LLMProviders,
   ProviderRecord,
 } from './types/providerTypes'
-import { availableProviders, providers } from './types/providers'
+import { providers } from './types/providers'
 
 export function findProvider(model: AllModels): ProviderRecord | undefined {
   for (const providerKey in providers) {
@@ -27,34 +27,35 @@ export function getProvidersWithUserKeys(
   return provider
 }
 
-export function filterProvidersBasedOnSubscription({
+export function isModelAvailableToUser({
   userData,
-  providersWithKeys,
+  model,
+  modelsWithKeys,
 }: {
   userData: UserResponse
-  providersWithKeys: LLMProviders[]
-}): LLMProviders[] | undefined {
-  let filteredProviders
-
+  model: AllModels
+  modelsWithKeys: AllModels[]
+}): boolean {
   if (userData && userData.user) {
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName?.trim()
 
       if (userSubscriptionName === SubscriptionNames.Wizard) {
-        filteredProviders = availableProviders
-      } else if (userSubscriptionName === SubscriptionNames.Apprentice) {
-        filteredProviders = availableProviders.filter(provider =>
-          providersWithKeys.includes(provider.provider)
-        )
+        // All models are available for Wizard subscription
+        return true
+      }
+      if (userSubscriptionName === SubscriptionNames.Apprentice) {
+        // Only models with keys are available for Apprentice subscription
+        const hasBalance = userData.user.balance > 0
+        return hasBalance ? true : modelsWithKeys.includes(model)
       }
     } else {
       if (userData.user.balance > 0) {
-        filteredProviders = availableProviders
+        // All models are available if user has a positive balance
+        return true
       }
     }
   }
-
-  return filteredProviders.length > 0
-    ? filteredProviders.map(prov => prov.provider)
-    : undefined
+  // If no subscription and no balance, model is not available
+  return false
 }
