@@ -1,9 +1,9 @@
-import { Message } from 'discord.js'
 import { CompletionModels } from './coreLLMService/types/completionModels'
 import {
   CompletionResponse,
   CompletionRequest,
   Chunk,
+  Message,
 } from './coreLLMService/types/liteLLMTypes'
 
 export interface IBudgetManagerService {
