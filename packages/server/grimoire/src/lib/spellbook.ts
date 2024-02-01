@@ -313,6 +313,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         this.agent.error(`Error handling event ${eventName} for ${spellId}`)
         continue
       }
+
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
   }
@@ -444,7 +445,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         initialState,
       })
 
-      spellCaster.initialize(spell)
+      await spellCaster.initialize(spell)
 
       const spellCasterList = this.spellMap.get(spell.id)
       if (spellCasterList) {
