@@ -291,7 +291,7 @@ export abstract class BasePlugin<
 
         saveGraphEvent({
           sender: payload.sender,
-          observer: payload.agentId,
+          observer: this.agentId,
           agentId: payload.agentId,
           connector: payload.connector,
           connectorData: JSON.stringify(payload.data),
@@ -325,11 +325,11 @@ export abstract class BasePlugin<
 
     // const { actionName, event } = data
     saveGraphEvent({
-      sender: data.event.agentId,
+      sender: this.agentId,
       // we are assuming here that the observer of this action is the
       //  original sender.  We may be wrong.
       observer: data.event.sender,
-      agentId: data.event.agentId,
+      agentId: this.agentId,
       connector: data.event.connector,
       connectorData: JSON.stringify(data.event.data),
       content: data.event.content,

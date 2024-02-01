@@ -140,6 +140,9 @@ export const FEATURE_FLAGS = {
   COMPOSER_V2: getVarForEnvironment('COMPOSER_V2') === 'true' || false,
 }
 
+//frigade config
+export const FRIGADE_KEY = getVarForEnvironment('FRIGADE_KEY') || '' 
+
 export const HEARTBEAT_MSEC =
   Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000
 export const MANAGER_WARM_UP_MSEC =

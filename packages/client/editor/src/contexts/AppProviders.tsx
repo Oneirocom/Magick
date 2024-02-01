@@ -5,6 +5,7 @@ import React from 'react'
 import ToastProvider from './ToastProvider'
 import { TabProvider } from '@magickml/providers';
 import { GlobalLayoutProvider } from './GlobalLayoutProvider'
+import FrigadeProvider from './FrigadeProvider';
 
 // Create a dark theme for the application
 const darkTheme = createTheme({
@@ -29,6 +30,7 @@ function ComposeProviders({ config, children }) {
     [ToastProvider, { autoHideDuration: 3000 }],
     GlobalLayoutProvider,
     TabProvider,
+    FrigadeProvider
   ].reverse()
 
   // Compose providers together and pass the props for each provider

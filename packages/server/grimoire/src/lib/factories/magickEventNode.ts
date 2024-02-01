@@ -11,6 +11,7 @@ import {
 import { BaseEmitter, EventPayload } from 'server/plugin'
 import { IEventStore } from '../services/eventStore'
 import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
+import { getEventStateKey } from '../utils'
 
 type OmitFactoryAndType<T extends INodeDefinition> = Omit<
   T,
@@ -45,27 +46,6 @@ type CustomEventNodeConfig<
   ) => void // Define the type more precisely if possible
   dependencyName: string
   eventName: string
-}
-
-const DEFAULT_EVENT_STATE_PROPERTY = 'channel'
-
-const getEventStateKey = (event: EventPayload, eventState: string[]) => {
-  const stateKey =
-    eventState.sort().reduce((acc, key) => {
-      const property = event[key]
-      if (property === undefined) return acc
-
-      // only add the : if there is already a key
-      if (acc.length > 0) {
-        acc = `${acc}:${property}`
-      } else {
-        acc = `${property}`
-      }
-
-      return acc
-    }, '') || event[DEFAULT_EVENT_STATE_PROPERTY]
-
-  return stateKey
 }
 
 /**
