@@ -37,19 +37,21 @@ export class GraphEventService<
       .from('graphEvents')
       .select('*')
       .where({ agentId: params?.query?.agentId })
+      .orderBy('created_at', 'desc')
 
     const param = params?.query || {}
     if (param.eventType) query.where({ eventType: param.eventType })
+    if (param.eventTypes) query.whereIn('eventType', param.eventTypes)
     if (param.sender) query.where({ sender: param.sender })
     if (param.connector) query.where({ connector: param.connector })
     if (param.observer) query.where({ observer: param.observer })
     if (param.connectorData) query.where({ connectorData: param.connectorData })
 
-    query.limit(param['$limit'])
+    if (param.$limit) query.limit(param.$limit)
 
     const res = await query
 
-    return { events: res as unknown as { data: Array<any> } }
+    return res
   }
 
   async create(data: GraphEventsData): Promise<GraphEventsData> {
