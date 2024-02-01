@@ -1,56 +1,66 @@
-import { modelProviderMap } from './constants/modelProviderMap'
-import { providerModelMap } from './constants/providerModelMap'
+import { UserResponse } from '../userService/coreUserService'
+import { SubscriptionNames } from '../userService/types'
 import { AllModels } from './types/models'
 import { LLMProviderKeys, LLMProviders } from './types/providerTypes'
-
-const providerKeyMap = {
-  [LLMProviderKeys.OpenAI]: LLMProviders.OpenAI,
-  [LLMProviderKeys.Azure]: LLMProviders.Azure,
-  [LLMProviderKeys.Anthropic]: LLMProviders.Anthropic,
-  [LLMProviderKeys.Sagemaker]: LLMProviders.Sagemaker,
-  [LLMProviderKeys.Bedrock]: LLMProviders.Bedrock,
-  [LLMProviderKeys.Anyscale]: LLMProviders.Anyscale,
-  [LLMProviderKeys.PerplexityAI]: LLMProviders.PerplexityAI,
-  [LLMProviderKeys.VLLM]: LLMProviders.VLLM,
-  [LLMProviderKeys.DeepInfra]: LLMProviders.DeepInfra,
-  [LLMProviderKeys.Cohere]: LLMProviders.Cohere,
-  [LLMProviderKeys.TogetherAI]: LLMProviders.TogetherAI,
-  [LLMProviderKeys.AlephAlpha]: LLMProviders.AlephAlpha,
-  [LLMProviderKeys.Baseten]: LLMProviders.Baseten,
-  [LLMProviderKeys.OpenRouter]: LLMProviders.OpenRouter,
-  [LLMProviderKeys.CustomAPI]: LLMProviders.CustomAPI,
-  [LLMProviderKeys.Petals]: LLMProviders.Petals,
-  [LLMProviderKeys.Ollama]: LLMProviders.Ollama,
-  [LLMProviderKeys.GoogleAIStudio]: LLMProviders.GoogleAIStudio,
-  [LLMProviderKeys.Palm]: LLMProviders.Palm,
-  [LLMProviderKeys.HuggingFace]: LLMProviders.HuggingFace,
-  [LLMProviderKeys.Xinference]: LLMProviders.Xinference,
-  [LLMProviderKeys.CloudflareWorkersAI]: LLMProviders.CloudflareWorkersAI,
-  [LLMProviderKeys.AI21]: LLMProviders.AI21,
-  [LLMProviderKeys.NLPCloud]: LLMProviders.NLPCloud,
-  [LLMProviderKeys.VoyageAI]: LLMProviders.VoyageAI,
-  [LLMProviderKeys.Replicate]: LLMProviders.Replicate,
-  [LLMProviderKeys.Meta]: LLMProviders.Meta,
-  [LLMProviderKeys.Mistral]: LLMProviders.Mistral,
-  [LLMProviderKeys.VertexAI]: LLMProviders,
-}
+import { availableProviders, providers } from './types/providers'
 
 export function findProviderKey(model: AllModels): LLMProviderKeys | undefined {
-  return modelProviderMap[model].apiKeyName
+  for (const providerKey in providers) {
+    const provider = providers[providerKey]
+    if (provider.allModels.includes(model)) {
+      return provider.keyName
+    }
+  }
+  return undefined
 }
 
 export function findProviderName(model: AllModels): LLMProviders | undefined {
-  return modelProviderMap[model].provider
-}
-
-export function getModelsForProvider(
-  provider: LLMProviders
-): Partial<AllModels[] | undefined> {
-  return providerModelMap[provider]
+  for (const providerKey in providers) {
+    const provider = providers[providerKey as LLMProviders]
+    if (provider.allModels.includes(model)) {
+      return provider.provider
+    }
+  }
+  return undefined
 }
 
 export function getProvidersWithUserKeys(
   keys: LLMProviderKeys[]
 ): LLMProviders[] {
-  return keys.map(key => providerKeyMap[key]).filter(Provider => Provider)
+  const provider = Object.values(providers)
+    .filter(provider => keys.includes(provider.keyName))
+    .map(provider => provider.provider)
+  return provider
+}
+
+export function filterProvidersBasedOnSubscription({
+  userData,
+  providersWithKeys,
+}: {
+  userData: UserResponse
+  providersWithKeys: LLMProviders[]
+}): LLMProviders[] | undefined {
+  let filteredProviders
+
+  if (userData && userData.user) {
+    if (userData.user.hasSubscription) {
+      const userSubscriptionName = userData.user.subscriptionName?.trim()
+
+      if (userSubscriptionName === SubscriptionNames.Wizard) {
+        filteredProviders = availableProviders
+      } else if (userSubscriptionName === SubscriptionNames.Apprentice) {
+        filteredProviders = availableProviders.filter(provider =>
+          providersWithKeys.includes(provider.provider)
+        )
+      }
+    } else {
+      if (userData.user.balance > 0) {
+        filteredProviders = availableProviders
+      }
+    }
+  }
+
+  return filteredProviders.length > 0
+    ? filteredProviders.map(prov => prov.provider)
+    : undefined
 }
