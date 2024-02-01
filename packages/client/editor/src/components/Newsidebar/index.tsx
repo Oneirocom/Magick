@@ -105,10 +105,15 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
 
             rootSpellId = rootSpell.data.id
           }
+          const agentName = uniqueNamesGenerator({
+            dictionaries: [adjectives, colors],
+            separator: ' ',
+            length: 2,
+          })
 
           // Create a draft agent
           const draftAgent = await createNewAgent({
-            name: 'Draft Agent',
+            name: `${agentName} (draft)`,
             projectId: config.projectId,
             enabled: true,
             default: true,
@@ -121,7 +126,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
 
           // Create a live agent
           const newLiveAgent = await createNewAgent({
-            name: 'My Live Agent',
+            name: `${agentName} (live)`,
             projectId: config.projectId,
             enabled: true,
             default: false,
@@ -149,7 +154,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
           // // Thus a draft should be created and a release should be made for the agent.
           if (agents.total === 1) {
             // Create a draft agent
-            const draftAgent = agents.data.filter(agent => agent.name === 'Draft Agent')[0]
+            const draftAgent = agents.data.filter(agent => agent.name.includes('draft'))[0]
             const agent = agents.data.filter(agent => agent.id !== draftAgent?.id)[0]
 
             if (!draftAgent) {
@@ -181,7 +186,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
                 rootSpell: agent?.rootSpell || "{}", // Depricated
                 publicVariables: '{}',
                 secrets: '{}',
-                name: 'Draft Agent',
+                name: `${agent?.name} (draft)`,
                 enabled: true,
                 pingedAt: "",
                 projectId: agent?.projectId,
@@ -242,7 +247,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
     <div style={{ display: 'flex', height: '100%', flexDirection: 'column', borderRight: '1px solid var(--deep-background-color)' }}>
       <AgentMenu data={data} />
 
-      <div className={`${!isAPIKeysSet ? "flex pb-4" : ""}`}>
+      <div className={`${!isAPIKeysSet ? "flex pb-4" : ""} `}>
         <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
       </div>
 
