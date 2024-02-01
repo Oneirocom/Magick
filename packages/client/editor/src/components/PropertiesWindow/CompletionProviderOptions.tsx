@@ -2,19 +2,17 @@ import React, { useState, useEffect } from "react";
 import { ConfigurationComponentProps } from "./PropertiesWindow";
 import { CompletionModels } from "plugins/core/src/lib/services/coreLLMService/types/completionModels";
 import { useConfig } from "@magickml/providers";
-import { filterProvidersBasedOnSubscription, getProvidersWithUserKeys } from "plugins/core/src/lib/services/coreLLMService/findProvider";
+import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/findProvider";
 import { useListCredentialsQuery } from "client/state";
 import { useGetUserQuery } from "client/state";
 import { LLMProviders } from "plugins/core/src/lib/services/coreLLMService/types/providerTypes";
-import { providers } from "plugins/core/src/lib/services/coreLLMService/types/providers";
+import { availableProviders, providers } from "plugins/core/src/lib/services/coreLLMService/types/providers";
 
 export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
   const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(props.fullConfig.modelProvider);
   const [selectedModel, setSelectedModel] = useState<CompletionModels>(props.fullConfig.model);
   const [activeModels, setActiveModels] = useState<CompletionModels[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
-  const [filteredProviders, setFilteredProviders] = useState<LLMProviders[]>([])
-  const [openAIAPIBase, setOpenAIAPIBase] = useState('');
 
   const config = useConfig()
   const { data: credentials } = useListCredentialsQuery({
@@ -33,24 +31,8 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
   }, [credentials]);
 
   useEffect(() => {
-    if (userData) {
-      const filteredProviderNames = filterProvidersBasedOnSubscription({
-        userData,
-        providersWithKeys,
-      });
-      setFilteredProviders(filteredProviderNames);
-      // Change the selected provider
-      const newProvider = providers[selectedProvider] || providers[LLMProviders.GoogleAIStudio]; // Default to OpenAI if selectedProvider is not valid
-      setActiveModels(newProvider.completionModels || []);
-      // Set the first model of the new provider as the selected model
-      const firstModel = newProvider.completionModels?.[0] || null;
-      setSelectedModel(firstModel);
-      // Update the configuration with the first model of the new provider
-      if (firstModel) {
-        props.updateConfigKey("model", firstModel);
-      }
-    }
-  }, [userData, providersWithKeys, selectedProvider]);
+    setActiveModels(providers[selectedProvider].completionModels);
+  }, [selectedProvider]);
 
   const onProviderChange = (provider: LLMProviders) => {
     setSelectedProvider(provider);
@@ -62,11 +44,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     props.updateConfigKey("model", model);
   };
 
-  const handleCustomOpenAIChange = (e) => {
-    const value = e.target.value;
-    setOpenAIAPIBase(value);
-    props.updateConfigKey("customBaseUrl", value);
-  };
 
   function removeFirstVendorTag(modelName) {
     // Define a regex pattern to match the first vendor tag
@@ -82,28 +59,34 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
   }
 
   const renderProviderOptions = () => {
-    return filteredProviders?.map((prov) => {
-      const isAvailable = providersWithKeys.includes(prov);
-      const newProvider = providers[prov];
+    return availableProviders?.map((prov) => {
       return (
-        <option key={prov} value={prov} style={{ color: isAvailable ? 'black' : 'gray' }}>
-          {newProvider.displayName}
+        <option key={prov.provider} value={prov.provider}>
+          {prov.displayName}
         </option>
       );
     });
   };
 
   const renderModelOptions = () => {
+    const modelsWithKeys = providersWithKeys.map((provider) => {
+      return providers[provider].completionModels;
+    }).flat();
     return activeModels?.map((model) => {
+
+      const isAvailable = isModelAvailableToUser({
+        userData,
+        model,
+        modelsWithKeys
+      })
       return (
-        <option key={model} value={model}>
+        <option key={model} value={model} disabled={!isAvailable} className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm">
           {removeFirstVendorTag(model)}
         </option>
       );
     });
   };
 
-  const isCustomOpenAISelected = selectedProvider === LLMProviders.CustomOpenAI;
 
   return (
     <div>
@@ -117,18 +100,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
           {renderProviderOptions()}
         </select>
       </div>
-      {isCustomOpenAISelected && (
-        <div className="mt-4">
-          <h3>Custom API URL</h3>
-          <input
-            type="text"
-            id="customOpenAI"
-            className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
-            value={openAIAPIBase}
-            onChange={handleCustomOpenAIChange}
-          />
-        </div>
-      )}
       <div className="mt-4">
         <h3>Model</h3>
         <div className="flex flex-col mt-1">
@@ -141,6 +112,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
             }
             }
           >
+            <option value="">Select a model</option>
             {renderModelOptions()}
           </select>
         </div>
