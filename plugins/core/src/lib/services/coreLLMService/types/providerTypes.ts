@@ -1,4 +1,6 @@
 import { PluginCredential } from 'server/credentials'
+import { CompletionModels } from './completionModels'
+import { EmbeddingModels } from '../../coreEmbeddingService/types'
 
 export enum LLMProviders {
   OpenAI = 'openai',
@@ -31,6 +33,63 @@ export enum LLMProviders {
   Meta = 'meta',
   Mistral = 'mistralai',
   VertexAI = 'vertexai',
+}
+
+export enum LLMProviderDisplayNames {
+  OpenAI = 'OpenAI',
+  Azure = 'Azure OpenAI',
+  Anthropic = 'Anthropic',
+  Sagemaker = 'Sagemaker',
+  Bedrock = 'AWS Bedrock',
+  Anyscale = 'Anyscale',
+  PerplexityAI = 'Perplexity AI',
+  VLLM = 'VLLM',
+  DeepInfra = 'DeepInfra',
+  Cohere = 'Cohere',
+  TogetherAI = 'Together AI',
+  AlephAlpha = 'Aleph Alpha',
+  Baseten = 'Baseten',
+  OpenRouter = 'OpenRouter',
+  CustomAPI = 'Custom API',
+  CustomOpenAI = 'Custom OpenAI',
+  Petals = 'Petals',
+  Ollama = 'Ollama',
+  GoogleAIStudio = 'Gemini - Google AI Studio',
+  Palm = 'Palm',
+  HuggingFace = 'Hugging Face',
+  Xinference = 'Xinference',
+  CloudflareWorkersAI = 'Cloudflare Workers AI',
+  AI21 = 'AI21',
+  NLPCloud = 'NLP Cloud',
+  VoyageAI = 'Voyage AI',
+  Replicate = 'Replicate',
+  Meta = 'Meta',
+  Mistral = 'Mistral AI',
+  VertexAI = 'Vertex AI',
+}
+
+export enum LLMProviderPrefixes {
+  Azure = 'azure',
+  Sagemaker = 'sagemaker',
+  Bedrock = 'bedrock',
+  Anyscale = 'anyscale',
+  PerplexityAI = 'perplexity',
+  VLLM = 'vllm',
+  DeepInfra = 'deepinfra',
+  TogetherAI = 'together_ai',
+  Baseten = 'baseten',
+  OpenRouter = 'openrouter',
+  CustomOpenAI = 'openai',
+  Petals = 'petals',
+  Ollama = 'ollama',
+  GoogleAIStudio = 'gemini',
+  Palm = 'palm',
+  HuggingFace = 'huggingface',
+  Xinference = 'xinference',
+  CloudflareWorkersAI = 'cloudflare',
+  VoyageAI = 'voyage',
+  Replicate = 'replicate/deployments',
+  Mistral = 'mistral',
 }
 
 export enum LLMProviderKeys {
@@ -66,10 +125,16 @@ export enum LLMProviderKeys {
   Unknown = 'unknown',
 }
 
-export interface ModelProviderMapping {
+export type ProviderRecord = {
   provider: LLMProviders
-  apiKeyName: LLMProviderKeys
+  displayName: LLMProviderDisplayNames
+  keyName: LLMProviderKeys
+  completionModels: CompletionModels[]
+  embeddingModels: EmbeddingModels[]
+  allModels: (CompletionModels | EmbeddingModels)[]
+  vendorModelPrefix: LLMProviderPrefixes | ''
 }
+
 export type LLMCredential = PluginCredential & {
   value: string
 }
