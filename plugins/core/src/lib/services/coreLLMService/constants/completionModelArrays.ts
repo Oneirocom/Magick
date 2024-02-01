@@ -29,16 +29,6 @@ import {
   GoogleAIStudioModels,
   CompletionModels,
 } from '../types/completionModels'
-import { LLMProviderPrefixes } from '../types/providerTypes'
-
-export function appendPrefixToModels(modelsArray, prefix) {
-  if (prefix === '') return modelsArray
-  return modelsArray.map(model => `${prefix}/${model}`)
-}
-export function appendPrefixToModel(model, prefix) {
-  if (prefix === '') return model
-  return `${prefix}/${model}`
-}
 
 export const openAIChatCompletionModelsArray = Object.values(
   OpenAIChatCompletionModels
@@ -87,120 +77,6 @@ export const allOllamaModelsArray = [
   ...ollamaVisionModelsArray,
 ]
 
-export const openAICompletionModelsWithPrefix = appendPrefixToModels(
-  openAIChatCompletionModelsArray,
-  ''
-)
-export const ollamaModelsWithPrefix = appendPrefixToModels(
-  ollamaModelsArray,
-  LLMProviderPrefixes.Ollama
-)
-export const ollamaVisionModelsWithPrefix = appendPrefixToModels(
-  ollamaVisionModelsArray,
-  LLMProviderPrefixes.Ollama
-)
-export const vertexAIGoogleModelsWithPrefix = appendPrefixToModels(
-  vertexAIGoogleModelsArray,
-  ''
-)
-export const mistralAIModelsWithPrefix = appendPrefixToModels(
-  mistralAIModelsArray,
-  LLMProviderPrefixes.Mistral
-)
-export const anthropicModelsWithPrefix = appendPrefixToModels(
-  anthropicModelsArray,
-  ''
-)
-export const sageMakerModelsWithPrefix = appendPrefixToModels(
-  sageMakerModelsArray,
-  LLMProviderPrefixes.Sagemaker
-)
-export const bedrockModelsWithPrefix = appendPrefixToModels(
-  bedrockModelsArray,
-  LLMProviderPrefixes.Bedrock
-)
-export const perplexityAIModelsWithPrefix = appendPrefixToModels(
-  perplexityAIModelsArray,
-  LLMProviderPrefixes.PerplexityAI
-)
-export const vllmModelsWithPrefix = appendPrefixToModels(
-  vllmModelsArray,
-  LLMProviderPrefixes.VLLM
-)
-export const xinferenceModelsWithPrefix = appendPrefixToModels(
-  xinferenceModelsArray,
-  LLMProviderPrefixes.Xinference
-)
-export const cloudflareWorkersAIModelsWithPrefix = appendPrefixToModels(
-  cloudflareWorkersAIModelsArray,
-  LLMProviderPrefixes.CloudflareWorkersAI
-)
-export const ai21ModelsWithPrefix = appendPrefixToModels(ai21ModelsArray, '')
-export const nlpCloudModelsWithPrefix = appendPrefixToModels(
-  nlpCloudModelsArray,
-  ''
-)
-export const deepInfraChatModelsWithPrefix = appendPrefixToModels(
-  deepInfraChatModelsArray,
-  LLMProviderPrefixes.DeepInfra
-)
-export const baseTenModelsWithPrefix = appendPrefixToModels(
-  baseTenModelsArray,
-  LLMProviderPrefixes.Baseten
-)
-export const petalsModelsWithPrefix = appendPrefixToModels(
-  petalsModelsArray,
-  LLMProviderPrefixes.Petals
-)
-export const voyageAIModelsWithPrefix = appendPrefixToModels(
-  voyageAIModelsArray,
-  LLMProviderPrefixes.VoyageAI
-)
-export const alephAlphaModelsWithPrefix = appendPrefixToModels(
-  alephAlphaModelsArray,
-  ''
-)
-export const anyscaleModelsWithPrefix = appendPrefixToModels(
-  anyscaleModelsArray,
-  LLMProviderPrefixes.Anyscale
-)
-export const openRouterModelsWithPrefix = appendPrefixToModels(
-  openRouterModelsArray,
-  LLMProviderPrefixes.OpenRouter
-)
-export const replicateModelsWithPrefix = appendPrefixToModels(
-  replicateModelsArray,
-  LLMProviderPrefixes.Replicate
-)
-export const togetherAIModelsWithPrefix = appendPrefixToModels(
-  togetherAIModelsArray,
-  LLMProviderPrefixes.TogetherAI
-)
-export const palmModelsWithPrefix = appendPrefixToModels(
-  palmModelsArray,
-  LLMProviderPrefixes.Palm
-)
-export const googleAIStudioModelsWithPrefix = appendPrefixToModels(
-  googleAIStudioModelsArray,
-  LLMProviderPrefixes.GoogleAIStudio
-)
-
-export const allOpenAICompletionModelsWithPrefix = appendPrefixToModels(
-  allOpenAICompletionModelsArray,
-  ''
-)
-
-export const allOllamaModelsWithPrefix = appendPrefixToModels(
-  allOllamaModelsArray,
-  LLMProviderPrefixes.Ollama
-)
-
-export const huggingFaceModelsWithPromptFormattingWithPrefix =
-  appendPrefixToModels(
-    huggingFaceModelsWithPromptFormattingArray,
-    LLMProviderPrefixes.HuggingFace
-  )
-
 export const allCompletionModels: CompletionModels[] = [
   ...openAIChatCompletionModelsArray,
   ...openAITextCompletionInstructModelsArray,
@@ -227,32 +103,4 @@ export const allCompletionModels: CompletionModels[] = [
   ...petalsModelsArray,
   ...voyageAIModelsArray,
   ...alephAlphaModelsArray,
-]
-
-export const allPrefixedCompletionModels = [
-  ...allOllamaModelsWithPrefix,
-  ...allOpenAICompletionModelsWithPrefix,
-  ...vertexAIGoogleModelsWithPrefix,
-  ...mistralAIModelsWithPrefix,
-  ...anthropicModelsWithPrefix,
-  ...sageMakerModelsWithPrefix,
-  ...bedrockModelsWithPrefix,
-  ...perplexityAIModelsWithPrefix,
-  ...vllmModelsWithPrefix,
-  ...xinferenceModelsWithPrefix,
-  ...cloudflareWorkersAIModelsWithPrefix,
-  ...ai21ModelsWithPrefix,
-  ...nlpCloudModelsWithPrefix,
-  ...deepInfraChatModelsWithPrefix,
-  ...baseTenModelsWithPrefix,
-  ...petalsModelsWithPrefix,
-  ...voyageAIModelsWithPrefix,
-  ...alephAlphaModelsWithPrefix,
-  ...anyscaleModelsWithPrefix,
-  ...openRouterModelsWithPrefix,
-  ...replicateModelsWithPrefix,
-  ...togetherAIModelsWithPrefix,
-  ...palmModelsWithPrefix,
-  ...googleAIStudioModelsWithPrefix,
-  ...huggingFaceModelsWithPromptFormattingWithPrefix,
 ]
