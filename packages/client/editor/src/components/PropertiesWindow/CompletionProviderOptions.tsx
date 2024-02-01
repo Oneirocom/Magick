@@ -38,11 +38,17 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
         userData,
         providersWithKeys,
       });
-
       setFilteredProviders(filteredProviderNames);
-
-      const models = providers[selectedProvider]?.completionModels || [];
-      setActiveModels(models);
+      // Change the selected provider
+      const newProvider = providers[selectedProvider] || providers[LLMProviders.GoogleAIStudio]; // Default to OpenAI if selectedProvider is not valid
+      setActiveModels(newProvider.completionModels || []);
+      // Set the first model of the new provider as the selected model
+      const firstModel = newProvider.completionModels?.[0] || null;
+      setSelectedModel(firstModel);
+      // Update the configuration with the first model of the new provider
+      if (firstModel) {
+        props.updateConfigKey("model", firstModel);
+      }
     }
   }, [userData, providersWithKeys, selectedProvider]);
 
@@ -53,11 +59,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
 
   const onModelChange = (model: CompletionModels) => {
     setSelectedModel(model);
-    const newProvider = providers[selectedProvider];
-    const providerPrefix = newProvider.vendorModelPrefix || "";
-    const newModel = `${providerPrefix}/${model}`;
-    props.updateConfigKey("model", newModel);
-    props.updateConfigKey('customBaseUrl', openAIAPIBase)
+    props.updateConfigKey("model", model);
   };
 
   const handleCustomOpenAIChange = (e) => {
@@ -66,6 +68,18 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     props.updateConfigKey("customBaseUrl", value);
   };
 
+  function removeFirstVendorTag(modelName) {
+    // Define a regex pattern to match the first vendor tag
+    const prefixPattern = /^([^/]+\/)?(.+)$/;
+
+    // Use regex to extract the model name without the first vendor tag
+    const match = modelName.match(prefixPattern);
+    if (match && match.length === 3) {
+      return match[2]; // The second capture group is the model name without the first vendor tag
+    }
+    // If no tag is found, return the original model name
+    return modelName;
+  }
 
   const renderProviderOptions = () => {
     return filteredProviders?.map((prov) => {
@@ -83,7 +97,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     return activeModels?.map((model) => {
       return (
         <option key={model} value={model}>
-          {model}
+          {removeFirstVendorTag(model)}
         </option>
       );
     });
