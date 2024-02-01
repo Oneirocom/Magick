@@ -15,6 +15,7 @@ import { VariableNames } from './variableNames';
 import { ValueType } from './ValueType';
 import { DefaultConfig } from './DefaultConfig';
 import { CompletionProviderOptions } from './CompletionProviderOptions';
+import { SelectedEvents } from './SelectedEvents';
 
 
 type Props = {
@@ -43,6 +44,7 @@ const ConfigurationComponents = {
   valueType: ValueType,
   default: DefaultConfig,
   modelProviders: CompletionProviderOptions,
+  selectedEvents: SelectedEvents
 }
 
 export const PropertiesWindow = (props: Props) => {
