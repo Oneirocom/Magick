@@ -1,9 +1,10 @@
+import { Message } from 'discord.js'
 import { CompletionModels } from './coreLLMService/types/completionModels'
 import {
   CompletionResponse,
   CompletionRequest,
-} from './coreLLMService/types/completionTypes'
-import { Chunk, Message } from './coreLLMService/types/messageTypes'
+  Chunk,
+} from './coreLLMService/types/liteLLMTypes'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
