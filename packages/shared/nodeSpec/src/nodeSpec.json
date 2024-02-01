@@ -1310,11 +1310,11 @@
         "name": "eventStateProperties",
         "valueType": "array",
         "defaultValue": [
-          "connector",
           "client",
+          "connector",
           "channel",
-          "sender",
-          "agentId"
+          "from user",
+          "to user"
         ]
       },
       {
