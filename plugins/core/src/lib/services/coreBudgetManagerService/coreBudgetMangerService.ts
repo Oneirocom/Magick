@@ -9,8 +9,10 @@ import {
 import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
 import { CompletionModels } from '../coreLLMService/types/completionModels'
-import { CompletionResponse } from '../coreLLMService/types/completionTypes'
-import { Message } from '../coreLLMService/types/messageTypes'
+import {
+  CompletionResponse,
+  Message,
+} from '../coreLLMService/types/liteLLMTypes'
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
