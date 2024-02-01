@@ -1,8 +1,15 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
+import { Application } from 'server/core'
 import { EventPayload } from 'server/plugin'
+import { getEventProperties } from '../utils'
 
 export interface IEventStore {
   currentEvent: () => EventPayload | null
+  queryEvents: (
+    eventPropertyKeys: string[],
+    messageTypes: string[],
+    limit?: number
+  ) => any
   setEvent: (event: EventWithKey) => void
   init: (nodes: GraphNodes) => void
   finish: () => void
@@ -28,17 +35,49 @@ export class EventStore implements IEventStore {
   private status: StatusEnum
   private stateService: IStateService
   private graphNodes!: GraphNodes
+  private app: Application
+  private agentId: string
 
-  constructor(stateService: IStateService) {
+  constructor(stateService: IStateService, app: Application, agentId: string) {
     this.stateService = stateService
     this._currentEvent = null
     this.status = StatusEnum.INIT
+    this.app = app
+    this.agentId = agentId
   }
 
   public init(graphNodes: GraphNodes) {
     this._currentEvent = null
     this.graphNodes = graphNodes
     this.status = StatusEnum.READY
+  }
+
+  public async queryEvents(
+    eventPropertyKeys: string[],
+    messageTypes: string[],
+    limit: number = 100
+  ) {
+    if (!this._currentEvent) return null
+
+    const graphEventsService = this.app.service('graphEvents')
+    const eventProperties = getEventProperties(
+      this._currentEvent,
+      eventPropertyKeys
+    )
+
+    const query = {
+      agentId: this.agentId,
+      eventTypes: messageTypes,
+      ...eventProperties,
+    }
+
+    query['$limit'] = limit
+
+    console.log('QUERY', query)
+
+    const results = await graphEventsService.find({ query })
+
+    return results
   }
 
   public currentEvent(): EventPayload | null {
