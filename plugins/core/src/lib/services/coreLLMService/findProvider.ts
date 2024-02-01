@@ -1,24 +1,18 @@
 import { UserResponse } from '../userService/coreUserService'
 import { SubscriptionNames } from '../userService/types'
 import { AllModels } from './types/models'
-import { LLMProviderKeys, LLMProviders } from './types/providerTypes'
+import {
+  LLMProviderKeys,
+  LLMProviders,
+  ProviderRecord,
+} from './types/providerTypes'
 import { availableProviders, providers } from './types/providers'
 
-export function findProviderKey(model: AllModels): LLMProviderKeys | undefined {
+export function findProvider(model: AllModels): ProviderRecord | undefined {
   for (const providerKey in providers) {
     const provider = providers[providerKey]
     if (provider.allModels.includes(model)) {
-      return provider.keyName
-    }
-  }
-  return undefined
-}
-
-export function findProviderName(model: AllModels): LLMProviders | undefined {
-  for (const providerKey in providers) {
-    const provider = providers[providerKey as LLMProviders]
-    if (provider.allModels.includes(model)) {
-      return provider.provider
+      return provider
     }
   }
   return undefined
