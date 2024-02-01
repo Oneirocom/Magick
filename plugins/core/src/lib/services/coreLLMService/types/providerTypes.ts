@@ -18,7 +18,7 @@ export enum LLMProviders {
   Baseten = 'baseten',
   OpenRouter = 'openrouter',
   CustomAPI = 'customapi',
-  CustomOpenAI = 'custom_openai',
+  // CustomOpenAI = 'custom_openai',
   Petals = 'petals',
   Ollama = 'ollama',
   GoogleAIStudio = 'google',
