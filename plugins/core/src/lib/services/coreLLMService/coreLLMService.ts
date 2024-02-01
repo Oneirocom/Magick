@@ -11,8 +11,10 @@ import { CoreUserService } from '../userService/coreUserService'
 import { saveRequest } from 'shared/core'
 import { findProviderKey, findProviderName } from './findProvider'
 import { LLMCredential } from './types/providerTypes'
-import { CompletionResponse } from './types/completionTypes'
+
 import { AllModels } from './types/models'
+import { SubscriptionNames } from '../userService/types'
+import { CompletionResponse } from './types/liteLLMTypes'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -64,17 +66,6 @@ export class CoreLLMService implements ICoreLLMService {
     while (attempts < maxRetries) {
       try {
         if (PRODUCTION) {
-          const user = await this.userService.getUser()
-          const budgetManagerUser =
-            await this.coreBudgetManagerService?.getUsers()
-
-          const liteLLMBudget =
-            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
-
-          console.log('###PROJECT ID', this.projectId)
-
-          console.log('USER', user, budgetManagerUser, liteLLMBudget)
-
           const estimatedCost =
             await this.coreBudgetManagerService?.projectedCost({
               model: request.model,
@@ -93,14 +84,25 @@ export class CoreLLMService implements ICoreLLMService {
           }
         }
 
+        const userData = await this.userService.getUser()
+        const credential = this.getCredentialForUser({
+          userData,
+          model: request.model,
+        })
+
+        if (!credential) {
+          throw new Error('No credential found')
+        }
+
         const body = {
-          model: request.model || 'gemini-pro',
+          model: request.model,
           messages: request.messages,
           ...request.options,
           stream: true,
-          api_key: this.getCredential(request.model),
+          api_key: credential,
         }
 
+        // console.log('BODY', body)
         const stream = await this.liteLLM.completion$(body)
 
         for await (const chunk of stream) {
@@ -171,17 +173,30 @@ export class CoreLLMService implements ICoreLLMService {
     }
   }
 
-  private getCredential = (model: AllModels): string => {
+  private getCredentialForUser = ({
+    userData,
+    model,
+  }: {
+    userData: any
+    model: AllModels
+  }) => {
     const providerKey = findProviderKey(model)
-
-    let credential = this.credentials.find(c => c.name === providerKey)?.value
-
-    if (!credential && !PRODUCTION && providerKey) {
-      credential = process.env[providerKey]
+    if (!providerKey) {
+      throw new Error(`No provider key found for ${model}`)
     }
-
-    if (!credential) {
-      throw new Error(`No credential found for ${providerKey}`)
+    let credential = this.credentials.find(c => c.name === providerKey)?.value
+    const MAGICK_API_KEY = process.env[providerKey]
+    if (userData.user.hasSubscription) {
+      const userSubscriptionName = userData.user.subscriptionName.trim()
+      if (userSubscriptionName === SubscriptionNames.Wizard && providerKey) {
+        credential = MAGICK_API_KEY
+      } else if (userSubscriptionName === SubscriptionNames.Apprentice) {
+        credential = this.credentials.find(c => c.name === providerKey)?.value
+      } else {
+        if (userData.user.balance > 0) {
+          credential = MAGICK_API_KEY
+        }
+      }
     }
     return credential
   }
