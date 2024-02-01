@@ -23,46 +23,15 @@ import {
   palmModelsArray,
   allOllamaModelsArray,
   googleAIStudioModelsArray,
-  googleAIStudioModelsWithPrefix,
   allOpenAICompletionModelsArray,
-  allOpenAICompletionModelsWithPrefix,
-  anthropicModelsWithPrefix,
-  sageMakerModelsWithPrefix,
-  bedrockModelsWithPrefix,
-  anyscaleModelsWithPrefix,
-  perplexityAIModelsWithPrefix,
-  vllmModelsWithPrefix,
-  deepInfraChatModelsWithPrefix,
-  togetherAIModelsWithPrefix,
-  alephAlphaModelsWithPrefix,
-  baseTenModelsWithPrefix,
-  openRouterModelsWithPrefix,
-  petalsModelsWithPrefix,
-  allOllamaModelsWithPrefix,
-  palmModelsWithPrefix,
-  xinferenceModelsWithPrefix,
-  cloudflareWorkersAIModelsWithPrefix,
-  ai21ModelsWithPrefix,
-  nlpCloudModelsWithPrefix,
-  voyageAIModelsWithPrefix,
-  replicateModelsWithPrefix,
-  mistralAIModelsWithPrefix,
-  vertexAIGoogleModelsWithPrefix,
-  huggingFaceModelsWithPromptFormattingWithPrefix,
 } from '../constants/completionModelArrays'
 import {
+  openAIEmbeddingModelsArray,
   bedrockEmbeddingModelsArray,
   cohereEmbeddingModelsArray,
-  mistralEmbeddingModelsArray,
-  voyageEmbeddingModelsArray,
-  openAIEmbeddingModelsArray,
   huggingFaceEmbeddingModelsArray,
-  openAIEmbeddingModelsWithPrefix,
-  bedrockEmbeddingModelsWithPrefix,
-  cohereEmbeddingModelsWithPrefix,
-  huggingFaceEmbeddingModelsWithPrefix,
-  voyageEmbeddingModelsWithPrefix,
-  mistralEmbeddingModelsWithPrefix,
+  voyageEmbeddingModelsArray,
+  mistralEmbeddingModelsArray,
 } from '../constants/embeddingModelArrays'
 
 import {
@@ -81,8 +50,8 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     completionModels: allOpenAICompletionModelsArray, // Add the specific models here
     embeddingModels: openAIEmbeddingModelsArray,
     allModels: [
-      ...allOpenAICompletionModelsWithPrefix,
-      ...openAIEmbeddingModelsWithPrefix,
+      ...allOpenAICompletionModelsArray,
+      ...openAIEmbeddingModelsArray,
     ],
     vendorModelPrefix: '',
   },
@@ -101,7 +70,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Anthropic,
     completionModels: anthropicModelsArray,
     embeddingModels: [],
-    allModels: anthropicModelsWithPrefix,
+    allModels: anthropicModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.Sagemaker]: {
@@ -110,7 +79,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Sagemaker,
     completionModels: sageMakerModelsArray,
     embeddingModels: [],
-    allModels: sageMakerModelsWithPrefix,
+    allModels: sageMakerModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Sagemaker,
   },
   [LLMProviders.Bedrock]: {
@@ -119,10 +88,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Bedrock,
     completionModels: bedrockModelsArray,
     embeddingModels: bedrockEmbeddingModelsArray,
-    allModels: [
-      ...bedrockModelsWithPrefix,
-      ...bedrockEmbeddingModelsWithPrefix,
-    ],
+    allModels: [...bedrockModelsArray, ...bedrockEmbeddingModelsArray],
     vendorModelPrefix: LLMProviderPrefixes.Bedrock,
   },
   [LLMProviders.Anyscale]: {
@@ -131,7 +97,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Anyscale,
     completionModels: anyscaleModelsArray,
     embeddingModels: [],
-    allModels: anyscaleModelsWithPrefix,
+    allModels: anyscaleModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Anyscale,
   },
   [LLMProviders.PerplexityAI]: {
@@ -140,7 +106,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.PerplexityAI,
     completionModels: perplexityAIModelsArray,
     embeddingModels: [],
-    allModels: perplexityAIModelsWithPrefix,
+    allModels: perplexityAIModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.PerplexityAI,
   },
   [LLMProviders.VLLM]: {
@@ -149,7 +115,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.VLLM,
     completionModels: vllmModelsArray,
     embeddingModels: [],
-    allModels: vllmModelsWithPrefix,
+    allModels: vllmModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.VLLM,
   },
   [LLMProviders.DeepInfra]: {
@@ -158,7 +124,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.DeepInfra,
     completionModels: deepInfraChatModelsArray,
     embeddingModels: [],
-    allModels: deepInfraChatModelsWithPrefix,
+    allModels: deepInfraChatModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.DeepInfra,
   },
   [LLMProviders.Cohere]: {
@@ -167,7 +133,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Cohere,
     completionModels: [],
     embeddingModels: cohereEmbeddingModelsArray,
-    allModels: cohereEmbeddingModelsWithPrefix,
+    allModels: cohereEmbeddingModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.TogetherAI]: {
@@ -176,7 +142,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.TogetherAI,
     completionModels: togetherAIModelsArray,
     embeddingModels: [],
-    allModels: togetherAIModelsWithPrefix,
+    allModels: togetherAIModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.TogetherAI,
   },
   [LLMProviders.AlephAlpha]: {
@@ -185,7 +151,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.AlephAlpha,
     completionModels: alephAlphaModelsArray,
     embeddingModels: [],
-    allModels: alephAlphaModelsWithPrefix,
+    allModels: alephAlphaModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.Baseten]: {
@@ -194,7 +160,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Baseten,
     completionModels: baseTenModelsArray,
     embeddingModels: [],
-    allModels: baseTenModelsWithPrefix,
+    allModels: baseTenModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Baseten,
   },
   [LLMProviders.OpenRouter]: {
@@ -203,7 +169,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.OpenRouter,
     completionModels: openRouterModelsArray,
     embeddingModels: [],
-    allModels: openRouterModelsWithPrefix,
+    allModels: openRouterModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.OpenRouter,
   },
   [LLMProviders.CustomAPI]: {
@@ -221,7 +187,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Petals,
     completionModels: petalsModelsArray,
     embeddingModels: [],
-    allModels: petalsModelsWithPrefix,
+    allModels: petalsModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Petals,
   },
   [LLMProviders.Ollama]: {
@@ -230,7 +196,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Ollama,
     completionModels: allOllamaModelsArray,
     embeddingModels: [],
-    allModels: allOllamaModelsWithPrefix,
+    allModels: allOllamaModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.GoogleAIStudio]: {
@@ -239,7 +205,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.GoogleAIStudio,
     completionModels: googleAIStudioModelsArray,
     embeddingModels: [],
-    allModels: googleAIStudioModelsWithPrefix,
+    allModels: googleAIStudioModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.GoogleAIStudio,
   },
   [LLMProviders.Palm]: {
@@ -248,7 +214,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Palm,
     completionModels: palmModelsArray,
     embeddingModels: [],
-    allModels: palmModelsWithPrefix,
+    allModels: palmModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Palm,
   },
   [LLMProviders.HuggingFace]: {
@@ -258,8 +224,8 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     completionModels: huggingFaceModelsWithPromptFormattingArray,
     embeddingModels: huggingFaceEmbeddingModelsArray,
     allModels: [
-      ...huggingFaceModelsWithPromptFormattingWithPrefix,
-      ...huggingFaceEmbeddingModelsWithPrefix,
+      ...huggingFaceModelsWithPromptFormattingArray,
+      ...huggingFaceEmbeddingModelsArray,
     ],
     vendorModelPrefix: LLMProviderPrefixes.HuggingFace,
   },
@@ -269,7 +235,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Xinference,
     completionModels: xinferenceModelsArray,
     embeddingModels: [],
-    allModels: xinferenceModelsWithPrefix,
+    allModels: xinferenceModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Xinference,
   },
   [LLMProviders.CloudflareWorkersAI]: {
@@ -278,7 +244,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.CloudflareWorkersAI,
     completionModels: cloudflareWorkersAIModelsArray,
     embeddingModels: [],
-    allModels: cloudflareWorkersAIModelsWithPrefix,
+    allModels: cloudflareWorkersAIModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.CloudflareWorkersAI,
   },
   [LLMProviders.AI21]: {
@@ -287,7 +253,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.AI21,
     completionModels: ai21ModelsArray,
     embeddingModels: [],
-    allModels: ai21ModelsWithPrefix,
+    allModels: ai21ModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.NLPCloud]: {
@@ -296,7 +262,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.NLPCloud,
     completionModels: nlpCloudModelsArray,
     embeddingModels: [],
-    allModels: nlpCloudModelsWithPrefix,
+    allModels: nlpCloudModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.VoyageAI]: {
@@ -305,10 +271,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.VoyageAI,
     completionModels: voyageAIModelsArray,
     embeddingModels: voyageEmbeddingModelsArray,
-    allModels: [
-      ...voyageAIModelsWithPrefix,
-      ...voyageEmbeddingModelsWithPrefix,
-    ],
+    allModels: [...voyageAIModelsArray, ...voyageEmbeddingModelsArray],
     vendorModelPrefix: LLMProviderPrefixes.VoyageAI,
   },
   [LLMProviders.Replicate]: {
@@ -317,7 +280,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Replicate,
     completionModels: replicateModelsArray,
     embeddingModels: [],
-    allModels: replicateModelsWithPrefix,
+    allModels: replicateModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.Replicate,
   },
   [LLMProviders.Meta]: {
@@ -335,10 +298,7 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.Mistral,
     completionModels: mistralAIModelsArray,
     embeddingModels: mistralEmbeddingModelsArray,
-    allModels: [
-      ...mistralAIModelsWithPrefix,
-      ...mistralEmbeddingModelsWithPrefix,
-    ],
+    allModels: [...mistralAIModelsArray, ...mistralEmbeddingModelsArray],
     vendorModelPrefix: LLMProviderPrefixes.Mistral,
   },
   [LLMProviders.VertexAI]: {
@@ -347,16 +307,16 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     keyName: LLMProviderKeys.VertexAI,
     completionModels: vertexAIGoogleModelsArray,
     embeddingModels: [],
-    allModels: vertexAIGoogleModelsWithPrefix,
+    allModels: vertexAIGoogleModelsArray,
     vendorModelPrefix: '',
   },
   [LLMProviders.CustomOpenAI]: {
     provider: LLMProviders.CustomOpenAI,
     displayName: LLMProviderDisplayNames.CustomOpenAI,
     keyName: LLMProviderKeys.OpenAI,
-    completionModels: allOpenAICompletionModelsWithPrefix,
+    completionModels: allOpenAICompletionModelsArray,
     embeddingModels: [],
-    allModels: allOpenAICompletionModelsWithPrefix,
+    allModels: allOpenAICompletionModelsArray,
     vendorModelPrefix: LLMProviderPrefixes.CustomOpenAI,
   },
 }
