@@ -85,7 +85,7 @@ export class CorePlugin extends CoreEventsPlugin<
   ]
   values = []
   coreLLMService: CoreLLMService
-  coreMemoryService = new CoreMemoryService()
+  coreMemoryService = new CoreMemoryService(true)
   userService: CoreUserService
 
   constructor({
