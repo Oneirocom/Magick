@@ -6,7 +6,7 @@ import {
   EmbeddingModel,
   OpenAIEmbeddingModels,
 } from '../coreEmbeddingService/types'
-import { findProvider } from '../coreLLMService/findProvider'
+import { findProvider } from '../coreLLMService/providerUtils'
 import {
   OpenAIChatCompletionModels,
   CompletionModel,
