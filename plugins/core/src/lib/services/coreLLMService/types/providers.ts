@@ -310,32 +310,28 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     allModels: vertexAIGoogleModelsArray,
     vendorModelPrefix: '',
   },
-  [LLMProviders.CustomOpenAI]: {
-    provider: LLMProviders.CustomOpenAI,
-    displayName: LLMProviderDisplayNames.CustomOpenAI,
-    keyName: LLMProviderKeys.OpenAI,
-    completionModels: allOpenAICompletionModelsArray,
-    embeddingModels: [],
-    allModels: allOpenAICompletionModelsArray,
-    vendorModelPrefix: LLMProviderPrefixes.CustomOpenAI,
-  },
+  // [LLMProviders.CustomOpenAI]: {
+  //   provider: LLMProviders.CustomOpenAI,
+  //   displayName: LLMProviderDisplayNames.CustomOpenAI,
+  //   keyName: LLMProviderKeys.CustomAPI,
+  //   completionModels: allOpenAICompletionModelsArray,
+  //   embeddingModels: [],
+  //   allModels: allOpenAICompletionModelsArray,
+  //   vendorModelPrefix: LLMProviderPrefixes.CustomOpenAI,
+  // },
 }
 
 export type ActiveProviders =
   | LLMProviders.OpenAI
-  | LLMProviders.CustomOpenAI
   | LLMProviders.GoogleAIStudio
   | LLMProviders.TogetherAI
   | LLMProviders.Palm
-// | LLMProviders.VertexAI
 
 const activeProviders: ActiveProviders[] = [
   LLMProviders.OpenAI,
-  LLMProviders.CustomOpenAI,
   LLMProviders.TogetherAI,
   LLMProviders.GoogleAIStudio,
   LLMProviders.Palm,
-  // LLMProviders.VertexAI,
 ]
 
 export const availableProviders = activeProviders.map(provider => {
