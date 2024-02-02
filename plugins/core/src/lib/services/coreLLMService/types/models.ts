@@ -1,4 +1,4 @@
-import { EmbeddingModels } from '../../coreEmbeddingService/types'
-import { CompletionModels } from './completionModels'
+import { EmbeddingModel } from '../../coreEmbeddingService/types'
+import { CompletionModel } from './completionModels'
 
-export type AllModels = CompletionModels | EmbeddingModels
+export type AllModels = CompletionModel | EmbeddingModel
