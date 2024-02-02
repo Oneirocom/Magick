@@ -1033,6 +1033,16 @@
         "name": "query",
         "valueType": "string",
         "defaultValue": ""
+      },
+      {
+        "name": "count",
+        "valueType": "integer",
+        "defaultValue": 3
+      },
+      {
+        "name": "metadata",
+        "valueType": "object",
+        "defaultValue": "[]"
       }
     ],
     "outputs": [

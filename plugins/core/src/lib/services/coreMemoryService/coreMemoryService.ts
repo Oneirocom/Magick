@@ -229,8 +229,11 @@ class CoreMemoryService {
   async search({ query, numDocuments = 3, metadata = {} }: SearchArgs) {
     try {
       if (!this.app) this.initialize(this.agentId)
-      const pythonResponse = await this.app._retreive_from_database(query, {
-        query_config: { numDocuments },
+      const pythonResponse = await this.app._retrieve_from_database$(query, {
+        query_config: {
+          numDocuments,
+          where: metadata,
+        },
         citations: true,
         where: metadata,
       })
