@@ -18,6 +18,8 @@ export class BullMQWorker<T = any> extends Worker {
     this.worker = new BMQWorker(queueName, callback, {
       connection: this.connection,
       concurrency: 10,
+      removeOnComplete: { count: 1000 },
+      removeOnFail: { count: 5000 },
     })
   }
 
