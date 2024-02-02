@@ -15,12 +15,18 @@ import {
 import { LLMCredential } from '../coreLLMService/types/providerTypes'
 import { AllModels } from '../coreLLMService/types/models'
 
+type SearchArgs = {
+  query: string
+  numDocuments?: number
+  metadata?: Record<string, any>
+}
+
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
   addCredential(credential: LLMCredential): void
   add(data: string, dataType?: string): Promise<any>
   query(query: string): Promise<any>
-  search(query: string): Promise<any>
+  search(args: SearchArgs): Promise<any>
   searchMany(queries: string[]): Promise<any>
 }
 
@@ -220,12 +226,15 @@ class CoreMemoryService {
     }
   }
 
-  async search(query: string, numDocuments = 3) {
+  async search({ query, numDocuments = 3, metadata = {} }: SearchArgs) {
     try {
       if (!this.app) this.initialize(this.agentId)
-      const pythonResponse = await this.app.search$(query, {
-        num_documents: numDocuments,
+      const pythonResponse = await this.app._retreive_from_database(query, {
+        query_config: { numDocuments },
+        citations: true,
+        where: metadata,
       })
+
       // const responseJson = await pythonResponse.serialize()
       const response = await pythonResponse.valueOf()
       return response
@@ -239,7 +248,7 @@ class CoreMemoryService {
     try {
       if (!this.app) this.initialize(this.agentId)
       const responses = await Promise.all(
-        queries.map(async query => await this.search(query))
+        queries.map(async query => await this.search({ query }))
       )
 
       return responses
