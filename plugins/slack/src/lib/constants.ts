@@ -14,6 +14,7 @@ export const pluginCredentials: PluginCredential[] = [
     icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
     helpLink: 'https://api.slack.com/apps/',
     description: 'Used to  recieve events from Slack',
+    available: true,
   },
   {
     name: 'slack-signing-secret',
@@ -24,6 +25,7 @@ export const pluginCredentials: PluginCredential[] = [
     icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
     helpLink: 'https://api.slack.com/apps/',
     description: 'Used to verify requests from Slack',
+    available: true,
   },
   {
     name: 'slack-app-token',
@@ -34,6 +36,7 @@ export const pluginCredentials: PluginCredential[] = [
     icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
     helpLink: 'https://api.slack.com/apps/',
     description: 'Used to send messages to Slack',
+    available: true,
   },
 ]
 

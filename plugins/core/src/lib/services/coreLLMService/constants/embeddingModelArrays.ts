@@ -5,7 +5,7 @@ import {
   VoyageEmbeddingModels,
   OpenAIEmbeddingModels,
   HuggingFaceEmbeddingModels,
-  EmbeddingModels,
+  EmbeddingModel,
 } from '../../coreEmbeddingService/types'
 
 export const bedrockEmbeddingModelsArray = Object.values(BedrockEmbeddingModels)
@@ -17,7 +17,7 @@ export const huggingFaceEmbeddingModelsArray = Object.values(
   HuggingFaceEmbeddingModels
 )
 
-export const allEmbeddingModels: EmbeddingModels[] = [
+export const allEmbeddingModels: EmbeddingModel[] = [
   ...bedrockEmbeddingModelsArray,
   ...cohereEmbeddingModelsArray,
   ...mistralEmbeddingModelsArray,

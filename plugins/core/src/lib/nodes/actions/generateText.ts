@@ -7,7 +7,7 @@ import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { CORE_DEP_KEYS } from '../../constants'
 import { IEventStore } from 'server/grimoire'
 import {
-  CompletionModels,
+  CompletionModel,
   GoogleAIStudioModels,
 } from '../../services/coreLLMService/types/completionModels'
 import { LLMProviders } from '../../services/coreLLMService/types/providerTypes'
@@ -121,7 +121,7 @@ export const generateText = makeFlowNodeDefinition({
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
         // const modelProvider: LLMProviders = configuration.modelProvider
-        const model: CompletionModels =
+        const model: CompletionModel =
           read('modelOverride') || configuration.model
 
         // Check for custom OpenAI and empty base URL

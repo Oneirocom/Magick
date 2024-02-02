@@ -3,13 +3,13 @@ import { PRODUCTION } from 'shared/config'
 
 import { DataType } from './coreMemoryTypes'
 import {
-  EmbeddingModels,
+  EmbeddingModel,
   OpenAIEmbeddingModels,
 } from '../coreEmbeddingService/types'
-import { findProvider } from '../coreLLMService/findProvider'
+import { findProvider } from '../coreLLMService/providerUtils'
 import {
   OpenAIChatCompletionModels,
-  CompletionModels,
+  CompletionModel,
 } from '../coreLLMService/types/completionModels'
 
 import { LLMCredential } from '../coreLLMService/types/providerTypes'
@@ -103,11 +103,11 @@ class CoreMemoryService {
     }
   }
 
-  setModel(model: CompletionModels) {
+  setModel(model: CompletionModel) {
     this.setLLM(model)
   }
 
-  private setLLM(model: CompletionModels) {
+  private setLLM(model: CompletionModel) {
     const providerName = findProvider(model)?.provider
     const credential = this.getCredential(model)
     const params = this.changeLLMParams()
@@ -122,7 +122,7 @@ class CoreMemoryService {
     }
   }
 
-  private setEmbedder(model: EmbeddingModels) {
+  private setEmbedder(model: EmbeddingModel) {
     const providerName = findProvider(model)?.provider
     const credential = this.getCredential(model)
 

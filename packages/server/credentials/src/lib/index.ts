@@ -25,6 +25,7 @@ export type PluginCredential = {
   description?: string
   icon?: string
   helpLink?: string
+  available: boolean
 }
 
 /**

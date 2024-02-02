@@ -27,7 +27,7 @@ import {
   TogetherAIModels,
   PalmModels,
   GoogleAIStudioModels,
-  CompletionModels,
+  CompletionModel,
 } from '../types/completionModels'
 
 export const openAIChatCompletionModelsArray = Object.values(
@@ -77,7 +77,7 @@ export const allOllamaModelsArray = [
   ...ollamaVisionModelsArray,
 ]
 
-export const allCompletionModels: CompletionModels[] = [
+export const allCompletionModels: CompletionModel[] = [
   ...openAIChatCompletionModelsArray,
   ...openAITextCompletionInstructModelsArray,
   ...openAIVisionModelsArray,

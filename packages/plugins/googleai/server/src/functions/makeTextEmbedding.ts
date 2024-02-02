@@ -4,7 +4,7 @@ import { GOOGLEAI_ENDPOINT } from '../constants'
 import { trackGoogleAIUsage } from 'server/core'
 import { wordCount } from './shared'
 import { DEFAULT_GOOGLEAI_API_KEY } from 'shared/config'
-import { EmbeddingModels } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
+import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
 
 /**
  * A function that makes a request to create a text embedding using GoogleAI's
@@ -78,7 +78,7 @@ export async function makeTextEmbedding(
       startTime: start,
       statusCode: completion.status,
       status: completion.statusText,
-      model: node.data.model as EmbeddingModels,
+      model: node.data.model as EmbeddingModel,
       parameters: JSON.stringify(settings),
       type: 'completion',
       provider: 'googleai',

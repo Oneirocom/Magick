@@ -45,8 +45,6 @@ export class EmbeddingService implements IEmbeddingService {
           return this.openAIEmbeddingHandler(params.options)
         case LLMProviders.Azure:
           return this.azureEmbeddingHandler(params.options)
-        case LLMProviders.CustomOpenAI:
-          return this.customOpenAIEmbeddingHandler(params.options)
         case LLMProviders.Bedrock:
           return this.bedrockEmbeddingHandler(params.options)
         case LLMProviders.Cohere:
