@@ -13,8 +13,9 @@ let plugins = []
 
 const checkIfCorePlugin = PluginClass => {
   return (
-    typeof PluginClass.prototype.init === 'function' &&
-    typeof PluginClass.prototype.getRegistry === 'function'
+    PluginClass &&
+    typeof PluginClass?.prototype?.init === 'function' &&
+    typeof PluginClass?.prototype?.getRegistry === 'function'
   )
 }
 
