@@ -13,7 +13,7 @@ interface DropdownProps {
 export const Dropdown: FC<DropdownProps> = ({ options, selectedValue, onChange, placeholder }) => {
   return (
     <Select onValueChange={onChange} value={selectedValue}>
-      <SelectTrigger className="w-full border-white/20">
+      <SelectTrigger className="w-full border-white/20 normal-case" >
         <SelectValue placeholder={placeholder || 'Select an option'} />
       </SelectTrigger>
       <SelectContent className="bg-[#2b2b30]">
