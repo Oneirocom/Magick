@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { ConfigurationComponentProps } from "./PropertiesWindow";
 import { CompletionModel } from "plugins/core/src/lib/services/coreLLMService/types/completionModels";
 import { useConfig } from "@magickml/providers";
-import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/findProvider";
+
 import { useListCredentialsQuery } from "client/state";
 import { useGetUserQuery } from "client/state";
 import { LLMProviders } from "plugins/core/src/lib/services/coreLLMService/types/providerTypes";
 import { availableProviders, providers } from "plugins/core/src/lib/services/coreLLMService/types/providers";
+import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/providerUtils";
 
 export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
   const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(props.fullConfig.modelProvider);

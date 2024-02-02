@@ -32,7 +32,7 @@ import clsx from 'clsx'
 import { LLMProviders, ProviderRecord } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes'
 import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
 import { availableEmbeddingProviders, providers } from 'plugins/core/src/lib/services/coreLLMService/types/providers'
-import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'plugins/core/src/lib/services/coreLLMService/findProvider'
+import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'plugins/core/src/lib/services/coreLLMService/providerUtils'
 
 type PluginCredential = {
   name: string
