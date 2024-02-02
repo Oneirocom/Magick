@@ -7,7 +7,7 @@ import { useListCredentialsQuery } from "client/state";
 import { useGetUserQuery } from "client/state";
 import { LLMProviders } from "plugins/core/src/lib/services/coreLLMService/types/providerTypes";
 import { availableProviders, providers } from "plugins/core/src/lib/services/coreLLMService/types/providers";
-import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/providerUtils";
+import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from "plugins/core/src/lib/services/coreLLMService/providerUtils";
 
 export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
   const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(props.fullConfig.modelProvider);
@@ -45,20 +45,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     props.updateConfigKey("model", model);
   };
 
-
-  function removeFirstVendorTag(modelName) {
-    // Define a regex pattern to match the first vendor tag
-    const prefixPattern = /^([^/]+\/)?(.+)$/;
-
-    // Use regex to extract the model name without the first vendor tag
-    const match = modelName.match(prefixPattern);
-    if (match && match.length === 3) {
-      return match[2]; // The second capture group is the model name without the first vendor tag
-    }
-    // If no tag is found, return the original model name
-    return modelName;
-  }
-
   const renderProviderOptions = () => {
     return availableProviders?.map((prov) => {
       return (
@@ -74,7 +60,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
       return providers[provider].completionModels;
     }).flat();
     return activeModels?.map((model) => {
-
       const isAvailable = isModelAvailableToUser({
         userData,
         model,
