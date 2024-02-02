@@ -670,13 +670,13 @@ files = [
 
 [[package]]
 name = "embedchain"
-version = "0.1.69"
+version = "0.1.72"
 description = "Simplest open source retrieval(RAG) framework"
 optional = false
 python-versions = ">=3.9,<3.12"
 files = [
-    {file = "embedchain-0.1.69-py3-none-any.whl", hash = "sha256:b77cb460eb75b163e3ed46a48e10b0d457b44da7b90d9232b9e4db9ddbd92eea"},
-    {file = "embedchain-0.1.69.tar.gz", hash = "sha256:77a3ec9e20b276f92a1cf6dfb0f4cd59208e08894bdd83b4b569f4e271ceb2f6"},
+    {file = "embedchain-0.1.72-py3-none-any.whl", hash = "sha256:1edd6a2e97cbfa9f2bfb0b698162d530d06409235d45573c9206b8fb7f74001f"},
+    {file = "embedchain-0.1.72.tar.gz", hash = "sha256:016767531d9163bc6381274f134bcc92b70e239d4262651417220880e99324a5"},
 ]
 
 [package.dependencies]
@@ -713,7 +713,7 @@ modal = ["modal (>=0.56.4329,<0.57.0)"]
 mysql = ["mysql-connector-python (>=8.1.0,<9.0.0)"]
 opensearch = ["opensearch-py (==2.3.1)"]
 opensource = ["gpt4all (==2.0.2)", "sentence-transformers (>=2.2.2,<3.0.0)", "torch (==2.0.0)"]
-pinecone = ["pinecone-client (>=2.2.4,<3.0.0)"]
+pinecone = ["pinecone-client (>=3.0.0,<4.0.0)"]
 poe = ["fastapi-poe (==0.0.16)"]
 postgres = ["psycopg (>=3.1.12,<4.0.0)", "psycopg-binary (>=3.1.12,<4.0.0)", "psycopg-pool (>=3.1.8,<4.0.0)"]
 qdrant = ["qdrant-client (==1.6.3)"]
@@ -3823,4 +3823,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.2"
-content-hash = "538e0788181bf644b680d0b1e5fb89bcb8d5a0045a51a8c56e8500d010b0d36a"
+content-hash = "fee565e77c98576a313ad181d5ba9fe7e69559cfc858030314bad1ebe1348368"
