@@ -31,10 +31,10 @@ export type GenerateEmbeddingParams =
       provider: LLMProviders.Azure
       options: AzureEmbeddingOptions
     })
-  | (BaseEmbeddingOptions & {
-      provider: LLMProviders.CustomOpenAI
-      options: CustomOpenAIEmbeddingOptions
-    })
+  // | (BaseEmbeddingOptions & {
+  //     provider: LLMProviders.CustomOpenAI
+  //     options: CustomOpenAIEmbeddingOptions
+  //   })
   | (BaseEmbeddingOptions & {
       provider: LLMProviders.Bedrock
       options: BedrockEmbeddingOptions

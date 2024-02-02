@@ -1,18 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { ConfigurationComponentProps } from "./PropertiesWindow";
-import { CompletionModels } from "plugins/core/src/lib/services/coreLLMService/types/completionModels";
-import { useConfig } from "@magickml/providers";
-import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/findProvider";
-import { useListCredentialsQuery } from "client/state";
-import { useGetUserQuery } from "client/state";
-import { LLMProviders } from "plugins/core/src/lib/services/coreLLMService/types/providerTypes";
-import { availableProviders, providers } from "plugins/core/src/lib/services/coreLLMService/types/providers";
+import React, { useState, useEffect } from 'react'
+import { ConfigurationComponentProps } from './PropertiesWindow'
 
-export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
-  const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(props.fullConfig.modelProvider);
-  const [selectedModel, setSelectedModel] = useState<CompletionModels>(props.fullConfig.model);
-  const [activeModels, setActiveModels] = useState<CompletionModels[]>([])
+import { useConfig } from '@magickml/providers'
+import {
+  getProvidersWithUserKeys, isModelAvailableToUser,
+} from 'plugins/core/src/lib/services/coreLLMService/findProvider'
+import { useListCredentialsQuery } from 'client/state'
+import { useGetUserQuery } from 'client/state'
+import { LLMProviders } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes'
+import { availableProviders, providers } from 'plugins/core/src/lib/services/coreLLMService/types/providers'
+import { EmbeddingModels } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
+
+export const EmbeddingProviderOptions = (
+  props: ConfigurationComponentProps
+) => {
+  const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(
+    props.fullConfig.modelProvider
+  )
+  const [selectedModel, setSelectedModel] = useState<EmbeddingModels>(
+    props.fullConfig.model
+  )
+  const [activeModels, setActiveModels] = useState<EmbeddingModels[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
+
 
   const config = useConfig()
   const { data: credentials } = useListCredentialsQuery({
@@ -24,38 +34,37 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
 
   useEffect(() => {
     if (credentials) {
-      const creds = credentials.map(cred => cred.name);
-      const providers = getProvidersWithUserKeys(creds as any);
-      setProvidersWithKeys(providers);
+      const creds = credentials.map(cred => cred.name)
+      const providers = getProvidersWithUserKeys(creds as any)
+      setProvidersWithKeys(providers)
     }
-  }, [credentials]);
+  }, [credentials])
 
   useEffect(() => {
-    setActiveModels(providers[selectedProvider].completionModels);
+    setActiveModels(providers[selectedProvider].embeddingModels);
   }, [selectedProvider]);
 
   const onProviderChange = (provider: LLMProviders) => {
-    setSelectedProvider(provider);
-    props.updateConfigKey("modelProvider", provider);
-  };
+    setSelectedProvider(provider)
+    props.updateConfigKey('modelProvider', provider)
+  }
 
-  const onModelChange = (model: CompletionModels) => {
-    setSelectedModel(model);
-    props.updateConfigKey("model", model);
-  };
-
+  const onModelChange = (model: EmbeddingModels) => {
+    setSelectedModel(model)
+    props.updateConfigKey('model', model)
+  }
 
   function removeFirstVendorTag(modelName) {
     // Define a regex pattern to match the first vendor tag
-    const prefixPattern = /^([^/]+\/)?(.+)$/;
+    const prefixPattern = /^([^/]+\/)?(.+)$/
 
     // Use regex to extract the model name without the first vendor tag
-    const match = modelName.match(prefixPattern);
+    const match = modelName.match(prefixPattern)
     if (match && match.length === 3) {
-      return match[2]; // The second capture group is the model name without the first vendor tag
+      return match[2] // The second capture group is the model name without the first vendor tag
     }
     // If no tag is found, return the original model name
-    return modelName;
+    return modelName
   }
 
   const renderProviderOptions = () => {
@@ -67,6 +76,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
       );
     });
   };
+
 
   const renderModelOptions = () => {
     const modelsWithKeys = providersWithKeys.map((provider) => {
@@ -86,16 +96,14 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
       );
     });
   };
-
-
   return (
     <div>
-      <h3>Model Provider</h3>
+      <h3>Embedding Model Provider</h3>
       <div className="flex flex-col mt-1">
         <select
           className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
           value={selectedProvider}
-          onChange={(e) => onProviderChange(e.currentTarget.value as any)}
+          onChange={e => onProviderChange(e.currentTarget.value as any)}
         >
           {renderProviderOptions()}
         </select>
@@ -106,10 +114,9 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
           <select
             className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
             value={selectedModel}
-            onChange={(e) => {
-              onModelChange(e.target.value as CompletionModels)
-            }
-            }
+            onChange={e => {
+              onModelChange(e.target.value as EmbeddingModels)
+            }}
           >
             <option value="">Select a model</option>
             {renderModelOptions()}
@@ -117,5 +124,5 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
