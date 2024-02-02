@@ -1,6 +1,6 @@
 import { PluginCredential } from 'server/credentials'
-import { CompletionModels } from './completionModels'
-import { EmbeddingModels } from '../../coreEmbeddingService/types'
+import { CompletionModel } from './completionModels'
+import { EmbeddingModel } from '../../coreEmbeddingService/types'
 
 export enum LLMProviders {
   OpenAI = 'openai',
@@ -129,9 +129,9 @@ export type ProviderRecord = {
   provider: LLMProviders
   displayName: LLMProviderDisplayNames
   keyName: LLMProviderKeys
-  completionModels: CompletionModels[]
-  embeddingModels: EmbeddingModels[]
-  allModels: (CompletionModels | EmbeddingModels)[]
+  completionModels: CompletionModel[]
+  embeddingModels: EmbeddingModel[]
+  allModels: (CompletionModel | EmbeddingModel)[]
   vendorModelPrefix: LLMProviderPrefixes | ''
 }
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { OPENAI_ENDPOINT } from '../constants'
 import { DEFAULT_OPENAI_KEY } from 'shared/config'
 import { trackOpenAIUsage } from 'server/core'
-import { EmbeddingModels } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
+import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
 
 /**
  * A function that makes a request to create a text embedding using OpenAI's
@@ -66,7 +66,7 @@ export async function makeTextEmbedding(
     )
 
     const spell = context.currentSpell
-    const model = node.data.model as EmbeddingModels
+    const model = node.data.model as EmbeddingModel
     const projectId = context.projectId
 
     // Save request information

@@ -327,6 +327,8 @@ export type ActiveProviders =
   | LLMProviders.TogetherAI
   | LLMProviders.Palm
 
+export type ActiveEmbeddingProviders = LLMProviders.OpenAI
+
 const activeProviders: ActiveProviders[] = [
   LLMProviders.OpenAI,
   LLMProviders.TogetherAI,
@@ -334,6 +336,16 @@ const activeProviders: ActiveProviders[] = [
   LLMProviders.Palm,
 ]
 
+const ActiveEmbeddingProviders: ActiveEmbeddingProviders[] = [
+  LLMProviders.OpenAI,
+]
+
 export const availableProviders = activeProviders.map(provider => {
   return providers[provider]
 })
+
+export const availableEmbeddingProviders = ActiveEmbeddingProviders.map(
+  provider => {
+    return providers[provider]
+  }
+)
