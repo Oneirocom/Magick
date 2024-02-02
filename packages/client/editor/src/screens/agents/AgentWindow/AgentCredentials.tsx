@@ -405,8 +405,7 @@ type CredentialProps = {
 
 export const Credentials: FC<CredentialProps> = ({ agentId }) => {
   const pluginCredentials: PluginCredential[] =
-    credentialsJson as PluginCredential[]
-  // credentialsJson.filter((cred) => cred.available) as PluginCredential[]
+    credentialsJson.filter((cred) => cred.available) as PluginCredential[]
   const config = useConfig()
   const { data: c } = useListCredentialsQuery({
     projectId: config.projectId,
