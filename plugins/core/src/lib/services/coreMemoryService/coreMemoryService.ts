@@ -174,20 +174,20 @@ class CoreMemoryService {
 
   async add(
     data: string,
-    dataType: DataType,
-    metadata: Record<string, any> = {}
+    options?: {
+      dataType?: DataType
+      metadata?: Record<string, any>
+    }
   ) {
-    const kwargs = { data_type: dataType, meta_data: metadata }
-    try {
-      let result
+    const kwargs = {
+      ...(options?.dataType && { data_type: options?.dataType }),
+      metadata: options?.metadata || {},
+    }
 
+    try {
       if (!this.app) this.initialize(this.agentId)
 
-      if (dataType) {
-        result = await this.app.add$(data, kwargs)
-      } else {
-        result = await this.app.add(data)
-      }
+      const result = await this.app.add$(data, kwargs)
 
       return result
     } catch (error: any) {
@@ -208,11 +208,23 @@ class CoreMemoryService {
     }
   }
 
-  async search(query: string) {
+  async getDataSources() {
     try {
       if (!this.app) this.initialize(this.agentId)
-      const pythonResponse = await this.app._retrieve_from_database$(query, {
-        citations: true,
+      const pythonResponse = await this.app.get_data_sources()
+      const response = await pythonResponse.valueOf()
+      return response
+    } catch (error: any) {
+      console.error('Error getting data sources from Embedchain:', error)
+      throw error
+    }
+  }
+
+  async search(query: string, numDocuments = 3) {
+    try {
+      if (!this.app) this.initialize(this.agentId)
+      const pythonResponse = await this.app.search$(query, {
+        num_documents: numDocuments,
       })
       // const responseJson = await pythonResponse.serialize()
       const response = await pythonResponse.valueOf()
