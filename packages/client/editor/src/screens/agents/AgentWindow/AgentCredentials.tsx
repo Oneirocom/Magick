@@ -33,6 +33,8 @@ import { LLMProviders, ProviderRecord } from 'plugins/core/src/lib/services/core
 import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
 import { availableEmbeddingProviders, providers } from 'plugins/core/src/lib/services/coreLLMService/types/providers'
 import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'plugins/core/src/lib/services/coreLLMService/providerUtils'
+import { Dropdown } from '@magickml/ui'
+
 
 type PluginCredential = {
   name: string
@@ -160,63 +162,49 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
     })
   }
 
-  const renderProviderOptions = () => {
-    return availableEmbeddingProviders?.map((prov) => {
-      return (
-        <option key={prov.provider} value={prov.provider}>
-          {prov.displayName}
-        </option>
-      );
-    });
-  };
+  const providerOptions = availableEmbeddingProviders.map(prov => ({
+    value: prov.provider,
+    label: prov.displayName
+  }));
 
-  const renderModelOptions = () => {
-    const modelsWithKeys = providersWithKeys.map((provider) => {
-      return providers[provider].embeddingModels;
-    }).flat();
-    return activeEmbeddingModels?.map((model) => {
+  const modelsWithKeys = providersWithKeys.map((provider) => {
+    return providers[provider].embeddingModels;
+  }).flat();
 
-      const isAvailable = isModelAvailableToUser({
-        userData,
-        model,
-        modelsWithKeys
-      })
-      return (
-        <option key={model} value={model} disabled={!isAvailable} className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm">
-          {removeFirstVendorTag(model)}
-        </option>
-      );
-    });
-  };
+  const modelOptions = activeEmbeddingModels.map(model => {
+    const isAvailable = isModelAvailableToUser({
+      userData,
+      model,
+      modelsWithKeys: modelsWithKeys
+    })
+    return {
+      value: model,
+      label: removeFirstVendorTag(model),
+      disabled: !isAvailable
+    }
+  })
 
   return (
     <div className="pt-8 pb-4">
       <div className="flex flex-col gap-y-1">
-        <h3>Embedding Model Provider</h3>
         <div className="flex flex-col mt-1">
-          <select
-            className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
-            value={selectedEmbeddingProvider?.provider}
-            onChange={(e) => handleEmbeddingProviderChange(e.currentTarget.value as any)}
-          >
-            <option value="">Select a provider</option>
-            {renderProviderOptions()}
-          </select>
+          <h3>Embedding Provider</h3>
+          <Dropdown
+            options={providerOptions}
+            selectedValue={selectedEmbeddingProvider?.provider}
+            onChange={handleEmbeddingProviderChange}
+            placeholder="Select a provider"
+          />
         </div>
         <div className="mt-4">
           <h3>Embedding Model</h3>
           <div className="flex flex-col mt-1">
-            <select
-              className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
-              value={selectedEmbeddingModel}
-              onChange={(e) => {
-                handleEmbeddingModelChange(e.target.value as EmbeddingModel)
-              }
-              }
-            >
-              <option value="">Select a model</option>
-              {renderModelOptions()}
-            </select>
+            <Dropdown
+              options={modelOptions}
+              selectedValue={selectedEmbeddingModel}
+              onChange={handleEmbeddingModelChange}
+              placeholder="Select a model"
+            />
           </div>
         </div>
         <br />
@@ -232,7 +220,7 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
           window.
         </p>
       </div>
-    </div>
+    </div >
   )
 }
 
