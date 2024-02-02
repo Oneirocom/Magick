@@ -27,6 +27,19 @@ export function getProvidersWithUserKeys(
   return provider
 }
 
+export function removeFirstVendorTag(modelName) {
+  // Define a regex pattern to match the first vendor tag
+  const prefixPattern = /^([^/]+\/)?(.+)$/
+
+  // Use regex to extract the model name without the first vendor tag
+  const match = modelName.match(prefixPattern)
+  if (match && match.length === 3) {
+    return match[2] // The second capture group is the model name without the first vendor tag
+  }
+  // If no tag is found, return the original model name
+  return modelName
+}
+
 export function isModelAvailableToUser({
   userData,
   model,
