@@ -140,9 +140,11 @@ export class PluginManager extends EventEmitter {
       // This check assumes BasePlugin is the base class for all your plugins
       if (
         Object.getPrototypeOf(PluginClass) === BasePlugin.prototype ||
+        // @ts-ignore
         PluginClass.prototype instanceof BasePlugin
       ) {
         // Create an instance of the plugin
+        // @ts-ignore
         const pluginInstance = new PluginClass({
           agentId: this.agentId,
           connection: this.connection,
