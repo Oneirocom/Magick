@@ -49,6 +49,7 @@ class CoreMemoryService {
   private agentId!: string
   private app!: any
   private credentials: EmbedchainCredential[] = []
+  private useEnv: boolean = false
 
   private baseConfig: any = {
     app: {
@@ -68,6 +69,10 @@ class CoreMemoryService {
     embedder: {
       config: {},
     },
+  }
+
+  constructor(useEnv?: boolean) {
+    this.useEnv = useEnv || false
   }
 
   async initialize(agentId: string) {
@@ -157,7 +162,7 @@ class CoreMemoryService {
       c => c.serviceType === provider
     )?.value
 
-    if (!credential && !PRODUCTION && provider) {
+    if (!credential && provider && (!PRODUCTION || this.useEnv)) {
       credential = process.env[provider]
     }
 
@@ -167,8 +172,12 @@ class CoreMemoryService {
     return credential
   }
 
-  async add(data: string, dataType: DataType) {
-    const kwargs = { data_type: dataType }
+  async add(
+    data: string,
+    dataType: DataType,
+    metadata: Record<string, any> = {}
+  ) {
+    const kwargs = { data_type: dataType, meta_data: metadata }
     try {
       let result
 
