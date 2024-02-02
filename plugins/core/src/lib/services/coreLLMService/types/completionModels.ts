@@ -279,7 +279,7 @@ export type MistralAISlug = `mistral/${
 export type BedrockSlug = `bedrock/${BedrockModels | BedrockEmbeddingModels}`
 export type CustomOpenAISlug = `openai/${string}`
 
-export type CompletionModels =
+export type CompletionModel =
   | OpenAIChatCompletionModels
   | OpenAITextCompletionInstructModels
   | OpenAIVisionModels
@@ -309,4 +309,4 @@ export type CompletionModels =
   | TogetherAIModels
   | ReplicateModels
 
-export type LLMModel = [CompletionModels, LLMProviderKeys]
+export type LLMModel = [CompletionModel, LLMProviderKeys]

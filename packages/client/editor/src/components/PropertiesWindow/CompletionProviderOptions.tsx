@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { ConfigurationComponentProps } from "./PropertiesWindow";
-import { CompletionModels } from "plugins/core/src/lib/services/coreLLMService/types/completionModels";
+import { CompletionModel } from "plugins/core/src/lib/services/coreLLMService/types/completionModels";
 import { useConfig } from "@magickml/providers";
-import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/findProvider";
+
 import { useListCredentialsQuery } from "client/state";
 import { useGetUserQuery } from "client/state";
 import { LLMProviders } from "plugins/core/src/lib/services/coreLLMService/types/providerTypes";
 import { availableProviders, providers } from "plugins/core/src/lib/services/coreLLMService/types/providers";
+import { getProvidersWithUserKeys, isModelAvailableToUser } from "plugins/core/src/lib/services/coreLLMService/providerUtils";
 
 export const CompletionProviderOptions = (props: ConfigurationComponentProps) => {
   const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(props.fullConfig.modelProvider);
-  const [selectedModel, setSelectedModel] = useState<CompletionModels>(props.fullConfig.model);
-  const [activeModels, setActiveModels] = useState<CompletionModels[]>([])
+  const [selectedModel, setSelectedModel] = useState<CompletionModel>(props.fullConfig.model);
+  const [activeModels, setActiveModels] = useState<CompletionModel[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
 
   const config = useConfig()
@@ -39,7 +40,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
     props.updateConfigKey("modelProvider", provider);
   };
 
-  const onModelChange = (model: CompletionModels) => {
+  const onModelChange = (model: CompletionModel) => {
     setSelectedModel(model);
     props.updateConfigKey("model", model);
   };
@@ -107,7 +108,7 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
             className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
             value={selectedModel}
             onChange={(e) => {
-              onModelChange(e.target.value as CompletionModels)
+              onModelChange(e.target.value as CompletionModel)
             }
             }
           >

@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 
 import { useConfig } from '@magickml/providers'
-import {
-  getProvidersWithUserKeys, isModelAvailableToUser,
-} from 'plugins/core/src/lib/services/coreLLMService/findProvider'
+
 import { useListCredentialsQuery } from 'client/state'
 import { useGetUserQuery } from 'client/state'
 import { LLMProviders } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes'
 import { availableProviders, providers } from 'plugins/core/src/lib/services/coreLLMService/types/providers'
-import { EmbeddingModels } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
+import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
+import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'plugins/core/src/lib/services/coreLLMService/providerUtils'
 
 export const EmbeddingProviderOptions = (
   props: ConfigurationComponentProps
@@ -17,10 +16,10 @@ export const EmbeddingProviderOptions = (
   const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(
     props.fullConfig.modelProvider
   )
-  const [selectedModel, setSelectedModel] = useState<EmbeddingModels>(
+  const [selectedModel, setSelectedModel] = useState<EmbeddingModel>(
     props.fullConfig.model
   )
-  const [activeModels, setActiveModels] = useState<EmbeddingModels[]>([])
+  const [activeModels, setActiveModels] = useState<EmbeddingModel[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
 
 
@@ -49,22 +48,9 @@ export const EmbeddingProviderOptions = (
     props.updateConfigKey('modelProvider', provider)
   }
 
-  const onModelChange = (model: EmbeddingModels) => {
+  const onModelChange = (model: EmbeddingModel) => {
     setSelectedModel(model)
     props.updateConfigKey('model', model)
-  }
-
-  function removeFirstVendorTag(modelName) {
-    // Define a regex pattern to match the first vendor tag
-    const prefixPattern = /^([^/]+\/)?(.+)$/
-
-    // Use regex to extract the model name without the first vendor tag
-    const match = modelName.match(prefixPattern)
-    if (match && match.length === 3) {
-      return match[2] // The second capture group is the model name without the first vendor tag
-    }
-    // If no tag is found, return the original model name
-    return modelName
   }
 
   const renderProviderOptions = () => {
@@ -76,7 +62,6 @@ export const EmbeddingProviderOptions = (
       );
     });
   };
-
 
   const renderModelOptions = () => {
     const modelsWithKeys = providersWithKeys.map((provider) => {
@@ -115,7 +100,7 @@ export const EmbeddingProviderOptions = (
             className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
             value={selectedModel}
             onChange={e => {
-              onModelChange(e.target.value as EmbeddingModels)
+              onModelChange(e.target.value as EmbeddingModel)
             }}
           >
             <option value="">Select a model</option>

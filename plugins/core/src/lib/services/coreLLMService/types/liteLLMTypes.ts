@@ -1,4 +1,4 @@
-import { CompletionModels } from './completionModels'
+import { CompletionModel } from './completionModels'
 
 export type LiteLLMOptions = {
   api_base?: string
@@ -44,7 +44,7 @@ export type CompletionOptions = {
 } & LiteLLMOptions
 
 export type CompletionRequest = {
-  model: CompletionModels
+  model: CompletionModel
   messages: Message[]
   options?: CompletionOptions
   api_key?: string

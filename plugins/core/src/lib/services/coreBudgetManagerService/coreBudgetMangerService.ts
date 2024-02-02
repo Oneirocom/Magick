@@ -8,7 +8,7 @@ import {
 } from '../types'
 import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
-import { CompletionModels } from '../coreLLMService/types/completionModels'
+import { CompletionModel } from '../coreLLMService/types/completionModels'
 import {
   CompletionResponse,
   Message,
@@ -158,7 +158,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
    */
   async getModelCost(
     projectId: string
-  ): Promise<Record<CompletionModels, number>> {
+  ): Promise<Record<CompletionModel, number>> {
     const modelCost = await this.liteLLMBudgetManager?.get_model_cost(projectId)
     if (modelCost === null || modelCost === undefined) {
       throw new Error('Error getting model cost')

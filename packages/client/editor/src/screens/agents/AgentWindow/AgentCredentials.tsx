@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from '@magickml/ui'
 import credentialsJson from 'packages/shared/nodeSpec/src/credentials.json'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import {
   AgentCredential,
   Credential,
@@ -24,9 +24,15 @@ import {
   useListAgentCredentialsQuery,
   useLinkAgentCredentialMutation,
   useUnlinkCredentialFromAgentMutation,
+  useUpdateAgentMutation,
+  useGetUserQuery,
 } from 'client/state'
 import { useConfig, useTabLayout } from '@magickml/providers'
 import clsx from 'clsx'
+import { LLMProviders, ProviderRecord } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes'
+import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
+import { availableEmbeddingProviders, providers } from 'plugins/core/src/lib/services/coreLLMService/types/providers'
+import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'plugins/core/src/lib/services/coreLLMService/providerUtils'
 
 type PluginCredential = {
   name: string
@@ -37,6 +43,7 @@ type PluginCredential = {
   description?: string
   icon?: string
   helpLink?: string
+  available: boolean
 }
 
 // Function to separate credentials into core+plugin and custom
@@ -88,8 +95,45 @@ function findMatchingAgentCredential(
   return agentCredentials.find(ac => ac.credentialId === c?.id)
 }
 
-const Header: FC = () => {
+const Header = ({ agentId }: { agentId: string }): JSX.Element => {
   const { openTab } = useTabLayout()
+  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] = useState<ProviderRecord>();
+  const [activeEmbeddingModels, setActiveEmbeddingModels] = useState<EmbeddingModel[]>([])
+  const [selectedEmbeddingModel, setSelectedEmbeddingModel] = useState<EmbeddingModel>();
+  const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
+
+  const config = useConfig()
+
+  const { data: credentials } = useListCredentialsQuery({
+    projectId: config.projectId,
+  })
+
+  const { data: userData } = useGetUserQuery({
+    projectId: config.projectId,
+  })
+
+  const [updateAgent] = useUpdateAgentMutation()
+
+  useEffect(() => {
+    if (credentials) {
+      const creds = credentials.map(cred => cred.name);
+      const providers = getProvidersWithUserKeys(creds as any);
+      setProvidersWithKeys(providers);
+    }
+  }, [credentials]);
+
+  useEffect(() => {
+    setActiveEmbeddingModels(selectedEmbeddingProvider?.embeddingModels || []);
+  }, [selectedEmbeddingProvider]);
+
+  useEffect(() => {
+    if (userData) {
+      const provider = userData.embeddingProvider;
+      const model = userData.embeddingModel;
+      setSelectedEmbeddingProvider(providers[provider]);
+      setSelectedEmbeddingModel(model);
+    }
+  }, [userData])
 
   const openSecrets = () => {
     openTab({
@@ -100,9 +144,82 @@ const Header: FC = () => {
     })
   }
 
+  const handleEmbeddingProviderChange = (provider: LLMProviders) => {
+    setSelectedEmbeddingProvider(providers[provider]);
+    updateAgent({
+      id: agentId,
+      embeddingProvider: provider
+    })
+  }
+
+  const handleEmbeddingModelChange = (model: EmbeddingModel) => {
+    setSelectedEmbeddingModel(model);
+    updateAgent({
+      id: agentId,
+      embeddingModel: model
+    })
+  }
+
+  const renderProviderOptions = () => {
+    return availableEmbeddingProviders?.map((prov) => {
+      return (
+        <option key={prov.provider} value={prov.provider}>
+          {prov.displayName}
+        </option>
+      );
+    });
+  };
+
+  const renderModelOptions = () => {
+    const modelsWithKeys = providersWithKeys.map((provider) => {
+      return providers[provider].embeddingModels;
+    }).flat();
+    return activeEmbeddingModels?.map((model) => {
+
+      const isAvailable = isModelAvailableToUser({
+        userData,
+        model,
+        modelsWithKeys
+      })
+      return (
+        <option key={model} value={model} disabled={!isAvailable} className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm">
+          {removeFirstVendorTag(model)}
+        </option>
+      );
+    });
+  };
+
   return (
     <div className="pt-8 pb-4">
       <div className="flex flex-col gap-y-1">
+        <h3>Embedding Model Provider</h3>
+        <div className="flex flex-col mt-1">
+          <select
+            className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
+            value={selectedEmbeddingProvider?.provider}
+            onChange={(e) => handleEmbeddingProviderChange(e.currentTarget.value as any)}
+          >
+            <option value="">Select a provider</option>
+            {renderProviderOptions()}
+          </select>
+        </div>
+        <div className="mt-4">
+          <h3>Embedding Model</h3>
+          <div className="flex flex-col mt-1">
+            <select
+              className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
+              value={selectedEmbeddingModel}
+              onChange={(e) => {
+                handleEmbeddingModelChange(e.target.value as EmbeddingModel)
+              }
+              }
+            >
+              <option value="">Select a model</option>
+              {renderModelOptions()}
+            </select>
+          </div>
+        </div>
+        <br />
         <div className="inline-flex items-center space-x-2">
           <h2>Linked Secrets</h2>
           <Button variant="outline" size="sm" onClick={openSecrets}>
@@ -288,7 +405,7 @@ type CredentialProps = {
 
 export const Credentials: FC<CredentialProps> = ({ agentId }) => {
   const pluginCredentials: PluginCredential[] =
-    credentialsJson as PluginCredential[]
+    credentialsJson.filter((cred) => cred.available) as PluginCredential[]
   const config = useConfig()
   const { data: c } = useListCredentialsQuery({
     projectId: config.projectId,
@@ -304,29 +421,30 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
   return (
     <>
       <div className="inline-flex w-full justify-between items-center space-x-2">
-        <Header />
+        <Header agentId={agentId} />
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        {pluginCredentials?.map(p => (
-          <CredentialItem
-            key={p.name}
-            credential={p}
-            isLinked={hasLinkedAgentCredential(p.name, credentials, ac)}
-            action={
-              <CredentialAction
-                projectId={config.projectId}
-                agentId={agentId}
-                linkedCredential={findMatchingAgentCredential(
-                  p,
-                  credentials,
-                  ac
-                )}
-                availableCredentials={findMatchingCredentials(p, credentials)}
-              />
-            }
-          />
-        ))}
+      {/* Add a container with a fixed height and overflow-y to enable scrolling */}
+      <div style={{ height: '400px', overflowY: 'auto' }}>
+        <div className="grid grid-cols-2 gap-6">
+          {pluginCredentials?.map(p => (
+            <CredentialItem
+              key={p.name}
+              credential={p}
+              isLinked={hasLinkedAgentCredential(p.name, credentials, ac)}
+              action={
+                <CredentialAction
+                  projectId={config.projectId}
+                  agentId={agentId}
+                  linkedCredential={findMatchingAgentCredential(
+                    p, credentials, ac
+                  )}
+                  availableCredentials={findMatchingCredentials(p, credentials)}
+                />
+              }
+            />
+          ))}
+        </div>
       </div>
     </>
-  )
+  );
 }

@@ -9,7 +9,7 @@ import {
 import { LLMProviders } from '../coreLLMService/types/providerTypes'
 
 export interface BaseEmbeddingOptions {
-  model: EmbeddingModels | string
+  model: EmbeddingModel | string
   input: string[]
 }
 
@@ -127,7 +127,7 @@ interface Usage {
   total_tokens: number
 }
 
-export type EmbeddingModels =
+export type EmbeddingModel =
   | OpenAIEmbeddingModels
   | BedrockEmbeddingModels
   | CohereEmbeddingModels
