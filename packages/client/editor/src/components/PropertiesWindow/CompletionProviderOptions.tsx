@@ -107,7 +107,6 @@ export const CompletionProviderOptions = (props: ConfigurationComponentProps) =>
             className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
             value={selectedModel}
             onChange={(e) => {
-              console.log('MODEL CHANGE', e.target.value)
               onModelChange(e.target.value as CompletionModels)
             }
             }
