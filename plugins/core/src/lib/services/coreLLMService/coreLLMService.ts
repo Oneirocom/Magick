@@ -9,7 +9,7 @@ import {
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { CoreUserService } from '../userService/coreUserService'
 import { saveRequest } from 'shared/core'
-import { findProvider } from './findProvider'
+import { findProvider } from './providerUtils'
 import { LLMCredential } from './types/providerTypes'
 
 import { AllModels } from './types/models'
