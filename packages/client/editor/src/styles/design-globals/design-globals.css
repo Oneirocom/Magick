@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: 'Montserrat Variable';
-  src: url(https://lglrzlrsfxchbqsslvur.supabase.co/storage/v1/object/public/assets/Montserrat Variable.otf);
+  src: url('https://lglrzlrsfxchbqsslvur.supabase.co/storage/v1/object/public/assets/Montserrat Variable.otf');
 }
 
 * {
