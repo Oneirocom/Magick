@@ -13,14 +13,17 @@ import {
   CompletionResponse,
   Message,
 } from '../coreLLMService/types/liteLLMTypes'
+import { Application, app } from 'server/core'
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
+  private app: Application
 
   protected userService: CoreUserService
   projectId: string
 
   constructor(projectId: string) {
+    this.app = app
     this.userService = new CoreUserService({ projectId })
     this.projectId = projectId
   }
@@ -132,7 +135,13 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     projectId: string,
     completionObj: CompletionResponse
   ): Promise<boolean> {
-    await this.liteLLMBudgetManager?.update_cost(projectId, completionObj)
+    const preChargeCost = await this.getCurrentCost(projectId)
+    const updatedCost = (await this.liteLLMBudgetManager?.update_cost(
+      projectId,
+      completionObj
+    )) as any
+    const newCharge = (await updatedCost.user.current_cost) - preChargeCost
+    this.app.service('user').emit('budgetUpdated', { newCharge, projectId })
     return true
   }
 
