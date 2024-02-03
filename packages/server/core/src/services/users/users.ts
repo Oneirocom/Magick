@@ -10,7 +10,7 @@ import { checkPermissions } from '../../lib/feathersPermissions'
 import { UserService } from './users.class'
 import { UserParams } from './users.class'
 
-const USER_EVENTS = ['log', 'error', 'update', 'create']
+const USER_EVENTS = ['log', 'error', 'update', 'create', 'budgetUpdated']
 
 export const users = (app: Application) => {
   app.use('user', new UserService(app), {
