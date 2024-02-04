@@ -13,6 +13,7 @@ import Requests from '../screens/RequestWindow'
 import Settings from '../screens/settings/SettingsWindow'
 import Config from '../screens/ConfigWindow'
 import Documents from '../screens/DocumentWindow'
+import Knowledge from '../screens/KnowledgeWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
 import Secrets from '../screens/SecretsWindow'
 import { ClientPluginManager, pluginManager } from 'shared/core'
@@ -56,6 +57,7 @@ const getComponents = () => {
     Requests,
     Settings,
     Documents,
+    Knowledge,
     Agents,
     Config,
     ...pluginComponents.reduce((acc, obj) => {
