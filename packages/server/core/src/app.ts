@@ -236,7 +236,7 @@ export async function initApp(environment: Environment = 'default') {
 
           if (authenticated) {
             context.params.user = authentication.payload.user
-            context.params.projectId = authentication.payload.projectId
+            context.params.projectId = authentication.payload.project
 
             const queryProjectId = context.params.query.projectId
             const bodyProjectId = context.params.body?.projectId
@@ -277,4 +277,11 @@ export async function initApp(environment: Environment = 'default') {
   logger.info('Feathers app initialized')
 
   return app
+}
+
+declare module '@feathersjs/feathers' {
+  interface Params {
+    user?: any // Replace 'any' with a more specific type if you have a user model
+    projectId?: string
+  }
 }
