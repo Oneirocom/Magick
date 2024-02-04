@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import { getLogger } from 'packages/server/logger/src'
-import { OPENMETER } from 'packages/shared/config/src'
+import { getLogger } from 'server/logger'
+import { OPENMETER } from 'shared/config'
 import { Event } from '@openmeter/sdk'
 
 export type MeterData = Record<

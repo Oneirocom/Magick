@@ -106,8 +106,10 @@ export const documentSchema = Type.Object(
   {
     id: Type.String(),
     type: Type.Optional(Type.String()),
+    fileType: Type.Optional(Type.String()),
     content: Type.Optional(Type.String()),
     projectId: Type.String(),
+    agentId: Type.Optional(Type.String()),
     date: Type.Optional(Type.String()),
     embedding: Type.Optional(Type.Any()),
     metadata: Type.Optional(Type.Any()),
@@ -116,6 +118,35 @@ export const documentSchema = Type.Object(
   {
     $id: 'Document',
     additionalProperties: false,
+  }
+)
+
+/**
+ * Full data model schema for a document.
+ *
+ * @property {string} id - The document's ID.
+ * @property {string} [type] - The type of the document (optional).
+ * @property {string} [content] - The content of the document (optional).
+ * @property {string} projectId - The ID of the project that the document belongs to.
+ * @property {string} [date] - The date when the document was created (optional).
+ * @property {any} [embedding] - The embedding data of the document (optional).
+ * @property {any} [metadata] - The embedding data of the document (optional).
+ */
+export const knowledgeSchema = Type.Object(
+  {
+    id: Type.String(),
+    projectId: Type.String(),
+    name: Type.String(),
+    type: Type.Optional(Type.String()),
+    dataType: Type.Optional(Type.String()),
+    sourceUrl: Type.Optional(Type.String()),
+    updatedAt: Type.Optional(Type.String() || Type.Null()),
+    createdAt: Type.Optional(Type.String() || Type.Null()),
+    metadata: Type.Optional(Type.Any()),
+    memoryId: Type.String(),
+  },
+  {
+    $id: 'Knowledge',
   }
 )
 
