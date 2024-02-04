@@ -15,7 +15,7 @@ export const corePluginCredentials: PluginCredential[] = [
     available: true,
   },
   {
-    name: 'ANYSACLE_API_KEY',
+    name: 'ANYSCALE_API_KEY',
     serviceType: 'anyscale',
     credentialType: 'plugin',
     clientName: 'Anyscale',
@@ -87,8 +87,8 @@ export const corePluginCredentials: PluginCredential[] = [
     clientName: 'TogetherAI',
     initials: 'TA',
     description: 'TogetherAI API Key',
-    icon: 'URL_to_TogetherAI_Icon',
-    helpLink: 'TogetherAI_Help_Link',
+    icon: 'https://assets-global.website-files.com/64f6f2c0e3f4c5a91c1e823a/654693d569494912cfc0c0d4_favicon.svg',
+    helpLink: 'https://docs.together.ai/reference/authentication-1',
     available: true,
   },
   {
@@ -153,8 +153,8 @@ export const corePluginCredentials: PluginCredential[] = [
     clientName: 'GoogleAI',
     initials: 'GA',
     description: 'GoogleAI API Key',
-    icon: 'URL_to_GoogleAI_Icon',
-    helpLink: 'GoogleAI_Help_Link',
+    icon: 'https://lh3.googleusercontent.com/RIR1USuPhQgIwCbC6X09bUiRZKCfu5EkZymDuG0mVQpCM42j0y4tvjSFmtZmezPgcfaCxbGSIkCjNlzXSo_p8KVoDqZvS5nEPKoqog',
+    helpLink: 'https://ai.google.dev/tutorials/setup',
     available: true,
   },
   {
@@ -164,8 +164,8 @@ export const corePluginCredentials: PluginCredential[] = [
     clientName: 'Palm',
     initials: 'PM',
     description: 'Palm API Key',
-    icon: 'URL_to_Palm_Icon',
-    helpLink: 'Palm_Help_Link',
+    icon: 'https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA',
+    helpLink: 'https://ai.google.dev/tutorials/setup',
     available: true,
   },
   {
