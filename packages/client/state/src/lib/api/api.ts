@@ -93,6 +93,8 @@ export const rootApi = createApi({
     'Credentials',
     'Credential',
     'User',
+    'Knowledge',
+    'OneKnowledge',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })
