@@ -11,10 +11,11 @@ python = "3.11.2"
 # litellm = { path = "./pythonPackages/liteLLM", develop = true }
 # litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
 # setuptools = "^69.0.3"
-embedchain = {extras = ["weaviate"], version = "0.1.72"}
+# embedchain = {extras = ["weaviate"], version = "0.1.72"}
+embedchain = { path = "./pythonPackages/embedchain", extras = ["weaviate"], develop = true }
 bs4 = "^0.0.2"
-# html5lib = "^1.1"
-# lxml = "^5.1.0"
+html5lib = "^1.1"
+lxml = "^5.1.0"
 litellm = "^1.19.2"
 google-generativeai = "^0.3.2"
 google-cloud-aiplatform = "^1.40.0"
@@ -23,6 +24,6 @@ google-cloud-aiplatform = "^1.40.0"
 #litellm = { path = "./pythonPackages/liteLLM", develop = true }
 # litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
 
-[build-system]
+[build-system] 
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
