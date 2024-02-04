@@ -1,6 +1,6 @@
 import { createActionNode } from 'plugins/shared/src'
 import { DiscordClient } from '../../services/discord'
-import { EventPayload } from 'packages/server/plugin/src'
+import { EventPayload } from 'server/plugin'
 import { DiscordEventPayload } from '../../types'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { DISCORD_KEY } from '../../constants'

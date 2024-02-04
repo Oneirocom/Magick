@@ -1,7 +1,7 @@
 import pino from 'pino'
-import { getLogger } from 'packages/server/logger/src'
-import { EventPayload } from 'packages/server/plugin/src'
-import { RedisPubSub } from 'packages/server/redis-pubsub/src'
+import { getLogger } from 'server/logger'
+import { EventPayload } from 'server/plugin'
+import { RedisPubSub } from 'server/redis-pubsub'
 import { DISCORD_EVENTS } from '../constants'
 
 class DiscordEventClient {

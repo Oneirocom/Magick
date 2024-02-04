@@ -1,10 +1,10 @@
-import { createActionNode } from 'plugins/shared/src'
 import { SlackClient } from '../../services/slack'
-import { EventPayload } from 'packages/server/plugin/src'
+import { EventPayload } from 'server/plugin'
 import { SlackEventPayload } from '../../types'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { SLACK_KEY } from '../../constants'
 import { IEventStore } from 'server/grimoire'
+import { createActionNode } from 'plugins/shared/src'
 
 type Inputs = {
   flow: SocketDefinition

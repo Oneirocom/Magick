@@ -1,5 +1,5 @@
 import { DISCORD_EVENTS, discordPluginName } from '../../constants'
-import { EventPayload } from 'packages/server/plugin/src'
+import { EventPayload } from 'server/plugin'
 import { DiscordEmitterType } from '../../dependencies/discordEmitter'
 import { createEventNode } from 'plugins/shared/src'
 import { DiscordEventPayload } from '../../types'

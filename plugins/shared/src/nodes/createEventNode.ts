@@ -3,7 +3,7 @@ import {
   NodeCategory,
   makeEventNodeDefinition,
 } from '@magickml/behave-graph'
-import { EventPayload } from 'packages/server/plugin/src'
+import { EventPayload } from 'server/plugin'
 import EventEmitter from 'events'
 
 type State<T> = {

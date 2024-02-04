@@ -1,8 +1,8 @@
+import { EventPayload } from 'server/plugin'
 import { SLACK_EVENTS, pluginName } from '../../constants'
-import { EventPayload } from 'packages/server/plugin/src'
 import { SlackEmitterType } from '../../dependencies/slackEmitter'
 import { AllMiddlewareArgs } from '@slack/bolt'
-import { createEventNode } from 'plugins/shared/src'
+import { createEventNode } from 'plugins/shared'
 
 type SlackEventProcess = (
   write: (key: string, value: any) => void,

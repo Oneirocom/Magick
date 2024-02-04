@@ -232,6 +232,7 @@
       "communication": ["packages/shared/communication/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/*": ["plugins/*"],
+      "plugins/shared": ["plugins/shared/src/index.ts"],
       "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [

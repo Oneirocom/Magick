@@ -1,7 +1,7 @@
 import pino from 'pino'
-import { getLogger } from 'packages/server/logger/src'
-import { ActionPayload, EventPayload } from 'packages/server/plugin/src'
-import { RedisPubSub } from 'packages/server/redis-pubsub/src'
+import { getLogger } from 'server/logger'
+import { ActionPayload, EventPayload } from 'server/plugin'
+import { RedisPubSub } from 'server/redis-pubsub'
 import { SLACK_EVENTS } from '../constants'
 
 class SlackEventClient {

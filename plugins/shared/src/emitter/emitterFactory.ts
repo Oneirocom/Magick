@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { EventPayload } from 'packages/server/plugin/src'
+import { EventPayload } from 'server/plugin'
 import TypedEmitter, { type EventMap } from 'typed-emitter'
 
 export type CreateMessageEvents<T> = {

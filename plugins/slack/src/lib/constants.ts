@@ -1,4 +1,4 @@
-import { createEventsEnum } from 'plugins/shared/src'
+import { createEventsEnum } from 'plugins/shared'
 import { PluginCredential } from 'server/credentials'
 import { PLUGIN_SETTINGS } from 'shared/config'
 
