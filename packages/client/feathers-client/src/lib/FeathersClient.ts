@@ -48,6 +48,11 @@ const configureCustomServices = (
     methods: ['find', 'get', 'create', 'patch', 'remove'],
   })
 
+  app.use('user', socketClient.service('user'), {
+    methods: ['get'],
+    events: ['log', 'error', 'update', 'create', 'budgetUpdated'],
+  })
+
   app.use('agents', socketClient.service('agents'), {
     methods: [
       'find',

@@ -251,7 +251,7 @@ const CreateCredential: FC<CreateCredentialProps> = ({
 const ServiceSelector = ({ selectedService, setSelectedService }) => {
   const groupedServices = pluginCredentials.reduce((acc, service) => {
     acc[service.clientName] = acc[service.clientName] || []
-    acc[service.clientName].push(service)
+    if (service.available) acc[service.clientName].push(service)
     return acc
   }, {}) as Record<string, typeof pluginCredentials>
 
