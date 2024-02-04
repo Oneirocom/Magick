@@ -10,10 +10,13 @@ import { useTabLayout } from "@magickml/providers"
 import { SetAPIKeys } from "client/core"
 import React from "react";
 import { ListItem } from "@mui/material";
+import { RootState, useGetAgentByIdQuery } from "client/state";
+import { useSelector } from "react-redux";
 
 export const drawerTooltipText = {
   spells: 'Create and manage spell node graphs for agents to use. ',
   agents: 'Create and manage autonomous agents powered by spells. ',
+  knowledge: 'Manage knowledge for your agent',
   documents:
     'Information vectorized as embeddings for quick search and retrieval. ',
   events: 'Data stored for use as short-term memory between spell runs.',
@@ -31,10 +34,22 @@ type DrawerItem = {
   Icon: any
   tooltip: string
   tooltipText: string
+  isV1?: boolean
+  isV2?: boolean
 }
 
 export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const { openTab } = useTabLayout()
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId } = globalConfig
+
+  const { data: agent, isLoading } = useGetAgentByIdQuery({ agentId: currentAgentId }, { skip: !currentAgentId })
+
+  if (isLoading) {
+    return null
+  }
+
+  const isV2 = agent?.version === '2.0'
 
   const DrawerItems: (DrawerItem | React.JSX.Element)[] = [
     {
@@ -46,7 +61,15 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
     {
       name: 'Documents',
       Icon: ArticleIcon,
+      isV1: true,
       tooltip: 'Documents Tooltip',
+      tooltipText: drawerTooltipText.documents,
+    },
+    {
+      name: 'Knowledge',
+      Icon: ArticleIcon,
+      isV2: true,
+      tooltip: 'Knowledge Tooltip',
       tooltipText: drawerTooltipText.documents,
     },
     {
@@ -72,33 +95,43 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
 
   return (
     <List sx={{ padding: 0, width: '100%' }}>
-      {DrawerItems.map((item, index: {}) => {
-        const isElement = React.isValidElement(item);
-        const key = isElement ? `plugin-drawer-item-${index}` : (item as DrawerItem).name;
+      {DrawerItems
+        .map((item, index: {}) => {
+          const isElement = React.isValidElement(item);
+          const key = isElement ? `plugin-drawer-item-${index}` : (item as DrawerItem).name;
 
-        if (!isElement) {
-          const drawerItem = item as DrawerItem;
-          return (
-            <DrawerItem
-              key={key} // Unique key for each DrawerItem
-              active={currentTab?.id === drawerItem.name}
-              Icon={drawerItem.Icon}
-              onClick={() => openTab({
-                name: drawerItem.name,
-                type: drawerItem.name,
-                switchActive: true,
-                id: drawerItem.name,
-              })}
-              text={drawerItem.name}
-              tooltip={drawerItem.tooltip}
-              tooltipText={drawerItem.tooltipText}
-            />
-          );
-        } else {
-          // Directly return the element if it's a JSX element
-          return React.cloneElement(item, { key });
-        }
-      })}
+          if (!isElement) {
+            const drawerItem = item as DrawerItem;
+
+            if (drawerItem.isV1 && isV2) {
+              return null;
+            }
+
+            if (drawerItem.isV2 && !isV2) {
+              return null;
+            }
+
+            return (
+              <DrawerItem
+                key={key} // Unique key for each DrawerItem
+                active={currentTab?.id === drawerItem.name}
+                Icon={drawerItem.Icon}
+                onClick={() => openTab({
+                  name: drawerItem.name,
+                  type: drawerItem.name,
+                  switchActive: true,
+                  id: drawerItem.name,
+                })}
+                text={drawerItem.name}
+                tooltip={drawerItem.tooltip}
+                tooltipText={drawerItem.tooltipText}
+              />
+            );
+          } else {
+            // Directly return the element if it's a JSX element
+            return React.cloneElement(item, { key });
+          }
+        })}
       {!isAPIKeysSet && (
         <ListItem key="set-api-keys" disablePadding sx={{ display: 'block' }}>
           <SetAPIKeys />
