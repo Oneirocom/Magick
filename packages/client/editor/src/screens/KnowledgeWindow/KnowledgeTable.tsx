@@ -1,8 +1,7 @@
-// FILEED
+// KNOWLEDGEED
 // Import statements kept as-is
 import { TableComponent } from 'client/core'
-import { CompletionProvider, pluginManager } from 'shared/core'
-import { MoreHoriz, NewReleases } from '@mui/icons-material'
+import { MoreHoriz } from '@mui/icons-material'
 import {
   Button,
   Container,
@@ -15,46 +14,20 @@ import {
 import { useSnackbar } from 'notistack'
 import { useConfig, useTreeData } from '@magickml/providers'
 import { useEffect, useMemo, useState } from 'react'
-import { CSVLink } from 'react-csv'
-import { FaFileCsv } from 'react-icons/fa'
 import {
   TableInstance,
-  useAsyncDebounce,
   useFilters,
   useGlobalFilter,
   usePagination,
   useSortBy,
   useTable,
 } from 'react-table'
-import { DocumentData, columns } from './knowledge'
+import { KnowledgeData, columns } from './knowledge'
 import styles from './index.module.scss'
-import DocumentModal from './KnowledgeModal'
-import DocContentModal from './KnowledgeContentModal'
-import { RootState, useCreateFileMutation, useDeleteFileMutation, useLazyGetFileByIdQuery } from 'client/state'
+import KnowledgeModal from './KnowledgeModal'
+import KnowledgeContentModal from './KnowledgeContentModal'
+import { RootState, useCreateKnowledgeMutation, useDeleteKnowledgeMutation, useLazyGetKnowledgeByIdQuery } from 'client/state'
 import { useSelector } from 'react-redux'
-/**
- * GlobalFilter component for applying search filter on the whole table.
- * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
- * @returns React.JSX.Element
- */
-const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
-  const [value, setValue] = useState(globalFilter)
-  const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined)
-  }, 500)
-  return (
-    <input
-      type="text"
-      value={value || ''}
-      onChange={e => {
-        setValue(e.target.value)
-        onChange(e.target.value)
-      }}
-      placeholder="Search Files..."
-      className={styles.search}
-    />
-  )
-}
 
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   return (
@@ -69,31 +42,33 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   )
 }
 
+export type NewKnowledgeState = {
+  name: string
+  tag: string
+  dataType: string
+  sourceUrl: string
+  projectId: string
+  date: string
+  files: any[]
+}
+
 /**
- * FilesTable component for displaying files in a table with sorting, filtering, and pagination.
- * @param {{ files: any[] }} param0
+ * KnowledgeTable component for displaying knowledge in a table with sorting, filtering, and pagination.
+ * @param {{ knowledge: any[] }} param0
  * @returns React.JSX.Element
  */
-function FileTable({ files }) {
-  const [deleteFile] = useDeleteFileMutation()
-  const [getFileById] = useLazyGetFileByIdQuery()
-  const [createFile] = useCreateFileMutation()
+function KnowledgeTable({ knowledgeData }) {
+  const [deleteKnowledge] = useDeleteKnowledgeMutation()
+  const [getKnowledgeById] = useLazyGetKnowledgeByIdQuery()
+  const [createKnowledge] = useCreateKnowledgeMutation()
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
 
-  useEffect(() => {
-    console.log('FILES', files)
-  }, [files])
-
-
   const { enqueueSnackbar } = useSnackbar()
-  const filteredProviders = pluginManager.getCompletionProviders('text', [
-    'embedding',
-  ]) as CompletionProvider[]
   const config = useConfig()
 
-  const [file, setFile] = useState(null)
+  const [knowledge, setKnowledge] = useState(null)
   const [contentModal, setContentModal] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   // todo better typing here for the row
@@ -103,39 +78,44 @@ function FileTable({ files }) {
 
   // Create mode state
   const [createMode, setCreateMode] = useState(false)
-  // State for new file
-  const [newFile, setNewFile] = useState({
-    type: '',
-    content: '',
+  // State for new knowledge
+  const [newKnowledge, setNewKnowledge] = useState<NewKnowledgeState>({
+    tag: '',
+    name: '',
+    dataType: '',
+    sourceUrl: '',
     projectId: '',
     date: new Date().toISOString(),
-    embedding: '',
     files: [],
   })
 
-  const handleActionClick = (file, row) => {
-    setAnchorEl(file.currentTarget)
+  const handleActionClick = (knowledge, row) => {
+    setAnchorEl(knowledge.currentTarget)
     setSelectedRow(row)
   }
 
   const createData = (
     data: {
       row: any,
-      fileName: any,
-      type: string,
-      createdAt: string
+      tag: string,
+      createdAt: string,
+      dataType?: string,
+      sourceUrl?: string
+      name: string
     }
-  ): DocumentData => {
+  ): KnowledgeData => {
     return {
       row: data.row,
-      type: data.type,
-      fileName: data.fileName,
+      tag: data.tag,
+      name: data.name,
+      dataType: data.dataType,
+      sourceUrl: data.sourceUrl,
       date: data.createdAt,
       action: (
         <>
           <IconButton
             aria-label="more"
-            onClick={file => handleActionClick(file, data.row)}
+            onClick={knowledge => handleActionClick(knowledge, data.row)}
             style={{ boxShadow: 'none' }}
           >
             <MoreHoriz />
@@ -148,8 +128,8 @@ function FileTable({ files }) {
   const defaultColumns = useMemo(
     () => [
       {
-        Header: 'Filename',
-        accessor: 'metadata.fileName',
+        Header: 'Knowledgename',
+        accessor: 'metadata.knowledgeName',
         disableSortBy: true,
       },
       {
@@ -168,8 +148,8 @@ function FileTable({ files }) {
         disableFilters: false,
       },
       {
-        Header: 'File Type',
-        accessor: 'fileType',
+        Header: 'Knowledge Type',
+        accessor: 'knowledgeType',
         disableFilters: false,
       },
     ],
@@ -179,16 +159,14 @@ function FileTable({ files }) {
   // Initialize the table with hooks
   const {
     page,
-    flatRows,
     pageOptions,
     gotoPage,
-    setGlobalFilter,
-    state: { sortBy, globalFilter },
+    state: { sortBy },
     setSortBy,
   } = useTable<any>(
     {
       columns: defaultColumns,
-      data: files,
+      data: knowledgeData,
       initialState: {
         // todo we need to pass a proper generic into the useTable hook to fix this type error
         // @ts-ignore
@@ -211,8 +189,10 @@ function FileTable({ files }) {
   const rows = page.map(el => {
     return createData({
       row: el.original,
-      fileName: el.original.metadata?.fileName,
-      type: el.original.type,
+      name: el.original.name,
+      sourceUrl: el.original.sourceUrl,
+      dataType: el.original.dataType || 'none',
+      tag: el.original.metadata.tag || 'none',
       createdAt: el.original.createdAt,
     })
   })
@@ -229,64 +209,61 @@ function FileTable({ files }) {
     setSelectedRow(null)
   }
 
-  const resetNewFile = () => {
-    setNewFile({
-      type: '',
-      content: '',
+  const resetNewKnowledge = () => {
+    setNewKnowledge({
+      tag: '',
+      name: '',
+      sourceUrl: '',
       projectId: '',
       date: '',
-      embedding: '',
+      dataType: '',
       files: [],
     })
   }
 
-  // Handle file deletion
-  const handleFileDelete = async (file: any) => {
+  // Handle knowledge deletion
+  const handleKnowledgeDelete = async (knowledge: any) => {
     if (!selectedRow) return
 
-    deleteFile({ fileId: selectedRow.id })
+    deleteKnowledge({ knowledgeId: selectedRow.id })
       .unwrap()
       .then(() => {
-        enqueueSnackbar('File deleted', { variant: 'success' })
+        enqueueSnackbar('Knowledge deleted', { variant: 'success' })
         // Close the action menu
         handleActionClose()
       })
       .catch(() => {
-        enqueueSnackbar('Error deleting file', { variant: 'error' })
+        enqueueSnackbar('Error deleting knowledge', { variant: 'error' })
       })
   }
 
-  // Get the original rows data
-  const originalRows = useMemo(
-    () => flatRows.map(row => row.original),
-    [flatRows]
-  )
-
   // Handle save action
   const handleSave = async selectedModel => {
-    const { files, ...body } = newFile
-    // call files endpoint
+    const { files, ...body } = newKnowledge
+    // call knowledge endpoint
 
     const formData = new FormData()
     formData.append('projectId', config.projectId)
     formData.append('secrets', localStorage.getItem('secrets') || '')
-    formData.append('type', body.type)
+    formData.append('tag', body.tag)
+    formData.append('sourceUrl', body.sourceUrl)
+    formData.append('name', body.name)
     for (const file of files as File[]) {
       formData.append('files', file, file.name)
     }
     formData.append('agentId', currentAgentId)
 
-    createFile({ file: formData })
+    createKnowledge({ knowledge: formData })
       .unwrap()
       .then(() => {
-        resetNewFile()
-        enqueueSnackbar('File saved successfully', { variant: 'success' })
+        resetNewKnowledge()
+        enqueueSnackbar('Knowledge saved successfully', { variant: 'success' })
         setTimeout(() => {
           setCreateMode(false)
         }, 500)
       })
       .catch(err => {
-        enqueueSnackbar('Error saving file', { variant: 'error' })
+        enqueueSnackbar('Error saving knowledge', { variant: 'error' })
       })
   }
 
@@ -296,11 +273,11 @@ function FileTable({ files }) {
   }
 
   const handleFindDoc = doc => {
-    //fetch the file
-    getFileById(doc.id)
+    //fetch the knowledge
+    getKnowledgeById(doc.id)
       .unwrap()
       .then((res) => {
-        setFile(res.content)
+        setKnowledge(res.content)
         setContentModal(true)
       })
       .catch(err => {
@@ -316,58 +293,35 @@ function FileTable({ files }) {
 
   return (
     <>{createMode && (
-      <DocumentModal
+      <KnowledgeModal
         createMode={createMode}
         setCreateMode={setCreateMode}
         handleSave={handleSave}
-        setNewDocument={setNewFile} />
+        setNewKnowledge={setNewKnowledge} />
     )}
-      {contentModal && file && (
-        <DocContentModal
+      {contentModal && knowledge && (
+        <KnowledgeContentModal
           contentModal={contentModal}
           setContentModal={setContentModal}
-          document={file}
+          knowledge={knowledge}
         />
       )}
       <Container className={styles.container} classes={{ root: styles.root }}>
         <Stack spacing={2} style={{ padding: '1.5rem', background: 'transparent' }}>
-          <div className={styles.flex}>
+          <div className={`${styles.flex} mt-8`}>
             <Typography variant="h4" className={styles.header}>
-              Files
+              Knowledge
             </Typography>
             <div className={styles.flex}>
               <Button
                 variant="outlined"
                 className={styles.btn}
-                startIcon={<NewReleases />}
                 style={{ marginLeft: '1rem' }}
                 name="refresh"
                 onClick={showCreateModal}
               >
-                Create New
+                Add knowledge
               </Button>
-              <CSVLink
-                data={originalRows}
-                filename="files.csv"
-                target="_blank"
-              >
-                <Button
-                  className={styles.btn}
-                  variant="outlined"
-                  startIcon={<FaFileCsv size={14} />}
-                  style={{ marginLeft: '1rem' }}
-                >
-                  export
-                </Button>
-              </CSVLink>
-            </div>
-          </div>
-          <div className={`${styles.flex} ${styles.flexEnd}`}>
-            <div className={styles.flex}>
-              <GlobalFilter
-                globalFilter={globalFilter}
-                setGlobalFilter={setGlobalFilter}
-              />
             </div>
           </div>
           <TableComponent
@@ -385,7 +339,7 @@ function FileTable({ files }) {
           <ActionMenu
             anchorEl={anchorEl}
             handleClose={handleActionClose}
-            handleDelete={handleFileDelete}
+            handleDelete={handleKnowledgeDelete}
           />
         </Stack>
       </Container>
@@ -393,4 +347,4 @@ function FileTable({ files }) {
   )
 }
 
-export default FileTable
+export default KnowledgeTable

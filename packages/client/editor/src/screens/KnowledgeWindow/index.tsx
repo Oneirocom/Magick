@@ -1,17 +1,14 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
-import FileTable from './KnowledgeTable'
-import { RootState, useGetDocumentsQuery, useGetFilesQuery } from 'client/state'
-import { useSelector } from 'react-redux'
-import { useConfig } from '@magickml/providers'
+import KnowledgeTable from './KnowledgeTable'
+import { useGetKnowledgeQuery } from 'client/state'
 
 /**
- * DocumentWindow component displays the documents of a project.
+ * KnowledgeWindow component displays the documents of a project.
  * @returns JSX Element
  */
-const DocumentWindow = (): React.JSX.Element => {
-  const config = useConfig()
-  const { data: files, isLoading } = useGetFilesQuery({})
+const KnowledgeWindow = (): React.JSX.Element => {
+  const { data: knowledge, isLoading } = useGetKnowledgeQuery({})
 
   return (
     <div
@@ -24,11 +21,11 @@ const DocumentWindow = (): React.JSX.Element => {
       }}
     >
       {isLoading && <LoadingScreen />}
-      {files && (
-        <FileTable files={files.data} />
+      {knowledge && (
+        <KnowledgeTable knowledgeData={knowledge.data} />
       )}
     </div>
   )
 }
 
-export default DocumentWindow
+export default KnowledgeWindow

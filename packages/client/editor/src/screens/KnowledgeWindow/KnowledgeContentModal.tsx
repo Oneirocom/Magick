@@ -3,7 +3,7 @@ import { useTreeData } from '@magickml/providers'
 import { Typography } from '@mui/material'
 import styles from './index.module.scss'
 
-function DocContentModal({ contentModal, setContentModal, document }) {
+function DocContentModal({ contentModal, setContentModal, knowledge }) {
   const { setOpenDoc } = useTreeData()
   return (
     <Modal
@@ -15,7 +15,7 @@ function DocContentModal({ contentModal, setContentModal, document }) {
     >
       <div className={styles.modalContent}>
         <Typography variant="body1" className={styles.modalTitle}>
-          {document}
+          {knowledge}
         </Typography>
       </div>
     </Modal>

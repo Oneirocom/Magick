@@ -1,13 +1,15 @@
 export interface Column {
   id:
     | 'action'
-    | 'collapse'
+    | 'name'
     | 'id'
-    | 'type'
+    | 'tag'
     | 'content'
     | 'projectId'
     | 'date'
-    | 'fileName'
+    | 'sourceUrl'
+    | 'dataType'
+    | 'createdAt'
   label: string
   minWidth?: number
   align?: 'right'
@@ -15,16 +17,19 @@ export interface Column {
 
 export const columns: Column[] = [
   { id: 'action', label: 'Actions', minWidth: 10 },
-  { id: 'collapse', label: '', minWidth: 10 },
-  { id: 'fileName', label: 'File Name', minWidth: 65 },
-  { id: 'type', label: 'Type', minWidth: 65 },
-  { id: 'date', label: 'Date', minWidth: 65 },
+  { id: 'name', label: 'Name', minWidth: 65 },
+  { id: 'sourceUrl', label: 'Source Url', minWidth: 65 },
+  { id: 'tag', label: 'Type', minWidth: 65 },
+  { id: 'dataType', label: 'Data Type', minWidth: 65 },
+  { id: 'createdAt', label: 'Date', minWidth: 65 },
 ]
 
-export interface DocumentData {
+export interface KnowledgeData {
   row: any
   action: any
-  type: string
-  fileName: string
+  name: string
+  tag: string
+  sourceUrl: string
+  dataType: string
   date: string
 }
