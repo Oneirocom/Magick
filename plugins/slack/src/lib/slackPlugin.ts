@@ -1,10 +1,6 @@
 import Redis from 'ioredis'
 import { Job } from 'bullmq'
-import {
-  ActionPayload,
-  CoreEventsPlugin,
-  EventPayload,
-} from 'packages/server/plugin/src'
+import { ActionPayload, CoreEventsPlugin, EventPayload } from 'server/plugin'
 import { SLACK_ACTIONS, SLACK_EVENTS, SLACK_KEY } from './constants'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'

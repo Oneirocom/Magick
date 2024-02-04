@@ -15,6 +15,7 @@ export const discordPluginCredentials: PluginCredential[] = [
     icon: 'https://discord.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg',
     helpLink: 'https://discord.com/developers/applications',
     description: 'Used to connect to Discord',
+    available: true,
   },
 ]
 

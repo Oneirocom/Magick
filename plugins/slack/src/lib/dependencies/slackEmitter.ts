@@ -1,4 +1,4 @@
-import { EmitterFactory, CreateMessageEvents } from 'plugins/shared/src'
+import { EmitterFactory, CreateMessageEvents } from 'plugins/shared'
 import TypedEmitter from 'typed-emitter'
 import { SLACK_EVENTS } from '../constants'
 

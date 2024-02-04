@@ -1,6 +1,6 @@
 import Redis from 'ioredis'
 import { Job } from 'bullmq'
-import { ActionPayload, CoreEventsPlugin } from 'packages/server/plugin/src'
+import { ActionPayload, CoreEventsPlugin } from 'server/plugin'
 import {
   DISCORD_ACTIONS,
   DISCORD_KEY,
@@ -29,7 +29,7 @@ export class DiscordPlugin extends CoreEventsPlugin {
     pubSub: RedisPubSub,
     projectId: string
   ) {
-    super(discordPluginName, connection, agentId, projectId)
+    super({ name: discordPluginName, connection, agentId, projectId })
     this.event = new DiscordEventClient(pubSub, agentId)
     this.setCredentials(discordPluginCredentials)
     this.initalizeDiscord().catch(error =>

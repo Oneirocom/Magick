@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js'
-import { EventPayload } from 'packages/server/plugin/src'
+import { EventPayload } from 'server/plugin'
 import { DiscordCredentials, DiscordEventPayload } from '../../types'
 import { Logger } from 'pino'
 import { DISCORD_EVENTS } from '../../constants'
