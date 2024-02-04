@@ -5,3 +5,6 @@
 [submodule "portal/platform"]
 	path = portal/platform
 	url = https://github.com/Oneirocom/Portal
+[submodule "pythonPackages/embedchain"]
+	path = pythonPackages/embedchain
+	url = git@github.com:Oneirocom/embedchain.git
