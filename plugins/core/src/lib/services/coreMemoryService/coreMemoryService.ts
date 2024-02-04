@@ -202,9 +202,20 @@ class CoreMemoryService {
     }
   }
 
-  async query(query: string) {
+  async remove(memoryId: string) {
     try {
       if (!this.app) this.initialize(this.agentId)
+      await this.app.delete(memoryId)
+      return true
+    } catch (error: any) {
+      console.error('Error removing from Embedchain:', error)
+      throw error
+    }
+  }
+
+  async query(query: string) {
+    try {
+      if (!this.app) await this.initialize(this.agentId)
       const pythonResponse = await this.app.query$(query, { citations: true })
       const response = await pythonResponse.valueOf()
       return response
