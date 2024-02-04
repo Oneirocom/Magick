@@ -161,7 +161,7 @@ export class CorePlugin extends CoreEventsPlugin<
     try {
       await this.coreLLMService.initialize()
       // await this.coreBudgetManagerService.initialize()
-      await this.coreMemoryService.initialize(this.agentId)
+      await this.coreMemoryService.initialize(this.projectId)
     } catch (error) {
       console.error('Error initializing dependencies:')
       console.error(error)
