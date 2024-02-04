@@ -15,7 +15,7 @@ import { equals } from 'rambdax'
 // rewrite object value in new formattaking into account we are manipulating objects
 export const ObjectValue: ValueType = {
   name: 'object',
-  creator: () => [],
+  creator: () => new Object(),
   deserialize: (value: string | object) =>
     typeof value === 'string' ? JSON.parse(value) : value,
   serialize: (value: object) => JSON.stringify(value),
