@@ -25,14 +25,14 @@ export const searchKnowledge = makeFlowNodeDefinition({
     const { getDependency } = graph
     const query = read('query') as string
     const count = read('count') as number
-    const metadata = read('metadata') as Record<string, any> | {}
+    const metadata = (read('metadata') as Record<string, any>) || {}
     const coreMemoryService = getDependency<ICoreMemoryService>(
       CORE_DEP_KEYS.MEMORY_SERVICE
     )
 
     const response = await coreMemoryService?.search({
       query,
-      numDocuments: count,
+      numDocuments: Number(count),
       metadata,
     })
     const knowledge = response.map(result => result.context)
