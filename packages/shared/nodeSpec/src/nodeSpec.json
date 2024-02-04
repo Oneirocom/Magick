@@ -1042,7 +1042,7 @@
       {
         "name": "metadata",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3497,12 +3497,12 @@
       {
         "name": "newValue",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       },
       {
         "name": "obj",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3617,7 +3617,7 @@
       {
         "name": "a",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3636,12 +3636,12 @@
       {
         "name": "a",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       },
       {
         "name": "b",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3660,12 +3660,12 @@
       {
         "name": "a",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       },
       {
         "name": "b",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3689,7 +3689,7 @@
       {
         "name": "obj",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3713,7 +3713,7 @@
       {
         "name": "obj",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3737,7 +3737,7 @@
       {
         "name": "obj",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3770,7 +3770,7 @@
       {
         "name": "payload",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3822,12 +3822,12 @@
       {
         "name": "schema",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       },
       {
         "name": "data",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -3869,7 +3869,7 @@
       {
         "name": "a",
         "valueType": "object",
-        "defaultValue": "[]"
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
