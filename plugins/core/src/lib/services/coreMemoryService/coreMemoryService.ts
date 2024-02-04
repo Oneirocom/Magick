@@ -226,21 +226,29 @@ class CoreMemoryService {
     }
   }
 
-  async search({ query, numDocuments = 3, metadata = {} }: SearchArgs) {
+  async search({
+    query,
+    numDocuments = 3,
+    metadata = { type: 'test' },
+  }: SearchArgs) {
     try {
       if (!this.app) this.initialize(this.agentId)
-      const pythonResponse = await this.app._retrieve_from_database$(query, {
-        query_config: {
-          numDocuments,
-          where: metadata,
-        },
-        citations: true,
+
+      const pythonResponse = await this.app.db.query$(query, {
+        n_results: numDocuments,
         where: metadata,
+        citations: true,
       })
 
       // const responseJson = await pythonResponse.serialize()
       const response = await pythonResponse.valueOf()
-      return response
+
+      const results = [] as { context: string; metadata: Record<string, any> }[]
+      for (const result of response) {
+        results.push({ context: result[0], metadata: result[1] })
+      }
+
+      return results
     } catch (error: any) {
       console.error('Error searching Embedchain:', error)
       throw error
