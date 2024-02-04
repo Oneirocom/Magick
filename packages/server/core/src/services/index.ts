@@ -4,6 +4,7 @@ import { spell } from './spells/spells'
 import { agent } from './agents/agents'
 import { event } from './events/events'
 import { task } from './tasks/tasks'
+import { knowledge } from './knowledge/knowledge'
 import { document } from './documents/documents'
 import { projects } from './projects/projects'
 import { agentImage } from './agentImage/agentImage'
@@ -38,6 +39,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(graphEvents)
   app.configure(credentials)
   app.configure(users)
+  app.configure(knowledge)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better
