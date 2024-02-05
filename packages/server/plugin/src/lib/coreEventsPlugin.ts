@@ -61,7 +61,7 @@ export abstract class CoreEventsPlugin<
   }
 
   /**
-   * Generic event handler to send out message events to the core
+   * Generic event trigger to send out message events to the core
    * plugin. This is used to send out events to the core plugin.
    * This will trigger off the graph event node that is listening
    * for the event.
@@ -69,9 +69,9 @@ export abstract class CoreEventsPlugin<
    * @param pluginPayload - The payload to send to the core plugin.
    * @example
    * const myPlugin = new CorePlugin('MyPlugin');
-   * myPlugin.onMessage({ message: 'Hello World' });
+   * myPlugin.triggerMessageReceived({ message: 'Hello World' });
    */
-  onMessage(pluginPayload: Payload) {
+  triggerMessageReceived(pluginPayload: Payload) {
     const event = EventTypes.ON_MESSAGE
     const payload = this.formatPayload(event, pluginPayload)
     this.centralEventBus.emit(event, payload)
