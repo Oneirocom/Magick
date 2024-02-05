@@ -4184,5 +4184,141 @@
       }
     ],
     "configuration": []
+  },
+  {
+    "type": "discord/onMessage",
+    "category": "Event",
+    "label": "On Discord Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "sender",
+        "valueType": "string"
+      },
+      {
+        "name": "channel",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "discord/onReactionAdd",
+    "category": "Event",
+    "label": "On Discord Reaction Add",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reaction",
+        "valueType": "string"
+      },
+      {
+        "name": "count",
+        "valueType": "number"
+      },
+      {
+        "name": "messageId",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "event"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "discord/sendMessage",
+    "category": "Action",
+    "label": "Send Discord Message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "channel",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
   }
 ]
