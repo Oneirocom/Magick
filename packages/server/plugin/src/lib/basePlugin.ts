@@ -40,9 +40,9 @@ interface ActionDefinition {
   handler: (ActionPayload) => void
 }
 
-export interface ActionPayload {
+export interface ActionPayload<T = unknown, Y = unknown> {
   actionName: string
-  event: EventPayload
+  event: EventPayload<T, Y>
   data: any
 }
 
@@ -65,10 +65,7 @@ export type EventFormat<
   status?: 'success' | 'error' | 'pending' | 'unknown'
 }
 
-export type EventPayload<
-  T = Record<string, unknown> | Object,
-  Y = Record<string, unknown>
-> = {
+export type EventPayload<T = unknown, Y = unknown> = {
   connector: string
   eventName: string
   status: 'success' | 'error' | 'pending' | 'unknown'
