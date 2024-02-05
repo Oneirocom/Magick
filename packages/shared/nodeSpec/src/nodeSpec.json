@@ -457,7 +457,7 @@
   {
     "type": "flow/array/forEach",
     "category": "Flow",
-    "label": "For Loop",
+    "label": "For Each",
     "inputs": [
       {
         "name": "flow",
