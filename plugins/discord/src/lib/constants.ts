@@ -3,7 +3,7 @@ import { createEventsEnum } from 'plugins/shared/src'
 import { Events } from 'discord.js'
 import { DiscordEvents } from './types'
 
-export const discordPluginName = 'Discord'
+export const discordPluginName = 'discord'
 
 export const discordPluginCredentials: PluginCredential[] = [
   {
