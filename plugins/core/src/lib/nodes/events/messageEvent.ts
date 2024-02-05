@@ -2,6 +2,7 @@ import { NodeCategory } from '@magickml/behave-graph'
 import { EventPayload } from 'server/plugin'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { EventTypes } from 'communication'
+import { corePluginName } from '../../constants'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
@@ -20,7 +21,7 @@ const messageEventConfig = {
     write('content', event.content)
     commit('flow')
   },
-  dependencyName: 'Core', // specify the dependency name for the Core Event Emitter
+  dependencyName: corePluginName, // specify the dependency name for the Core Event Emitter
   eventName: EventTypes.ON_MESSAGE, // specify the event name to listen to
 }
 

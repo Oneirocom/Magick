@@ -140,7 +140,7 @@ export class CorePlugin extends CoreEventsPlugin<
     this.registerAction({
       actionName: ON_ERROR,
       displayName: 'Error Received',
-      handler: this.handleOnMessage.bind(this),
+      handler: this.handleSendMessage.bind(this),
     })
   }
 
@@ -246,7 +246,7 @@ export class CorePlugin extends CoreEventsPlugin<
     this.logger.trace(`Sending message to ${eventName} on core plugin`)
     // handle sending a message back out.
 
-    if (plugin === 'Core') {
+    if (plugin === corePluginName) {
       this.client.sendMessage(actionPayload)
     } else {
       this.centralEventBus.emit(eventName, actionPayload)
@@ -265,7 +265,7 @@ export class CorePlugin extends CoreEventsPlugin<
     this.logger.trace(`Sending error to ${eventName} on core plugin`)
     // handle sending a message back out.
 
-    if (plugin === 'Core') {
+    if (plugin === corePluginName) {
       this.client.sendMessage(actionPayload)
     } else {
       this.centralEventBus.emit(eventName, actionPayload)
