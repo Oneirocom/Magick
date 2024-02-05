@@ -36,12 +36,13 @@ interface ExtendedConfig extends NodeConfigurationDescription {
 }
 
 type CustomEventNodeConfig<
+  TEventPayload extends EventPayload,
   TInput extends SocketsDefinition,
   TOutput extends SocketsDefinition,
   TState
 > = {
   handleEvent: (
-    event: EventPayload,
+    event: TEventPayload,
     args: EventNodeSetupParams<TInput, TOutput, TState>
   ) => void // Define the type more precisely if possible
   dependencyName: string
@@ -78,15 +79,16 @@ type CustomEventNodeConfig<
  * @returns A new event node definition
  */
 export function makeMagickEventNodeDefinition<
-  TInput extends SocketsDefinition,
-  TOutput extends SocketsDefinition,
-  TConfig extends NodeConfigurationDescription,
-  TState
+  TEventPayload extends EventPayload = EventPayload,
+  TInput extends SocketsDefinition = SocketsDefinition,
+  TOutput extends SocketsDefinition = SocketsDefinition,
+  TConfig extends NodeConfigurationDescription = NodeConfigurationDescription,
+  TState = Record<string, any>
 >(
   definition: OmitFactoryAndType<
     IEventNodeDefinition<TInput, TOutput, TConfig, TState>
   >,
-  eventConfig: CustomEventNodeConfig<TInput, TOutput, TState>
+  eventConfig: CustomEventNodeConfig<TEventPayload, TInput, TOutput, TState>
 ): Omit<
   IEventNodeDefinition<TInput, TOutput, TConfig, TState>,
   'init' | 'dispose'
@@ -149,7 +151,7 @@ export function makeMagickEventNodeDefinition<
 
           // Create a new onStartEvent function that will rehydrate the state before handling the event.
           // This also acts as a wrapper hanlder around the generic handler event which is passed in.
-          const onStartEvent = async (event: EventPayload) => {
+          const onStartEvent = async (event: TEventPayload) => {
             // attach event key to the event here
             // we set the current event in the event store for access in the state
             const eventStore = getDependency<IEventStore>(
