@@ -16,7 +16,7 @@
     "dev:nodeSpec": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.js",
     "dev:clientConfig": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateClientConfig.ts",
     "start": "node scripts/start-server.js",
-    "start-server": "node dist/apps/server/main.js",
+    "start-server": "OTEL_SERVICE_NAME=server node -r './instrument.js' dist/apps/server/main.js",
     "start-cloud-agent-manager": "OTEL_SERVICE_NAME=agent-manager node -r './instrument.js' dist/apps/cloud-agent-manager/main.js",
     "start-cloud-agent-worker": "OTEL_SERVICE_NAME=agent-worker poetry run node -r './instrument.js' dist/apps/cloud-agent-worker/main.js",
     "start-docs": "npx nx serve @magickml/docs",
