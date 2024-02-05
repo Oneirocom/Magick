@@ -7,7 +7,7 @@ import {
 export const forEach = makeFlowNodeDefinition({
   typeName: 'flow/array/forEach',
   category: NodeCategory.Flow,
-  label: 'For Loop',
+  label: 'For Each',
   configuration: {
     hiddenProperties: {
       valueType: 'array',
