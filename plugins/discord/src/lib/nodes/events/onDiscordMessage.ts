@@ -1,37 +1,46 @@
 import { DISCORD_EVENTS, discordPluginName } from '../../constants'
 import { EventPayload } from 'server/plugin'
-import { DiscordEmitterType } from '../../dependencies/discordEmitter'
-import { createEventNode } from 'plugins/shared/src'
 import { DiscordEventPayload } from '../../types'
+import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { NodeCategory } from '@magickml/behave-graph'
 
-type DiscordEventProcess<K extends keyof DiscordEventPayload> = (
-  write: (key: string, value: any) => void,
-  commit: (key: string) => void,
-  event: EventPayload<DiscordEventPayload[K]>
-) => void
+type State = {
+  onStartEvent?: ((event: EventPayload) => void) | undefined
+}
 
-const createDiscordEventNode = <
+const makeInitialState = (): State => ({
+  onStartEvent: undefined,
+})
+
+const createMagickDiscordEventNode = <
   K extends keyof DiscordEventPayload = keyof DiscordEventPayload
 >(
   typeName: string,
   label: string,
   eventKey: K,
   out: Record<string, string>,
-  process: DiscordEventProcess<K>
-) =>
-  createEventNode<DiscordEmitterType, DiscordEventPayload[K]>({
-    base: {
+  handleEvent: (event: EventPayload<DiscordEventPayload[K]>, args: any) => void
+) => {
+  const eventConfig = {
+    handleEvent,
+    dependencyName: discordPluginName,
+    eventName: DISCORD_EVENTS[eventKey],
+  }
+
+  return makeMagickEventNodeDefinition<EventPayload<DiscordEventPayload[K]>>(
+    {
       typeName,
       label,
+      category: NodeCategory.Event,
       in: {},
       out,
+      initialState: makeInitialState(),
     },
-    emitterDependencyKey: discordPluginName,
-    process: process,
-    event: DISCORD_EVENTS[eventKey],
-  })
+    eventConfig
+  )
+}
 
-export const onDiscordMessage = createDiscordEventNode<'messageCreate'>(
+export const onDiscordMessage = createMagickDiscordEventNode<'messageCreate'>(
   'discord/onMessage',
   'On Discord Message',
   'messageCreate',
@@ -42,7 +51,7 @@ export const onDiscordMessage = createDiscordEventNode<'messageCreate'>(
     channel: 'string',
     event: 'object',
   },
-  (write, commit, event) => {
+  (event, { write, commit }) => {
     write('content', event.data.content)
     write('sender', event.data.author.username)
     write('channel', event.data.channelId)
@@ -51,7 +60,7 @@ export const onDiscordMessage = createDiscordEventNode<'messageCreate'>(
 )
 
 export const onDiscordReactionAdd =
-  createDiscordEventNode<'messageReactionAdd'>(
+  createMagickDiscordEventNode<'messageReactionAdd'>(
     'discord/onReactionAdd',
     'On Discord Reaction Add',
     'messageReactionAdd',
@@ -62,7 +71,7 @@ export const onDiscordReactionAdd =
       messageId: 'string',
       event: 'event',
     },
-    (write, commit, event) => {
+    (event, { write, commit }) => {
       write('reaction', event.data.emoji.name)
       write('count', event.data.count)
       write('messageId', event.data.messageId)
