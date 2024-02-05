@@ -5,7 +5,6 @@ import { DiscordEventPayload } from '../../types'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { DISCORD_KEY } from '../../constants'
 import { IEventStore } from 'server/grimoire'
-import { ChannelType, TextChannel } from 'discord.js'
 
 type Inputs = {
   flow: SocketDefinition
@@ -53,19 +52,13 @@ export const sendDiscordMessage = createActionNode<
         throw new Error('No channel id found')
       }
 
-      const channel = await dependencies[
-        DISCORD_KEY
-      ].getClient().channels.fetch(event.data.channelId)
+      const discordClient = await dependencies[DISCORD_KEY]
 
-      if (!channel) {
-        throw new Error('No channel found')
+      if (!discordClient) {
+        throw new Error(`Discord client not found.`)
       }
 
-      if (channel.type !== ChannelType.GuildText) {
-        throw new Error('Channel is not a text channel')
-      }
-
-      await (channel as TextChannel).send(inputs.content)
+      await discordClient.sendMessage<'messageCreate'>(inputs.content, event)
     } catch (e) {
       console.log(e)
     }
