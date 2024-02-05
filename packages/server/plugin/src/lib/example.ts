@@ -134,7 +134,7 @@ class DiscordPlugin extends CoreEventsPlugin<PluginEvents, DiscordPayload> {
       this.makePayloadFromMessage(message)
     )
 
-    this.onMessage(pluginPayload)
+    this.triggerMessageReceived(pluginPayload)
 
     this.emitEvent(eventName, payload)
   }

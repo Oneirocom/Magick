@@ -1,6 +1,6 @@
 import { PluginCredential } from 'server/credentials'
 
-export const corePluginName = 'Core'
+export const corePluginName = 'core'
 
 export const corePluginCredentials: PluginCredential[] = [
   {
