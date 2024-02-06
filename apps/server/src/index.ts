@@ -5,14 +5,12 @@
 
 import cors from '@koa/cors'
 import Router from '@koa/router'
-import { pluginManager } from 'shared/core'
 import { apis, initApp, app, Handler, Method, Middleware, Route, spells } from 'server/core'
 import { initLogger, getLogger } from 'server/logger'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
-import plugins from './plugins'
 import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 import { PRODUCTION } from 'shared/config'
@@ -57,11 +55,10 @@ process.on(
 )
 
 // initialize server routes from the plugin manager
-const serverRoutes: Route[] = pluginManager.getServerRoutes()
 const router: Router = new Router()
 
 // merge spells, apis and server routes
-const routes: Route[] = [...spells, ...apis, ...serverRoutes]
+const routes: Route[] = [...spells, ...apis]
 
 /**
  * Initializes the server, sets up error-handling middleware, cross-origin resource sharing,
@@ -70,22 +67,6 @@ const routes: Route[] = [...spells, ...apis, ...serverRoutes]
 async function init() {
   await initApp('server')
   await initAgentCommander()
-  // load plugins
-  await (async () => {
-    logger.info(
-      'loaded plugins on server %o',
-      Object.values(plugins)
-        .map((p: any) => p.name)
-        .join(', ')
-    )
-  })()
-
-  const serverInits: Record<string, any> = pluginManager.getServerInits()
-
-  for (const method of Object.keys(serverInits)) {
-    await serverInits[method]()
-  }
-
   // generic error handling for any errors that may occur
   app.use(async (ctx: Context, next: () => Promise<any>) => {
     try {

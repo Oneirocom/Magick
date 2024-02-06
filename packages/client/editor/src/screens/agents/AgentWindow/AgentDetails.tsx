@@ -13,12 +13,10 @@ import {
 } from 'client/state'
 import { Button as SButton } from '@magickml/ui'
 import { Credentials } from './AgentCredentials'
-import { AgentConfigV1 } from './AgentConfigV1'
 
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData?: any
-  onLoadEnables: object
 }
 
 /**
@@ -32,7 +30,6 @@ interface AgentDetailsProps {
 const AgentDetails = ({
   selectedAgentData,
   setSelectedAgentData,
-  onLoadEnables,
 }: AgentDetailsProps) => {
   const [updateAgent] = useUpdateAgentMutation()
   const [editMode, setEditMode] = useState<boolean>(false)
@@ -173,17 +170,7 @@ const AgentDetails = ({
         </div>
       </div>
 
-      {v2 ? (
-        <Credentials agentId={selectedAgentData.id} />
-      ) : (
-        <AgentConfigV1
-          isDraft={isDraft}
-          selectedAgentData={selectedAgentData}
-          setSelectedAgentData={setSelectedAgentData}
-          onLoadEnables={onLoadEnables}
-          update={update}
-        />
-      )}
+      <Credentials agentId={selectedAgentData.id} />
     </div>
   )
 }

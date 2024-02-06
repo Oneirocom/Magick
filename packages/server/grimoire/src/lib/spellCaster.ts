@@ -17,11 +17,11 @@ import {
 import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
+import { CORE_DEP_KEYS } from 'plugin/core'
 import { AGENT_SPELL } from 'communication'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
-import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
 import { SpellState } from './spellbook'
 
 interface IAgent {

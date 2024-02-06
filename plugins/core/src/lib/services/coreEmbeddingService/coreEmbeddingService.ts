@@ -11,8 +11,8 @@ import {
   MistralEmbeddingOptions,
   OpenAIEmbeddingOptions,
   VoyageEmbeddingOptions,
-} from './types'
-import { LLMProviders } from '../coreLLMService/types/providerTypes'
+  LLMProviders,
+} from 'servicesShared'
 
 export class EmbeddingService implements IEmbeddingService {
   protected liteLLM: any

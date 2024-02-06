@@ -12,10 +12,8 @@ import {
 } from 'shared/config'
 import { PostHogProvider } from 'posthog-js/react'
 
-import plugins from './plugins'
 import { AppConfig } from '@magickml/providers'
 
-console.info('loaded with plugins %o', plugins)
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */

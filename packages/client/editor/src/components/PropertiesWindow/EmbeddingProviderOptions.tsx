@@ -5,10 +5,7 @@ import { useConfig } from '@magickml/providers'
 
 import { useListCredentialsQuery } from 'client/state'
 import { useGetUserQuery } from 'client/state'
-import { LLMProviders } from 'plugins/core/src/lib/services/coreLLMService/types/providerTypes'
-import { availableProviders, providers } from 'plugins/core/src/lib/services/coreLLMService/types/providers'
-import { EmbeddingModel } from 'plugins/core/src/lib/services/coreEmbeddingService/types'
-import { getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'plugins/core/src/lib/services/coreLLMService/providerUtils'
+import { LLMProviders, availableProviders, providers, getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag, EmbeddingModel } from 'servicesShared'
 
 export const EmbeddingProviderOptions = (
   props: ConfigurationComponentProps

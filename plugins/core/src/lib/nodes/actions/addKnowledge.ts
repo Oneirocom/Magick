@@ -1,8 +1,8 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 
 import { ICoreMemoryService } from '../../services/coreMemoryService/coreMemoryService'
-import { DataType } from '../../services/coreMemoryService/coreMemoryTypes'
 import { CORE_DEP_KEYS } from '../../constants'
+import { DataType } from 'servicesShared'
 
 export const addKnowledge = makeFlowNodeDefinition({
   typeName: 'action/knowledge/add',

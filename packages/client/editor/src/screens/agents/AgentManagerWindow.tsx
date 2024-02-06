@@ -1,11 +1,9 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
-import { type ClientPluginManager, pluginManager } from 'shared/core'
 import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useConfig } from '@magickml/providers'
 import AgentWindow from './AgentWindow'
-import validateSpellData from './AgentWindow/spellValidator'
 import { useCreateAgentMutation, useGetAgentsQuery } from 'client/state'
 
 // todo - improve agent typing by pulling from feathers types
@@ -21,21 +19,12 @@ const AgentManagerWindow = () => {
 
   const config = useConfig()
   const [data, setData] = useState<Array<AgentData>>([])
-  const [enable, setEnable] = useState({})
 
   // Handle data from initial loading of the agent data
   useEffect(() => {
     if (!agentData) return
     if (!agentData.data || !agentData.data[0]) return
     setData(agentData.data)
-
-    const spellAgent = agentData.data[0]?.rootSpell ?? {}
-    const inputs = (pluginManager as ClientPluginManager).getInputByName()
-    const plugin_list = (pluginManager as ClientPluginManager).getPlugins()
-    for (const key of Object.keys(plugin_list)) {
-      plugin_list[key] = validateSpellData(spellAgent, inputs[key])
-    }
-    setEnable(plugin_list)
   }, [agentData])
 
 
@@ -88,7 +77,6 @@ const AgentManagerWindow = () => {
     <AgentWindow
       data={data}
       onLoadFile={loadFile}
-      onLoadEnables={enable}
     />
   )
 }

@@ -5,15 +5,11 @@ import {
   BudgetDuration,
   IBudgetManagerService,
   ICoreBudgetManagerService,
-} from '../types'
+} from 'servicesShared'
 import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
-import { CompletionModel } from '../coreLLMService/types/completionModels'
-import {
-  CompletionResponse,
-  Message,
-} from '../coreLLMService/types/liteLLMTypes'
 import { Application, app } from 'server/core'
+import { CompletionModel, CompletionResponse, Message } from 'servicesShared'
 
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined

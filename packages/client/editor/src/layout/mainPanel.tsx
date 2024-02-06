@@ -10,14 +10,10 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useTabLayout } from '@magickml/providers';
 import Events from '../screens/EventWindow'
 import Requests from '../screens/RequestWindow'
-import Settings from '../screens/settings/SettingsWindow'
 import Config from '../screens/ConfigWindow'
-import Documents from '../screens/DocumentWindow'
 import Knowledge from '../screens/KnowledgeWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
 import Secrets from '../screens/SecretsWindow'
-import { ClientPluginManager, pluginManager } from 'shared/core'
-import Composer from '../components/workspaces/composer'
 import ComposerV2 from '../components/workspaces/composerv2'
 import NewMenuBar from '../components/MenuBar/newMenuBar';
 
@@ -39,33 +35,13 @@ const tabComponents = {
 };
 
 const getComponents = () => {
-  const pluginComponents = []
-
-    ; (pluginManager as ClientPluginManager)
-      .getGroupedClientRoutes()
-      .forEach(plugin => {
-        plugin.routes.map(route => {
-          pluginComponents.push({
-            name: route.path.charAt(1).toUpperCase() + route.path.slice(2),
-            component: route.component,
-          })
-        })
-      })
-
   return {
     Events,
     Requests,
-    Settings,
-    Documents,
     Knowledge,
     Agents,
     Config,
-    ...pluginComponents.reduce((acc, obj) => {
-      acc[obj.name] = obj.component
-      return acc
-    }, {}),
     Secrets,
-    spell: Composer,
     behave: ComposerV2,
     default: (props: IDockviewPanelProps<{ title: string }>) => {
       return (

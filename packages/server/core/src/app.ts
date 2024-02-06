@@ -18,7 +18,7 @@ import pino from 'pino'
 import Redis from 'ioredis'
 import { RedisPubSub } from 'server/redis-pubsub'
 import sync from 'feathers-sync'
-import { configureManager, globalsManager } from 'shared/core'
+import { globalsManager } from 'shared/core'
 
 import { REDIS_URL, API_ACCESS_KEY } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
@@ -31,10 +31,6 @@ import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
-
-//Vector DB Related Imports
-import { PostgresVectorStoreCustom, ExtendedEmbeddings } from './vectordb'
-import { PluginEmbeddings } from './customEmbeddings'
 
 import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
@@ -52,8 +48,6 @@ export type Environment = 'default' | 'server' | 'agent'
 
 declare module './declarations' {
   interface Configuration {
-    vectordb: PostgresVectorStoreCustom | any
-    embeddingdb: PostgresVectorStoreCustom | any
     pubsub: RedisPubSub
     redis: Redis
     isAgent?: boolean
@@ -132,9 +126,6 @@ export async function initApp(environment: Environment = 'default') {
   })
   app.set('redis', redis)
 
-  // Configure app spell management settings
-  app.configure(configureManager())
-
   // Configure authentication
   app.set('authentication', {
     secret: process.env.JWT_SECRET || 'secret',
@@ -170,19 +161,6 @@ export async function initApp(environment: Environment = 'default') {
   app.configure(rest())
 
   app.configure(dbClient)
-  const embeddings = new PluginEmbeddings({}) as unknown as ExtendedEmbeddings
-  const vectordb = new PostgresVectorStoreCustom(embeddings, {
-    client: app.get('dbClient'),
-    tableName: 'events',
-    queryName: 'match_events',
-  })
-  const embeddingdb = new PostgresVectorStoreCustom(embeddings, {
-    client: app.get('dbClient'),
-    tableName: 'embeddings',
-    queryName: 'match_embeddings',
-  })
-  app.set('vectordb', vectordb)
-  app.set('embeddingdb', embeddingdb)
   app.configure(services)
   app.configure(channels)
 

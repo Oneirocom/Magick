@@ -4,7 +4,6 @@ import { usePubSub } from '@magickml/providers'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'
-import { useEditor } from '../../contexts/EditorProvider'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 
@@ -28,7 +27,6 @@ interface Terminal {
  */
 const DebugConsole = ({ tab }): React.JSX.Element => {
   const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
-  const { centerNode } = useEditor()
   const { publish, subscribe, events } = usePubSub()
   const { $TRIGGER, $DEBUG_PRINT } = events
 
@@ -160,14 +158,6 @@ const DebugConsole = ({ tab }): React.JSX.Element => {
       fn: function () {
         // eslint-disable-next-line prefer-rest-params
         return `${Array.from(arguments).join(' ')}`
-      },
-    },
-    node: {
-      description: 'Center a node on the editor',
-      usage: 'node <nodeId>',
-      fn: function (nodeId: number) {
-        centerNode(nodeId)
-        return ''
       },
     },
     trigger: {

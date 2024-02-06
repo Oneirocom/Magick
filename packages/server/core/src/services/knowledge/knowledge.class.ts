@@ -13,7 +13,7 @@ import type {
   KnowledgePatch,
   KnowledgeQuery,
 } from './knowledge.schema'
-import { CoreMemoryService, DataType } from 'plugin/core'
+import { CoreMemoryService } from 'plugin/core'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import {
   AWS_ACCESS_KEY,
@@ -21,6 +21,7 @@ import {
   AWS_REGION,
   AWS_SECRET_KEY,
 } from 'shared/config'
+import { DataType } from 'servicesShared'
 
 // Extended parameter type for KnowledgeService support
 export type KnowledgeParams = KnexAdapterParams<KnowledgeQuery>

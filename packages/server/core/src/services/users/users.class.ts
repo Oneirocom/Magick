@@ -1,8 +1,8 @@
 import type { Params } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
-import { UserResponse } from 'plugins/core/src/lib/services/userService/coreUserService'
 import { UserQuery } from './users.schema'
+import { UserResponse } from 'servicesShared'
 
 export type UserParams = Params<UserQuery>
 

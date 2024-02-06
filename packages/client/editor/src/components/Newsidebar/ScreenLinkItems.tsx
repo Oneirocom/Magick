@@ -1,15 +1,12 @@
 import List from "@mui/material/List"
 import { DrawerItem } from "./DrawerItem"
-import { PluginDrawerItems } from "./PluginDrawerItems"
 import BoltIcon from '@mui/icons-material/Bolt'
 import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
 import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from "@magickml/providers"
-import { SetAPIKeys } from "client/core"
 import React from "react";
-import { ListItem } from "@mui/material";
 import { RootState, useGetAgentByIdQuery } from "client/state";
 import { useSelector } from "react-redux";
 
@@ -78,7 +75,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       tooltip: 'Requests Tooltip',
       tooltipText: drawerTooltipText.requests,
     },
-    <PluginDrawerItems currentTab={currentTab} />,
     {
       name: 'Config',
       Icon: SettingsIcon,
@@ -132,11 +128,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
             return React.cloneElement(item, { key });
           }
         })}
-      {!isAPIKeysSet && (
-        <ListItem key="set-api-keys" disablePadding sx={{ display: 'block' }}>
-          <SetAPIKeys />
-        </ListItem>
-      )}
     </List>
 
   )

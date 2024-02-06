@@ -1,23 +1,5 @@
+import { ICoreUserService, UserResponse } from 'servicesShared'
 import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
-import { SubscriptionNames } from './types'
-
-interface User {
-  id: string
-  email: string
-  name?: string
-  balance: number
-  hasSubscription: boolean
-  subscriptionName?: SubscriptionNames
-}
-
-export interface UserResponse {
-  status: string
-  user: User
-  message?: string
-}
-export interface ICoreUserService {
-  getUser(): Promise<UserResponse>
-}
 
 type ConstructorParams = {
   projectId: string

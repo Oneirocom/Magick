@@ -14,7 +14,6 @@ import { useCreateAgentMutation } from 'client/state'
  */
 interface Props {
   data: Array<object>
-  onLoadEnables: object
   onLoadFile: (selectedFile: any) => void
 }
 
@@ -29,7 +28,6 @@ interface Props {
 const AgentWindow = ({
   data,
   onLoadFile,
-  onLoadEnables,
 }: Props) => {
   const config = useConfig()
   const [createNewAgent] = useCreateAgentMutation()
@@ -105,7 +103,6 @@ const AgentWindow = ({
             <AgentDetails
               selectedAgentData={selectedAgentData}
               setSelectedAgentData={setSelectedAgentData}
-              onLoadEnables={onLoadEnables}
             />
           ) : (
             <Typography className={styles.noSelected}>Select Agent</Typography>

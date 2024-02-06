@@ -1,4 +1,4 @@
-import { GridviewReact, IGridviewPanelProps, Orientation } from 'dockview';
+import { GridviewReact, IDockviewPanelProps, IGridviewPanelProps, Orientation } from 'dockview';
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { Tab, useDockviewTheme } from 'client/state';
 import { usePubSub } from '@magickml/providers';
@@ -73,7 +73,7 @@ const composerLayoutComponents = {
   }
 }
 
-const ComposerContainer = (props: IGridviewPanelProps<{ tab: Tab; theme: string, spellId: string, spellName: string }>) => {
+const ComposerContainer = (props: IDockviewPanelProps<{ tab: Tab; theme: string, spellId: string, spellName: string }>) => {
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
 

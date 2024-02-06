@@ -33,159 +33,6 @@
       "@magickml/feathersRedux": [
         "packages/client/feathers-redux-toolkit/src/index.ts"
       ],
-      "@magickml/plugin-anthropic-client": [
-        "packages/plugins/anthropic/client/src/index.ts"
-      ],
-      "@magickml/plugin-anthropic-server": [
-        "packages/plugins/anthropic/server/src/index.ts"
-      ],
-      "@magickml/plugin-anthropic-shared": [
-        "packages/plugins/anthropic/shared/src/index.ts"
-      ],
-      "@magickml/plugin-avatar-client": [
-        "packages/plugins/avatar/client/src/index.ts"
-      ],
-      "@magickml/plugin-banana-client": [
-        "packages/plugins/banana/client/src/index.ts"
-      ],
-      "@magickml/plugin-banana-server": [
-        "packages/plugins/banana/server/src/index.ts"
-      ],
-      "@magickml/plugin-bluesky-client": [
-        "packages/plugins/bluesky/client/src/index.ts"
-      ],
-      "@magickml/plugin-bluesky-server": [
-        "packages/plugins/bluesky/server/src/index.ts"
-      ],
-      "@magickml/plugin-database-client": [
-        "packages/plugins/database/client/src/index.ts"
-      ],
-      "@magickml/plugin-database-server": [
-        "packages/plugins/database/server/src/index.ts"
-      ],
-      "@magickml/plugin-database-shared": [
-        "packages/plugins/database/shared/src/index.ts"
-      ],
-      "@magickml/plugin-discord-client": [
-        "packages/plugins/discord/client/src/index.ts"
-      ],
-      "@magickml/plugin-discord-server": [
-        "packages/plugins/discord/server/src/index.ts"
-      ],
-      "@magickml/plugin-discord-shared": [
-        "packages/plugins/discord/shared/src/index.ts"
-      ],
-      "@magickml/plugin-elevenlabs-client": [
-        "packages/plugins/elevenlabs/client/src/index.ts"
-      ],
-      "@magickml/plugin-elevenlabs-server": [
-        "packages/plugins/elevenlabs/server/src/index.ts"
-      ],
-      "@magickml/plugin-elevenlabs-shared": [
-        "packages/plugins/elevenlabs/shared/src/index.ts"
-      ],
-      "@magickml/plugin-ethereum-client": [
-        "packages/plugins/ethereum/client/src/index.ts"
-      ],
-      "@magickml/plugin-ethereum-server": [
-        "packages/plugins/ethereum/server/src/index.ts"
-      ],
-      "@magickml/plugin-ethereum-shared": [
-        "packages/plugins/ethereum/shared/src/index.ts"
-      ],
-      "@magickml/plugin-github-client": [
-        "packages/plugins/github/client/src/index.ts"
-      ],
-      "@magickml/plugin-github-server": [
-        "packages/plugins/github/server/src/index.ts"
-      ],
-      "@magickml/plugin-github-shared": [
-        "packages/plugins/github/shared/src/index.ts"
-      ],
-      "@magickml/plugin-googleai-client": [
-        "packages/plugins/googleai/client/src/index.ts"
-      ],
-      "@magickml/plugin-googleai-server": [
-        "packages/plugins/googleai/server/src/index.ts"
-      ],
-      "@magickml/plugin-googleai-shared": [
-        "packages/plugins/googleai/shared/src/index.ts"
-      ],
-      "@magickml/plugin-intent-client": [
-        "packages/plugins/intent/client/src/index.ts"
-      ],
-      "@magickml/plugin-intent-server": [
-        "packages/plugins/intent/server/src/index.ts"
-      ],
-      "@magickml/plugin-intent-shared": [
-        "packages/plugins/intent/shared/src/index.ts"
-      ],
-      "@magickml/plugin-localmodel-client": [
-        "packages/plugins/localmodel/client/src/index.ts"
-      ],
-      "@magickml/plugin-localmodel-server": [
-        "packages/plugins/localmodel/server/src/index.ts"
-      ],
-      "@magickml/plugin-localmodel-shared": [
-        "packages/plugins/localmodel/shared/src/index.ts"
-      ],
-      "@magickml/plugin-loop-client": [
-        "packages/plugins/loop/client/src/index.ts"
-      ],
-      "@magickml/plugin-loop-server": [
-        "packages/plugins/loop/server/src/index.ts"
-      ],
-      "@magickml/plugin-loop-shared": [
-        "packages/plugins/loop/shared/src/index.ts"
-      ],
-      "@magickml/plugin-openai-client": [
-        "packages/plugins/openai/client/src/index.ts"
-      ],
-      "@magickml/plugin-openai-server": [
-        "packages/plugins/openai/server/src/index.ts"
-      ],
-      "@magickml/plugin-openai-shared": [
-        "packages/plugins/openai/shared/src/index.ts"
-      ],
-      "@magickml/plugin-pinecone-client": [
-        "packages/plugins/pinecone/client/src/index.ts"
-      ],
-      "@magickml/plugin-pinecone-server": [
-        "packages/plugins/pinecone/server/src/index.ts"
-      ],
-      "@magickml/plugin-pinecone-shared": [
-        "packages/plugins/pinecone/shared/src/index.ts"
-      ],
-      "@magickml/plugin-rest-client": [
-        "packages/plugins/rest/client/src/index.ts"
-      ],
-      "@magickml/plugin-rest-server": [
-        "packages/plugins/rest/server/src/index.ts"
-      ],
-      "@magickml/plugin-search-client": [
-        "packages/plugins/search/client/src/index.ts"
-      ],
-      "@magickml/plugin-search-server": [
-        "packages/plugins/search/server/src/index.ts"
-      ],
-      "@magickml/plugin-search-shared": [
-        "packages/plugins/search/shared/src/index.ts"
-      ],
-      "@magickml/plugin-task-client": [
-        "packages/plugins/task/client/src/index.ts"
-      ],
-      "@magickml/plugin-task-server": [
-        "packages/plugins/task/server/src/index.ts"
-      ],
-      "@magickml/plugin-task-shared": [
-        "packages/plugins/task/shared/src/index.ts"
-      ],
-      "@magickml/plugin-twitter-client": [
-        "packages/plugins/twitter/client/src/index.ts"
-      ],
-      "@magickml/plugin-twitter-server": [
-        "packages/plugins/twitter/server/src/index.ts"
-      ],
       "@magickml/portal-api": ["portal/platform/packages/api/src/index.ts"],
       "@magickml/portal-api-client": [
         "portal/platform/packages/api-client/src/index.ts"
@@ -231,9 +78,7 @@
       "client/state": ["packages/client/state/src/index.ts"],
       "communication": ["packages/shared/communication/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
-      "plugins/*": ["plugins/*"],
       "plugins/shared": ["plugins/shared/src/index.ts"],
-      "rete": ["packages/rete/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
@@ -252,6 +97,7 @@
       "server/pluginManager": ["packages/server/pluginManager/src/index.ts"],
       "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
       "server/schemas": ["packages/server/schemas/src/index.ts"],
+      "servicesShared": ["packages/shared/servicesShared/src/index.ts"],
       "shared/config": ["packages/shared/config/src/index.ts"],
       "shared/core": ["packages/shared/core/src/index.ts"],
       "shared/nodeSpec": ["packages/shared/nodeSpec/src/index.ts"],

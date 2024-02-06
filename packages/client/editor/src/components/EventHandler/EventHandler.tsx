@@ -1,21 +1,18 @@
 // DOCUMENTED
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
-import { GraphData } from 'shared/core'
 
 import md5 from 'md5'
 
-import { useEditor } from '../../contexts/EditorProvider'
 import { diff } from '../../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/providers'
 import {
   useLazyGetSpellQuery,
   useSaveSpellMutation,
-  RootState,
   setSyncing,
 } from 'client/state'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
 
 /**
@@ -30,10 +27,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
   // only using this to handle events, so not rendering anything with it.
   const { enqueueSnackbar } = useSnackbar()
-
-  const { currentAgentId } = useSelector(
-    (state: RootState) => state.globalConfig
-  )
 
   const [saveSpellMutation] = useSaveSpellMutation()
   // TODO: is this a bug?
@@ -59,33 +52,15 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     spellRef.current = spell
   }, [spell])
 
-
-
-  const {
-    serialize,
-    getEditor,
-    undo,
-    redo,
-    del,
-    multiSelectCopy,
-    multiSelectPaste,
-  } = useEditor()
-
   const { events, subscribe } = pubSub
 
   const {
     $DELETE,
     $UNDO,
     $REDO,
-    $MULTI_SELECT_COPY,
-    $MULTI_SELECT_PASTE,
     $SAVE_SPELL,
     $SAVE_SPELL_DIFF,
     $EXPORT,
-    $CLOSE_EDITOR,
-    $PROCESS,
-    $RUN_SPELL,
-    $RESET_HIGHLIGHTS,
   } = events
 
   /**
@@ -97,7 +72,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     const type = spellRef.current.type || 'spell'
 
     const currentSpell = spellRef.current
-    const graph = type === 'spell' ? serialize() as GraphData : currentSpell.graph
+    const graph = currentSpell.graph
     if (!currentSpell) return
 
     const updatedSpell = {
@@ -192,46 +167,24 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   }
 
   /**
-   * Trigger the processing of the graph in the editor
-   */
-  const onProcess = () => {
-    const editor = getEditor()
-    if (!editor) return
-  }
-
-  /**
    * Trigger the undo action in the editor
    */
   const onUndo = () => {
-    undo()
+    console.warn('undo not implemented yet')
   }
 
   /**
    * Trigger the redo action in the editor
    */
   const onRedo = () => {
-    redo()
+    console.warn('redo not implemented yet')
   }
 
   /**
    * Trigger the delete action in the editor
    */
   const onDelete = () => {
-    del()
-  }
-
-  /**
-   * Trigger the multi-select copy action in the editor
-   */
-  const onMultiSelectCopy = () => {
-    multiSelectCopy()
-  }
-
-  /**
-   * Trigger the multi-select paste action in the editor
-   */
-  const onMultiSelectPaste = () => {
-    multiSelectPaste()
+    console.warn('delete not implemented yet')
   }
 
   /**
@@ -240,7 +193,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const onExport = async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
-    if (spell.type !== 'behave') spell.graph = serialize() as GraphData
 
     // remove secrets, if there are any
     function recurse(obj) {
@@ -277,48 +229,13 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     link.parentNode.removeChild(link)
   }
 
-  // clean up anything inside the editor which we need to shut down.
-  // mainly subscriptions, etc.
-  const onCloseEditor = () => {
-    const editor = getEditor() as Record<string, any>
-    if (editor.moduleSubscription) editor.moduleSubscription.unsubscribe()
-  }
-
-  /**
-   * Run the current spell
-   * @param {object} event - The run Spell event object
-   * @param {object} data - The data object for running the spell
-   */
-  const runSpell = async (event, _data) => {
-    // run the spell in the spell runner service
-    const data = {
-      spellId: spellRef.current.id,
-      agentId: currentAgentId,
-      projectId: config.projectId,
-      isPlaytest: true,
-      ..._data,
-    }
-    await client.service('agents').run(data)
-  }
-
-  const resetHighlights = () => {
-    const editor = getEditor() as Record<string, any>
-    editor.resetHighlights()
-  }
-
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$EXPORT(tab.id)]: onExport,
-    [$CLOSE_EDITOR(tab.id)]: onCloseEditor,
     [$UNDO(tab.id)]: onUndo,
     [$REDO(tab.id)]: onRedo,
     [$DELETE(tab.id)]: onDelete,
-    [$MULTI_SELECT_COPY(tab.id)]: onMultiSelectCopy,
-    [$MULTI_SELECT_PASTE(tab.id)]: onMultiSelectPaste,
-    [$PROCESS(tab.id)]: onProcess,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
-    [$RUN_SPELL(tab.id)]: runSpell,
-    [$RESET_HIGHLIGHTS(tab.id)]: resetHighlights,
   }
 
   useEffect(() => {

@@ -43,7 +43,6 @@
     "remove": "npx nx generate @nx/workspace:remove",
     "sortPackage": "npx sort-package-json",
     "find-unused-deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
-    "postinstall": "node scripts/config-plugins.js",
     "prepare": "husky install || true",
     "lint-staged": "lint-staged",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
