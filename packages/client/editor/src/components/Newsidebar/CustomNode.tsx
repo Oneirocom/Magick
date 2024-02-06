@@ -16,8 +16,8 @@ import {
 } from 'client/state'
 import { useSnackbar } from 'notistack'
 
-import { TypeIcon } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
+import { TypeIcon } from './TypeIcon'
 
 type ExtendedNodeModel = NodeModel & CustomData
 
@@ -51,7 +51,7 @@ export const CustomNode: React.FC<Props> = props => {
   const { renameTab, closeTab } = useTabLayout()
 
   const indent = props.depth * 24
-  const { droppable, data }: any = props.node
+  // const { droppable, data }: any = props.node
 
   // const handleToggle = (e: React.MouseEvent) => {
   //   e.stopPropagation()
@@ -236,8 +236,7 @@ export const CustomNode: React.FC<Props> = props => {
       </div>}
       <div>
         <TypeIcon
-          droppable={droppable}
-          fileType={data ? data.fileType : props.node.fileType}
+          fileType={props.node.fileType}
         />
       </div>
       <div className={styles.labelGridItem}>

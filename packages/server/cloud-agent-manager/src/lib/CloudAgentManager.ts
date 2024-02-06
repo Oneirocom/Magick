@@ -104,7 +104,10 @@ export class CloudAgentManager {
       setInterval(async () => {
         const enabledAgents = (await app.service('agents').find({
           paginate: false,
-          query: { enabled: true },
+          query: {
+            enabled: true,
+            version: '2.0',
+          },
         })) as AgentInterface[]
 
         const enabledAgentIds = new Set(enabledAgents.map(agent => agent.id))

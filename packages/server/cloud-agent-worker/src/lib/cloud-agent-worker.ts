@@ -2,15 +2,10 @@ import { Worker, Job } from 'bullmq'
 import { getLogger } from 'server/logger'
 import { Application, app } from 'server/core'
 
-import { BullMQWorker, BullQueue } from 'server/communication'
+import { BullMQWorker } from 'server/communication'
 
-import { Agent, type AgentRunJob } from 'server/agents'
-import {
-  AGENT_DELETE,
-  AGENT_DELETE_JOB,
-  AGENT_RUN_JOB,
-  AGENT_UPDATE_JOB,
-} from 'communication'
+import { Agent } from 'server/agents'
+import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
 import { type RedisPubSub } from 'server/redis-pubsub'
 import pino from 'pino'
 
@@ -90,9 +85,6 @@ export class CloudAgentWorker {
       app
     )
 
-    const agentQueue = new BullQueue(this.app.get('redis'))
-    agentQueue.initialize(AGENT_RUN_JOB(agent.id))
-    this.listenForRun(agent.id)
     this.listenForChanges(agentId)
 
     this.logger.debug(`Running agent add handlers for ${agentId}`)
@@ -134,7 +126,6 @@ export class CloudAgentWorker {
     this.currentAgents[agentId] = null
 
     this.pubSub.unsubscribe(AGENT_UPDATE_JOB(agentId))
-    this.pubSub.unsubscribe(AGENT_RUN_JOB(agentId))
   }
 
   async agentUpdated(agentId: string) {
@@ -176,35 +167,6 @@ export class CloudAgentWorker {
     if (this.currentAgents[agentId]) {
       this.currentAgents[agentId].update(agent)
     }
-  }
-
-  async listenForRun(agentId: string) {
-    this.logger.debug(`Listening for run for agent ${agentId}`)
-    this.logger.debug(AGENT_RUN_JOB(agentId))
-    this.pubSub.subscribe(AGENT_RUN_JOB(agentId), async (data: AgentRunJob) => {
-      this.logger.info(
-        `Running spell ${data.spellId} for agent ${data.agentId}`
-      )
-      try {
-        const agent = this.currentAgents[agentId] as Agent
-
-        if (!agent) {
-          this.logger.error(
-            `Agent ${agentId} not found when running spell ${data.spellId}`
-          )
-          throw new Error(
-            `Agent ${agentId} not found when running spell ${data.spellId}`
-          )
-        }
-
-        agent?.runWorker({ data: { ...data, agentId } })
-      } catch (e) {
-        this.logger.error(
-          `Error loading or running spell ${data.spellId} for agent ${data.agentId}`
-        )
-        throw e
-      }
-    })
   }
 
   async listenForChanges(agentId: string) {

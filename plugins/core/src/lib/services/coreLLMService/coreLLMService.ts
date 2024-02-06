@@ -5,16 +5,17 @@ import {
   // CompletionParams,
   ICoreBudgetManagerService,
   ICoreLLMService,
-} from '../types'
+} from 'servicesShared'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { CoreUserService } from '../userService/coreUserService'
 import { saveRequest } from 'shared/core'
-import { findProvider } from './providerUtils'
-import { LLMCredential } from './types/providerTypes'
-
-import { AllModels } from './types/models'
 import { SubscriptionNames } from '../userService/types'
-import { CompletionResponse } from './types/liteLLMTypes'
+import {
+  AllModels,
+  CompletionResponse,
+  LLMCredential,
+  findProvider,
+} from 'servicesShared'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

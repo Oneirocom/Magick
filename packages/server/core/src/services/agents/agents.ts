@@ -74,7 +74,6 @@ export const agent = (app: Application) => {
       'create',
       'patch',
       'remove',
-      'run',
       'command',
       'ping',
       'subscribe',

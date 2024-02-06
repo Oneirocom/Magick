@@ -6,7 +6,6 @@ import {
 } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/koa'
 import { ApplicationConfiguration } from './config/configuration'
-import { UserSpellManager } from 'shared/core'
 
 export type { NextFunction }
 
@@ -26,9 +25,7 @@ export interface ServiceTypes {}
  * @extends FeathersApplication<ServiceTypes, Configuration>
  */
 export interface Application
-  extends FeathersApplication<ServiceTypes, Configuration> {
-  userSpellManagers?: UserSpellManager
-}
+  extends FeathersApplication<ServiceTypes, Configuration> {}
 
 /**
  * The context for hook functions, can be typed with a service class.

@@ -1,5 +1,4 @@
 // DOCUMENTED
-import { SpellManager } from 'shared/core'
 
 /**
  * Handle socket connections for the application.
@@ -58,13 +57,6 @@ const handleSockets = (app: any) => {
         socket.feathers.projectId = payload.project
         if (payload.sessionId) socket.feathers.sessionId = payload.sessionId
 
-        // Instantiate the interface within the runner rather than the spell manager to avoid shared state issues.
-        const spellManager = new SpellManager({
-          socket,
-          app,
-          watchSpells: true,
-        })
-        app.userSpellManagers.set(user.id, spellManager)
         // emit login event to be handled by global app login methods for channels
         logger.debug('Emitting login event for connection')
         app.emit('login', payload, { connection: socket.feathers })

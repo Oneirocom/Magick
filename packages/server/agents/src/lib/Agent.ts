@@ -1,33 +1,11 @@
 import pino from 'pino'
-import {
-  SpellManager,
-  SpellRunner,
-  pluginManager as v1PluginManager,
-  MagickSpellInput,
-  MagickSpellOutput,
-  type Event,
-} from 'shared/core'
+import { type Event } from 'shared/core'
 
-import {
-  AGENT_ERROR,
-  AGENT_WARN,
-  AGENT_PONG,
-  AGENT_RUN_RESULT,
-  AGENT_RUN_ERROR,
-  AGENT_LOG,
-  AGENT_RUN_JOB,
-} from 'communication'
+import { AGENT_ERROR, AGENT_WARN, AGENT_PONG, AGENT_LOG } from 'communication'
 
-import { getLogger } from 'server/logger'
-
+import { type Worker } from 'server/communication'
 import { Application } from 'server/core'
-
-import {
-  type Job,
-  type Worker,
-  type MessageQueue,
-  BullQueue,
-} from 'server/communication'
+import { getLogger } from 'server/logger'
 import { AgentEvents, EventMetadata } from 'server/event-tracker'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
@@ -52,22 +30,18 @@ export class Agent implements AgentInterface {
   publicVariables!: Record<string, string>
   currentSpellReleaseId: string | null = null
   data!: AgentInterface
-  spellManager: SpellManager
   projectId!: string
   rootSpellId!: string
-  spellRunner?: SpellRunner
   logger: pino.Logger = getLogger()
   worker: Worker
-  messageQueue: MessageQueue
   commandHub: CommandHub
+  version!: string
   pubsub: RedisPubSub
   ready = false
   app: Application
-  // stateService: StateService
   spellbook: Spellbook<Agent, Application>
   agentManager: CloudAgentWorker
   pluginManager: PluginManager
-
   outputTypes: any[] = []
 
   /**
@@ -91,19 +65,10 @@ export class Agent implements AgentInterface {
 
     // Set up the agent worker to handle incoming messages
     this.worker = worker
-    this.worker.initialize(AGENT_RUN_JOB(this.id), this.runWorker.bind(this))
 
-    this.messageQueue = new BullQueue(this.app.get('redis'))
-    this.messageQueue.initialize(AGENT_RUN_JOB(this.id))
     this.pubsub = pubsub
 
     this.commandHub = new CommandHub(this, this.pubsub)
-
-    this.spellManager = new SpellManager({
-      cache: false,
-      agent: this,
-      app,
-    })
 
     this.pluginManager = new PluginManager({
       pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
@@ -120,12 +85,6 @@ export class Agent implements AgentInterface {
       pluginManager: this.pluginManager,
       commandHub: this.commandHub,
     })
-    // initialize the plugins
-    this.initializeV1Plugins()
-
-    // initialize the plugin commands
-    this.initializeV1PluginCommands()
-
     // initialize the core commands
     // These are used to remotely control the agent
     this.initializeCoreCommands()
@@ -145,22 +104,22 @@ export class Agent implements AgentInterface {
    */
   update(data: AgentInterface) {
     this.data = data
+    this.version = data.version
     this.currentSpellReleaseId = data.currentSpellReleaseId || null
     this.secrets = data?.secrets ? JSON.parse(data?.secrets) : {}
     this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
     this.projectId = data.projectId
-    this.rootSpellId = data.rootSpellId as string
     this.logger.info('Updated agent: %s | %s', this.name, this.id)
   }
 
-  async updateData(data: Record<string, any>) {
-    this.data = {
-      ...this.data,
-      ...data,
-    }
-    await this.app.service('agents').patch(this.id, data)
-  }
+  // async updateData(data: Record<string, any>) {
+  //   this.data = {
+  //     ...this.data,
+  //     ...data,
+  //   }
+  //   await this.app.service('agents').patch(this.id, data)
+  // }
 
   private async initializeSpellbook() {
     this.logger.debug(
@@ -183,59 +142,6 @@ export class Agent implements AgentInterface {
     const spells = spellsData.data
     this.spellbook.loadSpells(spells)
   }
-  /*
-   * Initializes the plugins for the Agent.
-   * If no root spell is found, logs a warning and returns.
-   * Loads the root spell and sets the spellRunner.
-   * Runs the agent start methods that were loaded from plugins.
-   * Sets the outputTypes for the Agent.
-   */
-  private async initializeV1Plugins() {
-    if (!this.data.rootSpellId) {
-      this.logger.warn('No root spell found for agent: %o', {
-        id: this.id,
-        name: this.name,
-      })
-      return
-    }
-    const spell = (
-      await this.app.service('spells').find({
-        query: {
-          projectId: this.data.projectId,
-          id: this.data.rootSpellId,
-        },
-      })
-    ).data[0]
-
-    this.spellRunner = await this.spellManager.load(spell)
-
-    const agentStartMethods = v1PluginManager.getAgentStartMethods()
-
-    this.logger.debug('Initializing plugins on agent %s', this.id)
-
-    // Runs the agent start methods that were loaded from plugins
-    for (const method of Object.keys(agentStartMethods)) {
-      try {
-        await agentStartMethods[method]({
-          agentManager: this.agentManager,
-          agent: this,
-          spellRunner: this.spellRunner,
-        })
-      } catch (err) {
-        this.error('Error in agent start method', { method, err })
-      }
-    }
-
-    const outputTypes = v1PluginManager.getOutputTypes()
-    this.outputTypes = outputTypes
-  }
-
-  private initializeV1PluginCommands() {
-    const pluginCommands = v1PluginManager.getAgentCommands()
-    for (const pluginName of Object.keys(pluginCommands)) {
-      this.commandHub.registerPlugin(pluginName, pluginCommands[pluginName])
-    }
-  }
 
   private intializePluginCommands() {
     const plugins = this.pluginManager.getPlugins()
@@ -253,9 +159,6 @@ export class Agent implements AgentInterface {
 
   private initializeCoreCommands() {
     this.commandHub.registerDomain('agent', 'core', {
-      toggleLive: async (data: any) => {
-        this.spellManager.toggleLive(data)
-      },
       ping: async () => {
         const isLive = this.spellbook.isLive
         this.pubsub.publish(AGENT_PONG(this.id), {
@@ -265,19 +168,6 @@ export class Agent implements AgentInterface {
         })
       },
     })
-  }
-
-  async removePlugins() {
-    this.logger.debug('Removing all plugins on agent %s', this.id)
-    const agentStopMethods = v1PluginManager.getAgentStopMethods()
-    if (agentStopMethods)
-      for (const method of Object.keys(agentStopMethods)) {
-        await agentStopMethods[method]({
-          agentManager: this.agentManager,
-          agent: this,
-          spellRunner: this.spellRunner,
-        })
-      }
   }
 
   trackEvent(
@@ -341,156 +231,24 @@ export class Agent implements AgentInterface {
     })
   }
 
-  async runV1Job(job: Job<AgentRunJob>) {
-    this.logger.debug('Running V1 Job')
-    const { data } = job
-
-    const spellRunner = await this.spellManager.loadById(
-      data.spellId || this.rootSpellId
-    )
-
-    // Handle the case where we don't get a sepllRunner
-    if (!spellRunner) {
-      this.logger.error(
-        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
-        'Spell not found'
-      )
-      this.publishEvent(AGENT_RUN_ERROR(this.id), {
-        jobId: job.data.jobId,
-        agentId: this.id,
-        projectId: this.projectId,
-        originalData: data,
-        result: { error: 'Spell not found' },
-      })
-      return
-    }
-
-    try {
-      this.logger.debug(
-        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
-        "Running agent's spell"
-      )
-      const output = await spellRunner.runComponent({
-        ...data,
-        agent: this,
-        secrets: {
-          ...this.secrets,
-          ...data.secrets,
-        },
-        sessionId: data?.sessionId,
-        publicVariables: this.publicVariables,
-        runSubspell: data.runSubspell,
-        app: this.app,
-        isPlaytest: data.isPlaytest,
-      })
-
-      this.publishEvent(AGENT_RUN_RESULT(this.id), {
-        jobId: job.data.jobId,
-        agentId: this.id,
-        projectId: this.projectId,
-        originalData: data,
-        result: output,
-      })
-    } catch (err) {
-      console.log('ERROR', err)
-      this.logger.error(
-        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
-        'Error running agent spell: %o',
-        err
-      )
-
-      this.publishEvent(AGENT_RUN_ERROR(this.id), {
-        jobId: job.data.jobId,
-        agentId: this.id,
-        projectId: this.projectId,
-        originalData: data,
-        result: {
-          error: err instanceof Error ? err.message : 'Error running agent',
-        },
-      })
-    }
-  }
-
-  runV2Job(job: Job<AgentRunJob>) {
-    this.logger.debug('Running V2 Job!!!')
-    const { data } = job
-
-    try {
-      this.logger.debug(
-        { spellId: data.spellId, agent: { name: this.name, id: this.id } },
-        "Running agent's behave graph spell in spellbook"
-      )
-
-      // this.spellbook.
-    } catch (err) {
-      this.logger.error(
-        { spellId: data.spellId, agent: { name: this.name, id: this.id }, err },
-        'Error running agent spell'
-      )
-
-      this.publishEvent(AGENT_RUN_ERROR(this.id), {
-        jobId: job.data.jobId,
-        agentId: this.id,
-        projectId: this.projectId,
-        originalData: data,
-        result: {
-          error: err instanceof Error ? err.message : 'Error running agent',
-        },
-      })
-    }
-  }
-
-  async runWorker(job: Job<AgentRunJob>) {
-    // the job name is the agent id.  Only run if the agent id matches.
-    this.logger.debug({ id: this.id, data: job.data }, 'running worker')
-    if (this.id !== job.data.agentId) return
-
-    if (job.data.version === 'v1') this.runV1Job(job)
-    if (job.data.version === 'v2') this.runV2Job(job)
-  }
-
   /**
    * Clean up resources when the instance is destroyed.
    */
   async onDestroy() {
-    await this.removePlugins()
     await this.spellbook.onDestroy()
     await this.pluginManager.onDestroy()
     await this.worker.close()
-    await this.messageQueue.close()
     await this.commandHub.onDestroy()
 
     this.log('destroyed agent', { id: this.id })
   }
 }
 
-export interface AgentRunJob {
-  inputs: MagickSpellInput
-  sessionId?: string
-  jobId: string
-  agentId: string
-  spellId: string
-  componentName: string
-  runSubspell: boolean
-  secrets: Record<string, string>
-  publicVariables: Record<string, unknown>
-  isPlaytest?: boolean
-  version: string
-}
-
-export interface AgentResult {
-  jobId: string
-  agentId: string
-  projectId: string
-  originalData: AgentRunJob
-  result: MagickSpellOutput
-}
-
 export interface AgentUpdateJob {
   agentId: string
 }
 
-export type AgentJob = AgentRunJob | AgentUpdateJob
+export type AgentJob = AgentUpdateJob
 
 // Exporting Agent class as default
 export default Agent

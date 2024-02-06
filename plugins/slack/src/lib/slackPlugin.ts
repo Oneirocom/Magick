@@ -14,7 +14,7 @@ import {
   onSlackMessageNodes,
   sendSlackAudio,
 } from './nodes'
-import { CorePluginEvents } from 'plugins/core/src/lib/types'
+import { CorePluginEvents } from 'plugin/core'
 export class SlackPlugin extends CoreEventsPlugin<
   CorePluginEvents,
   EventPayload,

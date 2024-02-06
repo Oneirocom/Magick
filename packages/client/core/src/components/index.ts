@@ -8,9 +8,6 @@ export { Button } from './Button'
 // Export Chip component
 export { Chip } from './Chip'
 
-// Export Drawer component
-export { DrawerProvider } from './Drawer'
-
 // Export Icon and componentCategories
 export { componentCategories, Icon } from './Icon'
 
@@ -52,7 +49,3 @@ export { Modal } from './Modal'
 
 // Export Table component
 export { TableComponent } from './Table'
-
-export * from './Drawer/SetAPIKeys'
-export * from './Drawer/TypeIcon'
-export * from './Drawer/tooltiptext'

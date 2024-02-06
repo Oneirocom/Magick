@@ -80,11 +80,11 @@ export class ProjectsService {
         documentQuery.$select = ['type', 'projectId', 'content', 'date']
       }
 
-      fetchPromises.push(
-        app.service('documents').find({
-          query: documentQuery,
-        })
-      )
+      // fetchPromises.push(
+      //   app.service('documents').find({
+      //     query: documentQuery,
+      //   })
+      // )
     }
 
     const results = await Promise.all(fetchPromises)
@@ -120,7 +120,7 @@ export class ProjectsService {
     spells: any
     documents: any
   }> {
-    const { agents, documents, spells, projectId } = data
+    const { agents, spells, projectId } = data
 
     // If replace is true, delete all agents, documents, and spells for this projectId
     if ((data as any).replace) {
@@ -138,11 +138,11 @@ export class ProjectsService {
           },
         }),
         //TODO: This type cooersion is hacky but the feathers service type says it expects a string. maybe need to update types?
-        app.service('documents').remove(null as unknown as string, {
-          query: {
-            projectId,
-          },
-        }),
+        // app.service('documents').remove(null as unknown as string, {
+        //   query: {
+        //     projectId,
+        //   },
+        // }),
       ])
     }
 
@@ -155,12 +155,6 @@ export class ProjectsService {
       agent.projectId = projectId
       agent.secrets = JSON.stringify(agent.secrets || {})
       return agent
-    })
-
-    const mappedDocuments = (documents ?? []).map(doc => {
-      delete doc.id
-      doc.projectId = projectId
-      return doc
     })
 
     // Create a key value of old IDs to new IDs for spells
@@ -201,13 +195,13 @@ export class ProjectsService {
       })
     }
 
-    const documentResponse: any[] = []
-    if (mappedDocuments.length > 0) {
-      mappedDocuments.forEach(async doc => {
-        const r = await app.service('documents').create(doc)
-        documentResponse.push(r)
-      })
-    }
+    // const documentResponse: any[] = []
+    // if (mappedDocuments.length > 0) {
+    //   mappedDocuments.forEach(async doc => {
+    //     const r = await app.service('documents').create(doc)
+    //     documentResponse.push(r)
+    //   })
+    // }
 
     const spellResponse: any[] = []
     mappedSpells?.forEach(async spell => {
@@ -219,7 +213,7 @@ export class ProjectsService {
     return {
       agents: agentResponse,
       spells: spellResponse,
-      documents: documentResponse,
+      documents: [],
     }
   }
 }

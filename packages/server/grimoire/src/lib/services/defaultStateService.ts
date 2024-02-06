@@ -5,7 +5,7 @@ import Redis from 'ioredis'
 
 import { EventStore, IEventStore } from './eventStore'
 import { EventPayload } from 'server/plugin'
-import { CORE_DEP_KEYS } from 'plugins/core/src/lib/constants'
+import { CORE_DEP_KEYS } from 'plugin/core'
 
 export class DefaultStateService implements IStateService {
   private stateStore: Record<string, any>

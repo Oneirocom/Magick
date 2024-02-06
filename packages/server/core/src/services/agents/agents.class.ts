@@ -8,7 +8,7 @@ import { app } from '../../app'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
-import type { AgentCommandData, RunRootSpellArgs } from 'server/agents'
+import type { AgentCommandData } from 'server/agents'
 import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
@@ -151,18 +151,6 @@ export class AgentService<
     const agentCommander = this.app.get('agentCommander')
     const response = await agentCommander.command(data)
 
-    return { response }
-  }
-
-  async run(data: Omit<RunRootSpellArgs, 'agent'>, params?: ServiceParams) {
-    if (!data.agentId) throw new Error('agentId is required')
-
-    this.authorizeAgentPermissions(data.agentId, params)
-
-    const agentCommander = this.app.get('agentCommander')
-    const response = await agentCommander.runSpellWithResponse(data)
-
-    // return the job id
     return { response }
   }
 

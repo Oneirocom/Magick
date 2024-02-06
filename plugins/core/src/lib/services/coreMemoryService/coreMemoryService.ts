@@ -1,19 +1,15 @@
 import { python } from 'pythonia'
-import { PRODUCTION } from 'shared/config'
-
-import { DataType } from './coreMemoryTypes'
 import {
-  EmbeddingModel,
-  OpenAIEmbeddingModels,
-} from '../coreEmbeddingService/types'
-import { findProvider } from '../coreLLMService/providerUtils'
-import {
-  OpenAIChatCompletionModels,
+  AllModels,
   CompletionModel,
-} from '../coreLLMService/types/completionModels'
-
-import { LLMCredential } from '../coreLLMService/types/providerTypes'
-import { AllModels } from '../coreLLMService/types/models'
+  DataType,
+  EmbeddingModel,
+  LLMCredential,
+  OpenAIChatCompletionModels,
+  OpenAIEmbeddingModels,
+  findProvider,
+} from 'servicesShared'
+import { PRODUCTION } from 'shared/config'
 
 type SearchArgs = {
   query: string

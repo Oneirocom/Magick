@@ -1,4 +1,0 @@
-// DOCUMENTED
-/**
- * Imports
- */

@@ -46,6 +46,11 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
       dispatch(setConnected(false))
       const client = await feathersClient.initialize(token, config)
 
+      if (!client?.io) {
+        console.error('Failed to initialize feathers client')
+        return
+      }
+
       client.io.on('connect', async (): Promise<void> => {
         logger.info('Connected to the server')
         dispatch(setConnected(true))
@@ -66,7 +71,9 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
         dispatch(setConnected(false))
         setTimeout((): void => {
           logger.info('Reconnecting...')
-          client.io.connect()
+          if (client?.io) {
+            client.io.connect();
+          }
         }, 1000)
       })
 
@@ -75,7 +82,9 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
         logger.info(`Connection error: ${error} \n trying to reconnect...`)
         setTimeout((): void => {
           logger.info('Reconnecting...')
-          client.io.connect()
+          if (client?.io) {
+            client.io.connect();
+          }
         }, 1000)
       })
 

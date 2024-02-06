@@ -9,8 +9,8 @@ import { IEventStore } from 'server/grimoire'
 import {
   CompletionModel,
   GoogleAIStudioModels,
-} from '../../services/coreLLMService/types/completionModels'
-import { LLMProviders } from '../../services/coreLLMService/types/providerTypes'
+  LLMProviders,
+} from 'servicesShared'
 
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
