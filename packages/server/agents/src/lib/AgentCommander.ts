@@ -45,7 +45,10 @@ export class AgentCommander extends EventEmitter {
       ? AGENT_COMMAND_PROJECT(projectId)
       : null
 
-    if (!event) throw new Error('Agent ID or project ID is required')
+    if (!event) {
+      console.error('agentId or projectId is required', args)
+      throw new Error('agentId or projectId is required')
+    }
 
     const jobId = uuidv4()
     await this.pubSub.publish(
