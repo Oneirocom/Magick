@@ -73,6 +73,7 @@ export const agentSchema = Type.Object(
     secrets: Type.Optional(Type.String()),
     frozen: Type.Optional(Type.Boolean()),
     default: Type.Optional(Type.Boolean()),
+    version: Type.String(),
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
     ),

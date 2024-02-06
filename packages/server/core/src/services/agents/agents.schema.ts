@@ -40,6 +40,7 @@ export const agentDataSchema = Type.Pick(
     'updatedAt',
     'createdAt',
     'pingedAt',
+    'version',
     'data',
     'publicVariables',
     'secrets',
@@ -129,6 +130,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'image',
   'rootSpellId',
   'default',
+  'version',
   'frozen',
   'currentSpellReleaseId',
 ])
