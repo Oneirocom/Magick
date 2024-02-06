@@ -1,5 +1,4 @@
 import { Application as FeathersApplication, Koa } from '@feathersjs/koa'
-import PubSub from 'pubsub-js'
 import { SpellInterface } from 'server/schemas'
 
 export type ImageType = {
