@@ -11,7 +11,7 @@ python = "3.11.2"
 # litellm = { path = "./pythonPackages/liteLLM", develop = true }
 # litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
 # setuptools = "^69.0.3"
-embedchain = { git="https://github.com/Oneirocom/embedchain.git", branch="main", extras = ["weaviate"]}
+embedchain = { git="https://github.com/Oneirocom/embedchain.git", branch="main", extras = ["pinecone"]}
 # embedchain = {extras = ["weaviate"], version = "0.1.72"}
 # embedchain = { path = "./pythonPackages/embedchain", extras = ["weaviate"], develop = true }
 bs4 = "^0.0.2"
