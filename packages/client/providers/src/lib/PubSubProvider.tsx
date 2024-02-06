@@ -1,7 +1,7 @@
 // DOCUMENTED
 
 // Import required modules
-import { PubSubContext, PubSubData, PubSubEvents } from 'shared/core'
+import { PubSubContext, PubSubData, PubSubEvents } from './pubSubTypes'
 import PubSub from 'pubsub-js'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import { useFeathers } from './FeathersProvider'

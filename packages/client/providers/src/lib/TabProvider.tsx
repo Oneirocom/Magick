@@ -3,10 +3,11 @@ import {
   DockviewApi,
   SerializedDockview,
 } from 'dockview'
-import { useConfig, usePubSub } from '@magickml/providers'
 import { getWorkspaceLayout } from 'client/layouts'
 import { RootState, setCurrentTab, useDockviewTheme } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
+import { usePubSub } from './PubSubProvider'
+import { useConfig } from './ConfigProvider'
 
 export type Tab = {
   id: string

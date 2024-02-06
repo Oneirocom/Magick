@@ -19,5 +19,5 @@
     "jsx": "react-jsx"
   },
   "files": [],
-  "include": ["src", "../providers/src/lib/ProjectWindowProvider.tsx"]
+  "include": ["src"]
 }
