@@ -47,16 +47,16 @@
     "lint-staged": "lint-staged",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
-    "portal:dev": "npm run portal:db:generate && npx nx serve portal",
+    "portal:dev": "npx nx serve @magickml/portal",
+    "portal:build": "npx nx build @magickml/portal",
+    "portal:update": "git submodule update --remote --merge --init portal/platform",
+    "portal:up": "docker compose -f portal-compose.yml up -d",
+    "portal:down": "docker compose -f portal-compose.yml down",
     "portal:db:generate": "npx nx run @magickml/portal-db:generate",
     "portal:db:push": "npx nx run @magickml/portal-db:push",
     "portal:db:pull": "npx nx run @magickml/portal-db:pull",
     "portal:db:studio": "npx nx run @magickml/portal-db:studio",
-    "Portal:db:push": "npx nx run @magickml/portal-db:push",
-    "portal:build": "npm run portal:db && npx nx build @magickml/portal",
-    "portal:update": "git submodule update --remote --merge --init portal/platform",
-    "portal:up": "docker compose -f portal-compose.yml up -d",
-    "portal:down": "docker compose -f portal-compose.yml down"
+    "Portal:db:push": "npx nx run @magickml/portal-db:push"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -326,6 +326,7 @@
     "@docusaurus/module-type-aliases": "2.4.1",
     "@feathersjs/cli": "5.0.5",
     "@feathersjs/rest-client": "5.0.5",
+    "@nrwl/next": "^18.0.2",
     "@nx-plus/docusaurus": "15.0.0-rc.0",
     "@nx/cypress": "17.2.8",
     "@nx/esbuild": "17.2.8",
