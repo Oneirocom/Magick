@@ -47,10 +47,16 @@
     "lint-staged": "lint-staged",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
-    "portal:dev": "npm run portal:db && npx nx serve portal",
-    "portal:db": "npx nx run @magickml/portal-db:generate",
+    "portal:dev": "npm run portal:db:generate && npx nx serve portal",
+    "portal:db:generate": "npx nx run @magickml/portal-db:generate",
+    "portal:db:push": "npx nx run @magickml/portal-db:push",
+    "portal:db:pull": "npx nx run @magickml/portal-db:pull",
+    "portal:db:studio": "npx nx run @magickml/portal-db:studio",
+    "Portal:db:push": "npx nx run @magickml/portal-db:push",
     "portal:build": "npm run portal:db && npx nx build @magickml/portal",
-    "portal:update": "git submodule update --remote --merge portal/platform"
+    "portal:update": "git submodule update --remote --merge portal/platform",
+    "portal:up": "docker compose -f portal-compose.yml up -d",
+    "portal:down": "docker compose -f portal-compose.yml down"
   },
   "resolutions": {
     "@types/react": "18.0.2"
