@@ -60,9 +60,15 @@ class CoreMemoryService {
       },
     },
     vectordb: {
-      provider: 'weaviate',
+      provider: 'pinecone',
       config: {
-        collection_name: 'embedchain',
+        metric: 'cosine',
+        vector_dimension: 1536,
+        collection_name: 'magick-dev',
+        serverless_config: {
+          cloud: 'aws',
+          region: 'us-west-2',
+        },
       },
     },
     llm: {
