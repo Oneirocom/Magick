@@ -57,7 +57,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
     <div className={cx("relative")}>
       <div
         className={cx(
-          'rounded text-white text-sm bg-[var(--foreground-color)] w-[150px] transition-all duration-300 opacity-100',
+          'rounded text-white text-sm bg-[var(--foreground-color)] w-[200px] transition-all duration-300 opacity-100',
           selected && 'outline outline-1',
           fired && 'outline outline-2 outline-green-500',
           running && css.running,
