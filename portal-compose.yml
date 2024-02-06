@@ -1,0 +1,43 @@
+version: '3.4'
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+  db:
+    restart: always
+    image: ankane/pgvector:v0.4.1
+    hostname: magick_db
+    environment:
+      POSTGRES_DB: magick
+      POSTGRES_USER: magick
+      POSTGRES_PASSWORD: magick_default_pw
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      
+  stripe-sync:
+    image: supabase/stripe-sync-engine:v0.29.0
+    restart: always
+    environment:
+      DATABASE_URL: ${STRIPE_DATABASE_URL}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      API_KEY: key
+      STRIPE_SECRET_KEY: ${STRIPE_SIGNING_SECRET}
+      PORT: 1338
+    ports:
+      - 1338:1338
+    depends_on:
+      - db
+volumes:
+  cache:
+    driver: local
+  s3-data:
+    driver: local
+
+networks:
+  default:
+    name: magick-network
+    external: true
