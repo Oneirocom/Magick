@@ -12,7 +12,7 @@ const NODE_ENV = process.env['NODE_ENV'] || 'development'
 
 let logger: pino.Logger | null = null
 
-const createDevelopmentLogger = () =>
+const createDevelopmentLogger = opts =>
   pino({
     level: PINO_LOG_LEVEL,
     transport: {
@@ -26,26 +26,37 @@ const createDevelopmentLogger = () =>
         },
       ],
     },
+    ...opts,
   })
 
-const createProductionLogger = () => {
+const createProductionLogger = (
+  opts: object = {},
+  transportOpts: object = {}
+) => {
   const targets = [
     getPinoTransport(PINO_LOG_LEVEL),
     // you can add other transports here if needed
   ]
 
-  return pino(
-    pino.transport({
+  return pino({
+    ...opts, // Spread the general options into the pino configuration
+    transport: pino.transport({
       targets,
-    })
-  )
+      ...transportOpts, // Spread the transport options into the pino.transport configuration
+    }),
+  })
 }
 
-export const initLogger = () => {
+const defaultLoggerOpts = {
+  name: 'default',
+  level: PINO_LOG_LEVEL,
+}
+
+export const initLogger = (opts: object = defaultLoggerOpts) => {
   if (NODE_ENV === 'development') {
-    logger = createDevelopmentLogger()
+    logger = createDevelopmentLogger(opts)
   } else {
-    logger = createProductionLogger()
+    logger = createProductionLogger(opts)
   }
 }
 
