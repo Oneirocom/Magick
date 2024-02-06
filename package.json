@@ -54,7 +54,7 @@
     "portal:db:studio": "npx nx run @magickml/portal-db:studio",
     "Portal:db:push": "npx nx run @magickml/portal-db:push",
     "portal:build": "npm run portal:db && npx nx build @magickml/portal",
-    "portal:update": "git submodule update --remote --merge portal/platform",
+    "portal:update": "git submodule update --remote --merge --init portal/platform",
     "portal:up": "docker compose -f portal-compose.yml up -d",
     "portal:down": "docker compose -f portal-compose.yml down"
   },
