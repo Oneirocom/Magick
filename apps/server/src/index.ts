@@ -10,31 +10,8 @@ import { Context } from 'koa'
 import koaBody from 'koa-body'
 import 'regenerator-runtime/runtime'
 import { initAgentCommander } from 'server/agents'
-import { getPinoTransport } from '@hyperdx/node-opentelemetry'
-import { PRODUCTION } from 'shared/config'
 
-const PINO_LOG_LEVEL = (typeof process !== 'undefined' && process.env['PINO_LOG_LEVEL']) || 'info'
-
-if (PRODUCTION) {
-  initLogger({
-    name: 'cloud-agent-worker',
-    transport: {
-      targets: [
-        getPinoTransport('info'),
-        {
-          target: 'pino-pretty',
-          level: PINO_LOG_LEVEL,
-          options: {
-            colorize: true
-          }
-        }
-      ]
-    },
-    level: 'info'
-  })
-} else {
-  initLogger({ name: 'cloud-agent-worker' })
-}
+initLogger({ name: 'cloud-agent-worker' })
 const logger = getLogger()
 
 // log handle errors

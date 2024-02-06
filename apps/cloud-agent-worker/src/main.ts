@@ -3,31 +3,8 @@ import { initLogger, getLogger } from 'server/logger'
 import { initApp } from 'server/core'
 import { initAgentCommander } from 'server/agents'
 import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
-import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
-const PINO_LOG_LEVEL =
-  (typeof process !== 'undefined' && process.env['PINO_LOG_LEVEL']) || 'info'
-
-if (PRODUCTION) {
-  initLogger({
-    name: 'cloud-agent-worker',
-    transport: {
-      targets: [
-        getPinoTransport(PINO_LOG_LEVEL),
-        {
-          target: 'pino-pretty',
-          level: PINO_LOG_LEVEL,
-          options: {
-            colorize: true,
-          },
-        },
-      ],
-    },
-    level: PINO_LOG_LEVEL,
-  })
-} else {
-  initLogger({ name: 'cloud-agent-worker' })
-}
+initLogger({ name: 'cloud-agent-worker' })
 
 console.log('GETTING LOGGER')
 const logger = getLogger()
