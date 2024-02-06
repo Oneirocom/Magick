@@ -4,12 +4,10 @@
  **/
 
 import cors from '@koa/cors'
-import Router from '@koa/router'
-import { apis, initApp, app, Handler, Method, Middleware, Route, spells } from 'server/core'
+import { initApp, app } from 'server/core'
 import { initLogger, getLogger } from 'server/logger'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
-import compose from 'koa-compose'
 import 'regenerator-runtime/runtime'
 import { initAgentCommander } from 'server/agents'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
@@ -54,12 +52,6 @@ process.on(
   ) => logger.error('Unhandled Rejection at: Promise %o with reason %s', p, reason)
 )
 
-// initialize server routes from the plugin manager
-const router: Router = new Router()
-
-// merge spells, apis and server routes
-const routes: Route[] = [...spells, ...apis]
-
 /**
  * Initializes the server, sets up error-handling middleware, cross-origin resource sharing,
  * form and multipart-json requests, and routes.
@@ -67,6 +59,7 @@ const routes: Route[] = [...spells, ...apis]
 async function init() {
   await initApp('server')
   await initAgentCommander()
+
   // generic error handling for any errors that may occur
   app.use(async (ctx: Context, next: () => Promise<any>) => {
     try {
@@ -87,75 +80,6 @@ async function init() {
 
   // Middleware used by every request. For route-specific middleware, add it to you route middleware specification
   app.use(koaBody({ multipart: true, jsonLimit: '200mb', formLimit: '200mb' }))
-
-  /**
-   * Creates a Koa route from the Route object passed in.
-   * @param method The HTTP method used for the route
-   * @param path The path of the route
-   * @param middleware Array of middleware functions to be passed to the route.
-   * @param handler The function to handle the request for the route.
-   */
-  const createRoute = (method: Method, path: string, middleware: Middleware[], handler: Handler) => {
-    switch (method) {
-      case 'get':
-        router.get(path, compose(middleware), handler)
-        break
-      case 'post':
-        router.post(path, compose(middleware), handler)
-        break
-      case 'put':
-        router.put(path, compose(middleware), handler)
-        break
-      case 'delete':
-        router.delete(path, compose(middleware), handler)
-        break
-      case 'head':
-        router.head(path, compose(middleware), handler)
-        break
-      case 'patch':
-        router.patch(path, compose(middleware), handler)
-        break
-    }
-  }
-
-  /**
-   * Returns an array of middleware functions. If none are passed, it returns an empty array.
-   * @param middleware An optional array of middleware functions to be included in the returned array.
-   * return An array of middleware functions to be used with a route.
-   */
-  const routeMiddleware = ({ middleware = [] }: { middleware?: Middleware[] } = {}) => {
-    return [...middleware]
-  }
-
-  // Create Koa routes from the routes defined in each module
-  routes.forEach((route) => {
-    const { method, path, middleware, handler } = route
-    const _middleware = routeMiddleware({ middleware })
-    if (method && handler) {
-      createRoute(method, path, _middleware, handler)
-    }
-    if (route.get) {
-      createRoute('get', path, _middleware, route.get)
-    }
-    if (route.put) {
-      createRoute('put', path, _middleware, route.put)
-    }
-    if (route.post) {
-      createRoute('post', path, _middleware, route.post)
-    }
-    if (route.delete) {
-      createRoute('delete', path, _middleware, route.delete)
-    }
-    if (route.head) {
-      createRoute('head', path, _middleware, route.head)
-    }
-    if (route.patch) {
-      createRoute('patch', path, _middleware, route.patch)
-    }
-  })
-
-  // adding router middlewares to Koa app
-  app.use(router.routes()).use(router.allowedMethods())
 
   app.listen(app.get('port'), () => {
     logger.info('Server started on port %s', app.get('port'))
