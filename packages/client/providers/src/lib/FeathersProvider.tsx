@@ -4,7 +4,6 @@ import { useConfig } from './ConfigProvider'
 import { feathersClient } from 'client/feathers-client'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setConnected } from 'client/state'
-import { current } from '@reduxjs/toolkit'
 
 const PING_INTERVAL_MS = 5000;
 const PONG_TIMEOUT_MS = 1000;
