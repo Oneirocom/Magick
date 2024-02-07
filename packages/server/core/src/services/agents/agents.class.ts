@@ -13,7 +13,7 @@ import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
-import { BadRequest } from '@feathersjs/errors'
+import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -40,18 +40,23 @@ export class AgentService<
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
-    // if (!agentId) {
-    //   console.error('agentId is required, Received null or undefined')
-    //   throw new BadRequest('agentId is required')
-    // }
-    // const agent = await this._get(agentId, params)
-    // if (!agent) throw new NotFound('Agent not found')
-    // const projectId = agent.projectId
-    // if (params?.provider) {
-    //   if (agent.projectId !== projectId) {
-    //     throw new NotAuthenticated("You don't have access to this agent")
-    //   }
-    // }
+    if (!agentId) {
+      console.error('agentId is required, Received null or undefined')
+      throw new BadRequest('agentId is required')
+    }
+    const agent = await this._get(agentId, params)
+    if (!agent) throw new NotFound('Agent not found')
+    const projectId = agent.projectId
+    if (params?.provider) {
+      if (agent.projectId !== projectId) {
+        console.error(
+          'Agent does not belong to the project',
+          projectId,
+          agentId
+        )
+        throw new NotAuthenticated("You don't have access to this agent")
+      }
+    }
   }
 
   async message(data: MessagePayload, params?: ServiceParams) {
