@@ -229,7 +229,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       this.executionErrorhandler.bind(this)
     )
 
-    this.engine.onNodeCommit.addListener(this.nodeCommitHandler.bind(this))
+    // this.engine.onNodeCommit.addListener(this.nodeCommitHandler.bind(this))
   }
 
   nodeCommitHandler = async payload => {

@@ -120,46 +120,47 @@ export const Node: React.FC<NodeProps> = ({
   }, [spell, id])
 
   // Handle commit event
-  useEffect(() => {
-    if (!spellEvent) return;
-    if (spellEvent.event === commitEventname) {
-      const commitedSocket = spellEvent.socket
+  // useEffect(() => {
+  //   if (!spellEvent) return;
+  //   if (spellEvent.event === commitEventname) {
+  //     const commitedSocket = spellEvent.socket
 
-      const connectedEdge = edges.find(edge => {
-        return edge.source === id && edge.sourceHandle === commitedSocket
-      })
+  //     const connectedEdge = edges.find(edge => {
+  //       return edge.source === id && edge.sourceHandle === commitedSocket
+  //     })
 
 
-      if (!connectedEdge) return;
+  //     if (!connectedEdge) return;
 
-      setEdges(tab.id, edges => {
-        const newEdges = edges.map(edge => {
-          if (edge.id === connectedEdge.id) {
-            return {
-              ...edge,
-              animated: true,
-              style: {
-                stroke: 'white'
-              }
-            }
-          }
+  //     setEdges(tab.id, edges => {
+  //       const newEdges = edges.map(edge => {
+  //         if (edge.id === connectedEdge.id) {
+  //           return {
+  //             ...edge,
+  //             animated: true,
+  //             style: {
+  //               stroke: 'white'
+  //             }
+  //           }
+  //         }
 
-          return edge
-        })
+  //         return edge
+  //       })
 
-        return newEdges
-      })
+  //       return newEdges
+  //     })
 
-      debounceAnimateEdgeDone(connectedEdge)
-    }
+  //     debounceAnimateEdgeDone(connectedEdge)
+  //   }
 
-  }, [spellEvent])
+  // }, [spellEvent])
 
   // Handle start event
   useEffect(() => {
     if (!spellEvent) return;
     if (spellEvent.event === startEventName) {
       setLastInputs(spellEvent.inputs)
+      console.log('start event', spellEvent)
       setRunning(true)
     }
   }, [spellEvent])
