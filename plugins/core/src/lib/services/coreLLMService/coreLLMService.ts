@@ -186,6 +186,11 @@ export class CoreLLMService implements ICoreLLMService {
     }
     let credential = this.credentials.find(c => c.name === providerKey)?.value
     const MAGICK_API_KEY = process.env[providerKey]
+
+    if (process.env.NODE_ENV === 'development') {
+      credential = MAGICK_API_KEY
+    }
+
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName.trim()
       if (userSubscriptionName === SubscriptionNames.Wizard && providerKey) {
