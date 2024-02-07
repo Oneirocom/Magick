@@ -14,14 +14,16 @@ import { CompletionModel, CompletionResponse, Message } from 'servicesShared'
 export class CoreBudgetManagerService implements ICoreBudgetManagerService {
   private liteLLMBudgetManager: IBudgetManagerService | undefined
   private app: Application
+  private agentId
 
   protected userService: CoreUserService
   projectId: string
 
-  constructor(projectId: string) {
+  constructor({ agentId, projectId }: { projectId: string; agentId: string }) {
     this.app = app
     this.userService = new CoreUserService({ projectId })
     this.projectId = projectId
+    this.agentId = agentId
   }
   async initialize() {
     try {
@@ -137,7 +139,9 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       completionObj
     )) as any
     const newCharge = (await updatedCost.user.current_cost) - preChargeCost
-    this.app.service('user').emit('budgetUpdated', { newCharge, projectId })
+    this.app
+      .service('user')
+      .emit('budgetUpdated', { newCharge, agentId: this.agentId })
     return true
   }
 

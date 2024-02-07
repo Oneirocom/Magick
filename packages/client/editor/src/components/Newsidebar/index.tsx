@@ -1,20 +1,10 @@
 // DOCUMENTED
 import Divider from '@mui/material/Divider'
-import { styled } from '@mui/material/styles'
 import { useEffect, useState } from 'react'
 import { useTreeData } from '@magickml/providers'
-import { Typography } from '@mui/material'
-import LinearProgress, {
-  linearProgressClasses,
-} from '@mui/material/LinearProgress'
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { useSelector } from 'react-redux'
-
 import { useConfig } from '@magickml/providers'
-
 import { AgentMenu } from './AgentMenu'
-import styles from './menu.module.css'
-
 import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ContextMenu } from './ContextMenu'
@@ -23,6 +13,7 @@ import {
   useCreateAgentMutation,
   useCreateAgentReleaseMutation,
   useGetAgentsQuery,
+  useGetUserQuery,
   useNewSpellMutation
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
@@ -30,23 +21,9 @@ import { v4 as uuidv4 } from 'uuid';
 import md5 from 'md5';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
 import { getTemplates } from 'client/core'
+import { DrawerProps } from '@mui/material/Drawer'
 
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 7,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor:
-      theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: '#1BC5EB',
-  },
-}))
-
-type DrawerProps = {
-  children: React.ReactNode
-}
+import { MPBalanceBar } from './MPBalanceBar'
 
 /**
  * The main Drawer component that wraps around the application content.
@@ -68,6 +45,10 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
   const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
     state => state.globalConfig
   )
+
+  const { data: userData } = useGetUserQuery({
+    projectId: config.projectId,
+  })
 
   // stopgap until I patch the agent menu with new redux stuff
   useEffect(() => {
@@ -263,14 +244,8 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         <ContextMenu />
       </div>
 
-      <div className={styles.credits}>
-        <div className={styles.menuFlex}>
-          <AutoAwesomeIcon sx={{ mr: 1 }} />
-          <Typography variant="body1">MP</Typography>
-        </div>
-        <BorderLinearProgress variant="determinate" value={100} />
-        <p className={styles.creditCount}><span style={{ fontSize: '2rem', position: 'relative', top: 3 }}>&#8734;</span> monthly MP</p>
-      </div>
+      <MPBalanceBar userData={userData} />
+
     </div>
   )
 }

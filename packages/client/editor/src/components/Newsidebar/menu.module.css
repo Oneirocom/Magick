@@ -44,6 +44,7 @@ ul ul ul li {
   padding: 0 1rem;
   margin-top: auto;
   white-space: nowrap;
+  margin-bottom: 1rem;
 }
 
 .creditCount {
@@ -59,7 +60,7 @@ ul ul ul li {
 }
 .menuFlex {
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
   align-items: center;
 }
 
