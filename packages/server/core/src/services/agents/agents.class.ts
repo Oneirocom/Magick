@@ -39,6 +39,8 @@ export class AgentService<
   }
 
   async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
+    if (!agentId) throw new BadRequest('agentId is required')
+
     const agent = await this._get(agentId, params)
 
     if (!agent) throw new NotFound('Agent not found')
