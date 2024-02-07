@@ -42,9 +42,10 @@ export class CoreLLMService implements ICoreLLMService {
       this.liteLLM = await python('litellm')
       this.liteLLM.set_verbose = true
       this.liteLLM.drop_params = true
-      this.coreBudgetManagerService = new CoreBudgetManagerService(
-        this.projectId
-      )
+      this.coreBudgetManagerService = new CoreBudgetManagerService({
+        projectId: this.projectId,
+        agentId: this.agentId,
+      })
 
       await this.coreBudgetManagerService.initialize()
     } catch (error: any) {
@@ -115,7 +116,7 @@ export class CoreLLMService implements ICoreLLMService {
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
 
-        if (PRODUCTION) {
+        if (!PRODUCTION) {
           await this.coreBudgetManagerService?.updateCost(
             this.projectId,
             completionResponsePython

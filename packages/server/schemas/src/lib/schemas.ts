@@ -232,6 +232,8 @@ export const userSchema = Type.Object(
     email: Type.String(),
     name: Type.Optional(Type.String()),
     balance: Type.Number(),
+    promoCredit: Type.Number(),
+    introCredit: Type.Number(),
     hasSubscription: Type.Boolean(),
     subscriptionName: Type.Optional(Type.String()),
     projectId: Type.Optional(Type.String()),
