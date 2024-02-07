@@ -69,8 +69,43 @@ export class RedisPubSub extends EventEmitter {
     await this.client.connect()
     await this.subscriber.connect()
 
-    this.subscriber.on('error', error => {
+    this.subscriber.on('error', async error => {
       console.error('Redis subscriber error:', error)
+      // Attempt to close and reconnect the subscriber
+      try {
+        await this.subscriber.quit()
+        this.subscriber = createClient(options)
+        await this.subscriber.connect()
+      } catch (reconnectError) {
+        console.error('Redis subscriber reconnect error:', reconnectError)
+        return
+      }
+
+      // Reattach listeners to channels
+      this.channelCallbacks.forEach((callbacks, channel) => {
+        callbacks.forEach(callback => {
+          // Re-subscribe to channel with each callback
+          this.subscribe(channel, callback).catch(subscribeError => {
+            console.error(
+              `Error resubscribing to channel ${channel}:`,
+              subscribeError
+            )
+          })
+        })
+      })
+
+      // Reattach listeners to patterns
+      this.patternCallbacks.forEach((callbacks, pattern) => {
+        callbacks.forEach(callback => {
+          // Re-subscribe to pattern with each callback
+          this.patternSubscribe(pattern, callback).catch(subscribeError => {
+            console.error(
+              `Error resubscribing to pattern ${pattern}:`,
+              subscribeError
+            )
+          })
+        })
+      })
     })
 
     this.client.on('error', error => {
