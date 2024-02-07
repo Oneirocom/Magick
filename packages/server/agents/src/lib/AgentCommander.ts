@@ -50,8 +50,6 @@ export class AgentCommander extends EventEmitter {
       return null
     }
 
-    this.logger.debug(`Sending command ${command} to agent ${agentId}`)
-
     const jobId = uuidv4()
     await this.pubSub.publish(
       event,

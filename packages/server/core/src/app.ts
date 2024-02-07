@@ -220,12 +220,18 @@ export async function initApp(environment: Environment = 'default') {
             const bodyProjectId = context.params.body?.projectId
 
             if (!queryProjectId && !bodyProjectId) {
+              console.error('No project id provided.')
               throw new NotAuthenticated('No project id provided.')
             }
 
             const providedProjectId = queryProjectId || bodyProjectId
 
             if (authentication.payload.project !== providedProjectId) {
+              console.error(
+                'User not authorized to access project',
+                authentication.payload.project,
+                providedProjectId
+              )
               throw new NotAuthenticated(
                 'User not authorized to access project'
               )

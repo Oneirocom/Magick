@@ -16,6 +16,7 @@ export const authenticateApiKey = apiKeys => {
       context.params.apiKey = true // Mark the request as authenticated via API key
       return next()
     } else {
+      console.log('INVALID API KEY')
       throw new errors.NotAuthenticated('Invalid API key')
     }
   }
