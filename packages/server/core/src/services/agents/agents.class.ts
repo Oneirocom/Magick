@@ -86,7 +86,6 @@ export class AgentService<
   // every time the agent is pinged
   async ping(agentId: string, params?: ServiceParams) {
     this.authorizeAgentPermissions(agentId, params)
-
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.ping(agentId)
 
