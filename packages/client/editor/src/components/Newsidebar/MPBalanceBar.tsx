@@ -75,14 +75,16 @@ export const MPBalanceBar = ({ userData }) => {
   }, [isHovered, isVisible]);
 
   useEffect(() => {
-    if (remainingBalance >= 5) {
+    if (remainingBalance === 0 && magickPowerBalance > 0) {
+      setWalletColor('#FFFFFF'); // Set to white if wallet balance is 0 and there is remaining Magick Power
+    } else if (remainingBalance >= 5) {
       setWalletColor('#00FF85');
     } else if (remainingBalance < 5 && remainingBalance >= 2) {
       setWalletColor('#FFD600');
     } else {
       setWalletColor('#FF0000');
     }
-  }, [remainingBalance]);
+  }, [remainingBalance, magickPowerBalance]);
 
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 12,
@@ -127,14 +129,14 @@ export const MPBalanceBar = ({ userData }) => {
       }
     >
       <div className={styles.menuFlex}>
-        <AutoAwesomeIcon sx={{ mr: 1 }} />
-        <Typography variant="body1">Magick Power (MP)</Typography>
+        <AutoAwesomeIcon sx={{ mr: 1, color: '#B7BBBE' }} />
+        <Typography variant="body1" className='text-[#B7BBBE]'>Magick Power (MP)</Typography>
       </div>
       <BorderLinearProgress variant="determinate" value={magickPowerBalance * 10} />
-      <p className={`${styles.creditCount} mt-2 `}>
+      <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
         {isNeophyte ? 'Upgrade to user MP' : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
       </p >
-      <p>
+      <p className='text-[#B7BBBE]'>
         Wallet: <span className='font-medium' style={walletStyle}>${walletBalance}</span>
       </p>
       <div className={`${isVisible ? 'visible' : 'invisible'}`}>
