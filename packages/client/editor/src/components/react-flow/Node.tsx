@@ -7,7 +7,7 @@ import NodeContainer from './NodeContainer.js';
 import OutputSocket from './OutputSocket.js';
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData.js';
 import { isHandleConnected } from '../../utils/isHandleConnected.js';
-import { setEdges, useSelectAgentsSpell } from 'client/state';
+import { useSelectAgentsSpell } from 'client/state';
 import { SpellInterface } from 'server/schemas';
 import { getConfig } from '../../utils/getNodeConfig.js';
 import { configureSockets } from '../../utils/configureSockets.js';
@@ -39,7 +39,7 @@ export const Node: React.FC<NodeProps> = ({
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
-  const [commitEventname, setCommitEventName] = useState<string | null>(null)
+  // const [commitEventname, setCommitEventName] = useState<string | null>(null)
   const [lastInputs, setLastInputs] = useState<Record<string, any> | null>(null)
   const [lastOutputs, setLastOutputs] = useState<Record<string, any> | null>(null)
 
@@ -51,7 +51,7 @@ export const Node: React.FC<NodeProps> = ({
 
   // Hook into to event to reset node states and stop animations
   useEffect(() => {
-    const unsubscribe = subscribe(events.RESET_NODE_STATE, (event) => {
+    const unsubscribe = subscribe(events.RESET_NODE_STATE, () => {
       setRunning(false)
       setDone(false)
       setError(false)
@@ -68,30 +68,30 @@ export const Node: React.FC<NodeProps> = ({
     setDone(false)
   }, DELAY)
 
-  const debounceAnimateEgdeFactory = (status) => {
-    return debounce((connectedEdge,) => {
-      setEdges(tab.id, edges => {
-        const newEdges = edges.map(edge => {
-          if (edge.id === connectedEdge.id) {
-            return {
-              ...edge,
-              animated: status,
-              style: {
-                stroke: 'white'
-              }
-            }
-          }
+  // const debounceAnimateEgdeFactory = (status) => {
+  //   return debounce((connectedEdge,) => {
+  //     setEdges(tab.id, edges => {
+  //       const newEdges = edges.map(edge => {
+  //         if (edge.id === connectedEdge.id) {
+  //           return {
+  //             ...edge,
+  //             animated: status,
+  //             style: {
+  //               stroke: 'white'
+  //             }
+  //           }
+  //         }
 
-          return edge
-        })
+  //         return edge
+  //       })
 
-        return newEdges
-      })
-    }, DELAY)
-  }
+  //       return newEdges
+  //     })
+  //   }, DELAY)
+  // }
 
-  // const debounceAnimateEdgeStart = debounceAnimateEgdeFactory(true)
-  const debounceAnimateEdgeDone = debounceAnimateEgdeFactory(false)
+  // // const debounceAnimateEdgeStart = debounceAnimateEgdeFactory(true)
+  // const debounceAnimateEdgeDone = debounceAnimateEgdeFactory(false)
 
   // if the node doesn't have a config yet, we need to make one for it and add it to the react flow node data
   if (!data.configuration) {
@@ -115,7 +115,7 @@ export const Node: React.FC<NodeProps> = ({
     setEndEventName(`${spell.id}-${id}-end`)
     setStartEventName(`${spell.id}-${id}-start`)
     setErrorEventName(`${spell.id}-${id}-error`)
-    setCommitEventName(`${spell.id}-${id}-commit`)
+    // setCommitEventName(`${spell.id}-${id}-commit`)
 
   }, [spell, id])
 
