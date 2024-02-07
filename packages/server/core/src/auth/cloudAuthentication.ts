@@ -75,6 +75,7 @@ export class CloudJwtService extends AuthenticationService {
       return payload as any
     } catch (error: any) {
       // Throw a NotAuthenticated error if token verification fails
+      console.error('Error verifying token', error.message)
       throw new NotAuthenticated(error.message, error)
     }
   }
