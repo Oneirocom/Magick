@@ -13,7 +13,7 @@ import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
-import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
+import { BadRequest } from '@feathersjs/errors'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -38,6 +38,7 @@ export class AgentService<
     this.app = app
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
     // if (!agentId) {
     //   console.error('agentId is required, Received null or undefined')
