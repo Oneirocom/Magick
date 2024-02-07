@@ -4,6 +4,7 @@ import { useConfig } from './ConfigProvider'
 import { feathersClient } from 'client/feathers-client'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setConnected } from 'client/state'
+import { current } from '@reduxjs/toolkit'
 
 const PING_INTERVAL_MS = 5000;
 const PONG_TIMEOUT_MS = 1000;
@@ -108,6 +109,8 @@ export const FeathersProvider = ({ children, token }): React.JSX.Element | null 
     if (!client) return
 
     const pingInterval = setInterval(() => {
+      if (currentAgentIdRef.current === null) return
+
       client.service('agents').ping(currentAgentIdRef.current)
       pongReceivedRef.current = false;
 
