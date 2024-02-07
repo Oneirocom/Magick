@@ -39,7 +39,10 @@ export class AgentService<
   }
 
   async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
-    if (!agentId) throw new BadRequest('agentId is required')
+    if (!agentId) {
+      console.error('agentId is required, Received null or undefined')
+      throw new BadRequest('agentId is required')
+    }
 
     const agent = await this._get(agentId, params)
 
@@ -86,6 +89,8 @@ export class AgentService<
   // every time the agent is pinged
   async ping(agentId: string, params?: ServiceParams) {
     this.authorizeAgentPermissions(agentId, params)
+
+    this.app.get('logger').debug(`Pinging agent ${agentId}`)
 
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.ping(agentId)
