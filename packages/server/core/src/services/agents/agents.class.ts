@@ -39,22 +39,18 @@ export class AgentService<
   }
 
   async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
-    if (!agentId) {
-      console.error('agentId is required, Received null or undefined')
-      throw new BadRequest('agentId is required')
-    }
-
-    const agent = await this._get(agentId, params)
-
-    if (!agent) throw new NotFound('Agent not found')
-
-    const projectId = agent.projectId
-
-    if (params?.provider) {
-      if (agent.projectId !== projectId) {
-        throw new NotAuthenticated("You don't have access to this agent")
-      }
-    }
+    // if (!agentId) {
+    //   console.error('agentId is required, Received null or undefined')
+    //   throw new BadRequest('agentId is required')
+    // }
+    // const agent = await this._get(agentId, params)
+    // if (!agent) throw new NotFound('Agent not found')
+    // const projectId = agent.projectId
+    // if (params?.provider) {
+    //   if (agent.projectId !== projectId) {
+    //     throw new NotAuthenticated("You don't have access to this agent")
+    //   }
+    // }
   }
 
   async message(data: MessagePayload, params?: ServiceParams) {
