@@ -1,0 +1,9 @@
+pythonPackages
+node_modules
+.nx
+.vscode
+bruno-requests
+tmp
+apps/docs
+apps/client
+packages/client
