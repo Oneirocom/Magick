@@ -8,3 +8,6 @@
 [submodule "pythonPackages/embedchain"]
 	path = pythonPackages/embedchain
 	url = git@github.com:Oneirocom/embedchain.git
+[submodule "portal/cloud"]
+	path = portal/cloud
+	url = https://github.com/oneirocom/portal
