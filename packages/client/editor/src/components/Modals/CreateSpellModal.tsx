@@ -1,14 +1,10 @@
 import Modal from '../Modal/Modal'
 import css from './createSpellModal.module.css'
-import { getTemplates } from 'client/core'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import TemplatePanel from '../TemplatePanel/TemplatePanel'
 import { useConfig, useTabLayout } from '@magickml/providers'
 import { v4 as uuidv4 } from 'uuid'
-import md5 from 'md5'
-import emptyImg from './empty.png'
 import { spellApi } from 'client/state'
 
 import {
@@ -20,21 +16,7 @@ import FileInput from '../FileInput/FileInput'
 import { FileUpload } from '@mui/icons-material'
 
 import behaveGraph from '../../graphs/graph.json'
-import { FEATURE_FLAGS } from 'shared/config'
 import { useModal } from '../../contexts/ModalProvider'
-
-export type Template = {
-  name?: string
-  bg?: string
-  type?: string
-  graph: Record<string, unknown>
-}
-
-const behave: Template = {
-  name: 'Behave Graph',
-  type: 'behave',
-  graph: behaveGraph
-}
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -47,10 +29,6 @@ const CreateSpellModal = () => {
   const config = useConfig()
   const { openTab } = useTabLayout()
   const { closeModal } = useModal()
-
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
-    getTemplates().spells[0] as Template
-  )
   const [error, setError] = useState<string | null>(null)
   const [, setLoading] = useState<boolean>(false)
   const { enqueueSnackbar } = useSnackbar()
@@ -70,8 +48,7 @@ const CreateSpellModal = () => {
       graph: spellData.graph,
       name: `${spellData.name}-copy`,
       projectId: config.projectId,
-      type: spellData.type,
-      hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
+      type: spellData.type
     })) as any
 
     handleSpellResponse(response)
@@ -89,7 +66,6 @@ const CreateSpellModal = () => {
 
   const onCreate = handleSubmit(async data => {
     try {
-      if (!selectedTemplate) return
       const placeholderName = uniqueNamesGenerator(customConfig)
       const name = data.name || placeholderName
       setLoading(true)
@@ -106,11 +82,10 @@ const CreateSpellModal = () => {
       // }
       const response = (await newSpell({
         id: uuidv4(),
-        graph: selectedTemplate.graph,
+        graph: behaveGraph,
         name,
-        type: selectedTemplate.type,
-        projectId: config.projectId,
-        hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
+        type: 'behave',
+        projectId: config.projectId
       })) as any
 
       handleSpellResponse(response)
@@ -174,7 +149,6 @@ const CreateSpellModal = () => {
     {
       label: 'Create',
       onClick: onCreate,
-      disabled: !selectedTemplate,
       className: css['create-btn'],
     }]
 
@@ -182,7 +156,6 @@ const CreateSpellModal = () => {
     <Modal
       title="New Spell"
       options={options}
-      icon="info"
       className={css['delete-modal']}
     >
       <div className={css['spell-details']}>
@@ -194,8 +167,8 @@ const CreateSpellModal = () => {
         >
           <input
             type="text"
-            className={css['input']}
             defaultValue=""
+            className="w-full p-2 border border-gray-300 rounded text-lg"
             placeholder="Enter spell name here"
             {...register('name')}
           />
@@ -211,14 +184,6 @@ const CreateSpellModal = () => {
           flexWrap: 'wrap',
         }}
       >
-        {[...(getTemplates().spells as Template[]), (FEATURE_FLAGS.COMPOSER_V2 ? behave : null)].filter(Boolean).map((template, i) => (
-          <TemplatePanel
-            setSelectedTemplate={setSelectedTemplate}
-            selectedTemplate={selectedTemplate}
-            template={{ ...template, bg: template?.bg ?? emptyImg }}
-            key={i}
-          />
-        ))}
       </div>
     </Modal>
   )
