@@ -1,6 +1,5 @@
 import List from "@mui/material/List"
 import { DrawerItem } from "./DrawerItem"
-import BoltIcon from '@mui/icons-material/Bolt'
 import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
@@ -49,12 +48,13 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const isV2 = agent?.version === '2.0'
 
   const DrawerItems: (DrawerItem | React.JSX.Element)[] = [
-    {
-      name: 'Events',
-      Icon: BoltIcon,
-      tooltip: 'Events Tooltip',
-      tooltipText: drawerTooltipText.events,
-    },
+    // todo remake this events page
+    // {
+    //   name: 'Events',
+    //   Icon: BoltIcon,
+    //   tooltip: 'Events Tooltip',
+    //   tooltipText: drawerTooltipText.events,
+    // },
     {
       name: 'Documents',
       Icon: ArticleIcon,
