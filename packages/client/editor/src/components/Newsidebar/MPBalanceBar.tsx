@@ -1,6 +1,8 @@
 import { styled } from '@mui/material/styles'
 import { useFeathers } from '@magickml/providers'
 import { LinearProgress, linearProgressClasses, Typography } from '@mui/material'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+
 import styles from './menu.module.css'
 import { useState, useEffect } from 'react'
 
@@ -13,10 +15,17 @@ export const MPBalanceBar = ({ userData }) => {
   const [remainingBalance, setRemainingBalance] = useState(0)
   const [magickPowerBalance, setMagickPowerBalance] = useState(0)
 
-  const [isHovered, setIsHovered] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-  const [isTransitionIn, setIsTransitionIn] = useState(false)
-  const [isTransitionOut, setIsTransitionOut] = useState(false)
+  const [isMPVisible, setIsMPVisible] = useState(false)
+  const [isWalletVisible, setIsWalletVisible] = useState(false); // State for Wallet tooltip visibility
+
+  const [isMPHovered, setIsMPHovered] = useState(false);
+  const [isMPTransitionIn, setIsMPTransitionIn] = useState(false)
+  const [isMPTransitionOut, setIsMPTransitionOut] = useState(false)
+
+  const [isWalletHovered, setIsWalletHovered] = useState(false);
+  const [isWalletTransitionIn, setIsWalletTransitionIn] = useState(false);
+  const [isWalletTransitionOut, setIsWalletTransitionOut] = useState(false);
+
   const [walletColor, setWalletColor] = useState('');
 
   //handle setup
@@ -61,18 +70,51 @@ export const MPBalanceBar = ({ userData }) => {
     }
   }, [client, magickPowerBalance, remainingBalance])
 
+  const handleWalletMouseEnter = () => {
+    setIsWalletHovered(true);
+  };
+
+  const handleWalletMouseLeave = () => {
+    setIsWalletHovered(false);
+  };
+
+  const handleMPMouseEnter = () => {
+    setIsMPHovered(true);
+  }
+
+  const handleMPMouseLeave = () => {
+    setIsMPHovered(false);
+  }
+
   useEffect(() => {
-    if (isHovered && !isVisible) {
-      setIsTransitionIn(true);
-      setIsVisible(true);
-    } else if (!isHovered && isVisible) {
-      setIsTransitionOut(true);
+    if (isWalletHovered) {
+      setIsWalletVisible(true);
+      setIsWalletTransitionIn(true);
+      // setIsWalletTransitionOut(false);
+    } else {
+      setIsWalletTransitionOut(true);
       setTimeout(() => {
-        setIsVisible(false);
-        setIsTransitionOut(false); // Reset transition state after fade out
-      }, 1000);
+        setIsWalletVisible(false);
+        setIsWalletTransitionIn(false);
+      }, 500);
     }
-  }, [isHovered, isVisible]);
+  }, [isWalletHovered]);
+
+  useEffect(() => {
+    if (isMPHovered) {
+      setIsMPVisible(true);
+      setIsMPTransitionIn(true);
+      // setIsMPTransitionOut(false);
+    } else {
+      setIsMPTransitionOut(true);
+      setTimeout(() => {
+        setIsMPVisible(false);
+        setIsMPTransitionIn(false);
+      }, 500);
+    }
+  }, [isMPHovered]);
+
+
 
   useEffect(() => {
     if (remainingBalance === 0 && magickPowerBalance > 0) {
@@ -100,6 +142,8 @@ export const MPBalanceBar = ({ userData }) => {
     },
   }))
 
+
+
   const hasSubscription = userData && userData?.user?.hasSubscription
   const isNeophyte = userData && !hasSubscription
   const isApprentice = userData && userData?.user?.subscriptionName === SubscriptionNames.Apprentice
@@ -119,51 +163,90 @@ export const MPBalanceBar = ({ userData }) => {
   };
 
   return (
-    <div className={`${styles.credits} ${isApprentice ? 'opacity-40' : ''}`}
-      onMouseEnter={() => {
-        setIsHovered(true)
-      }}
-      onMouseLeave={() => {
-        setIsHovered(false)
-      }
-      }
-    >
-      <div className={styles.menuFlex}>
-        <AutoAwesomeIcon sx={{ mr: 1, color: '#B7BBBE' }} />
-        <Typography variant="body1" className='text-[#B7BBBE]'>Magick Power (MP)</Typography>
+    <div className={`${styles.credits} ${isApprentice ? 'opacity-40' : ''}`}>
+      <div>
+        <div className={styles.menuFlex}>
+          <AutoAwesomeIcon sx={{ mr: 1, color: '#B7BBBE' }} />
+          <Typography variant="body1" className='text-[#B7BBBE]'>Magick Power (MP)</Typography>
+          <InfoOutlinedIcon className='text-[#B7BBBE] ml-1' style={{
+            fontSize: '1rem'
+          }}
+            onMouseEnter={handleMPMouseEnter}
+            onMouseLeave={handleMPMouseLeave}
+          />
+        </div>
+        <BorderLinearProgress variant="determinate" value={magickPowerBalance * 10} />
+        <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
+          {isNeophyte ? 'Upgrade to user MP' : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
+        </p >
       </div>
-      <BorderLinearProgress variant="determinate" value={magickPowerBalance * 10} />
-      <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
-        {isNeophyte ? 'Upgrade to user MP' : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
-      </p >
-      <p className='text-[#B7BBBE]'>
-        Wallet: <span className='font-medium' style={walletStyle}>${walletBalance}</span>
-      </p>
-      <div className={`${isVisible ? 'visible' : 'invisible'}`}>
+
+      <div className='flex row'>
+        <p className='text-[#B7BBBE]' >
+          Wallet: <span className='font-medium' style={walletStyle}>${walletBalance}</span>
+        </p>
+        <InfoOutlinedIcon className='text-[#B7BBBE] ml-1' style={{
+          fontSize: '1rem'
+        }}
+          onMouseEnter={handleWalletMouseEnter}
+          onMouseLeave={handleWalletMouseLeave} />
+      </div>
+
+
+      <div className={`${isMPVisible ? 'visible' : 'invisible'}`}>
         <div className={`
           absolute
           transform
           left-0
-          bottom-2
+          bottom-32
           transition-opacity
           duration-500
-          ${isTransitionIn ? 'opacity-100' : 'opacity-0'}
-          ${isTransitionOut ? 'opacity-0' : ''}
+          ${isMPTransitionIn ? 'opacity-100' : 'opacity-0'}
+          ${isMPTransitionOut ? 'opacity-0' : ''}
           flex
           flex-col
           items-center
-          p-4 border-2
+          p-4
+          border-2
           border-[#1BC5EB]
-          rounded-md bg-[#171b1c]
-        `
-        }>
-
-          <h2 className='mb-2'>mp bar</h2>
+          rounded-md
+          bg-[#171b1c]
+        `}>
+          <h2 className='mb-2'>MP Bar</h2>
           <div className="max-w-md text-wrap h-20 mt-2 mb-6">
             {body}
           </div>
         </div>
       </div>
-    </div >
+
+
+      <div className={`${isWalletVisible ? 'visible' : 'invisible'}`}>
+        <div className={`
+        absolute
+        transform
+        left-0
+        bottom-11
+        transition-opacity
+        duration-500
+        delay-500
+        ${isWalletTransitionIn ? 'opacity-100' : 'opacity-0'}
+        ${isWalletTransitionOut ? 'opacity-0' : ''}
+        flex
+        flex-col
+        items-center
+        p-4
+        border-2
+        border-[#1BC5EB]
+        rounded-md
+        bg-[#171b1c]
+      `}>
+          <h2 className='mb-2'>Wallet</h2>
+          <div className="max-w-md text-wrap">
+            Your Wallet reflects money available for compute power, used after your monthly MP runs out. Click to top up.
+          </div>
+        </div>
+      </div>
+    </div>
+
   )
 }
