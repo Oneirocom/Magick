@@ -3,6 +3,7 @@ import { getNodeSpec } from 'shared/nodeSpec'
 import { Edge, Node } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
+import { getSocketValueType } from '../configureSockets'
 
 export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
   const nodes: Node[] = []
@@ -35,6 +36,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
 
     if (nodeJSON.parameters) {
       for (const [inputKey, input] of Object.entries(nodeJSON.parameters)) {
+        const valueType = getSocketValueType(inputKey, nodeJSON, spec)
         if ('link' in input && input.link !== undefined) {
           edges.push({
             id: uuidv4(),
@@ -44,6 +46,9 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
             type: 'custom-edge',
             targetHandle: inputKey,
             updatable: 'target',
+            data: {
+              valueType,
+            },
           })
         }
         if ('value' in input) {
@@ -59,10 +64,12 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
           source: nodeJSON.id,
           sourceHandle: inputKey,
           type: 'custom-edge',
-
           target: link.nodeId,
           targetHandle: link.socket,
           updatable: 'target',
+          data: {
+            valueType: 'flow',
+          },
         })
       }
     }
