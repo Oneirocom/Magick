@@ -26,7 +26,26 @@ export const MPBalanceBar = ({ userData }) => {
   const [isWalletTransitionIn, setIsWalletTransitionIn] = useState(false);
   const [isWalletTransitionOut, setIsWalletTransitionOut] = useState(false);
 
+  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
+
+
   const [walletColor, setWalletColor] = useState('');
+
+  const handleWalletMouseEnter = () => {
+    setIsWalletHovered(true);
+  };
+
+  const handleWalletMouseLeave = () => {
+    setIsWalletHovered(false);
+  };
+
+  const handleMPMouseEnter = () => {
+    setIsMPHovered(true);
+  }
+
+  const handleMPMouseLeave = () => {
+    setIsMPHovered(false);
+  }
 
   //handle setup
   useEffect(() => {
@@ -70,41 +89,26 @@ export const MPBalanceBar = ({ userData }) => {
     }
   }, [client, magickPowerBalance, remainingBalance])
 
-  const handleWalletMouseEnter = () => {
-    setIsWalletHovered(true);
-  };
-
-  const handleWalletMouseLeave = () => {
-    setIsWalletHovered(false);
-  };
-
-  const handleMPMouseEnter = () => {
-    setIsMPHovered(true);
-  }
-
-  const handleMPMouseLeave = () => {
-    setIsMPHovered(false);
-  }
-
   useEffect(() => {
     if (isWalletHovered) {
       setIsWalletVisible(true);
       setIsWalletTransitionIn(true);
-      // setIsWalletTransitionOut(false);
     } else {
+      if (isTooltipHovered) return;
       setIsWalletTransitionOut(true);
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         setIsWalletVisible(false);
         setIsWalletTransitionIn(false);
       }, 500);
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [isWalletHovered]);
+  }, [isWalletHovered, isTooltipHovered]);
 
   useEffect(() => {
     if (isMPHovered) {
       setIsMPVisible(true);
       setIsMPTransitionIn(true);
-      // setIsMPTransitionOut(false);
     } else {
       setIsMPTransitionOut(true);
       setTimeout(() => {
@@ -220,7 +224,10 @@ export const MPBalanceBar = ({ userData }) => {
       </div>
 
 
-      <div className={`${isWalletVisible ? 'visible' : 'invisible'}`}>
+      <div
+        onMouseEnter={() => setIsTooltipHovered(true)}
+        onMouseLeave={() => setIsTooltipHovered(false)}
+        className={`${isWalletVisible ? 'visible' : 'invisible'}`}>
         <div className={`
         absolute
         transform
@@ -242,7 +249,10 @@ export const MPBalanceBar = ({ userData }) => {
       `}>
           <h2 className='mb-2'>Wallet</h2>
           <div className="max-w-md text-wrap">
-            Your Wallet reflects money available for compute power, used after your monthly MP runs out. Click to top up.
+            {/* TODO: Add button */}
+            Your Wallet reflects money available for compute power, used after your monthly MP runs out. <a href="https://cloud-dev.magickml.com/account" className="text-blue-500 hover:text-blue-700">
+              Click to top up.
+            </a>
           </div>
         </div>
       </div>
