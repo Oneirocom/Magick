@@ -179,7 +179,7 @@ export const MPBalanceBar = ({ userData }) => {
             onMouseLeave={handleMPMouseLeave}
           />
         </div>
-        <BorderLinearProgress variant="determinate" value={magickPowerBalance * 10} />
+        <BorderLinearProgress variant="determinate" value={Math.min((magickPowerBalance * 10), 100)} />
         <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
           {isNeophyte ? 'Upgrade to use MP' : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
         </p >
