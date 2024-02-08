@@ -27,7 +27,6 @@
       "portal/cloud/packages/types/src/lib/next-auth"
     ],
     "paths": {
-      "@editor": ["dist/packages/client/editor"],
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
@@ -52,7 +51,6 @@
       "@magickml/portal-providers": [
         "portal/cloud/packages/providers/src/index.ts"
       ],
-      "@magickml/portal-ssr": ["portal/cloud/packages/ssr/src/index.ts"],
       "@magickml/portal-state": ["portal/cloud/packages/state/src/index.ts"],
       "@magickml/portal-types": ["portal/cloud/packages/types/src/index.ts"],
       "@magickml/portal-ui": ["portal/cloud/packages/ui/src/index.ts"],
@@ -68,7 +66,6 @@
       "@magickml/ui": ["packages/client/ui/src/index.ts"],
       "@magickml/ui/components": ["packages/client/ui/src/components/*.tsx"],
       "@magickml/ui/utils": ["packages/client/ui/src/utils.ts"],
-      "client-editor-v2": ["packages/client/editor-v2/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
       "client/editor": ["packages/client/editor/src/index.ts"],
       "client/feathers-client": [
