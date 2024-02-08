@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button, Select, Window } from 'client/core'
+import { Button, Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useRef, useState } from 'react'
@@ -18,6 +18,7 @@ import {
   useSelectAgentsEvent,
 } from 'client/state'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { Checkbox, FormControlLabel } from '@mui/material'
 
 /**
  * Input component - Receives and sends playtest input.
@@ -160,6 +161,7 @@ const ChatWindow = ({ tab, spellName }) => {
   const [history, setHistory] = useState<Message[]>([])
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
+  const [autoscroll, setAutoscroll] = useState<boolean>(true)
   const isStreaming = useRef(false)
   const messageQueue = useRef([]); // Queue to hold incoming text chunks
   const typingTimer = useRef(null); // Timer for typing out messages
@@ -259,16 +261,11 @@ const ChatWindow = ({ tab, spellName }) => {
     }
   }, [lastEvent])
 
-  // Set playtest options based on spell graph nodes with the playtestToggle set to true.
-  const [playtestOptions] = useState<Record<
-    string,
-    any
-  > | null>([])
-  const [playtestOption, setPlaytestOption] = useState(null)
 
   // Keep scrollbar at the bottom of its window.
   useEffect(() => {
     if (!scrollbars.current) return
+    if (!autoscroll) return
     scrollbars.current.scrollToBottom()
   }, [history])
 
@@ -383,13 +380,13 @@ const ChatWindow = ({ tab, spellName }) => {
     setOpenData(!openData)
   }
 
-  const onSelectChange = async ({ value }) => {
-    setPlaytestOption(value)
-  }
+  // const onSelectChange = async ({ value }) => {
+  //   setPlaytestOption(value)
+  // }
 
   const toolbar = (
     <React.Fragment>
-      <Select
+      {/* <Select
         style={{ width: '100%', zIndex: 1 }}
         options={playtestOptions}
         onChange={onSelectChange}
@@ -399,7 +396,7 @@ const ChatWindow = ({ tab, spellName }) => {
         }}
         placeholder="Select Input"
         creatable={false}
-      />
+      /> */}
       <Button className="small" style={{ cursor: 'pointer' }} onClick={onClear}>
         Clear
       </Button>
@@ -410,6 +407,13 @@ const ChatWindow = ({ tab, spellName }) => {
       >
         Data
       </Button>
+      <FormControlLabel control={
+        <Checkbox
+          onChange={() => setAutoscroll(!autoscroll)}
+          checked={autoscroll}
+          defaultChecked
+        />
+      } label="Autoscroll" />
     </React.Fragment>
   )
 
