@@ -22,7 +22,7 @@
     "start": "node lib/",
     "prettier": "npx prettier \"**/*.ts\" --write",
     "bundle:client": "npm run compile && npm pack --pack-destination ./public",
-    "migrate": "knex migrate:latest",
+    "migrate": "knex migrate:latest && knex migrate:latest --knexfile ./knexfile-shadow.ts",
     "migrate:make": "knex migrate:make",
     "migrate:rollback": "knex migrate:rollback",
     "migrate:list": "knex migrate:list"
