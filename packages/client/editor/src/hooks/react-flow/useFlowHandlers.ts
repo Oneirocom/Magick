@@ -122,6 +122,11 @@ export const useFlowHandlers = ({
       const sourceNode = nodes.find(node => node.id === connection.source)
       const sourceSocket = getSourceSocket(connection, sourceNode, specJSON)
 
+      // @ts-ignore
+      connection.data = {
+        valueType: sourceSocket?.valueType,
+      }
+
       // if the source socket is not a flow socket, we don't need to do anything special
       if (sourceSocket === undefined || sourceSocket.valueType !== 'flow') {
         onConnectState(tab.id)(connection)
