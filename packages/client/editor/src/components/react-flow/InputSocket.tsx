@@ -100,7 +100,7 @@ const InputFieldForValue = ({
           {valueType === 'boolean' && !showChoices && (
             <input
               type="checkbox"
-              className={inputClass}
+              className="bg-gray-600 disabled:bg-gray-700 h-[16] nodrag text-sm"
               checked={Boolean(inputVal)}
               onChange={(e) => onChange(name, Boolean(e.currentTarget.checked))}
             />
