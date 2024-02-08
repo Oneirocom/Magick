@@ -80,7 +80,7 @@
       "communication": ["packages/shared/communication/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/shared": ["plugins/shared/src/index.ts"],
-      "server-db": ["packages/server/db/src/index.ts"],
+      "@magickml/server-db": ["packages/server/db/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
