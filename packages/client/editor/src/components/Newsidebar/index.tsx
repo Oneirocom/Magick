@@ -238,7 +238,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
           <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>
         </div>
       }
-      <div className="overflow-y-scroll overflow-x-hidden pb-8">
+      <div className="overflow-x-hidden pb-8">
         <FileTree currentTab={currentTab} />
 
         <ContextMenu />
