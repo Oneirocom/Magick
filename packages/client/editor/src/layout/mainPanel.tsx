@@ -8,7 +8,7 @@ import {
 } from 'dockview'
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useTabLayout } from '@magickml/providers';
-import Events from '../screens/EventWindow'
+// import Events from '../screens/EventWindow'
 import Requests from '../screens/RequestWindow'
 import Config from '../screens/ConfigWindow'
 import Knowledge from '../screens/KnowledgeWindow'
@@ -36,7 +36,7 @@ const tabComponents = {
 
 const getComponents = () => {
   return {
-    Events,
+    // Events,
     Requests,
     Knowledge,
     Agents,
