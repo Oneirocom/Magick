@@ -55,7 +55,8 @@
     "portal:db:generate": "npx nx run portal-db:generate",
     "portal:db:push": "npx nx run portal-db:push",
     "portal:db:pull": "npx nx run portal-db:pull",
-    "portal:db:studio": "npx nx run portal-db:studio"
+    "portal:db:studio": "npx nx run portal-db:studio",
+    "portal:db:seed": "npx nx run portal-db:seed"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -130,6 +131,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-separator": "^1.0.3",
@@ -220,6 +222,7 @@
     "next-auth": "^4.19.2",
     "next-themes": "^0.2.1",
     "next-transpile-modules": "^10.0.1",
+    "nextjs-cors": "^2.2.0",
     "ngrok": "^5.0.0-beta.2",
     "nodemailer": "^6.9.8",
     "notistack": "3.0.1",
@@ -253,6 +256,7 @@
     "react-hot-toast": "^2.4.1",
     "react-hotkeys-hook": "4.4.0",
     "react-icons": "4.8.0",
+    "react-intersection-observer": "^9.7.0",
     "react-json-view": "1.21.3",
     "react-keyed-flatten-children": "^2.2.1",
     "react-modal-sheet": "^2.2.0",
@@ -294,6 +298,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "tesseract.js": "4.0.6",
+    "trpc-openapi": "^1.2.0",
     "tslib": "^2.3.0",
     "twitter-api-v2": "1.14.3",
     "typechat": "^0.0.10",
