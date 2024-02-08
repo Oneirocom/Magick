@@ -33,5 +33,26 @@ export function configureSockets(
 
   const pairs = getPairs(flowInputs, [...flowOutputs, ...valueOutputs])
 
-  return { pairs, valueInputs, valueOutputs }
+  return { pairs, valueInputs, valueOutputs, flowInputs, flowOutputs }
+}
+
+export const getAllSockets = (
+  data: Record<string, any>,
+  spec: NodeSpecJSON
+) => {
+  const { valueInputs, valueOutputs, flowInputs, flowOutputs } =
+    configureSockets(data, spec)
+  return [...valueInputs, ...valueOutputs, ...flowInputs, ...flowOutputs]
+}
+
+export const getSocketValueType = (
+  socketName,
+  data: Record<string, any>,
+  spec: NodeSpecJSON
+) => {
+  const allSockets = getAllSockets(data, spec)
+
+  return (
+    allSockets.find(socket => socket.name === socketName)?.valueType || null
+  )
 }
