@@ -4,7 +4,8 @@ import useEmblaCarousel, {
     type UseEmblaCarouselType,
 } from "embla-carousel-react";
 
-import { cn, Button } from "@magickml/portal-ui";
+import { Button } from "./button";
+import { cn } from "../../utils/shadcn";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
