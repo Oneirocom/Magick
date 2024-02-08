@@ -181,7 +181,7 @@ export const MPBalanceBar = ({ userData }) => {
         </div>
         <BorderLinearProgress variant="determinate" value={magickPowerBalance * 10} />
         <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
-          {isNeophyte ? 'Upgrade to user MP' : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
+          {isNeophyte ? 'Upgrade to use MP' : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
         </p >
       </div>
 
