@@ -6,7 +6,7 @@
     "node": "20.x"
   },
   "scripts": {
-    "common-setup": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
+    "common-setup": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js",
     "dev-base": "npm run common-setup && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
     "dev": "poetry run concurrently --raw \"npm run dev-base\" \"npm run dev:clientConfig\"",
     "generate-node-specs": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.ts",
