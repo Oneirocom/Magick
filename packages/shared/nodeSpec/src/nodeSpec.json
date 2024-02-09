@@ -1074,6 +1074,16 @@
         "name": "queries",
         "valueType": "array",
         "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "count",
+        "valueType": "integer",
+        "defaultValue": 2
+      },
+      {
+        "name": "metadata",
+        "valueType": "object",
+        "defaultValue": "{}"
       }
     ],
     "outputs": [
@@ -1083,7 +1093,11 @@
       },
       {
         "name": "knowledge",
-        "valueType": "string"
+        "valueType": "array"
+      },
+      {
+        "name": "data",
+        "valueType": "array"
       }
     ],
     "configuration": []
