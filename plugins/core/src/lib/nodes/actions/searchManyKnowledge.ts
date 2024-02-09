@@ -9,21 +9,48 @@ export const searchManyKnowledge = makeFlowNodeDefinition({
   in: {
     flow: 'flow',
     queries: 'array',
+    count: {
+      valueType: 'integer',
+      defaultValue: 2,
+    },
+    metadata: 'object',
   },
   out: {
     flow: 'flow',
-    knowledge: 'string',
+    knowledge: 'array',
+    data: 'array',
   },
   initialState: undefined,
   triggered: async ({ commit, read, write, graph }) => {
     const { getDependency } = graph
     const queries = read('queries') as string[]
+    const count = Number(read('count')) as number
+    const metadata = (read('metadata') as Record<string, any>) || {}
     const coreMemoryService = getDependency<ICoreMemoryService>(
       CORE_DEP_KEYS.MEMORY_SERVICE
     )
 
-    const response = await coreMemoryService?.searchMany(queries)
-    write('knowledge', response)
+    const deduplicateByContext = array => {
+      const unique = {}
+      array.forEach(item => {
+        unique[item.context] = item
+      })
+      return Object.values(unique)
+    }
+
+    const response = await coreMemoryService?.searchMany({
+      queries,
+      numDocuments: count,
+      metadata,
+    })
+
+    // Use the function with your response data
+    const uniqueResponses = deduplicateByContext(response) as any[]
+
+    const knowledge = uniqueResponses.map(result => result.context)
+
+    write('knowledge', knowledge)
+    write('data', response)
     commit('flow')
   },
 })
