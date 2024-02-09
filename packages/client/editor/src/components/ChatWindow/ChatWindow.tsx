@@ -243,7 +243,7 @@ const ChatWindow = ({ tab, spellName }) => {
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
-    if (!lastEvent) return
+    if (!lastEvent || !spell?.id) return
 
 
     const { data, event, actionName } = lastEvent
