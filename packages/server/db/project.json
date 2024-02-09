@@ -1,0 +1,61 @@
+{
+  "name": "server-db",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/db/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/db",
+        "tsConfig": "packages/server/db/tsconfig.lib.json",
+        "packageJson": "packages/server/db/package.json",
+        "main": "packages/server/db/src/index.ts",
+        "assets": ["packages/server/db/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/server/db/jest.config.ts"
+      }
+    },
+    "generate": {
+      "command": "npx prisma generate --schema ./src/lib/prisma/schema.prisma",
+      "options": {
+        "cwd": "packages/server/db"
+      }
+    },
+    "push": {
+      "command": "npx prisma db push --schema ./src/lib/prisma/schema.prisma",
+      "options": {
+        "cwd": "packages/server/db"
+      }
+    },
+    "pull": {
+      "command": "npx prisma db pull --schema ./src/lib/prisma/schema.prisma",
+      "options": {
+        "cwd": "packages/server/db"
+      }
+    },
+    "studio": {
+      "executor": "npx prisma studio --schema ./src/lib/prisma/schema.prisma",
+      "options": {
+        "cwd": "packages/server/db"
+      }
+    },
+    "seed": {
+      "command": "ts-node ./src/lib/seed/index.ts",
+      "options": {
+        "cwd": "packages/server/db"
+      }
+    }
+  },
+  "tags": []
+}
