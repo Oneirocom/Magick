@@ -52,4 +52,3 @@ volumes:
 networks:
   default:
     name: magick-network
-    external: true
