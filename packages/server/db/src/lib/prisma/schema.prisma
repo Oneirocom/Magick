@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   output          = "../../../../../../../node_modules/@prisma/client-core"
-  previewFeatures = ["fullTextSearch", "multiSchema", "views", "postgresqlExtensions"]
+  previewFeatures = ["fullTextSearch", "multiSchema", "postgresqlExtensions", "views"]
   name            = "prisma"
 }
 
@@ -9,8 +9,8 @@ datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  extensions        = [uuid_ossp(map: "uuid-ossp"), vector]
   schemas           = ["public"]
-  extensions        = [pgvector(map: "vector")]
 }
 
 model agent_credentials {

@@ -25,6 +25,7 @@
     "db:pull": "npx nx run server-db:pull",
     "db:studio": "npx nx run server-db:studio",
     "db:seed": "npx nx run server-db:seed",
+    "db:deploy": " npx prisma migrate deploy --schema packages/server//db/src/lib/prisma/schema.prisma",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
     "migrate:shadow": "nx run @magickml/server:migrate:shadow",
