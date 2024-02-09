@@ -1,4 +1,5 @@
 import { python } from 'pythonia'
+import flatten from 'arr-flatten'
 import {
   AllModels,
   CompletionModel,
@@ -17,13 +18,19 @@ type SearchArgs = {
   metadata?: Record<string, any>
 }
 
+type SearchManyArgs = {
+  queries: string[]
+  numDocuments?: number
+  metadata?: Record<string, any>
+}
+
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
   addCredential(credential: LLMCredential): void
   add(data: string, dataType?: string): Promise<any>
   query(query: string): Promise<any>
   search(args: SearchArgs): Promise<any>
-  searchMany(queries: string[]): Promise<any>
+  searchMany(args: SearchManyArgs): Promise<any>
 }
 
 interface EmbedchainCredential {
@@ -239,11 +246,7 @@ class CoreMemoryService {
     }
   }
 
-  async search({
-    query,
-    numDocuments = 3,
-    metadata = { type: 'test' },
-  }: SearchArgs) {
+  async search({ query, numDocuments = 3, metadata = {} }: SearchArgs) {
     try {
       if (!this.app) this.initialize(this.agentId)
 
@@ -268,14 +271,24 @@ class CoreMemoryService {
     }
   }
 
-  async searchMany(queries: string[]) {
+  async searchMany({
+    queries,
+    numDocuments = 3,
+    metadata = {},
+  }: {
+    queries: string[]
+    numDocuments?: number
+    metadata?: Record<string, any>
+  }) {
     try {
       if (!this.app) this.initialize(this.agentId)
       const responses = await Promise.all(
-        queries.map(async query => await this.search({ query }))
+        queries.map(
+          async query => await this.search({ query, numDocuments, metadata })
+        )
       )
 
-      return responses
+      return flatten(responses)
     } catch (error: any) {
       console.error('Error searching Embedchain:', error)
       throw error
