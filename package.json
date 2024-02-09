@@ -6,7 +6,7 @@
     "node": "20.x"
   },
   "scripts": {
-    "common-setup": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js && node scripts/check-docker.js",
+    "common-setup": "NX_NON_NATIVE_HASHER=true node scripts/check-install.js",
     "dev-base": "npm run common-setup && npx nx run-many --watch --target=serve --projects=@magickml/server,@magickml/client,@magickml/cloud-agent-worker-app,@magickml/cloud-agent-manager-app --parallel --maxParallel=100",
     "dev": "poetry run concurrently --raw \"npm run dev-base\" \"npm run dev:clientConfig\"",
     "generate-node-specs": "tsx watch --tsconfig ./tsconfig.base.json --clear-screen=false ./scripts/generateNodeSpec.ts",
@@ -22,6 +22,7 @@
     "start-docs": "npx nx serve @magickml/docs",
     "db:generate": "npx nx run server-db:generate",
     "db:push": "npx nx run server-db:push",
+    "db:push:acceptLoss": "npx nx run server-db:push:acceptLoss",
     "db:pull": "npx nx run server-db:pull",
     "db:studio": "npx nx run server-db:studio",
     "db:seed": "npx nx run server-db:seed",
@@ -60,6 +61,7 @@
     "portal:down": "docker compose -f portal-compose.yml down",
     "portal:db:generate": "npx nx run portal-db:generate",
     "portal:db:push": "npx nx run portal-db:push",
+    "portal:db:push:acceptLoss": "npx nx run portal-db:push:acceptLoss",
     "portal:db:pull": "npx nx run portal-db:pull",
     "portal:db:studio": "npx nx run portal-db:studio",
     "portal:db:seed": "npx nx run portal-db:seed",
