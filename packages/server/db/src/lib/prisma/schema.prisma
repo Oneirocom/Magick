@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   output          = "../../../../../../../node_modules/@prisma/client-core"
-  previewFeatures = ["fullTextSearch", "multiSchema", "views"]
+  previewFeatures = ["fullTextSearch", "multiSchema", "views", "postgresqlExtensions"]
   name            = "prisma"
 }
 
@@ -10,6 +10,7 @@ datasource db {
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
   schemas           = ["public"]
+  extensions        = [pgvector(map: "vector")]
 }
 
 model agent_credentials {
@@ -25,7 +26,7 @@ model agent_credentials {
 }
 
 model agents {
-  id                                                        String              @id @db.Uuid @unique
+  id                                                        String              @id @unique @db.Uuid
   rootSpell                                                 Json?
   publicVariables                                           String?
   secrets                                                   String?
@@ -70,7 +71,7 @@ model chatMessages {
 }
 
 model credentials {
-  id                String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid @unique
+  id                String              @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   projectId         String              @db.VarChar(255)
   name              String              @db.VarChar(255)
   serviceType       String              @db.VarChar(255)
