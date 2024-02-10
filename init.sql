@@ -1,6 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "postgres_fdw";
-
 -- This sets up a role for stripe-sync-engine to use
 -- On supabase this role is created by default
 CREATE OR REPLACE FUNCTION create_role_if_not_exists() RETURNS void AS $$

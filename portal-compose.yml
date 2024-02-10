@@ -23,7 +23,7 @@ services:
     hostname: magick_shadow_db
     environment:
       POSTGRES_DB: magick_shadow
-      POSTGRES_USER: postgres
+      POSTGRES_USER: magick_shadow
       POSTGRES_PASSWORD: magick_shadow_default_pw
     ports:
       - '5433:5432'
@@ -52,4 +52,3 @@ volumes:
 networks:
   default:
     name: magick-network
-    external: true
