@@ -75,6 +75,11 @@ export class SpellService<
         }
       }
     }
+
+    params.query = {
+      ...params.query,
+      type: 'behave',
+    }
     return this._find(params) as Promise<Paginated<SpellInterface>>
   }
 

@@ -37,20 +37,23 @@ const Modal = ({
    * It stops propagation, closes the modal window and calls the onClose function.
    * @param {Object} e The event object.
    */
-  const handleModalBackgroundClick = useCallback((e) => {
-    e.stopPropagation();
-    closeModal();
-    if (onClose) onClose();
-  }, [closeModal, onClose]);
+  const handleModalBackgroundClick = useCallback(
+    e => {
+      e.stopPropagation()
+      closeModal()
+      if (onClose) onClose()
+    },
+    [closeModal, onClose]
+  )
 
   /**
    * Function to handle clicks on the modal panel.
    * It stops propagation to avoid closing the modal window and only interact with the panel elements.
    * @param {Object} e The event object.
    */
-  const handleModalPanelClick = useCallback((e) => {
-    e.stopPropagation();
-  }, []);
+  const handleModalPanelClick = useCallback(e => {
+    e.stopPropagation()
+  }, [])
   /**
    * Function to render the options buttons inside the modal action strip.
    * It maps over the options array and generates a button for each item.
@@ -97,7 +100,7 @@ const Modal = ({
 
   return (
     <div className={css['modal-bg']} onClick={handleModalBackgroundClick}>
-      <div className={css['modal-panel']} onClick={handleModalPanelClick}>
+      <div className="p-4" onClick={handleModalPanelClick}>
         <div className={css['modal-panel-content']}>
           <div className={css['modal-title']}>
             {icon && (
@@ -122,7 +125,6 @@ const Modal = ({
           <Button onClick={handleModalBackgroundClick}>Close</Button>
           {renderOptions()}
         </div>
-
       </div>
     </div>
   )

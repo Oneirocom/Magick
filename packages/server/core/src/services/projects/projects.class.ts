@@ -167,6 +167,7 @@ export class ProjectsService {
       const newId = uuidv4()
       spellKeys[spell.id] = newId
       spell.id = newId
+      spell.type = 'behave'
 
       delete spell.creatorId
       spell.projectId = projectId
