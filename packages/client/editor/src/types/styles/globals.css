@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -158,13 +157,13 @@
 }
 
 @font-face {
-  font-family: "Berkley Mono";
-  src: url("../../public/fonts/BerkeleyMono-Regular.otf");
+  font-family: 'Berkley Mono';
+  src: url('../../public/fonts/BerkeleyMono-Regular.otf');
 }
 
 @font-face {
-  font-family: "Libre Baskerville";
-  src: url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap");
+  font-family: 'Libre Baskerville';
+  src: url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
 }
 
 @layer utilities {
@@ -201,7 +200,7 @@
 }
 
 .montserrat {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .btn {
@@ -408,7 +407,7 @@ h6 {
 
 .list-alpha li:before {
   counter-increment: item;
-  content: "(" counter(item, lower-alpha) ") ";
+  content: '(' counter(item, lower-alpha) ') ';
   position: absolute;
   left: 0;
 }
@@ -416,7 +415,7 @@ h6 {
 /* Second level list style */
 .list-alpha .list-roman li:before {
   counter-increment: item;
-  content: "(" counter(item, lower-roman) ") ";
+  content: '(' counter(item, lower-roman) ') ';
   position: absolute;
   left: 0;
 }
@@ -424,7 +423,7 @@ h6 {
 /* Third level list style */
 .list-alpha .list-roman .list-alpha li:before {
   counter-increment: item;
-  content: "(" counter(item, upper-alpha) ") ";
+  content: '(' counter(item, upper-alpha) ') ';
   position: absolute;
   left: 0;
 }
@@ -512,9 +511,9 @@ h6 {
 }
 
 #prompt-textarea {
-  display: "block";
-  overflow: "hidden";
-  width: "100%";
+  display: 'block';
+  overflow: 'hidden';
+  width: '100%';
   resize: none;
   height: 40px;
   max-height: 200px;

@@ -3,7 +3,6 @@
 import 'regenerator-runtime/runtime'
 export * from './types'
 export * from './functions/saveRequest'
-export * from './functions/ProcessPython'
 export * from './globals'
 // Export all plugins
 

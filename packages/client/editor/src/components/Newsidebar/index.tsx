@@ -27,6 +27,7 @@ import { getTemplates } from 'client/core'
 import { DrawerProps } from '@mui/material/Drawer'
 
 import { MPBalanceBar } from './MPBalanceBar'
+import { Button } from '@magickml/ui'
 
 /**
  * The main Drawer component that wraps around the application content.
@@ -247,12 +248,9 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
       <Divider sx={{ marginY: 2 }} />
       {!currentSpellReleaseId && (
         <div className="px-4">
-          <button
-            onClick={onCreateSpell}
-            className="p-4 w-full mb-4 cursor-pointer"
-          >
+          <Button className="p-4 w-full mb-4 " onClick={onCreateSpell}>
             + Create spell
-          </button>
+          </Button>
         </div>
       )}
       <div className="overflow-x-hidden pb-8">

@@ -42,6 +42,19 @@ const getComponents = () => {
     Config,
     Secrets,
     behave: ComposerV2,
+    spell: (props: IDockviewPanelProps<{ title: string }>) => {
+      return (
+        <div
+          style={{
+            height: '100%',
+            padding: '20px',
+            background: 'var(--background-color)',
+          }}
+        >
+          <p>'V1 Spells no longer support'</p>
+        </div>
+      )
+    },
     default: (props: IDockviewPanelProps<{ title: string }>) => {
       return (
         <div
