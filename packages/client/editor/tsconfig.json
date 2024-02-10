@@ -25,6 +25,8 @@
     "../core/client/src/providers/PubSubProvider.tsx",
     "../core/client/src/providers/FeathersProvider.tsx",
     "../core/shared/src/state",
-    "../state/src/lib/helperHooks/useDockviewTheme.tsx"
+    "../state/src/lib/helperHooks/useDockviewTheme.tsx",
+    "../stylesheets/src/lib/styles",
+, "../stylesheets/src/lib/App.css.d.ts"    "../stylesheets/src/lib/design-globals"
   ]
 }

@@ -131,7 +131,6 @@ export const spellApi = rootApi.injectEndpoints({
         if (!spellCopy.createdAt) spellCopy.createdAt = new Date().toISOString()
         spellCopy.updatedAt = new Date().toISOString()
         spellCopy.projectId = spell.projectId ?? projectId
-        spellCopy.hash = md5(JSON.stringify(spellCopy.graph.nodes))
 
         delete spellCopy.creatorId
 

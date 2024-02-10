@@ -1,31 +1,31 @@
-import React, { useEffect } from 'react';
-import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow';
+import React, { useEffect } from 'react'
+import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
 
-import CustomControls from './Controls.js'
-import { NodePicker } from './NodePicker.js'
-import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow.js'
-import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers.js'
+import CustomControls from './Controls'
+import { NodePicker } from './NodePicker'
+import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow'
+import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers'
 import { Tab, usePubSub } from '@magickml/providers'
 
-import './flowOverrides.css'
+// import './flowOverrides.css'
 import { SpellInterface } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { useSelector } from 'react-redux'
 import { RootState, useSelectAgentsSpell } from 'client/state'
-import { nodeColor } from '../../utils/nodeColor.js'
+import { nodeColor } from '../../utils/nodeColor'
 import { ContextNodeMenu } from './ContextNodeMenu'
-import CustomEdge from './CustomEdge.js';
-import { NodeSpecJSON } from '@magickml/behave-graph';
+import CustomEdge from './CustomEdge'
+import { NodeSpecJSON } from '@magickml/behave-graph'
 
 type FlowProps = {
-  spell: SpellInterface;
-  parentRef: React.RefObject<HTMLDivElement>;
+  spell: SpellInterface
+  parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
 }
 
 const edgeTypes = {
   'custom-edge': CustomEdge,
-};
+}
 
 const proOptions = {
   // passing in the account property will enable hiding the attribution
@@ -33,10 +33,10 @@ const proOptions = {
   account: 'paid-pro',
   // in combination with the account property, hideAttribution: true will remove the attribution
   hideAttribution: true,
-};
+}
 
 function isEmptyObject(obj: object): boolean {
-  return Object.keys(obj).length === 0;
+  return Object.keys(obj).length === 0
 }
 
 export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
@@ -77,7 +77,6 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     } else if (!lastSpellEvent.state.isRunning) {
       setPlaying(false)
     }
-
   }, [lastSpellEvent])
 
   const {
@@ -110,7 +109,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
     setOpenNodeMenu,
     nodeMenuActions,
     isValidConnectionHandler,
-    onEdgeUpdate
+    onEdgeUpdate,
   } = useFlowHandlers({
     nodes,
     edges,

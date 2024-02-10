@@ -7,7 +7,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePubSub, useConfig } from '@magickml/providers'
-import css from '../../styles/magick.module.css'
+import css from './magick.module.css'
 import {
   RootState,
   addLocalState,
@@ -148,12 +148,15 @@ type Message = {
 const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
 
-  const { spell } = useGetSpellByNameQuery({ spellName }, {
-    skip: !spellName,
-    selectFromResult: (data) => ({
-      spell: data?.data?.data[0]
-    })
-  })
+  const { spell } = useGetSpellByNameQuery(
+    { spellName },
+    {
+      skip: !spellName,
+      selectFromResult: data => ({
+        spell: data?.data?.data[0],
+      }),
+    }
+  )
 
   const { lastItem: lastEvent } = useSelectAgentsEvent()
 
@@ -163,12 +166,12 @@ const ChatWindow = ({ tab, spellName }) => {
   const [openData, setOpenData] = useState<boolean>(false)
   const [autoscroll, setAutoscroll] = useState<boolean>(true)
   const isStreaming = useRef(false)
-  const messageQueue = useRef([]); // Queue to hold incoming text chunks
-  const typingTimer = useRef(null); // Timer for typing out messages
-  const queueTimer = useRef(null); // Timer for processing the queue
+  const messageQueue = useRef([]) // Queue to hold incoming text chunks
+  const typingTimer = useRef(null) // Timer for typing out messages
+  const queueTimer = useRef(null) // Timer for processing the queue
 
-  const setIsStreaming = (value) => {
-    isStreaming.current = value;
+  const setIsStreaming = value => {
+    isStreaming.current = value
   }
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
@@ -184,67 +187,68 @@ const ChatWindow = ({ tab, spellName }) => {
   const { MESSAGE_AGENT } = events
 
   // Print to console callback function.
-  const printToConsole =
-    (_text) => {
-      // check if _text is a string
-      if (typeof _text !== 'string')
-        return console.warn('could not split text, not a string', _text)
-      const text = `Agent: ` + _text
+  const printToConsole = _text => {
+    // check if _text is a string
+    if (typeof _text !== 'string')
+      return console.warn('could not split text, not a string', _text)
+    const text = `Agent: ` + _text
 
-      const newMessage: Message = {
-        sender: 'agent',
-        content: text,
-      }
-
-      setHistory((prevHistory) => [...prevHistory, newMessage]);
+    const newMessage: Message = {
+      sender: 'agent',
+      content: text,
     }
+
+    setHistory(prevHistory => [...prevHistory, newMessage])
+  }
 
   const typeChunk = () => {
     // Process all messages in the queue at once
-    const messagesToProcess = [...messageQueue.current];
-    messageQueue.current = []; // Clear the queue as we're processing all messages
+    const messagesToProcess = [...messageQueue.current]
+    messageQueue.current = [] // Clear the queue as we're processing all messages
 
     setHistory(prevHistory => {
-      const newHistory = [...prevHistory];
+      const newHistory = [...prevHistory]
       messagesToProcess.forEach(currentMessage => {
-        if (newHistory.length === 0 || newHistory[newHistory.length - 1].sender !== 'agent') {
-          newHistory.push({ sender: 'agent', content: currentMessage });
+        if (
+          newHistory.length === 0 ||
+          newHistory[newHistory.length - 1].sender !== 'agent'
+        ) {
+          newHistory.push({ sender: 'agent', content: currentMessage })
         } else {
-          newHistory[newHistory.length - 1].content += currentMessage;
+          newHistory[newHistory.length - 1].content += currentMessage
         }
-      });
-      return newHistory;
-    });
-  };
+      })
+      return newHistory
+    })
+  }
 
   const processQueue = () => {
     if (messageQueue.current.length > 0) {
-      typeChunk(); // Directly call typeChunk to process all messages
+      typeChunk() // Directly call typeChunk to process all messages
     }
-  };
+  }
 
-  const streamToConsole = (_text) => {
+  const streamToConsole = _text => {
     if (typeof _text !== 'string') {
-      console.warn('Could not stream text, not a string', _text);
-      return;
+      console.warn('Could not stream text, not a string', _text)
+      return
     }
 
-    messageQueue.current.push(_text);
-    processQueue();
-  };
+    messageQueue.current.push(_text)
+    processQueue()
+  }
 
   useEffect(() => {
-    queueTimer.current = setInterval(processQueue, 100);
+    queueTimer.current = setInterval(processQueue, 100)
     return () => {
-      if (queueTimer.current) clearInterval(queueTimer.current);
-      if (typingTimer.current) clearInterval(typingTimer.current);
-    };
+      if (queueTimer.current) clearInterval(queueTimer.current)
+      if (typingTimer.current) clearInterval(typingTimer.current)
+    }
   }, [])
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
     if (!lastEvent || !spell?.id) return
-
 
     const { data, event, actionName } = lastEvent
     const { content } = data
@@ -260,7 +264,6 @@ const ChatWindow = ({ tab, spellName }) => {
       streamToConsole(content)
     }
   }, [lastEvent])
-
 
   // Keep scrollbar at the bottom of its window.
   useEffect(() => {
@@ -351,7 +354,7 @@ const ChatWindow = ({ tab, spellName }) => {
       rawData: value,
       agentId: currentAgentId,
       spellId: spell.id,
-      isPlaytest: true
+      isPlaytest: true,
     }
 
     setValue('')
@@ -407,13 +410,16 @@ const ChatWindow = ({ tab, spellName }) => {
       >
         Data
       </Button>
-      <FormControlLabel control={
-        <Checkbox
-          onChange={() => setAutoscroll(!autoscroll)}
-          checked={autoscroll}
-          defaultChecked
-        />
-      } label="Autoscroll" />
+      <FormControlLabel
+        control={
+          <Checkbox
+            onChange={() => setAutoscroll(!autoscroll)}
+            checked={autoscroll}
+            defaultChecked
+          />
+        }
+        label="Autoscroll"
+      />
     </React.Fragment>
   )
 

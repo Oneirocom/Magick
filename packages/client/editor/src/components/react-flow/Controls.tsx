@@ -1,31 +1,27 @@
-import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph';
-import {
-  faPause,
-  faPlay,
-  faSitemap,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import React from 'react';
-import { ControlButton, Controls } from 'reactflow';
+import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
+import { faPause, faPlay, faSitemap } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState } from 'react'
+import React from 'react'
+import { ControlButton, Controls } from 'reactflow'
 
-import { ClearModal } from './modals/ClearModal.js';
+import { ClearModal } from './modals/ClearModal'
 
 export type CustomControlsProps = {
-  playing: boolean;
-  togglePlay: () => void;
-  setBehaviorGraph: (value: GraphJSON) => void;
-  specJson: NodeSpecJSON[] | undefined;
-  miniMapOpen: boolean;
-  toggleMiniMap: () => void;
-};
+  playing: boolean
+  togglePlay: () => void
+  setBehaviorGraph: (value: GraphJSON) => void
+  specJson: NodeSpecJSON[] | undefined
+  miniMapOpen: boolean
+  toggleMiniMap: () => void
+}
 
 export const CustomControls: React.FC<CustomControlsProps> = ({
   playing,
   togglePlay,
   toggleMiniMap,
 }) => {
-  const [clearModalOpen, setClearModalOpen] = useState(false);
+  const [clearModalOpen, setClearModalOpen] = useState(false)
 
   return (
     <>
@@ -51,7 +47,7 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
         onClose={() => setClearModalOpen(false)}
       />
     </>
-  );
-};
+  )
+}
 
-export default CustomControls;
+export default CustomControls

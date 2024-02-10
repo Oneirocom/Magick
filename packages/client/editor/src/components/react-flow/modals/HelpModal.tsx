@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import { Modal } from './Modal.js';
+import { Modal } from './Modal'
 
 export type HelpModalProps = {
-  open?: boolean;
-  onClose: () => void;
-};
+  open?: boolean
+  onClose: () => void
+}
 
 export const HelpModal: React.FC<HelpModalProps> = ({
   open = false,
-  onClose
+  onClose,
 }) => {
   return (
     <Modal
@@ -32,5 +32,5 @@ export const HelpModal: React.FC<HelpModalProps> = ({
         nodes or connections.
       </p>
     </Modal>
-  );
-};
+  )
+}

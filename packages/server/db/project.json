@@ -38,6 +38,12 @@
         "cwd": "packages/server/db"
       }
     },
+    "push:acceptLoss": {
+      "command": "npx prisma db push --schema ./src/lib/prisma/schema.prisma --accept-data-loss",
+      "options": {
+        "cwd": "packages/server/db"
+      }
+    },
     "pull": {
       "command": "npx prisma db pull --schema ./src/lib/prisma/schema.prisma",
       "options": {

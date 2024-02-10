@@ -36,9 +36,9 @@ const CreateSpellModal = () => {
   const { register, handleSubmit } = useForm()
 
   /**
-  * Handles loading a selected file for opening a spell.
-  * @param event - FileReader onload event
-  */
+   * Handles loading a selected file for opening a spell.
+   * @param event - FileReader onload event
+   */
   const onReaderLoad = async (event): Promise<void> => {
     const spellData = JSON.parse(event.target.result)
 
@@ -48,7 +48,7 @@ const CreateSpellModal = () => {
       graph: spellData.graph,
       name: `${spellData.name}-copy`,
       projectId: config.projectId,
-      type: spellData.type
+      type: spellData.type,
     })) as any
 
     handleSpellResponse(response)
@@ -69,23 +69,12 @@ const CreateSpellModal = () => {
       const placeholderName = uniqueNamesGenerator(customConfig)
       const name = data.name || placeholderName
       setLoading(true)
-      // const spellCheck = await spellExists({
-      //   name,
-      //   projectId: config.projectId,
-      //   hash: md5(JSON.stringify(selectedTemplate?.graph.nodes)),
-      // })
-      // if (spellCheck.data.total > 0) {
-      //   enqueueSnackbar('A spell with that name already exists', {
-      //     variant: 'error',
-      //   })
-      //   return
-      // }
       const response = (await newSpell({
         id: uuidv4(),
         graph: behaveGraph,
         name,
         type: 'behave',
-        projectId: config.projectId
+        projectId: config.projectId,
       })) as any
 
       handleSpellResponse(response)
@@ -94,7 +83,7 @@ const CreateSpellModal = () => {
     }
   })
 
-  const handleSpellResponse = (response) => {
+  const handleSpellResponse = response => {
     if (handleError(response)) return
     openTab({
       id: response.data.name,
@@ -103,15 +92,15 @@ const CreateSpellModal = () => {
       switchActive: true,
       type: response.data.type || 'spell',
       params: {
-        spellId: response.data.id
-      }
+        spellId: response.data.id,
+      },
     })
 
     closeModal()
     setLoading(false)
   }
 
-  const handleError = (response) => {
+  const handleError = response => {
     if ('error' in response) {
       if ('status' in response.error) {
         const err = response.error as any
@@ -126,10 +115,9 @@ const CreateSpellModal = () => {
     return false
   }
 
-
   const options = [
     {
-      component:
+      component: (
         <FileInput
           // todo fix this typing issue
           // @ts-ignore
@@ -145,19 +133,17 @@ const CreateSpellModal = () => {
           }
           innerText={'Import'}
         />
+      ),
     },
     {
       label: 'Create',
       onClick: onCreate,
       className: css['create-btn'],
-    }]
+    },
+  ]
 
   return (
-    <Modal
-      title="New Spell"
-      options={options}
-      className={css['delete-modal']}
-    >
+    <Modal title="New Spell" options={options} className={css['delete-modal']}>
       <div className={css['spell-details']}>
         <form
           onSubmit={e => {
@@ -183,8 +169,7 @@ const CreateSpellModal = () => {
           flexDirection: 'row',
           flexWrap: 'wrap',
         }}
-      >
-      </div>
+      ></div>
     </Modal>
   )
 }

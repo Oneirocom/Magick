@@ -14,6 +14,14 @@ import { PostHogProvider } from 'posthog-js/react'
 
 import { AppConfig } from '@magickml/providers'
 
+import 'dockview/dist/styles/dockview.css'
+import 'reactflow/dist/style.css'
+import '../../../packages/client/stylesheets/src/lib/styles/behaveFlow.css'
+import '../../../packages/client/stylesheets/src/lib/design-globals/design-globals.css'
+import '../../../packages/client/stylesheets/src/lib/App.css'
+import '../../../packages/client/stylesheets/src/lib/styles/dockview.css'
+import '../../../packages/client/stylesheets/src/lib/styles/themes.scss'
+
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
  */
@@ -22,7 +30,7 @@ if (window === window.parent) {
     console.info('standalone')
     const container = document.getElementById('root') as Element
     const root = createRoot(container) // createRoot(container!) if you use TypeScript
-      ; (window as any).root = root
+    ;(window as any).root = root
 
     // Check URL parameters for projectId and apiUrl
     const projectId =
@@ -39,7 +47,7 @@ if (window === window.parent) {
       projectId,
       token: DEFAULT_USER_TOKEN,
       userId: '',
-      email: undefined
+      email: undefined,
     }
 
     const Root = () => <MagickIDE config={config} />
@@ -53,8 +61,8 @@ if (window === window.parent) {
   const TRUSTED_PARENT_URLS = [
     TRUSTED_PARENT_URL,
     'https://www.magickml.com',
-    'https://beta.magickml.com']
-    .map(url => url.replace(/\/+$/, ''));
+    'https://beta.magickml.com',
+  ].map(url => url.replace(/\/+$/, ''))
 
   window.addEventListener(
     'message',
@@ -66,13 +74,13 @@ if (window === window.parent) {
         event.origin !== window.location.origin &&
         !TRUSTED_PARENT_URLS.includes(event.origin)
       ) {
-        console.error('Untrusted origin %s', event.origin);
+        console.error('Untrusted origin %s', event.origin)
         // Log the trusted origins for debugging purposes
         TRUSTED_PARENT_URLS.forEach(trustedUrl => {
-          console.error('Trusted origin is %s', trustedUrl);
-        });
+          console.error('Trusted origin is %s', trustedUrl)
+        })
 
-        return;
+        return
       }
 
       const { data } = event
@@ -90,7 +98,7 @@ if (window === window.parent) {
                 apiKey={POSTHOG_API_KEY}
                 options={{
                   api_host: 'https://app.posthog.com',
-                  loaded: (posthog_instance) => {
+                  loaded: posthog_instance => {
                     posthog_instance.identify(config.email)
                   },
                 }}
@@ -104,10 +112,10 @@ if (window === window.parent) {
         }
         const container = document.getElementById('root') as Element
         const root = createRoot(container) // createRoot(container!) if you use TypeScript
-          ; (window as any).root = root
+        ;(window as any).root = root
 
-        const userId = config.userId;
-        document.cookie = `magick-userId=${userId};path=/;max-age=31536000;SameSite=Strict;Secure`;
+        const userId = config.userId
+        document.cookie = `magick-userId=${userId};path=/;max-age=31536000;SameSite=Strict;Secure`
 
         root.render(<Root />)
       }

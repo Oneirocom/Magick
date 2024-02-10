@@ -105,7 +105,8 @@
       "shared/core": ["packages/shared/core/src/index.ts"],
       "shared/nodeSpec": ["packages/shared/nodeSpec/src/index.ts"],
       "shared/rete": ["packages/shared/rete/src/index.ts"],
-      "shared/utils": ["packages/shared/utils/src/index.ts"]
+      "shared/utils": ["packages/shared/utils/src/index.ts"],
+      "stylesheets": ["packages/client/stylesheets/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

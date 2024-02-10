@@ -1,8 +1,8 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { Connection, ReactFlowInstance } from 'reactflow'
 
-import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType.js'
-import { isHandleConnected } from './isHandleConnected.js'
+import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
+import { isHandleConnected } from './isHandleConnected'
 
 export const isValidConnection = (
   connection: Connection,

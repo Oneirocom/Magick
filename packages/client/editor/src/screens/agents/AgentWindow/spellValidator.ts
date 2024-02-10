@@ -62,7 +62,6 @@ interface SpellData {
   id: string
   name: string
   projectId: string
-  hash: string | null
   createdAt: string | null
   updatedAt: string | null
   graph: Graph

@@ -1,8 +1,8 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { Node, OnConnectStartParams } from 'reactflow'
 
-import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType.js'
-import { NodePickerFilters } from '../components/react-flow/NodePicker.js'
+import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
+import { NodePickerFilters } from '../components/react-flow/NodePicker'
 
 export const getNodePickerFilters = (
   nodes: Node[],

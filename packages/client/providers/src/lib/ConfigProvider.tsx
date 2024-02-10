@@ -1,6 +1,6 @@
 // DOCUMENTED
 // Import required dependencies
-import { DEFAULT_PROJECT_ID } from 'shared/config'
+import { DEFAULT_PROJECT_ID } from 'clientConfig'
 import { createContext, useContext, useState } from 'react'
 
 // Define AppConfig type
@@ -37,7 +37,7 @@ export const defaultConfig: AppConfig = {
   projectId: DEFAULT_PROJECT_ID,
   token: '',
   userId: '',
-  email: undefined
+  email: undefined,
 }
 
 /**

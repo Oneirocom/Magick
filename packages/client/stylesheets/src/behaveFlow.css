@@ -47,7 +47,7 @@ input::-webkit-inner-spin-button {
   stroke: #fff;
 }
 
-.node-picker ::-webkit-scrollbar {
+/* .node-picker ::-webkit-scrollbar {
   @apply w-2;
 }
 
@@ -57,7 +57,7 @@ input::-webkit-inner-spin-button {
 
 .node-picker ::-webkit-scrollbar-thumb {
   @apply bg-gray-600;
-}
+} */
 
 .react-flow .react-flow__controls {
   display: flex;

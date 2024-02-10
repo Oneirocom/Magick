@@ -1,6 +1,6 @@
 // DOCUMENTED
 
-import { SPEECH_SERVER_URL } from 'shared/config'
+import { SPEECH_SERVER_URL } from 'clientConfig'
 import socketIOClient from 'socket.io-client'
 
 /**
