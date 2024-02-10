@@ -12,16 +12,8 @@ import mdPlugin, { Mode } from 'vite-plugin-markdown'
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../../node_modules/.vite/editor',
-  assetsInclude: ['**/*.vrm', '**/*.svg'],
-  resolve: {
-    alias: {
-      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
-      url: 'rollup-plugin-node-polyfills/polyfills/url',
-      querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
-    },
-  },
+  assetsInclude: ['**/*.svg'],
   plugins: [
-    mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
     dts({
       entryRoot: 'src',
       tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
