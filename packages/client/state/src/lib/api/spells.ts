@@ -1,7 +1,6 @@
 // DOCUMENTED
 import { RootState } from '../store'
 import { rootApi } from './api'
-import md5 from 'md5'
 
 /**
  * @interface Diff represents a spell diff.

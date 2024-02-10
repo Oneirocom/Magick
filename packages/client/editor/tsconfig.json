@@ -27,6 +27,7 @@
     "../core/shared/src/state",
     "../state/src/lib/helperHooks/useDockviewTheme.tsx",
     "../stylesheets/src/lib/styles",
-, "../stylesheets/src/lib/App.css.d.ts"    "../stylesheets/src/lib/design-globals"
+    "../stylesheets/src/lib/App.css.d.ts",
+    "../stylesheets/src/lib/design-globals"
   ]
 }

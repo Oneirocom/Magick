@@ -18,7 +18,6 @@ import {
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
 import { v4 as uuidv4 } from 'uuid'
-import md5 from 'md5'
 import {
   uniqueNamesGenerator,
   adjectives,

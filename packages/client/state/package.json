@@ -2,6 +2,7 @@
   "name": "state",
   "version": "0.0.1",
   "dependencies": {
+    "clientConfig": "*",
     "@reduxjs/toolkit": "1.9.5",
     "react-redux": "8.0.5",
     "redux-persist": "6.0.0",
@@ -9,9 +10,7 @@
     "client/feathers-client": "*",
     "@magickml/feathersRedux": "*",
     "@magickml/behave-graph": "*",
-    "shared/config": "*",
-    "reactflow": "^11.9.4",
-    "md5": "^2.3.0"
+    "reactflow": "^11.9.4"
   },
   "main": "./index.js",
   "module": "./index.mjs",

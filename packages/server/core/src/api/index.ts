@@ -7,8 +7,6 @@ import otJson0 from 'ot-json0'
 
 import { Route } from '../config/types'
 
-import md5 from 'md5'
-
 /**
  * Saves a diff of a spell and updates it.
  * @param {Koa.Context} ctx - The Koa context of the request.
