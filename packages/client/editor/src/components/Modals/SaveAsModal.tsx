@@ -7,7 +7,6 @@ import css from './modalForms.module.css'
 import { useNavigate } from 'react-router'
 import { getTemplates } from 'client/core'
 import { useConfig } from '@magickml/providers'
-import md5 from 'md5'
 import { v4 as uuidv4 } from 'uuid'
 import { spellApi } from 'client/state'
 

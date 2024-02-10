@@ -4,7 +4,6 @@ import { NotFound } from '@feathersjs/errors/lib'
  * Imports
  */
 import otJson0 from 'ot-json0'
-import md5 from 'md5'
 import { KnexAdapter } from '@feathersjs/knex'
 import { BadRequest } from '@feathersjs/errors/lib'
 import type { Application } from '../../declarations'

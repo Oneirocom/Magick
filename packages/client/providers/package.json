@@ -2,7 +2,7 @@
   "name": "@magickml/providers",
   "version": "0.0.1",
   "dependencies": {
-    "shared/config": "*",
+    "clientConfig": "*",
     "react": "18.2.0",
     "pubsub-js": "1.9.4",
     "dockview": "^1.9.0",

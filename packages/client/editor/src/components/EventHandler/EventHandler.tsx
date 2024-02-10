@@ -2,8 +2,6 @@
 import { useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
 
-import md5 from 'md5'
-
 import { diff } from '../../utils/json0'
 
 import { useConfig, useFeathers } from '@magickml/providers'
