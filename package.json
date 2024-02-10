@@ -26,6 +26,7 @@
     "db:pull": "npx nx run server-db:pull",
     "db:studio": "npx nx run server-db:studio",
     "db:seed": "npx nx run server-db:seed",
+    "db:deploy": " npx prisma migrate deploy --schema packages/server//db/src/lib/prisma/schema.prisma",
     "migrate:make": "nx run @magickml/server:migrate:make",
     "migrate": "nx run @magickml/server:migrate",
     "migrate:shadow": "nx run @magickml/server:migrate:shadow",
@@ -65,11 +66,7 @@
     "portal:db:pull": "npx nx run portal-db:pull",
     "portal:db:studio": "npx nx run portal-db:studio",
     "portal:db:seed": "npx nx run portal-db:seed",
-    "portal:db:migrate:dev": "npx prisma migrate dev --schema portal/cloud/packages/db/src/lib/prisma/schema.prisma --name init",
-    "portal:db:migrate:deploy": "npx prisma migrate deploy --schema portal/cloud/packages/db/src/lib/prisma/schema.prisma",
-    "portal:db:migrate:create": "npx prisma migrate dev --create-only --schema portal/cloud/packages/db/src/lib/prisma/schema.prisma",
-    "portal:db:migrate:resolve": "echo 'run this but replace the applied: npx prisma migrate resolve --schema portal/cloud/packages/db/src/lib/prisma/schema.prisma --applied 0_init'",
-    "portal:db:migrate:diff": "echo 'npx prisma migrate diff --from-empty --to-schema-datamodel portal/cloud/packages/db/src/lib/prisma/schema.prisma --script > portal/cloud/packages/db/src/lib/prisma/migrations/0_init/migration.sql'"
+    "portal:db:deploy": "npx prisma migrate deploy --schema portal/cloud/packages/db/src/lib/prisma/schema.prisma"
   },
   "resolutions": {
     "@types/react": "18.0.2"
