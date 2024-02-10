@@ -20,7 +20,7 @@ const buttonVariants = cva(
           "hover:border border-ds-primary color-transition backdrop-blur-[2px]",
         link: "text-primary underline-offset-4 hover:underline",
         basic:
-          "font-bold bg-ds-neutral text-white border-0 rounded-lg relative button-transition",
+          "font-bold bg-ds-neutral text-ds-white border-0 rounded-lg relative button-transition hover:border hover:border-ds-primary",
         primary:
           "bg-ds-primary text-primary-foreground shadow font-bold capitalize dark:border-2 dark:border-[#BADDE4] text-white hover:text-accent-foreground text-lg font-montAlt button-transition hover:bg-transparent rounded-lg",
         agent:
