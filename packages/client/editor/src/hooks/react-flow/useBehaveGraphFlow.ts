@@ -1,11 +1,11 @@
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
 
-import { behaveToFlow } from '../../utils/transformers/behaveToFlow.js'
-import { flowToBehave } from '../../utils/transformers/flowToBehave.js'
-import { autoLayout } from '../../utils/autoLayout.js'
-import { hasPositionMetaData } from '../../utils/hasPositionMetaData.js'
-import { useCustomNodeTypes } from './useCustomNodeTypes.js'
+import { behaveToFlow } from '../../utils/transformers/behaveToFlow'
+import { flowToBehave } from '../../utils/transformers/flowToBehave'
+import { autoLayout } from '../../utils/autoLayout'
+import { hasPositionMetaData } from '../../utils/hasPositionMetaData'
+import { useCustomNodeTypes } from './useCustomNodeTypes'
 import { Tab, usePubSub } from '@magickml/providers'
 import {
   selectTabEdges,

@@ -14,11 +14,8 @@ import 'regenerator-runtime/runtime'
 import App from './App'
 import AppProviders from './contexts/AppProviders'
 import { AppConfig } from '@magickml/providers'
-import { MagickmlChatbox } from 'client/magickml-chatbox'
 import { createStore } from 'client/state'
 import { feathersClient } from 'client/feathers-client'
-
-import './styles/themes.scss'
 
 /**
  * Type definition for the props that can be passed to MagickIDE
@@ -37,12 +34,11 @@ export type MagickIDEProps = {
 export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
   const [loaded, setLoaded] = useState(false)
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       await feathersClient.initialize(config.token, config)
       setLoaded(true)
     })()
   })
-
 
   if (!loaded) return null
 
@@ -52,7 +48,6 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
         <AppProviders config={config}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <App />
-            <MagickmlChatbox />
           </LocalizationProvider>
         </AppProviders>
       </Provider>

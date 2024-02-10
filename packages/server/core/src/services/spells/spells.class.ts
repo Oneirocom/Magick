@@ -122,13 +122,10 @@ export class SpellService<
     }
 
     // Calculate checksum of graph
-    const hash = md5(JSON.stringify(spellUpdate.graph.nodes))
     app.get('logger').trace('Saving spell diff: %o', { name, diff })
 
     // Update spell data
-    return await app
-      .service('spells')
-      .update(spell.id, { ...spellUpdate, hash })
+    return await app.service('spells').update(spell.id, { ...spellUpdate })
   }
 }
 

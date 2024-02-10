@@ -1,22 +1,22 @@
-import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph';
-import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cx from 'classnames';
-import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph'
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import cx from 'classnames'
+import React from 'react'
+import { Handle, Position } from 'reactflow'
 
-import { colors, valueTypeColorMap } from '../../utils/colors.js';
-import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui';
-import ReactJson from 'react-json-view';
+import { colors, valueTypeColorMap } from '../../utils/colors'
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui'
+import ReactJson from 'react-json-view'
 
 export type InputSocketProps = {
-  connected: boolean;
-  value: any | undefined;
-  onChange: (key: string, value: any) => void;
-  lastEventInput: any;
-  specJSON: NodeSpecJSON[];
-  hideValue?: boolean;
-} & InputSocketSpecJSON;
+  connected: boolean
+  value: any | undefined
+  onChange: (key: string, value: any) => void
+  lastEventInput: any
+  specJSON: NodeSpecJSON[]
+  hideValue?: boolean
+} & InputSocketSpecJSON
 
 const InputFieldForValue = ({
   choices,
@@ -26,26 +26,33 @@ const InputFieldForValue = ({
   name,
   valueType,
   connected,
-  hideValue = false
+  hideValue = false,
 }: Pick<
   InputSocketProps,
-  'choices' | 'value' | 'defaultValue' | 'name' | 'onChange' | 'valueType' | 'connected' | 'hideValue'
+  | 'choices'
+  | 'value'
+  | 'defaultValue'
+  | 'name'
+  | 'onChange'
+  | 'valueType'
+  | 'connected'
+  | 'hideValue'
 >) => {
-  const showChoices = choices?.length;
-  const inputVal = (value ? value : defaultValue ?? '') as string;
+  const showChoices = choices?.length
+  const inputVal = (value ? value : defaultValue ?? '') as string
   const hideValueInput = hideValue || connected
 
   const inputClass = cx(
-    'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm',
-  );
+    'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm'
+  )
 
   const containerClass = cx(
-    "flex w-full rounded-lg items-center pl-4",
-    !hideValueInput && "bg-[var(--foreground-color)]"
+    'flex w-full rounded-lg items-center pl-4',
+    !hideValueInput && 'bg-[var(--foreground-color)]'
   )
 
   const handleChange = (key: string, value: any) => {
-    onChange(key, value);
+    onChange(key, value)
   }
 
   return (
@@ -60,10 +67,10 @@ const InputFieldForValue = ({
             <select
               className={inputClass}
               value={value ?? defaultValue ?? ''}
-              onChange={(e) => handleChange(name, e.currentTarget.value)}
+              onChange={e => handleChange(name, e.currentTarget.value)}
             >
               <>
-                {choices.map((choice) => (
+                {choices.map(choice => (
                   <option key={choice.text} value={choice.value}>
                     {choice.text}
                   </option>
@@ -76,7 +83,7 @@ const InputFieldForValue = ({
               type="text"
               className={inputClass}
               value={String(inputVal) || ''}
-              onChange={(e) => {
+              onChange={e => {
                 onChange(name, e.currentTarget.value)
               }}
             />
@@ -86,7 +93,7 @@ const InputFieldForValue = ({
               type="number"
               className={inputClass}
               value={Number(inputVal) || 0}
-              onChange={(e) => onChange(name, Number(e.currentTarget.value))}
+              onChange={e => onChange(name, Number(e.currentTarget.value))}
             />
           )}
           {valueType === 'integer' && !showChoices && (
@@ -94,7 +101,7 @@ const InputFieldForValue = ({
               type="number"
               className={inputClass}
               value={Number(inputVal) || 0}
-              onChange={(e) => onChange(name, Number(e.currentTarget.value))}
+              onChange={e => onChange(name, Number(e.currentTarget.value))}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
@@ -102,16 +109,14 @@ const InputFieldForValue = ({
               type="checkbox"
               className="bg-gray-600 disabled:bg-gray-700 h-[16] nodrag text-sm"
               checked={Boolean(inputVal)}
-              onChange={(e) => onChange(name, Boolean(e.currentTarget.checked))}
+              onChange={e => onChange(name, Boolean(e.currentTarget.checked))}
             />
           )}
-
         </div>
       )}
     </div>
-  );
-};
-
+  )
+}
 
 const InputSocket: React.FC<InputSocketProps> = ({
   connected,
@@ -119,20 +124,20 @@ const InputSocket: React.FC<InputSocketProps> = ({
   lastEventInput,
   ...rest
 }) => {
-  const { name, valueType } = rest;
+  const { name, valueType } = rest
 
-  const isFlowSocket = valueType === 'flow';
-  const isArraySocket = valueType === 'array';
-  const isObjectSocket = valueType === 'object';
+  const isFlowSocket = valueType === 'flow'
+  const isArraySocket = valueType === 'array'
+  const isObjectSocket = valueType === 'object'
 
-  let colorName = valueTypeColorMap[valueType];
+  let colorName = valueTypeColorMap[valueType]
   if (colorName === undefined) {
-    colorName = 'red';
+    colorName = 'red'
   }
 
   // @ts-ignore
-  const [backgroundColor, borderColor] = colors[colorName];
-  const showName = isFlowSocket === false || name !== 'flow';
+  const [backgroundColor, borderColor] = colors[colorName]
+  const showName = isFlowSocket === false || name !== 'flow'
 
   return (
     <div className="flex grow items-center justify-start h-7 w-full">
@@ -143,8 +148,13 @@ const InputSocket: React.FC<InputSocketProps> = ({
         </>
       )}
 
-      {!isFlowSocket && <InputFieldForValue connected={connected} hideValue={isArraySocket || isObjectSocket} {...rest} />}
-
+      {!isFlowSocket && (
+        <InputFieldForValue
+          connected={connected}
+          hideValue={isArraySocket || isObjectSocket}
+          {...rest}
+        />
+      )}
 
       <Popover>
         <PopoverTrigger asChild>
@@ -152,13 +162,16 @@ const InputSocket: React.FC<InputSocketProps> = ({
             id={name}
             type="target"
             position={Position.Left}
-            className={cx(borderColor, connected ? backgroundColor : 'bg-gray-800')}
+            className={cx(
+              borderColor,
+              connected ? backgroundColor : 'bg-gray-800'
+            )}
           />
         </PopoverTrigger>
         <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
           <ReactJson
             src={{
-              [name]: lastEventInput || undefined
+              [name]: lastEventInput || undefined,
             }}
             style={{ width: 400, overflow: 'scroll' }}
             theme="tomorrow"
@@ -176,7 +189,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
         </PopoverContent>
       </Popover>
     </div>
-  );
-};
+  )
+}
 
-export default InputSocket;
+export default InputSocket

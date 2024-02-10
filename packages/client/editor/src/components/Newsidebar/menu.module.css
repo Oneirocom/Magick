@@ -30,12 +30,6 @@
   padding-inline-start: 8px;
 }
 
-ul ul ul li {
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-}
-
 .menu {
   margin-top: 1rem;
 }

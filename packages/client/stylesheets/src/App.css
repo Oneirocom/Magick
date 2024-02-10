@@ -1,0 +1,252 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* If the user prefers dark mode, 
+we of course apply color-scheme: dark, as usual */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light;
+  }
+}
+
+/* If the user prefers light mode, 
+    we still enforce color-scheme: dark, despite the user preference until we have light mode support */
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: light;
+  }
+}
+
+html,
+body {
+  font-size: 14px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Overrides tabs in dockview 
+.tab-layout .tabs-and-actions-container {
+  margin-left: 50px !important;
+} */
+
+.expanding {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--extra-small);
+  width: var(--extra-small);
+  border-radius: 100%;
+  transition: transform 0.2s ease;
+}
+
+.expanding:hover {
+  transform: scale(1.5);
+}
+
+button {
+  box-sizing: border-box;
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  background: var(--slate-30);
+  border: 1px solid var(--dark-3);
+  padding: 9px 16px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', 'sans-serif' !important;
+  font-size: 11px;
+  text-transform: uppercase;
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
+  height: var(--c4);
+  display: flex;
+  align-items: center;
+}
+
+button.option {
+  border: none;
+  margin: 0;
+  border-radius: 0;
+}
+
+button.primary {
+  background-color: var(--primary-dark);
+  color: var(--dark-5);
+}
+
+button.list {
+  background-color: var(--foreground-light);
+  padding: 3px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+}
+
+button.small {
+  background-color: var(--slate-30);
+  padding: 8px;
+  padding-left: var(--small);
+  padding-right: var(--small);
+}
+
+button.extra-small {
+  background-color: var(--slate-30);
+  padding: 4px;
+  padding-left: var(--extraSmall);
+  padding-right: var(--extraSmall);
+  font-size: 8px;
+  height: 16px;
+}
+
+button:hover {
+  filter: brightness(1.3);
+}
+
+button:active {
+  filter: brightness(0.9);
+}
+
+button.disabled {
+  box-shadow: none;
+  pointer-events: none;
+  opacity: 0.5;
+  background-color: var(--foreground-light);
+}
+
+.node.selected button {
+  background-color: var(--primary) !important;
+}
+
+/* .view-line span {
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', sans-serif;
+} */
+
+input {
+  box-sizing: border-box;
+  /* padding: var(--small); */
+  /* not using a var here to optically correct for base + cap of typeface */
+  background-color: var(--foreground-light);
+  padding-left: var(--small);
+  padding-right: var(--small);
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  border: none;
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
+  font-size: 12px;
+}
+
+input:focus-visible {
+  outline: 1px solid var(--primary-dark);
+}
+
+.App {
+  width: calc(100% - 180px);
+}
+
+.agents-container {
+  display: flex;
+}
+
+.agent-header {
+  display: flex;
+}
+
+.agent-createModal {
+  position: relative;
+  right: 400px;
+  bottom: 350px;
+}
+
+.nav {
+  width: 180px;
+  float: left;
+  height: 100vh;
+}
+
+.nav-item,
+.nav-item-active {
+  cursor: pointer;
+  margin: 2em;
+  display: block;
+}
+
+.nav-item-active {
+  color: var(--white);
+}
+
+.entBtns {
+  padding: 1em;
+  display: flex;
+}
+
+.form-item-label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
+
+  color: var(---rich-blue);
+}
+
+.select {
+  padding: 0.4em;
+  border: 1px solid var(--dark-3);
+  border-radius: 4px;
+}
+
+.form-text-area,
+.agent-select > select,
+.search-corpus > select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--extraSmall);
+  /* not using a var here to optically correct for base + cap of typeface */
+  background-color: var(--foreground-light);
+  color: #fff;
+  border-radius: 4px;
+  cursor: default;
+  border: 1px solid var(--dark-3);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'Montserrat Variable', 'IBM Plex Mono', monospace !important;
+  font-size: 11px;
+  height: var(--c4);
+}
+
+.MuiInputBase-root input,
+.MuiInputBase-multiline {
+  padding: 13px !important;
+}
+
+/* styles for global connector layout */
+
+.connector-layout {
+  background-color: var(--background-color);
+  padding: 1em 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+  opacity: 1;
+  font-size: 14px;
+  border: 1px solid var(--foreground-color);
+  margin-bottom: 10px;
+}
+
+.connector-layout > .controls {
+  display: flex;
+  /* padding-top: 1em; */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-flow {
+  z-index: 1000 !important;
+}

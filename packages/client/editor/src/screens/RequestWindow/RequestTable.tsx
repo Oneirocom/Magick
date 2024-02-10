@@ -9,7 +9,7 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { API_ROOT_URL } from 'shared/config'
+import { API_ROOT_URL } from 'clientConfig'
 import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { FaFileCsv } from 'react-icons/fa'
@@ -320,7 +320,10 @@ function RequestTable({ requests, updateCallback }) {
 
   return (
     <Container className={styles.container} classes={{ root: styles.root }}>
-      <Stack spacing={2} style={{ padding: '1rem', background: 'var(--background-color)' }}>
+      <Stack
+        spacing={2}
+        style={{ padding: '1rem', background: 'var(--background-color)' }}
+      >
         <div className={styles.flex}>
           <Typography variant="h4" className={styles.header}>
             Requests
@@ -359,8 +362,9 @@ function RequestTable({ requests, updateCallback }) {
         </div>
         <div className={styles.flex}>
           <Button
-            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
-              }`}
+            className={`${styles.btn} ${
+              selectedRows.length > 0 ? styles.selectedBtn : ''
+            }`}
             onClick={handleDeleteMany}
             variant="outlined"
             startIcon={<Delete />}

@@ -19,13 +19,13 @@ import {
 } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
-import { calculateNewEdge } from '../../utils/calculateNewEdge.js'
-import { getNodePickerFilters } from '../../utils/getPickerFilters.js'
+import { calculateNewEdge } from '../../utils/calculateNewEdge'
+import { getNodePickerFilters } from '../../utils/getPickerFilters'
 import { isValidConnection } from '../../utils/isValidConnection'
-import { useBehaveGraphFlow } from './useBehaveGraphFlow.js'
+import { useBehaveGraphFlow } from './useBehaveGraphFlow'
 import { Tab } from '@magickml/providers'
 import { onConnect as onConnectState, setEdges, setNodes } from 'client/state'
-import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType.js'
+import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 

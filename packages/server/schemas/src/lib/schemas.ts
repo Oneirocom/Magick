@@ -7,7 +7,6 @@ import { Static, Type } from '@feathersjs/typebox'
  * @property {string} id - The spell's ID.
  * @property {string} projectId - The ID of the project that the spell belongs to.
  * @property {string} name - The name of the spell.
- * @property {string} hash - The hash of the spell.
  * @property {string} [type] - The type of the spell (optional).
  * @property {object} graph - The spell's graph object.
  * @property {string} graph.id - The ID of the spell's graph.
@@ -21,7 +20,6 @@ export const spellSchema = Type.Object(
     id: Type.String(),
     projectId: Type.String(),
     name: Type.String(),
-    hash: Type.String(),
     type: Type.Optional(Type.String()),
     graph: Type.Object({
       id: Type.Optional(Type.String()),

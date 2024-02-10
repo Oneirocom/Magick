@@ -54,20 +54,13 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
   const { events, subscribe } = pubSub
 
-  const {
-    $DELETE,
-    $UNDO,
-    $REDO,
-    $SAVE_SPELL,
-    $SAVE_SPELL_DIFF,
-    $EXPORT,
-  } = events
+  const { $DELETE, $UNDO, $REDO, $SAVE_SPELL, $SAVE_SPELL_DIFF, $EXPORT } =
+    events
 
   /**
    * Save the current spell
    */
   const saveSpell = async () => {
-
     if (!spellRef.current) return
     const type = spellRef.current.type || 'spell'
 
@@ -78,7 +71,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     const updatedSpell = {
       ...currentSpell,
       graph,
-      hash: md5(JSON.stringify(graph)),
     }
 
     if (!updatedSpell.type) updatedSpell.type = type
@@ -129,8 +121,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     if (updatedSpell.graph.nodes.length === 0) return
 
-    updatedSpell.hash = md5(JSON.stringify(updatedSpell.graph.nodes))
-
     try {
       dispatch(setSyncing(true))
       // We save the diff. Doing this via feathers but may want to switch to rtk query
@@ -140,7 +130,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         name: currentSpell.name,
         spellId: currentSpell.id,
       })
-
 
       spellRef.current = diffResponse
 

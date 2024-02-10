@@ -90,6 +90,10 @@
     .tabs-and-actions-container {
       height: 40px;
 
+      .tabs-container .tab {
+        height: 100%;
+      }
+
       .tab.active-tab {
         border-top: 2px solid var(--primary);
         // background-color: var(--background-color) !important;
@@ -170,6 +174,7 @@
         .tab.active-tab {
           border-top: none;
           color: var(--active-font-color) !important;
+          height: 100%;
         }
       }
     }
@@ -182,6 +187,7 @@
         .tab {
           background: var(--background-color);
           color: var(--active-font-color);
+          height: 100%;
         }
 
         .tab.active-tab {

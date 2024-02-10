@@ -1,27 +1,31 @@
-import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph';
-import React, { useEffect, useState } from 'react';
-import { NodeProps as FlowNodeProps, useEdges, useUpdateNodeInternals } from 'reactflow';
+import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
+import React, { useEffect, useState } from 'react'
+import {
+  NodeProps as FlowNodeProps,
+  useEdges,
+  useUpdateNodeInternals,
+} from 'reactflow'
 
-import InputSocket from './InputSocket.js';
-import NodeContainer from './NodeContainer.js';
-import OutputSocket from './OutputSocket.js';
-import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData.js';
-import { isHandleConnected } from '../../utils/isHandleConnected.js';
-import { useSelectAgentsSpell } from 'client/state';
-import { SpellInterface } from 'server/schemas';
-import { getConfig } from '../../utils/getNodeConfig.js';
-import { configureSockets } from '../../utils/configureSockets.js';
-import { enqueueSnackbar } from 'notistack';
-import { debounce } from 'lodash';
-import { Tab, usePubSub } from '@magickml/providers';
+import InputSocket from './InputSocket'
+import NodeContainer from './NodeContainer'
+import OutputSocket from './OutputSocket'
+import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
+import { isHandleConnected } from '../../utils/isHandleConnected'
+import { useSelectAgentsSpell } from 'client/state'
+import { SpellInterface } from 'server/schemas'
+import { getConfig } from '../../utils/getNodeConfig'
+import { configureSockets } from '../../utils/configureSockets'
+import { enqueueSnackbar } from 'notistack'
+import { debounce } from 'lodash'
+import { Tab, usePubSub } from '@magickml/providers'
 
 type NodeProps = FlowNodeProps & {
-  tab: Tab;
-  spec: NodeSpecJSON;
-  allSpecs: NodeSpecJSON[];
-  spell: SpellInterface,
+  tab: Tab
+  spec: NodeSpecJSON
+  allSpecs: NodeSpecJSON[]
+  spell: SpellInterface
   nodeJSON: NodeJSON
-};
+}
 
 export const Node: React.FC<NodeProps> = ({
   id,
@@ -34,20 +38,22 @@ export const Node: React.FC<NodeProps> = ({
   nodeJSON,
 }: NodeProps) => {
   const { events, subscribe } = usePubSub()
-  const updateNodeInternals = useUpdateNodeInternals();
+  const updateNodeInternals = useUpdateNodeInternals()
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
   // const [commitEventname, setCommitEventName] = useState<string | null>(null)
   const [lastInputs, setLastInputs] = useState<Record<string, any> | null>(null)
-  const [lastOutputs, setLastOutputs] = useState<Record<string, any> | null>(null)
+  const [lastOutputs, setLastOutputs] = useState<Record<string, any> | null>(
+    null
+  )
 
   const [running, setRunning] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(false)
-  const edges = useEdges();
-  const handleChange = useChangeNodeData(id);
+  const edges = useEdges()
+  const handleChange = useChangeNodeData(id)
 
   // Hook into to event to reset node states and stop animations
   useEffect(() => {
@@ -104,19 +110,18 @@ export const Node: React.FC<NodeProps> = ({
   }
 
   useEffect(() => {
-    updateNodeInternals(id);
+    updateNodeInternals(id)
   }, [data])
 
   const { configuration: config } = data
   const { pairs, valueInputs } = configureSockets(data, spec)
 
   useEffect(() => {
-    if (!spell || !id) return;
+    if (!spell || !id) return
     setEndEventName(`${spell.id}-${id}-end`)
     setStartEventName(`${spell.id}-${id}-start`)
     setErrorEventName(`${spell.id}-${id}-error`)
     // setCommitEventName(`${spell.id}-${id}-commit`)
-
   }, [spell, id])
 
   // Handle commit event
@@ -128,7 +133,6 @@ export const Node: React.FC<NodeProps> = ({
   //     const connectedEdge = edges.find(edge => {
   //       return edge.source === id && edge.sourceHandle === commitedSocket
   //     })
-
 
   //     if (!connectedEdge) return;
 
@@ -157,7 +161,7 @@ export const Node: React.FC<NodeProps> = ({
 
   // Handle start event
   useEffect(() => {
-    if (!spellEvent) return;
+    if (!spellEvent) return
     if (spellEvent.event === startEventName) {
       setLastInputs(spellEvent.inputs)
       console.log('start event', spellEvent)
@@ -167,7 +171,7 @@ export const Node: React.FC<NodeProps> = ({
 
   // Handle end event
   useEffect(() => {
-    if (!spellEvent) return;
+    if (!spellEvent) return
     if (spellEvent.event === endEventName) {
       setLastOutputs(spellEvent.outputs)
       setRunning(false)
@@ -179,15 +183,18 @@ export const Node: React.FC<NodeProps> = ({
 
   // Handle error event
   useEffect(() => {
-    if (!spellEvent) return;
+    if (!spellEvent) return
     if (spellEvent.event === errorEventName) {
       setRunning(false)
       setError(spellEvent)
 
-      const truncatedMessage = spellEvent.message.length > 100 ? spellEvent.message.substring(
-        0,
-        spellEvent.message.lastIndexOf(' ', 10)
-      ) + '...' : spellEvent.message
+      const truncatedMessage =
+        spellEvent.message.length > 100
+          ? spellEvent.message.substring(
+              0,
+              spellEvent.message.lastIndexOf(' ', 10)
+            ) + '...'
+          : spellEvent.message
 
       enqueueSnackbar(truncatedMessage, {
         variant: 'error',
@@ -214,7 +221,7 @@ export const Node: React.FC<NodeProps> = ({
         <div
           key={ix}
           className="flex flex-row justify-between gap-8 relative px-2"
-        // className={styles.container}
+          // className={styles.container}
         >
           {flowInput && (
             <InputSocket
@@ -230,7 +237,11 @@ export const Node: React.FC<NodeProps> = ({
               {...output}
               specJSON={allSpecs}
               lastEventOutput={
-                lastOutputs ? lastOutputs.find((event: any) => event.name === output.name)?.value : undefined}
+                lastOutputs
+                  ? lastOutputs.find((event: any) => event.name === output.name)
+                      ?.value
+                  : undefined
+              }
               connected={isHandleConnected(edges, id, output.name, 'source')}
             />
           )}
@@ -241,16 +252,18 @@ export const Node: React.FC<NodeProps> = ({
         <div
           key={ix}
           className="flex flex-row justify-start gap-8 relative px-2"
-        // className={styles.container}
+          // className={styles.container}
         >
           <InputSocket
             {...input}
             specJSON={allSpecs}
             value={data[input.name] ?? input.defaultValue}
             lastEventInput={
-              lastInputs ? lastInputs.find((event: any) => {
-                return event.name === input.name
-              })?.value : undefined
+              lastInputs
+                ? lastInputs.find((event: any) => {
+                    return event.name === input.name
+                  })?.value
+                : undefined
             }
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}
@@ -258,5 +271,5 @@ export const Node: React.FC<NodeProps> = ({
         </div>
       ))}
     </NodeContainer>
-  );
-};
+  )
+}

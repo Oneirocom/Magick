@@ -1,10 +1,3 @@
-ul {
-  margin: 0;
-  list-style: none;
-  position: relative;
-  border-radius: 3px;
-}
-
 .list-item {
   border: 1px solid var(--dark-3);
   border-top: 0;
@@ -28,26 +21,6 @@ ul {
   position: absolute;
   top: 30px; /* the height of the main nav */
   transform: translateX(calc(var(--c7) * -1));
-}
-
-/* Display Dropdowns on Hover */
-ul li:hover > ul {
-  display: inherit;
-}
-
-/* Fisrt Tier Dropdown */
-ul ul li {
-  width: var(--c20);
-  float: none;
-  display: list-item;
-  position: relative;
-}
-
-/* Second, Third and more Tiers	*/
-ul ul ul li {
-  position: relative;
-  top: calc(var(--c4) * -1);
-  left: var(--c23);
 }
 
 li.list-item:first-child {

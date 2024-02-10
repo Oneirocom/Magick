@@ -14,12 +14,16 @@ import {
   useCreateAgentReleaseMutation,
   useGetAgentsQuery,
   useGetUserQuery,
-  useNewSpellMutation
+  useNewSpellMutation,
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
-import { v4 as uuidv4 } from 'uuid';
-import md5 from 'md5';
-import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
+import { v4 as uuidv4 } from 'uuid'
+import md5 from 'md5'
+import {
+  uniqueNamesGenerator,
+  adjectives,
+  colors,
+} from 'unique-names-generator'
 import { getTemplates } from 'client/core'
 import { DrawerProps } from '@mui/material/Drawer'
 
@@ -37,14 +41,16 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
   const { setAgentUpdate } = useTreeData()
 
   const config = useConfig()
-  const [createNewAgent, { data: newAgent, isLoading }] = useCreateAgentMutation()
+  const [createNewAgent, { data: newAgent, isLoading }] =
+    useCreateAgentMutation()
   const [createAgentRelease] = useCreateAgentReleaseMutation()
-  const { data: agents } = useGetAgentsQuery({ projectId: config.projectId, })
+  const { data: agents } = useGetAgentsQuery({ projectId: config.projectId })
   const [newSpell] = useNewSpellMutation()
   const { currentTab } = useSelector((state: any) => state.tabLayout)
-  const { currentSpellReleaseId } = useSelector<RootState, RootState['globalConfig']>(
-    state => state.globalConfig
-  )
+  const { currentSpellReleaseId } = useSelector<
+    RootState,
+    RootState['globalConfig']
+  >(state => state.globalConfig)
 
   const { data: userData } = useGetUserQuery({
     projectId: config.projectId,
@@ -55,7 +61,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
     if (!newAgent) return
     setAgentUpdate(true)
   }, [newAgent])
-
 
   useEffect(() => {
     const handleInitialAgentSetup = async () => {
@@ -77,11 +82,10 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
               id: uuidv4(),
               graph: spellTemplate.graph,
               name: spellName,
-              type: spellTemplate.type || "spell",
+              type: spellTemplate.type || 'spell',
               projectId: config.projectId,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
             })) as any
 
             rootSpellId = rootSpell.data.id
@@ -98,12 +102,13 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
             projectId: config.projectId,
             enabled: true,
             default: true,
+            version: '2.0',
             publicVariables: '{}',
             secrets: '{}',
-            rootSpellId: rootSpellId || "",
+            rootSpellId: rootSpellId || '',
             updatedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
-          }).unwrap();
+          }).unwrap()
 
           // Create a live agent
           const newLiveAgent = await createNewAgent({
@@ -111,12 +116,13 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
             projectId: config.projectId,
             enabled: true,
             default: false,
+            version: '2.0',
             publicVariables: '{}',
             secrets: '{}',
-            rootSpellId: rootSpellId || "",
+            rootSpellId: rootSpellId || '',
             updatedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
-          }).unwrap();
+          }).unwrap()
 
           // Create a release for the live agent
           await createAgentRelease({
@@ -124,19 +130,22 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
             description: 'Initial Release',
             agentToCopyId: draftAgent.id,
             projectId: config.projectId,
-          }).unwrap();
+          }).unwrap()
 
           openModal({
             modal: 'draftAgentCreatedModal',
           })
         } else {
-
           // // In this scenario, we are assuming a project with one agent is currently live,
           // // Thus a draft should be created and a release should be made for the agent.
           if (agents.total === 1) {
             // Create a draft agent
-            const draftAgent = agents.data.filter(agent => agent.name.includes('draft'))[0]
-            const agent = agents.data.filter(agent => agent.id !== draftAgent?.id)[0]
+            const draftAgent = agents.data.filter(agent =>
+              agent.name.includes('draft')
+            )[0]
+            const agent = agents.data.filter(
+              agent => agent.id !== draftAgent?.id
+            )[0]
 
             if (!draftAgent) {
               let rootSpellId = agent?.rootSpellId
@@ -153,28 +162,27 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
                   id: uuidv4(),
                   graph: spellTemplate.graph,
                   name: spellName,
-                  type: spellTemplate.type || "spell",
+                  type: spellTemplate.type || 'spell',
                   projectId: config.projectId,
                   createdAt: new Date().toISOString(),
                   updatedAt: new Date().toISOString(),
-                  hash: md5(JSON.stringify(spellTemplate?.graph.nodes)),
                 })) as any
 
                 rootSpellId = rootSpell.data.id
               }
 
               await createNewAgent({
-                rootSpell: agent?.rootSpell || "{}", // Depricated
+                rootSpell: agent?.rootSpell || '{}', // Depricated
                 publicVariables: '{}',
                 secrets: '{}',
                 name: `${agent?.name} (draft)`,
                 enabled: true,
-                pingedAt: "",
+                pingedAt: '',
                 projectId: agent?.projectId,
                 data: agent?.data || {},
                 runState: newAgent?.runState,
-                image: agent?.image || "",
-                rootSpellId: rootSpellId || "",
+                image: agent?.image || '',
+                rootSpellId: rootSpellId || '',
                 default: true,
                 currentSpellReleaseId: null,
               }).unwrap()
@@ -186,7 +194,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
               description: 'Initial Release',
               agentToCopyId: agent.id,
               projectId: agent.projectId,
-            }).unwrap();
+            }).unwrap()
 
             openModal({
               modal: 'draftAgentCreatedModal',
@@ -197,12 +205,10 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         console.log(`Error in initial agent setup: ${error}`)
       }
     }
-    handleInitialAgentSetup();
-    if (agents?.data === data) return;
-    setData(agents?.data);
-  }, [agents, createNewAgent, createAgentRelease, config.projectId]);
-
-
+    handleInitialAgentSetup()
+    if (agents?.data === data) return
+    setData(agents?.data)
+  }, [agents, createNewAgent, createAgentRelease, config.projectId])
 
   useEffect(() => {
     const secrets = localStorage.getItem('secrets')
@@ -225,19 +231,31 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%', flexDirection: 'column', borderRight: '1px solid var(--deep-background-color)' }}>
+    <div
+      style={{
+        display: 'flex',
+        height: '100%',
+        flexDirection: 'column',
+        borderRight: '1px solid var(--deep-background-color)',
+      }}
+    >
       <AgentMenu data={data} />
 
-      <div className={`${!isAPIKeysSet ? "flex pb-4" : ""} `}>
+      <div className={`${!isAPIKeysSet ? 'flex pb-4' : ''} `}>
         <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
       </div>
 
       <Divider sx={{ marginY: 2 }} />
-      {!currentSpellReleaseId &&
+      {!currentSpellReleaseId && (
         <div className="px-4">
-          <button onClick={onCreateSpell} className="p-4 w-full mb-4 cursor-pointer">+ Create spell</button>
+          <button
+            onClick={onCreateSpell}
+            className="p-4 w-full mb-4 cursor-pointer"
+          >
+            + Create spell
+          </button>
         </div>
-      }
+      )}
       <div className="overflow-x-hidden pb-8">
         <FileTree currentTab={currentTab} />
 
@@ -245,7 +263,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
       </div>
 
       <MPBalanceBar userData={userData} />
-
     </div>
   )
 }

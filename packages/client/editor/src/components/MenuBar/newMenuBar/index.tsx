@@ -8,22 +8,17 @@ import MenuIcon from '@mui/icons-material/Menu'
 import css from '../menuBar.module.css'
 import { styled } from '@mui/material/styles'
 import { NestedMenuItem } from 'mui-nested-menu'
-import {
-  RootState,
-  Tab,
-  rootApi,
-  useAppDispatch
-} from 'client/state'
+import { RootState, Tab, rootApi, useAppDispatch } from 'client/state'
 import { useModal } from '../../../contexts/ModalProvider'
 import { enqueueSnackbar } from 'notistack'
 import axios from 'axios'
-import { PRODUCTION } from 'shared/config'
+import { PRODUCTION } from 'clientConfig'
 
 function toTitleCase(str) {
   return str
     .split('_') // Split the string by underscores
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
-    .join(' '); // Join the words with a space
+    .join(' ') // Join the words with a space
 }
 
 /**
@@ -50,14 +45,7 @@ const NewMenuBar = props => {
   }, [currentTab])
 
   // Grab all events we need
-  const {
-    $SAVE_SPELL,
-    $EXPORT,
-    $UNDO,
-    $REDO,
-    $DELETE,
-    TOGGLE_SNAP,
-  } = events
+  const { $SAVE_SPELL, $EXPORT, $UNDO, $REDO, $DELETE, TOGGLE_SNAP } = events
 
   /**
    * Save handler
@@ -158,7 +146,9 @@ const NewMenuBar = props => {
     hiddenFileInput.current?.click()
   }
 
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleFileInputChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     if (event.target.files) {
       Array.from(event.target.files).forEach(loadFile)
     }
@@ -186,7 +176,7 @@ const NewMenuBar = props => {
         },
         import_project: {
           onClick: onImportProject,
-        }
+        },
       },
     },
     edit: {
@@ -273,7 +263,7 @@ const NewMenuBar = props => {
                 useHotkeys(
                   item.hotKey,
                   event => {
-                    console.log("HOTKEYS", item.hotKey)
+                    console.log('HOTKEYS', item.hotKey)
                     event.preventDefault()
                     item.onClick()
                   },
@@ -299,7 +289,6 @@ const NewMenuBar = props => {
     }
 
     return (
-
       <li
         className={`${css[topLevel ? 'menu-bar-item' : 'list-item']}`}
         onClick={onClick}
@@ -401,7 +390,9 @@ const NewMenuBar = props => {
             },
           }}
           divider={true}
-        >Home</MenuItem>
+        >
+          Home
+        </MenuItem>
         {Object.keys(menuBarItems).map((item, index) => (
           <NestedMenu
             key={index}
@@ -470,16 +461,16 @@ const NewMenuBar = props => {
                         {menuBarItems[item].items[subMenuKey].hasOwnProperty(
                           'isActive'
                         ) && (
-                            <span
-                              className={
-                                menuBarItems[item].items[subMenuKey].isActive
-                                  ? css['preference-active']
-                                  : css['preference-notActive']
-                              }
-                            >
-                              ●{' '}
-                            </span>
-                          )}
+                          <span
+                            className={
+                              menuBarItems[item].items[subMenuKey].isActive
+                                ? css['preference-active']
+                                : css['preference-notActive']
+                            }
+                          >
+                            ●{' '}
+                          </span>
+                        )}
                         {toTitleCase(subMenuKey)}
                       </p>
 

@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { config } from 'dotenv-flow'
-import { importMetaEnv } from './import-meta-env'
+import { importMetaEnv } from '../../../client/config/src/lib/import-meta-env'
 import { v4 } from 'uuid'
 
 // Load environment variables
@@ -49,9 +49,9 @@ export const SERVER_HOST = getVarForEnvironment('HOST') || 'localhost'
 export const SPEECH_SERVER_URL =
   getVarForEnvironment('SPEECH_SERVER_URL') || 'http://localhost:65532'
 export const TRUSTED_PARENT_URL =
-  getVarForEnvironment('TRUSTED_PARENT_URL') || 'https://localhost:3000'
+  getVarForEnvironment('TRUSTED_PARENT_URL') || 'https://localhost:4000'
 export const PORTAL_URL =
-  getVarForEnvironment('PORTAL_URL') || 'http://localhost:3000'
+  getVarForEnvironment('PORTAL_URL') || 'http://localhost:4000'
 export const API_ROOT_URL =
   getVarForEnvironment('API_URL') || `http://localhost:${SERVER_PORT}`
 export const GOOGLE_APPLICATION_CREDENTIALS =
@@ -141,7 +141,7 @@ export const FEATURE_FLAGS = {
 }
 
 //frigade config
-export const FRIGADE_KEY = getVarForEnvironment('FRIGADE_KEY') || '' 
+export const FRIGADE_KEY = getVarForEnvironment('FRIGADE_KEY') || ''
 
 export const HEARTBEAT_MSEC =
   Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000

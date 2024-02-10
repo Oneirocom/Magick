@@ -31,12 +31,10 @@ const saveDiffHandler = async (ctx: Koa.Context): Promise<void> => {
   if (Object.keys((spellUpdate as SpellInterface).graph.nodes).length === 0)
     throw new SpellError('input-failed', 'Graph would be cleared.  Aborting.')
 
-  const hash = md5(JSON.stringify(spellUpdate.graph.nodes))
-
   // In feathers.js, get the spells service and update the spell with the name of 'name'.
   const updatedSpell = await app
     .service('spells')
-    .update(name, { ...spellUpdate, hash })
+    .update(name, { ...spellUpdate })
 
   ctx.response.status = 200
   ctx.body = updatedSpell
