@@ -7,7 +7,6 @@ import react from '@vitejs/plugin-react'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-import mdPlugin, { Mode } from 'vite-plugin-markdown'
 
 export default defineConfig({
   root: __dirname,
