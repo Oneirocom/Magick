@@ -43,7 +43,6 @@
       ],
       "@magickml/portal-chat": ["portal/cloud/packages/chat/src/index.ts"],
       "@magickml/portal-config": ["portal/cloud/packages/config/src/index.ts"],
-      "@magickml/portal-core-ui": ["portal/core/ui/src/index.ts"],
       "@magickml/portal-db": ["portal/cloud/packages/db/src/index.ts"],
       "@magickml/portal-hooks": ["portal/cloud/packages/hooks/src/index.ts"],
       "@magickml/portal-layout": ["portal/cloud/packages/layout/src/index.ts"],
@@ -75,6 +74,7 @@
         "packages/client/magickml-chatbox/src/index.ts"
       ],
       "client/state": ["packages/client/state/src/index.ts"],
+      "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
       "clientConfig": ["packages/client/config/src/index.ts"],
       "communication": ["packages/shared/communication/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],

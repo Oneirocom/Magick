@@ -27,7 +27,7 @@ import { getTemplates } from 'client/core'
 import { DrawerProps } from '@mui/material/Drawer'
 
 import { MPBalanceBar } from './MPBalanceBar'
-import { Button } from '@magickml/portal-core-ui'
+import { Button } from '@magickml/client-ui'
 
 /**
  * The main Drawer component that wraps around the application content.
