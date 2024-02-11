@@ -1,2 +1,3 @@
 export * from './lib/utils/shadcn'
-export * from './lib/components/ui'
+export * from './lib/core/ui'
+export * from  './lib/components/table'
