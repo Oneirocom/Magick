@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/ui",
+  "name": "@magickml/client-ui",
   "version": "0.0.1",
   "main": "./index.js",
   "types": "./index.d.ts",

@@ -1,5 +1,5 @@
 import { usePubSub } from '@magickml/providers'
-import { Button } from '@magickml/ui'
+import { Button } from '@magickml/client-ui'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import { RootState } from 'client/state'
 import { enqueueSnackbar } from 'notistack'

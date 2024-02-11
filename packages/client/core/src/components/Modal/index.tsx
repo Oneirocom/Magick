@@ -6,7 +6,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import styles from './index.module.scss'
 import { DialogTitle } from '@mui/material'
 import React from 'react'
-import { Button } from '@magickml/ui'
+import { Button } from '@magickml/client-ui'
 
 /**
  * Modal component to display a dialog with action buttons.

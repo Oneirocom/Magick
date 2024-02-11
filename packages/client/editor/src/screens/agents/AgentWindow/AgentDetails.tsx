@@ -9,9 +9,8 @@ import { InputEdit } from './InputEdit'
 
 import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
 import { useUpdateAgentMutation } from 'client/state'
+import { Button } from '@magickml/client-ui'
 import { Credentials } from './AgentCredentials'
-import { Button } from '@magickml/ui'
-
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData?: any
@@ -149,6 +148,15 @@ const AgentDetails = ({
               />
             </span>
           </Tooltip>
+          <Button
+            className="text-white"
+            onClick={() => {
+              const v2 = selectedAgentData.version === '2.0'
+              changeVersion(v2 ? '1.0' : '2.0')
+            }}
+          >
+            Toggle V2
+          </Button>
         </div>
 
         <div className={styles.btns}>
