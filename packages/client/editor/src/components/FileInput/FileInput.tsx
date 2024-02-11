@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button } from 'client/core'
+import { Button } from '@magickml/ui'
 import React from 'react'
 
 /**
@@ -27,7 +27,7 @@ const FileInput = ({
   }
   return (
     <>
-      <Button onClick={handleClick} style={{ ...sx }}>
+      <Button variant="outline" onClick={handleClick}>
         {Icon}
         {innerText}
       </Button>

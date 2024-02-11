@@ -17,6 +17,7 @@ import { FileUpload } from '@mui/icons-material'
 
 import behaveGraph from '../../graphs/graph.json'
 import { useModal } from '../../contexts/ModalProvider'
+import { Input } from '@magickml/ui'
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -151,7 +152,7 @@ const CreateSpellModal = () => {
             onCreate()
           }}
         >
-          <input
+          <Input
             type="text"
             defaultValue=""
             className="w-full p-2 border border-gray-300 rounded text-lg"
