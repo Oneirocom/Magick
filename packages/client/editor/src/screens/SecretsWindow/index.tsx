@@ -20,7 +20,7 @@ import {
   SelectValue,
   CredentialsTable,
   columns,
-} from '@magickml/ui'
+} from '@magickml/portal-core-ui'
 import {
   useListCredentialsQuery,
   useCreateCredentialMutation,

@@ -6,7 +6,7 @@ import cx from 'classnames'
 import { Handle, Position } from 'reactflow'
 
 import { colors, valueTypeColorMap } from '../../utils/colors'
-import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/portal-core-ui'
 
 export type OutputSocketProps = {
   connected: boolean

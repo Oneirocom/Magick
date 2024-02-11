@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@magickml/ui'
+} from '@magickml/portal-core-ui'
 import credentialsJson from 'packages/shared/nodeSpec/src/credentials.json'
 import { FC, useEffect, useState } from 'react'
 import {
@@ -32,7 +32,7 @@ import clsx from 'clsx'
 
 import { LLMProviders, ProviderRecord, EmbeddingModel, availableEmbeddingProviders, providers, getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'servicesShared'
 
-import { Dropdown } from '@magickml/ui'
+import { Dropdown } from '@magickml/portal-core-ui'
 
 
 type PluginCredential = {
