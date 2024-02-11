@@ -10,7 +10,7 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "@magickml/ui/components",
-    "utils": "@magickml/ui/utils"
+    "components": "@magickml/client-ui/components",
+    "utils": "@magickml/client-ui/utils"
   }
 }

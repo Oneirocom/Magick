@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button } from '@magickml/ui'
+import { Button } from '@magickml/client-ui'
 import React from 'react'
 
 /**
