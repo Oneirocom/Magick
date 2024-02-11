@@ -11,7 +11,7 @@ import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
 import {
   useUpdateAgentMutation,
 } from 'client/state'
-import { Button as SButton } from '@magickml/ui'
+import { Button as SButton } from '@magickml/portal-core-ui'
 import { Credentials } from './AgentCredentials'
 
 interface AgentDetailsProps {
