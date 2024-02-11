@@ -17,5 +17,6 @@
   },
   "[sql]": {
     "editor.defaultFormatter": "mtxr.sqltools"
-  }
+  },
+  "WillLuke.nextjs.hasPrompted": true
 }
