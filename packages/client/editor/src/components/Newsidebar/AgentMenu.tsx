@@ -23,7 +23,7 @@ import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
 import { useSnackbar } from 'notistack'
 import StyledDivider from './StyledDivider'
 import { AgentInterface } from 'server/schemas'
-import { Button } from '@magickml/ui'
+import { Button } from '@magickml/client-ui'
 
 export function AgentMenu({ data }) {
   const { client } = useFeathers()

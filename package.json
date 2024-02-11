@@ -299,6 +299,7 @@
     "solc": "0.8.20",
     "stripe": "^14.13.0",
     "superjson": "^2.2.1",
+    "svix": "^1.17.0",
     "swr": "2.1.5",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
