@@ -12,7 +12,7 @@ import { useModal } from '../../contexts/ModalProvider'
 import { Icon } from 'client/core'
 import css from './modal.module.css'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { Button } from '@magickml/ui'
+import { Button } from '@magickml/client-ui'
 
 const Modal = ({
   options,

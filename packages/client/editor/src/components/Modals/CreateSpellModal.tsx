@@ -17,7 +17,7 @@ import { FileUpload } from '@mui/icons-material'
 
 import behaveGraph from '../../graphs/graph.json'
 import { useModal } from '../../contexts/ModalProvider'
-import { Input } from '@magickml/ui'
+import { Input } from '@magickml/client-ui'
 
 // Custom configuration for unique name generator
 const customConfig = {
