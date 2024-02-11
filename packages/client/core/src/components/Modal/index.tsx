@@ -1,5 +1,4 @@
 // DOCUMENTED
-import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
@@ -7,6 +6,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import styles from './index.module.scss'
 import { DialogTitle } from '@mui/material'
 import React from 'react'
+import { Button } from '@magickml/ui'
 
 /**
  * Modal component to display a dialog with action buttons.
@@ -51,15 +51,19 @@ export const Modal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions classes={{ root: styles.actions }}>
-        <Button onClick={onClose} className={styles.btnCancel}>
+        <Button
+          onClick={onClose}
+          variant="outline"
+          className={styles.btnCancel}
+        >
           Cancel
         </Button>
         {handleAction !== undefined && showSaveBtn === true && (
           <Button
+            variant="default"
             onClick={() => {
               handleAction()
             }}
-            className={styles.btnAction}
           >
             {submitText || 'Save'}
           </Button>

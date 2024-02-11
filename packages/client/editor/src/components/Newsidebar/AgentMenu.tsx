@@ -18,12 +18,12 @@ import {
   useCreateAgentReleaseMutation,
   useUpdateAgentMutation,
 } from 'client/state'
-import { Button } from 'client/core'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
 import { useSnackbar } from 'notistack'
 import StyledDivider from './StyledDivider'
 import { AgentInterface } from 'server/schemas'
+import { Button } from '@magickml/ui'
 
 export function AgentMenu({ data }) {
   const { client } = useFeathers()
@@ -255,16 +255,16 @@ export function AgentMenu({ data }) {
           }}
         >
           <Button
-            hoverStyle={{}}
-            style={{
-              backgroundColor: 'var(--primary)',
-              border: 'none',
-              marginTop: '8px',
-              marginBottom: '8px',
-              width: '100%',
-              textAlign: 'center',
-              justifyContent: 'center',
-            }}
+            className="w-full mt-4 mb-4"
+            // style={{
+            //   backgroundColor: 'var(--primary)',
+            //   border: 'none',
+            //   marginTop: '8px',
+            //   marginBottom: '8px',
+            //   width: '100%',
+            //   textAlign: 'center',
+            //   justifyContent: 'center',
+            // }}
             onClick={() => {
               void handleMakeRelease()
             }}

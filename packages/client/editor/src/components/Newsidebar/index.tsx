@@ -248,7 +248,11 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
       <Divider sx={{ marginY: 2 }} />
       {!currentSpellReleaseId && (
         <div className="px-4">
-          <Button className="p-4 w-full mb-4 " onClick={onCreateSpell}>
+          <Button
+            className="p-4 w-full mb-4 "
+            variant="secondary"
+            onClick={onCreateSpell}
+          >
             + Create spell
           </Button>
         </div>
