@@ -6,7 +6,7 @@ import React from 'react'
 import { Handle, Position } from 'reactflow'
 
 import { colors, valueTypeColorMap } from '../../utils/colors'
-import { Popover, PopoverContent, PopoverTrigger } from '@magickml/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
 
 export type InputSocketProps = {

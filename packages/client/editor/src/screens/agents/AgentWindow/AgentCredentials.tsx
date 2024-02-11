@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@magickml/ui'
+} from '@magickml/client-ui'
 import credentialsJson from 'packages/shared/nodeSpec/src/credentials.json'
 import { FC, useEffect, useState } from 'react'
 import {
@@ -30,10 +30,18 @@ import {
 import { useConfig, useTabLayout } from '@magickml/providers'
 import clsx from 'clsx'
 
-import { LLMProviders, ProviderRecord, EmbeddingModel, availableEmbeddingProviders, providers, getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag } from 'servicesShared'
+import {
+  LLMProviders,
+  ProviderRecord,
+  EmbeddingModel,
+  availableEmbeddingProviders,
+  providers,
+  getProvidersWithUserKeys,
+  isModelAvailableToUser,
+  removeFirstVendorTag,
+} from 'servicesShared'
 
-import { Dropdown } from '@magickml/ui'
-
+import { Dropdown } from '@magickml/client-ui'
 
 type PluginCredential = {
   name: string
@@ -98,9 +106,13 @@ function findMatchingAgentCredential(
 
 const Header = ({ agentId }: { agentId: string }): JSX.Element => {
   const { openTab } = useTabLayout()
-  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] = useState<ProviderRecord>();
-  const [activeEmbeddingModels, setActiveEmbeddingModels] = useState<EmbeddingModel[]>([])
-  const [selectedEmbeddingModel, setSelectedEmbeddingModel] = useState<EmbeddingModel>();
+  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] =
+    useState<ProviderRecord>()
+  const [activeEmbeddingModels, setActiveEmbeddingModels] = useState<
+    EmbeddingModel[]
+  >([])
+  const [selectedEmbeddingModel, setSelectedEmbeddingModel] =
+    useState<EmbeddingModel>()
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
 
   const config = useConfig()
@@ -117,22 +129,22 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
 
   useEffect(() => {
     if (credentials) {
-      const creds = credentials.map(cred => cred.name);
-      const providers = getProvidersWithUserKeys(creds as any);
-      setProvidersWithKeys(providers);
+      const creds = credentials.map(cred => cred.name)
+      const providers = getProvidersWithUserKeys(creds as any)
+      setProvidersWithKeys(providers)
     }
-  }, [credentials]);
+  }, [credentials])
 
   useEffect(() => {
-    setActiveEmbeddingModels(selectedEmbeddingProvider?.embeddingModels || []);
-  }, [selectedEmbeddingProvider]);
+    setActiveEmbeddingModels(selectedEmbeddingProvider?.embeddingModels || [])
+  }, [selectedEmbeddingProvider])
 
   useEffect(() => {
     if (userData) {
-      const provider = userData.embeddingProvider;
-      const model = userData.embeddingModel;
-      setSelectedEmbeddingProvider(providers[provider]);
-      setSelectedEmbeddingModel(model);
+      const provider = userData.embeddingProvider
+      const model = userData.embeddingModel
+      setSelectedEmbeddingProvider(providers[provider])
+      setSelectedEmbeddingModel(model)
     }
   }, [userData])
 
@@ -146,40 +158,42 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
   }
 
   const handleEmbeddingProviderChange = (provider: LLMProviders) => {
-    setSelectedEmbeddingProvider(providers[provider]);
+    setSelectedEmbeddingProvider(providers[provider])
     updateAgent({
       id: agentId,
-      embeddingProvider: provider
+      embeddingProvider: provider,
     })
   }
 
   const handleEmbeddingModelChange = (model: EmbeddingModel) => {
-    setSelectedEmbeddingModel(model);
+    setSelectedEmbeddingModel(model)
     updateAgent({
       id: agentId,
-      embeddingModel: model
+      embeddingModel: model,
     })
   }
 
   const providerOptions = availableEmbeddingProviders.map(prov => ({
     value: prov.provider,
-    label: prov.displayName
-  }));
+    label: prov.displayName,
+  }))
 
-  const modelsWithKeys = providersWithKeys.map((provider) => {
-    return providers[provider].embeddingModels;
-  }).flat();
+  const modelsWithKeys = providersWithKeys
+    .map(provider => {
+      return providers[provider].embeddingModels
+    })
+    .flat()
 
   const modelOptions = activeEmbeddingModels.map(model => {
     const isAvailable = isModelAvailableToUser({
       userData,
       model,
-      modelsWithKeys: modelsWithKeys
+      modelsWithKeys: modelsWithKeys,
     })
     return {
       value: model,
       label: removeFirstVendorTag(model),
-      disabled: !isAvailable
+      disabled: !isAvailable,
     }
   })
 
@@ -219,7 +233,7 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
           window.
         </p>
       </div>
-    </div >
+    </div>
   )
 }
 
@@ -391,8 +405,9 @@ type CredentialProps = {
 }
 
 export const Credentials: FC<CredentialProps> = ({ agentId }) => {
-  const pluginCredentials: PluginCredential[] =
-    credentialsJson.filter((cred) => cred.available) as PluginCredential[]
+  const pluginCredentials: PluginCredential[] = credentialsJson.filter(
+    cred => cred.available
+  ) as PluginCredential[]
   const config = useConfig()
   const { data: c } = useListCredentialsQuery({
     projectId: config.projectId,
@@ -423,7 +438,9 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
                   projectId={config.projectId}
                   agentId={agentId}
                   linkedCredential={findMatchingAgentCredential(
-                    p, credentials, ac
+                    p,
+                    credentials,
+                    ac
                   )}
                   availableCredentials={findMatchingCredentials(p, credentials)}
                 />
@@ -433,5 +450,5 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
         </div>
       </div>
     </>
-  );
+  )
 }
