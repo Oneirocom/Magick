@@ -9,10 +9,10 @@
  */
 import React, { useCallback } from 'react'
 import { useModal } from '../../contexts/ModalProvider'
-import { Button } from 'client/core'
 import { Icon } from 'client/core'
 import css from './modal.module.css'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { Button } from '@magickml/ui'
 
 const Modal = ({
   options,
@@ -69,9 +69,10 @@ const Modal = ({
         return (
           <Button
             key={item.label}
+            variant="default"
             disabled={item.disabled || false}
             onClick={item.onClick}
-            className={`${item.className} ${item.disabled && 'disabled'}`}
+            className={`${item.disabled && 'disabled'}`}
           >
             {item.label}
           </Button>
@@ -100,8 +101,8 @@ const Modal = ({
 
   return (
     <div className={css['modal-bg']} onClick={handleModalBackgroundClick}>
-      <div className="p-4" onClick={handleModalPanelClick}>
-        <div className={css['modal-panel-content']}>
+      <div className={css['modal-panel']} onClick={handleModalPanelClick}>
+        <div className="p-8 min-w-[500px]">
           <div className={css['modal-title']}>
             {icon && (
               <Icon
@@ -110,7 +111,7 @@ const Modal = ({
                 style={{ marginRight: 'var(--extraSmall)' }}
               />
             )}
-            <h1 style={{ marginBottom: 'var(--small)' }}>{title}</h1>
+            <h1 className="text-2xl">{title}</h1>
           </div>
           <div
             style={{
@@ -121,8 +122,10 @@ const Modal = ({
             {children}
           </div>
         </div>
-        <div className={`${css['modal-action-strip']}`}>
-          <Button onClick={handleModalBackgroundClick}>Close</Button>
+        <div className="p-4 flex justify-end gap-4">
+          <Button variant="outline" onClick={handleModalBackgroundClick}>
+            Close
+          </Button>
           {renderOptions()}
         </div>
       </div>
