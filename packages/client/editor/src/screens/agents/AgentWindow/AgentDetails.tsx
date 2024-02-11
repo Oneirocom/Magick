@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { CustomizedSwitch } from 'client/core'
-import { Button, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -8,11 +8,9 @@ import styles from './index.module.scss'
 import { InputEdit } from './InputEdit'
 
 import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
-import {
-  useUpdateAgentMutation,
-} from 'client/state'
-import { Button as SButton } from '@magickml/ui'
+import { useUpdateAgentMutation } from 'client/state'
 import { Credentials } from './AgentCredentials'
+import { Button } from '@magickml/ui'
 
 interface AgentDetailsProps {
   selectedAgentData: any
@@ -48,25 +46,28 @@ const AgentDetails = ({
     setV2(selectedAgentData.version === '2.0')
   }, [selectedAgentData.version])
 
-  const changeVersion = useCallback((version) => {
-    updateAgent({
-      id: selectedAgentData.id,
-      version
-    })
-      .unwrap()
-      .then(data => {
-        setSelectedAgentData(data)
-        enqueueSnackbar(`Changed agent to version ${version}`, {
-          variant: 'success',
-        })
+  const changeVersion = useCallback(
+    version => {
+      updateAgent({
+        id: selectedAgentData.id,
+        version,
       })
-      .catch(e => {
-        console.error(e)
-        enqueueSnackbar('Error updating agent', {
-          variant: 'error',
+        .unwrap()
+        .then(data => {
+          setSelectedAgentData(data)
+          enqueueSnackbar(`Changed agent to version ${version}`, {
+            variant: 'success',
+          })
         })
-      })
-  }, [selectedAgentData])
+        .catch(e => {
+          console.error(e)
+          enqueueSnackbar('Error updating agent', {
+            variant: 'error',
+          })
+        })
+    },
+    [selectedAgentData]
+  )
 
   /**
    * update agent data by agent id.
@@ -125,8 +126,8 @@ const AgentDetails = ({
 
           <Tooltip
             title={
-              isDraft ?
-                'Disabling your draft agent will disable your environment. Proceed with caution.'
+              isDraft
+                ? 'Disabling your draft agent will disable your environment. Proceed with caution.'
                 : ''
             }
             placement="right-start"
@@ -148,23 +149,10 @@ const AgentDetails = ({
               />
             </span>
           </Tooltip>
-          <SButton className="text-white" onClick={() => {
-            const v2 = selectedAgentData.version === '2.0'
-            changeVersion(v2 ? '1.0' : '2.0')
-          }}>
-            Toggle V2
-          </SButton>
         </div>
 
         <div className={styles.btns}>
-          <Button
-            onClick={() => update()}
-            style={{
-              margin: '1em',
-              color: 'white',
-              backgroundColor: 'var(--primary)',
-            }}
-          >
+          <Button onClick={() => update()} variant="default">
             Save changes
           </Button>
         </div>

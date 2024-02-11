@@ -2,7 +2,6 @@ import {
   FrigadeAnnouncement,
   FrigadeProvider as FrigadeProviderOG,
 } from '@frigade/react'
-import { useNavigate } from 'react-router-dom'
 import { FRIGADE_KEY } from 'clientConfig'
 import { useSelector } from 'react-redux'
 
@@ -12,7 +11,6 @@ type Props = {
 
 const FrigadeProvider = ({ children }: Props) => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
-  const navigate = useNavigate()
 
   console.log('FRIGADE_KEY', FRIGADE_KEY)
 
@@ -25,7 +23,7 @@ const FrigadeProvider = ({ children }: Props) => {
           if (target === '_blank') {
             window.open(url, '_blank')
           } else {
-            navigate(url)
+            console.error('FrigadeProvider navigate', url, target)
           }
         },
         defaultAppearance: {

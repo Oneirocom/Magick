@@ -4,7 +4,6 @@ import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
-import { useNavigate } from 'react-router'
 import { getTemplates } from 'client/core'
 import { useConfig } from '@magickml/providers'
 import { v4 as uuidv4 } from 'uuid'
@@ -40,9 +39,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
   // Snackbar for showing notifications
   const { enqueueSnackbar } = useSnackbar()
 
-  // Navigate hook for navigating between spells
-  const navigate = useNavigate()
-
   // Initialize form handling
   const { register, handleSubmit } = useForm()
 
@@ -76,11 +72,6 @@ const EditSpellModal = ({ tab, closeModal }) => {
 
     // Show success message
     enqueueSnackbar('Spell saved', { variant: 'success' })
-
-    // Navigate to the new spell
-    navigate(
-      `/magick/${response.data.id + '-' + encodeURIComponent(btoa(data.name))}`
-    )
 
     // Close the modal
     closeModal()

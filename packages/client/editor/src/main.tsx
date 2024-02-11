@@ -5,9 +5,6 @@
  */
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import 'regenerator-runtime/runtime'
 
@@ -43,15 +40,11 @@ export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
   if (!loaded) return null
 
   return (
-    <Router>
-      <Provider store={createStore(config)}>
-        <AppProviders config={config}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <App />
-          </LocalizationProvider>
-        </AppProviders>
-      </Provider>
-    </Router>
+    <Provider store={createStore(config)}>
+      <AppProviders config={config}>
+        <App />
+      </AppProviders>
+    </Provider>
   )
 }
 
