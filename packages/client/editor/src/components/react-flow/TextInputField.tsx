@@ -18,9 +18,15 @@ export const TextInputField = ({
       type="text"
       placeholder="input text..."
       value={value}
-      onChange={e => onChange(e)}
-      onFocus={() => onFocus()}
-      onBlur={() => handleBlur()}
+      onChange={e => {
+        onChange && onChange(e)
+      }}
+      onFocus={() => {
+        onFocus && onFocus()
+      }}
+      onBlur={() => {
+        handleBlur && handleBlur()
+      }}
     />
   )
 }
