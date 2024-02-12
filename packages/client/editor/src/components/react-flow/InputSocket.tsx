@@ -19,13 +19,14 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
-import { TextInputField } from './TextInputField.js'
+import { TextInputField } from './TextInputField'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectTextEditorState,
   setActiveInput,
   setTextEditorState,
 } from 'client/state'
+import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'
 
 export type InputSocketProps = {
   connected: boolean
