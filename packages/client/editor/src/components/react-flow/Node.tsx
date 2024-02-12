@@ -11,13 +11,14 @@ import NodeContainer from './NodeContainer'
 import OutputSocket from './OutputSocket'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import { isHandleConnected } from '../../utils/isHandleConnected'
-import { useSelectAgentsSpell } from 'client/state'
+import { selectActiveInput, useSelectAgentsSpell } from 'client/state'
 import { SpellInterface } from 'server/schemas'
 import { getConfig } from '../../utils/getNodeConfig'
 import { configureSockets } from '../../utils/configureSockets'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
 import { Tab, usePubSub } from '@magickml/providers'
+import { useSelector } from 'react-redux'
 
 type NodeProps = FlowNodeProps & {
   tab: Tab
@@ -43,17 +44,17 @@ export const Node: React.FC<NodeProps> = ({
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
-  // const [commitEventname, setCommitEventName] = useState<string | null>(null)
   const [lastInputs, setLastInputs] = useState<Record<string, any> | null>(null)
   const [lastOutputs, setLastOutputs] = useState<Record<string, any> | null>(
     null
   )
-
   const [running, setRunning] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(false)
   const edges = useEdges()
   const handleChange = useChangeNodeData(id)
+
+  const focusedInputName = useSelector(selectActiveInput)
 
   // Hook into to event to reset node states and stop animations
   useEffect(() => {
@@ -98,41 +99,6 @@ export const Node: React.FC<NodeProps> = ({
     setErrorEventName(`${spell.id}-${id}-error`)
     // setCommitEventName(`${spell.id}-${id}-commit`)
   }, [spell, id])
-
-  // Handle commit event
-  // useEffect(() => {
-  //   if (!spellEvent) return;
-  //   if (spellEvent.event === commitEventname) {
-  //     const commitedSocket = spellEvent.socket
-
-  //     const connectedEdge = edges.find(edge => {
-  //       return edge.source === id && edge.sourceHandle === commitedSocket
-  //     })
-
-  //     if (!connectedEdge) return;
-
-  //     setEdges(tab.id, edges => {
-  //       const newEdges = edges.map(edge => {
-  //         if (edge.id === connectedEdge.id) {
-  //           return {
-  //             ...edge,
-  //             animated: true,
-  //             style: {
-  //               stroke: 'white'
-  //             }
-  //           }
-  //         }
-
-  //         return edge
-  //       })
-
-  //       return newEdges
-  //     })
-
-  //     debounceAnimateEdgeDone(connectedEdge)
-  //   }
-
-  // }, [spellEvent])
 
   // Handle start event
   useEffect(() => {
@@ -205,6 +171,8 @@ export const Node: React.FC<NodeProps> = ({
               value={data[flowInput.name] ?? flowInput.defaultValue}
               onChange={handleChange}
               connected={isHandleConnected(edges, id, flowInput.name, 'target')}
+              nodeId={id}
+              isActive={focusedInputName === flowInput.name}
             />
           )}
           {output && (
@@ -242,6 +210,8 @@ export const Node: React.FC<NodeProps> = ({
             }
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}
+            nodeId={id}
+            isActive={focusedInputName === input.name}
           />
         </div>
       ))}

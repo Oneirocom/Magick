@@ -18,6 +18,8 @@ export interface GlobalConfig {
   currentSpellReleaseId: string
   theme: string
   dockviewTheme: string
+  textEditorState: string
+  activeInput: string
 }
 
 /**
@@ -32,6 +34,8 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     projectId: '',
     currentAgentId: '',
     currentSpellReleaseId: '',
+    textEditorState: '',
+    activeInput: '',
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
   },
@@ -72,6 +76,18 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     ): void => {
       state.dockviewTheme = action.payload
     },
+    setTextEditorState: (
+      state: GlobalConfig,
+      action: PayloadAction<string>
+    ): void => {
+      state.textEditorState = action.payload
+    },
+    setActiveInput: (
+      state: GlobalConfig,
+      action: PayloadAction<string>
+    ): void => {
+      state.activeInput = action.payload
+    },
   },
 })
 
@@ -84,9 +100,16 @@ export const {
   setCurrentAgentId,
   setDockviewTheme,
   setCurrentSpellReleaseId,
+  setTextEditorState,
+  setActiveInput,
 } = globalConfigSlice.actions
 
 /**
  * Export GlobalConfigSlice reducer.
  */
 export default globalConfigSlice.reducer
+
+export const selectTextEditorState = state =>
+  state.globalConfig.textEditorState as string
+export const selectActiveInput = state =>
+  state.globalConfig.activeInput as string

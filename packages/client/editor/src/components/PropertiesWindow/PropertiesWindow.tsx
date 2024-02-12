@@ -115,7 +115,7 @@ export const PropertiesWindow = (props: Props) => {
         )
 
         return (
-          <div className={borderClass}>
+          <div key={key + index} className={borderClass}>
             <Component {...componentProps} />
           </div>
         )
