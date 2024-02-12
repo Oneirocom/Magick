@@ -77,11 +77,13 @@ export const StatusBar = () => {
         }}
       />
       <VerticalDivider />
-      <p>Current Tab: {currentTab?.title}</p>
+      <p className="truncate">Current Tab: {currentTab?.title}</p>
       <VerticalDivider />
-      <p>Current agent: {currentAgentId}</p>
+      <p className="truncate">Current agent: {currentAgentId}</p>
       <VerticalDivider />
-      <p>Current spell id: {currentTab?.params.spellId as string}</p>
+      <p className="truncate">
+        Current spell id: {currentTab?.params.spellId as string}
+      </p>
       <VerticalDivider />
 
       <div className="flex flex-grow justify-end">
