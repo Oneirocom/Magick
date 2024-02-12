@@ -2,6 +2,8 @@ FROM magickml/magick:latest
 
 ARG GITHUB_TOKEN
 
+COPY .git /app/.git
+COPY .gitsubmodules /app/.gitsubmodules
 COPY . /app
 WORKDIR /app
 
@@ -9,7 +11,7 @@ WORKDIR /app
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 
 # Clone the submodule
-RUN git submodule update --init --recursive
+RUN git submodule update --init --recursive portal/cloud
 
 RUN poetry install --no-interaction --no-ansi -vvv
 # RUN poetry install --no-root
