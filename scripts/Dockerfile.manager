@@ -6,6 +6,8 @@ COPY ./.gitmodules /app/.gitmodules
 COPY . /app
 WORKDIR /app
 
+# make this folder into a git repository so we can install submodules
+RUN git init
 # Configure git to use the token
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 
