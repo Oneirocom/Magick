@@ -13,7 +13,7 @@ RUN git init
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 
 # Clone the submodule
-RUN git submodule update --init --recursive portal/cloud
+RUN git submodule update --init --recursive
 
 RUN poetry install --no-interaction --no-ansi -vvv
 # RUN poetry install --no-root
