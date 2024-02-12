@@ -1,7 +1,6 @@
 // DOCUMENTED
 
 import { importMetaEnv } from './import-meta-env'
-import { v4 } from 'uuid'
 
 // Check whether "process" is defined or not, and assign the appropriate environment object.
 const processEnv = typeof process === 'undefined' ? importMetaEnv : process.env
