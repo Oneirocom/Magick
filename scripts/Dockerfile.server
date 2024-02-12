@@ -2,7 +2,6 @@ FROM magickml/magick:latest
 
 ARG GITHUB_TOKEN
 
-COPY ./.git /app/.git
 COPY ./.gitmodules /app/.gitmodules
 COPY . /app
 WORKDIR /app
