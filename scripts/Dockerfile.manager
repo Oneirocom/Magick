@@ -1,7 +1,15 @@
 FROM magickml/magick:latest
 
+ARG GITHUB_TOKEN
+
 COPY . /app
 WORKDIR /app
+
+# Configure git to use the token
+RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+# Clone the submodule
+RUN git submodule update --init --recursive
 
 RUN poetry install --no-interaction --no-ansi -vvv
 # RUN poetry install --no-root
