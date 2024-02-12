@@ -30,8 +30,6 @@ export const DEFAULT_USER_TOKEN =
 export const STANDALONE = getVarForEnvironment('STANDALONE') === 'true' || false
 export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
 
-export const TRUSTED_PARENT_URL =
-  getVarForEnvironment('TRUSTED_PARENT_URL') || 'https://localhost:4000'
 export const PORTAL_URL =
   getVarForEnvironment('PORTAL_URL') || 'http://localhost:4000'
 export const SERVER_PORT = getVarForEnvironment('PORT') || '3030'
@@ -44,15 +42,5 @@ export const POSTHOG_ENABLED =
   getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 
-// Feature flags
-export const FEATURE_FLAGS = {
-  // Enable the new editor
-  COMPOSER_V2: getVarForEnvironment('COMPOSER_V2') === 'true' || false,
-}
-
 //frigade config
 export const FRIGADE_KEY = getVarForEnvironment('FRIGADE_KEY') || ''
-
-export const PLUGIN_SETTINGS = {
-  SLACK_DEVELOPER_MODE: getVarForEnvironment('SLACK_DEVELOPER_MODE') === 'true',
-}

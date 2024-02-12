@@ -26,9 +26,15 @@ function getVarForEnvironment(env: string): string | undefined {
   )
 }
 
+// depricating
+export const SPEECH_SERVER_PORT =
+  getVarForEnvironment('SPEECH_SERVER_PORT') || 65532
+export const ENABLE_SPEECH_SERVER =
+  getVarForEnvironment('ENABLE_SPEECH_SERVER') || true
+export const USSSL_SPEECH = getVarForEnvironment('USSSL_SPEECH') || true
+
 // Define and export constants from environment variables
 
-export const IGNORE_AUTH = getVarForEnvironment('IGNORE_AUTH') === 'true'
 export const DATABASE_URL = getVarForEnvironment('DATABASE_URL')
 export const STANDALONE = getVarForEnvironment('STANDALONE') === 'true' || false
 export const PRODUCTION = getVarForEnvironment('PRODUCTION') === 'true'
@@ -43,15 +49,8 @@ export const TRUSTED_PARENT_URL =
 export const PORTAL_URL =
   getVarForEnvironment('PORTAL_URL') || 'http://localhost:4000'
 export const API_ROOT_URL =
-  getVarForEnvironment('API_URL') || `http://localhost:${SERVER_PORT}`
-export const GOOGLE_APPLICATION_CREDENTIALS =
-  processEnv.GOOGLE_APPLICATION_CREDENTIALS || ''
-export const SPEECH_SERVER_PORT =
-  getVarForEnvironment('SPEECH_SERVER_PORT') || 65532
-export const ENABLE_SPEECH_SERVER =
-  getVarForEnvironment('ENABLE_SPEECH_SERVER') || true
-export const USSSL_SPEECH = getVarForEnvironment('USSSL_SPEECH') || true
-export const USESSL = getVarForEnvironment('USESSL') || false
+  getVarForEnvironment('API_URL') || `http://${SERVER_HOST}:${SERVER_PORT}`
+
 export const NODE_ENV = getVarForEnvironment('NODE_ENV') || 'development'
 
 export const PAGINATE_DEFAULT = getVarForEnvironment('PAGINATE_DEFAULT') || '10'
@@ -64,38 +63,12 @@ export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 
 export const REDIS_URL = getVarForEnvironment('REDIS_URL')
 
-export const ELEVENLABS_API_KEY =
-  getVarForEnvironment('ELEVENLABS_API_KEY') ||
-  'ce69df07b50e7179cbbfc5c2bef9d752'
-
-export const AGENT_UPDATE_TIME_MSEC = Number(
-  getVarForEnvironment('AGENT_UPDATE_TIME_MSEC') || 3000
-)
-export const PING_AGENT_TIME_MSEC = Number(
-  getVarForEnvironment('PING_AGENT_TIME_MSEC') || 6000
-)
-
 export const PINO_LOG_LEVEL = getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
-
-export const OPENMETER_ENDPOINT =
-  getVarForEnvironment('OPENMETER_ENDPOINT') || 'http://localhost:8888'
-
-export const OPENMETER_ENABLED =
-  getVarForEnvironment('OPENMETER_ENABLED') === 'true'
-
-export const OPENMETER_TOKEN = getVarForEnvironment('OPENMETER_TOKEN') || ''
-
-export const OPENMETER_SOURCE =
-  getVarForEnvironment('OPENMETER_SOURCE') || 'cloud-dev'
 
 export const AGENT_RESPONSE_TIMEOUT_MSEC =
   Number(getVarForEnvironment('AGENT_RESPONSE_TIMEOUT_MSEC')) || 120000
 
-export const CLOUD_AGENT_KEY = getVarForEnvironment('CLOUD_AGENT_KEY') || v4()
-
-export const BACKOFF_RETRY_LIMIT = Number(
-  getVarForEnvironment('BACKOFF_RETRY_LIMIT') || 0
-)
+export const PORTAL_AGENT_KEY = getVarForEnvironment('PORTAL_AGENT_KEY') || v4()
 
 export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
 export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
@@ -103,12 +76,6 @@ export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
 export const AWS_BUCKET_NAME = getVarForEnvironment('AWS_BUCKET_NAME') || ''
 export const AWS_BUCKET_ENDPOINT =
   getVarForEnvironment('AWS_BUCKET_ENDPOINT') || ''
-
-// Feature flags
-export const FEATURE_FLAGS = {
-  // Enable the new editor
-  COMPOSER_V2: getVarForEnvironment('COMPOSER_V2') === 'true' || false,
-}
 
 export const HEARTBEAT_MSEC =
   Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000
