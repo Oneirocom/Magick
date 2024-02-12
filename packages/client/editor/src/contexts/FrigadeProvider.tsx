@@ -12,7 +12,7 @@ type Props = {
 const FrigadeProvider = ({ children }: Props) => {
   const globalConfig = useSelector((state: any) => state.globalConfig)
 
-  console.log('FRIGADE_KEY', FRIGADE_KEY)
+  // console.log("FRIGADE_KEY", FRIGADE_KEY)
 
   return (
     <FrigadeProviderOG
