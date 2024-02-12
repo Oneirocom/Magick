@@ -3,7 +3,12 @@ import Editor from '@monaco-editor/react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
-import { selectActiveNode, selectTextEditorState, setTextEditorState, selectActiveInput } from 'client/state'
+import {
+  selectActiveNode,
+  selectTextEditorState,
+  setTextEditorState,
+  selectActiveInput,
+} from 'client/state'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
 
@@ -14,11 +19,11 @@ const TextEditor = props => {
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
-    fontSize: 16
+    fontSize: 16,
   })
 
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
-  const handleChange = useChangeNodeData(selectedNode?.id);
+  const handleChange = useChangeNodeData(selectedNode?.id)
   const textEditorState = useSelector(selectTextEditorState)
   const activeInput = useSelector(selectActiveInput)
 
@@ -29,12 +34,12 @@ const TextEditor = props => {
       rules: [],
       wordWrap: true,
       colors: {
-        'editor.background': "#171b1c",
+        'editor.background': '#171b1c',
       },
     })
   }
 
-  const debounceSave = debounce((code) => {
+  const debounceSave = debounce(code => {
     handleChange('configuration', {
       ...configuration,
       textEditorData: code,
@@ -43,6 +48,7 @@ const TextEditor = props => {
 
   const updateCode = rawCode => {
     const code = rawCode.replace('\r\n', '\n')
+    console.log('DISPATCHING', code)
     dispatch(setTextEditorState(code))
     debounceSave(code)
   }
@@ -65,27 +71,31 @@ const TextEditor = props => {
   useEffect(() => {
     if (!code) return
     if (!selectedNode) return
-    if (!selectedNode.data?.configuration?.textEditorOptions?.options?.language) return
+    if (!selectedNode.data?.configuration?.textEditorOptions?.options?.language)
+      return
     const { configuration } = selectedNode.data
     const { textEditorOptions } = configuration
     const { options } = textEditorOptions
     const { language } = options
     if (language !== 'handlebars') return
     // socket regex looks for handlebars style {{socketName}}
-    const socketRegex = /{{(.+?)}}/g;
-
+    const socketRegex = /{{(.+?)}}/g
 
     const socketMatches = code.matchAll(socketRegex)
     const sockets = []
     for (const match of socketMatches) {
       if (!match[1]) continue
-      const socketName = match[1].split(' ')
-        .filter(name =>
-          !name.startsWith('#') &&
-          !name.startsWith('/') &&
-          !name.startsWith('@') &&
-          name !== 'this'
-        ).join('').trim()
+      const socketName = match[1]
+        .split(' ')
+        .filter(
+          name =>
+            !name.startsWith('#') &&
+            !name.startsWith('/') &&
+            !name.startsWith('@') &&
+            name !== 'this'
+        )
+        .join('')
+        .trim()
 
       console.log('Socket name', socketName)
 
@@ -96,17 +106,15 @@ const TextEditor = props => {
         valueType: 'string',
       }
 
-      if (configuration.socketInputs.find(input => input.name === socketName)) continue
+      if (configuration.socketInputs.find(input => input.name === socketName))
+        continue
 
       sockets.push(socket)
     }
 
     handleChange('configuration', {
       ...configuration,
-      socketInputs: [
-        ...configuration.socketInputs,
-        ...sockets.filter(Boolean),
-      ],
+      socketInputs: [...configuration.socketInputs, ...sockets.filter(Boolean)],
     })
   }, [code])
 
@@ -115,7 +123,7 @@ const TextEditor = props => {
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
 
-  if (textEditorData === undefined || !activeInput)
+  if (textEditorData === undefined && !activeInput)
     return <WindowMessage content="Select a node with a text field" />
 
   return (
