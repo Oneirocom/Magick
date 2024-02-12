@@ -38,8 +38,8 @@ export const categoryColorMap: Record<NodeSpecJSON['category'], color> = {
   Variable: 'purple',
   Query: 'purple',
   Action: 'blue',
-  Flow: 'gray',
+  Flow: 'orange',
   Effect: 'lime',
-  Time: 'gray',
+  Time: 'purple',
   None: 'green',
 }
