@@ -6,7 +6,18 @@ import React from 'react'
 import { Handle, Position } from 'reactflow'
 
 import { colors, valueTypeColorMap } from '../../utils/colors'
-import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'
+import {
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Switch,
+} from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
 
 export type InputSocketProps = {
@@ -42,18 +53,12 @@ const InputFieldForValue = ({
   const inputVal = (value ? value : defaultValue ?? '') as string
   const hideValueInput = hideValue || connected
 
-  const inputClass = cx(
-    'bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm'
-  )
+  const inputClass = cx('h-6 text-sm')
 
   const containerClass = cx(
     'flex w-full rounded-lg items-center pl-4',
     !hideValueInput && 'bg-[var(--foreground-color)]'
   )
-
-  const handleChange = (key: string, value: any) => {
-    onChange(key, value)
-  }
 
   return (
     <div style={{ borderRadius: 5 }} className={containerClass}>
@@ -64,22 +69,24 @@ const InputFieldForValue = ({
       {!hideValueInput && (
         <div className="flex-1 justify-center">
           {showChoices && (
-            <select
-              className={inputClass}
-              value={value ?? defaultValue ?? ''}
-              onChange={e => handleChange(name, e.currentTarget.value)}
+            <Select
+              onValueChange={value => onChange(name, value)}
+              defaultValue={value}
             >
-              <>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
                 {choices.map(choice => (
-                  <option key={choice.text} value={choice.value}>
+                  <SelectItem key={choice.text} value={choice.value}>
                     {choice.text}
-                  </option>
+                  </SelectItem>
                 ))}
-              </>
-            </select>
+              </SelectContent>
+            </Select>
           )}
           {valueType === 'string' && !showChoices && (
-            <input
+            <Input
               type="text"
               className={inputClass}
               value={String(inputVal) || ''}
@@ -89,28 +96,36 @@ const InputFieldForValue = ({
             />
           )}
           {valueType === 'float' && !showChoices && (
-            <input
+            <Input
               type="number"
+              step="0.01"
               className={inputClass}
-              value={Number(inputVal) || 0}
-              onChange={e => onChange(name, Number(e.currentTarget.value))}
+              value={inputVal}
+              onChange={e => onChange(name, e.currentTarget.value)}
             />
           )}
           {valueType === 'integer' && !showChoices && (
-            <input
+            <Input
               type="number"
               className={inputClass}
-              value={Number(inputVal) || 0}
-              onChange={e => onChange(name, Number(e.currentTarget.value))}
+              value={inputVal}
+              onChange={e => {
+                console.log('onChange', e.currentTarget.value)
+                onChange(name, e.currentTarget.value)
+              }}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
-            <input
-              type="checkbox"
-              className="bg-gray-600 disabled:bg-gray-700 h-[16] nodrag text-sm"
-              checked={Boolean(inputVal)}
-              onChange={e => onChange(name, Boolean(e.currentTarget.checked))}
-            />
+            <div className="flex gap-2 h-10 items-center">
+              <p>True</p>
+              <Switch
+                defaultValue={inputVal || 0}
+                onChange={value => {
+                  onChange(name, value)
+                }}
+              />
+              <p>False</p>
+            </div>
           )}
         </div>
       )}
@@ -144,7 +159,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
       {isFlowSocket && (
         <>
           <FontAwesomeIcon icon={faCaretRight} color="#ffffff" size="lg" />
-          {showName && <div className="capitalize mr-2">{name}</div>}
+          {showName && <div className="capitalize mr-2 truncate">{name}</div>}
         </>
       )}
 

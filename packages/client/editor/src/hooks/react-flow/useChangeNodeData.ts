@@ -6,6 +6,7 @@ export const useChangeNodeData = (id: string) => {
 
   return useCallback(
     (key: string, value: any) => {
+      console.log('useChangeNodeData', key, value)
       instance.setNodes(nodes =>
         nodes.map(n => {
           if (n.id !== id) return n
@@ -13,7 +14,7 @@ export const useChangeNodeData = (id: string) => {
             ...n,
             data: {
               ...n.data,
-              [key]: value,
+              [key]: value || '',
             },
           }
         })

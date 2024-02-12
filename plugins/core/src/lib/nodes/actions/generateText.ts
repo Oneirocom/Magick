@@ -63,7 +63,7 @@ export const generateText = makeFlowNodeDefinition({
       defaultValue: '',
     },
     temperature: {
-      valueType: 'integer',
+      valueType: 'float',
       defaultValue: 0.5,
     },
     maxRetries: {
