@@ -2,7 +2,7 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cx from 'classnames'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 
 import { colors, valueTypeColorMap } from '../../utils/colors'
@@ -19,6 +19,13 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
+import { TextInputField } from './TextInputField.js'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectTextEditorState,
+  setActiveInput,
+  setTextEditorState,
+} from 'client/state'
 
 export type InputSocketProps = {
   connected: boolean
@@ -27,6 +34,8 @@ export type InputSocketProps = {
   lastEventInput: any
   specJSON: NodeSpecJSON[]
   hideValue?: boolean
+  isActive: boolean
+  textEditorState: string
 } & InputSocketSpecJSON
 
 const InputFieldForValue = ({
@@ -38,6 +47,7 @@ const InputFieldForValue = ({
   valueType,
   connected,
   hideValue = false,
+  isActive,
 }: Pick<
   InputSocketProps,
   | 'choices'
@@ -48,9 +58,12 @@ const InputFieldForValue = ({
   | 'valueType'
   | 'connected'
   | 'hideValue'
+  | 'isActive'
 >) => {
+  const dispatch = useDispatch()
+  const textEditorState = useSelector(selectTextEditorState)
   const showChoices = choices?.length
-  const inputVal = (value ? value : defaultValue ?? '') as string
+  const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
   const hideValueInput = hideValue || connected
 
   const inputClass = cx('h-6 text-sm')
@@ -59,6 +72,24 @@ const InputFieldForValue = ({
     'flex w-full rounded-lg items-center pl-1',
     !hideValueInput && 'bg-[var(--foreground-color)]'
   )
+
+  const handleChange = ({ key, value }: { key: string; value: any }) => {
+    onChange(key, value)
+    setInputVal(value)
+    dispatch(setTextEditorState(value))
+  }
+
+  const onFocus = (x: string) => {
+    handleChange({ key: name, value: x })
+    dispatch(setActiveInput(name))
+  }
+
+  useEffect(() => {
+    if (isActive) {
+      handleChange({ key: name, value: textEditorState || '' })
+      setInputVal(textEditorState || '')
+    }
+  }, [isActive, textEditorState])
 
   return (
     <div style={{ borderRadius: 5 }} className={containerClass}>
@@ -86,13 +117,12 @@ const InputFieldForValue = ({
             </Select>
           )}
           {valueType === 'string' && !showChoices && (
-            <Input
-              type="text"
-              className={inputClass}
-              value={String(inputVal) || ''}
-              onChange={e => {
-                onChange(name, e.currentTarget.value)
-              }}
+            <TextInputField
+              value={inputVal}
+              onChange={e =>
+                handleChange({ key: name, value: e.currentTarget.value })
+              }
+              onFocus={() => onFocus(inputVal)}
             />
           )}
           {valueType === 'float' && !showChoices && (
@@ -135,6 +165,8 @@ const InputSocket: React.FC<InputSocketProps> = ({
   connected,
   specJSON,
   lastEventInput,
+  isActive,
+  textEditorState,
   ...rest
 }) => {
   const { name, valueType } = rest
@@ -151,7 +183,6 @@ const InputSocket: React.FC<InputSocketProps> = ({
   // @ts-ignore
   const [backgroundColor, borderColor] = colors[colorName]
   const showName = isFlowSocket === false || name !== 'flow'
-
   return (
     <div className="flex grow items-center justify-start h-7 w-full">
       {isFlowSocket && (
@@ -160,15 +191,14 @@ const InputSocket: React.FC<InputSocketProps> = ({
           {showName && <div className="capitalize mr-2 truncate">{name}</div>}
         </>
       )}
-
       {!isFlowSocket && (
         <InputFieldForValue
           connected={connected}
           hideValue={isArraySocket || isObjectSocket}
+          isActive={isActive}
           {...rest}
         />
       )}
-
       <Popover>
         <PopoverTrigger asChild>
           <Handle
