@@ -11,7 +11,6 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import { cx } from 'class-variance-authority'
-import { Icon } from 'client/core'
 import { debounce } from 'lodash'
 import { useEffect, useState } from 'react'
 
