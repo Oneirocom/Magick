@@ -1,14 +1,15 @@
 import { debounce } from 'lodash'
 import Editor from '@monaco-editor/react'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
-import { selectActiveNode } from 'client/state'
+import { selectActiveNode, selectTextEditorState, setTextEditorState, selectActiveInput } from 'client/state'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
 
 const TextEditor = props => {
-  const [code, setCodeState] = useState<string | undefined>(undefined)
+  const dispatch = useDispatch()
+  const [code, setCode] = useState<string | undefined>(undefined)
 
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
@@ -18,14 +19,46 @@ const TextEditor = props => {
 
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const handleChange = useChangeNodeData(selectedNode?.id);
+  const textEditorState = useSelector(selectTextEditorState)
+  const activeInput = useSelector(selectActiveInput)
+
+  const handleEditorWillMount = monaco => {
+    monaco.editor.defineTheme('sds-dark', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      wordWrap: true,
+      colors: {
+        'editor.background': "#171b1c",
+      },
+    })
+  }
+
+  const debounceSave = debounce((code) => {
+    handleChange('configuration', {
+      ...configuration,
+      textEditorData: code,
+    })
+  }, 1000)
+
+  const updateCode = rawCode => {
+    const code = rawCode.replace('\r\n', '\n')
+    dispatch(setTextEditorState(code))
+    debounceSave(code)
+  }
 
   useEffect(() => {
-    if (!selectedNode) return
+    if (!selectedNode || textEditorState) return
     const { configuration } = selectedNode.data
     const { textEditorData } = configuration
     if (textEditorData === undefined) return
     setCode(textEditorData)
   }, [selectedNode])
+
+  useEffect(() => {
+    if (textEditorState === undefined) return
+    setCode(textEditorState || '')
+  }, [textEditorState])
 
   // listen for changes to the code and check if selected node is text template
   // then we want to parse the template for sockets and add them to the node
@@ -75,7 +108,6 @@ const TextEditor = props => {
         ...sockets.filter(Boolean),
       ],
     })
-    // handleChange('sockets', sockets)
   }, [code])
 
   if (!selectedNode) return null
@@ -83,35 +115,7 @@ const TextEditor = props => {
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
 
-  const handleEditorWillMount = monaco => {
-    monaco.editor.defineTheme('sds-dark', {
-      base: 'vs-dark',
-      inherit: true,
-      rules: [],
-      wordWrap: true,
-      colors: {
-        'editor.background': "#171b1c",
-      },
-    })
-  }
-
-  const debounceSave = debounce((code) => {
-    handleChange('configuration', {
-      ...configuration,
-      textEditorData: code,
-    })
-  }, 1000)
-
-  const updateCode = rawCode => {
-    const code = rawCode.replace('\r\n', '\n')
-    debounceSave(code)
-  }
-
-  const setCode = update => {
-    setCodeState(update)
-  }
-
-  if (textEditorData === undefined)
+  if (textEditorData === undefined || !activeInput)
     return <WindowMessage content="Select a node with a text field" />
 
   return (
