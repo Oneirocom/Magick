@@ -3,7 +3,6 @@ FROM magickml/magick:latest
 ARG GITHUB_TOKEN
 ARG PORTAL_BRANCH=main
 
-COPY ./.gitmodules /app/.gitmodules
 COPY . /app
 WORKDIR /app
 
@@ -15,7 +14,7 @@ RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "htt
 RUN git submodule add -b ${PORTAL_BRANCH} https://${GITHUB_TOKEN}@github.com/oneirocom/portal.git portal/cloud
 
 # Clone the submodule
-RUN git submodule update --init --recursive portal/cloud
+RUN git submodule update --init --recursive
 
 RUN poetry install --no-interaction --no-ansi -vvv
 # RUN poetry install --no-root
