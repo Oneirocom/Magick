@@ -1,5 +1,5 @@
-import React from 'react';
-import { Input } from '@magickml/ui';
+import { Input } from '@magickml/client-ui'
+import React from 'react'
 
 export const TextInputField = ({
   value,
@@ -12,16 +12,15 @@ export const TextInputField = ({
   onFocus?: () => void
   handleBlur?: () => void
 }) => {
-
   return (
     <Input
-      className='bg-dark-3 h-5 rounded-sm px-2'
+      className="bg-dark-3 h-5 rounded-sm px-2"
       type="text"
       placeholder="input text..."
       value={value}
-      onChange={(e) => onChange(e)}
+      onChange={e => onChange(e)}
       onFocus={() => onFocus()}
       onBlur={() => handleBlur()}
     />
   )
-};
+}
