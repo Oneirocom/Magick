@@ -56,7 +56,7 @@ const InputFieldForValue = ({
   const inputClass = cx('h-6 text-sm')
 
   const containerClass = cx(
-    'flex w-full rounded-lg items-center pl-4',
+    'flex w-full rounded-lg items-center pl-1',
     !hideValueInput && 'bg-[var(--foreground-color)]'
   )
 
@@ -116,15 +116,13 @@ const InputFieldForValue = ({
             />
           )}
           {valueType === 'boolean' && !showChoices && (
-            <div className="flex gap-2 h-10 items-center">
-              <p>True</p>
+            <div className="flex gap-2 items-center">
               <Switch
                 defaultValue={inputVal || 0}
                 onChange={value => {
                   onChange(name, value)
                 }}
               />
-              <p>False</p>
             </div>
           )}
         </div>
