@@ -1,10 +1,5 @@
 import axios from 'axios'
-import {
-  OPENMETER_ENDPOINT,
-  OPENMETER_ENABLED,
-  OPENMETER_TOKEN,
-  OPENMETER_SOURCE,
-} from 'shared/config'
+import { OPENMETER } from 'shared/config'
 import { getLogger } from 'server/logger'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -46,7 +41,7 @@ type MeteringEvent = {
  * @return {Promise<boolean>} Indicates whether the event was sent successfully.
  */
 async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
-  if (!OPENMETER_ENABLED) {
+  if (!OPENMETER.enabled) {
     return Promise.resolve(false)
   }
   const logger = getLogger()
@@ -54,7 +49,7 @@ async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
   const event: MeteringEvent = {
     specversion: '1.0',
     id: uuidv4(),
-    source: OPENMETER_SOURCE,
+    source: OPENMETER.source,
     type: data.type,
     subject: data.project_id,
     time: new Date().toISOString(),
@@ -70,11 +65,11 @@ async function sendMeteringEvent(data: MeteringEventData): Promise<boolean> {
   const headers = {
     Expect: '',
     'Content-Type': 'application/cloudevents+json',
-    Authorization: `Bearer ${OPENMETER_TOKEN}`,
+    Authorization: `Bearer ${OPENMETER.token}`,
   }
 
   try {
-    const response = await axios.post(OPENMETER_ENDPOINT, event, { headers })
+    const response = await axios.post(OPENMETER.endpoint, event, { headers })
     return response.status === 200
   } catch (err) {
     logger.error('Error sending metering event: %o', err)

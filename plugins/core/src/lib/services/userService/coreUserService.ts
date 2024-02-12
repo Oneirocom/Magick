@@ -1,5 +1,5 @@
 import { ICoreUserService, UserResponse } from 'servicesShared'
-import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
+import { PORTAL_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
 type ConstructorParams = {
   projectId: string
@@ -17,7 +17,7 @@ export class CoreUserService implements ICoreUserService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': CLOUD_AGENT_KEY,
+          'x-api-key': PORTAL_AGENT_KEY,
         },
       }).then(res => res.json())
 

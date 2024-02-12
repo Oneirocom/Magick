@@ -266,6 +266,7 @@ export function AgentMenu({ data }) {
             //   justifyContent: 'center',
             // }}
             onClick={() => {
+              console.log('handleMakeRelease')
               void handleMakeRelease()
             }}
           >

@@ -6,7 +6,7 @@ import {
   IBudgetManagerService,
   ICoreBudgetManagerService,
 } from 'servicesShared'
-import { CLOUD_AGENT_KEY, PORTAL_URL } from 'shared/config'
+import { PORTAL_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
 import { Application, app } from 'server/core'
 import { CompletionModel, CompletionResponse, Message } from 'servicesShared'
@@ -36,7 +36,7 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
         this.projectId,
         'hosted',
         `${PORTAL_URL}/api/magick/budget`,
-        { 'x-api-key': CLOUD_AGENT_KEY }
+        { 'x-api-key': PORTAL_AGENT_KEY }
       )) as IBudgetManagerService
       const isValidUser = await this.isValidUser(userId)
       if (!isValidUser) {
