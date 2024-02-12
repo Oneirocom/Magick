@@ -1,9 +1,7 @@
 {
   "name": "clientConfig",
   "version": "0.0.1",
-  "dependencies": {
-    "uuid": "^9.0.0"
-  },
+  "dependencies": {},
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts"
