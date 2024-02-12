@@ -26,7 +26,6 @@ import {
   setActiveInput,
   setTextEditorState,
 } from 'client/state'
-import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'
 
 export type InputSocketProps = {
   connected: boolean
