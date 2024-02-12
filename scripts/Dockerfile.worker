@@ -1,6 +1,7 @@
 FROM magickml/magick:latest
 
 ARG GITHUB_TOKEN
+ARG PORTAL_BRANCH=main
 
 COPY ./.gitmodules /app/.gitmodules
 COPY . /app
@@ -11,6 +12,7 @@ RUN git init
 
 # Configure git to use the token
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+RUN git submodule add -b ${SUBMODULE_BRANCH} https://${GITHUB_TOKEN}@github.com/oneirocom/portal.git portal/cloud
 
 # Clone the submodule
 RUN git submodule update --init --recursive
