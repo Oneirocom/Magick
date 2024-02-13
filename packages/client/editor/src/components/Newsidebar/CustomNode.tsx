@@ -10,10 +10,7 @@ import MenuItem from '@mui/material/MenuItem'
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone'
 import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone'
 import { Modal } from 'client/core'
-import {
-  spellApi,
-  Tab,
-} from 'client/state'
+import { spellApi, Tab } from 'client/state'
 import { useSnackbar } from 'notistack'
 
 import { useModal } from '../../contexts/ModalProvider'
@@ -80,7 +77,7 @@ export const CustomNode: React.FC<Props> = props => {
       type: 'spell',
       params: {
         spellId: props.node.id,
-      }
+      },
     })
   }
 
@@ -92,10 +89,9 @@ export const CustomNode: React.FC<Props> = props => {
       type: 'behave',
       params: {
         spellId: props.node.id,
-      }
+      },
     })
   }
-
 
   const handleClick = () => {
     if (!props.node) return
@@ -146,11 +142,10 @@ export const CustomNode: React.FC<Props> = props => {
       if (props.node.fileType === 'spell' || props.node.fileType === 'behave') {
         const spellId: any = props.node.id
 
-        await deleteSpell({ spellId })
-          .unwrap()
+        await deleteSpell({ spellId }).unwrap()
 
         setContextMenuOpen(false)
-        closeTab(props.node.text)
+        closeTab && closeTab(props.node.text)
         enqueueSnackbar('Spell successfully deleted', {
           variant: 'success',
         })
@@ -196,9 +191,8 @@ export const CustomNode: React.FC<Props> = props => {
 
       enqueueSnackbar('Spell saved', { variant: 'success' })
       setIsRenaming(false)
-
     } catch (err) {
-      console.error("error saving spell", err)
+      console.error('error saving spell', err)
       enqueueSnackbar('Error saving spell', {
         variant: 'error',
       })
@@ -207,7 +201,8 @@ export const CustomNode: React.FC<Props> = props => {
 
   const setClassSelectedFile = () => {
     if (props.currentTab?.id === 'Documents') return
-    const style = props.currentTab?.id === props.node.text ? styles.isSelected : ''
+    const style =
+      props.currentTab?.id === props.node.text ? styles.isSelected : ''
     return style
   }
 
@@ -227,17 +222,19 @@ export const CustomNode: React.FC<Props> = props => {
       onClick={handleClick}
       onContextMenu={handleContextMenu}
     >
-      {props.node.droppable && <div
-        className={`${styles.expandIconWrapper} ${props.isOpen ? styles.isOpen : ''}`}
-      >
-        <div>
-          <ChevronRightIcon />
+      {props.node.droppable && (
+        <div
+          className={`${styles.expandIconWrapper} ${
+            props.isOpen ? styles.isOpen : ''
+          }`}
+        >
+          <div>
+            <ChevronRightIcon />
+          </div>
         </div>
-      </div>}
+      )}
       <div>
-        <TypeIcon
-          fileType={props.node.fileType}
-        />
+        <TypeIcon fileType={props.node.fileType} />
       </div>
       <div className={styles.labelGridItem}>
         {isRenaming ? (

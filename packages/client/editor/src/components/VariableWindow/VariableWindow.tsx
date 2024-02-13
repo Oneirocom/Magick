@@ -51,10 +51,10 @@ export const VariableWindow = (props: Props) => {
 
   const deleteAllVariableNodes = useCallback(
     (variable: VariableJSON) => {
-      const newNodes = nodes.filter(node => !node.type.includes(variable.name))
+      const newNodes = nodes.filter(node => !node.type?.includes(variable.name))
 
       const removedNodes = nodes
-        .filter(node => node.type.includes(variable.name))
+        .filter(node => node.type?.includes(variable.name))
         .map(node => node.id)
 
       const newEdges = edges.filter(

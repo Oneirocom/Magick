@@ -19,13 +19,21 @@ const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 // todo we need to centralize these types
 const valueTypes = ['boolean', 'string', 'float', 'array', 'object']
 
+interface DefaultInputProps {
+  valueType: string
+  initialValue: any
+  onChange: (value: any) => void
+  choices?: { text: string; value: string }[]
+  showChoices?: boolean
+}
+
 const DefaultInput = ({
   valueType,
   initialValue,
   onChange,
   choices = [],
   showChoices = false,
-}) => {
+} : DefaultInputProps) => {
   // determine fallback value based on type
   if (valueType === 'boolean') {
     initialValue = initialValue || false
