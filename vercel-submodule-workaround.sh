@@ -1,8 +1,7 @@
 # github submodule repo address without https:// prefix
-SUBMODULE_GITHUB=github.com/beeinger/vercel-private-submodule
-
+SUBMODULE_GITHUB=github.com/oneirocom/portal.git
 # .gitmodules submodule path
-SUBMODULE_PATH=library
+SUBMODULE_PATH=portal/cloud
 
 # github access token is necessary
 # add it to Environment Variables on Vercel
