@@ -14,7 +14,7 @@ set -e
 
 # get submodule commit
 output=$(git submodule status --recursive | grep "$SUBMODULE_PATH") # get specific submodule info
-COMMIT=$(echo $output | awk '{print $1}') # extract the commit SHA
+COMMIT=$(echo $output | awk '{print $1}' | sed 's/^-//') # extract the commit SHA
 
 echo "Submodule commit: $COMMIT"
 
