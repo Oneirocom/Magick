@@ -111,6 +111,7 @@
     .inactive-group {
       .tabs-and-actions-container {
         .tab.active-tab {
+          height: 50px;
           border-top: none;
           color: var(--inactive-font-color) !important;
         }
@@ -172,6 +173,7 @@
     .inactive-group {
       .tabs-and-actions-container {
         .tab.active-tab {
+          height: 50px;
           border-top: none;
           color: var(--active-font-color) !important;
           height: 100%;
@@ -185,14 +187,31 @@
 
       .tabs-container {
         .tab {
-          background: var(--background-color);
-          color: var(--active-font-color);
-          height: 100%;
+          &.active-tab {
+            border-top: none;
+            background: var(--foreground-color) !important;
+            color: var(--active-font-color);
+            height: 100%;
+          }
+
+          &.inactive-tab {
+            background-color: var(--background-color) !important;
+            color: var(--inactive-font-color) !important;
+            border-bottom: 1px solid var(--deep-background-color) !important;
+          }
+
+          /* Assuming .dockview-react-tab-title and .tab-content are nested within .tab */
+          .dockview-react-tab-title,
+          .default-tab .tab-content {
+            padding: 0px 8px 0px 0px;
+          }
         }
 
         .tab.active-tab {
           border-top: none;
+          height: 100%;
           background: var(--foreground-color) !important;
+          // background: var(--foreground-color) !important;
           color: var(--active-font-color);
         }
 
@@ -208,4 +227,22 @@
   [name='react-console-emulator'] {
     background-color: var(--background-color) !important;
   }
+}
+
+.tab.active-tab {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+
+.tab .dockview-react-tab .dockview-react-tab-title,
+.tab .default-tab .tab-content {
+  padding: 0px 8px 0px 0px;
+}
+
+.groupview.active-group
+  > .tabs-and-actions-container
+  > .tabs-container
+  > .tab.active-tab {
+  padding-left: 8px;
+  border-top: var(--ds-primary) 2px solid;
 }
