@@ -21,9 +21,6 @@ import GraphWindow from '../../GraphWindow/GraphWindow'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 import { VariableWindow } from '../../VariableWindow/VariableWindow'
-import { useSelector } from 'react-redux'
-import { RootState } from 'client/state'
-import { VariableWindow } from '../../VariableWindow/VariableWindow'
 
 const getLayoutFromLocalStorage = (spellId: string) => {
   const layout = localStorage.getItem(`composer_layout_${spellId}`)
@@ -99,7 +96,6 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
       tab,
       spellId,
       spellName,
-      spellName,
     },
     position: { referencePanel: 'Properties', direction: 'below' },
   })
@@ -112,7 +108,6 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
         title: 'Test',
         tab,
         spellId,
-        spellName,
         spellName,
       },
       position: { referencePanel: 'Graph', direction: 'right' },
@@ -129,15 +124,11 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
       tab,
       spellId,
       spellName,
-      spellName,
     },
     position: { referencePanel: 'Test', direction: 'below' },
   })
 }
-
-// todo refactore these components to take in the full dockview panel props
 const components = {
-  default: (props: IDockviewPanelProps<{ title: string; spellId: string }>) => {
   default: (props: IDockviewPanelProps<{ title: string; spellId: string }>) => {
     return (
       <div style={{ padding: '20px', color: 'white' }}>
@@ -148,44 +139,28 @@ const components = {
   Test: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
-  Test: (
-    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
-  ) => {
     return <ChatWindow {...props.params} />
   },
   // depricating this one
   Chat: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
-  Chat: (
-    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
-  ) => {
     return <ChatWindow {...props.params} />
   },
-  Properties: (
-    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
-  ) => {
   Properties: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
     return <PropertiesWindow {...props.params} />
   },
   TextEditor: (props: IDockviewPanelProps<{ tab: Tab; spellId: string }>) => {
-  TextEditor: (props: IDockviewPanelProps<{ tab: Tab; spellId: string }>) => {
     return <TextEditor {...props.params} />
   },
-  Graph: (
-    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
-  ) => {
   Graph: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
     return <GraphWindow {...props} />
   },
   Variables: VariableWindow,
-  Console: (
-    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName }>
-  ) => {
   Console: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName }>
   ) => {
@@ -196,12 +171,9 @@ const components = {
 const PermanentTab = (props: IDockviewPanelHeaderProps) => {
   return <DockviewDefaultTab hideClose {...props} />
 }
-  return <DockviewDefaultTab hideClose {...props} />
-}
 
 const tabComponents = {
   permanentTab: PermanentTab,
-}
 }
 
 export const Composer = ({ tab, theme, spellId, spellName }) => {
@@ -221,7 +193,6 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
     // const layout = tab.layoutJson;
     const layout = getLayoutFromLocalStorage(spellId)
 
-    let success = false
     let success = false
 
     if (layout) {
@@ -247,7 +218,6 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
           title: 'Text Editor',
           tab,
           spellId,
-          spellId,
         },
         position: { referencePanel: 'Graph', direction: 'left' },
       })
@@ -259,7 +229,6 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
         params: {
           title: 'Chat',
           tab,
-          spellId,
           spellId,
         },
         position: { referencePanel: 'Graph', direction: 'below' },
@@ -274,7 +243,6 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
           tab,
           spellId,
           spellName,
-          spellName,
         },
         position: { referencePanel: 'Graph', direction: 'below' },
       })
@@ -284,11 +252,6 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
   useEffect(() => {
     if (!api) return
 
-    const windowBarSubscriptions = Object.entries(windowBarMap).map(
-      ([event, handler]) => {
-        return subscribe(event, handler)
-      }
-    )
     const windowBarSubscriptions = Object.entries(windowBarMap).map(
       ([event, handler]) => {
         return subscribe(event, handler)
@@ -326,14 +289,8 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
       },
     })
   }
-        spellName,
-      },
-    })
-  }
 
   const showDndOverlay = () => {
-    return true
-  }
     return true
   }
 
@@ -353,4 +310,3 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
     </>
   )
 }
-
