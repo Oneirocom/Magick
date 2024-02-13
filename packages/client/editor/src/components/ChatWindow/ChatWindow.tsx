@@ -187,18 +187,17 @@ const ChatWindow = ({ tab, spellName }) => {
   const { MESSAGE_AGENT } = events
 
   // Print to console callback function.
-  const printToConsole = _text => {
-    // check if _text is a string
+  const printToConsole = (_text: string) => {
     if (typeof _text !== 'string')
       return console.warn('could not split text, not a string', _text)
-    const text = `Agent: ` + _text
+    const text = `Agent: ${_text}`
 
     const newMessage: Message = {
       sender: 'agent',
       content: text,
     }
 
-    setHistory(prevHistory => [...prevHistory, newMessage])
+    console.log(newMessage)
   }
 
   const typeChunk = () => {
