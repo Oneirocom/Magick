@@ -1,7 +1,6 @@
 // DOCUMENTED
 
 import * as React from 'react'
-import css from './TabLayout.module.css'
 
 /**
  * TabLayout component
@@ -13,7 +12,13 @@ export const TabLayout: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   return (
     // Use 'view-container' CSS class for the outer div
-    <div className={css['view-container']}>
+    <div
+      className={`
+    p-4
+    h-full
+    bg-[var(--dark-1)]
+    `}
+    >
       {
         // Create a new div with inline styles for position and height, and
         // insert the received child components inside
