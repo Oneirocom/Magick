@@ -1,25 +1,21 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import {
-  GridviewApi,
-  SerializedGridviewComponent,
-} from 'dockview'
+import { GridviewApi, SerializedGridviewComponent } from 'dockview'
 import { useDockviewTheme } from 'client/state'
 
-
 type Resizing = {
-  id: string,
-  animationDuration: number,
+  id: string
+  animationDuration: number
   size: number
 }
 
 type DocviewContext = {
   theme: string
   setTheme: (theme: string) => void
-  api: GridviewApi
+  api: GridviewApi | null
   setApi: (api: GridviewApi) => void
   getLayout: () => SerializedGridviewComponent | null
   setLayout: (layout: SerializedGridviewComponent) => void
-  resizing: Resizing
+  resizing: Resizing | null
   setResizing: (resizing: Resizing) => void
 }
 
@@ -32,8 +28,8 @@ const Context = createContext<DocviewContext>(undefined!)
 export const useGlobalLayout = () => useContext(Context)
 
 export const GlobalLayoutProvider = ({ children }) => {
-  const [api, setApi] = useState<GridviewApi>()
-  const [resizing, setResizing] = useState<Resizing>()
+  const [api, setApi] = useState<GridviewApi | null>(null)
+  const [resizing, setResizing] = useState<Resizing | null>(null)
 
   const { theme, setTheme } = useDockviewTheme()
 
@@ -43,7 +39,7 @@ export const GlobalLayoutProvider = ({ children }) => {
     if (!layout) {
       return null
     }
-    return JSON.parse(localStorage.getItem(LAYOUT_KEY)) as SerializedGridviewComponent
+    return JSON.parse(layout) as SerializedGridviewComponent
   }
 
   const setLayout = (layout: SerializedGridviewComponent) => {

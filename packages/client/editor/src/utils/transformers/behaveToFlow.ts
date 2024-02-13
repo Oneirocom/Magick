@@ -13,6 +13,9 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
 
   graph.nodes?.forEach(nodeJSON => {
     const spec = nodeSpecs.find(spec => spec.type === nodeJSON.type)
+    if (!spec) {
+      throw new Error(`Node spec not found for node type: ${nodeJSON.type}`)
+    }
     const configuration = getConfig(nodeJSON, spec)
 
     const node: Node = {

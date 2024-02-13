@@ -18,7 +18,7 @@ export const getSocketsByNodeTypeAndHandleType = (
   spec: NodeSpecJSON[],
   nodeType: string | undefined,
   handleType: 'source' | 'target' | null,
-  configuration: Record<string, any> = undefined
+  configuration: Record<string, any> | undefined = undefined
 ) => {
   const nodeSpec = spec.find(node => node.type === nodeType)
   if (nodeSpec === undefined) return

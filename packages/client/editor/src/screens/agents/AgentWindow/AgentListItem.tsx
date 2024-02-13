@@ -1,8 +1,8 @@
-import React from 'react';
-import { MenuItem, Avatar, ListItemText, Box, Checkbox } from '@mui/material';
-import LockIcon from '@mui/icons-material/Lock';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import { AgentInterface } from 'server/schemas';
+import React from 'react'
+import { MenuItem, Avatar, ListItemText, Box, Checkbox } from '@mui/material'
+import LockIcon from '@mui/icons-material/Lock'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { AgentInterface } from 'server/schemas'
 
 const AgentListItem = ({
   agent,
@@ -12,33 +12,36 @@ const AgentListItem = ({
   onCheckboxChange,
   isSinglePublishedAgent = false,
 }: {
-  agent: AgentInterface;
-  onSelectAgent: (agent: AgentInterface) => void;
-  isDraft?: boolean;
-  selectedAgents?: string[];
-  onCheckboxChange?: (agentId: string, checked: boolean) => void;
-  isSinglePublishedAgent?: boolean;
+  agent: AgentInterface
+  onSelectAgent: (agent: AgentInterface) => void
+  isDraft?: boolean
+  selectedAgents?: string[]
+  onCheckboxChange?: (agentId: string, checked: boolean) => void
+  isSinglePublishedAgent?: boolean
 }) => {
   const agentImage = agent.image
     ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
-    : undefined;
+    : undefined
 
   const formatDate = (date: string) => {
-    if (!date) return '';
-    return formatDistanceToNow(new Date(date), { addSuffix: true });
-  };
+    if (!date) return ''
+    return formatDistanceToNow(new Date(date), { addSuffix: true })
+  }
 
-  const handleCheckboxClick = (event) => {
+  const handleCheckboxClick = event => {
     if (event.target.type === 'checkbox') {
-      event.stopPropagation();
+      event.stopPropagation()
     }
   }
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
     if (onCheckboxChange) {
-      onCheckboxChange(agent.id, checked);
+      onCheckboxChange(agent.id, checked)
     }
-  };
+  }
 
   return (
     <MenuItem
@@ -52,10 +55,13 @@ const AgentListItem = ({
         onSelectAgent(agent)
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={handleCheckboxClick}>
+      <Box
+        sx={{ display: 'flex', alignItems: 'center' }}
+        onClick={handleCheckboxClick}
+      >
         {!isDraft && !isSinglePublishedAgent && (
           <Checkbox
-            size='small'
+            size="small"
             checked={selectedAgents?.includes(agent.id)}
             onChange={handleCheckboxChange}
             sx={{
@@ -73,14 +79,17 @@ const AgentListItem = ({
         </Avatar>
         <ListItemText
           primary={agent.name}
-          secondary={`Updated ${formatDate(agent.updatedAt || agent.createdAt)}`}
+          secondary={`Updated ${formatDate(
+            (agent.updatedAt as string) || (agent.createdAt as string)
+          )}`}
           sx={{
             ml: 1,
             maxWidth: isDraft ? '220px' : '180px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }} />
+            whiteSpace: 'nowrap',
+          }}
+        />
       </Box>
 
       {!isDraft && (
@@ -89,7 +98,7 @@ const AgentListItem = ({
         </Box>
       )}
     </MenuItem>
-  );
-};
+  )
+}
 
-export default AgentListItem;
+export default AgentListItem

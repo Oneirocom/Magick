@@ -34,7 +34,9 @@ const KnowledgeModal = ({
     setNewKnowledge(newKnowledge)
   }, [newKnowledge])
 
-  function handleDataTypesChange(event: Event & { target: { value: unknown; name: string; }; }) {
+  function handleDataTypesChange(
+    event: unknown & { target: { value: unknown; name: string } }
+  ) {
     setKnowledge({ ...newKnowledge, dataType: event.target.value as string })
   }
 
@@ -48,7 +50,7 @@ const KnowledgeModal = ({
     inputElement.addEventListener('change', async (event: Event) => {
       const files = (event.target as HTMLInputElement).files
 
-      if (files.length === 1) {
+      if (files?.length === 1) {
         setLoading(true)
         const file = files[0]
         setKnowledge({ ...newKnowledge, files: [file], name: file.name })
@@ -59,7 +61,7 @@ const KnowledgeModal = ({
       // leaving this for when we handle multiple uploads again
       if (files && files.length > 0) {
         setLoading(true)
-        const newfiles = []
+        const newfiles = [] as File[]
 
         for (const file of files) {
           newfiles.push(file)
@@ -158,7 +160,7 @@ const KnowledgeModal = ({
             <TextField
               label="Source URL"
               name="sourcrUrl"
-              disabled={newKnowledge.files.length > 0}
+              disabled={!!newKnowledge?.files?.length}
               value={newKnowledge.sourceUrl}
               style={{ width: '100%', margin: '.5em' }}
               onChange={e =>

@@ -25,10 +25,7 @@ interface Props {
  * @param onLoadFile - function to load agents from a file
  * @returns AgentWindow component
  */
-const AgentWindow = ({
-  data,
-  onLoadFile,
-}: Props) => {
+const AgentWindow = ({ data, onLoadFile }: Props) => {
   const config = useConfig()
   const [createNewAgent] = useCreateAgentMutation()
   const [selectedAgentData, setSelectedAgentData] = useState<any>(undefined)
@@ -82,7 +79,7 @@ const AgentWindow = ({
           >
             Add Agent
           </Button>
-          {data?.map((agent: { id: string }) => {
+          {(data as { id: string }[])?.map(agent => {
             return (
               <AgentItem
                 key={agent?.id}

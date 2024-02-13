@@ -25,7 +25,9 @@ import {
   useListCredentialsQuery,
   useCreateCredentialMutation,
 } from 'client/state'
-import pluginCredentials from 'packages/shared/nodeSpec/src/credentials.json'
+import { getPluginCredentials } from 'shared/nodeSpec'
+
+const pluginCredentials = getPluginCredentials()
 
 interface Credential {
   id: string
@@ -55,7 +57,7 @@ const SecretWindow: FC = () => {
     projectId: config.projectId,
   })
 
-  if (isLoading) {
+  if (isLoading || !credentials) {
     return <div>Loading...</div>
   }
 
@@ -111,7 +113,7 @@ const CreateCredential: FC<CreateCredentialProps> = ({
   const [createCredential, { isLoading: createLoading }] =
     useCreateCredentialMutation()
   const [name, setName] = useState('')
-  const [serviceType, setServiceType] = useState(
+  const [serviceType, setServiceType] = useState<string>(
     pluginCredentials[0].clientName
   )
   const [description, setDescription] = useState('')
@@ -135,7 +137,7 @@ const CreateCredential: FC<CreateCredentialProps> = ({
 
   const resetForm = () => {
     setName('')
-    setServiceType(null)
+    setServiceType(pluginCredentials[0].clientName)
     setDescription('')
     setValue('')
   }

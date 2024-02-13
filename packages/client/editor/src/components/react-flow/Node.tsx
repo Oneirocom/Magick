@@ -142,7 +142,7 @@ export const Node: React.FC<NodeProps> = ({
       })
 
       setTimeout(() => {
-        setError(null)
+        setError(false)
       }, 5000)
     }
   }, [spellEvent])
