@@ -13,7 +13,8 @@ type Props = IDockviewPanelProps<{
 
 const GraphWindow = (props: Props) => {
   const { spellName } = props.params
-  const parentRef = useRef()
+  // Change useRef() to useRef<HTMLDivElement>(null) to match the expected type
+  const parentRef = useRef<HTMLDivElement>(null)
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -43,7 +44,7 @@ const GraphWindow = (props: Props) => {
 
   return (
     <div style={{ height, width }} ref={parentRef}>
-      <Flow parentRef={parentRef} tab={props.params.tab} spell={spell} />;
+      <Flow parentRef={parentRef} tab={props.params.tab} spell={spell} />
     </div>
   )
 }
