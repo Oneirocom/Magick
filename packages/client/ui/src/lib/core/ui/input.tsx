@@ -19,14 +19,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         className={cn(
           `
           flex
-          h-9
           w-full
-          rounded-lg
-          border-2
-          border-input
-          bg-transparent
+          rounded-sm
+          border-[var(--deep-background-color)]
+          border-1
+          bg-[var(--background-color)]
           px-3
-          py-1
+          my-2
+          h-9
           text-sm
           shadow-sm
           transition-colors
