@@ -10,7 +10,7 @@ import {
   OpenAIEmbeddingModels,
   findProvider,
 } from 'servicesShared'
-import { PRODUCTION } from 'shared/config'
+import { PRODUCTION, PINECONE_INDEX_NAME } from 'shared/config'
 
 type SearchArgs = {
   query: string
@@ -71,7 +71,7 @@ class CoreMemoryService {
       config: {
         metric: 'cosine',
         vector_dimension: 1536,
-        collection_name: 'magick-dev',
+        collection_name: PINECONE_INDEX_NAME,
         serverless_config: {
           cloud: 'aws',
           region: 'us-west-2',

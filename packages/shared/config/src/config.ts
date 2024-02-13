@@ -109,3 +109,6 @@ export const MAGICK_TOGETHERAI_API_KEY =
   getVarForEnvironment('TOGETHERAI_API_KEY')
 export const VERTEXAI_PROJECT = getVarForEnvironment('VERTEXAI_PROJECT')
 export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
+
+export const PINECONE_INDEX_NAME =
+  getVarForEnvironment('PINECONE_INDEX_NAME') || 'magick-dev'

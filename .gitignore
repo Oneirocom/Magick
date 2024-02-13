@@ -68,3 +68,4 @@ docstore.json
 
 .portal.dev.env
 .portal.prod.env
+.ide.prod.env
