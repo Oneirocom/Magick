@@ -65,3 +65,6 @@ docstore.json
 
 # Next.js
 .next
+
+.portal.dev.env
+.portal.prod.env
