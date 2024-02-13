@@ -4,10 +4,10 @@ import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { useHotkeys } from 'react-hotkeys-hook'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { usePubSub, useConfig } from '@magickml/providers'
-import css from './magick.module.css'
+// import css from './magick.module.css'
 import {
   RootState,
   addLocalState,
@@ -19,117 +19,7 @@ import {
 } from 'client/state'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 import { Checkbox, FormControlLabel } from '@mui/material'
-
-/**
- * Input component - Receives and sends playtest input.
- */
-const Input = props => {
-  const ref = useRef() as React.MutableRefObject<HTMLInputElement>
-
-  const [playtestCache, setPlaytestCache] = useState<string[]>([])
-
-  // Trigger 'onSend' when 'return' key is pressed on the input.
-  useHotkeys(
-    'enter',
-    () => {
-      if (ref.current !== document.activeElement) return
-      onSend()
-    },
-    { enableOnFormTags: ['INPUT'] },
-    [props, ref]
-  )
-
-  // Use up and down arrows to move through history and set valye of input.
-  useHotkeys(
-    'up',
-    () => {
-      if (ref.current !== document.activeElement) return
-      if (playtestCache.length === 0) return
-      const last = playtestCache[playtestCache.length - 1]
-
-      // handle case where user is moving up more than one
-      if (ref.current.value !== '') {
-        const index = playtestCache.indexOf(ref.current.value)
-        if (index === -1) {
-          // if the current value is not in the playtestCache, add it to the playtestCache
-          setPlaytestCache([...playtestCache, ref.current.value])
-        } else if (index === 0) {
-          // if the current value is the first item in the playtestCache, do nothing
-          return
-        } else {
-          // if the current value is in the playtestCache, move up one
-          ref.current.value = playtestCache[index - 1]
-          props.onChange({ target: { value: playtestCache[index - 1] } })
-          return
-        }
-      }
-
-      ref.current.value = last
-      props.onChange({ target: { value: last } })
-    },
-    { enableOnFormTags: ['INPUT'] },
-    [props, ref, playtestCache]
-  )
-
-  // handle down arrow moving through list
-  useHotkeys(
-    'down',
-    () => {
-      if (ref.current !== document.activeElement) return
-      if (playtestCache.length === 0) return
-
-      // handle case where user is moving down more than one
-      if (ref.current.value !== '') {
-        const index = playtestCache.indexOf(ref.current.value)
-        if (index === -1) {
-          // if the current value is not in the playtestCache, add it to the playtestCache
-          setPlaytestCache([...playtestCache, ref.current.value])
-        } else if (index === playtestCache.length - 1) {
-          // handle user moving down back into an empty input
-          ref.current.value = ''
-          // if the current value is the last item in the playtestCache, do nothing
-          return
-        } else {
-          // if the current value is in the playtestCache, move down one
-          ref.current.value = playtestCache[index + 1]
-          props.onChange({ target: { value: playtestCache[index + 1] } })
-          return
-        }
-      }
-
-      ref.current.value = ''
-      props.onChange({ target: { value: '' } })
-    },
-    { enableOnFormTags: ['INPUT'] },
-    [props, ref, playtestCache]
-  )
-
-  // function to call onSend  after storing user input in playtestCache
-  const onSend = () => {
-    const newHistory = [...playtestCache, ref.current.value]
-    setPlaytestCache(newHistory as [])
-    props.onSend()
-  }
-
-  return (
-    <div className={css['playtest-input']}>
-      <input
-        ref={ref}
-        type="text"
-        value={props.value}
-        onChange={props.onChange}
-        placeholder="Type chat input here"
-      ></input>
-      <Button
-        className={`small ${css['playtest-input-send']}`}
-        style={{ cursor: 'pointer' }}
-        onClick={onSend}
-      >
-        Send
-      </Button>
-    </div>
-  )
-}
+import { ChatInput } from './ChatInput'
 
 // Default playtest data.
 const defaultPlaytestData = {
@@ -433,27 +323,27 @@ const ChatWindow = ({ tab, spellName }) => {
         }
       })
   }
-
   const UserMessage = ({ message }) => (
-    <div className={css['playtest-user-message']}>
-      <div className={css['playtest-user-message-content']}>{message}</div>
+    <div className="flex flex-row mb-2">
+      <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
+        {message}
+      </div>
     </div>
   )
 
   const AgentMessage = ({ message }) => (
-    <div className={css['playtest-agent-message']}>
-      <div className={css['playtest-agent-message-content']}>{message}</div>
+    <div className="flex flex-row mb-2">
+      <div className="bg-slate-700 p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
+        {message}
+      </div>
     </div>
   )
 
   return (
     <Window toolbar={toolbar}>
-      <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
-        <div
-          className={css['playtest-output']}
-          style={{ display: openData ? '' : 'none' }}
-        >
-          <Scrollbars ref={ref => (scrollbars.current = ref)}>
+      <div className="flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto">
+        <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
+          <Scrollbars>
             <Editor
               theme="sds-dark"
               language="json"
@@ -468,15 +358,11 @@ const ChatWindow = ({ tab, spellName }) => {
           </Scrollbars>
         </div>
         <div
-          style={{
-            height: 'var(--c1)',
-            backgroundColor: 'var(--dark-3)',
-            display: openData ? '' : 'none',
-          }}
+          className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
         ></div>
-        <div className={css['playtest-output']}>
-          <Scrollbars ref={ref => (scrollbars.current = ref)}>
-            <ul>
+        <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
+          <Scrollbars>
+            <ul className="list-none m-0 p-0">
               {history.map((printItem: Message, key: any) => {
                 if (printItem.sender === 'user') {
                   return (
@@ -497,10 +383,7 @@ const ChatWindow = ({ tab, spellName }) => {
             </ul>
           </Scrollbars>
         </div>
-        <label htmlFor="playtest-input" style={{ display: 'none' }}>
-          Input
-        </label>
-        <Input onChange={onChange} value={value} onSend={onSend} />
+        <ChatInput onChange={onChange} value={value} onSend={onSend} />
       </div>
     </Window>
   )
