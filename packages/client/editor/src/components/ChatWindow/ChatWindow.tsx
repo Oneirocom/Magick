@@ -166,9 +166,9 @@ const ChatWindow = ({ tab, spellName }) => {
   const [openData, setOpenData] = useState<boolean>(false)
   const [autoscroll, setAutoscroll] = useState<boolean>(true)
   const isStreaming = useRef(false)
-  const messageQueue = useRef([]) // Queue to hold incoming text chunks
-  const typingTimer = useRef(null) // Timer for typing out messages
-  const queueTimer = useRef(null) // Timer for processing the queue
+  const messageQueue = useRef<string[]>([]);
+  const typingTimer = useRef<any>(null)
+  const queueTimer = useRef<any>(null)
 
   const setIsStreaming = value => {
     isStreaming.current = value
@@ -187,18 +187,17 @@ const ChatWindow = ({ tab, spellName }) => {
   const { MESSAGE_AGENT } = events
 
   // Print to console callback function.
-  const printToConsole = _text => {
-    // check if _text is a string
+  const printToConsole = (_text: string) => {
     if (typeof _text !== 'string')
       return console.warn('could not split text, not a string', _text)
-    const text = `Agent: ` + _text
+    const text = `Agent: ${_text}`
 
     const newMessage: Message = {
       sender: 'agent',
       content: text,
     }
 
-    setHistory(prevHistory => [...prevHistory, newMessage])
+    console.log(newMessage)
   }
 
   const typeChunk = () => {
@@ -228,23 +227,25 @@ const ChatWindow = ({ tab, spellName }) => {
     }
   }
 
-  const streamToConsole = _text => {
+  const streamToConsole = (_text) => {
     if (typeof _text !== 'string') {
-      console.warn('Could not stream text, not a string', _text)
-      return
+      console.warn('Could not stream text, not a string', _text);
+      return;
     }
-
-    messageQueue.current.push(_text)
-    processQueue()
-  }
-
+  
+    messageQueue.current.push(_text);
+    processQueue();
+  };
+  
+  
   useEffect(() => {
-    queueTimer.current = setInterval(processQueue, 100)
+    queueTimer.current = setInterval(processQueue, 100) as unknown as null
     return () => {
-      if (queueTimer.current) clearInterval(queueTimer.current)
-      if (typingTimer.current) clearInterval(typingTimer.current)
+      if (queueTimer.current) clearInterval(queueTimer.current as unknown as number)
+      if (typingTimer.current) clearInterval(typingTimer.current as unknown as number)
     }
   }, [])
+  
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {

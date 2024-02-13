@@ -6,17 +6,28 @@ export const TextInputField = ({
   onChange,
   onFocus,
   handleBlur,
+  className,
+  type,
+  placeholder,
+  onKeyDown,
+  required = false,
 }: {
   value: string
   onChange?: (e) => void
   onFocus?: () => void
+  onKeyDown?: (e) => void
   handleBlur?: () => void
+  className?: string
+  type?: string
+  placeholder?: string
+  required?: boolean
 }) => {
   return (
     <Input
-      className="bg-dark-3 h-5 rounded-sm px-2"
-      type="text"
-      placeholder="input text..."
+      className={`${className ?? ''}`}
+      type={type || 'text'}
+      placeholder={placeholder || 'input text...'}
+      required={required}
       value={value}
       onChange={e => {
         onChange && onChange(e)
@@ -26,6 +37,9 @@ export const TextInputField = ({
       }}
       onBlur={() => {
         handleBlur && handleBlur()
+      }}
+      onKeyDown={e => {
+        onKeyDown && onKeyDown(e)
       }}
     />
   )

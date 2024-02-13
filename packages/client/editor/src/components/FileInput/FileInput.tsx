@@ -16,10 +16,11 @@ const FileInput = ({
   innerText = 'Import',
   Icon = <> </>,
 }) => {
-  const hiddenFileInput = React.useRef(null)
+  const hiddenFileInput = React.useRef<HTMLInputElement>(null);
+
 
   const handleClick = () => {
-    hiddenFileInput.current.click()
+    hiddenFileInput.current?.click()
   }
 
   const handleChange = event => {

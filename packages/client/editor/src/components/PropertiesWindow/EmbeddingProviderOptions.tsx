@@ -1,108 +1,109 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
-
 import { useConfig } from '@magickml/providers'
+import { useListCredentialsQuery, useGetUserQuery } from 'client/state'
+import {
+  LLMProviders,
+  EmbeddingModel,
+  availableProviders,
+  providers,
+  getProvidersWithUserKeys,
+  isModelAvailableToUser,
+  removeFirstVendorTag,
+} from 'servicesShared'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@magickml/client-ui'
 
-import { useListCredentialsQuery } from 'client/state'
-import { useGetUserQuery } from 'client/state'
-import { LLMProviders, availableProviders, providers, getProvidersWithUserKeys, isModelAvailableToUser, removeFirstVendorTag, EmbeddingModel } from 'servicesShared'
-
-export const EmbeddingProviderOptions = (
-  props: ConfigurationComponentProps
-) => {
-  const [selectedProvider, setSelectedProvider] = useState<LLMProviders>(
-    props.fullConfig.modelProvider
+export const EmbeddingProviderOptions: React.FC<
+  ConfigurationComponentProps
+> = props => {
+  const [selectedProvider, setSelectedProvider] = useState<LLMProviders | ''>(
+    props.fullConfig.modelProvider || ''
   )
-  const [selectedModel, setSelectedModel] = useState<EmbeddingModel>(
-    props.fullConfig.model
+  const [selectedModel, setSelectedModel] = useState<EmbeddingModel | ''>(
+    props.fullConfig.model || ''
   )
   const [activeModels, setActiveModels] = useState<EmbeddingModel[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
-
 
   const config = useConfig()
   const { data: credentials } = useListCredentialsQuery({
     projectId: config.projectId,
   })
-  const { data: userData } = useGetUserQuery({
-    projectId: config.projectId,
-  })
+  const { data: userData } = useGetUserQuery({ projectId: config.projectId })
 
   useEffect(() => {
-    if (credentials) {
-      const creds = credentials.map(cred => cred.name)
-      const providers = getProvidersWithUserKeys(creds as any)
-      setProvidersWithKeys(providers)
-    }
+    const creds = credentials?.map(cred => cred.name) || []
+    const providersWithUserKeys = getProvidersWithUserKeys(creds as any)
+    setProvidersWithKeys(providersWithUserKeys)
   }, [credentials])
 
   useEffect(() => {
-    setActiveModels(providers[selectedProvider].embeddingModels);
-  }, [selectedProvider]);
+    if (selectedProvider) {
+      const models = providers[selectedProvider]?.embeddingModels || []
+      setActiveModels(models)
+    }
+  }, [selectedProvider])
 
-  const onProviderChange = (provider: LLMProviders) => {
-    setSelectedProvider(provider)
-    props.updateConfigKey('modelProvider', provider)
-  }
-
-  const onModelChange = (model: EmbeddingModel) => {
-    setSelectedModel(model)
-    props.updateConfigKey('model', model)
-  }
-
-  const renderProviderOptions = () => {
-    return availableProviders?.map((prov) => {
-      return (
-        <option key={prov.provider} value={prov.provider}>
-          {prov.displayName}
-        </option>
-      );
-    });
-  };
-
-  const renderModelOptions = () => {
-    const modelsWithKeys = providersWithKeys.map((provider) => {
-      return providers[provider].completionModels;
-    }).flat();
-    return activeModels?.map((model) => {
-
-      const isAvailable = isModelAvailableToUser({
-        userData,
-        model,
-        modelsWithKeys
-      })
-      return (
-        <option key={model} value={model} disabled={!isAvailable} className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm">
-          {removeFirstVendorTag(model)}
-        </option>
-      );
-    });
-  };
   return (
     <div>
+      {/* Embedding Model Provider Selection */}
       <h3>Embedding Model Provider</h3>
       <div className="flex flex-col mt-1">
-        <select
-          className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
+        <Select
           value={selectedProvider}
-          onChange={e => onProviderChange(e.currentTarget.value as any)}
+          onValueChange={(newValue: LLMProviders | '') =>
+            setSelectedProvider(newValue)
+          }
         >
-          {renderProviderOptions()}
-        </select>
+          <SelectTrigger>
+            <SelectValue placeholder="Select Provider" />
+          </SelectTrigger>
+          <SelectContent>
+            {availableProviders.map(prov => (
+              <SelectItem key={prov.provider} value={prov.provider}>
+                {prov.displayName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
+
+      {/* Model Selection */}
       <div className="mt-4">
-        <h3>Model</h3>
+        <h3>Embedding Model</h3>
         <div className="flex flex-col mt-1">
-          <select
-            className="bg-gray-600 disabled:bg-gray-700 w-full py-1 px-2 nodrag text-sm"
+          <Select
             value={selectedModel}
-            onChange={e => {
-              onModelChange(e.target.value as EmbeddingModel)
-            }}
+            onValueChange={(newValue: EmbeddingModel | '') =>
+              setSelectedModel(newValue)
+            }
           >
-            <option value="">Select a model</option>
-            {renderModelOptions()}
-          </select>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a model" />
+            </SelectTrigger>
+            <SelectContent>
+              {activeModels.map(model => {
+                const isAvailable = isModelAvailableToUser({
+                  userData,
+                  model,
+                  modelsWithKeys: providersWithKeys.flatMap(
+                    provider => providers[provider]?.embeddingModels || []
+                  ),
+                })
+                return (
+                  <SelectItem key={model} value={model} disabled={!isAvailable}>
+                    {removeFirstVendorTag(model)}
+                  </SelectItem>
+                )
+              })}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

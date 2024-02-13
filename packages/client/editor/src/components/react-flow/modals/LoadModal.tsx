@@ -1,9 +1,14 @@
+import React, { useState, useEffect } from 'react'
 import { GraphJSON } from '@magickml/behave-graph'
-import React from 'react'
-import { useCallback, useEffect, useState } from 'react'
 import { useReactFlow } from 'reactflow'
-
 import { Modal } from './Modal'
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from '@magickml/client-ui' // Assuming a similar API
 
 export type Examples = {
   [key: string]: GraphJSON
@@ -33,25 +38,25 @@ export const LoadModal: React.FC<LoadModalProps> = ({
     }
   }, [selected, examples])
 
-  const handleLoad = useCallback(() => {
-    let graph
-    if (value !== undefined) {
-      graph = JSON.parse(value) as GraphJSON
-    } else if (selected !== '') {
+  const handleLoad = () => {
+    let graph: GraphJSON | undefined
+    if (value) {
+      graph = JSON.parse(value)
+    } else if (selected) {
       graph = examples[selected]
     }
 
-    if (graph === undefined) return
+    if (!graph) return
 
     setBehaviorGraph(graph)
 
-    // TODO better way to call fit vew after edges render
+    // Better way to call fit view after edges render
     setTimeout(() => {
       instance.fitView()
     }, 100)
 
     handleClose()
-  }, [setBehaviorGraph, value, instance])
+  }
 
   const handleClose = () => {
     setValue(undefined)
@@ -73,24 +78,22 @@ export const LoadModal: React.FC<LoadModalProps> = ({
         autoFocus
         className="border border-gray-300 w-full p-2 h-32 align-top"
         placeholder="Paste JSON here"
-        value={value}
+        value={value || ''}
         onChange={e => setValue(e.currentTarget.value)}
       ></textarea>
       <div className="p-4 text-center text-gray-800">or</div>
-      <select
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded block w-full p-3"
-        onChange={e => setSelected(e.target.value)}
-        value={selected}
-      >
-        <option disabled value="">
-          Select an example
-        </option>
-        {Object.keys(examples).map(key => (
-          <option key={key} value={key}>
-            {key}
-          </option>
-        ))}
-      </select>
+      <Select value={selected} onValueChange={setSelected}>
+        <SelectTrigger>
+          <SelectValue placeholder="Select an example" />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.keys(examples).map(key => (
+            <SelectItem key={key} value={key}>
+              {key}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </Modal>
   )
 }
