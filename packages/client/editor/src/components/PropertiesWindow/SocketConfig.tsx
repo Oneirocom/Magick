@@ -2,14 +2,16 @@ import { useCallback, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import SingleElement from './SingleElement'
 // import InputSocket from '../react-flow/InputSocket'
-import { TextInputField } from '../react-flow/TextInputField'
+
 import {
+  Button,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
+import { TextInputField } from '../react-flow/TextInputField'
 
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -79,9 +81,9 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
           </Select>
         )}
         {/* Add button */}
-        <button style={{ margin: 0 }} onClick={onAdd} type="submit">
+        <Button variant="outline" onClick={onAdd} type="submit">
           Add
-        </button>
+        </Button>
       </div>
     </form>
   )
