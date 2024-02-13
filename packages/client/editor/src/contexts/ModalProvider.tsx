@@ -8,7 +8,7 @@ import { getModals } from '../components/Modals'
  * Type for the context object used throughout the application regarding modals
  */
 type MyContextType = {
-  activeModal: object
+  activeModal: object | null
   modalName: string
   openModal: (options: object) => void
   closeModal: () => void
@@ -56,23 +56,23 @@ const ModalContext: React.FC<React.PropsWithChildren<unknown>> = ({
   const [modalName, setModalName] = useState<string>('')
 
   // Open the modal with the specified options and attach closeModal function
-  const openModal = useCallback((modalOptions) => {
+  const openModal = useCallback(modalOptions => {
     if (modalName !== modalOptions.modal) {
-      setModalName(modalOptions.modal);
+      setModalName(modalOptions.modal)
     }
     if (activeModal !== modalOptions) {
-      setActiveModal({ ...modalOptions, closeModal });
+      setActiveModal({ ...modalOptions, closeModal })
     }
-  }, []);
+  }, [])
 
   const closeModal = useCallback(() => {
     setActiveModal(prevModal => {
       if (prevModal !== null) {
-        return null;
+        return null
       }
-      return prevModal;
-    });
-  }, []);
+      return prevModal
+    })
+  }, [])
 
   // Get the Modal component by its name
   const Modal = modalList[modalName]

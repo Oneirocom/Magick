@@ -16,6 +16,8 @@ import {
   Edge,
   updateEdge,
   Connection,
+  OnConnectStart,
+  OnConnectEnd,
 } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -28,6 +30,8 @@ import { onConnect as onConnectState, setEdges, setNodes } from 'client/state'
 import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
+
+const defaultPosition: XYPosition = { x: 0, y: 0 }
 
 const useNodePickFilters = ({
   nodes,
@@ -66,9 +70,12 @@ export const useFlowHandlers = ({
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
-  const [pickedNodeVisibility, setPickedNodeVisibility] = useState<XYPosition>()
-  const [nodePickerPosition, setNodePickerPosition] = useState<XYPosition>()
-  const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
+  const [pickedNodeVisibility, setPickedNodeVisibility] =
+    useState<XYPosition>(defaultPosition)
+  const [nodePickerPosition, setNodePickerPosition] =
+    useState<XYPosition>(defaultPosition)
+  const [nodeMenuVisibility, setNodeMenuVisibility] =
+    useState<XYPosition>(defaultPosition)
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
   const rfDomNode = useStore(state => state.domNode)
@@ -95,8 +102,8 @@ export const useFlowHandlers = ({
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
-    setNodePickerPosition(undefined)
-    setPickedNodeVisibility(undefined)
+    setNodePickerPosition(defaultPosition)
+    setPickedNodeVisibility(defaultPosition)
   }, [])
 
   const onEdgeUpdate = useCallback(
@@ -120,7 +127,10 @@ export const useFlowHandlers = ({
 
       // get source node
       const sourceNode = nodes.find(node => node.id === connection.source)
-      const sourceSocket = getSourceSocket(connection, sourceNode, specJSON)
+      const sourceSocket =
+        sourceNode &&
+        specJSON &&
+        getSourceSocket(connection, sourceNode, specJSON)
 
       // @ts-ignore
       connection.data = {
@@ -161,7 +171,7 @@ export const useFlowHandlers = ({
     (connection: Connection) => {
       console.log('validating connection')
       const newNode = nodes.find(node => node.id === connection.target)
-      if (!newNode) return false
+      if (!newNode || !specJSON) return false
       return isValidConnection(connection, instance, specJSON)
     },
     [instance, nodes, specJSON]
@@ -215,7 +225,7 @@ export const useFlowHandlers = ({
   )
 
   const handleRemoveNode = () => {
-    if (!targetNodes.length) return
+    if (!targetNodes?.length) return
 
     const newNodes = nodes.filter(
       node => !targetNodes.some(targetNode => targetNode.id === node.id)
@@ -234,7 +244,7 @@ export const useFlowHandlers = ({
   }
 
   const cloneNode = () => {
-    if (!targetNodes.length) return
+    if (!targetNodes?.length) return
     const newNodes: NodeChange[] = targetNodes.map(node => {
       const id = uuidv4()
       const x = node.position.x + 10
@@ -254,10 +264,9 @@ export const useFlowHandlers = ({
     setTargetNodes(undefined)
   }, [nodes])
 
-  const handleStartConnect = useCallback(
-    (e: ReactMouseEvent, params: OnConnectStartParams) => {
+  const handleStartConnect: OnConnectStart = useCallback(
+    (e, params) => {
       setLastConnectStart(params)
-      e
     },
     [getNodes]
   )
@@ -294,19 +303,32 @@ export const useFlowHandlers = ({
     { label: 'Paste', onClick: paste },
   ]
 
-  const handleStopConnect = useCallback((e: MouseEvent) => {
+  const handleStopConnect: OnConnectEnd = useCallback(e => {
     blockClose = true
     e.preventDefault()
     const element = e.target as HTMLElement
     if (element.classList.contains('react-flow__pane')) {
-      const bounds = parentRef.current.getBoundingClientRect()
+      const bounds = parentRef?.current?.getBoundingClientRect()
+
+      if (!bounds) return
+
+      let clientX, clientY
+
+      if (e instanceof MouseEvent) {
+        clientX = e.clientX
+        clientY = e.clientY
+      } else if (e instanceof TouchEvent && e.touches.length > 0) {
+        clientX = e.touches[0].clientX
+        clientY = e.touches[0].clientY
+      }
+
       setPickedNodeVisibility({
-        x: e.clientX - bounds.left + window.scrollX,
-        y: e.clientY - bounds.top + window.scrollY,
+        x: clientX - bounds.left + window.scrollX,
+        y: clientY - bounds.top + window.scrollY,
       })
       setNodePickerPosition({
-        x: e.clientX,
-        y: e.clientY,
+        x: clientX,
+        y: clientY,
       })
 
       setTimeout(() => {

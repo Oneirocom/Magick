@@ -1,5 +1,6 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import nodeSpec from './nodeSpec.json'
+import pluginCredentials from './credentials.json'
 import { SpellInterface } from 'server/schemas'
 import {
   generateVariableNodeSpecs,
@@ -17,4 +18,8 @@ export const getNodeSpec = (spell?: SpellInterface): NodeSpecJSON[] => {
   const allSpecs = [...nodeSpec, ...variableSpecs].sort(sortNodeSpecsByType)
 
   return allSpecs as NodeSpecJSON[]
+}
+
+export const getPluginCredentials = () => {
+  return pluginCredentials
 }

@@ -26,7 +26,12 @@ import { KnowledgeData, columns } from './knowledge'
 import styles from './index.module.scss'
 import KnowledgeModal from './KnowledgeModal'
 import KnowledgeContentModal from './KnowledgeContentModal'
-import { RootState, useCreateKnowledgeMutation, useDeleteKnowledgeMutation, useLazyGetKnowledgeByIdQuery } from 'client/state'
+import {
+  RootState,
+  useCreateKnowledgeMutation,
+  useDeleteKnowledgeMutation,
+  useLazyGetKnowledgeByIdQuery,
+} from 'client/state'
 import { useSelector } from 'react-redux'
 
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
@@ -94,22 +99,20 @@ function KnowledgeTable({ knowledgeData }) {
     setSelectedRow(row)
   }
 
-  const createData = (
-    data: {
-      row: any,
-      tag: string,
-      createdAt: string,
-      dataType?: string,
-      sourceUrl?: string
-      name: string
-    }
-  ): KnowledgeData => {
+  const createData = (data: {
+    row: any
+    tag: string
+    createdAt: string
+    dataType?: string
+    sourceUrl?: string
+    name: string
+  }): KnowledgeData => {
     return {
       row: data.row,
       tag: data.tag,
       name: data.name,
-      dataType: data.dataType,
-      sourceUrl: data.sourceUrl,
+      dataType: data.dataType || 'none',
+      sourceUrl: data.sourceUrl || 'none',
       date: data.createdAt,
       action: (
         <>
@@ -276,7 +279,7 @@ function KnowledgeTable({ knowledgeData }) {
     //fetch the knowledge
     getKnowledgeById(doc.id)
       .unwrap()
-      .then((res) => {
+      .then(res => {
         setKnowledge(res.content)
         setContentModal(true)
       })
@@ -292,13 +295,15 @@ function KnowledgeTable({ knowledgeData }) {
   }, [openDoc])
 
   return (
-    <>{createMode && (
-      <KnowledgeModal
-        createMode={createMode}
-        setCreateMode={setCreateMode}
-        handleSave={handleSave}
-        setNewKnowledge={setNewKnowledge} />
-    )}
+    <>
+      {createMode && (
+        <KnowledgeModal
+          createMode={createMode}
+          setCreateMode={setCreateMode}
+          handleSave={handleSave}
+          setNewKnowledge={setNewKnowledge}
+        />
+      )}
       {contentModal && knowledge && (
         <KnowledgeContentModal
           contentModal={contentModal}
@@ -307,7 +312,10 @@ function KnowledgeTable({ knowledgeData }) {
         />
       )}
       <Container className={styles.container} classes={{ root: styles.root }}>
-        <Stack spacing={2} style={{ padding: '1.5rem', background: 'transparent' }}>
+        <Stack
+          spacing={2}
+          style={{ padding: '1.5rem', background: 'transparent' }}
+        >
           <div className={`${styles.flex} mt-8`}>
             <Typography variant="h4" className={styles.header}>
               Knowledge

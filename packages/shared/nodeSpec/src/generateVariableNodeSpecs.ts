@@ -88,6 +88,10 @@ export const generateVariableNodeSpecs = (
   const getVariableSpec = allSpecs.find(spec => spec.type === 'variables/get')
   const setVariableSpec = allSpecs.find(spec => spec.type === 'variables/set')
 
+  if (!getVariableSpec || !setVariableSpec) {
+    return []
+  }
+
   const getConfiguration = configurationArrayToObject(
     getVariableSpec.configuration
   )

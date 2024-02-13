@@ -28,7 +28,9 @@ export type MagickIDEProps = {
  * @param {MagickIDEProps} props - A plain object representing the props passed to the component.
  * @returns {React.ReactElement} - A React component
  */
-export const MagickIDE = ({ config }: MagickIDEProps): React.ReactElement => {
+export const MagickIDE = ({
+  config,
+}: MagickIDEProps): React.ReactElement | null => {
   const [loaded, setLoaded] = useState(false)
   useEffect(() => {
     ;(async () => {

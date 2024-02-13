@@ -50,7 +50,7 @@ function getHexColorFromTailwindClass(className) {
 
   // Convert RGB to Hex
   const rgbMatch = rgb.match(/\d+/g)
-  if (!rgbMatch) return null
+  if (!rgbMatch) return '#000000'
 
   const hex = `#${rgbMatch
     .map(x => {

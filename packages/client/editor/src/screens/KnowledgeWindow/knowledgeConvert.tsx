@@ -94,7 +94,7 @@ async function convertPdfToText(
   // Load the PDF document
   const pdfDocument = await pdfjsLib.getDocument({ data: pdfBuffer }).promise
 
-  const text = []
+  const text = [] as string[]
 
   if (ocrEngine === 'tesseract') {
     // Initialize Tesseract.js with the English language

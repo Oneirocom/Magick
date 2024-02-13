@@ -204,8 +204,10 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
           <h3>Embedding Provider</h3>
           <Dropdown
             options={providerOptions}
-            selectedValue={selectedEmbeddingProvider?.provider}
-            onChange={handleEmbeddingProviderChange}
+            selectedValue={selectedEmbeddingProvider?.provider as LLMProviders}
+            onChange={value =>
+              handleEmbeddingProviderChange(value as LLMProviders)
+            }
             placeholder="Select a provider"
           />
         </div>
@@ -214,8 +216,10 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
           <div className="flex flex-col mt-1">
             <Dropdown
               options={modelOptions}
-              selectedValue={selectedEmbeddingModel}
-              onChange={handleEmbeddingModelChange}
+              selectedValue={selectedEmbeddingModel as EmbeddingModel}
+              onChange={value =>
+                handleEmbeddingModelChange(value as EmbeddingModel)
+              }
               placeholder="Select a model"
             />
           </div>
