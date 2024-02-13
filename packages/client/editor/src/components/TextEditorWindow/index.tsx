@@ -11,6 +11,7 @@ import {
 } from 'client/state'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
+import { Socket } from '@magickml/behave-graph'
 
 const TextEditor = props => {
   const dispatch = useDispatch()
@@ -23,7 +24,12 @@ const TextEditor = props => {
   })
 
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
-  const handleChange = useChangeNodeData(selectedNode?.id)
+  // const handleChange = useChangeNodeData(selectedNode?.id)
+  const handleChange = (key: string, value: any) => {
+    if (!selectedNode) return
+    useChangeNodeData(selectedNode?.id)(key, value)
+  }
+
   const textEditorState = useSelector(selectTextEditorState)
   const activeInput = useSelector(selectActiveInput)
 
@@ -82,7 +88,7 @@ const TextEditor = props => {
     const socketRegex = /{{(.+?)}}/g
 
     const socketMatches = code.matchAll(socketRegex)
-    const sockets = []
+    const sockets: Socket[] = []
     for (const match of socketMatches) {
       if (!match[1]) continue
       const socketName = match[1]
@@ -101,9 +107,13 @@ const TextEditor = props => {
 
       if (!socketName) continue
 
-      const socket = {
+      const socket: Socket = {
         name: socketName,
-        valueType: 'string',
+        valueTypeName: 'string',
+        value: '',
+        valueChoices: [],
+        label: socketName,
+        links: [],
       }
 
       if (configuration.socketInputs.find(input => input.name === socketName))

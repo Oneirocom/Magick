@@ -85,7 +85,7 @@ const Modal = ({
    * Function to find and call the first enabled option's onClick function.
    */
   const handleEnterPress = () => {
-    const firstEnabledOption = options.find(option => !option.disabled)
+    const firstEnabledOption = options?.find(option => !option.disabled)
     if (firstEnabledOption) {
       firstEnabledOption.onClick()
     }
@@ -94,7 +94,7 @@ const Modal = ({
   // Close the modal when Escape key is pressed
   useHotkeys('escape', () => {
     closeModal()
-    onClose()
+    onClose && onClose()
   })
 
   useHotkeys('enter', handleEnterPress)
