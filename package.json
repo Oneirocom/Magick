@@ -72,8 +72,6 @@
     "lint-staged": "lint-staged",
     "postinstall": "npm run generateClients",
     "vercel-install": "./vercel-submodule-workaround.sh && npm i"
-    }
-}
 
   },
   "resolutions": {
