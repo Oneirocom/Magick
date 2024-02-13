@@ -1,11 +1,11 @@
 FROM magickml/magick:latest
 
 ARG GITHUB_TOKEN
-ARG PORTAL_BRANCH=main
+ARG BRANCH=development
 
 # Configure git to use the token
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
-RUN git clone --depth 1 https://www.github.com/oneirocom/magick.git /app
+RUN git clone --branch ${BRANCH} --depth 1 https://www.github.com/oneirocom/magick.git /app
 
 WORKDIR /app
 
