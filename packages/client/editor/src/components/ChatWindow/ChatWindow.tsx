@@ -166,9 +166,9 @@ const ChatWindow = ({ tab, spellName }) => {
   const [openData, setOpenData] = useState<boolean>(false)
   const [autoscroll, setAutoscroll] = useState<boolean>(true)
   const isStreaming = useRef(false)
-  const messageQueue = useRef([]) // Queue to hold incoming text chunks
-  const typingTimer = useRef(null) // Timer for typing out messages
-  const queueTimer = useRef(null) // Timer for processing the queue
+  const messageQueue = useRef<string[]>([]);
+  const typingTimer = useRef<any>(null)
+  const queueTimer = useRef<any>(null)
 
   const setIsStreaming = value => {
     isStreaming.current = value
@@ -227,7 +227,7 @@ const ChatWindow = ({ tab, spellName }) => {
     }
   }
 
-  const streamToConsole = (_text: string) => {
+  const streamToConsole = (_text) => {
     if (typeof _text !== 'string') {
       console.warn('Could not stream text, not a string', _text);
       return;
@@ -239,12 +239,13 @@ const ChatWindow = ({ tab, spellName }) => {
   
   
   useEffect(() => {
-    queueTimer.current = setInterval(processQueue, 100)
+    queueTimer.current = setInterval(processQueue, 100) as unknown as null
     return () => {
-      if (queueTimer.current) clearInterval(queueTimer.current)
-      if (typingTimer.current) clearInterval(typingTimer.current)
+      if (queueTimer.current) clearInterval(queueTimer.current as unknown as number)
+      if (typingTimer.current) clearInterval(typingTimer.current as unknown as number)
     }
   }, [])
+  
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
