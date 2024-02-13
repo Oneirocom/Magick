@@ -9,12 +9,11 @@ if [ "$GITHUB_ACCESS_TOKEN" == "" ]; then
   echo "Error: GITHUB_ACCESS_TOKEN is empty"
   exit 1
 fi
-
 # stop execution on error - don't let it build if something goes wrong
 set -e
 
 # get submodule commit
-output=$(git submodule status --recursive | grep "$GITHUB_ACCESS_TOKEN") # get specific submodule info
+output=$(git submodule status --recursive | grep "$SUBMODULE_PATH") # get specific submodule info
 COMMIT=$(echo $output | awk '{print $1}') # extract the commit SHA
 
 echo "Submodule commit: $COMMIT"
