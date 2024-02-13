@@ -227,16 +227,17 @@ const ChatWindow = ({ tab, spellName }) => {
     }
   }
 
-  const streamToConsole = _text => {
+  const streamToConsole = (_text: string) => {
     if (typeof _text !== 'string') {
-      console.warn('Could not stream text, not a string', _text)
-      return
+      console.warn('Could not stream text, not a string', _text);
+      return;
     }
-
-    messageQueue.current.push(_text)
-    processQueue()
-  }
-
+  
+    messageQueue.current.push(_text);
+    processQueue();
+  };
+  
+  
   useEffect(() => {
     queueTimer.current = setInterval(processQueue, 100)
     return () => {
