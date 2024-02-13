@@ -70,7 +70,11 @@
     "find-unused-deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
     "prepare": "husky install || true",
     "lint-staged": "lint-staged",
-    "postinstall": "npm run generateClients"
+    "postinstall": "npm run generateClients",
+    "vercel-install": "./vercel-submodule-workaround.sh && npm i"
+    }
+}
+
   },
   "resolutions": {
     "@types/react": "18.0.2"
