@@ -24,34 +24,38 @@ export const FileTree = ({ currentTab }) => {
     setTreeData(newTree)
   }
 
-  return (<div className={`${styles.files} px-4`} >
-    <CssBaseline />
-    <DndProvider backend={MultiBackend} options={getBackendOptions()}>
-      <div>
-        <Tree
-          tree={treeData}
-          rootId={0}
-          render={(
-            node: NodeModel<CustomData>,
-            { depth, isOpen, onToggle }
-          ) => (
-            <CustomNode
-              currentTab={currentTab}
-              openTab={openTab}
-              node={node}
-              depth={depth}
-              isOpen={isOpen}
-              onToggle={onToggle}
-            />
-          )}
-          onDrop={handleDrop}
-          classes={{
-            root: styles.treeRoot,
-            draggingSource: styles.draggingSource,
-            dropTarget: styles.dropTarget,
-          }}
-        />
-      </div>
-    </DndProvider>
-  </div>)
+  return (
+    <div className={`${styles.files} px-4`}>
+      <CssBaseline />
+      <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+        <div>
+          <Tree
+            tree={treeData}
+            rootId={0}
+            // @ts-ignore
+            render={(
+              node: NodeModel<CustomData>,
+              { depth, isOpen, onToggle }
+            ) => (
+              <CustomNode
+                currentTab={currentTab}
+                openTab={openTab}
+                node={node}
+                depth={depth}
+                isOpen={isOpen}
+                onToggle={onToggle}
+              />
+            )}
+            // @ts-ignore
+            onDrop={handleDrop}
+            classes={{
+              root: styles.treeRoot,
+              draggingSource: styles.draggingSource,
+              dropTarget: styles.dropTarget,
+            }}
+          />
+        </div>
+      </DndProvider>
+    </div>
+  )
 }
