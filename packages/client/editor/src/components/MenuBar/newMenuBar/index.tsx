@@ -51,6 +51,7 @@ const NewMenuBar = props => {
    * Save handler
    */
   const onSave = () => {
+    if (!activeTabRef.current) return
     publish($SAVE_SPELL(activeTabRef.current?.id))
   }
 
