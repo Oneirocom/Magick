@@ -1,6 +1,15 @@
 import { useCallback, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import SingleElement from './SingleElement'
+// import InputSocket from '../react-flow/InputSocket'
+import { TextInputField } from '../react-flow/TextInputField'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@magickml/client-ui'
 
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -40,8 +49,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
       {/* Flexbox container for input field and add button */}
       <div className="flex gap-1">
         {/* Input field */}
-        <input
-          className="flex-grow"
+        <TextInputField
           value={value}
           type="text"
           onChange={onChange}
@@ -54,17 +62,21 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
           }}
         />
         {!definedValueType && (
-          <select
+          <Select
             value={selectedValueType}
-            onChange={e => setSelectedValueType(e.target.value)}
-            className="flex flex-1 px-3 bg-[var(--background-color)] rounded-sm"
+            onValueChange={e => setSelectedValueType(e)}
           >
-            {valueTypes.map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger>
+              <SelectValue placeholder={'Select a type'} />
+            </SelectTrigger>
+            <SelectContent>
+              {valueTypes.map(type => (
+                <SelectItem key={type} value={type}>
+                  <div>{type}</div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
         {/* Add button */}
         <button style={{ margin: 0 }} onClick={onAdd} type="submit">
@@ -121,13 +133,6 @@ export const SocketConfig = ({
           valueTypes={socketValues}
           definedValueType={valueType}
         />
-        {/* <Input value={key} onChange={e => setKey(e.target.value)} />
-        <select value={valueType} onChange={e => setValueType(e.target.value)}>
-          <option value="string">string</option>
-          <option value="integer">integer</option>
-          <option value="boolean">boolean</option>
-        </select>
-        <button onClick={addSocket}>Add</button> */}
       </div>
     </div>
   )
