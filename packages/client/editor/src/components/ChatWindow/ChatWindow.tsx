@@ -166,7 +166,7 @@ const ChatWindow = ({ tab, spellName }) => {
   const [openData, setOpenData] = useState<boolean>(false)
   const [autoscroll, setAutoscroll] = useState<boolean>(true)
   const isStreaming = useRef(false)
-  const messageQueue = useRef<string[]>([]);
+  const messageQueue = useRef<string[]>([])
   const typingTimer = useRef<any>(null)
   const queueTimer = useRef<any>(null)
 
@@ -197,7 +197,7 @@ const ChatWindow = ({ tab, spellName }) => {
       content: text,
     }
 
-    console.log(newMessage)
+    setHistory(prevHistory => [...prevHistory, newMessage])
   }
 
   const typeChunk = () => {
@@ -227,25 +227,25 @@ const ChatWindow = ({ tab, spellName }) => {
     }
   }
 
-  const streamToConsole = (_text) => {
+  const streamToConsole = _text => {
     if (typeof _text !== 'string') {
-      console.warn('Could not stream text, not a string', _text);
-      return;
+      console.warn('Could not stream text, not a string', _text)
+      return
     }
-  
-    messageQueue.current.push(_text);
-    processQueue();
-  };
-  
-  
+
+    messageQueue.current.push(_text)
+    processQueue()
+  }
+
   useEffect(() => {
     queueTimer.current = setInterval(processQueue, 100) as unknown as null
     return () => {
-      if (queueTimer.current) clearInterval(queueTimer.current as unknown as number)
-      if (typingTimer.current) clearInterval(typingTimer.current as unknown as number)
+      if (queueTimer.current)
+        clearInterval(queueTimer.current as unknown as number)
+      if (typingTimer.current)
+        clearInterval(typingTimer.current as unknown as number)
     }
   }, [])
-  
 
   // note here that we can do better than this by using things like a sessionId, etc.
   useEffect(() => {
@@ -258,6 +258,7 @@ const ChatWindow = ({ tab, spellName }) => {
     if (event.channel !== spell.id) return
 
     if (actionName === SEND_MESSAGE) {
+      console.log('MESSAGE RECEIVED', content)
       printToConsole(content)
     }
 
