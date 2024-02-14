@@ -67,12 +67,13 @@ declare module './declarations' {
  *
  * @returns {object} Database configuration settings
  */
-const getDatabaseConfig = () => {
+const getDatabaseConfig = (): Knex.Config<any> => {
   const dbURL = DATABASE_URL
   if (!dbURL) throw new Error('Missing DATABASE_URL in your .env file.')
   return {
     client: 'pg',
     connection: dbURL,
+    pool: { min: 0, max: 30, acquireTimeoutMillis: 60 * 1000 },
   }
 }
 
