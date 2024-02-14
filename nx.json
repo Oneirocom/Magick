@@ -3,6 +3,23 @@
   "affected": {
     "defaultBase": "main"
   },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx-cloud",
+      "options": {
+        "accessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU="
+      }
+    },
+    "vercel": {
+      "runner": "@vercel/remote-nx",
+      "options": {
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "token": "<token>",
+        "teamId": "<teamId>"
+      }
+    }
+  },
+  "nxCloudAccessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU=",
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
@@ -79,6 +96,5 @@
       }
     }
   },
-  "defaultProject": "@magickml/server",
-  "nxCloudAccessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU="
+  "defaultProject": "@magickml/server"
 }
