@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { Button, Window } from 'client/core'
+import { Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useRef, useState } from 'react'
@@ -18,8 +18,9 @@ import {
   useSelectAgentsEvent,
 } from 'client/state'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
-import { Checkbox, FormControlLabel } from '@mui/material'
+// import { Checkbox, FormControlLabel } from '@mui/material'
 import { ChatInput } from './ChatInput'
+import { Button, Checkbox, Label } from '@magickml/client-ui'
 
 // Default playtest data.
 const defaultPlaytestData = {
@@ -280,39 +281,32 @@ const ChatWindow = ({ tab, spellName }) => {
   // }
 
   const toolbar = (
-    <React.Fragment>
-      {/* <Select
-        style={{ width: '100%', zIndex: 1 }}
-        options={playtestOptions}
-        onChange={onSelectChange}
-        defaultValue={{
-          value: playtestOption || null,
-          label: playtestOption || 'No Inputs Found',
-        }}
-        placeholder="Select Input"
-        creatable={false}
-      /> */}
-      <Button className="small" style={{ cursor: 'pointer' }} onClick={onClear}>
+    <div className="flex space-x-1 justify-center items-center m-auto mt-1.5 mb-1.5 pl-1 pr-0.5">
+      <div className="flex space-x-1 items-center mr-1">
+        <Label className="font-medium text-xs">Autoscroll</Label>
+        <Checkbox
+          className=""
+          onCheckedChange={() => {
+            setAutoscroll(!autoscroll)
+          }}
+          defaultChecked
+        />
+      </div>
+      <Button
+        variant="basic"
+        onClick={onClear}
+        className="h-6 w-14 font-medium"
+      >
         Clear
       </Button>
       <Button
-        className="small"
-        style={{ cursor: 'pointer' }}
+        variant="basic"
         onClick={toggleData}
+        className="h-6 w-14 font-medium"
       >
         Data
       </Button>
-      <FormControlLabel
-        control={
-          <Checkbox
-            onChange={() => setAutoscroll(!autoscroll)}
-            checked={autoscroll}
-            defaultChecked
-          />
-        }
-        label="Autoscroll"
-      />
-    </React.Fragment>
+    </div>
   )
 
   if (document.getElementById('api-key')) {
