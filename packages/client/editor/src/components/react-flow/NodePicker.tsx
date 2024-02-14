@@ -10,7 +10,7 @@ export type NodePickerFilters = {
 
 type NodePickerProps = {
   position: XYPosition
-  pickedNodePosition: XYPosition
+  pickedNodePosition: XYPosition | undefined
   filters?: NodePickerFilters
   onPickNode: (type: string, position: XYPosition) => void
   onClose: () => void
@@ -159,7 +159,11 @@ export const NodePicker: React.FC<NodePickerProps> = ({
         setFocusedIndex(prev => Math.min(prev + 1, filtered.length - 1))
       } else if (event.key === 'ArrowUp') {
         setFocusedIndex(prev => Math.max(prev - 1, 0))
-      } else if (event.key === 'Enter' && filtered.length > 0) {
+      } else if (
+        event.key === 'Enter' &&
+        filtered.length > 0 &&
+        pickedNodePosition
+      ) {
         onPickNode(
           filtered[focusedIndex].type,
           instance.project(pickedNodePosition)
@@ -245,9 +249,10 @@ export const NodePicker: React.FC<NodePickerProps> = ({
                   index === focusedIndex ? 'bg-gray-700' : 'hover:bg-gray-600'
                 }`}
                 onMouseEnter={() => setFocusedIndex(index)}
-                onClick={() =>
-                  onPickNode(type, instance.project(pickedNodePosition))
-                }
+                onClick={() => {
+                  if (!pickedNodePosition) return
+                  return onPickNode(type, instance.project(pickedNodePosition))
+                }}
               >
                 {type}
               </div>
@@ -255,7 +260,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
           </div>
         </>
       )}
-      {!search && (
+      {!search && pickedNodePosition && (
         <div className={styles['context-menu']}>
           {groupedData.map(item => (
             <Item
