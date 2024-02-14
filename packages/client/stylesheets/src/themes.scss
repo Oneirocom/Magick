@@ -95,13 +95,20 @@
       }
 
       .tab.active-tab {
-        border-top: 2px solid var(--primary);
+        border-top: 2px solid var(--ds-primary);
+        padding-inline-start: 0;
+        padding-inline-end: 0;
+        padding: 0px 8px 0px 8px;
         // background-color: var(--background-color) !important;
         background: var(--background-color) !important;
         color: var(--active-font-color) !important;
+        // padding: 0px 8px 0px 0px !important;
       }
 
       .tab.inactive-tab {
+        padding-inline-start: 0;
+        padding-inline-end: 0;
+        padding: 0px 8px 0px 8px;
         background-color: var(--background-color) !important;
         color: var(--inactive-font-color) !important;
         border-bottom: 1px solid var(--deep-background-color) !important;
@@ -111,7 +118,7 @@
     .inactive-group {
       .tabs-and-actions-container {
         .tab.active-tab {
-          height: 50px;
+          height: 30px;
           border-top: none;
           color: var(--inactive-font-color) !important;
         }
@@ -173,7 +180,7 @@
     .inactive-group {
       .tabs-and-actions-container {
         .tab.active-tab {
-          height: 50px;
+          height: 30px;
           border-top: none;
           color: var(--active-font-color) !important;
         }
@@ -207,6 +214,8 @@
         }
 
         .tab.active-tab {
+          padding-inline-start: 0;
+          padding-inline-end: 0;
           border-top: none;
           height: 100%;
           background: var(--foreground-color) !important;
@@ -215,6 +224,8 @@
         }
 
         .tab.inactive-tab {
+          // padding-inline-start: 0;
+          // padding-inline-end: 0;
           background-color: var(--background-color) !important;
           color: var(--active-font-color) !important;
         }
@@ -228,20 +239,22 @@
   }
 }
 
-.tab.active-tab {
-  padding-inline-start: 0;
-  padding-inline-end: 0;
-}
-
 .tab .dockview-react-tab .dockview-react-tab-title,
 .tab .default-tab .tab-content {
   padding: 0px 8px 0px 0px;
 }
 
-.groupview.active-group
-  > .tabs-and-actions-container
-  > .tabs-container
-  > .tab.active-tab {
-  padding-left: 8px;
-  border-top: var(--ds-primary) 2px solid;
-}
+// .groupview.active-group
+//   > .tabs-and-actions-container
+//   > .tabs-container
+//   > .tab.active-tab {
+//   padding-left: 8px;
+//   border-top: var(--ds-primary) 2px solid;
+// }
+// .dockview-react-tab {
+//   height: 40px;
+
+//   .dockview-react-tab-title {
+//     padding: 0px 8px 0px 0px;
+//   }
+// }
