@@ -138,7 +138,7 @@ const TextEditor = props => {
 
   return (
     <Window>
-      <div className="flex h-full bg-[var(--background-color-dark)] w-[96%] m-auto pt-1 pb-1">
+      <div className="flex h-full bg-[var(--background-color-dark)] w-[96%] m-auto pt-2 pb-2">
         <Editor
           theme="sds-dark"
           // height={height} // This seemed to have been causing issues.
@@ -148,7 +148,6 @@ const TextEditor = props => {
           defaultValue={code}
           onChange={updateCode}
           beforeMount={handleEditorWillMount}
-          className=""
         />
       </div>
     </Window>
