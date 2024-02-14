@@ -68,28 +68,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         if (!agents || isLoading) return
         // If there are no agents, create a draft agent and a live agent
         if (agents.total === 0) {
-          const agent = agents.data[0]
-          let rootSpellId = agent?.rootSpellId
-
-          if (!rootSpellId) {
-            const spellTemplate = getTemplates().spells[0] as any
-            const spellName = uniqueNamesGenerator({
-              dictionaries: [adjectives, colors],
-              separator: ' ',
-              length: 2,
-            })
-            const rootSpell = (await newSpell({
-              id: uuidv4(),
-              graph: spellTemplate.graph,
-              name: spellName,
-              type: spellTemplate.type || 'spell',
-              projectId: config.projectId,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            })) as any
-
-            rootSpellId = rootSpell.data.id
-          }
           const agentName = uniqueNamesGenerator({
             dictionaries: [adjectives, colors],
             separator: ' ',
@@ -105,7 +83,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
             version: '2.0',
             publicVariables: '{}',
             secrets: '{}',
-            rootSpellId: rootSpellId || '',
             updatedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
           }).unwrap()
@@ -119,7 +96,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
             version: '2.0',
             publicVariables: '{}',
             secrets: '{}',
-            rootSpellId: rootSpellId || '',
             updatedAt: new Date().toISOString(),
             createdAt: new Date().toISOString(),
           }).unwrap()

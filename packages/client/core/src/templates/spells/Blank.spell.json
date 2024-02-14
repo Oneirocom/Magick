@@ -1,66 +1,13 @@
 {
-  "id": "ee0cd8da-85a6-484d-90d4-b85b652d8063",
+  "id": "30e438fe-8ce3-402f-bcf2-1c433b43a4f4",
   "name": "Blank",
   "projectId": "clmp2r33q0003vyxy4dh2uz8e",
-  "hash": "c8a6becf74079c8ec523e38a21565171",
-  "createdAt": "1695319385395",
-  "updatedAt": "1695319412520",
+  "hash": "b9d6637c48f4a1edba20427a561a77d5",
+  "createdAt": "1695319267522",
+  "updatedAt": "1695319318544",
   "graph": {
-    "id": "demo@0.1.0",
-    "nodes": {
-      "524": {
-        "id": 524,
-        "data": {
-          "log": false,
-          "name": "Input - Default",
-          "isInput": true,
-          "inputName": "Default",
-          "socketKey": "5bd194d8-0cb0-4f2f-aaec-f706e941b300"
-        },
-        "inputs": {},
-        "outputs": {
-          "trigger": {
-            "connections": []
-          },
-          "output": {
-            "connections": []
-          }
-        },
-        "position": [-206, -2.5],
-        "name": "Input"
-      },
-      "525": {
-        "id": 525,
-        "data": {
-          "log": false,
-          "name": "Output - Default",
-          "isOutput": true,
-          "socketKey": "4495a612-83a1-4dc8-8868-baaecd23c6ff",
-          "sendToPlaytest": true
-        },
-        "inputs": {
-          "trigger": {
-            "connections": []
-          },
-          "input": {
-            "connections": []
-          },
-          "event": {
-            "connections": []
-          }
-        },
-        "outputs": {
-          "trigger": {
-            "connections": []
-          },
-          "output": {
-            "connections": []
-          }
-        },
-        "position": [206, 2.5],
-        "name": "Output"
-      }
-    },
-    "comments": []
+    "nodes": [],
+    "customEvents": [],
+    "variables": []
   }
 }
