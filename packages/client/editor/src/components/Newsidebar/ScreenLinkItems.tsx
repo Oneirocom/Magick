@@ -1,13 +1,13 @@
-import List from "@mui/material/List"
-import { DrawerItem } from "./DrawerItem"
-import ArticleIcon from '@mui/icons-material/Article';
+import List from '@mui/material/List'
+import { DrawerItem } from './DrawerItem'
+import ArticleIcon from '@mui/icons-material/Article'
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
 import StorageIcon from '@mui/icons-material/Storage'
-import { useTabLayout } from "@magickml/providers"
-import React from "react";
-import { RootState, useGetAgentByIdQuery } from "client/state";
-import { useSelector } from "react-redux";
+import { useTabLayout } from '@magickml/providers'
+import React from 'react'
+import { RootState, useGetAgentByIdQuery } from 'client/state'
+import { useSelector } from 'react-redux'
 
 export const drawerTooltipText = {
   spells: 'Create and manage spell node graphs for agents to use. ',
@@ -24,7 +24,6 @@ export const drawerTooltipText = {
   secrets: 'Manage your secrets',
 }
 
-
 type DrawerItem = {
   name: string
   Icon: any
@@ -39,7 +38,10 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
 
-  const { data: agent, isLoading } = useGetAgentByIdQuery({ agentId: currentAgentId }, { skip: !currentAgentId })
+  const { data: agent, isLoading } = useGetAgentByIdQuery(
+    { agentId: currentAgentId },
+    { skip: !currentAgentId }
+  )
 
   if (isLoading) {
     return null
@@ -56,16 +58,8 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
     //   tooltipText: drawerTooltipText.events,
     // },
     {
-      name: 'Documents',
-      Icon: ArticleIcon,
-      isV1: true,
-      tooltip: 'Documents Tooltip',
-      tooltipText: drawerTooltipText.documents,
-    },
-    {
       name: 'Knowledge',
       Icon: ArticleIcon,
-      isV2: true,
       tooltip: 'Knowledge Tooltip',
       tooltipText: drawerTooltipText.documents,
     },
@@ -86,49 +80,51 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       Icon: SecretsIcon,
       tooltip: 'Secrets Tooltip',
       tooltipText: drawerTooltipText.secrets,
-    }
+    },
   ]
 
   return (
     <List sx={{ padding: 0, width: '100%' }}>
-      {DrawerItems
-        .map((item, index: {}) => {
-          const isElement = React.isValidElement(item);
-          const key = isElement ? `plugin-drawer-item-${index}` : (item as DrawerItem).name;
+      {DrawerItems.map((item, index: {}) => {
+        const isElement = React.isValidElement(item)
+        const key = isElement
+          ? `plugin-drawer-item-${index}`
+          : (item as DrawerItem).name
 
-          if (!isElement) {
-            const drawerItem = item as DrawerItem;
+        if (!isElement) {
+          const drawerItem = item as DrawerItem
 
-            if (drawerItem.isV1 && isV2) {
-              return null;
-            }
+          if (drawerItem.isV1 && isV2) {
+            return null
+          }
 
-            if (drawerItem.isV2 && !isV2) {
-              return null;
-            }
+          if (drawerItem.isV2 && !isV2) {
+            return null
+          }
 
-            return (
-              <DrawerItem
-                key={key} // Unique key for each DrawerItem
-                active={currentTab?.id === drawerItem.name}
-                Icon={drawerItem.Icon}
-                onClick={() => openTab({
+          return (
+            <DrawerItem
+              key={key} // Unique key for each DrawerItem
+              active={currentTab?.id === drawerItem.name}
+              Icon={drawerItem.Icon}
+              onClick={() =>
+                openTab({
                   name: drawerItem.name,
                   type: drawerItem.name,
                   switchActive: true,
                   id: drawerItem.name,
-                })}
-                text={drawerItem.name}
-                tooltip={drawerItem.tooltip}
-                tooltipText={drawerItem.tooltipText}
-              />
-            );
-          } else {
-            // Directly return the element if it's a JSX element
-            return React.cloneElement(item, { key });
-          }
-        })}
+                })
+              }
+              text={drawerItem.name}
+              tooltip={drawerItem.tooltip}
+              tooltipText={drawerItem.tooltipText}
+            />
+          )
+        } else {
+          // Directly return the element if it's a JSX element
+          return React.cloneElement(item, { key })
+        }
+      })}
     </List>
-
   )
 }
