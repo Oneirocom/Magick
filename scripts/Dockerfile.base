@@ -5,8 +5,5 @@ RUN poetry config installer.max-workers 10
 
 # Optionally, globally configure npm or poetry here if there are any global settings you'd like to apply
 
-# skip NX cache builds
-ENV NX_SKIP_NX_CACHE=true
-
 # Clean up the apt cache to reduce the image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
