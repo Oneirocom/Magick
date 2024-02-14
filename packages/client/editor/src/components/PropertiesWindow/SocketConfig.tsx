@@ -49,7 +49,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
   return (
     <form className="w-full mt-1">
       {/* Flexbox container for input field and add button */}
-      <div className="flex gap-1">
+      <div className="flex gap-2 items-center">
         {/* Input field */}
         <TextInputField
           value={value}
@@ -62,13 +62,14 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
               onAdd(e)
             }
           }}
+          className="min-w-25 h-8"
         />
         {!definedValueType && (
           <Select
             value={selectedValueType}
             onValueChange={e => setSelectedValueType(e)}
           >
-            <SelectTrigger>
+            <SelectTrigger className="h-8">
               <SelectValue placeholder={'Select a type'} />
             </SelectTrigger>
             <SelectContent>
@@ -81,7 +82,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
           </Select>
         )}
         {/* Add button */}
-        <Button variant="outline" onClick={onAdd} type="submit">
+        <Button variant="outline" onClick={onAdd} type="submit" className="h-8">
           Add
         </Button>
       </div>
