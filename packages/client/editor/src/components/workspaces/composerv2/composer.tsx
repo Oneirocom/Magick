@@ -51,22 +51,9 @@ function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
       tab,
       spellId,
       spellName,
-      spellName,
     },
   })
 
-  api.addPanel({
-    id: 'Properties',
-    component: 'Properties',
-    tabComponent: 'permanentTab',
-    params: {
-      title: 'Properties',
-      tab,
-      spellId,
-      spellName,
-    },
-    position: { referencePanel: 'Graph', direction: 'left' },
-  })
   api.addPanel({
     id: 'Properties',
     component: 'Properties',

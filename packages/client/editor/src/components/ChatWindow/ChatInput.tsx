@@ -5,7 +5,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
  * Input component - Receives and sends playtest input.
  */
 export const ChatInput = props => {
-  const ref = useRef(null)
+  const ref = useRef<any>(null)
   // const ref = useRef(null) as React.MutableRefObject<HTMLInputElement>
 
   const [playtestCache, setPlaytestCache] = useState<string[]>([])
@@ -25,6 +25,7 @@ export const ChatInput = props => {
   useHotkeys(
     'up',
     () => {
+      if (!ref.current) return
       if (ref.current !== document.activeElement) return
       if (playtestCache.length === 0) return
       const last = playtestCache[playtestCache.length - 1]
