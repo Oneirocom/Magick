@@ -12,16 +12,14 @@ import FileDrawer from '../layout/fileDrawer'
 import RightSidebar from '../layout/rightSidebar'
 import { useDockviewTheme } from 'client/state'
 import ModalProvider from '../contexts/ModalProvider'
-import { StatusBar } from '../components/StatusBar/statusBar';
+import { StatusBar } from '../components/StatusBar/statusBar'
 
 const components = {
   MainPanel,
   FileDrawer,
   RightSidebar,
   StatusBar: (props: IGridviewPanelProps<{ title: string }>) => {
-    return (
-      <StatusBar />
-    )
+    return <StatusBar />
   },
   default: (props: IGridviewPanelProps<{ title: string }>) => {
     return (
@@ -35,7 +33,7 @@ const components = {
         Status Bar
       </div>
     )
-  }
+  },
 }
 
 const loadDefaultLayout = (api: GridviewApi) => {
@@ -57,7 +55,7 @@ const loadDefaultLayout = (api: GridviewApi) => {
     maximumWidth: 300,
     params: {
       title: 'FileDrawer',
-      id: 'FileDrawer'
+      id: 'FileDrawer',
     },
   })
 
@@ -67,26 +65,28 @@ const loadDefaultLayout = (api: GridviewApi) => {
     component: 'MainPanel',
     params: {
       title: 'MainPanel',
-      id: 'MainPanel'
+      id: 'MainPanel',
     },
     priority: LayoutPriority.High,
     position: { referencePanel: 'FileDrawer', direction: 'right' },
   })
 
   // Right side console panel
-  api.addPanel({
-    id: 'RightSidebar',
-    component: 'RightSidebar',
-    params: {
-      title: 'Panel 6',
-      id: 'RightSidebar'
-    },
-    snap: true,
-    priority: LayoutPriority.Low,
-    position: { referencePanel: 'MainPanel', direction: 'right' },
-  }).api.setSize({
-    width: 0
-  })
+  api
+    .addPanel({
+      id: 'RightSidebar',
+      component: 'RightSidebar',
+      params: {
+        title: 'Panel 6',
+        id: 'RightSidebar',
+      },
+      snap: true,
+      priority: LayoutPriority.Low,
+      position: { referencePanel: 'MainPanel', direction: 'right' },
+    })
+    .api.setSize({
+      width: 0,
+    })
 }
 
 const MagickV2 = () => {
