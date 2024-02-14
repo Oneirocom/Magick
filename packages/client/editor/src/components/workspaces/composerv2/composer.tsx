@@ -21,6 +21,10 @@ import GraphWindow from '../../GraphWindow/GraphWindow'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 import { VariableWindow } from '../../VariableWindow/VariableWindow'
+import {
+  applyConstraintsFromConfig,
+  applyLayoutConfig,
+} from '../../../screens/layoutConfig'
 
 const getLayoutFromLocalStorage = (spellId: string) => {
   const layout = localStorage.getItem(`composer_layout_${spellId}`)
@@ -31,90 +35,6 @@ const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
   localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
 }
 
-function loadDefaultLayout(api: DockviewApi, tab, spellId, spellName) {
-  const panel = api.addPanel({
-    id: 'panel_1',
-    component: 'default',
-    params: {
-      title: 'Panel 1',
-    },
-  })
-
-  panel.group.locked = true
-  panel.group.header.hidden = true
-
-  api.addPanel({
-    id: 'Graph',
-    component: 'Graph',
-    params: {
-      title: 'Graph',
-      tab,
-      spellId,
-      spellName,
-    },
-  })
-
-  api.addPanel({
-    id: 'Properties',
-    component: 'Properties',
-    tabComponent: 'permanentTab',
-    params: {
-      title: 'Properties',
-      tab,
-      spellId,
-      spellName,
-    },
-    position: { referencePanel: 'Graph', direction: 'left' },
-  })
-
-  const propertyPanel = api.getPanel('Properties')
-  if (propertyPanel) {
-    const propertyGroup = propertyPanel.group
-    propertyGroup.api.setConstraints({
-      minimumWidth: 300,
-    })
-  }
-
-  api.addPanel({
-    id: 'Variables',
-    component: 'Variables',
-    params: {
-      title: 'Variables',
-      tab,
-      spellId,
-      spellName,
-    },
-    position: { referencePanel: 'Properties', direction: 'below' },
-  })
-
-  api
-    .addPanel({
-      id: 'Test',
-      component: 'Test',
-      params: {
-        title: 'Test',
-        tab,
-        spellId,
-        spellName,
-      },
-      position: { referencePanel: 'Graph', direction: 'right' },
-    })
-    .api.setSize({
-      width: 300,
-    })
-
-  api.addPanel({
-    id: 'Text Editor',
-    component: 'TextEditor',
-    params: {
-      title: 'Text Editor',
-      tab,
-      spellId,
-      spellName,
-    },
-    position: { referencePanel: 'Test', direction: 'below' },
-  })
-}
 const components = {
   default: (props: IDockviewPanelProps<{ title: string; spellId: string }>) => {
     return (
@@ -177,20 +97,18 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
   }, [_currentAgentId])
 
   const onReady = (event: DockviewReadyEvent) => {
-    // const layout = tab.layoutJson;
     const layout = getLayoutFromLocalStorage(spellId)
 
     let success = false
 
     if (layout) {
       event.api.fromJSON(layout)
-      success = true
-      event.api.fromJSON(layout)
+      applyConstraintsFromConfig({ api: event.api })
       success = true
     }
 
     if (!success) {
-      loadDefaultLayout(event.api, tab, spellId, spellName)
+      applyLayoutConfig(event.api)
     }
 
     setApi(event.api)
