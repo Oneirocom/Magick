@@ -31,8 +31,6 @@ import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
-const defaultPosition: XYPosition = { x: 0, y: 0 }
-
 const useNodePickFilters = ({
   nodes,
   lastConnectStart,
@@ -70,12 +68,9 @@ export const useFlowHandlers = ({
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
-  const [pickedNodeVisibility, setPickedNodeVisibility] =
-    useState<XYPosition>(defaultPosition)
-  const [nodePickerPosition, setNodePickerPosition] =
-    useState<XYPosition>(defaultPosition)
-  const [nodeMenuVisibility, setNodeMenuVisibility] =
-    useState<XYPosition>(defaultPosition)
+  const [pickedNodeVisibility, setPickedNodeVisibility] = useState<XYPosition>()
+  const [nodePickerPosition, setNodePickerPosition] = useState<XYPosition>()
+  const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
   const rfDomNode = useStore(state => state.domNode)
@@ -102,8 +97,8 @@ export const useFlowHandlers = ({
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
-    setNodePickerPosition(defaultPosition)
-    setPickedNodeVisibility(defaultPosition)
+    setNodePickerPosition(undefined)
+    setPickedNodeVisibility(undefined)
   }, [])
 
   const onEdgeUpdate = useCallback(
