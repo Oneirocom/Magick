@@ -44,7 +44,7 @@ export const agentDataSchema = Type.Pick(
     'data',
     'publicVariables',
     'secrets',
-    'rootSpellId',
+    'rootSpellId', // DEPRECATED
     'runState', //UNUSED right now
     'image',
     'currentSpellReleaseId',
