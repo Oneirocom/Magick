@@ -211,7 +211,7 @@ export const MPBalanceBar = ({ userData }) => {
         <p className="text-[#B7BBBE]">
           Wallet:{' '}
           <span className="font-medium" style={walletStyle}>
-            ${walletBalance}
+            ${walletBalance > 0 ? walletBalance : '0.00'}
           </span>
         </p>
         <InfoOutlinedIcon
