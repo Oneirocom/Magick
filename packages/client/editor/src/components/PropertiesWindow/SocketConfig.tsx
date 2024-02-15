@@ -49,42 +49,51 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
   return (
     <form className="w-full mt-1">
       {/* Flexbox container for input field and add button */}
-      <div className="flex gap-2 items-center">
-        {/* Input field */}
-        <TextInputField
-          value={value}
-          type="text"
-          onChange={onChange}
-          required
-          placeholder="Add new socket"
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              onAdd(e)
-            }
-          }}
-          className="min-w-25 h-8"
-        />
-        {!definedValueType && (
-          <Select
-            value={selectedValueType}
-            onValueChange={e => setSelectedValueType(e)}
+      <div className="flex h-20 mr-2">
+        <div className="flex gap-2 items-center h-10 ">
+          {/* Input field */}
+          <TextInputField
+            value={value}
+            type="text"
+            onChange={onChange}
+            required
+            placeholder="Add new socket"
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                onAdd(e)
+              }
+            }}
+            className="w-28 h-8 pl-2 input-placeholder bg-[var(--dark-3)] border-[var(--dark-3)]"
+          />
+          {!definedValueType && (
+            <Select
+              value={selectedValueType}
+              onValueChange={e => setSelectedValueType(e)}
+            >
+              <SelectTrigger className="h-8 pl-2 text-xs pr-1 font-medium border-0 bg-[var(--dark-1)]">
+                <SelectValue placeholder={'Select a type'}>
+                  {selectedValueType.charAt(0).toUpperCase() +
+                    selectedValueType.slice(1)}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="w-auto min-w-full">
+                {valueTypes.map(type => (
+                  <SelectItem key={type} value={type}>
+                    <div>{type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {/* Add button */}
+          <Button
+            onClick={onAdd}
+            // type="submit"
+            className="h-8 w-8 border border-[var(--dark-3)] bg-ds-neutral rounded-sm"
           >
-            <SelectTrigger className="h-8">
-              <SelectValue placeholder={'Select a type'} />
-            </SelectTrigger>
-            <SelectContent>
-              {valueTypes.map(type => (
-                <SelectItem key={type} value={type}>
-                  <div>{type}</div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-        {/* Add button */}
-        <Button variant="outline" onClick={onAdd} type="submit" className="h-8">
-          Add
-        </Button>
+            +
+          </Button>
+        </div>
       </div>
     </form>
   )
