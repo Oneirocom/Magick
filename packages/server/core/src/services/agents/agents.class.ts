@@ -256,46 +256,38 @@ export class AgentService<
           }
         )
 
-        const draftSpellsToCopy: SpellData[] = allSpells.filter(
-          (spell: SpellData) => !spell.spellReleaseId
-        )
+        const draftSpellsToCopy: SpellData[] =
+          allSpells.filter((spell: SpellData) => !spell.spellReleaseId) || []
 
         if (!draftSpellsToCopy.length)
           throw new Error('No spells found to copy')
 
         const newSpells: SpellData[] = []
-        // Duplicate spells for the new release
-        for (const spell of draftSpellsToCopy) {
-          const newSpell = (await trx('spells')
-            .insert({
-              ...spell,
-              id: uuidv4(),
-              spellReleaseId: spellRelease.id,
-              updatedAt: new Date().toISOString(),
-              createdAt: new Date().toISOString(),
-              type: spell.type ?? 'spell',
-            })
-            .returning('*')) as SpellData[]
-          newSpells.push(newSpell[0])
+        if (draftSpellsToCopy.length > 0) {
+          // Duplicate spells for the new release
+          for (const spell of draftSpellsToCopy) {
+            const newSpell = (await trx('spells')
+              .insert({
+                ...spell,
+                id: uuidv4(),
+                spellReleaseId: spellRelease.id,
+                updatedAt: new Date().toISOString(),
+                createdAt: new Date().toISOString(),
+                type: spell.type ?? 'spell',
+              })
+              .returning('*')) as SpellData[]
+            newSpells.push(newSpell[0])
+          }
         }
-        const rootSpell = draftSpellsToCopy.find(
-          spell => spell.id === agentToCopy?.rootSpellId
-        ) as SpellData
-
-        const newRootSpell = newSpells.find(spell => {
-          return spell.name === rootSpell?.name
-        }) as SpellData
 
         // Update agent with new spell release ID
         await trx('agents').where({ id: agentToUpdate.id }).update({
           currentSpellReleaseId: spellRelease.id,
-          rootSpellId: newRootSpell?.id,
           updatedAt: new Date().toISOString(),
         })
 
         return {
           spellReleaseId: spellRelease.id,
-          rootSpellId: newRootSpell?.id,
           agentToUpdateId: agentToUpdate.id,
         }
       })
