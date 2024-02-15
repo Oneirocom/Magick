@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           w-full
           rounded-sm
           border-[var(--deep-background-color)]
-          border-1
+          border
           bg-[var(--background-color)]
           px-3
           my-2
@@ -34,12 +34,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           file:bg-transparent
           file:text-sm
           file:font-medium
-          placeholder:text-muted-foreground
           focus-visible:outline-none
           focus-visible:ring-1
           focus-visible:ring-ring
           disabled:cursor-not-allowed
           disabled:opacity-50
+          font-montserrat
         `,
           className
         )}
