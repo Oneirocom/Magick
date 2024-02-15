@@ -122,7 +122,7 @@ export const PropertiesWindow = (props: Props) => {
             // Check if the current element is the first or the last one in the array
             const isFirstElement = index === 0
             const borderClass = cx(
-              'border-solid border-0 border-b border-[var(--background-color)] p-4',
+              'border-solid border-0 border-b border-[var(--background-color)] pl-4 pr-2 py-4',
               isFirstElement && 'border-t'
             )
 
