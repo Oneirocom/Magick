@@ -53,7 +53,7 @@ export const { addLocalState, deleteLocalState, upsertLocalState } =
  */
 export const selectStateBytabId = createDraftSafeSelector(
   [state => localSelectors.selectAll(state), (_, id) => id],
-  (states, id) => Object.values(states).find(state => state.id === id)
+  (states, id) => Object.values(states).find(state => state?.id === id)
 )
 
 // export the default reducer
