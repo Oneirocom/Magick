@@ -137,7 +137,7 @@ export const FeathersProvider = ({
 
     const handler = (data): void => {
       pongReceivedRef.current = true
-      dispatch(setConnected(true))
+      if (data.isLive) dispatch(setConnected(true))
 
       // if watching ever fails we should reconnect here.
       if (!data.isLive) {
