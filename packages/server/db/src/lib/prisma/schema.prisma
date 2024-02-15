@@ -46,6 +46,7 @@ model agents {
   version                                                   String              @default("1.0") @db.VarChar(255)
   embeddingProvider                                         String?             @db.VarChar(255)
   embeddingModel                                            String?             @db.VarChar(255)
+  isDraft                                                   Boolean             @default(false)
   agent_credentials                                         agent_credentials[]
   spellReleases_agents_currentSpellReleaseIdTospellReleases spellReleases?      @relation("agents_currentSpellReleaseIdTospellReleases", fields: [currentSpellReleaseId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "agents_currentspellreleaseid_foreign")
   chatMessages                                              chatMessages[]
