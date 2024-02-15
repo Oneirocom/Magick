@@ -73,7 +73,7 @@ export const defaultLayoutConfig: PanelConfig[] = [
     },
     position: { referencePanel: 'Graph', direction: 'left' },
     constraints: {
-      maximumWidth: 280,
+      minimumWidth: 270,
     },
   },
   {
@@ -87,7 +87,7 @@ export const defaultLayoutConfig: PanelConfig[] = [
     },
     position: { referencePanel: 'Properties', direction: 'below' },
     constraints: {
-      maximumWidth: 280,
+      minimumWidth: 270,
     },
   },
   {
@@ -100,7 +100,6 @@ export const defaultLayoutConfig: PanelConfig[] = [
       spellName: 'YourSpellName',
     },
     position: { referencePanel: 'Graph', direction: 'right' },
-    constraints: {},
   },
   {
     id: 'Text Editor',
