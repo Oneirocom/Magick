@@ -69,7 +69,7 @@ const InputFieldForValue = ({
   const inputClass = cx('h-6 text-sm')
 
   const containerClass = cx(
-    'flex w-full rounded-lg items-center pl-1',
+    'flex w-full rounded-sm items-center pl-1 rounded-sm',
     !hideValueInput && 'bg-[var(--foreground-color)]'
   )
 
@@ -92,9 +92,9 @@ const InputFieldForValue = ({
   }, [isActive, textEditorState])
 
   return (
-    <div style={{ borderRadius: 5 }} className={containerClass}>
+    <div className={containerClass}>
       {/* flex layout these divs 50 50 */}
-      <div className="flex flex-1 items-center h-full">
+      <div className="flex flex-1 items-center h-8">
         <p className="flex capitalize">{name}</p>
       </div>
       {!hideValueInput && (
@@ -104,7 +104,7 @@ const InputFieldForValue = ({
               onValueChange={value => onChange(name, value)}
               defaultValue={value}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger>
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
@@ -123,6 +123,7 @@ const InputFieldForValue = ({
                 handleChange({ key: name, value: e.currentTarget.value })
               }
               onFocus={() => onFocus(inputVal)}
+              className="m-1 h-6"
             />
           )}
           {valueType === 'float' && !showChoices && (
