@@ -21,6 +21,10 @@ import GraphWindow from '../../GraphWindow/GraphWindow'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 import { VariableWindow } from '../../VariableWindow/VariableWindow'
+import {
+  applyConstraintsFromConfig,
+  applyDynamicLayoutConfig,
+} from '../../../screens/layoutConfig'
 
 const getLayoutFromLocalStorage = (spellId: string) => {
   const layout = localStorage.getItem(`composer_layout_${spellId}`)
@@ -179,20 +183,15 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
     const layout = getLayoutFromLocalStorage(spellId)
-
     let success = false
-
     if (layout) {
       event.api.fromJSON(layout)
-      success = true
-      event.api.fromJSON(layout)
+      applyConstraintsFromConfig({ api: event.api, spellId, tab, spellName })
       success = true
     }
-
     if (!success) {
-      loadDefaultLayout(event.api, tab, spellId, spellName)
+      applyDynamicLayoutConfig({ api: event.api, spellId, spellName, tab })
     }
-
     setApi(event.api)
   }
 
