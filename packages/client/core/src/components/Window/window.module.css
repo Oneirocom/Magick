@@ -33,7 +33,6 @@
   justify-content: flex-end;
   padding-bottom: var(--c1);
   gap: var(--extraSmall);
-  border-bottom: 1px solid var(--dark-1);
 }
 
 .lock-bar {
