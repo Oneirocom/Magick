@@ -15,6 +15,10 @@
   --gradient-3: linear-gradient(0deg, #1459fa, #7027dd);
   --gradient-4: linear-gradient(310deg, rgb(13, 21, 51), rgba(0, 11, 214, 0.3));
 
+  --dark-1: #282d33;
+  --dark-2: #00010187;
+  --dark-3: #191d20;
+
   // Functional Variables
   --primary-color: var(--neutral-light); // Primary color for buttons, etc.
   --deep-background-color: #0b0d0e;
@@ -30,7 +34,6 @@
   --button-active-bg: var(--neutral-dark); // Background for active buttons
   --button-inactive-text: var(--slate); // Text for inactive buttons
   --button-active-text: var(--neutral-light); // Text for active buttons
-
   // spacing
   --sash-width: 4px;
 
@@ -243,18 +246,7 @@
 .tab .default-tab .tab-content {
   padding: 0px 8px 0px 0px;
 }
-
-// .groupview.active-group
-//   > .tabs-and-actions-container
-//   > .tabs-container
-//   > .tab.active-tab {
-//   padding-left: 8px;
-//   border-top: var(--ds-primary) 2px solid;
-// }
-// .dockview-react-tab {
-//   height: 40px;
-
-//   .dockview-react-tab-title {
-//     padding: 0px 8px 0px 0px;
-//   }
-// }
+.input-placeholder::placeholder {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
