@@ -44,7 +44,6 @@ export const agentDataSchema = Type.Pick(
     'data',
     'publicVariables',
     'secrets',
-    'rootSpellId', // DEPRECATED
     'runState', //UNUSED right now
     'image',
     'currentSpellReleaseId',
@@ -70,7 +69,6 @@ export const agentPatchDataSchema = Type.Partial(
       'publicVariables',
       'secrets',
       'currentSpellReleaseId',
-      'rootSpellId',
     ],
     { $id: 'AgentPatch', additionalProperties: true }
   )
