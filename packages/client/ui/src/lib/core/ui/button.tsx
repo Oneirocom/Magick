@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '../../utils/shadcn'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md text-sm font-medium font-montserrat transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-sm text-sm font-medium font-montserrat transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -19,7 +19,7 @@ const buttonVariants = cva(
           'hover:border border-ds-primary color-transition backdrop-blur-[2px]',
         link: 'text-primary underline-offset-4 hover:underline',
         basic:
-          'font-bold bg-ds-neutral text-ds-white border rounded-sm relative button-transition hover:border hover:border-ds-primary',
+          'font-bold bg-ds-neutral text-ds-white border border-[var(--dark-2)] rounded-sm relative button-transition hover:border hover:border-ds-primary',
         primary:
           'bg-ds-primary text-primary-foreground shadow font-bold capitalize dark:border-2 dark:border-[#BADDE4] text-white hover:text-accent-foreground text-lg font-montAlt button-transition hover:bg-transparent rounded-lg',
         agent:
