@@ -299,10 +299,9 @@ export class AgentService<
           agentToUpdateId: agentToUpdate.id,
         }
       })
-      .then(({ spellReleaseId, rootSpellId, agentToUpdateId }) => {
+      .then(({ spellReleaseId, agentToUpdateId }) => {
         this.app.service('agents').patch(agentToUpdateId, {
           currentSpellReleaseId: spellReleaseId,
-          rootSpellId: rootSpellId,
           updatedAt: new Date().toISOString(),
         })
 
