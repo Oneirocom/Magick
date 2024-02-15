@@ -79,7 +79,7 @@ export const generateLayoutConfig = (
     },
     position: { referencePanel: 'Graph', direction: 'left' },
     constraints: {
-      minimumWidth: 270,
+      // minimumWidth: 270,
     },
   },
   {
