@@ -1,3 +1,5 @@
+import { DockviewApi } from 'dockview'
+
 type PanelPosition = {
   referencePanel: string
   direction: 'above' | 'below' | 'left' | 'right'
@@ -38,7 +40,12 @@ interface PanelConfig {
   snap?: boolean
 }
 
-export const defaultLayoutConfig: PanelConfig[] = [
+// Function to generate dynamic layout configuration
+export const generateLayoutConfig = (
+  tab: string,
+  spellId: string,
+  spellName: string
+): PanelConfig[] => [
   {
     id: 'panel_1',
     component: 'default',
@@ -55,10 +62,9 @@ export const defaultLayoutConfig: PanelConfig[] = [
     component: 'Graph',
     params: {
       title: 'Graph',
-      // Ensure tab, spellId, spellName are defined or passed appropriately
-      tab: 'YourTab',
-      spellId: 'YourSpellId',
-      spellName: 'YourSpellName',
+      tab,
+      spellId,
+      spellName,
     },
   },
   {
@@ -67,9 +73,9 @@ export const defaultLayoutConfig: PanelConfig[] = [
     tabComponent: 'permanentTab',
     params: {
       title: 'Properties',
-      tab: 'YourTab',
-      spellId: 'YourSpellId',
-      spellName: 'YourSpellName',
+      tab,
+      spellId,
+      spellName,
     },
     position: { referencePanel: 'Graph', direction: 'left' },
     constraints: {
@@ -81,23 +87,20 @@ export const defaultLayoutConfig: PanelConfig[] = [
     component: 'Variables',
     params: {
       title: 'Variables',
-      tab: 'YourTab',
-      spellId: 'YourSpellId',
-      spellName: 'YourSpellName',
+      tab,
+      spellId,
+      spellName,
     },
     position: { referencePanel: 'Properties', direction: 'below' },
-    constraints: {
-      minimumWidth: 270,
-    },
   },
   {
     id: 'Test',
     component: 'Test',
     params: {
       title: 'Test',
-      tab: 'YourTab',
-      spellId: 'YourSpellId',
-      spellName: 'YourSpellName',
+      tab,
+      spellId,
+      spellName,
     },
     position: { referencePanel: 'Graph', direction: 'right' },
   },
@@ -106,16 +109,28 @@ export const defaultLayoutConfig: PanelConfig[] = [
     component: 'TextEditor',
     params: {
       title: 'Text Editor',
-      tab: 'YourTab',
-      spellId: 'YourSpellId',
-      spellName: 'YourSpellName',
+      tab,
+      spellId,
+      spellName,
     },
     position: { referencePanel: 'Test', direction: 'below' },
   },
 ]
 
-export const applyLayoutConfig = api => {
-  defaultLayoutConfig.forEach(config => {
+// Function to apply dynamic layout configuration
+export const applyDynamicLayoutConfig = ({
+  api,
+  tab,
+  spellId,
+  spellName,
+}: {
+  api: DockviewApi
+  tab: string
+  spellId: string
+  spellName: string
+}) => {
+  const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
+  layoutConfig.forEach(config => {
     const panel = api.addPanel({
       id: config.id,
       component: config.component,
@@ -125,11 +140,11 @@ export const applyLayoutConfig = api => {
     })
 
     if (config.groupModifications) {
-      if (config.groupModifications.locked) {
-        panel.group.locked = true
+      if (config.groupModifications.locked !== undefined) {
+        panel.group.locked = config.groupModifications.locked
       }
-      if (config.groupModifications.headerHidden) {
-        panel.group.header.hidden = true
+      if (config.groupModifications.headerHidden !== undefined) {
+        panel.group.header.hidden = config.groupModifications.headerHidden
       }
     }
 
@@ -143,9 +158,20 @@ export const applyLayoutConfig = api => {
   })
 }
 
-export const applyConstraintsFromConfig = ({ api }) => {
+export const applyConstraintsFromConfig = ({
+  api,
+  tab,
+  spellId,
+  spellName,
+}: {
+  api: DockviewApi
+  tab: string
+  spellId: string
+  spellName: string
+}) => {
   api.panels.forEach(panel => {
-    defaultLayoutConfig.map(config => {
+    const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
+    layoutConfig.map(config => {
       if (config.constraints) {
         const { minimumWidth, maximumWidth, minimumHeight, maximumHeight } =
           config.constraints
