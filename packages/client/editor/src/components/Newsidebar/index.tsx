@@ -66,7 +66,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
     const handleInitialAgentSetup = async () => {
       try {
         if (!agents || isLoading) return
-        console.log('agents', agents)
         // If there are no agents, create a draft agent and a live agent
         if (agents.total === 0) {
           const agentName = uniqueNamesGenerator({
