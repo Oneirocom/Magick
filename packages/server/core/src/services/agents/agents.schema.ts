@@ -47,6 +47,7 @@ export const agentDataSchema = Type.Pick(
     'runState', //UNUSED right now
     'image',
     'currentSpellReleaseId',
+    'isDraft',
     'default',
     'rootSpell', //DEPRECATED
   ],
@@ -69,6 +70,7 @@ export const agentPatchDataSchema = Type.Partial(
       'publicVariables',
       'secrets',
       'currentSpellReleaseId',
+      'isDraft',
     ],
     { $id: 'AgentPatch', additionalProperties: true }
   )
@@ -131,6 +133,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'version',
   'frozen',
   'currentSpellReleaseId',
+  'isDraft',
 ])
 
 /**
