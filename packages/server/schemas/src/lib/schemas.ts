@@ -75,6 +75,7 @@ export const agentSchema = Type.Object(
     currentSpellReleaseId: Type.Optional(
       Type.Union([Type.Null(), Type.String()])
     ),
+    isDraft: Type.Optional(Type.Boolean()),
     embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
