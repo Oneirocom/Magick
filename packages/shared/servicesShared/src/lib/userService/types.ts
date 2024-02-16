@@ -30,6 +30,8 @@ export interface User {
   balance: number
   hasSubscription: boolean
   subscriptionName?: SubscriptionNames
+  promoCredit: number
+  introCredit: number
 }
 
 export interface UserResponse {
