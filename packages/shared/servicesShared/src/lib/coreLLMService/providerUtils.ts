@@ -62,7 +62,11 @@ export function isModelAvailableToUser({
         return hasBalance ? true : modelsWithKeys.includes(model)
       }
     } else {
-      if (userData.user.balance > 0) {
+      if (
+        userData?.user?.balance > 0 ||
+        userData?.user?.promoCredit > 0 ||
+        userData?.user?.introCredit > 0
+      ) {
         // All models are available if user has a positive balance
         return true
       }
