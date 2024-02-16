@@ -11,7 +11,7 @@ import styles from './menu.module.css'
 import { useState, useEffect } from 'react'
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-import { SubscriptionNames } from 'servicesShared'
+import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 
 export const MPBalanceBar = ({ userData }) => {
   const { client } = useFeathers()
@@ -147,13 +147,13 @@ export const MPBalanceBar = ({ userData }) => {
     },
   }))
 
-  const hasSubscription = userData && userData?.user?.hasSubscription
-  const isNeophyte = userData && !hasSubscription
+  const isNeophyte =
+    userData && userData.user?.subscriptionName === PortalSubscriptions.NEOPHYTE
   const isApprentice =
     userData &&
-    userData?.user?.subscriptionName === SubscriptionNames.Apprentice
+    userData?.user?.subscriptionName === PortalSubscriptions.APPRENTICE
   const isWizard =
-    userData && userData?.user?.subscriptionName === SubscriptionNames.Wizard
+    userData && userData?.user?.subscriptionName === PortalSubscriptions.WIZARD
 
   const mp = Number((magickPowerBalance * 100).toFixed(0))
   const walletBalance = Number(remainingBalance.toFixed(2))
@@ -195,9 +195,7 @@ export const MPBalanceBar = ({ userData }) => {
         <BorderLinearProgress
           variant="determinate"
           value={
-            isNeophyte
-              ? Math.min(magickPowerBalance * 5 * 10, 100)
-              : Math.min(magickPowerBalance * 10, 100)
+            isNeophyte ? magickPowerBalance * 5 * 10 : magickPowerBalance * 10
           }
         />
         <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
