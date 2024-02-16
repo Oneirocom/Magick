@@ -161,7 +161,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         <div className="px-4">
           <Button
             className="p-4 w-full mb-4 "
-            variant="portal-primary"
+            variant="portal-neutral"
             onClick={onCreateSpell}
           >
             + Create spell
