@@ -2,7 +2,7 @@
 import { CustomizedSwitch } from 'client/core'
 import { Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import styles from './index.module.scss'
 import { InputEdit } from './InputEdit'
@@ -44,29 +44,6 @@ const AgentDetails = ({
 
     setV2(selectedAgentData.version === '2.0')
   }, [selectedAgentData.version])
-
-  const changeVersion = useCallback(
-    version => {
-      updateAgent({
-        id: selectedAgentData.id,
-        version,
-      })
-        .unwrap()
-        .then(data => {
-          setSelectedAgentData(data)
-          enqueueSnackbar(`Changed agent to version ${version}`, {
-            variant: 'success',
-          })
-        })
-        .catch(e => {
-          console.error(e)
-          enqueueSnackbar('Error updating agent', {
-            variant: 'error',
-          })
-        })
-    },
-    [selectedAgentData]
-  )
 
   /**
    * update agent data by agent id.
@@ -148,15 +125,6 @@ const AgentDetails = ({
               />
             </span>
           </Tooltip>
-          <Button
-            className="text-white"
-            onClick={() => {
-              const v2 = selectedAgentData.version === '2.0'
-              changeVersion(v2 ? '1.0' : '2.0')
-            }}
-          >
-            Toggle V2
-          </Button>
         </div>
 
         <div className={styles.btns}>
