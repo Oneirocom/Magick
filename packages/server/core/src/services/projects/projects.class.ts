@@ -2,22 +2,30 @@
 import { Params } from '@feathersjs/feathers'
 import { app } from '../../app'
 import { v4 as uuidv4 } from 'uuid'
+import { UserInterface } from 'server/schemas'
+import { prisma } from '@magickml/portal-db'
 
 /**
  * Interface for CreateData objects
  */
-interface CreateData {
+interface UploadData {
   agents: any // Add specific type if possible
   documents: any // Add specific type if possible
   spells: any // Add specific type if possible
   projectId: string
 }
 
+type CreateProjectParams = {
+  owner: string
+  name: string
+  description: string
+}
+
 /**
  * Interface for custom params including user information
  */
 export interface ProjectParams extends Params {
-  user: any // Add specific type if possible
+  user: UserInterface
   query: any
 }
 
@@ -110,12 +118,67 @@ export class ProjectsService {
     }
   }
 
+  async create(params: CreateProjectParams) {
+    try {
+      const { owner, name, description } = params
+      // Create a new project
+      const project = await prisma.project.create({
+        data: {
+          name: name,
+          description,
+          owner,
+          updatedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+        },
+      })
+
+      const agentService = app.service('agents')
+      // Create a draft agent
+      const draftAgent = await agentService.create({
+        name: name,
+        projectId: project.id,
+        enabled: true,
+        default: true,
+        version: '2.0',
+        publicVariables: '{}',
+        secrets: '{}',
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        isDraft: true,
+      })
+
+      // Create a live agent
+      const newLiveAgent = await agentService.create({
+        name: name,
+        projectId: project.id,
+        enabled: true,
+        default: false,
+        version: '2.0',
+        publicVariables: '{}',
+        secrets: '{}',
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      })
+
+      // Create a release for the live agent
+      await agentService.createRelease({
+        agentId: newLiveAgent.id,
+        description: 'Initial Release',
+        agentToCopyId: draftAgent.id,
+      })
+
+      return project
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   /**
    * Create a new project with the given data (agents, documents, spells, projectId)
    * @param data - The data required to create a new project
    * @returns - An object containing the created agents, spells and documents
    */
-  async create(data: CreateData): Promise<{
+  async projectImport(data: UploadData): Promise<{
     agents: any
     spells: any
     documents: any
