@@ -222,16 +222,15 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   return (
     <div
-      className="fixed z-10 text-sm text-white bg-gray-800 border border-gray-500 rounded node-picker "
+      className="fixed z-10 text-sm text-white border border-gray-500 rounded-sm node-picker bg-[var(--secondary-3)] "
       style={{ top: position.y, left: position.x }}
     >
-      <div className="p-2 bg-gray-500">Add Node</div>
       <div className="p-2">
         <input
           type="text"
           autoFocus
-          placeholder="Type to filter"
-          className="w-full px-2 py-1 bg-gray-600 disabled:bg-gray-700"
+          placeholder="Search"
+          className="w-full px-2 py-1 bg-[var(--dark-2)] disabled:bg-gray-700 rounded-sm"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -245,7 +244,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
             {filtered.map(({ type }, index) => (
               <div
                 key={type}
-                className={`p-2 text-base cursor-pointer border-b border-gray-600 ${
+                className={`p-2 text-base cursor-pointer border-b border-[var(--secondary-3)] ${
                   index === focusedIndex ? 'bg-gray-700' : 'hover:bg-gray-600'
                 }`}
                 onMouseEnter={() => setFocusedIndex(index)}
