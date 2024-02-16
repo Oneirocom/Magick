@@ -1,7 +1,5 @@
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { UserResponse } from '../userService/types'
-import { PortalSubscriptions } from '@magickml/portal-utils-shared'
-import { UserResponse } from '../userService/types'
 import { AllModels } from './types/models'
 import {
   LLMProviderKeys,
