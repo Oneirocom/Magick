@@ -1,4 +1,5 @@
-import { SubscriptionNames, UserResponse } from '../userService/types'
+import { PortalSubscriptions } from '@magickml/portal-utils-shared'
+import { UserResponse } from '../userService/types'
 import { AllModels } from './types/models'
 import {
   LLMProviderKeys,
@@ -52,24 +53,28 @@ export function isModelAvailableToUser({
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName?.trim()
 
-      if (userSubscriptionName === SubscriptionNames.Wizard) {
-        // All models are available for Wizard subscription
-        return true
+      if (userSubscriptionName === PortalSubscriptions.NEOPHYTE) {
+        // Only models with keys are available for Journeyman subscription
+        if (
+          userData?.user?.balance > 0 ||
+          userData?.user?.promoCredit > 0 ||
+          userData?.user?.introCredit > 0
+        ) {
+          // All models are available if user has a positive balance
+          return true
+        }
       }
-      if (userSubscriptionName === SubscriptionNames.Apprentice) {
+      if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
         // Only models with keys are available for Apprentice subscription
         const hasBalance = userData.user.balance > 0
         return hasBalance ? true : modelsWithKeys.includes(model)
       }
-    } else {
-      if (
-        userData?.user?.balance > 0 ||
-        userData?.user?.promoCredit > 0 ||
-        userData?.user?.introCredit > 0
-      ) {
-        // All models are available if user has a positive balance
+      if (userSubscriptionName === PortalSubscriptions.WIZARD) {
+        // All models are available for Wizard subscription
         return true
       }
+    } else {
+      return false
     }
   }
   // If no subscription and no balance, model is not available
