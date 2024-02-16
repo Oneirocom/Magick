@@ -78,7 +78,11 @@ export class KnowledgeService<
       try {
         await this.s3.send(command)
 
-        const sourceUrl = `https://${this.bucketName}.s3.${AWS_REGION}.amazonaws.com/${key}` // Construct the S3 URL
+        // Make sure to turn this into a proper URL
+        const sourceUrl = new URL(
+          `https://${this.bucketName}.s3.${AWS_REGION}.amazonaws.com/${key}`
+        ).toString()
+        // Construct the S3 URL
         const metaData = {
           ...options.metadata,
           fileName: file.originalFilename,
@@ -86,6 +90,7 @@ export class KnowledgeService<
           s3Key: key,
         }
 
+        console.log('ADDING TO EMBEDCHAIN:', sourceUrl, metaData)
         // If you need to add the S3 knowledge reference or other info to embedchain
         const memoryResult = await memoryService.add(sourceUrl, {
           metadata: metaData,
