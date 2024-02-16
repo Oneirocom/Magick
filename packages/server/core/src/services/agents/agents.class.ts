@@ -258,25 +258,23 @@ export class AgentService<
 
         const draftSpellsToCopy: SpellData[] =
           allSpells.filter((spell: SpellData) => !spell.spellReleaseId) || []
-
-        if (!draftSpellsToCopy.length)
-          throw new Error('No spells found to copy')
-
-        const newSpells: SpellData[] = []
         if (draftSpellsToCopy.length > 0) {
-          // Duplicate spells for the new release
-          for (const spell of draftSpellsToCopy) {
-            const newSpell = (await trx('spells')
-              .insert({
-                ...spell,
-                id: uuidv4(),
-                spellReleaseId: spellRelease.id,
-                updatedAt: new Date().toISOString(),
-                createdAt: new Date().toISOString(),
-                type: spell.type ?? 'spell',
-              })
-              .returning('*')) as SpellData[]
-            newSpells.push(newSpell[0])
+          const newSpells: SpellData[] = []
+          if (draftSpellsToCopy.length > 0) {
+            // Duplicate spells for the new release
+            for (const spell of draftSpellsToCopy) {
+              const newSpell = (await trx('spells')
+                .insert({
+                  ...spell,
+                  id: uuidv4(),
+                  spellReleaseId: spellRelease.id,
+                  updatedAt: new Date().toISOString(),
+                  createdAt: new Date().toISOString(),
+                  type: spell.type ?? 'spell',
+                })
+                .returning('*')) as SpellData[]
+              newSpells.push(newSpell[0])
+            }
           }
         }
 
