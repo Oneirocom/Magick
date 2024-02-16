@@ -105,6 +105,7 @@ export default function (app: Application): void {
 
     if (agentId) {
       const agentChannel = app.channel(`agent:${agentId}`)
+      logger.trace(`CHANNELS: Publishing to agent ${agentId}: ${data.event}`)
       channels.push(agentChannel)
     }
 
