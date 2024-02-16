@@ -141,7 +141,7 @@ export const agent = (app: Application) => {
         'spell',
       ])
 
-      // app.get('logger').trace('AGENT SERVICE: Relaying message %s', channel)
+      app.get('logger').trace('AGENT SERVICE: Relaying message %s', channel)
 
       // this is where we relay messages up based upon the time.
       // note for every custom type we need to add it to the above
