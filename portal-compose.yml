@@ -29,20 +29,6 @@ services:
       - '5433:5432'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      
-  stripe-sync:
-    image: supabase/stripe-sync-engine:v0.29.0
-    restart: always
-    environment:
-      DATABASE_URL: ${STRIPE_DATABASE_URL}
-      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
-      API_KEY: key
-      STRIPE_SECRET_KEY: ${STRIPE_SIGNING_SECRET}
-      PORT: 1338
-    ports:
-      - 1338:1338
-    depends_on:
-      - db
 volumes:
   cache:
     driver: local
