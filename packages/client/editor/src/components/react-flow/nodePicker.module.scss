@@ -1,8 +1,8 @@
 .item {
   color: #fff;
-  padding: 5px;
+  padding: 5px 10px 5px 18px;
   border-bottom: 1px solid darken(rgba(50, 51, 56, 0.97), 8%);
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+  background-color: var(--secondary-3);
   cursor: pointer;
   width: 100%;
   position: relative;
@@ -37,7 +37,7 @@
     }
 
     &:hover {
-      background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+      background-color: var(--blue-accessible);
     }
   }
 
@@ -52,6 +52,7 @@
     }
     .subitems {
       position: absolute;
+      background-color: var(--ds-primary);
       top: 0;
       left: 100%;
       min-width: 150px;
