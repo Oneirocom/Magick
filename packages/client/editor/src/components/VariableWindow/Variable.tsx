@@ -33,7 +33,7 @@ const DefaultInput = ({
   onChange,
   choices = [],
   showChoices = false,
-} : DefaultInputProps) => {
+}: DefaultInputProps) => {
   // determine fallback value based on type
   if (valueType === 'boolean') {
     initialValue = initialValue || false
@@ -163,21 +163,23 @@ export const Variable = ({
 
             <div className="flex-grow">
               <Label>Type</Label>
-              <Select
-                onValueChange={updateProperty('valueTypeName')}
-                defaultValue={variable.valueTypeName}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {valueTypes.map(type => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="my-2">
+                <Select
+                  onValueChange={updateProperty('valueTypeName')}
+                  defaultValue={variable.valueTypeName}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {valueTypes.map(type => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
