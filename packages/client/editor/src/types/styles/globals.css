@@ -57,6 +57,8 @@
     --ds-background: #fbfbfb;
     --ds-header: #fbfbfb;
 
+    --blue-accessible: #076297;
+
     /* SHAD DEFAULT COLORS. THESE ARE TO BE REMOVED */
     --background: 190, 25%, 95%;
     --foreground: 234, 12%, 17%;
