@@ -175,6 +175,8 @@ export const MPBalanceBar = ({ userData }) => {
     transition: 'color 0.5s ease',
   }
 
+  const normalise = (value, MIN, MAX) => ((value - MIN) * 100) / (MAX - MIN)
+
   return (
     <div className={`${styles.credits} ${isApprentice ? 'opacity-40' : ''}`}>
       <div>
@@ -195,11 +197,17 @@ export const MPBalanceBar = ({ userData }) => {
         <BorderLinearProgress
           variant="determinate"
           value={
-            isNeophyte ? magickPowerBalance * 5 * 10 : magickPowerBalance * 10
+            isNeophyte
+              ? normalise(magickPowerBalance * 100, 0, 200) > 100
+                ? 100
+                : normalise(magickPowerBalance * 100, 0, 200)
+              : normalise(magickPowerBalance * 100, 0, 1000) > 100
+              ? 100
+              : normalise(magickPowerBalance * 100, 0, 1000)
           }
         />
         <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
-          {isNeophyte
+          {isNeophyte && magickPowerBalance === 0
             ? 'Upgrade to use MP'
             : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
         </p>
