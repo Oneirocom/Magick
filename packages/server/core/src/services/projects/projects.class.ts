@@ -157,7 +157,7 @@ export class ProjectsService {
         agentToCopyId: draftAgent.id,
       })
 
-      return
+      return true
     } catch (e) {
       console.error(e)
     }
