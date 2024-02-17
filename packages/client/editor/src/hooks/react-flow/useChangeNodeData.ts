@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useReactFlow } from 'reactflow'
 
-export const useChangeNodeData = (id: string) => {
+export const useChangeNodeData = (id: string | undefined) => {
   const instance = useReactFlow()
 
   return useCallback(

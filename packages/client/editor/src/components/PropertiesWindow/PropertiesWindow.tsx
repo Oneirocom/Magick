@@ -46,6 +46,7 @@ const ConfigurationComponents = {
 }
 
 export const PropertiesWindow = (props: Props) => {
+  const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const spellName = props.spellName
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -57,12 +58,9 @@ export const PropertiesWindow = (props: Props) => {
     }
   )
 
+  const handleChange = useChangeNodeData(selectedNode?.id)
+
   const nodeSpecs = getNodeSpec()
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
-  const handleChange = (key: string, value: any) => {
-    if (!selectedNode) return
-    useChangeNodeData(selectedNode?.id)
-  }
 
   if (!selectedNode) return null
 
