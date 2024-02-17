@@ -9,7 +9,7 @@ import {
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { CoreUserService } from '../userService/coreUserService'
 import { saveRequest } from 'shared/core'
-import { SubscriptionNames } from '../userService/types'
+import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import {
   AllModels,
   CompletionResponse,
@@ -194,12 +194,12 @@ export class CoreLLMService implements ICoreLLMService {
 
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName.trim()
-      if (userSubscriptionName === SubscriptionNames.Wizard && providerKey) {
+      if (userSubscriptionName === PortalSubscriptions.WIZARD && providerKey) {
         credential = MAGICK_API_KEY
-      } else if (userSubscriptionName === SubscriptionNames.Apprentice) {
+      } else if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
         credential = this.credentials.find(c => c.name === providerKey)?.value
       } else {
-        if (userData.user.balance > 0) {
+        if (userData.user.balance > 0 || userData.user.promoCredit > 0) {
           credential = MAGICK_API_KEY
         }
       }
