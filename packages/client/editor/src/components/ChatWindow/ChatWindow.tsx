@@ -281,8 +281,22 @@ const ChatWindow = ({ tab, spellName }) => {
   // }
 
   const toolbar = (
-    <div className="flex space-x-1 justify-center items-center m-auto mt-1.5 mb-1.5 pl-1 pr-0.5">
+    <div className="flex space-x-1 justify-right items-right mt-1.5 mb-1.5 pl-1 pr-2">
       <div className="flex space-x-1 items-center mr-1">
+        <Button
+          variant="basic"
+          onClick={toggleData}
+          className="h-6 w-14 font-medium"
+        >
+          Data
+        </Button>
+        <Button
+          variant="basic"
+          onClick={onClear}
+          className="h-6 w-14 font-medium"
+        >
+          Clear
+        </Button>
         <Label className="font-medium text-xs">Autoscroll</Label>
         <Checkbox
           className=""
@@ -292,20 +306,6 @@ const ChatWindow = ({ tab, spellName }) => {
           defaultChecked
         />
       </div>
-      <Button
-        variant="basic"
-        onClick={onClear}
-        className="h-6 w-14 font-medium"
-      >
-        Clear
-      </Button>
-      <Button
-        variant="basic"
-        onClick={toggleData}
-        className="h-6 w-14 font-medium"
-      >
-        Data
-      </Button>
     </div>
   )
 
@@ -357,7 +357,7 @@ const ChatWindow = ({ tab, spellName }) => {
         ></div>
         <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
           <Scrollbars>
-            <ul className="list-none m-0 p-0">
+            <ul className="list-none m-0 p-2">
               {history.map((printItem: Message, key: any) => {
                 if (printItem.sender === 'user') {
                   return (
