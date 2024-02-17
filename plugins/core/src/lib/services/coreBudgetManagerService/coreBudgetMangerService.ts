@@ -40,8 +40,8 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       )) as IBudgetManagerService
       const isValidUser = await this.isValidUser(userId)
       if (!isValidUser) {
-        const initialBalance = userData.user.balance || 0
-        //TODO: We need to figure out duration
+        const initialBalance =
+          userData.user.balance + userData.user.promoCredit || 0
         await this.createBudget({
           totalBudget: initialBalance,
           projectId: this.projectId,

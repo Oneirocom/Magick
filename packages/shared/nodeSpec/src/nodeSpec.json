@@ -206,7 +206,7 @@
       {
         "name": "model",
         "valueType": "string",
-        "defaultValue": "gpt-3.5-turbo-16k"
+        "defaultValue": "gpt-3.5-turbo"
       },
       {
         "name": "customBaseUrl",
