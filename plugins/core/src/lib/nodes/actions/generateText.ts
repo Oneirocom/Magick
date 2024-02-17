@@ -8,8 +8,9 @@ import { CORE_DEP_KEYS } from '../../constants'
 import { IEventStore } from 'server/grimoire'
 import {
   CompletionModel,
-  GoogleAIStudioModels,
+  // GoogleAIStudioModels,
   LLMProviders,
+  OpenAIChatCompletionModels,
 } from 'servicesShared'
 
 export const generateText = makeFlowNodeDefinition({
@@ -23,7 +24,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     modelProvider: {
       valueType: 'string',
-      defaultValue: LLMProviders.GoogleAIStudio,
+      defaultValue: LLMProviders.OpenAI,
     },
     models: {
       valueType: 'array',
@@ -31,7 +32,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     model: {
       valueType: 'string',
-      defaultValue: GoogleAIStudioModels.GeminiPro,
+      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
     },
     customBaseUrl: {
       valueType: 'string',
