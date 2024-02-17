@@ -116,7 +116,7 @@ export class CoreLLMService implements ICoreLLMService {
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
 
-        if (!PRODUCTION) {
+        if (PRODUCTION) {
           await this.coreBudgetManagerService?.updateCost(
             this.projectId,
             completionResponsePython
