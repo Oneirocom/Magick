@@ -1,255 +1,255 @@
 generator client {
-  provider        = "prisma-client-js"
-  output          = "../../../../../../../node_modules/@prisma/client-core"
-  previewFeatures = ["fullTextSearch", "multiSchema", "postgresqlExtensions", "views"]
-  name            = "prisma"
+    provider        = "prisma-client-js"
+    output          = "../../../../../../../node_modules/@prisma/client-core"
+    previewFeatures = ["fullTextSearch", "multiSchema", "postgresqlExtensions"]
+    name            = "prisma"
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  extensions        = [uuid_ossp(map: "uuid-ossp"), vector]
-  schemas           = ["public"]
+    provider          = "postgresql"
+    url               = env("DATABASE_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    extensions        = [uuid_ossp(map: "uuid-ossp"), vector]
+    schemas           = ["public"]
 }
 
 model agent_credentials {
-  agentId      String      @db.Uuid
-  credentialId String      @db.Uuid
-  created_at   DateTime    @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime    @default(now()) @db.Timestamptz(6)
-  agents       agents      @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "agent_credentials_agentid_foreign")
-  credentials  credentials @relation(fields: [credentialId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "agent_credentials_credentialid_foreign")
+    agentId      String      @db.Uuid
+    credentialId String      @db.Uuid
+    created_at   DateTime    @default(now()) @db.Timestamptz(6)
+    updated_at   DateTime    @default(now()) @db.Timestamptz(6)
+    agents       agents      @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "agent_credentials_agentid_foreign")
+    credentials  credentials @relation(fields: [credentialId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "agent_credentials_credentialid_foreign")
 
-  @@id([agentId, credentialId])
-  @@schema("public")
+    @@id([agentId, credentialId])
+    @@schema("public")
 }
 
 model agents {
-  id                                                        String              @id @unique @db.Uuid
-  rootSpell                                                 Json?
-  publicVariables                                           String?
-  secrets                                                   String?
-  name                                                      String?
-  enabled                                                   Boolean?
-  updatedAt                                                 String?
-  pingedAt                                                  String?
-  projectId                                                 String?
-  data                                                      Json?
-  runState                                                  String              @default("stopped")
-  image                                                     String?
-  rootSpellId                                               String?             @db.Uuid
-  default                                                   Boolean             @default(false)
-  createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
-  currentSpellReleaseId                                     String?             @db.Uuid
-  embedModel                                                String?             @db.VarChar(255)
-  version                                                   String              @default("1.0") @db.VarChar(255)
-  embeddingProvider                                         String?             @db.VarChar(255)
-  embeddingModel                                            String?             @db.VarChar(255)
-  isDraft                                                   Boolean             @default(false)
-  agent_credentials                                         agent_credentials[]
-  spellReleases_agents_currentSpellReleaseIdTospellReleases spellReleases?      @relation("agents_currentSpellReleaseIdTospellReleases", fields: [currentSpellReleaseId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "agents_currentspellreleaseid_foreign")
-  chatMessages                                              chatMessages[]
-  graphEvents                                               graphEvents[]
-  pluginState                                               pluginState[]
-  spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
+    id                                                        String              @id @unique @db.Uuid
+    rootSpell                                                 Json?
+    publicVariables                                           String?
+    secrets                                                   String?
+    name                                                      String?
+    enabled                                                   Boolean?
+    updatedAt                                                 String?
+    pingedAt                                                  String?
+    projectId                                                 String?
+    data                                                      Json?
+    runState                                                  String              @default("stopped")
+    image                                                     String?
+    rootSpellId                                               String?             @db.Uuid
+    default                                                   Boolean             @default(false)
+    createdAt                                                 DateTime?           @default(now()) @db.Timestamptz(6)
+    currentSpellReleaseId                                     String?             @db.Uuid
+    embedModel                                                String?             @db.VarChar(255)
+    version                                                   String              @default("1.0") @db.VarChar(255)
+    embeddingProvider                                         String?             @db.VarChar(255)
+    embeddingModel                                            String?             @db.VarChar(255)
+    isDraft                                                   Boolean             @default(false)
+    agent_credentials                                         agent_credentials[]
+    spellReleases_agents_currentSpellReleaseIdTospellReleases spellReleases?      @relation("agents_currentSpellReleaseIdTospellReleases", fields: [currentSpellReleaseId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "agents_currentspellreleaseid_foreign")
+    chatMessages                                              chatMessages[]
+    graphEvents                                               graphEvents[]
+    pluginState                                               pluginState[]
+    spellReleases_spellReleases_agentIdToagents               spellReleases[]     @relation("spellReleases_agentIdToagents")
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model chatMessages {
-  id             String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  agentId        String   @db.Uuid
-  sender         String?  @db.VarChar(255)
-  connector      String   @db.VarChar(255)
-  content        String?
-  conversationId String?  @db.VarChar(255)
-  created_at     DateTime @default(now()) @db.Timestamptz(6)
-  updated_at     DateTime @default(now()) @db.Timestamptz(6)
-  agents         agents   @relation(fields: [agentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chatmessages_agentid_foreign")
+    id             String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    agentId        String   @db.Uuid
+    sender         String?  @db.VarChar(255)
+    connector      String   @db.VarChar(255)
+    content        String?
+    conversationId String?  @db.VarChar(255)
+    created_at     DateTime @default(now()) @db.Timestamptz(6)
+    updated_at     DateTime @default(now()) @db.Timestamptz(6)
+    agents         agents   @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "chatmessages_agentid_foreign")
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model credentials {
-  id                String              @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  projectId         String              @db.VarChar(255)
-  name              String              @db.VarChar(255)
-  serviceType       String              @db.VarChar(255)
-  credentialType    String
-  value             String
-  description       String?
-  metadata          Json?
-  created_at        DateTime            @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
-  agent_credentials agent_credentials[]
+    id                String              @id @unique @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    projectId         String              @db.VarChar(255)
+    name              String              @db.VarChar(255)
+    serviceType       String              @db.VarChar(255)
+    credentialType    String
+    value             String
+    description       String?
+    metadata          Json?
+    created_at        DateTime            @default(now()) @db.Timestamptz(6)
+    updated_at        DateTime            @default(now()) @db.Timestamptz(6)
+    agent_credentials agent_credentials[]
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model documents {
-  id        String  @id @db.Uuid
-  type      String?
-  projectId String?
-  date      String?
-  metadata  Json?   @default("{}")
+    id        String  @id @db.Uuid
+    type      String?
+    projectId String?
+    date      String?
+    metadata  Json?   @default("{}")
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model embeddings {
-  id         Int                    @id @default(autoincrement())
-  documentId String?                @db.Uuid
-  content    String?
-  embedding  Unsupported("vector")?
-  index      Int?
+    id         Int                    @id @default(autoincrement())
+    documentId String?                @db.Uuid
+    content    String?
+    embedding  Unsupported("vector")?
+    index      Int?
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model public_events {
-  id          String                 @id @db.Uuid
-  type        String?
-  observer    String?
-  sender      String?
-  client      String?
-  channel     String?
-  channelType String?
-  projectId   String?
-  content     String?
-  agentId     String?
-  entities    String[]
-  embedding   Unsupported("vector")?
-  date        String?
-  rawData     String?
-  connector   String?
+    id          String                 @id @db.Uuid
+    type        String?
+    observer    String?
+    sender      String?
+    client      String?
+    channel     String?
+    channelType String?
+    projectId   String?
+    content     String?
+    agentId     String?
+    entities    String[]
+    embedding   Unsupported("vector")?
+    date        String?
+    rawData     String?
+    connector   String?
 
-  @@map("events")
-  @@schema("public")
+    @@map("events")
+    @@schema("public")
 }
 
 model graphEvents {
-  id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  agentId       String   @db.Uuid
-  sender        String   @db.VarChar(255)
-  connector     String   @db.VarChar(255)
-  connectorData Json?
-  content       String   @db.VarChar(255)
-  eventType     String   @db.VarChar(255)
-  created_at    DateTime @default(now()) @db.Timestamptz(6)
-  updated_at    DateTime @default(now()) @db.Timestamptz(6)
-  event         Json?    @default("{}")
-  observer      String?  @db.VarChar(255)
-  agents        agents   @relation(fields: [agentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "graphevents_agentid_foreign")
+    id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    agentId       String   @db.Uuid
+    sender        String   @db.VarChar(255)
+    connector     String   @db.VarChar(255)
+    connectorData Json?
+    content       String   @db.VarChar(255)
+    eventType     String   @db.VarChar(255)
+    created_at    DateTime @default(now()) @db.Timestamptz(6)
+    updated_at    DateTime @default(now()) @db.Timestamptz(6)
+    event         Json?    @default("{}")
+    observer      String?  @db.VarChar(255)
+    agents        agents   @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "graphevents_agentid_foreign")
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model public_knex_migrations {
-  id             Int       @id @default(autoincrement())
-  name           String?   @db.VarChar(255)
-  batch          Int?
-  migration_time DateTime? @db.Timestamptz(6)
+    id             Int       @id @default(autoincrement())
+    name           String?   @db.VarChar(255)
+    batch          Int?
+    migration_time DateTime? @db.Timestamptz(6)
 
-  @@map("knex_migrations")
-  @@schema("public")
+    @@map("knex_migrations")
+    @@schema("public")
 }
 
 model public_knex_migrations_lock {
-  index     Int  @id @default(autoincrement())
-  is_locked Int?
+    index     Int  @id @default(autoincrement())
+    is_locked Int?
 
-  @@map("knex_migrations_lock")
-  @@schema("public")
+    @@map("knex_migrations_lock")
+    @@schema("public")
 }
 
 model knowledge {
-  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name      String    @db.VarChar(255)
-  sourceUrl String?   @db.VarChar(255)
-  dataType  String?   @db.VarChar(255)
-  data      String?   @db.VarChar(255)
-  projectId String    @db.VarChar(255)
-  metadata  Json?     @db.Json
-  memoryId  String?   @db.VarChar(255)
-  createdAt DateTime? @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @default(now()) @db.Timestamptz(6)
+    id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    name      String    @db.VarChar(255)
+    sourceUrl String?   @db.VarChar(255)
+    dataType  String?   @db.VarChar(255)
+    data      String?   @db.VarChar(255)
+    projectId String    @db.VarChar(255)
+    metadata  Json?     @db.Json
+    memoryId  String?   @db.VarChar(255)
+    createdAt DateTime? @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime? @default(now()) @db.Timestamptz(6)
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model pluginState {
-  id      String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  agentId String? @db.Uuid
-  state   Json?   @db.Json
-  plugin  String? @db.VarChar(255)
-  agents  agents? @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "pluginstate_agentid_foreign")
+    id      String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    agentId String? @db.Uuid
+    state   Json?   @db.Json
+    plugin  String? @db.VarChar(255)
+    agents  agents? @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "pluginstate_agentid_foreign")
 
-  @@unique([agentId, plugin], map: "pluginstate_agentid_plugin_unique")
-  @@schema("public")
+    @@unique([agentId, plugin], map: "pluginstate_agentid_plugin_unique")
+    @@schema("public")
 }
 
 model request {
-  id           String    @id @db.Uuid
-  projectId    String
-  requestData  String?
-  responseData String?
-  duration     Int
-  status       String?
-  statusCode   Int?
-  model        String?
-  parameters   String?
-  createdAt    DateTime? @default(now()) @db.Timestamptz(6)
-  provider     String
-  type         String
-  hidden       Boolean   @default(false)
-  processed    Boolean   @default(false)
-  cost         Float?
-  spell        String?
-  nodeId       String?   @db.VarChar(255)
-  agentId      String    @default("") @db.VarChar(255)
+    id           String    @id @db.Uuid
+    projectId    String
+    requestData  String?
+    responseData String?
+    duration     Int
+    status       String?
+    statusCode   Int?
+    model        String?
+    parameters   String?
+    createdAt    DateTime? @default(now()) @db.Timestamptz(6)
+    provider     String
+    type         String
+    hidden       Boolean   @default(false)
+    processed    Boolean   @default(false)
+    cost         Float?
+    spell        String?
+    nodeId       String?   @db.VarChar(255)
+    agentId      String    @default("") @db.VarChar(255)
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model spellReleases {
-  id                                                 String    @id @db.Uuid
-  description                                        String?   @db.VarChar(255)
-  agentId                                            String    @db.Uuid
-  spellId                                            String?   @db.Uuid
-  projectId                                          String?
-  createdAt                                          DateTime? @default(now()) @db.Timestamptz(6)
-  agents_agents_currentSpellReleaseIdTospellReleases agents[]  @relation("agents_currentSpellReleaseIdTospellReleases")
-  agents_spellReleases_agentIdToagents               agents    @relation("spellReleases_agentIdToagents", fields: [agentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spellreleases_agentid_foreign")
-  spells                                             spells[]
+    id                                                 String    @id @db.Uuid
+    description                                        String?   @db.VarChar(255)
+    agentId                                            String    @db.Uuid
+    spellId                                            String?   @db.Uuid
+    projectId                                          String?
+    createdAt                                          DateTime? @default(now()) @db.Timestamptz(6)
+    agents_agents_currentSpellReleaseIdTospellReleases agents[]  @relation("agents_currentSpellReleaseIdTospellReleases")
+    agents_spellReleases_agentIdToagents               agents    @relation("spellReleases_agentIdToagents", fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spellreleases_agentid_foreign")
+    spells                                             spells[]
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model spells {
-  id             String         @id @db.Uuid
-  name           String?
-  projectId      String?
-  graph          Json?
-  createdAt      String?
-  updatedAt      String?
-  type           String?        @db.VarChar(255)
-  spellReleaseId String?        @db.Uuid
-  spellReleases  spellReleases? @relation(fields: [spellReleaseId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_spellreleaseid_foreign")
+    id             String         @id @db.Uuid
+    name           String?
+    projectId      String?
+    graph          Json?
+    createdAt      String?
+    updatedAt      String?
+    type           String?        @db.VarChar(255)
+    spellReleaseId String?        @db.Uuid
+    spellReleases  spellReleases? @relation(fields: [spellReleaseId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "spells_spellreleaseid_foreign")
 
-  @@schema("public")
+    @@schema("public")
 }
 
 model tasks {
-  id        Int     @id @default(autoincrement())
-  status    String
-  type      String
-  objective String
-  eventData Json    @db.Json
-  projectId String
-  date      String?
-  steps     String
-  agentId   String?
+    id        Int     @id @default(autoincrement())
+    status    String
+    type      String
+    objective String
+    eventData Json    @db.Json
+    projectId String
+    date      String?
+    steps     String
+    agentId   String?
 
-  @@schema("public")
+    @@schema("public")
 }
