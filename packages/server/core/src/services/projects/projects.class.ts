@@ -3,7 +3,6 @@ import { Params } from '@feathersjs/feathers'
 import { app } from '../../app'
 import { v4 as uuidv4 } from 'uuid'
 import { UserInterface } from 'server/schemas'
-import { prisma } from '@magickml/portal-db'
 
 /**
  * Interface for CreateData objects
@@ -15,10 +14,11 @@ interface UploadData {
   projectId: string
 }
 
-type CreateProjectParams = {
+export type CreateProjectParams = {
   owner: string
   name: string
   description: string
+  projectId: string
 }
 
 /**
@@ -120,23 +120,13 @@ export class ProjectsService {
 
   async create(params: CreateProjectParams) {
     try {
-      const { owner, name, description } = params
-      // Create a new project
-      const project = await prisma.project.create({
-        data: {
-          name: name,
-          description,
-          owner,
-          updatedAt: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
-        },
-      })
+      const { name, projectId } = params
 
       const agentService = app.service('agents')
       // Create a draft agent
       const draftAgent = await agentService.create({
         name: name,
-        projectId: project.id,
+        projectId: projectId,
         enabled: true,
         default: true,
         version: '2.0',
@@ -150,7 +140,7 @@ export class ProjectsService {
       // Create a live agent
       const newLiveAgent = await agentService.create({
         name: name,
-        projectId: project.id,
+        projectId: projectId,
         enabled: true,
         default: false,
         version: '2.0',
@@ -167,7 +157,7 @@ export class ProjectsService {
         agentToCopyId: draftAgent.id,
       })
 
-      return project
+      return
     } catch (e) {
       console.error(e)
     }
