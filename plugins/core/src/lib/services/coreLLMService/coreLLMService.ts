@@ -82,7 +82,7 @@ export class CoreLLMService implements ICoreLLMService {
           }
 
           if (estimatedCost > totalBudget) {
-            throw new Error('Budget limit exceeded or invalid user')
+            throw new Error('Budget limit exceeded')
           }
         }
 
@@ -116,7 +116,7 @@ export class CoreLLMService implements ICoreLLMService {
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
 
-        if (!PRODUCTION) {
+        if (PRODUCTION) {
           await this.coreBudgetManagerService?.updateCost(
             this.projectId,
             completionResponsePython
