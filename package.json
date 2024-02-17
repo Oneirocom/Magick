@@ -48,6 +48,7 @@
     "db:studio": "npx nx run server-db:studio",
     "db:seed": "npx nx run server-db:seed",
     "db:deploy": "npx prisma migrate deploy --schema packages/server/db/src/lib/prisma/schema.prisma",
+    "db:dev": "npx prisma migrate dev --schema packages/server/db/src/lib/prisma/schema.prisma",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
     "portal:dev": "npx nx serve --watch portal",
