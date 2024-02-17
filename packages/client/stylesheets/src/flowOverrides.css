@@ -3,7 +3,7 @@
 }
 
 .react-flow__minimap {
-  background-color: var(--background-color) !important;
+  background-color: var(--deep-background-color) !important;
 }
 
 .react-flow__controls svg {
