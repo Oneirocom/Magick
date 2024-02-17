@@ -196,7 +196,7 @@
       {
         "name": "modelProvider",
         "valueType": "string",
-        "defaultValue": "google"
+        "defaultValue": "openai"
       },
       {
         "name": "models",
@@ -206,7 +206,7 @@
       {
         "name": "model",
         "valueType": "string",
-        "defaultValue": "gemini/gemini-pro"
+        "defaultValue": "gpt-3.5-turbo"
       },
       {
         "name": "customBaseUrl",
