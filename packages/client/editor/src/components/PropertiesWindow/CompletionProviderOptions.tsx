@@ -38,6 +38,11 @@ export const CompletionProviderOptions: React.FC<
   })
   const { data: userData } = useGetUserQuery({ projectId: config.projectId })
 
+  const onSelectModel = (model: CompletionModel | '') => {
+    setSelectedModel(model)
+    // props.updateConfigKey('model', model)
+  }
+
   useEffect(() => {
     const creds = credentials?.map(cred => cred.name) || []
     const providersWithUserKeys = getProvidersWithUserKeys(creds as any)
@@ -81,9 +86,9 @@ export const CompletionProviderOptions: React.FC<
         <div className="flex flex-col mt-1">
           <Select
             value={selectedModel}
-            onValueChange={(newValue: CompletionModel | '') =>
-              setSelectedModel(newValue)
-            }
+            onValueChange={(newValue: CompletionModel | '') => {
+              onSelectModel(newValue)
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select a model" />
