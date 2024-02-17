@@ -29,6 +29,7 @@
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
+      "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/feathersRedux": [
         "packages/client/feathers-redux-toolkit/src/index.ts"
@@ -74,9 +75,9 @@
         "packages/client/magickml-chatbox/src/index.ts"
       ],
       "client/state": ["packages/client/state/src/index.ts"],
-      "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
       "clientConfig": ["packages/client/config/src/index.ts"],
       "communication": ["packages/shared/communication/src/index.ts"],
+      "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/shared": ["plugins/shared/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
