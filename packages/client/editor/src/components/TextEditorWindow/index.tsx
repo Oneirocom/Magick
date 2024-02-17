@@ -16,6 +16,7 @@ import { Socket } from '@magickml/behave-graph'
 const TextEditor = props => {
   const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
+  const selectedNode = useSelector(selectActiveNode(props.tab.id))
 
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
@@ -23,11 +24,12 @@ const TextEditor = props => {
     fontSize: 16,
   })
 
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
+  const updateNodeData = useChangeNodeData(selectedNode?.id)
+
   // const handleChange = useChangeNodeData(selectedNode?.id)
   const handleChange = (key: string, value: any) => {
     if (!selectedNode) return
-    useChangeNodeData(selectedNode?.id)(key, value)
+    updateNodeData(key, value)
   }
 
   const textEditorState = useSelector(selectTextEditorState)
