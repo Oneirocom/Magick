@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/client-icons",
+  "name": "@magickml/icons",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/client/icons/src",
   "projectType": "library",
