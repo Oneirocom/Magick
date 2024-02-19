@@ -51,7 +51,7 @@ export const queryEventHistory = makeFlowNodeDefinition({
       throw new Error('Event store not found')
     }
 
-    const limit = read('entries') as number
+    const limit = Number(read('entries')) as number
 
     const events = await eventStore.queryEvents(
       eventState,
