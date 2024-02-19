@@ -40,6 +40,7 @@
     "build-engine": "npx nx build shared-core",
     "generateClients": "npm run portal:db:generate && npm run db:generate",
     "init": "npm run portal:up && sleep 5 && npm run db:init && npm run portal:db:init",
+    "deploy:all": "npm run db:deploy && npm run portal:db:deploy",
     "db:init": "npm run db:generate && npm run db:deploy",
     "db:generate": "npx nx run server-db:generate",
     "db:push": "npx nx run server-db:push",
