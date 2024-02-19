@@ -69,7 +69,7 @@ const SecretWindow: FC = () => {
           projectId={config.projectId}
           currentCreds={credentials}
         />
-        <Button variant="outline" onClick={openConfigWindow}>
+        <Button variant="portal-neutral" onClick={openConfigWindow}>
           Link
         </Button>
       </div>
@@ -166,7 +166,7 @@ const CreateCredential: FC<CreateCredentialProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Create</Button>
+        <Button variant="portal-neutral">Create</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -235,7 +235,7 @@ const CreateCredential: FC<CreateCredentialProps> = ({
           </div>
           <DialogFooter>
             <Button
-              className="text-white"
+              variant="portal-primary"
               type="submit"
               disabled={
                 createLoading || (serviceType === 'custom' && !isUnique(name))
