@@ -329,8 +329,8 @@ export abstract class BasePlugin<
       agentId: this.agentId,
       connector: data.event.connector,
       connectorData: JSON.stringify(data.event.data),
-      content: data.event.content,
-      eventType: data.event.eventName,
+      content: data.data.content,
+      eventType: data.actionName,
       event: data.event as EventPayload,
     })
   }
