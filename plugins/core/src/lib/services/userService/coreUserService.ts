@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { ICoreUserService, UserResponse } from 'servicesShared'
 import { PORTAL_AGENT_KEY, PORTAL_URL } from 'shared/config'
 
@@ -13,13 +14,15 @@ export class CoreUserService implements ICoreUserService {
   async getUser(): Promise<UserResponse> {
     const url = `${PORTAL_URL}/api/magick/user/${this.projectId}`
     try {
-      const userData: UserResponse = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': PORTAL_AGENT_KEY,
-        },
-      }).then(res => res.json())
+      const userData: UserResponse = await axios
+        .get(url, {
+          timeout: 5000,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': PORTAL_AGENT_KEY,
+          },
+        })
+        .then(res => res.data)
 
       if (!userData) {
         throw new Error('User not found')
