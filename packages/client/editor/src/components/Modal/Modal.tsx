@@ -9,7 +9,7 @@
  */
 import React, { useCallback } from 'react'
 import { useModal } from '../../contexts/ModalProvider'
-import { Icon } from 'client/core'
+import { Icon } from '@magickml/icons'
 import css from './modal.module.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Button } from '@magickml/client-ui'
@@ -107,7 +107,7 @@ const Modal = ({
             {icon && (
               <Icon
                 size={24}
-                name={icon}
+                name={icon as any}
                 style={{ marginRight: 'var(--extraSmall)' }}
               />
             )}
