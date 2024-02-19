@@ -1,6 +1,6 @@
 // DOCUMENTED
 import * as React from 'react'
-import { Icon } from '../Icon'
+import { Icon } from '@magickml/icons'
 import css from './chip.module.css'
 
 /**

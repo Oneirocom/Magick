@@ -5,7 +5,7 @@ import Creatable from 'react-select/creatable'
 import ReactSelect, { SelectInstance, StylesConfig } from 'react-select'
 
 import { Chip } from '../Chip'
-import { Icon, componentCategories } from '../Icon'
+import { Icon, componentCategories } from '@magickml/icons'
 import css from './select.module.css'
 
 /**

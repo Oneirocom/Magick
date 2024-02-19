@@ -29,6 +29,7 @@
     "paths": {
       "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
+      "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/feathersRedux": [

@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from '@magickml/client-ui'
 import clsx from 'clsx'
-import { MagickIcon } from '../icons'
+import { MagickIcon } from '@magickml/icons'
 import { FunctionComponent } from 'react'
 
 type MagickDialogProps = {
