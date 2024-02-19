@@ -375,6 +375,7 @@
     "@semantic-release/npm": "10.0.4",
     "@semantic-release/release-notes-generator": "11.0.3",
     "@sindresorhus/tsconfig": "^3.0.1",
+    "@svgr/cli": "^8.1.0",
     "@svgr/rollup": "^8.0.1",
     "@svgr/webpack": "^8.0.1",
     "@swc-node/register": "~1.6.7",

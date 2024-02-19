@@ -9,7 +9,7 @@ export { Button } from './Button'
 export { Chip } from './Chip'
 
 // Export Icon and componentCategories
-export { componentCategories, Icon } from './Icon'
+export { componentCategories, Icon } from '@magickml/icons'
 
 // Export IconBtn component
 export { IconBtn } from './IconButton'

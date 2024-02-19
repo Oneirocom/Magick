@@ -1,6 +1,6 @@
 // WelcomeScreen.jsx
 import { IWatermarkPanelProps } from 'dockview'
-import { MagickWatermark } from '@magickml/client-ui'
+import { MagickWatermark } from '@magickml/icons'
 const WelcomeScreen = (props: IWatermarkPanelProps) => {
   const isGroup = props.containerApi.groups.length > 0
 
