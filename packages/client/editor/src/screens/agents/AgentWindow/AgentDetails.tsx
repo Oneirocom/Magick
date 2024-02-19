@@ -1,16 +1,10 @@
-// DOCUMENTED
-import { CustomizedSwitch } from 'client/core'
 import { Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
-
-import styles from './index.module.scss'
+import {  useEffect, useState } from 'react'
 import { InputEdit } from './InputEdit'
-
-import { SmallAgentAvatarCard } from './SmallAgentAvatarCard'
 import { useUpdateAgentMutation } from 'client/state'
-import { Button } from '@magickml/client-ui'
 import { Credentials } from './AgentCredentials'
+import { Avatar, AvatarFallback, AvatarImage, Button, Label, Switch } from '@magickml/client-ui'
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData?: any
@@ -45,6 +39,7 @@ const AgentDetails = ({
     setV2(selectedAgentData.version === '2.0')
   }, [selectedAgentData.version])
 
+
   /**
    * update agent data by agent id.
    *
@@ -78,11 +73,10 @@ const AgentDetails = ({
   if (!selectedAgentData) return null
 
   return (
-    <div
-      style={{ overflowY: 'scroll', height: '100vh', padding: '40px 100px' }}
-    >
-      <div className={styles.agentDetailsContainer}>
-        <div className={styles.agentDescription}>
+    <div className='h-dvh pb-20 overflow-y-scroll py-10 px-24'>
+      {/* Top Section */}
+      <div className="inline-flex w-full justify-between items-center">
+        <div className="inline-flex gap-x-2 items-center">
           {editMode ? (
             <InputEdit
               selectedAgentData={selectedAgentData}
@@ -93,11 +87,10 @@ const AgentDetails = ({
               oldName={oldName}
             />
           ) : (
-            <SmallAgentAvatarCard
-              agent={selectedAgentData}
-              setEditMode={setEditMode}
-              setOldName={setOldName}
-            />
+            <Avatar>
+              <AvatarImage src="" alt="@shadcn" />
+              <AvatarFallback>{selectedAgentData?.name[0]}</AvatarFallback>
+            </Avatar>
           )}
 
           <Tooltip
@@ -110,28 +103,20 @@ const AgentDetails = ({
             disableInteractive
             arrow
           >
-            <span style={{ marginLeft: '20px' }}>
-              <CustomizedSwitch
-                label={selectedAgentData.enabled ? 'On' : 'Off'}
+            <div className="flex items-center space-x-2 ml-5">
+              <Switch
+                id="agent-enabled"
                 checked={selectedAgentData.enabled ? true : false}
-                onChange={() => {
-                  update({
-                    enabled: selectedAgentData.enabled ? false : true,
-                  })
-                }}
-                style={{
-                  alignSelf: 'self-start',
-                }}
+                onChange={() => update({ enabled: !selectedAgentData.enabled })}
               />
-            </span>
+              <Label htmlFor="agent-enabled">Enabled</Label>
+            </div>
           </Tooltip>
         </div>
 
-        <div className={styles.btns}>
-          <Button onClick={() => update()} variant="default">
-            Save changes
-          </Button>
-        </div>
+        <Button onClick={() => update()} variant="portal-primary">
+          Save changes
+        </Button>
       </div>
 
       <Credentials agentId={selectedAgentData.id} />
