@@ -131,7 +131,7 @@ const InputFieldForValue = ({
               type="number"
               step="0.01"
               className={inputClass}
-              value={inputVal}
+              value={Number(value)}
               onChange={e => onChange(name, e.currentTarget.value)}
             />
           )}
@@ -139,17 +139,16 @@ const InputFieldForValue = ({
             <Input
               type="number"
               className={inputClass}
-              value={inputVal}
+              value={Number(value)}
               onChange={e => {
-                console.log('onChange', e.currentTarget.value)
-                onChange(name, e.currentTarget.value)
+                onChange(name, Number(e.currentTarget.value))
               }}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
             <div className="flex gap-2 items-center">
               <Switch
-                defaultValue={inputVal || 0}
+                defaultValue={value || 0}
                 onChange={value => {
                   onChange(name, value)
                 }}
