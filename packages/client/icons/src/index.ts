@@ -1,1 +1,2 @@
-export * from './lib/client-icons'
+export * from './lib/editor'
+export * from './lib/portal'
