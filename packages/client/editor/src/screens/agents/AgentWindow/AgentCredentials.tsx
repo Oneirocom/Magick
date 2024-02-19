@@ -307,7 +307,7 @@ const CredentialAction: FC<CredentialActionProps> = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{isLinked ? 'Unlink' : 'Link'} Credential</DialogTitle>
-          <DialogDescription className="text-white/90">
+          <DialogDescription className="text-ds-white">
             Select a credential to {isLinked ? 'unlink' : 'link'} to this agent.
           </DialogDescription>
         </DialogHeader>
@@ -430,28 +430,26 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
         <Header agentId={agentId} />
       </div>
       {/* Add a container with a fixed height and overflow-y to enable scrolling */}
-      <div style={{ height: '400px', overflowY: 'auto' }}>
-        <div className="grid grid-cols-2 gap-6">
-          {pluginCredentials?.map(p => (
-            <CredentialItem
-              key={p.name}
-              credential={p}
-              isLinked={hasLinkedAgentCredential(p.name, credentials, ac)}
-              action={
-                <CredentialAction
-                  projectId={config.projectId}
-                  agentId={agentId}
-                  linkedCredential={findMatchingAgentCredential(
-                    p,
-                    credentials,
-                    ac
-                  )}
-                  availableCredentials={findMatchingCredentials(p, credentials)}
-                />
-              }
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-2 gap-6">
+        {pluginCredentials?.map(p => (
+          <CredentialItem
+            key={p.name}
+            credential={p}
+            isLinked={hasLinkedAgentCredential(p.name, credentials, ac)}
+            action={
+              <CredentialAction
+                projectId={config.projectId}
+                agentId={agentId}
+                linkedCredential={findMatchingAgentCredential(
+                  p,
+                  credentials,
+                  ac
+                )}
+                availableCredentials={findMatchingCredentials(p, credentials)}
+              />
+            }
+          />
+        ))}
       </div>
     </>
   )
