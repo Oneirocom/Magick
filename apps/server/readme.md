@@ -15,6 +15,7 @@ This project uses [Feathers](http://feathersjs.com). An open source framework fo
     cd path/to/server
     npm install
     ```
+    
 
 3. Start your app
 
