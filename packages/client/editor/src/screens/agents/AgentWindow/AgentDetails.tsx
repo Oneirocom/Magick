@@ -1,10 +1,18 @@
 import { Tooltip } from '@mui/material'
 import { enqueueSnackbar } from 'notistack'
-import {  useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { InputEdit } from './InputEdit'
 import { useUpdateAgentMutation } from 'client/state'
 import { Credentials } from './AgentCredentials'
-import { Avatar, AvatarFallback, AvatarImage, Button, Label, Switch } from '@magickml/client-ui'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Label,
+  Switch,
+} from '@magickml/client-ui'
+import { CustomizedSwitch } from 'client/core'
 interface AgentDetailsProps {
   selectedAgentData: any
   setSelectedAgentData?: any
@@ -39,7 +47,6 @@ const AgentDetails = ({
     setV2(selectedAgentData.version === '2.0')
   }, [selectedAgentData.version])
 
-
   /**
    * update agent data by agent id.
    *
@@ -73,7 +80,7 @@ const AgentDetails = ({
   if (!selectedAgentData) return null
 
   return (
-    <div className='h-dvh pb-20 overflow-y-scroll py-10 px-24'>
+    <div className="h-dvh pb-20 overflow-y-scroll py-10 px-24">
       {/* Top Section */}
       <div className="inline-flex w-full justify-between items-center">
         <div className="inline-flex gap-x-2 items-center">
@@ -104,10 +111,18 @@ const AgentDetails = ({
             arrow
           >
             <div className="flex items-center space-x-2 ml-5">
-              <Switch
+              <CustomizedSwitch
+                label={selectedAgentData.enabled ? 'On' : 'Off'}
                 id="agent-enabled"
                 checked={selectedAgentData.enabled ? true : false}
-                onChange={() => update({ enabled: !selectedAgentData.enabled })}
+                onChange={() => {
+                  update({
+                    enabled: selectedAgentData.enabled ? false : true,
+                  })
+                }}
+                style={{
+                  alignSelf: 'self-start',
+                }}
               />
               <Label htmlFor="agent-enabled">Enabled</Label>
             </div>
