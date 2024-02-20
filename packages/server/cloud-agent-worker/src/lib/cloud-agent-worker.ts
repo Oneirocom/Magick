@@ -82,6 +82,11 @@ export class CloudAgentWorker {
       return
     }
 
+    if (this.currentAgents[agentId]) {
+      this.logger.error(`Agent ${agentId} already exists`)
+      throw new Error(`Agent ${agentId} already exists`)
+    }
+
     const agent = new Agent(
       agentData,
       this,
