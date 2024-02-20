@@ -8,6 +8,8 @@ import { Agent } from 'server/agents'
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
 import { type RedisPubSub } from 'server/redis-pubsub'
 import pino from 'pino'
+import { FeathersSyncReporter } from 'server/cloud-agent-manager'
+import { AgentInterface } from 'server/schemas'
 
 export interface AgentListRecord {
   id: string
@@ -24,11 +26,14 @@ export class CloudAgentWorker {
   currentAgents: string[] = []
   addHandlers: any = []
   removeHandlers: any = []
+  agentStateReporter: FeathersSyncReporter
   app: Application
 
   constructor(app: Application) {
     this.app = app
     this.pubSub = app.get('pubsub')
+
+    this.agentStateReporter = new FeathersSyncReporter()
 
     this.pubSub.subscribe(AGENT_DELETE, async (agentId: string) => {
       this.logger.info(
@@ -170,10 +175,21 @@ export class CloudAgentWorker {
   }
 
   async listenForChanges(agentId: string) {
+    this.agentStateReporter.on(
+      `agent:updateD:${agentId}`,
+      async (agent: AgentInterface) => {
+        if (agent.id === agentId) {
+          this.logger.info(`Agent ${agentId} updated, updating agent`)
+          await this.agentUpdated(agentId)
+        }
+      }
+    )
+
     this.pubSub.subscribe(AGENT_UPDATE_JOB(agentId), async () => {
       this.logger.info(`Agent ${agentId} updated, updating agent`)
       await this.agentUpdated(agentId)
     })
+
     this.pubSub.subscribe(AGENT_DELETE_JOB(agentId), async () => {
       this.logger.info(`Agent ${agentId} updated, updating agent`)
       this.removeAgent(agentId)
@@ -188,7 +204,7 @@ export class CloudAgentWorker {
     await redis.sadd('agent-workers', 'me')
 
     new Worker(
-      'agent:new',
+      'agent:create',
       async (job: Job) => {
         this.logger.info(`Starting agent ${job.data.agentId}`)
         await this.agentUpdated(job.data.agentId)
