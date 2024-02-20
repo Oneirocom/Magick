@@ -15,6 +15,8 @@
   </a>
 </p>
 
+<h1 align = "center">WARNING!  This repository is undergoing a massive upgrade.  Our readme is outdated and our local deploy process is being migrated.  Check back soon for the new and improved Magick!</h1>
+
 <h3 align = "center">Magick is a groundbreaking visual AIDE (Artificial Intelligence Development Environment) for no-code data pipelines and multimodal agents. Magick can connect to other services and comes with nodes and templates well-suited for intelligent agents, chatbots, complex reasoning systems and realistic characters.</h3>
 
 ## 🗝 Key Features
