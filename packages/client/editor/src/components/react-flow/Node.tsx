@@ -105,7 +105,6 @@ export const Node: React.FC<NodeProps> = ({
     if (!spellEvent) return
     if (spellEvent.event === startEventName) {
       setLastInputs(spellEvent.inputs)
-      console.log('start event', spellEvent)
       setRunning(true)
     }
   }, [spellEvent])
@@ -148,13 +147,9 @@ export const Node: React.FC<NodeProps> = ({
   }, [spellEvent])
 
   const isActive = (x: string) => {
-    console.log({
-      activeInput,
-      x,
-      active: activeInput?.name === x,
-    })
     return activeInput?.name === x
   }
+
   return (
     <NodeContainer
       fired={done}
