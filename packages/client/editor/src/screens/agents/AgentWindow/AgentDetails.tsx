@@ -10,7 +10,6 @@ import {
   AvatarImage,
   Button,
   Label,
-  Switch,
 } from '@magickml/client-ui'
 import { CustomizedSwitch } from 'client/core'
 interface AgentDetailsProps {
