@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export enum SubscriptionNames {
   Apprentice = 'Apprentice Subscription',
   Wizard = 'Wizard Subscription',
@@ -43,3 +45,32 @@ export interface UserResponse {
 export interface ICoreUserService {
   getUser(): Promise<UserResponse>
 }
+
+// These are what the portal returns for get/set budget and get user
+export const getBudgetResponseSchema = z.object({
+  status: z.union([z.literal('success'), z.literal('error')]),
+  data: z.any(), // Replace with more specific type if possible
+  message: z.string().optional(),
+})
+
+export const setBudgetResponseSchema = z.object({
+  status: z.union([z.literal('success'), z.literal('error')]),
+  message: z.string(),
+})
+
+export const getUserResponseSchema = z.object({
+  status: z.union([z.literal('success'), z.literal('error')]),
+  user: z
+    .object({
+      id: z.string(),
+      email: z.string().email().nullable(),
+      name: z.string().nullable(),
+      balance: z.number().nullable(),
+      promoCredit: z.number().nullable(),
+      introCredit: z.number().nullable(),
+      hasSubscription: z.boolean(),
+      subscriptionName: z.string().nullable(),
+    })
+    .nullable(),
+  message: z.string().optional(),
+})
