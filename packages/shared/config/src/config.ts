@@ -61,7 +61,9 @@ export const POSTHOG_ENABLED =
   getVarForEnvironment('POSTHOG_ENABLED') === 'true'
 export const POSTHOG_API_KEY = getVarForEnvironment('POSTHOG_API_KEY') || ''
 
-export const REDIS_URL = getVarForEnvironment('REDIS_URL')
+export const REDIS_URL =
+  // check for private URL on railway before we use the public one
+  getVarForEnvironment('REDIS_PRIVATE_URL') || getVarForEnvironment('REDIS_URL')
 
 export const PINO_LOG_LEVEL = getVarForEnvironment('PINO_LOG_LEVEL') || 'info'
 
