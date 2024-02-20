@@ -70,4 +70,4 @@ docstore.json
 .portal.prod.env
 .ide.prod.env
 
-**/**/*.dylib.node
+**/**/*.node
