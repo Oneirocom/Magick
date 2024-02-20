@@ -24,8 +24,6 @@ export class CloudAgentWorker {
   subscriptions: Record<string, Function> = {}
   logger: pino.Logger = getLogger()
   currentAgents: string[] = []
-  addHandlers: any = []
-  removeHandlers: any = []
   agentStateReporter: FeathersSyncReporter
   app: Application
 
@@ -40,12 +38,6 @@ export class CloudAgentWorker {
         `Agent ${agentId} deleted, removing from cloud agent worker`
       )
       await this.removeAgent(agentId)
-    })
-
-    this.logger.debug('Subscribing to heartbeat-ping')
-    this.pubSub.subscribe('heartbeat-ping', async () => {
-      const agentIds = Object.keys(this.currentAgents)
-      this.pubSub.publish('heartbeat-pong', JSON.stringify(agentIds))
     })
 
     this.addAgent = this.addAgent.bind(this)
@@ -84,7 +76,7 @@ export class CloudAgentWorker {
 
     if (this.currentAgents[agentId]) {
       this.logger.error(`Agent ${agentId} already exists`)
-      throw new Error(`Agent ${agentId} already exists`)
+      return
     }
 
     const agent = new Agent(
@@ -97,40 +89,18 @@ export class CloudAgentWorker {
 
     this.listenForChanges(agentId)
 
-    this.logger.debug(`Running agent add handlers for ${agentId}`)
-    this.addHandlers.forEach(handler => {
-      handler({ agent, agentData })
-    })
-
     this.currentAgents[agentId] = agent
-    this.logger.debug(`Finished running agent add handlers for ${agentId}`)
 
     this.logger.info(`Updated agent ${agentId}`)
-  }
-
-  /**
-   * Register a handler to be called when an agent is added.
-   * @param handler - The handler function to be called.
-   */
-  registerAddAgentHandler(handler) {
-    this.logger.debug('Registering add agent handler')
-    this.addHandlers.push(handler)
-  }
-  /**
-   * Register a handler to be called when an agent is removed.
-   * @param handler - The handler function to be called.
-   */
-  registerRemoveAgentHandler(handler) {
-    this.logger.debug('Registering remove agent handler')
-    this.removeHandlers.push(handler)
   }
 
   async removeAgent(agentId: string) {
     this.logger.info(`Removing agent ${agentId}...`)
 
-    this.removeHandlers.forEach(handler => {
-      handler({ agent: this.currentAgents[agentId] })
-    })
+    if (!this.currentAgents[agentId]) {
+      this.logger.error(`Error removing agent. Agent ${agentId} does not exist`)
+      return
+    }
 
     await this.currentAgents[agentId]?.onDestroy()
     this.currentAgents[agentId] = null
@@ -139,7 +109,6 @@ export class CloudAgentWorker {
   }
 
   async agentUpdated(agentId: string) {
-    this.logger.info(`Updating agent ${agentId}`)
     const agentDBRes = await app.service('agents').find({
       query: {
         id: agentId,
@@ -159,9 +128,11 @@ export class CloudAgentWorker {
 
     // start or stop the agent if the enabled state changed
     if (agent.enabled && !this.currentAgents[agentId]) {
+      this.logger.info(`Agent ${agentId} enabled, adding agent`)
       await this.addAgent(agentId)
     }
     if (!agent.enabled && this.currentAgents[agentId]) {
+      this.logger.info(`Agent ${agentId} disabled, removing agent`)
       await this.removeAgent(agentId)
     }
 
@@ -181,7 +152,7 @@ export class CloudAgentWorker {
 
   async listenForChanges(agentId: string) {
     this.agentStateReporter.on(
-      `agent:updateD:${agentId}`,
+      `agent:updated:${agentId}`,
       async (agent: AgentInterface) => {
         if (agent.id === agentId) {
           this.logger.info(`Agent ${agentId} updated, updating agent`)
@@ -211,7 +182,6 @@ export class CloudAgentWorker {
     new Worker(
       'agent:create',
       async (job: Job) => {
-        this.logger.info(`Starting agent ${job.data.agentId}`)
         await this.agentUpdated(job.data.agentId)
       },
       {
