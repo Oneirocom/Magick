@@ -14,7 +14,7 @@ export const TextInputField = ({
 }: {
   value: string
   onChange?: (e) => void
-  onFocus?: () => void
+  onFocus?: (x) => void
   onKeyDown?: (e) => void
   handleBlur?: () => void
   className?: string
@@ -32,8 +32,8 @@ export const TextInputField = ({
       onChange={e => {
         onChange && onChange(e)
       }}
-      onFocus={() => {
-        onFocus && onFocus()
+      onFocus={e => {
+        onFocus && onFocus(e.currentTarget.value)
       }}
       onBlur={() => {
         handleBlur && handleBlur()
