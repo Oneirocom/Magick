@@ -3,7 +3,7 @@ import { DrawerItem } from './DrawerItem'
 import ArticleIcon from '@mui/icons-material/Article'
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
-import StorageIcon from '@mui/icons-material/Storage'
+// import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from '@magickml/providers'
 import React from 'react'
 import { RootState, useGetAgentByIdQuery } from 'client/state'
@@ -63,12 +63,12 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       tooltip: 'Knowledge Tooltip',
       tooltipText: drawerTooltipText.documents,
     },
-    {
-      name: 'Requests',
-      Icon: StorageIcon,
-      tooltip: 'Requests Tooltip',
-      tooltipText: drawerTooltipText.requests,
-    },
+    // {
+    //   name: 'Requests',
+    //   Icon: StorageIcon,
+    //   tooltip: 'Requests Tooltip',
+    //   tooltipText: drawerTooltipText.requests,
+    // },
     {
       name: 'Config',
       Icon: SettingsIcon,
