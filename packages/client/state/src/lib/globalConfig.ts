@@ -7,6 +7,11 @@
 
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
 
+type ActiveInputType = {
+  name: string
+  inputType: string
+  value: string
+}
 /**
  * Interface that defines the Global Config type.
  */
@@ -19,7 +24,7 @@ export interface GlobalConfig {
   theme: string
   dockviewTheme: string
   textEditorState: string
-  activeInput: string
+  activeInput: ActiveInputType
 }
 
 /**
@@ -35,7 +40,11 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     currentAgentId: '',
     currentSpellReleaseId: '',
     textEditorState: '',
-    activeInput: '',
+    activeInput: {
+      name: '',
+      inputType: '',
+      value: '',
+    },
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
   },
@@ -76,15 +85,9 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     ): void => {
       state.dockviewTheme = action.payload
     },
-    setTextEditorState: (
-      state: GlobalConfig,
-      action: PayloadAction<string>
-    ): void => {
-      state.textEditorState = action.payload
-    },
     setActiveInput: (
       state: GlobalConfig,
-      action: PayloadAction<string>
+      action: PayloadAction<ActiveInputType>
     ): void => {
       state.activeInput = action.payload
     },
@@ -109,7 +112,9 @@ export const {
  */
 export default globalConfigSlice.reducer
 
-export const selectTextEditorState = state =>
-  state.globalConfig.textEditorState as string
 export const selectActiveInput = state =>
-  state.globalConfig.activeInput as string
+  state.globalConfig.activeInput as {
+    name: string
+    inputType: string
+    value: string
+  }
