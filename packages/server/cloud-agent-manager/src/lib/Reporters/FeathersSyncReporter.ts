@@ -16,6 +16,7 @@ export class FeathersSyncReporter implements Reporter {
     this.logger.info('Initializing FeathersSyncReporter...')
     app.service('agents').on('patched', (agent: any) => {
       this.emitter.emit('agent:updated', agent)
+      this.emitter.emit(`agent:updated:${agent.id}`, agent)
     })
     app
       .service('agents')
