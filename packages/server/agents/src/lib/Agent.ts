@@ -113,7 +113,7 @@ export class Agent implements AgentInterface {
     this.publicVariables = data.publicVariables
     this.name = data.name ?? 'agent'
     this.projectId = data.projectId
-    this.logger.info('Updated agent: %s | %s', this.name, this.id)
+    this.logger.info('AGENT: Updated agent: %s | %s', this.name, this.id)
   }
 
   // async updateData(data: Record<string, any>) {
@@ -253,7 +253,6 @@ export class Agent implements AgentInterface {
   async onDestroy() {
     await this.spellbook.onDestroy()
     await this.pluginManager.onDestroy()
-    await this.worker.close()
     await this.commandHub.onDestroy()
     clearInterval(this.heartbeatInterval)
 
