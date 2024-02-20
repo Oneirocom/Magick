@@ -143,6 +143,7 @@ export const FeathersProvider = ({
       if (!data.isLive) {
         console.error('Agent is not live')
         client.service('agents').subscribe(currentAgentIdRef.current)
+        dispatch(setConnected(false))
       }
     }
 
