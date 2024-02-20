@@ -367,6 +367,7 @@
     "@nx/workspace": "17.2.8",
     "@playwright/test": "^1.36.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^5.9.1",
     "@rollup/plugin-url": "^7.0.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/commit-analyzer": "10.0.1",
