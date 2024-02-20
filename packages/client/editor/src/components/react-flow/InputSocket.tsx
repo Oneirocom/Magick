@@ -21,11 +21,7 @@ import {
 import ReactJson from 'react-json-view'
 import { TextInputField } from './TextInputField'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  selectTextEditorState,
-  setActiveInput,
-  setTextEditorState,
-} from 'client/state'
+import { selectActiveInput, setActiveInput } from 'client/state'
 
 export type InputSocketProps = {
   connected: boolean
@@ -61,7 +57,7 @@ const InputFieldForValue = ({
   | 'isActive'
 >) => {
   const dispatch = useDispatch()
-  const textEditorState = useSelector(selectTextEditorState)
+  const activeInput = useSelector(selectActiveInput)
   const showChoices = choices?.length
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
   const hideValueInput = hideValue || connected
@@ -76,20 +72,22 @@ const InputFieldForValue = ({
   const handleChange = ({ key, value }: { key: string; value: any }) => {
     onChange(key, value)
     setInputVal(value)
-    dispatch(setTextEditorState(value))
+    dispatch(setActiveInput({ ...activeInput, value }))
   }
 
   const onFocus = (x: string) => {
-    handleChange({ key: name, value: x })
-    dispatch(setActiveInput(name))
+    if (valueType === 'string') {
+      handleChange({ key: name, value: x })
+      dispatch(setActiveInput({ name, inputType: valueType, value: x }))
+      return
+    }
+    dispatch(setActiveInput({ name, inputType: valueType, value: x }))
   }
 
   useEffect(() => {
-    if (isActive) {
-      handleChange({ key: name, value: textEditorState || '' })
-      setInputVal(textEditorState || '')
-    }
-  }, [isActive, textEditorState])
+    if (!isActive || !activeInput?.name) return
+    setInputVal(activeInput?.value || '')
+  }, [isActive, activeInput])
 
   return (
     <div className={containerClass}>
@@ -133,6 +131,7 @@ const InputFieldForValue = ({
               className={inputClass}
               value={Number(value)}
               onChange={e => onChange(name, e.currentTarget.value)}
+              onFocus={() => onFocus(value)}
             />
           )}
           {valueType === 'integer' && !showChoices && (
@@ -143,6 +142,7 @@ const InputFieldForValue = ({
               onChange={e => {
                 onChange(name, Number(e.currentTarget.value))
               }}
+              onFocus={() => onFocus(value)}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
@@ -152,6 +152,7 @@ const InputFieldForValue = ({
                 onChange={value => {
                   onChange(name, value)
                 }}
+                onFocus={() => onFocus(value)}
               />
             </div>
           )}
