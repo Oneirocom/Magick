@@ -1,5 +1,5 @@
 import {
-  CloudAgentManager,
+  CloudAgentManagerV2,
   FeathersSyncReporter,
 } from 'server/cloud-agent-manager'
 import { initLogger, getLogger } from 'server/logger'
@@ -13,13 +13,13 @@ const logger = getLogger()
 
 function start() {
   logger.info('Starting cloud agent manager...')
-  const manager = new CloudAgentManager({
+  const manager = new CloudAgentManagerV2({
     newQueue: new BullQueue(app.get('redis')),
     agentStateReporter: new FeathersSyncReporter(),
     pubSub: app.get('pubsub'),
   })
 
-  manager.run()
+  manager.start()
   logger.info('Cloud agent manager started')
 }
 
