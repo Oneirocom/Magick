@@ -13,6 +13,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
+import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
 // import { StateService } from './StateService'
 
 // type AgentData = {
@@ -31,7 +32,6 @@ export class Agent implements AgentInterface {
   currentSpellReleaseId: string | null = null
   data!: AgentInterface
   projectId!: string
-  rootSpellId!: string
   logger: pino.Logger = getLogger()
   worker: Worker
   commandHub: CommandHub
@@ -43,6 +43,7 @@ export class Agent implements AgentInterface {
   agentManager: CloudAgentWorker
   pluginManager: PluginManager
   outputTypes: any[] = []
+  heartbeatInterval: NodeJS.Timer
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
@@ -93,6 +94,8 @@ export class Agent implements AgentInterface {
 
     // initialize the plugin commands
     this.intializePluginCommands()
+
+    this.heartbeatInterval = this.startHeartbeat()
 
     this.logger.info('New agent created: %s | %s', this.name, this.id)
     this.ready = true
@@ -148,6 +151,19 @@ export class Agent implements AgentInterface {
     for (const plugin of plugins) {
       this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
     }
+  }
+
+  startHeartbeat() {
+    const redis = this.app.get('redis')
+    const AGENT_ID = this.id
+    const HEARTBEAT_KEY = `agent:heartbeat:${AGENT_ID}`
+
+    return setInterval(() => {
+      const timestamp = Date.now()
+      redis.set(HEARTBEAT_KEY, timestamp.toString())
+      // Optionally set an expiry longer than the heartbeat interval
+      redis.expire(HEARTBEAT_KEY, 60) // Expires after 60 seconds
+    }, AGENT_HEARTBEAT_INTERVAL_MSEC)
   }
 
   /**
@@ -239,6 +255,7 @@ export class Agent implements AgentInterface {
     await this.pluginManager.onDestroy()
     await this.worker.close()
     await this.commandHub.onDestroy()
+    clearInterval(this.heartbeatInterval)
 
     this.log('destroyed agent', { id: this.id })
   }
