@@ -16,7 +16,7 @@ import { useCallback, useState } from 'react'
 import { enqueueSnackbar } from 'notistack'
 import { Variable } from './Variable'
 import { useSelector } from 'react-redux'
-import { Button, Input, agentInputStyles } from '@magickml/client-ui'
+import { Button, Input } from '@magickml/client-ui'
 
 type Props = IDockviewPanelProps<{
   tab: Tab
@@ -143,14 +143,18 @@ export const VariableWindow = (props: Props) => {
 
   return (
     <Window borderless>
-      <div className="flex flex-row px-2 mt-2 gap-2 border-b-2 border-b-solid border-b-[var(--background-color)] pb-2">
+      <div className="flex flex-row items-center px-2 mt-2 gap-2 border-b-2 border-b-solid border-b-[var(--background-color)] pb-2 justify-center h-10">
         <Input
-          className={agentInputStyles}
+          className={`focus:ring-2 focus:ring-[var(--accent-color)] focus:border-transparent h-full`}
           onChange={onInputChange}
           value={newVariableName}
           placeholder="New variable"
         />
-        <Button variant="secondary" onClick={createNewVariable}>
+        <Button
+          className="h-full w-8 border border-[var(--dark-3)] bg-ds-neutral rounded-sm"
+          variant="secondary"
+          onClick={createNewVariable}
+        >
           +
         </Button>
       </div>
