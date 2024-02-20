@@ -54,7 +54,7 @@ export const Node: React.FC<NodeProps> = ({
   const edges = useEdges()
   const handleChange = useChangeNodeData(id)
 
-  const focusedInputName = useSelector(selectActiveInput)
+  const activeInput = useSelector(selectActiveInput)
 
   // Hook into to event to reset node states and stop animations
   useEffect(() => {
@@ -147,6 +147,14 @@ export const Node: React.FC<NodeProps> = ({
     }
   }, [spellEvent])
 
+  const isActive = (x: string) => {
+    console.log({
+      activeInput,
+      x,
+      active: activeInput?.name === x,
+    })
+    return activeInput?.name === x
+  }
   return (
     <NodeContainer
       fired={done}
@@ -172,7 +180,7 @@ export const Node: React.FC<NodeProps> = ({
               onChange={handleChange}
               connected={isHandleConnected(edges, id, flowInput.name, 'target')}
               nodeId={id}
-              isActive={focusedInputName === flowInput.name}
+              isActive={isActive(flowInput.name)}
             />
           )}
           {output && (
@@ -211,7 +219,7 @@ export const Node: React.FC<NodeProps> = ({
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}
             nodeId={id}
-            isActive={focusedInputName === input.name}
+            isActive={isActive(input.name)}
           />
         </div>
       ))}
