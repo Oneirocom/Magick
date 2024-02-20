@@ -86,6 +86,7 @@ const InputFieldForValue = ({
 
   useEffect(() => {
     if (!isActive || !activeInput?.name) return
+    onChange(activeInput?.name, activeInput?.value)
     setInputVal(activeInput?.value || '')
   }, [isActive, activeInput])
 
