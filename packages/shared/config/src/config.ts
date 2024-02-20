@@ -112,3 +112,6 @@ export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
 
 export const PINECONE_INDEX_NAME =
   getVarForEnvironment('PINECONE_INDEX_NAME') || 'magick-dev'
+
+export const AGENT_HEARTBEAT_INTERVAL_MSEC =
+  Number(getVarForEnvironment('AGENT_HEARTBEAT_INTERVAL_MSEC')) || 10000
