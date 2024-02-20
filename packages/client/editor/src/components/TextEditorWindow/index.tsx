@@ -5,9 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
 import {
   selectActiveNode,
-  selectTextEditorState,
-  setTextEditorState,
   selectActiveInput,
+  setActiveInput,
 } from 'client/state'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
@@ -25,14 +24,10 @@ const TextEditor = props => {
   })
 
   const updateNodeData = useChangeNodeData(selectedNode?.id)
-
-  // const handleChange = useChangeNodeData(selectedNode?.id)
   const handleChange = (key: string, value: any) => {
     if (!selectedNode) return
     updateNodeData(key, value)
   }
-
-  const textEditorState = useSelector(selectTextEditorState)
   const activeInput = useSelector(selectActiveInput)
 
   const handleEditorWillMount = monaco => {
@@ -56,23 +51,23 @@ const TextEditor = props => {
 
   const updateCode = rawCode => {
     const code = rawCode.replace('\r\n', '\n')
-    console.log('DISPATCHING', code)
-    dispatch(setTextEditorState(code))
+    dispatch(setActiveInput({ ...activeInput, value: code }))
     debounceSave(code)
   }
 
   useEffect(() => {
-    if (!selectedNode || textEditorState) return
+    if (!selectedNode || activeInput?.name) return
     const { configuration } = selectedNode.data
     const { textEditorData } = configuration
     if (textEditorData === undefined) return
     setCode(textEditorData)
-  }, [selectedNode])
+  }, [selectedNode, activeInput])
 
   useEffect(() => {
-    if (textEditorState === undefined) return
-    setCode(textEditorState || '')
-  }, [textEditorState])
+    if (activeInput?.value === code) return
+    if (activeInput?.inputType !== 'string') return
+    setCode(activeInput.value)
+  }, [activeInput, code])
 
   // listen for changes to the code and check if selected node is text template
   // then we want to parse the template for sockets and add them to the node
@@ -135,7 +130,15 @@ const TextEditor = props => {
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
 
-  if (textEditorData === undefined && !activeInput)
+  console.log({
+    textEditorData,
+    activeInput,
+    code,
+  })
+  if (
+    (textEditorData === undefined && !activeInput) ||
+    (activeInput && activeInput.inputType !== 'string')
+  )
     return <WindowMessage content="Select a node with a text field" />
 
   return (
