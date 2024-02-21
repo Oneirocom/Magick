@@ -12,10 +12,10 @@ WORKDIR /app
 # Clone the submodule
 RUN git submodule update --init --recursive portal/cloud
 
+ARG RAILWAY_GIT_COMMIT_SHA
 RUN poetry install --no-interaction --no-ansi -vvv
 # RUN poetry install --no-root
 
-ARG RAILWAY_GIT_COMMIT_SHA
 RUN npm install
 
 RUN npm run build-cloud-agent-worker
