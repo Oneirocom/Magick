@@ -11,8 +11,8 @@ python = "3.11.2"
 # litellm = { path = "./pythonPackages/liteLLM", develop = true }
 # litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
 # setuptools = "^69.0.3"
-embedchain = { git="https://github.com/Oneirocom/embedchain.git", branch="main", extras = ["pinecone"]}
-# embedchain = {extras = ["pinecone"], version = "0.1.73"}
+# embedchain = { git="https://github.com/Oneirocom/embedchain.git", branch="main", extras = ["pinecone"]}
+embedchain = {extras = ["pinecone"], version = "0.1.73"}
 # embedchain = { path = "./pythonPackages/embedchain", extras = ["pinecone"], develop = true }
 bs4 = "^0.0.2"
 html5lib = "^1.1"
