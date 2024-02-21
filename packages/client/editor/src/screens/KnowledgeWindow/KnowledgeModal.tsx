@@ -1,8 +1,6 @@
 import { Modal } from 'client/core'
 import {
-  Backdrop,
   Button,
-  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -21,7 +19,7 @@ const KnowledgeModal = ({
   handleSave,
   setNewKnowledge,
 }) => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [newKnowledge, setKnowledge] = useState<Partial<NewKnowledgeState>>({
     tag: '',
     name: '',
@@ -72,155 +70,147 @@ const KnowledgeModal = ({
     })
   }
 
-  const [selectedModel] = useState(null)
-
   const handleSaveKnowledge = async () => {
+    console.log('settign loading true')
     setLoading(true)
 
-    await handleSave(selectedModel)
+    await handleSave(() => {
+      setLoading(false)
+    })
 
-    setLoading(false)
+    console.log('settign loading false')
   }
 
   return (
     <Modal
       open={createMode}
+      loading={loading}
       onClose={() => {
         setCreateMode(!createMode)
       }}
       submitText="Upload"
       handleAction={handleSaveKnowledge}
     >
-      {loading && (
-        <Backdrop
-          open={loading}
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-        >
-          <CircularProgress className={styles.loader} />
-        </Backdrop>
-      )}
-      {!loading && (
-        <Grid container>
-          <Grid container direction="row" justifyContent="space-between">
-            <Grid item>
-              <Typography
-                variant={'h5'}
-                fontWeight={'bold'}
-                style={{ margin: '0.5rem' }}
-              >
-                Add Knowledge
-              </Typography>
-            </Grid>
-            <Button
-              className={styles.btn}
-              variant="outlined"
-              style={{ marginLeft: '1rem' }}
-              onClick={handleFileUpload}
+      <Grid container>
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item>
+            <Typography
+              variant={'h5'}
+              fontWeight={'bold'}
+              style={{ margin: '0.5rem' }}
             >
-              Upload files
-            </Button>
+              Add Knowledge
+            </Typography>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{ display: 'flex', gap: '5rem', alignItems: 'center' }}
+          <Button
+            className={styles.btn}
+            variant="outlined"
+            style={{ marginLeft: '1rem' }}
+            onClick={handleFileUpload}
           >
-            <Grid item xs={12}>
-              <Typography
-                style={{ width: '100%', margin: '.5em' }}
-                variant={'h6'}
-                fontWeight={'bold'}
-              >
-                Name
-              </Typography>
-              <TextField
-                label="Name"
-                name="name"
-                value={newKnowledge.name}
-                style={{ width: '100%', margin: '.5em' }}
-                onChange={e =>
-                  setKnowledge({ ...newKnowledge, name: e.target.value })
-                }
-                required
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{ display: 'flex', gap: '5rem', alignItems: 'center' }}
-          >
-            <Grid item xs={12}>
-              <Typography
-                style={{ width: '100%', margin: '.5em' }}
-                variant={'h6'}
-                fontWeight={'bold'}
-              >
-                Source URL
-              </Typography>
-              <TextField
-                label="Source URL"
-                name="sourcrUrl"
-                disabled={!!newKnowledge?.files?.length}
-                value={newKnowledge.sourceUrl}
-                style={{ width: '100%', margin: '.5em' }}
-                onChange={e =>
-                  setKnowledge({ ...newKnowledge, sourceUrl: e.target.value })
-                }
-                required
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{ display: 'flex', gap: '5rem', alignItems: 'center' }}
-          >
-            <Grid item xs={6}>
-              <Typography
-                style={{ width: '100%', margin: '.5em' }}
-                variant={'h6'}
-                fontWeight={'bold'}
-              >
-                Tag
-              </Typography>
-              <TextField
-                name="type"
-                style={{ width: '100%', margin: '.5em' }}
-                onChange={e =>
-                  setKnowledge({ ...newKnowledge, tag: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Typography
-                style={{ width: '100%', margin: '.5em' }}
-                variant={'h6'}
-                fontWeight={'bold'}
-              >
-                Data Type
-              </Typography>
-              <FormControl fullWidth>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Data type"
-                  name="dataType"
-                  value={newKnowledge.dataType}
-                  onChange={handleDataTypesChange}
-                  required
-                >
-                  {Object.values(DataType).map((type, index) => (
-                    <MenuItem key={index} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+            Upload files
+          </Button>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          style={{ display: 'flex', gap: '5rem', alignItems: 'center' }}
+        >
+          <Grid item xs={12}>
+            <Typography
+              style={{ width: '100%', margin: '.5em' }}
+              variant={'h6'}
+              fontWeight={'bold'}
+            >
+              Name
+            </Typography>
+            <TextField
+              label="Name"
+              name="name"
+              value={newKnowledge.name}
+              style={{ width: '100%', margin: '.5em' }}
+              onChange={e =>
+                setKnowledge({ ...newKnowledge, name: e.target.value })
+              }
+              required
+            />
           </Grid>
         </Grid>
-      )}
+        <Grid
+          item
+          xs={12}
+          style={{ display: 'flex', gap: '5rem', alignItems: 'center' }}
+        >
+          <Grid item xs={12}>
+            <Typography
+              style={{ width: '100%', margin: '.5em' }}
+              variant={'h6'}
+              fontWeight={'bold'}
+            >
+              Source URL
+            </Typography>
+            <TextField
+              label="Source URL"
+              name="sourcrUrl"
+              disabled={!!newKnowledge?.files?.length}
+              value={newKnowledge.sourceUrl}
+              style={{ width: '100%', margin: '.5em' }}
+              onChange={e =>
+                setKnowledge({ ...newKnowledge, sourceUrl: e.target.value })
+              }
+              required
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          style={{ display: 'flex', gap: '5rem', alignItems: 'center' }}
+        >
+          <Grid item xs={6}>
+            <Typography
+              style={{ width: '100%', margin: '.5em' }}
+              variant={'h6'}
+              fontWeight={'bold'}
+            >
+              Tag
+            </Typography>
+            <TextField
+              name="type"
+              style={{ width: '100%', margin: '.5em' }}
+              onChange={e =>
+                setKnowledge({ ...newKnowledge, tag: e.target.value })
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography
+              style={{ width: '100%', margin: '.5em' }}
+              variant={'h6'}
+              fontWeight={'bold'}
+            >
+              Data Type
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Data type"
+                name="dataType"
+                value={newKnowledge.dataType}
+                onChange={handleDataTypesChange}
+                required
+              >
+                {Object.values(DataType).map((type, index) => (
+                  <MenuItem key={index} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Grid>
     </Modal>
   )
 }

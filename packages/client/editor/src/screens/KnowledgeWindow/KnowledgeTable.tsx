@@ -241,7 +241,7 @@ function KnowledgeTable({ knowledgeData }) {
   }
 
   // Handle save action
-  const handleSave = async selectedModel => {
+  const handleSave = async (callback: () => void) => {
     const { files, ...body } = newKnowledge
     // call knowledge endpoint
 
@@ -262,6 +262,7 @@ function KnowledgeTable({ knowledgeData }) {
         resetNewKnowledge()
         enqueueSnackbar('Knowledge saved successfully', { variant: 'success' })
         setTimeout(() => {
+          callback()
           setCreateMode(false)
         }, 500)
       })
