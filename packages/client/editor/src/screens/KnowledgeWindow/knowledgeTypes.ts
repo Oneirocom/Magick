@@ -35,7 +35,7 @@ export enum SpecialDataType {
 export enum DataType {
   AUTO = SpecialDataType.AUTO,
   TEXT = 'text', // Replace "text" with the actual value from DirectDataType.TEXT.value
-  YOUTUBE_VIDEO = IndirectDataType.YOUTUBE_VIDEO,
+  // YOUTUBE_VIDEO = IndirectDataType.YOUTUBE_VIDEO,
   PDF_FILE = IndirectDataType.PDF_FILE,
   WEB_PAGE = IndirectDataType.WEB_PAGE,
   SITEMAP = IndirectDataType.SITEMAP,
@@ -52,7 +52,7 @@ export enum DataType {
   OPENAPI = IndirectDataType.OPENAPI,
   // GMAIL = IndirectDataType.GMAIL,
   SUBSTACK = IndirectDataType.SUBSTACK,
-  YOUTUBE_CHANNEL = IndirectDataType.YOUTUBE_CHANNEL,
+  // YOUTUBE_CHANNEL = IndirectDataType.YOUTUBE_CHANNEL,
   DISCORD = IndirectDataType.DISCORD,
   // CUSTOM = IndirectDataType.CUSTOM,
   RSSFEED = IndirectDataType.RSSFEED,
