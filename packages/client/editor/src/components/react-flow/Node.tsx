@@ -11,14 +11,18 @@ import NodeContainer from './NodeContainer'
 import OutputSocket from './OutputSocket'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import { isHandleConnected } from '../../utils/isHandleConnected'
-import { selectActiveInput, useSelectAgentsSpell } from 'client/state'
+import {
+  selectActiveInput,
+  setActiveInput,
+  useSelectAgentsSpell,
+} from 'client/state'
 import { SpellInterface } from 'server/schemas'
 import { getConfig } from '../../utils/getNodeConfig'
 import { configureSockets } from '../../utils/configureSockets'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
 import { Tab, usePubSub } from '@magickml/providers'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 type NodeProps = FlowNodeProps & {
   tab: Tab
@@ -39,6 +43,7 @@ export const Node: React.FC<NodeProps> = ({
   nodeJSON,
 }: NodeProps) => {
   const { events, subscribe } = usePubSub()
+  const dispatch = useDispatch()
   const updateNodeInternals = useUpdateNodeInternals()
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const [endEventName, setEndEventName] = useState<string | null>(null)
@@ -55,6 +60,10 @@ export const Node: React.FC<NodeProps> = ({
   const handleChange = useChangeNodeData(id)
 
   const activeInput = useSelector(selectActiveInput)
+
+  useEffect(() => {
+    if (!selected) dispatch(setActiveInput(null))
+  }, [selected])
 
   // Hook into to event to reset node states and stop animations
   useEffect(() => {
