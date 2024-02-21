@@ -52,7 +52,7 @@ const Item = ({ item, position, onPickNode }: Props) => {
       onMouseOver={() => setVisibleSubitems(true)}
       onMouseLeave={() => setVisibleSubitems(false)}
     >
-      {item.title ?? (item?.type && item?.type.split('/')[1])}
+      {item.title ?? item?.type}
       {item.subItems && visibleSubitems && (
         <div className={styles['subitems']}>
           {item.subItems.map(subitem => (
