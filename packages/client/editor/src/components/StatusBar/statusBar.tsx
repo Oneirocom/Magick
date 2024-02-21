@@ -4,6 +4,7 @@ import AutorenewIcon from '@mui/icons-material/Autorenew'
 import { RootState } from 'client/state'
 import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
+import { cx } from 'class-variance-authority'
 
 const VerticalDivider = () => (
   <div className="inline-block h-[250px] min-h-[1em] w-0.5 self-stretch bg-[var(--background-color)] opacity-100 dark:opacity-50"></div>
@@ -63,18 +64,7 @@ export const StatusBar = () => {
       <VerticalDivider />
       <p>Syncing: </p>
       <AutorenewIcon
-        sx={{
-          marginRight: '20px',
-          animation: syncing ? 'spin 2s linear infinite' : 'none',
-          '@keyframes spin': {
-            '0%': {
-              transform: 'rotate(0deg)',
-            },
-            '100%': {
-              transform: 'rotate(230deg)',
-            },
-          },
-        }}
+        className={cx('mr-[20px] h-4 w-4', syncing ? 'animate-spin' : '')}
       />
       <VerticalDivider />
       <p className="truncate">Current Tab: {currentTab?.title}</p>
