@@ -11,7 +11,12 @@ import styles from './menu.module.css'
 import { useState, useEffect } from 'react'
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-import { PortalSubscriptions } from '@magickml/portal-utils-shared'
+
+enum PortalSubscriptions {
+  NEOPHYTE = 'NEOPHYTE',
+  APPRENTICE = 'APPRENTICE',
+  WIZARD = 'WIZARD',
+}
 
 export const MPBalanceBar = ({ userData }) => {
   const { client } = useFeathers()

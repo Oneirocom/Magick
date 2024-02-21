@@ -138,10 +138,12 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       projectId,
       completionObj
     )) as any
+    await this.liteLLMBudgetManager?.reset_cost(projectId)
     const newCharge = (await updatedCost.user.current_cost) - preChargeCost
     this.app
       .service('user')
       .emit('budgetUpdated', { newCharge, agentId: this.agentId })
+
     return true
   }
 
