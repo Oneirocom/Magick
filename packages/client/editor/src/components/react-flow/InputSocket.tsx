@@ -72,16 +72,16 @@ const InputFieldForValue = ({
   const handleChange = ({ key, value }: { key: string; value: any }) => {
     onChange(key, value)
     setInputVal(value)
-    dispatch(setActiveInput({ ...activeInput, value }))
+    dispatch(setActiveInput({ name, inputType: valueType, value }))
   }
 
   const onFocus = (x: string) => {
     if (valueType === 'string') {
-      handleChange({ key: name, value: x })
+      onChange(name, x)
       dispatch(setActiveInput({ name, inputType: valueType, value: x }))
       return
     }
-    dispatch(setActiveInput({ name, inputType: valueType, value: x }))
+    dispatch(setActiveInput(null))
   }
 
   useEffect(() => {
@@ -224,7 +224,6 @@ const InputSocket: React.FC<InputSocketProps> = ({
             collapsed={1}
             collapseStringsAfterLength={20}
             shouldCollapse={(field: any) => {
-              console.log('Should collapse', field)
               return typeof field === 'string' && field.length > 20
             }}
             enableClipboard={true}

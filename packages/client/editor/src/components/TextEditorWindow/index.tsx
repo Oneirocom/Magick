@@ -100,8 +100,6 @@ const TextEditor = props => {
         .join('')
         .trim()
 
-      console.log('Socket name', socketName)
-
       if (!socketName) continue
 
       const socket: Socket = {
@@ -129,15 +127,9 @@ const TextEditor = props => {
 
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
-
-  console.log({
-    textEditorData,
-    activeInput,
-    code,
-  })
   if (
     (textEditorData === undefined && !activeInput) ||
-    (activeInput && activeInput.inputType !== 'string')
+    activeInput?.inputType !== 'string'
   )
     return <WindowMessage content="Select a node with a text field" />
 
