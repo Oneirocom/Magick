@@ -40,7 +40,12 @@ export const CompletionProviderOptions: React.FC<
 
   const onSelectModel = (model: CompletionModel | '') => {
     setSelectedModel(model)
-    // props.updateConfigKey('model', model)
+    props.updateConfigKey('model', model)
+  }
+
+  const onSelectProvider = (provider: LLMProviders | '') => {
+    setSelectedProvider(provider)
+    props.updateConfigKey('modelProvider', provider)
   }
 
   useEffect(() => {
@@ -64,7 +69,7 @@ export const CompletionProviderOptions: React.FC<
         <Select
           value={selectedProvider}
           onValueChange={(newValue: LLMProviders | '') =>
-            setSelectedProvider(newValue)
+            onSelectProvider(newValue)
           }
         >
           <SelectTrigger>
