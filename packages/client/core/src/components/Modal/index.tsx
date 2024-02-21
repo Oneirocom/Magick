@@ -7,6 +7,7 @@ import styles from './index.module.scss'
 import { DialogTitle } from '@mui/material'
 import React from 'react'
 import { Button } from '@magickml/client-ui'
+import { ReloadIcon } from '@radix-ui/react-icons'
 
 /**
  * Modal component to display a dialog with action buttons.
@@ -25,6 +26,7 @@ interface Props {
   handleAction?: () => void
   children?: React.ReactNode
   showSaveBtn?: boolean
+  loading?: boolean
 }
 
 export const Modal = ({
@@ -34,6 +36,7 @@ export const Modal = ({
   submitText,
   title,
   children,
+  loading = false,
   showSaveBtn = true,
 }: Props) => {
   return (
@@ -61,11 +64,18 @@ export const Modal = ({
         {handleAction !== undefined && showSaveBtn === true && (
           <Button
             variant="default"
+            disabled={loading}
             onClick={() => {
               handleAction()
             }}
           >
-            {submitText || 'Save'}
+            {loading && (
+              <>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
+            )}
+            {!loading && (submitText || 'Save')}
           </Button>
         )}
       </DialogActions>
