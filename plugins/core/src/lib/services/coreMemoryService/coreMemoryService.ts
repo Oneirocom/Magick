@@ -71,7 +71,7 @@ class CoreMemoryService {
       config: {
         metric: 'cosine',
         vector_dimension: 1536,
-        collection_name: PINECONE_INDEX_NAME,
+        index_name: PINECONE_INDEX_NAME,
         serverless_config: {
           cloud: 'aws',
           region: 'us-west-2',
