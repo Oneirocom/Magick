@@ -5,9 +5,18 @@
 import React from 'react'
 
 import MagickV2 from './screens'
+import { FrigadeAnnouncement } from '@frigade/react'
 
 function App(): React.JSX.Element {
-  return <MagickV2 />
+  return (
+    <>
+      <FrigadeAnnouncement
+        flowId="flow_8ZIGBYvK0fP6r4Fa"
+        modalPosition="center"
+      />
+      <MagickV2 />
+    </>
+  )
 }
 
 export default App
