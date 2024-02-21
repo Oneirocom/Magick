@@ -214,7 +214,9 @@ export const MPBalanceBar = ({ userData }) => {
         <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
           {isNeophyte && magickPowerBalance === 0
             ? 'Upgrade to use MP'
-            : `${mp} / ${isWizard || isApprentice ? '1000' : '200'} monthly MP`}
+            : `${mp} / ${
+                isWizard || isApprentice ? '1000 monthly' : '200 Free Trial'
+              } MP`}
         </p>
       </div>
 
