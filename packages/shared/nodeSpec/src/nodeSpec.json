@@ -85,7 +85,9 @@
         "valueType": "array",
         "defaultValue": [
           "hiddenProperties",
-          "textEditorOptions"
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
         ]
       },
       {
