@@ -8,7 +8,6 @@ import {
 } from 'servicesShared'
 import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { CoreUserService } from '../userService/coreUserService'
-import { saveRequest } from 'shared/core'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import {
   AllModels,
@@ -16,6 +15,7 @@ import {
   LLMCredential,
   findProvider,
 } from 'servicesShared'
+import { saveRequest } from 'server/core'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

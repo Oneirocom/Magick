@@ -1,9 +1,6 @@
-// DOCUMENTED
-// import { calculateCompletionCost } from '../cost-calculator'
+import { GraphEventPayload, RequestPayload } from 'shared/core'
+import { app } from '../app'
 import { v4 } from 'uuid'
-import { globalsManager } from '../globals'
-import { GraphEventPayload, RequestPayload } from '../types'
-import { app } from 'server/core'
 
 /**
  * Calculate and save request details in the module.
@@ -39,7 +36,6 @@ export function saveRequest({
   type,
   hidden,
   processed,
-  totalTokens,
   spell,
   nodeId,
   cost,
