@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Tooltip } from 'react-tooltip'
 import { Checkbox, FormControlLabel } from '@mui/material'
 import { ConfigurationComponentProps } from './PropertiesWindow'
-import { InfoIcon } from '@magickml/icons'
+// import { InfoIcon } from '@magickml/icons'
 
 export const EventStateProperties = (props: ConfigurationComponentProps) => {
   const { updateConfigKey, config, fullConfig } = props
@@ -23,13 +23,13 @@ export const EventStateProperties = (props: ConfigurationComponentProps) => {
     <div>
       <h3>
         Event State{' '}
-        <span
+        {/* <span
           className="inline"
           data-tooltip-id="eventState"
           data-tooltip-variant="light"
         >
           <InfoIcon className="inline mb-2" />
-        </span>
+        </span> */}
       </h3>
 
       <Tooltip anchorSelect="#my-anchor-element" content="Hello world!" />

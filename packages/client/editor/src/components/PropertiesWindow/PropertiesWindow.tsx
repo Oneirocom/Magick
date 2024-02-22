@@ -36,7 +36,6 @@ export type ConfigurationComponentProps = {
 
 const ConfigurationComponents = {
   socketInputs: SocketConfig,
-  textEditorData: () => <div>Button to open text editor</div>,
   eventStateProperties: EventStateProperties,
   variableNames: VariableNames,
   valueType: ValueType,
