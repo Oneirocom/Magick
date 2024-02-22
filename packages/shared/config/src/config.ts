@@ -72,12 +72,13 @@ export const AGENT_RESPONSE_TIMEOUT_MSEC =
 
 export const PORTAL_AGENT_KEY = getVarForEnvironment('PORTAL_AGENT_KEY') || v4()
 
-export const AWS_ACCESS_KEY = getVarForEnvironment('AWS_ACCESS_KEY') || ''
-export const AWS_SECRET_KEY = getVarForEnvironment('AWS_SECRET_KEY') || ''
-export const AWS_REGION = getVarForEnvironment('AWS_REGION') || ''
-export const AWS_BUCKET_NAME = getVarForEnvironment('AWS_BUCKET_NAME') || ''
+export const AWS_ACCESS_KEY = getVarForEnvironment('NEXT_AWS_ACCESS_KEY') || ''
+export const AWS_SECRET_KEY = getVarForEnvironment('NEXT_AWS_SECRET_KEY') || ''
+export const AWS_REGION = getVarForEnvironment('NEXT_AWS_REGION') || ''
+export const AWS_BUCKET_NAME =
+  getVarForEnvironment('NEXT_AWS_BUCKET_NAME') || ''
 export const AWS_BUCKET_ENDPOINT =
-  getVarForEnvironment('AWS_BUCKET_ENDPOINT') || ''
+  getVarForEnvironment('NEXT_AWS_BUCKET_ENDPOINT') || ''
 
 export const HEARTBEAT_MSEC =
   Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000
