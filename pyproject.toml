@@ -20,6 +20,8 @@ lxml = "^5.1.0"
 litellm = "^1.19.2"
 google-generativeai = "^0.3.2"
 google-cloud-aiplatform = "^1.40.0"
+pinecone-text = "^0.8.0"
+pinecone-client = "^3.0.3"
 
 [tool.poetry.dev-dependencies]
 #litellm = { path = "./pythonPackages/liteLLM", develop = true }
