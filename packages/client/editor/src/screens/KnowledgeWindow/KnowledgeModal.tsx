@@ -19,7 +19,7 @@ const KnowledgeModal = ({
   handleSave,
   setNewKnowledge,
 }) => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [newKnowledge, setKnowledge] = useState<Partial<NewKnowledgeState>>({
     tag: '',
     name: '',
