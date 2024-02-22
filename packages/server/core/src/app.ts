@@ -18,7 +18,6 @@ import pino from 'pino'
 import Redis from 'ioredis'
 import { RedisPubSub } from 'server/redis-pubsub'
 import sync from 'feathers-sync'
-import { globalsManager } from 'shared/core'
 
 import { REDIS_URL, API_ACCESS_KEY } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
@@ -68,8 +67,6 @@ export async function initApp(environment: Environment = 'default') {
   app.set('credentialsManager', credentialsManager)
 
   app.set('posthog', createPosthogClient(app))
-
-  globalsManager.register('feathers', app)
 
   const port = parseInt(process.env.PORT || '3030', 10)
   app.set('port', port)

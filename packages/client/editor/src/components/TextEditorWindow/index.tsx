@@ -1,6 +1,6 @@
 // import { debounce } from 'lodash'
 import Editor from '@monaco-editor/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
@@ -12,7 +12,6 @@ import {
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { Socket } from '@magickml/behave-graph'
-import { debounce } from 'lodash'
 
 const TextEditor = props => {
   const dispatch = useDispatch()
@@ -50,6 +49,10 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (code === undefined) return
+    if (!selectedNode) return
+
+    const { configuration } = selectedNode.data
+
     const formattedCode = code.replace('\r\n', '\n')
     if (selectedNode?.data?.configuration?.textEditorData !== undefined) {
       console.log('SAVING')
@@ -63,6 +66,54 @@ const TextEditor = props => {
       console.log('DISPATCHING')
       dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
     }
+
+    if (!selectedNode.data?.configuration?.textEditorOptions?.options?.language)
+      return
+    const { textEditorOptions } = configuration
+    const { options } = textEditorOptions
+    const { language } = options
+
+    if (language !== 'handlebars') return
+    // socket regex looks for handlebars style {{socketName}}
+    const socketRegex = /{{(.+?)}}/g
+
+    const socketMatches = code.matchAll(socketRegex)
+    const sockets: Socket[] = []
+    for (const match of socketMatches) {
+      if (!match[1]) continue
+      const socketName = match[1]
+        .split(' ')
+        .filter(
+          name =>
+            !name.startsWith('#') &&
+            !name.startsWith('/') &&
+            !name.startsWith('@') &&
+            name !== 'this'
+        )
+        .join('')
+        .trim()
+
+      if (!socketName) continue
+
+      const socket: Socket = {
+        name: socketName,
+        valueTypeName: 'string',
+        value: '',
+        valueChoices: [],
+        label: socketName,
+        links: [],
+      }
+
+      if (configuration.socketInputs.find(input => input.name === socketName))
+        continue
+
+      sockets.push(socket)
+    }
+
+    handleChange('configuration', {
+      ...configuration,
+      socketInputs: [...configuration.socketInputs, ...sockets.filter(Boolean)],
+    })
   }, [debouncedCode])
 
   // Handles loading the code from selected node if a text editor data node
@@ -81,72 +132,6 @@ const TextEditor = props => {
     if (activeInput?.inputType !== 'string') return
     setCode(activeInput.value)
   }, [activeInput])
-
-  const debounceSockets = useCallback(
-    debounce(code => {
-      if (!code) return
-      if (!selectedNode) return
-      if (
-        !selectedNode.data?.configuration?.textEditorOptions?.options?.language
-      )
-        return
-      const { configuration } = selectedNode.data
-      const { textEditorOptions } = configuration
-      const { options } = textEditorOptions
-      const { language } = options
-      if (language !== 'handlebars') return
-      // socket regex looks for handlebars style {{socketName}}
-      const socketRegex = /{{(.+?)}}/g
-
-      const socketMatches = code.matchAll(socketRegex)
-      const sockets: Socket[] = []
-      for (const match of socketMatches) {
-        if (!match[1]) continue
-        const socketName = match[1]
-          .split(' ')
-          .filter(
-            name =>
-              !name.startsWith('#') &&
-              !name.startsWith('/') &&
-              !name.startsWith('@') &&
-              name !== 'this'
-          )
-          .join('')
-          .trim()
-
-        if (!socketName) continue
-
-        const socket: Socket = {
-          name: socketName,
-          valueTypeName: 'string',
-          value: '',
-          valueChoices: [],
-          label: socketName,
-          links: [],
-        }
-
-        if (configuration.socketInputs.find(input => input.name === socketName))
-          continue
-
-        sockets.push(socket)
-      }
-
-      handleChange('configuration', {
-        ...configuration,
-        socketInputs: [
-          ...configuration.socketInputs,
-          ...sockets.filter(Boolean),
-        ],
-      })
-    }, 3000),
-    []
-  )
-
-  // listen for changes to the code and check if selected node is text template
-  // then we want to parse the template for sockets and add them to the node
-  useEffect(() => {
-    debounceSockets(code)
-  }, [code])
 
   if (!selectedNode) return null
 

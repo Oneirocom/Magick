@@ -3,6 +3,7 @@
 import { v4 } from 'uuid'
 import { globalsManager } from '../globals'
 import { GraphEventPayload, RequestPayload } from '../types'
+import { app } from 'server/core'
 
 /**
  * Calculate and save request details in the module.
@@ -56,9 +57,6 @@ export function saveRequest({
   const end = Date.now()
   const duration = end - startTime
 
-  // Get Feathers app instance from globals manager.
-  const app = globalsManager.get('feathers') as any
-
   // Save and create the request object in Feathers app.
   return app.service('request').create({
     id: v4(),
@@ -92,8 +90,6 @@ export function saveGraphEvent({
   eventType,
   event,
 }: GraphEventPayload) {
-  const app = globalsManager.get('feathers') as any
-
   return app.service('graphEvents').create({
     sender,
     agentId,
