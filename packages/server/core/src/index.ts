@@ -39,3 +39,5 @@ export * from './metering'
 
 export * from './lib/feathersPermissions'
 export * from './types'
+
+export * from './utils'

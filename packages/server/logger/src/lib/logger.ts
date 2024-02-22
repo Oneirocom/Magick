@@ -29,15 +29,7 @@ const createDevelopmentLogger = opts =>
     ...opts,
   })
 
-const createProductionLogger = (
-  opts: object = {},
-  transportOpts: object = {}
-) => {
-  const targets = [
-    getPinoTransport(PINO_LOG_LEVEL),
-    // you can add other transports here if needed
-  ]
-
+const createProductionLogger = (opts: object = {}) => {
   return pino({
     ...opts, // Spread the general options into the pino configuration
     transport: getPinoTransport(PINO_LOG_LEVEL),

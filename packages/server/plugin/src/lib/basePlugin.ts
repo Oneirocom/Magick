@@ -11,8 +11,8 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { saveGraphEvent } from 'shared/core'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
+import { saveGraphEvent } from 'server/core'
 // import { MeterManager } from 'packages/server/meter/src'
 // import { PluginStateManager } from 'packages/server/pluginState/src'
 
