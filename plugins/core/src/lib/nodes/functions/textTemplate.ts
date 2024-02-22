@@ -7,12 +7,18 @@ import {
 
 export const textTemplate = makeFunctionNodeDefinition({
   typeName: 'logic/string/template',
+  aliases: ['logic/string/textTemplate'],
   category: NodeCategory.Logic,
   label: 'Text Template',
   configuration: {
     hiddenProperties: {
       valueType: 'array',
-      defaultValue: ['hiddenProperties', 'textEditorOptions'],
+      defaultValue: [
+        'hiddenProperties',
+        'textEditorOptions',
+        'textEditorData',
+        'socketValues',
+      ],
     },
     textEditorData: {
       valueType: 'string',
