@@ -1,25 +1,39 @@
-import React, { useState } from 'react';
-import { Checkbox, FormControlLabel } from "@mui/material";
-import { ConfigurationComponentProps } from "./PropertiesWindow"
+import React, { useState } from 'react'
+import { Tooltip } from 'react-tooltip'
+import { Checkbox, FormControlLabel } from '@mui/material'
+import { ConfigurationComponentProps } from './PropertiesWindow'
+import { InfoIcon } from '@magickml/icons'
 
 export const EventStateProperties = (props: ConfigurationComponentProps) => {
-  const { updateConfigKey, config, fullConfig } = props;
+  const { updateConfigKey, config, fullConfig } = props
   const [, eventProperties] = config
   const eventStateValue = fullConfig.eventState
-  const [selectedEvents, setSelectedEvents] = useState(eventStateValue || []);
+  const [selectedEvents, setSelectedEvents] = useState(eventStateValue || [])
 
   const handleChange = (event, eventProperty) => {
     const newSelection = event.target.checked
       ? [...selectedEvents, eventProperty]
-      : selectedEvents.filter(e => e !== eventProperty);
-    setSelectedEvents(newSelection);
+      : selectedEvents.filter(e => e !== eventProperty)
+    setSelectedEvents(newSelection)
     // would rather not hard code this string here
-    updateConfigKey('eventState', newSelection);
-  };
+    updateConfigKey('eventState', newSelection)
+  }
 
   return (
     <div>
-      <h3>Event State</h3>
+      <h3>
+        Event State{' '}
+        <span
+          className="inline"
+          data-tooltip-id="eventState"
+          data-tooltip-variant="light"
+        >
+          <InfoIcon className="inline mb-2" />
+        </span>
+      </h3>
+
+      <Tooltip anchorSelect="#my-anchor-element" content="Hello world!" />
+
       <div className="flex flex-col">
         {eventProperties.map((eventProperty, index) => (
           <FormControlLabel
@@ -27,7 +41,7 @@ export const EventStateProperties = (props: ConfigurationComponentProps) => {
             control={
               <Checkbox
                 checked={selectedEvents.includes(eventProperty)}
-                onChange={(e) => handleChange(e, eventProperty)}
+                onChange={e => handleChange(e, eventProperty)}
               />
             }
             label={eventProperty}
@@ -35,5 +49,5 @@ export const EventStateProperties = (props: ConfigurationComponentProps) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
