@@ -1,6 +1,7 @@
-import { debounce } from 'lodash'
+// import { debounce } from 'lodash'
 import Editor from '@monaco-editor/react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
 import {
@@ -11,10 +12,14 @@ import {
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { Socket } from '@magickml/behave-graph'
+import { debounce } from 'lodash'
 
 const TextEditor = props => {
   const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
+
+  const [debouncedCode] = useDebounce(code, 2000)
+
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
 
   const [editorOptions] = useState<Record<string, any>>({
@@ -24,6 +29,7 @@ const TextEditor = props => {
   })
 
   const updateNodeData = useChangeNodeData(selectedNode?.id)
+
   const handleChange = (key: string, value: any) => {
     if (!selectedNode) return
     updateNodeData(key, value)
@@ -42,85 +48,104 @@ const TextEditor = props => {
     })
   }
 
-  const debounceSave = debounce(code => {
-    handleChange('configuration', {
-      ...configuration,
-      textEditorData: code,
-    })
-  }, 1000)
-
-  const updateCode = rawCode => {
-    const code = rawCode.replace('\r\n', '\n')
-    dispatch(setActiveInput({ ...activeInput, value: code }))
-    debounceSave(code)
-  }
-
   useEffect(() => {
-    if (!selectedNode || activeInput?.name) return
+    if (code === undefined) return
+    const formattedCode = code.replace('\r\n', '\n')
+    if (selectedNode?.data?.configuration?.textEditorData !== undefined) {
+      console.log('SAVING')
+      handleChange('configuration', {
+        ...configuration,
+        textEditorData: formattedCode,
+      })
+    }
+
+    if (activeInput) {
+      console.log('DISPATCHING')
+      dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
+    }
+  }, [debouncedCode])
+
+  // Handles loading the code from selected node if a text editor data node
+  useEffect(() => {
+    if (!selectedNode) return
     const { configuration } = selectedNode.data
     const { textEditorData } = configuration
     if (textEditorData === undefined) return
+    if (textEditorData === code) return
     setCode(textEditorData)
-  }, [selectedNode, activeInput])
+  }, [selectedNode?.id])
 
+  // Handles setting the code from the active input
   useEffect(() => {
     if (activeInput?.value === code) return
     if (activeInput?.inputType !== 'string') return
     setCode(activeInput.value)
-  }, [activeInput, code])
+  }, [activeInput])
+
+  const debounceSockets = useCallback(
+    debounce(code => {
+      if (!code) return
+      if (!selectedNode) return
+      if (
+        !selectedNode.data?.configuration?.textEditorOptions?.options?.language
+      )
+        return
+      const { configuration } = selectedNode.data
+      const { textEditorOptions } = configuration
+      const { options } = textEditorOptions
+      const { language } = options
+      if (language !== 'handlebars') return
+      // socket regex looks for handlebars style {{socketName}}
+      const socketRegex = /{{(.+?)}}/g
+
+      const socketMatches = code.matchAll(socketRegex)
+      const sockets: Socket[] = []
+      for (const match of socketMatches) {
+        if (!match[1]) continue
+        const socketName = match[1]
+          .split(' ')
+          .filter(
+            name =>
+              !name.startsWith('#') &&
+              !name.startsWith('/') &&
+              !name.startsWith('@') &&
+              name !== 'this'
+          )
+          .join('')
+          .trim()
+
+        if (!socketName) continue
+
+        const socket: Socket = {
+          name: socketName,
+          valueTypeName: 'string',
+          value: '',
+          valueChoices: [],
+          label: socketName,
+          links: [],
+        }
+
+        if (configuration.socketInputs.find(input => input.name === socketName))
+          continue
+
+        sockets.push(socket)
+      }
+
+      handleChange('configuration', {
+        ...configuration,
+        socketInputs: [
+          ...configuration.socketInputs,
+          ...sockets.filter(Boolean),
+        ],
+      })
+    }, 3000),
+    []
+  )
 
   // listen for changes to the code and check if selected node is text template
   // then we want to parse the template for sockets and add them to the node
   useEffect(() => {
-    if (!code) return
-    if (!selectedNode) return
-    if (!selectedNode.data?.configuration?.textEditorOptions?.options?.language)
-      return
-    const { configuration } = selectedNode.data
-    const { textEditorOptions } = configuration
-    const { options } = textEditorOptions
-    const { language } = options
-    if (language !== 'handlebars') return
-    // socket regex looks for handlebars style {{socketName}}
-    const socketRegex = /{{(.+?)}}/g
-
-    const socketMatches = code.matchAll(socketRegex)
-    const sockets: Socket[] = []
-    for (const match of socketMatches) {
-      if (!match[1]) continue
-      const socketName = match[1]
-        .split(' ')
-        .filter(
-          name =>
-            !name.startsWith('#') &&
-            !name.startsWith('/') &&
-            !name.startsWith('@') &&
-            name !== 'this'
-        )
-        .join('')
-        .trim()
-
-      if (!socketName) continue
-
-      const socket: Socket = {
-        name: socketName,
-        valueTypeName: 'string',
-        value: '',
-        valueChoices: [],
-        label: socketName,
-        links: [],
-      }
-
-      if (configuration.socketInputs.find(input => input.name === socketName))
-        continue
-
-      sockets.push(socket)
-    }
-
-    handleChange('configuration', {
-      ...configuration,
-      socketInputs: [...configuration.socketInputs, ...sockets.filter(Boolean)],
-    })
+    debounceSockets(code)
   }, [code])
 
   if (!selectedNode) return null
@@ -128,8 +153,8 @@ const TextEditor = props => {
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
   if (
-    (textEditorData === undefined && !activeInput) ||
-    activeInput?.inputType !== 'string'
+    textEditorData === undefined &&
+    (!activeInput || activeInput?.inputType !== 'string')
   )
     return <WindowMessage content="Select a node with a text field" />
 
@@ -143,7 +168,7 @@ const TextEditor = props => {
           value={code}
           options={editorOptions}
           defaultValue={code}
-          onChange={updateCode}
+          onChange={setCode}
           beforeMount={handleEditorWillMount}
         />
       </div>
