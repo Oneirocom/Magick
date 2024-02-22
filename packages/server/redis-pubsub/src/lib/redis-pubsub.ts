@@ -56,7 +56,7 @@ export class RedisPubSub extends EventEmitter {
     const options: RedisClientOptions = {
       ..._options,
       url: redisCloudUrl,
-      pingInterval: 5 * 60 * 1000,
+      pingInterval: 2 * 60 * 1000,
       socket: {
         ..._options?.socket,
         reconnectStrategy: this.retryStrategy,
