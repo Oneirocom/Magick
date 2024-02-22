@@ -40,10 +40,7 @@ const createProductionLogger = (
 
   return pino({
     ...opts, // Spread the general options into the pino configuration
-    transport: pino.transport({
-      targets,
-      ...transportOpts, // Spread the transport options into the pino.transport configuration
-    }),
+    transport: getPinoTransport(PINO_LOG_LEVEL),
   })
 }
 
