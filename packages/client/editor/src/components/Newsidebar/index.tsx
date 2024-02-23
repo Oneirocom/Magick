@@ -8,6 +8,7 @@ import { AgentMenu } from './AgentMenu'
 import { ScreenLinkItems } from './ScreenLinkItems'
 import { FileTree } from './FileTree'
 import { ContextMenu } from './ContextMenu'
+import { useUpdateAgentMutation } from 'client/state'
 import {
   RootState,
   useCreateAgentMutation,
@@ -27,7 +28,7 @@ import { Button } from '@magickml/client-ui'
 export function NewSidebar(DrawerProps): React.JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   // State to keep track of the anchor element of the menu and cursor position
-
+  const [updateAgent] = useUpdateAgentMutation()
   const { openModal } = useModal()
   const [data, setData] = useState([])
   const { setAgentUpdate } = useTreeData()
@@ -59,6 +60,20 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         if (!agents || isLoading) return
         // // In this scenario, we are assuming a project with one agent is currently live,
         // // Thus a draft should be created and a release should be made for the agent.
+        if (agents.total === 2) {
+          const draftAgent = agents.data.filter(agent => agent.isDraft)[0]
+          const agent = agents.data.filter(
+            agent => agent.id !== draftAgent?.id
+          )[0]
+
+          if (!agent.draftAgentId) {
+            await updateAgent({
+              id: agent.id,
+              draftAgentId: draftAgent.id,
+            }).unwrap()
+          }
+        }
+
         if (agents.total === 1) {
           // Create a draft agent
           const draftAgent = agents.data.filter(agent => agent.isDraft)[0]
@@ -79,6 +94,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
               isDraft: false,
+              draftAgentId: draftAgent.id,
             }).unwrap()
             //TOOD: open a modal for published agent created
             return
