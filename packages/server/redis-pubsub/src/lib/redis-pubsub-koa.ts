@@ -1,14 +1,10 @@
 import { Application } from '@feathersjs/koa/lib'
 import { RedisPubSub } from './redis-pubsub'
-import { RedisClientOptions } from 'redis'
 
-export const koaPubSub = async (
-  redisCloudUrl: string,
-  options: RedisClientOptions = {}
-) => {
+export const koaPubSub = async (redisCloudUrl: string) => {
   const pubsub = new RedisPubSub()
 
-  await pubsub.initialize(redisCloudUrl, options)
+  await pubsub.initialize(redisCloudUrl)
 
   return (app: Application) => {
     app.set('pubsub', pubsub)
