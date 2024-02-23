@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState, useCallback, useEffect } from 'react'
-import { styled } from '@mui/material/styles'
-import Avatar from '@mui/material/Avatar'
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -9,7 +8,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Menu from '@mui/material/Menu'
-
+import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import { STANDALONE } from 'clientConfig'
 import { useFeathers } from '@magickml/providers'
@@ -25,6 +24,7 @@ import { useSnackbar } from 'notistack'
 import StyledDivider from './StyledDivider'
 import { AgentInterface } from 'server/schemas'
 import { Button } from '@magickml/client-ui'
+import { Avatar, AvatarImage } from '@magickml/client-ui'
 
 export function AgentMenu({ data }) {
   const { client } = useFeathers()
@@ -42,6 +42,7 @@ export function AgentMenu({ data }) {
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
     client.service('agents').subscribe(agent.id)
+    console.log('AGENT', agent)
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
     dispatch(setCurrentAgentId(agent.id))
@@ -77,6 +78,7 @@ export function AgentMenu({ data }) {
   }
 
   const handleSelectAgent = (agent: AgentInterface) => {
+    console.log('AGENT', agent)
     setCurrentAgent(agent)
     toggleMenu()
   }
@@ -126,27 +128,20 @@ export function AgentMenu({ data }) {
     }
   }
 
-  const BorderedAvatar = styled(Avatar)`
-    border: 1px solid lightseagreen;
-    ${STANDALONE && 'cursor: pointer;'}
-  `
-
   return (
     <div>
       <List sx={{ width: '100%' }}>
         <ListItem alignItems="center">
           <ListItemAvatar onClick={redirectToCloudAgents}>
-            <BorderedAvatar
-              alt={currentAgent ? currentAgent?.name?.at(0) || 'A' : 'newagent'}
-              src={
-                currentAgent && currentAgent.image
-                  ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${currentAgent.image}`
-                  : undefined // Ensure it's undefined if there's no valid image URL.
-              }
-              sx={{ width: 24, height: 24 }}
+            <Avatar
+              className={clsx('self-center border border-ds-primary w-8 h-8')}
             >
-              {currentAgent?.name?.at(0) || 'A'}
-            </BorderedAvatar>
+              <AvatarImage
+                className="object-cover w-full h-full rounded-full"
+                src={`${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${currentAgent?.image}`}
+                alt={currentAgent?.name || 'Agent'}
+              />
+            </Avatar>
           </ListItemAvatar>
           <ListItemText
             primary={currentAgent ? currentAgent?.name : 'New agent'}

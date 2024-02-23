@@ -1,8 +1,10 @@
 import React from 'react'
-import { MenuItem, Avatar, ListItemText, Box, Checkbox } from '@mui/material'
+import { MenuItem, ListItemText, Box, Checkbox } from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { AgentInterface } from 'server/schemas'
+import { Avatar, AvatarImage } from '@magickml/client-ui'
+import clsx from 'clsx'
 
 const AgentListItem = ({
   agent,
@@ -20,7 +22,7 @@ const AgentListItem = ({
   isSinglePublishedAgent?: boolean
 }) => {
   const agentImage = agent.image
-    ? `https://pub-58d22deb43dc48e792b7b7468610b5f9.r2.dev/magick-dev/agents/${agent.image}`
+    ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent.image}`
     : undefined
 
   const formatDate = (date: string) => {
@@ -71,10 +73,13 @@ const AgentListItem = ({
           />
         )}
         <Avatar
-          alt={agent.name.at(0) || 'A'}
-          src={agentImage}
-          sx={{ width: 24, height: 24 }}
+          className={clsx('self-center border border-ds-primary w-8 h-8')}
         >
+          <AvatarImage
+            className="object-cover w-full h-full rounded-full"
+            src={`${agentImage}`}
+            alt={agent.name.at(0) || 'Agent'}
+          />
           {agent.name.at(0) || 'A'}
         </Avatar>
         <ListItemText
