@@ -3179,6 +3179,7 @@ export namespace Prisma {
     embeddingProvider: string | null
     embeddingModel: string | null
     isDraft: boolean | null
+    draftAgentId: string | null
   }
 
   export type AgentsMaxAggregateOutputType = {
@@ -3201,6 +3202,7 @@ export namespace Prisma {
     embeddingProvider: string | null
     embeddingModel: string | null
     isDraft: boolean | null
+    draftAgentId: string | null
   }
 
   export type AgentsCountAggregateOutputType = {
@@ -3225,6 +3227,7 @@ export namespace Prisma {
     embeddingProvider: number
     embeddingModel: number
     isDraft: number
+    draftAgentId: number
     _all: number
   }
 
@@ -3249,6 +3252,7 @@ export namespace Prisma {
     embeddingProvider?: true
     embeddingModel?: true
     isDraft?: true
+    draftAgentId?: true
   }
 
   export type AgentsMaxAggregateInputType = {
@@ -3271,6 +3275,7 @@ export namespace Prisma {
     embeddingProvider?: true
     embeddingModel?: true
     isDraft?: true
+    draftAgentId?: true
   }
 
   export type AgentsCountAggregateInputType = {
@@ -3295,6 +3300,7 @@ export namespace Prisma {
     embeddingProvider?: true
     embeddingModel?: true
     isDraft?: true
+    draftAgentId?: true
     _all?: true
   }
 
@@ -3392,6 +3398,7 @@ export namespace Prisma {
     embeddingProvider: string | null
     embeddingModel: string | null
     isDraft: boolean
+    draftAgentId: string | null
     _count: AgentsCountAggregateOutputType | null
     _min: AgentsMinAggregateOutputType | null
     _max: AgentsMaxAggregateOutputType | null
@@ -3433,6 +3440,7 @@ export namespace Prisma {
     embeddingProvider?: boolean
     embeddingModel?: boolean
     isDraft?: boolean
+    draftAgentId?: boolean
     agent_credentials?: boolean | agents$agent_credentialsArgs<ExtArgs>
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
     chatMessages?: boolean | agents$chatMessagesArgs<ExtArgs>
@@ -3464,6 +3472,7 @@ export namespace Prisma {
     embeddingProvider?: boolean
     embeddingModel?: boolean
     isDraft?: boolean
+    draftAgentId?: boolean
   }
 
   export type agentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3509,6 +3518,7 @@ export namespace Prisma {
       embeddingProvider: string | null
       embeddingModel: string | null
       isDraft: boolean
+      draftAgentId: string | null
     }, ExtArgs["result"]["agents"]>
     composites: {}
   }
@@ -3935,6 +3945,7 @@ export namespace Prisma {
     readonly embeddingProvider: FieldRef<"agents", 'String'>
     readonly embeddingModel: FieldRef<"agents", 'String'>
     readonly isDraft: FieldRef<"agents", 'Boolean'>
+    readonly draftAgentId: FieldRef<"agents", 'String'>
   }
     
 
@@ -9069,12 +9080,12 @@ export namespace Prisma {
     agentId: string | null
     sender: string | null
     connector: string | null
-    channel: string | null
     content: string | null
     eventType: string | null
     created_at: Date | null
     updated_at: Date | null
     observer: string | null
+    channel: string | null
   }
 
   export type GraphEventsMaxAggregateOutputType = {
@@ -9082,12 +9093,12 @@ export namespace Prisma {
     agentId: string | null
     sender: string | null
     connector: string | null
-    channel: string | null
     content: string | null
     eventType: string | null
     created_at: Date | null
     updated_at: Date | null
     observer: string | null
+    channel: string | null
   }
 
   export type GraphEventsCountAggregateOutputType = {
@@ -9096,13 +9107,13 @@ export namespace Prisma {
     sender: number
     connector: number
     connectorData: number
-    channel: number
     content: number
     eventType: number
     created_at: number
     updated_at: number
     event: number
     observer: number
+    channel: number
     _all: number
   }
 
@@ -9112,12 +9123,12 @@ export namespace Prisma {
     agentId?: true
     sender?: true
     connector?: true
-    channel?: true
     content?: true
     eventType?: true
     created_at?: true
     updated_at?: true
     observer?: true
+    channel?: true
   }
 
   export type GraphEventsMaxAggregateInputType = {
@@ -9125,12 +9136,12 @@ export namespace Prisma {
     agentId?: true
     sender?: true
     connector?: true
-    channel?: true
     content?: true
     eventType?: true
     created_at?: true
     updated_at?: true
     observer?: true
+    channel?: true
   }
 
   export type GraphEventsCountAggregateInputType = {
@@ -9139,13 +9150,13 @@ export namespace Prisma {
     sender?: true
     connector?: true
     connectorData?: true
-    channel?: true
     content?: true
     eventType?: true
     created_at?: true
     updated_at?: true
     event?: true
     observer?: true
+    channel?: true
     _all?: true
   }
 
@@ -9227,13 +9238,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData: JsonValue | null
-    channel: string | null
     content: string
     eventType: string
     created_at: Date
     updated_at: Date
     event: JsonValue | null
     observer: string | null
+    channel: string | null
     _count: GraphEventsCountAggregateOutputType | null
     _min: GraphEventsMinAggregateOutputType | null
     _max: GraphEventsMaxAggregateOutputType | null
@@ -9259,13 +9270,13 @@ export namespace Prisma {
     sender?: boolean
     connector?: boolean
     connectorData?: boolean
-    channel?: boolean
     content?: boolean
     eventType?: boolean
     created_at?: boolean
     updated_at?: boolean
     event?: boolean
     observer?: boolean
+    channel?: boolean
     agents?: boolean | agentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["graphEvents"]>
 
@@ -9275,13 +9286,13 @@ export namespace Prisma {
     sender?: boolean
     connector?: boolean
     connectorData?: boolean
-    channel?: boolean
     content?: boolean
     eventType?: boolean
     created_at?: boolean
     updated_at?: boolean
     event?: boolean
     observer?: boolean
+    channel?: boolean
   }
 
   export type graphEventsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9300,13 +9311,13 @@ export namespace Prisma {
       sender: string
       connector: string
       connectorData: Prisma.JsonValue | null
-      channel: string | null
       content: string
       eventType: string
       created_at: Date
       updated_at: Date
       event: Prisma.JsonValue | null
       observer: string | null
+      channel: string | null
     }, ExtArgs["result"]["graphEvents"]>
     composites: {}
   }
@@ -9707,13 +9718,13 @@ export namespace Prisma {
     readonly sender: FieldRef<"graphEvents", 'String'>
     readonly connector: FieldRef<"graphEvents", 'String'>
     readonly connectorData: FieldRef<"graphEvents", 'Json'>
-    readonly channel: FieldRef<"graphEvents", 'String'>
     readonly content: FieldRef<"graphEvents", 'String'>
     readonly eventType: FieldRef<"graphEvents", 'String'>
     readonly created_at: FieldRef<"graphEvents", 'DateTime'>
     readonly updated_at: FieldRef<"graphEvents", 'DateTime'>
     readonly event: FieldRef<"graphEvents", 'Json'>
     readonly observer: FieldRef<"graphEvents", 'String'>
+    readonly channel: FieldRef<"graphEvents", 'String'>
   }
     
 
@@ -17643,7 +17654,8 @@ export namespace Prisma {
     version: 'version',
     embeddingProvider: 'embeddingProvider',
     embeddingModel: 'embeddingModel',
-    isDraft: 'isDraft'
+    isDraft: 'isDraft',
+    draftAgentId: 'draftAgentId'
   };
 
   export type AgentsScalarFieldEnum = (typeof AgentsScalarFieldEnum)[keyof typeof AgentsScalarFieldEnum]
@@ -17726,13 +17738,13 @@ export namespace Prisma {
     sender: 'sender',
     connector: 'connector',
     connectorData: 'connectorData',
-    channel: 'channel',
     content: 'content',
     eventType: 'eventType',
     created_at: 'created_at',
     updated_at: 'updated_at',
     event: 'event',
-    observer: 'observer'
+    observer: 'observer',
+    channel: 'channel'
   };
 
   export type GraphEventsScalarFieldEnum = (typeof GraphEventsScalarFieldEnum)[keyof typeof GraphEventsScalarFieldEnum]
@@ -17918,7 +17930,8 @@ export namespace Prisma {
     embedModel: 'embedModel',
     version: 'version',
     embeddingProvider: 'embeddingProvider',
-    embeddingModel: 'embeddingModel'
+    embeddingModel: 'embeddingModel',
+    draftAgentId: 'draftAgentId'
   };
 
   export type agentsOrderByRelevanceFieldEnum = (typeof agentsOrderByRelevanceFieldEnum)[keyof typeof agentsOrderByRelevanceFieldEnum]
@@ -17992,10 +18005,10 @@ export namespace Prisma {
     agentId: 'agentId',
     sender: 'sender',
     connector: 'connector',
-    channel: 'channel',
     content: 'content',
     eventType: 'eventType',
-    observer: 'observer'
+    observer: 'observer',
+    channel: 'channel'
   };
 
   export type graphEventsOrderByRelevanceFieldEnum = (typeof graphEventsOrderByRelevanceFieldEnum)[keyof typeof graphEventsOrderByRelevanceFieldEnum]
@@ -18243,6 +18256,7 @@ export namespace Prisma {
     embeddingProvider?: StringNullableFilter<"agents"> | string | null
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
+    draftAgentId?: UuidNullableFilter<"agents"> | string | null
     agent_credentials?: Agent_credentialsListRelationFilter
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: XOR<SpellReleasesNullableRelationFilter, spellReleasesWhereInput> | null
     chatMessages?: ChatMessagesListRelationFilter
@@ -18273,6 +18287,7 @@ export namespace Prisma {
     embeddingProvider?: SortOrderInput | SortOrder
     embeddingModel?: SortOrderInput | SortOrder
     isDraft?: SortOrder
+    draftAgentId?: SortOrderInput | SortOrder
     agent_credentials?: agent_credentialsOrderByRelationAggregateInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesOrderByWithRelationAndSearchRelevanceInput
     chatMessages?: chatMessagesOrderByRelationAggregateInput
@@ -18307,6 +18322,7 @@ export namespace Prisma {
     embeddingProvider?: StringNullableFilter<"agents"> | string | null
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
+    draftAgentId?: UuidNullableFilter<"agents"> | string | null
     agent_credentials?: Agent_credentialsListRelationFilter
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: XOR<SpellReleasesNullableRelationFilter, spellReleasesWhereInput> | null
     chatMessages?: ChatMessagesListRelationFilter
@@ -18337,6 +18353,7 @@ export namespace Prisma {
     embeddingProvider?: SortOrderInput | SortOrder
     embeddingModel?: SortOrderInput | SortOrder
     isDraft?: SortOrder
+    draftAgentId?: SortOrderInput | SortOrder
     _count?: agentsCountOrderByAggregateInput
     _max?: agentsMaxOrderByAggregateInput
     _min?: agentsMinOrderByAggregateInput
@@ -18367,6 +18384,7 @@ export namespace Prisma {
     embeddingProvider?: StringNullableWithAggregatesFilter<"agents"> | string | null
     embeddingModel?: StringNullableWithAggregatesFilter<"agents"> | string | null
     isDraft?: BoolWithAggregatesFilter<"agents"> | boolean
+    draftAgentId?: UuidNullableWithAggregatesFilter<"agents"> | string | null
   }
 
   export type chatMessagesWhereInput = {
@@ -18731,13 +18749,13 @@ export namespace Prisma {
     sender?: StringFilter<"graphEvents"> | string
     connector?: StringFilter<"graphEvents"> | string
     connectorData?: JsonNullableFilter<"graphEvents">
-    channel?: StringNullableFilter<"graphEvents"> | string | null
     content?: StringFilter<"graphEvents"> | string
     eventType?: StringFilter<"graphEvents"> | string
     created_at?: DateTimeFilter<"graphEvents"> | Date | string
     updated_at?: DateTimeFilter<"graphEvents"> | Date | string
     event?: JsonNullableFilter<"graphEvents">
     observer?: StringNullableFilter<"graphEvents"> | string | null
+    channel?: StringNullableFilter<"graphEvents"> | string | null
     agents?: XOR<AgentsRelationFilter, agentsWhereInput>
   }
 
@@ -18747,13 +18765,13 @@ export namespace Prisma {
     sender?: SortOrder
     connector?: SortOrder
     connectorData?: SortOrderInput | SortOrder
-    channel?: SortOrderInput | SortOrder
     content?: SortOrder
     eventType?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     event?: SortOrderInput | SortOrder
     observer?: SortOrderInput | SortOrder
+    channel?: SortOrderInput | SortOrder
     agents?: agentsOrderByWithRelationAndSearchRelevanceInput
     _relevance?: graphEventsOrderByRelevanceInput
   }
@@ -18767,13 +18785,13 @@ export namespace Prisma {
     sender?: StringFilter<"graphEvents"> | string
     connector?: StringFilter<"graphEvents"> | string
     connectorData?: JsonNullableFilter<"graphEvents">
-    channel?: StringNullableFilter<"graphEvents"> | string | null
     content?: StringFilter<"graphEvents"> | string
     eventType?: StringFilter<"graphEvents"> | string
     created_at?: DateTimeFilter<"graphEvents"> | Date | string
     updated_at?: DateTimeFilter<"graphEvents"> | Date | string
     event?: JsonNullableFilter<"graphEvents">
     observer?: StringNullableFilter<"graphEvents"> | string | null
+    channel?: StringNullableFilter<"graphEvents"> | string | null
     agents?: XOR<AgentsRelationFilter, agentsWhereInput>
   }, "id">
 
@@ -18783,13 +18801,13 @@ export namespace Prisma {
     sender?: SortOrder
     connector?: SortOrder
     connectorData?: SortOrderInput | SortOrder
-    channel?: SortOrderInput | SortOrder
     content?: SortOrder
     eventType?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     event?: SortOrderInput | SortOrder
     observer?: SortOrderInput | SortOrder
+    channel?: SortOrderInput | SortOrder
     _count?: graphEventsCountOrderByAggregateInput
     _max?: graphEventsMaxOrderByAggregateInput
     _min?: graphEventsMinOrderByAggregateInput
@@ -18804,13 +18822,13 @@ export namespace Prisma {
     sender?: StringWithAggregatesFilter<"graphEvents"> | string
     connector?: StringWithAggregatesFilter<"graphEvents"> | string
     connectorData?: JsonNullableWithAggregatesFilter<"graphEvents">
-    channel?: StringNullableWithAggregatesFilter<"graphEvents"> | string | null
     content?: StringWithAggregatesFilter<"graphEvents"> | string
     eventType?: StringWithAggregatesFilter<"graphEvents"> | string
     created_at?: DateTimeWithAggregatesFilter<"graphEvents"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"graphEvents"> | Date | string
     event?: JsonNullableWithAggregatesFilter<"graphEvents">
     observer?: StringNullableWithAggregatesFilter<"graphEvents"> | string | null
+    channel?: StringNullableWithAggregatesFilter<"graphEvents"> | string | null
   }
 
   export type public_knex_migrationsWhereInput = {
@@ -19433,6 +19451,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -19463,6 +19482,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -19491,6 +19511,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -19521,6 +19542,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -19550,6 +19572,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
   }
 
   export type agentsUpdateManyMutationInput = {
@@ -19573,6 +19596,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type agentsUncheckedUpdateManyInput = {
@@ -19597,6 +19621,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type chatMessagesCreateInput = {
@@ -19996,13 +20021,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: string | null
     content: string
     eventType: string
     created_at?: Date | string
     updated_at?: Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: string | null
+    channel?: string | null
     agents: agentsCreateNestedOneWithoutGraphEventsInput
   }
 
@@ -20012,13 +20037,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: string | null
     content: string
     eventType: string
     created_at?: Date | string
     updated_at?: Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: string | null
+    channel?: string | null
   }
 
   export type graphEventsUpdateInput = {
@@ -20026,13 +20051,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
     agents?: agentsUpdateOneRequiredWithoutGraphEventsNestedInput
   }
 
@@ -20042,13 +20067,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type graphEventsCreateManyInput = {
@@ -20057,13 +20082,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: string | null
     content: string
     eventType: string
     created_at?: Date | string
     updated_at?: Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: string | null
+    channel?: string | null
   }
 
   export type graphEventsUpdateManyMutationInput = {
@@ -20071,13 +20096,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type graphEventsUncheckedUpdateManyInput = {
@@ -20086,13 +20111,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type public_knex_migrationsCreateInput = {
@@ -20958,6 +20983,7 @@ export namespace Prisma {
     embeddingProvider?: SortOrder
     embeddingModel?: SortOrder
     isDraft?: SortOrder
+    draftAgentId?: SortOrder
   }
 
   export type agentsMaxOrderByAggregateInput = {
@@ -20980,6 +21006,7 @@ export namespace Prisma {
     embeddingProvider?: SortOrder
     embeddingModel?: SortOrder
     isDraft?: SortOrder
+    draftAgentId?: SortOrder
   }
 
   export type agentsMinOrderByAggregateInput = {
@@ -21002,6 +21029,7 @@ export namespace Prisma {
     embeddingProvider?: SortOrder
     embeddingModel?: SortOrder
     isDraft?: SortOrder
+    draftAgentId?: SortOrder
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -21389,13 +21417,13 @@ export namespace Prisma {
     sender?: SortOrder
     connector?: SortOrder
     connectorData?: SortOrder
-    channel?: SortOrder
     content?: SortOrder
     eventType?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     event?: SortOrder
     observer?: SortOrder
+    channel?: SortOrder
   }
 
   export type graphEventsMaxOrderByAggregateInput = {
@@ -21403,12 +21431,12 @@ export namespace Prisma {
     agentId?: SortOrder
     sender?: SortOrder
     connector?: SortOrder
-    channel?: SortOrder
     content?: SortOrder
     eventType?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     observer?: SortOrder
+    channel?: SortOrder
   }
 
   export type graphEventsMinOrderByAggregateInput = {
@@ -21416,12 +21444,12 @@ export namespace Prisma {
     agentId?: SortOrder
     sender?: SortOrder
     connector?: SortOrder
-    channel?: SortOrder
     content?: SortOrder
     eventType?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     observer?: SortOrder
+    channel?: SortOrder
   }
 
   export type public_knex_migrationsOrderByRelevanceInput = {
@@ -22721,6 +22749,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -22750,6 +22779,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -22824,6 +22854,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -22853,6 +22884,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -22978,13 +23010,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: string | null
     content: string
     eventType: string
     created_at?: Date | string
     updated_at?: Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: string | null
+    channel?: string | null
   }
 
   export type graphEventsUncheckedCreateWithoutAgentsInput = {
@@ -22992,13 +23024,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: string | null
     content: string
     eventType: string
     created_at?: Date | string
     updated_at?: Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: string | null
+    channel?: string | null
   }
 
   export type graphEventsCreateOrConnectWithoutAgentsInput = {
@@ -23175,13 +23207,13 @@ export namespace Prisma {
     sender?: StringFilter<"graphEvents"> | string
     connector?: StringFilter<"graphEvents"> | string
     connectorData?: JsonNullableFilter<"graphEvents">
-    channel?: StringNullableFilter<"graphEvents"> | string | null
     content?: StringFilter<"graphEvents"> | string
     eventType?: StringFilter<"graphEvents"> | string
     created_at?: DateTimeFilter<"graphEvents"> | Date | string
     updated_at?: DateTimeFilter<"graphEvents"> | Date | string
     event?: JsonNullableFilter<"graphEvents">
     observer?: StringNullableFilter<"graphEvents"> | string | null
+    channel?: StringNullableFilter<"graphEvents"> | string | null
   }
 
   export type pluginStateUpsertWithWhereUniqueWithoutAgentsInput = {
@@ -23259,6 +23291,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -23288,6 +23321,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -23331,6 +23365,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -23360,6 +23395,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -23425,6 +23461,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -23454,6 +23491,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -23497,6 +23535,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -23526,6 +23565,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -23553,6 +23593,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -23582,6 +23623,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -23625,6 +23667,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -23654,6 +23697,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -23681,6 +23725,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -23709,6 +23754,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -23747,6 +23793,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -23776,6 +23823,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -23858,6 +23906,7 @@ export namespace Prisma {
     embeddingProvider?: StringNullableFilter<"agents"> | string | null
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
+    draftAgentId?: UuidNullableFilter<"agents"> | string | null
   }
 
   export type agentsUpsertWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
@@ -23892,6 +23941,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -23921,6 +23971,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -24034,13 +24085,13 @@ export namespace Prisma {
     sender: string
     connector: string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: string | null
     content: string
     eventType: string
     created_at?: Date | string
     updated_at?: Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: string | null
+    channel?: string | null
   }
 
   export type pluginStateCreateManyAgentsInput = {
@@ -24110,13 +24161,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type graphEventsUncheckedUpdateWithoutAgentsInput = {
@@ -24124,13 +24175,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type graphEventsUncheckedUpdateManyWithoutAgentsInput = {
@@ -24138,13 +24189,13 @@ export namespace Prisma {
     sender?: StringFieldUpdateOperationsInput | string
     connector?: StringFieldUpdateOperationsInput | string
     connectorData?: NullableJsonNullValueInput | InputJsonValue
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: NullableJsonNullValueInput | InputJsonValue
     observer?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type pluginStateUpdateWithoutAgentsInput = {
@@ -24238,6 +24289,7 @@ export namespace Prisma {
     embeddingProvider?: string | null
     embeddingModel?: string | null
     isDraft?: boolean
+    draftAgentId?: string | null
   }
 
   export type spellsCreateManySpellReleasesInput = {
@@ -24271,6 +24323,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -24299,6 +24352,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -24327,6 +24381,7 @@ export namespace Prisma {
     embeddingProvider?: NullableStringFieldUpdateOperationsInput | string | null
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
+    draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type spellsUpdateWithoutSpellReleasesInput = {
