@@ -3,13 +3,13 @@ import { PrismaClient } from './prisma/client-core'
 export * from './prisma/client-core'
 export type * from './prisma/client-core/index.d.ts'
 
-const globalForPrismaCore = globalThis as { prisma?: PrismaClient }
+const globalForPrismaCore = globalThis as { prismaCore?: PrismaClient }
 
 export const prismaCore =
-  globalForPrismaCore.prisma ||
+  globalForPrismaCore.prismaCore ||
   new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   })
 
 if (process.env.NODE_ENV !== 'production')
-  globalForPrismaCore.prisma = prismaCore
+  globalForPrismaCore.prismaCore = prismaCore
