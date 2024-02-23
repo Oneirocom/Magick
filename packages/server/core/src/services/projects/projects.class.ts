@@ -148,6 +148,8 @@ export class ProjectsService {
         secrets: '{}',
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
+        isDraft: false,
+        draftAgentId: draftAgent.id,
       })
 
       // Create a release for the live agent
