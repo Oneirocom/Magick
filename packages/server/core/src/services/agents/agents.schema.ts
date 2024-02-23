@@ -50,6 +50,8 @@ export const agentDataSchema = Type.Pick(
     'isDraft',
     'default',
     'rootSpell', //DEPRECATED
+    'draftAgentId',
+    'image',
   ],
   { $id: 'AgentData' }
 )
@@ -134,6 +136,7 @@ export const agentQueryProperties = Type.Pick(agentSchema, [
   'frozen',
   'currentSpellReleaseId',
   'isDraft',
+  'draftAgentId',
 ])
 
 /**
