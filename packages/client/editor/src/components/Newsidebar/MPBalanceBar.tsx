@@ -211,7 +211,7 @@ export const MPBalanceBar = ({ userData }) => {
               : normalise(magickPowerBalance * 100, 0, 1000)
           }
         />
-        <p className={`${styles.creditCount} mt-2 text-[#B7BBBE]`}>
+        <p className={`${styles.creditCount} mt-2 text-[#B7BBBE] text-sm`}>
           {isNeophyte && magickPowerBalance === 0
             ? 'Upgrade to use MP'
             : `${mp} / ${
