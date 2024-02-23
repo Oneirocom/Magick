@@ -112,6 +112,7 @@ const TextEditor = props => {
 
     handleChange('configuration', {
       ...configuration,
+      textEditorData: formattedCode,
       socketInputs: [...configuration.socketInputs, ...sockets.filter(Boolean)],
     })
   }, [debouncedCode])
