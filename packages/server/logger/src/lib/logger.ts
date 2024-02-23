@@ -1,4 +1,5 @@
 import pino from 'pino'
+import pretty from 'pino-pretty'
 import { config } from 'dotenv-flow'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
 
@@ -29,11 +30,16 @@ const createDevelopmentLogger = opts =>
     ...opts,
   })
 
-const createProductionLogger = (opts: object = {}) => {
-  return pino({
-    ...opts, // Spread the general options into the pino configuration
-    transport: getPinoTransport(PINO_LOG_LEVEL),
-  })
+const createProductionLogger = () => {
+  console.log('PINO_LOG_LEVEL', PINO_LOG_LEVEL)
+  const streams = [
+    pretty(),
+    pino.transport({
+      targets: [getPinoTransport(PINO_LOG_LEVEL)],
+    }),
+  ]
+
+  return pino({ level: PINO_LOG_LEVEL }, pino.multistream(streams))
 }
 
 const defaultLoggerOpts = {
@@ -45,7 +51,7 @@ export const initLogger = (opts: object = defaultLoggerOpts) => {
   if (NODE_ENV === 'development') {
     logger = createDevelopmentLogger(opts)
   } else {
-    logger = createProductionLogger(opts)
+    logger = createProductionLogger()
   }
 }
 
