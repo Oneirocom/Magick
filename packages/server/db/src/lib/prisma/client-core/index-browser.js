@@ -135,7 +135,8 @@ exports.Prisma.AgentsScalarFieldEnum = {
   version: 'version',
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
-  isDraft: 'isDraft'
+  isDraft: 'isDraft',
+  draftAgentId: 'draftAgentId'
 };
 
 exports.Prisma.ChatMessagesScalarFieldEnum = {
@@ -200,13 +201,13 @@ exports.Prisma.GraphEventsScalarFieldEnum = {
   sender: 'sender',
   connector: 'connector',
   connectorData: 'connectorData',
-  channel: 'channel',
   content: 'content',
   eventType: 'eventType',
   created_at: 'created_at',
   updated_at: 'updated_at',
   event: 'event',
-  observer: 'observer'
+  observer: 'observer',
+  channel: 'channel'
 };
 
 exports.Prisma.Public_knex_migrationsScalarFieldEnum = {
@@ -344,7 +345,8 @@ exports.Prisma.agentsOrderByRelevanceFieldEnum = {
   embedModel: 'embedModel',
   version: 'version',
   embeddingProvider: 'embeddingProvider',
-  embeddingModel: 'embeddingModel'
+  embeddingModel: 'embeddingModel',
+  draftAgentId: 'draftAgentId'
 };
 
 exports.Prisma.chatMessagesOrderByRelevanceFieldEnum = {
@@ -400,10 +402,10 @@ exports.Prisma.graphEventsOrderByRelevanceFieldEnum = {
   agentId: 'agentId',
   sender: 'sender',
   connector: 'connector',
-  channel: 'channel',
   content: 'content',
   eventType: 'eventType',
-  observer: 'observer'
+  observer: 'observer',
+  channel: 'channel'
 };
 
 exports.Prisma.public_knex_migrationsOrderByRelevanceFieldEnum = {
