@@ -1,4 +1,4 @@
-import { createClient, RedisClientOptions } from 'redis'
+import Redis from 'ioredis'
 import { EventEmitter } from 'events'
 
 /**
@@ -32,8 +32,8 @@ import { EventEmitter } from 'events'
  * resource leaks.
  */
 export class RedisPubSub extends EventEmitter {
-  private client!: ReturnType<typeof createClient>
-  private subscriber!: ReturnType<typeof createClient>
+  private client!: Redis
+  private subscriber!: Redis
 
   private channelRefCount = new Map<string, number>()
   private patternRefCount = new Map<string, number>()
@@ -49,34 +49,20 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
    */
-  async initialize(
-    redisCloudUrl: string,
-    _options: RedisClientOptions = {}
-  ): Promise<void> {
-    const options: RedisClientOptions = {
-      ..._options,
-      url: redisCloudUrl,
-      pingInterval: 2 * 60 * 1000,
-      socket: {
-        ..._options?.socket,
-        reconnectStrategy: this.retryStrategy,
-      },
-    }
-
-    this.client = createClient(options)
-    this.subscriber = createClient(options)
+  async initialize(redisCloudUrl: string): Promise<void> {
+    this.client = new Redis(redisCloudUrl)
+    this.subscriber = new Redis(redisCloudUrl)
 
     console.log('Connecting to redis pubsub')
-    await this.client.connect()
-    await this.subscriber.connect()
+    // await this.client.connect()
+    // await this.subscriber.connect()
 
     this.subscriber.on('error', async error => {
       console.error('Redis subscriber error:', error)
       // Attempt to close and reconnect the subscriber
       try {
         await this.subscriber.quit()
-        this.subscriber = createClient(options)
-        await this.subscriber.connect()
+        this.subscriber = new Redis(redisCloudUrl)
       } catch (reconnectError) {
         console.error('Redis subscriber reconnect error:', reconnectError)
         return
@@ -183,7 +169,13 @@ export class RedisPubSub extends EventEmitter {
     }
 
     try {
-      await this.subscriber.subscribe(channel, messageListener)
+      await this.subscriber.subscribe(channel)
+
+      this.subscriber.on('message', (ch, message) => {
+        if (ch === channel) {
+          messageListener(message)
+        }
+      })
       console.log(
         `Subscribed to the ${channel} channel. Listening for updates.`
       )
@@ -215,7 +207,12 @@ export class RedisPubSub extends EventEmitter {
 
     this.patternCallbacks.get(pattern)!.push(callback)
 
-    const messageListener = (message, channel) => {
+    const messageListener = (messagePattern, channel, message) => {
+      // check pattern
+      if (messagePattern !== pattern) {
+        return
+      }
+
       let deserializedMessage
       try {
         deserializedMessage = JSON.parse(message)
@@ -227,7 +224,9 @@ export class RedisPubSub extends EventEmitter {
     }
 
     try {
-      await this.subscriber.pSubscribe(pattern, messageListener)
+      await this.subscriber.psubscribe(pattern)
+
+      this.subscriber.on('pmessage', messageListener)
       console.log(
         `Subscribed to the ${pattern} channel. Listening for updates.`
       )
@@ -252,7 +251,7 @@ export class RedisPubSub extends EventEmitter {
       this.patternRefCount.set(pattern, currentCount - 1)
     } else {
       // Unsubscribe only when count is 1 or less
-      await this.subscriber.pUnsubscribe(pattern)
+      await this.subscriber.punsubscribe(pattern)
       this.patternRefCount.delete(pattern)
       this.patternCallbacks.delete(pattern) // Remove all callbacks
       console.log(`Unsubscribed from the ${pattern} pattern.`)
