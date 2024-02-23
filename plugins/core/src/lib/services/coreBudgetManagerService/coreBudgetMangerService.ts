@@ -133,16 +133,16 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
     projectId: string,
     completionObj: CompletionResponse
   ): Promise<boolean> {
-    const preChargeCost = await this.getCurrentCost(projectId)
+    // const preChargeCost = await this.getCurrentCost(projectId)
     const updatedCost = (await this.liteLLMBudgetManager?.update_cost(
       projectId,
       completionObj
     )) as any
-    await this.liteLLMBudgetManager?.reset_cost(projectId)
-    const newCharge = (await updatedCost.user.current_cost) - preChargeCost
+    const newCharge = await updatedCost.user.current_cost
     this.app
       .service('user')
       .emit('budgetUpdated', { newCharge, agentId: this.agentId })
+    await this.liteLLMBudgetManager?.reset_cost(projectId)
 
     return true
   }
