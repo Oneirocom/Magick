@@ -8,7 +8,6 @@ export const split = makeInNOutFunctionDesc({
   exec: (a: string, b: string) => {
     const regExp = new RegExp(b, 'g')
     const arr = a.split(regExp)
-    console.log('ARR', arr)
     return arr
   },
 })
