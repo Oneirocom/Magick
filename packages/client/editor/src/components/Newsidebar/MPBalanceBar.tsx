@@ -294,7 +294,7 @@ export const MPBalanceBar = ({ userData }) => {
             Your Wallet reflects money available for compute power, used after
             your monthly MP runs out.{' '}
             <a
-              href="https://cloud-dev.magickml.com/account"
+              href="https://cloud-dev.magickml.com/billing"
               className="text-blue-500 hover:text-blue-700"
             >
               Click to top up.
