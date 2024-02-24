@@ -15,6 +15,8 @@ import { useSnackbar } from 'notistack'
 
 import { useModal } from '../../contexts/ModalProvider'
 import { TypeIcon } from './TypeIcon'
+import { Input } from '@magickml/client-ui'
+import { removeLayoutFromLocalStorage } from '../../utils/layoutLocalStorage'
 
 type ExtendedNodeModel = NodeModel & CustomData
 
@@ -45,7 +47,7 @@ export const CustomNode: React.FC<Props> = props => {
   const { openModal } = useModal()
   const { setOpenDoc } = useTreeData()
   const { enqueueSnackbar } = useSnackbar()
-  const { renameTab, closeTab } = useTabLayout()
+  const { openTab, closeTab } = useTabLayout()
 
   const indent = props.depth * 24
   // const { droppable, data }: any = props.node
@@ -161,6 +163,7 @@ export const CustomNode: React.FC<Props> = props => {
   }
 
   const handleRenameStart = () => {
+    setIsRenaming(false)
     if (props?.node?.fileType === 'folder') return
     setIsRenaming(true)
     setContextMenuOpen(false)
@@ -173,6 +176,11 @@ export const CustomNode: React.FC<Props> = props => {
     }
   }
 
+  const handleRenameFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    // e.target.select()
+  }
+
   const handleRename = async () => {
     if (!props.node || !newName.trim() || props.node.text === newName) {
       setIsRenaming(false)
@@ -180,14 +188,26 @@ export const CustomNode: React.FC<Props> = props => {
     }
 
     try {
-      await patchSpell({
+      const newSpell = await patchSpell({
         id: props.node.id,
         update: {
           name: newName,
         },
       }).unwrap()
 
-      renameTab(props.currentTab.id, newName)
+      removeLayoutFromLocalStorage(newSpell.id)
+
+      closeTab && closeTab(props.node.text)
+
+      openTab({
+        id: newName,
+        name: newName,
+        spellName: newName,
+        type: 'behave',
+        params: {
+          spellId: newSpell.id,
+        },
+      })
 
       enqueueSnackbar('Spell saved', { variant: 'success' })
       setIsRenaming(false)
@@ -238,11 +258,12 @@ export const CustomNode: React.FC<Props> = props => {
       </div>
       <div className={styles.labelGridItem}>
         {isRenaming ? (
-          <input
+          <Input
             type="text"
-            className="rename-input"
             value={newName}
+            className="ml-2 my-0 h-7 p-2 bg-stone-700 text-md"
             onChange={e => setNewName(e.target.value)}
+            onFocus={handleRenameFocus}
             onBlur={handleRename}
             onKeyDown={handleRenameSubmit}
           />
