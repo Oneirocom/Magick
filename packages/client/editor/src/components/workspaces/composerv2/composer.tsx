@@ -25,15 +25,10 @@ import {
   applyConstraintsFromConfig,
   applyDynamicLayoutConfig,
 } from '../../../screens/layoutConfig'
-
-const getLayoutFromLocalStorage = (spellId: string) => {
-  const layout = localStorage.getItem(`composer_layout_${spellId}`)
-  return layout ? JSON.parse(layout) : null
-}
-
-const saveLayoutToLocalStorage = (spellId: string, layout: any) => {
-  localStorage.setItem(`composer_layout_${spellId}`, JSON.stringify(layout))
-}
+import {
+  getLayoutFromLocalStorage,
+  saveLayoutToLocalStorage,
+} from '../../../utils/layoutLocalStorage'
 
 const components = {
   default: (props: IDockviewPanelProps<{ title: string; spellId: string }>) => {
@@ -65,6 +60,7 @@ const components = {
   Graph: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
+    console.log('Graph props', props.params)
     return <GraphWindow {...props} />
   },
   Variables: VariableWindow,
@@ -93,12 +89,17 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
   const currentAgentRef = useRef(_currentAgentId)
 
   useEffect(() => {
+    console.log('Composer', spellName, spellId)
+  }, [spellName])
+
+  useEffect(() => {
     currentAgentRef.current = _currentAgentId
   }, [_currentAgentId])
 
   const onReady = (event: DockviewReadyEvent) => {
     // const layout = tab.layoutJson;
     const layout = getLayoutFromLocalStorage(spellId)
+
     let success = false
     if (layout) {
       event.api.fromJSON(layout)

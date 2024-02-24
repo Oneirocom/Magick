@@ -1,8 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import {
-  DockviewApi,
-  SerializedDockview,
-} from 'dockview'
+import { DockviewApi, SerializedDockview } from 'dockview'
 import { getWorkspaceLayout } from 'client/layouts'
 import { RootState, setCurrentTab, useDockviewTheme } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
@@ -63,20 +60,24 @@ export const TabProvider = ({ children }) => {
 
   const getLayout = () => {
     const currentAgentId = currentAgentRef.current
-    const TAB_LAYOUT_KEY = generateTabLayoutKey(config.projectId, currentAgentId)
+    const TAB_LAYOUT_KEY = generateTabLayoutKey(
+      config.projectId,
+      currentAgentId
+    )
     const layout = localStorage.getItem(TAB_LAYOUT_KEY)
 
     if (!layout) {
       return null
     }
-    return JSON.parse(
-      layout
-    ) as SerializedDockview
+    return JSON.parse(layout) as SerializedDockview
   }
 
   const setLayout = (layout: SerializedDockview) => {
     const currentAgentId = currentAgentRef.current
-    const TAB_LAYOUT_KEY = generateTabLayoutKey(config.projectId, currentAgentId)
+    const TAB_LAYOUT_KEY = generateTabLayoutKey(
+      config.projectId,
+      currentAgentId
+    )
     localStorage.setItem(TAB_LAYOUT_KEY, JSON.stringify(layout))
   }
 
@@ -99,14 +100,16 @@ export const TabProvider = ({ children }) => {
       return
     }
 
-    api.onDidActivePanelChange((panel) => {
+    api.onDidActivePanelChange(panel => {
       if (!panel) return
 
-      dispatch(setCurrentTab({
-        id: panel.id,
-        title: panel.title,
-        params: panel.params,
-      }))
+      dispatch(
+        setCurrentTab({
+          id: panel.id,
+          title: panel.title,
+          params: panel.params,
+        })
+      )
     })
 
     // set up API event handlers
@@ -118,6 +121,7 @@ export const TabProvider = ({ children }) => {
 
     const unsubscribeOpenTab = subscribe(events.OPEN_TAB, (event, data) => {
       if (!data) return
+      console.log('OPENING TAB', data)
       openTab({
         id: data.name,
         name: data.name,
@@ -126,16 +130,14 @@ export const TabProvider = ({ children }) => {
         params: {
           spellId: data.spellId,
           spellName: data.name,
-        }
+        },
       })
     })
 
     return () => {
       unsubscribeOpenTab()
     }
-
   }, [api])
-
 
   const isTabOpen = (id: string) => {
     if (!api) return false
@@ -153,6 +155,11 @@ export const TabProvider = ({ children }) => {
     if (!panel) return
 
     panel.api.setTitle(newName)
+
+    panel.api.updateParameters({
+      ...panel.params,
+      spellName: newName,
+    })
   }
 
   const setActiveTab = (id: string) => {
@@ -186,7 +193,7 @@ export const TabProvider = ({ children }) => {
         tab,
         theme,
         spellName: tab.name,
-        ...tab.params
+        ...tab.params,
       },
     })
   }
@@ -211,7 +218,7 @@ export const TabProvider = ({ children }) => {
     openTab,
     isTabOpen,
     renameTab,
-    closeTab
+    closeTab,
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
