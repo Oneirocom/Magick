@@ -113,8 +113,8 @@ export async function initApp(environment: Environment = 'default') {
   )
 
   // Initialize pubsub redis client
-  const pubsub = new RedisPubSub()
-  await pubsub.initialize(REDIS_URL)
+  const pubsub = new RedisPubSub(REDIS_URL)
+  await pubsub.initialize()
 
   app.set('pubsub', pubsub)
 

@@ -13,8 +13,8 @@ export * from './credentials.class'
  */
 export const credentials = (app: Application): void => {
   const logger = getLogger()
-  const pubsub = new RedisPubSub()
-  pubsub.initialize(REDIS_URL)
+  const pubsub = new RedisPubSub(REDIS_URL)
+  pubsub.initialize()
 
   app.use('credentials', new CredentialsService(app), {
     methods: ['create', 'remove', 'find'],

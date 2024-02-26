@@ -25,11 +25,11 @@ function start() {
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
   process.on('uncaughtException', (e: any) => {
-    logger.error('Uncaught exception: %s\n From: %o', e, e.stack)
+    logger.error(e.stack, 'Uncaught exception: %s\n From: %o', e)
   })
 
   process.on('unhandledRejection', (e: any) => {
-    logger.error('Unhandled rejection: %s\n From: %o', e, e.stack)
+    logger.error(e.stack, 'Unhandled rejection: %s\n From: %o', e)
   })
 }
 console.log('INIT APP')
