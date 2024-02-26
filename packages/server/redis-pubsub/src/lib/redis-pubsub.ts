@@ -32,7 +32,7 @@ import { EventEmitter } from 'events'
  * resource leaks.
  */
 export class RedisPubSub extends EventEmitter {
-  private client!: Redis
+  private publisher!: Redis
   private subscriber!: Redis
 
   private channelRefCount = new Map<string, number>()
@@ -50,7 +50,7 @@ export class RedisPubSub extends EventEmitter {
    * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
    */
   async initialize(redisCloudUrl: string): Promise<void> {
-    this.client = new Redis(redisCloudUrl)
+    this.publisher = new Redis(redisCloudUrl)
     this.subscriber = new Redis(redisCloudUrl)
 
     console.log('Connecting to redis pubsub')
@@ -61,6 +61,7 @@ export class RedisPubSub extends EventEmitter {
       console.error('Redis subscriber error:', error)
       // Attempt to close and reconnect the subscriber
       try {
+        console.warn('Attempting subscriber reconnection...')
         await this.subscriber.quit()
         this.subscriber = new Redis(redisCloudUrl)
       } catch (reconnectError) {
@@ -95,8 +96,24 @@ export class RedisPubSub extends EventEmitter {
       })
     })
 
-    this.client.on('error', error => {
-      console.error('Redis client error:', error)
+    this.publisher.on('error', async error => {
+      console.error('Redis publisher error:', error)
+      try {
+        console.warn('Attempting publisher reconnection...')
+        await this.publisher.quit()
+        this.publisher = new Redis(redisCloudUrl)
+      } catch (reconnectError) {
+        console.error('Redis publisher reconnect error:', reconnectError)
+        return
+      }
+    })
+
+    this.publisher.on('connect', () => {
+      console.log('Redis publisher connected')
+    })
+
+    this.subscriber.on('connect', () => {
+      console.log('Redis subscriber connected')
     })
 
     // Listen for messages and emit them as events
@@ -130,7 +147,7 @@ export class RedisPubSub extends EventEmitter {
         throw new Error('Invalid message type. Expected string or object.')
       }
 
-      await this.client.publish(channel, serializedMessage)
+      await this.publisher.publish(channel, serializedMessage)
     } catch (err) {
       console.error('Failed to publish message:', err)
     }
@@ -347,7 +364,7 @@ export class RedisPubSub extends EventEmitter {
    * redisPubSub.close();
    */
   close(): void {
-    this.client.quit()
+    this.publisher.quit()
     this.subscriber.quit()
   }
 
