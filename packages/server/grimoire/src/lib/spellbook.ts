@@ -119,7 +119,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   mainRegistry!: IRegistry
 
   get isLive() {
-    return this.watchSpells && this.spellMap.size > 0
+    return this.watchSpells
   }
 
   get initialState() {
