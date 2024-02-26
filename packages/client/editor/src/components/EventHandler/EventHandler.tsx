@@ -107,6 +107,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       ...update,
     }
 
+    if (currentSpell.spellReleaseId) return
+
     const jsonDiff = diff(currentSpell, updatedSpell)
 
     // no point saving if nothing has changed
