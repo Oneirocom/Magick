@@ -26,7 +26,7 @@ process.on(
       /* null */
     },
     p: Promise<any>
-  ) => logger.error('Unhandled Rejection at: Promise %o with reason %s', p, reason)
+  ) => logger.error(reason, 'Unhandled Rejection at: Promise %o with reason %s', p, reason)
 )
 
 /**

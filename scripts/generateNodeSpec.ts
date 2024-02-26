@@ -38,9 +38,9 @@ const getUnifiedRegistry = async plugins => {
 
 const loadPlugins = async () => {
   const connection = new Redis()
-  const pubSub = new RedisPubSub()
+  const pubSub = new RedisPubSub(process.env.REDIS_URL)
 
-  await pubSub.initialize(process.env.REDIS_URL)
+  await pubSub.initialize()
 
   for (const [pluginName, pluginGetter] of Object.entries(pluginModules)) {
     // Get the actual class from the getter
