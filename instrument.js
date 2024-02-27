@@ -5,8 +5,7 @@ const {
 const {
   IORedisInstrumentation,
 } = require('@opentelemetry/instrumentation-ioredis')
-
-import { KoaInstrumentation } from '@opentelemetry/instrumentation-koa'
+const { KoaInstrumentation } = require('@opentelemetry/instrumentation-koa')
 
 initSDK({
   consoleCapture: true, // optional, default: true
