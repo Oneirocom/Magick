@@ -21,6 +21,7 @@ type FlowProps = {
   spell: SpellInterface
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
+  readOnly?: boolean
 }
 
 const edgeTypes = {
@@ -39,7 +40,12 @@ function isEmptyObject(obj: object): boolean {
   return Object.keys(obj).length === 0
 }
 
-export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
+export const Flow: React.FC<FlowProps> = ({
+  spell,
+  parentRef,
+  tab,
+  readOnly = false,
+}) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
   const { projectId, currentAgentId } = globalConfig
@@ -153,6 +159,9 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
       edges={edges}
       onNodesChange={onNodesChange(tab.id)}
       onEdgesChange={onEdgesChange(tab.id)}
+      nodesDraggable={!readOnly}
+      nodesConnectable={!readOnly}
+      elementsSelectable={!readOnly}
       onConnect={handleOnConnect}
       edgeTypes={edgeTypes}
       isValidConnection={isValidConnectionHandler}
@@ -189,7 +198,7 @@ export const Flow: React.FC<FlowProps> = ({ spell, parentRef, tab }) => {
           zoomable
         />
       )}
-      {nodePickerPosition && (
+      {nodePickerPosition && !readOnly && (
         <NodePicker
           position={nodePickerPosition}
           pickedNodePosition={pickedNodeVisibility}
