@@ -10,5 +10,10 @@ export const cacheInvalidationMiddleware: Middleware =
       store.dispatch(spellApi.util.invalidateTags(['Spells', 'Spell']))
     }
 
+    if (action.type === 'globalConfig/setCurrentAgentId') {
+      // Invalidate all query caches
+      store.dispatch(spellApi.util.invalidateTags(['Spells', 'Spell']))
+    }
+
     return result
   }
