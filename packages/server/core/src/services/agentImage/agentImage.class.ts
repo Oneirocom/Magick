@@ -51,8 +51,12 @@ export class AgentImageService {
 
       const command = new PutObjectCommand(s3Params)
 
-      return await this.s3.send(command)
+      const result = await this.s3.send(command)
+      console.log('Image uploaded to S3', { result })
+      logger.info('Image uploaded to S3', { result })
+      return result
     } catch (error) {
+      console.log('Error uploading image to S3', { error })
       logger.error('Error uploading image to S3', { error })
       throw new Error('Failed to upload image to S3.')
     }

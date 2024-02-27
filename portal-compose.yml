@@ -29,6 +29,12 @@ services:
       - '5433:5432'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  s3mock:
+    image: adobe/s3mock
+    command: ['-s', '-p', '9090']
+    ports:
+      - '9090:9090'
+      - '9191:9191'
 volumes:
   cache:
     driver: local

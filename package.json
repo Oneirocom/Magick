@@ -39,7 +39,7 @@
     "build-docs": "npx nx build @magickml/docs",
     "build-engine": "npx nx build shared-core",
     "generateClients": "npm run portal:db:generate && npm run db:generate",
-    "init": "npm run portal:up && sleep 5 && npm run db:init && npm run portal:db:init",
+    "init": "npm run portal:up && sleep 5 && npm run db:init && npm run portal:db:init && npm run bucket:init",
     "deploy:all": "npm run db:deploy && npm run portal:db:deploy",
     "db:init": "npm run db:generate && npm run db:deploy",
     "db:generate": "npx nx run server-db:generate",
@@ -76,7 +76,8 @@
     "prepare": "husky install || true",
     "lint-staged": "lint-staged",
     "postinstall": "npm run generateClients",
-    "vercel-install": "./vercel-submodule-workaround.sh && npm i"
+    "vercel-install": "./vercel-submodule-workaround.sh && npm i",
+    "bucket:init": "ts-node ./scripts/init-bucket.ts"
   },
   "resolutions": {
     "@types/react": "18.0.2"
