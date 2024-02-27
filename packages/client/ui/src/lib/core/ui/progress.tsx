@@ -5,8 +5,10 @@ import { cn } from '../../utils/shadcn'
 
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & {
+    isLoading?: boolean
+  }
+>(({ className, value, isLoading, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
@@ -16,8 +18,15 @@ const Progress = React.forwardRef<
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-ds-primary transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+      className={cn(
+        'h-full bg-ds-primary transition-all',
+        isLoading ? 'w-[50%] animate-progress-loading' : 'w-full'
+      )}
+      style={{
+        transform: isLoading
+          ? undefined
+          : `translateX(-${100 - (value || 0)}%)`,
+      }}
     />
   </ProgressPrimitive.Root>
 ))

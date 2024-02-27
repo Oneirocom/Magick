@@ -1,59 +1,22 @@
-import { styled } from '@mui/material/styles'
 import { useFeathers } from '@magickml/providers'
 import {
-  LinearProgress,
-  linearProgressClasses,
-  Typography,
-} from '@mui/material'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+  Progress,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@magickml/client-ui'
+import Image from 'next/legacy/image'
 
-import styles from './menu.module.css'
+import { InfoIcon } from '@magickml/icons'
 import { useState, useEffect } from 'react'
 
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-
-enum PortalSubscriptions {
-  NEOPHYTE = 'NEOPHYTE',
-  APPRENTICE = 'APPRENTICE',
-  WIZARD = 'WIZARD',
-}
-
-export const MPBalanceBar = ({ userData }) => {
+export const MPBalanceBar = ({ userData, isLoading }) => {
   const { client } = useFeathers()
 
   const [remainingBalance, setRemainingBalance] = useState(0)
   const [magickPowerBalance, setMagickPowerBalance] = useState(0)
-
-  const [isMPVisible, setIsMPVisible] = useState(false)
-  const [isWalletVisible, setIsWalletVisible] = useState(false) // State for Wallet tooltip visibility
-
-  const [isMPHovered, setIsMPHovered] = useState(false)
-  const [isMPTransitionIn, setIsMPTransitionIn] = useState(false)
-  const [isMPTransitionOut, setIsMPTransitionOut] = useState(false)
-
-  const [isWalletHovered, setIsWalletHovered] = useState(false)
-  const [isWalletTransitionIn, setIsWalletTransitionIn] = useState(false)
-  const [isWalletTransitionOut, setIsWalletTransitionOut] = useState(false)
-
-  const [isTooltipHovered, setIsTooltipHovered] = useState(false)
-
   const [walletColor, setWalletColor] = useState('')
-
-  const handleWalletMouseEnter = () => {
-    setIsWalletHovered(true)
-  }
-
-  const handleWalletMouseLeave = () => {
-    setIsWalletHovered(false)
-  }
-
-  const handleMPMouseEnter = () => {
-    setIsMPHovered(true)
-  }
-
-  const handleMPMouseLeave = () => {
-    setIsMPHovered(false)
-  }
 
   //handle setup
   useEffect(() => {
@@ -98,35 +61,7 @@ export const MPBalanceBar = ({ userData }) => {
   }, [client, magickPowerBalance, remainingBalance])
 
   useEffect(() => {
-    if (isWalletHovered) {
-      setIsWalletVisible(true)
-      setIsWalletTransitionIn(true)
-    } else {
-      if (isTooltipHovered) return
-      setIsWalletTransitionOut(true)
-      const timeoutId = setTimeout(() => {
-        setIsWalletVisible(false)
-        setIsWalletTransitionIn(false)
-      }, 500)
-
-      return () => clearTimeout(timeoutId)
-    }
-  }, [isWalletHovered, isTooltipHovered])
-
-  useEffect(() => {
-    if (isMPHovered) {
-      setIsMPVisible(true)
-      setIsMPTransitionIn(true)
-    } else {
-      setIsMPTransitionOut(true)
-      setTimeout(() => {
-        setIsMPVisible(false)
-        setIsMPTransitionIn(false)
-      }, 500)
-    }
-  }, [isMPHovered])
-
-  useEffect(() => {
+    if (isLoading) return
     if (remainingBalance === 0 && magickPowerBalance > 0) {
       setWalletColor('#FFFFFF') // Set to white if wallet balance is 0 and there is remaining Magick Power
     } else if (remainingBalance >= 5) {
@@ -136,171 +71,112 @@ export const MPBalanceBar = ({ userData }) => {
     } else {
       setWalletColor('#FF0000')
     }
-  }, [remainingBalance, magickPowerBalance])
+  }, [remainingBalance, magickPowerBalance, isLoading])
 
-  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: 12,
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: magickPowerBalance ? '#117A91' : '#363D44',
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor: '#0b0d0e',
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: 5,
-      backgroundColor: '#1BC5EB',
-    },
-  }))
+  // const isAspirant = userData && userData.user?.subscriptionName === 'ASPIRANT'
+  // const isApprentice =
+  //   userData && userData?.user?.subscriptionName === 'APPRENTICE'
+  const isWizard = userData && userData?.user?.subscriptionName === 'WIZARD'
 
-  const isNeophyte =
-    userData && userData.user?.subscriptionName === PortalSubscriptions.NEOPHYTE
-  const isApprentice =
-    userData &&
-    userData?.user?.subscriptionName === PortalSubscriptions.APPRENTICE
-  const isWizard =
-    userData && userData?.user?.subscriptionName === PortalSubscriptions.WIZARD
+  const getProgressValue = () => {
+    const maxMP = isWizard ? 1000 : 200 // Maximum MP based on subscription
+    const currentMP = Number((magickPowerBalance || 0).toFixed(0) || 0) * 100 // Current MP
+    const percentage = (currentMP / maxMP) * 100 // Calculate percentage of the max MP
 
-  const mp = Number((magickPowerBalance * 100).toFixed(0))
-  const walletBalance = Number(remainingBalance.toFixed(2))
-
-  const neophyteBody =
-    'Your Magick Power (MP) shows how much compute power you have remaining before your free trial is over.'
-  const apprenticeBody =
-    'Upgrade to Wizard for access to all AI providers and 1000 MP per month.'
-  const wizardBody =
-    'Your Magick Power (MP) reflects your available compute power, replenished monthly with your Wizard subscription.'
-  const body = isNeophyte
-    ? neophyteBody
-    : isApprentice
-    ? apprenticeBody
-    : wizardBody
-
-  const walletStyle = {
-    color: walletColor,
-    transition: 'color 0.5s ease',
+    if (isNaN(percentage) || percentage < 0) return 0 // Ensure value is not NaN or negative
+    return percentage > 100 ? 100 : percentage // Cap the value at 100%
   }
 
-  const normalise = (value, MIN, MAX) => ((value - MIN) * 100) / (MAX - MIN)
+  const getWalletBalanceDisplay = () => {
+    // Check if the user is currently a wizard
+    if (isWizard) {
+      // If they have a balance, display it; otherwise, show zero
+      return `$${Number(remainingBalance || 0).toFixed(2)}`
+    } else {
+      // For non-wizard users, show the balance if it exists and is greater than 0,
+      // otherwise show 'N/A'
+      return Number(remainingBalance || 0) > 0
+        ? `$${Number(remainingBalance || 0).toFixed(2)}`
+        : 'N/A'
+    }
+  }
 
   return (
-    <div className={`${styles.credits} ${isApprentice ? 'opacity-40' : ''}`}>
-      <div>
-        <div className={styles.menuFlex}>
-          <AutoAwesomeIcon sx={{ mr: 1, color: '#B7BBBE' }} />
-          <Typography variant="body1" className="text-[#B7BBBE]">
-            Magick Power (MP)
-          </Typography>
-          <InfoOutlinedIcon
-            className="text-[#B7BBBE] ml-1"
-            style={{
-              fontSize: '1rem',
-            }}
-            onMouseEnter={handleMPMouseEnter}
-            onMouseLeave={handleMPMouseLeave}
+    <div className="w-full h-full flex flex-col px-5 box-border items-start justify-end gap-[5px]">
+      <div className="self-stretch bg-[#282d33] text-[#b5b9bc] rounded-md py-1 px-3">
+        <div className="flex flex-row py-[5px] items-center justify-start gap-1">
+          <Image
+            className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full"
+            alt="Magic Points Icon"
+            src="/images/icons/mp.svg"
+            width={15}
+            height={15}
           />
+          <div className="text-md font-medium font-montAlt">
+            Magick Power (MP)
+          </div>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="absolute inline-flex items-center justify-center font-medium cursor-pointer right-7 opacity-50">
+                  <InfoIcon />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="">
+                <h3 className="text-lg font-semibold prose-h3:prose-sm">
+                  Magick Power (MP)
+                </h3>
+                <p className="prose-p:prose-sm py-1">
+                  Magick Power (MP) is your monthly balance from your
+                  subscription.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
-        <BorderLinearProgress
-          variant="determinate"
-          value={
-            isNeophyte
-              ? normalise(magickPowerBalance * 100, 0, 200) > 100
-                ? 100
-                : normalise(magickPowerBalance * 100, 0, 200)
-              : normalise(magickPowerBalance * 100, 0, 1000) > 100
-              ? 100
-              : normalise(magickPowerBalance * 100, 0, 1000)
-          }
-        />
-        <p className={`${styles.creditCount} mt-2 text-[#B7BBBE] text-sm`}>
-          {isNeophyte && magickPowerBalance === 0
-            ? 'Upgrade to use MP'
-            : `${mp} / ${
-                isWizard || isApprentice ? '1000 monthly' : '200 Free Trial'
+        <div className="self-stretch relative py-1">
+          <div className="-top-1 -left-1 absolute rounded-[20px] w-full h-5" />
+
+          <Progress value={getProgressValue()} />
+
+          {/* MP Info container */}
+          <div className="relative w-full text-center mt-2 flex">
+            <p className="text-ds-secondary-p dark:text-ds-secondary-m font-normal text-xs justify-start">
+              {`${Number(magickPowerBalance.toFixed(0) || 0) * 100} / ${
+                isWizard ? '1000' : '200 Free Trial'
               } MP`}
-        </p>
-      </div>
-
-      <div className="flex row">
-        <p className="text-[#B7BBBE]">
-          Wallet:{' '}
-          <span className="font-medium" style={walletStyle}>
-            ${walletBalance > 0 ? walletBalance : '0.00'}
-          </span>
-        </p>
-        <InfoOutlinedIcon
-          className="text-[#B7BBBE] ml-1"
-          style={{
-            fontSize: '1rem',
-          }}
-          onMouseEnter={handleWalletMouseEnter}
-          onMouseLeave={handleWalletMouseLeave}
-        />
-      </div>
-
-      <div className={`${isMPVisible ? 'visible' : 'invisible'}`}>
-        <div
-          className={`
-          absolute
-          transform
-          left-0
-          bottom-32
-          transition-opacity
-          duration-500
-          ${isMPTransitionIn ? 'opacity-100' : 'opacity-0'}
-          ${isMPTransitionOut ? 'opacity-0' : ''}
-          flex
-          flex-col
-          items-center
-          p-4
-          border-2
-          border-[#1BC5EB]
-          rounded-md
-          bg-[#171b1c]
-        `}
-        >
-          <h2 className="mb-2">MP Bar</h2>
-          <div className="max-w-md text-wrap h-20 mt-2 mb-6">{body}</div>
-        </div>
-      </div>
-
-      <div
-        onMouseEnter={() => setIsTooltipHovered(true)}
-        onMouseLeave={() => setIsTooltipHovered(false)}
-        className={`${isWalletVisible ? 'visible' : 'invisible'}`}
-      >
-        <div
-          className={`
-        absolute
-        transform
-        left-0
-        bottom-11
-        transition-opacity
-        duration-500
-        delay-500
-        ${isWalletTransitionIn ? 'opacity-100' : 'opacity-0'}
-        ${isWalletTransitionOut ? 'opacity-0' : ''}
-        flex
-        flex-col
-        items-center
-        p-4
-        border-2
-        border-[#1BC5EB]
-        rounded-md
-        bg-[#171b1c]
-      `}
-        >
-          <h2 className="mb-2">Wallet</h2>
-          <div className="max-w-md text-wrap">
-            Your Wallet reflects money available for compute power, used after
-            your monthly MP runs out.{' '}
-            <a
-              href="https://cloud-dev.magickml.com/billing"
-              className="text-blue-500 hover:text-blue-700"
-            >
-              Click to top up.
-            </a>
+            </p>
           </div>
         </div>
+      </div>
+      <div className="relative w-full rounded-md bg-[#282d33] text-[#b5b9bc] border-1 border-black px-3 pt-2 pb-1 my-2">
+        <p
+          className={`text-ds-secondary-p dark:text-ds-secondary-m text-lg font-medium text-${walletColor} ${
+            isWizard ? 'opacity-1' : 'opacity-25'
+          }`}
+        >
+          Wallet: {getWalletBalanceDisplay()}
+        </p>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="absolute inline-flex items-center justify-center font-medium cursor-pointer right-0 top-1/2 transform -translate-y-1/2">
+                <InfoIcon className={`opacity-50 mr-2 mb-1`} />
+              </div>
+            </TooltipTrigger>
+
+            <TooltipContent className="">
+              <h3 className="text-lg font-semibold prose-h3:prose-sm">
+                Wallet
+              </h3>
+              <p className="prose-p:prose-sm py-1">
+                Money available for compute power. Accessible with a Wizard
+                subscription.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   )
