@@ -17,6 +17,7 @@ import { CoreMemoryService } from 'plugin/core'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import {
   AWS_ACCESS_KEY,
+  AWS_BUCKET_ENDPOINT,
   AWS_BUCKET_NAME,
   AWS_REGION,
   AWS_SECRET_KEY,
@@ -51,6 +52,8 @@ export class KnowledgeService<
         secretAccessKey: AWS_SECRET_KEY,
       },
       region: AWS_REGION,
+      endpoint: AWS_BUCKET_ENDPOINT,
+      forcePathStyle: true,
     })
   }
 
