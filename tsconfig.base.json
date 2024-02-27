@@ -84,6 +84,7 @@
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/shared": ["plugins/shared/src/index.ts"],
+      "server-storage": ["packages/server/storage/src/index.ts"],
       "server/agents": ["packages/server/agents/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
