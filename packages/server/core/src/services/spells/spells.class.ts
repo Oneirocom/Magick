@@ -104,13 +104,10 @@ export class SpellService<
    * Saves the diff of a spell
    */
   async saveDiff(data: SaveDiffData): Promise<SpellInterface> {
-    const { name, diff, projectId, spellReleaseId, spellId } = data
+    const { name, diff, spellReleaseId, spellId } = data
 
     // Modify query to include spellReleaseId
-    const query: Record<string, any> = { projectId, name }
-    if (spellReleaseId) {
-      query.spellReleaseId = spellReleaseId
-    }
+    if (spellReleaseId) throw new BadRequest('SpellReleaseId not supported')
 
     // Find spell data
     const spell = await app.service('spells').get(spellId, {})
