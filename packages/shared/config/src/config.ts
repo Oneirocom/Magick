@@ -79,6 +79,8 @@ export const AWS_BUCKET_NAME =
   getVarForEnvironment('NEXT_AWS_BUCKET_NAME') || ''
 export const AWS_BUCKET_ENDPOINT =
   getVarForEnvironment('NEXT_AWS_BUCKET_ENDPOINT') || ''
+export const AWS_PUBLIC_BUCKET_PREFIX =
+  getVarForEnvironment('NEXT_PUBLIC_BUCKET_PREFIX') || ''
 
 export const HEARTBEAT_MSEC =
   Number(getVarForEnvironment('HEARTBEAT_MSEC')) || 3000
