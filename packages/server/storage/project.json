@@ -1,0 +1,24 @@
+{
+  "name": "server-storage",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/storage/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/storage",
+        "tsConfig": "packages/server/storage/tsconfig.lib.json",
+        "packageJson": "packages/server/storage/package.json",
+        "main": "packages/server/storage/src/index.ts",
+        "assets": ["packages/server/storage/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}
