@@ -16,7 +16,6 @@ import {
   setCurrentAgentId,
   setCurrentSpellReleaseId,
   useCreateAgentReleaseMutation,
-  useUpdateAgentMutation,
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
@@ -38,11 +37,9 @@ export function AgentMenu({ data }) {
   const [publishedAgent, setPublishedAgent] = useState(null)
 
   const [createAgentRelease] = useCreateAgentReleaseMutation()
-  const [updateAgent] = useUpdateAgentMutation()
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
     client.service('agents').subscribe(agent.id)
-    console.log('AGENT', agent)
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
     dispatch(setCurrentAgentId(agent.id))
@@ -55,6 +52,7 @@ export function AgentMenu({ data }) {
       if (!data) return
 
       const draft = data.find(agent => agent.isDraft)
+
       if (draft) {
         setDraftAgent(draft)
         setCurrentAgent(currentAgent || draft)
@@ -65,7 +63,7 @@ export function AgentMenu({ data }) {
     }
 
     handleDataUpdate()
-  }, [data, updateAgent, currentAgent, setCurrentAgent])
+  }, [data])
 
   const toggleMenu = (target = null) => {
     if (openMenu) {
