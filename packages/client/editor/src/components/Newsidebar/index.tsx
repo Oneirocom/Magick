@@ -44,7 +44,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
     RootState['globalConfig']
   >(state => state.globalConfig)
 
-  const { data: userData } = useGetUserQuery({
+  const { data: userData, isLoading: userLoading } = useGetUserQuery({
     projectId: config.projectId,
   })
 
@@ -190,7 +190,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         <ContextMenu />
       </div>
 
-      <MPBalanceBar userData={userData} />
+      <MPBalanceBar userData={userData} isLoading={userLoading} />
     </div>
   )
 }
