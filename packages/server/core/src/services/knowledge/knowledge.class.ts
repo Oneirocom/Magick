@@ -5,6 +5,7 @@
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexAdapter } from '@feathersjs/knex'
+import { v4 } from 'uuid'
 import fs from 'fs'
 
 import type { Application } from '../../declarations'
@@ -21,6 +22,7 @@ import {
   AWS_BUCKET_NAME,
   AWS_REGION,
   AWS_SECRET_KEY,
+  AWS_PUBLIC_BUCKET_PREFIX,
 } from 'shared/config'
 import { DataType } from 'servicesShared'
 
@@ -67,11 +69,12 @@ export class KnowledgeService<
     for (const file of data.files) {
       const filePath = file.filepath // Path where the knowledge is temporarily stored
       const fileStream = fs.createReadStream(filePath) // Create a readable stream
+      const uuid = v4()
 
-      const key = `projects/${data.projectId}/knowledge/${file.originalFilename}` // The name you want the uploaded knowledge to have in S3
+      const path = `projects/${data.projectId}/knowledge/${uuid}/${file.originalFilename}` // The name you want the uploaded knowledge to have in S3
       const s3Params = {
         Bucket: this.bucketName,
-        Key: key,
+        Key: path,
         Body: fileStream, // Use the stream here
         ContentType: file.mimetype || 'application/octet-stream', // Use the correct MIME type
       }
@@ -83,14 +86,14 @@ export class KnowledgeService<
 
         // Make sure to turn this into a proper URL
         const sourceUrl = new URL(
-          `https://${this.bucketName}.s3.${AWS_REGION}.amazonaws.com/${key}`
+          `${AWS_PUBLIC_BUCKET_PREFIX}/${path}`
         ).toString()
         // Construct the S3 URL
         const metaData = {
           ...options.metadata,
           fileName: file.originalFilename,
           sourceUrl,
-          s3Key: key,
+          s3Key: path,
         }
 
         console.log('ADDING TO EMBEDCHAIN:', sourceUrl, metaData)
