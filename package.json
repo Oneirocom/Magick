@@ -76,7 +76,8 @@
     "prepare": "husky install || true",
     "lint-staged": "lint-staged",
     "postinstall": "npm run generateClients",
-    "vercel-install": "./vercel-submodule-workaround.sh && npm i"
+    "vercel-install": "./vercel-submodule-workaround.sh && npm i",
+    "bucket:init": "ts-node ./scripts/init-bucket.ts"
   },
   "resolutions": {
     "@types/react": "18.0.2"
