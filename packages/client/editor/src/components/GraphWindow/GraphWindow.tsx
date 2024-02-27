@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Flow } from '../react-flow/Flow'
 
 import { Tab } from '@magickml/providers'
-import { useGetSpellByNameQuery } from 'client/state'
+import { RootState, useGetSpellByNameQuery } from 'client/state'
+import { useSelector } from 'react-redux'
 
 type Props = IDockviewPanelProps<{
   tab: Tab
@@ -15,6 +16,11 @@ const GraphWindow = (props: Props) => {
   const { spellName } = props.params
   // Change useRef() to useRef<HTMLDivElement>(null) to match the expected type
   const parentRef = useRef<HTMLDivElement>(null)
+
+  const { currentSpellReleaseId } = useSelector<
+    RootState,
+    RootState['globalConfig']
+  >(state => state.globalConfig)
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -44,7 +50,12 @@ const GraphWindow = (props: Props) => {
 
   return (
     <div style={{ height, width }} ref={parentRef}>
-      <Flow parentRef={parentRef} tab={props.params.tab} spell={spell} />
+      <Flow
+        parentRef={parentRef}
+        tab={props.params.tab}
+        spell={spell}
+        readOnly={!!currentSpellReleaseId}
+      />
     </div>
   )
 }
