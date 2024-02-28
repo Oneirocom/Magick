@@ -102,6 +102,7 @@ export interface BasePluginInit {
   projectId: string
   state?: Record<string, unknown>
 }
+
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
  * within the system. It encapsulates common functionalities and structures that
@@ -195,7 +196,7 @@ export abstract class BasePlugin<
   protected projectId: string
 
   public connection: Redis
-  public enabled: boolean = false
+  // public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
   private updateDependencyHandler?: (key: string, dependency: any) => void
@@ -376,7 +377,7 @@ export abstract class BasePlugin<
    * this.emitEvent('myEvent', { data: 'example' });
    */
   protected emitEvent(eventName: string, payload: EventPayload) {
-    if (!this.enabled) return
+    if (!this.state.enabled) return
     this.eventEmitter.emit(eventName, payload)
   }
 
@@ -430,18 +431,18 @@ export abstract class BasePlugin<
   /**
    * Activates the plugin, making it ready for operation.
    */
-  activate(): void {
+  async activate() {
     // Activation logic specific to the plugin
-    this.setEnabled(true)
+    await this.setEnabled(true)
     this.logger.debug(`Plugin ${this.name} activated`)
   }
 
   /**
    * Deactivates the plugin, putting it into a passive state.
    */
-  deactivate(): void {
+  async deactivate() {
     // Deactivation logic specific to the plugin
-    this.setEnabled(false)
+    await this.setEnabled(false)
     this.logger.debug(`Plugin ${this.name} deactivated`)
   }
 
@@ -461,8 +462,11 @@ export abstract class BasePlugin<
    * @example
    * this.setEnabled(true);
    */
-  setEnabled(state: boolean) {
-    this.enabled = state
+  async setEnabled(enabled: boolean) {
+    await this.stateManager.updatePluginState({
+      ...this.state,
+      enabled,
+    })
   }
 
   /**
@@ -642,11 +646,11 @@ export abstract class BasePlugin<
    * Method to handle enable/disable commands for the plugin.
    * @param enable - Boolean indicating whether to enable or disable the plugin.
    */
-  handleEnableCommand(enable: boolean): void {
+  async handleEnableCommand(enable: boolean) {
     if (enable) {
-      this.activate()
+      await this.activate()
     } else {
-      this.deactivate()
+      await this.deactivate()
     }
   }
 
@@ -678,7 +682,7 @@ export abstract class BasePlugin<
    * Initializes the plugin state by fetching it from the database or setting it to a default value.
    * This should be called during the plugin's initialization process.
    */
-  async initializePluginState(defaultState?: State): Promise<void> {
+  async initializePluginState(defaultState?: PluginStateType<State>) {
     this.state = await this.stateManager.getPluginState(defaultState)
   }
 
@@ -686,7 +690,7 @@ export abstract class BasePlugin<
    * Updates the plugin state both in-memory and in the database.
    * @param newState The new state to set.
    */
-  async updatePluginState(newState: State): Promise<void> {
+  async updatePluginState(newState: PluginStateType<State>) {
     await this.stateManager.updatePluginState(newState)
     // After updating the state in the database, update the in-memory state.
     this.state = newState

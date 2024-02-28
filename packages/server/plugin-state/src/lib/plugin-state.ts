@@ -1,6 +1,8 @@
 import { prismaCore } from '@magickml/server-db'
 
-export type PluginStateType<T extends object = Record<string, unknown>> = T
+export type PluginStateType<T extends object = Record<string, unknown>> = T & {
+  enabled: boolean
+}
 
 export class PluginStateManager<T extends object = Record<string, unknown>> {
   private plugin: string
@@ -26,7 +28,10 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
     })
 
     if (!stateRow) {
-      const newState = {} as T
+      // Ensure the newState object conforms to PluginStateType<T>
+      const newState: PluginStateType<T> = {
+        enabled: false,
+      } as PluginStateType<T>
       await prismaCore.pluginState.create({
         data: {
           agentId: this.agentId,
@@ -36,7 +41,7 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
       })
       this.currentState = newState
     } else {
-      this.currentState = stateRow.state as T
+      this.currentState = stateRow.state as PluginStateType<T>
     }
   }
 
@@ -46,12 +51,18 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
     }
   }
 
-  public async getPluginState(defaultState?: T): Promise<T> {
+  public async getPluginState(
+    defaultState?: PluginStateType<T>
+  ): Promise<PluginStateType<T>> {
     await this.ensureStateInitialized()
-    return this.currentState || defaultState || ({} as T)
+    return (
+      this.currentState ||
+      defaultState ||
+      ({ enabled: false } as PluginStateType<T>)
+    )
   }
 
-  public async updatePluginState(newState: T): Promise<void> {
+  public async updatePluginState(newState: PluginStateType<T>): Promise<void> {
     try {
       await prismaCore.pluginState.update({
         where: {
@@ -81,13 +92,14 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
         },
       })
 
-      this.currentState = {} as T // Reset to empty state
+      // Reset to a valid empty state conforming to PluginStateType<T>
+      this.currentState = { enabled: false } as PluginStateType<T>
     } catch (error: any) {
       this.handleError(error, 'Error removing plugin state')
     }
   }
 
-  public getState(): T | undefined {
+  public getState(): PluginStateType<T> | undefined {
     return this.currentState
   }
 }
