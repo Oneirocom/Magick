@@ -2,10 +2,7 @@ const { initSDK } = require('@hyperdx/node-opentelemetry')
 const {
   BullMQInstrumentation,
 } = require('@jenniferplusplus/opentelemetry-instrumentation-bullmq')
-const {
-  KnexInstrumentation,
-  KnexInstrumentationConfig,
-} = require('@opentelemetry/instrumentation-knex')
+const { KnexInstrumentation } = require('@opentelemetry/instrumentation-knex')
 const {
   IORedisInstrumentation,
 } = require('@opentelemetry/instrumentation-ioredis')
@@ -18,10 +15,6 @@ initSDK({
     new BullMQInstrumentation(),
     new IORedisInstrumentation(),
     new KoaInstrumentation(),
-    new KnexInstrumentation(
-      new KnexInstrumentationConfig({
-        maxQueryLength: 100,
-      })
-    ),
+    new KnexInstrumentation(),
   ],
 })
