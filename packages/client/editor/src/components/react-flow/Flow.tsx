@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
 
 import CustomControls from './Controls'
-import { NodePicker } from './NodePicker'
+// import { NodePicker } from './NodePicker'
+import { NosePicker } from './NosePicker'
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow'
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers'
 import { Tab, usePubSub } from '@magickml/providers'
@@ -199,7 +200,7 @@ export const Flow: React.FC<FlowProps> = ({
         />
       )}
       {nodePickerPosition && !readOnly && (
-        <NodePicker
+        <NosePicker
           position={nodePickerPosition}
           pickedNodePosition={pickedNodeVisibility}
           filters={nodePickFilters}
@@ -207,6 +208,14 @@ export const Flow: React.FC<FlowProps> = ({
           onClose={closeNodePicker}
           specJSON={specJson}
         />
+        // <NodePicker
+        //   position={nodePickerPosition}
+        //   pickedNodePosition={pickedNodeVisibility}
+        //   filters={nodePickFilters}
+        //   onPickNode={handleAddNode}
+        //   onClose={closeNodePicker}
+        //   specJSON={specJson}
+        // />
       )}
 
       {openNodeMenu && (
