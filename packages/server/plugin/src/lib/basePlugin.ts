@@ -95,7 +95,6 @@ export type PluginCommand = {
   handler: (enable: boolean) => void
 }
 
-
 export interface BasePluginInit {
   name: string
   agentId: string
@@ -250,7 +249,7 @@ export abstract class BasePlugin<
   /**
    * Initializes the plugin by defining events and initializing functionalities.
    */
-  init(centralEventBus: EventEmitter) {
+  async init(centralEventBus: EventEmitter) {
     this.centralEventBus = centralEventBus
     this.defineEvents()
     this.defineActions()
@@ -258,6 +257,7 @@ export abstract class BasePlugin<
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
     this.initializeBaseCommands()
+    await this.initializePluginState()
   }
 
   initializeBaseCommands() {
@@ -678,7 +678,7 @@ export abstract class BasePlugin<
    * Initializes the plugin state by fetching it from the database or setting it to a default value.
    * This should be called during the plugin's initialization process.
    */
-  protected async initializePluginState(defaultState?: State): Promise<void> {
+  async initializePluginState(defaultState?: State): Promise<void> {
     this.state = await this.stateManager.getPluginState(defaultState)
   }
 
@@ -686,7 +686,7 @@ export abstract class BasePlugin<
    * Updates the plugin state both in-memory and in the database.
    * @param newState The new state to set.
    */
-  protected async updatePluginState(newState: State): Promise<void> {
+  async updatePluginState(newState: State): Promise<void> {
     await this.stateManager.updatePluginState(newState)
     // After updating the state in the database, update the in-memory state.
     this.state = newState
