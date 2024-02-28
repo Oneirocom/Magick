@@ -1,16 +1,6 @@
 import { prismaCore } from '@magickml/server-db'
 
-type PluginStateType<T extends object = Record<string, unknown>> = T
-
-export const ensureStateInitialized = async <T extends object>(
-  currentState: T | undefined,
-  initState: () => Promise<void>
-): Promise<T> => {
-  if (!currentState) {
-    await initState()
-  }
-  return currentState as T
-}
+export type PluginStateType<T extends object = Record<string, unknown>> = T
 
 export class PluginStateManager<T extends object = Record<string, unknown>> {
   private plugin: string
@@ -20,7 +10,6 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
   constructor(agentId: string, plugin: string) {
     this.plugin = plugin
     this.agentId = agentId
-    // this.initState()
   }
 
   private handleError(error: Error, message: string) {
