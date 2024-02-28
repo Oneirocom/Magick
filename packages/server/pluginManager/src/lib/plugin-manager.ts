@@ -247,10 +247,10 @@ export class PluginManager extends EventEmitter {
    * Activates a plugin, making it ready for operation.
    * @param pluginName The name of the plugin to activate.
    */
-  activatePlugin(pluginName: string): void {
+  async activatePlugin(pluginName: string): Promise<void> {
     const plugin = this.plugins.get(pluginName)
     if (plugin) {
-      plugin.activate()
+      await plugin.activate()
       this.logger.debug(`Plugin ${pluginName} activated`)
     } else {
       this.logger.warn(`Plugin ${pluginName} not found for activation.`)
@@ -261,10 +261,10 @@ export class PluginManager extends EventEmitter {
    * Deactivates a plugin, putting it in a passive state.
    * @param pluginName The name of the plugin to deactivate.
    */
-  deactivatePlugin(pluginName: string): void {
+  async deactivatePlugin(pluginName: string): Promise<void> {
     const plugin = this.plugins.get(pluginName)
     if (plugin) {
-      plugin.deactivate()
+      await plugin.deactivate()
       this.logger.debug(`Plugin ${pluginName} deactivated`)
     } else {
       this.logger.warn(`Plugin ${pluginName} not found for deactivation.`)
