@@ -77,3 +77,19 @@ export abstract class CoreEventsPlugin<
     this.centralEventBus.emit(event, payload)
   }
 }
+
+// helpers types and abstract class so that i can just pass State in easier
+export type DefaultPluginEvents = Record<string, (...args: any[]) => void>
+export type DefaultPluginPayload = Partial<EventPayload>
+export type DefaultPluginData = Record<string, unknown>
+export type DefaultPluginMetadata = Record<string, unknown>
+
+export abstract class CoreEventsPluginWithDefaultTypes<
+  State extends object = Record<string, unknown>
+> extends CoreEventsPlugin<
+  DefaultPluginEvents,
+  DefaultPluginPayload,
+  DefaultPluginData,
+  DefaultPluginMetadata,
+  State
+> {}
