@@ -13,8 +13,7 @@ import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { CredentialsManager, PluginCredential } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
-// import { MeterManager } from 'packages/server/meter/src'
-// import { PluginStateManager } from 'packages/server/pluginState/src'
+import { PluginStateManager, PluginStateType } from 'plugin-state'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -189,7 +188,6 @@ export abstract class BasePlugin<
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
   protected credentialsManager!: CredentialsManager
-  // protected pluginStateManager!: PluginStateManager<State>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -200,6 +198,9 @@ export abstract class BasePlugin<
   public logger = getLogger()
   public eventEmitter: EventEmitter
   private updateDependencyHandler?: (key: string, dependency: any) => void
+
+  public state: PluginStateType<State>
+  private pluginStateManager: PluginStateManager<State>
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -239,10 +240,11 @@ export abstract class BasePlugin<
     this.events = []
     this.commands = []
     this.credentialsManager = new CredentialsManager()
-    // this.pluginStateManager = new PluginStateManager<State>(
-    //   this.agentId,
-    //   this.name
-    // )
+    this.pluginStateManager = new PluginStateManager<State>(
+      this.agentId,
+      this.name
+    )
+    this.state = {} as PluginStateType<State>
   }
 
   /**
@@ -670,6 +672,24 @@ export abstract class BasePlugin<
       this.logger.error(`Error retrieving credential '${name}': ${error}`)
       return
     }
+  }
+
+  /**
+   * Initializes the plugin state by fetching it from the database or setting it to a default value.
+   * This should be called during the plugin's initialization process.
+   */
+  async initializePluginState(defaultState?: State): Promise<void> {
+    this.state = await this.pluginStateManager.getPluginState(defaultState)
+  }
+
+  /**
+   * Updates the plugin state both in-memory and in the database.
+   * @param newState The new state to set.
+   */
+  async updatePluginState(newState: State): Promise<void> {
+    await this.pluginStateManager.updatePluginState(newState)
+    // After updating the state in the database, update the in-memory state.
+    this.state = newState
   }
 }
 
