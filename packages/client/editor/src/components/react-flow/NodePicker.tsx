@@ -33,6 +33,8 @@ type Props = {
   item: ItemType
   onPickNode: Function
   position: XYPosition
+  id: string
+  index: number
 }
 
 export const NodePicker: React.FC<NodePickerProps> = ({
@@ -44,7 +46,10 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   specJSON,
 }: NodePickerProps) => {
   const [search, setSearch] = useState('')
-  const [focusedIndex, setFocusedIndex] = useState(0)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
+  const [accordionOpen, setAccordionOpen] = useState(null) // Track if any accordion is open
+  const [innerFocusedIndex, setInnerFocusedIndex] = useState(-1) // Focused index within an accordion
+
   const instance = useReactFlow()
 
   useOnPressKey('Escape', onClose)
@@ -112,47 +117,109 @@ export const NodePicker: React.FC<NodePickerProps> = ({
       setSearch(longestCommonPrefix)
     }
   }
-  // Keyboard navigation logic
   useEffect(() => {
-    let newIndex = focusedIndex
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        const accordionItem = document.getElementById(
+          `accordion-item-${focusedIndex}`
+        )
+        if (accordionItem) {
+          const accordionTrigger = document.getElementById(
+            `accordion-trigger-${focusedIndex}`
+          )
+          if (accordionTrigger) {
+            console.log('clicking')
+            accordionTrigger.click()
+          }
+        }
+      }
+
       if (event.key === 'Tab') {
         event.preventDefault()
         autocompleteSearchTerm()
-      }
-
-      if (event.key === 'ArrowDown') {
-        event.preventDefault()
-        newIndex = Math.min(focusedIndex + 1, filtered.length - 1)
-        setFocusedIndex(newIndex)
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault()
-        newIndex = Math.max(focusedIndex - 1, 0)
-        setFocusedIndex(newIndex)
-      } else if (
-        event.key === 'Enter' &&
-        filtered.length > 0 &&
-        pickedNodePosition
-      ) {
-        onPickNode(
-          filtered[focusedIndex].type,
-          instance.project(pickedNodePosition)
-        )
-        onClose() // Close the picker after selection
+      } else if (!search) {
+        // Navigation logic for accordion titles and contents
+        navigateAccordions(event)
+      } else {
+        // Navigation logic for search results
+        navigateSearchResults(event)
       }
     }
 
-    const itemElement = document.getElementById(`search-item-${newIndex}`)
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [search, focusedIndex, accordionOpen, groupedData, autocompleteSearchTerm])
+
+  // Navigation through accordion titles or contents based on accordionOpen state
+  const navigateAccordions = event => {
+    let newIndex = focusedIndex
+    const totalItems = groupedData.length
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      // Logic to navigate accordion titles or inner contents
+      if (accordionOpen === null) {
+        // Navigate through accordion titles
+        newIndex = (focusedIndex + 1) % totalItems
+      } else {
+        // Navigate within the opened accordion's contents
+        const maxInnerIndex = groupedData[accordionOpen].subItems.length - 1
+        setInnerFocusedIndex(current =>
+          current + 1 > maxInnerIndex ? 0 : current + 1
+        )
+        return
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      // Similar logic for ArrowUp
+      if (accordionOpen === null) {
+        newIndex = (focusedIndex - 1 + totalItems) % totalItems
+      } else {
+        const maxInnerIndex = groupedData[accordionOpen].subItems.length - 1
+        setInnerFocusedIndex(current =>
+          current - 1 < 0 ? maxInnerIndex : current - 1
+        )
+        return
+      }
+    }
+
+    setFocusedIndex(newIndex)
+    // Scroll the focused accordion title into view
+    scrollToItem(`accordion-item-${newIndex}`)
+  }
+
+  // Navigation through search results
+  const navigateSearchResults = event => {
+    let newIndex = focusedIndex
+    const totalItems = filtered.length
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      newIndex = (focusedIndex + 1) % totalItems
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      newIndex = (focusedIndex - 1 + totalItems) % totalItems
+    } else if (event.key === 'Enter' && totalItems > 0 && pickedNodePosition) {
+      // Trigger selection
+      onPickNode(
+        filtered[focusedIndex].type,
+        instance.project(pickedNodePosition)
+      )
+      onClose()
+      return
+    }
+
+    setFocusedIndex(newIndex)
+    scrollToItem(`search-item-${newIndex}`)
+  }
+
+  // Helper function to scroll the item into view
+  const scrollToItem = itemId => {
+    const itemElement = document.getElementById(itemId)
     if (itemElement) {
       itemElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
-    // console.log('ITEM ELEMENT', itemElement)
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [filtered, focusedIndex, onPickNode, instance, position, onClose])
+  }
 
   // Group the nodes by category and subcategory when not searching
   if (!search) {
@@ -195,7 +262,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
     }, [] as ItemType[])
   }
 
-  const Item = ({ item, position, onPickNode }: Props) => {
+  const Item = ({ item, position, onPickNode, id, index }: Props) => {
     const instance = useReactFlow()
 
     const handleClick = ({ i }) => {
@@ -206,11 +273,19 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
     return (
       <AccordionItem
+        id={id}
         key={item.title}
         value={item.title}
-        className=" py-0 border-b border-black"
+        className={`py-0 border-b border-black ${
+          index === focusedIndex ? 'bg-[#282d33]' : ''
+        }
+        }`}
       >
-        <AccordionTrigger className="py-2 px-2" iconPosition="start">
+        <AccordionTrigger
+          id={`accordion-trigger-${index}`}
+          className="py-2 px-2"
+          iconPosition="start"
+        >
           {item.title ?? item?.type}
         </AccordionTrigger>
         {item.subItems &&
@@ -274,9 +349,11 @@ export const NodePicker: React.FC<NodePickerProps> = ({
         pickedNodePosition && (
           <div className="max-h-[320px] overflow-y-scroll w-full">
             <Accordion type="multiple">
-              {groupedData.map(item => (
+              {groupedData.map((item, index) => (
                 <Item
-                  key={item.title}
+                  id={`accordion-item-${index}`}
+                  index={index}
+                  key={item.title + index}
                   item={item}
                   onPickNode={onPickNode}
                   position={pickedNodePosition}
