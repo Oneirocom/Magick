@@ -344,13 +344,31 @@ export const useFlowHandlers = ({
       e.preventDefault()
       if (parentRef && parentRef.current) {
         const bounds = parentRef.current.getBoundingClientRect()
+
+        const nodePickerWidth = 240
+        const nodePickerHeight = 320
+
+        // Calculate positions, ensuring the node picker doesn't open off-screen
+        let xPosition = e.clientX - bounds.left
+        let yPosition = e.clientY - bounds.top
+
+        // Adjust if opening off the right side
+        if (e.clientX + nodePickerWidth > window.innerWidth) {
+          xPosition -= e.clientX + nodePickerWidth * 1.5 - window.innerWidth
+        }
+
+        // Adjust if opening off the bottom
+        if (e.clientY + nodePickerHeight > window.innerHeight) {
+          yPosition -= e.clientY + nodePickerHeight * 1.1 - window.innerHeight
+        }
+
         setPickedNodeVisibility({
-          x: e.clientX - bounds.left + window.scrollX,
-          y: e.clientY - bounds.top + window.scrollY,
+          x: xPosition,
+          y: yPosition,
         })
         setNodePickerPosition({
-          x: e.clientX,
-          y: e.clientY,
+          x: xPosition + bounds.left,
+          y: yPosition + bounds.top,
         })
       }
     },
