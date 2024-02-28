@@ -39,7 +39,7 @@ export abstract class CoreEventsPlugin<
     // Initialize CoreEventPlugin specific stuff if needed
   }
 
-  override init(centralEventBus: EventEmitter) {
+  override async init(centralEventBus: EventEmitter) {
     super.init(centralEventBus)
     this.initializeActionHandlers()
     // Initialize CoreEventPlugin specific stuff if needed

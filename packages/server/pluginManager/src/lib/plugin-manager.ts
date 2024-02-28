@@ -132,7 +132,7 @@ export class PluginManager extends EventEmitter {
    *
    */
   async loadPlugins(): Promise<void> {
-    for (const [, pluginGetter] of Object.entries(plugins)) {
+    for await (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
 
@@ -151,7 +151,7 @@ export class PluginManager extends EventEmitter {
           pubSub: this.pubSub,
           projectId: this.projectId,
         })
-        this.registerPlugin(pluginInstance)
+        await this.registerPlugin(pluginInstance)
       }
     }
   }
@@ -199,11 +199,11 @@ export class PluginManager extends EventEmitter {
    * Registers a plugin with the Plugin Manager.
    * @param plugin The plugin instance to register.
    */
-  registerPlugin(plugin: BasePlugin): void {
+  async registerPlugin(plugin: BasePlugin): Promise<void> {
     this.logger.debug(`Registering plugin ${plugin.name}`)
     this.plugins.set(plugin.name, plugin)
     this.setupPluginEventForwarding(plugin)
-    plugin.init(this.centralEventBus)
+    await plugin.init(this.centralEventBus)
   }
 
   /**

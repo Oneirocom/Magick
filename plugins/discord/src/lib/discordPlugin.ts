@@ -1,8 +1,4 @@
-import {
-  ActionPayload,
-  CoreEventsPlugin,
-  CoreEventsPluginWithDefaultTypes,
-} from 'server/plugin'
+import { ActionPayload, CoreEventsPluginWithDefaultTypes } from 'server/plugin'
 import {
   DISCORD_KEY,
   DISCORD_EVENTS,
