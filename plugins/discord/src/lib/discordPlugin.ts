@@ -1,4 +1,8 @@
-import { ActionPayload, CoreEventsPlugin } from 'server/plugin'
+import {
+  ActionPayload,
+  CoreEventsPlugin,
+  CoreEventsPluginWithDefaultTypes,
+} from 'server/plugin'
 import {
   DISCORD_KEY,
   DISCORD_EVENTS,
@@ -9,10 +13,14 @@ import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { discordPluginName } from './constants'
 import { DiscordClient } from './services/discord'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
-import { DiscordCredentials, DiscordEventPayload } from './types'
+import {
+  DiscordCredentials,
+  DiscordEventPayload,
+  DiscordPluginState,
+} from './types'
 import { EventTypes } from 'communication'
 
-export class DiscordPlugin extends CoreEventsPlugin {
+export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPluginState> {
   override enabled = true
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
@@ -21,6 +29,8 @@ export class DiscordPlugin extends CoreEventsPlugin {
   constructor({ connection, agentId, projectId }) {
     super({ name: discordPluginName, connection, agentId, projectId })
     this.setCredentials(discordPluginCredentials)
+
+    this.initializePluginState()
   }
 
   async initalizeDiscord() {

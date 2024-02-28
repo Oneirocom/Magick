@@ -95,11 +95,13 @@ export type PluginCommand = {
   handler: (enable: boolean) => void
 }
 
+
 export interface BasePluginInit {
   name: string
   agentId: string
   connection: Redis
   projectId: string
+  state?: Record<string, unknown>
 }
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
@@ -200,7 +202,7 @@ export abstract class BasePlugin<
   private updateDependencyHandler?: (key: string, dependency: any) => void
 
   public state: PluginStateType<State>
-  private pluginStateManager: PluginStateManager<State>
+  protected stateManager: PluginStateManager<State>
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -230,9 +232,8 @@ export abstract class BasePlugin<
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor({ name, agentId, connection, projectId }: BasePluginInit) {
+  constructor({ name, agentId, connection, projectId, state }: BasePluginInit) {
     super({ name })
-
     this.agentId = agentId
     this.projectId = projectId
     this.connection = connection
@@ -240,11 +241,10 @@ export abstract class BasePlugin<
     this.events = []
     this.commands = []
     this.credentialsManager = new CredentialsManager()
-    this.pluginStateManager = new PluginStateManager<State>(
-      this.agentId,
-      this.name
-    )
-    this.state = {} as PluginStateType<State>
+    this.stateManager = new PluginStateManager<State>(this.agentId, this.name)
+    this.state = state
+      ? (state as PluginStateType<State>)
+      : ({} as PluginStateType<State>)
   }
 
   /**
@@ -678,16 +678,16 @@ export abstract class BasePlugin<
    * Initializes the plugin state by fetching it from the database or setting it to a default value.
    * This should be called during the plugin's initialization process.
    */
-  async initializePluginState(defaultState?: State): Promise<void> {
-    this.state = await this.pluginStateManager.getPluginState(defaultState)
+  protected async initializePluginState(defaultState?: State): Promise<void> {
+    this.state = await this.stateManager.getPluginState(defaultState)
   }
 
   /**
    * Updates the plugin state both in-memory and in the database.
    * @param newState The new state to set.
    */
-  async updatePluginState(newState: State): Promise<void> {
-    await this.pluginStateManager.updatePluginState(newState)
+  protected async updatePluginState(newState: State): Promise<void> {
+    await this.stateManager.updatePluginState(newState)
     // After updating the state in the database, update the in-memory state.
     this.state = newState
   }

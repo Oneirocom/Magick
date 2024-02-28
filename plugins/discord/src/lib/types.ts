@@ -1,6 +1,7 @@
 import { ClientEvents } from 'discord.js'
 import { DISCORD_EVENTS } from './constants'
 import { APIMessage, APIReaction } from 'discord-api-types/v10'
+import type { PluginStateType } from 'plugin-state'
 
 export type DiscordEvents = keyof ClientEvents
 
@@ -20,6 +21,6 @@ export type DiscordEventPayload = BaseEventPayload
 
 export type DiscordCredentials = string | undefined
 
-export interface DiscordState extends Record<string, unknown> {
+export interface DiscordPluginState extends PluginStateType {
   enabled: boolean
 }
