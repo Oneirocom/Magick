@@ -3,7 +3,7 @@ import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
 
 import CustomControls from './Controls'
 // import { NodePicker } from './NodePicker'
-import { NosePicker } from './NosePicker'
+import { NodePicker } from './NodePicker'
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow'
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers'
 import { Tab, usePubSub } from '@magickml/providers'
@@ -200,7 +200,7 @@ export const Flow: React.FC<FlowProps> = ({
         />
       )}
       {nodePickerPosition && !readOnly && (
-        <NosePicker
+        <NodePicker
           position={nodePickerPosition}
           pickedNodePosition={pickedNodeVisibility}
           filters={nodePickFilters}

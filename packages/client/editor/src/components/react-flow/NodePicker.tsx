@@ -1,8 +1,14 @@
-import { NodeSpecJSON } from '@magickml/behave-graph'
 import React, { useEffect, useState } from 'react'
 import { useReactFlow, XYPosition } from 'reactflow'
+
 import { useOnPressKey } from '../../hooks/react-flow/useOnPressKey'
-import styles from './nodePicker.module.scss'
+import { NodeSpecJSON } from '@magickml/behave-graph'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '../../../../ui/src/lib/core/ui'
 export type NodePickerFilters = {
   handleType: 'source' | 'target'
   valueType: string
@@ -27,46 +33,6 @@ type Props = {
   item: ItemType
   onPickNode: Function
   position: XYPosition
-}
-
-const Item = ({ item, position, onPickNode }: Props) => {
-  const instance = useReactFlow()
-  const [visibleSubitems, setVisibleSubitems] = useState(false)
-
-  const handleClick = () => {
-    if (item.type) {
-      onPickNode(item.type, instance.project(position))
-    }
-  }
-
-  return (
-    <div
-      className={
-        'p-2 capitalize text-base border-b border-gray-600 cursor-pointer ' +
-        styles['item'] +
-        ' ' +
-        (item.subItems ? styles['hasSubitems'] : '')
-      }
-      key={item.title}
-      onClick={handleClick}
-      onMouseOver={() => setVisibleSubitems(true)}
-      onMouseLeave={() => setVisibleSubitems(false)}
-    >
-      {item.title ?? item?.type}
-      {item.subItems && visibleSubitems && (
-        <div className={styles['subitems']}>
-          {item.subItems.map(subitem => (
-            <Item
-              key={subitem.title}
-              item={subitem}
-              onPickNode={onPickNode}
-              position={position}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  )
 }
 
 export const NodePicker: React.FC<NodePickerProps> = ({
@@ -117,9 +83,8 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   const autocompleteSearchTerm = () => {
     if (!filtered || search.length === 0 || filtered?.length === 0) return
 
-    // Filter to only include items that start with the current search term
     const relevantItems = filtered.filter(node =>
-      node.type.toLowerCase().startsWith(search.toLowerCase())
+      node.type.toLowerCase().includes(search.toLowerCase())
     )
 
     if (relevantItems.length === 0) return
@@ -149,6 +114,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   }
   // Keyboard navigation logic
   useEffect(() => {
+    let newIndex = focusedIndex
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Tab') {
         event.preventDefault()
@@ -156,9 +122,13 @@ export const NodePicker: React.FC<NodePickerProps> = ({
       }
 
       if (event.key === 'ArrowDown') {
-        setFocusedIndex(prev => Math.min(prev + 1, filtered.length - 1))
+        event.preventDefault()
+        newIndex = Math.min(focusedIndex + 1, filtered.length - 1)
+        setFocusedIndex(newIndex)
       } else if (event.key === 'ArrowUp') {
-        setFocusedIndex(prev => Math.max(prev - 1, 0))
+        event.preventDefault()
+        newIndex = Math.max(focusedIndex - 1, 0)
+        setFocusedIndex(newIndex)
       } else if (
         event.key === 'Enter' &&
         filtered.length > 0 &&
@@ -172,6 +142,11 @@ export const NodePicker: React.FC<NodePickerProps> = ({
       }
     }
 
+    const itemElement = document.getElementById(`search-item-${newIndex}`)
+    if (itemElement) {
+      itemElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+    // console.log('ITEM ELEMENT', itemElement)
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
@@ -220,9 +195,45 @@ export const NodePicker: React.FC<NodePickerProps> = ({
     }, [] as ItemType[])
   }
 
+  const Item = ({ item, position, onPickNode }: Props) => {
+    const instance = useReactFlow()
+
+    const handleClick = ({ i }) => {
+      if (i.type) {
+        onPickNode(i.type, instance.project(position))
+      }
+    }
+
+    return (
+      <AccordionItem
+        key={item.title}
+        value={item.title}
+        className=" py-0 border-b border-black"
+      >
+        <AccordionTrigger className="py-2 px-2" iconPosition="start">
+          {item.title ?? item?.type}
+        </AccordionTrigger>
+        {item.subItems &&
+          item.subItems.map(subitem => {
+            return (
+              <AccordionContent
+                onClick={e => {
+                  e.stopPropagation()
+                  handleClick({ i: subitem })
+                }}
+                className="py-2 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer"
+              >
+                {subitem.type}
+              </AccordionContent>
+            )
+          })}
+      </AccordionItem>
+    )
+  }
+
   return (
     <div
-      className="fixed z-10 text-sm text-white border border-gray-500 rounded-sm node-picker bg-[var(--secondary-3)] "
+      className="fixed z-10 w-[240px] text-sm text-white border border-gray-500 rounded-sm bg-[var(--secondary-3)] "
       style={{ top: position.y, left: position.x }}
     >
       <div className="p-2">
@@ -230,22 +241,23 @@ export const NodePicker: React.FC<NodePickerProps> = ({
           type="text"
           autoFocus
           placeholder="Search"
-          className="w-full px-2 py-1 bg-[var(--dark-2)] disabled:bg-gray-700 rounded-sm"
+          className="w-full bg-[var(--dark-2)] disabled:bg-gray-700 rounded-sm"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
       </div>
-      {search && (
+      {search ? (
         <>
           <div className="p-2 text-xs text-gray-400">
             Press <span className="font-bold">Tab</span> to autocomplete
           </div>
-          <div className="overflow-y-scroll max-h-48">
+          <div className="overflow-y-scroll max-h-[320px] w-full">
             {filtered.map(({ type }, index) => (
               <div
+                id={`search-item-${index}`} // Assigning ID based on index
                 key={type}
-                className={`p-2 text-base cursor-pointer border-b border-[var(--secondary-3)] ${
-                  index === focusedIndex ? 'bg-gray-700' : 'hover:bg-gray-600'
+                className={`p-2 cursor-pointer border-b border-[var(--secondary-3)] ${
+                  index === focusedIndex ? 'bg-[#282d33]' : 'hover:bg-[#282d33]'
                 }`}
                 onMouseEnter={() => setFocusedIndex(index)}
                 onClick={() => {
@@ -253,23 +265,26 @@ export const NodePicker: React.FC<NodePickerProps> = ({
                   return onPickNode(type, instance.project(pickedNodePosition))
                 }}
               >
-                {type}
+                <div className="">{type}</div>
               </div>
             ))}
           </div>
         </>
-      )}
-      {!search && pickedNodePosition && (
-        <div className={styles['context-menu']}>
-          {groupedData.map(item => (
-            <Item
-              key={item.title}
-              item={item}
-              onPickNode={onPickNode}
-              position={pickedNodePosition}
-            />
-          ))}
-        </div>
+      ) : (
+        pickedNodePosition && (
+          <div className="max-h-[320px] overflow-y-scroll w-full">
+            <Accordion type="multiple">
+              {groupedData.map(item => (
+                <Item
+                  key={item.title}
+                  item={item}
+                  onPickNode={onPickNode}
+                  position={pickedNodePosition}
+                />
+              ))}
+            </Accordion>
+          </div>
+        )
       )}
     </div>
   )
