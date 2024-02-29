@@ -11,7 +11,7 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { CredentialsManager, PluginCredential } from 'server/credentials'
+import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
 import { PluginStateManager, PluginStateType } from 'plugin-state'
 
@@ -189,14 +189,13 @@ export abstract class BasePlugin<
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   protected credentials: PluginCredential[] = []
-  protected credentialsManager!: CredentialsManager
+  protected credentialsManager: PluginCredentialsManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
   protected projectId: string
 
   public connection: Redis
-  // public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
   private updateDependencyHandler?: (key: string, dependency: any) => void
@@ -239,7 +238,11 @@ export abstract class BasePlugin<
     this.eventEmitter = new EventEmitter()
     this.events = []
     this.commands = []
-    this.credentialsManager = new CredentialsManager()
+    this.credentialsManager = new PluginCredentialsManager(
+      agentId,
+      name,
+      projectId
+    )
     this.stateManager = new PluginStateManager<State>(this.agentId, this.name)
   }
 
@@ -254,6 +257,7 @@ export abstract class BasePlugin<
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
     this.initializeBaseCommands()
+    await this.credentialsManager.init()
     await this.initializePluginState()
   }
 
@@ -654,29 +658,21 @@ export abstract class BasePlugin<
     }
   }
 
-  // /**
-  //  * Method to get the current status of the plugin.
-  //  * @returns The status of the plugin (enabled/disabled).
-  //  */
-  // getStatus(): boolean {
-  //   return this.enabled
+  // async getCredential(
+  //   name: string,
+  //   serviceType?: string | undefined
+  // ): Promise<string | undefined> {
+  //   try {
+  //     return await this.credentialsManager.retrieveAgentCredentials(
+  //       this.agentId,
+  //       name,
+  //       serviceType
+  //     )
+  //   } catch (error) {
+  //     this.logger.error(`Error retrieving credential '${name}': ${error}`)
+  //     return
+  //   }
   // }
-
-  async getCredential(
-    name: string,
-    serviceType?: string | undefined
-  ): Promise<string | undefined> {
-    try {
-      return await this.credentialsManager.retrieveAgentCredentials(
-        this.agentId,
-        name,
-        serviceType
-      )
-    } catch (error) {
-      this.logger.error(`Error retrieving credential '${name}': ${error}`)
-      return
-    }
-  }
 
   /**
    * Initializes the plugin state by fetching it from the database or setting it to a default value.
@@ -697,6 +693,18 @@ export abstract class BasePlugin<
       ...state,
       ...newState,
     })
+  }
+
+  async getCredentials() {
+    return this.credentialsManager.getCredentials()
+  }
+
+  async getCredential(name: string) {
+    return this.credentialsManager.getCredential(name)
+  }
+
+  async updateCredentials() {
+    await this.credentialsManager.update()
   }
 }
 
