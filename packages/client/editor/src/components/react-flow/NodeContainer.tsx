@@ -59,7 +59,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   }
 
   return (
-    <div className={cx('relative')}>
+    <div className={cx('relative p-5')}>
       <div
         className={cx(
           'rounded text-white text-sm bg-[var(--foreground-color)] w-[220px] transition-all duration-300 opacity-100',
