@@ -181,6 +181,13 @@ export class CoreLLMService implements ICoreLLMService {
     userData: any
     model: AllModels
   }) => {
+    const isFineTune = model.includes('ft')
+
+    if (isFineTune) {
+      const modelName = model.split(':')[1]
+      return this.credentials.find(c => c.serviceType === modelName)?.value
+    }
+
     const providerKey = findProvider(model)?.keyName
     if (!providerKey) {
       throw new Error(`No provider key found for ${model}`)
