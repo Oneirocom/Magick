@@ -201,7 +201,6 @@ export abstract class BasePlugin<
   public eventEmitter: EventEmitter
   private updateDependencyHandler?: (key: string, dependency: any) => void
 
-  public state: PluginStateType<State>
   protected stateManager: PluginStateManager<State>
 
   /**
@@ -232,7 +231,7 @@ export abstract class BasePlugin<
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor({ name, agentId, connection, projectId, state }: BasePluginInit) {
+  constructor({ name, agentId, connection, projectId }: BasePluginInit) {
     super({ name })
     this.agentId = agentId
     this.projectId = projectId
@@ -242,9 +241,6 @@ export abstract class BasePlugin<
     this.commands = []
     this.credentialsManager = new CredentialsManager()
     this.stateManager = new PluginStateManager<State>(this.agentId, this.name)
-    this.state = state
-      ? (state as PluginStateType<State>)
-      : ({} as PluginStateType<State>)
   }
 
   /**
@@ -377,7 +373,7 @@ export abstract class BasePlugin<
    * this.emitEvent('myEvent', { data: 'example' });
    */
   protected emitEvent(eventName: string, payload: EventPayload) {
-    if (!this.state.enabled) {
+    if (!this.stateManager.getState()?.enabled) {
       console.log(`Plugin ${this.name} is not enabled.  Not emitting event.`)
       return
     }
@@ -466,8 +462,9 @@ export abstract class BasePlugin<
    * this.setEnabled(true);
    */
   async setEnabled(enabled: boolean) {
+    const current = this.stateManager.getState() as PluginStateType<State>
     await this.stateManager.updatePluginState({
-      ...this.state,
+      ...current,
       enabled,
     })
   }
@@ -686,17 +683,20 @@ export abstract class BasePlugin<
    * This should be called during the plugin's initialization process.
    */
   async initializePluginState(defaultState?: PluginStateType<State>) {
-    this.state = await this.stateManager.getPluginState(defaultState)
+    await this.stateManager.getPluginState(defaultState)
   }
 
   /**
    * Updates the plugin state both in-memory and in the database.
    * @param newState The new state to set.
    */
-  async updatePluginState(newState: PluginStateType<State>) {
-    await this.stateManager.updatePluginState(newState)
-    // After updating the state in the database, update the in-memory state.
-    this.state = newState
+  async updatePluginState(newState: Partial<PluginStateType<State>>) {
+    const state = await this.stateManager.getPluginState()
+
+    await this.stateManager.updatePluginState({
+      ...state,
+      ...newState,
+    })
   }
 }
 
