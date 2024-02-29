@@ -73,4 +73,8 @@ export class PluginCredentialsManager<
   public getCredentials(): PluginCredentialsType<T> | undefined {
     return this.currentCredentials
   }
+
+  public getCredential(name: string): string | undefined {
+    return this.currentCredentials[name]
+  }
 }
