@@ -377,7 +377,10 @@ export abstract class BasePlugin<
    * this.emitEvent('myEvent', { data: 'example' });
    */
   protected emitEvent(eventName: string, payload: EventPayload) {
-    if (!this.state.enabled) return
+    if (!this.state.enabled) {
+      console.log(`Plugin ${this.name} is not enabled.  Not emitting event.`)
+      return
+    }
     this.eventEmitter.emit(eventName, payload)
   }
 
