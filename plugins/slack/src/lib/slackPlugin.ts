@@ -22,7 +22,6 @@ export class SlackPlugin extends CoreEventsPlugin<
   Record<string, unknown>,
   SlackState
 > {
-  override enabled = true
   client: SlackEventClient
   nodes = [
     ...onSlackMessageNodes,
@@ -46,7 +45,6 @@ export class SlackPlugin extends CoreEventsPlugin<
   }) {
     super({ name: pluginName, connection, agentId, projectId })
     this.client = new SlackEventClient(pubSub, agentId)
-    // this.meterManager.initializeMeters({})
     this.setCredentials(pluginCredentials)
     this.initalizeSlack().catch(error =>
       this.logger.error(

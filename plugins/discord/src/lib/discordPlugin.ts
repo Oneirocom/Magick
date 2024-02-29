@@ -17,7 +17,6 @@ import {
 import { EventTypes } from 'communication'
 
 export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPluginState> {
-  override enabled = true
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
   discord: DiscordClient | undefined = undefined
@@ -73,13 +72,6 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
   }
 
   defineActions(): void {
-    // for (const [actionName] of Object.entries(DISCORD_ACTIONS)) {
-    //   this.registerAction({
-    //     actionName,
-    //     displayName: `Discord ${actionName}`,
-    //     handler: this.handleSendMessage.bind(this),
-    //   })
-    // }
     // Handler for generic event if it comes in
     this.registerAction({
       actionName: EventTypes.SEND_MESSAGE,

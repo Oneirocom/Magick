@@ -54,7 +54,6 @@ export class CorePlugin extends CoreEventsPlugin<
   Record<string, unknown>,
   CorePluginState
 > {
-  override enabled = true
   client: CoreEventClient
   nodes = [
     messageEvent,
