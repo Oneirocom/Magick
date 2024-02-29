@@ -20,20 +20,6 @@ export type PluginCredential = {
 /**
  * Type definition for credentials payload.
  */
-// export type CredentialsPayload = {
-//   id: string
-//   projectId: string
-//   name: string
-//   serviceType: string
-//   credentialType: 'core' | 'plugin' | 'custom'
-//   value: string
-//   description?: string
-//   metadata?: Record<string, any> | null
-//   created_at?: Date
-//   updated_at?: Date
-// }
-
-// omit id, created_at, updated_at
 export type CredentialsPayload = Prisma.credentialsCreateInput
 
 /**
