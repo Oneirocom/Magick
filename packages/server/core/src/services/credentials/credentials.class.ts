@@ -5,6 +5,7 @@ import {
   CredentialsPayload,
 } from 'server/credentials'
 import type { Params } from '@feathersjs/feathers'
+import { type AgentCommandData } from 'server/agents'
 
 const getProjectId = (params: Params) => {
   return params?.query?.projectId as string
@@ -55,10 +56,32 @@ export class CredentialsService {
   // The following are agent scoped
   async linkCredentialToAgent(data: AgentCredentialsPayload): Promise<void> {
     const { agentId, credentialId } = data
-    await this.credentialsManager.linkCredentialToAgent({
+    const cred = await this.credentialsManager.linkCredentialToAgent({
       agentId,
       credentialId,
     })
+
+    // {
+    //   name: 'slack-token',
+    //   serviceType: 'slack',
+    //   credentialType: 'plugin',
+    //   initials: 'SL',
+    //   clientName: 'Slack Token',
+    //   icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
+    //   helpLink: 'https://api.slack.com/apps/',
+    //   description: 'Used to  recieve events from Slack',
+    //   available: true,
+    // },
+
+    const command: AgentCommandData = {
+      agentId,
+      command: 'linkCredential',
+      data: {
+        credentialId,
+      },
+    }
+
+    await CredentialsService.app.get('agentCommander').command(command)
   }
 
   async listAgentCredentials(data: {
@@ -73,7 +96,16 @@ export class CredentialsService {
     credentialId: string
   }): Promise<void> {
     const { agentId, credentialId } = data
-    await this.credentialsManager.deleteAgentCredential(agentId, credentialId)
+
+    const command: AgentCommandData = {
+      agentId,
+      command: 'removeCredential',
+      data: {
+        credentialId,
+      },
+    }
+
+    await CredentialsService.app.get('agentCommander').command(command)
   }
 }
 
