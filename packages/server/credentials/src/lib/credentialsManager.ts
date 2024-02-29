@@ -86,15 +86,13 @@ class CredentialsManager {
     serviceType?: string
   ): Promise<string | null> {
     try {
-      let query = {
+      const result = await prismaCore.credentials.findFirst({
         where: {
           projectId: projectId,
           ...(id && { id: id }),
           ...(serviceType && { serviceType: serviceType }),
         },
-      }
-
-      const result = await prismaCore.credentials.findFirst(query)
+      })
 
       if (!result) {
         return null

@@ -20,6 +20,7 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
   discord: DiscordClient | undefined = undefined
+  state = []
 
   constructor({ connection, agentId, projectId }) {
     super({ name: discordPluginName, connection, agentId, projectId })

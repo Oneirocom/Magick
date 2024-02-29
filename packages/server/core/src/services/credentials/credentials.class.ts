@@ -56,23 +56,11 @@ export class CredentialsService {
   // The following are agent scoped
   async linkCredentialToAgent(data: AgentCredentialsPayload): Promise<void> {
     const { agentId, credentialId } = data
-    const cred = await this.credentialsManager.linkCredentialToAgent({
+    await this.credentialsManager.linkCredentialToAgent({
       agentId,
       credentialId,
     })
-
-    // {
-    //   name: 'slack-token',
-    //   serviceType: 'slack',
-    //   credentialType: 'plugin',
-    //   initials: 'SL',
-    //   clientName: 'Slack Token',
-    //   icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
-    //   helpLink: 'https://api.slack.com/apps/',
-    //   description: 'Used to  recieve events from Slack',
-    //   available: true,
-    // },
-
+    // TODO. return the plugin name so we send it to the correct one
     const command: AgentCommandData = {
       agentId,
       command: 'linkCredential',
