@@ -3,7 +3,7 @@ import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
 
 import CustomControls from './Controls'
 // import { NodePicker } from './NodePicker'
-import { NodePicker } from './NodePicker'
+import { NodePicker } from './NodePicker/NodePicker'
 import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow'
 import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers'
 import { Tab, usePubSub } from '@magickml/providers'
