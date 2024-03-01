@@ -3,37 +3,27 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@magickml/client-ui'
-import { XYPosition, useReactFlow } from 'reactflow'
+import { XYPosition } from 'reactflow'
 import { ItemType } from './types'
 
 export const NodeItem = ({
   item,
-  position,
+  pickedNodePosition,
   onPickNode,
   index,
-  setActiveCategories,
-  activeCategories,
-  // lastClickedCategory,
-  setLastClickedCategory,
+  instance,
 }: {
-  item: ItemType
-  position: XYPosition
-  onPickNode: any
+  item: ItemType | undefined
+  pickedNodePosition: XYPosition
+  onPickNode: (type: string, position: XYPosition) => void
   index: number
-  setActiveCategories: any
-  activeCategories: string[]
-  lastClickedCategory: string
-  setLastClickedCategory: any
+  instance: any
 }) => {
-  const instance = useReactFlow()
-
-  const handleClick = ({ i }) => {
-    if (i.type) {
-      onPickNode(i.type, instance.project(position))
-    }
+  const handleClick = ({ item }) => {
+    onPickNode(item, instance.project(pickedNodePosition))
   }
 
-  const categoryOpen = activeCategories.includes(item.title)
+  if (!item) return <></>
   return (
     <AccordionItem
       key={item.title + index}
@@ -41,19 +31,9 @@ export const NodeItem = ({
       className={`py-0 border-b border-black`}
     >
       <AccordionTrigger
-        className={`py-2 px-2 ${
-          categoryOpen && `bg-[#282d33]`
-        } hover:bg-[#282d33] cursor-pointer transition-all border-b border-black hover:underline`}
+        className={`py-2 px-2
+        data-[state=open]:bg-[#282d33] hover:bg-[#282d33] cursor-pointer transition-all border-b border-black hover:underline`}
         iconPosition="start"
-        onClick={() => {
-          setActiveCategories([...activeCategories, item.title])
-          setLastClickedCategory(item.title)
-          if (activeCategories.includes(item.title)) {
-            setActiveCategories(
-              activeCategories.filter(category => category !== item.title)
-            )
-          }
-        }}
       >
         {item.title ?? item?.type}
       </AccordionTrigger>
@@ -64,7 +44,7 @@ export const NodeItem = ({
             <AccordionContent
               onClick={e => {
                 e.stopPropagation()
-                handleClick({ i: subItem })
+                handleClick({ item: sub })
               }}
               className={`py-2 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer`}
             >
