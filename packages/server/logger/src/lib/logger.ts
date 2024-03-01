@@ -1,4 +1,4 @@
-import pino from 'pino'
+import pino, { type LoggerOptions } from 'pino'
 import pretty from 'pino-pretty'
 import { config } from 'dotenv-flow'
 import { getPinoTransport } from '@hyperdx/node-opentelemetry'
@@ -13,7 +13,7 @@ const NODE_ENV = process.env['NODE_ENV'] || 'development'
 
 let logger: pino.Logger | null = null
 
-const createDevelopmentLogger = opts =>
+const createDevelopmentLogger = (opts: LoggerOptions = {}) =>
   pino({
     level: PINO_LOG_LEVEL,
     transport: {
@@ -21,6 +21,7 @@ const createDevelopmentLogger = opts =>
         {
           target: 'pino-pretty',
           level: PINO_LOG_LEVEL,
+          translateTime: 'SYS:standard',
           options: {
             colorize: true,
           },
@@ -42,23 +43,25 @@ const createProductionLogger = () => {
   return pino({ level: PINO_LOG_LEVEL }, pino.multistream(streams))
 }
 
-const defaultLoggerOpts = {
+const defaultLoggerOpts: LoggerOptions = {
   name: 'default',
   level: PINO_LOG_LEVEL,
 }
 
-export const initLogger = (opts: object = defaultLoggerOpts) => {
+export const initLogger = (
+  opts: LoggerOptions = defaultLoggerOpts,
+  additionalOpts: LoggerOptions = {}
+) => {
   if (NODE_ENV === 'development') {
-    logger = createDevelopmentLogger(opts)
+    logger = createDevelopmentLogger({ ...opts, ...additionalOpts })
   } else {
     logger = createProductionLogger()
   }
 }
 
-export const getLogger: () => pino.Logger = () => {
+export const getLogger = (additionalOpts: LoggerOptions = {}): pino.Logger => {
   if (logger === null) {
-    initLogger()
+    initLogger(defaultLoggerOpts, additionalOpts)
   }
-
   return logger as pino.Logger
 }
