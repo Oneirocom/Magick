@@ -63,18 +63,20 @@ export class RedisPubSub extends EventEmitter {
           console.warn(`Error quitting the ${clientType} client: ${quitError}`)
         }
 
-        this[clientType] = new Redis(this.redisCloudUrl)
+        const client = await this.createConnection(this.redisCloudUrl)
+
+        this[clientType] = client
+
+        this.connectEventListeners(client, clientType)
 
         // Set up the connect event listener to reinitialize subscriptions or other necessary setup
-        this[clientType].once('connect', () => {
+        client.once('connect', () => {
           console.log(
             `${clientType} reconnected successfully on attempt ${attempt}.`
           )
 
           delay = initialDelay // Reset the delay after a successful reconnection
           attempt = 0 // Reset attempt counter
-
-          this.connectEventListeners(clientType)
 
           // Reattach all necessary event listeners or re-subscribe to channels and patterns
           if (clientType === 'subscriber') {
@@ -98,6 +100,12 @@ export class RedisPubSub extends EventEmitter {
     reconnect()
   }
 
+  async createConnection(redusUrl: string) {
+    return new Redis(redusUrl, {
+      maxRetriesPerRequest: null,
+    })
+  }
+
   constructor(redisCloudUrl: string) {
     super()
     this.redisCloudUrl = redisCloudUrl
@@ -113,40 +121,67 @@ export class RedisPubSub extends EventEmitter {
    * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
    */
   async initialize(): Promise<void> {
-    this.publisher = new Redis(this.redisCloudUrl)
-    this.subscriber = new Redis(this.redisCloudUrl)
+    this.publisher = await this.createConnection(this.redisCloudUrl)
+    this.subscriber = await this.createConnection(this.redisCloudUrl)
 
     console.log('Connecting to redis pubsub')
     // await this.client.connect()
     // await this.subscriber.connect()
-    this.connectEventListeners('publisher')
-    this.connectEventListeners('subscriber')
+    this.connectEventListeners(this.publisher, 'publisher')
+    this.connectEventListeners(this.subscriber, 'subscriber')
   }
 
-  connectEventListeners(clientType: 'subscriber' | 'publisher') {
-    this[clientType].on('error', async error => {
+  connectEventListeners(client: Redis, clientType: 'subscriber' | 'publisher') {
+    client.on('error', async error => {
       console.error(`Redis ${clientType} error:`, error)
       // Attempt to close and reconnect the client
       await this.reconnectRedisClient(clientType)
     })
 
-    this[clientType].on('connect', () => {
+    // "wait" | "reconnecting" | "connecting" | "connect" | "ready" | "close" | "end";
+
+    client.on('connecting', () => {
+      console.log(`Connecting to Redis ${clientType}...`)
+    })
+
+    client.on('connect', () => {
       console.log(`Redis ${clientType} connected successfully.`)
     })
 
-    this[clientType].on('close', () => {
+    client.on('close', () => {
       console.log(`Redis ${clientType} connection closed.`)
+    })
+
+    client.on('reconnecting', () => {
+      console.warn(`Reconnecting to Redis ${clientType}...`)
+    })
+
+    client.on('end', () => {
+      console.log(`Redis ${clientType} connection ended.`)
+    })
+
+    client.on('ready', () => {
+      console.log(`Redis ${clientType} is ready.`)
+    })
+
+    client.on('reconnecting', () => {
+      console.log(`Redis ${clientType} reconnecing.`)
+    })
+
+    client.on('wait', time => {
+      console.log(`Redis ${clientType} is waiting:`, time)
     })
 
     // handle subscriber reconnection
 
     if (clientType === 'subscriber') {
-      this.subscriber.on('message', (channel, message) => {
+      console.log('Setting up subscriber event listeners...')
+      client.on('message', (channel, message) => {
         this.emit(channel, message)
       })
 
       // Listen for pattern messages and emit them as events
-      this.subscriber.on('pmessage', (pattern, channel, message) => {
+      client.on('pmessage', (pattern, channel, message) => {
         this.emit(pattern, message)
       })
     }
