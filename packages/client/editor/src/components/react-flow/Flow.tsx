@@ -208,14 +208,6 @@ export const Flow: React.FC<FlowProps> = ({
           onClose={closeNodePicker}
           specJSON={specJson}
         />
-        // <NodePicker
-        //   position={nodePickerPosition}
-        //   pickedNodePosition={pickedNodeVisibility}
-        //   filters={nodePickFilters}
-        //   onPickNode={handleAddNode}
-        //   onClose={closeNodePicker}
-        //   specJSON={specJson}
-        // />
       )}
 
       {openNodeMenu && (
