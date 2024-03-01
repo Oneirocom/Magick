@@ -13,8 +13,8 @@ export type ItemType = {
 }
 
 export type NodePickerProps = {
-  position: XYPosition
   pickedNodePosition: XYPosition | undefined
+  position: XYPosition
   filters?: NodePickerFilters
   onPickNode: (type: string, position: XYPosition) => void
   onClose: () => void
