@@ -1,9 +1,11 @@
-import { PluginCredential } from 'server/credentials'
-import { CorePluginState } from './types'
+import {
+  type ExtractPluginCredentialNames,
+  type PluginCredential,
+} from 'packages/server/credentials/src'
+import { corePluginName } from '.'
+import { z } from 'zod'
 
-export const corePluginName = 'core' as const
-
-export const corePluginCredentials: PluginCredential[] = [
+export const corePluginCredentials = [
   {
     name: 'OPENAI_API_KEY',
     serviceType: 'openai',
@@ -304,26 +306,28 @@ export const corePluginCredentials: PluginCredential[] = [
     available: false,
     pluginName: corePluginName,
   },
-]
+] as const satisfies PluginCredential[]
 
-export const CORE_DEP_KEYS = {
-  ACTION_SERVICE: 'coreActionService',
-  STATE_SERVICE: 'IStateService',
-  EVENT_STORE: 'IEventStore',
-  I_VARIABLE_SERVICE: 'IVariableService',
-  LLM_SERVICE: 'coreLLMService',
-  BUDGET_MANAGER_SERVICE: 'coreBudgetManagerService',
-  MEMORY_SERVICE: 'coreMemoryService',
-  IMAGE_SERVICE: 'coreImageService',
-  LOGGER: 'ILogger',
+export type CoreCredentialNames = ExtractPluginCredentialNames<
+  typeof corePluginCredentials
+>
+
+export type CoreCredentialsKeys = {
+  [K in CoreCredentialNames]: string | undefined
 }
 
-// These nodes are removed from the core plugin because we have others that
-// do the same thing but are more specific. For example, the variable/get
-// node is removed because we have our own nodes that do
-// the same thing but  more specific.
-export const coreRemovedNodes = ['variable/get', 'variable/set', 'time/delay']
+export type CoreCredentials = Record<CoreCredentialNames, string | undefined>
 
-export const coreDefaultState: CorePluginState = {
-  enabled: true,
+export const corePluginCredentialsSchema = z.object({
+  'core-token': z.string(),
+})
+
+// parse but don't validate
+export const parseCorePluginCredentials = (state: unknown) => {
+  return corePluginCredentialsSchema.safeParse(state)
+}
+
+// validate and parse
+export const validateCorePluginCredentials = (state: unknown) => {
+  return corePluginCredentialsSchema.parse(state)
 }

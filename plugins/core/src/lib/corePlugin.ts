@@ -33,14 +33,15 @@ import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
-import { CorePluginEvents, CorePluginState } from './types'
 import {
+  type CorePluginEvents,
+  type CorePluginState,
   CORE_DEP_KEYS,
   coreDefaultState,
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
-} from './constants'
+} from './config'
 import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
