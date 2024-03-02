@@ -147,10 +147,13 @@ export class Agent implements AgentInterface {
   }
 
   private intializePluginCommands() {
-    const plugins = this.pluginManager.getPlugins()
-    for (const plugin of plugins) {
-      this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
-    }
+    this.pluginManager.loadPlugins().then(() => {
+      const plugins = this.pluginManager.getPlugins()
+      for (const plugin of plugins) {
+        console.log('Registering plugin', plugin.name, plugin.getCommands())
+        this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
+      }
+    })
   }
 
   startHeartbeat() {
