@@ -12,6 +12,9 @@
     "@magickml/behave-graph": "*",
     "reactflow": "^11.9.4"
   },
+  "devDependencies": {
+    "@magickml/server-db": "*"
+  },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts"
