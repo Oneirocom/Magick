@@ -5,9 +5,13 @@ import { SLACK_ACTIONS, SLACK_EVENTS, SLACK_KEY } from './constants'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
-import { pluginName, pluginCredentials } from './constants'
+import {
+  slackPluginName,
+  pluginCredentials,
+  slackDefaultState,
+} from './constants'
 import { SlackClient } from './services/slack'
-import { SlackCredentials, SlackState } from './types'
+import { type SlackCredentials, type SlackPluginState } from './types'
 import {
   sendSlackImage,
   sendSlackMessage,
@@ -15,13 +19,16 @@ import {
   sendSlackAudio,
 } from './nodes'
 import { CorePluginEvents } from 'plugin/core'
+import { corePluginCommands } from 'plugins/core/src/lib/commands'
+
 export class SlackPlugin extends CoreEventsPlugin<
   CorePluginEvents,
   EventPayload,
   Record<string, unknown>,
   Record<string, unknown>,
-  SlackState
+  SlackPluginState
 > {
+  override defaultState = slackDefaultState
   client: SlackEventClient
   nodes = [
     ...onSlackMessageNodes,
@@ -31,6 +38,7 @@ export class SlackPlugin extends CoreEventsPlugin<
   ]
   values = []
   slack: SlackClient | undefined = undefined
+  credentials = pluginCredentials
 
   constructor({
     connection,
@@ -43,14 +51,20 @@ export class SlackPlugin extends CoreEventsPlugin<
     pubSub: RedisPubSub
     projectId: string
   }) {
-    super({ name: pluginName, connection, agentId, projectId })
+    super({ name: slackPluginName, connection, agentId, projectId })
     this.client = new SlackEventClient(pubSub, agentId)
-    this.setCredentials(pluginCredentials)
-    this.initalizeSlack().catch(error =>
-      this.logger.error(
-        `Failed to initialize Slack Plugin for agent ${agentId}: ${error}`
-      )
-    )
+  }
+
+  defineCommands() {
+    for (const [commandName, commandInfo] of Object.entries(
+      corePluginCommands
+    )) {
+      this.registerCommand({
+        commandName,
+        displayName: commandInfo.displayName,
+        handler: thing => console.log(`Handling ${commandName} with ${thing}`),
+      })
+    }
   }
 
   defineEvents(): void {
@@ -74,21 +88,23 @@ export class SlackPlugin extends CoreEventsPlugin<
 
   getDependencies() {
     return {
-      [pluginName]: SlackEmitter,
+      [slackPluginName]: SlackEmitter,
       [SLACK_KEY]: this.slack,
     }
   }
 
   private async initalizeSlack() {
     try {
-      const credentials = await this.getCredentials()
-      this.slack = new SlackClient(
-        credentials,
-        this.agentId,
-        this.emitEvent.bind(this)
-      )
+      await this.updateCredentials()
+      // // const credentials = (await this.getCredentials()) as SlackCredentials
+      
+      // this.slack = new SlackClient(
+      //   credentials,
+      //   this.agentId,
+      //   this.emitEvent.bind(this)
+      // )
 
-      await this.slack.init()
+      // await this.slack.init()
 
       this.updateDependency(SLACK_KEY, this.slack)
     } catch (error) {
@@ -96,23 +112,9 @@ export class SlackPlugin extends CoreEventsPlugin<
     }
   }
 
-  private async getCredentials(): Promise<SlackCredentials> {
-    try {
-      const tokens = Object.values(pluginCredentials).map(c => c.name)
-      const [token, signingSecret, appToken] = await Promise.all(
-        tokens.map(t =>
-          this.credentialsManager.retrieveAgentCredentials(this.agentId, t)
-        )
-      )
-
-      return { token, signingSecret, appToken }
-    } catch (error) {
-      this.logger.error('Failed to retrieve credentials:', error)
-      throw error
-    }
+  async initializeFunctionalities(): Promise<void> {
+    await this.initalizeSlack()
   }
-
-  initializeFunctionalities(): void {}
   handleOnMessage() {}
 
   handleSendMessage(actionPayload: Job<ActionPayload>) {
@@ -120,7 +122,7 @@ export class SlackPlugin extends CoreEventsPlugin<
     const { plugin } = event
     const eventName = `${plugin}:${actionName}`
 
-    if (plugin === 'Slack') {
+    if (plugin === slackPluginName) {
       this.client.sendMessage(actionPayload.data)
     } else {
       this.centralEventBus.emit(eventName, actionPayload.data)

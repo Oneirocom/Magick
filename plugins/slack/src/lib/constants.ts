@@ -1,8 +1,9 @@
 import { createEventsEnum } from 'plugins/shared'
 import { PluginCredential } from 'server/credentials'
 import { PLUGIN_SETTINGS } from 'shared/config'
+import { SlackPluginState } from './types'
 
-export const pluginName = 'Slack'
+export const slackPluginName = 'slack' as const
 
 export const pluginCredentials: PluginCredential[] = [
   {
@@ -15,6 +16,7 @@ export const pluginCredentials: PluginCredential[] = [
     helpLink: 'https://api.slack.com/apps/',
     description: 'Used to  recieve events from Slack',
     available: true,
+    pluginName: slackPluginName,
   },
   {
     name: 'slack-signing-secret',
@@ -26,6 +28,7 @@ export const pluginCredentials: PluginCredential[] = [
     helpLink: 'https://api.slack.com/apps/',
     description: 'Used to verify requests from Slack',
     available: true,
+    pluginName: slackPluginName,
   },
   {
     name: 'slack-app-token',
@@ -37,6 +40,7 @@ export const pluginCredentials: PluginCredential[] = [
     helpLink: 'https://api.slack.com/apps/',
     description: 'Used to send messages to Slack',
     available: true,
+    pluginName: slackPluginName,
   },
 ]
 
@@ -63,3 +67,7 @@ export const SLACK_ACTIONS = createEventsEnum([
 export const SLACK_KEY = 'slackClient'
 
 export const SLACK_DEVELOPER_MODE = PLUGIN_SETTINGS.SLACK_DEVELOPER_MODE
+
+export const slackDefaultState: SlackPluginState = {
+  enabled: false,
+}
