@@ -3,7 +3,6 @@ import {
   type PluginCredential,
 } from 'packages/server/credentials/src'
 import { corePluginName } from '.'
-import { z } from 'zod'
 
 export const corePluginCredentials = [
   {
@@ -317,17 +316,3 @@ export type CoreCredentialsKeys = {
 }
 
 export type CoreCredentials = Record<CoreCredentialNames, string | undefined>
-
-export const corePluginCredentialsSchema = z.object({
-  'core-token': z.string(),
-})
-
-// parse but don't validate
-export const parseCorePluginCredentials = (state: unknown) => {
-  return corePluginCredentialsSchema.safeParse(state)
-}
-
-// validate and parse
-export const validateCorePluginCredentials = (state: unknown) => {
-  return corePluginCredentialsSchema.parse(state)
-}
