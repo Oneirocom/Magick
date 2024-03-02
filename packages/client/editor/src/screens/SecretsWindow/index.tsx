@@ -152,10 +152,17 @@ const CreateCredential: FC<CreateCredentialProps> = ({
           serviceType === 'custom'
             ? name
             : serviceTypeByName(serviceType)?.name,
-        serviceType: serviceType === 'custom' ? 'custom' : serviceType,
+        serviceType:
+          serviceType === 'custom'
+            ? 'custom'
+            : serviceTypeByName(serviceType)?.serviceType,
         credentialType: serviceType === 'custom' ? 'custom' : 'plugin',
         description,
         value,
+        pluginName:
+          serviceType === 'custom'
+            ? undefined
+            : serviceTypeByName(serviceType)?.pluginName,
       }).unwrap()
       resetForm()
     } catch (error) {
