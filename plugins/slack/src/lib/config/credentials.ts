@@ -1,11 +1,11 @@
-import { createEventsEnum } from 'plugins/shared'
-import { PluginCredential } from 'server/credentials'
-import { PLUGIN_SETTINGS } from 'shared/config'
-import { SlackPluginState } from './types'
+import {
+  type ExtractPluginCredentialNames,
+  type PluginCredential,
+} from 'packages/server/credentials/src'
+import { slackPluginName } from '.'
+import { z } from 'zod'
 
-export const slackPluginName = 'slack' as const
-
-export const pluginCredentials: PluginCredential[] = [
+export const slackPluginCredentials = [
   {
     name: 'slack-token',
     serviceType: 'slack',
@@ -42,32 +42,28 @@ export const pluginCredentials: PluginCredential[] = [
     available: true,
     pluginName: slackPluginName,
   },
-]
+] as const satisfies PluginCredential[]
 
-export const SLACK_EVENTS = createEventsEnum([
-  'message',
-  'message_im',
-  'message_mpim',
-  'bot_message',
-  'channel_join',
-  'channel_leave',
-  'file_share',
-  'me_message',
-  'message_changed',
-  'message_deleted',
-  'message_replied',
-])
+export type SlackCredentialNames = ExtractPluginCredentialNames<
+  typeof slackPluginCredentials
+>
 
-export const SLACK_ACTIONS = createEventsEnum([
-  'sendMessage',
-  'sendImage',
-  'sendAudio',
-])
+export type SlackCredentialsKeys = {
+  [K in SlackCredentialNames]: string | undefined
+}
 
-export const SLACK_KEY = 'slackClient'
+export type SlackCredentials = Record<SlackCredentialNames, string | undefined>
 
-export const SLACK_DEVELOPER_MODE = PLUGIN_SETTINGS.SLACK_DEVELOPER_MODE
+export const slackPluginCredentialsSchema = z.object({
+  'slack-token': z.string(),
+})
 
-export const slackDefaultState: SlackPluginState = {
-  enabled: false,
+// parse but don't validate
+export const parseSlackPluginCredentials = (state: unknown) => {
+  return slackPluginCredentialsSchema.safeParse(state)
+}
+
+// validate and parse
+export const validateSlackPluginCredentials = (state: unknown) => {
+  return slackPluginCredentialsSchema.parse(state)
 }
