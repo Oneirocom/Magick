@@ -1,6 +1,9 @@
-import { DISCORD_EVENTS, discordPluginName } from '../../constants'
+import {
+  DISCORD_EVENTS,
+  discordPluginName,
+  type DiscordEventPayload,
+} from '../../config'
 import { EventPayload } from 'server/plugin'
-import { DiscordEventPayload } from '../../types'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { NodeCategory } from '@magickml/behave-graph'
 

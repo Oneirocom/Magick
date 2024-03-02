@@ -1,9 +1,12 @@
 import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import { EventPayload } from 'server/plugin'
-import { DiscordCredentials, DiscordEventPayload } from '../../types'
 import { Logger } from 'pino'
 import natural from 'natural'
-import { DISCORD_EVENTS } from '../../constants'
+import {
+  DISCORD_EVENTS,
+  type DiscordEventPayload,
+  type DiscordPluginCredentialsMap,
+} from '../../config'
 
 const tokenizer = new natural.SentenceTokenizer()
 
@@ -60,7 +63,7 @@ export class DiscordClient {
     })
   }
 
-  private validateCredentials(credentials: DiscordCredentials) {
+  private validateCredentials(credentials: DiscordPluginCredentialsMap) {
     if (!credentials) {
       throw new Error('Missing required Discord credentials: token')
     }

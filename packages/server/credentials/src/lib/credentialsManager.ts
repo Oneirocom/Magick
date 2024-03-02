@@ -18,8 +18,8 @@ export type PluginCredential = {
   pluginName: string
 }
 
-export type ExtractCredentialNames<T extends PluginCredential[]> = {
-  [P in T[number] as P['name']]: P
+export type PluginCredentialsMap<T extends PluginCredential[]> = {
+  [K in T[number]['name']]: string | undefined
 }
 
 /**
