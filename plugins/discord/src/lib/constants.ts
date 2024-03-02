@@ -1,9 +1,9 @@
 import { PluginCredential } from 'packages/server/credentials/src'
 import { createEventsEnum } from 'plugins/shared/src'
 import { Events } from 'discord.js'
-import { DiscordEvents } from './types'
+import { DiscordEvents, DiscordPluginState } from './types'
 
-export const discordPluginName = 'discord'
+export const discordPluginName = 'discord' as const
 
 export const discordPluginCredentials: PluginCredential[] = [
   {
@@ -16,6 +16,7 @@ export const discordPluginCredentials: PluginCredential[] = [
     helpLink: 'https://discord.com/developers/applications',
     description: 'Used to connect to Discord',
     available: true,
+    pluginName: discordPluginName,
   },
 ]
 
@@ -32,6 +33,17 @@ export const DISCORD_ACTIONS = createEventsEnum([
   'sendAudio',
 ])
 
-export const DISCORD_KEY = 'discordClient'
+export const DISCORD_KEY = 'discordClient' as const
 
 export const DISCORD_DEVELOPER_MODE = false
+
+export const discordDefaultState: DiscordPluginState = {
+  enabled: false,
+  context: {
+    id: '',
+    username: '',
+    displayName: '',
+    avatar: '',
+    banner: '',
+  },
+}

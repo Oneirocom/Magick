@@ -3,6 +3,7 @@ import {
   DISCORD_KEY,
   DISCORD_EVENTS,
   discordPluginCredentials,
+  discordDefaultState,
 } from './constants'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
@@ -10,56 +11,104 @@ import { discordPluginName } from './constants'
 import { DiscordClient } from './services/discord'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
 import {
-  DiscordCredentials,
+  // DiscordCredentials,
   DiscordEventPayload,
   DiscordPluginState,
 } from './types'
 import { EventTypes } from 'communication'
+import { discordPluginCommands } from './commands'
 
 export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPluginState> {
+  override defaultState = discordDefaultState
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
-  discord: DiscordClient | undefined = undefined
+  credentials = discordPluginCredentials
+  discord: DiscordClient
   state = []
 
   constructor({ connection, agentId, projectId }) {
     super({ name: discordPluginName, connection, agentId, projectId })
-    this.setCredentials(discordPluginCredentials)
-
-    this.initializePluginState()
+    this.discord = new DiscordClient(
+      this.agentId,
+      this.emitEvent.bind(this),
+      this.logger
+    )
   }
 
-  async initalizeDiscord() {
-    try {
-      const credentials = await this.getCredentials()
+  async handleEnable() {
+    await this.updatePluginState({ enabled: true })
+    await this.initializeFunctionalities()
+    await this.refreshContext()
+    this.logger.debug('Discord plugin enabled')
+  }
 
-      console.log('setting up discord client on agent', this.agentId)
-      this.discord = new DiscordClient(
-        credentials,
-        this.agentId,
-        this.emitEvent.bind(this),
-        this.logger
-      )
+  async handleDisable() {
+    await this.updatePluginState({ enabled: false })
+    await this.discord?.logout()
+    this.logger.debug('Discord plugin disabled')
+  }
 
-      await this.discord.init()
-
-      this.logger.info('Discord client initialized.')
-    } catch (error) {
-      this.logger.error(error, 'Failed during initialization:')
-      throw error
+  async refreshContext() {
+    const context = this.discord?.getClient().user
+    if (context) {
+      await this.updatePluginState({
+        context: {
+          id: context.id,
+          username: context.username,
+          displayName: context.username,
+          avatar: context.avatar,
+          banner: context.banner,
+        },
+      })
     }
   }
 
   async initializeFunctionalities() {
-    await this.initalizeDiscord().catch(error =>
-      this.logger.error(
-        `Failed to initialize Discord Plugin for agent ${this.agentId} ${error}`
-      )
-    )
-    // // handle generic message received event from discord
-    this.discord?.onMessageCreate(event => {
-      // todo fix typing here,but I am lazy.
-      this.triggerMessageReceived(event as any)
+    const state = await this.stateManager.getPluginState()
+
+    if (state?.enabled) {
+      console.log('Discord plugin is enabled')
+      await this.updateCredentials()
+
+      const creds = await this.getCredentials()
+      if (!creds) {
+        this.logger.error('No discord token found')
+        return
+      }
+
+      await this.discord.login(creds[0].value as string)
+
+      this.discord.setupAllEventListeners()
+
+      // handle generic message received event from discord
+      // this.discord?.onMessageCreate(event => {
+      //   console.log('onMessageCreate', event)
+      //   // todo fix typing here,but I am lazy.
+      //   this.triggerMessageReceived(event as any)
+      // })
+    } else {
+      this.logger.debug('Discord plugin is not enabled')
+    }
+  }
+
+  defineCommands() {
+    const { enable, disable, linkCredential, unlinkCredential } =
+      discordPluginCommands
+    this.registerCommand({
+      ...linkCredential,
+      handler: this.handleEnable.bind(this),
+    })
+    this.registerCommand({
+      ...unlinkCredential,
+      handler: this.handleDisable.bind(this),
+    })
+    this.registerCommand({
+      ...enable,
+      handler: this.handleEnable.bind(this),
+    })
+    this.registerCommand({
+      ...disable,
+      handler: this.handleDisable.bind(this),
     })
   }
 
@@ -81,26 +130,10 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
     })
   }
 
-  getDependencies() {
+  async getDependencies() {
     return {
       [discordPluginName]: DiscordEmitter,
       [DISCORD_KEY]: this.discord,
-    }
-  }
-
-  private async getCredentials(): Promise<DiscordCredentials> {
-    try {
-      const tokens = Object.values(discordPluginCredentials).map(c => c.name)
-      const [token] = await Promise.all(
-        tokens.map(t =>
-          this.credentialsManager.retrieveAgentCredentials(this.agentId, t)
-        )
-      )
-
-      return token
-    } catch (error) {
-      this.logger.error('Failed to retrieve credentials:', error)
-      throw error
     }
   }
 

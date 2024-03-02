@@ -38,7 +38,6 @@ export class DiscordClient {
   private client: Client<true>
 
   constructor(
-    private credentials: DiscordCredentials,
     private agentId: string,
     private emitEvent: (eventName: string, payload: EventPayload<any>) => void,
     private logger: Logger
@@ -79,12 +78,20 @@ export class DiscordClient {
         if (this.checkIfBotMessage(payload)) {
           return
         }
+
+        console.log('!!!!!!!!!!!!!!!!event name', eventName)
         this.emitEvent(
           eventName,
           this.createEventPayload<typeof eventName>(eventName, payload)
         )
       }
     )
+  }
+
+  public setupAllEventListeners() {
+    Object.keys(DISCORD_EVENTS).forEach(eventName => {
+      this.setupEventListener(eventName as keyof DiscordEventPayload)
+    })
   }
 
   private checkIfBotMessage<K extends keyof DiscordEventPayload>(
@@ -144,15 +151,6 @@ export class DiscordClient {
       return payload.channelId as string
     }
     return ''
-  }
-
-  async init() {
-    this.logger.info('Initializing Discord client...')
-    this.validateCredentials(this.credentials)
-    await this.client.login(this.credentials)
-    Object.keys(DISCORD_EVENTS).forEach(eventName => {
-      this.setupEventListener(eventName as keyof DiscordEventPayload)
-    })
   }
 
   async onMessageCreate(
@@ -227,6 +225,17 @@ export class DiscordClient {
       this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
       throw err
     }
+  }
+
+  async login(token: string) {
+    this.logger.info('Initializing Discord client...')
+    // this.validateCredentials(this.credentials)
+    await this.client.login(token)
+  }
+
+  public async logout() {
+    this.client.removeAllListeners()
+    await this.client.destroy()
   }
 
   getClient() {
