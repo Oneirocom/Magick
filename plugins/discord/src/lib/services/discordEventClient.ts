@@ -23,7 +23,7 @@ class DiscordEventClient {
     this.pubSub.patternSubscribe(pattern, this.discordEventHandler.bind(this))
   }
 
-  discordEventHandler(event, channel) {
+  discordEventHandler(event: EventPayload, channel: string): void {
     const eventType = this.extractEventType(channel)
 
     this.logger.debug(`Received event of type '${eventType}'`)

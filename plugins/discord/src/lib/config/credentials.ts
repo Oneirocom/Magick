@@ -1,6 +1,7 @@
 import {
-  PluginCredential,
-  PluginCredentialsMap,
+  type PluginCredentialsType,
+  type ExtractPluginCredentialNames,
+  type PluginCredential,
 } from 'packages/server/credentials/src'
 import { discordPluginName } from '.'
 import { z } from 'zod'
@@ -20,8 +21,19 @@ export const discordPluginCredentials = [
   },
 ] as const satisfies PluginCredential[]
 
-export type DiscordPluginCredentialsMap = PluginCredentialsMap<
+// export type DiscordPluginCredentials = typeof discordPluginCredentials
+
+export type DiscordCredentialNames = ExtractPluginCredentialNames<
   typeof discordPluginCredentials
+>
+
+export type DiscordCredentialsKeys = {
+  [K in DiscordCredentialNames]: string | undefined
+}
+
+export type DiscordCredentials = Record<
+  DiscordCredentialNames,
+  string | undefined
 >
 
 export const discordPluginCredentialsSchema = z.object({

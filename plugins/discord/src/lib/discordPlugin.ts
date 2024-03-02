@@ -1,4 +1,8 @@
-import { ActionPayload, CoreEventsPluginWithDefaultTypes } from 'server/plugin'
+import {
+  ActionPayload,
+  BasePluginInit,
+  CoreEventsPluginWithDefaultTypes,
+} from 'server/plugin'
 import {
   DISCORD_KEY,
   DISCORD_EVENTS,
@@ -6,7 +10,7 @@ import {
   discordDefaultState,
   discordPluginName,
   discordPluginCommands,
-  type DiscordPluginCredentialsMap,
+  type DiscordCredentials,
   type DiscordEventPayload,
   type DiscordPluginState,
 } from './config'
@@ -16,7 +20,10 @@ import { DiscordClient } from './services/discord'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
 import { EventTypes } from 'communication'
 
-export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPluginState> {
+export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
+  DiscordPluginState,
+  DiscordCredentials
+> {
   override defaultState = discordDefaultState
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
@@ -24,7 +31,7 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
   discord: DiscordClient
   state = []
 
-  constructor({ connection, agentId, projectId }) {
+  constructor({ connection, agentId, projectId }: BasePluginInit) {
     super({ name: discordPluginName, connection, agentId, projectId })
     this.discord = new DiscordClient(
       this.agentId,
@@ -59,7 +66,6 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
         },
       })
     }
-    const state = await this.stateManager.getPluginState()
   }
 
   async initializeFunctionalities() {
@@ -70,12 +76,12 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
       await this.updateCredentials()
 
       const creds = await this.getCredentials()
-      if (!creds) {
+      if (!creds?.['discord-token']) {
         this.logger.error('No discord token found')
         return
       }
 
-      await this.discord.login(creds[0].value as string)
+      await this.discord.login(creds['discord-token'])
 
       this.discord.setupAllEventListeners()
 
@@ -145,7 +151,7 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
     this.discord?.sendMessage<K>(data.content, event)
   }
 
-  formatPayload(event, payload) {
+  formatPayload(event: any, payload: any) {
     return payload
   }
 }
