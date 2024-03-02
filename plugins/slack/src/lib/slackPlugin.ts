@@ -1,11 +1,6 @@
 import Redis from 'ioredis'
 import { Job } from 'bullmq'
-import {
-  ActionPayload,
-  CoreEventsPlugin,
-  CoreEventsPluginWithDefaultTypes,
-  EventPayload,
-} from 'server/plugin'
+import { ActionPayload, CoreEventsPluginWithDefaultTypes } from 'server/plugin'
 import {
   SLACK_ACTIONS,
   SLACK_EVENTS,
@@ -27,7 +22,6 @@ import {
   onSlackMessageNodes,
   sendSlackAudio,
 } from './nodes'
-import { CorePluginEvents } from 'plugin/core'
 
 export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
   SlackPluginState,
