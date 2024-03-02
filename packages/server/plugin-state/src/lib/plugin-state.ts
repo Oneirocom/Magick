@@ -24,7 +24,7 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
   }
 
   // Initializes the plugin state in the database if not already present.
-  private async initState(): Promise<void> {
+  private async initState(defaultState: PluginStateType<T>) {
     const stateRow = await prismaCore.pluginState.findFirst({
       where: {
         agentId: this.agentId,
@@ -33,56 +33,67 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
     })
 
     if (!stateRow) {
-      const newState: PluginStateType<T> = {
-        enabled: false,
-      } as PluginStateType<T>
-      await prismaCore.pluginState.create({
+      const newState = await prismaCore.pluginState.create({
         data: {
           agentId: this.agentId,
           plugin: this.plugin,
-          state: newState,
+          state: defaultState,
         },
       })
-      this.currentState = newState
+      if (!newState) {
+        throw new Error('Error initializing plugin state')
+      } else {
+        this.currentState = newState.state as PluginStateType<T>
+      }
     } else {
       this.currentState = stateRow.state as PluginStateType<T>
     }
+    return this.currentState
   }
 
   // Ensures the plugin state is initialized before any operation.
-  private async ensureStateInitialized(): Promise<void> {
+  public async ensureStateInitialized(defaultState: PluginStateType<T>) {
     if (this.currentState === undefined) {
-      await this.initState()
+      await this.initState(defaultState)
     }
+    return this.currentState
   }
 
   // Retrieves the current plugin state, initializing it if necessary.
-  public async getPluginState(
-    defaultState?: PluginStateType<T>
-  ): Promise<PluginStateType<T>> {
-    await this.ensureStateInitialized()
-    return (
-      this.currentState ||
-      defaultState ||
-      ({ enabled: false } as PluginStateType<T>)
-    )
+  public async getPluginState() {
+    return this.currentState
   }
 
   // Updates the plugin state in the database.
-  public async updatePluginState(newState: PluginStateType<T>): Promise<void> {
+  public async updatePluginState(
+    newState: Partial<PluginStateType<T>>
+  ): Promise<void> {
     try {
-      await prismaCore.pluginState.update({
+      console.log('Updating plugin state', newState)
+      const updatedState = await prismaCore.pluginState.upsert({
         where: {
           agentId_plugin: {
             agentId: this.agentId,
             plugin: this.plugin,
           },
         },
-        data: {
-          state: newState,
+        update: {
+          state: {
+            ...this.currentState,
+            ...newState,
+          },
+        },
+        create: {
+          agentId: this.agentId,
+          plugin: this.plugin,
+          state: {
+            ...this.currentState,
+            ...newState,
+          },
         },
       })
-      this.currentState = newState
+      this.currentState = updatedState.state as PluginStateType<T>
+      console.log('Plugin state updated', this.currentState)
     } catch (error: any) {
       this.handleError(error, 'Error updating plugin state')
     }
