@@ -15,6 +15,11 @@ export type PluginCredential = {
   icon?: string
   helpLink?: string
   available: boolean
+  pluginName: string
+}
+
+export type ExtractCredentialNames<T extends PluginCredential[]> = {
+  [P in T[number] as P['name']]: P
 }
 
 /**
@@ -140,17 +145,19 @@ class CredentialsManager {
    * @param payload The agent and credential IDs to link.
    */
   async linkCredentialToAgent(payload: AgentCredentialsPayload) {
-    // Remove any existing links with the same agentId and credentialId
-    await prismaCore.agent_credentials.deleteMany({
-      where: {
+    // Create a new link
+    const linkedCredential = await prismaCore.agent_credentials.upsert({
+      create: {
         agentId: payload.agentId,
         credentialId: payload.credentialId,
       },
-    })
-
-    // Create a new link
-    const linkedCredential = await prismaCore.agent_credentials.create({
-      data: payload,
+      update: {},
+      where: {
+        agentId_credentialId: {
+          agentId: payload.agentId,
+          credentialId: payload.credentialId,
+        },
+      },
       select: {
         credentialId: true,
         credentials: {
@@ -158,6 +165,7 @@ class CredentialsManager {
             name: true,
             serviceType: true,
             credentialType: true,
+            pluginName: true,
           },
         },
       },
@@ -220,14 +228,21 @@ class CredentialsManager {
    * @param agentId The ID of the agent.
    * @param credentialId The ID of the credential.
    */
-  async deleteAgentCredential(
-    agentId: string,
-    credentialId: string
-  ): Promise<void> {
-    await prismaCore.agent_credentials.deleteMany({
+  async deleteAgentCredential(agentId: string, credentialId: string) {
+    return await prismaCore.agent_credentials.delete({
       where: {
-        agentId: agentId,
-        credentialId: credentialId,
+        agentId_credentialId: {
+          agentId: agentId,
+          credentialId: credentialId,
+        },
+      },
+      select: {
+        credentialId: true,
+        credentials: {
+          select: {
+            serviceType: true,
+          },
+        },
       },
     })
   }
