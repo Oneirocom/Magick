@@ -1,24 +1,11 @@
 import { rootApi } from './api'
+import type { Prisma } from '@magickml/server-db'
 
-export type Credential = {
-  id: string
-  projectId: string
-  name: string
-  serviceType: string
-  credentialType: string
-  description: null | string
-  created_at: string
-  updated_at: string
-}
+export type Credential = Prisma.$credentialsPayload['scalars']
 
 export type CredentialsWithValue = Credential & { value: string }
 
-export type AgentCredential = {
-  agentId: string
-  credentialId: string
-  created_at: string
-  updated_at: string
-}
+export type AgentCredential = Prisma.$agent_credentialsPayload['scalars']
 
 export const credentialsApi = rootApi.injectEndpoints({
   endpoints: builder => ({
