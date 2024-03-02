@@ -4,9 +4,12 @@ import {
   SlackEventMiddlewareArgs,
   App,
 } from '@slack/bolt'
-import { SLACK_DEVELOPER_MODE, SLACK_EVENTS } from '../../constants'
-import { EventPayload } from 'server/plugin'
-import { SlackCredentials } from '../../types'
+import { type EventPayload } from 'server/plugin'
+import {
+  type SlackCredentials,
+  SLACK_DEVELOPER_MODE,
+  SLACK_EVENTS,
+} from '../../config'
 import { identifyMessageType } from './events'
 export class SlackClient {
   private client: App
@@ -17,10 +20,10 @@ export class SlackClient {
     private emitEvent: (eventName: string, payload: EventPayload<any>) => void
   ) {
     this.client = new App({
-      token: credentials.token,
-      signingSecret: credentials.signingSecret,
+      token: credentials['slack-token'],
+      signingSecret: credentials['slack-signing-secret'],
       socketMode: true,
-      appToken: credentials.appToken,
+      appToken: credentials['slack-app-token'],
       developerMode: SLACK_DEVELOPER_MODE,
     })
     this.emitEvent = emitEvent
@@ -34,9 +37,9 @@ export class SlackClient {
 
   private validateCredentials(credentials: SlackCredentials) {
     if (
-      !credentials.token ||
-      !credentials.signingSecret ||
-      !credentials.appToken
+      !credentials['slack-token'] ||
+      !credentials['slack-signing-secret'] ||
+      !credentials['slack-app-token']
     ) {
       throw new Error(
         `Missing required Slack credentials: ${[

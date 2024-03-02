@@ -1,9 +1,8 @@
 import { createActionNode } from 'plugins/shared/src'
 import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'server/plugin'
-import { SlackEventPayload } from '../../types'
+import { type SlackEventPayload, SLACK_KEY } from '../../config'
 import { SocketDefinition } from '@magickml/behave-graph'
-import { SLACK_KEY } from '../../constants'
 import { IEventStore } from 'server/grimoire'
 
 type Inputs = {

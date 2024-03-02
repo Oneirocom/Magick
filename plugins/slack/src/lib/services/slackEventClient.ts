@@ -1,8 +1,8 @@
 import pino from 'pino'
 import { getLogger } from 'server/logger'
-import { ActionPayload, EventPayload } from 'server/plugin'
+import { type ActionPayload, type EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { SLACK_EVENTS } from '../constants'
+import { SLACK_EVENTS } from '../config'
 
 class SlackEventClient {
   private logger: pino.Logger = getLogger()

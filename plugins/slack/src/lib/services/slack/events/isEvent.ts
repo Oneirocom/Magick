@@ -1,5 +1,5 @@
 import { MessageEvent } from '@slack/bolt'
-import { SLACK_EVENTS } from '../../../constants'
+import { SLACK_EVENTS } from '../../../config'
 
 export function isGenericMessageEvent(event: MessageEvent) {
   return {
