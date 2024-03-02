@@ -56,16 +56,16 @@ export class CredentialsService {
   // The following are agent scoped
   async linkCredentialToAgent(data: AgentCredentialsPayload): Promise<void> {
     const { agentId, credentialId } = data
-    await this.credentialsManager.linkCredentialToAgent({
+    const link = await this.credentialsManager.linkCredentialToAgent({
       agentId,
       credentialId,
     })
-    // TODO. return the plugin name so we send it to the correct one
+
     const command: AgentCommandData = {
       agentId,
-      command: 'linkCredential',
+      command: `plugin:${link.credentials.pluginName}:linkCredential`,
       data: {
-        credentialId,
+        credential: link.credentials.name,
       },
     }
 
@@ -85,9 +85,14 @@ export class CredentialsService {
   }): Promise<void> {
     const { agentId, credentialId } = data
 
+    const unlink = await this.credentialsManager.deleteAgentCredential(
+      agentId,
+      credentialId
+    )
+
     const command: AgentCommandData = {
       agentId,
-      command: 'removeCredential',
+      command: `plugin:${unlink.credentials.serviceType}:unlinkCredential`,
       data: {
         credentialId,
       },
