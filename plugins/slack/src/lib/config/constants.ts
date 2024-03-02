@@ -1,6 +1,5 @@
 import { createEventsEnum } from 'plugins/shared/src'
 import { PLUGIN_SETTINGS } from 'shared/config'
-import { SlackPluginState } from './state'
 
 export const slackPluginName = 'slack' as const
 
