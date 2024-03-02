@@ -5363,6 +5363,7 @@ export namespace Prisma {
     credentialType: string | null
     value: string | null
     description: string | null
+    pluginName: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -5375,6 +5376,7 @@ export namespace Prisma {
     credentialType: string | null
     value: string | null
     description: string | null
+    pluginName: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -5388,6 +5390,7 @@ export namespace Prisma {
     value: number
     description: number
     metadata: number
+    pluginName: number
     created_at: number
     updated_at: number
     _all: number
@@ -5402,6 +5405,7 @@ export namespace Prisma {
     credentialType?: true
     value?: true
     description?: true
+    pluginName?: true
     created_at?: true
     updated_at?: true
   }
@@ -5414,6 +5418,7 @@ export namespace Prisma {
     credentialType?: true
     value?: true
     description?: true
+    pluginName?: true
     created_at?: true
     updated_at?: true
   }
@@ -5427,6 +5432,7 @@ export namespace Prisma {
     value?: true
     description?: true
     metadata?: true
+    pluginName?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -5513,6 +5519,7 @@ export namespace Prisma {
     value: string
     description: string | null
     metadata: JsonValue | null
+    pluginName: string | null
     created_at: Date
     updated_at: Date
     _count: CredentialsCountAggregateOutputType | null
@@ -5543,6 +5550,7 @@ export namespace Prisma {
     value?: boolean
     description?: boolean
     metadata?: boolean
+    pluginName?: boolean
     created_at?: boolean
     updated_at?: boolean
     agent_credentials?: boolean | credentials$agent_credentialsArgs<ExtArgs>
@@ -5558,6 +5566,7 @@ export namespace Prisma {
     value?: boolean
     description?: boolean
     metadata?: boolean
+    pluginName?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -5582,6 +5591,7 @@ export namespace Prisma {
       value: string
       description: string | null
       metadata: Prisma.JsonValue | null
+      pluginName: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["credentials"]>
@@ -5987,6 +5997,7 @@ export namespace Prisma {
     readonly value: FieldRef<"credentials", 'String'>
     readonly description: FieldRef<"credentials", 'String'>
     readonly metadata: FieldRef<"credentials", 'Json'>
+    readonly pluginName: FieldRef<"credentials", 'String'>
     readonly created_at: FieldRef<"credentials", 'DateTime'>
     readonly updated_at: FieldRef<"credentials", 'DateTime'>
   }
@@ -17684,6 +17695,7 @@ export namespace Prisma {
     value: 'value',
     description: 'description',
     metadata: 'metadata',
+    pluginName: 'pluginName',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -17956,7 +17968,8 @@ export namespace Prisma {
     serviceType: 'serviceType',
     credentialType: 'credentialType',
     value: 'value',
-    description: 'description'
+    description: 'description',
+    pluginName: 'pluginName'
   };
 
   export type credentialsOrderByRelevanceFieldEnum = (typeof credentialsOrderByRelevanceFieldEnum)[keyof typeof credentialsOrderByRelevanceFieldEnum]
@@ -18470,6 +18483,7 @@ export namespace Prisma {
     value?: StringFilter<"credentials"> | string
     description?: StringNullableFilter<"credentials"> | string | null
     metadata?: JsonNullableFilter<"credentials">
+    pluginName?: StringNullableFilter<"credentials"> | string | null
     created_at?: DateTimeFilter<"credentials"> | Date | string
     updated_at?: DateTimeFilter<"credentials"> | Date | string
     agent_credentials?: Agent_credentialsListRelationFilter
@@ -18484,6 +18498,7 @@ export namespace Prisma {
     value?: SortOrder
     description?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    pluginName?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     agent_credentials?: agent_credentialsOrderByRelationAggregateInput
@@ -18502,6 +18517,7 @@ export namespace Prisma {
     value?: StringFilter<"credentials"> | string
     description?: StringNullableFilter<"credentials"> | string | null
     metadata?: JsonNullableFilter<"credentials">
+    pluginName?: StringNullableFilter<"credentials"> | string | null
     created_at?: DateTimeFilter<"credentials"> | Date | string
     updated_at?: DateTimeFilter<"credentials"> | Date | string
     agent_credentials?: Agent_credentialsListRelationFilter
@@ -18516,6 +18532,7 @@ export namespace Prisma {
     value?: SortOrder
     description?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    pluginName?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: credentialsCountOrderByAggregateInput
@@ -18535,6 +18552,7 @@ export namespace Prisma {
     value?: StringWithAggregatesFilter<"credentials"> | string
     description?: StringNullableWithAggregatesFilter<"credentials"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"credentials">
+    pluginName?: StringNullableWithAggregatesFilter<"credentials"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"credentials"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"credentials"> | Date | string
   }
@@ -19709,6 +19727,7 @@ export namespace Prisma {
     value: string
     description?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     agent_credentials?: agent_credentialsCreateNestedManyWithoutCredentialsInput
@@ -19723,6 +19742,7 @@ export namespace Prisma {
     value: string
     description?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutCredentialsInput
@@ -19737,6 +19757,7 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     agent_credentials?: agent_credentialsUpdateManyWithoutCredentialsNestedInput
@@ -19751,6 +19772,7 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutCredentialsNestedInput
@@ -19765,6 +19787,7 @@ export namespace Prisma {
     value: string
     description?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -19778,6 +19801,7 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19791,6 +19815,7 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21195,6 +21220,7 @@ export namespace Prisma {
     value?: SortOrder
     description?: SortOrder
     metadata?: SortOrder
+    pluginName?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -21207,6 +21233,7 @@ export namespace Prisma {
     credentialType?: SortOrder
     value?: SortOrder
     description?: SortOrder
+    pluginName?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -21219,6 +21246,7 @@ export namespace Prisma {
     credentialType?: SortOrder
     value?: SortOrder
     description?: SortOrder
+    pluginName?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -22800,6 +22828,7 @@ export namespace Prisma {
     value: string
     description?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -22813,6 +22842,7 @@ export namespace Prisma {
     value: string
     description?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -22911,6 +22941,7 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22924,6 +22955,7 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    pluginName?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
