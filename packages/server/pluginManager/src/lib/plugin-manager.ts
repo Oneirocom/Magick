@@ -15,6 +15,12 @@ import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
  */
 export class PluginManager extends EventEmitter {
   /**
+   * pluginsLoaded - A boolean indicating whether the plugins have been loaded.
+   * @type {boolean}
+   */
+  private pluginsLoaded: boolean = false
+
+  /**
    * The Redis connection.
    * @private
    * @type {Redis}
@@ -132,6 +138,7 @@ export class PluginManager extends EventEmitter {
    *
    */
   async loadPlugins(): Promise<void> {
+    if (this.pluginsLoaded) return
     for await (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
@@ -154,6 +161,7 @@ export class PluginManager extends EventEmitter {
         await this.registerPlugin(pluginInstance)
       }
     }
+    this.pluginsLoaded = true
   }
 
   /**
