@@ -4,19 +4,17 @@ import {
   DISCORD_EVENTS,
   discordPluginCredentials,
   discordDefaultState,
-} from './constants'
+  discordPluginName,
+  discordPluginCommands,
+  type DiscordPluginCredentialsMap,
+  type DiscordEventPayload,
+  type DiscordPluginState,
+} from './config'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
-import { discordPluginName } from './constants'
 import { DiscordClient } from './services/discord'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
-import {
-  // DiscordCredentials,
-  DiscordEventPayload,
-  DiscordPluginState,
-} from './types'
 import { EventTypes } from 'communication'
-import { discordPluginCommands } from './commands'
 
 export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPluginState> {
   override defaultState = discordDefaultState
@@ -61,6 +59,7 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<DiscordPlugi
         },
       })
     }
+    const state = await this.stateManager.getPluginState()
   }
 
   async initializeFunctionalities() {
