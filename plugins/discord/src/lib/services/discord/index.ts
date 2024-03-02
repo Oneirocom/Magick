@@ -5,16 +5,16 @@ import natural from 'natural'
 import {
   DISCORD_EVENTS,
   type DiscordEventPayload,
-  type DiscordPluginCredentialsMap,
+  type DiscordCredentials,
 } from '../../config'
 
 const tokenizer = new natural.SentenceTokenizer()
 
-function tokenizeIntoSentences(content) {
+function tokenizeIntoSentences(content: string) {
   return tokenizer.tokenize(content)
 }
 
-function splitLongSentence(sentence, maxLength) {
+function splitLongSentence(sentence: string, maxLength: number) {
   // Split the sentence at logical points, such as punctuation or conjunctions.
   const splitRegex = /,|;|\s-\s/ // Split at commas, semicolons, or dashes. You can refine this regex based on your needs.
   const parts = [] as string[]
@@ -63,7 +63,7 @@ export class DiscordClient {
     })
   }
 
-  private validateCredentials(credentials: DiscordPluginCredentialsMap) {
+  private validateCredentials(credentials: DiscordCredentials) {
     if (!credentials) {
       throw new Error('Missing required Discord credentials: token')
     }
