@@ -11,7 +11,12 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
+import {
+  ExtractPluginCredentialNames,
+  PluginCredential,
+  PluginCredentialsManager,
+  PluginCredentialsType,
+} from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
 import { PluginStateManager, PluginStateType } from 'plugin-state'
 
@@ -211,14 +216,16 @@ export abstract class BasePlugin<
   Metadata = Record<string, unknown>,
   //TODO: should this be getting passed in anywhere?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  State extends object = Record<string, unknown>
+  State extends object = Record<string, unknown>,
+  // Credentials extends object = Record<ExtractPluginCredentialNames<PluginCredential[]>>> |<string, string | undefined>
+  Credentials extends object = Record<string, string | undefined>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
-  abstract credentials?: PluginCredential[]
-  protected credentialsManager: PluginCredentialsManager
+  abstract credentials: PluginCredential[]
+  protected credentialsManager: PluginCredentialsManager<Credentials>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -705,7 +712,7 @@ export abstract class BasePlugin<
     return this.credentialsManager.getCredentials()
   }
 
-  async getCredential(name: string) {
+  async getCredential(name: keyof Credentials) {
     return this.credentialsManager.getCredential(name)
   }
 

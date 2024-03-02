@@ -2,6 +2,8 @@ import Redis from 'ioredis'
 import { BasePlugin, EventPayload } from './basePlugin'
 import EventEmitter from 'events'
 import { EventTypes } from 'communication'
+import { PluginStateType } from 'plugin-state'
+import { PluginCredentialsType } from 'server/credentials'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
@@ -22,8 +24,16 @@ export abstract class CoreEventsPlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends object = Record<string, unknown>
-> extends BasePlugin<PluginEvents, Payload, Data, Metadata, State> {
+  State extends PluginStateType = PluginStateType,
+  Credentials extends PluginCredentialsType = PluginCredentialsType
+> extends BasePlugin<
+  PluginEvents,
+  Payload,
+  Data,
+  Metadata,
+  State,
+  Credentials
+> {
   constructor({
     name,
     connection,
@@ -85,11 +95,13 @@ export type DefaultPluginData = Record<string, unknown>
 export type DefaultPluginMetadata = Record<string, unknown>
 
 export abstract class CoreEventsPluginWithDefaultTypes<
-  State extends object = Record<string, unknown>
+  State extends PluginStateType,
+  Credentials extends PluginCredentialsType
 > extends CoreEventsPlugin<
   DefaultPluginEvents,
   DefaultPluginPayload,
   DefaultPluginData,
   DefaultPluginMetadata,
-  State
+  State,
+  Credentials
 > {}

@@ -1,10 +1,14 @@
 import { prismaCore } from '@magickml/server-db'
 import { decrypt } from './shared'
 import { CREDENTIALS_ENCRYPTION_KEY } from 'shared/config'
+import { PluginCredential } from './credentialsManager'
 
-// Defines the structure for the plugin credentials, extending a base object type.
-export type PluginCredentialsType<T extends object = Record<string, string>> =
-  T[]
+export type PluginCredentialsType<
+  T extends object = Record<string, string | undefined>
+> = T
+
+export type ExtractPluginCredentialNames<T extends PluginCredential[]> =
+  T[number]['name']
 
 // Manages the credentials of a plugin, including its initialization, retrieval, update, and removal.
 export class PluginCredentialsManager<
@@ -13,7 +17,7 @@ export class PluginCredentialsManager<
   private plugin: string
   private projectId: string
   private agentId: string
-  private currentCredentials: PluginCredentialsType<T> = []
+  private currentCredentials: PluginCredentialsType<T> | undefined
 
   // Initializes the manager with an agent ID and plugin name.
   constructor(agentId: string, plugin: string, projectId: string) {
@@ -60,7 +64,6 @@ export class PluginCredentialsManager<
           })
         : {}
 
-      // set the current credentials
       this.currentCredentials = credentials as PluginCredentialsType<T>
     } catch (error) {
       throw new Error(
@@ -73,7 +76,7 @@ export class PluginCredentialsManager<
     return this.currentCredentials
   }
 
-  public getCredential(name: string): string | undefined {
-    return this.currentCredentials[name]
+  public getCredential(name: keyof T): T[keyof T] | undefined {
+    return this.currentCredentials ? this.currentCredentials[name] : undefined
   }
 }
