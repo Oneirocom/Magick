@@ -1,5 +1,5 @@
 import { EventPayload } from 'server/plugin'
-import { SLACK_EVENTS, pluginName } from '../../constants'
+import { SLACK_EVENTS, slackPluginName } from '../../constants'
 import { SlackEmitterType } from '../../dependencies/slackEmitter'
 import { AllMiddlewareArgs } from '@slack/bolt'
 import { createEventNode } from 'plugins/shared'
@@ -40,7 +40,7 @@ const createSlackEventNode = (
         event: 'event',
       },
     },
-    emitterDependencyKey: pluginName,
+    emitterDependencyKey: slackPluginName,
     process: process ?? processSlackEvent,
     event: SLACK_EVENTS[eventKey],
   })
