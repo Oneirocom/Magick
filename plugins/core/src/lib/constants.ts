@@ -1,6 +1,7 @@
 import { PluginCredential } from 'server/credentials'
+import { CorePluginState } from './types'
 
-export const corePluginName = 'core'
+export const corePluginName = 'core' as const
 
 export const corePluginCredentials: PluginCredential[] = [
   {
@@ -13,6 +14,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'https://openai.com/favicon.ico',
     helpLink: 'https://platform.openai.com/api-keys',
     available: true,
+    pluginName: corePluginName,
   },
   {
     name: 'ANYSCALE_API_KEY',
@@ -24,6 +26,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Anyscale_Icon',
     helpLink: 'Anyscale_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'DEEPINFRA_API_KEY',
@@ -35,6 +38,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_DeepInfra_Icon',
     helpLink: 'DeepInfra_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'SAGEMAKER_API_KEY',
@@ -46,6 +50,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Sagemaker_Icon',
     helpLink: 'Sagemaker_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'PERPLEXITY_API_KEY',
@@ -57,6 +62,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Perplexity_Icon',
     helpLink: 'Perplexity_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'VLLM_API_KEY',
@@ -68,6 +74,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_VLLM_Icon',
     helpLink: 'VLLM_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'COHERE_API_KEY',
@@ -79,6 +86,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Cohere_Icon',
     helpLink: 'Cohere_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'TOGETHERAI_API_KEY',
@@ -90,6 +98,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'https://assets-global.website-files.com/64f6f2c0e3f4c5a91c1e823a/654693d569494912cfc0c0d4_favicon.svg',
     helpLink: 'https://docs.together.ai/reference/authentication-1',
     available: true,
+    pluginName: corePluginName,
   },
   {
     name: 'ALEPHALPHA_API_KEY',
@@ -101,6 +110,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_AlephAlpha_Icon',
     helpLink: 'AlephAlpha_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'BASETEN_API_KEY',
@@ -112,6 +122,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_BaseTen_Icon',
     helpLink: 'BaseTen_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'OPENROUTER_API_KEY',
@@ -123,6 +134,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_OpenRouter_Icon',
     helpLink: 'OpenRouter_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'PETALS_API_KEY',
@@ -134,6 +146,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Petals_Icon',
     helpLink: 'Petals_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'OLLAMA_API_KEY',
@@ -145,6 +158,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Ollama_Icon',
     helpLink: 'Ollama_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'GOOGLEAI_API_KEY',
@@ -156,6 +170,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'https://lh3.googleusercontent.com/RIR1USuPhQgIwCbC6X09bUiRZKCfu5EkZymDuG0mVQpCM42j0y4tvjSFmtZmezPgcfaCxbGSIkCjNlzXSo_p8KVoDqZvS5nEPKoqog',
     helpLink: 'https://ai.google.dev/tutorials/setup',
     available: true,
+    pluginName: corePluginName,
   },
   {
     name: 'PALM_API_KEY',
@@ -167,6 +182,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA',
     helpLink: 'https://ai.google.dev/tutorials/setup',
     available: true,
+    pluginName: corePluginName,
   },
   {
     name: 'HUGGINGFACE_API_KEY',
@@ -178,6 +194,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_HuggingFace_Icon',
     helpLink: 'HuggingFace_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'XINFERENCE_API_KEY',
@@ -189,6 +206,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_XInference_Icon',
     helpLink: 'XInference_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'CLOUDFLAREWORKERS_API_KEY',
@@ -200,6 +218,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_CloudflareWorkers_Icon',
     helpLink: 'CloudflareWorkers_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'AI21_API_KEY',
@@ -211,6 +230,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_AI21_Icon',
     helpLink: 'AI21_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'NLPCLOUD_API_KEY',
@@ -222,6 +242,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_NLP_Cloud_Icon',
     helpLink: 'NLP_Cloud_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'VOYAGEAI_API_KEY',
@@ -233,6 +254,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_VoyageAI_Icon',
     helpLink: 'VoyageAI_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'REPLICATE_API_KEY',
@@ -244,6 +266,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Replicate_Icon',
     helpLink: 'Replicate_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'META_API_KEY',
@@ -255,6 +278,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Meta_Icon',
     helpLink: 'Meta_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'MISTRAL_API_KEY',
@@ -266,6 +290,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_Mistral_Icon',
     helpLink: 'Mistral_Help_Link',
     available: false,
+    pluginName: corePluginName,
   },
   {
     name: 'VERTEXAI_API_KEY',
@@ -277,39 +302,7 @@ export const corePluginCredentials: PluginCredential[] = [
     icon: 'URL_to_VertexAI_Icon',
     helpLink: 'VertexAI_Help_Link',
     available: false,
-  },
-  {
-    name: 'slack-token',
-    serviceType: 'slack',
-    credentialType: 'plugin',
-    initials: 'SL',
-    clientName: 'Slack Token',
-    description: 'Used to  recieve events from Slack',
-    icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
-    helpLink: 'https://api.slack.com/apps/',
-    available: false,
-  },
-  {
-    name: 'slack-signing-secret',
-    serviceType: 'slack',
-    credentialType: 'plugin',
-    initials: 'SL',
-    description: 'Used to verify requests from Slack',
-    clientName: 'Slack Signing Secret',
-    icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
-    helpLink: 'https://api.slack.com/apps/',
-    available: false,
-  },
-  {
-    name: 'slack-app-token',
-    serviceType: 'slack',
-    credentialType: 'plugin',
-    initials: 'SL',
-    description: 'Used to send messages to Slack',
-    clientName: 'Slack App Token',
-    icon: 'https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png',
-    helpLink: 'https://api.slack.com/apps/',
-    available: false,
+    pluginName: corePluginName,
   },
 ]
 
@@ -330,3 +323,7 @@ export const CORE_DEP_KEYS = {
 // node is removed because we have our own nodes that do
 // the same thing but  more specific.
 export const coreRemovedNodes = ['variable/get', 'variable/set', 'time/delay']
+
+export const coreDefaultState: CorePluginState = {
+  enabled: true,
+}
