@@ -2,7 +2,7 @@ import {
   type ExtractPluginCredentialNames,
   type PluginCredential,
 } from 'packages/server/credentials/src'
-import { slackPluginName } from '.'
+import { slackPluginName } from './constants'
 import { z } from 'zod'
 
 export const slackPluginCredentials = [

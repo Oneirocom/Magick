@@ -34,13 +34,14 @@ import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
 import {
-  type CorePluginEvents,
-  type CorePluginState,
   CORE_DEP_KEYS,
   coreDefaultState,
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
+  type CorePluginEvents,
+  type CorePluginState,
+  type CorePluginCredentials,
 } from './config'
 import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
@@ -54,7 +55,8 @@ export class CorePlugin extends CoreEventsPlugin<
   EventPayload,
   Record<string, unknown>,
   Record<string, unknown>,
-  CorePluginState
+  CorePluginState,
+  CorePluginCredentials
 > {
   override defaultState = coreDefaultState
   client: CoreEventClient

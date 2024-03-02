@@ -2,7 +2,7 @@ import {
   type ExtractPluginCredentialNames,
   type PluginCredential,
 } from 'packages/server/credentials/src'
-import { corePluginName } from '.'
+import { corePluginName } from './constants'
 
 export const corePluginCredentials = [
   {
@@ -307,12 +307,15 @@ export const corePluginCredentials = [
   },
 ] as const satisfies PluginCredential[]
 
-export type CoreCredentialNames = ExtractPluginCredentialNames<
+export type CorePluginCredentialNames = ExtractPluginCredentialNames<
   typeof corePluginCredentials
 >
 
-export type CoreCredentialsKeys = {
-  [K in CoreCredentialNames]: string | undefined
+export type CorePluginCredentialsKeys = {
+  [K in CorePluginCredentialNames]: string | undefined
 }
 
-export type CoreCredentials = Record<CoreCredentialNames, string | undefined>
+export type CorePluginCredentials = Record<
+  CorePluginCredentialNames,
+  string | undefined
+>
