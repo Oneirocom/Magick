@@ -1,5 +1,5 @@
 import { EventPayload } from 'server/plugin'
-import { SLACK_EVENTS, slackPluginName } from '../../constants'
+import { SLACK_EVENTS, slackPluginName } from '../../config'
 import { SlackEmitterType } from '../../dependencies/slackEmitter'
 import { AllMiddlewareArgs } from '@slack/bolt'
 import { createEventNode } from 'plugins/shared'

@@ -1,17 +1,26 @@
 import Redis from 'ioredis'
 import { Job } from 'bullmq'
-import { ActionPayload, CoreEventsPlugin, EventPayload } from 'server/plugin'
-import { SLACK_ACTIONS, SLACK_EVENTS, SLACK_KEY } from './constants'
+import {
+  ActionPayload,
+  CoreEventsPlugin,
+  CoreEventsPluginWithDefaultTypes,
+  EventPayload,
+} from 'server/plugin'
+import {
+  SLACK_ACTIONS,
+  SLACK_EVENTS,
+  SLACK_KEY,
+  slackPluginName,
+  slackPluginCommands,
+  slackPluginCredentials,
+  slackDefaultState,
+  type SlackCredentials,
+  type SlackPluginState,
+} from './config'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
-import {
-  slackPluginName,
-  pluginCredentials,
-  slackDefaultState,
-} from './constants'
 import { SlackClient } from './services/slack'
-import { type SlackCredentials, type SlackPluginState } from './types'
 import {
   sendSlackImage,
   sendSlackMessage,
@@ -19,14 +28,10 @@ import {
   sendSlackAudio,
 } from './nodes'
 import { CorePluginEvents } from 'plugin/core'
-import { corePluginCommands } from 'plugins/core/src/lib/commands'
 
-export class SlackPlugin extends CoreEventsPlugin<
-  CorePluginEvents,
-  EventPayload,
-  Record<string, unknown>,
-  Record<string, unknown>,
-  SlackPluginState
+export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
+  SlackPluginState,
+  SlackCredentials
 > {
   override defaultState = slackDefaultState
   client: SlackEventClient
@@ -38,7 +43,7 @@ export class SlackPlugin extends CoreEventsPlugin<
   ]
   values = []
   slack: SlackClient | undefined = undefined
-  credentials = pluginCredentials
+  credentials = slackPluginCredentials
 
   constructor({
     connection,
@@ -57,7 +62,7 @@ export class SlackPlugin extends CoreEventsPlugin<
 
   defineCommands() {
     for (const [commandName, commandInfo] of Object.entries(
-      corePluginCommands
+      slackPluginCommands
     )) {
       this.registerCommand({
         commandName,
@@ -96,15 +101,24 @@ export class SlackPlugin extends CoreEventsPlugin<
   private async initalizeSlack() {
     try {
       await this.updateCredentials()
-      // // const credentials = (await this.getCredentials()) as SlackCredentials
-      
-      // this.slack = new SlackClient(
-      //   credentials,
-      //   this.agentId,
-      //   this.emitEvent.bind(this)
-      // )
+      const credentials = await this.getCredentials()
+      // validate each three keys
+      if (
+        !credentials ||
+        !credentials['slack-token'] ||
+        !credentials['slack-signing-secret'] ||
+        !credentials['slack-app-token']
+      ) {
+        return
+      }
 
-      // await this.slack.init()
+      this.slack = new SlackClient(
+        credentials,
+        this.agentId,
+        this.emitEvent.bind(this)
+      )
+
+      await this.slack.init()
 
       this.updateDependency(SLACK_KEY, this.slack)
     } catch (error) {
