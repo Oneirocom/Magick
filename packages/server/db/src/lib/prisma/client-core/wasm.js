@@ -159,6 +159,7 @@ exports.Prisma.CredentialsScalarFieldEnum = {
   value: 'value',
   description: 'description',
   metadata: 'metadata',
+  pluginName: 'pluginName',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -365,7 +366,8 @@ exports.Prisma.credentialsOrderByRelevanceFieldEnum = {
   serviceType: 'serviceType',
   credentialType: 'credentialType',
   value: 'value',
-  description: 'description'
+  description: 'description',
+  pluginName: 'pluginName'
 };
 
 exports.Prisma.documentsOrderByRelevanceFieldEnum = {

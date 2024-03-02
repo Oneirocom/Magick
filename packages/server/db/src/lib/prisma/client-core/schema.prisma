@@ -81,6 +81,7 @@ model credentials {
   value             String
   description       String?
   metadata          Json?
+  pluginName        String?
   created_at        DateTime            @default(now()) @db.Timestamptz(6)
   updated_at        DateTime            @default(now()) @db.Timestamptz(6)
   agent_credentials agent_credentials[]
