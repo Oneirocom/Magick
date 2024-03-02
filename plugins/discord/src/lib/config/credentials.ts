@@ -1,5 +1,4 @@
 import {
-  type PluginCredentialsType,
   type ExtractPluginCredentialNames,
   type PluginCredential,
 } from 'packages/server/credentials/src'
@@ -20,8 +19,6 @@ export const discordPluginCredentials = [
     pluginName: discordPluginName,
   },
 ] as const satisfies PluginCredential[]
-
-// export type DiscordPluginCredentials = typeof discordPluginCredentials
 
 export type DiscordCredentialNames = ExtractPluginCredentialNames<
   typeof discordPluginCredentials

@@ -2,7 +2,7 @@ import { NodeCategory } from '@magickml/behave-graph'
 import { EventPayload } from 'server/plugin'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { EventTypes } from 'communication'
-import { corePluginName } from '../../constants'
+import { corePluginName } from '../../config'
 
 type State = {
   onStartEvent?: ((event: EventPayload) => void) | undefined
