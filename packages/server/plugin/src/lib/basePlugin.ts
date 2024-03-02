@@ -92,8 +92,10 @@ export type EventPayload<T = unknown, Y = unknown> = {
 export type PluginCommand = {
   commandName: string
   displayName: string
-  handler: (enable: boolean) => void
+  handler: (enable: any) => void
 }
+
+export type PluginCommandInfo = Omit<PluginCommand, 'handler'>
 
 export interface BasePluginInit {
   name: string
@@ -101,6 +103,33 @@ export interface BasePluginInit {
   connection: Redis
   projectId: string
   state?: Record<string, unknown>
+}
+
+const enable: PluginCommandInfo = {
+  commandName: 'enable',
+  displayName: 'Enable',
+}
+
+const disable: PluginCommandInfo = {
+  commandName: 'disable',
+  displayName: 'Disable',
+}
+
+const linkCredential: PluginCommandInfo = {
+  commandName: 'linkCredential',
+  displayName: 'Link Credential',
+}
+
+const unlinkCredential: PluginCommandInfo = {
+  commandName: 'unlinkCredential',
+  displayName: 'Unlink Credential',
+}
+
+export const basePluginCommands: Record<string, PluginCommandInfo> = {
+  enable,
+  disable,
+  linkCredential,
+  unlinkCredential,
 }
 
 /**
@@ -188,12 +217,14 @@ export abstract class BasePlugin<
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
-  protected credentials: PluginCredential[] = []
+  abstract credentials?: PluginCredential[]
   protected credentialsManager: PluginCredentialsManager
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
   protected projectId: string
+  protected isBuild?: boolean = false
+  abstract defaultState: PluginStateType<State>
 
   public connection: Redis
   public logger = getLogger()
@@ -253,27 +284,29 @@ export abstract class BasePlugin<
     this.centralEventBus = centralEventBus
     this.defineEvents()
     this.defineActions()
-    this.initializeFunctionalities()
+    this.defineCommands()
+    await this.initializePluginState()
+    await this.credentialsManager.init()
+    await this.initializeFunctionalities()
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
-    this.initializeBaseCommands()
-    await this.credentialsManager.init()
-    await this.initializePluginState()
+
+    // this.initializeBaseCommands()
   }
 
-  initializeBaseCommands() {
-    this.registerCommand({
-      commandName: 'enable',
-      displayName: 'Enable',
-      handler: this.handleEnableCommand.bind(this),
-    })
+  // initializeBaseCommands() {
+  //   this.registerCommand({
+  //     commandName: 'enable',
+  //     displayName: 'Enable',
+  //     handler: this.handleEnableCommand.bind(this),
+  //   })
 
-    this.registerCommand({
-      commandName: 'disable',
-      displayName: 'Disable',
-      handler: this.handleEnableCommand.bind(this),
-    })
-  }
+  //   this.registerCommand({
+  //     commandName: 'disable',
+  //     displayName: 'Disable',
+  //     handler: this.handleEnableCommand.bind(this),
+  //   })
+  // }
 
   /**
    * Maps registered events to a BullMQ queue.
@@ -391,7 +424,9 @@ export abstract class BasePlugin<
     return registry
   }
 
-  abstract getDependencies(spellCaster: SpellCaster): Record<string, any>
+  abstract getDependencies(
+    spellCaster: SpellCaster
+  ): Record<string, any> | Promise<Record<string, any>>
 
   /**
    * Returns a registry object merged with the plugin's specific registry.
@@ -524,6 +559,18 @@ export abstract class BasePlugin<
   abstract defineEvents(): void
 
   /**
+   * Abstract method to be implemented by plugins to define their commands.
+   * @example
+   * defineCommands() {
+   * this.registerCommand({
+   *  commandName: 'enable',
+   *  displayName: 'Enable',
+   *  handler: this.handleEnableCommand.bind(this)
+   * });
+   */
+  abstract defineCommands(): void
+
+  /**
    * Abstract method to be implemented by plugins to define their actions.
    * @example
    * defineActions() {
@@ -543,7 +590,7 @@ export abstract class BasePlugin<
    *   this.discordClient.login('YOUR_DISCORD_BOT_TOKEN');
    * }
    */
-  abstract initializeFunctionalities(): void
+  abstract initializeFunctionalities(): Promise<void> | void
 
   /**
    * Abstract method for formatting the event payload.
@@ -587,14 +634,6 @@ export abstract class BasePlugin<
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
     }
-  }
-
-  /**
-   * Sets the credentials for the plugin.
-   * @param newCredentials Array of credentials to set.
-   */
-  setCredentials(newCredentials: PluginCredential[]) {
-    this.credentials = newCredentials
   }
 
   /**
@@ -647,39 +686,11 @@ export abstract class BasePlugin<
   }
 
   /**
-   * Method to handle enable/disable commands for the plugin.
-   * @param enable - Boolean indicating whether to enable or disable the plugin.
-   */
-  async handleEnableCommand(enable: boolean) {
-    if (enable) {
-      await this.activate()
-    } else {
-      await this.deactivate()
-    }
-  }
-
-  // async getCredential(
-  //   name: string,
-  //   serviceType?: string | undefined
-  // ): Promise<string | undefined> {
-  //   try {
-  //     return await this.credentialsManager.retrieveAgentCredentials(
-  //       this.agentId,
-  //       name,
-  //       serviceType
-  //     )
-  //   } catch (error) {
-  //     this.logger.error(`Error retrieving credential '${name}': ${error}`)
-  //     return
-  //   }
-  // }
-
-  /**
    * Initializes the plugin state by fetching it from the database or setting it to a default value.
    * This should be called during the plugin's initialization process.
    */
-  async initializePluginState(defaultState?: PluginStateType<State>) {
-    await this.stateManager.getPluginState(defaultState)
+  async initializePluginState() {
+    await this.stateManager.ensureStateInitialized(this.defaultState)
   }
 
   /**
@@ -687,12 +698,7 @@ export abstract class BasePlugin<
    * @param newState The new state to set.
    */
   async updatePluginState(newState: Partial<PluginStateType<State>>) {
-    const state = await this.stateManager.getPluginState()
-
-    await this.stateManager.updatePluginState({
-      ...state,
-      ...newState,
-    })
+    await this.stateManager.updatePluginState(newState)
   }
 
   async getCredentials() {
