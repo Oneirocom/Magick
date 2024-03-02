@@ -11,12 +11,7 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import {
-  ExtractPluginCredentialNames,
-  PluginCredential,
-  PluginCredentialsManager,
-  PluginCredentialsType,
-} from 'server/credentials'
+import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
 import { PluginStateManager, PluginStateType } from 'plugin-state'
 
