@@ -3,8 +3,8 @@ import { decrypt } from './shared'
 import { CREDENTIALS_ENCRYPTION_KEY } from 'shared/config'
 
 // Defines the structure for the plugin credentials, extending a base object type.
-export type PluginCredentialsType<T extends object = Record<string, unknown>> =
-  T
+export type PluginCredentialsType<T extends object = Record<string, string>> =
+  T[]
 
 // Manages the credentials of a plugin, including its initialization, retrieval, update, and removal.
 export class PluginCredentialsManager<
@@ -13,8 +13,7 @@ export class PluginCredentialsManager<
   private plugin: string
   private projectId: string
   private agentId: string
-  private currentCredentials: PluginCredentialsType<T> =
-    {} as PluginCredentialsType<T>
+  private currentCredentials: PluginCredentialsType<T> = []
 
   // Initializes the manager with an agent ID and plugin name.
   constructor(agentId: string, plugin: string, projectId: string) {
