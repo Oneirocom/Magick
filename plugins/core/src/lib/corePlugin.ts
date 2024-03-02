@@ -36,6 +36,7 @@ import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
 import { CorePluginEvents, CorePluginState } from './types'
 import {
   CORE_DEP_KEYS,
+  coreDefaultState,
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
@@ -54,6 +55,7 @@ export class CorePlugin extends CoreEventsPlugin<
   Record<string, unknown>,
   CorePluginState
 > {
+  override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
     messageEvent,
@@ -83,6 +85,7 @@ export class CorePlugin extends CoreEventsPlugin<
     queryEventHistory,
   ]
   values = []
+  credentials = corePluginCredentials
   coreLLMService: CoreLLMService
   coreMemoryService = new CoreMemoryService(true)
   userService: CoreUserService
@@ -100,7 +103,6 @@ export class CorePlugin extends CoreEventsPlugin<
   }) {
     super({ name: corePluginName, connection, agentId, projectId })
     this.client = new CoreEventClient({ pubSub, agentId })
-    this.setCredentials(corePluginCredentials)
 
     this.coreLLMService = new CoreLLMService({
       projectId,
@@ -109,6 +111,8 @@ export class CorePlugin extends CoreEventsPlugin<
 
     this.userService = new CoreUserService({ projectId })
   }
+
+  defineCommands() {}
 
   /**
    * Defines the events that the plugin will listen for.
@@ -183,7 +187,7 @@ export class CorePlugin extends CoreEventsPlugin<
   }
 
   async getLLMCredentials() {
-    if (this.agentId === '000000000') return
+    await this.credentialsManager.update()
     try {
       // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
       for (const providerKey of Object.keys(LLMProviderKeys).filter(
