@@ -72,19 +72,6 @@ export class DiscordPlugin extends WebSocketPlugin<
     super({ name: discordPluginName, connection, agentId, projectId })
   }
 
-  // DISCORD METHODS
-  handleSendMessage<K extends keyof DiscordEventPayload>(
-    actionPayload: ActionPayload<DiscordEventPayload[K]>
-  ) {
-    const { event } = actionPayload
-    const { plugin } = event
-    if (plugin === discordPluginName) {
-      // this.client.sendMessage(actionPayload)
-    } else {
-      this.centralEventBus.emit('createMessage', actionPayload)
-    }
-  }
-
   // this is unused, but is for sending messages from discord to magick i think
   async onMessageCreate(
     handler: (event: EventPayload<DiscordEventPayload['messageCreate']>) => void
@@ -262,6 +249,18 @@ export class DiscordPlugin extends WebSocketPlugin<
     } catch (err) {
       this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
       throw err
+    }
+  }
+
+  handleSendMessage<K extends keyof DiscordEventPayload>(
+    actionPayload: ActionPayload<DiscordEventPayload[K]>
+  ) {
+    const { event } = actionPayload
+    const { plugin } = event
+    if (plugin === discordPluginName) {
+      // this.client.sendMessage(actionPayload)
+    } else {
+      this.centralEventBus.emit('createMessage', actionPayload)
     }
   }
 
