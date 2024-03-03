@@ -1,6 +1,7 @@
 import { createEventsEnum } from 'plugins/shared/src'
 import { Events } from 'discord.js'
 import { DiscordEvents } from './types'
+import { PLUGIN_SETTINGS } from 'shared/config'
 
 export const discordPluginName = 'discord' as const
 
@@ -25,4 +26,4 @@ export const DISCORD_DEP_KEYS = {
 
 export const DISCORD_KEY = 'discordClient' as const
 
-export const DISCORD_DEVELOPER_MODE = false
+export const DISCORD_DEVELOPER_MODE = PLUGIN_SETTINGS.DISCORD_DEVELOPER_MODE
