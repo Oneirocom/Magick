@@ -170,7 +170,9 @@ export abstract class WebSocketPlugin<
    * @param credentials - The credentials to validate.
    * @returns The validated credentials or false if validation fails.
    */
-  abstract validateCredentials(credentials: Credentials): Credentials | false
+  abstract validateCredentials(
+    credentials: Credentials
+  ): Credentials | false | Promise<Credentials | false>
 
   /**
    * Listens to an event.
@@ -258,7 +260,7 @@ export abstract class WebSocketPlugin<
 
     if (state?.enabled) {
       const credentials = await this.getCredentials()
-      const validated = this.validateCredentials(
+      const validated = await this.validateCredentials(
         credentials || ({} as Credentials)
       )
       if (!validated) {
