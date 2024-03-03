@@ -11,20 +11,33 @@ import {
   discordPluginCredentials,
   discordDefaultState,
   discordPluginName,
-  discordPluginCommands,
   type DiscordCredentials,
   type DiscordEventPayload,
   type DiscordPluginState,
   SendMessage,
+  DISCORD_DEVELOPER_MODE,
+  DISCORD_ACTIONS,
 } from './config'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
 import { EventTypes } from 'communication'
-import { AbstractWebsocketPlugin } from 'plugin-abstracts'
+import { WebSocketPlugin } from 'plugin-abstracts'
 import { DiscordMessageUtils } from './services/discord-message-utils'
+import { isDiscordToken } from 'token-validation'
 
-export class DiscordPlugin extends AbstractWebsocketPlugin<
+interface DiscordPluginConfig {
+  pluginName: typeof discordPluginName
+  events: typeof DISCORD_EVENTS
+  actions: typeof DISCORD_ACTIONS
+  dependencyKeys: typeof DISCORD_DEP_KEYS
+  developerMode: typeof DISCORD_DEVELOPER_MODE
+}
+
+export class DiscordPlugin extends WebSocketPlugin<
+  typeof DISCORD_EVENTS,
+  typeof DISCORD_ACTIONS,
+  typeof DISCORD_DEP_KEYS,
   CorePluginEvents,
   EventPayload<DiscordEventPayload[keyof DiscordEventPayload], any>,
   Record<string, unknown>,
@@ -59,147 +72,7 @@ export class DiscordPlugin extends AbstractWebsocketPlugin<
     super({ name: discordPluginName, connection, agentId, projectId })
   }
 
-  async login(credentials: DiscordCredentials) {
-    this.logger.info('Initializing Discord client...')
-    await this.discord.login(credentials['discord-token'])
-  }
-
-  public async logout() {
-    this.discord.removeAllListeners()
-    await this.discord.destroy()
-  }
-
-  async handleEnable() {
-    await this.updatePluginState({ enabled: true })
-    await this.initializeFunctionalities()
-    await this.refreshContext()
-    this.logger.debug('Discord plugin enabled')
-  }
-
-  async handleDisable() {
-    await this.updatePluginState({ enabled: false })
-    await this.logout()
-    this.logger.debug('Discord plugin disabled')
-  }
-
-  async refreshContext() {
-    const context = this.discord.user
-    if (context) {
-      await this.updatePluginState({
-        context: {
-          id: context.id,
-          username: context.username,
-          displayName: context.username,
-          avatar: context.avatar,
-          banner: context.banner,
-        },
-      })
-    }
-  }
-
-  async initializeFunctionalities() {
-    const state = await this.stateManager.getPluginState()
-    await this.updateCredentials()
-
-    if (state?.enabled) {
-      this.logger.debug('Discord plugin is enabled')
-      const creds = await this.getCredentials()
-      if (!creds?.['discord-token']) {
-        this.logger.error('No discord token found')
-        return
-      }
-
-      await this.discord.login(creds['discord-token'])
-      this.discord.removeAllListeners()
-      this.setupAllEventListeners()
-
-      // handle generic message received event from discord
-      // this.discord?.onMessageCreate(event => {
-      //   console.log('onMessageCreate', event)
-      //   // todo fix typing here,but I am lazy.
-      //   this.triggerMessageReceived(event as any)
-      // })
-    } else {
-      this.logger.debug('Discord plugin is not enabled')
-    }
-  }
-
-  setupEventListener(eventName: keyof DiscordEventPayload) {
-    this.discord.on(
-      eventName,
-
-      (...args) => {
-        // have to cast here because of the way discord.js typings are set up
-        // they have a whole seperate library of the correct types returned from each event
-        const payload = args[0] as DiscordEventPayload[typeof eventName]
-
-        if (this.utils.checkIfBotMessage(payload)) {
-          return
-        }
-
-        console.log('!!!!!!!!!!!!!!!!event name', eventName)
-        this.emitEvent(
-          eventName,
-          this.utils.createEventPayload<typeof eventName>(eventName, payload)
-        )
-      }
-    )
-  }
-
-  setupAllEventListeners() {
-    Object.keys(DISCORD_EVENTS).forEach(eventName => {
-      this.setupEventListener(eventName as keyof DiscordEventPayload)
-    })
-  }
-
-  defineCommands() {
-    const { enable, disable, linkCredential, unlinkCredential } =
-      discordPluginCommands
-    this.registerCommand({
-      ...linkCredential,
-      handler: this.handleEnable.bind(this),
-    })
-    this.registerCommand({
-      ...unlinkCredential,
-      handler: this.handleDisable.bind(this),
-    })
-    this.registerCommand({
-      ...enable,
-      handler: this.handleEnable.bind(this),
-    })
-    this.registerCommand({
-      ...disable,
-      handler: this.handleDisable.bind(this),
-    })
-  }
-
-  defineEvents(): void {
-    for (const [messageType, eventName] of Object.entries(DISCORD_EVENTS)) {
-      this.registerEvent({
-        eventName,
-        displayName: `Discord ${messageType}`,
-      })
-    }
-  }
-
-  defineActions(): void {
-    this.registerAction({
-      actionName: EventTypes.SEND_MESSAGE,
-      displayName: 'Send Message',
-      handler: this.handleSendMessage.bind(this),
-    })
-  }
-
-  async getDependencies() {
-    return {
-      [discordPluginName]: DiscordEmitter,
-      [DISCORD_DEP_KEYS.DISCORD_KEY]: this.discord,
-      [DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
-    }
-  }
-
-  handleOnMessage() {}
-
+  // DISCORD METHODS
   handleSendMessage<K extends keyof DiscordEventPayload>(
     actionPayload: ActionPayload<DiscordEventPayload[K]>
   ) {
@@ -229,6 +102,104 @@ export class DiscordPlugin extends AbstractWebsocketPlugin<
         payload
       )
       handler(eventPayload)
+    })
+  }
+
+  // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
+  getWSPluginConfig(): DiscordPluginConfig {
+    return {
+      pluginName: discordPluginName,
+      events: DISCORD_EVENTS,
+      actions: DISCORD_ACTIONS,
+      dependencyKeys: DISCORD_DEP_KEYS,
+      developerMode: DISCORD_DEVELOPER_MODE,
+    }
+  }
+
+  async login(credentials: DiscordCredentials) {
+    await this.discord.login(credentials['discord-token'])
+    this.logger.info('Logged in to Discord')
+  }
+
+  validateLogin() {
+    return this.discord.user !== null
+  }
+
+  validatePermissions() {
+    // TODO
+    return true
+  }
+
+  async logout() {
+    this.unlistenAll()
+    await this.discord.destroy()
+    this.logger.info('Logged out of Discord')
+  }
+
+  async getContext() {
+    const orString = (str: string | null | undefined) => (str ? str : '')
+    const user = this.discord.user
+    return {
+      id: orString(user?.id),
+      username: orString(user?.username),
+      displayName: orString(user?.username),
+      avatar: orString(user?.avatar),
+      banner: orString(user?.banner),
+    }
+  }
+
+  validateCredentials(credentials: DiscordCredentials) {
+    if (!credentials?.['discord-token']) {
+      return false
+    }
+
+    if (!isDiscordToken(credentials['discord-token'])) {
+      return false
+    }
+
+    return credentials
+  }
+
+  listen(eventName: keyof DiscordEventPayload) {
+    this.discord.on(
+      eventName,
+
+      (...args) => {
+        // have to cast here because of the way discord.js typings are set up
+        // they have a whole seperate library of the correct types returned from each event
+        const payload = args[0] as DiscordEventPayload[typeof eventName]
+
+        if (this.utils.checkIfBotMessage(payload)) {
+          return
+        }
+
+        console.log('!!!!!!!!!!!!!!!!event name', eventName)
+        this.emitEvent(
+          eventName,
+          this.utils.createEventPayload<typeof eventName>(eventName, payload)
+        )
+      }
+    )
+  }
+
+  unlisten(eventName: keyof DiscordEventPayload) {
+    this.discord.removeAllListeners(eventName)
+  }
+
+  // ABSTRACT IMPLEMENTATIONS FROM BASE/CORE PLUGIN
+  async getDependencies() {
+    return {
+      [discordPluginName]: DiscordEmitter,
+      [DISCORD_DEP_KEYS.DISCORD_KEY]: this.discord,
+      [DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
+    }
+  }
+
+  defineActions(): void {
+    this.registerAction({
+      actionName: EventTypes.SEND_MESSAGE,
+      displayName: 'Send Message',
+      handler: this.handleSendMessage.bind(this),
     })
   }
 
