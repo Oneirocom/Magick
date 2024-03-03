@@ -65,11 +65,8 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
   }
 
   // Updates the plugin state in the database.
-  public async updatePluginState(
-    newState: Partial<PluginStateType<T>>
-  ): Promise<void> {
+  public async updatePluginState(newState: Partial<PluginStateType<T>>) {
     try {
-      console.log('Updating plugin state', newState)
       const updatedState = await prismaCore.pluginState.upsert({
         where: {
           agentId_plugin: {
@@ -93,9 +90,10 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
         },
       })
       this.currentState = updatedState.state as PluginStateType<T>
-      console.log('Plugin state updated', this.currentState)
+      return this.currentState
     } catch (error: any) {
-      this.handleError(error, 'Error updating plugin state')
+      console.error('Error updating plugin state', error)
+      return this.currentState
     }
   }
 
