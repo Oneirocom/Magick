@@ -85,6 +85,7 @@ export class DiscordPlugin extends WebSocketPlugin<
     }
   }
 
+  // this is unused, but is for sending messages from discord to magick i think
   async onMessageCreate(
     handler: (event: EventPayload<DiscordEventPayload['messageCreate']>) => void
   ) {
@@ -99,7 +100,8 @@ export class DiscordPlugin extends WebSocketPlugin<
 
       const eventPayload = this.utils.createEventPayload(
         'messageCreate',
-        payload
+        payload,
+        this.getContext()
       )
       handler(eventPayload)
     })
@@ -136,7 +138,7 @@ export class DiscordPlugin extends WebSocketPlugin<
     this.logger.info('Logged out of Discord')
   }
 
-  async getContext() {
+  getContext() {
     const orString = (str: string | null | undefined) => (str ? str : '')
     const user = this.discord.user
     return {
@@ -145,6 +147,7 @@ export class DiscordPlugin extends WebSocketPlugin<
       displayName: orString(user?.username),
       avatar: orString(user?.avatar),
       banner: orString(user?.banner),
+      platform: discordPluginName,
     }
   }
 
@@ -176,7 +179,11 @@ export class DiscordPlugin extends WebSocketPlugin<
         console.log('!!!!!!!!!!!!!!!!event name', eventName)
         this.emitEvent(
           eventName,
-          this.utils.createEventPayload<typeof eventName>(eventName, payload)
+          this.utils.createEventPayload<typeof eventName>(
+            eventName,
+            payload,
+            this.getContext()
+          )
         )
       }
     )
@@ -192,6 +199,7 @@ export class DiscordPlugin extends WebSocketPlugin<
       [discordPluginName]: DiscordEmitter,
       [DISCORD_DEP_KEYS.DISCORD_KEY]: this.discord,
       [DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
+      [DISCORD_DEP_KEYS.DISCORD_CONTEXT]: this.getContext.bind(this),
     }
   }
 
