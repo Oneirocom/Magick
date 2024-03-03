@@ -1,0 +1,31 @@
+{
+  "name": "plugin-abstracts",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/plugin-abstracts/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/plugin-abstracts",
+        "tsConfig": "packages/server/plugin-abstracts/tsconfig.lib.json",
+        "packageJson": "packages/server/plugin-abstracts/package.json",
+        "main": "packages/server/plugin-abstracts/src/index.ts",
+        "assets": ["packages/server/plugin-abstracts/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/server/plugin-abstracts/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
