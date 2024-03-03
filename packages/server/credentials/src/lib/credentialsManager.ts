@@ -5,8 +5,8 @@ import { prismaCore, type Prisma } from '@magickml/server-db'
 /**
  * Type definition for plugin credentials.
  */
-export type PluginCredential = {
-  readonly name: string
+export type PluginCredential = Readonly<{
+  name: string
   serviceType: string
   credentialType: 'core' | 'plugin' | 'custom'
   clientName?: string
@@ -16,7 +16,7 @@ export type PluginCredential = {
   helpLink?: string
   available: boolean
   pluginName: string
-}
+}>
 
 /**
  * Type definition for credentials payload.

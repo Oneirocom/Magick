@@ -42,7 +42,7 @@ export const slackPluginCredentials = [
     available: true,
     pluginName: slackPluginName,
   },
-] as const satisfies PluginCredential[]
+] as const satisfies ReadonlyArray<PluginCredential>
 
 export type SlackCredentialNames = ExtractPluginCredentialNames<
   typeof slackPluginCredentials

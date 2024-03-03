@@ -23,7 +23,7 @@ import {
   sendSlackAudio,
 } from './nodes'
 
-export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
+export class SlackPlugin extends CoreEventsPluginWithDefaultTypes<
   SlackPluginState,
   SlackCredentials
 > {
