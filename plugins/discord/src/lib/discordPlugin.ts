@@ -1,11 +1,13 @@
 import {
-  ActionPayload,
-  BasePluginInit,
-  CoreEventsPluginWithDefaultTypes,
+  type ActionPayload,
+  type BasePluginInit,
+  type EventPayload,
 } from 'server/plugin'
+import { type CorePluginEvents } from 'plugin/core'
+import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import {
-  DISCORD_KEY,
   DISCORD_EVENTS,
+  DISCORD_DEP_KEYS,
   discordPluginCredentials,
   discordDefaultState,
   discordPluginName,
@@ -13,14 +15,20 @@ import {
   type DiscordCredentials,
   type DiscordEventPayload,
   type DiscordPluginState,
+  SendMessage,
 } from './config'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
-import { DiscordClient } from './services/discord'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
 import { EventTypes } from 'communication'
+import { AbstractWebsocketPlugin } from 'plugin-abstracts'
+import { DiscordMessageUtils } from './services/discord-message-utils'
 
-export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
+export class DiscordPlugin extends AbstractWebsocketPlugin<
+  CorePluginEvents,
+  EventPayload<DiscordEventPayload[keyof DiscordEventPayload], any>,
+  Record<string, unknown>,
+  Record<string, unknown>,
   DiscordPluginState,
   DiscordCredentials
 > {
@@ -28,16 +36,37 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
   credentials = discordPluginCredentials
-  discord: DiscordClient
   state = []
+  discord = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.DirectMessageReactions,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.GuildMessageTyping,
+      GatewayIntentBits.DirectMessageTyping,
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildInvites,
+    ],
+  })
+  utils = new DiscordMessageUtils(this.agentId)
 
   constructor({ connection, agentId, projectId }: BasePluginInit) {
     super({ name: discordPluginName, connection, agentId, projectId })
-    this.discord = new DiscordClient(
-      this.agentId,
-      this.emitEvent.bind(this),
-      this.logger
-    )
+  }
+
+  async login(credentials: DiscordCredentials) {
+    this.logger.info('Initializing Discord client...')
+    await this.discord.login(credentials['discord-token'])
+  }
+
+  public async logout() {
+    this.discord.removeAllListeners()
+    await this.discord.destroy()
   }
 
   async handleEnable() {
@@ -49,12 +78,12 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
 
   async handleDisable() {
     await this.updatePluginState({ enabled: false })
-    await this.discord?.logout()
+    await this.logout()
     this.logger.debug('Discord plugin disabled')
   }
 
   async refreshContext() {
-    const context = this.discord?.getClient().user
+    const context = this.discord.user
     if (context) {
       await this.updatePluginState({
         context: {
@@ -70,11 +99,10 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
 
   async initializeFunctionalities() {
     const state = await this.stateManager.getPluginState()
+    await this.updateCredentials()
 
     if (state?.enabled) {
-      console.log('Discord plugin is enabled')
-      await this.updateCredentials()
-
+      this.logger.debug('Discord plugin is enabled')
       const creds = await this.getCredentials()
       if (!creds?.['discord-token']) {
         this.logger.error('No discord token found')
@@ -82,8 +110,8 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
       }
 
       await this.discord.login(creds['discord-token'])
-
-      this.discord.setupAllEventListeners()
+      this.discord.removeAllListeners()
+      this.setupAllEventListeners()
 
       // handle generic message received event from discord
       // this.discord?.onMessageCreate(event => {
@@ -94,6 +122,34 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
     } else {
       this.logger.debug('Discord plugin is not enabled')
     }
+  }
+
+  setupEventListener(eventName: keyof DiscordEventPayload) {
+    this.discord.on(
+      eventName,
+
+      (...args) => {
+        // have to cast here because of the way discord.js typings are set up
+        // they have a whole seperate library of the correct types returned from each event
+        const payload = args[0] as DiscordEventPayload[typeof eventName]
+
+        if (this.utils.checkIfBotMessage(payload)) {
+          return
+        }
+
+        console.log('!!!!!!!!!!!!!!!!event name', eventName)
+        this.emitEvent(
+          eventName,
+          this.utils.createEventPayload<typeof eventName>(eventName, payload)
+        )
+      }
+    )
+  }
+
+  setupAllEventListeners() {
+    Object.keys(DISCORD_EVENTS).forEach(eventName => {
+      this.setupEventListener(eventName as keyof DiscordEventPayload)
+    })
   }
 
   defineCommands() {
@@ -127,7 +183,6 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
   }
 
   defineActions(): void {
-    // Handler for generic event if it comes in
     this.registerAction({
       actionName: EventTypes.SEND_MESSAGE,
       displayName: 'Send Message',
@@ -138,7 +193,8 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
   async getDependencies() {
     return {
       [discordPluginName]: DiscordEmitter,
-      [DISCORD_KEY]: this.discord,
+      [DISCORD_DEP_KEYS.DISCORD_KEY]: this.discord,
+      [DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
     }
   }
 
@@ -147,11 +203,90 @@ export class DiscordPlugin extends CoreEventsPluginWithDefaultTypes<
   handleSendMessage<K extends keyof DiscordEventPayload>(
     actionPayload: ActionPayload<DiscordEventPayload[K]>
   ) {
-    const { event, data } = actionPayload
-    this.discord?.sendMessage<K>(data.content, event)
+    const { event } = actionPayload
+    const { plugin } = event
+    if (plugin === discordPluginName) {
+      // this.client.sendMessage(actionPayload)
+    } else {
+      this.centralEventBus.emit('createMessage', actionPayload)
+    }
   }
 
-  formatPayload(event: any, payload: any) {
+  async onMessageCreate(
+    handler: (event: EventPayload<DiscordEventPayload['messageCreate']>) => void
+  ) {
+    this.discord.on('messageCreate', (...args) => {
+      // have to cast here because of the way discord.js typings are set up
+      //@ts-ignore
+      const payload = args[0] as DiscordEventPayload['messageCreate']
+
+      if (this.utils.checkIfBotMessage(payload)) {
+        return
+      }
+
+      const eventPayload = this.utils.createEventPayload(
+        'messageCreate',
+        payload
+      )
+      handler(eventPayload)
+    })
+  }
+
+  sendMessage: SendMessage = async (content, event) => {
+    if (!event.data.channelId) {
+      throw new Error('No channel id found')
+    }
+
+    try {
+      const channel = await this.discord.channels.fetch(event.data.channelId)
+
+      if (!channel) {
+        throw new Error('No channel found')
+      }
+
+      if (channel.type !== ChannelType.GuildText) {
+        throw new Error('Channel is not a text channel')
+      }
+
+      const MAX_LENGTH = 2000
+      const sentences = this.utils.tokenizeIntoSentences(content) // Function to split content into sentences
+      let currentBatch = ''
+      const batches = [] as string[]
+
+      for (const sentence of sentences) {
+        if (sentence.length > MAX_LENGTH) {
+          // If a single sentence is too long, further split it.
+          const parts = this.utils.splitLongSentence(sentence, MAX_LENGTH) // Function to split long sentence
+          for (const part of parts) {
+            if (currentBatch.length + part.length <= MAX_LENGTH) {
+              currentBatch += part
+            } else {
+              batches.push(currentBatch)
+              currentBatch = part
+            }
+          }
+        } else if (currentBatch.length + sentence.length <= MAX_LENGTH) {
+          currentBatch += sentence
+        } else {
+          batches.push(currentBatch)
+          currentBatch = sentence
+        }
+      }
+
+      if (currentBatch) {
+        batches.push(currentBatch)
+      }
+
+      for (const batch of batches) {
+        await (channel as TextChannel).send(batch)
+      }
+    } catch (err) {
+      this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
+      throw err
+    }
+  }
+
+  formatPayload(events: any, payload: any) {
     return payload
   }
 }

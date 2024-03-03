@@ -17,6 +17,11 @@ export const DISCORD_ACTIONS = createEventsEnum([
   'sendAudio',
 ])
 
+export const DISCORD_DEP_KEYS = {
+  DISCORD_KEY: 'discordClient',
+  DISCORD_SEND_MESSAGE: 'discordSendMessage',
+} as const
+
 export const DISCORD_KEY = 'discordClient' as const
 
 export const DISCORD_DEVELOPER_MODE = false
