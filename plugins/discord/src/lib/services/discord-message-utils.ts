@@ -1,5 +1,5 @@
 import { EventPayload } from 'server/plugin'
-import { type DiscordEventPayload } from '../config'
+import { DiscordAgentContext, type DiscordEventPayload } from '../config'
 import { SentenceTokenizer } from 'natural'
 
 export class DiscordMessageUtils {
@@ -75,7 +75,8 @@ export class DiscordMessageUtils {
 
   public createEventPayload<K extends keyof DiscordEventPayload>(
     eventName: K,
-    payload: DiscordEventPayload[K]
+    payload: DiscordEventPayload[K],
+    context: DiscordAgentContext | null | undefined
   ): EventPayload<DiscordEventPayload[K]> {
     return {
       connector: 'discord',
@@ -92,7 +93,9 @@ export class DiscordMessageUtils {
       rawData: JSON.stringify(payload),
       timestamp: new Date().toISOString(),
       data: payload,
-      metadata: {},
+      metadata: {
+        context,
+      },
     }
   }
 }

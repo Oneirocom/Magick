@@ -20,6 +20,7 @@ export const DISCORD_ACTIONS = createEventsEnum([
 export const DISCORD_DEP_KEYS = {
   DISCORD_KEY: 'discordClient',
   DISCORD_SEND_MESSAGE: 'discordSendMessage',
+  DISCORD_CONTEXT: 'discordContext',
 } as const
 
 export const DISCORD_KEY = 'discordClient' as const
