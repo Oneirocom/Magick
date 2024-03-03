@@ -700,7 +700,7 @@ export abstract class BasePlugin<
    * @param newState The new state to set.
    */
   async updatePluginState(newState: Partial<PluginStateType<State>>) {
-    await this.stateManager.updatePluginState(newState)
+    return await this.stateManager.updatePluginState(newState)
   }
 
   async getCredentials() {
