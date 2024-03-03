@@ -1,5 +1,7 @@
 import {
   DISCORD_EVENTS,
+  DiscordAgentContext,
+  DiscordEventMetadata,
   discordPluginName,
   type DiscordEventPayload,
 } from '../../config'
@@ -22,7 +24,10 @@ const createMagickDiscordEventNode = <
   label: string,
   eventKey: K,
   out: Record<string, string>,
-  handleEvent: (event: EventPayload<DiscordEventPayload[K]>, args: any) => void
+  handleEvent: (
+    event: EventPayload<DiscordEventPayload[K], DiscordEventMetadata>,
+    args: any
+  ) => void
 ) => {
   const eventConfig = {
     handleEvent,
@@ -30,7 +35,9 @@ const createMagickDiscordEventNode = <
     eventName: DISCORD_EVENTS[eventKey],
   }
 
-  return makeMagickEventNodeDefinition<EventPayload<DiscordEventPayload[K]>>(
+  return makeMagickEventNodeDefinition<
+    EventPayload<DiscordEventPayload[K], DiscordEventMetadata>
+  >(
     {
       typeName,
       label,
@@ -52,12 +59,14 @@ export const onDiscordMessage = createMagickDiscordEventNode<'messageCreate'>(
     content: 'string',
     sender: 'string',
     channel: 'string',
+    context: 'object',
     event: 'object',
   },
   (event, { write, commit }) => {
     write('content', event.data.content)
     write('sender', event.data.author.username)
     write('channel', event.data.channelId)
+    write('context', event.metadata['context'])
     commit('flow')
   }
 )
@@ -79,6 +88,7 @@ export const onDiscordReactionAdd =
       write('count', event.data.count)
       write('messageId', event.data.messageId)
       write('event', event.data)
+      write('context', event.metadata['context'])
       commit('flow')
     }
   )

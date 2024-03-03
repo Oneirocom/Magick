@@ -1,6 +1,7 @@
 import type { PluginStateType } from 'plugin-state'
 import type { User } from 'discord.js'
 import { z } from 'zod'
+import { discordPluginName } from './constants'
 
 export type DiscordAgentContext = {
   id: User['id']
@@ -8,6 +9,7 @@ export type DiscordAgentContext = {
   displayName: User['displayName']
   avatar: User['avatar']
   banner: User['banner']
+  platform: typeof discordPluginName
 }
 
 export interface DiscordPluginState extends PluginStateType {
@@ -23,6 +25,7 @@ export const discordDefaultState: DiscordPluginState = {
     displayName: '',
     avatar: '',
     banner: '',
+    platform: discordPluginName,
   },
 }
 
@@ -34,6 +37,7 @@ export const discordPluginStateSchema = z.object({
     displayName: z.string(),
     avatar: z.string(),
     banner: z.string(),
+    platform: z.literal(discordPluginName),
   }),
 })
 
