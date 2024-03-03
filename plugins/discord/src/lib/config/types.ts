@@ -1,6 +1,7 @@
 import { type ClientEvents } from 'discord.js'
-import { APIMessage, APIReaction } from 'discord-api-types/v10'
+import { type APIMessage, type APIReaction } from 'discord-api-types/v10'
 import { DISCORD_EVENTS } from './constants'
+import { type EventPayload } from 'server/plugin'
 
 export type DiscordEvents = keyof ClientEvents
 
@@ -17,3 +18,8 @@ export type BaseEventPayload = {
 }
 
 export type DiscordEventPayload = BaseEventPayload
+
+export type SendMessage = <K extends keyof DiscordEventPayload>(
+  content: string,
+  event: EventPayload<DiscordEventPayload[K]>
+) => Promise<void>
