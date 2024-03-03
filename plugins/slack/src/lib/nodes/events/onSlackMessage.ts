@@ -50,25 +50,25 @@ export const onSlackMessage = createSlackEventNode(
   'On Slack Message',
   SLACK_EVENTS.message
 )
-export const onSlackDirectMessage = createSlackEventNode(
-  'slack/onDirectMessage',
-  'On Slack Direct Message',
-  SLACK_EVENTS.message_im
-)
-export const onSlackGroupMessage = createSlackEventNode(
-  'slack/onGroupMessage',
-  'On Slack Group Message',
-  SLACK_EVENTS.message_mpim
-)
-export const onSlackBotMessage = createSlackEventNode(
-  'slack/onBotMessage',
-  'On Slack Bot Message',
-  SLACK_EVENTS.bot_message
-)
+// export const onSlackDirectMessage = createSlackEventNode(
+//   'slack/onDirectMessage',
+//   'On Slack Direct Message',
+//   SLACK_EVENTS.message_im
+// )
+// export const onSlackGroupMessage = createSlackEventNode(
+//   'slack/onGroupMessage',
+//   'On Slack Group Message',
+//   SLACK_EVENTS.message_mpim
+// )
+// export const onSlackBotMessage = createSlackEventNode(
+//   'slack/onBotMessage',
+//   'On Slack Bot Message',
+//   SLACK_EVENTS.bot_message
+// )
 export const onSlackChannelJoin = createSlackEventNode(
   'slack/onChannelJoin',
   'On Slack Channel Join',
-  SLACK_EVENTS.channel_join,
+  SLACK_EVENTS.member_joined_channel,
   {
     flow: 'flow',
     sender: 'string',
@@ -79,7 +79,7 @@ export const onSlackChannelJoin = createSlackEventNode(
 export const onSlackChannelLeave = createSlackEventNode(
   'slack/onChannelLeave',
   'On Slack Channel Leave',
-  SLACK_EVENTS.channel_leave,
+  SLACK_EVENTS.member_left_channel,
   {
     flow: 'flow',
     sender: 'string',
@@ -90,14 +90,14 @@ export const onSlackChannelLeave = createSlackEventNode(
 export const onSlackFileShare = createSlackEventNode(
   'slack/onFileShared',
   'On Slack File Shared',
-  SLACK_EVENTS.file_share
+  SLACK_EVENTS.file_shared
 )
 
 export const onSlackMessageNodes = [
   onSlackMessage,
-  onSlackDirectMessage,
-  onSlackGroupMessage,
-  onSlackBotMessage,
+  // onSlackDirectMessage,
+  // onSlackGroupMessage,
+  // onSlackBotMessage,
   onSlackChannelJoin,
   onSlackChannelLeave,
   onSlackFileShare,

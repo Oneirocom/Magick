@@ -1,9 +1,9 @@
 import { createActionNode } from 'plugins/shared/src'
-import { SlackClient } from '../../services/slack'
 import { EventPayload } from 'server/plugin'
-import { type SlackEventPayload, SLACK_KEY } from '../../config'
+import { type SlackEventPayload, SLACK_DEP_KEYS } from '../../config'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'server/grimoire'
+import type { App } from '@slack/bolt'
 
 type Inputs = {
   flow: SocketDefinition
@@ -17,11 +17,11 @@ type Outputs = {
 export const sendSlackAudio = createActionNode<
   Inputs,
   Outputs,
-  [typeof SLACK_KEY, 'IEventStore']
+  [typeof SLACK_DEP_KEYS.SLACK_KEY, 'IEventStore']
 >({
   label: 'Send Slack Audio',
   typeName: 'slack/sendAudio',
-  dependencyKeys: [SLACK_KEY, 'IEventStore'],
+  dependencyKeys: [SLACK_DEP_KEYS.SLACK_KEY, 'IEventStore'],
   inputs: {
     flow: { valueType: 'flow' },
     audioFile: { valueType: 'buffer' },
@@ -30,7 +30,7 @@ export const sendSlackAudio = createActionNode<
     flow: { valueType: 'flow' },
   },
   process: async (
-    dependencies: { [SLACK_KEY]: SlackClient; IEventStore: IEventStore },
+    dependencies: { [SLACK_DEP_KEYS.SLACK_KEY]: App; IEventStore: IEventStore },
     inputs: { audioFile: Buffer },
     write: (key: keyof Outputs, value: any) => void,
     commit: (key: string) => void
@@ -45,7 +45,7 @@ export const sendSlackAudio = createActionNode<
     //   },
     // })
 
-    await dependencies[SLACK_KEY].getClient().client.files.uploadV2({
+    await dependencies[SLACK_DEP_KEYS.SLACK_KEY].client.files.uploadV2({
       channels: event.channel,
       file: inputs.audioFile,
       filename: 'audio.mp3',
