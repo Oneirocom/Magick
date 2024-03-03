@@ -4224,6 +4224,10 @@
         "valueType": "string"
       },
       {
+        "name": "context",
+        "valueType": "object"
+      },
+      {
         "name": "event",
         "valueType": "object"
       }

@@ -2,6 +2,7 @@ import { type ClientEvents } from 'discord.js'
 import { type APIMessage, type APIReaction } from 'discord-api-types/v10'
 import { DISCORD_EVENTS } from './constants'
 import { type EventPayload } from 'server/plugin'
+import { type DiscordAgentContext } from './state'
 
 export type DiscordEvents = keyof ClientEvents
 
@@ -23,3 +24,12 @@ export type SendMessage = <K extends keyof DiscordEventPayload>(
   content: string,
   event: EventPayload<DiscordEventPayload[K]>
 ) => Promise<void>
+
+export type DiscordEventMetadata = Record<string, unknown> & {
+  context: DiscordAgentContext | null | undefined
+}
+
+export type DiscordEvent = EventPayload<
+  DiscordEventPayload[keyof DiscordEventPayload],
+  DiscordEventMetadata
+>
