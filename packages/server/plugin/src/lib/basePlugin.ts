@@ -219,7 +219,7 @@ export abstract class BasePlugin<
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
-  abstract credentials: PluginCredential[]
+  abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
   protected credentialsManager: PluginCredentialsManager<Credentials>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]

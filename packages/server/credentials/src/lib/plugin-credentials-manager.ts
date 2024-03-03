@@ -7,8 +7,9 @@ export type PluginCredentialsType<
   T extends object = Record<string, string | undefined>
 > = T
 
-export type ExtractPluginCredentialNames<T extends PluginCredential[]> =
-  T[number]['name']
+export type ExtractPluginCredentialNames<
+  T extends ReadonlyArray<PluginCredential> = ReadonlyArray<PluginCredential>
+> = T[number]['name']
 
 // Manages the credentials of a plugin, including its initialization, retrieval, update, and removal.
 export class PluginCredentialsManager<
@@ -51,18 +52,13 @@ export class PluginCredentialsManager<
         },
       })
 
-      // decrypt and map them
-      const credentials = creds
-        ? creds.map(credential => {
-            return {
-              name: credential.credentials.name,
-              value: decrypt(
-                credential.credentials.value,
-                CREDENTIALS_ENCRYPTION_KEY
-              ),
-            }
-          })
-        : {}
+      const credentials = creds.reduce((acc, credential) => {
+        acc[credential.credentials.name] = decrypt(
+          credential.credentials.value,
+          CREDENTIALS_ENCRYPTION_KEY
+        )
+        return acc
+      }, {} as PluginCredentialsType<T>)
 
       this.currentCredentials = credentials as PluginCredentialsType<T>
     } catch (error) {

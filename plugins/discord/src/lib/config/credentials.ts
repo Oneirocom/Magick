@@ -18,7 +18,7 @@ export const discordPluginCredentials = [
     available: true,
     pluginName: discordPluginName,
   },
-] as const satisfies PluginCredential[]
+] as const satisfies ReadonlyArray<PluginCredential>
 
 export type DiscordCredentialNames = ExtractPluginCredentialNames<
   typeof discordPluginCredentials

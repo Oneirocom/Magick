@@ -305,7 +305,7 @@ export const corePluginCredentials = [
     available: false,
     pluginName: corePluginName,
   },
-] as const satisfies PluginCredential[]
+] as const satisfies ReadonlyArray<PluginCredential>
 
 export type CorePluginCredentialNames = ExtractPluginCredentialNames<
   typeof corePluginCredentials
