@@ -1,29 +1,53 @@
 import Redis from 'ioredis'
 import { Job } from 'bullmq'
-import { ActionPayload, CoreEventsPluginWithDefaultTypes } from 'server/plugin'
+import { ActionPayload, EventPayload } from 'server/plugin'
 import {
   SLACK_ACTIONS,
   SLACK_EVENTS,
-  SLACK_KEY,
   slackPluginName,
-  slackPluginCommands,
   slackPluginCredentials,
   slackDefaultState,
   type SlackCredentials,
   type SlackPluginState,
+  SLACK_DEVELOPER_MODE,
+  SLACK_DEP_KEYS,
+  SlackEventPayload,
+  SlackEvents,
 } from './config'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
-import { SlackClient } from './services/slack'
 import {
   sendSlackImage,
   sendSlackMessage,
   onSlackMessageNodes,
   sendSlackAudio,
 } from './nodes'
+import { WebSocketPlugin } from 'plugin-abstracts'
+import { type CorePluginEvents } from 'plugin/core'
+import {
+  type AllMiddlewareArgs,
+  type MessageEvent,
+  type SlackEventMiddlewareArgs,
+  App,
+} from '@slack/bolt'
 
-export class SlackPlugin extends CoreEventsPluginWithDefaultTypes<
+interface SlackPluginConfig {
+  pluginName: typeof slackPluginName
+  events: typeof SLACK_EVENTS
+  actions: typeof SLACK_ACTIONS
+  dependencyKeys: typeof SLACK_DEP_KEYS
+  developerMode: typeof SLACK_DEVELOPER_MODE
+}
+
+export class SlackPlugin extends WebSocketPlugin<
+  typeof SLACK_EVENTS,
+  typeof SLACK_ACTIONS,
+  typeof SLACK_DEP_KEYS,
+  CorePluginEvents,
+  EventPayload<SlackEventPayload[keyof SlackEventPayload], any>,
+  Record<string, unknown>,
+  Record<string, unknown>,
   SlackPluginState,
   SlackCredentials
 > {
@@ -36,7 +60,7 @@ export class SlackPlugin extends CoreEventsPluginWithDefaultTypes<
     sendSlackAudio,
   ]
   values = []
-  slack: SlackClient | undefined = undefined
+  slack: App | null = null
   credentials = slackPluginCredentials
 
   constructor({
@@ -54,25 +78,153 @@ export class SlackPlugin extends CoreEventsPluginWithDefaultTypes<
     this.client = new SlackEventClient(pubSub, agentId)
   }
 
-  defineCommands() {
-    for (const [commandName, commandInfo] of Object.entries(
-      slackPluginCommands
-    )) {
-      this.registerCommand({
-        commandName,
-        displayName: commandInfo.displayName,
-        handler: thing => console.log(`Handling ${commandName} with ${thing}`),
-      })
+  // SLACK SPECIFIC METHODS
+  private createEventPayload(
+    message: MessageEvent,
+    agentId: string,
+    messageType: string,
+    rest: AllMiddlewareArgs
+  ): EventPayload<AllMiddlewareArgs> {
+    const payload: EventPayload<AllMiddlewareArgs> = {
+      connector: 'slack',
+      eventName: messageType,
+      status: 'success',
+      content: '',
+      sender: '',
+      observer: 'assistant',
+      client: 'cloud.magickml.com',
+      channel: message.channel,
+      plugin: 'slack',
+      agentId: agentId,
+      channelType: message.channel_type,
+      rawData: message,
+      timestamp: new Date().toISOString(),
+      data: rest,
+      metadata: {},
+    }
+
+    // TODO: fix typing so we don't have to do this
+    if ('text' in message) {
+      payload.content = message.text || ''
+    }
+    if ('user' in message) {
+      payload.sender = message.user || ''
+    }
+
+    return payload
+  }
+
+  // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
+  getWSPluginConfig(): SlackPluginConfig {
+    return {
+      pluginName: slackPluginName,
+      events: SLACK_EVENTS,
+      actions: SLACK_ACTIONS,
+      dependencyKeys: SLACK_DEP_KEYS,
+      developerMode: SLACK_DEVELOPER_MODE,
     }
   }
 
-  defineEvents(): void {
-    for (const [messageType, eventName] of Object.entries(SLACK_EVENTS)) {
-      this.registerEvent({
-        eventName,
-        displayName: `Slack ${messageType}`,
-      })
+  async login(credentials: SlackCredentials) {
+    this.slack = new App({
+      token: credentials['slack-token'],
+      signingSecret: credentials['slack-signing-secret'],
+      socketMode: true,
+      appToken: credentials['slack-app-token'],
+      developerMode: SLACK_DEVELOPER_MODE,
+    })
+    await this.slack.start()
+  }
+
+  async validateLogin() {
+    if (!this.slack) {
+      this.logger.warn('Slack client not initialized on validateLogin')
+      return false
     }
+    const test = await this.slack.client.auth.test()
+    return test.ok
+  }
+
+  validatePermissions() {
+    // TODO
+    return true
+  }
+
+  async logout() {
+    if (!this.slack) {
+      this.logger.warn('Slack client not initialized on logout')
+      return
+    }
+    this.unlistenAll()
+    await this.slack.stop()
+    this.slack = null
+    this.logger.info('Logged out of Slack')
+  }
+
+  async getContext() {
+    if (!this.slack) {
+      throw new Error('Slack client not initialized')
+    }
+    const orString = (str: string | null | undefined) => (str ? str : '')
+    const ctx = await this.slack.client.auth.test()
+    return {
+      id: orString(ctx.user_id),
+      username: orString(ctx.user),
+      platform: slackPluginName,
+      authTest: ctx,
+    }
+  }
+
+  validateCredentials(credentials: SlackCredentials) {
+    if (
+      !credentials['slack-token'] ||
+      !credentials['slack-signing-secret'] ||
+      !credentials['slack-app-token']
+    ) {
+      this.logger.warn(
+        `Missing required Slack credentials: ${[
+          'token',
+          'signingSecret',
+          'appToken',
+        ]
+          .filter(key => !credentials[key])
+          .join(', ')}`
+      )
+      return false
+    }
+    return credentials
+  }
+
+  listen(eventName: SlackEvents) {
+    if (!this.slack) {
+      this.logger.warn('Slack client not initialized')
+      return
+    }
+    this.slack.event(
+      eventName,
+      async (
+        args: SlackEventMiddlewareArgs<typeof eventName> & AllMiddlewareArgs
+      ) => {
+        const event = args.event as MessageEvent
+
+        const eventPayload = this.createEventPayload(
+          event,
+          this.agentId,
+          eventName,
+          args
+        )
+
+        this.emitEvent(eventName, eventPayload)
+      }
+    )
+  }
+
+  unlisten(eventName: SlackEvents) {
+    if (!this.slack) {
+      this.logger.warn('Slack client not initialized')
+      return
+    }
+    this.slack.event(eventName, async () => {})
   }
 
   defineActions(): void {
@@ -88,42 +240,9 @@ export class SlackPlugin extends CoreEventsPluginWithDefaultTypes<
   getDependencies() {
     return {
       [slackPluginName]: SlackEmitter,
-      [SLACK_KEY]: this.slack,
+      [SLACK_DEP_KEYS.SLACK_KEY]: this.slack,
     }
   }
-
-  private async initalizeSlack() {
-    try {
-      await this.updateCredentials()
-      const credentials = await this.getCredentials()
-      // validate each three keys
-      if (
-        !credentials ||
-        !credentials['slack-token'] ||
-        !credentials['slack-signing-secret'] ||
-        !credentials['slack-app-token']
-      ) {
-        return
-      }
-
-      this.slack = new SlackClient(
-        credentials,
-        this.agentId,
-        this.emitEvent.bind(this)
-      )
-
-      await this.slack.init()
-
-      this.updateDependency(SLACK_KEY, this.slack)
-    } catch (error) {
-      this.logger.error(error, 'Failed during initialization:')
-    }
-  }
-
-  async initializeFunctionalities(): Promise<void> {
-    await this.initalizeSlack()
-  }
-  handleOnMessage() {}
 
   handleSendMessage(actionPayload: Job<ActionPayload>) {
     const { actionName, event } = actionPayload.data
@@ -131,7 +250,7 @@ export class SlackPlugin extends CoreEventsPluginWithDefaultTypes<
     const eventName = `${plugin}:${actionName}`
 
     if (plugin === slackPluginName) {
-      this.client.sendMessage(actionPayload.data)
+      // this.client.sendMessage(actionPayload.data)
     } else {
       this.centralEventBus.emit(eventName, actionPayload.data)
     }
