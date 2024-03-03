@@ -158,7 +158,7 @@ export abstract class WebSocketPlugin<
    *   const context = { username: this.discord.user.username }
    *  return { context }
    */
-  abstract getContext(): Promise<State['context']>
+  abstract getContext(): Promise<State['context']> | State['context']
 
   /**
    * Validates the provided credentials.
