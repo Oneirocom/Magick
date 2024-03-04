@@ -1,15 +1,7 @@
-// webhook.service.ts
-import {
-  Id,
-  NullableId,
-  Paginated,
-  Params,
-  ServiceMethods,
-} from '@feathersjs/feathers'
+import { Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { prismaCore, type Prisma } from '@magickml/server-db'
 import { AgentCommandData } from 'server/agents'
-import { KnexAdapterOptions } from '@feathersjs/knex'
 
 export type WebhookServiceMethods = Pick<ServiceMethods<unknown>, 'create'>
 
@@ -27,11 +19,16 @@ class WebhookService implements WebhookServiceMethods {
   async create(data: unknown, params?: Params): Promise<unknown> {
     const agentId = params?.route?.agentid as string
     const pluginName = params?.route?.plugin as string
+
+    // TODO: validate that the plugin name exists
+    // TODO: if its Core, validate the users wh-key against the header
     const command: AgentCommandData = {
       agentId,
       command: `plugin:${pluginName}:webhook`,
       data,
     }
+
+    console.log('webhook command', command)
 
     await this.app.get('agentCommander').command(command)
 
