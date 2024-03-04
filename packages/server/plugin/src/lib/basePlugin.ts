@@ -699,16 +699,39 @@ export abstract class BasePlugin<
     return await this.stateManager.updatePluginState(newState)
   }
 
+  /**
+   * Retrieves the current plugin state.
+   * @returns The current plugin state.
+   */
+
   async getCredentials() {
     return this.credentialsManager.getCredentials()
   }
 
+  /**
+   * Retrieves a specific credential by name.
+   * @param name The name of the credential to retrieve.
+   * @returns The credential value.
+   */
   async getCredential(name: keyof Credentials) {
     return this.credentialsManager.getCredential(name)
   }
 
+  /**
+   * Refreshes the crdential manager's credentials.
+   */
   async updateCredentials() {
     await this.credentialsManager.update()
+  }
+
+  /**
+   * Retrieves the state from any plugin.
+   * Defaults to getting all plugin states.
+   * @param string The name of the plugin to retrieve the state from.
+   * @returns The state of the plugin.
+   */
+  async getGlobalState(name?: string) {
+    return this.stateManager.getGlobalState(name)
   }
 }
 
