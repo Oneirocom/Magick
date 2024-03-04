@@ -336,4 +336,4 @@ Which turns the actual Slack and Discord plugins into mostly config, type defini
 
 ##  
 ##  
-Note: I haven't fully integrated all of these features into the core plugin yet beyond updating what needed to be and setting up its creds/state/commands files. I've spent the least amount of time in the core plugin, so you guys would know best but i believe there's a lot of things here it can take advantage from via usage/more abstraction. For example we can simplify and outright remove much of the credentials logic from their now, etc.
+Note: I haven't fully integrated all of these features into the core plugin yet beyond updating what needed to be and setting up its creds/state/commands files. I've spent the least amount of time in the core plugin, so you guys would know best but i believe there's a lot of things here it can take advantage from via usage/more abstraction. For example we can simplify and outright remove much of the credentials logic from there now, etc.

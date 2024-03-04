@@ -97,8 +97,10 @@ export class PluginCredentialsManager<
       },
     })
 
+    if (!customCredential) return undefined
+
     const value = decrypt(
-      customCredential?.credentials.value,
+      customCredential.credentials.value,
       CREDENTIALS_ENCRYPTION_KEY
     )
 
