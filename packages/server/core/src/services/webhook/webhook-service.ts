@@ -8,13 +8,11 @@ export type WebhookServiceMethods = Pick<ServiceMethods<BasePayload>, 'create'>
 
 class WebhookService implements WebhookServiceMethods {
   app: Application
+  options: any
 
   constructor(options: any = {}, app: Application) {
     this.app = app
-  }
-
-  async setup(app: Application, path: string): Promise<void> {
-    this.app = app
+    this.options = options
   }
 
   async create(data: BasePayload, params?: Params): Promise<unknown> {
