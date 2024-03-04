@@ -3,7 +3,9 @@ import type { Application } from '../../declarations'
 import { prismaCore, type Prisma } from '@magickml/server-db'
 import { AgentCommandData } from 'server/agents'
 
-export type WebhookServiceMethods = Pick<ServiceMethods<unknown>, 'create'>
+type BasePayload = Record<string, any>
+
+export type WebhookServiceMethods = Pick<ServiceMethods<BasePayload>, 'create'>
 
 class WebhookService implements WebhookServiceMethods {
   app: Application
@@ -16,7 +18,7 @@ class WebhookService implements WebhookServiceMethods {
     this.app = app
   }
 
-  async create(data: unknown, params?: Params): Promise<unknown> {
+  async create(data: BasePayload, params?: Params): Promise<unknown> {
     const agentId = params?.route?.agentid as string
     const pluginName = params?.route?.plugin as string
 
@@ -27,8 +29,6 @@ class WebhookService implements WebhookServiceMethods {
       command: `plugin:${pluginName}:webhook`,
       data,
     }
-
-    console.log('webhook command', command)
 
     await this.app.get('agentCommander').command(command)
 

@@ -10,6 +10,10 @@ export const CORE_DEP_KEYS = {
   MEMORY_SERVICE: 'coreMemoryService',
   IMAGE_SERVICE: 'coreImageService',
   LOGGER: 'ILogger',
+  GET_SECRET: 'getSecret',
+  GET_STATE: 'getState',
+  UPLOAD_FILE: 'uploadFile',
+  DOWNLOAD_FILE: 'downloadFile',
 } as const
 
 export const coreRemovedNodes = ['variable/get', 'variable/set', 'time/delay']

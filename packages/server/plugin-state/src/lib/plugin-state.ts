@@ -1,4 +1,5 @@
 import { prismaCore } from '@magickml/server-db'
+import { v4 } from 'uuid'
 
 // Defines the structure for the plugin state, extending it with a mandatory enabled flag.
 export type PluginStateType<T extends object = Record<string, unknown>> = T & {
@@ -112,6 +113,26 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
     } catch (error: any) {
       this.handleError(error, 'Error removing plugin state')
     }
+  }
+
+  // Gets the state of all plugins for the current agent.
+  public async getGlobalState(): Promise<Record<string, PluginStateType<T>>> {
+    try {
+      const pluginStates = await prismaCore.pluginState.findMany({
+        where: {
+          agentId: this.agentId,
+        },
+      })
+
+      return pluginStates.reduce((acc, state) => {
+        acc[state?.plugin ?? v4()] = state.state as PluginStateType<T>
+        return acc
+      }, {} as Record<string, PluginStateType<T>>)
+    } catch (error: any) {
+      this.handleError(error, 'Error getting agent plugin states')
+    }
+
+    return {}
   }
 
   // Returns the current state of the plugin.
