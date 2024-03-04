@@ -42,10 +42,16 @@ import {
   type CorePluginEvents,
   type CorePluginState,
   type CorePluginCredentials,
+  corePluginCommands,
 } from './config'
 import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
+import {
+  type CoreWebhookPayload,
+  formatCoreWebhookPayload,
+  validateCoreWebhookPayload,
+} from './config/webhook'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -115,7 +121,19 @@ export class CorePlugin extends CoreEventsPlugin<
     this.userService = new CoreUserService({ projectId })
   }
 
-  defineCommands() {}
+  defineCommands() {
+    const { webhook } = corePluginCommands
+    this.registerCommand({ ...webhook, handler: this.handleWebhook.bind(this) })
+  }
+
+  async handleWebhook(payload: CoreWebhookPayload) {
+    const isValid = validateCoreWebhookPayload(payload)
+    if (!isValid) {
+      return
+    }
+    const p = formatCoreWebhookPayload(payload, this.agentId)
+    this.emitEvent(EventTypes.ON_WEBHOOK, p)
+  }
 
   /**
    * Defines the events that the plugin will listen for.

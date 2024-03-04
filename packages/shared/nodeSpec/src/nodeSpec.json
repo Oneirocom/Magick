@@ -1190,6 +1190,7 @@
         "valueType": "array",
         "defaultValue": [
           "messageReceived",
+          "webhookReceived",
           "messageSend",
           "messageStream"
         ]

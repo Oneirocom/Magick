@@ -97,6 +97,14 @@ export type PluginCommand = {
 
 export type PluginCommandInfo = Omit<PluginCommand, 'handler'>
 
+export type WebhookPayload<
+  T extends Record<string, unknown> = Record<string, unknown>
+> = {
+  agentId: string
+  pluginName: string
+  payload: T
+}
+
 export interface BasePluginInit {
   name: string
   agentId: string
@@ -125,11 +133,17 @@ const unlinkCredential: PluginCommandInfo = {
   displayName: 'Unlink Credential',
 }
 
+const webhook: PluginCommandInfo = {
+  commandName: 'webhook',
+  displayName: 'Webhook',
+}
+
 export const basePluginCommands: Record<string, PluginCommandInfo> = {
   enable,
   disable,
   linkCredential,
   unlinkCredential,
+  webhook,
 }
 
 /**
@@ -209,11 +223,9 @@ export abstract class BasePlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  //TODO: should this be getting passed in anywhere?
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   State extends object = Record<string, unknown>,
-  // Credentials extends object = Record<ExtractPluginCredentialNames<PluginCredential[]>>> |<string, string | undefined>
-  Credentials extends object = Record<string, string | undefined>
+  Credentials extends object = Record<string, string | undefined>,
+  Webhook extends Record<string, unknown> = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
@@ -292,23 +304,7 @@ export abstract class BasePlugin<
     await this.initializeFunctionalities()
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
-
-    // this.initializeBaseCommands()
   }
-
-  // initializeBaseCommands() {
-  //   this.registerCommand({
-  //     commandName: 'enable',
-  //     displayName: 'Enable',
-  //     handler: this.handleEnableCommand.bind(this),
-  //   })
-
-  //   this.registerCommand({
-  //     commandName: 'disable',
-  //     displayName: 'Disable',
-  //     handler: this.handleEnableCommand.bind(this),
-  //   })
-  // }
 
   /**
    * Maps registered events to a BullMQ queue.
