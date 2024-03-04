@@ -18,7 +18,6 @@ export enum LLMProviders {
   Baseten = 'baseten',
   OpenRouter = 'openrouter',
   CustomAPI = 'customapi',
-  // CustomOpenAI = 'custom_openai',
   Petals = 'petals',
   Ollama = 'ollama',
   GoogleAIStudio = 'google',
@@ -33,6 +32,7 @@ export enum LLMProviders {
   Meta = 'meta',
   Mistral = 'mistralai',
   VertexAI = 'vertexai',
+  Groq = 'groq',
 }
 
 export enum LLMProviderDisplayNames {
@@ -51,7 +51,6 @@ export enum LLMProviderDisplayNames {
   Baseten = 'Baseten',
   OpenRouter = 'OpenRouter',
   CustomAPI = 'Custom API',
-  CustomOpenAI = 'Custom OpenAI',
   Petals = 'Petals',
   Ollama = 'Ollama',
   GoogleAIStudio = 'Gemini - Google AI Studio',
@@ -66,6 +65,7 @@ export enum LLMProviderDisplayNames {
   Meta = 'Meta',
   Mistral = 'Mistral AI',
   VertexAI = 'Vertex AI',
+  Groq = 'Groq',
 }
 
 export enum LLMProviderPrefixes {
@@ -90,6 +90,7 @@ export enum LLMProviderPrefixes {
   VoyageAI = 'voyage',
   Replicate = 'replicate/deployments',
   Mistral = 'mistral',
+  Groq = 'groq',
 }
 
 export enum LLMProviderKeys {
@@ -122,6 +123,7 @@ export enum LLMProviderKeys {
   Meta = 'META_API_KEY',
   Mistral = 'MISTRAL_API_KEY',
   VertexAI = 'VERTEXAI_API_KEY',
+  Groq = 'GROQ_API_KEY',
   Unknown = 'unknown',
 }
 
