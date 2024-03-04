@@ -10,22 +10,19 @@ export type CoreWebhookPayload = WebhookPayload<ValidPayload>['payload']
 export const validateCoreWebhookPayload = (
   payload: unknown
 ): payload is ValidPayload => {
-  if (typeof payload !== 'object') {
-    return false
-  }
-
-  if (typeof (payload as ValidPayload).content !== 'string') {
-    return false
-  }
-
   return true
 }
+
+export type CoreWebhookEventPayload = EventPayload<
+  ValidPayload,
+  Record<string, unknown>
+>
 
 export const formatCoreWebhookPayload = (
   payload: ValidPayload,
   agentId: string
 ) => {
-  const formatted: EventPayload<ValidPayload, Record<string, unknown>> = {
+  const formatted: CoreWebhookEventPayload = {
     connector: corePluginName,
     eventName: 'webhookReceived',
     status: 'success',
