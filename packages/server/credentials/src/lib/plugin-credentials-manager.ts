@@ -72,7 +72,36 @@ export class PluginCredentialsManager<
     return this.currentCredentials
   }
 
+  // Returns the current credential of the plugin.
   public getCredential(name: keyof T): T[keyof T] | undefined {
     return this.currentCredentials ? this.currentCredentials[name] : undefined
+  }
+
+  // Returns a decreypted custom credential by name.
+  public async getCustomCredential(name: string): Promise<string | undefined> {
+    const customCredential = await prismaCore.agent_credentials.findFirst({
+      where: {
+        agentId: this.agentId,
+        credentials: {
+          serviceType: 'custom',
+          projectId: this.projectId,
+          name,
+        },
+      },
+      select: {
+        credentials: {
+          select: {
+            value: true,
+          },
+        },
+      },
+    })
+
+    const value = decrypt(
+      customCredential?.credentials.value,
+      CREDENTIALS_ENCRYPTION_KEY
+    )
+
+    return value
   }
 }
