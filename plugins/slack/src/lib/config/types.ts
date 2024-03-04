@@ -1,7 +1,6 @@
 import {
   type SlackEvent,
   type EventFromType,
-  type MessageEvent,
 } from '@slack/bolt'
 import { type SlackAgentContext } from './state'
 import { type EventPayload } from 'server/plugin'

@@ -1,6 +1,5 @@
 import {
   SLACK_EVENTS,
-  type SlackEventMetadata,
   slackPluginName,
   type SlackEventPayload,
   type SlackEvents,
