@@ -1,7 +1,6 @@
 import {
   DISCORD_EVENTS,
-  DiscordAgentContext,
-  DiscordEventMetadata,
+  type DiscordEventMetadata,
   discordPluginName,
   type DiscordEventPayload,
 } from '../../config'

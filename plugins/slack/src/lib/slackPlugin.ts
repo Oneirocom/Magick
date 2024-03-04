@@ -13,6 +13,8 @@ import {
   SLACK_DEP_KEYS,
   SlackEventPayload,
   SlackEvents,
+  SlackMessageEvents,
+  SlackBaseMessageEvent,
 } from './config'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
@@ -30,6 +32,7 @@ import {
   type MessageEvent,
   type SlackEventMiddlewareArgs,
   App,
+  EventFromType,
 } from '@slack/bolt'
 
 interface SlackPluginConfig {
@@ -76,42 +79,6 @@ export class SlackPlugin extends WebSocketPlugin<
   }) {
     super({ name: slackPluginName, connection, agentId, projectId })
     this.client = new SlackEventClient(pubSub, agentId)
-  }
-
-  // SLACK SPECIFIC METHODS
-  private createEventPayload(
-    message: MessageEvent,
-    agentId: string,
-    messageType: string,
-    rest: AllMiddlewareArgs
-  ): EventPayload<AllMiddlewareArgs> {
-    const payload: EventPayload<AllMiddlewareArgs> = {
-      connector: 'slack',
-      eventName: messageType,
-      status: 'success',
-      content: '',
-      sender: '',
-      observer: 'assistant',
-      client: 'cloud.magickml.com',
-      channel: message.channel,
-      plugin: 'slack',
-      agentId: agentId,
-      channelType: message.channel_type,
-      rawData: message,
-      timestamp: new Date().toISOString(),
-      data: rest,
-      metadata: {},
-    }
-
-    // TODO: fix typing so we don't have to do this
-    if ('text' in message) {
-      payload.content = message.text || ''
-    }
-    if ('user' in message) {
-      payload.sender = message.user || ''
-    }
-
-    return payload
   }
 
   // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
@@ -195,6 +162,41 @@ export class SlackPlugin extends WebSocketPlugin<
     return credentials
   }
 
+  private createMessageEventPayload(
+    message: MessageEvent,
+    messageType: string
+  ): SlackEventPayload {
+    const payload: SlackEventPayload = {
+      connector: 'slack',
+      eventName: messageType,
+      status: 'success',
+      content: '',
+      sender: '',
+      observer: 'assistant',
+      client: 'cloud.magickml.com',
+      channel: message.channel,
+      plugin: 'slack',
+      agentId: this.agentId,
+      channelType: message.channel_type,
+      rawData: message,
+      timestamp: new Date().toISOString(),
+      data: message,
+      metadata: {
+        context: this.stateManager.getState()?.context,
+      },
+    }
+
+    // TODO: fix typing so we don't have to do this
+    if ('text' in message) {
+      payload.content = message.text || ''
+    }
+    if ('user' in message) {
+      payload.sender = message.user || ''
+    }
+
+    return payload
+  }
+
   listen(eventName: SlackEvents) {
     if (!this.slack) {
       this.logger.warn('Slack client not initialized')
@@ -205,16 +207,40 @@ export class SlackPlugin extends WebSocketPlugin<
       async (
         args: SlackEventMiddlewareArgs<typeof eventName> & AllMiddlewareArgs
       ) => {
-        const event = args.event as MessageEvent
+        if (args.event.type === 'message') {
+          const message = args.event as
+            | SlackMessageEvents[keyof SlackMessageEvents]
+            | SlackBaseMessageEvent
 
-        const eventPayload = this.createEventPayload(
-          event,
-          this.agentId,
-          eventName,
-          args
-        )
+          const m = message as SlackBaseMessageEvent
 
-        this.emitEvent(eventName, eventPayload)
+          const eventPayload = this.createMessageEventPayload(
+            args.event,
+            message.subtype || 'message'
+          )
+
+          this.emitEvent(message.subtype || 'message', eventPayload)
+
+          // this.emitEvent(eventName, {
+          //   connector: slackPluginName,
+          //   status: 'success',
+          //   observer: 'assistant',
+          //   client: 'cloud.magickml.com',
+          //   plugin: slackPluginName,
+          //   eventName: message.subtype || 'message',
+          //   content: m.text || '',
+          //   agentId: this.agentId,
+          //   timestamp: new Date().toISOString(),
+          //   data: message,
+          //   rawData: message,
+          //   sender: m.user || '',
+          //   channel: m.channel,
+          //   channelType: m.channel_type,
+          //   metadata: {
+          //     context: this.stateManager.getState()?.context,
+          //   },
+          // })
+        }
       }
     )
   }
@@ -244,15 +270,15 @@ export class SlackPlugin extends WebSocketPlugin<
     }
   }
 
-  handleSendMessage(actionPayload: Job<ActionPayload>) {
-    const { actionName, event } = actionPayload.data
+  handleSendMessage<K extends keyof SlackEventPayload>(
+    actionPayload: ActionPayload<SlackEventPayload[K]>
+  ) {
+    const { event } = actionPayload
     const { plugin } = event
-    const eventName = `${plugin}:${actionName}`
-
     if (plugin === slackPluginName) {
-      // this.client.sendMessage(actionPayload.data)
+      // this.client.sendMessage(actionPayload)
     } else {
-      this.centralEventBus.emit(eventName, actionPayload.data)
+      this.centralEventBus.emit('createMessage', actionPayload)
     }
   }
 
