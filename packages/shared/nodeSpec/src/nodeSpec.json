@@ -1253,6 +1253,47 @@
     ]
   },
   {
+    "type": "agent/getState",
+    "category": "None",
+    "label": "Get Agent State",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "plugin",
+        "valueType": "string",
+        "defaultValue": "core",
+        "choices": [
+          {
+            "text": "core",
+            "value": "core"
+          },
+          {
+            "text": "discord",
+            "value": "discord"
+          },
+          {
+            "text": "slack",
+            "value": "slack"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "state",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",

@@ -51,6 +51,7 @@ import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
+import { getStateNode } from './nodes/_uncategorized/getState'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -92,6 +93,7 @@ export class CorePlugin extends CoreEventsPlugin<
     delay,
     queryEventHistory,
     webhookEventNode,
+    getStateNode,
   ]
   values = []
   credentials = corePluginCredentials
