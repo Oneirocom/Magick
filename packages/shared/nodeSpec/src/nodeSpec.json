@@ -3957,90 +3957,40 @@
         "valueType": "string"
       },
       {
-        "name": "event",
-        "valueType": "event"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "slack/onChannelJoin",
-    "category": "Event",
-    "label": "On Slack Channel Join",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "sender",
-        "valueType": "string"
-      },
-      {
-        "name": "channel",
-        "valueType": "string"
+        "name": "context",
+        "valueType": "object"
       },
       {
         "name": "event",
-        "valueType": "event"
+        "valueType": "object"
       }
     ],
-    "configuration": []
-  },
-  {
-    "type": "slack/onChannelLeave",
-    "category": "Event",
-    "label": "On Slack Channel Leave",
-    "inputs": [],
-    "outputs": [
+    "configuration": [
       {
-        "name": "flow",
-        "valueType": "flow"
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
       },
       {
-        "name": "sender",
-        "valueType": "string"
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
       },
       {
-        "name": "channel",
-        "valueType": "string"
-      },
-      {
-        "name": "event",
-        "valueType": "event"
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
       }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "slack/onFileShared",
-    "category": "Event",
-    "label": "On Slack File Shared",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "content",
-        "valueType": "string"
-      },
-      {
-        "name": "sender",
-        "valueType": "string"
-      },
-      {
-        "name": "channel",
-        "valueType": "string"
-      },
-      {
-        "name": "event",
-        "valueType": "event"
-      }
-    ],
-    "configuration": []
+    ]
   },
   {
     "type": "slack/sendMessage",
