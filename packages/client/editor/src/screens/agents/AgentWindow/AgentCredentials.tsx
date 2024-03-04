@@ -246,6 +246,9 @@ interface CredentialActionProps {
   agentId: string
   linkedCredential?: AgentCredential
   availableCredentials: Credential[]
+  children?: React.ReactNode
+  custom?: boolean
+  customId?: string
 }
 
 const CredentialAction: FC<CredentialActionProps> = ({
@@ -253,6 +256,9 @@ const CredentialAction: FC<CredentialActionProps> = ({
   agentId,
   linkedCredential,
   availableCredentials,
+  children,
+  custom = false,
+  customId,
 }) => {
   const [open, onOpenChange] = useState(false)
   const isLinked = linkedCredential && !!linkedCredential.credentialId
@@ -268,12 +274,14 @@ const CredentialAction: FC<CredentialActionProps> = ({
   }
 
   const handleLink = async () => {
-    if (!selectedCredentialId) return
+    if (!custom && !selectedCredentialId) return
     try {
       await linkAgentCredential({
         projectId: projectId,
         agentId: agentId,
-        credentialId: selectedCredentialId || '',
+        credentialId: custom
+          ? (customId as string)
+          : selectedCredentialId || '',
       })
       onOpenChange(false)
     } catch (e) {
@@ -306,46 +314,59 @@ const CredentialAction: FC<CredentialActionProps> = ({
       </Button>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isLinked ? 'Unlink' : 'Link'} Credential</DialogTitle>
-          <DialogDescription className="text-ds-white">
-            Select a credential to {isLinked ? 'unlink' : 'link'} to this agent.
-          </DialogDescription>
+          <DialogTitle>{`${isLinked ? 'Unlink' : 'Link'} ${
+            custom && ' Custom'
+          } Credential`}</DialogTitle>
+          {!custom && (
+            <DialogDescription className="text-ds-white">
+              Select a credential to {isLinked ? 'unlink' : 'link'} to this
+              agent.
+            </DialogDescription>
+          )}
         </DialogHeader>
-        <div className="py-4">
-          {availableCredentials?.length > 0 ? (
-            <Select onValueChange={handleSelect}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a Credential" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableCredentials.map(credential => (
-                  <SelectItem key={credential.id} value={credential.id}>
-                    {`${credential.name} - ${new Date(
-                      credential.created_at
-                    ).toLocaleDateString()}`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <p>
-              Create a secret for this platform in the secrets window to link to
-              this agent
-            </p>
-          )}
 
-          {selectedCredentialId && (
-            <p className="mt-2 text-sm text-white/80">
-              {availableCredentials.find(c => c.id === selectedCredentialId)
-                ?.description || 'No description'}
-            </p>
-          )}
-        </div>
+        {!custom ? (
+          <div className="py-4">
+            {availableCredentials?.length > 0 ? (
+              <Select onValueChange={handleSelect}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select a Credential" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableCredentials.map(credential => (
+                    <SelectItem key={credential.id} value={credential.id}>
+                      {`${credential.name} - ${new Date(
+                        credential.created_at
+                      ).toLocaleDateString()}`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <p>
+                Create a secret for this platform in the secrets window to link
+                to this agent
+              </p>
+            )}
+
+            {selectedCredentialId && (
+              <p className="mt-2 text-sm text-white/80">
+                {availableCredentials.find(c => c.id === selectedCredentialId)
+                  ?.description || 'No description'}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div>
+            <p>When linked you can access this secret in the getSecret node.</p>
+          </div>
+        )}
+
         <DialogFooter>
           <Button
             variant="outline"
             onClick={handleLink}
-            disabled={!selectedCredentialId}
+            disabled={custom ? false : !selectedCredentialId}
           >
             Link
           </Button>
@@ -417,7 +438,7 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
     projectId: config.projectId,
   })
 
-  const [credentials] = separateCredentials(c || [])
+  const [credentials, custom] = separateCredentials(c || [])
 
   const { data: ac } = useListAgentCredentialsQuery({
     projectId: config.projectId,
@@ -429,7 +450,7 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
       <div className="inline-flex w-full justify-between items-center space-x-2">
         <Header agentId={agentId} />
       </div>
-      {/* Add a container with a fixed height and overflow-y to enable scrolling */}
+      {/* Plugin Credentials */}
       <div className="grid grid-cols-2 gap-6">
         {pluginCredentials?.map(p => (
           <CredentialItem
@@ -450,6 +471,55 @@ export const Credentials: FC<CredentialProps> = ({ agentId }) => {
             }
           />
         ))}
+      </div>
+      {/* section that lists linked credentials with serviceType 'custom' and allows linking/unlinking */}
+      <div className="mt-8">
+        <h2>Custom Credentials</h2>
+        <p>
+          Custom credentials are secrets that you create in the secrets window
+          and link to this agent.
+        </p>
+        <div className="grid grid-cols-2 gap-6">
+          {custom?.map(c => (
+            <CredentialItem
+              key={c.name}
+              credential={{
+                name: c.name,
+                serviceType: c.serviceType as 'custom',
+                credentialType: c.credentialType as 'custom',
+                initials: c.name.charAt(0),
+                description: c.description || '',
+                available: true,
+              }}
+              isLinked={hasLinkedAgentCredential(c.name, custom, ac)}
+              action={
+                <CredentialAction
+                  custom={true}
+                  customId={c.id}
+                  projectId={config.projectId}
+                  agentId={agentId}
+                  linkedCredential={findMatchingAgentCredential(
+                    {
+                      ...c,
+                      available: true,
+                      initials: c.name.charAt(0),
+                    } as PluginCredential,
+                    credentials,
+                    ac
+                  )}
+                  availableCredentials={findMatchingCredentials(
+                    {
+                      ...c,
+                      available: true,
+                      initials: c.name.charAt(0),
+                    } as PluginCredential,
+                    custom
+                  )}
+                />
+              }
+            />
+          ))}
+        </div>
       </div>
     </>
   )
