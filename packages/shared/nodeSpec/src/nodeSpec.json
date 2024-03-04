@@ -1294,6 +1294,33 @@
     "configuration": []
   },
   {
+    "type": "agent/getSecret",
+    "category": "None",
+    "label": "Get Agent Secret",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "value",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",

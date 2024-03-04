@@ -52,6 +52,7 @@ import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
 import { getStateNode } from './nodes/_uncategorized/getState'
+import { getSecretNode } from './nodes/_uncategorized/getSecret'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -94,6 +95,7 @@ export class CorePlugin extends CoreEventsPlugin<
     queryEventHistory,
     webhookEventNode,
     getStateNode,
+    getSecretNode,
   ]
   values = []
   credentials = corePluginCredentials
