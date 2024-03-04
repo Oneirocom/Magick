@@ -39,19 +39,18 @@ import {
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
+  corePluginCommands,
+  formatCoreWebhookPayload,
+  validateCoreWebhookPayload,
   type CorePluginEvents,
   type CorePluginState,
   type CorePluginCredentials,
-  corePluginCommands,
+  type CoreWebhookPayload,
 } from './config'
 import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
-import {
-  type CoreWebhookPayload,
-  formatCoreWebhookPayload,
-  validateCoreWebhookPayload,
-} from './config/webhook'
+import { webhookEventNode } from './nodes/events/onWebhook'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -92,6 +91,7 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
     delay,
     queryEventHistory,
+    webhookEventNode,
   ]
   values = []
   credentials = corePluginCredentials
@@ -143,6 +143,10 @@ export class CorePlugin extends CoreEventsPlugin<
     this.registerEvent({
       eventName: EventTypes.ON_MESSAGE,
       displayName: 'Message Received',
+    })
+    this.registerEvent({
+      eventName: EventTypes.ON_WEBHOOK,
+      displayName: 'Webhook Received',
     })
   }
 
