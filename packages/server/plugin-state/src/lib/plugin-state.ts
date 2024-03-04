@@ -116,11 +116,14 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
   }
 
   // Gets the state of all plugins for the current agent.
-  public async getGlobalState(): Promise<Record<string, PluginStateType<T>>> {
+  public async getGlobalState(
+    name?: string
+  ): Promise<Record<string, PluginStateType<T>>> {
     try {
       const pluginStates = await prismaCore.pluginState.findMany({
         where: {
           agentId: this.agentId,
+          ...(name && { plugin: name }),
         },
       })
 
@@ -132,7 +135,7 @@ export class PluginStateManager<T extends object = Record<string, unknown>> {
       this.handleError(error, 'Error getting agent plugin states')
     }
 
-    return {}
+    return {} as Record<string, PluginStateType<T>>
   }
 
   // Returns the current state of the plugin.
