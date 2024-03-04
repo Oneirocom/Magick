@@ -10,6 +10,7 @@ export const ON_ERROR = 'error'
 
 export enum EventTypes {
   ON_MESSAGE = 'messageReceived',
+  ON_WEBHOOK = 'webhookReceived',
   SEND_MESSAGE = 'messageSend',
   STREAM_MESSAGE = 'messageStream',
 }
