@@ -261,6 +261,11 @@ export enum ReplicateModels {
   ReplicateFlanT5Large = 'replicate/daanelson/flan-t5-large',
 }
 
+export enum GroqModels {
+  GroqLlama270b = 'groq/llama2-70b-4096',
+  GroqMixtral8x7b = 'groq/mixtral-8x7b-32768',
+}
+
 export type GoogleAIStudioSlug = `gemini/${GoogleAIStudioModels}`
 export type TogetherAISlug = `together_ai/${TogetherAIModels}`
 export type VoyageAISlug = `voyage-ai/${VoyageAIModels | VoyageEmbeddingModels}`
@@ -308,5 +313,6 @@ export type CompletionModel =
   | GoogleAIStudioModels
   | TogetherAIModels
   | ReplicateModels
+  | GroqModels
 
 export type LLMModel = [CompletionModel, LLMProviderKeys]
