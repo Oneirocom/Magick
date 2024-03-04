@@ -4,13 +4,8 @@ import { type SlackEvents } from './types'
 
 export const slackPluginName = 'slack' as const
 
-export const slackEventNames: SlackEvents[] = [
-  'message',
-  'member_joined_channel',
-  'member_left_channel',
-  'file_shared',
-  'reaction_added',
-]
+export const slackEventNames: SlackEvents[] = ['message']
+
 export const SLACK_EVENTS = createEventsEnum(slackEventNames)
 
 export const SLACK_ACTIONS = createEventsEnum([
