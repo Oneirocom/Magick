@@ -14,6 +14,7 @@ import {
   SlackEvents,
   SlackMessageEvents,
   SlackBaseMessageEvent,
+  SendSlackMessage,
 } from './config'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
@@ -120,10 +121,16 @@ export class SlackPlugin extends WebSocketPlugin<
       this.logger.warn('Slack client not initialized on logout')
       return
     }
-    this.unlistenAll()
+
+    // Stop the Slack app
     await this.slack.stop()
+
+    this.slack.client.removeAllListeners()
+
+    // Nullify the Slack app instance to ensure it's completely dereferenced
     this.slack = null
-    this.logger.info('Logged out of Slack')
+
+    this.logger.info('Logged out of Slack and the Slack client destroyed')
   }
 
   async getContext() {
@@ -243,7 +250,22 @@ export class SlackPlugin extends WebSocketPlugin<
     return {
       [slackPluginName]: SlackEmitter,
       [SLACK_DEP_KEYS.SLACK_KEY]: this.slack,
+      [SLACK_DEP_KEYS.SEND_SLACK_MESSAGE]: this.sendSlackMessage.bind(this),
     }
+  }
+
+  sendSlackMessage: SendSlackMessage = async (content, channel) => {
+    if (!this.slack) {
+      this.logger.warn(
+        'Slack client not initialized but sendSlackMessage invoked'
+      )
+      return
+    }
+
+    await this.slack.client.chat.postMessage({
+      text: content,
+      channel: channel,
+    })
   }
 
   handleSendMessage<K extends keyof SlackEventPayload>(
