@@ -1,7 +1,4 @@
-import {
-  type SlackEvent,
-  type EventFromType,
-} from '@slack/bolt'
+import { type SlackEvent, type EventFromType } from '@slack/bolt'
 import { type SlackAgentContext } from './state'
 import { type EventPayload } from 'server/plugin'
 
@@ -36,3 +33,8 @@ export type SlackEventPayload = EventPayload<
   BaseSlackEventPayload[keyof BaseSlackEventPayload],
   SlackEventMetadata
 >
+
+export type SendSlackMessage = (
+  content: string,
+  channel: string
+) => Promise<void>

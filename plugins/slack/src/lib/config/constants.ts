@@ -18,6 +18,7 @@ export const SLACK_KEY = 'slackClient'
 
 export const SLACK_DEP_KEYS = {
   SLACK_KEY,
+  SEND_SLACK_MESSAGE: 'sendSlackMessage',
 } as const
 
 export const SLACK_DEVELOPER_MODE = PLUGIN_SETTINGS.SLACK_DEVELOPER_MODE
