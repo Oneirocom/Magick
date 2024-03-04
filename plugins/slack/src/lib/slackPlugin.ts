@@ -1,5 +1,4 @@
 import Redis from 'ioredis'
-import { Job } from 'bullmq'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import {
   SLACK_ACTIONS,
@@ -32,7 +31,6 @@ import {
   type MessageEvent,
   type SlackEventMiddlewareArgs,
   App,
-  EventFromType,
 } from '@slack/bolt'
 
 interface SlackPluginConfig {
@@ -212,34 +210,12 @@ export class SlackPlugin extends WebSocketPlugin<
             | SlackMessageEvents[keyof SlackMessageEvents]
             | SlackBaseMessageEvent
 
-          const m = message as SlackBaseMessageEvent
-
           const eventPayload = this.createMessageEventPayload(
             args.event,
             message.subtype || 'message'
           )
 
           this.emitEvent(message.subtype || 'message', eventPayload)
-
-          // this.emitEvent(eventName, {
-          //   connector: slackPluginName,
-          //   status: 'success',
-          //   observer: 'assistant',
-          //   client: 'cloud.magickml.com',
-          //   plugin: slackPluginName,
-          //   eventName: message.subtype || 'message',
-          //   content: m.text || '',
-          //   agentId: this.agentId,
-          //   timestamp: new Date().toISOString(),
-          //   data: message,
-          //   rawData: message,
-          //   sender: m.user || '',
-          //   channel: m.channel,
-          //   channelType: m.channel_type,
-          //   metadata: {
-          //     context: this.stateManager.getState()?.context,
-          //   },
-          // })
         }
       }
     )
