@@ -1,6 +1,5 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import { prismaCore, type Prisma } from '@magickml/server-db'
 import { AgentCommandData } from 'server/agents'
 
 type BasePayload = Record<string, any>
