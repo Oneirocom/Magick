@@ -24,6 +24,7 @@ import {
   allOllamaModelsArray,
   googleAIStudioModelsArray,
   allOpenAICompletionModelsArray,
+  groqChatCompletionModelsArray,
 } from '../constants/completionModelArrays'
 import {
   openAIEmbeddingModelsArray,
@@ -310,15 +311,15 @@ export const providers: Record<LLMProviders, ProviderRecord> = {
     allModels: vertexAIGoogleModelsArray,
     vendorModelPrefix: '',
   },
-  // [LLMProviders.CustomOpenAI]: {
-  //   provider: LLMProviders.CustomOpenAI,
-  //   displayName: LLMProviderDisplayNames.CustomOpenAI,
-  //   keyName: LLMProviderKeys.CustomAPI,
-  //   completionModels: allOpenAICompletionModelsArray,
-  //   embeddingModels: [],
-  //   allModels: allOpenAICompletionModelsArray,
-  //   vendorModelPrefix: LLMProviderPrefixes.CustomOpenAI,
-  // },
+  [LLMProviders.Groq]: {
+    provider: LLMProviders.Groq,
+    displayName: LLMProviderDisplayNames.Groq,
+    keyName: LLMProviderKeys.Groq,
+    completionModels: groqChatCompletionModelsArray,
+    embeddingModels: [],
+    allModels: groqChatCompletionModelsArray,
+    vendorModelPrefix: LLMProviderPrefixes.CustomOpenAI,
+  },
 }
 
 export type ActiveProviders =
@@ -326,6 +327,7 @@ export type ActiveProviders =
   | LLMProviders.GoogleAIStudio
   | LLMProviders.TogetherAI
   | LLMProviders.Palm
+  | LLMProviders.Groq
 
 export type ActiveEmbeddingProviders = LLMProviders.OpenAI
 
@@ -334,6 +336,7 @@ const activeProviders: ActiveProviders[] = [
   LLMProviders.TogetherAI,
   LLMProviders.GoogleAIStudio,
   LLMProviders.Palm,
+  LLMProviders.Groq,
 ]
 
 const ActiveEmbeddingProviders: ActiveEmbeddingProviders[] = [
