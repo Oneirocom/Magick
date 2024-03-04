@@ -224,8 +224,7 @@ export abstract class BasePlugin<
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
   State extends object = Record<string, unknown>,
-  Credentials extends object = Record<string, string | undefined>,
-  Webhook extends Record<string, unknown> = Record<string, unknown>
+  Credentials extends object = Record<string, string | undefined>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
