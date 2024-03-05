@@ -28,8 +28,10 @@ import {
   PalmModels,
   GoogleAIStudioModels,
   CompletionModel,
+  GroqModels,
 } from '../types/completionModels'
 
+export const groqChatCompletionModelsArray = Object.values(GroqModels)
 export const openAIChatCompletionModelsArray = Object.values(
   OpenAIChatCompletionModels
 )
@@ -103,4 +105,8 @@ export const allCompletionModels: CompletionModel[] = [
   ...petalsModelsArray,
   ...voyageAIModelsArray,
   ...alephAlphaModelsArray,
+  ...anyscaleModelsArray,
+  ...openRouterModelsArray,
+  ...replicateModelsArray,
+  ...groqChatCompletionModelsArray,
 ]

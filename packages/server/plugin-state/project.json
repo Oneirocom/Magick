@@ -1,0 +1,24 @@
+{
+  "name": "plugin-state",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/plugin-state/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/plugin-state",
+        "tsConfig": "packages/server/plugin-state/tsconfig.lib.json",
+        "packageJson": "packages/server/plugin-state/package.json",
+        "main": "packages/server/plugin-state/src/index.ts",
+        "assets": ["packages/server/plugin-state/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

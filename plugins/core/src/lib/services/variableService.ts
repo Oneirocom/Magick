@@ -3,7 +3,7 @@ import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 import { EventStore, SpellCaster } from 'server/grimoire'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
-import { CORE_DEP_KEYS } from '../constants'
+import { CORE_DEP_KEYS } from '../config'
 
 // This is the interface you'll use to get and set variables.
 export interface IVariableService {

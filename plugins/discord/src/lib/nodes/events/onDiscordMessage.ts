@@ -1,6 +1,10 @@
-import { DISCORD_EVENTS, discordPluginName } from '../../constants'
+import {
+  DISCORD_EVENTS,
+  type DiscordEventMetadata,
+  discordPluginName,
+  type DiscordEventPayload,
+} from '../../config'
 import { EventPayload } from 'server/plugin'
-import { DiscordEventPayload } from '../../types'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { NodeCategory } from '@magickml/behave-graph'
 
@@ -19,7 +23,10 @@ const createMagickDiscordEventNode = <
   label: string,
   eventKey: K,
   out: Record<string, string>,
-  handleEvent: (event: EventPayload<DiscordEventPayload[K]>, args: any) => void
+  handleEvent: (
+    event: EventPayload<DiscordEventPayload[K], DiscordEventMetadata>,
+    args: any
+  ) => void
 ) => {
   const eventConfig = {
     handleEvent,
@@ -27,7 +34,9 @@ const createMagickDiscordEventNode = <
     eventName: DISCORD_EVENTS[eventKey],
   }
 
-  return makeMagickEventNodeDefinition<EventPayload<DiscordEventPayload[K]>>(
+  return makeMagickEventNodeDefinition<
+    EventPayload<DiscordEventPayload[K], DiscordEventMetadata>
+  >(
     {
       typeName,
       label,
@@ -49,12 +58,14 @@ export const onDiscordMessage = createMagickDiscordEventNode<'messageCreate'>(
     content: 'string',
     sender: 'string',
     channel: 'string',
+    context: 'object',
     event: 'object',
   },
   (event, { write, commit }) => {
     write('content', event.data.content)
     write('sender', event.data.author.username)
     write('channel', event.data.channelId)
+    write('context', event.metadata['context'])
     commit('flow')
   }
 )
@@ -76,6 +87,7 @@ export const onDiscordReactionAdd =
       write('count', event.data.count)
       write('messageId', event.data.messageId)
       write('event', event.data)
+      write('context', event.metadata['context'])
       commit('flow')
     }
   )

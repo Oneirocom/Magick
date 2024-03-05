@@ -15,6 +15,12 @@ import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
  */
 export class PluginManager extends EventEmitter {
   /**
+   * pluginsLoaded - A boolean indicating whether the plugins have been loaded.
+   * @type {boolean}
+   */
+  private pluginsLoaded: boolean = false
+
+  /**
    * The Redis connection.
    * @private
    * @type {Redis}
@@ -132,7 +138,8 @@ export class PluginManager extends EventEmitter {
    *
    */
   async loadPlugins(): Promise<void> {
-    for (const [, pluginGetter] of Object.entries(plugins)) {
+    if (this.pluginsLoaded) return
+    for await (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
 
@@ -151,9 +158,10 @@ export class PluginManager extends EventEmitter {
           pubSub: this.pubSub,
           projectId: this.projectId,
         })
-        this.registerPlugin(pluginInstance)
+        await this.registerPlugin(pluginInstance)
       }
     }
+    this.pluginsLoaded = true
   }
 
   /**
@@ -199,11 +207,11 @@ export class PluginManager extends EventEmitter {
    * Registers a plugin with the Plugin Manager.
    * @param plugin The plugin instance to register.
    */
-  registerPlugin(plugin: BasePlugin): void {
+  async registerPlugin(plugin: BasePlugin): Promise<void> {
     this.logger.debug(`Registering plugin ${plugin.name}`)
     this.plugins.set(plugin.name, plugin)
     this.setupPluginEventForwarding(plugin)
-    plugin.init(this.centralEventBus)
+    await plugin.init(this.centralEventBus)
   }
 
   /**
@@ -247,10 +255,10 @@ export class PluginManager extends EventEmitter {
    * Activates a plugin, making it ready for operation.
    * @param pluginName The name of the plugin to activate.
    */
-  activatePlugin(pluginName: string): void {
+  async activatePlugin(pluginName: string): Promise<void> {
     const plugin = this.plugins.get(pluginName)
     if (plugin) {
-      plugin.activate()
+      await plugin.activate()
       this.logger.debug(`Plugin ${pluginName} activated`)
     } else {
       this.logger.warn(`Plugin ${pluginName} not found for activation.`)
@@ -261,10 +269,10 @@ export class PluginManager extends EventEmitter {
    * Deactivates a plugin, putting it in a passive state.
    * @param pluginName The name of the plugin to deactivate.
    */
-  deactivatePlugin(pluginName: string): void {
+  async deactivatePlugin(pluginName: string): Promise<void> {
     const plugin = this.plugins.get(pluginName)
     if (plugin) {
-      plugin.deactivate()
+      await plugin.deactivate()
       this.logger.debug(`Plugin ${pluginName} deactivated`)
     } else {
       this.logger.warn(`Plugin ${pluginName} not found for deactivation.`)

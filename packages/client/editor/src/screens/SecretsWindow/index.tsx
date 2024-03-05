@@ -36,8 +36,8 @@ interface Credential {
   serviceType: string
   credentialType: string
   description: string | null
-  created_at: string
-  updated_at: string
+  created_at: string | Date
+  updated_at: string | Date
 }
 
 const SecretWindow: FC = () => {
@@ -152,10 +152,17 @@ const CreateCredential: FC<CreateCredentialProps> = ({
           serviceType === 'custom'
             ? name
             : serviceTypeByName(serviceType)?.name,
-        serviceType: serviceType === 'custom' ? 'custom' : serviceType,
+        serviceType:
+          serviceType === 'custom'
+            ? 'custom'
+            : serviceTypeByName(serviceType)?.serviceType,
         credentialType: serviceType === 'custom' ? 'custom' : 'plugin',
         description,
         value,
+        pluginName:
+          serviceType === 'custom'
+            ? undefined
+            : serviceTypeByName(serviceType)?.pluginName,
       }).unwrap()
       resetForm()
     } catch (error) {

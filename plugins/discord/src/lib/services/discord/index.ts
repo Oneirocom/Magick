@@ -1,17 +1,20 @@
 import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import { EventPayload } from 'server/plugin'
-import { DiscordCredentials, DiscordEventPayload } from '../../types'
 import { Logger } from 'pino'
 import natural from 'natural'
-import { DISCORD_EVENTS } from '../../constants'
+import {
+  DISCORD_EVENTS,
+  type DiscordEventPayload,
+  type DiscordCredentials,
+} from '../../config'
 
 const tokenizer = new natural.SentenceTokenizer()
 
-function tokenizeIntoSentences(content) {
+function tokenizeIntoSentences(content: string) {
   return tokenizer.tokenize(content)
 }
 
-function splitLongSentence(sentence, maxLength) {
+function splitLongSentence(sentence: string, maxLength: number) {
   // Split the sentence at logical points, such as punctuation or conjunctions.
   const splitRegex = /,|;|\s-\s/ // Split at commas, semicolons, or dashes. You can refine this regex based on your needs.
   const parts = [] as string[]
@@ -38,7 +41,6 @@ export class DiscordClient {
   private client: Client<true>
 
   constructor(
-    private credentials: DiscordCredentials,
     private agentId: string,
     private emitEvent: (eventName: string, payload: EventPayload<any>) => void,
     private logger: Logger
@@ -79,12 +81,20 @@ export class DiscordClient {
         if (this.checkIfBotMessage(payload)) {
           return
         }
+
+        console.log('!!!!!!!!!!!!!!!!event name', eventName)
         this.emitEvent(
           eventName,
           this.createEventPayload<typeof eventName>(eventName, payload)
         )
       }
     )
+  }
+
+  public setupAllEventListeners() {
+    Object.keys(DISCORD_EVENTS).forEach(eventName => {
+      this.setupEventListener(eventName as keyof DiscordEventPayload)
+    })
   }
 
   private checkIfBotMessage<K extends keyof DiscordEventPayload>(
@@ -144,15 +154,6 @@ export class DiscordClient {
       return payload.channelId as string
     }
     return ''
-  }
-
-  async init() {
-    this.logger.info('Initializing Discord client...')
-    this.validateCredentials(this.credentials)
-    await this.client.login(this.credentials)
-    Object.keys(DISCORD_EVENTS).forEach(eventName => {
-      this.setupEventListener(eventName as keyof DiscordEventPayload)
-    })
   }
 
   async onMessageCreate(
@@ -227,6 +228,17 @@ export class DiscordClient {
       this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
       throw err
     }
+  }
+
+  async login(token: string) {
+    this.logger.info('Initializing Discord client...')
+    // this.validateCredentials(this.credentials)
+    await this.client.login(token)
+  }
+
+  public async logout() {
+    this.client.removeAllListeners()
+    await this.client.destroy()
   }
 
   getClient() {

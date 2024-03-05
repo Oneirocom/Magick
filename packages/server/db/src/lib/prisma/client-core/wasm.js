@@ -159,6 +159,7 @@ exports.Prisma.CredentialsScalarFieldEnum = {
   value: 'value',
   description: 'description',
   metadata: 'metadata',
+  pluginName: 'pluginName',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -295,6 +296,19 @@ exports.Prisma.TasksScalarFieldEnum = {
   agentId: 'agentId'
 };
 
+exports.Prisma.WebhookScalarFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  url: 'url',
+  method: 'method',
+  headers: 'headers',
+  body: 'body',
+  response: 'response',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -365,7 +379,8 @@ exports.Prisma.credentialsOrderByRelevanceFieldEnum = {
   serviceType: 'serviceType',
   credentialType: 'credentialType',
   value: 'value',
-  description: 'description'
+  description: 'description',
+  pluginName: 'pluginName'
 };
 
 exports.Prisma.documentsOrderByRelevanceFieldEnum = {
@@ -471,6 +486,29 @@ exports.Prisma.tasksOrderByRelevanceFieldEnum = {
   agentId: 'agentId'
 };
 
+exports.Prisma.WebhookOrderByRelevanceFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  url: 'url'
+};
+exports.WebhookMethod = exports.$Enums.WebhookMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+  OPTIONS: 'OPTIONS',
+  HEAD: 'HEAD',
+  CONNECT: 'CONNECT',
+  TRACE: 'TRACE'
+};
+
+exports.WebhookStatus = exports.$Enums.WebhookStatus = {
+  ACTIVE: 'ACTIVE',
+  REJECTED: 'REJECTED',
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE'
+};
 
 exports.Prisma.ModelName = {
   agent_credentials: 'agent_credentials',
@@ -488,7 +526,8 @@ exports.Prisma.ModelName = {
   request: 'request',
   spellReleases: 'spellReleases',
   spells: 'spells',
-  tasks: 'tasks'
+  tasks: 'tasks',
+  Webhook: 'Webhook'
 };
 
 /**

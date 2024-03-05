@@ -1,10 +1,9 @@
 import { createActionNode } from 'plugins/shared/src'
-import { SlackClient } from '../../services/slack'
-import { SlackEventPayload } from '../../types'
+import { type SlackEventPayload, SLACK_DEP_KEYS } from '../../config'
 import { SocketDefinition } from '@magickml/behave-graph'
-import { SLACK_KEY } from '../../constants'
 import { IEventStore } from 'server/grimoire'
 import { EventPayload } from 'server/plugin'
+import { type App } from '@slack/bolt'
 
 type Inputs = {
   flow: SocketDefinition
@@ -18,7 +17,7 @@ type Outputs = {
 
 const process = async (
   dependencies: {
-    slackClient: SlackClient
+    slackClient: App
     IEventStore: IEventStore
   },
   inputs: { images: string[]; comment: string },
@@ -45,7 +44,7 @@ const process = async (
   })
 
   // Send the message
-  await dependencies.slackClient.getClient().client.chat.postMessage({
+  await dependencies.slackClient.client.chat.postMessage({
     channel: event.channel,
     blocks: blocks,
     text: inputs.comment ?? 'Sent from MagickML',
@@ -57,12 +56,16 @@ const process = async (
 export const sendSlackImage = createActionNode<
   Inputs,
   Outputs,
-  [typeof SLACK_KEY, 'IEventStore', 'slackActionService']
+  [typeof SLACK_DEP_KEYS.SLACK_KEY, 'IEventStore', 'slackActionService']
 >({
   // eventName: SLACK_ACTIONS.sendImage,
   label: 'Send Slack Image',
   typeName: 'slack/sendImage',
-  dependencyKeys: [SLACK_KEY, 'IEventStore', 'slackActionService'],
+  dependencyKeys: [
+    SLACK_DEP_KEYS.SLACK_KEY,
+    'IEventStore',
+    'slackActionService',
+  ],
   inputs: {
     flow: { valueType: 'flow' },
     images: { valueType: 'string[]' },

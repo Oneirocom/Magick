@@ -4,7 +4,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { CORE_DEP_KEYS } from '../../constants'
+import { CORE_DEP_KEYS } from '../../config'
 import { IEventStore } from 'server/grimoire'
 import {
   CompletionModel,

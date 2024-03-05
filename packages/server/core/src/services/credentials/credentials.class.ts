@@ -5,6 +5,7 @@ import {
   CredentialsPayload,
 } from 'server/credentials'
 import type { Params } from '@feathersjs/feathers'
+import { type AgentCommandData } from 'server/agents'
 
 const getProjectId = (params: Params) => {
   return params?.query?.projectId as string
@@ -55,10 +56,20 @@ export class CredentialsService {
   // The following are agent scoped
   async linkCredentialToAgent(data: AgentCredentialsPayload): Promise<void> {
     const { agentId, credentialId } = data
-    await this.credentialsManager.linkCredentialToAgent({
+    const link = await this.credentialsManager.linkCredentialToAgent({
       agentId,
       credentialId,
     })
+
+    const command: AgentCommandData = {
+      agentId,
+      command: `plugin:${link.credentials.pluginName}:linkCredential`,
+      data: {
+        credential: link.credentials.name,
+      },
+    }
+
+    await CredentialsService.app.get('agentCommander').command(command)
   }
 
   async listAgentCredentials(data: {
@@ -73,7 +84,21 @@ export class CredentialsService {
     credentialId: string
   }): Promise<void> {
     const { agentId, credentialId } = data
-    await this.credentialsManager.deleteAgentCredential(agentId, credentialId)
+
+    const unlink = await this.credentialsManager.deleteAgentCredential(
+      agentId,
+      credentialId
+    )
+
+    const command: AgentCommandData = {
+      agentId,
+      command: `plugin:${unlink.credentials.serviceType}:unlinkCredential`,
+      data: {
+        credentialId,
+      },
+    }
+
+    await CredentialsService.app.get('agentCommander').command(command)
   }
 }
 

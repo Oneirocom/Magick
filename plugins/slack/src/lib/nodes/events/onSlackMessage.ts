@@ -1,104 +1,64 @@
-import { EventPayload } from 'server/plugin'
-import { SLACK_EVENTS, pluginName } from '../../constants'
-import { SlackEmitterType } from '../../dependencies/slackEmitter'
-import { AllMiddlewareArgs } from '@slack/bolt'
-import { createEventNode } from 'plugins/shared'
+import {
+  SLACK_EVENTS,
+  slackPluginName,
+  type SlackEventPayload,
+  type SlackEvents,
+} from '../../config'
+import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { NodeCategory } from '@magickml/behave-graph'
 
-type SlackEventProcess = (
-  write: (key: string, value: any) => void,
-  commit: (key: string) => void,
-  event: EventPayload<AllMiddlewareArgs>
-) => void
-
-const processSlackEvent: SlackEventProcess = (write, commit, event) => {
-  const { content, sender, channel } = event
-  write('event', event)
-  content && content.length > 0 && write('content', content)
-  write('sender', sender)
-  write('channel', channel)
-  commit('flow')
+type State = {
+  onStartEvent?: ((event: SlackEventPayload) => void) | undefined
 }
+const makeInitialState = (): State => ({
+  onStartEvent: undefined,
+})
 
-const createSlackEventNode = (
+const createMagickSlackEventNode = (
   typeName: string,
   label: string,
-  eventKey: keyof typeof SLACK_EVENTS,
-  out?: Record<string, string>,
-  process?: SlackEventProcess
-) =>
-  // TODO: replace any with proper type, it should be the type that gets passed to EventPayload<T> for slack
-  createEventNode<SlackEmitterType, any>({
-    base: {
+  eventKey: SlackEvents,
+  out: Record<string, string>,
+  handleEvent: (event: SlackEventPayload, args: any) => void
+) => {
+  const eventConfig = {
+    handleEvent,
+    dependencyName: slackPluginName,
+    eventName: SLACK_EVENTS[eventKey],
+  }
+
+  return makeMagickEventNodeDefinition<SlackEventPayload>(
+    {
       typeName,
       label,
+      category: NodeCategory.Event,
       in: {},
-      out: out ?? {
-        flow: 'flow',
-        content: 'string',
-        sender: 'string',
-        channel: 'string',
-        event: 'event',
-      },
+      out,
+      initialState: makeInitialState(),
     },
-    emitterDependencyKey: pluginName,
-    process: process ?? processSlackEvent,
-    event: SLACK_EVENTS[eventKey],
-  })
+    eventConfig
+  )
+}
 
-export const onSlackMessage = createSlackEventNode(
+export const onSlackMessage = createMagickSlackEventNode(
   'slack/onMessage',
   'On Slack Message',
-  SLACK_EVENTS.message
-)
-export const onSlackDirectMessage = createSlackEventNode(
-  'slack/onDirectMessage',
-  'On Slack Direct Message',
-  SLACK_EVENTS.message_im
-)
-export const onSlackGroupMessage = createSlackEventNode(
-  'slack/onGroupMessage',
-  'On Slack Group Message',
-  SLACK_EVENTS.message_mpim
-)
-export const onSlackBotMessage = createSlackEventNode(
-  'slack/onBotMessage',
-  'On Slack Bot Message',
-  SLACK_EVENTS.bot_message
-)
-export const onSlackChannelJoin = createSlackEventNode(
-  'slack/onChannelJoin',
-  'On Slack Channel Join',
-  SLACK_EVENTS.channel_join,
+  'message',
   {
     flow: 'flow',
+    content: 'string',
     sender: 'string',
     channel: 'string',
-    event: 'event',
+    context: 'object',
+    event: 'object',
+  },
+  (event, { write, commit }) => {
+    write('content', event.content)
+    write('sender', event.sender)
+    write('channel', event.channel)
+    write('context', event.metadata['context'])
+    commit('flow')
   }
-)
-export const onSlackChannelLeave = createSlackEventNode(
-  'slack/onChannelLeave',
-  'On Slack Channel Leave',
-  SLACK_EVENTS.channel_leave,
-  {
-    flow: 'flow',
-    sender: 'string',
-    channel: 'string',
-    event: 'event',
-  }
-)
-export const onSlackFileShare = createSlackEventNode(
-  'slack/onFileShared',
-  'On Slack File Shared',
-  SLACK_EVENTS.file_share
 )
 
-export const onSlackMessageNodes = [
-  onSlackMessage,
-  onSlackDirectMessage,
-  onSlackGroupMessage,
-  onSlackBotMessage,
-  onSlackChannelJoin,
-  onSlackChannelLeave,
-  onSlackFileShare,
-]
+export const onSlackMessageNodes = [onSlackMessage]
