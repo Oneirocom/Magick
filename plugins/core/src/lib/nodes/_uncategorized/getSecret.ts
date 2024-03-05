@@ -4,7 +4,7 @@ import { type PluginCredentialsManager } from 'server/credentials'
 
 export const getSecretNode = makeFlowNodeDefinition({
   typeName: 'agent/getSecret',
-  category: NodeCategory.Agent,
+  category: NodeCategory.Action,
   label: 'Get Agent Secret',
   in: {
     flow: 'flow',
