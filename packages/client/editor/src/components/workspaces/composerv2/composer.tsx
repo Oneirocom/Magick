@@ -1,7 +1,6 @@
 import {
   DockviewApi,
   DockviewDefaultTab,
-  DockviewDropEvent,
   DockviewReact,
   DockviewReadyEvent,
   IDockviewPanelHeaderProps,
@@ -174,7 +173,7 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
     }
   }, [api])
 
-  const onDidDrop = (event: DockviewDropEvent) => {
+  const onDidDrop = event => {
     const component = event.nativeEvent.dataTransfer?.getData('component') || ''
     const title = event.nativeEvent.dataTransfer?.getData('title') || ''
     event.api.addPanel({
