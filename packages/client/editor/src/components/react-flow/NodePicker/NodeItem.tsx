@@ -42,6 +42,7 @@ export const NodeItem = ({
           const sub = subItem?.subItems?.flatMap(subItem => subItem.type)
           return (
             <AccordionContent
+              key={subItem.title}
               onClick={e => {
                 e.stopPropagation()
                 handleClick({ item: sub })
