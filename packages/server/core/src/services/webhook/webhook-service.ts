@@ -15,7 +15,7 @@ class WebhookService implements WebhookServiceMethods {
     this.options = options
   }
 
-  async create(data: BasePayload, params?: Params): Promise<unknown> {
+  async create(data: BasePayload, params?: Params): Promise<BasePayload> {
     const agentId = params?.route?.agentid as string
     const pluginName = params?.route?.plugin as string
 
