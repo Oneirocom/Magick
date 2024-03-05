@@ -11,7 +11,7 @@ export enum PluginStateChoice {
 
 export const getStateNode = makeFlowNodeDefinition({
   typeName: 'agent/getState',
-  category: NodeCategory.Agent,
+  category: NodeCategory.Action,
   label: 'Get Agent State',
   in: {
     flow: 'flow',
