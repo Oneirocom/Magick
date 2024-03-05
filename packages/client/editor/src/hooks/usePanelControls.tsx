@@ -4,9 +4,9 @@ import { usePubSub } from '@magickml/providers'
 import { IGridviewPanelProps } from 'dockview'
 
 export const usePanelControls = (
-  props: IGridviewPanelProps<{ title: string, id: string }>,
+  props: IGridviewPanelProps<{ title: string; id: string }>,
   toggleEventName: string,
-  keyCommand?: string,
+  keyCommand?: string
 ) => {
   const [currentWidth, setCurrentWidth] = useState(0)
   const { subscribe } = usePubSub()
@@ -22,11 +22,11 @@ export const usePanelControls = (
   }
 
   const open = () => {
-    props.api.setVisible(true)
+    // props.api.setVisible(true)
   }
 
   const close = () => {
-    props.api.setVisible(false)
+    // props.api.setVisible(false)
   }
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import { Flow } from '../react-flow/Flow'
 import { Tab } from '@magickml/providers'
 import { RootState, useGetSpellByNameQuery } from 'client/state'
 import { useSelector } from 'react-redux'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 type Props = IDockviewPanelProps<{
   tab: Tab
@@ -43,6 +44,16 @@ const GraphWindow = (props: Props) => {
 
     return () => {
       dispose.dispose()
+    }
+  })
+
+  useHotkeys('meta+f, ctrl+f', () => {
+    const isMaximized = props.api.isMaximized()
+
+    if (isMaximized) {
+      props.api.exitMaximized()
+    } else {
+      props.api.maximize()
     }
   })
 
