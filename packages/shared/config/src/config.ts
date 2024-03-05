@@ -105,6 +105,8 @@ export const OPENMETER = {
 
 export const PLUGIN_SETTINGS = {
   SLACK_DEVELOPER_MODE: getVarForEnvironment('SLACK_DEVELOPER_MODE') === 'true',
+  DISCORD_DEVELOPER_MODE:
+    getVarForEnvironment('DISCORD_DEVELOPER_MODE') === 'true',
 }
 
 export const MAGICK_OPENAI_API_KEY = getVarForEnvironment('OPENAI_API_KEY')

@@ -11,10 +11,9 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { CredentialsManager, PluginCredential } from 'server/credentials'
+import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
-// import { MeterManager } from 'packages/server/meter/src'
-// import { PluginStateManager } from 'packages/server/pluginState/src'
+import { PluginStateManager, PluginStateType } from 'plugin-state'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -93,7 +92,17 @@ export type EventPayload<T = unknown, Y = unknown> = {
 export type PluginCommand = {
   commandName: string
   displayName: string
-  handler: (enable: boolean) => void
+  handler: (enable: any) => void
+}
+
+export type PluginCommandInfo = Omit<PluginCommand, 'handler'>
+
+export type WebhookPayload<
+  T extends Record<string, unknown> = Record<string, unknown>
+> = {
+  agentId: string
+  pluginName: string
+  payload: T
 }
 
 export interface BasePluginInit {
@@ -101,7 +110,42 @@ export interface BasePluginInit {
   agentId: string
   connection: Redis
   projectId: string
+  state?: Record<string, unknown>
 }
+
+const enable: PluginCommandInfo = {
+  commandName: 'enable',
+  displayName: 'Enable',
+}
+
+const disable: PluginCommandInfo = {
+  commandName: 'disable',
+  displayName: 'Disable',
+}
+
+const linkCredential: PluginCommandInfo = {
+  commandName: 'linkCredential',
+  displayName: 'Link Credential',
+}
+
+const unlinkCredential: PluginCommandInfo = {
+  commandName: 'unlinkCredential',
+  displayName: 'Unlink Credential',
+}
+
+const webhook: PluginCommandInfo = {
+  commandName: 'webhook',
+  displayName: 'Webhook',
+}
+
+export const basePluginCommands: Record<string, PluginCommandInfo> = {
+  enable,
+  disable,
+  linkCredential,
+  unlinkCredential,
+  webhook,
+}
+
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
  * within the system. It encapsulates common functionalities and structures that
@@ -179,27 +223,28 @@ export abstract class BasePlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  //TODO: should this be getting passed in anywhere?
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  State extends object = Record<string, unknown>
+  State extends object = Record<string, unknown>,
+  Credentials extends object = Record<string, string | undefined>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
-  protected credentials: PluginCredential[] = []
-  protected credentialsManager!: CredentialsManager
-  // protected pluginStateManager!: PluginStateManager<State>
+  abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
+  protected credentialsManager: PluginCredentialsManager<Credentials>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
   protected projectId: string
+  protected isBuild?: boolean = false
+  abstract defaultState: PluginStateType<State>
 
   public connection: Redis
-  public enabled: boolean = false
   public logger = getLogger()
   public eventEmitter: EventEmitter
   private updateDependencyHandler?: (key: string, dependency: any) => void
+
+  protected stateManager: PluginStateManager<State>
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -231,45 +276,33 @@ export abstract class BasePlugin<
    */
   constructor({ name, agentId, connection, projectId }: BasePluginInit) {
     super({ name })
-
     this.agentId = agentId
     this.projectId = projectId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
     this.commands = []
-    this.credentialsManager = new CredentialsManager()
-    // this.pluginStateManager = new PluginStateManager<State>(
-    //   this.agentId,
-    //   this.name
-    // )
+    this.credentialsManager = new PluginCredentialsManager(
+      agentId,
+      name,
+      projectId
+    )
+    this.stateManager = new PluginStateManager<State>(this.agentId, this.name)
   }
 
   /**
    * Initializes the plugin by defining events and initializing functionalities.
    */
-  init(centralEventBus: EventEmitter) {
+  async init(centralEventBus: EventEmitter) {
     this.centralEventBus = centralEventBus
     this.defineEvents()
     this.defineActions()
-    this.initializeFunctionalities()
+    this.defineCommands()
+    await this.initializePluginState()
+    await this.credentialsManager.init()
+    await this.initializeFunctionalities()
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
-    this.initializeBaseCommands()
-  }
-
-  initializeBaseCommands() {
-    this.registerCommand({
-      commandName: 'enable',
-      displayName: 'Enable',
-      handler: this.handleEnableCommand.bind(this),
-    })
-
-    this.registerCommand({
-      commandName: 'disable',
-      displayName: 'Disable',
-      handler: this.handleEnableCommand.bind(this),
-    })
   }
 
   /**
@@ -374,7 +407,10 @@ export abstract class BasePlugin<
    * this.emitEvent('myEvent', { data: 'example' });
    */
   protected emitEvent(eventName: string, payload: EventPayload) {
-    if (!this.enabled) return
+    if (!this.stateManager.getState()?.enabled) {
+      console.log(`Plugin ${this.name} is not enabled.  Not emitting event.`)
+      return
+    }
     this.eventEmitter.emit(eventName, payload)
   }
 
@@ -385,7 +421,9 @@ export abstract class BasePlugin<
     return registry
   }
 
-  abstract getDependencies(spellCaster: SpellCaster): Record<string, any>
+  abstract getDependencies(
+    spellCaster: SpellCaster
+  ): Record<string, any> | Promise<Record<string, any>>
 
   /**
    * Returns a registry object merged with the plugin's specific registry.
@@ -428,18 +466,18 @@ export abstract class BasePlugin<
   /**
    * Activates the plugin, making it ready for operation.
    */
-  activate(): void {
+  async activate() {
     // Activation logic specific to the plugin
-    this.setEnabled(true)
+    await this.setEnabled(true)
     this.logger.debug(`Plugin ${this.name} activated`)
   }
 
   /**
    * Deactivates the plugin, putting it into a passive state.
    */
-  deactivate(): void {
+  async deactivate() {
     // Deactivation logic specific to the plugin
-    this.setEnabled(false)
+    await this.setEnabled(false)
     this.logger.debug(`Plugin ${this.name} deactivated`)
   }
 
@@ -459,8 +497,12 @@ export abstract class BasePlugin<
    * @example
    * this.setEnabled(true);
    */
-  setEnabled(state: boolean) {
-    this.enabled = state
+  async setEnabled(enabled: boolean) {
+    const current = this.stateManager.getState() as PluginStateType<State>
+    await this.stateManager.updatePluginState({
+      ...current,
+      enabled,
+    })
   }
 
   /**
@@ -514,6 +556,18 @@ export abstract class BasePlugin<
   abstract defineEvents(): void
 
   /**
+   * Abstract method to be implemented by plugins to define their commands.
+   * @example
+   * defineCommands() {
+   * this.registerCommand({
+   *  commandName: 'enable',
+   *  displayName: 'Enable',
+   *  handler: this.handleEnableCommand.bind(this)
+   * });
+   */
+  abstract defineCommands(): void
+
+  /**
    * Abstract method to be implemented by plugins to define their actions.
    * @example
    * defineActions() {
@@ -533,7 +587,7 @@ export abstract class BasePlugin<
    *   this.discordClient.login('YOUR_DISCORD_BOT_TOKEN');
    * }
    */
-  abstract initializeFunctionalities(): void
+  abstract initializeFunctionalities(): Promise<void> | void
 
   /**
    * Abstract method for formatting the event payload.
@@ -577,14 +631,6 @@ export abstract class BasePlugin<
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
     }
-  }
-
-  /**
-   * Sets the credentials for the plugin.
-   * @param newCredentials Array of credentials to set.
-   */
-  setCredentials(newCredentials: PluginCredential[]) {
-    this.credentials = newCredentials
   }
 
   /**
@@ -637,39 +683,54 @@ export abstract class BasePlugin<
   }
 
   /**
-   * Method to handle enable/disable commands for the plugin.
-   * @param enable - Boolean indicating whether to enable or disable the plugin.
+   * Initializes the plugin state by fetching it from the database or setting it to a default value.
+   * This should be called during the plugin's initialization process.
    */
-  handleEnableCommand(enable: boolean): void {
-    if (enable) {
-      this.activate()
-    } else {
-      this.deactivate()
-    }
+  async initializePluginState() {
+    await this.stateManager.ensureStateInitialized(this.defaultState)
   }
 
-  // /**
-  //  * Method to get the current status of the plugin.
-  //  * @returns The status of the plugin (enabled/disabled).
-  //  */
-  // getStatus(): boolean {
-  //   return this.enabled
-  // }
+  /**
+   * Updates the plugin state both in-memory and in the database.
+   * @param newState The new state to set.
+   */
+  async updatePluginState(newState: Partial<PluginStateType<State>>) {
+    return await this.stateManager.updatePluginState(newState)
+  }
 
-  async getCredential(
-    name: string,
-    serviceType?: string | undefined
-  ): Promise<string | undefined> {
-    try {
-      return await this.credentialsManager.retrieveAgentCredentials(
-        this.agentId,
-        name,
-        serviceType
-      )
-    } catch (error) {
-      this.logger.error(`Error retrieving credential '${name}': ${error}`)
-      return
-    }
+  /**
+   * Retrieves the current plugin state.
+   * @returns The current plugin state.
+   */
+
+  async getCredentials() {
+    return this.credentialsManager.getCredentials()
+  }
+
+  /**
+   * Retrieves a specific credential by name.
+   * @param name The name of the credential to retrieve.
+   * @returns The credential value.
+   */
+  async getCredential(name: keyof Credentials) {
+    return this.credentialsManager.getCredential(name)
+  }
+
+  /**
+   * Refreshes the crdential manager's credentials.
+   */
+  async updateCredentials() {
+    await this.credentialsManager.update()
+  }
+
+  /**
+   * Retrieves the state from any plugin.
+   * Defaults to getting all plugin states.
+   * @param string The name of the plugin to retrieve the state from.
+   * @returns The state of the plugin.
+   */
+  async getGlobalState(name?: string) {
+    return this.stateManager.getGlobalState(name)
   }
 }
 

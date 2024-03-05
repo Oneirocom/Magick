@@ -2,7 +2,7 @@ import pino from 'pino'
 import { getLogger } from 'server/logger'
 import { EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { DISCORD_EVENTS } from '../constants'
+import { DISCORD_EVENTS } from '../config'
 
 class DiscordEventClient {
   private logger: pino.Logger = getLogger()
@@ -23,7 +23,7 @@ class DiscordEventClient {
     this.pubSub.patternSubscribe(pattern, this.discordEventHandler.bind(this))
   }
 
-  discordEventHandler(event, channel) {
+  discordEventHandler(event: EventPayload, channel: string): void {
     const eventType = this.extractEventType(channel)
 
     this.logger.debug(`Received event of type '${eventType}'`)

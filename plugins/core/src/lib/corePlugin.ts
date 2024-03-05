@@ -33,16 +33,26 @@ import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
-import { CorePluginEvents, CorePluginState } from './types'
 import {
   CORE_DEP_KEYS,
+  coreDefaultState,
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
-} from './constants'
+  corePluginCommands,
+  formatCoreWebhookPayload,
+  validateCoreWebhookPayload,
+  type CorePluginEvents,
+  type CorePluginState,
+  type CorePluginCredentials,
+  type CoreWebhookPayload,
+} from './config'
 import { EventTypes, ON_ERROR } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
+import { webhookEventNode } from './nodes/events/onWebhook'
+import { getStateNode } from './nodes/_uncategorized/getState'
+import { getSecretNode } from './nodes/_uncategorized/getSecret'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -52,9 +62,10 @@ export class CorePlugin extends CoreEventsPlugin<
   EventPayload,
   Record<string, unknown>,
   Record<string, unknown>,
-  CorePluginState
+  CorePluginState,
+  CorePluginCredentials
 > {
-  override enabled = true
+  override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
     messageEvent,
@@ -82,8 +93,12 @@ export class CorePlugin extends CoreEventsPlugin<
     searchManyKnowledge,
     delay,
     queryEventHistory,
+    webhookEventNode,
+    getStateNode,
+    getSecretNode,
   ]
   values = []
+  credentials = corePluginCredentials
   coreLLMService: CoreLLMService
   coreMemoryService = new CoreMemoryService(true)
   userService: CoreUserService
@@ -101,7 +116,6 @@ export class CorePlugin extends CoreEventsPlugin<
   }) {
     super({ name: corePluginName, connection, agentId, projectId })
     this.client = new CoreEventClient({ pubSub, agentId })
-    this.setCredentials(corePluginCredentials)
 
     this.coreLLMService = new CoreLLMService({
       projectId,
@@ -109,6 +123,20 @@ export class CorePlugin extends CoreEventsPlugin<
     })
 
     this.userService = new CoreUserService({ projectId })
+  }
+
+  defineCommands() {
+    const { webhook } = corePluginCommands
+    this.registerCommand({ ...webhook, handler: this.handleWebhook.bind(this) })
+  }
+
+  async handleWebhook(payload: CoreWebhookPayload) {
+    const isValid = validateCoreWebhookPayload(payload)
+    if (!isValid) {
+      return
+    }
+    const p = formatCoreWebhookPayload(payload, this.agentId)
+    this.emitEvent(EventTypes.ON_WEBHOOK, p)
   }
 
   /**
@@ -119,6 +147,10 @@ export class CorePlugin extends CoreEventsPlugin<
     this.registerEvent({
       eventName: EventTypes.ON_MESSAGE,
       displayName: 'Message Received',
+    })
+    this.registerEvent({
+      eventName: EventTypes.ON_WEBHOOK,
+      displayName: 'Webhook Received',
     })
   }
 
@@ -180,11 +212,14 @@ export class CorePlugin extends CoreEventsPlugin<
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
       // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
+      [CORE_DEP_KEYS.GET_STATE]: this.getGlobalState.bind(this),
+      [CORE_DEP_KEYS.GET_SECRET]:
+        this.credentialsManager.getCustomCredential.bind(this),
     }
   }
 
   async getLLMCredentials() {
-    if (this.agentId === '000000000') return
+    await this.credentialsManager.update()
     try {
       // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
       for (const providerKey of Object.keys(LLMProviderKeys).filter(

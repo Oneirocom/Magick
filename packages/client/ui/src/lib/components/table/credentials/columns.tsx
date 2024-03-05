@@ -19,8 +19,8 @@ export type Credential = {
   serviceType: string
   credentialType: string
   description: null | string
-  created_at: string
-  updated_at: string
+  created_at: string | Date
+  updated_at: string | Date
 }
 
 const ButtonHeader = ({ column, name }: { column: any; name: string }) => {

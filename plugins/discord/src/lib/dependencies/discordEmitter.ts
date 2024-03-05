@@ -1,6 +1,6 @@
 import { EmitterFactory, CreateMessageEvents } from 'plugins/shared/src'
 import TypedEmitter from 'typed-emitter'
-import { DISCORD_EVENTS } from '../constants'
+import { DISCORD_EVENTS } from '../config'
 
 export type DiscordMessageEvents = CreateMessageEvents<typeof DISCORD_EVENTS>
 

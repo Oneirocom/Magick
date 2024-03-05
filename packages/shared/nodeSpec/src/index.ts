@@ -23,3 +23,11 @@ export const getNodeSpec = (spell?: SpellInterface): NodeSpecJSON[] => {
 export const getPluginCredentials = () => {
   return pluginCredentials
 }
+
+export function getUniquePluginNames(): string[] {
+  const uniquePluginNames = new Set<string>()
+  pluginCredentials.forEach(service => {
+    uniquePluginNames.add(service.pluginName)
+  })
+  return Array.from(uniquePluginNames)
+}
