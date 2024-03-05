@@ -1,6 +1,7 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { AgentCommandData } from 'server/agents'
+import { getUniquePluginNames } from 'shared/nodeSpec'
 
 type BasePayload = Record<string, any>
 
@@ -15,11 +16,17 @@ class WebhookService implements WebhookServiceMethods {
     this.options = options
   }
 
+  private publicNames = getUniquePluginNames()
+
   async create(data: BasePayload, params?: Params): Promise<BasePayload> {
     const agentId = params?.route?.agentid as string
     const pluginName = params?.route?.plugin as string
 
-    // TODO: validate that the plugin name exists
+    // validate that the plugin name exists
+    if (!this.publicNames.includes(pluginName)) {
+      throw new Error(`Plugin ${pluginName} does not exist`)
+    }
+
     // TODO: if its Core, validate the users wh-key against the header
     const command: AgentCommandData = {
       agentId,
