@@ -40,6 +40,7 @@ export type PubSubEvents = {
   $MULTI_SELECT_PASTE: (tabId: string) => string
   $REFRESH_EVENT_TABLE: (tabId: string) => string
   $RUN_AGENT: (tabId: string) => string
+  $RELOAD_GRAPH: (tabId: string) => string
 }
 
 export interface PubSubContext {
