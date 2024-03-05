@@ -1,17 +1,17 @@
-// DOCUMENTED
-// DOCUMENTED
 /**
  * Module that exports a Redux slice for the global config that carries the authentication, project id and API url information.
  * @module globalConfigSlice
  */
 
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
+import { SaveDiffData } from 'packages/client/feathers-client/src/lib/FeathersClient'
 
 type ActiveInputType = {
   name: string
   inputType: string
   value: string
 }
+
 /**
  * Interface that defines the Global Config type.
  */
@@ -25,6 +25,8 @@ export interface GlobalConfig {
   dockviewTheme: string
   textEditorState: string
   activeInput: ActiveInputType
+  pastState: SaveDiffData[]
+  futureState: SaveDiffData[]
 }
 
 /**
@@ -40,6 +42,8 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     currentAgentId: '',
     currentSpellReleaseId: '',
     textEditorState: '',
+    pastState: [] as SaveDiffData[],
+    futureState: [] as SaveDiffData[],
     activeInput: {
       name: '',
       inputType: '',
@@ -63,6 +67,50 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
       state.apiUrl = apiUrl
       state.token = token
       state.projectId = projectId
+    },
+    applyState: (
+      state: GlobalConfig,
+      action: PayloadAction<{ value: SaveDiffData }>
+    ) => {
+      if (!action.payload.value) return
+      const MAX_HISTORY = 30
+      if (state.pastState?.length >= MAX_HISTORY) {
+        const update = [...state.pastState.slice(1)]
+        state.pastState = update
+      }
+      const update = [...(state.pastState || []), action.payload.value]
+      state.pastState = update
+      state.futureState = [] // Clear redo stack
+      console.log('applyState', {
+        pastState: state.pastState,
+        futureState: state.futureState,
+      })
+    },
+    undoState: (state: GlobalConfig) => {
+      // Separate modification from assignment
+      if (state.pastState.length > 0) {
+        const lastState = state.pastState.slice(-1)[0] // Get last item without modifying
+        state.pastState = state.pastState.slice(0, -1) // Remove the last item by re-assigning
+        const update = [lastState, ...state.futureState]
+        state.futureState = update
+      }
+
+      console.log('STATE_TWO', {
+        past: state.pastState,
+        future: state.futureState,
+      })
+    },
+    redoState: (state: GlobalConfig) => {
+      if (state.futureState.length > 0) {
+        const nextState = state.futureState[0] // Get first item without modifying
+        state.futureState = state.futureState.slice(1) // Remove the first item by re-assigning
+        const update = [nextState, ...state.pastState]
+        state.pastState = update // Append nextState to pastState
+        console.log('STATE_THREE', {
+          past: state.pastState,
+          future: state.futureState,
+        })
+      }
     },
     setCurrentAgentId: (
       state: GlobalConfig,
@@ -105,6 +153,9 @@ export const {
   setCurrentSpellReleaseId,
   setTextEditorState,
   setActiveInput,
+  applyState,
+  undoState,
+  redoState,
 } = globalConfigSlice.actions
 
 /**
@@ -118,3 +169,6 @@ export const selectActiveInput = state =>
     inputType: string
     value: string
   }
+
+export const selectPastState = state => state.globalConfig.pastState
+export const selectFutureState = state => state.globalConfig.futureState
