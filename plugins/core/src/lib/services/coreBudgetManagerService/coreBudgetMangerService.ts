@@ -101,11 +101,8 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
       messages,
       projectId
     )
-    if (!baseCost) {
-      throw new Error('Error getting base cost')
-    }
 
-    return baseCost
+    return baseCost || 0
   }
 
   /**
