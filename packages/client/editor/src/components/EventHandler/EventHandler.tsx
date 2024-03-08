@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSnackbar } from 'notistack'
 
 import { diff } from '../../utils/json0'
@@ -9,9 +9,17 @@ import {
   useLazyGetSpellQuery,
   useSaveSpellMutation,
   setSyncing,
+  selectPastState,
+  selectFutureState,
+  applyState,
+  undoState,
+  redoState,
+  selectIsDirty,
+  setIsDirty,
 } from 'client/state'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -27,6 +35,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [saveSpellMutation] = useSaveSpellMutation()
+  const [isSaving, setIsSaving] = useState(false)
   // TODO: is this a bug?
   const [getSpell, { data: spell }] = useLazyGetSpellQuery({
     id: spellId,
@@ -50,15 +59,26 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     spellRef.current = spell
   }, [spell])
 
-  const { events, subscribe } = pubSub
+  const pastState = useSelector(selectPastState)
+  const futureState = useSelector(selectFutureState)
+  const isDirty = useSelector(selectIsDirty)
 
-  const { $DELETE, $UNDO, $REDO, $SAVE_SPELL, $SAVE_SPELL_DIFF, $EXPORT } =
-    events
+  const { events, subscribe, publish } = pubSub
+
+  const {
+    $DELETE,
+    $UNDO,
+    $REDO,
+    $RELOAD_GRAPH,
+    $SAVE_SPELL,
+    $SAVE_SPELL_DIFF,
+    $EXPORT,
+  } = events
 
   /**
    * Save the current spell
    */
-  const saveSpell = async () => {
+  const saveSpell = useCallback(async () => {
     if (!spellRef.current) return
     const type = spellRef.current.type || 'spell'
 
@@ -91,95 +111,124 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     })
 
     // onProcess()
-  }
+  }, [spellRef, saveSpellMutation, config.projectId, enqueueSnackbar])
 
   /**
    * Save an incremental diff of changes made in editor to the server
    * @param {object} event - The onSaveDiff event object
    * @param {object} update - The updated spell object
    */
-  const onSaveDiff = async (event, update) => {
-    if (!spellRef.current) return
+  const onSaveDiff = useCallback(
+    async (event, update, onSuccessCB) => {
+      if (!spellRef.current) return true
 
-    const currentSpell = spellRef.current
-    const updatedSpell = {
-      ...currentSpell,
-      ...update,
-    }
+      const currentSpell = spellRef.current
+      const updatedSpell = {
+        ...currentSpell,
+        ...update,
+      }
 
-    if (currentSpell.spellReleaseId) return
+      if (currentSpell.spellReleaseId) return
 
-    const jsonDiff = diff(currentSpell, updatedSpell)
+      const jsonDiff = diff(currentSpell, updatedSpell)
 
-    // no point saving if nothing has changed
-    if (jsonDiff.length === 0) {
-      console.warn('No changes to save')
-      return
-    }
-    // While Importing spell, the graph is first created, then the imported graph is loaded
-    // This might be causing issue at the server end.import { GlobalConfig } from '../../../../dist/packages/editor/state/globalConfig.d';
+      // no point saving if nothing has changed
+      if (jsonDiff.length === 0) {
+        console.warn('No changes to save')
+        return
+      }
+      // While Importing spell, the graph is first created, then the imported graph is loaded
+      // This might be causing issue at the server end.import { GlobalConfig } from '../../../../dist/packages/editor/state/globalConfig.d';
 
-    if (updatedSpell.graph.nodes.length === 0) return
+      if (updatedSpell.graph.nodes.length === 0) return
 
-    try {
-      dispatch(setSyncing(true))
-      // We save the diff. Doing this via feathers but may want to switch to rtk query
-      const diffResponse = await client.service('spells').saveDiff({
-        projectId: config.projectId,
-        diff: jsonDiff,
-        name: currentSpell.name,
-        spellId: currentSpell.id,
-      })
+      try {
+        setIsSaving(true)
+        dispatch(setSyncing(true))
+        // We save the diff. Doing this via feathers but may want to switch to rtk query
+        const diffResponse = await client.service('spells').saveDiff({
+          projectId: config.projectId,
+          diff: jsonDiff,
+          name: currentSpell.name,
+          spellId: currentSpell.id,
+        })
+        dispatch(applyState({ value: currentSpell, clearFuture: !isDirty }))
+        spellRef.current = diffResponse
+        onSuccessCB && onSuccessCB()
+        // extend the timeout to 500ms to give the user a chance to see the sync icon
+        setTimeout(() => {
+          dispatch(setSyncing(false))
+          setIsSaving(false)
+          return
+        }, 1000)
 
-      spellRef.current = diffResponse
-
-      // extend the timeout to 500ms to give the user a chance to see the sync icon
-      setTimeout(() => {
-        dispatch(setSyncing(false))
-      }, 1000)
-
-      // invalidate the spell cache in rtk query
-      // dispatch(spellApi.util.invalidateTags(['Spell']))
-
-      if ('error' in diffResponse) {
-        enqueueSnackbar('Error Updating spell', {
+        if ('error' in diffResponse) {
+          enqueueSnackbar('Error Updating spell', {
+            variant: 'error',
+          })
+          return
+        }
+      } catch (err) {
+        enqueueSnackbar('Error saving spell', {
           variant: 'error',
         })
         return
       }
-    } catch (err) {
-      enqueueSnackbar('Error saving spell', {
-        variant: 'error',
-      })
-      return
-    }
-  }
+    },
+    [
+      dispatch,
+      client,
+      config.projectId,
+      enqueueSnackbar,
+      setIsSaving,
+      spellRef,
+      isDirty,
+    ]
+  )
 
   /**
    * Trigger the undo action in the editor
    */
-  const onUndo = () => {
-    console.warn('undo not implemented yet')
-  }
+  const onUndo = useCallback(() => {
+    if (pastState?.length > 0 && !isSaving) {
+      const lastSpellState = pastState[pastState?.length - 1]
+      dispatch(setIsDirty(true))
+      onSaveDiff(null, lastSpellState, () => {
+        dispatch(undoState({ value: lastSpellState }))
+        publish($RELOAD_GRAPH(tab.id), { spellState: lastSpellState })
+      })
+    }
+  }, [pastState, isSaving, dispatch, onSaveDiff, publish, tab.id])
 
   /**
    * Trigger the redo action in the editor
    */
-  const onRedo = () => {
-    console.warn('redo not implemented yet')
-  }
+  const onRedo = useCallback(async () => {
+    if (futureState.length > 0 && !isSaving) {
+      const futureSpellState = futureState[futureState?.length - 1]
+
+      dispatch(setIsDirty(true))
+      onSaveDiff(null, futureSpellState, () => {
+        dispatch(redoState({ value: futureSpellState }))
+        publish($RELOAD_GRAPH(tab.id), { spellState: futureSpellState })
+      })
+    }
+  }, [futureState, isSaving, dispatch, onSaveDiff, publish, tab.id])
+
+  useHotkeys('ctrl+z', () => onUndo())
+  useHotkeys('ctrl+shift+z', () => onRedo())
 
   /**
    * Trigger the delete action in the editor
    */
-  const onDelete = () => {
+  const onDelete = useCallback(() => {
     console.warn('delete not implemented yet')
-  }
+  }, [])
 
   /**
    * Export the current spell to a JSON file
    */
-  const onExport = async () => {
+  const onExport = useCallback(async () => {
     // refetch spell from local DB to ensure it is the most up to date
     const spell = { ...spellRef.current }
 
@@ -216,7 +265,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     // Clean up and remove the link
     link.parentNode.removeChild(link)
-  }
+  }, [spellRef])
 
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
