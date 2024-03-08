@@ -1254,7 +1254,7 @@
   },
   {
     "type": "agent/getState",
-    "category": "None",
+    "category": "Action",
     "label": "Get Agent State",
     "inputs": [
       {
@@ -1295,7 +1295,7 @@
   },
   {
     "type": "agent/getSecret",
-    "category": "None",
+    "category": "Action",
     "label": "Get Agent Secret",
     "inputs": [
       {
