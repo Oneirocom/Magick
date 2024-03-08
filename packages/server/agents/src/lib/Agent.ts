@@ -257,7 +257,7 @@ export class Agent implements AgentInterface {
     await this.spellbook.onDestroy()
     await this.pluginManager.onDestroy()
     await this.commandHub.onDestroy()
-    clearInterval(this.heartbeatInterval)
+    clearInterval(this.heartbeatInterval as any)
 
     this.log('destroyed agent', { id: this.id })
   }
