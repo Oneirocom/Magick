@@ -1,5 +1,6 @@
 import Redis from 'ioredis'
 import { EventEmitter } from 'events'
+import { stringify } from 'shared/utils'
 
 /**
  * A class for managing Redis Publish/Subscribe operations.
@@ -243,7 +244,7 @@ export class RedisPubSub extends EventEmitter {
       if (typeof message === 'string') {
         serializedMessage = message
       } else if (typeof message === 'object') {
-        serializedMessage = JSON.stringify(message)
+        serializedMessage = stringify(message)
       } else {
         throw new Error('Invalid message type. Expected string or object.')
       }
