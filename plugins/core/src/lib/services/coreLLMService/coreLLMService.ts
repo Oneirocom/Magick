@@ -107,9 +107,10 @@ export class CoreLLMService implements ICoreLLMService {
         const stream = await this.liteLLM.completion$(body)
 
         for await (const chunk of stream) {
+          chunks.push(chunk)
+
           const chunkJSON = await chunk.json()
           const chunkVal = await chunkJSON.valueOf()
-          chunks.push(chunkVal)
           yield chunkVal
         }
 
