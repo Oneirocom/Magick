@@ -9,14 +9,14 @@ interface RedisConfig {
   key: string
   serialize: (data: any) => string
   deserialize: (data: string) => any
-  redisCloudUrl: string
+  uri: string
 }
 
 export default (config: RedisConfig) => {
   return (app: any) => {
-    const { key, serialize, deserialize, redisCloudUrl } = config
+    const { key, serialize, deserialize, uri } = config
 
-    const redisPubSub = new RedisPubSub(redisCloudUrl)
+    const redisPubSub = new RedisPubSub(uri)
 
     const msgFromRedisHandler = (data: string) => {
       logger(`Got ${key} message from Redis`)
