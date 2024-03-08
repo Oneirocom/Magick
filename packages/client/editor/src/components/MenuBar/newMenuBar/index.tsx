@@ -184,11 +184,11 @@ const NewMenuBar = props => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'alt+z, ctrl+z',
+          hotKey: 'alt+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'alt+y, ctrl+y, alt+shift+z, ctrl+shift+z',
+          hotKey: 'alt+y, ctrl+y, alt+shift+z',
         },
         delete: {
           onClick: onDelete,
