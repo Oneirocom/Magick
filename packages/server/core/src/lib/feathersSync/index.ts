@@ -2,11 +2,16 @@ import { URL } from 'url'
 import core, { SYNC } from './core'
 import redis from './redisAdapter'
 const adaptors = {
-  core,
   redis,
 }
 
-const init = options => {
+type InitOptions = {
+  uri: string
+  deserialize?: (data: string) => any
+  serialize?: (data: any) => string
+}
+
+const init = (options: InitOptions) => {
   const { uri, deserialize, serialize } = options
 
   if (!uri) {
@@ -32,7 +37,7 @@ const init = options => {
   const identifiedProtocolName = Object.keys(adaptors).filter(adaptor =>
     name.indexOf(adaptor) !== -1 ? adaptor : null
   )[0]
-  const adapter = adaptors[identifiedProtocolName]
+  const adapter = adaptors[identifiedProtocolName] as typeof redis
 
   if (!adapter) {
     throw new Error(`${name} is an invalid adapter (uri ${uri})`)
