@@ -27,6 +27,7 @@ export interface GlobalConfig {
   activeInput: ActiveInputType
   pastState: SaveDiffData[]
   futureState: SaveDiffData[]
+  isDirty: boolean
 }
 
 /**
@@ -51,6 +52,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     },
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
+    isDirty: false as boolean,
   },
   reducers: {
     /**
@@ -70,47 +72,82 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     },
     applyState: (
       state: GlobalConfig,
-      action: PayloadAction<{ value: SaveDiffData }>
+      action: PayloadAction<{ value: SaveDiffData; clearFuture: boolean }>
     ) => {
       if (!action.payload.value) return
       const MAX_HISTORY = 30
+
       if (state.pastState?.length >= MAX_HISTORY) {
-        const update = [...state.pastState.slice(1)]
-        state.pastState = update
+        const newPastState = [...state.pastState].slice(1)
+        state.pastState = newPastState
       }
-      const update = [...(state.pastState || []), action.payload.value]
-      state.pastState = update
-      state.futureState = [] // Clear redo stack
+      const newPastState = state.pastState?.length
+        ? [...state.pastState, action.payload.value]
+        : [action.payload.value]
+
+      state.pastState = newPastState
+
+      if (action.payload.clearFuture) {
+        state.futureState = []
+      }
+
       console.log('applyState', {
         pastState: state.pastState,
-        futureState: state.futureState,
+        futureState: state.futureState || [],
+        clearFuture: action.payload.clearFuture,
+        newPastState,
       })
     },
     undoState: (state: GlobalConfig) => {
-      // Separate modification from assignment
-      if (state.pastState.length > 0) {
-        const lastState = state.pastState.slice(-1)[0] // Get last item without modifying
-        state.pastState = state.pastState.slice(0, -1) // Remove the last item by re-assigning
-        const update = [lastState, ...state.futureState]
-        state.futureState = update
-      }
+      const MAX_ENTRIES = 30
 
-      console.log('STATE_TWO', {
-        past: state.pastState,
-        future: state.futureState,
-      })
-    },
-    redoState: (state: GlobalConfig) => {
-      if (state.futureState.length > 0) {
-        const nextState = state.futureState[0] // Get first item without modifying
-        state.futureState = state.futureState.slice(1) // Remove the first item by re-assigning
-        const update = [nextState, ...state.pastState]
-        state.pastState = update // Append nextState to pastState
-        console.log('STATE_THREE', {
-          past: state.pastState,
-          future: state.futureState,
+      if (state.pastState.length > 0) {
+        // Prepare updates separately
+        const lastState = state.pastState[state.pastState.length - 1]
+        //remove lastState from pastState
+        const updatedPastState = [...state.pastState]
+
+        //TODO: Not sure why we are popping twice here, might have something to do with applyState being called unexpectedly
+        updatedPastState.pop()
+        updatedPastState.pop()
+
+        // Prepend lastState to futureState and enforce MAX_ENTRIES limit
+        const updatedFutureState = [...state.futureState, lastState].slice(
+          0,
+          MAX_ENTRIES
+        )
+
+        // Perform assignments
+        state.pastState = updatedPastState
+        state.futureState = updatedFutureState
+        console.log('undoState', {
+          pastState: state.pastState,
+          futureState: state.futureState,
+          updatedPastState,
+          lastState,
         })
       }
+    },
+    redoState: (state: GlobalConfig) => {
+      const MAX_ENTRIES = 30
+      if (state.futureState.length > 0) {
+        // Prepare updates separately
+        const nextState = state.futureState[state.futureState.length - 1]
+        const updatedFutureState = [...state.futureState]
+        updatedFutureState.pop()
+
+        // Append nextState to pastState and enforce MAX_ENTRIES limit
+        const updatedPastState = [nextState, ...state.pastState].slice(
+          0,
+          MAX_ENTRIES
+        )
+        // Perform assignments
+        state.pastState = updatedPastState
+        state.futureState = updatedFutureState
+      }
+    },
+    setIsDirty: (state: GlobalConfig, action: PayloadAction<boolean>): void => {
+      state.isDirty = action.payload
     },
     setCurrentAgentId: (
       state: GlobalConfig,
@@ -156,6 +193,7 @@ export const {
   applyState,
   undoState,
   redoState,
+  setIsDirty,
 } = globalConfigSlice.actions
 
 /**
@@ -172,3 +210,4 @@ export const selectActiveInput = state =>
 
 export const selectPastState = state => state.globalConfig.pastState
 export const selectFutureState = state => state.globalConfig.futureState
+export const selectIsDirty = state => state.globalConfig.isDirty
