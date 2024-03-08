@@ -16,6 +16,8 @@ import {
   onNodesChange,
   onConnect,
   graphActions,
+  // setIsDirty,
+  // selectIsDirty,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'
@@ -37,10 +39,13 @@ export const useBehaveGraphFlow = ({
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
-  const { events, publish } = usePubSub()
+  const { events, publish, subscribe } = usePubSub()
+  const { $RELOAD_GRAPH } = events
   const dispatch = useDispatch()
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
+  // TODO: we need to set isDirty to false somewhere. currently future state gets weird
+  // const isDirty = useSelector(selectIsDirty)
 
   const [graphJson, setStoredGraphJson] = useState<GraphJSON | undefined>()
 
@@ -90,6 +95,16 @@ export const useBehaveGraphFlow = ({
       debouncedUpdate.cancel()
     }
   }, [debouncedUpdate, nodes, edges, specJson, spell])
+
+  useEffect(() => {
+    const reloadGraphEvent = subscribe($RELOAD_GRAPH(tab.id), (event, data) => {
+      setGraphJson(data.spellState.graph)
+    })
+
+    return () => {
+      reloadGraphEvent()
+    }
+  }, [$RELOAD_GRAPH])
 
   const nodeTypes = useCustomNodeTypes({
     tab,
