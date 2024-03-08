@@ -52,10 +52,11 @@ export function isModelAvailableToUser({
   if (userData && userData.user) {
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName?.trim()
-
+      //TODO: Update this when Aspirant is used
       if (userSubscriptionName === PortalSubscriptions.NEOPHYTE) {
         // Only models with keys are available for Journeyman subscription
         if (
+          //TODO: remove balance check
           userData?.user?.balance > 0 ||
           userData?.user?.promoCredit > 0 ||
           userData?.user?.introCredit > 0

@@ -65,7 +65,7 @@ export const PropertiesWindow = (props: Props) => {
 
   const spec = nodeSpecs.find(spec => spec.type === selectedNode.type)
   const { configuration } = selectedNode.data
-  const hiddenProperties = configuration.hiddenProperties || []
+  const hiddenProperties = configuration?.hiddenProperties || []
 
   if (!spell || !spec) return null
 

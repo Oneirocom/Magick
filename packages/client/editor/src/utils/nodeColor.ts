@@ -15,7 +15,7 @@ export function nodeColor(node, specJson, spell) {
   }
   let [backgroundColor] = colors[colorName]
 
-  if (configuration.variableId) {
+  if (configuration?.variableId) {
     const variable = spell.graph.variables.find(
       variable => variable.id === configuration.variableId
     )
