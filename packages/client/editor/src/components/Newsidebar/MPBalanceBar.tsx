@@ -78,9 +78,14 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
   //   userData && userData?.user?.subscriptionName === 'APPRENTICE'
   const isWizard = userData && userData?.user?.subscriptionName === 'WIZARD'
 
+  const getCurrentMP = () => {
+    return Number((magickPowerBalance || 0).toFixed(2) || 0) * 100
+  }
+
   const getProgressValue = () => {
+    console.log('magickPowerBalance', magickPowerBalance)
     const maxMP = isWizard ? 1000 : 200 // Maximum MP based on subscription
-    const currentMP = Number((magickPowerBalance || 0).toFixed(0) || 0) * 100 // Current MP
+    const currentMP = getCurrentMP() // Get current MP
     const percentage = (currentMP / maxMP) * 100 // Calculate percentage of the max MP
 
     if (isNaN(percentage) || percentage < 0) return 0 // Ensure value is not NaN or negative
@@ -143,9 +148,7 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
           {/* MP Info container */}
           <div className="relative w-full text-center mt-2 flex">
             <p className="text-ds-secondary-p dark:text-ds-secondary-m font-normal text-xs justify-start">
-              {`${Number(magickPowerBalance.toFixed(0) || 0) * 100} / ${
-                isWizard ? '1000' : '200 Free Trial'
-              } MP`}
+              {`${getCurrentMP()} / ${isWizard ? '1000' : '200 Free Trial'} MP`}
             </p>
           </div>
         </div>
