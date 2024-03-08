@@ -412,7 +412,7 @@
     "@types/lodash": "4.14.195",
     "@types/md5": "^2.3.5",
     "@types/mocha": "10.0.1",
-    "@types/node": "18.16.9",
+    "@types/node": "20.10.0",
     "@types/nodemailer": "^6.4.14",
     "@types/react": "18.2.33",
     "@types/react-csv": "1.1.3",
