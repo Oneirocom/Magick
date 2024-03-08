@@ -1,6 +1,5 @@
 // DOCUMENTED
 import checkPermissions from 'feathers-permissions'
-import { parse, stringify } from 'flatted'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
 import { HookContext } from '@feathersjs/feathers'
@@ -17,7 +16,6 @@ import socketio from '@feathersjs/socketio'
 import pino from 'pino'
 import Redis from 'ioredis'
 import { RedisPubSub } from 'server/redis-pubsub'
-import sync from 'feathers-sync'
 
 import { REDIS_URL, API_ACCESS_KEY } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
@@ -34,6 +32,8 @@ import handleSockets from './sockets/sockets'
 import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
 import { CredentialsManager } from 'server/credentials'
+import feathersSync from './lib/feathersSync'
+import { stringify } from 'shared/utils'
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -105,10 +105,10 @@ export async function initApp(environment: Environment = 'default') {
   // sync up messages between the app and the runner
   logger.info('SETTING UP REDIS')
   app.configure(
-    sync({
+    feathersSync({
       uri: REDIS_URL,
       serialize: stringify,
-      deserialize: parse,
+      deserialize: JSON.parse,
     })
   )
 
