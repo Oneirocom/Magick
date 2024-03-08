@@ -139,6 +139,8 @@ export class PluginManager extends EventEmitter {
    */
   async loadPlugins(): Promise<void> {
     if (this.pluginsLoaded) return
+    this.pluginsLoaded = true
+
     for await (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
       const PluginClass = pluginGetter
@@ -161,7 +163,6 @@ export class PluginManager extends EventEmitter {
         await this.registerPlugin(pluginInstance)
       }
     }
-    this.pluginsLoaded = true
   }
 
   /**
