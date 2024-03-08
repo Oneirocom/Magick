@@ -36,6 +36,7 @@ const GraphWindow = (props: Props) => {
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
+    //TODO: Jakob - This might be helpful for context menu issues
     const dispose = props.api.onDidDimensionsChange(event => {
       setWidth(event.width)
       setHeight(event.height)
