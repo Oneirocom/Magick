@@ -59,25 +59,27 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   }
 
   return (
-    <div className={cx('relative p-5')}>
-      <div
-        className={cx(
-          'rounded text-white text-sm bg-[var(--foreground-color)] w-[220px] transition-all duration-300 opacity-100',
-          selected && 'outline outline-1',
-          fired && 'outline outline-2 outline-green-500',
-          running && css.running,
-          error && 'outline outline-2 outline-red-500'
-        )}
-      >
+    <div className="p-5">
+      <div className={cx('relative')}>
         <div
           className={cx(
-            `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100`
+            'rounded text-white text-sm bg-[var(--foreground-color)] w-[220px] transition-all duration-300 opacity-100',
+            selected && 'outline outline-1',
+            fired && 'outline outline-2 outline-green-500',
+            running && css.running,
+            error && 'outline outline-2 outline-red-500'
           )}
         >
-          {title}
-          {config?.label && ` - ${config.label}`}
+          <div
+            className={cx(
+              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100`
+            )}
+          >
+            {title}
+            {config?.label && ` - ${config.label}`}
+          </div>
+          <div className={`flex flex-col gap-1 py-1`}>{children}</div>
         </div>
-        <div className={`flex flex-col gap-1 py-1`}>{children}</div>
       </div>
     </div>
   )
