@@ -61,6 +61,7 @@ export const events: PubSubEvents = {
   $MULTI_SELECT_COPY: tabId => `multiSelectCopy:${tabId}`,
   $MULTI_SELECT_PASTE: tabId => `multiSelectPaste:${tabId}`,
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
+  $RELOAD_GRAPH: tabId => `reloadGraph:${tabId}`,
 }
 
 // Create the PubSubProvider component
@@ -76,6 +77,7 @@ export const PubSubProvider = ({ children }) => {
 
   // Publish function
   const publish = (event: string, data?: PubSubData) => {
+    console.log('DATA', data)
     return PubSub.publish(event, data)
   }
 
@@ -111,15 +113,17 @@ export const PubSubProvider = ({ children }) => {
       client.service('agents').command(command)
     })
 
-    const unsubscribeMessage = subscribe(events.MESSAGE_AGENT, (event, data) => {
-      client.service('agents').message(data)
-    })
+    const unsubscribeMessage = subscribe(
+      events.MESSAGE_AGENT,
+      (event, data) => {
+        client.service('agents').message(data)
+      }
+    )
 
     return () => {
       unsubscribeRun()
       unsubscribeCommand()
       unsubscribeMessage()
-
     }
   }, [client])
 

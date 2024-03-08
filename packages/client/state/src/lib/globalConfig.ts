@@ -1,17 +1,17 @@
-// DOCUMENTED
-// DOCUMENTED
 /**
  * Module that exports a Redux slice for the global config that carries the authentication, project id and API url information.
  * @module globalConfigSlice
  */
 
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
+import { SaveDiffData } from 'packages/client/feathers-client/src/lib/FeathersClient'
 
 type ActiveInputType = {
   name: string
   inputType: string
   value: string
 }
+
 /**
  * Interface that defines the Global Config type.
  */
@@ -25,6 +25,9 @@ export interface GlobalConfig {
   dockviewTheme: string
   textEditorState: string
   activeInput: ActiveInputType
+  pastState: SaveDiffData[]
+  futureState: SaveDiffData[]
+  isDirty: boolean
 }
 
 /**
@@ -40,6 +43,8 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     currentAgentId: '',
     currentSpellReleaseId: '',
     textEditorState: '',
+    pastState: [] as SaveDiffData[],
+    futureState: [] as SaveDiffData[],
     activeInput: {
       name: '',
       inputType: '',
@@ -47,6 +52,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     },
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
+    isDirty: false as boolean,
   },
   reducers: {
     /**
@@ -63,6 +69,85 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
       state.apiUrl = apiUrl
       state.token = token
       state.projectId = projectId
+    },
+    applyState: (
+      state: GlobalConfig,
+      action: PayloadAction<{ value: SaveDiffData; clearFuture: boolean }>
+    ) => {
+      if (!action.payload.value) return
+      const MAX_HISTORY = 30
+
+      if (state.pastState?.length >= MAX_HISTORY) {
+        const newPastState = [...state.pastState].slice(1)
+        state.pastState = newPastState
+      }
+      const newPastState = state.pastState?.length
+        ? [...state.pastState, action.payload.value]
+        : [action.payload.value]
+
+      state.pastState = newPastState
+
+      if (action.payload.clearFuture) {
+        state.futureState = []
+      }
+
+      console.log('applyState', {
+        pastState: state.pastState,
+        futureState: state.futureState || [],
+        clearFuture: action.payload.clearFuture,
+        newPastState,
+      })
+    },
+    undoState: (state: GlobalConfig) => {
+      const MAX_ENTRIES = 30
+
+      if (state.pastState.length > 0) {
+        // Prepare updates separately
+        const lastState = state.pastState[state.pastState.length - 1]
+        //remove lastState from pastState
+        const updatedPastState = [...state.pastState]
+
+        //TODO: Not sure why we are popping twice here, might have something to do with applyState being called unexpectedly
+        updatedPastState.pop()
+        updatedPastState.pop()
+
+        // Prepend lastState to futureState and enforce MAX_ENTRIES limit
+        const updatedFutureState = [...state.futureState, lastState].slice(
+          0,
+          MAX_ENTRIES
+        )
+
+        // Perform assignments
+        state.pastState = updatedPastState
+        state.futureState = updatedFutureState
+        console.log('undoState', {
+          pastState: state.pastState,
+          futureState: state.futureState,
+          updatedPastState,
+          lastState,
+        })
+      }
+    },
+    redoState: (state: GlobalConfig) => {
+      const MAX_ENTRIES = 30
+      if (state.futureState.length > 0) {
+        // Prepare updates separately
+        const nextState = state.futureState[state.futureState.length - 1]
+        const updatedFutureState = [...state.futureState]
+        updatedFutureState.pop()
+
+        // Append nextState to pastState and enforce MAX_ENTRIES limit
+        const updatedPastState = [nextState, ...state.pastState].slice(
+          0,
+          MAX_ENTRIES
+        )
+        // Perform assignments
+        state.pastState = updatedPastState
+        state.futureState = updatedFutureState
+      }
+    },
+    setIsDirty: (state: GlobalConfig, action: PayloadAction<boolean>): void => {
+      state.isDirty = action.payload
     },
     setCurrentAgentId: (
       state: GlobalConfig,
@@ -105,6 +190,10 @@ export const {
   setCurrentSpellReleaseId,
   setTextEditorState,
   setActiveInput,
+  applyState,
+  undoState,
+  redoState,
+  setIsDirty,
 } = globalConfigSlice.actions
 
 /**
@@ -118,3 +207,7 @@ export const selectActiveInput = state =>
     inputType: string
     value: string
   }
+
+export const selectPastState = state => state.globalConfig.pastState
+export const selectFutureState = state => state.globalConfig.futureState
+export const selectIsDirty = state => state.globalConfig.isDirty

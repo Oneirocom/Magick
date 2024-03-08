@@ -9,10 +9,13 @@ import { io } from 'socket.io-client'
 /**
  * SaveDiffData type definition.
  */
-type SaveDiffData = {
+
+export type SaveDiffData = {
   name: string
   diff: Record<string, any>
   projectId: string
+  spellReleaseId?: string
+  spellId: string
 }
 
 /**
