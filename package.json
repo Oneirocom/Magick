@@ -122,6 +122,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@frigade/react": "^1.38.31",
     "@google-cloud/speech": "5.5.0",
+    "@google-cloud/storage": "^7.8.0",
     "@google-cloud/text-to-speech": "4.2.2",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
