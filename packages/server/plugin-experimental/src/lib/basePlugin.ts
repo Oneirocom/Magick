@@ -202,6 +202,11 @@ export abstract class BasePlugin<
     }
   }
 
+  getEvents() {
+    return this.eventManager.getEvents()
+  }
+
+
   // ACTIONS
 
   protected initializeActionHandlers() {
@@ -266,6 +271,10 @@ export abstract class BasePlugin<
   }
 
   abstract getCommandHandlers(): Record<keyof Commands, (enable: any) => void>
+
+  getCommands = () => {
+    return this.commandManager.getCommands()
+  }
 
   /**
    * Registers the base commands for the plugin.
