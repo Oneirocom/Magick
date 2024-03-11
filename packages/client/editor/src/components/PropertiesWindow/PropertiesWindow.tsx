@@ -15,6 +15,7 @@ import { ValueType } from './ValueType'
 import { DefaultConfig } from './DefaultConfig'
 import { CompletionProviderOptions } from './CompletionProviderOptions'
 import { SelectedEvents } from './SelectedEvents'
+import { useEffect, useState } from 'react'
 
 type Props = {
   tab: Tab
@@ -46,6 +47,12 @@ const ConfigurationComponents = {
 
 export const PropertiesWindow = (props: Props) => {
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
+  const [spec, setSpec] = useState<NodeSpecJSON | null>(null)
+  const [configuration, setConfiguration] = useState<Record<
+    string,
+    any
+  > | null>(null)
+
   const spellName = props.spellName
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -61,13 +68,17 @@ export const PropertiesWindow = (props: Props) => {
 
   const nodeSpecs = getNodeSpec()
 
-  if (!selectedNode) return null
+  useEffect(() => {
+    if (!spell || !selectedNode || !nodeSpecs) return
+    const { configuration } = selectedNode.data
+    if (!configuration) {
+      handleChange('configuration', spell.configuration)
+    }
+    setConfiguration(configuration)
 
-  const spec = nodeSpecs.find(spec => spec.type === selectedNode.type)
-  const { configuration } = selectedNode.data
-  const hiddenProperties = configuration?.hiddenProperties || []
-
-  if (!spell || !spec) return null
+    const spec = nodeSpecs.find(spec => spec.type === selectedNode.type)
+    setSpec(spec || null)
+  }, [spell, selectedNode, nodeSpecs])
 
   const updateConfigKey = (key: string, value: any) => {
     const newConfig = {
@@ -85,6 +96,8 @@ export const PropertiesWindow = (props: Props) => {
     handleChange('configuration', newConfig)
   }
 
+  if (!spell || !spec || !configuration || !selectedNode) return null
+
   return (
     <Window borderless>
       {spec && (
@@ -94,7 +107,9 @@ export const PropertiesWindow = (props: Props) => {
       )}
       {
         Object.entries(configuration || {})
-          .filter(([key, value]) => !hiddenProperties.includes(key))
+          .filter(
+            ([key, value]) => !configuration.hiddenProperties.includes(key)
+          )
           .map((config: [key: string, any], index) => {
             const [key] = config
             const Component =
