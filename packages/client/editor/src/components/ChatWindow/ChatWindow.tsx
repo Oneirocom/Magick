@@ -338,7 +338,7 @@ const ChatWindow = ({ tab, spellName }) => {
     <Window toolbar={toolbar}>
       <div className="flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto">
         <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
-          <Scrollbars>
+          <Scrollbars ref={scrollbars}>
             <Editor
               theme="sds-dark"
               language="json"
@@ -356,7 +356,7 @@ const ChatWindow = ({ tab, spellName }) => {
           className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
         ></div>
         <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
-          <Scrollbars>
+          <Scrollbars ref={ref => (scrollbars.current = ref)}>
             <ul className="list-none m-0 p-2">
               {history.map((printItem: Message, key: any) => {
                 if (printItem.sender === 'user') {
