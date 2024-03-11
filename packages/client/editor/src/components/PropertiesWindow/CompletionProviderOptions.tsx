@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import { useConfig } from '@magickml/providers'
-import { useListCredentialsQuery, useGetUserQuery } from 'client/state'
+import {
+  useListCredentialsQuery,
+  useGetUserQuery,
+  selectActiveNode,
+} from 'client/state'
 import {
   LLMProviders,
   CompletionModel,
@@ -18,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
+import { useSelector } from 'react-redux'
 
 // Assuming props.fullConfig has the correct types for modelProvider and model
 export const CompletionProviderOptions: React.FC<
@@ -31,12 +36,22 @@ export const CompletionProviderOptions: React.FC<
   )
   const [activeModels, setActiveModels] = useState<CompletionModel[]>([])
   const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
+  const [lastActiveNodeId, setLastActiveNodeId] = useState<string | null>(null)
 
   const config = useConfig()
   const { data: credentials } = useListCredentialsQuery({
     projectId: config.projectId,
   })
   const { data: userData } = useGetUserQuery({ projectId: config.projectId })
+  const selectedNode = useSelector(selectActiveNode(props.tab.id))
+
+  // keep state in sync with selected node
+  useEffect(() => {
+    if (selectedNode && selectedNode.id === lastActiveNodeId) return
+    setLastActiveNodeId(selectedNode?.id || '')
+    setSelectedProvider(props.fullConfig.modelProvider || '')
+    setSelectedModel(props.fullConfig.model || '')
+  }, [selectedNode])
 
   useEffect(() => {
     setSelectedProvider(props.fullConfig.modelProvider || '')
