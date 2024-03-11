@@ -100,9 +100,9 @@ export class CommandHub {
    */
   registerPlugin(
     pluginName: string,
-    actions: { [key: string]: (data: any) => void }
+    commands: { [key: string]: (data: any) => void }
   ) {
-    this.registerDomain('plugin', pluginName, actions)
+    this.registerDomain('plugin', pluginName, commands)
   }
 
   /**
@@ -124,6 +124,7 @@ export class CommandHub {
   ) {
     for (const command of Object.keys(commands)) {
       const eventType = `${domain}:${subdomain}:${command}`
+      console.log('registering event', eventType, command)
       this.on(eventType, { callback: commands[command] })
     }
   }
