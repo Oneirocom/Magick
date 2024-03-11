@@ -83,6 +83,9 @@
       "communication": ["packages/shared/communication/src/index.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
       "plugin-abstracts": ["packages/server/plugin-abstracts/src/index.ts"],
+      "plugin-experimental": [
+        "packages/server/plugin-experimental/src/index.ts"
+      ],
       "plugin-state": ["packages/server/plugin-state/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/shared": ["plugins/shared/src/index.ts"],
