@@ -62,7 +62,7 @@ const InputFieldForValue = ({
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
   const hideValueInput = hideValue || connected
 
-  const inputClass = cx('h-6 text-sm')
+  const inputClass = cx('h-5 text-sm')
 
   const containerClass = cx(
     'flex w-full rounded-sm items-center pl-1 rounded-sm',
