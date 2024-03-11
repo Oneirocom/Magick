@@ -1,8 +1,8 @@
-import { EventPayload } from 'server/plugin'
 import { z } from 'zod'
 import {
   type ExtractPluginCredentialNames,
-  PluginStateType,
+  type EventPayload,
+  type PluginStateType,
 } from 'plugin-experimental'
 import { PluginCredential } from 'server/credentials'
 import { createEventsEnum } from 'plugins/shared'

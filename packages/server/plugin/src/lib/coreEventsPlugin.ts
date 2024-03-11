@@ -17,6 +17,7 @@ import { PluginCredentialsType } from 'server/credentials'
  * }
  */
 export abstract class CoreEventsPlugin<
+  Credentials extends Record<string, string | undefined>,
   PluginEvents extends Record<string, (...args: any[]) => void> = Record<
     string,
     (...args: any[]) => void
@@ -24,15 +25,14 @@ export abstract class CoreEventsPlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends PluginStateType = PluginStateType,
-  Credentials extends PluginCredentialsType = PluginCredentialsType
+  State extends PluginStateType = PluginStateType
 > extends BasePlugin<
+  Credentials,
   PluginEvents,
   Payload,
   Data,
   Metadata,
-  State,
-  Credentials
+  State
 > {
   constructor({
     name,
@@ -95,13 +95,13 @@ export type DefaultPluginData = Record<string, unknown>
 export type DefaultPluginMetadata = Record<string, unknown>
 
 export abstract class CoreEventsPluginWithDefaultTypes<
-  State extends PluginStateType,
-  Credentials extends PluginCredentialsType
+  Credentials extends Record<string, string | undefined>,
+  State extends PluginStateType
 > extends CoreEventsPlugin<
+  Credentials,
   DefaultPluginEvents,
   DefaultPluginPayload,
   DefaultPluginData,
   DefaultPluginMetadata,
-  State,
-  Credentials
+  State
 > {}

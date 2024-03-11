@@ -71,12 +71,12 @@ export abstract class WebSocketPlugin<
   State extends WebSocketPluginState = WebSocketPluginState,
   Credentials extends PluginCredentialsType = PluginCredentialsType
 > extends CoreEventsPlugin<
+  Credentials,
   CoreEvents,
   Payload,
   Data,
   Metadata,
-  State,
-  Credentials
+  State
 > {
   protected pluginConfig: WSPluginConfig<WSEvents, WSActions, WSDepKeys>
 

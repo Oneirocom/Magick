@@ -11,12 +11,14 @@ import {
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
+import { PluginCredential } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
 import {
   BasePluginStateManager,
   PluginStateManager,
   PluginStateType,
+  PluginCredentialsManager,
+  BaseCredentialsManager,
 } from 'plugin-experimental'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
@@ -220,6 +222,10 @@ export const basePluginCommands: Record<string, PluginCommandInfo> = {
  * @property enabled - The enabled state of the plugin.
  */
 export abstract class BasePlugin<
+  Credentials extends Record<string, string | undefined> = Record<
+    string,
+    string | undefined
+  >,
   PluginEvents extends Record<string, (...args: any[]) => void> = Record<
     string,
     (...args: any[]) => void
@@ -227,15 +233,14 @@ export abstract class BasePlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends object = Record<string, unknown>,
-  OldCredentials extends object = Record<string, string | undefined>
+  State extends object = Record<string, unknown>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
-  protected credentialsManager: PluginCredentialsManager<OldCredentials>
+  protected credentialsManager: PluginCredentialsManager<Credentials>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -286,7 +291,8 @@ export abstract class BasePlugin<
     this.eventEmitter = new EventEmitter()
     this.events = []
     this.commands = []
-    this.credentialsManager = new PluginCredentialsManager(
+
+    this.credentialsManager = new BaseCredentialsManager<Credentials>(
       agentId,
       name,
       projectId
@@ -719,7 +725,7 @@ export abstract class BasePlugin<
    * @param name The name of the credential to retrieve.
    * @returns The credential value.
    */
-  async getCredential(name: keyof OldCredentials) {
+  async getCredential(name: keyof Credentials) {
     return this.credentialsManager.getCredential(name)
   }
 
