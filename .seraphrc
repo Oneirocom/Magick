@@ -1,0 +1,22 @@
+{
+  "plugin": {
+    "name": "plugin",
+    "description": "This is a plugin for the MagickML plugin system.  It works to abstract away complexity and provides a clean way to extend the functionality of Magick.",
+    "corePrompt": "generate a plugin for the Magick system which meets all the user specifications and takes into account all the provided files for examples.",
+    "files": [
+      {
+        "fileName": "main plugin",
+        "description": "Contains the main code for the plugin",
+        "fileType": "typescript",
+        "coreFilePath": "plugins/discord/src/lib/discordPlugin.ts",
+        "supplementaryFiles": [
+          "packages/server/plugin/src/lib/basePlugin.ts",
+          "packages/server/plugin/src/lib/coreEventsPlugin.ts",
+          "packages/server/plugin/src/lib/coreEventTypes.ts",
+          "packages/server/pluginManager/src/lib/plugin-manager.ts"
+        ]
+      }
+    ],
+    "supplementaryFiles": []
+  }
+}
