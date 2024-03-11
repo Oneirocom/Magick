@@ -138,10 +138,12 @@ export const generateText = makeFlowNodeDefinition({
           options: {
             temperature,
             top_p,
-            stop,
+            stop_sequences: stop ? [stop] : undefined,
             base_url: customBaseUrl || undefined,
           },
         }
+
+        console.log('generateText request:', request)
 
         const processNextChunk = async iterator => {
           const result = await iterator.next()
