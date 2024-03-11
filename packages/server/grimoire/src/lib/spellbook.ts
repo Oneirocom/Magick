@@ -160,6 +160,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.app = app
     this.agent = agent
     this.init()
+    this.pluginManager.on('pluginsLoaded', () => {
+      this.initializePlugins()
+    })
   }
 
   init() {
@@ -250,13 +253,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   private initializePlugins() {
     // Load plugins
-    this.pluginManager.loadPlugins().then(() => {
-      this.logger.trace(
-        `Plugins loaded in Spellbook for agent ${this.agent.id}`
-      )
-      this.pluginManager.getPlugins().forEach(plugin => {
-        this.setupPluginWorker(plugin)
-      })
+    this.logger.trace(`Plugins loaded in Spellbook for agent ${this.agent.id}`)
+    this.pluginManager.getPlugins().forEach(plugin => {
+      this.setupPluginWorker(plugin)
     })
   }
 
