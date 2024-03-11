@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import Redis from 'ioredis'
-import { Plugin } from './plugin'
+import { Plugin } from 'server/plugin'
 import {
   IRegistry,
   NodeDefinition,
@@ -30,7 +30,6 @@ import {
   basePluginCommands,
 } from './commands/command-manager'
 import { EventTypes } from 'communication'
-import { BaseEmitter } from './baseEmitter'
 
 type ValueOf<T> = T[keyof T]
 
