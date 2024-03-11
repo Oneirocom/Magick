@@ -13,7 +13,11 @@ import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
-import { PluginStateManager, PluginStateType } from 'plugin-state'
+import {
+  BasePluginStateManager,
+  PluginStateManager,
+  PluginStateType,
+} from 'plugin-experimental'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
@@ -224,14 +228,14 @@ export abstract class BasePlugin<
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
   State extends object = Record<string, unknown>,
-  Credentials extends object = Record<string, string | undefined>
+  OldCredentials extends object = Record<string, string | undefined>
 > extends Plugin {
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
-  protected credentialsManager: PluginCredentialsManager<Credentials>
+  protected credentialsManager: PluginCredentialsManager<OldCredentials>
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -287,7 +291,10 @@ export abstract class BasePlugin<
       name,
       projectId
     )
-    this.stateManager = new PluginStateManager<State>(this.agentId, this.name)
+    this.stateManager = new BasePluginStateManager<State>(
+      this.agentId,
+      this.name
+    )
   }
 
   /**
@@ -712,7 +719,7 @@ export abstract class BasePlugin<
    * @param name The name of the credential to retrieve.
    * @returns The credential value.
    */
-  async getCredential(name: keyof Credentials) {
+  async getCredential(name: keyof OldCredentials) {
     return this.credentialsManager.getCredential(name)
   }
 
