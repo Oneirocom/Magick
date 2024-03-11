@@ -328,6 +328,7 @@ export type ActiveProviders =
   | LLMProviders.TogetherAI
   | LLMProviders.Palm
   | LLMProviders.Groq
+  | LLMProviders.Anthropic
 
 export type ActiveEmbeddingProviders = LLMProviders.OpenAI
 
@@ -337,6 +338,7 @@ const activeProviders: ActiveProviders[] = [
   LLMProviders.GoogleAIStudio,
   LLMProviders.Palm,
   LLMProviders.Groq,
+  LLMProviders.Anthropic,
 ]
 
 const ActiveEmbeddingProviders: ActiveEmbeddingProviders[] = [

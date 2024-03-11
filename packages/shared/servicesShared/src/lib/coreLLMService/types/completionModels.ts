@@ -82,9 +82,10 @@ export enum MistralAIModels {
 }
 
 export enum AnthropicModels {
+  Claude3sonnet = 'claude-3-sonnet-20240229',
+  Claude3Opus = 'claude-3-opus-20240229',
   Claude21 = 'claude-2.1',
   Claude2 = 'claude-2',
-  ClaudeInstant1 = 'claude-instant-1',
   ClaudeInstant12 = 'claude-instant-1.2',
 }
 
