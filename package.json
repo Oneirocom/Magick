@@ -77,7 +77,8 @@
     "lint-staged": "lint-staged",
     "postinstall": "npm run generateClients",
     "vercel-install": "./vercel-submodule-workaround.sh && npm i",
-    "bucket:init": "ts-node ./scripts/init-bucket.ts"
+    "bucket:init": "ts-node ./scripts/init-bucket.ts",
+    "seraph:codegen": "node ./scripts/seraphCodegen/seraphCodegen.js"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -91,6 +92,7 @@
     ]
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.17.1",
     "@aws-sdk/client-s3": "^3.400.0",
     "@aws-sdk/s3-request-presigner": "^3.525.0",
     "@clerk/clerk-sdk-node": "^4.13.9",
@@ -195,9 +197,12 @@
     "bullmq": "4.6.0",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.3.2",
+    "cli-highlight": "^2.1.11",
+    "cli-progress": "^3.12.0",
     "clientjs": "^0.2.1",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
+    "commander": "^12.0.0",
     "compute-cosine-similarity": "1.0.0",
     "daisyui": "^4.6.0",
     "date-fns": "^2.30.0",
@@ -451,6 +456,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "husky": "^8.0.0",
     "ink-testing-library": "^3.0.0",
+    "inquirer": "^8.0.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "29.5.0",
     "jest-environment-node": "29.5.0",
