@@ -1,0 +1,24 @@
+{
+  "name": "plugin-experimental",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/plugin-experimental/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/plugin-experimental",
+        "tsConfig": "packages/server/plugin-experimental/tsconfig.lib.json",
+        "packageJson": "packages/server/plugin-experimental/package.json",
+        "main": "packages/server/plugin-experimental/src/index.ts",
+        "assets": ["packages/server/plugin-experimental/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}
