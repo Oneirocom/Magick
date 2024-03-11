@@ -122,3 +122,5 @@ export const PINECONE_INDEX_NAME =
 
 export const AGENT_HEARTBEAT_INTERVAL_MSEC =
   Number(getVarForEnvironment('AGENT_HEARTBEAT_INTERVAL_MSEC')) || 10000
+
+export const PORTAL_BOT_URL = getVarForEnvironment('PORTAL_BOT_URL') || false
