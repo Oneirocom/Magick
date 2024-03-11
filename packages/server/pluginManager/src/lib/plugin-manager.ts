@@ -9,6 +9,7 @@ import Redis from 'ioredis'
 import * as plugins from './../../../../../plugins'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
+import { CommandHub } from 'server/command-hub'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
@@ -79,6 +80,12 @@ export class PluginManager extends EventEmitter {
   centralEventBus: EventEmitter = new EventEmitter()
 
   /**
+   * The command hub for the plugin manager.
+   * Handles responding to incomign commands.
+   */
+  commandHub: CommandHub
+
+  /**
    * The agent ID of the agent running the plugin manager.
    * @type {string}
    * @memberof PluginManager
@@ -107,12 +114,14 @@ export class PluginManager extends EventEmitter {
     agentId,
     pubSub,
     projectId,
+    commandHub,
   }: {
     pluginDirectory: string
     connection: Redis
     agentId: string
     pubSub: RedisPubSub
     projectId: string
+    commandHub: CommandHub
   }) {
     super()
     this.agentId = agentId
@@ -122,6 +131,7 @@ export class PluginManager extends EventEmitter {
     this.pluginDirectory = pluginDirectory
     this.plugins = new Map()
     this.logger = getLogger()
+    this.commandHub = commandHub
   }
 
   /**
@@ -131,6 +141,14 @@ export class PluginManager extends EventEmitter {
    */
   getPlugins(): BasePlugin[] {
     return Array.from(this.plugins.values())
+  }
+
+  /**
+   * Initializes the PluginManager.
+   * @memberof PluginManager
+   */
+  initialize(): void {
+    this.loadPlugins()
   }
 
   /**
@@ -163,6 +181,8 @@ export class PluginManager extends EventEmitter {
         await this.registerPlugin(pluginInstance)
       }
     }
+
+    this.emit('pluginsLoaded', this.getPlugins())
   }
 
   /**
@@ -202,6 +222,7 @@ export class PluginManager extends EventEmitter {
         }
       }
     }
+    this.emit('pluginsLoaded', this.getPlugins())
   }
 
   /**
@@ -213,6 +234,9 @@ export class PluginManager extends EventEmitter {
     this.plugins.set(plugin.name, plugin)
     this.setupPluginEventForwarding(plugin)
     await plugin.init(this.centralEventBus)
+
+    // Commands need to be registered after the plugin has been initialized
+    this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
   }
 
   /**
