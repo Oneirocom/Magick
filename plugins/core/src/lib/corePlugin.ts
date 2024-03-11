@@ -44,7 +44,6 @@ import {
   validateCoreWebhookPayload,
   type CorePluginEvents,
   type CorePluginState,
-  type CorePluginCredentials,
   type CoreWebhookPayload,
 } from './config'
 import { EventTypes, ON_ERROR } from 'communication'
@@ -53,17 +52,18 @@ import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
 import { getStateNode } from './nodes/_uncategorized/getState'
 import { getSecretNode } from './nodes/_uncategorized/getSecret'
+import { type CorePluginCredentials } from './configx'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
 export class CorePlugin extends CoreEventsPlugin<
+  CorePluginCredentials,
   CorePluginEvents,
   EventPayload,
   Record<string, unknown>,
   Record<string, unknown>,
-  CorePluginState,
-  CorePluginCredentials
+  CorePluginState
 > {
   override defaultState = coreDefaultState
   client: CoreEventClient
