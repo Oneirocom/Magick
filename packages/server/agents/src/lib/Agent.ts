@@ -77,6 +77,7 @@ export class Agent implements AgentInterface {
       agentId: this.id,
       pubSub: this.app.get('pubsub'),
       projectId: this.projectId,
+      commandHub: this.commandHub,
     })
 
     // @ts-ignore
@@ -86,19 +87,24 @@ export class Agent implements AgentInterface {
       pluginManager: this.pluginManager,
       commandHub: this.commandHub,
     })
-    // initialize the core commands
-    // These are used to remotely control the agent
-    this.initializeCoreCommands()
 
-    this.initializeSpellbook()
-
-    // initialize the plugin commands
-    this.intializePluginCommands()
+    this.initialize()
 
     this.heartbeatInterval = this.startHeartbeat()
 
     this.logger.info('New agent created: %s | %s', this.name, this.id)
     this.ready = true
+  }
+
+  initialize() {
+    // initialize the core commands
+    // These are used to remotely control the agent
+    this.initializeCoreCommands()
+
+    this.pluginManager.initialize()
+
+    // initialzie spellbook
+    this.initializeSpellbook()
   }
 
   /**
@@ -144,16 +150,6 @@ export class Agent implements AgentInterface {
 
     const spells = spellsData.data
     this.spellbook.loadSpells(spells)
-  }
-
-  private intializePluginCommands() {
-    this.pluginManager.loadPlugins().then(() => {
-      const plugins = this.pluginManager.getPlugins()
-      for (const plugin of plugins) {
-        console.log('Registering plugin', plugin.name, plugin.getCommands())
-        this.commandHub.registerPlugin(plugin.name, plugin.getCommands())
-      }
-    })
   }
 
   startHeartbeat() {
