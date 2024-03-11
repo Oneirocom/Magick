@@ -2,7 +2,7 @@ import { createActionNode } from 'plugins/shared/src'
 import { EventPayload } from 'server/plugin'
 import {
   type DiscordEventPayload,
-  DISCORD_DEP_KEYS,
+  DISCORD_DEPENDENCIES,
   type SendMessage,
 } from '../../config'
 import { SocketDefinition } from '@magickml/behave-graph'
@@ -23,17 +23,17 @@ export const sendDiscordMessage = createActionNode<
   Inputs,
   Outputs,
   [
-    typeof DISCORD_DEP_KEYS.DISCORD_KEY,
+    typeof DISCORD_DEPENDENCIES.DISCORD_KEY,
     'IEventStore',
-    typeof DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE
+    typeof DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE
   ]
 >({
   label: 'Send Discord Message',
   typeName: 'discord/sendMessage',
   dependencyKeys: [
-    DISCORD_DEP_KEYS.DISCORD_KEY,
+    DISCORD_DEPENDENCIES.DISCORD_KEY,
     'IEventStore',
-    DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE,
+    DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE,
   ],
   inputs: {
     flow: { valueType: 'flow' },
@@ -45,9 +45,9 @@ export const sendDiscordMessage = createActionNode<
   },
   process: async (
     dependencies: {
-      [DISCORD_DEP_KEYS.DISCORD_KEY]: Client
+      [DISCORD_DEPENDENCIES.DISCORD_KEY]: Client
       IEventStore: IEventStore
-      [DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE]: (
+      [DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE]: (
         content: string,
         event: EventPayload<DiscordEventPayload['messageCreate']>
       ) => void
@@ -71,7 +71,7 @@ export const sendDiscordMessage = createActionNode<
       }
 
       const sendDiscordMessage = dependencies[
-        DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE
+        DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE
       ] as SendMessage | undefined
 
       if (!sendDiscordMessage) {
