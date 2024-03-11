@@ -1,4 +1,4 @@
-import { EventPayload } from 'plugin-experimental'
+import { EventPayload } from 'server/plugin'
 import { DiscordAgentContext, type DiscordEventPayload } from '../config'
 import { SentenceTokenizer } from 'natural'
 
