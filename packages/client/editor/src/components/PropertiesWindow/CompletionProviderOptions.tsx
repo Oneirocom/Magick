@@ -38,6 +38,11 @@ export const CompletionProviderOptions: React.FC<
   })
   const { data: userData } = useGetUserQuery({ projectId: config.projectId })
 
+  useEffect(() => {
+    setSelectedProvider(props.fullConfig.modelProvider || '')
+    setSelectedModel(props.fullConfig.model || '')
+  }, [props.fullConfig.modelProvider, props.fullConfig.model])
+
   const onSelectModel = (model: CompletionModel | '') => {
     setSelectedModel(model)
     props.updateConfigKey('model', model)
