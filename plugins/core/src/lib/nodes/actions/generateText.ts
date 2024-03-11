@@ -79,6 +79,10 @@ export const generateText = makeFlowNodeDefinition({
       valueType: 'integer',
       defaultValue: 42,
     },
+    maxTokens: {
+      valueType: 'integer',
+      defaultValue: 256,
+    },
   },
   out: {
     response: 'string',
@@ -121,6 +125,7 @@ export const generateText = makeFlowNodeDefinition({
         const maxRetries: number = read('maxRetries') || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
+        const max_tokens: number = read('maxTokens')
         // const modelProvider: LLMProviders = configuration.modelProvider
         const model: CompletionModel =
           read('modelOverride') || configuration.model
@@ -140,6 +145,7 @@ export const generateText = makeFlowNodeDefinition({
             top_p,
             stop_sequences: stop ? [stop] : undefined,
             base_url: customBaseUrl || undefined,
+            max_tokens,
           },
         }
 
