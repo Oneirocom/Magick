@@ -17,7 +17,6 @@ import {
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
-import { EventTypes } from 'communication'
 import { WebSocketPlugin } from 'plugin-abstracts'
 import { DiscordMessageUtils } from './services/discord-message-utils'
 import { isDiscordToken } from 'token-validation'
@@ -51,7 +50,7 @@ export class DiscordPlugin extends WebSocketPlugin<
   Record<string, unknown>,
   DiscordPluginState
 > {
-  override defaultState = discordDefaultState
+  defaultState = discordDefaultState
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]
   values = []
   credentials = discordPluginCredentials

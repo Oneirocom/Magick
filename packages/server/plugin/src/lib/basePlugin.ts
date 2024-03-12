@@ -126,39 +126,6 @@ export interface BasePluginInit {
   state?: Record<string, unknown>
 }
 
-const enable: PluginCommandInfo = {
-  commandName: 'enable',
-  displayName: 'Enable',
-}
-
-const disable: PluginCommandInfo = {
-  commandName: 'disable',
-  displayName: 'Disable',
-}
-
-const linkCredential: PluginCommandInfo = {
-  commandName: 'linkCredential',
-  displayName: 'Link Credential',
-}
-
-const unlinkCredential: PluginCommandInfo = {
-  commandName: 'unlinkCredential',
-  displayName: 'Unlink Credential',
-}
-
-const webhook: PluginCommandInfo = {
-  commandName: 'webhook',
-  displayName: 'Webhook',
-}
-
-export const basePluginCommands: Record<string, PluginCommandInfo> = {
-  enable,
-  disable,
-  linkCredential,
-  unlinkCredential,
-  webhook,
-}
-
 /**
  * The `BasePlugin` class serves as an abstract foundation for creating plugins
  * within the system. It encapsulates common functionalities and structures that

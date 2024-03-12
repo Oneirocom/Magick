@@ -39,14 +39,13 @@ import {
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
-  corePluginCommands,
   formatCoreWebhookPayload,
   validateCoreWebhookPayload,
   type CorePluginEvents,
   type CorePluginState,
   type CoreWebhookPayload,
 } from './config'
-import { EventTypes, ON_ERROR } from 'communication'
+import { EventTypes } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
@@ -181,27 +180,6 @@ export class CorePlugin extends CoreEventsPlugin<
     })
   }
 
-  /**
-   * Defines the actions that the plugin will handle.
-   */
-  // defineActions() {
-  //   // Define actions here
-  //   this.registerAction({
-  //     actionName: EventTypes.SEND_MESSAGE,
-  //     displayName: 'Send Message',
-  //     handler: this.handleSendMessage.bind(this),
-  //   })
-  //   this.registerAction({
-  //     actionName: EventTypes.STREAM_MESSAGE,
-  //     displayName: 'Stream Message',
-  //     handler: this.handleSendMessage.bind(this),
-  //   })
-  //   this.registerAction({
-  //     actionName: ON_ERROR,
-  //     displayName: 'Error Received',
-  //     handler: this.handleSendMessage.bind(this),
-  //   })
-  // }
   getActionHandlers() {
     return {
       [CORE_ACTIONS.messageSend]: this.handleSendMessage,

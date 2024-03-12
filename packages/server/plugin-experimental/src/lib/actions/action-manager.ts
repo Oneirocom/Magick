@@ -1,7 +1,6 @@
 import { type EventPayload } from '../events/event-manager'
 import { getLogger } from 'server/logger'
 import { saveGraphEvent } from 'server/core'
-import { AiOutlineConsoleSql } from 'react-icons/ai'
 
 export interface ActionPayload<T = unknown, Y = unknown> {
   actionName: string

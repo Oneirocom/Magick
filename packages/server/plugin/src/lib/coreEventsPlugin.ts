@@ -3,7 +3,6 @@ import { BasePlugin, EventPayload } from './basePlugin'
 import EventEmitter from 'events'
 import { EventTypes } from 'communication'
 import { PluginStateType } from 'plugin-state'
-import { PluginCredentialsType } from 'server/credentials'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
