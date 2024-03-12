@@ -53,11 +53,11 @@ interface WSPluginConfig<
  * Abstract class for a WebSocket-based plugin.
  */
 export abstract class WebSocketPlugin<
+  Events extends Record<string, string>,
+  Actions extends Record<string, string>,
+  Dependencies extends Record<string, string>,
   Commands extends Record<string, string>,
   Credentials extends PluginCredentialsType = PluginCredentialsType,
-  WSEvents extends WebSocketPluginEventNames = WebSocketPluginEventNames,
-  WSActions extends WebSocketPluginActions = WebSocketPluginActions,
-  WSDepKeys extends WebSocketPluginDepKeys = WebSocketPluginDepKeys,
   CoreEvents extends Record<string, (...args: any[]) => void> = Record<
     string,
     (...args: any[]) => void
@@ -67,6 +67,9 @@ export abstract class WebSocketPlugin<
   Metadata = Record<string, unknown>,
   State extends WebSocketPluginState = WebSocketPluginState
 > extends CoreEventsPlugin<
+  Events,
+  Actions,
+  Dependencies,
   Commands,
   Credentials,
   CoreEvents,
@@ -75,11 +78,8 @@ export abstract class WebSocketPlugin<
   Metadata,
   State
 > {
-  protected pluginConfig: WSPluginConfig<WSEvents, WSActions, WSDepKeys>
-
   constructor({ name, connection, agentId, projectId }: BasePluginInit) {
     super({ name, connection, agentId, projectId })
-    this.pluginConfig = this.getWSPluginConfig()
   }
 
   /**
@@ -90,14 +90,6 @@ export abstract class WebSocketPlugin<
   override async init(centralEventBus: EventEmitter) {
     super.init(centralEventBus)
   }
-
-  /**
-   * Abstract method to get the WebSocket plugin configuration.
-   * This is a helper to avoid using the constructor.
-   * @example: Discord plugin configuration.
-   * @returns The WebSocket plugin configuration.
-   */
-  abstract getWSPluginConfig(): WSPluginConfig<WSEvents, WSActions, WSDepKeys>
 
   /**
    * Abstract method to handle the login process.
@@ -179,7 +171,7 @@ export abstract class WebSocketPlugin<
    * }
    * @param eventName - The name of the event to listen to.
    */
-  abstract listen(eventName: keyof WSEvents): void | Promise<void>
+  abstract listen(eventName: keyof Events): void | Promise<void>
 
   /**
    * Stops listening to an event.
@@ -189,7 +181,7 @@ export abstract class WebSocketPlugin<
    * }
    * @param eventName - The name of the event to stop listening to.
    */
-  abstract unlisten(eventName: keyof WSEvents): void | Promise<void>
+  abstract unlisten(eventName: keyof Events): void | Promise<void>
 
   /**
    * Handles plugin enabling.
@@ -226,7 +218,7 @@ export abstract class WebSocketPlugin<
    * Loops through the events defined in the plugin config and listens to them.
    */
   listenAll() {
-    Object.keys(this.pluginConfig.events).forEach(eventName => {
+    Object.keys(this.config.events).forEach(eventName => {
       this.listen(eventName)
     })
   }
@@ -236,7 +228,7 @@ export abstract class WebSocketPlugin<
    * Loops through the events defined in the plugin config and stops listening to them.
    */
   unlistenAll() {
-    Object.keys(this.pluginConfig.events).forEach(eventName => {
+    Object.keys(this.config.events).forEach(eventName => {
       this.unlisten(eventName)
     })
   }
@@ -323,9 +315,7 @@ export abstract class WebSocketPlugin<
    * Passed in events are defined in the plugin config and a type.
    */
   defineEvents() {
-    for (const [messageType, eventName] of Object.entries(
-      this.pluginConfig.events
-    )) {
+    for (const [messageType, eventName] of Object.entries(this.config.events)) {
       this.registerEvent({
         eventName,
         displayName: `${this.name} ${messageType}`,

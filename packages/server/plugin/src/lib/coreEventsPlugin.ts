@@ -17,6 +17,9 @@ import { PluginCredentialsType } from 'server/credentials'
  * }
  */
 export abstract class CoreEventsPlugin<
+  Events extends Record<string, string>,
+  Actions extends Record<string, string>,
+  Dependencies extends Record<string, string>,
   Commands extends Record<string, string>,
   Credentials extends Record<string, string | undefined>,
   PluginEvents extends Record<string, (...args: any[]) => void> = Record<
@@ -28,6 +31,9 @@ export abstract class CoreEventsPlugin<
   Metadata = Record<string, unknown>,
   State extends PluginStateType = PluginStateType
 > extends BasePlugin<
+  Events,
+  Actions,
+  Dependencies,
   Commands,
   Credentials,
   PluginEvents,
@@ -97,10 +103,16 @@ export type DefaultPluginData = Record<string, unknown>
 export type DefaultPluginMetadata = Record<string, unknown>
 
 export abstract class CoreEventsPluginWithDefaultTypes<
+  Events extends Record<string, string>,
+  Actions extends Record<string, string>,
+  Dependencies extends Record<string, string>,
   Commands extends Record<string, string>,
   Credentials extends Record<string, string | undefined>,
   State extends PluginStateType
 > extends CoreEventsPlugin<
+  Events,
+  Actions,
+  Dependencies,
   Commands,
   Credentials,
   DefaultPluginEvents,

@@ -46,11 +46,11 @@ interface SlackPluginConfig {
 }
 
 export class SlackPlugin extends WebSocketPlugin<
-  typeof SLACK_COMMANDS,
-  SlackCredentials,
   typeof SLACK_EVENTS,
   typeof SLACK_ACTIONS,
-  typeof SLACK_DEP_KEYS,
+  typeof SLACK_DEPENDENCIES,
+  typeof SLACK_COMMANDS,
+  SlackCredentials,
   CorePluginEvents,
   EventPayload<SlackEventPayload[keyof SlackEventPayload], any>,
   Record<string, unknown>,

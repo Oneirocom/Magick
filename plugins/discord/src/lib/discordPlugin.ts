@@ -40,11 +40,11 @@ interface DiscordPluginConfig {
 }
 
 export class DiscordPlugin extends WebSocketPlugin<
-  typeof DISCORD_COMMANDS,
-  DiscordCredentials,
   typeof DISCORD_EVENTS,
   typeof DISCORD_ACTIONS,
-  typeof DISCORD_DEP_KEYS,
+  typeof DISCORD_DEPENDENCIES,
+  typeof DISCORD_COMMANDS,
+  DiscordCredentials,
   CorePluginEvents,
   EventPayload<DiscordEventPayload[keyof DiscordEventPayload], any>,
   Record<string, unknown>,
