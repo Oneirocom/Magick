@@ -41,7 +41,7 @@ interface SlackPluginConfig {
   pluginName: typeof slackPluginName
   events: typeof SLACK_EVENTS
   actions: typeof SLACK_ACTIONS
-  dependencyKeys: typeof SLACK_DEP_KEYS
+  dependencyKeys: typeof SLACK_DEPENDENCIES
   developerMode: typeof SLACK_DEVELOPER_MODE
 }
 
@@ -98,17 +98,6 @@ export class SlackPlugin extends WebSocketPlugin<
   // COMMANDS
   getCommandHandlers() {
     return {}
-  }
-
-  // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
-  getWSPluginConfig(): SlackPluginConfig {
-    return {
-      pluginName: slackPluginName,
-      events: SLACK_EVENTS,
-      actions: SLACK_ACTIONS,
-      dependencyKeys: SLACK_DEP_KEYS,
-      developerMode: SLACK_DEVELOPER_MODE,
-    }
   }
 
   async login(credentials: SlackCredentials) {

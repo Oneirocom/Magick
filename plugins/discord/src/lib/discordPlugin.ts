@@ -128,15 +128,6 @@ export class DiscordPlugin extends WebSocketPlugin<
   }
 
   // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
-  getWSPluginConfig(): DiscordPluginConfig {
-    return {
-      pluginName: discordPluginName,
-      events: DISCORD_EVENTS,
-      actions: DISCORD_ACTIONS,
-      dependencyKeys: DISCORD_DEPENDENCIES,
-      developerMode: DISCORD_DEVELOPER_MODE,
-    }
-  }
 
   async login(credentials: DiscordCredentials) {
     await this.discord.login(credentials['discord-token'])
