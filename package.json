@@ -26,6 +26,7 @@
     "migrate:rollback": "nx run @magickml/server:migrate:rollback",
     "migrate:list": "nx run @magickml/server:migrate:list",
     "lint": "npx nx run-many --all --target=lint --max-warnings=0",
+    "lint:nocache": "npx nx run-many --all --target=lint --max-warnings=0 --skip-nx-cache",
     "lint-fix": "npx nx run-many --all --target=lint --fix --max-warnings=0",
     "lint:engine": "npx nx lint shared-core --fix",
     "lint:editor": "npx nx lint @magickml/editor --fix",
