@@ -26,6 +26,8 @@ import {
   BaseActionManager,
 } from 'plugin-experimental'
 
+type ValueOf<T> = T[keyof T]
+
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
 /**
  * Interface for defining an event.
@@ -390,7 +392,6 @@ export abstract class BasePlugin<
     )
   }
 
-
   // COMMANDS
 
   defineCommands() {
@@ -570,7 +571,9 @@ export abstract class BasePlugin<
 
   abstract getDependencies(
     spellCaster: SpellCaster
-  ): Record<string, any> | Promise<Record<string, any>>
+  ):
+    | Record<ValueOf<Dependencies>, any>
+    | Promise<Record<ValueOf<Dependencies>, any>>
 
   /**
    * Returns a registry object merged with the plugin's specific registry.
