@@ -143,17 +143,23 @@ export class CorePlugin extends CoreEventsPlugin<
     }
   }
 
-  defineCommands() {
-    const { webhook } = corePluginCommands
-    this.registerCommand({ ...webhook, handler: this.handleWebhook.bind(this) })
+  // COMMANDS
+
+  getCommandHandlers() {
+    return {}
   }
 
-  async handleWebhook(payload: CoreWebhookPayload) {
+  handleEnableCommand() {}
+  handleDisableCommand() {}
+  handleLinkCommand() {}
+  handleUnlinkCommand() {}
+  handleWebhookCommand(payload: CoreWebhookPayload) {
     const isValid = validateCoreWebhookPayload(payload)
     if (!isValid) {
       return
     }
     const p = formatCoreWebhookPayload(payload, this.agentId)
+    console.log('Webhook event received:', p)
     this.emitEvent(EventTypes.ON_WEBHOOK, p)
   }
 

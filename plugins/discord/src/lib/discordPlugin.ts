@@ -89,6 +89,11 @@ export class DiscordPlugin extends WebSocketPlugin<
     }
   }
 
+  // COMMANDS
+  getCommandHandlers() {
+    return {}
+  }
+
   handleSendMessage<K extends keyof DiscordEventPayload>(
     actionPayload: ActionPayload<DiscordEventPayload[K]>
   ) {

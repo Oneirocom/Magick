@@ -341,6 +341,67 @@ export abstract class BasePlugin<
     this.mapActionsToEventBus()
   }
 
+  // COMMANDS
+
+  defineCommands() {
+    const handlers = this.getCommandHandlers()
+    for (const command of Object.entries(this.config.commands)) {
+      const commandName = command[0]
+      const displayName = command[1]
+      const handler = handlers[commandName]
+      if (!handler) {
+        throw new Error(`Missing command handler for ${commandName}`)
+      }
+      this.commandManager.registerCommand({
+        commandName,
+        displayName: `${this.name} ${displayName}`,
+        handler: handler.bind(this),
+      })
+    }
+
+    this.defineBaseCommands()
+  }
+
+  abstract getCommandHandlers(): Record<keyof Commands, (enable: any) => void>
+
+  getCommands = () => {
+    return this.commandManager.getCommands()
+  }
+
+  /**
+   * Registers the base commands for the plugin.
+   */
+  defineBaseCommands() {
+    const { enable, disable, linkCredential, unlinkCredential, webhook } =
+      basePluginCommands
+    this.commandManager.registerCommand({
+      ...linkCredential,
+      handler: this.handleEnableCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...unlinkCredential,
+      handler: this.handleDisableCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...enable,
+      handler: this.handleLinkCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...disable,
+      handler: this.handleUnlinkCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...webhook,
+      handler: this.handleWebhookCommand.bind(this),
+    })
+  }
+
+  abstract handleEnableCommand(payload: any): void
+  abstract handleDisableCommand(payload: any): void
+  abstract handleLinkCommand(payload: any): void
+  abstract handleUnlinkCommand(payload: any): void
+  abstract handleWebhookCommand(payload: any): void
+
   /**
    * Maps registered events to a BullMQ queue.
    * Each event emission will create a job in the BullMQ queue.
@@ -601,7 +662,7 @@ export abstract class BasePlugin<
    *  handler: this.handleEnableCommand.bind(this)
    * });
    */
-  abstract defineCommands(): void
+  // abstract defineCommands(): void
 
   /**
    * Abstract method to be implemented by plugins to define their actions.
@@ -710,13 +771,13 @@ export abstract class BasePlugin<
    * @example
    * const commands = this.getCommands();
    */
-  getCommands(): Record<string, PluginCommand['handler']> {
-    // reduce over command array to make object iof name and handler
-    return this.commands.reduce((acc, command) => {
-      acc[command.commandName] = command.handler
-      return acc
-    }, {} as Record<string, PluginCommand['handler']>)
-  }
+  // getCommands(): Record<string, PluginCommand['handler']> {
+  //   // reduce over command array to make object iof name and handler
+  //   return this.commands.reduce((acc, command) => {
+  //     acc[command.commandName] = command.handler
+  //     return acc
+  //   }, {} as Record<string, PluginCommand['handler']>)
+  // }
 
   /**
    * Initializes the plugin state by fetching it from the database or setting it to a default value.

@@ -1,10 +1,5 @@
 import { EventEmitter } from 'events'
-import {
-  BasePluginInit,
-  CoreEventsPlugin,
-  EventPayload,
-  basePluginCommands,
-} from 'server/plugin'
+import { BasePluginInit, CoreEventsPlugin, EventPayload } from 'server/plugin'
 import { PluginCredentialsType } from 'server/credentials'
 
 /**
@@ -324,27 +319,6 @@ export abstract class WebSocketPlugin<
 
   /**
    * Required method from parent class.
-   * Defines commands for the plugin.
-   * Setup the enable/disable and linkCredential/unlinkCredential commands.
-   * Override this method to add more commands but be sure define enable/disable.
-   */
-  defineCommands() {
-    const { enable, disable, linkCredential, unlinkCredential } =
-      basePluginCommands
-    this.registerCommand({
-      ...linkCredential,
-      handler: this.handleEnable.bind(this),
-    })
-    this.registerCommand({
-      ...unlinkCredential,
-      handler: this.handleDisable.bind(this),
-    })
-    this.registerCommand({ ...enable, handler: this.handleEnable.bind(this) })
-    this.registerCommand({ ...disable, handler: this.handleDisable.bind(this) })
-  }
-
-  /**
-   * Required method from parent class.
    * Defines events for the plugin.
    * Passed in events are defined in the plugin config and a type.
    */
@@ -364,4 +338,28 @@ export abstract class WebSocketPlugin<
    * Currently unused.
    */
   handleOnMessage() {}
+
+  // COMMANDS
+
+  handleEnableCommand() {
+    this.activate()
+  }
+
+  handleDisableCommand() {
+    this.deactivate()
+  }
+
+  handleLinkCommand() {
+    this.activate()
+  }
+
+  handleUnlinkCommand() {
+    this.deactivate()
+  }
+
+  handleWebhookCommand() {
+    this.logger.info(
+      'Webhook command received, but this plugin does not support webhooks'
+    )
+  }
 }
