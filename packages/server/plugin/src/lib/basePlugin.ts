@@ -153,6 +153,8 @@ export abstract class BasePlugin<
     this.actionsManager = new BaseActionManager(agentId)
   }
 
+  // CONFIG
+
   /**
    * Abstract method to get the plugin configuration.
    * This is a helper to avoid using the constructor.
@@ -235,6 +237,8 @@ export abstract class BasePlugin<
   }
   abstract beforeDestroy(): void
   abstract afterDestroy(): void
+
+  // ACTIONS
 
   protected initializeActionHandlers() {
     this.actionsManager.getActions().forEach(action => {
@@ -337,6 +341,15 @@ export abstract class BasePlugin<
   abstract handleUnlinkCommand(payload: any): void
   abstract handleWebhookCommand(payload: any): void
 
+  // DEPENDENCIES
+
+  abstract getDependencies(
+    spellCaster: SpellCaster
+  ):
+    | Record<ValueOf<Dependencies>, any>
+    | Promise<Record<ValueOf<Dependencies>, any>>
+
+    
   /**
    * Maps registered events to a BullMQ queue.
    * Each event emission will create a job in the BullMQ queue.
@@ -445,12 +458,6 @@ export abstract class BasePlugin<
   provideRegistry(registry: IRegistry): IRegistry {
     return registry
   }
-
-  abstract getDependencies(
-    spellCaster: SpellCaster
-  ):
-    | Record<ValueOf<Dependencies>, any>
-    | Promise<Record<ValueOf<Dependencies>, any>>
 
   /**
    * Returns a registry object merged with the plugin's specific registry.
