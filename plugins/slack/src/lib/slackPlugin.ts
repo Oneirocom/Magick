@@ -95,6 +95,11 @@ export class SlackPlugin extends WebSocketPlugin<
     }
   }
 
+  // COMMANDS
+  getCommandHandlers() {
+    return {}
+  }
+
   // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
   getWSPluginConfig(): SlackPluginConfig {
     return {
