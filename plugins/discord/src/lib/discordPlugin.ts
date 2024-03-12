@@ -6,17 +6,13 @@ import {
 import { type CorePluginEvents } from 'plugin/core'
 import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
 import {
-  DISCORD_EVENTS,
   DISCORD_DEP_KEYS,
   discordPluginCredentials,
   discordDefaultState,
-  discordPluginName,
   type DiscordCredentials,
   type DiscordEventPayload,
   type DiscordPluginState,
   SendMessage,
-  DISCORD_DEVELOPER_MODE,
-  DISCORD_ACTIONS,
 } from './config'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
@@ -26,13 +22,20 @@ import { WebSocketPlugin } from 'plugin-abstracts'
 import { DiscordMessageUtils } from './services/discord-message-utils'
 import { isDiscordToken } from 'token-validation'
 
-import type { DISCORD_COMMANDS } from './configx'
+import {
+  DISCORD_COMMANDS,
+  discordPluginName,
+  DISCORD_EVENTS,
+  DISCORD_ACTIONS,
+  DISCORD_DEPENDENCIES,
+  DISCORD_DEVELOPER_MODE,
+} from './configx'
 
 interface DiscordPluginConfig {
   pluginName: typeof discordPluginName
   events: typeof DISCORD_EVENTS
   actions: typeof DISCORD_ACTIONS
-  dependencyKeys: typeof DISCORD_DEP_KEYS
+  dependencyKeys: typeof DISCORD_DEPENDENCIES
   developerMode: typeof DISCORD_DEVELOPER_MODE
 }
 
@@ -75,6 +78,17 @@ export class DiscordPlugin extends WebSocketPlugin<
     super({ name: discordPluginName, connection, agentId, projectId })
   }
 
+  getPluginConfig() {
+    return {
+      events: DISCORD_EVENTS,
+      actions: DISCORD_ACTIONS,
+      dependencyKeys: DISCORD_DEPENDENCIES,
+      commands: DISCORD_COMMANDS,
+      developerMode: DISCORD_DEVELOPER_MODE,
+      credentials: discordPluginCredentials,
+    }
+  }
+
   handleSendMessage<K extends keyof DiscordEventPayload>(
     actionPayload: ActionPayload<DiscordEventPayload[K]>
   ) {
@@ -115,7 +129,7 @@ export class DiscordPlugin extends WebSocketPlugin<
       pluginName: discordPluginName,
       events: DISCORD_EVENTS,
       actions: DISCORD_ACTIONS,
-      dependencyKeys: DISCORD_DEP_KEYS,
+      dependencyKeys: DISCORD_DEPENDENCIES,
       developerMode: DISCORD_DEVELOPER_MODE,
     }
   }

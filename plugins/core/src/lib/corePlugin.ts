@@ -52,7 +52,13 @@ import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
 import { getStateNode } from './nodes/_uncategorized/getState'
 import { getSecretNode } from './nodes/_uncategorized/getSecret'
-import { type CorePluginCredentials, type CORE_COMMANDS } from './configx'
+import {
+  type CorePluginCredentials,
+  CORE_COMMANDS,
+  CORE_EVENTS,
+  CORE_ACTIONS,
+  CORE_DEPENDENCIES,
+} from './configx'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -124,6 +130,17 @@ export class CorePlugin extends CoreEventsPlugin<
     })
 
     this.userService = new CoreUserService({ projectId })
+  }
+
+  getPluginConfig() {
+    return {
+      events: CORE_EVENTS,
+      actions: CORE_ACTIONS,
+      dependencyKeys: CORE_DEPENDENCIES,
+      commands: CORE_COMMANDS,
+      developerMode: false,
+      credentials: corePluginCredentials,
+    }
   }
 
   defineCommands() {
