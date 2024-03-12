@@ -172,13 +172,70 @@ export abstract class BasePlugin<
     this.defineEvents()
     this.defineActions()
     this.defineCommands()
-    await this.initializePluginState()
+
+    const state = await this.stateManager.ensureStateInitialized(
+      this.defaultState
+    )
     await this.credentialsManager.init()
-    await this.initializeFunctionalities()
+    if (state?.enabled) await this.activate()
+
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
     this.initializeActionHandlers()
   }
+
+  // LIFECYCLE METHODS
+
+  /**
+   * Sets the enabled state of the plugin.
+   * @param enabled The enabled state to set.
+   * @example
+   * this.setEnabled(true);
+   */
+  async setEnabled(enabled: boolean) {
+    const current = this.stateManager.getState() as PluginStateType<State>
+    await this.stateManager.updatePluginState({
+      ...current,
+      enabled,
+    })
+  }
+
+  /**
+   * Activates the plugin, making it ready for operation.
+   */
+  async activate() {
+    await this.beforeActivate()
+    await this.setEnabled(true)
+    await this.afterActivate()
+
+    this.logger.debug(`Plugin ${this.name} activated`)
+  }
+  abstract beforeActivate(): Promise<void> | void
+  abstract afterActivate(): Promise<void> | void
+
+  /**
+   * Deactivates the plugin, putting it into a passive state.
+   */
+  async deactivate() {
+    await this.beforeDeactivate()
+    await this.setEnabled(false)
+    await this.afterDeactivate()
+    this.logger.debug(`Plugin ${this.name} deactivated`)
+  }
+  abstract beforeDeactivate(): Promise<void> | void
+  abstract afterDeactivate(): Promise<void> | void
+
+  /**
+   * Cleans up resources and performs necessary teardown tasks.
+   */
+  destroy(): void {
+    this.beforeDestroy()
+    this.eventEmitter.removeAllListeners()
+    this.afterDestroy()
+    this.logger.debug(`Plugin ${this.name} destroyed.`)
+  }
+  abstract beforeDestroy(): void
+  abstract afterDestroy(): void
 
   protected initializeActionHandlers() {
     this.actionsManager.getActions().forEach(action => {
@@ -309,13 +366,6 @@ export abstract class BasePlugin<
     })
   }
 
-  // /**
-  //  * Maps registered actions to the action queue.
-  //  */
-  // mapActionsToEventBus() {
-  //   this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
-  // }
-
   /**
    * Handles an action from the action queue.
    * @param job The job to handle.
@@ -439,48 +489,6 @@ export abstract class BasePlugin<
     }
 
     return await this.provideRegistry(registry)
-  }
-
-  /**
-   * Activates the plugin, making it ready for operation.
-   */
-  async activate() {
-    // Activation logic specific to the plugin
-    await this.setEnabled(true)
-    this.logger.debug(`Plugin ${this.name} activated`)
-  }
-
-  /**
-   * Deactivates the plugin, putting it into a passive state.
-   */
-  async deactivate() {
-    // Deactivation logic specific to the plugin
-    await this.setEnabled(false)
-    this.logger.debug(`Plugin ${this.name} deactivated`)
-  }
-
-  /**
-   * Cleans up resources and performs necessary teardown tasks.
-   */
-  destroy(): void {
-    // Remove all listeners to prevent memory leaks
-    this.eventEmitter.removeAllListeners()
-
-    this.logger.debug(`Plugin ${this.name} destroyed.`)
-  }
-
-  /**
-   * Sets the enabled state of the plugin.
-   * @param state The state to set the plugin to.
-   * @example
-   * this.setEnabled(true);
-   */
-  async setEnabled(enabled: boolean) {
-    const current = this.stateManager.getState() as PluginStateType<State>
-    await this.stateManager.updatePluginState({
-      ...current,
-      enabled,
-    })
   }
 
   /**
