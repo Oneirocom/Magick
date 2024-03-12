@@ -55,8 +55,6 @@ export abstract class BasePlugin<
   Commands extends Record<string, string>,
   Credentials extends Record<string, string | undefined>,
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
-  Data = Record<string, unknown>,
-  Metadata = Record<string, unknown>,
   State extends object = Record<string, unknown>
 > extends Plugin {
   protected config: BasePluginConfig<Events, Actions, Dependencies, Commands>
@@ -205,7 +203,6 @@ export abstract class BasePlugin<
   getEvents() {
     return this.eventManager.getEvents()
   }
-
 
   // ACTIONS
 

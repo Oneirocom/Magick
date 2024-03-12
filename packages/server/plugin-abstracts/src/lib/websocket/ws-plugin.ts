@@ -2,52 +2,11 @@ import { EventEmitter } from 'events'
 import { BasePluginInit, CoreEventsPlugin, EventPayload } from 'server/plugin'
 import { PluginCredentialsType } from 'server/credentials'
 
-/**
- * Defines the structure for WebSocketPlugin event names.
- */
-interface WebSocketPluginEventNames {
-  [key: string]: string
-}
-
-/**
- * Defines the structure for WebSocketPlugin actions.
- */
-interface WebSocketPluginActions {
-  [key: string]: string
-}
-
-/**
- * Defines the structure for WebSocketPlugin dependency keys.
- * These are the keys that the plugin will use to access dependencies.
- */
-interface WebSocketPluginDepKeys {
-  [key: string]: string
-}
-
-/**
- * Defines the structure for WebSocketPlugin State.
- * Does not extend PluginStateType but has same structure.
- */
-
 export type WebSocketPluginState<T extends object = Record<string, unknown>> =
   T & {
     enabled: boolean
     context: Record<string, unknown>
   }
-
-/**
- * Configuration object for WebSocketPlugin plugins.
- */
-interface WSPluginConfig<
-  Events extends WebSocketPluginEventNames,
-  Actions extends WebSocketPluginActions,
-  DependencyKeys extends WebSocketPluginDepKeys
-> {
-  events: Events
-  actions: Actions
-  dependencyKeys: DependencyKeys
-  developerMode: boolean
-}
 
 /**
  * Abstract class for a WebSocket-based plugin.
