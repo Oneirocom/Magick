@@ -5,15 +5,6 @@ import {
 } from 'server/plugin'
 import { type CorePluginEvents } from 'plugin/core'
 import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
-import {
-  DISCORD_DEP_KEYS,
-  discordPluginCredentials,
-  discordDefaultState,
-  type DiscordCredentials,
-  type DiscordEventPayload,
-  type DiscordPluginState,
-  SendMessage,
-} from './config'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
@@ -22,12 +13,18 @@ import { DiscordMessageUtils } from './services/discord-message-utils'
 import { isDiscordToken } from 'token-validation'
 
 import {
+  discordPluginCredentials,
+  discordDefaultState,
   DISCORD_COMMANDS,
   discordPluginName,
   DISCORD_EVENTS,
   DISCORD_ACTIONS,
   DISCORD_DEPENDENCIES,
   DISCORD_DEVELOPER_MODE,
+  type DiscordEventPayload,
+  type DiscordCredentials,
+  type DiscordPluginState,
+  type SendMessage,
 } from './configx'
 
 export class DiscordPlugin extends WebSocketPlugin<
@@ -69,6 +66,7 @@ export class DiscordPlugin extends WebSocketPlugin<
     super({ name: discordPluginName, connection, agentId, projectId })
   }
 
+  // CONFIG
   getPluginConfig() {
     return {
       events: DISCORD_EVENTS,
@@ -77,6 +75,23 @@ export class DiscordPlugin extends WebSocketPlugin<
       commands: DISCORD_COMMANDS,
       developerMode: DISCORD_DEVELOPER_MODE,
       credentials: discordPluginCredentials,
+    }
+  }
+
+  // DEPENDENCIES
+  async getDependencies() {
+    return {
+      [discordPluginName]: DiscordEmitter,
+      [DISCORD_DEPENDENCIES.DISCORD_KEY]: this.discord,
+      [DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
+      [DISCORD_DEPENDENCIES.DISCORD_CONTEXT]: this.getContext.bind(this),
+    }
+  }
+
+  // ACTIONS
+  getActionHandlers() {
+    return {
+      [DISCORD_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
     }
   }
 
@@ -97,30 +112,7 @@ export class DiscordPlugin extends WebSocketPlugin<
     }
   }
 
-  // this is unused, but is for sending messages from discord to magick i think
-  async onMessageCreate(
-    handler: (event: EventPayload<DiscordEventPayload['messageCreate']>) => void
-  ) {
-    this.discord.on('messageCreate', (...args) => {
-      // have to cast here because of the way discord.js typings are set up
-      //@ts-ignore
-      const payload = args[0] as DiscordEventPayload['messageCreate']
-
-      if (this.utils.checkIfBotMessage(payload)) {
-        return
-      }
-
-      const eventPayload = this.utils.createEventPayload(
-        'messageCreate',
-        payload,
-        this.getContext()
-      )
-      handler(eventPayload)
-    })
-  }
-
-  // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
-
+  // ABSTRACTS FROM WS PLUGIN & BASE PLUGIN
   async login(credentials: DiscordCredentials) {
     await this.discord.login(credentials['discord-token'])
     this.logger.info('Logged in to Discord')
@@ -194,31 +186,6 @@ export class DiscordPlugin extends WebSocketPlugin<
 
   unlisten(eventName: keyof DiscordEventPayload) {
     this.discord.removeAllListeners(eventName)
-  }
-
-  // ABSTRACT IMPLEMENTATIONS FROM BASE/CORE PLUGIN
-  async getDependencies() {
-    return {
-      [discordPluginName]: DiscordEmitter,
-      [DISCORD_DEP_KEYS.DISCORD_KEY]: this.discord,
-      [DISCORD_DEP_KEYS.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
-      [DISCORD_DEP_KEYS.DISCORD_CONTEXT]: this.getContext.bind(this),
-    }
-  }
-
-  // defineActions(): void {
-  //   this.registerAction({
-  //     actionName: EventTypes.SEND_MESSAGE,
-  //     displayName: 'Send Message',
-  //     handler: this.handleSendMessage.bind(this),
-  //   })
-  // }
-
-  // ACTIONS
-  getActionHandlers() {
-    return {
-      [DISCORD_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
-    }
   }
 
   sendMessage: SendMessage = async (content, event) => {
