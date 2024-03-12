@@ -347,7 +347,49 @@ export abstract class BasePlugin<
     await this.initializeFunctionalities()
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
+    this.initializeActionHandlers()
   }
+
+  protected initializeActionHandlers() {
+    this.actionsManager.getActions().forEach(action => {
+      const eventName = `${this.name}:${action.actionName}`
+      this.centralEventBus.on(eventName, action.handler)
+    })
+  }
+
+  defineActions() {
+    const handlers = this.getActionHandlers()
+    console.log('ACTION handlers', handlers)
+    for (const [actionName, displayName] of Object.entries(
+      this.config.actions
+    )) {
+      console.log('ACTION registering', actionName, displayName)
+      if (!handlers[actionName]) {
+        throw new Error(`Missing action handler for ${actionName}`)
+      }
+      this.actionsManager.registerAction({
+        actionName,
+        displayName: `${this.name} ${displayName}`,
+        handler: handlers[actionName].bind(this),
+      })
+    }
+  }
+
+  abstract getActionHandlers(): Record<
+    keyof Actions,
+    (payload: ActionPayload<Payload['data'], Payload['metadata']>) => void
+  >
+
+  /**
+   * Maps registered actions to the action queue.
+   */
+  mapActionsToEventBus() {
+    this.centralEventBus.on(
+      this.actionQueueName,
+      this.actionsManager.handleAction.bind(this.actionsManager)
+    )
+  }
+
 
   // COMMANDS
 
@@ -438,12 +480,12 @@ export abstract class BasePlugin<
     })
   }
 
-  /**
-   * Maps registered actions to the action queue.
-   */
-  mapActionsToEventBus() {
-    this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
-  }
+  // /**
+  //  * Maps registered actions to the action queue.
+  //  */
+  // mapActionsToEventBus() {
+  //   this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
+  // }
 
   /**
    * Handles an action from the action queue.
@@ -682,7 +724,7 @@ export abstract class BasePlugin<
    *   handler: this.handleMyAction.bind(this)
    * });
    */
-  abstract defineActions(): void
+  // abstract defineActions(): void
 
   /**
    * Abstract method to be implemented by plugins to initialize their functionalities.

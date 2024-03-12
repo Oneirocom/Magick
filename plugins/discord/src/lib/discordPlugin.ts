@@ -224,12 +224,19 @@ export class DiscordPlugin extends WebSocketPlugin<
     }
   }
 
-  defineActions(): void {
-    this.registerAction({
-      actionName: EventTypes.SEND_MESSAGE,
-      displayName: 'Send Message',
-      handler: this.handleSendMessage.bind(this),
-    })
+  // defineActions(): void {
+  //   this.registerAction({
+  //     actionName: EventTypes.SEND_MESSAGE,
+  //     displayName: 'Send Message',
+  //     handler: this.handleSendMessage.bind(this),
+  //   })
+  // }
+
+  // ACTIONS
+  getActionHandlers() {
+    return {
+      [DISCORD_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
+    }
   }
 
   sendMessage: SendMessage = async (content, event) => {
