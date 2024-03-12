@@ -88,7 +88,6 @@ export abstract class BasePlugin<
   abstract values?: ValueType[]
   protected agentId: string
   protected projectId: string
-  protected isBuild?: boolean = false
   abstract defaultState: PluginStateType<State>
 
   public connection: Redis
@@ -542,30 +541,6 @@ export abstract class BasePlugin<
   abstract defineEvents(): void
 
   /**
-   * Abstract method to be implemented by plugins to define their commands.
-   * @example
-   * defineCommands() {
-   * this.registerCommand({
-   *  commandName: 'enable',
-   *  displayName: 'Enable',
-   *  handler: this.handleEnableCommand.bind(this)
-   * });
-   */
-  // abstract defineCommands(): void
-
-  /**
-   * Abstract method to be implemented by plugins to define their actions.
-   * @example
-   * defineActions() {
-   *  this.registerAction({
-   *   actionName: 'myAction',
-   *   displayName: 'My Action',
-   *   handler: this.handleMyAction.bind(this)
-   * });
-   */
-  // abstract defineActions(): void
-
-  /**
    * Abstract method to be implemented by plugins to initialize their functionalities.
    * @example
    * initializeFunctionalities() {
@@ -653,20 +628,6 @@ export abstract class BasePlugin<
   registerCommand(command: PluginCommand) {
     this.commands.push(command)
   }
-
-  /**
-   * Returns the list of registered commands.
-   * @returns An array of PluginCommand objects.
-   * @example
-   * const commands = this.getCommands();
-   */
-  // getCommands(): Record<string, PluginCommand['handler']> {
-  //   // reduce over command array to make object iof name and handler
-  //   return this.commands.reduce((acc, command) => {
-  //     acc[command.commandName] = command.handler
-  //     return acc
-  //   }, {} as Record<string, PluginCommand['handler']>)
-  // }
 
   /**
    * Initializes the plugin state by fetching it from the database or setting it to a default value.
