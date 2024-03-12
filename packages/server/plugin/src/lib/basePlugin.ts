@@ -79,7 +79,6 @@ export abstract class BasePlugin<
 > extends Plugin {
   protected config: BasePluginConfig<Events, Actions, Dependencies, Commands>
   protected events: EventDefinition[]
-  protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
@@ -349,7 +348,6 @@ export abstract class BasePlugin<
     | Record<ValueOf<Dependencies>, any>
     | Promise<Record<ValueOf<Dependencies>, any>>
 
-    
   /**
    * Maps registered events to a BullMQ queue.
    * Each event emission will create a job in the BullMQ queue.
@@ -384,9 +382,9 @@ export abstract class BasePlugin<
    */
   protected async handleAction(data: ActionPayload) {
     this.logger.trace(`Handling action ${data.actionName}`)
-    const action = this.actions.find(
-      action => action.actionName === data.actionName
-    )
+    const action = this.actionsManager
+      .getActions()
+      .find(action => action.actionName === data.actionName)
     if (!action) return
     this.logger.trace(`Action ${data.actionName} found.  Handling...`)
     await action.handler(data as ActionPayload)
@@ -510,21 +508,6 @@ export abstract class BasePlugin<
   registerEvent(event: EventDefinition) {
     this.events.push(event)
   }
-
-  /**
-   * Registers an action with the plugin.
-   * @param action The action definition to register.
-   * @example
-   * this.registerAction({
-   *   actionName: 'myAction',
-   *   displayName: 'My Action',
-   *   handler: this.handleMyAction.bind(this)
-   * });
-   */
-  registerAction(action: ActionDefinition) {
-    this.actions.push(action)
-  }
-
   /**
    * Returns the list of registered events.
    * @returns An array of EventDefinition objects.
