@@ -23,6 +23,7 @@ import {
   PluginCommandManager,
   basePluginCommands as expBasePluginCommands,
   BasePluginConfig,
+  BaseActionManager,
 } from 'plugin-experimental'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
@@ -227,6 +228,9 @@ export const basePluginCommands: Record<string, PluginCommandInfo> = {
  */
 
 export abstract class BasePlugin<
+  Events extends Record<string, string> = Record<string, string>,
+  Actions extends Record<string, string> = Record<string, string>,
+  Dependencies extends Record<string, string> = Record<string, string>,
   Commands extends Record<string, string> = Record<string, string>,
   Credentials extends Record<string, string | undefined> = Record<
     string,
@@ -241,7 +245,7 @@ export abstract class BasePlugin<
   Metadata = Record<string, unknown>,
   State extends object = Record<string, unknown>
 > extends Plugin {
-  protected config: BasePluginConfig<any, any, any, Commands>
+  protected config: BasePluginConfig<Events, Actions, Dependencies, Commands>
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
@@ -263,6 +267,8 @@ export abstract class BasePlugin<
   protected stateManager: PluginStateManager<State>
   protected credentialsManager: PluginCredentialsManager<Credentials>
   protected commandManager: PluginCommandManager
+  protected actionsManager: BaseActionManager
+
   /**
    * Returns the name of the BullMQ queue for the plugin.
    * Format: event:pluginName
@@ -312,6 +318,8 @@ export abstract class BasePlugin<
     )
 
     this.commandManager = new BaseCommandManager()
+
+    this.actionsManager = new BaseActionManager(agentId)
   }
 
   /**
@@ -373,7 +381,7 @@ export abstract class BasePlugin<
    */
   defineBaseCommands() {
     const { enable, disable, linkCredential, unlinkCredential, webhook } =
-      basePluginCommands
+      expBasePluginCommands
     this.commandManager.registerCommand({
       ...linkCredential,
       handler: this.handleEnableCommand.bind(this),

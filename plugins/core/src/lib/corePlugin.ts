@@ -64,6 +64,9 @@ import {
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
 export class CorePlugin extends CoreEventsPlugin<
+  typeof CORE_EVENTS,
+  typeof CORE_ACTIONS,
+  typeof CORE_DEPENDENCIES,
   typeof CORE_COMMANDS,
   CorePluginCredentials,
   CorePluginEvents,
