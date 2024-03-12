@@ -246,12 +246,12 @@ export abstract class WebSocketPlugin<
    */
   async initializeFunctionalities() {
     const state = await this.stateManager.getPluginState()
-    await this.updateCredentials()
+    await this.credentialsManager.update()
 
     console.log(`Initializing ${this.name} plugin... ${state}`)
 
     if (state?.enabled) {
-      const credentials = await this.getCredentials()
+      const credentials = this.credentialsManager.getCredentials()
 
       const validated = await this.validateCredentials(
         credentials || ({} as Credentials)
@@ -260,7 +260,7 @@ export abstract class WebSocketPlugin<
         this.logger.warn(
           `${this.name} plugin is disabled due to invalid credentials`
         )
-        await this.updatePluginState({ enabled: false } as State)
+        await this.stateManager.updatePluginState({ enabled: false } as State)
       } else {
         this.logger.info(`Initializing ${this.name} plugin...`)
         await this.login(validated)
@@ -270,7 +270,7 @@ export abstract class WebSocketPlugin<
           this.logger.warn(
             `${this.name} plugin is disabled due to failed login`
           )
-          await this.updatePluginState({ enabled: false } as State)
+          await this.stateManager.updatePluginState({ enabled: false } as State)
         }
 
         // Validate permissions
@@ -278,7 +278,7 @@ export abstract class WebSocketPlugin<
           this.logger.warn(
             `${this.name} plugin is disabled due to failed permissions`
           )
-          await this.updatePluginState({ enabled: false } as State)
+          await this.stateManager.updatePluginState({ enabled: false } as State)
         }
 
         await this.updateContext()

@@ -242,7 +242,7 @@ export class CorePlugin extends CoreEventsPlugin<
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
       // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
-      [CORE_DEP_KEYS.GET_STATE]: this.getGlobalState.bind(this),
+      [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
       [CORE_DEP_KEYS.GET_SECRET]:
         this.credentialsManager.getCustomCredential.bind(this),
     }
@@ -258,7 +258,7 @@ export class CorePlugin extends CoreEventsPlugin<
         const provider = LLMProviderKeys[providerKey]
 
         // Retrieve credentials for each provider
-        const credential = await this.getCredential(provider)
+        const credential = await this.credentialsManager.getCredential(provider)
 
         // Check if credentials are retrieved and valid
         if (credential) {
