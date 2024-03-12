@@ -163,7 +163,7 @@ export abstract class WebSocketPlugin<
   }
 
   async afterActivate() {
-    await this.listenAll()
+    this.listenAll()
   }
 
   beforeDeactivate() {
@@ -234,82 +234,6 @@ export abstract class WebSocketPlugin<
     Object.keys(this.config.events).forEach(eventName => {
       this.unlisten(eventName)
     })
-  }
-
-  /**
-   * Required method from parent class.
-   * Initializes the plugin functionalities.
-   * This method is called automatically when the plugin is enabled.
-   * It checks if it should be enabled and if the credentials are valid.
-   * If so, it initializes the WebSocket functionalities.
-   * If not, it logs a warning and disables the plugin.
-   */
-  async initializeFunctionalities() {
-    const state = await this.stateManager.getPluginState()
-    await this.credentialsManager.update()
-
-    console.log(`Initializing ${this.name} plugin... ${state}`)
-
-    if (state?.enabled) {
-      const credentials = this.credentialsManager.getCredentials()
-
-      const validated = await this.validateCredentials(
-        credentials || ({} as Credentials)
-      )
-      if (!validated) {
-        this.logger.warn(
-          `${this.name} plugin is disabled due to invalid credentials`
-        )
-        await this.stateManager.updatePluginState({ enabled: false } as State)
-      } else {
-        this.logger.info(`Initializing ${this.name} plugin...`)
-        await this.login(validated)
-
-        // Validate login
-        if (!(await this.validateLogin())) {
-          this.logger.warn(
-            `${this.name} plugin is disabled due to failed login`
-          )
-          await this.stateManager.updatePluginState({ enabled: false } as State)
-        }
-
-        // Validate permissions
-        if (!(await this.validatePermissions())) {
-          this.logger.warn(
-            `${this.name} plugin is disabled due to failed permissions`
-          )
-          await this.stateManager.updatePluginState({ enabled: false } as State)
-        }
-
-        await this.updateContext()
-        await this.initializeWebSocketFunctionalities()
-      }
-    } else {
-      this.logger.warn(
-        `${this.name} plugin is disabled but we tried to initialize it`
-      )
-    }
-  }
-
-  /**
-   * Initializes WebSocket functionalities.
-   * By default were just listening to all events.
-   * Override this method to customize this behavoir.
-   * It could make a nice pairing with state and commands to let users enable/disable events.
-   * It would also lower processing usage to not listen to all by default.
-   */
-  async initializeWebSocketFunctionalities() {
-    this.logger.info('Initializing WebSocket functionalities')
-    this.listenAll()
-    // THIS USED TO BE IN THE OLD DISCORD PLUGIN
-    // TODO: Figure out how to handle this
-    // I was having a double send issue so I commented this out for now
-    // it also belongs somewhere else now
-    // this.discord?.onMessageCreate(event => {
-    //   console.log('onMessageCreate', event)
-    //   // todo fix typing here,but I am lazy.
-    //   this.triggerMessageReceived(event as any)
-    // })
   }
 
   /**
