@@ -2,7 +2,7 @@ import pino from 'pino'
 import { getLogger } from 'server/logger'
 import { EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { DISCORD_EVENTS } from '../config'
+import { DISCORD_EVENTS } from '../configx'
 
 class DiscordEventClient {
   private logger: pino.Logger = getLogger()
