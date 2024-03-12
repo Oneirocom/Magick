@@ -28,83 +28,20 @@ import {
   PluginCommand,
 } from './commands/command-manager'
 import { BasePluginConfig } from './types'
-import { BaseActionManager } from './actions/action-manager'
+import {
+  ActionDefinition,
+  ActionPayload,
+  BaseActionManager,
+} from './actions/action-manager'
+import {
+  EventDefinition,
+  EventFormat,
+  EventPayload,
+} from './events/event-manager'
 
 type ValueOf<T> = T[keyof T]
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
-/**
- * Interface for defining an event.
- * @property eventName - The unique name of the event, typically namespaced.
- * @property displayName - A user-friendly name for the event.
- * @property payloadType - The type of data the event carries.
- */
-interface EventDefinition {
-  eventName: string
-  displayName: string
-}
-
-/**
- * Interface for defining an action.
- * @property actionName - The unique name of the action, typically namespaced.
- * @property displayName - A user-friendly name for the action.
- * @property handler - The handler for the action.
- */
-interface ActionDefinition {
-  actionName: string
-  displayName: string
-  handler: (ActionPayload) => void
-}
-
-export interface ActionPayload<T = unknown, Y = unknown> {
-  actionName: string
-  event: EventPayload<T, Y>
-  data: any
-}
-
-export type EventFormat<
-  Data = Record<string, unknown>,
-  Y = Record<string, unknown>
-> = {
-  content: string
-  sender: string
-  channel: string
-  entities?: any[]
-  rawData: unknown
-  channelType: string
-  observer: string
-  client: string
-  isPlaytest?: boolean
-  spellId?: string
-  data: Data
-  metadata?: Y
-  status?: 'success' | 'error' | 'pending' | 'unknown'
-}
-
-export type EventPayload<T = unknown, Y = unknown> = {
-  connector: string
-  eventName: string
-  status: 'success' | 'error' | 'pending' | 'unknown'
-  content: string
-  sender: string
-  observer: string
-  client: string
-  channel: string
-  plugin: string
-  agentId: string
-  isPlaytest?: boolean
-  spellId?: string
-  // entities: any[]
-  channelType: string
-  rawData: unknown
-  timestamp: string
-  stateKey?: string
-  runInfo?: {
-    spellId: string
-  }
-  data: T
-  metadata: Y
-}
 
 export type WebhookPayload<
   T extends Record<string, unknown> = Record<string, unknown>

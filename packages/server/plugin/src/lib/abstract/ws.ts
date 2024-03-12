@@ -1,7 +1,8 @@
 import { EventEmitter } from 'events'
-import BasePlugin, { BasePluginInit, EventPayload } from '../basePlugin'
+import BasePlugin, { BasePluginInit } from '../basePlugin'
 import { PluginCredentialsType } from 'server/credentials'
 import { PluginStateType } from 'plugin-state'
+import { EventPayload } from '../events/event-manager'
 
 export type WebSocketPluginState<T extends object = Record<string, unknown>> =
   T & {
