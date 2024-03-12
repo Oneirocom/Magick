@@ -1,21 +1,5 @@
 import Redis from 'ioredis'
 import { ActionPayload, EventPayload } from 'server/plugin'
-import {
-  SLACK_ACTIONS,
-  SLACK_EVENTS,
-  slackPluginName,
-  slackPluginCredentials,
-  slackDefaultState,
-  type SlackCredentials,
-  type SlackPluginState,
-  SLACK_DEVELOPER_MODE,
-  SLACK_DEP_KEYS,
-  SlackEventPayload,
-  SlackEvents,
-  SlackMessageEvents,
-  SlackBaseMessageEvent,
-  SendSlackMessage,
-} from './config'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
@@ -34,7 +18,24 @@ import {
   App,
 } from '@slack/bolt'
 
-import type { SLACK_COMMANDS } from './configx'
+import {
+  SLACK_DEPENDENCIES,
+  SLACK_COMMANDS,
+  SLACK_ACTIONS,
+  SLACK_EVENTS,
+  slackPluginName,
+  slackPluginCredentials,
+  slackDefaultState,
+  type SlackCredentials,
+  type SlackPluginState,
+  SLACK_DEVELOPER_MODE,
+  SlackEventPayload,
+  SlackEvents,
+  SlackMessageEvents,
+  SlackBaseMessageEvent,
+  SendSlackMessage,
+} from './configx'
+import { SLACK_DEP_KEYS } from './config'
 
 interface SlackPluginConfig {
   pluginName: typeof slackPluginName
@@ -81,6 +82,17 @@ export class SlackPlugin extends WebSocketPlugin<
   }) {
     super({ name: slackPluginName, connection, agentId, projectId })
     this.client = new SlackEventClient(pubSub, agentId)
+  }
+
+  getPluginConfig() {
+    return {
+      events: SLACK_EVENTS,
+      actions: SLACK_ACTIONS,
+      dependencyKeys: SLACK_DEPENDENCIES,
+      commands: SLACK_COMMANDS,
+      developerMode: SLACK_DEVELOPER_MODE,
+      credentials: slackPluginCredentials,
+    }
   }
 
   // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN

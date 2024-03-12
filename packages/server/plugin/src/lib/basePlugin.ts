@@ -22,6 +22,7 @@ import {
   BaseCommandManager,
   PluginCommandManager,
   basePluginCommands as expBasePluginCommands,
+  BasePluginConfig,
 } from 'plugin-experimental'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
@@ -224,6 +225,7 @@ export const basePluginCommands: Record<string, PluginCommandInfo> = {
  * @property eventQueue - The BullMQ queue for processing events.
  * @property enabled - The enabled state of the plugin.
  */
+
 export abstract class BasePlugin<
   Commands extends Record<string, string> = Record<string, string>,
   Credentials extends Record<string, string | undefined> = Record<
@@ -239,12 +241,13 @@ export abstract class BasePlugin<
   Metadata = Record<string, unknown>,
   State extends object = Record<string, unknown>
 > extends Plugin {
+  protected config: BasePluginConfig<any, any, any, Commands>
   protected events: EventDefinition[]
   protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
-  protected credentialsManager: PluginCredentialsManager<Credentials>
+
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
@@ -258,7 +261,8 @@ export abstract class BasePlugin<
   private updateDependencyHandler?: (key: string, dependency: any) => void
 
   protected stateManager: PluginStateManager<State>
-
+  protected credentialsManager: PluginCredentialsManager<Credentials>
+  protected commandManager: PluginCommandManager
   /**
    * Returns the name of the BullMQ queue for the plugin.
    * Format: event:pluginName
@@ -289,6 +293,7 @@ export abstract class BasePlugin<
    */
   constructor({ name, agentId, connection, projectId }: BasePluginInit) {
     super({ name })
+    this.config = this.getPluginConfig()
     this.agentId = agentId
     this.projectId = projectId
     this.connection = connection
@@ -305,8 +310,22 @@ export abstract class BasePlugin<
       this.agentId,
       this.name
     )
+
+    this.commandManager = new BaseCommandManager()
   }
 
+  /**
+   * Abstract method to get the WebSocket plugin configuration.
+   * This is a helper to avoid using the constructor.
+   * @example: Discord plugin configuration.
+   * @returns The WebSocket plugin configuration.
+   */
+  abstract getPluginConfig(): BasePluginConfig<
+    any, //Events,
+    any, //Actions,
+    any, //Dependencies,
+    Commands
+  >
   /**
    * Initializes the plugin by defining events and initializing functionalities.
    */
