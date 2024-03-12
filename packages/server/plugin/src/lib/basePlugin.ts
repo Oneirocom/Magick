@@ -2,41 +2,40 @@ import { EventEmitter } from 'events'
 import Redis from 'ioredis'
 import { Plugin } from './plugin'
 import {
-  IRegistry,
-  NodeDefinition,
-  ValueType,
-  ValueTypeMap,
   memo,
+  type IRegistry,
+  type NodeDefinition,
+  type ValueType,
+  type ValueTypeMap,
 } from '@magickml/behave-graph'
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { PluginCredential } from 'server/credentials'
+import { type PluginCredential } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
+import { type BasePluginConfig } from './types'
 
+// MANAGERS
 import {
   BasePluginStateManager,
-  PluginStateManager,
-  PluginStateType,
+  type PluginStateManager,
+  type PluginStateType,
 } from './state'
-
-import { PluginCredentialsManager, BaseCredentialsManager } from './credentials'
+import {
+  BaseCredentialsManager,
+  type PluginCredentialsManager,
+} from './credentials'
 import {
   BaseCommandManager,
-  PluginCommandManager,
   basePluginCommands as expBasePluginCommands,
-  PluginCommand,
+  type PluginCommandManager,
+  type PluginCommand,
 } from './commands/command-manager'
-import { BasePluginConfig } from './types'
+import { BaseActionManager, type ActionPayload } from './actions/action-manager'
 import {
-  ActionDefinition,
-  ActionPayload,
-  BaseActionManager,
-} from './actions/action-manager'
-import {
-  EventDefinition,
-  EventFormat,
-  EventPayload,
+  type EventDefinition,
+  type EventFormat,
+  type EventPayload,
 } from './events/event-manager'
 
 type ValueOf<T> = T[keyof T]
@@ -135,7 +134,6 @@ export abstract class BasePlugin<
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
-    this.commands = []
 
     this.credentialsManager = new BaseCredentialsManager<Credentials>(
       agentId,
@@ -373,34 +371,6 @@ export abstract class BasePlugin<
           event: payload,
         })
       })
-    })
-  }
-
-  /**
-   * Handles an action from the action queue.
-   * @param job The job to handle.
-   */
-  protected async handleAction(data: ActionPayload) {
-    this.logger.trace(`Handling action ${data.actionName}`)
-    const action = this.actionsManager
-      .getActions()
-      .find(action => action.actionName === data.actionName)
-    if (!action) return
-    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
-    await action.handler(data as ActionPayload)
-
-    // const { actionName, event } = data
-    saveGraphEvent({
-      sender: this.agentId,
-      // we are assuming here that the observer of this action is the
-      //  original sender.  We may be wrong.
-      observer: data.event.sender,
-      agentId: this.agentId,
-      connector: data.event.connector,
-      connectorData: JSON.stringify(data.event.data),
-      content: data.data.content,
-      eventType: data.actionName,
-      event: data.event as EventPayload,
     })
   }
 
