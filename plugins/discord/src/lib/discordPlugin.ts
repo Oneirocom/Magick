@@ -17,7 +17,7 @@ import {
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
-import { WebSocketPlugin } from 'plugin-abstracts'
+import { WebSocketPlugin } from 'server/plugin'
 import { DiscordMessageUtils } from './services/discord-message-utils'
 import { isDiscordToken } from 'token-validation'
 
@@ -29,14 +29,6 @@ import {
   DISCORD_DEPENDENCIES,
   DISCORD_DEVELOPER_MODE,
 } from './configx'
-
-interface DiscordPluginConfig {
-  pluginName: typeof discordPluginName
-  events: typeof DISCORD_EVENTS
-  actions: typeof DISCORD_ACTIONS
-  dependencyKeys: typeof DISCORD_DEPENDENCIES
-  developerMode: typeof DISCORD_DEVELOPER_MODE
-}
 
 export class DiscordPlugin extends WebSocketPlugin<
   typeof DISCORD_EVENTS,

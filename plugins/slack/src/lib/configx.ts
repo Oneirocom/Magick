@@ -2,10 +2,7 @@ import { SlackEvent as BoltEvents } from '@slack/bolt'
 import { EventPayload } from 'server/plugin'
 import type { App, EventFromType } from '@slack/bolt'
 import { PLUGIN_SETTINGS } from 'shared/config'
-import type {
-  CreateCredentialsRecord,
-  PluginStateType,
-} from 'plugin-experimental'
+import type { CreateCredentialsRecord, PluginStateType } from 'server/plugin'
 import { PluginCredential } from 'server/credentials'
 import { createEventsEnum } from 'plugins/shared'
 

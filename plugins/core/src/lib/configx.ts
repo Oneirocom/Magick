@@ -3,7 +3,7 @@ import {
   type ExtractPluginCredentialNames,
   type EventPayload,
   type PluginStateType,
-} from 'plugin-experimental'
+} from 'server/plugin'
 import { PluginCredential } from 'server/credentials'
 import { createEventsEnum } from 'plugins/shared'
 import { EventTypes } from 'communication'
