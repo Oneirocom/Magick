@@ -59,7 +59,7 @@ export abstract class CoreEventsPlugin<
 
   override async init(centralEventBus: EventEmitter) {
     super.init(centralEventBus)
-    this.initializeActionHandlers()
+    // this.initializeActionHandlers()
     // Initialize CoreEventPlugin specific stuff if needed
   }
 
@@ -71,12 +71,12 @@ export abstract class CoreEventsPlugin<
    * when the plugin is initialized. This makes all of the
    * actions available to the central event bus if needed.
    */
-  private initializeActionHandlers() {
-    this.actions.forEach(action => {
-      const eventName = `${this.name}:${action.actionName}`
-      this.centralEventBus.on(eventName, action.handler)
-    })
-  }
+  // private initializeActionHandlers() {
+  //   this.actions.forEach(action => {
+  //     const eventName = `${this.name}:${action.actionName}`
+  //     this.centralEventBus.on(eventName, action.handler)
+  //   })
+  // }
 
   /**
    * Generic event trigger to send out message events to the core

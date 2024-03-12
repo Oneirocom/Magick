@@ -184,23 +184,30 @@ export class CorePlugin extends CoreEventsPlugin<
   /**
    * Defines the actions that the plugin will handle.
    */
-  defineActions() {
-    // Define actions here
-    this.registerAction({
-      actionName: EventTypes.SEND_MESSAGE,
-      displayName: 'Send Message',
-      handler: this.handleSendMessage.bind(this),
-    })
-    this.registerAction({
-      actionName: EventTypes.STREAM_MESSAGE,
-      displayName: 'Stream Message',
-      handler: this.handleSendMessage.bind(this),
-    })
-    this.registerAction({
-      actionName: ON_ERROR,
-      displayName: 'Error Received',
-      handler: this.handleSendMessage.bind(this),
-    })
+  // defineActions() {
+  //   // Define actions here
+  //   this.registerAction({
+  //     actionName: EventTypes.SEND_MESSAGE,
+  //     displayName: 'Send Message',
+  //     handler: this.handleSendMessage.bind(this),
+  //   })
+  //   this.registerAction({
+  //     actionName: EventTypes.STREAM_MESSAGE,
+  //     displayName: 'Stream Message',
+  //     handler: this.handleSendMessage.bind(this),
+  //   })
+  //   this.registerAction({
+  //     actionName: ON_ERROR,
+  //     displayName: 'Error Received',
+  //     handler: this.handleSendMessage.bind(this),
+  //   })
+  // }
+  getActionHandlers() {
+    return {
+      [CORE_ACTIONS.messageSend]: this.handleSendMessage,
+      [CORE_ACTIONS.messageStream]: this.handleSendMessage,
+      [CORE_ACTIONS.error]: this.handleSendMessage,
+    }
   }
 
   async initializeFunctionalities() {

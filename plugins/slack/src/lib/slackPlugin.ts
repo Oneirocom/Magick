@@ -256,13 +256,10 @@ export class SlackPlugin extends WebSocketPlugin<
     this.slack.event(eventName, async () => {})
   }
 
-  defineActions(): void {
-    for (const [actionName] of Object.entries(SLACK_ACTIONS)) {
-      this.registerAction({
-        actionName,
-        displayName: `Slack ${actionName}`,
-        handler: this.handleSendMessage.bind(this),
-      })
+  // ACTIONS
+  getActionHandlers() {
+    return {
+      [SLACK_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
     }
   }
 
