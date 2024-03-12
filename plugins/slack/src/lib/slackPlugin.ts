@@ -9,7 +9,7 @@ import {
   onSlackMessageNodes,
   sendSlackAudio,
 } from './nodes'
-import { WebSocketPlugin } from 'plugin-abstracts'
+import { WebSocketPlugin } from 'server/plugin'
 import { type CorePluginEvents } from 'plugin/core'
 import {
   type AllMiddlewareArgs,
@@ -36,14 +36,6 @@ import {
   SendSlackMessage,
 } from './configx'
 import { SLACK_DEP_KEYS } from './config'
-
-interface SlackPluginConfig {
-  pluginName: typeof slackPluginName
-  events: typeof SLACK_EVENTS
-  actions: typeof SLACK_ACTIONS
-  dependencyKeys: typeof SLACK_DEPENDENCIES
-  developerMode: typeof SLACK_DEVELOPER_MODE
-}
 
 export class SlackPlugin extends WebSocketPlugin<
   typeof SLACK_EVENTS,

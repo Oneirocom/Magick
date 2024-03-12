@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
-import { BasePluginInit, CoreEventsPlugin, EventPayload } from 'server/plugin'
+import BasePlugin, { BasePluginInit, EventPayload } from '../basePlugin'
 import { PluginCredentialsType } from 'server/credentials'
+import { PluginStateType } from 'plugin-state'
 
 export type WebSocketPluginState<T extends object = Record<string, unknown>> =
   T & {
@@ -24,8 +25,8 @@ export abstract class WebSocketPlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends WebSocketPluginState = WebSocketPluginState
-> extends CoreEventsPlugin<
+  State extends PluginStateType = PluginStateType
+> extends BasePlugin<
   Events,
   Actions,
   Dependencies,
@@ -169,6 +170,8 @@ export abstract class WebSocketPlugin<
    */
   async updateContext() {
     const context = await this.getContext()
+    // temp ignore until we move some of this down/up
+    // @ts-ignore
     await this.updatePluginState({ context } as Partial<State>)
   }
 

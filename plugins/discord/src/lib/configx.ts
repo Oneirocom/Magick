@@ -6,7 +6,7 @@ import {
   CreateCredentialsRecord,
   EventPayload,
   PluginStateType,
-} from 'plugin-experimental'
+} from 'server/plugin'
 import { PluginCredential } from 'server/credentials'
 
 // BASE

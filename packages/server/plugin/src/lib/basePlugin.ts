@@ -13,18 +13,21 @@ import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
 import { PluginCredential } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
+
 import {
   BasePluginStateManager,
   PluginStateManager,
   PluginStateType,
-  PluginCredentialsManager,
-  BaseCredentialsManager,
+} from './state'
+
+import { PluginCredentialsManager, BaseCredentialsManager } from './credentials'
+import {
   BaseCommandManager,
   PluginCommandManager,
   basePluginCommands as expBasePluginCommands,
-  BasePluginConfig,
-  BaseActionManager,
-} from 'plugin-experimental'
+} from './commands/command-manager'
+import { BasePluginConfig } from './types'
+import { BaseActionManager } from './actions/action-manager'
 
 type ValueOf<T> = T[keyof T]
 
