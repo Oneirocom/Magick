@@ -19,6 +19,9 @@ import {
   PluginStateType,
   PluginCredentialsManager,
   BaseCredentialsManager,
+  BaseCommandManager,
+  PluginCommandManager,
+  basePluginCommands as expBasePluginCommands,
 } from 'plugin-experimental'
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
@@ -222,6 +225,7 @@ export const basePluginCommands: Record<string, PluginCommandInfo> = {
  * @property enabled - The enabled state of the plugin.
  */
 export abstract class BasePlugin<
+  Commands extends Record<string, string> = Record<string, string>,
   Credentials extends Record<string, string | undefined> = Record<
     string,
     string | undefined
