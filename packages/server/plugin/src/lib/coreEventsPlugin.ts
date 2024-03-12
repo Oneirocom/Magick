@@ -1,8 +1,9 @@
 import Redis from 'ioredis'
-import { BasePlugin, EventPayload } from './basePlugin'
+import { BasePlugin } from './basePlugin'
 import EventEmitter from 'events'
 import { EventTypes } from 'communication'
-import { PluginStateType } from 'plugin-state'
+import { type PluginStateType } from 'plugin-state'
+import { type EventPayload } from './events/event-manager'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
