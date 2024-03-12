@@ -144,24 +144,64 @@ export abstract class WebSocketPlugin<
    */
   abstract unlisten(eventName: keyof Events): void | Promise<void>
 
-  /**
-   * Handles plugin enabling.
-   * Updates the plugin enabled state and initializes functionalities.
-   */
-  async handleEnable() {
-    await this.updatePluginState({ enabled: true } as State)
-    await this.initializeFunctionalities()
-    this.logger.debug('Plugin enabled')
+  async beforeActivate() {
+    await this.credentialsManager.update()
+    const credentials = this.credentialsManager.getCredentials()
+    const validated = await this.validateCredentials(
+      credentials || ({} as Credentials)
+    )
+    if (!validated) {
+      throw new Error(`${this.name} plugin has invalid credentials`)
+    }
+    await this.login(validated)
+    if (!(await this.validateLogin())) {
+      throw new Error(`${this.name} plugin failed to login`)
+    }
+    if (!(await this.validatePermissions())) {
+      throw new Error(`${this.name} plugin has insufficient permissions`)
+    }
   }
 
-  /**
-   * Handles plugin disabling.
-   * Updates the plugin enabled state and logs out.
-   */
-  async handleDisable() {
-    await this.updatePluginState({ enabled: false } as State)
+  async afterActivate() {
+    await this.listenAll()
+  }
+
+  beforeDeactivate() {
+    this.unlistenAll()
+  }
+
+  async afterDeactivate(): Promise<void> {
     await this.logout()
-    this.logger.debug('Plugin disabled')
+  }
+
+  beforeDestroy() {
+    return this.beforeDeactivate()
+  }
+
+  afterDestroy() {}
+
+  // COMMANDS
+
+  handleEnableCommand() {
+    this.activate()
+  }
+
+  handleDisableCommand() {
+    this.deactivate()
+  }
+
+  handleLinkCommand() {
+    this.activate()
+  }
+
+  handleUnlinkCommand() {
+    this.deactivate()
+  }
+
+  handleWebhookCommand() {
+    this.logger.info(
+      'Webhook command received, but this plugin does not support webhooks'
+    )
   }
 
   /**
@@ -291,28 +331,4 @@ export abstract class WebSocketPlugin<
    * Currently unused.
    */
   handleOnMessage() {}
-
-  // COMMANDS
-
-  handleEnableCommand() {
-    this.activate()
-  }
-
-  handleDisableCommand() {
-    this.deactivate()
-  }
-
-  handleLinkCommand() {
-    this.activate()
-  }
-
-  handleUnlinkCommand() {
-    this.deactivate()
-  }
-
-  handleWebhookCommand() {
-    this.logger.info(
-      'Webhook command received, but this plugin does not support webhooks'
-    )
-  }
 }

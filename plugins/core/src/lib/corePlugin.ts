@@ -145,8 +145,26 @@ export class CorePlugin extends CoreEventsPlugin<
     }
   }
 
-  // COMMANDS
+  // LIFECYCLE
+  async beforeActivate() {}
 
+  async afterActivate() {
+    console.log('CorePlugin activated')
+    await this.getLLMCredentials()
+
+    this.centralEventBus.on(
+      EventTypes.ON_MESSAGE,
+      this.handleOnMessage.bind(this)
+    )
+    this.client.onMessage(this.handleOnMessage.bind(this))
+  }
+
+  async beforeDeactivate() {}
+  async afterDeactivate() {}
+  beforeDestroy() {}
+  afterDestroy() {}
+
+  // COMMANDS
   getCommandHandlers() {
     return {}
   }
