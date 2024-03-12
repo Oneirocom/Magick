@@ -8,8 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "3.11.2"
-# litellm = { path = "./pythonPackages/liteLLM", develop = true }
-# litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
+litellm = { git = "https://github.com/Oneirocom/litellm.git" }
 # setuptools = "^69.0.3"
 # embedchain = { git="https://github.com/Oneirocom/embedchain.git", branch="main", extras = ["pinecone"]}
 embedchain = {extras = ["pinecone"], version = "0.1.94"}
@@ -17,16 +16,15 @@ embedchain = {extras = ["pinecone"], version = "0.1.94"}
 bs4 = "^0.0.2"
 html5lib = "^1.1"
 lxml = "^5.1.0"
-litellm = "^1.30.3"
+# litellm = "^1.30.3"
 google-generativeai = "^0.3.2"
 google-cloud-aiplatform = "^1.40.0"
 pinecone-text = "^0.8.0"
 pinecone-client = "^3.0.3"
 
-[tool.poetry.dev-dependencies]
-#litellm = { path = "./pythonPackages/liteLLM", develop = true }
+# [tool.poetry.dev-dependencies]
 # litellm = { git = "https://github.com/HaruHunab1320/litellm.git", branch="main"}
 
-[build-system] 
+[build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
