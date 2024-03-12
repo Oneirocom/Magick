@@ -149,7 +149,7 @@ export class CorePlugin extends CoreEventsPlugin<
   async beforeActivate() {}
 
   async afterActivate() {
-    console.log('CorePlugin activated')
+    this.logger.info('CorePlugin activated')
     await this.getLLMCredentials()
 
     this.centralEventBus.on(
@@ -179,7 +179,7 @@ export class CorePlugin extends CoreEventsPlugin<
       return
     }
     const p = formatCoreWebhookPayload(payload, this.agentId)
-    console.log('Webhook event received:', p)
+    this.logger.info('Webhook event received:', p)
     this.emitEvent(EventTypes.ON_WEBHOOK, p)
   }
 
@@ -206,16 +206,6 @@ export class CorePlugin extends CoreEventsPlugin<
     }
   }
 
-  async initializeFunctionalities() {
-    await this.getLLMCredentials()
-
-    this.centralEventBus.on(
-      EventTypes.ON_MESSAGE,
-      this.handleOnMessage.bind(this)
-    )
-    this.client.onMessage(this.handleOnMessage.bind(this))
-  }
-
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
@@ -225,8 +215,7 @@ export class CorePlugin extends CoreEventsPlugin<
       // await this.coreBudgetManagerService.initialize()
       await this.coreMemoryService.initialize(this.projectId)
     } catch (error) {
-      console.error('Error initializing dependencies:')
-      console.error(error)
+      this.logger.error('Error initializing dependencies:')
     }
 
     return {
@@ -258,7 +247,7 @@ export class CorePlugin extends CoreEventsPlugin<
         const provider = LLMProviderKeys[providerKey]
 
         // Retrieve credentials for each provider
-        const credential = await this.credentialsManager.getCredential(provider)
+        const credential = this.credentialsManager.getCredential(provider)
 
         // Check if credentials are retrieved and valid
         if (credential) {

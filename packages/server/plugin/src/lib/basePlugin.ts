@@ -501,16 +501,6 @@ export abstract class BasePlugin<
   abstract defineEvents(): void
 
   /**
-   * Abstract method to be implemented by plugins to initialize their functionalities.
-   * @example
-   * initializeFunctionalities() {
-   *   this.discordClient.on('messageCreate', this.handleMessageCreate.bind(this));
-   *   this.discordClient.login('YOUR_DISCORD_BOT_TOKEN');
-   * }
-   */
-  abstract initializeFunctionalities(): Promise<void> | void
-
-  /**
    * Abstract method for formatting the event payload.
    * Each plugin should implement this method to format its specific event data.
    * The formatMessageEvent method can be used to format a message event.
