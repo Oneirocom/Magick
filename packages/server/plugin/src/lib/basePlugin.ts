@@ -235,6 +235,43 @@ export abstract class BasePlugin<
   abstract beforeDestroy(): void
   abstract afterDestroy(): void
 
+  // EVENTS
+
+  /**
+   * Registers an event with the plugin.
+   * @param event The event definition to register.
+   * @example
+   * this.registerEvent({
+   *   eventName: 'myEvent',
+   *   displayName: 'My Event',
+   *   payloadType: MyPayloadType
+   * });
+   */
+  registerEvent(event: EventDefinition) {
+    this.events.push(event)
+  }
+  /**
+   * Returns the list of registered events.
+   * @returns An array of EventDefinition objects.
+   * @example
+   * const events = this.getEvents();
+   */
+  getEvents() {
+    return this.events
+  }
+
+  /**
+   * Abstract method to be implemented by plugins to define their events.
+   * @example
+   * defineEvents() {
+   *  this.registerEvent({
+   *   eventName: 'myEvent',
+   *   displayName: 'My Event',
+   *   payloadType: MyPayloadType
+   * });xz
+   */
+  abstract defineEvents(): void
+
   // ACTIONS
 
   protected initializeActionHandlers() {
@@ -347,6 +384,27 @@ export abstract class BasePlugin<
     | Promise<Record<ValueOf<Dependencies>, any>>
 
   /**
+   * Sets the handler function for updating dependencies in the spell caster.
+   * @param handler The dependency update handler function.
+   */
+  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
+    this.updateDependencyHandler = handler
+  }
+
+  /**
+   * Requests an update of a dependency in the spell caster.
+   * @param key The key of the dependency to update.
+   * @param dependency The new dependency object.
+   */
+  updateDependency(key: string, dependency: any) {
+    if (this.updateDependencyHandler) {
+      this.updateDependencyHandler(key, dependency)
+    } else {
+      throw new Error('Dependency update handler is not set.')
+    }
+  }
+
+  /**
    * Maps registered events to a BullMQ queue.
    * Each event emission will create a job in the BullMQ queue.
    */
@@ -420,6 +478,8 @@ export abstract class BasePlugin<
     this.eventEmitter.emit(eventName, payload)
   }
 
+  // REGISTRY
+
   /**
    * optional method to be override by plugins to provide an additional registry when needed.
    */
@@ -466,41 +526,6 @@ export abstract class BasePlugin<
   }
 
   /**
-   * Registers an event with the plugin.
-   * @param event The event definition to register.
-   * @example
-   * this.registerEvent({
-   *   eventName: 'myEvent',
-   *   displayName: 'My Event',
-   *   payloadType: MyPayloadType
-   * });
-   */
-  registerEvent(event: EventDefinition) {
-    this.events.push(event)
-  }
-  /**
-   * Returns the list of registered events.
-   * @returns An array of EventDefinition objects.
-   * @example
-   * const events = this.getEvents();
-   */
-  getEvents() {
-    return this.events
-  }
-
-  /**
-   * Abstract method to be implemented by plugins to define their events.
-   * @example
-   * defineEvents() {
-   *  this.registerEvent({
-   *   eventName: 'myEvent',
-   *   displayName: 'My Event',
-   *   payloadType: MyPayloadType
-   * });xz
-   */
-  abstract defineEvents(): void
-
-  /**
    * Abstract method for formatting the event payload.
    * Each plugin should implement this method to format its specific event data.
    * The formatMessageEvent method can be used to format a message event.
@@ -541,27 +566,6 @@ export abstract class BasePlugin<
       metadata: messageDetails.metadata || ({} as Metadata),
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
-    }
-  }
-
-  /**
-   * Sets the handler function for updating dependencies in the spell caster.
-   * @param handler The dependency update handler function.
-   */
-  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
-    this.updateDependencyHandler = handler
-  }
-
-  /**
-   * Requests an update of a dependency in the spell caster.
-   * @param key The key of the dependency to update.
-   * @param dependency The new dependency object.
-   */
-  updateDependency(key: string, dependency: any) {
-    if (this.updateDependencyHandler) {
-      this.updateDependencyHandler(key, dependency)
-    } else {
-      throw new Error('Dependency update handler is not set.')
     }
   }
 }
