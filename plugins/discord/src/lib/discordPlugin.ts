@@ -26,6 +26,8 @@ import { WebSocketPlugin } from 'plugin-abstracts'
 import { DiscordMessageUtils } from './services/discord-message-utils'
 import { isDiscordToken } from 'token-validation'
 
+import type { DISCORD_COMMANDS } from './configx'
+
 interface DiscordPluginConfig {
   pluginName: typeof discordPluginName
   events: typeof DISCORD_EVENTS
@@ -35,6 +37,8 @@ interface DiscordPluginConfig {
 }
 
 export class DiscordPlugin extends WebSocketPlugin<
+  typeof DISCORD_COMMANDS,
+  DiscordCredentials,
   typeof DISCORD_EVENTS,
   typeof DISCORD_ACTIONS,
   typeof DISCORD_DEP_KEYS,
@@ -42,8 +46,7 @@ export class DiscordPlugin extends WebSocketPlugin<
   EventPayload<DiscordEventPayload[keyof DiscordEventPayload], any>,
   Record<string, unknown>,
   Record<string, unknown>,
-  DiscordPluginState,
-  DiscordCredentials
+  DiscordPluginState
 > {
   override defaultState = discordDefaultState
   nodes = [...onDiscordMessageNodes, sendDiscordMessage]

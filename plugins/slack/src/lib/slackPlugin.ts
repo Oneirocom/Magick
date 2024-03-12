@@ -34,6 +34,8 @@ import {
   App,
 } from '@slack/bolt'
 
+import type { SLACK_COMMANDS } from './configx'
+
 interface SlackPluginConfig {
   pluginName: typeof slackPluginName
   events: typeof SLACK_EVENTS
@@ -43,6 +45,8 @@ interface SlackPluginConfig {
 }
 
 export class SlackPlugin extends WebSocketPlugin<
+  typeof SLACK_COMMANDS,
+  SlackCredentials,
   typeof SLACK_EVENTS,
   typeof SLACK_ACTIONS,
   typeof SLACK_DEP_KEYS,
@@ -50,8 +54,7 @@ export class SlackPlugin extends WebSocketPlugin<
   EventPayload<SlackEventPayload[keyof SlackEventPayload], any>,
   Record<string, unknown>,
   Record<string, unknown>,
-  SlackPluginState,
-  SlackCredentials
+  SlackPluginState
 > {
   override defaultState = slackDefaultState
   client: SlackEventClient

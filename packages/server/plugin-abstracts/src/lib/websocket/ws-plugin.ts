@@ -58,9 +58,11 @@ interface WSPluginConfig<
  * Abstract class for a WebSocket-based plugin.
  */
 export abstract class WebSocketPlugin<
-  WSEvents extends WebSocketPluginEventNames,
-  WSActions extends WebSocketPluginActions,
-  WSDepKeys extends WebSocketPluginDepKeys,
+  Commands extends Record<string, string>,
+  Credentials extends PluginCredentialsType = PluginCredentialsType,
+  WSEvents extends WebSocketPluginEventNames = WebSocketPluginEventNames,
+  WSActions extends WebSocketPluginActions = WebSocketPluginActions,
+  WSDepKeys extends WebSocketPluginDepKeys = WebSocketPluginDepKeys,
   CoreEvents extends Record<string, (...args: any[]) => void> = Record<
     string,
     (...args: any[]) => void
@@ -68,9 +70,9 @@ export abstract class WebSocketPlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends WebSocketPluginState = WebSocketPluginState,
-  Credentials extends PluginCredentialsType = PluginCredentialsType
+  State extends WebSocketPluginState = WebSocketPluginState
 > extends CoreEventsPlugin<
+  Commands,
   Credentials,
   CoreEvents,
   Payload,
@@ -260,6 +262,7 @@ export abstract class WebSocketPlugin<
 
     if (state?.enabled) {
       const credentials = await this.getCredentials()
+
       const validated = await this.validateCredentials(
         credentials || ({} as Credentials)
       )
