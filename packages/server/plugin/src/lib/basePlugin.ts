@@ -25,6 +25,7 @@ import {
   BaseCommandManager,
   PluginCommandManager,
   basePluginCommands as expBasePluginCommands,
+  PluginCommand,
 } from './commands/command-manager'
 import { BasePluginConfig } from './types'
 import { BaseActionManager } from './actions/action-manager'
@@ -104,14 +105,6 @@ export type EventPayload<T = unknown, Y = unknown> = {
   data: T
   metadata: Y
 }
-
-export type PluginCommand = {
-  commandName: string
-  displayName: string
-  handler: (enable: any) => void
-}
-
-export type PluginCommandInfo = Omit<PluginCommand, 'handler'>
 
 export type WebhookPayload<
   T extends Record<string, unknown> = Record<string, unknown>
@@ -295,15 +288,13 @@ export abstract class BasePlugin<
   }
 
   /**
-   * Abstract method to get the WebSocket plugin configuration.
+   * Abstract method to get the plugin configuration.
    * This is a helper to avoid using the constructor.
-   * @example: Discord plugin configuration.
-   * @returns The WebSocket plugin configuration.
    */
   abstract getPluginConfig(): BasePluginConfig<
-    any, //Events,
-    any, //Actions,
-    any, //Dependencies,
+    Events,
+    Actions,
+    Dependencies,
     Commands
   >
   /**
