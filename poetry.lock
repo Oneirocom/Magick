@@ -1759,7 +1759,7 @@ proxy = ["PyJWT (>=2.8.0,<3.0.0)", "apscheduler (>=3.10.4,<4.0.0)", "argon2-cffi
 type = "git"
 url = "https://github.com/Oneirocom/litellm.git"
 reference = "HEAD"
-resolved_reference = "fe1d5f6e31634a31e206f9241f924ca581f67904"
+resolved_reference = "b2215b43bebd48544ec2283798c02f1b52919227"
 
 [[package]]
 name = "lxml"
