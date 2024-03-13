@@ -66,6 +66,7 @@
         "portal/cloud/packages/utils/shared/src/index.ts"
       ],
       "@magickml/providers": ["packages/client/providers/src/index.ts"],
+      "@magickml/seraph": ["packages/server/seraph/src/index.ts"],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-db": ["packages/server/db/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
