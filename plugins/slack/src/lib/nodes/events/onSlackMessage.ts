@@ -3,7 +3,7 @@ import {
   slackPluginName,
   type SlackEventPayload,
   type SlackEvents,
-} from '../../config'
+} from '../../configx'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { NodeCategory } from '@magickml/behave-graph'
 

@@ -1,8 +1,8 @@
 import {
   type SlackEventPayload,
-  SLACK_DEP_KEYS,
+  SLACK_DEPENDENCIES,
   SendSlackMessage,
-} from '../../config'
+} from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'server/grimoire'
 import { createActionNode } from 'plugins/shared/src'
@@ -19,11 +19,11 @@ type Outputs = {
 export const sendSlackMessage = createActionNode<
   Inputs,
   Outputs,
-  [typeof SLACK_DEP_KEYS.SEND_SLACK_MESSAGE, 'IEventStore']
+  [typeof SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE, 'IEventStore']
 >({
   label: 'Send Slack Message',
   typeName: 'slack/sendMessage',
-  dependencyKeys: [SLACK_DEP_KEYS.SEND_SLACK_MESSAGE, 'IEventStore'],
+  dependencyKeys: [SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE, 'IEventStore'],
   inputs: {
     flow: { valueType: 'flow' },
     content: { valueType: 'string' },
@@ -33,7 +33,7 @@ export const sendSlackMessage = createActionNode<
   },
   process: async (
     dependencies: {
-      [SLACK_DEP_KEYS.SEND_SLACK_MESSAGE]: SendSlackMessage
+      [SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE]: SendSlackMessage
       IEventStore: IEventStore
     },
     inputs: { content: string },
@@ -43,7 +43,7 @@ export const sendSlackMessage = createActionNode<
     const event = dependencies.IEventStore.currentEvent() as SlackEventPayload
 
     const sendDiscordMessage = dependencies[
-      SLACK_DEP_KEYS.SEND_SLACK_MESSAGE
+      SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE
     ] as SendSlackMessage
 
     await sendDiscordMessage(inputs.content, event.channel)
