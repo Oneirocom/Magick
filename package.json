@@ -233,7 +233,7 @@
     "handlebars": "4.7.7",
     "ink": "^4.4.1",
     "ioredis": "^5.3.2",
-    "jose": "4.14.4",
+    "jose": "4.15.5",
     "jotai": "^2.6.2",
     "js-cookie": "^3.0.5",
     "jsdom-global": "^3.0.2",
