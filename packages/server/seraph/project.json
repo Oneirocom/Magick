@@ -1,0 +1,36 @@
+{
+  "name": "@magickml/seraph",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/seraph/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/seraph",
+        "main": "packages/server/seraph/src/index.ts",
+        "tsConfig": "packages/server/seraph/tsconfig.lib.json",
+        "assets": ["packages/server/seraph/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/server/seraph/jest.config.ts"
+      }
+    },
+    "cli": {
+      "command": "ts-node --inspect ./src/lib/cli.ts",
+      "options": {
+        "cwd": "packages/server/seraph"
+      }
+    }
+  },
+  "tags": []
+}

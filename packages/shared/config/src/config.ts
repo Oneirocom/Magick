@@ -109,6 +109,8 @@ export const PLUGIN_SETTINGS = {
     getVarForEnvironment('DISCORD_DEVELOPER_MODE') === 'true',
 }
 
+export const MAGICK_ANTHROPIC_API_KEY =
+  getVarForEnvironment('ANTHROPIC_API_KEY')
 export const MAGICK_OPENAI_API_KEY = getVarForEnvironment('OPENAI_API_KEY')
 export const MAGICK_GEMINI_API_KEY = getVarForEnvironment('GEMINI_API_KEY')
 export const MAGICK_PALM_API_KEY = getVarForEnvironment('PALM_API_KEY')
