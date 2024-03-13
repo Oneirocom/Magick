@@ -189,28 +189,18 @@ export enum VoyageAIModels {
   VoyageLite01 = 'voyage/voyage-lite-01',
   VoyageLite01Instruct = 'voyage/voyage-lite-01-instruct',
 }
-
 export enum TogetherAIModels {
-  TogetherLlama270bChat = 'together_ai/togethercomputer/llama-2-70b-chat', // Not Working
-  TogetherLlama270b = 'together_ai/togethercomputer/llama-2-70b', // Not Working
-  TogetherLlama27B32K = 'together_ai/togethercomputer/LLaMA-2-7B-32K', // Not Working
-  TogetherLlama27B32KInstruct = 'together_ai/togethercomputer/Llama-2-7B-32K-Instruct', // Not Working
-  TogetherLlama27b = 'together_ai/togethercomputer/llama-2-7b', // Not Working
-  TogetherFalcon40bInstruct = 'together_ai/togethercomputer/falcon-40b-instruct', // Not Working
-  TogetherFalcon7bInstruct = 'together_ai/togethercomputer/falcon-7b-instruct', // Not Working
-  TogetherAlpaca7b = 'together_ai/togethercomputer/alpaca-7b', // Not Working
-  TogetherStarchatAlpha = 'together_ai/HuggingFaceH4/starchat-alpha', // Not Working
-  TogetherCodeLlama34b = 'together_ai/togethercomputer/CodeLlama-34b', // Not Working
-  TogetherCodeLlama34bInstruct = 'together_ai/togethercomputer/CodeLlama-34b-Instruct', // WORKING
-  TogetherCodeLlama34bPython = 'together_ai/togethercomputer/CodeLlama-34b-Python', // Not Working
-  TogetherSqlCoder = 'together_ai/defog/sqlcoder', // Not Working
-  TogetherNSQLLlama27B = 'together_ai/NumbersStation/nsql-llama-2-7B', // Not Working
-  TogetherWizardCoder15BV10 = 'together_ai/WizardLM/WizardCoder-15B-V1.0', // Not Working
-  TogetherWizardCoderPython34BV10 = 'together_ai/WizardLM/WizardCoder-Python-34B-V1.0', // Not Working
-  TogetherNousHermesLlama213b = 'together_ai/NousResearch/Nous-Hermes-Llama2-13b', // Not Working
-  TogetherChronosHermes13b = 'together_ai/Austism/chronos-hermes-13b', // Not Working
-  TogetherSolar070b16bit = 'together_ai/upstage/SOLAR-0-70b-16bit', // Not Working
-  TogetherWizardLM70BV10 = 'together_ai/WizardLM/WizardLM-70B-V1.0', // Not Working
+  TogetherLlama270bChat = 'together_ai/togethercomputer/llama-2-70b-chat',
+  TogetherLlama270b = 'together_ai/togethercomputer/llama-2-70b',
+  TogetherLlama27B32K = 'together_ai/togethercomputer/LLaMA-2-7B-32K',
+  TogetherLlama27b = 'together_ai/togethercomputer/llama-2-7b',
+  TogetherAlpaca7b = 'together_ai/togethercomputer/alpaca-7b',
+  TogetherCodeLlama34bInstruct = 'together_ai/togethercomputer/CodeLlama-34b-Instruct',
+  TogetherCodeLlama34bPython = 'together_ai/togethercomputer/CodeLlama-34b-Python',
+  TogetherWizardCoderPython34BV10 = 'together_ai/WizardLM/WizardCoder-Python-34B-V1.0',
+  TogetherChronosHermes13b = 'together_ai/Austism/chronos-hermes-13b',
+  TogetherNousHermesLlama213b = 'together_ai/NousResearch/Nous-Hermes-Llama2-13b',
+  TogetherWizardCoder15BV10 = 'together_ai/WizardLM/WizardCoder-15B-V1.0',
 }
 
 export enum AlephAlphaModels {
