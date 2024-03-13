@@ -37,6 +37,14 @@ import {
   type EventFormat,
   type EventPayload,
 } from './events/event-manager'
+import { PluginStorageManager, S3PluginStorageManager } from './storage'
+
+import {
+  AWS_SECRET_KEY,
+  AWS_ACCESS_KEY,
+  AWS_REGION,
+  AWS_BUCKET_NAME,
+} from 'shared/config'
 
 type ValueOf<T> = T[keyof T]
 
@@ -97,6 +105,7 @@ export abstract class BasePlugin<
   protected credentialsManager: PluginCredentialsManager<Credentials>
   protected commandManager: PluginCommandManager
   protected actionsManager: BaseActionManager
+  protected storageManager: PluginStorageManager
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -148,6 +157,15 @@ export abstract class BasePlugin<
     this.commandManager = new BaseCommandManager()
 
     this.actionsManager = new BaseActionManager(agentId)
+
+    this.storageManager = new S3PluginStorageManager(
+      this.agentId,
+      this.name,
+      AWS_ACCESS_KEY,
+      AWS_SECRET_KEY,
+      AWS_REGION,
+      AWS_BUCKET_NAME
+    )
   }
 
   // CONFIG
