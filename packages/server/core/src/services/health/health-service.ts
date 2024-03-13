@@ -1,4 +1,4 @@
-import { Params, ServiceMethods } from '@feathersjs/feathers'
+import { ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { getRawNodeSpec } from 'shared/nodeSpec'
 
