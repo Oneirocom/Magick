@@ -20,6 +20,10 @@ export const getNodeSpec = (spell?: SpellInterface): NodeSpecJSON[] => {
   return allSpecs as NodeSpecJSON[]
 }
 
+export const getRawNodeSpec = () => {
+  return nodeSpec
+}
+
 export const getPluginCredentials = () => {
   return pluginCredentials
 }
