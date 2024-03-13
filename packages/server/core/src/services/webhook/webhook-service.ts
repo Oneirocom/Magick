@@ -1,11 +1,27 @@
-import { Params, ServiceMethods } from '@feathersjs/feathers'
+import { Params, ServiceMethods, HookContext } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { AgentCommandData } from 'server/agents'
 import { getUniquePluginNames } from 'shared/nodeSpec'
 
-type BasePayload = Record<string, any>
+type WebhookBody = Record<string, any>
+type WebhookHeaders = Record<string, any>
+type BasePayload = {
+  body: WebhookBody
+  headers: WebhookHeaders
+}
 
 export type WebhookServiceMethods = Pick<ServiceMethods<BasePayload>, 'create'>
+
+const webhookMiddleware = async (context: HookContext) => {
+  const headers = context.arguments[1]?.headers || {}
+  const d = {
+    body: context.data,
+    headers: headers,
+  }
+
+  context.data = d
+  return context
+}
 
 class WebhookService implements WebhookServiceMethods {
   app: Application
@@ -19,6 +35,7 @@ class WebhookService implements WebhookServiceMethods {
   private publicNames = getUniquePluginNames()
 
   async create(data: BasePayload, params?: Params): Promise<BasePayload> {
+    console.log('WEBHOOK DATA', data)
     const agentId = params?.route?.agentid as string
     const pluginName = params?.route?.plugin as string
 
@@ -36,7 +53,7 @@ class WebhookService implements WebhookServiceMethods {
 
     await this.app.get('agentCommander').command(command)
 
-    return data
+    return { body: {}, headers: {} }
   }
 }
 
@@ -45,6 +62,12 @@ export const webhook = (app: Application): void => {
     {
       methods: ['create'],
     }
+
+  app.service('/webhook/:agentid/:plugin').hooks({
+    before: {
+      all: [webhookMiddleware],
+    },
+  })
 }
 
 declare module '../../declarations' {
