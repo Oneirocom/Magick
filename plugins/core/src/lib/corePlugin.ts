@@ -174,8 +174,7 @@ export class CorePlugin extends CoreEventsPlugin<
   handleLinkCommand() {}
   handleUnlinkCommand() {}
   handleWebhookCommand(payload: CoreWebhookPayload) {
-    const isValid = validateCoreWebhookPayload(payload)
-    if (!isValid) {
+    if (!validateCoreWebhookPayload(payload)) {
       return
     }
     const p = formatCoreWebhookPayload(payload, this.agentId)
