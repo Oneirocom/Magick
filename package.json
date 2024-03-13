@@ -141,6 +141,8 @@
     "@mui/material": "5.13.2",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@nx/devkit": "17.2.8",
+    "@octokit/rest": "^20.0.2",
+    "@octokit/webhooks-types": "^7.4.0",
     "@openmeter/sdk": "^1.0.0-beta.35",
     "@opentelemetry/auto-instrumentations-node": "^0.41.1",
     "@opentelemetry/exporter-trace-otlp-http": "^0.48.0",

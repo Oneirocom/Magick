@@ -42,11 +42,23 @@ export const sendSlackMessage = createActionNode<
   ) => {
     const event = dependencies.IEventStore.currentEvent() as SlackEventPayload
 
-    const sendDiscordMessage = dependencies[
-      SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE
-    ] as SendSlackMessage
+    try {
+      if (!event) {
+        throw new Error('No event found')
+      }
 
-    await sendDiscordMessage(inputs.content, event.channel)
+      const sendSlackMessage = dependencies[
+        SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE
+      ] as SendSlackMessage
+
+      if (!sendSlackMessage) {
+        throw new Error('No sendDiscordMessage found')
+      }
+
+      await sendSlackMessage(inputs.content, event.channel)
+    } catch (e) {
+      console.log('Error sending slack message', e)
+    }
 
     await commit('flow')
   },
