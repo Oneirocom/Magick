@@ -11,6 +11,7 @@ import { graphEvents } from './graphEvents/graphEvents'
 import { users } from './users/users'
 import { credentials } from './credentials/credentials'
 import { webhook } from './webhook/webhook-service'
+import { health } from './health/health-service'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
@@ -35,6 +36,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(users)
   app.configure(knowledge)
   app.configure(webhook)
+  app.configure(health)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better
