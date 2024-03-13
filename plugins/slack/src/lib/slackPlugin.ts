@@ -35,7 +35,6 @@ import {
   SlackBaseMessageEvent,
   SendSlackMessage,
 } from './configx'
-import { SLACK_DEP_KEYS } from './config'
 
 export class SlackPlugin extends WebSocketPlugin<
   typeof SLACK_EVENTS,
@@ -247,8 +246,8 @@ export class SlackPlugin extends WebSocketPlugin<
   getDependencies() {
     return {
       [slackPluginName]: SlackEmitter,
-      [SLACK_DEP_KEYS.SLACK_KEY]: this.slack,
-      [SLACK_DEP_KEYS.SEND_SLACK_MESSAGE]: this.sendSlackMessage.bind(this),
+      [SLACK_DEPENDENCIES.SLACK_CLIENT]: this.slack,
+      [SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE]: this.sendSlackMessage.bind(this),
     }
   }
 

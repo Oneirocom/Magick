@@ -1,6 +1,6 @@
 import { EmitterFactory, CreateMessageEvents } from 'plugins/shared'
 import TypedEmitter from 'typed-emitter'
-import { SLACK_EVENTS } from '../config'
+import { SLACK_EVENTS } from '../configx'
 
 export type SlackMessageEvents = CreateMessageEvents<typeof SLACK_EVENTS>
 

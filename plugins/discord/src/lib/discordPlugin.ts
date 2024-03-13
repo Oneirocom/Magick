@@ -112,7 +112,7 @@ export class DiscordPlugin extends WebSocketPlugin<
     }
   }
 
-  // ABSTRACTS FROM WS PLUGIN & BASE PLUGIN
+  // OTHER ABSTRACTS FROM WS PLUGIN & BASE PLUGIN
   async login(credentials: DiscordCredentials) {
     await this.discord.login(credentials['discord-token'])
     this.logger.info('Logged in to Discord')

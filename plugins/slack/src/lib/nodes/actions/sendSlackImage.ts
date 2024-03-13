@@ -1,5 +1,5 @@
 import { createActionNode } from 'plugins/shared/src'
-import { type SlackEventPayload, SLACK_DEP_KEYS } from '../../config'
+import { type SlackEventPayload, SLACK_DEPENDENCIES } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'server/grimoire'
 import { EventPayload } from 'server/plugin'
@@ -56,13 +56,13 @@ const process = async (
 export const sendSlackImage = createActionNode<
   Inputs,
   Outputs,
-  [typeof SLACK_DEP_KEYS.SLACK_KEY, 'IEventStore', 'slackActionService']
+  [typeof SLACK_DEPENDENCIES.SLACK_CLIENT, 'IEventStore', 'slackActionService']
 >({
   // eventName: SLACK_ACTIONS.sendImage,
   label: 'Send Slack Image',
   typeName: 'slack/sendImage',
   dependencyKeys: [
-    SLACK_DEP_KEYS.SLACK_KEY,
+    SLACK_DEPENDENCIES.SLACK_CLIENT,
     'IEventStore',
     'slackActionService',
   ],
