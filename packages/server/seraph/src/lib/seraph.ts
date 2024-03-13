@@ -149,7 +149,8 @@ class Seraph {
       /<function_results>[\s\S]*?<\/function_results>/g,
       ''
     )
-    return strippedFunctionResults.trim()
+    console.log('strippedFunctionResults', strippedFunctionResults)
+    return strippedFunctionResults
   }
 }
 

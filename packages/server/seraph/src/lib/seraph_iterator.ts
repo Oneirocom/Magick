@@ -8,6 +8,7 @@ class SeraphIterator implements AsyncIterator<string> {
   private conversationId: string
   private systemPrompt: string
   private llmManager: LLMManager
+  private done: boolean = false
 
   constructor(seraph: Seraph, conversationId: string, systemPrompt: string) {
     if (!ANTHROPIC_API_KEY) {
@@ -22,7 +23,9 @@ class SeraphIterator implements AsyncIterator<string> {
   }
 
   public async next(): Promise<IteratorResult<string>> {
-    let result: IteratorResult<string>
+    if (this.done) {
+      return { done: true, value: undefined }
+    }
 
     const messages = this.seraph.conversationManager.getMessages(
       this.conversationId
@@ -70,20 +73,20 @@ class SeraphIterator implements AsyncIterator<string> {
           'user'
         )
 
-        result = {
+        this.done = false
+        return {
           done: false,
           value: this.seraph.stripFunctionTags(updatedResponse),
-        } // Return the updated response
+        } // Return the updated response/ Yield the stripped LLM response
       } catch (error) {
         console.error('Error executing cognitive function:', error)
         throw error
       }
     } else {
-      console.log('DONE!', llmResponse)
-      result = { done: true, value: this.seraph.stripFunctionTags(llmResponse) } // Return the response
+      const strippedResponse = this.seraph.stripFunctionTags(llmResponse)
+      this.done = true // Mark the iterator as done
+      return { done: false, value: strippedResponse }
     }
-
-    return result // Always return a value
   }
 
   public [Symbol.asyncIterator](): AsyncIterator<string> {
