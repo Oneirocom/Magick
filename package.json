@@ -178,6 +178,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@reduxjs/toolkit": "1.9.5",
+    "@shopify/shopify-api": "^9.5.0",
     "@slack/bolt": "^3.17.0",
     "@supabase/supabase-js": "^2.39.3",
     "@swc/helpers": "~0.5.2",
