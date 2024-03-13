@@ -1,4 +1,4 @@
-import { Params, ServiceMethods, HookContext } from '@feathersjs/feathers'
+import { Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { getRawNodeSpec } from 'shared/nodeSpec'
 
@@ -13,7 +13,7 @@ class HealthService implements HealthSeviceMethods {
     this.options = options
   }
 
-  async find(data: any, params?: Params) {
+  async find() {
     return { nodeSpec: getRawNodeSpec() }
   }
 }
