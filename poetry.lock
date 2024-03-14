@@ -1733,7 +1733,7 @@ requests = ">=2,<3"
 
 [[package]]
 name = "litellm"
-version = "1.31.4"
+version = "1.31.9"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = ">=3.8.1,<4.0, !=3.9.7"
@@ -1759,7 +1759,7 @@ proxy = ["PyJWT (>=2.8.0,<3.0.0)", "apscheduler (>=3.10.4,<4.0.0)", "argon2-cffi
 type = "git"
 url = "https://github.com/Oneirocom/litellm.git"
 reference = "HEAD"
-resolved_reference = "b2215b43bebd48544ec2283798c02f1b52919227"
+resolved_reference = "8ae1639cde167a6e14226edade1c2c19c3182bfb"
 
 [[package]]
 name = "lxml"
