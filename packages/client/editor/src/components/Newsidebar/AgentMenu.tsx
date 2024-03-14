@@ -132,13 +132,16 @@ export function AgentMenu({ data }) {
         <ListItem alignItems="center">
           <ListItemAvatar onClick={redirectToCloudAgents}>
             <Avatar
-              className={clsx('self-center border border-ds-primary w-8 h-8')}
+              className={clsx(
+                'self-center border border-ds-primary w-8 h-8 justify-center items-center'
+              )}
             >
               <AvatarImage
-                className="object-cover w-full h-full rounded-full"
+                className="object-cover w-full h-full rounded-full "
                 src={`${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${currentAgent?.image}`}
-                alt={currentAgent?.name || 'Agent'}
+                alt={currentAgent?.name.at(0) || 'A'}
               />
+              {currentAgent?.name.at(0) || 'A'}
             </Avatar>
           </ListItemAvatar>
           <ListItemText
