@@ -114,7 +114,9 @@
       "shared/rete": ["packages/shared/rete/src/index.ts"],
       "shared/utils": ["packages/shared/utils/src/index.ts"],
       "stylesheets": ["packages/client/stylesheets/src/index.ts"],
-      "token-validation": ["packages/server/token-validation/src/index.ts"]
+      "token-validation": ["packages/server/token-validation/src/index.ts"],
+      "windows/config": ["packages/client/windows/config/src/index.ts"],
+      "windows/secrets": ["packages/client/windows/secrets/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
