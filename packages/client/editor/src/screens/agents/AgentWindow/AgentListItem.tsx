@@ -1,9 +1,13 @@
 import React from 'react'
-import { MenuItem, ListItemText, Box, Checkbox } from '@mui/material'
-import LockIcon from '@mui/icons-material/Lock'
+import { NodeLock } from '@magickml/icons'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { AgentInterface } from 'server/schemas'
-import { Avatar, AvatarImage } from '@magickml/client-ui'
+import {
+  Avatar,
+  AvatarImage,
+  Checkbox,
+  DropdownMenuItem,
+} from '@magickml/client-ui'
 import clsx from 'clsx'
 
 const AgentListItem = ({
@@ -21,10 +25,6 @@ const AgentListItem = ({
   onCheckboxChange?: (agentId: string, checked: boolean) => void
   isSinglePublishedAgent?: boolean
 }) => {
-  const agentImage = agent.image
-    ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent.image}`
-    : undefined
-
   const formatDate = (date: string) => {
     if (!date) return ''
     return formatDistanceToNow(new Date(date), { addSuffix: true })
@@ -36,73 +36,59 @@ const AgentListItem = ({
     }
   }
 
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
+  const handleCheckboxChange = (checked: boolean) => {
     if (onCheckboxChange) {
       onCheckboxChange(agent.id, checked)
     }
   }
 
   return (
-    <MenuItem
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-      }}
-      onClick={() => {
-        onSelectAgent(agent)
-      }}
+    <DropdownMenuItem
+      className="flex items-center justify-between w-full p-2 hover:bg-[#282d33] cursor-pointer transition-all"
+      onClick={() => onSelectAgent(agent)}
     >
-      <Box
-        sx={{ display: 'flex', alignItems: 'center' }}
-        onClick={handleCheckboxClick}
-      >
+      <div className="flex items-center" onClick={handleCheckboxClick}>
         {!isDraft && !isSinglePublishedAgent && (
           <Checkbox
-            size="small"
+            id="agent-checkbox"
             checked={selectedAgents?.includes(agent.id)}
-            onChange={handleCheckboxChange}
-            sx={{
-              marginRight: '8px',
-              padding: 0,
-            }}
+            onCheckedChange={handleCheckboxChange}
+            className="mr-8 p-0"
           />
         )}
         <Avatar
-          className={clsx('self-center border border-ds-primary w-8 h-8')}
+          className={clsx(
+            'self-center border border-ds-primary w-8 h-8 justify-center items-center mr-2'
+          )}
         >
           <AvatarImage
             className="object-cover w-full h-full rounded-full"
-            src={`${agentImage}`}
-            alt={agent.name.at(0) || 'Agent'}
+            src={`${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent.image}`}
+            alt={agent.name.at(0) || 'A'}
           />
           {agent.name.at(0) || 'A'}
         </Avatar>
-        <ListItemText
-          primary={agent.name}
-          secondary={`Updated ${formatDate(
-            (agent.updatedAt as string) || (agent.createdAt as string)
-          )}`}
-          sx={{
-            ml: 1,
-            maxWidth: isDraft ? '220px' : '180px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        />
-      </Box>
+        <div
+          className={`flex flex-col ml-1 truncate ${
+            isDraft ? 'max-w-[220px]' : 'max-w-[180px]'
+          }`}
+        >
+          <div className="text-white font-medium">{agent.name}</div>
+          <div className="text-[#b5b9bc] text-xs">
+            Updated{' '}
+            {formatDate(
+              (agent.updatedAt as string) || (agent.createdAt as string)
+            )}
+          </div>
+        </div>
+      </div>
 
       {!isDraft && (
-        <Box sx={{ marginRight: '4px' }}>
-          <LockIcon />
-        </Box>
+        <div className="mr-2">
+          <NodeLock color="#b5b9bc" />
+        </div>
       )}
-    </MenuItem>
+    </DropdownMenuItem>
   )
 }
 
