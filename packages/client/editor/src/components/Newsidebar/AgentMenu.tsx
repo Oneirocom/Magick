@@ -126,7 +126,7 @@ export function AgentMenu({ data }) {
   }
 
   return (
-    <div className="flex items-center justify-between w-full p-3 bg-gray-800 rounded-lg border border-gray-700">
+    <div className="flex items-center justify-between w-full p-3 bg-gray-800 rounded-lg ">
       <div
         className="flex items-center space-x-2 w-full"
         onClick={redirectToCloudAgents}
