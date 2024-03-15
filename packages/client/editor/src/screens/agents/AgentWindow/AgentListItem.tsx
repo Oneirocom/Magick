@@ -8,7 +8,6 @@ import {
   Checkbox,
   DropdownMenuItem,
 } from '@magickml/client-ui'
-import clsx from 'clsx'
 
 const AgentListItem = ({
   agent,
@@ -56,11 +55,7 @@ const AgentListItem = ({
             className="mr-8 p-0"
           />
         )}
-        <Avatar
-          className={clsx(
-            'self-center border border-ds-primary w-8 h-8 justify-center items-center mr-2'
-          )}
-        >
+        <Avatar className="self-center border border-ds-primary w-8 h-8 justify-center items-center mr-2">
           <AvatarImage
             className="object-cover w-full h-full rounded-full"
             src={`${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent.image}`}
