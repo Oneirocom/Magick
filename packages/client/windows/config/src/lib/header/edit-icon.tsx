@@ -1,8 +1,4 @@
-import React from 'react'
-
-type Props = {}
-
-export const EditIcon = (props: Props) => {
+export const EditIcon = () => {
   return (
     <svg
       width="18"
