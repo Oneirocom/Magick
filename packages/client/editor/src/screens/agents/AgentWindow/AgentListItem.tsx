@@ -43,7 +43,7 @@ const AgentListItem = ({
 
   return (
     <DropdownMenuItem
-      className="flex items-center justify-between w-full p-2 hover:bg-[#282d33] cursor-pointer transition-all"
+      className="flex items-center justify-between w-full p-2 hover:bg-[#282d33] focus:bg-[#282d33] cursor-pointer transition-all"
       onClick={() => onSelectAgent(agent)}
     >
       <div className="flex items-center" onClick={handleCheckboxClick}>
