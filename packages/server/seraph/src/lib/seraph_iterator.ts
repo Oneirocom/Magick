@@ -1,8 +1,6 @@
 import { Seraph } from './seraph'
 import { LLMManager } from './llm_manager'
 
-const ANTHROPIC_API_KEY = process.env['ANTHROPIC_API_KEY']
-
 class SeraphIterator implements AsyncIterator<string> {
   private seraph: Seraph
   private conversationId: string
@@ -11,15 +9,10 @@ class SeraphIterator implements AsyncIterator<string> {
   private done: boolean = false
 
   constructor(seraph: Seraph, conversationId: string, systemPrompt: string) {
-    if (!ANTHROPIC_API_KEY) {
-      throw new Error(
-        'ANTHROPIC_API_KEY is not defined. Please add to your environment variables.'
-      )
-    }
     this.seraph = seraph
     this.conversationId = conversationId
     this.systemPrompt = systemPrompt
-    this.llmManager = new LLMManager(ANTHROPIC_API_KEY)
+    this.llmManager = new LLMManager(seraph.options.anthropicApiKey)
   }
 
   public async next(): Promise<IteratorResult<string>> {
@@ -36,6 +29,11 @@ class SeraphIterator implements AsyncIterator<string> {
       this.systemPrompt,
       messages,
       1024
+    )
+
+    this.seraph.middlewareManager.runMiddleware(
+      llmResponse,
+      this.conversationId
     )
 
     this.seraph.conversationManager.updateContext(

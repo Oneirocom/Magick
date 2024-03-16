@@ -6,7 +6,13 @@ import { ResponseParser } from './response_parser'
 import { FeedbackProcessor } from './feedback_processor'
 import { SeraphIterator } from './seraph_iterator'
 import { BaseCognitiveFunction } from './base_cognitive_function'
+import { MiddlewareManager } from './middlewareManager'
 
+type SeraphOptions = {
+  prompt: string
+  openAIApiKey: string
+  anthropicApiKey: string
+}
 /**
  * The Seraph class represents the main entry point for the AI system.
  * It manages cognitive functions, conversation context, and the cognitive loop.
@@ -17,14 +23,18 @@ class Seraph {
   cognitiveFunctionExecutor: CognitiveFunctionExecutor
   responseParser: ResponseParser
   feedbackProcessor: FeedbackProcessor
+  middlewareManager: MiddlewareManager
   prompt: string
+  options: SeraphOptions
 
-  constructor(prompt: string) {
+  constructor(options: SeraphOptions) {
+    this.options = options
     this.conversationManager = new ConversationManager()
     this.cognitiveFunctionExecutor = new CognitiveFunctionExecutor()
     this.responseParser = new ResponseParser(this.cognitiveFunctions)
     this.feedbackProcessor = new FeedbackProcessor()
-    this.prompt = prompt
+    this.middlewareManager = new MiddlewareManager()
+    this.prompt = options.prompt
   }
 
   /**
@@ -96,6 +106,7 @@ class Seraph {
 
   generateSystemPrompt(): string {
     const toolsDescription = this.getToolsDescription()
+    const middlewarePrompts = this.middlewareManager.getMiddlewarePrompts()
     const prompt = `
     This is the Seraph AI system.  This is your core directive and prompt:
     ${this.prompt}
@@ -114,7 +125,12 @@ class Seraph {
     </function_calls> 
 
     Here are the tools available:
-    ${toolsDescription}`
+    ${toolsDescription}
+    
+    You have the ability to call side effect functions that will not return a response, but will perform an action.  The available actions are:
+
+    ${middlewarePrompts}
+    `
 
     return prompt
   }
@@ -149,7 +165,6 @@ class Seraph {
       /<function_results>[\s\S]*?<\/function_results>/g,
       ''
     )
-    console.log('strippedFunctionResults', strippedFunctionResults)
     return strippedFunctionResults
   }
 }

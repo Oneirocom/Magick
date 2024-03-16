@@ -1,4 +1,5 @@
 // cognitive_function_executor.ts
+import chalk from 'chalk'
 import { BaseCognitiveFunction } from './base_cognitive_function'
 
 /**
@@ -32,7 +33,13 @@ class CognitiveFunctionExecutor {
       throw new Error(`Cognitive function '${functionName}' not found.`)
     }
 
-    return await cognitiveFunction.execute(functionArgs)
+    console.log(chalk.blue('Executing function', functionName))
+
+    const result = await cognitiveFunction.execute(functionArgs)
+
+    console.log(chalk.blue(`Function ${functionName} result:`, result))
+
+    return result
   }
 }
 
