@@ -26,7 +26,7 @@
       }
     },
     "cli": {
-      "command": "ts-node --inspect ./src/lib/cli.ts",
+      "command": "tsx ./src/lib/cli.ts",
       "options": {
         "cwd": "packages/server/seraph"
       }

@@ -2,9 +2,10 @@
   "name": "@magickml/seraph",
   "version": "0.0.1",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "tslib": "^2.3.0"
   },
-  "type": "commonjs",
+  "type": "module",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts"
 }
