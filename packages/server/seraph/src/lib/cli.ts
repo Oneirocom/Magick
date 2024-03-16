@@ -1,16 +1,11 @@
-import chalk from 'chalk'
 import { Seraph } from './seraph'
-import * as readline from 'readline'
+// import inquirer from 'inquirer'
 import * as dotenv from 'dotenv'
-import { MemoryRetrieval, MemoryStorage } from './cognitive_functions/memory'
+import { MemoryRetrieval } from './cognitive_functions/memory/memory'
+import SeraphCLI from './seraphCLI'
+import { MemoryStorageMiddleware } from './middleware/memory_storage_middleware'
 
 dotenv.config()
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: true,
-})
 
 // validate API keys are in process env
 if (!process.env['OPENAI_API_KEY']) {
@@ -26,37 +21,40 @@ if (!process.env['ANTHROPIC_API_KEY']) {
   )
   process.exit(1)
 }
+interface PrivatePromptModule {
+  prompt: string
+}
 
-const prompt = 'You are Seraph, an AI assistant.'
-const seraph = new Seraph({
-  prompt,
-  openAIApiKey: process.env['OPENAI_API_KEY'] as string,
-  anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
-})
-// seraph.registerCognitiveFunction(new JokeGenerator())
-seraph.registerCognitiveFunction(new MemoryStorage(seraph))
-seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
-const conversationId = 'cli_conversation'
+const privatePrompts = ['./private_prompts/seraph_3_cli.ts']
 
-function startConversation() {
-  rl.setPrompt('User: ')
-  rl.prompt()
-  rl.on('line', async input => {
-    if (input.trim().toLowerCase() === 'exit') {
-      rl.close()
-      return
-    }
-
-    const response = seraph.processInput(input, conversationId)
-
-    for await (const message of response) {
-      console.log(chalk.greenBright('\nSeraph:', message, '\n'))
-    }
-
-    rl.prompt()
+const importPrivatePrompts = async () => {
+  return Promise.all(
+    privatePrompts.map(async module => {
+      try {
+        const imported = (await import(module)) as PrivatePromptModule
+        return imported.prompt
+      } catch (error) {
+        console.error('Failed to import private module:', error)
+        return null
+      }
+    })
+  ).then(prompts => {
+    return prompts.filter(prompt => prompt !== null).join('\n')
   })
 }
 
-console.log('Welcome to the Seraph CLI!')
-console.log('Type "exit" to end the conversation.\n')
-startConversation()
+;(async () => {
+  const prompt =
+    (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
+
+  const seraph = new Seraph({
+    prompt,
+    openAIApiKey: process.env['OPENAI_API_KEY'] as string,
+    anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
+  })
+  seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
+  // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
+  seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
+
+  new SeraphCLI(seraph)
+})()
