@@ -19,6 +19,8 @@ abstract class BaseCognitiveFunction {
     this.examples = examples
   }
 
+  abstract getPromptInjection(): Promise<string>
+
   abstract execute(args: Record<string, any> | null): Promise<string>
 
   async getFeedback(prompt, getUserFeedback) {

@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/seraph",
+  "name": "seraph",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/seraph/src",
   "projectType": "library",
@@ -26,9 +26,16 @@
       }
     },
     "cli": {
-      "command": "tsx ./src/lib/cli.ts",
+      "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/server/seraph"
+        "cwd": "packages/server/seraph",
+        "commands": [
+          {
+            "command": "tsx ./src/lib/cli.ts",
+            "forwardAllArgs": true
+          }
+        ],
+        "parallel": false
       }
     }
   },
