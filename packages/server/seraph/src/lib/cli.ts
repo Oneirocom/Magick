@@ -1,12 +1,10 @@
+import chalk from 'chalk'
 import { Seraph } from './seraph'
 import * as readline from 'readline'
-import { JokeGenerator } from './cognitive_functions/joke_generator'
+import * as dotenv from 'dotenv'
+import { MemoryRetrieval, MemoryStorage } from './cognitive_functions/memory'
 
-import dotenv from 'dotenv'
-
-dotenv.config({
-  path: '../../../../../.env.local',
-})
+dotenv.config()
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -14,10 +12,30 @@ const rl = readline.createInterface({
   terminal: true,
 })
 
-const prompt = 'You are Seraph, an AI assistant.'
-const seraph = new Seraph(prompt)
-seraph.registerCognitiveFunction(new JokeGenerator())
+// validate API keys are in process env
+if (!process.env['OPENAI_API_KEY']) {
+  console.error(
+    'OPENAI_API_KEY is not defined. Please add to your environment variables.'
+  )
+  process.exit(1)
+}
 
+if (!process.env['ANTHROPIC_API_KEY']) {
+  console.error(
+    'ANTHROPIC_API_KEY is not defined. Please add to your environment variables.'
+  )
+  process.exit(1)
+}
+
+const prompt = 'You are Seraph, an AI assistant.'
+const seraph = new Seraph({
+  prompt,
+  openAIApiKey: process.env['OPENAI_API_KEY'] as string,
+  anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
+})
+// seraph.registerCognitiveFunction(new JokeGenerator())
+seraph.registerCognitiveFunction(new MemoryStorage(seraph))
+seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
 const conversationId = 'cli_conversation'
 
 function startConversation() {
@@ -32,7 +50,7 @@ function startConversation() {
     const response = seraph.processInput(input, conversationId)
 
     for await (const message of response) {
-      console.log('Seraph CLI:', message)
+      console.log(chalk.greenBright('\nSeraph:', message, '\n'))
     }
 
     rl.prompt()
