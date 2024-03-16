@@ -1321,6 +1321,80 @@
     "configuration": []
   },
   {
+    "type": "actions/http/fetch",
+    "category": "Action",
+    "label": "Fetch",
+    "inputs": [
+      {
+        "name": "url",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "method",
+        "valueType": "string",
+        "defaultValue": "",
+        "choices": [
+          {
+            "text": "GET",
+            "value": "GET"
+          },
+          {
+            "text": "POST",
+            "value": "POST"
+          },
+          {
+            "text": "PUT",
+            "value": "PUT"
+          },
+          {
+            "text": "DELETE",
+            "value": "DELETE"
+          },
+          {
+            "text": "PATCH",
+            "value": "PATCH"
+          }
+        ]
+      },
+      {
+        "name": "headers",
+        "valueType": "object",
+        "defaultValue": "{}"
+      },
+      {
+        "name": "body",
+        "valueType": "object",
+        "defaultValue": "{}"
+      },
+      {
+        "name": "authToken",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "authTokenHeader",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "response",
+        "valueType": "object"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",
