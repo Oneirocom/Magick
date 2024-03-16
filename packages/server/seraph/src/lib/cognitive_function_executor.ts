@@ -1,12 +1,17 @@
 // cognitive_function_executor.ts
-import chalk from 'chalk'
 import { BaseCognitiveFunction } from './base_cognitive_function'
+import { Seraph } from './seraph'
 
 /**
  * The CognitiveFunctionExecutor class executes cognitive functions.
  */
 class CognitiveFunctionExecutor {
   private cognitiveFunctions: Record<string, BaseCognitiveFunction> = {}
+  seraph: Seraph
+
+  constructor(seraph: Seraph) {
+    this.seraph = seraph
+  }
 
   /**
    * Registers a cognitive function.
@@ -33,11 +38,11 @@ class CognitiveFunctionExecutor {
       throw new Error(`Cognitive function '${functionName}' not found.`)
     }
 
-    console.log(chalk.blue('Executing function', functionName))
+    this.seraph.emit('functionExecution', functionName)
 
     const result = await cognitiveFunction.execute(functionArgs)
 
-    console.log(chalk.blue(`Function ${functionName} result:`, result))
+    this.seraph.emit('functionResult', functionName, result)
 
     return result
   }

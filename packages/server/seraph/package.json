@@ -1,9 +1,17 @@
 {
   "name": "@magickml/seraph",
   "version": "0.0.1",
+  "scripts": {
+    "cli": "ts-node ./src/lib/cli.ts"
+  },
   "dependencies": {
+    "blessed": "^0.1.81",
+    "boxen": "^7.1.1",
     "dotenv": "^16.4.5",
-    "tslib": "^2.3.0"
+    "fast-xml-parser": "^4.3.6",
+    "ora": "^8.0.1",
+    "tslib": "^2.3.0",
+    "zod-to-json-schema": "^3.22.4"
   },
   "type": "module",
   "main": "./src/index.js",

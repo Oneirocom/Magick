@@ -1,11 +1,11 @@
 // memory.ts
-import { LocalIndex } from 'vectra'
+import { IndexItem, LocalIndex } from 'vectra'
 import { OpenAIApi, Configuration } from 'openai'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { BaseCognitiveFunction } from '../base_cognitive_function'
+import { BaseCognitiveFunction } from '../../base_cognitive_function'
 import { metadataManager } from './metadata_manager'
-import { Seraph } from '../seraph'
+import { Seraph } from '../../seraph'
 
 const __filename = fileURLToPath(import.meta.url) // get the resolved path to the file
 const __dirname = path.dirname(__filename) // get the name of the directory
@@ -72,21 +72,19 @@ class MemoryStorage extends BaseCognitiveFunction {
     this.index = new LocalIndex(path.join(__dirname, '..', 'memory_index'))
   }
 
-  getPromptInjection(): string {
+  getPromptInjection(): Promise<string> {
     return metadataManager.getPromptInjection()
   }
 
   async execute(args: Record<string, any>): Promise<string> {
     const { text, type, metadata = {}, metadataDescriptions = {} } = args
 
-    if (!(await this.index.isIndexCreated())) {
-      await this.index.createIndex()
-    }
-
-    await this.index.insertItem({
+    const item: IndexItem<any> = await this.index.insertItem({
       vector: await this.getVector(text),
       metadata: { text, type, ...metadata },
     })
+
+    this.seraph.emit('info', 'Information stored in memory', item.metadata)
 
     Object.entries(metadataDescriptions).forEach(([key, value]) => {
       metadataManager.addMetadataDescription(key, value as string)
@@ -112,7 +110,8 @@ class MemoryRetrieval extends BaseCognitiveFunction {
   constructor(seraph: Seraph) {
     super({
       name: 'memoryRetrieval',
-      description: 'Retrieves information from memory',
+      description:
+        'Retrieves information from memory.  Use this only when what is being talked about is out of the range of your abilities.  Be sure to also look to the conversation history. If you have trouble with your memory, ask for user input first.',
       parameters: {
         query: { type: 'string', description: 'Query to search memory' },
         limit: {
@@ -154,7 +153,7 @@ class MemoryRetrieval extends BaseCognitiveFunction {
     this.index = new LocalIndex(path.join(__dirname, '..', 'memory_index'))
   }
 
-  getPromptInjection(): string {
+  async getPromptInjection(): Promise<string> {
     return metadataManager.getPromptInjection()
   }
 
@@ -167,8 +166,6 @@ class MemoryRetrieval extends BaseCognitiveFunction {
       ...metadata,
     })
 
-    console.log('Memory results: ', results)
-
     if (results.length > 0) {
       const memories = results.map(result => {
         const { text, type, ...metadata } = result.item
@@ -176,10 +173,15 @@ class MemoryRetrieval extends BaseCognitiveFunction {
         const metadataString = Object.entries(metadata)
           .map(([key, value]) => `${key}: ${value}`)
           .join(', ')
-        return `Type: ${type}\nText: ${text}\nMetadata: ${metadataString}`
+        const value = `Type: ${type}\nText: ${text}\nMetadata: ${metadataString}`
+        this.seraph.emit('info', 'Memory retrieved', result.item.metadata)
+        return value
       })
-      return `Relevant memories:\n${memories.join('\n\n')}`
+      const value = `Relevant memories:\n${memories.join('\n\n')}`
+      this.seraph.emit('info', value)
+      return value
     } else {
+      this.seraph.emit('info', 'No relevant memories found.')
       return 'No relevant memories found.'
     }
   }

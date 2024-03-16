@@ -1,12 +1,22 @@
 // seraph.ts
-import { CognitiveFunctionSchema, convertToXML } from './zod_schemas'
+import { convertToXML } from './zod_schemas'
+import TypedEmitter from 'typed-emitter'
 import { ConversationManager } from './conversation_manager'
 import { CognitiveFunctionExecutor } from './cognitive_function_executor'
 import { ResponseParser } from './response_parser'
 import { FeedbackProcessor } from './feedback_processor'
 import { SeraphIterator } from './seraph_iterator'
 import { BaseCognitiveFunction } from './base_cognitive_function'
-import { MiddlewareManager } from './middlewareManager'
+import { IMiddleware, MiddlewareManager } from './middlewareManager'
+import EventEmitter from 'events'
+
+type SeraphEvents = {
+  error: (error: Error) => void
+  message: (role: 'user' | 'assistant', message: string) => void
+  info: (info: string, data?: Record<string, unknown>) => void
+  functionExecution: (functionName: string) => void
+  functionResult: (functionName: string, result: string) => void
+}
 
 type SeraphOptions = {
   prompt: string
@@ -17,8 +27,8 @@ type SeraphOptions = {
  * The Seraph class represents the main entry point for the AI system.
  * It manages cognitive functions, conversation context, and the cognitive loop.
  */
-class Seraph {
-  cognitiveFunctions: Record<string, CognitiveFunctionSchema> = {}
+class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
+  cognitiveFunctions: Record<string, BaseCognitiveFunction> = {}
   conversationManager: ConversationManager
   cognitiveFunctionExecutor: CognitiveFunctionExecutor
   responseParser: ResponseParser
@@ -28,9 +38,10 @@ class Seraph {
   options: SeraphOptions
 
   constructor(options: SeraphOptions) {
+    super()
     this.options = options
     this.conversationManager = new ConversationManager()
-    this.cognitiveFunctionExecutor = new CognitiveFunctionExecutor()
+    this.cognitiveFunctionExecutor = new CognitiveFunctionExecutor(this)
     this.responseParser = new ResponseParser(this.cognitiveFunctions)
     this.feedbackProcessor = new FeedbackProcessor()
     this.middlewareManager = new MiddlewareManager()
@@ -64,12 +75,25 @@ class Seraph {
   }
 
   /**
+   * Registers a middleware with the AI system.
+   * Middleware is used to process the response of the AI system, and can be used to perform side effects.
+   * @param middleware
+   */
+  public registerMiddleware(middleware: IMiddleware) {
+    this.middlewareManager.registerMiddleware(middleware)
+  }
+
+  /**
    * Generates the XML description for all registered cognitive functions.
    * @returns The XML description of the cognitive functions.
    */
   public getToolsDescription(): string {
     const toolsXML = Object.values(this.cognitiveFunctions)
-      .map(convertToXML)
+      .map(func => {
+        const xml = convertToXML(func)
+        const prompt = func.getPromptInjection()
+        return `${xml}\n${prompt}`
+      })
       .join('\n')
 
     return toolsXML
@@ -89,7 +113,7 @@ class Seraph {
     this.conversationManager.updateContext(conversationId, userInput, 'user')
 
     // Generate response using core prompts and conversation context
-    const systemPrompt = this.generateSystemPrompt()
+    const systemPrompt = await this.generateSystemPrompt()
 
     // Create a SeraphIterator to handle the cognitive loop
     const seraphIterator = new SeraphIterator(
@@ -100,13 +124,15 @@ class Seraph {
 
     // Yield responses from the SeraphIterator
     for await (const iteratorResponse of seraphIterator) {
+      this.emit('message', 'assistant', iteratorResponse)
       yield iteratorResponse
     }
   }
 
-  generateSystemPrompt(): string {
-    const toolsDescription = this.getToolsDescription()
-    const middlewarePrompts = this.middlewareManager.getMiddlewarePrompts()
+  async generateSystemPrompt(): Promise<string> {
+    const toolsDescription = await this.getToolsDescription()
+    const middlewarePrompts =
+      await this.middlewareManager.getMiddlewarePrompts()
     const prompt = `
     This is the Seraph AI system.  This is your core directive and prompt:
     ${this.prompt}
