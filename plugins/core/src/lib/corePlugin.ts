@@ -39,32 +39,41 @@ import {
   corePluginCredentials,
   corePluginName,
   coreRemovedNodes,
-  corePluginCommands,
   formatCoreWebhookPayload,
   validateCoreWebhookPayload,
   type CorePluginEvents,
   type CorePluginState,
-  type CorePluginCredentials,
   type CoreWebhookPayload,
 } from './config'
-import { EventTypes, ON_ERROR } from 'communication'
+import { EventTypes } from 'communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
 import { getStateNode } from './nodes/_uncategorized/getState'
 import { getSecretNode } from './nodes/_uncategorized/getSecret'
 import { FetchNode } from './nodes/actions/fetch'
+import {
+  type CorePluginCredentials,
+  CORE_COMMANDS,
+  CORE_EVENTS,
+  CORE_ACTIONS,
+  CORE_DEPENDENCIES,
+} from './configx'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
 export class CorePlugin extends CoreEventsPlugin<
+  typeof CORE_EVENTS,
+  typeof CORE_ACTIONS,
+  typeof CORE_DEPENDENCIES,
+  typeof CORE_COMMANDS,
+  CorePluginCredentials,
   CorePluginEvents,
   EventPayload,
   Record<string, unknown>,
   Record<string, unknown>,
-  CorePluginState,
-  CorePluginCredentials
+  CorePluginState
 > {
   override defaultState = coreDefaultState
   client: CoreEventClient
@@ -127,17 +136,51 @@ export class CorePlugin extends CoreEventsPlugin<
     this.userService = new CoreUserService({ projectId })
   }
 
-  defineCommands() {
-    const { webhook } = corePluginCommands
-    this.registerCommand({ ...webhook, handler: this.handleWebhook.bind(this) })
+  getPluginConfig() {
+    return {
+      events: CORE_EVENTS,
+      actions: CORE_ACTIONS,
+      dependencyKeys: CORE_DEPENDENCIES,
+      commands: CORE_COMMANDS,
+      developerMode: false,
+      credentials: corePluginCredentials,
+    }
   }
 
-  async handleWebhook(payload: CoreWebhookPayload) {
-    const isValid = validateCoreWebhookPayload(payload)
-    if (!isValid) {
+  // LIFECYCLE
+  async beforeActivate() {}
+
+  async afterActivate() {
+    this.logger.info('CorePlugin activated')
+    await this.getLLMCredentials()
+
+    this.centralEventBus.on(
+      EventTypes.ON_MESSAGE,
+      this.handleOnMessage.bind(this)
+    )
+    this.client.onMessage(this.handleOnMessage.bind(this))
+  }
+
+  async beforeDeactivate() {}
+  async afterDeactivate() {}
+  beforeDestroy() {}
+  afterDestroy() {}
+
+  // COMMANDS
+  getCommandHandlers() {
+    return {}
+  }
+
+  handleEnableCommand() {}
+  handleDisableCommand() {}
+  handleLinkCommand() {}
+  handleUnlinkCommand() {}
+  handleWebhookCommand(payload: CoreWebhookPayload) {
+    if (!validateCoreWebhookPayload(payload)) {
       return
     }
     const p = formatCoreWebhookPayload(payload, this.agentId)
+    this.logger.info('Webhook event received:', p)
     this.emitEvent(EventTypes.ON_WEBHOOK, p)
   }
 
@@ -156,36 +199,12 @@ export class CorePlugin extends CoreEventsPlugin<
     })
   }
 
-  /**
-   * Defines the actions that the plugin will handle.
-   */
-  defineActions() {
-    // Define actions here
-    this.registerAction({
-      actionName: EventTypes.SEND_MESSAGE,
-      displayName: 'Send Message',
-      handler: this.handleSendMessage.bind(this),
-    })
-    this.registerAction({
-      actionName: EventTypes.STREAM_MESSAGE,
-      displayName: 'Stream Message',
-      handler: this.handleSendMessage.bind(this),
-    })
-    this.registerAction({
-      actionName: ON_ERROR,
-      displayName: 'Error Received',
-      handler: this.handleSendMessage.bind(this),
-    })
-  }
-
-  async initializeFunctionalities() {
-    await this.getLLMCredentials()
-
-    this.centralEventBus.on(
-      EventTypes.ON_MESSAGE,
-      this.handleOnMessage.bind(this)
-    )
-    this.client.onMessage(this.handleOnMessage.bind(this))
+  getActionHandlers() {
+    return {
+      [CORE_ACTIONS.messageSend]: this.handleSendMessage,
+      [CORE_ACTIONS.messageStream]: this.handleSendMessage,
+      [CORE_ACTIONS.error]: this.handleSendMessage,
+    }
   }
 
   /**
@@ -197,8 +216,7 @@ export class CorePlugin extends CoreEventsPlugin<
       // await this.coreBudgetManagerService.initialize()
       await this.coreMemoryService.initialize(this.projectId)
     } catch (error) {
-      console.error('Error initializing dependencies:')
-      console.error(error)
+      this.logger.error('Error initializing dependencies:')
     }
 
     return {
@@ -214,7 +232,7 @@ export class CorePlugin extends CoreEventsPlugin<
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
       // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
-      [CORE_DEP_KEYS.GET_STATE]: this.getGlobalState.bind(this),
+      [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
       [CORE_DEP_KEYS.GET_SECRET]:
         this.credentialsManager.getCustomCredential.bind(this),
     }
@@ -230,7 +248,7 @@ export class CorePlugin extends CoreEventsPlugin<
         const provider = LLMProviderKeys[providerKey]
 
         // Retrieve credentials for each provider
-        const credential = await this.getCredential(provider)
+        const credential = this.credentialsManager.getCredential(provider)
 
         // Check if credentials are retrieved and valid
         if (credential) {

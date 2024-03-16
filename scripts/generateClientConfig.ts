@@ -67,7 +67,10 @@ const loadPlugins = async () => {
 const getCredentials = plugins => {
   const credentials: PluginCredential[] = []
   for (const plugin of plugins) {
-    const pluginCredentials = plugin.credentials
+    const pluginCredentials =
+      typeof plugin.getPluginConfig === 'function'
+        ? plugin.getPluginConfig().credentials
+        : plugin.credentials
     credentials.push(...pluginCredentials)
   }
   return credentials
@@ -104,6 +107,22 @@ async function writeConfig(fileLocation: string) {
   fs.writeFileSync(
     path.join('./packages/shared/nodeSpec/src/credentials.json'),
     JSON.stringify(credentials, null, 2)
+  )
+
+  console.log('WRITING PLUGIN CONFIG')
+  const credentialMap = credentials.reduce((acc, credential) => {
+    if (!acc[credential.pluginName]) {
+      acc[credential.pluginName] = {
+        credentials: [],
+      }
+    }
+    acc[credential.pluginName].credentials.push(credential)
+    return acc
+  }, {})
+
+  fs.writeFileSync(
+    path.join('./packages/shared/nodeSpec/src/pluginConfig.json'),
+    JSON.stringify(credentialMap, null, 2)
   )
 
   console.log('DONE WRITING NODE SPECS')

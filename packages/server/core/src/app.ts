@@ -178,6 +178,15 @@ export async function initApp(environment: Environment = 'default') {
             return next()
           }
 
+          if (context.path.startsWith('health')) {
+            context.params.user = {
+              id: 'api',
+              permissions: ['admin', 'owner'],
+            }
+
+            return next()
+          }
+
           // if the route to /webhook/:agentid/:plugin, skip auth
           if (context.path.startsWith('webhook')) {
             // add mock permissions for now

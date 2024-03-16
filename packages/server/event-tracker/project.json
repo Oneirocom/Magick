@@ -14,6 +14,16 @@
         ]
       }
     },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/event-tracker",
+        "tsConfig": "packages/server/event-tracker/tsconfig.lib.json",
+        "packageJson": "packages/server/event-tracker/package.json",
+        "main": "packages/server/event-tracker/src/index.ts"
+      }
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

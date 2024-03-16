@@ -35,7 +35,7 @@ export const getStateNode = makeFlowNodeDefinition({
       throw new Error(`Invalid plugin in getStateNode: ${plugin}`)
     }
 
-    const getState = getDependency<BasePlugin['getGlobalState']>(
+    const getState = getDependency<BasePlugin['stateManager']['getGlobalState']>(
       CORE_DEP_KEYS.GET_STATE
     )
 

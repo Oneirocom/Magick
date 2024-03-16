@@ -1,21 +1,5 @@
 import Redis from 'ioredis'
 import { ActionPayload, EventPayload } from 'server/plugin'
-import {
-  SLACK_ACTIONS,
-  SLACK_EVENTS,
-  slackPluginName,
-  slackPluginCredentials,
-  slackDefaultState,
-  type SlackCredentials,
-  type SlackPluginState,
-  SLACK_DEVELOPER_MODE,
-  SLACK_DEP_KEYS,
-  SlackEventPayload,
-  SlackEvents,
-  SlackMessageEvents,
-  SlackBaseMessageEvent,
-  SendSlackMessage,
-} from './config'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
@@ -25,7 +9,7 @@ import {
   onSlackMessageNodes,
   sendSlackAudio,
 } from './nodes'
-import { WebSocketPlugin } from 'plugin-abstracts'
+import { WebSocketPlugin } from 'server/plugin'
 import { type CorePluginEvents } from 'plugin/core'
 import {
   type AllMiddlewareArgs,
@@ -34,24 +18,35 @@ import {
   App,
 } from '@slack/bolt'
 
-interface SlackPluginConfig {
-  pluginName: typeof slackPluginName
-  events: typeof SLACK_EVENTS
-  actions: typeof SLACK_ACTIONS
-  dependencyKeys: typeof SLACK_DEP_KEYS
-  developerMode: typeof SLACK_DEVELOPER_MODE
-}
+import {
+  SLACK_DEPENDENCIES,
+  SLACK_COMMANDS,
+  SLACK_ACTIONS,
+  SLACK_EVENTS,
+  slackPluginName,
+  slackPluginCredentials,
+  slackDefaultState,
+  type SlackCredentials,
+  type SlackPluginState,
+  SLACK_DEVELOPER_MODE,
+  SlackEventPayload,
+  SlackEvents,
+  SlackMessageEvents,
+  SlackBaseMessageEvent,
+  SendSlackMessage,
+} from './configx'
 
 export class SlackPlugin extends WebSocketPlugin<
   typeof SLACK_EVENTS,
   typeof SLACK_ACTIONS,
-  typeof SLACK_DEP_KEYS,
+  typeof SLACK_DEPENDENCIES,
+  typeof SLACK_COMMANDS,
+  SlackCredentials,
   CorePluginEvents,
   EventPayload<SlackEventPayload[keyof SlackEventPayload], any>,
   Record<string, unknown>,
   Record<string, unknown>,
-  SlackPluginState,
-  SlackCredentials
+  SlackPluginState
 > {
   override defaultState = slackDefaultState
   client: SlackEventClient
@@ -80,15 +75,20 @@ export class SlackPlugin extends WebSocketPlugin<
     this.client = new SlackEventClient(pubSub, agentId)
   }
 
-  // ABSTRACT IMPLEMENTATIONS FROM WS PLUGIN
-  getWSPluginConfig(): SlackPluginConfig {
+  getPluginConfig() {
     return {
-      pluginName: slackPluginName,
       events: SLACK_EVENTS,
       actions: SLACK_ACTIONS,
-      dependencyKeys: SLACK_DEP_KEYS,
+      dependencyKeys: SLACK_DEPENDENCIES,
+      commands: SLACK_COMMANDS,
       developerMode: SLACK_DEVELOPER_MODE,
+      credentials: slackPluginCredentials,
     }
+  }
+
+  // COMMANDS
+  getCommandHandlers() {
+    return {}
   }
 
   async login(credentials: SlackCredentials) {
@@ -236,21 +236,18 @@ export class SlackPlugin extends WebSocketPlugin<
     this.slack.event(eventName, async () => {})
   }
 
-  defineActions(): void {
-    for (const [actionName] of Object.entries(SLACK_ACTIONS)) {
-      this.registerAction({
-        actionName,
-        displayName: `Slack ${actionName}`,
-        handler: this.handleSendMessage.bind(this),
-      })
+  // ACTIONS
+  getActionHandlers() {
+    return {
+      [SLACK_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
     }
   }
 
   getDependencies() {
     return {
       [slackPluginName]: SlackEmitter,
-      [SLACK_DEP_KEYS.SLACK_KEY]: this.slack,
-      [SLACK_DEP_KEYS.SEND_SLACK_MESSAGE]: this.sendSlackMessage.bind(this),
+      [SLACK_DEPENDENCIES.SLACK_CLIENT]: this.slack,
+      [SLACK_DEPENDENCIES.SLACK_SEND_MESSAGE]: this.sendSlackMessage.bind(this),
     }
   }
 

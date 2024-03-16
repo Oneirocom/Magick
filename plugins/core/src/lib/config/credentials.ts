@@ -315,7 +315,7 @@ export type CorePluginCredentialsKeys = {
   [K in CorePluginCredentialNames]: string | undefined
 }
 
-export type CorePluginCredentials = Record<
-  CorePluginCredentialNames,
-  string | undefined
->
+// export type CorePluginCredentials = Record<
+//   CorePluginCredentialNames,
+//   string | undefined
+// >
