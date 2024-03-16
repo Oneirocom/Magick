@@ -2,15 +2,23 @@
   "name": "@magickml/seraph",
   "version": "0.0.1",
   "scripts": {
-    "cli": "ts-node ./src/lib/cli.ts"
+    "cli": "tsx ./src/lib/cli.ts"
   },
   "dependencies": {
-    "blessed": "^0.1.81",
-    "boxen": "^7.1.1",
-    "dotenv": "^16.4.5",
-    "fast-xml-parser": "^4.3.6",
-    "ora": "^8.0.1",
+    "@anthropic-ai/sdk": "^0.17.0",
+    "boxen": "^6.2.1",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "dotenv": "^8.6.0",
+    "events": "^3.3.0",
+    "fast-xml-parser": "^4.2.5",
+    "inquirer": "^8.2.6",
+    "openai": "^3.3.0",
     "tslib": "^2.3.0",
+    "typed-emitter": "^2.1.0",
+    "vectra": "^0.5.5",
+    "xml2js": "^0.6.2",
+    "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.4"
   },
   "type": "module",
