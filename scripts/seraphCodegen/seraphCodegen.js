@@ -295,6 +295,15 @@ class CodeGenerator {
       },
     ])
 
+    const { globalSupplementaryFiles } = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'globalSupplementaryFiles',
+        message:
+          'Enter the global supplementary files to be attached to all file generations (comma-separated, leave empty if none):',
+      },
+    ])
+
     const files = []
 
     for (let i = 0; i < numFiles; i++) {
@@ -352,15 +361,6 @@ class CodeGenerator {
           : [],
       })
     }
-
-    const { globalSupplementaryFiles } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'globalSupplementaryFiles',
-        message:
-          'Enter the global supplementary files (comma-separated, leave empty if none):',
-      },
-    ])
 
     const newGenerator = {
       name: generatorName,
