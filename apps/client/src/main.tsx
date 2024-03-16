@@ -2,12 +2,10 @@
 import { createRoot } from 'react-dom/client'
 import { MagickIDE } from 'client/editor'
 import {
-  DEFAULT_PROJECT_ID,
   API_ROOT_URL,
   TRUSTED_PARENT_URL,
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
-  DEFAULT_USER_TOKEN,
   STANDALONE,
 } from 'shared/config'
 import { PostHogProvider } from 'posthog-js/react'
@@ -21,6 +19,7 @@ import '../../../packages/client/stylesheets/src/lib/design-globals/design-globa
 import '../../../packages/client/stylesheets/src/lib/App.css'
 import '../../../packages/client/stylesheets/src/lib/styles/dockview.css'
 import '../../../packages/client/stylesheets/src/lib/styles/themes.scss'
+import { DEFAULT_PROJECT_ID, DEFAULT_USER_TOKEN } from 'clientConfig'
 
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)

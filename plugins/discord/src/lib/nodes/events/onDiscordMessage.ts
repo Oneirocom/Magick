@@ -3,7 +3,7 @@ import {
   type DiscordEventMetadata,
   discordPluginName,
   type DiscordEventPayload,
-} from '../../config'
+} from '../../configx'
 import { EventPayload } from 'server/plugin'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { NodeCategory } from '@magickml/behave-graph'

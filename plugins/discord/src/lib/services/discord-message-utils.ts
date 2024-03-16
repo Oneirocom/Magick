@@ -1,5 +1,5 @@
 import { EventPayload } from 'server/plugin'
-import { DiscordAgentContext, type DiscordEventPayload } from '../config'
+import { DiscordAgentContext, type DiscordEventPayload } from '../configx'
 import { SentenceTokenizer } from 'natural'
 
 export class DiscordMessageUtils {

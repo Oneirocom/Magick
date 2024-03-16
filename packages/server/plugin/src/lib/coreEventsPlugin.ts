@@ -1,9 +1,9 @@
 import Redis from 'ioredis'
-import { BasePlugin, EventPayload } from './basePlugin'
+import { BasePlugin } from './basePlugin'
 import EventEmitter from 'events'
 import { EventTypes } from 'communication'
-import { PluginStateType } from 'plugin-state'
-import { PluginCredentialsType } from 'server/credentials'
+import { type PluginStateType } from 'plugin-state'
+import { type EventPayload } from './events/event-manager'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
@@ -17,6 +17,11 @@ import { PluginCredentialsType } from 'server/credentials'
  * }
  */
 export abstract class CoreEventsPlugin<
+  Events extends Record<string, string>,
+  Actions extends Record<string, string>,
+  Dependencies extends Record<string, string>,
+  Commands extends Record<string, string>,
+  Credentials extends Record<string, string | undefined>,
   PluginEvents extends Record<string, (...args: any[]) => void> = Record<
     string,
     (...args: any[]) => void
@@ -24,15 +29,18 @@ export abstract class CoreEventsPlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends PluginStateType = PluginStateType,
-  Credentials extends PluginCredentialsType = PluginCredentialsType
+  State extends PluginStateType = PluginStateType
 > extends BasePlugin<
+  Events,
+  Actions,
+  Dependencies,
+  Commands,
+  Credentials,
   PluginEvents,
   Payload,
   Data,
   Metadata,
-  State,
-  Credentials
+  State
 > {
   constructor({
     name,
@@ -51,7 +59,7 @@ export abstract class CoreEventsPlugin<
 
   override async init(centralEventBus: EventEmitter) {
     super.init(centralEventBus)
-    this.initializeActionHandlers()
+    // this.initializeActionHandlers()
     // Initialize CoreEventPlugin specific stuff if needed
   }
 
@@ -63,12 +71,12 @@ export abstract class CoreEventsPlugin<
    * when the plugin is initialized. This makes all of the
    * actions available to the central event bus if needed.
    */
-  private initializeActionHandlers() {
-    this.actions.forEach(action => {
-      const eventName = `${this.name}:${action.actionName}`
-      this.centralEventBus.on(eventName, action.handler)
-    })
-  }
+  // private initializeActionHandlers() {
+  //   this.actions.forEach(action => {
+  //     const eventName = `${this.name}:${action.actionName}`
+  //     this.centralEventBus.on(eventName, action.handler)
+  //   })
+  // }
 
   /**
    * Generic event trigger to send out message events to the core
@@ -95,13 +103,21 @@ export type DefaultPluginData = Record<string, unknown>
 export type DefaultPluginMetadata = Record<string, unknown>
 
 export abstract class CoreEventsPluginWithDefaultTypes<
-  State extends PluginStateType,
-  Credentials extends PluginCredentialsType
+  Events extends Record<string, string>,
+  Actions extends Record<string, string>,
+  Dependencies extends Record<string, string>,
+  Commands extends Record<string, string>,
+  Credentials extends Record<string, string | undefined>,
+  State extends PluginStateType
 > extends CoreEventsPlugin<
+  Events,
+  Actions,
+  Dependencies,
+  Commands,
+  Credentials,
   DefaultPluginEvents,
   DefaultPluginPayload,
   DefaultPluginData,
   DefaultPluginMetadata,
-  State,
-  Credentials
+  State
 > {}

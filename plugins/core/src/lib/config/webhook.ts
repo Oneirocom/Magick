@@ -2,8 +2,11 @@ import { EventPayload, WebhookPayload } from 'server/plugin'
 import { corePluginName } from './constants'
 
 type ValidPayload = {
-  content: string
-  callback?: string
+  body: {
+    content: string
+    callback?: string
+  }
+  headers?: Record<string, string>
 }
 export type CoreWebhookPayload = WebhookPayload<ValidPayload>['payload']
 
@@ -26,14 +29,14 @@ export const formatCoreWebhookPayload = (
     connector: corePluginName,
     eventName: 'webhookReceived',
     status: 'success',
-    content: payload.content,
+    content: payload.body.content,
     sender: 'assistant', // TODO
     observer: 'assistant',
     client: 'cloud.magickml.com',
-    channel: payload.callback || 'none',
+    channel: payload.body.callback || 'none',
     plugin: corePluginName,
     agentId,
-    channelType: payload.callback ? 'callback' : 'none',
+    channelType: payload.body.callback ? 'callback' : 'none',
     rawData: JSON.stringify(payload),
     timestamp: new Date().toISOString(),
     data: payload,

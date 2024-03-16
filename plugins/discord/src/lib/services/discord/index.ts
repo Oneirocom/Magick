@@ -6,7 +6,7 @@ import {
   DISCORD_EVENTS,
   type DiscordEventPayload,
   type DiscordCredentials,
-} from '../../config'
+} from '../../configx'
 
 const tokenizer = new natural.SentenceTokenizer()
 

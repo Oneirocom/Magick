@@ -2,100 +2,53 @@ import { EventEmitter } from 'events'
 import Redis from 'ioredis'
 import { Plugin } from './plugin'
 import {
-  IRegistry,
-  NodeDefinition,
-  ValueType,
-  ValueTypeMap,
   memo,
+  type IRegistry,
+  type NodeDefinition,
+  type ValueType,
+  type ValueTypeMap,
 } from '@magickml/behave-graph'
 import { getLogger } from 'server/logger'
 import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { PluginCredential, PluginCredentialsManager } from 'server/credentials'
+import { type PluginCredential } from 'server/credentials'
 import { saveGraphEvent } from 'server/core'
-import { PluginStateManager, PluginStateType } from 'plugin-state'
+import { type BasePluginConfig } from './types'
+
+// MANAGERS
+import {
+  BasePluginStateManager,
+  type PluginStateManager,
+  type PluginStateType,
+} from './state'
+import {
+  BaseCredentialsManager,
+  type PluginCredentialsManager,
+} from './credentials'
+import {
+  BaseCommandManager,
+  basePluginCommands as expBasePluginCommands,
+  type PluginCommandManager,
+  type PluginCommand,
+} from './commands/command-manager'
+import { BaseActionManager, type ActionPayload } from './actions/action-manager'
+import {
+  type EventDefinition,
+  type EventFormat,
+  type EventPayload,
+} from './events/event-manager'
+import { PluginStorageManager, S3PluginStorageManager } from './storage'
+
+import {
+  AWS_SECRET_KEY,
+  AWS_ACCESS_KEY,
+  AWS_REGION,
+  AWS_BUCKET_NAME,
+} from 'shared/config'
+
+type ValueOf<T> = T[keyof T]
 
 export type RegistryFactory = (registry?: IRegistry) => IRegistry
-/**
- * Interface for defining an event.
- * @property eventName - The unique name of the event, typically namespaced.
- * @property displayName - A user-friendly name for the event.
- * @property payloadType - The type of data the event carries.
- */
-interface EventDefinition {
-  eventName: string
-  displayName: string
-}
-
-/**
- * Interface for defining an action.
- * @property actionName - The unique name of the action, typically namespaced.
- * @property displayName - A user-friendly name for the action.
- * @property handler - The handler for the action.
- */
-interface ActionDefinition {
-  actionName: string
-  displayName: string
-  handler: (ActionPayload) => void
-}
-
-export interface ActionPayload<T = unknown, Y = unknown> {
-  actionName: string
-  event: EventPayload<T, Y>
-  data: any
-}
-
-export type EventFormat<
-  Data = Record<string, unknown>,
-  Y = Record<string, unknown>
-> = {
-  content: string
-  sender: string
-  channel: string
-  entities?: any[]
-  rawData: unknown
-  channelType: string
-  observer: string
-  client: string
-  isPlaytest?: boolean
-  spellId?: string
-  data: Data
-  metadata?: Y
-  status?: 'success' | 'error' | 'pending' | 'unknown'
-}
-
-export type EventPayload<T = unknown, Y = unknown> = {
-  connector: string
-  eventName: string
-  status: 'success' | 'error' | 'pending' | 'unknown'
-  content: string
-  sender: string
-  observer: string
-  client: string
-  channel: string
-  plugin: string
-  agentId: string
-  isPlaytest?: boolean
-  spellId?: string
-  // entities: any[]
-  channelType: string
-  rawData: unknown
-  timestamp: string
-  stateKey?: string
-  runInfo?: {
-    spellId: string
-  }
-  data: T
-  metadata: Y
-}
-
-export type PluginCommand = {
-  commandName: string
-  displayName: string
-  handler: (enable: any) => void
-}
-
-export type PluginCommandInfo = Omit<PluginCommand, 'handler'>
 
 export type WebhookPayload<
   T extends Record<string, unknown> = Record<string, unknown>
@@ -113,109 +66,15 @@ export interface BasePluginInit {
   state?: Record<string, unknown>
 }
 
-const enable: PluginCommandInfo = {
-  commandName: 'enable',
-  displayName: 'Enable',
-}
-
-const disable: PluginCommandInfo = {
-  commandName: 'disable',
-  displayName: 'Disable',
-}
-
-const linkCredential: PluginCommandInfo = {
-  commandName: 'linkCredential',
-  displayName: 'Link Credential',
-}
-
-const unlinkCredential: PluginCommandInfo = {
-  commandName: 'unlinkCredential',
-  displayName: 'Unlink Credential',
-}
-
-const webhook: PluginCommandInfo = {
-  commandName: 'webhook',
-  displayName: 'Webhook',
-}
-
-export const basePluginCommands: Record<string, PluginCommandInfo> = {
-  enable,
-  disable,
-  linkCredential,
-  unlinkCredential,
-  webhook,
-}
-
-/**
- * The `BasePlugin` class serves as an abstract foundation for creating plugins
- * within the system. It encapsulates common functionalities and structures that
- * are shared across various plugins, providing a consistent interface and lifecycle
- *  management.
- *
- * Core Principles:
- * 1. Event-Driven Architecture: Plugins can emit and respond to events. This aligns
- *    with the reactive programming model, where the flow of the program is driven by
- *    events.
- * 2. Extensibility: Through inheritance, specific plugins can extend `BasePlugin`,
- *    customizingvor enhancing the base functionality.
- * 3. Abstraction: It abstracts away common functionalities like event handling,
- *    queue management, and logging, allowing developers to focus on plugin-specific logic.
- * 4. Encapsulation: By encapsulating event and queue logic within the plugin, it maintains a
- *    separation of concerns, making the code more manageable and modular.
- *
- * Design Patterns:
- * - Template Method: The class provides a skeletal implementation with `abstract`
- *   methods like `defineEvents` and `initializeFunctionalities` that subclasses should
- *   override.
- * - Observer: Through the use of `EventEmitter`, the class follows the observer pattern,
- *   allowing subscribers to react to emitted events.
- * - Command: The emission of events can be seen as a command pattern, where an event
- *   triggers specific actions or commands.
- *
- * Strengths:
- * - Reduced Boilerplate: Common functionalities like event handling are handled by
- *   the base class, reducing redundancy in subclasses.
- * - Consistency: It enforces a consistent structure and lifecycle for plugins, making
- *   the system predictable and easier to understand.
- * - Scalability: The event-driven nature facilitates loose coupling and scalability,
- *   as new plugins can be easily integrated.
- * - Testability: With well-defined interfaces and separation of concerns,
- *   testing individual plugins becomes more straightforward.
- *
- * Example Usage:
- * // Assuming there's a `CustomPlugin` that extends `BasePlugin`
- * class CustomPlugin extends BasePlugin {
- *   constructor(name: string, connection: Redis, agentId: string) {
- *     super(name, connection, agentId);
- *   }
- *
- *   defineEvents() {
- *     this.registerEvent({
- *       eventName: 'customEvent',
- *       displayName: 'Custom Event',
- *     });
- *   }
- *
- *   initializeFunctionalities() {
- *     // Custom initialization logic for the plugin
- *   }
- * }
- *
- * // Usage
- * const customPlugin = new CustomPlugin('MyCustomPlugin', redisConnection, 'agent123');
- * customPlugin.activate();
- *
- * Note:
- * This class should be used as a base for creating new plugins. It's not meant to be
- * instantiated directly, but to be extended by concrete plugin implementations.
- *
- * @property name - The name of the plugin.
- * @property events - An array of events the plugin can emit.
- * @property eventEmitter - The event emitter for emitting events.
- * @property eventQueue - The BullMQ queue for processing events.
- * @property enabled - The enabled state of the plugin.
- */
 export abstract class BasePlugin<
+  Events extends Record<string, string> = Record<string, string>,
+  Actions extends Record<string, string> = Record<string, string>,
+  Dependencies extends Record<string, string> = Record<string, string>,
+  Commands extends Record<string, string> = Record<string, string>,
+  Credentials extends Record<string, string | undefined> = Record<
+    string,
+    string | undefined
+  >,
   PluginEvents extends Record<string, (...args: any[]) => void> = Record<
     string,
     (...args: any[]) => void
@@ -223,20 +82,18 @@ export abstract class BasePlugin<
   Payload extends Partial<EventPayload> = Partial<EventPayload>,
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
-  State extends object = Record<string, unknown>,
-  Credentials extends object = Record<string, string | undefined>
+  State extends object = Record<string, unknown>
 > extends Plugin {
+  protected config: BasePluginConfig<Events, Actions, Dependencies, Commands>
   protected events: EventDefinition[]
-  protected actions: ActionDefinition[] = []
   protected commands: PluginCommand[] = []
   protected centralEventBus!: EventEmitter
   abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
-  protected credentialsManager: PluginCredentialsManager<Credentials>
+
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
   protected agentId: string
   protected projectId: string
-  protected isBuild?: boolean = false
   abstract defaultState: PluginStateType<State>
 
   public connection: Redis
@@ -245,6 +102,10 @@ export abstract class BasePlugin<
   private updateDependencyHandler?: (key: string, dependency: any) => void
 
   protected stateManager: PluginStateManager<State>
+  protected credentialsManager: PluginCredentialsManager<Credentials>
+  protected commandManager: PluginCommandManager
+  protected actionsManager: BaseActionManager
+  protected storageManager: PluginStorageManager
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -276,20 +137,49 @@ export abstract class BasePlugin<
    */
   constructor({ name, agentId, connection, projectId }: BasePluginInit) {
     super({ name })
+    this.config = this.getPluginConfig()
     this.agentId = agentId
     this.projectId = projectId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
-    this.commands = []
-    this.credentialsManager = new PluginCredentialsManager(
+
+    this.credentialsManager = new BaseCredentialsManager<Credentials>(
       agentId,
       name,
       projectId
     )
-    this.stateManager = new PluginStateManager<State>(this.agentId, this.name)
+    this.stateManager = new BasePluginStateManager<State>(
+      this.agentId,
+      this.name
+    )
+
+    this.commandManager = new BaseCommandManager()
+
+    this.actionsManager = new BaseActionManager(agentId)
+
+    this.storageManager = new S3PluginStorageManager(
+      this.agentId,
+      this.name,
+      AWS_ACCESS_KEY,
+      AWS_SECRET_KEY,
+      AWS_REGION,
+      AWS_BUCKET_NAME
+    )
   }
 
+  // CONFIG
+
+  /**
+   * Abstract method to get the plugin configuration.
+   * This is a helper to avoid using the constructor.
+   */
+  abstract getPluginConfig(): BasePluginConfig<
+    Events,
+    Actions,
+    Dependencies,
+    Commands
+  >
   /**
    * Initializes the plugin by defining events and initializing functionalities.
    */
@@ -298,11 +188,238 @@ export abstract class BasePlugin<
     this.defineEvents()
     this.defineActions()
     this.defineCommands()
-    await this.initializePluginState()
+
+    const state = await this.stateManager.ensureStateInitialized(
+      this.defaultState
+    )
     await this.credentialsManager.init()
-    await this.initializeFunctionalities()
+    if (state?.enabled) await this.activate()
+
     this.mapEventsToEventBus()
     this.mapActionsToEventBus()
+    this.initializeActionHandlers()
+  }
+
+  // LIFECYCLE METHODS
+
+  /**
+   * Sets the enabled state of the plugin.
+   * @param enabled The enabled state to set.
+   * @example
+   * this.setEnabled(true);
+   */
+  async setEnabled(enabled: boolean) {
+    const current = this.stateManager.getState() as PluginStateType<State>
+    await this.stateManager.updatePluginState({
+      ...current,
+      enabled,
+    })
+  }
+
+  /**
+   * Activates the plugin, making it ready for operation.
+   */
+  async activate() {
+    await this.beforeActivate()
+    await this.setEnabled(true)
+    await this.afterActivate()
+
+    this.logger.debug(`Plugin ${this.name} activated`)
+  }
+  abstract beforeActivate(): Promise<void> | void
+  abstract afterActivate(): Promise<void> | void
+
+  /**
+   * Deactivates the plugin, putting it into a passive state.
+   */
+  async deactivate() {
+    await this.beforeDeactivate()
+    await this.setEnabled(false)
+    await this.afterDeactivate()
+    this.logger.debug(`Plugin ${this.name} deactivated`)
+  }
+  abstract beforeDeactivate(): Promise<void> | void
+  abstract afterDeactivate(): Promise<void> | void
+
+  /**
+   * Cleans up resources and performs necessary teardown tasks.
+   */
+  destroy(): void {
+    this.beforeDestroy()
+    this.eventEmitter.removeAllListeners()
+    this.afterDestroy()
+    this.logger.debug(`Plugin ${this.name} destroyed.`)
+  }
+  abstract beforeDestroy(): void
+  abstract afterDestroy(): void
+
+  // EVENTS
+
+  /**
+   * Registers an event with the plugin.
+   * @param event The event definition to register.
+   * @example
+   * this.registerEvent({
+   *   eventName: 'myEvent',
+   *   displayName: 'My Event',
+   *   payloadType: MyPayloadType
+   * });
+   */
+  registerEvent(event: EventDefinition) {
+    this.events.push(event)
+  }
+  /**
+   * Returns the list of registered events.
+   * @returns An array of EventDefinition objects.
+   * @example
+   * const events = this.getEvents();
+   */
+  getEvents() {
+    return this.events
+  }
+
+  /**
+   * Abstract method to be implemented by plugins to define their events.
+   * @example
+   * defineEvents() {
+   *  this.registerEvent({
+   *   eventName: 'myEvent',
+   *   displayName: 'My Event',
+   *   payloadType: MyPayloadType
+   * });xz
+   */
+  abstract defineEvents(): void
+
+  // ACTIONS
+
+  protected initializeActionHandlers() {
+    this.actionsManager.getActions().forEach(action => {
+      const eventName = `${this.name}:${action.actionName}`
+      this.centralEventBus.on(eventName, action.handler)
+    })
+  }
+
+  defineActions() {
+    const handlers = this.getActionHandlers()
+    console.log('ACTION handlers', handlers)
+    for (const [actionName, displayName] of Object.entries(
+      this.config.actions
+    )) {
+      console.log('ACTION registering', actionName, displayName)
+      if (!handlers[actionName]) {
+        throw new Error(`Missing action handler for ${actionName}`)
+      }
+      this.actionsManager.registerAction({
+        actionName,
+        displayName: `${this.name} ${displayName}`,
+        handler: handlers[actionName].bind(this),
+      })
+    }
+  }
+
+  abstract getActionHandlers(): Record<
+    keyof Actions,
+    (payload: ActionPayload<Payload['data'], Payload['metadata']>) => void
+  >
+
+  /**
+   * Maps registered actions to the action queue.
+   */
+  mapActionsToEventBus() {
+    this.centralEventBus.on(
+      this.actionQueueName,
+      this.actionsManager.handleAction.bind(this.actionsManager)
+    )
+  }
+
+  // COMMANDS
+
+  defineCommands() {
+    const handlers = this.getCommandHandlers()
+    for (const command of Object.entries(this.config.commands)) {
+      const commandName = command[0]
+      const displayName = command[1]
+      const handler = handlers[commandName]
+      if (!handler) {
+        throw new Error(`Missing command handler for ${commandName}`)
+      }
+      this.commandManager.registerCommand({
+        commandName,
+        displayName: `${this.name} ${displayName}`,
+        handler: handler.bind(this),
+      })
+    }
+
+    this.defineBaseCommands()
+  }
+
+  abstract getCommandHandlers(): Record<keyof Commands, (enable: any) => void>
+
+  getCommands = () => {
+    return this.commandManager.getCommands()
+  }
+
+  /**
+   * Registers the base commands for the plugin.
+   */
+  defineBaseCommands() {
+    const { enable, disable, linkCredential, unlinkCredential, webhook } =
+      expBasePluginCommands
+    this.commandManager.registerCommand({
+      ...linkCredential,
+      handler: this.handleEnableCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...unlinkCredential,
+      handler: this.handleDisableCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...enable,
+      handler: this.handleLinkCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...disable,
+      handler: this.handleUnlinkCommand.bind(this),
+    })
+    this.commandManager.registerCommand({
+      ...webhook,
+      handler: this.handleWebhookCommand.bind(this),
+    })
+  }
+
+  abstract handleEnableCommand(payload: any): void
+  abstract handleDisableCommand(payload: any): void
+  abstract handleLinkCommand(payload: any): void
+  abstract handleUnlinkCommand(payload: any): void
+  abstract handleWebhookCommand(payload: any): void
+
+  // DEPENDENCIES
+
+  abstract getDependencies(
+    spellCaster: SpellCaster
+  ):
+    | Record<ValueOf<Dependencies>, any>
+    | Promise<Record<ValueOf<Dependencies>, any>>
+
+  /**
+   * Sets the handler function for updating dependencies in the spell caster.
+   * @param handler The dependency update handler function.
+   */
+  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
+    this.updateDependencyHandler = handler
+  }
+
+  /**
+   * Requests an update of a dependency in the spell caster.
+   * @param key The key of the dependency to update.
+   * @param dependency The new dependency object.
+   */
+  updateDependency(key: string, dependency: any) {
+    if (this.updateDependencyHandler) {
+      this.updateDependencyHandler(key, dependency)
+    } else {
+      throw new Error('Dependency update handler is not set.')
+    }
   }
 
   /**
@@ -330,41 +447,6 @@ export abstract class BasePlugin<
           event: payload,
         })
       })
-    })
-  }
-
-  /**
-   * Maps registered actions to the action queue.
-   */
-  mapActionsToEventBus() {
-    this.centralEventBus.on(this.actionQueueName, this.handleAction.bind(this))
-  }
-
-  /**
-   * Handles an action from the action queue.
-   * @param job The job to handle.
-   */
-  protected async handleAction(data: ActionPayload) {
-    this.logger.trace(`Handling action ${data.actionName}`)
-    const action = this.actions.find(
-      action => action.actionName === data.actionName
-    )
-    if (!action) return
-    this.logger.trace(`Action ${data.actionName} found.  Handling...`)
-    await action.handler(data as ActionPayload)
-
-    // const { actionName, event } = data
-    saveGraphEvent({
-      sender: this.agentId,
-      // we are assuming here that the observer of this action is the
-      //  original sender.  We may be wrong.
-      observer: data.event.sender,
-      agentId: this.agentId,
-      connector: data.event.connector,
-      connectorData: JSON.stringify(data.event.data),
-      content: data.data.content,
-      eventType: data.actionName,
-      event: data.event as EventPayload,
     })
   }
 
@@ -414,16 +496,14 @@ export abstract class BasePlugin<
     this.eventEmitter.emit(eventName, payload)
   }
 
+  // REGISTRY
+
   /**
    * optional method to be override by plugins to provide an additional registry when needed.
    */
   provideRegistry(registry: IRegistry): IRegistry {
     return registry
   }
-
-  abstract getDependencies(
-    spellCaster: SpellCaster
-  ): Record<string, any> | Promise<Record<string, any>>
 
   /**
    * Returns a registry object merged with the plugin's specific registry.
@@ -462,132 +542,6 @@ export abstract class BasePlugin<
 
     return await this.provideRegistry(registry)
   }
-
-  /**
-   * Activates the plugin, making it ready for operation.
-   */
-  async activate() {
-    // Activation logic specific to the plugin
-    await this.setEnabled(true)
-    this.logger.debug(`Plugin ${this.name} activated`)
-  }
-
-  /**
-   * Deactivates the plugin, putting it into a passive state.
-   */
-  async deactivate() {
-    // Deactivation logic specific to the plugin
-    await this.setEnabled(false)
-    this.logger.debug(`Plugin ${this.name} deactivated`)
-  }
-
-  /**
-   * Cleans up resources and performs necessary teardown tasks.
-   */
-  destroy(): void {
-    // Remove all listeners to prevent memory leaks
-    this.eventEmitter.removeAllListeners()
-
-    this.logger.debug(`Plugin ${this.name} destroyed.`)
-  }
-
-  /**
-   * Sets the enabled state of the plugin.
-   * @param state The state to set the plugin to.
-   * @example
-   * this.setEnabled(true);
-   */
-  async setEnabled(enabled: boolean) {
-    const current = this.stateManager.getState() as PluginStateType<State>
-    await this.stateManager.updatePluginState({
-      ...current,
-      enabled,
-    })
-  }
-
-  /**
-   * Registers an event with the plugin.
-   * @param event The event definition to register.
-   * @example
-   * this.registerEvent({
-   *   eventName: 'myEvent',
-   *   displayName: 'My Event',
-   *   payloadType: MyPayloadType
-   * });
-   */
-  registerEvent(event: EventDefinition) {
-    this.events.push(event)
-  }
-
-  /**
-   * Registers an action with the plugin.
-   * @param action The action definition to register.
-   * @example
-   * this.registerAction({
-   *   actionName: 'myAction',
-   *   displayName: 'My Action',
-   *   handler: this.handleMyAction.bind(this)
-   * });
-   */
-  registerAction(action: ActionDefinition) {
-    this.actions.push(action)
-  }
-
-  /**
-   * Returns the list of registered events.
-   * @returns An array of EventDefinition objects.
-   * @example
-   * const events = this.getEvents();
-   */
-  getEvents() {
-    return this.events
-  }
-
-  /**
-   * Abstract method to be implemented by plugins to define their events.
-   * @example
-   * defineEvents() {
-   *  this.registerEvent({
-   *   eventName: 'myEvent',
-   *   displayName: 'My Event',
-   *   payloadType: MyPayloadType
-   * });xz
-   */
-  abstract defineEvents(): void
-
-  /**
-   * Abstract method to be implemented by plugins to define their commands.
-   * @example
-   * defineCommands() {
-   * this.registerCommand({
-   *  commandName: 'enable',
-   *  displayName: 'Enable',
-   *  handler: this.handleEnableCommand.bind(this)
-   * });
-   */
-  abstract defineCommands(): void
-
-  /**
-   * Abstract method to be implemented by plugins to define their actions.
-   * @example
-   * defineActions() {
-   *  this.registerAction({
-   *   actionName: 'myAction',
-   *   displayName: 'My Action',
-   *   handler: this.handleMyAction.bind(this)
-   * });
-   */
-  abstract defineActions(): void
-
-  /**
-   * Abstract method to be implemented by plugins to initialize their functionalities.
-   * @example
-   * initializeFunctionalities() {
-   *   this.discordClient.on('messageCreate', this.handleMessageCreate.bind(this));
-   *   this.discordClient.login('YOUR_DISCORD_BOT_TOKEN');
-   * }
-   */
-  abstract initializeFunctionalities(): Promise<void> | void
 
   /**
    * Abstract method for formatting the event payload.
@@ -631,106 +585,6 @@ export abstract class BasePlugin<
       data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
     }
-  }
-
-  /**
-   * Sets the handler function for updating dependencies in the spell caster.
-   * @param handler The dependency update handler function.
-   */
-  setUpdateDependencyHandler(handler: (key: string, dependency: any) => void) {
-    this.updateDependencyHandler = handler
-  }
-
-  /**
-   * Requests an update of a dependency in the spell caster.
-   * @param key The key of the dependency to update.
-   * @param dependency The new dependency object.
-   */
-  updateDependency(key: string, dependency: any) {
-    if (this.updateDependencyHandler) {
-      this.updateDependencyHandler(key, dependency)
-    } else {
-      throw new Error('Dependency update handler is not set.')
-    }
-  }
-
-  /**
-   * Registers a command with the plugin.
-   * @param command The command definition to register.
-   * @example
-   * this.registerCommand({
-   *   commandName: 'enable',
-   *   displayName: 'Enable',
-   *   handler: this.handleEnableCommand.bind(this)
-   * });
-   */
-  registerCommand(command: PluginCommand) {
-    this.commands.push(command)
-  }
-
-  /**
-   * Returns the list of registered commands.
-   * @returns An array of PluginCommand objects.
-   * @example
-   * const commands = this.getCommands();
-   */
-  getCommands(): Record<string, PluginCommand['handler']> {
-    // reduce over command array to make object iof name and handler
-    return this.commands.reduce((acc, command) => {
-      acc[command.commandName] = command.handler
-      return acc
-    }, {} as Record<string, PluginCommand['handler']>)
-  }
-
-  /**
-   * Initializes the plugin state by fetching it from the database or setting it to a default value.
-   * This should be called during the plugin's initialization process.
-   */
-  async initializePluginState() {
-    await this.stateManager.ensureStateInitialized(this.defaultState)
-  }
-
-  /**
-   * Updates the plugin state both in-memory and in the database.
-   * @param newState The new state to set.
-   */
-  async updatePluginState(newState: Partial<PluginStateType<State>>) {
-    return await this.stateManager.updatePluginState(newState)
-  }
-
-  /**
-   * Retrieves the current plugin state.
-   * @returns The current plugin state.
-   */
-
-  async getCredentials() {
-    return this.credentialsManager.getCredentials()
-  }
-
-  /**
-   * Retrieves a specific credential by name.
-   * @param name The name of the credential to retrieve.
-   * @returns The credential value.
-   */
-  async getCredential(name: keyof Credentials) {
-    return this.credentialsManager.getCredential(name)
-  }
-
-  /**
-   * Refreshes the crdential manager's credentials.
-   */
-  async updateCredentials() {
-    await this.credentialsManager.update()
-  }
-
-  /**
-   * Retrieves the state from any plugin.
-   * Defaults to getting all plugin states.
-   * @param string The name of the plugin to retrieve the state from.
-   * @returns The state of the plugin.
-   */
-  async getGlobalState(name?: string) {
-    return this.stateManager.getGlobalState(name)
   }
 }
 
