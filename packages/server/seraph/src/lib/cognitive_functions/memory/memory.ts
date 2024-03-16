@@ -69,7 +69,7 @@ class MemoryStorage extends BaseCognitiveFunction {
     this.seraph = seraph
     this.openAIApi = new OpenAIApi(configuration)
 
-    this.index = new LocalIndex(path.join(__dirname, '..', 'memory_index'))
+    this.index = new LocalIndex(path.join(__dirname, '.', 'memory_index'))
   }
 
   getPromptInjection(): Promise<string> {
@@ -150,7 +150,7 @@ class MemoryRetrieval extends BaseCognitiveFunction {
     this.seraph = seraph
     this.openAIApi = new OpenAIApi(configuration)
 
-    this.index = new LocalIndex(path.join(__dirname, '..', 'memory_index'))
+    this.index = new LocalIndex(path.join(__dirname, '.', 'memory_index'))
   }
 
   async getPromptInjection(): Promise<string> {
