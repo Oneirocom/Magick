@@ -25,7 +25,15 @@ class MemoryStorageMiddleware implements IMiddleware {
     this.seraph = seraph
     this.openAIApi = new OpenAIApi(configuration)
 
-    this.index = new LocalIndex(path.join(__dirname, '..', 'memory_index'))
+    this.index = new LocalIndex(
+      path.join(
+        __dirname,
+        '..',
+        'cognitive_functions',
+        'memory',
+        'memory_index'
+      )
+    )
   }
 
   schema = z.object({
