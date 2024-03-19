@@ -2,11 +2,12 @@
 import { ZodType } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
+import { Seraph } from './seraph'
 
 export interface IMiddleware {
   name: string
   input?: (input: string, conversationId: string) => Promise<void>
-  run?(response: string, conversationId: string): Promise<void>
+  run?(response: string, conversationId: string): Promise<string>
   getPrompt?(): Promise<string>
   schema: ZodType<any>
   preProcess?(response: string, conversationId: string): Promise<string>
@@ -15,6 +16,11 @@ export interface IMiddleware {
 
 export class MiddlewareManager {
   private middlewares: IMiddleware[] = []
+  private seraph: Seraph
+
+  constructor(seraph: Seraph) {
+    this.seraph = seraph
+  }
 
   registerMiddleware(middleware: IMiddleware) {
     this.middlewares.push(middleware)
@@ -36,14 +42,26 @@ export class MiddlewareManager {
         (await middleware.preProcess?.(response, conversationId)) ?? response
     }
 
-    const xmlTags = this.extractXmlTags(response)
-    for (const xmlTag of xmlTags) {
-      const { middlewareName, xml } = this.parseXmlTag(xmlTag)
-      const middleware = this.middlewares.find(m => m.name === middlewareName)
-      if (middleware) {
-        const schema = middleware.schema
-        const parsedResponse = schema.parse(this.xmlToJson(xml))
-        await middleware.run?.(JSON.stringify(parsedResponse), conversationId)
+    const middlewareInstructionsRegex =
+      /<middleware_instructions>([\s\S]*?)<\/middleware_instructions>/g
+    const middlewareInstructions = response.match(middlewareInstructionsRegex)
+
+    if (middlewareInstructions) {
+      for (const instruction of middlewareInstructions) {
+        const { middlewareName, parameters } =
+          this.parseMiddlewareInstruction(instruction)
+        const middleware = this.middlewares.find(m => m.name === middlewareName)
+
+        if (middleware) {
+          this.seraph.emit('middlewareExecution', middlewareName)
+          const schema = middleware.schema
+          const parsedParameters = schema.parse(parameters)
+          const result = await middleware.run?.(
+            JSON.stringify(parsedParameters),
+            conversationId
+          )
+          this.seraph.emit('middlewareResult', middlewareName, result || 'Done')
+        }
       }
     }
 
@@ -51,6 +69,19 @@ export class MiddlewareManager {
     for (const middleware of this.middlewares) {
       await middleware.postProcess?.(response, conversationId)
     }
+  }
+
+  private parseMiddlewareInstruction(instruction: string): {
+    middlewareName: string
+    parameters: any
+  } {
+    const parser = new XMLParser()
+    const json = parser.parse(instruction)
+
+    const middlewareName = json.middleware_instructions.middleware_name
+    const parameters = json.middleware_instructions.parameters
+
+    return { middlewareName, parameters }
   }
 
   async getMiddlewarePrompts(): Promise<string> {
@@ -75,26 +106,6 @@ export class MiddlewareManager {
     const fullPrompt = prompts.filter(Boolean).join('\n')
 
     return `<middleware_instructions>${fullPrompt}</middleware_instructions>`
-  }
-
-  private xmlToJson(xml: string): any {
-    const parser = new XMLParser()
-    const json = parser.parse(xml)
-    return json
-  }
-
-  private extractXmlTags(response: string): string[] {
-    const xmlRegex = /<([^>]+)>[\s\S]*?<\/\1>/g
-    const matches = response.match(xmlRegex)
-    return matches || []
-  }
-
-  private parseXmlTag(xmlTag: string): { middlewareName: string; xml: string } {
-    const matches = xmlTag.match(/<(\w+)>([\s\S]*)<\/\1>/)
-    if (matches && matches.length === 3) {
-      return { middlewareName: matches[1], xml: matches[2] }
-    }
-    throw new Error('Invalid XML tag format')
   }
 
   private jsonSchemaToXml(jsonSchema: any): string {

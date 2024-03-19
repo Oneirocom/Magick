@@ -24,12 +24,41 @@ class SeraphIterator implements AsyncIterator<string> {
       this.conversationId
     )
 
-    // Generate a new response from the LLM
-    const llmResponse = await this.llmManager.generateResponse(
+    let insideMessage = false
+    let partialOpeningTag = ''
+
+    const stream = this.llmManager.streamResponse(
       this.systemPrompt,
       messages,
       1024
     )
+
+    stream.on('text', token => {
+      if (insideMessage) {
+        if (token === '</message') {
+          insideMessage = false
+          this.seraph.emit('token', '<END>')
+        } else {
+          this.seraph.emit('token', token)
+        }
+      } else {
+        if (token === '<message') {
+          partialOpeningTag = token
+        } else if (partialOpeningTag) {
+          if (token === '>') {
+            insideMessage = true
+            this.seraph.emit('token', '<START>')
+            partialOpeningTag = ''
+          } else {
+            partialOpeningTag += token
+          }
+        }
+      }
+    })
+
+    const finalMessage = await stream.finalMessage()
+
+    const llmResponse = finalMessage.content[0].text
 
     this.seraph.middlewareManager.runMiddleware(
       llmResponse,
@@ -72,18 +101,24 @@ class SeraphIterator implements AsyncIterator<string> {
         )
 
         this.done = false
+        const message = this.seraph.extractMessage(updatedResponse)
+
+        if (!message) {
+          throw new Error('No message found in response')
+        }
+
         return {
           done: false,
-          value: this.seraph.stripFunctionTags(updatedResponse),
+          value: message,
         } // Return the updated response/ Yield the stripped LLM response
       } catch (error) {
         console.error('Error executing cognitive function:', error)
         throw error
       }
     } else {
-      const strippedResponse = this.seraph.stripFunctionTags(llmResponse)
+      const message = this.seraph.extractMessage(llmResponse)
       this.done = true // Mark the iterator as done
-      return { done: false, value: strippedResponse }
+      return { done: false, value: message || '' }
     }
   }
 

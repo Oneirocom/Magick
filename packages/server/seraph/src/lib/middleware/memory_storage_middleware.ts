@@ -1,6 +1,6 @@
 // memoryStorageMiddleware.ts
 import { IndexItem, LocalIndex } from 'vectra'
-import { OpenAIApi, Configuration } from 'openai'
+import { OpenAI } from 'openai'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { IMiddleware } from '../middlewareManager'
@@ -15,15 +15,14 @@ class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'
   private index: LocalIndex
   private seraph: Seraph
-  private openAIApi: OpenAIApi
+  private openAIApi: OpenAI
 
   constructor(seraph: Seraph) {
-    const configuration = new Configuration({
+    this.openAIApi = new OpenAI({
       apiKey: seraph.options.openAIApiKey,
     })
 
     this.seraph = seraph
-    this.openAIApi = new OpenAIApi(configuration)
 
     this.index = new LocalIndex(
       path.join(
@@ -43,7 +42,7 @@ class MemoryStorageMiddleware implements IMiddleware {
     metadataDescriptions: z.record(z.string()).optional(),
   })
 
-  async post(response: string, conversationId: string): Promise<void> {
+  async run(response: string, conversationId: string): Promise<string> {
     const parsedResponse = JSON.parse(response)
     const {
       text,
@@ -62,6 +61,10 @@ class MemoryStorageMiddleware implements IMiddleware {
     Object.entries(metadataDescriptions).forEach(([key, value]) => {
       metadataManager.addMetadataDescription(key, value as string)
     })
+
+    return `Stored memory ${type} with content "${text}" and metadata ${JSON.stringify(
+      item.metadata
+    )}`
   }
 
   async getPrompt(): Promise<string> {
@@ -76,37 +79,17 @@ class MemoryStorageMiddleware implements IMiddleware {
       ${basePrompt}
       
       ${metadataPrompt}
-      
-      Examples:
-      ${this.getExamples()}
     `
 
     return fullPrompt
   }
 
-  private getExamples(): string {
-    return `
-      <memoryStorage>
-        <text>Seraph is an AI assistant</text>
-        <type>context</type>
-        <metadata>
-          <category>general</category>
-          <timestamp>2023-06-12T10:30:00Z</timestamp>
-        </metadata>
-        <metadataDescriptions>
-          <category>General category is for miscelanneous and broad things.</category>
-          <timestamp>The timestamp of when the memory was stored</timestamp>
-        </metadataDescriptions>
-      </memoryStorage>
-    `
-  }
-
   async getVector(text: string) {
-    const response = await this.openAIApi.createEmbedding({
+    const response = await this.openAIApi.embeddings.create({
       model: 'text-embedding-ada-002',
       input: text,
     })
-    return response.data.data[0].embedding
+    return response.data[0].embedding
   }
 }
 
