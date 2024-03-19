@@ -1,4 +1,4 @@
-import { NodeSpecJSON } from '@magickml/behave-graph'
+import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
 import { XYPosition } from 'reactflow'
 
 export type NodePickerFilters = {
@@ -10,6 +10,7 @@ export type ItemType = {
   title: string
   type?: string
   subItems: (ItemType | NodeSpecJSON)[]
+  category?: NodeCategory
 }
 
 export type NodePickerProps = {

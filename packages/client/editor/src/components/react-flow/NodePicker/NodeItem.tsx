@@ -24,6 +24,7 @@ export const NodeItem = ({
   }
 
   if (!item) return <></>
+
   return (
     <AccordionItem
       key={item.title + index}
@@ -39,19 +40,16 @@ export const NodeItem = ({
       </AccordionTrigger>
       {item?.subItems &&
         item.subItems.map((subItem: Partial<ItemType>) => {
-          const sub = subItem?.subItems?.flatMap(
-            subItem => subItem.type
-          ) as string[]
           return (
             <AccordionContent
               key={subItem.title}
               onClick={e => {
                 e.stopPropagation()
-                handleClick({ item: sub[0] })
+                handleClick({ item: subItem?.type })
               }}
               className={`py-2 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer`}
             >
-              {sub}
+              {subItem.title ?? subItem?.type}
             </AccordionContent>
           )
         })}
