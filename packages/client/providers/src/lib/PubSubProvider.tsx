@@ -62,6 +62,8 @@ export const events: PubSubEvents = {
   $MULTI_SELECT_PASTE: tabId => `multiSelectPaste:${tabId}`,
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
   $RELOAD_GRAPH: tabId => `reloadGraph:${tabId}`,
+  $SERAPH_REQUEST: tabId => `seraphRequest:${tabId}`,
+  $SERAPH_RESPONSE: tabId => `seraphResponse:${tabId}`,
 }
 
 // Create the PubSubProvider component
