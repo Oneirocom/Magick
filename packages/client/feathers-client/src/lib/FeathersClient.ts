@@ -76,7 +76,8 @@ const configureCustomServices = (
     methods: ['find', 'get', 'create', 'patch', 'remove'],
   })
   app.use('seraph', socketClient.service('seraph'), {
-    methods: ['request', 'response', 'error', 'info', 'find', 'get'],
+    methods: ['request', 'find', 'get', 'create'],
+    events: ['request', 'response', 'error', 'info'],
   })
 }
 
