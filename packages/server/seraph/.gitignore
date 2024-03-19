@@ -1,3 +1,4 @@
 .env
 memory_index
 private_prompts
+metadata_descriptions.json
