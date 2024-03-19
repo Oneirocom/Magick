@@ -64,6 +64,8 @@ export const events: PubSubEvents = {
   $RELOAD_GRAPH: tabId => `reloadGraph:${tabId}`,
   $SERAPH_REQUEST: tabId => `seraphRequest:${tabId}`,
   $SERAPH_RESPONSE: tabId => `seraphResponse:${tabId}`,
+  $SERAPH_ERROR: tabId => `seraphError:${tabId}`,
+  $SERAPH_INFO: tabId => `seraphInfo:${tabId}`,
 }
 
 // Create the PubSubProvider component
