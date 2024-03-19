@@ -13,7 +13,6 @@
     "events": "^3.3.0",
     "fast-xml-parser": "^4.2.5",
     "inquirer": "^8.2.6",
-    "log-update": "^6.0.0",
     "openai": "^4.29.1",
     "tslib": "^2.3.0",
     "typed-emitter": "^2.1.0",
