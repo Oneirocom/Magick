@@ -1,6 +1,5 @@
 import { NodeCategory } from '@magickml/behave-graph'
 import { useMemo } from 'react'
-import { ItemType } from './types'
 
 export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
   // Utility function to combine node sockets with configuration defaults
@@ -33,17 +32,40 @@ export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
     [specJSON, filters, search]
   )
 
-  // Group the filtered nodes when not searching
+  // If category is 'None' we want to check the typeParts and then handles those in a case
+  const getGroup = node => {
+    if (node.category === 'None') {
+      switch (node.type.split('/')[0]) {
+        case 'action': {
+          return NodeCategory.Action
+        }
+        case 'logic': {
+          return NodeCategory.Logic
+        }
+        case 'math': {
+          return NodeCategory.Logic
+        }
+        case 'flow': {
+          return NodeCategory.Flow
+        }
+        case 'time': {
+          return NodeCategory.Time
+        }
+        case 'event': {
+          return NodeCategory.Event
+        }
+        default: {
+          console.log('No category found for node', node.type.split('/')[0])
+        }
+      }
+    }
+    return node.category
+  }
+
   const groupedData = useMemo(() => {
     if (!search) {
       return filteredNodes.reduce((result, node) => {
-        let category = node.category
-        const typeParts = node.type.split('/')
-        if (category === NodeCategory.None) {
-          category = (typeParts[0][0].toUpperCase() +
-            typeParts[0].slice(1)) as NodeCategory
-        }
-        const subcategory = typeParts[2] || typeParts[1]
+        const category = getGroup(node)
 
         let categoryGroup = result.find(item => item.title === category)
         if (!categoryGroup) {
@@ -51,18 +73,7 @@ export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
           result.push(categoryGroup)
         }
 
-        if (subcategory) {
-          let subcategoryGroup = categoryGroup.subItems.find(
-            item => 'title' in item && item.title === subcategory
-          ) as ItemType
-          if (!subcategoryGroup) {
-            subcategoryGroup = { title: subcategory, subItems: [] }
-            categoryGroup.subItems.push(subcategoryGroup)
-          }
-          subcategoryGroup.subItems.push(node)
-        } else {
-          categoryGroup.subItems.push(node)
-        }
+        categoryGroup?.subItems.push(node)
 
         return result
       }, [])
