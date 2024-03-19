@@ -43,6 +43,8 @@ export type PubSubEvents = {
   $RELOAD_GRAPH: (tabId: string) => string
   $SERAPH_REQUEST: (tabId: string) => string
   $SERAPH_RESPONSE: (tabId: string) => string
+  $SERAPH_ERROR: (tabId: string) => string
+  $SERAPH_INFO: (tabId: string) => string
 }
 
 export interface PubSubContext {
