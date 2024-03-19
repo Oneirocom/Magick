@@ -58,7 +58,7 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
       open={open}
     >
       {!hideButton && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-[320px] text-black dark:text-ds-white rounded dark:bg-[#262B2E] bg-[#E9EDF1]">
+      <DialogContent className="max-w-[320px] text-black dark:text-ds-white rounded bg-ds-card border-ds-neutral">
         <DialogHeader>
           {logo && (
             <MagickIcon
@@ -67,13 +67,11 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
               className="mx-auto my-4 text-black dark:text-ds-white"
             />
           )}
-          <DialogTitle className="py-4 text-center font-montserrat">
-            {title}
-          </DialogTitle>
+          <DialogTitle className="py-4 !font-montAlt">{title}</DialogTitle>
           <DialogDescription
             className={clsx(
               destructive ? 'text-red-500' : 'text-black dark:text-ds-white',
-              'text-center font-montserrat font-medium'
+              'font-montserrat font-medium text-xs'
             )}
           >
             {description}
