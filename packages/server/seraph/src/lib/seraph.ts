@@ -14,8 +14,11 @@ type SeraphEvents = {
   error: (error: Error) => void
   message: (role: 'user' | 'assistant', message: string) => void
   info: (info: string, data?: Record<string, unknown>) => void
+  token: (token: string) => void
   functionExecution: (functionName: string) => void
   functionResult: (functionName: string, result: string) => void
+  middlewareExecution: (middlewareName: string) => void
+  middlewareResult: (middlewareName: string, result: string) => void
 }
 
 type SeraphOptions = {
@@ -44,7 +47,7 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     this.cognitiveFunctionExecutor = new CognitiveFunctionExecutor(this)
     this.responseParser = new ResponseParser(this.cognitiveFunctions)
     this.feedbackProcessor = new FeedbackProcessor()
-    this.middlewareManager = new MiddlewareManager()
+    this.middlewareManager = new MiddlewareManager(this)
     this.prompt = options.prompt
   }
 
@@ -87,16 +90,16 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
    * Generates the XML description for all registered cognitive functions.
    * @returns The XML description of the cognitive functions.
    */
-  public getToolsDescription(): string {
-    const toolsXML = Object.values(this.cognitiveFunctions)
-      .map(func => {
+  public async getToolsDescription(): Promise<string> {
+    const toolsXML = await Promise.all(
+      Object.values(this.cognitiveFunctions).map(async func => {
         const xml = convertToXML(func)
-        const prompt = func.getPromptInjection()
+        const prompt = await func.getPromptInjection()
         return `${xml}\n${prompt}`
       })
-      .join('\n')
+    )
 
-    return toolsXML
+    return toolsXML.join('\n')
   }
 
   /**
@@ -107,7 +110,8 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
    */
   public async *processInput(
     userInput: string,
-    conversationId: string
+    conversationId: string,
+    iterate: boolean = true
   ): AsyncIterableIterator<string> {
     // Update conversation context
     this.conversationManager.updateContext(conversationId, userInput, 'user')
@@ -125,7 +129,9 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     // Yield responses from the SeraphIterator
     for await (const iteratorResponse of seraphIterator) {
       this.emit('message', 'assistant', iteratorResponse)
-      yield iteratorResponse
+      if (iterate) {
+        yield iteratorResponse
+      }
     }
   }
 
@@ -134,9 +140,12 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     const middlewarePrompts =
       await this.middlewareManager.getMiddlewarePrompts()
     const prompt = `
+    <system_prompt>
     This is the Seraph AI system.  This is your core directive and prompt:
     ${this.prompt}
+    </system_prompt>
 
+    <user_instructions>
     In this environment you have access to a set of tools you can use to answer the user's question and help them to accomplish their tasks.
 
     You may call them like this:
@@ -156,6 +165,24 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     You have the ability to call side effect functions that will not return a response, but will perform an action.  The available actions are:
 
     ${middlewarePrompts}
+
+    When calling a middleware, start off with the <middleware_instructions> tag, and then include the middleware name and parameters.  For example:
+
+    <middleware_instructions>
+    <middleware_name>$MIDDLEWARE_NAME</middleware_name>
+    <parameters>
+    <$PARAMETER_NAME>$PARAMETER_VALUE</$PARAMETER_NAME>
+    ...
+    </parameters>
+    </middleware_instructions>
+    </user_instructions>
+
+    <formatting_instructions>
+    When you return a message for the user, you can use the <message> tag to format the message.  For example:
+
+    <message>
+    This is the message to the user.
+    </message>
     `
 
     return prompt
@@ -176,22 +203,15 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     return updatedResponse
   }
 
-  /**
-   * Removes the XML tags for function calls and results from the response.
-   * @param response The response string.
-   * @returns The response string without the XML tags.
-   */
-  public stripFunctionTags(response: string): string {
-    const strippedResponse = response.replace(/<function_calls>/g, '')
-    const strippedInvoke = strippedResponse.replace(
-      /<invoke>[\s\S]*?<\/invoke>/g,
-      ''
-    )
-    const strippedFunctionResults = strippedInvoke.replace(
-      /<function_results>[\s\S]*?<\/function_results>/g,
-      ''
-    )
-    return strippedFunctionResults
+  extractMessage(response: string): string | null {
+    const messageRegex = /<message>([\s\S]*?)<\/message>/
+    const match = response.match(messageRegex)
+
+    if (match && match.length > 1) {
+      return match[1].trim()
+    }
+
+    return null
   }
 }
 

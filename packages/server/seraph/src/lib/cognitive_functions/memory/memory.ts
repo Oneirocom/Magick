@@ -1,6 +1,6 @@
 // memory.ts
 import { IndexItem, LocalIndex } from 'vectra'
-import { OpenAIApi, Configuration } from 'openai'
+import { OpenAI } from 'openai'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { BaseCognitiveFunction } from '../../base_cognitive_function'
@@ -57,17 +57,15 @@ const functionDefinition = {
 class MemoryStorage extends BaseCognitiveFunction {
   private index: LocalIndex
   private seraph: Seraph
-  private openAIApi: OpenAIApi
+  private openAIApi: OpenAI
 
   constructor(seraph: Seraph) {
     super(functionDefinition)
 
-    const configuration = new Configuration({
+    this.seraph = seraph
+    this.openAIApi = new OpenAI({
       apiKey: seraph.options.openAIApiKey,
     })
-
-    this.seraph = seraph
-    this.openAIApi = new OpenAIApi(configuration)
 
     this.index = new LocalIndex(path.join(__dirname, '.', 'memory_index'))
   }
@@ -94,18 +92,18 @@ class MemoryStorage extends BaseCognitiveFunction {
   }
 
   async getVector(text: string) {
-    const response = await this.openAIApi.createEmbedding({
+    const response = await this.openAIApi.embeddings.create({
       model: 'text-embedding-ada-002',
       input: text,
     })
-    return response.data.data[0].embedding
+    return response.data[0].embedding
   }
 }
 
 class MemoryRetrieval extends BaseCognitiveFunction {
   private index: LocalIndex
   private seraph: Seraph
-  private openAIApi: OpenAIApi
+  private openAIApi: OpenAI
 
   constructor(seraph: Seraph) {
     super({
@@ -143,12 +141,10 @@ class MemoryRetrieval extends BaseCognitiveFunction {
       ],
     })
 
-    const configuration = new Configuration({
+    this.seraph = seraph
+    this.openAIApi = new OpenAI({
       apiKey: seraph.options.openAIApiKey,
     })
-
-    this.seraph = seraph
-    this.openAIApi = new OpenAIApi(configuration)
 
     this.index = new LocalIndex(path.join(__dirname, '.', 'memory_index'))
   }
@@ -187,11 +183,11 @@ class MemoryRetrieval extends BaseCognitiveFunction {
   }
 
   async getVector(text: string) {
-    const response = await this.openAIApi.createEmbedding({
+    const response = await this.openAIApi.embeddings.create({
       model: 'text-embedding-ada-002',
       input: text,
     })
-    return response.data.data[0].embedding
+    return response.data[0].embedding
   }
 }
 
