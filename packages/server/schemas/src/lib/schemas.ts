@@ -1,6 +1,5 @@
 // DOCUMENTED
 import { Static, Type } from '@feathersjs/typebox'
-
 /**
  * Full data model schema for a spell.
  *
@@ -247,3 +246,47 @@ export const userSchema = Type.Object(
 export type UserSchema = Static<typeof userSchema>
 /** The interface for an agent object that's based on the `agentSchema`. */
 export type UserInterface = UserSchema
+
+export const seraphEventSchema = Type.Object(
+  {
+    id: Type.String(),
+    agentId: Type.String(),
+    projectId: Type.String(),
+    type: Type.String(),
+    request: Type.Optional(
+      Type.Object({
+        message: Type.String(),
+        systemPrompt: Type.String(),
+        createdAt: Type.String(),
+      })
+    ),
+    response: Type.Optional(
+      Type.Object({
+        message: Type.String(),
+        functionStart: Type.Object({
+          functionName: Type.String(),
+          message: Type.String(),
+          icon: Type.Optional(Type.String()),
+          startedAt: Type.Optional(Type.String({ format: 'date-time' })),
+          finishedAt: Type.Optional(Type.String({ format: 'date-time' })),
+        }),
+        functionResult: Type.Object({
+          functionName: Type.String(),
+          message: Type.String(),
+          icon: Type.Optional(Type.String()),
+          startedAt: Type.Optional(Type.String({ format: 'date-time' })),
+          finishedAt: Type.Optional(Type.String({ format: 'date-time' })),
+        }),
+        error: Type.String(),
+        info: Type.String(),
+        createdAt: Type.Optional(Type.String({ format: 'date-time' })),
+      })
+    ),
+    error: Type.String(),
+    info: Type.String(),
+    createdAt: Type.Optional(Type.String({ format: 'date-time' })),
+  },
+  {
+    $id: 'SeraphEvent',
+  }
+)
