@@ -171,6 +171,7 @@
 
     .sash {
       background-color: var(--background-color);
+      z-index: 3;
     }
 
     .split-view-container.vertical > .view-container > .view {
