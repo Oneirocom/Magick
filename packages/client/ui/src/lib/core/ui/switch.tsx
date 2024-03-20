@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '../../utils/shadcn'
 
 const switchVariants = cva(
-  'peer inline-flex h-[20px] w-[36px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
+  'peer inline-flex h-[20px] w-[36px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-ds-secondary data-[state=unchecked]:bg-ds-card',
   {
     variants: {
       size: {
@@ -13,7 +13,7 @@ const switchVariants = cva(
         large: 'h-[24px] w-[48px]',
       },
       secondary: {
-        'bg-secondary': '!bg-[#A0B3C1]',
+        'bg-secondary': '!bg-ds-secondary',
       },
     },
     defaultVariants: {
@@ -23,14 +23,14 @@ const switchVariants = cva(
 )
 
 const thumbVariants = cva(
-  'pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0 transition-transform data-[state=unchecked]:dark:bg-black',
+  'pointer-events-none block h-5 w-5 rounded-full bg-ds-alert shadow-lg ring-0 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0 transition-transform data-[state=unchecked]:dark:bg-ds-secondary',
   {
     variants: {
       translateX: {
         small: 'data-[state=unchecked]:!translate-x-[-2px]',
       },
       secondaryThumb: {
-        'bg-secondary': '!bg-primary',
+        'bg-secondary': 'bg-ds-alert',
       },
     },
   }
