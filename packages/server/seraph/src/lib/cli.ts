@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv'
 import { MemoryRetrieval } from './cognitive_functions/memory/memory'
 import SeraphCLI from './seraphCLI'
 import { MemoryStorageMiddleware } from './middleware/memory_storage_middleware'
+import { BashExecutor } from './cognitive_functions/bash_executor'
+import { GitManager } from './cognitive_functions/git_manager'
 
 dotenv.config()
 
@@ -55,6 +57,8 @@ const importPrivatePrompts = async () => {
   seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
   // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
   seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
+  seraph.registerCognitiveFunction(new BashExecutor(seraph))
+  seraph.registerCognitiveFunction(new GitManager(seraph))
 
   new SeraphCLI(seraph)
 })()
