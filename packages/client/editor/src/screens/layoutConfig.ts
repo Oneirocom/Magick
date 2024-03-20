@@ -78,9 +78,7 @@ export const generateLayoutConfig = (
       spellName,
     },
     position: { referencePanel: 'Graph', direction: 'left' },
-    constraints: {
-      // minimumWidth: 270,
-    },
+    size: { width: 270 },
   },
   {
     id: 'Variables',
@@ -92,6 +90,7 @@ export const generateLayoutConfig = (
       spellName,
     },
     position: { referencePanel: 'Properties', direction: 'below' },
+    size: { width: 270 },
   },
   {
     id: 'Test',
@@ -103,6 +102,7 @@ export const generateLayoutConfig = (
       spellName,
     },
     position: { referencePanel: 'Graph', direction: 'right' },
+    size: { width: 270 },
   },
   {
     id: 'Text Editor',
@@ -114,6 +114,7 @@ export const generateLayoutConfig = (
       spellName,
     },
     position: { referencePanel: 'Test', direction: 'below' },
+    size: { width: 270 },
   },
 ]
 
@@ -151,10 +152,6 @@ export const applyDynamicLayoutConfig = ({
     if (config.constraints) {
       panel.group.api.setConstraints(config.constraints)
     }
-
-    if (config.size) {
-      panel.api.setSize(config.size)
-    }
   })
 }
 
@@ -180,6 +177,7 @@ export const applyConstraintsFromConfig = ({
         if (minimumHeight) panel.group.api.setConstraints({ minimumHeight })
         if (maximumHeight) panel.group.api.setConstraints({ maximumHeight })
       }
+      if (config.size) panel.api.setSize(config.size)
     })
   })
 }

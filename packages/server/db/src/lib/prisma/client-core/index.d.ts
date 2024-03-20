@@ -12926,12 +12926,16 @@ export namespace Prisma {
     id: string | null
     agentId: string | null
     plugin: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PluginStateMaxAggregateOutputType = {
     id: string | null
     agentId: string | null
     plugin: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PluginStateCountAggregateOutputType = {
@@ -12939,6 +12943,8 @@ export namespace Prisma {
     agentId: number
     state: number
     plugin: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -12947,12 +12953,16 @@ export namespace Prisma {
     id?: true
     agentId?: true
     plugin?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PluginStateMaxAggregateInputType = {
     id?: true
     agentId?: true
     plugin?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PluginStateCountAggregateInputType = {
@@ -12960,6 +12970,8 @@ export namespace Prisma {
     agentId?: true
     state?: true
     plugin?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -13040,6 +13052,8 @@ export namespace Prisma {
     agentId: string | null
     state: JsonValue | null
     plugin: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     _count: PluginStateCountAggregateOutputType | null
     _min: PluginStateMinAggregateOutputType | null
     _max: PluginStateMaxAggregateOutputType | null
@@ -13064,6 +13078,8 @@ export namespace Prisma {
     agentId?: boolean
     state?: boolean
     plugin?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     agents?: boolean | pluginState$agentsArgs<ExtArgs>
   }, ExtArgs["result"]["pluginState"]>
 
@@ -13072,6 +13088,8 @@ export namespace Prisma {
     agentId?: boolean
     state?: boolean
     plugin?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
   export type pluginStateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13089,6 +13107,8 @@ export namespace Prisma {
       agentId: string | null
       state: Prisma.JsonValue | null
       plugin: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
     }, ExtArgs["result"]["pluginState"]>
     composites: {}
   }
@@ -13488,6 +13508,8 @@ export namespace Prisma {
     readonly agentId: FieldRef<"pluginState", 'String'>
     readonly state: FieldRef<"pluginState", 'Json'>
     readonly plugin: FieldRef<"pluginState", 'String'>
+    readonly createdAt: FieldRef<"pluginState", 'DateTime'>
+    readonly updatedAt: FieldRef<"pluginState", 'DateTime'>
   }
     
 
@@ -18917,7 +18939,9 @@ export namespace Prisma {
     id: 'id',
     agentId: 'agentId',
     state: 'state',
-    plugin: 'plugin'
+    plugin: 'plugin',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type PluginStateScalarFieldEnum = (typeof PluginStateScalarFieldEnum)[keyof typeof PluginStateScalarFieldEnum]
@@ -20197,6 +20221,8 @@ export namespace Prisma {
     agentId?: UuidNullableFilter<"pluginState"> | string | null
     state?: JsonNullableFilter<"pluginState">
     plugin?: StringNullableFilter<"pluginState"> | string | null
+    createdAt?: DateTimeNullableFilter<"pluginState"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"pluginState"> | Date | string | null
     agents?: XOR<AgentsNullableRelationFilter, agentsWhereInput> | null
   }
 
@@ -20205,6 +20231,8 @@ export namespace Prisma {
     agentId?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
     plugin?: SortOrderInput | SortOrder
+    createdAt?: SortOrderInput | SortOrder
+    updatedAt?: SortOrderInput | SortOrder
     agents?: agentsOrderByWithRelationAndSearchRelevanceInput
     _relevance?: pluginStateOrderByRelevanceInput
   }
@@ -20218,6 +20246,8 @@ export namespace Prisma {
     agentId?: UuidNullableFilter<"pluginState"> | string | null
     state?: JsonNullableFilter<"pluginState">
     plugin?: StringNullableFilter<"pluginState"> | string | null
+    createdAt?: DateTimeNullableFilter<"pluginState"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"pluginState"> | Date | string | null
     agents?: XOR<AgentsNullableRelationFilter, agentsWhereInput> | null
   }, "id" | "agentId_plugin">
 
@@ -20226,6 +20256,8 @@ export namespace Prisma {
     agentId?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
     plugin?: SortOrderInput | SortOrder
+    createdAt?: SortOrderInput | SortOrder
+    updatedAt?: SortOrderInput | SortOrder
     _count?: pluginStateCountOrderByAggregateInput
     _max?: pluginStateMaxOrderByAggregateInput
     _min?: pluginStateMinOrderByAggregateInput
@@ -20239,6 +20271,8 @@ export namespace Prisma {
     agentId?: UuidNullableWithAggregatesFilter<"pluginState"> | string | null
     state?: JsonNullableWithAggregatesFilter<"pluginState">
     plugin?: StringNullableWithAggregatesFilter<"pluginState"> | string | null
+    createdAt?: DateTimeNullableWithAggregatesFilter<"pluginState"> | Date | string | null
+    updatedAt?: DateTimeNullableWithAggregatesFilter<"pluginState"> | Date | string | null
   }
 
   export type requestWhereInput = {
@@ -21576,6 +21610,8 @@ export namespace Prisma {
     id?: string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
     agents?: agentsCreateNestedOneWithoutPluginStateInput
   }
 
@@ -21584,12 +21620,16 @@ export namespace Prisma {
     agentId?: string | null
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
   }
 
   export type pluginStateUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     agents?: agentsUpdateOneWithoutPluginStateNestedInput
   }
 
@@ -21598,6 +21638,8 @@ export namespace Prisma {
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type pluginStateCreateManyInput = {
@@ -21605,12 +21647,16 @@ export namespace Prisma {
     agentId?: string | null
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
   }
 
   export type pluginStateUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type pluginStateUncheckedUpdateManyInput = {
@@ -21618,6 +21664,8 @@ export namespace Prisma {
     agentId?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type requestCreateInput = {
@@ -22964,18 +23012,24 @@ export namespace Prisma {
     agentId?: SortOrder
     state?: SortOrder
     plugin?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type pluginStateMaxOrderByAggregateInput = {
     id?: SortOrder
     agentId?: SortOrder
     plugin?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type pluginStateMinOrderByAggregateInput = {
     id?: SortOrder
     agentId?: SortOrder
     plugin?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -24612,12 +24666,16 @@ export namespace Prisma {
     id?: string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
   }
 
   export type pluginStateUncheckedCreateWithoutAgentsInput = {
     id?: string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
   }
 
   export type pluginStateCreateOrConnectWithoutAgentsInput = {
@@ -24839,6 +24897,8 @@ export namespace Prisma {
     agentId?: UuidNullableFilter<"pluginState"> | string | null
     state?: JsonNullableFilter<"pluginState">
     plugin?: StringNullableFilter<"pluginState"> | string | null
+    createdAt?: DateTimeNullableFilter<"pluginState"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"pluginState"> | Date | string | null
   }
 
   export type spellReleasesUpsertWithWhereUniqueWithoutAgents_spellReleases_agentIdToagentsInput = {
@@ -25883,6 +25943,8 @@ export namespace Prisma {
     id?: string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
   }
 
   export type spellReleasesCreateManyAgents_spellReleases_agentIdToagentsInput = {
@@ -25999,18 +26061,24 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type pluginStateUncheckedUpdateWithoutAgentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type pluginStateUncheckedUpdateManyWithoutAgentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     state?: NullableJsonNullValueInput | InputJsonValue
     plugin?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type spellReleasesUpdateWithoutAgents_spellReleases_agentIdToagentsInput = {

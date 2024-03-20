@@ -10,15 +10,17 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useTabLayout } from '@magickml/providers'
 // import Events from '../screens/EventWindow'
 import Requests from '../screens/RequestWindow'
-import Config from '../screens/ConfigWindow'
+// import Config from '../screens/ConfigWindow'
 import Knowledge from '../screens/KnowledgeWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
-import Secrets from '../screens/SecretsWindow'
+// import Secrets from '../screens/SecretsWindow'
+import { SecretWindow } from 'windows/secrets'
 import ComposerV2 from '../components/workspaces/composerv2'
 import NewMenuBar from '../components/MenuBar/newMenuBar'
 
 // import './tab-layout.scss'
 import WelcomeScreen from '../components/Watermark/watermark'
+import { ConfigWindow } from 'windows/config'
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
   const onContextMenu = (event: React.MouseEvent) => {
@@ -39,8 +41,8 @@ const getComponents = () => {
     Requests,
     Knowledge,
     Agents,
-    Config,
-    Secrets,
+    Config: () => <ConfigWindow />,
+    Secrets: () => <SecretWindow />,
     behave: ComposerV2,
     spell: (props: IDockviewPanelProps<{ title: string }>) => {
       return (

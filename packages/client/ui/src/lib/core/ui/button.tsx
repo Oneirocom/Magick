@@ -28,7 +28,8 @@ const buttonVariants = cva(
         'portal-primary':
           'bg-ds-primary text-ds-black font-bold font-montserrat',
         'portal-neutral':
-          'bg-ds-neutral text-ds-white font-medium font-montserrat',
+          'bg-ds-neutral text-ds-white font-medium font-montserrat border border-ds-white/40',
+          clear: '',
       },
       size: {
         default: 'h-9 px-4 py-2',

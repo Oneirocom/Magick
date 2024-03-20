@@ -10,6 +10,7 @@ import Image from 'next/legacy/image'
 
 import { InfoIcon } from '@magickml/icons'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 export const MPBalanceBar = ({ userData, isLoading }) => {
   const { client } = useFeathers()
@@ -108,6 +109,24 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
 
   return (
     <div className="w-full h-full flex flex-col px-5 box-border items-start justify-end gap-[5px]">
+      <div className="flex flex-row px-2 m-1 items-center  gap-1 text-[#b5b9bc] ">
+        <Link
+          href="https://www.youtube.com/watch?v=ZaOJ1hDYq20"
+          target="_blank"
+          className="cursor-pointer flex flex-row items-center gap-1"
+        >
+          <Image
+            className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full"
+            alt="Magic Points Icon"
+            src="/images/icons/video.svg"
+            width={16}
+            height={16}
+          />
+          <div className="text-md font-medium font-montAlt ml-2">
+            intro Tutorial Video
+          </div>
+        </Link>
+      </div>
       <div className="self-stretch bg-[#282d33] text-[#b5b9bc] rounded-md py-1 px-3">
         <div className="flex flex-row py-[5px] items-center justify-start gap-1">
           <Image

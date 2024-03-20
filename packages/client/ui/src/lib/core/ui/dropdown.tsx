@@ -22,7 +22,7 @@ export const Dropdown: FC<DropdownProps> = ({
 }) => {
   return (
     <Select onValueChange={onChange} value={selectedValue}>
-      <SelectTrigger className="w-full border-white/20 normal-case">
+      <SelectTrigger className="w-full border-ds-neutral normal-case data-[placeholder]:text-white/50">
         <SelectValue placeholder={placeholder || 'Select an option'} />
       </SelectTrigger>
       <SelectContent className="bg-[#2b2b30]">
