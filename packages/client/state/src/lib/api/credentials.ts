@@ -3,12 +3,28 @@ import type { Prisma } from '@magickml/server-db'
 
 export type Credential = Prisma.$credentialsPayload['scalars']
 
+export type AgentCredentialV2 = Prisma.$agent_credentialsPayload['scalars'] & {
+  credential: Partial<Credential>
+}
+
 export type CredentialsWithValue = Credential & { value: string }
 
 export type AgentCredential = Prisma.$agent_credentialsPayload['scalars']
 
 export const credentialsApi = rootApi.injectEndpoints({
   endpoints: builder => ({
+    // new single method for both
+    getCredentials: builder.query<
+      AgentCredentialV2[],
+      { projectId: string; agentId: string }
+    >({
+      providesTags: ['Credentials'],
+      query: args => ({
+        url: `credentials/v2/?projectId=${args.projectId}&agentId=${args.agentId}`,
+        method: 'GET',
+      }),
+    }),
+
     // project scoped
     listCredentials: builder.query<Credential[], { projectId: string }>({
       providesTags: ['Credentials'],
@@ -84,4 +100,5 @@ export const {
   useListAgentCredentialsQuery,
   useLinkAgentCredentialMutation,
   useUnlinkCredentialFromAgentMutation,
+  useGetCredentialsQuery,
 } = credentialsApi
