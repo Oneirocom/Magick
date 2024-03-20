@@ -141,18 +141,33 @@ class CredentialsManager {
    * @param payload The agent and credential IDs to link.
    */
   async linkCredentialToAgent(payload: AgentCredentialsPayload) {
-    // Create a new link
-    const linkedCredential = await prismaCore.agent_credentials.upsert({
-      create: {
-        agentId: payload.agentId,
-        credentialId: payload.credentialId,
-      },
-      update: {},
+    // Check if a link already exists for the given agentId and credentialId
+    const existingLink = await prismaCore.agent_credentials.findUnique({
       where: {
         agentId_credentialId: {
           agentId: payload.agentId,
           credentialId: payload.credentialId,
         },
+      },
+    })
+
+    if (existingLink) {
+      // If a link exists, delete it (but keep the credential)
+      await prismaCore.agent_credentials.delete({
+        where: {
+          agentId_credentialId: {
+            agentId: payload.agentId,
+            credentialId: payload.credentialId,
+          },
+        },
+      })
+    }
+
+    // Create a new link
+    const linkedCredential = await prismaCore.agent_credentials.create({
+      data: {
+        agentId: payload.agentId,
+        credentialId: payload.credentialId,
       },
       select: {
         credentialId: true,
@@ -237,6 +252,30 @@ class CredentialsManager {
         credentials: {
           select: {
             serviceType: true,
+          },
+        },
+      },
+    })
+  }
+
+  // new method now that we use prisma
+  async getCredentials(agentId: string) {
+    return await prismaCore.agent_credentials.findMany({
+      where: {
+        agentId: agentId,
+      },
+      select: {
+        created_at: true,
+        updated_at: true,
+        agentId: true,
+        credentialId: true,
+        credentials: {
+          select: {
+            name: true,
+            serviceType: true,
+            credentialType: true,
+            pluginName: true,
+            description: true,
           },
         },
       },
