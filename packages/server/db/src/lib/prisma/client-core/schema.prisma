@@ -183,11 +183,13 @@ model knowledge {
 }
 
 model pluginState {
-  id      String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  agentId String? @db.Uuid
-  state   Json?   @db.Json
-  plugin  String? @db.VarChar(255)
-  agents  agents? @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "pluginstate_agentid_foreign")
+  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  agentId   String?   @db.Uuid
+  state     Json?     @db.Json
+  plugin    String?   @db.VarChar(255)
+  createdAt DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @db.Timestamptz(6)
+  agents    agents?   @relation(fields: [agentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "pluginstate_agentid_foreign")
 
   @@unique([agentId, plugin], map: "pluginstate_agentid_plugin_unique")
   @@schema("public")

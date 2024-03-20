@@ -240,7 +240,9 @@ exports.Prisma.PluginStateScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   state: 'state',
-  plugin: 'plugin'
+  plugin: 'plugin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.RequestScalarFieldEnum = {
