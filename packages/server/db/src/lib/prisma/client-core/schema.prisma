@@ -296,26 +296,3 @@ enum WebhookStatus {
 
   @@schema("public")
 }
-
-enum SeraphEventTypes {
-  request
-  response
-  error
-  info
-
-  @@schema("public")
-}
-
-model SeraphEvent {
-  id        String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  agentId   String
-  projectId String
-  type      SeraphEventTypes
-  request   Json?
-  response  Json?
-  error     String?
-  info      String?
-  createdAt DateTime         @default(now()) @db.Timestamptz(6)
-
-  @@schema("public")
-}
