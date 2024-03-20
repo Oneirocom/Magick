@@ -5,7 +5,6 @@ import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import * as readline from 'readline'
 import { Command } from 'commander'
 import { createLogUpdate } from 'log-update'
 import { Seraph } from './seraph'
@@ -22,16 +21,11 @@ type CliCommand = {
 
 class SeraphCLI {
   private seraph: Seraph
-  private rl: readline.Interface
   private conversationId: string
   commands: CliCommand[] = []
 
   constructor(seraph: Seraph) {
     this.seraph = seraph
-    this.rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    })
     this.conversationId = 'cli_conversation'
 
     this.setupEventListeners()
@@ -135,6 +129,41 @@ class SeraphCLI {
       description: '!prompt - Display the latest current system prompt',
       handler: this.handleGetPrompt.bind(this),
     })
+
+    this.registerCommand({
+      name: '!messages',
+      description: '!messages - Display the conversation messages',
+      handler: this.handleGetMessages.bind(this),
+    })
+
+    this.registerCommand({
+      name: '!clearLastMessage',
+      description: '!clearLastMessage - Clear the last message',
+      handler: this.handleClearLastMessage.bind(this),
+    })
+  }
+
+  private async handleClearLastMessage() {
+    const messages = this.seraph.conversationManager.getMessages(
+      this.conversationId
+    )
+
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage) {
+      this.seraph.conversationManager.removeLastMessage(this.conversationId)
+      console.log('Last message removed.')
+    } else {
+      console.log('No messages to remove.')
+    }
+  }
+
+  private async handleGetMessages() {
+    const messages = this.seraph.conversationManager.getMessages(
+      this.conversationId
+    )
+
+    console.log('Conversation messages:')
+    console.log(messages)
   }
 
   private async handleGetPrompt() {
@@ -234,30 +263,38 @@ class SeraphCLI {
   }
 
   private async conversationLoop() {
-    const { input } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'input',
-        message: chalk.yellow('User:'),
-      },
-    ])
+    if (!this.seraph.disableInput) {
+      const { input } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'input',
+          message: chalk.yellow('User:'),
+        },
+      ])
 
-    if (input.trim().toLowerCase() === 'exit') {
-      console.log('Conversation ended.')
-      return
-    }
-
-    if (input.startsWith('!')) {
-      if (input === '!help') {
-        await this.displayCommandMenu()
-      } else {
-        await this.handleDirectCommand(input)
+      if (input.trim().toLowerCase() === 'exit') {
+        console.log('Conversation ended.')
+        return
       }
-    } else {
-      this.sendMessage(input)
+
+      if (input.startsWith('!')) {
+        if (input === '!help') {
+          await this.displayCommandMenu()
+        } else {
+          await this.handleDirectCommand(input)
+        }
+      } else {
+        if (!this.seraph.disableInput) this.sendMessage(input)
+      }
     }
 
-    this.conversationLoop() // Restart the conversation loop
+    if (this.seraph.disableInput) {
+      setTimeout(() => {
+        this.conversationLoop()
+      }, 100)
+    } else {
+      this.conversationLoop() // Restart the conversation loop
+    }
   }
 }
 
