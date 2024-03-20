@@ -32,6 +32,8 @@ class LLMManager {
   ): Promise<string> {
     const msg = await this.anthropic.messages.create({
       model: 'claude-3-opus-20240229',
+      // model: 'claude-3-sonnet-20240229',
+      // model: 'claude-3-haiku-20240307',
       stop_sequences: ['</function_calls>'],
       system: systemPrompt,
       max_tokens: maxTokens,
