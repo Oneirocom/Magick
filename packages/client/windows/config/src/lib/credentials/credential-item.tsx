@@ -1,18 +1,21 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@magickml/client-ui'
 import { FC } from 'react'
 import clsx from 'clsx'
-import { type PluginCredential } from './utils'
+import {
+  type FindCredentialIdReturn,
+  type PluginCredential,
+} from './utils'
 
-interface CredentialItemProps {
+export interface CredentialItemProps {
   action?: React.ReactNode
-  isLinked: boolean
   credential: PluginCredential
+  status: FindCredentialIdReturn
 }
 
 export const CredentialItem: FC<CredentialItemProps> = ({
   action,
-  isLinked,
   credential,
+  status,
 }) => {
   return (
     <div className="inline-flex items-center justify-start space-x-4 border-2 bg-[#282d33] border-white/10 rounded-sm p-4 h-24">
@@ -27,11 +30,11 @@ export const CredentialItem: FC<CredentialItemProps> = ({
         <p className="text-xs">{credential.description}</p>
         <p
           className={clsx(
-            isLinked ? 'text-green-500' : 'text-white/60',
+            status.linked ? 'text-green-500' : 'text-white/60',
             'text-sm'
           )}
         >
-          {isLinked ? 'Linked' : 'Not Linked'}
+          {status.linked ? 'Linked' : 'Not Linked'}
         </p>
         {credential?.helpLink && (
           <a

@@ -1,11 +1,18 @@
-export const CredentialsHeader = () => {
+import { FC } from 'react'
+
+type CredentialsHeaderProps = {
+  title: string
+  description: string
+}
+
+export const CredentialsHeader: FC<CredentialsHeaderProps> = ({
+  title,
+  description,
+}) => {
   return (
     <div className="gap-y-1 pb-2 flex flex-col">
-      <h3 className="font-semibold">Linked Secrets</h3>
-
-      <p className="opacity-70">
-        {`Link secrets (API keys, tokens, etc) to your Agent to use in your spells and connect to external services.`}
-      </p>
+      <h3 className="font-semibold capitalize">{title}</h3>
+      <p className="opacity-70">{description}</p>
     </div>
   )
 }
