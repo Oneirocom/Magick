@@ -95,6 +95,8 @@ export const rootApi = createApi({
     'User',
     'Knowledge',
     'OneKnowledge',
+    'PluginState',
+    'PluginCommand'
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })
