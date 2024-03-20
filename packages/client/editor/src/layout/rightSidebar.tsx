@@ -52,7 +52,7 @@ const components = {
 }
 
 const RightSidebar = (
-  props: IGridviewPanelProps<{ title: string; id: string; spellName }>
+  props: IGridviewPanelProps<{ title: string; id: string; spellName; user }>
 ) => {
   usePanelControls(props, 'none', 'ctrl+l')
 
@@ -66,16 +66,17 @@ const RightSidebar = (
       isExpanded: true,
       title: 'Logs',
     })
-    //TODO: conly render this to devs for now
-    event.api.addPanel({
-      id: 'Seraph',
-      component: 'SeraphWindow',
-      params: {
-        spellName: props.params.spellName,
-      },
-      isExpanded: true,
-      title: 'Seraph',
-    })
+    if (!process.env.PRODUCTION) {
+      event.api.addPanel({
+        id: 'Seraph',
+        component: 'SeraphWindow',
+        params: {
+          spellName: props.params.spellName,
+        },
+        isExpanded: true,
+        title: 'Seraph',
+      })
+    }
   }
 
   return (
