@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import BasePlugin, { BasePluginInit } from '../basePlugin'
-import { PluginCredentialsType } from 'server/credentials'
+import { PluginCredentialsType } from 'server/plugin'
 import { PluginStateType } from 'plugin-state'
 import { EventPayload } from '../events/event-manager'
 
