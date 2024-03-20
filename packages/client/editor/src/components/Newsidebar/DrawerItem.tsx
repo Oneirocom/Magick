@@ -15,7 +15,6 @@ type DrawerItemProps = {
   tooltipText: string
 }
 
-
 /**
  * The DrawerItem component used to display individual items in the main drawer.
  */
@@ -28,7 +27,7 @@ export const DrawerItem: React.FC<DrawerItemProps> = ({
   tooltipText,
 }) => (
   <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-    <Tooltip title={tooltipText} placement="top" enterDelay={500} arrow>
+    <Tooltip title={tooltipText} placement="right" enterDelay={500} arrow>
       <ListItemButton
         sx={{
           py: 0.2,
