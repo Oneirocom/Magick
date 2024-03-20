@@ -1,116 +1,150 @@
-import credentialsJson from 'packages/shared/nodeSpec/src/credentials.json'
-import { FC } from 'react'
-import {
-  useListCredentialsQuery,
-  useListAgentCredentialsQuery,
-} from 'client/state'
+import { FC, useState } from 'react'
+import { useListCredentialsQuery } from 'client/state'
 import { useConfig } from '@magickml/providers'
-import {
-  separateCredentials,
-  hasLinkedAgentCredential,
-  findMatchingAgentCredential,
-  findMatchingCredentials,
-  type PluginCredential,
-} from './utils'
-import { CredentialAction } from './credential-action'
-import { CredentialItem } from './credential-item'
+import { getAvailablePlugins, findCredentialId } from './utils'
 import { CredentialsHeader } from './credentials-header'
+import { CredentialCard } from './core/credential-card'
+import { PluginCredentialCard } from './plugin/plugin-credential-card'
+import { CredentialsTab, CredentialsTabs } from './credentials-tabs'
+import {
+  useGetPluginStateQuery,
+  PluginState,
+  useGetCredentialsQuery,
+} from 'client/state'
+import { CredentialsDialog } from './dialog/credentials-dialog'
 
 type ConfigCredentialsProps = {
   agentId: string
 }
 
+const getPluginState = (pluginState: PluginState[], pluginName: string) => {
+  const state = pluginState.find(p => p.plugin === pluginName)
+    ?.state as PluginState
+  return {
+    enabled: false,
+    ...state,
+  }
+}
+
 export const ConfigCredentials: FC<ConfigCredentialsProps> = ({ agentId }) => {
-  const pluginCredentials: PluginCredential[] = credentialsJson.filter(
-    cred => cred.available
-  ) as PluginCredential[]
+  const tab = useState(CredentialsTab.CORE)
   const config = useConfig()
-  const { data: c } = useListCredentialsQuery({
-    projectId: config.projectId,
-  })
+  const all = getAvailablePlugins()
 
-  const [credentials, custom] = separateCredentials(c || [])
+  const { data: pluginState } = useGetPluginStateQuery(
+    {
+      projectId: config.projectId,
+      agentId,
+    },
+    {
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+    }
+  )
 
-  const { data: ac } = useListAgentCredentialsQuery({
-    projectId: config.projectId,
-    agentId,
-  })
+  const { data: agentSecrets, isLoading: agentSecretsLoading } =
+    useGetCredentialsQuery(
+      {
+        projectId: config.projectId,
+        agentId,
+      },
+      {
+        refetchOnFocus: true,
+        refetchOnMountOrArgChange: true,
+      }
+    )
+
+  const { data: projectSecrets, isLoading: projectSecretsLoading } =
+    useListCredentialsQuery({
+      projectId: config.projectId,
+    })
 
   return (
-    <>
-      <CredentialsHeader />
+    <div className="w-full">
+      <CredentialsHeader
+        title="Secrets"
+        description={`Link secrets (API keys, tokens, etc) to your Agent to use in your spells and connect to external services.`}
+      />
 
-      {/* Plugin Credentials */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {pluginCredentials?.map(p => (
-          <CredentialItem
-            key={p.name}
-            credential={p}
-            isLinked={hasLinkedAgentCredential(p.name, credentials, ac)}
-            action={
-              <CredentialAction
-                projectId={config.projectId}
-                agentId={agentId}
-                linkedCredential={findMatchingAgentCredential(
-                  p,
-                  credentials,
-                  ac
-                )}
-                availableCredentials={findMatchingCredentials(p, credentials)}
+      {JSON.stringify(agentSecrets)}
+
+      <CredentialsTabs
+        value={tab[0]}
+        setTab={tab[1]}
+        core={
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {all['core']?.map(p => (
+              <CredentialCard
+                key={p.name}
+                credential={p}
+                status={findCredentialId({
+                  pluginName: 'core',
+                  secretName: p.name,
+                  arr: (agentSecrets as any) || [],
+                })}
+                action={
+                  <CredentialsDialog
+                    projectId={config.projectId}
+                    agentId={agentId}
+                    credName={p.name}
+                    clientName={p.clientName ?? p.name}
+                    isCore={true}
+                    serviceType={p.serviceType}
+                    pluginName="core"
+                    agentSecret={findCredentialId({
+                      pluginName: 'core',
+                      secretName: p.name,
+                      arr: (agentSecrets as any) || [],
+                    })}
+                    projectSecrets={projectSecrets || []}
+                  />
+                }
               />
-            }
-          />
-        ))}
-      </div>
-      {/* section that lists linked credentials with serviceType 'custom' and allows linking/unlinking */}
-      <div className="mt-8\">
-        <h2>Custom Credentials</h2>
-        <p>
-          Custom credentials are secrets that you create in the secrets window
-          and link to this agent.
-        </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {custom?.map(c => (
-            <CredentialItem
-              key={c.name}
-              credential={{
-                name: c.name,
-                serviceType: c.serviceType as 'custom',
-                credentialType: c.credentialType as 'custom',
-                initials: c.name.charAt(0),
-                description: c.description || '',
-                available: true,
-              }}
-              isLinked={hasLinkedAgentCredential(c.name, custom, ac)}
-              action={
-                <CredentialAction
-                  custom={true}
-                  customId={c.id}
-                  projectId={config.projectId}
-                  agentId={agentId}
-                  linkedCredential={findMatchingAgentCredential(
-                    {
-                      ...c,
-                      available: true,
-                      initials: c.name.charAt(0),
-                    } as PluginCredential,
-                    credentials,
-                    ac
-                  )}
-                  availableCredentials={findMatchingCredentials(
-                    {
-                      ...c,
-                      available: true,
-                      initials: c.name.charAt(0),
-                    } as PluginCredential,
-                    custom
-                  )}
-                />
-              }
-            />
-          ))}
-        </div>
-      </div>
-    </>
+            ))}
+          </div>
+        }
+        plugin={
+          <div className="flex flex-col gap-y-6">
+            {Object.keys(all).map(key => {
+              if (key === 'core') return null
+              return (
+                <div key={key} className="gap-y-1 pb-2 flex flex-col">
+                  <PluginCredentialCard
+                    agentId={agentId}
+                    projectId={config.projectId}
+                    credentials={all[key].map(c => ({
+                      credential: c,
+                      status: findCredentialId({
+                        pluginName: c.pluginName,
+                        secretName: c.name,
+                        arr: (agentSecrets as any) || [],
+                      }),
+                      action: (
+                        <CredentialsDialog
+                          projectId={config.projectId}
+                          agentId={agentId}
+                          credName={c.name}
+                          clientName={c.clientName ?? c.name}
+                          isCore={true}
+                          serviceType={c.serviceType}
+                          pluginName={c.pluginName}
+                          agentSecret={findCredentialId({
+                            pluginName: c.pluginName,
+                            secretName: c.name,
+                            arr: (agentSecrets as any) || [],
+                          })}
+                          projectSecrets={projectSecrets || []}
+                        />
+                      ),
+                    }))}
+                    state={getPluginState(pluginState || [], key)}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        }
+      />
+    </div>
   )
 }
