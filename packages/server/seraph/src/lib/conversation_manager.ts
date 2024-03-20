@@ -31,6 +31,10 @@ class ConversationManager {
     this.conversations[conversationId].push(message)
   }
 
+  public removeLastMessage(conversationId: string): void {
+    this.conversations[conversationId].pop()
+  }
+
   /**
    * Retrieves the context of a conversation.
    * @param conversationId The identifier of the conversation.
