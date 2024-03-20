@@ -11,7 +11,7 @@ import { IMiddleware, MiddlewareManager } from './middlewareManager'
 import EventEmitter from 'events'
 
 type SeraphEvents = {
-  error: (error: Error) => void
+  error: (error: Error | string) => void
   message: (role: 'user' | 'assistant', message: string) => void
   info: (info: string, data?: Record<string, unknown>) => void
   token: (token: string) => void
@@ -39,6 +39,7 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
   middlewareManager: MiddlewareManager
   prompt: string
   options: SeraphOptions
+  disableInput: boolean = false
 
   constructor(options: SeraphOptions) {
     super()
@@ -114,6 +115,8 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     iterate: boolean = true
   ): AsyncIterableIterator<string> {
     // Update conversation context
+    if (this.disableInput) return
+
     this.conversationManager.updateContext(conversationId, userInput, 'user')
 
     // Generate response using core prompts and conversation context
@@ -126,6 +129,8 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
       systemPrompt
     )
 
+    this.disableInput = true
+
     // Yield responses from the SeraphIterator
     for await (const iteratorResponse of seraphIterator) {
       this.emit('message', 'assistant', iteratorResponse)
@@ -133,6 +138,7 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
         yield iteratorResponse
       }
     }
+    this.disableInput = false
   }
 
   async generateSystemPrompt(): Promise<string> {
