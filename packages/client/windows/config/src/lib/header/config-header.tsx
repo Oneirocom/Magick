@@ -14,28 +14,54 @@ import { useState } from 'react'
 import { EditIcon } from './edit-icon'
 import { defaultImage } from 'shared/utils'
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
+import { useUpdateAgentMutation } from 'client/state'
 
-interface AgentInfoProps {
+interface ConfigHeaderProps {
   selectedAgentData: any
   setSelectedAgentData?: (data: any) => void
-  update: (data?: any) => void
 }
 
+/**
+ * ConfigHeader component displays and allows editing of an agent's configuration.
+ * @param {Object} props - Component props
+ * @param {Object} props.selectedAgentData - The selected agent's data
+ * @param {Function} [props.setSelectedAgentData] - Function to update the selected agent's data
+ */
 export const ConfigHeader = ({
   selectedAgentData,
   setSelectedAgentData,
-  update,
-}: AgentInfoProps) => {
+}: ConfigHeaderProps) => {
+  const [updateAgent] = useUpdateAgentMutation()
   const [editName, setEditName] = useState(false)
   const isDraft = selectedAgentData?.currentSpellReleaseId === null || false
 
+  /**
+   * Updates the agent's data on the server.
+   * @param {Object} [data={}] - The data to update
+   */
+  const update = (data = {}) => {
+    const _data = { ...selectedAgentData, ...data }
+    _data.enabled = !!_data.enabled
+    _data.updatedAt = new Date().toISOString()
+    _data.secrets = _data.secrets || '{}'
+    _data.pingedAt = new Date().toISOString()
+
+    updateAgent(_data)
+      .unwrap()
+      .then(data => {
+        setSelectedAgentData && setSelectedAgentData(data)
+      })
+      .catch(console.error)
+  }
+
+  if (!selectedAgentData) return null
+
   return (
-    <div className="inline-flex w-full justify-start items-center gap-x-2 h-16">
+    <div className="inline-flex w-full justify-start items-center gap-x-2">
       <Avatar className='ring-1 ring-ds-primary'>
         <AvatarImage src={defaultImage(selectedAgentData.id)} />
         <AvatarFallback>{selectedAgentData?.name[0]}</AvatarFallback>
       </Avatar>
-
       {editName ? (
         <>
           <FancyInput
@@ -79,7 +105,7 @@ export const ConfigHeader = ({
         </>
       ) : (
         <>
-          <p className="font-medium capitalize">{selectedAgentData.name}</p>
+          <p className="ml-2 font-medium capitalize">{selectedAgentData.name}</p>
           <Button
             variant="ghost"
             size="icon"
@@ -91,7 +117,6 @@ export const ConfigHeader = ({
           </Button>
         </>
       )}
-
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -105,7 +130,7 @@ export const ConfigHeader = ({
                   })
                 }}
               />
-              <span>{selectedAgentData.enabled ? 'On' : 'Off'}</span>
+              <span className='text-sm font-medium text-white/60'>{selectedAgentData.enabled ? 'On' : 'Off'}</span>
             </>
           </TooltipTrigger>
           <TooltipContent>
