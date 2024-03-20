@@ -100,6 +100,7 @@
     "@clerk/nextjs": "^4.29.7",
     "@clerk/themes": "^1.7.9",
     "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-json": "^6.0.1",
     "@docusaurus/core": "3.0.1",
     "@docusaurus/preset-classic": "3.0.1",
     "@emotion/styled": "11.11.0",

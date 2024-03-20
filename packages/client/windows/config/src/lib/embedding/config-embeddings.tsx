@@ -86,7 +86,7 @@ export const ConfigEmbeddings = ({
     .flat()
 
   return (
-    <div className="flex flex-col max-w-2xl w-full pt-8 pb-4 gap-y-4">
+    <div className="flex flex-col max-w-2xl w-full gap-y-4">
       <EmbeddingProviderDropdown
         selectedEmbeddingProvider={selectedEmbeddingProvider?.provider}
         onChange={handleEmbeddingProviderChange}
