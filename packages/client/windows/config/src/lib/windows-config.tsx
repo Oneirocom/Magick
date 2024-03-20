@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { AgentDetails } from './header/agent-details'
+import { ConfigHeader } from './header/config-header'
 import { RootState, useGetAgentByIdQuery } from 'client/state'
 import { useEffect, useState } from 'react'
 import { ConfigCredentials } from './credentials/config-credentials'
@@ -25,8 +25,8 @@ export const ConfigWindow = () => {
   if (isLoading || !selectedAgent) return null
 
   return (
-    <div className="h-dvh pt-10 pb-20 overflow-y-scroll px-24">
-      <AgentDetails
+    <div className="h-dvh pt-10 pb-20 overflow-y-scroll px-24 gap-y-10 flex flex-col">
+      <ConfigHeader
         selectedAgentData={selectedAgent}
         setSelectedAgentData={setSelectedAgent}
       />
