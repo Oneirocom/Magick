@@ -72,10 +72,7 @@ export class CredentialsService {
     await CredentialsService.app.get('agentCommander').command(command)
   }
 
-  async listAgentCredentials(data: {
-    agentId: string
-    serviceType?: string
-  }): Promise<AgentCredentialsPayload[]> {
+  async listAgentCredentials(data: { agentId: string; serviceType?: string }) {
     return await this.credentialsManager.listAgentCredentials(data.agentId)
   }
 
@@ -99,6 +96,10 @@ export class CredentialsService {
     }
 
     await CredentialsService.app.get('agentCommander').command(command)
+  }
+
+  async getCredentials(id: string) {
+    return await this.credentialsManager.getCredentials(id)
   }
 }
 
