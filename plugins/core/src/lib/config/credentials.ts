@@ -1,7 +1,6 @@
-import {
-  type ExtractPluginCredentialNames,
-  type PluginCredential,
-} from 'packages/server/credentials/src'
+import { type ExtractPluginCredentialNames } from 'server/plugin'
+import { PluginCredential } from 'server/credentials'
+
 import { corePluginName } from './constants'
 
 export const corePluginCredentials = [
