@@ -17,8 +17,8 @@ export const EmbeddingProviderDropdown: FC<EmbeddingProviderDropdownProps> = ({
   }))
 
   return (
-    <div className="flex flex-col gap-y-1 w-full">
-      <p className='font-semibold'>Embedding Provider</p>
+    <div className="flex flex-col gap-y-2 w-full">
+      <p className='font-semibold'>Embedding Model Provider</p>
       <Dropdown
         options={providerOptions}
         selectedValue={selectedEmbeddingProvider || ''}
