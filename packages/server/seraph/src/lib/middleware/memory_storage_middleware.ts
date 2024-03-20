@@ -69,7 +69,7 @@ class MemoryStorageMiddleware implements IMiddleware {
 
   async getPrompt(): Promise<string> {
     const basePrompt = `
-      You have the ability to store information in your memory for later retrieval.  This operation is a background process and wil not block your main cognition loop.
+      You have the ability to store information in your memory for later retrieval.  This operation is a background process and wil not block your main cognition loop.  When storing your memory, the <text> should be the memory query which will later be used to matched to via embedding similarity to retrieve the memory.  Store the content in the metadata. Keep your text short, and remember IT IS A QUERY.
 
       The <metadata> and <metadataDescriptions> tags are optional. If you create a new metadata tag, use a proper description to describe what it does.
     `
