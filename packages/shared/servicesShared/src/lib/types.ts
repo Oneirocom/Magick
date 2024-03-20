@@ -103,3 +103,45 @@ export interface ICoreLLMService {
   ) => AsyncGenerator<Chunk, CompletionResponse, undefined>
   initialize: () => Promise<void>
 }
+
+export type SeraphRequest = {
+  message: string
+  systemPrompt: string
+  createdAt: string
+}
+
+export type SeraphFunction = {
+  functionName: string
+  message: string
+  icon?: string
+  startedAt?: string
+  finishedAt?: string
+}
+
+export type SeraphResponse = {
+  message: string
+  functionStart?: SeraphFunction
+  functionResult?: SeraphFunction
+  createdAt: string
+}
+
+export type SeraphEventTypes = {
+  request: SeraphRequest
+  response: SeraphResponse
+  error: string
+  info: string
+  functionStart: SeraphFunction
+  functionEnd: SeraphFunction
+}
+
+export interface ISeraphEvent {
+  id: string
+  agentId: string
+  projectId: string
+  type: SeraphEventTypes
+  request?: SeraphRequest
+  response?: SeraphResponse
+  error?: string
+  info?: string
+  createdAt: string
+}
