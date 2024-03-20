@@ -66,6 +66,7 @@ const RightSidebar = (
       isExpanded: true,
       title: 'Logs',
     })
+    //TODO: conly render this to devs for now
     event.api.addPanel({
       id: 'Seraph',
       component: 'SeraphWindow',
