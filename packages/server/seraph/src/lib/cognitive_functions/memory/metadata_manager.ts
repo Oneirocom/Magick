@@ -21,6 +21,10 @@ class MetadataManager {
     key: string,
     description: string
   ): Promise<void> {
+    if (typeof key !== 'string' || typeof description !== 'string') {
+      throw new Error('Invalid metadata key or description')
+    }
+
     const metadataDescriptions = await this.loadMetadataDescriptions()
     metadataDescriptions[key] = description
     await this.saveMetadataDescriptions(metadataDescriptions)
@@ -64,11 +68,16 @@ class MetadataManager {
   private async saveMetadataDescriptions(
     metadataDescriptions: Record<string, string>
   ): Promise<void> {
-    await fs.writeFile(
-      this.metadataFilePath,
-      JSON.stringify(metadataDescriptions, null, 2),
-      'utf-8'
-    )
+    try {
+      await fs.writeFile(
+        this.metadataFilePath,
+        JSON.stringify(metadataDescriptions, null, 2),
+        'utf-8'
+      )
+    } catch (error) {
+      console.error('Error saving metadata descriptions:', error)
+      throw error
+    }
   }
 }
 
