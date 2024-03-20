@@ -8,6 +8,7 @@ import {
   Checkbox,
   DropdownMenuItem,
 } from '@magickml/client-ui'
+import { defaultImage } from 'shared/utils'
 
 const AgentListItem = ({
   agent,
@@ -58,10 +59,13 @@ const AgentListItem = ({
         <Avatar className="self-center border border-ds-primary w-8 h-8 justify-center items-center mr-2">
           <AvatarImage
             className="object-cover w-full h-full rounded-full"
-            src={`${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent.image}`}
+            src={
+              agent?.image
+                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent?.image}`
+                : defaultImage(agent?.id || '1')
+            }
             alt={agent.name.at(0) || 'A'}
           />
-          {agent.name.at(0) || 'A'}
         </Avatar>
         <div
           className={`flex flex-col ml-1 truncate ${

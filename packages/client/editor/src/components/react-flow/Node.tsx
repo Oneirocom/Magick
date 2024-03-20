@@ -7,7 +7,8 @@ import {
 } from 'reactflow'
 
 import InputSocket from './InputSocket'
-import NodeContainer from './NodeContainer'
+// import NodeContainer from './NodeContainer'
+import NodeContainerV2 from './NodeContainerV2'
 import OutputSocket from './OutputSocket'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import { isHandleConnected } from '../../utils/isHandleConnected'
@@ -160,7 +161,7 @@ export const Node: React.FC<NodeProps> = ({
   }
 
   return (
-    <NodeContainer
+    <NodeContainerV2
       fired={done}
       error={error}
       running={running}
@@ -227,6 +228,6 @@ export const Node: React.FC<NodeProps> = ({
           />
         </div>
       ))}
-    </NodeContainer>
+    </NodeContainerV2>
   )
 }

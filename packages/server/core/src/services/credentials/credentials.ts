@@ -83,6 +83,24 @@ export const credentials = (app: Application): void => {
       }
     },
   })
+
+  app.use('credentials/v2', {
+    find: async (params: Params) => {
+      if (!params.query) {
+        throw new Error('Query parameters are missing')
+      }
+
+      const credentialsService = app.service(
+        'credentials'
+      ) as CredentialsService
+      try {
+        return await credentialsService.getCredentials(params.query.agentId)
+      } catch (error) {
+        logger.error('error:', error)
+        return { success: false }
+      }
+    },
+  })
 }
 
 declare module '../../declarations' {
@@ -94,6 +112,9 @@ declare module '../../declarations' {
     'credentials/agent': {
       find: ReturnType<any>
       remove: ReturnType<any>
+    }
+    'credentials/v2': {
+      find: ReturnType<any>
     }
   }
 }

@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@magickml/client-ui'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { defaultImage } from 'shared/utils'
 
 export function AgentMenu({ data }) {
   const { client } = useFeathers()
@@ -138,7 +139,11 @@ export function AgentMenu({ data }) {
         >
           <AvatarImage
             className="object-cover w-full h-full rounded-full"
-            src={`${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${currentAgent?.image}`}
+            src={
+              currentAgent?.image
+                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${currentAgent?.image}`
+                : defaultImage(currentAgent?.id || '1')
+            }
             alt={currentAgent?.name.at(0) || 'A'}
           />
           {currentAgent?.name.at(0) || 'A'}
