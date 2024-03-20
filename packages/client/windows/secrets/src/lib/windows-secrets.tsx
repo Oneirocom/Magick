@@ -84,7 +84,7 @@ interface HeaderProps {
   sortType: string
 }
 
-const Header: FC<HeaderProps> = ({ sortType }) => {
+export const Header: FC<HeaderProps> = ({ sortType }) => {
   return (
     <div className="pt-8 pb-4">
       <div className="flex flex-col gap-y-1">
@@ -106,7 +106,7 @@ interface CreateCredentialProps {
   currentCreds?: Credential[]
 }
 
-const CreateCredential: FC<CreateCredentialProps> = ({
+export const CreateCredential: FC<CreateCredentialProps> = ({
   projectId,
   currentCreds,
 }) => {
@@ -258,7 +258,7 @@ const CreateCredential: FC<CreateCredentialProps> = ({
   )
 }
 
-const ServiceSelector = ({ selectedService, setSelectedService }) => {
+export const ServiceSelector = ({ selectedService, setSelectedService }) => {
   const groupedServices = pluginCredentials.reduce((acc, service) => {
     acc[service.clientName] = acc[service.clientName] || []
     if (service.available) acc[service.clientName].push(service)
