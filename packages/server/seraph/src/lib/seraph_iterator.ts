@@ -103,13 +103,9 @@ class SeraphIterator implements AsyncIterator<string> {
         this.done = false
         const message = this.seraph.extractMessage(updatedResponse)
 
-        if (!message) {
-          throw new Error('No message found in response')
-        }
-
         return {
           done: false,
-          value: message,
+          value: message || '',
         } // Return the updated response/ Yield the stripped LLM response
       } catch (error) {
         console.error('Error executing cognitive function:', error)
