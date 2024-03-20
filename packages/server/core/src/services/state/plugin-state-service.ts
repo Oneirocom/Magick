@@ -1,7 +1,6 @@
 import {
   Params,
   ServiceMethods,
-  HookContext,
   type Id,
 } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
@@ -34,7 +33,7 @@ class PluginStateService implements PluginStateServiceMethods {
       throw new Error('No agentId provided')
     }
 
-    let where: Prisma.pluginStateWhereInput = {
+    const where: Prisma.pluginStateWhereInput = {
       agentId,
     }
 

@@ -42,7 +42,7 @@ export const ConfigCredentials: FC<ConfigCredentialsProps> = ({ agentId }) => {
     }
   )
 
-  const { data: agentSecrets, isLoading: agentSecretsLoading } =
+  const { data: agentSecrets } =
     useGetCredentialsQuery(
       {
         projectId: config.projectId,
@@ -54,7 +54,7 @@ export const ConfigCredentials: FC<ConfigCredentialsProps> = ({ agentId }) => {
       }
     )
 
-  const { data: projectSecrets, isLoading: projectSecretsLoading } =
+  const { data: projectSecrets } =
     useListCredentialsQuery({
       projectId: config.projectId,
     })

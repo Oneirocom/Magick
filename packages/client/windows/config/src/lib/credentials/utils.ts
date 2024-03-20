@@ -113,7 +113,7 @@ export function findCredentialId({
   secretName,
   arr,
 }: FindCredentialIdParams): FindCredentialIdReturn {
-  for (let obj of arr) {
+  for (const obj of arr) {
     if (
       obj.credentials &&
       obj.credentials.pluginName === pluginName &&
