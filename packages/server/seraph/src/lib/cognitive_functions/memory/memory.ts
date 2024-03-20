@@ -111,7 +111,10 @@ class MemoryRetrieval extends BaseCognitiveFunction {
       description:
         'Retrieves information from memory.  Use this only when what is being talked about is out of the range of your abilities.  Be sure to also look to the conversation history. If you have trouble with your memory, ask for user input first.',
       parameters: {
-        query: { type: 'string', description: 'Query to search memory' },
+        query: {
+          type: 'string',
+          description: 'Semantic query to search memory',
+        },
         limit: {
           type: 'number',
           description: 'Maximum number of results to return',
@@ -123,7 +126,8 @@ class MemoryRetrieval extends BaseCognitiveFunction {
         },
         metadata: {
           type: 'object',
-          description: 'Metadata tags and their values to filter the results',
+          description:
+            'Metadata tags and their values to filter the results.  You can choose to just filter by metadata of you want to.',
         },
       },
       examples: [
@@ -155,6 +159,13 @@ class MemoryRetrieval extends BaseCognitiveFunction {
 
   async execute(args: Record<string, any>): Promise<string> {
     const { query, limit, type, metadata = {} } = args
+
+    this.seraph.emit('info', 'Retrieving memory', {
+      query,
+      limit,
+      type,
+      metadata,
+    })
 
     const vector = await this.getVector(query)
     const results = await this.index.queryItems(vector, limit, {
