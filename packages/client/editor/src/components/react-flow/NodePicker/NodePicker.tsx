@@ -49,7 +49,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   return (
     <div
-      className="fixed z-10 w-[340px] text-sm text-white border-2 border-[var(--ds-black)] rounded-md bg-[var(--ds-card-alt)] "
+      className="fixed z-10 w-[340px] text-sm text-white border-2 border-[var(--ds-black)] rounded-md bg-[var(--ds-card-alt)] py-1"
       style={{ top: position.y, left: position.x }}
     >
       <div className="text-md px-2 py-1 font-bold">Node Selection</div>
