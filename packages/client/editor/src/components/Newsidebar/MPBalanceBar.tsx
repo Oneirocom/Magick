@@ -109,9 +109,27 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
 
   return (
     <div className="w-full h-full flex flex-col px-5 box-border items-start justify-end gap-[5px]">
-      <div className="flex flex-row px-2 m-1 items-center  gap-1 text-[#b5b9bc] ">
+      <div className="flex flex-row px-2 mx-1 items-center text-[#b5b9bc] ">
         <Link
-          href="https://www.youtube.com/watch?v=ZaOJ1hDYq20"
+          href="http://bit.ly/magickdiscordlp"
+          target="_blank"
+          className="cursor-pointer flex flex-row items-center gap-1"
+        >
+          <Image
+            className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full"
+            alt="Magic Points Icon"
+            src="/images/icons/discord-light.svg"
+            width={14}
+            height={14}
+          />
+          <div className="text-md font-medium font-montAlt ml-2">
+            join our discord!
+          </div>
+        </Link>
+      </div>
+      <div className="flex flex-row px-2 mx-1 items-center gap-1 text-[#b5b9bc] ">
+        <Link
+          href="https://youtu.be/yxeYZtOsrSc"
           target="_blank"
           className="cursor-pointer flex flex-row items-center gap-1"
         >
