@@ -2,6 +2,7 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 import { XYPosition } from 'reactflow'
 import { ItemType } from './types'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { useState } from 'react'
 
 export const NodeItem = ({
   item,
@@ -16,6 +17,8 @@ export const NodeItem = ({
   index: number
   instance: any
 }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
   const handleClick = ({ item }) => {
     onPickNode(item, instance.project(pickedNodePosition))
   }
@@ -23,9 +26,17 @@ export const NodeItem = ({
   if (!item) return <></>
 
   return (
-    <Collapsible.Root key={item.title + index} className="py-0 w-full">
+    <Collapsible.Root
+      key={item.title + index}
+      className="py-0 w-full"
+      onOpenChange={setIsOpen}
+    >
       <Collapsible.Trigger className="py-1 px-2 data-[state=open]:bg-[var(--ds-black)] hover:bg-[var(--ds-black)] cursor-pointer transition-all w-full hover:underline flex items-center justify-start">
-        <ChevronDownIcon className="w-4 h-4 mr-2 ml-1 transition-transform duration-200 data-[state=open]:rotate-180" />
+        <ChevronDownIcon
+          className={`w-4 h-4 mr-2 ml-1 transition-transform duration-200 ${
+            !isOpen ? 'rotate-0' : 'rotate-[-90deg]'
+          }`}
+        />
         <span>{item.title ?? item?.type}</span>
       </Collapsible.Trigger>
       <Collapsible.Content>
