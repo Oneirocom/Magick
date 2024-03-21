@@ -21,7 +21,7 @@
     "xml2js": "^0.6.2",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.4",
-    "util": "*"
+    "util": "^0.12.5"
   },
   "type": "module",
   "main": "./src/index.js",
