@@ -121,7 +121,7 @@ export const TabProvider = ({ children }) => {
 
     const unsubscribeOpenTab = subscribe(events.OPEN_TAB, (event, data) => {
       if (!data) return
-      console.log('OPENING TAB', data)
+
       openTab({
         id: data.name,
         name: data.name,
