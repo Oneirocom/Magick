@@ -28,6 +28,7 @@ export interface GlobalConfig {
   pastState: SaveDiffData[]
   futureState: SaveDiffData[]
   isDirty: boolean
+  layoutChangeEvent: boolean
 }
 
 /**
@@ -53,6 +54,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
     isDirty: false as boolean,
+    layoutChangeEvent: false as boolean,
   },
   reducers: {
     /**
@@ -90,13 +92,6 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
       if (action.payload.clearFuture) {
         state.futureState = []
       }
-
-      console.log('applyState', {
-        pastState: state.pastState,
-        futureState: state.futureState || [],
-        clearFuture: action.payload.clearFuture,
-        newPastState,
-      })
     },
     undoState: (state: GlobalConfig) => {
       const MAX_ENTRIES = 30
@@ -107,7 +102,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
         //remove lastState from pastState
         const updatedPastState = [...state.pastState]
 
-        //TODO: Not sure why we are popping twice here, might have something to do with applyState being called unexpectedly
+        //TODO: I think we are poping twice here because one is the current state. might have a bug somewhere
         updatedPastState.pop()
         updatedPastState.pop()
 
@@ -120,12 +115,6 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
         // Perform assignments
         state.pastState = updatedPastState
         state.futureState = updatedFutureState
-        console.log('undoState', {
-          pastState: state.pastState,
-          futureState: state.futureState,
-          updatedPastState,
-          lastState,
-        })
       }
     },
     redoState: (state: GlobalConfig) => {
@@ -176,10 +165,15 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     ): void => {
       state.activeInput = action.payload
     },
+    setLayoutChangeEvent: (
+      state: GlobalConfig,
+      action: PayloadAction<boolean>
+    ): void => {
+      state.layoutChangeEvent = action.payload
+    },
   },
 })
 
-// Actions
 /**
  * Action to set the global configuration.
  */
@@ -190,6 +184,7 @@ export const {
   setCurrentSpellReleaseId,
   setTextEditorState,
   setActiveInput,
+  setLayoutChangeEvent,
   applyState,
   undoState,
   redoState,
@@ -211,3 +206,5 @@ export const selectActiveInput = state =>
 export const selectPastState = state => state.globalConfig.pastState
 export const selectFutureState = state => state.globalConfig.futureState
 export const selectIsDirty = state => state.globalConfig.isDirty
+export const selectLayoutChangeEvent = state =>
+  state.globalConfig.layoutChangeEvent
