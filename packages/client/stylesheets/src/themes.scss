@@ -132,9 +132,11 @@
 
     .sash {
       background-color: var(--slate-30);
+      z-index: 3;
 
       &.disabled {
         background-color: var(--background-color);
+        z-index: 3;
       }
     }
   }
