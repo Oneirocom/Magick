@@ -7,8 +7,7 @@ import {
 } from 'reactflow'
 
 import InputSocket from './InputSocket'
-// import NodeContainer from './NodeContainer'
-import NodeContainerV2 from './NodeContainerV2'
+// import NodeContainerV2 from './NodeContainerV2'
 import OutputSocket from './OutputSocket'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import { isHandleConnected } from '../../utils/isHandleConnected'
@@ -24,6 +23,7 @@ import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
 import { Tab, usePubSub } from '@magickml/providers'
 import { useDispatch, useSelector } from 'react-redux'
+import NodeContainer from './NodeContainer'
 
 type NodeProps = FlowNodeProps & {
   tab: Tab
@@ -161,7 +161,7 @@ export const Node: React.FC<NodeProps> = ({
   }
 
   return (
-    <NodeContainerV2
+    <NodeContainer
       fired={done}
       error={error}
       running={running}
@@ -228,6 +228,6 @@ export const Node: React.FC<NodeProps> = ({
           />
         </div>
       ))}
-    </NodeContainerV2>
+    </NodeContainer>
   )
 }
