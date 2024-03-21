@@ -12,26 +12,39 @@ export const autoCompleteSearchTerm = ({
 
   if (relevantItems.length === 0) return
 
-  // Function to find the longest common prefix among an array of strings
-  const findLongestCommonPrefix = arr => {
+  // Function to find the most common prefix among an array of strings
+  const findMostCommonPrefix = arr => {
     if (arr.length === 0) return ''
 
-    let prefix = arr[0]
-    for (let i = 1; i < arr.length; i++) {
-      while (arr[i].indexOf(prefix) !== 0) {
-        prefix = prefix.substring(0, prefix.length - 1)
-        if (prefix === '') return ''
+    let prefix = ''
+    let maxCount = 0
+
+    for (let i = 0; i < arr[0].length; i++) {
+      const currentPrefix = arr[0].slice(0, i + 1)
+      let count = 0
+
+      for (let j = 1; j < arr.length; j++) {
+        if (arr[j].startsWith(currentPrefix)) {
+          count++
+        }
+      }
+
+      if (count > maxCount) {
+        prefix = currentPrefix
+        maxCount = count
       }
     }
     return prefix
   }
 
-  // Find the longest common prefix that extends the current search term
-  const longestCommonPrefix = findLongestCommonPrefix(
+  // Find the most common prefix that extends the current search term
+  const mostCommonPrefix = findMostCommonPrefix(
     relevantItems.map(item => item.type)
   )
 
-  if (longestCommonPrefix.length > search.length) {
-    setSearch(longestCommonPrefix)
+  if (relevantItems.length === 1) {
+    setSearch(relevantItems[0].type)
+  } else if (mostCommonPrefix.length > search.length) {
+    setSearch(mostCommonPrefix)
   }
 }
