@@ -44,7 +44,7 @@ export const NodeItem = ({
           item.subItems.map((subItem: Partial<ItemType>) => {
             return (
               <div
-                key={subItem.title}
+                key={subItem?.title ?? subItem?.type}
                 onClick={e => {
                   e.stopPropagation()
                   handleClick({ item: subItem?.type })
