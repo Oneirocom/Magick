@@ -49,15 +49,16 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   return (
     <div
-      className="fixed z-10 w-[240px] text-sm text-white border border-gray-500 rounded-sm bg-[var(--secondary-3)] "
+      className="fixed z-10 w-[340px] text-sm text-white border-2 border-[var(--ds-black)] rounded-md bg-[var(--ds-card-alt)] "
       style={{ top: position.y, left: position.x }}
     >
-      <div className="p-2">
+      <div className="text-md px-2 py-1 font-bold">Node Selection</div>
+      <div className="px-2 pb-1">
         <input
           type="text"
           autoFocus
           placeholder="Search"
-          className="w-full bg-[var(--dark-2)] disabled:bg-gray-700 rounded-sm"
+          className="w-full bg-[#282d33] disabled:bg-gray-700 rounded-md py-1 focus:ring-2 focus:ring-[var(--ds-primary)] focus:outline-none"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
