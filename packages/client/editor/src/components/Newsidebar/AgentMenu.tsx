@@ -146,7 +146,7 @@ export function AgentMenu({ data }) {
             }
             alt={currentAgent?.name.at(0) || 'A'}
           />
-          {currentAgent?.name.at(0) || 'A'}
+          {currentAgent?.image ? currentAgent?.name.at(0) || 'A' : null}
         </Avatar>
         <div className="flex flex-col w-full">
           <span className="text-white font-medium">{currentAgent?.name}</span>
