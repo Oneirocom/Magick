@@ -20,13 +20,18 @@ export const NodePickerMenu = ({
           <>
             <NodeItem
               index={index}
-              key={item.title + index}
+              key={'node-item' + index}
               item={item}
               onPickNode={onPickNode}
               pickedNodePosition={pickedNodePosition}
               instance={instance}
             />
-            {!isLast && <div className="border-b border-black w-full" />}
+            {!isLast && (
+              <div
+                key={index + 'divider'}
+                className="border-b border-black w-full"
+              />
+            )}
           </>
         )
       })}
