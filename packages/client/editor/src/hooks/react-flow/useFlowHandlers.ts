@@ -26,8 +26,15 @@ import { getNodePickerFilters } from '../../utils/getPickerFilters'
 import { isValidConnection } from '../../utils/isValidConnection'
 import { useBehaveGraphFlow } from './useBehaveGraphFlow'
 import { Tab } from '@magickml/providers'
-import { onConnect as onConnectState, setEdges, setNodes } from 'client/state'
+import {
+  onConnect as onConnectState,
+  selectLayoutChangeEvent,
+  setEdges,
+  setLayoutChangeEvent,
+  setNodes,
+} from 'client/state'
 import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType'
+import { useDispatch, useSelector } from 'react-redux'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
@@ -77,6 +84,16 @@ export const useFlowHandlers = ({
   const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
   const instance = useReactFlow()
   const { screenToFlowPosition, getNodes } = instance
+  const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (layoutChangeEvent) {
+      closeNodePicker()
+    } else {
+      dispatch(setLayoutChangeEvent(false))
+    }
+  }, [layoutChangeEvent])
 
   useEffect(() => {
     if (rfDomNode) {
@@ -345,8 +362,8 @@ export const useFlowHandlers = ({
       if (parentRef && parentRef.current) {
         const bounds = parentRef.current.getBoundingClientRect()
 
-        const nodePickerWidth = 240
-        const nodePickerHeight = 320
+        const nodePickerWidth = 440
+        const nodePickerHeight = 251
 
         // Calculate positions, ensuring the node picker doesn't open off-screen
         let xPosition = e.clientX - bounds.left
