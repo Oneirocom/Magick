@@ -84,7 +84,6 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
   }
 
   const getProgressValue = () => {
-    console.log('magickPowerBalance', magickPowerBalance)
     const maxMP = isWizard ? 1000 : 200 // Maximum MP based on subscription
     const currentMP = getCurrentMP() // Get current MP
     const percentage = (currentMP / maxMP) * 100 // Calculate percentage of the max MP
