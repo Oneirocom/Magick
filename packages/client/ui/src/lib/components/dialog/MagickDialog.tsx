@@ -63,16 +63,18 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
         }
       }}
       open={open}
+      modal={true}
     >
       {!hideButton && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={cn(
-          'max-w-[320px] text-black dark:text-ds-white rounded bg-ds-card border-ds-neutral',
+          'max-w-[420px] text-black dark:text-ds-white rounded bg-ds-card border-ds-neutral',
           type === 'info' && 'border-ds-neutral',
           type === 'error' && 'border-ds-error',
           type === 'success' && 'border-ds-alert',
           type === 'warning' && 'border-ds-warning'
         )}
+        onPointerDownOutside={e => e.preventDefault()}
       >
         <DialogHeader>
           {logo && (
