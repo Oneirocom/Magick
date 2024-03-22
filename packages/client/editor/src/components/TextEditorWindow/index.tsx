@@ -11,7 +11,7 @@ import {
 } from 'client/state'
 import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
 import WindowMessage from '../WindowMessage/WindowMessage'
-import { Socket } from '@magickml/behave-graph'
+import { InputSocketSpecJSON } from '@magickml/behave-graph'
 
 const TextEditor = props => {
   const dispatch = useDispatch()
@@ -55,7 +55,6 @@ const TextEditor = props => {
 
     const formattedCode = code.replace('\r\n', '\n')
     if (selectedNode?.data?.configuration?.textEditorData !== undefined) {
-      console.log('SAVING')
       handleChange('configuration', {
         ...configuration,
         textEditorData: formattedCode,
@@ -63,7 +62,6 @@ const TextEditor = props => {
     }
 
     if (activeInput) {
-      console.log('DISPATCHING')
       dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
     }
 
@@ -78,7 +76,7 @@ const TextEditor = props => {
     const socketRegex = /{{(.+?)}}/g
 
     const socketMatches = code.matchAll(socketRegex)
-    const sockets: Socket[] = []
+    const sockets: InputSocketSpecJSON[] = []
     for (const match of socketMatches) {
       if (!match[1]) continue
       const socketName = match[1]
@@ -95,14 +93,12 @@ const TextEditor = props => {
 
       if (!socketName) continue
 
-      const socket: Socket = {
+      const socket: InputSocketSpecJSON = {
         name: socketName,
-        valueTypeName: 'string',
-        value: '',
-        valueChoices: [],
-        label: socketName,
-        links: [],
+        valueType: 'string',
       }
+
+      console.log('socket', socket)
 
       if (configuration.socketInputs.find(input => input.name === socketName))
         continue
