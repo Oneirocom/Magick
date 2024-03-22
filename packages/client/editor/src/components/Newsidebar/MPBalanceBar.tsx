@@ -74,9 +74,9 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
     }
   }, [remainingBalance, magickPowerBalance, isLoading])
 
-  // const isAspirant = userData && userData.user?.subscriptionName === 'ASPIRANT'
-  // const isApprentice =
-  //   userData && userData?.user?.subscriptionName === 'APPRENTICE'
+  const isAspirant = userData && userData.user?.subscriptionName === 'NEOPHYTE'
+  const isApprentice =
+    userData && userData?.user?.subscriptionName === 'APPRENTICE'
   const isWizard = userData && userData?.user?.subscriptionName === 'WIZARD'
 
   const getCurrentMP = () => {
@@ -115,11 +115,11 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
           className="cursor-pointer flex flex-row items-center gap-1"
         >
           <Image
-            className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full"
+            className="relative flex-shrink-0"
             alt="Magic Points Icon"
             src="/images/icons/discord-light.svg"
-            width={14}
-            height={14}
+            width={16}
+            height={16}
           />
           <div className="text-md font-medium font-montAlt ml-2">
             join our discord!
@@ -165,7 +165,7 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
                 </div>
               </TooltipTrigger>
               <TooltipContent className="w-[60%]" openTo="right">
-                <div className="flex flex-row py-1 items-center justify-start gap-1">
+                <div className="flex flex-row items-center justify-start gap-1">
                   <Image
                     className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full invert"
                     alt="Magic Points Icon"
@@ -178,7 +178,12 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
                   </h3>
                 </div>
                 <p className="prose-p:prose-sm py-1 mr-2">
-                  Your monthly compute power, available for Wizards.
+                  {(isApprentice &&
+                    'Your monthly compute power, available for Wizards.') ||
+                    (isWizard &&
+                      'Your available compute power, replenished monthly.') ||
+                    (isAspirant &&
+                      'Indicates the remaining compute power available in your free-trial.')}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -215,13 +220,17 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
             </TooltipTrigger>
 
             <TooltipContent className="w-[60%]" openTo="right">
-              <h3 className="text-lg  font-semibold prose-h3:prose-sm">
+              <h3 className="text-lg font-semibold prose-h3:prose-sm">
                 Wallet
               </h3>
 
               <p className="prose-p:prose-sm py-1">
-                Money available for compute power. Accessible with a Wizard
-                subscription.
+                {(isApprentice &&
+                  'Your monthly compute power, available for Wizards.') ||
+                  (isWizard &&
+                    'Money available for compute power, used after your monthly MP runs out') ||
+                  (isAspirant &&
+                    'Money available for compute power, only for Wizards')}
               </p>
             </TooltipContent>
           </Tooltip>
