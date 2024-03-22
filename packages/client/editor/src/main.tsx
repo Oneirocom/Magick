@@ -14,6 +14,12 @@ import { AppConfig } from '@magickml/providers'
 import { createStore } from 'client/state'
 import { feathersClient } from 'client/feathers-client'
 
+enum LoadingStatus {
+  INITIALIZING = 'Initializing editor...',
+  CONNECTING = 'Connecting to server...',
+  READY = 'Ready',
+}
+
 /**
  * Type definition for the props that can be passed to MagickIDE
  * @typedef {Object} MagickIDEProps
@@ -22,6 +28,8 @@ import { feathersClient } from 'client/feathers-client'
 export type MagickIDEProps = {
   config: AppConfig
   loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+  // TODO: type it with the enum, but we have to move the enum out of the package for the parent to import
+  loadingStatus: [string, React.Dispatch<React.SetStateAction<string>>]
 }
 
 /**
@@ -32,11 +40,14 @@ export type MagickIDEProps = {
 export const MagickIDE = ({
   config,
   loading,
+  loadingStatus,
 }: MagickIDEProps): React.ReactElement | null => {
   useEffect(() => {
     ;(async () => {
+      loadingStatus[1](LoadingStatus.CONNECTING)
       await feathersClient.initialize(config.token, config)
       loading[1](false)
+      loadingStatus[1](LoadingStatus.READY)
     })()
   }, [config, loading])
 
