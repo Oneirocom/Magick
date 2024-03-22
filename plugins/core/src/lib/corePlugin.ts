@@ -59,6 +59,7 @@ import {
   CORE_ACTIONS,
   CORE_DEPENDENCIES,
 } from './configx'
+import { getMessageHistory } from './nodes/actions/messageHistory'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -107,6 +108,7 @@ export class CorePlugin extends CoreEventsPlugin<
     getStateNode,
     getSecretNode,
     FetchNode,
+    getMessageHistory,
   ]
   values = []
   credentials = corePluginCredentials
