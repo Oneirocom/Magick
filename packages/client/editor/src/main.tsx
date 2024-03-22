@@ -21,6 +21,7 @@ import { feathersClient } from 'client/feathers-client'
  */
 export type MagickIDEProps = {
   config: AppConfig
+  loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
 
 /**
@@ -30,16 +31,16 @@ export type MagickIDEProps = {
  */
 export const MagickIDE = ({
   config,
+  loading,
 }: MagickIDEProps): React.ReactElement | null => {
-  const [loaded, setLoaded] = useState(false)
   useEffect(() => {
     ;(async () => {
       await feathersClient.initialize(config.token, config)
-      setLoaded(true)
+      loading[1](false)
     })()
-  })
+  }, [config, loading])
 
-  if (!loaded) return null
+  if (loading[0]) return null
 
   return (
     <Provider store={createStore(config)}>
