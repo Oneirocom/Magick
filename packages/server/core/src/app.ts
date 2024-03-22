@@ -279,9 +279,13 @@ export async function initApp(environment: Environment = 'default') {
   return app
 }
 
+type BaseUser = {
+  id: string
+}
+
 declare module '@feathersjs/feathers' {
   interface Params {
-    user?: any // Replace 'any' with a more specific type if you have a user model
+    user?: BaseUser & Record<any, any>
     projectId?: string
   }
 }
