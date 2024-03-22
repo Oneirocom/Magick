@@ -5,6 +5,7 @@ import { saveGraphEvent } from 'server/core'
 export interface ActionPayload<T = unknown, Y = unknown> {
   actionName: string
   event: EventPayload<T, Y>
+  skipSave?: boolean
   data: any
 }
 
@@ -17,6 +18,7 @@ export interface ActionPayload<T = unknown, Y = unknown> {
 export interface ActionDefinition<T extends string = string> {
   actionName: T
   displayName: string
+  skipSave?: boolean
   handler: (ActionPayload) => void | Promise<void>
 }
 
@@ -57,6 +59,8 @@ export class BaseActionManager {
     await action.handler(data as ActionPayload)
 
     // const { actionName, event } = data
+    if (data.skipSave) return
+
     saveGraphEvent({
       sender: this.agentId,
       // we are assuming here that the observer of this action is the
