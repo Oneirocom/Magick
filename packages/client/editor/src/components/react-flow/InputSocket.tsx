@@ -32,6 +32,7 @@ export type InputSocketProps = {
   hideValue?: boolean
   isActive: boolean
   textEditorState: string
+  valueTypeName?: string
 } & InputSocketSpecJSON
 
 const InputFieldForValue = ({
@@ -58,7 +59,7 @@ const InputFieldForValue = ({
 >) => {
   const dispatch = useDispatch()
   const activeInput = useSelector(selectActiveInput)
-  const showChoices = choices?.length
+  const showChoices = choices?.length && choices.length > 0
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
   const hideValueInput = hideValue || connected
 
@@ -171,7 +172,12 @@ const InputSocket: React.FC<InputSocketProps> = ({
   textEditorState,
   ...rest
 }) => {
-  const { name, valueType } = rest
+  const { name, valueTypeName } = rest
+  let { valueType } = rest
+
+  if (!valueType && valueTypeName) {
+    valueType = valueTypeName
+  }
 
   const isFlowSocket = valueType === 'flow'
   const isArraySocket = valueType === 'array'
@@ -195,10 +201,11 @@ const InputSocket: React.FC<InputSocketProps> = ({
       )}
       {!isFlowSocket && (
         <InputFieldForValue
+          {...rest}
           connected={connected}
           hideValue={isArraySocket || isObjectSocket}
           isActive={isActive}
-          {...rest}
+          valueType={valueType}
         />
       )}
       <Popover>

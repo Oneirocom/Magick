@@ -160,6 +160,8 @@ export const Node: React.FC<NodeProps> = ({
     return activeInput?.name === x
   }
 
+  console.log('value inputs', valueInputs)
+
   return (
     <NodeContainer
       fired={done}
