@@ -103,7 +103,6 @@ export const NodePicker: React.FC<NodePickerProps> = ({
           onPickNode={onPickNode}
           pickedNodePosition={pickedNodePosition}
           instance={instance}
-          filteredNodes={filteredNodes}
         />
       )}
     </div>
