@@ -1,7 +1,8 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
-import { Application } from 'server/core'
-import { EventPayload } from 'server/plugin'
+import { Application, saveGraphEvent } from 'server/core'
+import { ActionPayload, EventPayload } from 'server/plugin'
 import { getEventProperties } from '../utils'
+import { EventTypes, SEND_MESSAGE } from 'communication'
 
 type EventProperties =
   | 'sender'
@@ -18,6 +19,12 @@ export interface IEventStore {
     messageTypes: string[],
     limit?: number
   ) => any
+  saveAgentMessage: (content: string) => void
+  saveAgentEvent: (data: ActionPayload) => void
+  getMessages: (
+    eventPropertyKeys: EventProperties[],
+    limit?: number
+  ) => Promise<Message[]>
   setEvent: (event: EventWithKey) => void
   init: (nodes: GraphNodes) => void
   finish: () => void
@@ -33,6 +40,11 @@ export enum StatusEnum {
   RUNNING = 'RUNNING',
   DONE = 'DONE',
   ERRORED = 'ERRORED',
+}
+
+type Message = {
+  role: string
+  content: string
 }
 
 type EventWithKey = EventPayload & { stateKey: string }
@@ -58,6 +70,71 @@ export class EventStore implements IEventStore {
     this._currentEvent = null
     this.graphNodes = graphNodes
     this.status = StatusEnum.READY
+  }
+
+  public saveAgentMessage(content: string) {
+    const event = this.currentEvent()
+
+    if (!event) return
+
+    this.saveAgentEvent({
+      ...event,
+      data: { content },
+      event,
+      actionName: SEND_MESSAGE,
+    })
+  }
+
+  public async saveAgentEvent(data: ActionPayload) {
+    saveGraphEvent({
+      sender: this.agentId,
+      // we are assuming here that the observer of this action is the
+      //  original sender.  We may be wrong.
+      observer: data.event.sender,
+      agentId: this.agentId,
+      connector: data.event.connector,
+      connectorData: JSON.stringify(data.event.data),
+      content: data.data.content,
+      eventType: data.actionName,
+      event: data.event as EventPayload,
+    })
+  }
+
+  public async getMessages(
+    eventPropertyKeys: EventProperties[],
+    limit: number = 100
+  ) {
+    eventPropertyKeys.push('from user')
+    eventPropertyKeys.push('to user')
+    const eventTypes = [EventTypes.ON_MESSAGE, EventTypes.SEND_MESSAGE]
+    const events = await this.queryEvents(eventPropertyKeys, eventTypes, limit)
+
+    const transformed = [] as Message[]
+    let expectedRole = 'assistant' // Start with 'assistant' role
+
+    for (const event of events) {
+      const role = event.sender === this.agentId ? 'assistant' : 'user'
+
+      if (!event.content) {
+        // if this is an assistant message, also remove last user message
+        if (role === 'assistant') {
+          transformed.pop()
+        }
+        continue
+      }
+
+      if (role === expectedRole) {
+        transformed.push({
+          role,
+          content: event.content,
+        })
+
+        // Update the expected role for the next message
+        expectedRole = role === 'assistant' ? 'user' : 'assistant'
+      }
+    }
+
+    return transformed
   }
 
   public async queryEvents(
