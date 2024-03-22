@@ -39,13 +39,37 @@ export const NodePicker: React.FC<NodePickerProps> = ({
           setSearch,
         })
       }
+      if (event.key === 'ArrowDown') {
+        setFocusedIndex(prev => (prev + 1) % filteredNodes.length)
+      }
+      if (event.key === 'ArrowUp') {
+        setFocusedIndex(
+          prev => (prev - 1 + filteredNodes.length) % filteredNodes.length
+        )
+      }
+      if (event.key === 'Enter') {
+        if (pickedNodePosition) {
+          onPickNode(
+            filteredNodes[focusedIndex]?.type,
+            instance.project(pickedNodePosition)
+          )
+        }
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [filteredNodes, groupedData, search, setSearch])
+  }, [
+    filteredNodes,
+    groupedData,
+    search,
+    setSearch,
+    focusedIndex,
+    pickedNodePosition,
+    onPickNode,
+  ])
 
   return (
     <div
@@ -79,6 +103,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
           onPickNode={onPickNode}
           pickedNodePosition={pickedNodePosition}
           instance={instance}
+          filteredNodes={filteredNodes}
         />
       )}
     </div>
