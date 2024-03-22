@@ -1,5 +1,11 @@
 import { createEventsEnum } from 'plugins/shared/src'
-import { ClientEvents, Events, GatewayIntentBits, User } from 'discord.js'
+import {
+  ClientEvents,
+  ColorResolvable,
+  Events,
+  GatewayIntentBits,
+  User,
+} from 'discord.js'
 import { PLUGIN_SETTINGS } from 'shared/config'
 import { APIMessage, APIReaction } from 'discord-api-types/v10'
 import {
@@ -104,12 +110,16 @@ export type DiscordEvent = EventPayload<
 >
 
 // ACTIONS
-export const DISCORD_ACTIONS = createEventsEnum(['sendMessage'])
+export const DISCORD_ACTIONS = createEventsEnum([
+  'sendMessage',
+  'streamMessage',
+])
 
 // DEPENDENCIES
 export enum DISCORD_DEPENDENCIES {
   DISCORD_KEY = 'discordClient',
   DISCORD_SEND_MESSAGE = 'discordSendMessage',
+  DISCORD_STREAM_MESSAGE = 'discordStreamMessage',
   DISCORD_CONTEXT = 'discordContext',
 }
 
@@ -121,3 +131,11 @@ export type SendMessage = <K extends keyof DiscordEventPayload>(
   content: string,
   event: EventPayload<DiscordEventPayload[K]>
 ) => Promise<void>
+
+// DISCORD SPECIFIC FOR STREAMING
+export const EMBED_COLOR: Record<string, ColorResolvable> = {
+  incomplete: 0xffa500, // Orange
+  complete: 0x00ff00, // Green
+}
+export const EMBED_MAX_LENGTH = 4096
+export const EDITS_PER_SECOND = 1.3
