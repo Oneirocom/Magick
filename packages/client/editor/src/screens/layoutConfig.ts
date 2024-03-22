@@ -152,6 +152,7 @@ export const applyDynamicLayoutConfig = ({
     if (config.constraints) {
       panel.group.api.setConstraints(config.constraints)
     }
+    if (config.size) panel.api.setSize(config.size)
   })
 }
 
@@ -177,7 +178,6 @@ export const applyConstraintsFromConfig = ({
         if (minimumHeight) panel.group.api.setConstraints({ minimumHeight })
         if (maximumHeight) panel.group.api.setConstraints({ maximumHeight })
       }
-      if (config.size) panel.api.setSize(config.size)
     })
   })
 }
