@@ -7,31 +7,17 @@ import {
 } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'server/grimoire'
-import {
-  Client,
-  TextChannel,
-  ThreadChannel,
-  EmbedBuilder,
-  ColorResolvable,
-} from 'discord.js'
+import { Client } from 'discord.js'
 
 type Inputs = {
   flow: SocketDefinition
   content: SocketDefinition
-  channelId: SocketDefinition
+  channel: SocketDefinition
 }
 
 type Outputs = {
   flow: SocketDefinition
 }
-
-const EMBED_COLOR: Record<string, ColorResolvable> = {
-  incomplete: 0xffa500, // Orange
-  complete: 0x00ff00, // Green
-}
-
-const EMBED_MAX_LENGTH = 4096
-const EDITS_PER_SECOND = 1.3
 
 export const streamDiscordMessage = createActionNode<
   Inputs,
@@ -39,7 +25,7 @@ export const streamDiscordMessage = createActionNode<
   [
     typeof DISCORD_DEPENDENCIES.DISCORD_KEY,
     'IEventStore',
-    typeof DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE
+    typeof DISCORD_DEPENDENCIES.DISCORD_STREAM_MESSAGE
   ]
 >({
   label: 'Stream Discord Message',
@@ -47,12 +33,12 @@ export const streamDiscordMessage = createActionNode<
   dependencyKeys: [
     DISCORD_DEPENDENCIES.DISCORD_KEY,
     'IEventStore',
-    DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE,
+    DISCORD_DEPENDENCIES.DISCORD_STREAM_MESSAGE,
   ],
   inputs: {
     flow: { valueType: 'flow' },
     content: { valueType: 'string' },
-    channelId: { valueType: 'string' },
+    channel: { valueType: 'string' },
   },
   outputs: {
     flow: { valueType: 'flow' },
@@ -61,9 +47,12 @@ export const streamDiscordMessage = createActionNode<
     dependencies: {
       [DISCORD_DEPENDENCIES.DISCORD_KEY]: Client
       IEventStore: IEventStore
-      [DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE]: SendMessage
+      [DISCORD_DEPENDENCIES.DISCORD_STREAM_MESSAGE]: (
+        content: string,
+        event: EventPayload<DiscordEventPayload['messageCreate']>
+      ) => void
     },
-    inputs: { content: string; channelId: string },
+    inputs: { content: string },
     write: (key: keyof Outputs, value: any) => void,
     commit: (key: string) => void
   ) => {
@@ -77,66 +66,21 @@ export const streamDiscordMessage = createActionNode<
     }
 
     try {
-      const discordClient = dependencies[DISCORD_DEPENDENCIES.DISCORD_KEY] as Client
-      const channel = (await discordClient.channels.fetch(
-        inputs?.channelId ? inputs.channelId : event.channel
-      )) as TextChannel | ThreadChannel
-
-      if (!channel) {
-        throw new Error('Channel not found')
+      if (!event.data.channelId) {
+        throw new Error('No channel id found')
       }
 
-      let responseMessage = await channel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setDescription('⏳')
-            .setColor(EMBED_COLOR.incomplete),
-        ],
-      })
+      const streamDiscordMessage = dependencies[
+        DISCORD_DEPENDENCIES.DISCORD_STREAM_MESSAGE
+      ] as SendMessage | undefined
 
-      let responseContent = ''
-      let lastTaskTime = Date.now()
-
-      for await (const chunk of inputs.content.split(/(?<=\S)\s+/g)) {
-        responseContent += chunk
-
-        const isFinalEdit = responseContent.length >= inputs.content.length
-        const shouldEdit =
-          isFinalEdit || Date.now() - lastTaskTime >= 1000 / EDITS_PER_SECOND
-
-        if (shouldEdit) {
-          const embed = new EmbedBuilder()
-            .setDescription(responseContent.slice(0, EMBED_MAX_LENGTH))
-            .setColor(
-              isFinalEdit ? EMBED_COLOR.complete : EMBED_COLOR.incomplete
-            )
-
-          await responseMessage.edit({ embeds: [embed] })
-          lastTaskTime = Date.now()
-
-          if (responseContent.length > EMBED_MAX_LENGTH) {
-            responseContent = responseContent.slice(EMBED_MAX_LENGTH)
-            responseMessage = await channel.send({
-              embeds: [
-                new EmbedBuilder()
-                  .setDescription(responseContent.slice(0, EMBED_MAX_LENGTH))
-                  .setColor(EMBED_COLOR.incomplete),
-              ],
-            })
-          }
-        }
+      if (!streamDiscordMessage) {
+        throw new Error('Discord stream function not found')
       }
 
-      // Send the final message if there's any remaining content
-      if (responseContent.length > 0) {
-        const embed = new EmbedBuilder()
-          .setDescription(responseContent)
-          .setColor(EMBED_COLOR.complete)
-
-        await channel.send({ embeds: [embed] })
-      }
-    } catch (error) {
-      console.error('Error while streaming Discord message:', error)
+      await streamDiscordMessage<'messageCreate'>(inputs.content, event)
+    } catch (e) {
+      console.log(e)
     }
 
     commit('flow')
