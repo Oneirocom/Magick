@@ -255,3 +255,39 @@
   font-size: 0.7rem;
   font-weight: 500;
 }
+
+.TooltipContent {
+  /* ... */
+  position: relative;
+}
+
+.TooltipArrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+}
+
+.TooltipContent[data-side='top'] .TooltipArrow {
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.TooltipContent[data-side='right'] .TooltipArrow {
+  top: 50%;
+  left: -4px;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.TooltipContent[data-side='bottom'] .TooltipArrow {
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.TooltipContent[data-side='left'] .TooltipArrow {
+  top: 50%;
+  right: -4px;
+  transform: translateY(-50%) rotate(45deg);
+}
