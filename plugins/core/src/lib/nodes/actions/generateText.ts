@@ -13,6 +13,11 @@ import {
   OpenAIChatCompletionModels,
 } from 'servicesShared'
 
+type Message = {
+  role: string
+  content: string
+}
+
 export const generateText = makeFlowNodeDefinition({
   typeName: 'magick/generateText',
   category: NodeCategory.Action,
@@ -54,6 +59,14 @@ export const generateText = makeFlowNodeDefinition({
     prompt: {
       valueType: 'string',
       defaultValue: '',
+    },
+    system: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+    messages: {
+      valueType: 'array',
+      defaultValue: [],
     },
     modelOverride: {
       valueType: 'string',
@@ -115,11 +128,20 @@ export const generateText = makeFlowNodeDefinition({
         const coreLLMService = getDependency<CoreLLMService>(
           CORE_DEP_KEYS.LLM_SERVICE
         )
+
+        const eventStore = getDependency<IEventStore>('IEventStore')
+
         if (!coreLLMService) {
           throw new Error('No coreLLMService provided')
         }
 
+        if (!eventStore) {
+          throw new Error('No eventStore provided')
+        }
+
         const prompt: string = read('prompt') || ''
+        const system: string = read('system') || ''
+        const messages: Message[] = read('messages') || []
         const temperature: number = read('temperature') || 0.5
         const top_p: number = read('top_p') || 1
         const maxRetries: number = read('maxRetries') || 1
@@ -137,9 +159,21 @@ export const generateText = makeFlowNodeDefinition({
         //   )
         // }
 
+        if (messages[messages.length - 1]?.role === 'user') {
+          messages.pop()
+        }
+
+        const allMessages = [
+          { role: 'system', content: system },
+          ...messages,
+          { role: 'user', content: prompt },
+        ] as Message[]
+
+        console.log('allMessages:', allMessages)
+
         const request = {
           model,
-          messages: [{ role: 'user', content: prompt }],
+          messages: allMessages,
           options: {
             temperature,
             top_p,
@@ -149,13 +183,15 @@ export const generateText = makeFlowNodeDefinition({
           },
         }
 
-        console.log('generateText request:', request)
-
         const processNextChunk = async iterator => {
           const result = await iterator.next()
           if (result.done) {
             write('response', result.value.choices[0].message.content || '')
+            console.log('result:', result)
             write('completionResponse', result.value) // Assuming the last value is the completion response
+            await eventStore.saveAgentMessage(
+              result.value.choices[0].message.content
+            )
             commit('done')
           } else {
             const chunk = result.value
@@ -171,7 +207,6 @@ export const generateText = makeFlowNodeDefinition({
           outerResolve(undefined)
         }
 
-        const eventStore = getDependency<IEventStore>('IEventStore')
         const spellId = eventStore?.currentEvent()?.spellId
 
         // our iterator is a generator function that will yield a chunk of data
