@@ -3,7 +3,7 @@
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE
  */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
 
 import 'regenerator-runtime/runtime'
