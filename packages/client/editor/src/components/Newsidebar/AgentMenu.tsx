@@ -212,7 +212,6 @@ export function AgentMenu({ data }) {
             <Button
               className="w-full mt-4 mb-4 text-black hover:bg-[#70e5ff] transition-all"
               onClick={() => {
-                console.log('handleMakeRelease')
                 void handleMakeRelease()
               }}
             >
