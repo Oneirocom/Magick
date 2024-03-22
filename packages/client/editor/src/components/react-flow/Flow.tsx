@@ -23,6 +23,7 @@ type FlowProps = {
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
+  windowDimensions: { width: number; height: number }
 }
 
 const edgeTypes = {
@@ -46,6 +47,7 @@ export const Flow: React.FC<FlowProps> = ({
   parentRef,
   tab,
   readOnly = false,
+  windowDimensions,
 }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
@@ -125,6 +127,7 @@ export const Flow: React.FC<FlowProps> = ({
     specJSON: specJson,
     parentRef,
     tab,
+    windowDimensions,
   })
 
   const togglePlay = () => {
