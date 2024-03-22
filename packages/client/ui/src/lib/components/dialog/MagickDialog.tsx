@@ -32,6 +32,7 @@ type MagickDialogProps = {
   contentClassNames?: string
   titleClassNames?: string
   type?: 'info' | 'error' | 'success' | 'warning'
+  noClose?: boolean
 }
 
 export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
@@ -53,6 +54,7 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
   contentClassNames,
   titleClassNames,
   type = 'info',
+  noClose = false,
 }) => {
   return (
     <Dialog
@@ -75,6 +77,7 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
           type === 'warning' && 'border-ds-warning'
         )}
         onPointerDownOutside={e => e.preventDefault()}
+        noClose={noClose}
       >
         <DialogHeader>
           {logo && (
