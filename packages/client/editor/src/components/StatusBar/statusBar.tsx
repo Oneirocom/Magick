@@ -5,6 +5,7 @@ import { RootState } from 'client/state'
 import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { cx } from 'class-variance-authority'
+import { cn } from '@magickml/client-ui'
 
 const VerticalDivider = () => (
   <div className="inline-block h-[250px] min-h-[1em] w-0.5 self-stretch bg-[var(--background-color)] opacity-100 dark:opacity-50"></div>
@@ -62,10 +63,14 @@ export const StatusBar = () => {
       </span>
       <p style={{ marginRight: 20 }}>{connected ? 'Online' : 'Offline'}</p>
       <VerticalDivider />
-      <p>Syncing: </p>
-      <AutorenewIcon
-        className={cx('mr-[20px] h-4 w-4', syncing ? 'animate-spin' : '')}
-      />
+      <div className="flex items-center gap-2">
+        <p className={cn('truncate', syncing ? 'text-blue-500' : '')}>
+          {syncing ? 'Syncing' : 'Synced'}
+        </p>
+        <AutorenewIcon
+          className={cx('h-4 w-4', syncing ? 'animate-spin' : '')}
+        />
+      </div>
       <VerticalDivider />
       <p className="truncate">Current Tab: {currentTab?.title}</p>
       <VerticalDivider />

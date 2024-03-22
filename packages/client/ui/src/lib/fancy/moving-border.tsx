@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {
   motion,
   useAnimationFrame,
@@ -6,7 +6,6 @@ import {
   useMotionValue,
   useTransform,
 } from 'framer-motion'
-import { useRef } from 'react'
 
 export const MovingBorder = ({
   children,
