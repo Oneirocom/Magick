@@ -47,6 +47,7 @@ export class CoreActionService {
     await this.emitAction({
       actionName: STREAM_MESSAGE,
       event,
+      skipSave: true,
       data: messageContent,
     })
   }
