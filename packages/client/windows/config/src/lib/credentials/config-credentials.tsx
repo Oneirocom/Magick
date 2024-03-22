@@ -42,22 +42,20 @@ export const ConfigCredentials: FC<ConfigCredentialsProps> = ({ agentId }) => {
     }
   )
 
-  const { data: agentSecrets } =
-    useGetCredentialsQuery(
-      {
-        projectId: config.projectId,
-        agentId,
-      },
-      {
-        refetchOnFocus: true,
-        refetchOnMountOrArgChange: true,
-      }
-    )
-
-  const { data: projectSecrets } =
-    useListCredentialsQuery({
+  const { data: agentSecrets } = useGetCredentialsQuery(
+    {
       projectId: config.projectId,
-    })
+      agentId,
+    },
+    {
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+    }
+  )
+
+  const { data: projectSecrets } = useListCredentialsQuery({
+    projectId: config.projectId,
+  })
 
   return (
     <div className="w-full">
@@ -65,8 +63,6 @@ export const ConfigCredentials: FC<ConfigCredentialsProps> = ({ agentId }) => {
         title="Secrets"
         description={`Link secrets (API keys, tokens, etc) to your Agent to use in your spells and connect to external services.`}
       />
-
-      {JSON.stringify(agentSecrets)}
 
       <CredentialsTabs
         value={tab[0]}

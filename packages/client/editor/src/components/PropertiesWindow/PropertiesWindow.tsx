@@ -108,7 +108,7 @@ export const PropertiesWindow = (props: Props) => {
       {
         Object.entries(configuration || {})
           .filter(
-            ([key, value]) => !configuration.hiddenProperties.includes(key)
+            ([key, value]) => !configuration.hiddenProperties?.includes(key)
           )
           .map((config: [key: string, any], index) => {
             const [key] = config

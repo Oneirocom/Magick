@@ -17,8 +17,8 @@ import TextEditor from '../../TextEditorWindow'
 import ChatWindow from '../../ChatWindow/ChatWindow'
 import { PropertiesWindow } from '../../PropertiesWindow/PropertiesWindow'
 import GraphWindow from '../../GraphWindow/GraphWindow'
-import { useSelector } from 'react-redux'
-import { RootState } from 'client/state'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, setLayoutChangeEvent } from 'client/state'
 import { VariableWindow } from '../../VariableWindow/VariableWindow'
 import {
   applyConstraintsFromConfig,
@@ -82,6 +82,7 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
   const pubSub = usePubSub()
   const [api, setApi] = useState<DockviewApi | null>(null)
   const { events, subscribe } = usePubSub()
+  const dispatch = useDispatch()
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId: _currentAgentId } = globalConfig
@@ -163,6 +164,7 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
     api.onDidLayoutChange(() => {
       const layout = api.toJSON()
 
+      dispatch(setLayoutChangeEvent(true))
       saveLayoutToLocalStorage(spellId, layout)
     })
 

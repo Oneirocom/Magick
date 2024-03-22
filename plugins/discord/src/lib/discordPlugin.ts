@@ -4,7 +4,13 @@ import {
   type EventPayload,
 } from 'server/plugin'
 import { type CorePluginEvents } from 'plugin/core'
-import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
+import {
+  ChannelType,
+  Client,
+  EmbedBuilder,
+  GatewayIntentBits,
+  TextChannel,
+} from 'discord.js'
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
@@ -25,7 +31,11 @@ import {
   type DiscordCredentials,
   type DiscordPluginState,
   type SendMessage,
+  EMBED_COLOR,
+  EDITS_PER_SECOND,
+  EMBED_MAX_LENGTH,
 } from './configx'
+// import { streamDiscordMessage } from './nodes/actions/streamDiscordMessage'
 
 export class DiscordPlugin extends WebSocketPlugin<
   typeof DISCORD_EVENTS,
@@ -40,7 +50,11 @@ export class DiscordPlugin extends WebSocketPlugin<
   DiscordPluginState
 > {
   defaultState = discordDefaultState
-  nodes = [...onDiscordMessageNodes, sendDiscordMessage]
+  nodes = [
+    ...onDiscordMessageNodes,
+    sendDiscordMessage,
+    // streamDiscordMessage
+  ]
   values = []
   credentials = discordPluginCredentials
   state = []
@@ -84,6 +98,8 @@ export class DiscordPlugin extends WebSocketPlugin<
       [discordPluginName]: DiscordEmitter,
       [DISCORD_DEPENDENCIES.DISCORD_KEY]: this.discord,
       [DISCORD_DEPENDENCIES.DISCORD_SEND_MESSAGE]: this.sendMessage.bind(this),
+      [DISCORD_DEPENDENCIES.DISCORD_STREAM_MESSAGE]:
+        this.streamMessage.bind(this),
       [DISCORD_DEPENDENCIES.DISCORD_CONTEXT]: this.getContext.bind(this),
     }
   }
@@ -92,6 +108,7 @@ export class DiscordPlugin extends WebSocketPlugin<
   getActionHandlers() {
     return {
       [DISCORD_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
+      [DISCORD_ACTIONS.streamMessage]: this.handleSendMessage.bind(this),
     }
   }
 
@@ -238,6 +255,77 @@ export class DiscordPlugin extends WebSocketPlugin<
       }
     } catch (err) {
       this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
+      throw err
+    }
+  }
+
+  streamMessage: SendMessage = async (content, event) => {
+    if (!event.data.channelId) {
+      throw new Error('No channel id found')
+    }
+
+    try {
+      const channel = await this.discord.channels.fetch(event.data.channelId)
+
+      if (!channel) {
+        throw new Error('No channel found')
+      }
+
+      if (channel.type !== ChannelType.GuildText) {
+        throw new Error('Channel is not a text channel')
+      }
+
+      let responseMessage = await (channel as TextChannel).send({
+        embeds: [
+          new EmbedBuilder()
+            .setDescription('⏳')
+            .setColor(EMBED_COLOR.incomplete),
+        ],
+      })
+
+      let responseContent = ''
+      let lastTaskTime = Date.now()
+
+      for await (const chunk of content.split(/(?<=\S)\s+/g)) {
+        responseContent += chunk
+
+        const isFinalEdit = responseContent.length >= content.length
+        const shouldEdit =
+          isFinalEdit || Date.now() - lastTaskTime >= 1000 / EDITS_PER_SECOND
+
+        if (shouldEdit) {
+          const embed = new EmbedBuilder()
+            .setDescription(responseContent.slice(0, EMBED_MAX_LENGTH))
+            .setColor(
+              isFinalEdit ? EMBED_COLOR.complete : EMBED_COLOR.incomplete
+            )
+
+          await responseMessage.edit({ embeds: [embed] })
+          lastTaskTime = Date.now()
+
+          if (responseContent.length > EMBED_MAX_LENGTH) {
+            responseContent = responseContent.slice(EMBED_MAX_LENGTH)
+            responseMessage = await (channel as TextChannel).send({
+              embeds: [
+                new EmbedBuilder()
+                  .setDescription(responseContent.slice(0, EMBED_MAX_LENGTH))
+                  .setColor(EMBED_COLOR.incomplete),
+              ],
+            })
+          }
+        }
+      }
+
+      // Send the final message if there's any remaining content
+      if (responseContent.length > 0) {
+        const embed = new EmbedBuilder()
+          .setDescription(responseContent)
+          .setColor(EMBED_COLOR.complete)
+
+        await (channel as TextChannel).send({ embeds: [embed] })
+      }
+    } catch (err) {
+      this.logger.error(err, 'ERROR IN DISCORD STREAM MESSAGE')
       throw err
     }
   }
