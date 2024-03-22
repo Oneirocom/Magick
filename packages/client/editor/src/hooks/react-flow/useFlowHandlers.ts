@@ -66,12 +66,14 @@ export const useFlowHandlers = ({
   specJSON,
   parentRef,
   tab,
+  windowDimensions,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
   nodes: Node[]
   edges: Edge[]
   specJSON: NodeSpecJSON[] | undefined
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
+  windowDimensions: { width: number; height: number }
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
@@ -90,7 +92,6 @@ export const useFlowHandlers = ({
   useEffect(() => {
     if (layoutChangeEvent) {
       closeNodePicker()
-    } else {
       dispatch(setLayoutChangeEvent(false))
     }
   }, [layoutChangeEvent])
@@ -357,39 +358,39 @@ export const useFlowHandlers = ({
   }, [closeNodePicker])
 
   const handlePaneContextMenu = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault()
+    (mouseClick: React.MouseEvent) => {
+      mouseClick.preventDefault()
       if (parentRef && parentRef.current) {
         const bounds = parentRef.current.getBoundingClientRect()
 
         const nodePickerWidth = 440
         const nodePickerHeight = 251
 
-        // Calculate positions, ensuring the node picker doesn't open off-screen
-        let xPosition = e.clientX - bounds.left
-        let yPosition = e.clientY - bounds.top
+        // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
+        let xPosition = mouseClick.clientX - bounds.left
+        let yPosition = mouseClick.clientY - bounds.top
 
-        // Adjust if opening off the right side
-        if (e.clientX + nodePickerWidth > window.innerWidth) {
-          xPosition -= e.clientX + nodePickerWidth * 1.5 - window.innerWidth
+        // Adjust if the context menu would open off the right side of the viewport
+        if (xPosition + nodePickerWidth > bounds.width) {
+          xPosition = bounds.width - nodePickerWidth * 0.85
         }
 
-        // Adjust if opening off the bottom
-        if (e.clientY + nodePickerHeight > window.innerHeight) {
-          yPosition -= e.clientY + nodePickerHeight * 1.1 - window.innerHeight
+        // Adjust if the context menu would open off the bottom of the viewport
+        if (yPosition + nodePickerHeight > bounds.height) {
+          yPosition = bounds.height - nodePickerHeight * 1.1
         }
 
         setPickedNodeVisibility({
-          x: xPosition,
-          y: yPosition,
+          x: Math.max(0, xPosition), // Prevent negative values
+          y: Math.max(0, yPosition), // Prevent negative values
         })
         setNodePickerPosition({
-          x: xPosition + bounds.left,
-          y: yPosition + bounds.top,
+          x: Math.max(0, xPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
+          y: Math.max(0, yPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
         })
       }
     },
-    [parentRef]
+    [parentRef, windowDimensions]
   )
 
   const nodePickFilters = useNodePickFilters({
