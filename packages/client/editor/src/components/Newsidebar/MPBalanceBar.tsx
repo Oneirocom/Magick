@@ -164,13 +164,21 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
                   <InfoIcon />
                 </div>
               </TooltipTrigger>
-              <TooltipContent className="">
-                <h3 className="text-lg font-semibold prose-h3:prose-sm">
-                  Magick Power (MP)
-                </h3>
-                <p className="prose-p:prose-sm py-1">
-                  Magick Power (MP) is your monthly balance from your
-                  subscription.
+              <TooltipContent className="w-[60%]" openTo="right">
+                <div className="flex flex-row py-1 items-center justify-start gap-1">
+                  <Image
+                    className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full invert"
+                    alt="Magic Points Icon"
+                    src="/images/icons/mp.svg"
+                    width={15}
+                    height={15}
+                  />
+                  <h3 className="text-lg font-semibold prose-h3:prose-sm">
+                    MP
+                  </h3>
+                </div>
+                <p className="prose-p:prose-sm py-1 mr-2">
+                  Your monthly compute power, available for Wizards.
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -197,6 +205,7 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
         >
           Wallet: {getWalletBalanceDisplay()}
         </p>
+
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -205,10 +214,11 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
               </div>
             </TooltipTrigger>
 
-            <TooltipContent className="">
-              <h3 className="text-lg font-semibold prose-h3:prose-sm">
+            <TooltipContent className="w-[60%]" openTo="right">
+              <h3 className="text-lg  font-semibold prose-h3:prose-sm">
                 Wallet
               </h3>
+
               <p className="prose-p:prose-sm py-1">
                 Money available for compute power. Accessible with a Wizard
                 subscription.
