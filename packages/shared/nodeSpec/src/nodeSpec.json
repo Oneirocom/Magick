@@ -137,6 +137,16 @@
         "defaultValue": ""
       },
       {
+        "name": "system",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "messages",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
         "name": "modelOverride",
         "valueType": "string",
         "defaultValue": ""
@@ -1398,6 +1408,50 @@
       }
     ],
     "configuration": []
+  },
+  {
+    "type": "queries/messages/getMessageHistory",
+    "category": "Flow",
+    "label": "Message History",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "entries",
+        "valueType": "integer",
+        "defaultValue": 10
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "messages",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": [
+          "channel",
+          "connector"
+        ]
+      }
+    ]
   },
   {
     "type": "logic/string",
