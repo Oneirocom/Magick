@@ -147,7 +147,7 @@ export const generateText = makeFlowNodeDefinition({
         const maxRetries: number = read('maxRetries') || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
-        const max_tokens: number = read('maxTokens')
+        const max_tokens: number = Number(read('maxTokens')) || 256
         // const modelProvider: LLMProviders = configuration.modelProvider
         const model: CompletionModel =
           read('modelOverride') || configuration.model
