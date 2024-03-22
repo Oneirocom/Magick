@@ -1,5 +1,6 @@
 import {
   Button,
+  cn,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -28,6 +29,9 @@ type MagickDialogProps = {
   submitDisabled?: boolean
   isLoading?: boolean
   submitButton?: boolean
+  contentClassNames?: string
+  titleClassNames?: string
+  type?: 'info' | 'error' | 'success' | 'warning'
 }
 
 export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
@@ -46,6 +50,9 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
   submitDisabled = false,
   isLoading = false,
   submitButton = true,
+  contentClassNames,
+  titleClassNames,
+  type = 'info',
 }) => {
   return (
     <Dialog
@@ -58,7 +65,15 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
       open={open}
     >
       {!hideButton && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-[320px] text-black dark:text-ds-white rounded bg-ds-card border-ds-neutral">
+      <DialogContent
+        className={cn(
+          'max-w-[320px] text-black dark:text-ds-white rounded bg-ds-card border-ds-neutral',
+          type === 'info' && 'border-ds-neutral',
+          type === 'error' && 'border-ds-error',
+          type === 'success' && 'border-ds-alert',
+          type === 'warning' && 'border-ds-warning'
+        )}
+      >
         <DialogHeader>
           {logo && (
             <MagickIcon
@@ -67,17 +82,23 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
               className="mx-auto my-4 text-black dark:text-ds-white"
             />
           )}
-          <DialogTitle className="py-4 !font-montAlt">{title}</DialogTitle>
-          <DialogDescription
-            className={clsx(
-              destructive ? 'text-red-500' : 'text-black dark:text-ds-white',
-              'font-montserrat font-medium text-xs'
-            )}
-          >
-            {description}
-          </DialogDescription>
+          <DialogTitle className={clsx('py-4 !font-montAlt', titleClassNames)}>
+            {title}
+          </DialogTitle>
+          {description && (
+            <DialogDescription
+              className={clsx(
+                destructive ? 'text-red-500' : 'text-black dark:text-ds-white',
+                'font-montserrat font-medium text-xs'
+              )}
+            >
+              {description}
+            </DialogDescription>
+          )}
         </DialogHeader>
-        <div className="grid gap-4 py-4">{children}</div>
+        <div className={cn('grid gap-4 py-4', contentClassNames)}>
+          {children}
+        </div>
         <DialogFooter className="mx-auto">
           {submitButton && (
             <Button
