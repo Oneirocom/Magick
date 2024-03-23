@@ -95,5 +95,6 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
     },
     Model: app.get('dbClient'),
     name: 'graphEvents',
+    multi: true,
   }
 }
