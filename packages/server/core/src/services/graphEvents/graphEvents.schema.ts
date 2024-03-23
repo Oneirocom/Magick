@@ -66,6 +66,7 @@ export const graphEventsPatchValidator = getDataValidator(
 export const graphEventsPatchResolver = resolve<GraphEvents, HookContext>({})
 
 export const graphEventsQueryProperties = Type.Pick(graphEventsSchema, [
+  'id',
   'sender',
   'agentId',
   'connector',
