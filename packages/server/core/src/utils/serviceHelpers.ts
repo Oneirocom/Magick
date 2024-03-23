@@ -76,16 +76,19 @@ export function saveRequest({
   })
 }
 
-export function saveGraphEvent({
-  sender,
-  agentId,
-  connector,
-  connectorData,
-  observer,
-  content,
-  eventType,
-  event,
-}: GraphEventPayload) {
+export function saveGraphEvent(event: GraphEventPayload) {
+  const {
+    sender,
+    agentId,
+    connector,
+    connectorData,
+    observer,
+    content,
+    eventType,
+  } = event
+
+  app.get('posthog').track(eventType, event, agentId)
+
   return app.service('graphEvents').create({
     sender,
     agentId,
