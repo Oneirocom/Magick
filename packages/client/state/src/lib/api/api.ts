@@ -83,8 +83,8 @@ export const rootApi = createApi({
     'Version',
     'Agent',
     'Agents',
-    'Events',
-    'Event',
+    'GraphEvents',
+    'GraphEvent',
     'Document',
     'Documents',
     'Request',
@@ -96,7 +96,7 @@ export const rootApi = createApi({
     'Knowledge',
     'OneKnowledge',
     'PluginState',
-    'PluginCommand'
+    'PluginCommand',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })

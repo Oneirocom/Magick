@@ -4,9 +4,9 @@ import { feathersClient } from 'client/feathers-client'
 export const eventsApi = rootApi.injectEndpoints({
   endpoints: builder => ({
     getEvents: builder.query({
-      providesTags: ['Events'],
-      query: () => ({
-        url: `events`,
+      providesTags: ['GraphEvents'],
+      query: agentId => ({
+        url: `graphEvents?agentId=${agentId}`,
       }),
       async onCacheEntryAdded(
         arg,
@@ -27,51 +27,51 @@ export const eventsApi = rootApi.injectEndpoints({
           })
         }
 
-        client.service('events').on('created', listener)
+        client.service('graphEvents').on('created', listener)
 
         await cacheEntryRemoved
 
-        client.service('events').off('created', listener)
+        client.service('graphEvents').off('created', listener)
       },
     }),
     getEvent: builder.query({
-      providesTags: ['Event'],
+      providesTags: ['GraphEvent'],
       query: ({ eventId }) => {
         return {
-          url: `events/${eventId}`,
+          url: `graphEvents/${eventId}`,
           params: {},
         }
       },
     }),
     createEvent: builder.mutation({
-      invalidatesTags: ['Events'],
+      invalidatesTags: ['GraphEvents'],
       query: event => ({
-        url: `events`,
+        url: `graphEvents`,
         method: 'POST',
         body: event,
       }),
     }),
     updateEvent: builder.mutation({
-      invalidatesTags: ['Event', 'Events'],
+      invalidatesTags: ['GraphEvent', 'GraphEvents'],
       query: event => {
         return {
-          url: `events/${event.id}`,
+          url: `graphEvents/${event.id}`,
           method: 'PATCH',
           body: event,
         }
       },
     }),
     deleteEvents: builder.mutation({
-      invalidatesTags: ['Events'],
+      invalidatesTags: ['GraphEvents'],
       query: ({ query }) => ({
-        url: `events?${query}`,
+        url: `graphEvents?${query}`,
         method: 'DELETE',
       }),
     }),
     deleteEvent: builder.mutation({
-      invalidatesTags: ['Event', 'Events'],
+      invalidatesTags: ['GraphEvent', 'GraphEvents'],
       query: ({ eventId }) => ({
-        url: `events/${eventId}`,
+        url: `graphEvents/${eventId}`,
         method: 'DELETE',
       }),
     }),
