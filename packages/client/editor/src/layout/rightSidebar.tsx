@@ -66,17 +66,17 @@ const RightSidebar = (
       isExpanded: true,
       title: 'Logs',
     })
-    if (!process.env.PRODUCTION) {
-      event.api.addPanel({
-        id: 'Seraph',
-        component: 'SeraphWindow',
-        params: {
-          spellName: props.params.spellName,
-        },
-        isExpanded: true,
-        title: 'Seraph',
-      })
-    }
+    // if (!process.env.PRODUCTION) {
+    //   event.api.addPanel({
+    //     id: 'Seraph',
+    //     component: 'SeraphWindow',
+    //     params: {
+    //       spellName: props.params.spellName,
+    //     },
+    //     isExpanded: true,
+    //     title: 'Seraph',
+    //   })
+    // }
   }
 
   return (
