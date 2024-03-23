@@ -34,9 +34,7 @@ export class BaseActionManager {
   }
 
   registerAction(action: ActionDefinition) {
-    console.log('!!registerAction:', action)
     this.actions.push(action)
-    console.log('!!actions:', this.actions)
   }
 
   getActions(): ActionDefinition[] {
