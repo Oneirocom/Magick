@@ -1,12 +1,11 @@
 import pino from 'pino'
-import { type Event } from 'shared/core'
 
 import { AGENT_ERROR, AGENT_WARN, AGENT_PONG, AGENT_LOG } from 'communication'
 
 import { type Worker } from 'server/communication'
 import { Application } from 'server/core'
 import { getLogger } from 'server/logger'
-import { AgentEvents, EventMetadata } from 'server/event-tracker'
+import { EventMetadata } from 'server/event-tracker'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
@@ -14,6 +13,7 @@ import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
+import { EventPayload } from 'server/plugin'
 // import { StateService } from './StateService'
 
 // type AgentData = {
@@ -186,15 +186,15 @@ export class Agent implements AgentInterface {
   }
 
   trackEvent(
-    eventName: AgentEvents,
+    eventName: any,
     metadata: EventMetadata = {},
-    event: Event
+    event: EventPayload
   ) {
     // remove unwanted data
     delete event.content
-    delete event.embedding
     delete event.rawData
-    delete event.entities
+    delete event.rawData
+    delete event.data
 
     metadata.event = event
 
