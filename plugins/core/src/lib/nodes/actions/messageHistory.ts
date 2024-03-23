@@ -39,9 +39,10 @@ export const getMessageHistory = makeFlowNodeDefinition({
 
     const limit = Number(read('entries')) as number
 
-    const messages = (await eventStore.getMessages(eventState, limit)).reverse()
+    const messages =
+      (await eventStore.getMessages(eventState, limit)).reverse() || []
 
-    if (messages[0].role === 'assistant') {
+    if (messages.length > 0 && messages[0].role === 'assistant') {
       messages.shift()
     }
 
