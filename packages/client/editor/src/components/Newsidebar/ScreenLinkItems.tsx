@@ -3,6 +3,7 @@ import { DrawerItem } from './DrawerItem'
 import ArticleIcon from '@mui/icons-material/Article'
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
+import MultipleStopIcon from '@mui/icons-material/MultipleStop'
 // import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from '@magickml/providers'
 import React from 'react'
@@ -51,12 +52,12 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
 
   const DrawerItems: (DrawerItem | React.JSX.Element)[] = [
     // todo remake this events page
-    // {
-    //   name: 'Events',
-    //   Icon: BoltIcon,
-    //   tooltip: 'Events Tooltip',
-    //   tooltipText: drawerTooltipText.events,
-    // },
+    {
+      name: 'Events',
+      Icon: MultipleStopIcon,
+      tooltip: 'Events Tooltip',
+      tooltipText: drawerTooltipText.events,
+    },
     {
       name: 'Knowledge',
       Icon: ArticleIcon,
