@@ -218,7 +218,7 @@ function EventTable({ events, refetchEvents }) {
       el.original.type,
       el.original.channel,
       el.original.observer,
-      new Date(el.original.date).toLocaleDateString()
+      new Date(el.original.created_at).toLocaleDateString()
     )
   })
 
@@ -321,8 +321,9 @@ function EventTable({ events, refetchEvents }) {
         </div>
         <div className={styles.flex}>
           <Button
-            className={`${styles.btn} ${selectedRows.length > 0 ? styles.selectedBtn : ''
-              }`}
+            className={`${styles.btn} ${
+              selectedRows.length > 0 ? styles.selectedBtn : ''
+            }`}
             onClick={handleDeleteMany}
             variant="outlined"
             startIcon={<Delete />}

@@ -1,14 +1,19 @@
 // DOCUMENTED
 import { LoadingScreen } from 'client/core'
 import EventTable from './EventTable'
-import { useGetEventsQuery } from 'client/state'
+import { RootState, useGetEventsQuery } from 'client/state'
+import { useSelector } from 'react-redux'
 
 /**
  * EventWindow component displays the events of a project.
  * @returns JSX Element
  */
 const EventWindow = (): React.JSX.Element => {
-  const { data, isLoading, refetch } = useGetEventsQuery({})
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+  const { currentAgentId } = globalConfig
+  const { data, isLoading, refetch } = useGetEventsQuery(currentAgentId, {
+    skip: !currentAgentId,
+  })
 
   if (isLoading) return <LoadingScreen />
 
@@ -22,8 +27,7 @@ const EventWindow = (): React.JSX.Element => {
         overflow: 'scroll',
       }}
     >
-
-      <EventTable events={data.events} refetchEvents={refetch} />
+      <EventTable events={data} refetchEvents={refetch} />
     </div>
   )
 }
