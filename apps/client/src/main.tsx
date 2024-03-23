@@ -20,6 +20,7 @@ import '../../../packages/client/stylesheets/src/lib/App.css'
 import '../../../packages/client/stylesheets/src/lib/styles/dockview.css'
 import '../../../packages/client/stylesheets/src/lib/styles/themes.scss'
 import { DEFAULT_PROJECT_ID, DEFAULT_USER_TOKEN } from 'clientConfig'
+import { useState } from 'react'
 
 /**
  * Initialize and render the MagickIDE component when running as a standalone editor (not inside an iframe)
@@ -49,7 +50,17 @@ if (window === window.parent) {
       email: undefined,
     }
 
-    const Root = () => <MagickIDE config={config} />
+    const Root = () => {
+      const loading = useState(true)
+      const loadingStatus = useState()
+      return (
+        <MagickIDE
+          config={config}
+          loading={loading}
+          loadingStatus={loadingStatus}
+        />
+      )
+    }
 
     root.render(<Root />)
   }
@@ -91,6 +102,9 @@ if (window === window.parent) {
         const { config } = payload as { config: AppConfig }
 
         const Root = () => {
+          const loading = useState(true)
+          const loadingStatus = useState()
+
           if (POSTHOG_ENABLED && config?.posthogEnabled) {
             return (
               <PostHogProvider
@@ -102,11 +116,21 @@ if (window === window.parent) {
                   },
                 }}
               >
-                <MagickIDE config={config} />
+                <MagickIDE
+                  config={config}
+                  loading={loading}
+                  loadingStatus={loadingStatus}
+                />
               </PostHogProvider>
             )
           } else {
-            return <MagickIDE config={config} />
+            return (
+              <MagickIDE
+                config={config}
+                loading={loading}
+                loadingStatus={loadingStatus}
+              />
+            )
           }
         }
         const container = document.getElementById('root') as Element
