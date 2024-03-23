@@ -21,7 +21,7 @@ export const createPosthogClient = (app: Application) => {
 
   return {
     track: (
-      eventName: EventTypes,
+      eventName: string,
       properties: EventMetadata = {},
       agentId: string
     ) => {
