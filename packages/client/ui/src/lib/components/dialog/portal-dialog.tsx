@@ -37,6 +37,7 @@ export interface PortalDialogProps {
   triggerText?: string
   footerText?: string
   type?: DialogType
+  noTrigger?: boolean
 }
 
 export const PortalDialog = ({
@@ -49,11 +50,12 @@ export const PortalDialog = ({
   triggerText,
   footerText,
   type,
+  noTrigger = true,
 }: PortalDialogProps) => {
   return (
     <Dialog {...base.root}>
       <DialogTrigger asChild {...base.trigger}>
-        <Button {...triggerButton}>{triggerText}</Button>
+        {!noTrigger && <Button {...triggerButton}>{triggerText}</Button>}
       </DialogTrigger>
       <DialogContent
         className={cn(
