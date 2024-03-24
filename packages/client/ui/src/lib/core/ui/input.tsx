@@ -25,7 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           border
           bg-[var(--background-color)]
           px-3
-          my-2
+          // my-2
           h-9
           text-sm
           shadow-sm
