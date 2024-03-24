@@ -1,1 +1,1 @@
-components from aceternity 
+## This folder holds base components from aceternity
