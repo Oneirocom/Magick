@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Label, Input, type InputProps } from '../../core/ui'
+import { Label, Input } from '../../core/ui'
 import { cn } from '../../utils/shadcn'
 
 interface InputWithLabelProps extends React.ComponentProps<typeof Input> {
