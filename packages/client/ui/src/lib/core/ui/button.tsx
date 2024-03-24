@@ -26,7 +26,7 @@ const buttonVariants = cva(
           'bg-transparent font-montserrat lg:dark:bg-[#262b2e] text-base gap-x-2 rounded-lg lg:bg-[#e9edf1] hover:bg-secondary-highlight/80 dark:hover:bg-[#3C3F41] text-black dark:text-white font-montserrat',
 
         'portal-primary':
-          'bg-ds-primary text-ds-black font-bold font-montserrat',
+          'bg-ds-primary text-ds-black font-semibold font-montserrat',
         'portal-neutral':
           'bg-ds-neutral text-ds-white font-medium font-montserrat border border-ds-white/40',
           clear: '',
