@@ -6,7 +6,7 @@ interface TextareaWithLabelProps extends TextareaProps {
   label?: string
 }
 
-const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
+export const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
   label,
   id,
   className,
@@ -30,5 +30,3 @@ const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
     </div>
   )
 }
-
-export default TextareaWithLabel
