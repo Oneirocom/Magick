@@ -35,7 +35,7 @@ export const ChatMessageContainer = ({
     <div
       className={cn(
         messages.length > 0 ? 'overflow-auto' : 'overflow-hidden',
-        'flex flex-col flex-grow h-0 px-3 md:px-5 py-5 md:pt-10 w-full max-w-full lg:max-w-7xl mx-auto'
+        'flex flex-col flex-grow h-0 w-full px-8 my-4'
       )}
     >
       <div ref={reff} className="pb-2 grow">
