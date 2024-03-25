@@ -12,7 +12,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@25316bbc1f10ac9d8798711f44914b1cf3c4e954 # v2.4.0
         with:
-          node-version: '19.x'
+          node-version: '20.x'
       - name: Install Dependencies
         run: npm ci
       - name: Run ESLint
