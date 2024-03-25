@@ -1,15 +1,16 @@
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Tooltip from '@mui/material/Tooltip'
+import * as React from 'react'
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from '@magickml/client-ui'
 
 // DrawerItem component properties
 type DrawerItemProps = {
   Icon: React.ElementType
   open?: boolean
   text: string
-  tooltip: string
   active: boolean
   onClick?: () => void
   tooltipText: string
@@ -26,29 +27,28 @@ export const DrawerItem: React.FC<DrawerItemProps> = ({
   onClick,
   tooltipText,
 }) => (
-  <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-    <Tooltip title={tooltipText} placement="right" enterDelay={500} arrow>
-      <ListItemButton
-        sx={{
-          py: 0.2,
-          justifyContent: open ? 'initial' : 'center',
-          px: 1,
-        }}
-        selected={active}
-        onClick={onClick}
-      >
-        <ListItemIcon
-          sx={{
-            minWidth: 0,
-            mr: open ? 2 : 'auto',
-            justifyContent: 'center',
-            color: active ? 'var(--primary)' : 'white',
-          }}
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div
+          className={`flex items-center px-1 py-0.2 cursor-pointer ${
+            active ? 'text-primary' : 'text-white'
+          }`}
+          onClick={onClick}
         >
-          <Icon />
-        </ListItemIcon>
-        <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-      </ListItemButton>
+          <div
+            className={`flex items-center justify-center mr-${
+              open ? '2' : 'auto'
+            } min-w-0`}
+          >
+            <Icon />
+          </div>
+          {open && <span className="opacity-100">{text}</span>}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent side="right" sideOffset={8} className="w-auto">
+        {tooltipText}
+      </TooltipContent>
     </Tooltip>
-  </ListItem>
+  </TooltipProvider>
 )
