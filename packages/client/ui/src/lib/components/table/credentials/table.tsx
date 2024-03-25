@@ -27,19 +27,31 @@ import {
 
 import { Credential } from './columns'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
-interface CredentialsTableProps {
+export const CredentialsTable = ({
+  columns,
+  data,
+  sorting,
+  columnFilters,
+  columnVisibility,
+  rowSelection,
+  setSorting,
+  setColumnFilters,
+  setColumnVisibility,
+  setRowSelection,
+}: {
   columns: ColumnDef<Credential>[]
   data: Credential[]
-}
-
-export const CredentialsTable = ({ columns, data }: CredentialsTableProps) => {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
-
+  sorting: SortingState
+  columnFilters: ColumnFiltersState
+  columnVisibility: VisibilityState
+  rowSelection: Record<string, boolean>
+  setSorting: Dispatch<SetStateAction<SortingState>>
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>
+  setColumnVisibility: Dispatch<SetStateAction<VisibilityState>>
+  setRowSelection: Dispatch<SetStateAction<{}>>
+}) => {
   const table = useReactTable({
     data,
     columns,
