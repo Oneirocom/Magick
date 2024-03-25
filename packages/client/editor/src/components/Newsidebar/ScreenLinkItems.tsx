@@ -118,7 +118,7 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
                 })
               }
               text={drawerItem.name}
-              tooltip={drawerItem.tooltip}
+              // tooltip={drawerItem.tooltip}
               tooltipText={drawerItem.tooltipText}
             />
           )

@@ -522,7 +522,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/coffee/migrate/magick/packages/server/db/src/lib/prisma/client-core",
+      "value": "/Users/jakobgrant/Workspaces/Oneirocom/Magick/packages/server/db/src/lib/prisma/client-core",
       "fromEnvVar": null
     },
     "config": {
@@ -532,7 +532,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       }
     ],

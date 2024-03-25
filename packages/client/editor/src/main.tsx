@@ -46,12 +46,13 @@ export const MagickIDE = ({
     ;(async () => {
       loadingStatus[1](LoadingStatus.CONNECTING)
       await feathersClient.initialize(config.token, config)
+      loading && loading[1](false)
       loading[1](false)
       loadingStatus[1](LoadingStatus.READY)
     })()
   }, [config, loading])
 
-  if (!loading || loading[0]) return null
+  if (loading || loading[0]) return null
 
   return (
     <Provider store={createStore(config)}>
