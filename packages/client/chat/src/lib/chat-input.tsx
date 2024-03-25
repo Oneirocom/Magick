@@ -1,4 +1,4 @@
-import { cn } from '@magickml/client-ui'
+import { cn, Textarea } from '@magickml/client-ui'
 import { ChatTextArea } from './chat-textarea'
 
 type AgentChatInputProps = {
@@ -22,7 +22,7 @@ export const ChatInput = ({
     <div
       className={cn(
         'pb-0',
-        'bg-[#dbe2e8] dark:bg-[#171b1c] w-full inline-flex lg:bottom-0 placeholder:text-[#a0b3c1] font-montserrat dark:placeholder:text-white/50 placeholder:black/50 rounded-lg md:rounded-b-none relative pb-0 lg:pb-0 lg:mb-4'
+        'bg-ds-card w-full inline-flex lg:bottom-0 placeholder:text-[#a0b3c1] font-montserrat dark:placeholder:text-white/50 placeholder:black/50 rounded-[5px] relative pb-0 lg:pb-0'
       )}
     >
       <ChatTextArea
@@ -31,6 +31,8 @@ export const ChatInput = ({
         handleKeydown={handleKeyDown}
         value={value}
       />
+   
+
       {!isResponding ? (
         <button
           className={cn(
