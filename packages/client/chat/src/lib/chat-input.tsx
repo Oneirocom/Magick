@@ -1,4 +1,4 @@
-import { cn, Textarea } from '@magickml/client-ui'
+import { cn } from '@magickml/client-ui'
 import { ChatTextArea } from './chat-textarea'
 
 type AgentChatInputProps = {
