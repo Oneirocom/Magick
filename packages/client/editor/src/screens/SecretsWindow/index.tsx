@@ -26,6 +26,11 @@ import {
   useCreateCredentialMutation,
 } from 'client/state'
 import { getPluginCredentials } from 'shared/nodeSpec'
+import {
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table'
 
 const pluginCredentials = getPluginCredentials()
 
@@ -43,6 +48,11 @@ interface Credential {
 const SecretWindow: FC = () => {
   const config = useConfig()
   const { openTab } = useTabLayout()
+
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const openConfigWindow = () => {
     openTab({
@@ -74,7 +84,19 @@ const SecretWindow: FC = () => {
         </Button>
       </div>
       <div className="grid gap-6 p-8">
-        <CredentialsTable columns={columns} data={credentials} />
+        {/* Note: *BUG* Jakob - We are passing in the state values as props as it seems any state values break this component locally */}
+        <CredentialsTable
+          columns={columns}
+          data={credentials}
+          sorting={sorting}
+          columnFilters={columnFilters}
+          columnVisibility={columnVisibility}
+          rowSelection={rowSelection}
+          setSorting={setSorting}
+          setColumnFilters={setColumnFilters}
+          setColumnVisibility={setColumnVisibility}
+          setRowSelection={setRowSelection}
+        />
       </div>
     </div>
   )
