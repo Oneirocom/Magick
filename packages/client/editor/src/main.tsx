@@ -52,7 +52,7 @@ export const MagickIDE = ({
     })()
   }, [config, loading])
 
-  if (loading || loading[0]) return null
+  if (!loading || loading[0]) return null
 
   return (
     <Provider store={createStore(config)}>
