@@ -1,3 +1,4 @@
+import { Textarea } from '@magickml/client-ui'
 import React, { useRef, useEffect } from 'react'
 
 type Props = {
@@ -44,15 +45,15 @@ export function ChatTextArea({
   }, [])
 
   return (
-    <textarea
-      rows={1}
-      ref={textareaRef}
-      onKeyDown={handleKeydown}
+    <Textarea
+      className="min-h-[50px] w-full p-2 pt-4 pl-5 border-0 !rounded-t-none !rounded-b-[5px] border-t-ds-neutral border-opacity-50 border-t  bg-ds-background 
+       text-ds-black dark:text-ds-white"
+      placeholder={`Message ${placeholder}...`}
       value={value}
-      onChange={e => handleInput(e)}
-      className="min-h-[50px] w-full p-2 pt-4 pl-5 border-0 resize-none focus:outline-none focus:ring-0 rounded-lg rounded-b-none md:rounded-b-lg pr-10 bg-transparent border-[#171b1c] black:border-[#dbe2e8] dark:border-[#171b1c] dark:bg-[#171b1c] dark:text-white/50 dark:placeholder-white/50 placeholder-black/50"
-      placeholder={placeholder}
-      {...props}
+      onChange={handleChange}
+      onKeyDown={handleKeydown}
+      rows={1}
+      autoFocus
     />
   )
 }
