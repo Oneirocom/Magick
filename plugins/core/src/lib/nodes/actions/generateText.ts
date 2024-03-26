@@ -120,12 +120,12 @@ export const generateText = makeFlowNodeDefinition({
         }
 
         const prompt: string = read('prompt') || ''
-        const temperature: number = read('temperature') || 0.5
-        const top_p: number = read('top_p') || 1
-        const maxRetries: number = read('maxRetries') || 1
+        const temperature: number = Number(read('temperature')) || 0.5
+        const top_p: number = Number(read('top_p')) || 1
+        const maxRetries: number = Number(read('maxRetries')) || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
-        const max_tokens: number = read('maxTokens')
+        const max_tokens: number = Number(read('maxTokens'))
         // const modelProvider: LLMProviders = configuration.modelProvider
         const model: CompletionModel =
           read('modelOverride') || configuration.model
@@ -148,8 +148,6 @@ export const generateText = makeFlowNodeDefinition({
             max_tokens,
           },
         }
-
-        console.log('generateText request:', request)
 
         const processNextChunk = async iterator => {
           const result = await iterator.next()
