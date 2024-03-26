@@ -184,7 +184,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
           </Button>
         </div>
       )}
-      <div className="overflow-x-hidden pb-8">
+      <div className="overflow-x-hidden pb-8 h-full">
         <FileTree currentTab={currentTab} />
 
         <ContextMenu />
