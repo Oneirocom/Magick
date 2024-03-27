@@ -87,6 +87,7 @@ export enum AnthropicModels {
   Claude21 = 'claude-2.1',
   Claude2 = 'claude-2',
   ClaudeInstant12 = 'claude-instant-1.2',
+  Claud3Haiku = 'claude-3-haiku-20240307',
 }
 
 export enum SageMakerModels {
