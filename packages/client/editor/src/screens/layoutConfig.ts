@@ -170,11 +170,10 @@ export const applyConstraintsFromConfig = ({
   spellId: string
   spellName: string
 }) => {
+  const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
   api.panels.forEach(panel => {
-    const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
     layoutConfig.map(config => {
-      api.getGroup(panel.group.id)
-      if (config.constraints) {
+      if (config.constraints && panel.id === config.id) {
         panel.group.api.setConstraints(config.constraints)
       }
     })
