@@ -21,14 +21,28 @@ import NewMenuBar from '../components/MenuBar/newMenuBar'
 // import './tab-layout.scss'
 import WelcomeScreen from '../components/Watermark/watermark'
 import { ConfigWindow } from 'windows/config'
+import posthog from 'posthog-js'
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
   const onContextMenu = (event: React.MouseEvent) => {
     event.preventDefault()
     alert('context menu')
   }
+
+  const onTabClick = (event: React.MouseEvent) => {
+    posthog.capture('tab_click', {
+      tab: props.containerApi.activePanel?.title,
+    })
+  }
+
   // @ts-ignore
-  return <DockviewDefaultTab onContextMenu={onContextMenu} {...props} />
+  return (
+    <DockviewDefaultTab
+      onContextMenu={onContextMenu}
+      onClick={onTabClick}
+      {...props}
+    />
+  )
 }
 
 const tabComponents = {

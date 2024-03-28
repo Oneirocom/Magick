@@ -20,6 +20,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
 import { useHotkeys } from 'react-hotkeys-hook'
+import posthog from 'posthog-js'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -159,6 +160,10 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         setTimeout(() => {
           dispatch(setSyncing(false))
           setIsSaving(false)
+          posthog.capture('spell_updated', {
+            spellId: currentSpell.id,
+            projectId: config.projectId,
+          })
           return
         }, 1000)
 
@@ -260,6 +265,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     // Start download
     link.click()
+
+    posthog.capture('spell_exported', {
+      spellId: spell.id,
+      projectId: config.projectId,
+    })
 
     if (!link.parentNode) return
 

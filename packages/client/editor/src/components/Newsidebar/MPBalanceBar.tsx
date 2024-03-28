@@ -11,6 +11,7 @@ import Image from 'next/legacy/image'
 import { InfoIcon } from '@magickml/icons'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import posthog from 'posthog-js'
 
 export const MPBalanceBar = ({ userData, isLoading }) => {
   const { client } = useFeathers()
@@ -131,6 +132,9 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
           href="https://youtu.be/yxeYZtOsrSc"
           target="_blank"
           className="cursor-pointer flex flex-row items-center gap-1"
+          onClick={() => {
+            posthog.capture('tutorial_video_clicked')
+          }}
         >
           <Image
             className="relative overflow-hidden flex-shrink-0 object-cover justify-end w-full"

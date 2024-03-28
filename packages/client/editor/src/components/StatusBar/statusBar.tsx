@@ -6,6 +6,7 @@ import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { cx } from 'class-variance-authority'
 import { cn } from '@magickml/client-ui'
+import posthog from 'posthog-js'
 
 const VerticalDivider = () => (
   <div className="inline-block h-[250px] min-h-[1em] w-0.5 self-stretch bg-[var(--background-color)] opacity-100 dark:opacity-50"></div>
@@ -28,6 +29,10 @@ export const StatusBar = () => {
 
     publish(events.RESET_NODE_STATE)
 
+    posthog.capture('kill_all_spells', {
+      agentId: currentAgentId,
+    })
+
     enqueueSnackbar('All spells stopped.  Send an event to start them again.', {
       variant: 'success',
     })
@@ -39,6 +44,10 @@ export const StatusBar = () => {
     })
 
     publish(events.RESET_NODE_STATE)
+
+    posthog.capture('refresh_all_spells', {
+      agentId: currentAgentId,
+    })
 
     enqueueSnackbar('All spells refreshed.', {
       variant: 'success',
