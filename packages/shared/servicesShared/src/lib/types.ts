@@ -125,20 +125,20 @@ export type SeraphResponse = {
   createdAt: string
 }
 
-export type SeraphEventTypes = {
-  request: SeraphRequest
-  response: SeraphResponse
-  error: string
-  info: string
-  functionStart: SeraphFunction
-  functionEnd: SeraphFunction
+export enum SeraphEvents {
+  request = 'request',
+  response = 'response',
+  error = 'error',
+  info = 'info',
+  functionStart = 'functionStart',
+  functionEnd = 'functionEnd',
 }
 
 export interface ISeraphEvent {
-  id: string
+  id?: string
   agentId: string
   projectId: string
-  type: SeraphEventTypes
+  type: SeraphEvents
   request?: SeraphRequest
   response?: SeraphResponse
   error?: string
