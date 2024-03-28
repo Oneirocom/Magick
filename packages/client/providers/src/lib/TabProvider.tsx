@@ -5,6 +5,7 @@ import { RootState, setCurrentTab, useDockviewTheme } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePubSub } from './PubSubProvider'
 import { useConfig } from './ConfigProvider'
+import posthog from 'posthog-js'
 
 export type Tab = {
   id: string
@@ -195,6 +196,11 @@ export const TabProvider = ({ children }) => {
         spellName: tab.name,
         ...tab.params,
       },
+    })
+
+    posthog.capture('tab_opened', {
+      tabName: tab.name,
+      tabType: tab.type,
     })
   }
 

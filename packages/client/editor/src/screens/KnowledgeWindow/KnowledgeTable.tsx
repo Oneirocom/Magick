@@ -33,6 +33,7 @@ import {
   useLazyGetKnowledgeByIdQuery,
 } from 'client/state'
 import { useSelector } from 'react-redux'
+import posthog from 'posthog-js'
 
 function ActionMenu({ anchorEl, handleClose, handleDelete }) {
   return (
@@ -265,6 +266,12 @@ function KnowledgeTable({ knowledgeData }) {
           callback()
           setCreateMode(false)
         }, 500)
+
+        posthog.capture('knowledge_created', {
+          projectId: config.projectId,
+          knowledgeName: body.name,
+          knowledgeType: body.tag,
+        })
       })
       .catch(err => {
         enqueueSnackbar('Error saving knowledge', { variant: 'error' })

@@ -28,6 +28,7 @@ import { useBehaveGraphFlow } from './useBehaveGraphFlow'
 import { Tab } from '@magickml/providers'
 import { onConnect as onConnectState, setEdges, setNodes } from 'client/state'
 import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType'
+import posthog from 'posthog-js'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 
@@ -132,6 +133,10 @@ export const useFlowHandlers = ({
         valueType: sourceSocket?.valueType,
       }
 
+      posthog.capture('node_connected', {
+        spellId: tab.spellName,
+      })
+
       // if the source socket is not a flow socket, we don't need to do anything special
       if (sourceSocket === undefined || sourceSocket.valueType !== 'flow') {
         onConnectState(tab.id)(connection)
@@ -189,6 +194,10 @@ export const useFlowHandlers = ({
           item: newNode,
         },
       ])
+
+      posthog.capture('node_added', {
+        nodeType,
+      })
 
       if (lastConnectStart === undefined) return
 

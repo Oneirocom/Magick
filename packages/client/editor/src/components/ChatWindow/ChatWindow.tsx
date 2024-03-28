@@ -21,6 +21,7 @@ import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 // import { Checkbox, FormControlLabel } from '@mui/material'
 import { ChatInput } from './ChatInput'
 import { Button, Checkbox, Label } from '@magickml/client-ui'
+import posthog from 'posthog-js'
 
 // Default playtest data.
 const defaultPlaytestData = {
@@ -252,6 +253,12 @@ const ChatWindow = ({ tab, spellName }) => {
 
     setValue('')
     publish(MESSAGE_AGENT, eventPayload)
+
+    posthog.capture('playtest_message_sent', {
+      projectId: config.projectId,
+      spellId: spell.id,
+      agentId: currentAgentId,
+    })
   }
 
   // Update state when playtest data is changed.

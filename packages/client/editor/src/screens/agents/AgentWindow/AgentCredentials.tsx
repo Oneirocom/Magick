@@ -42,6 +42,7 @@ import {
 } from 'servicesShared'
 
 import { Dropdown } from '@magickml/client-ui'
+import posthog from 'posthog-js'
 
 type PluginCredential = {
   name: string
@@ -282,6 +283,11 @@ const CredentialAction: FC<CredentialActionProps> = ({
         credentialId: custom
           ? (customId as string)
           : selectedCredentialId || '',
+      })
+
+      posthog.capture('agent_linked_credential', {
+        agentId,
+        credentialId: custom ? customId : selectedCredentialId,
       })
       onOpenChange(false)
     } catch (e) {
