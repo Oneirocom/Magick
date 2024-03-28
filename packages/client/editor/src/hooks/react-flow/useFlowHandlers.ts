@@ -388,12 +388,12 @@ export const useFlowHandlers = ({
 
         // Adjust if the context menu would open off the right side of the viewport
         if (xPosition + nodePickerWidth > bounds.width) {
-          xPosition = bounds.width - nodePickerWidth * 1.1
+          xPosition = bounds.width - nodePickerWidth * 1.05
         }
 
         // Adjust if the context menu would open off the bottom of the viewport
         if (yPosition + nodePickerHeight > bounds.height) {
-          yPosition = bounds.height - nodePickerHeight * 1.1
+          yPosition = bounds.height - nodePickerHeight * 1.05
         }
 
         setPickedNodeVisibility({
