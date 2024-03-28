@@ -18,6 +18,7 @@ import {
   Connection,
   OnConnectStart,
   OnConnectEnd,
+  useOnViewportChange,
 } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -89,6 +90,12 @@ export const useFlowHandlers = ({
   const { screenToFlowPosition, getNodes } = instance
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
+
+  useOnViewportChange({
+    onStart: () => {
+      closeNodePicker()
+    },
+  })
 
   useEffect(() => {
     if (layoutChangeEvent) {
@@ -372,7 +379,7 @@ export const useFlowHandlers = ({
       if (parentRef && parentRef.current) {
         const bounds = parentRef.current.getBoundingClientRect()
 
-        const nodePickerWidth = 440
+        const nodePickerWidth = 240
         const nodePickerHeight = 251
 
         // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
@@ -381,7 +388,7 @@ export const useFlowHandlers = ({
 
         // Adjust if the context menu would open off the right side of the viewport
         if (xPosition + nodePickerWidth > bounds.width) {
-          xPosition = bounds.width - nodePickerWidth * 0.85
+          xPosition = bounds.width - nodePickerWidth * 1.1
         }
 
         // Adjust if the context menu would open off the bottom of the viewport
