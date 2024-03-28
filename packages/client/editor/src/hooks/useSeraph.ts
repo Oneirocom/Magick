@@ -7,11 +7,9 @@ import { useEffect, useState } from 'react'
 import {
   ISeraphEvent,
   SeraphEvents,
-  SeraphFunction,
-  SeraphRequest,
 } from '../../../../shared/servicesShared/src'
 
-export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
+export const useSeraph = ({ tab, spellName, projectId, agentId }) => {
   const { data: seraphChatHistory } = useGetSeraphChatHistoryQuery({ agentId })
   const [createSeraphRequest, { error: requestError }] =
     useCreateSeraphRequestMutation()
@@ -20,29 +18,17 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   const { $SERAPH_REQUEST, $SERAPH_RESPONSE, $SERAPH_ERROR, $SERAPH_INFO } =
     events
 
+  const [chatHistory, setChatHistory] = useState<ISeraphEvent[]>([])
   const [info, setInfo] = useState<string | undefined>()
   const [error, setError] = useState<string | undefined>()
   const [response, setResponse] = useState<ISeraphEvent>()
-  const [functionStart, setFunctionStart] = useState<
-    SeraphFunction | undefined
-  >()
-  const [functionEnd, setFunctionEnd] = useState<SeraphFunction | undefined>()
 
   // set up listeners for response, error, info,
   useEffect(() => {
     const destoryResponseListener = subscribe(
       $SERAPH_RESPONSE(tab.id),
       (event, data) => {
-        switch (data.response?.type) {
-          case SeraphEvents.functionStart:
-            setFunctionStart(data.response.functionStart)
-            break
-          case SeraphEvents.functionEnd:
-            setFunctionEnd(data.response.functionEnd)
-            break
-          default:
-            setResponse(data.response.message)
-        }
+        console.log('RESPONSE', event)
         setResponse(data.response)
       }
     )
@@ -70,24 +56,25 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
 
   // fetch seraph chat history
   useEffect(() => {
-    if (seraphChatHistory?.length === history.length) return
+    if (seraphChatHistory?.length === chatHistory.length) return
     if (seraphChatHistory?.length === 0) return
     if (!seraphChatHistory) return
-    setHistory(seraphChatHistory)
+    setChatHistory(seraphChatHistory)
   }, [seraphChatHistory])
 
   // function to make a request
-  const makeSeraphRequest = async (request: SeraphRequest) => {
+  const makeSeraphRequest = async (message: string, systemPrompt: string) => {
     const seraphRequest: ISeraphEvent = {
       agentId,
       projectId,
       type: SeraphEvents.request,
-      spellId: tab.params.spellId,
-      request,
+      request: {
+        message,
+        systemPrompt,
+      },
       createdAt: new Date().toISOString(),
     }
     try {
-      setResponse(undefined)
       const data = await createSeraphRequest(seraphRequest)
       if (!data) throw new Error('Error creating seraph request')
       publish($SERAPH_REQUEST(tab.id), { request: seraphRequest })
@@ -101,7 +88,6 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
     error: requestError || error,
     response,
     makeSeraphRequest,
-    functionStart,
-    functionEnd,
+    seraphChatHistory,
   }
 }
