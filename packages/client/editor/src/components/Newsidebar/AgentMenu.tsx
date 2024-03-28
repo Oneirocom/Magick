@@ -1,4 +1,5 @@
 // @ts-nocheck
+import posthog from 'posthog-js'
 import { useState, useCallback, useEffect } from 'react'
 import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
@@ -111,6 +112,13 @@ export function AgentMenu({ data }) {
         if (result) {
           enqueueSnackbar('Successfully published to live agent', {
             variant: 'success',
+          })
+
+          posthog.capture('agent_published', {
+            projectId: publishedAgent.projectId,
+            agentId: publishedAgent.id,
+            agentName: publishedAgent.name,
+            agentReleaseId: result.id,
           })
         }
       }
