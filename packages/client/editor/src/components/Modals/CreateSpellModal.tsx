@@ -18,6 +18,7 @@ import { FileUpload } from '@mui/icons-material'
 import behaveGraph from '../../graphs/graph.json'
 import { useModal } from '../../contexts/ModalProvider'
 import { Input } from '@magickml/client-ui'
+import posthog from 'posthog-js'
 
 // Custom configuration for unique name generator
 const customConfig = {
@@ -42,6 +43,11 @@ const CreateSpellModal = () => {
    */
   const onReaderLoad = async (event): Promise<void> => {
     const spellData = JSON.parse(event.target.result)
+
+    posthog.capture('spell_imported', {
+      projectId: config.projectId,
+      spellName: spellData.name,
+    })
 
     // Create new spell
     const response = (await newSpell({
@@ -77,6 +83,12 @@ const CreateSpellModal = () => {
         type: 'behave',
         projectId: config.projectId,
       })) as any
+
+      posthog.capture('spell_created', {
+        projectId: config.projectId,
+        spellId: response.data.id,
+        spellName: response.data.name,
+      })
 
       handleSpellResponse(response)
     } catch (err) {
