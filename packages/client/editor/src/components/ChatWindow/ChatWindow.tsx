@@ -120,15 +120,6 @@ const ChatWindow = ({ tab, spellName }) => {
     })
   }
 
-  // Update state when playtest data is changed.
-  const onDataChange = dataText => {
-    dispatch(
-      upsertLocalState({
-        id: tab.id,
-        playtestData: dataText ?? defaultPlaytestData,
-      })
-    )
-  }
   const onChange = e => {
     setValue(e.target.value)
   }
