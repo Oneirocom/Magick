@@ -66,6 +66,9 @@ export const generateLayoutConfig = (
       spellId,
       spellName,
     },
+    constraints: {
+      minimumWidth: 300,
+    },
   },
   {
     id: 'Properties',
@@ -170,13 +173,9 @@ export const applyConstraintsFromConfig = ({
   api.panels.forEach(panel => {
     const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
     layoutConfig.map(config => {
+      api.getGroup(panel.group.id)
       if (config.constraints) {
-        const { minimumWidth, maximumWidth, minimumHeight, maximumHeight } =
-          config.constraints
-        if (minimumWidth) panel.group.api.setConstraints({ minimumWidth })
-        if (maximumWidth) panel.group.api.setConstraints({ maximumWidth })
-        if (minimumHeight) panel.group.api.setConstraints({ minimumHeight })
-        if (maximumHeight) panel.group.api.setConstraints({ maximumHeight })
+        panel.group.api.setConstraints(config.constraints)
       }
     })
   })
