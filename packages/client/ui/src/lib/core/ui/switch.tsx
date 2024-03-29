@@ -30,7 +30,7 @@ const thumbVariants = cva(
         small: 'data-[state=unchecked]:!translate-x-[-2px]',
       },
       secondaryThumb: {
-        'bg-secondary': 'bg-ds-alert',
+        'bg-secondary': 'bg-ds-primary',
       },
     },
   }
