@@ -101,6 +101,6 @@ export const PortalDialog = ({
 
 const Loading = () => {
   return (
-    <span className="loading loading-spinner text-ds-black dark:text-ds-white" />
+    <span className="loading loading-spinner text-ds-black mr-1" />
   )
 }
