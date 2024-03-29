@@ -1,4 +1,4 @@
-import { type AppRouter } from '@magickml/portal-api'
+import { type AppRouter } from '@magickml/portal-server-router'
 import { createTRPCProxyClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 import superjson from 'superjson'
