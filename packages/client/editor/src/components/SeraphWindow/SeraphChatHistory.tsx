@@ -1,8 +1,6 @@
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { useMessageHistory } from '../../hooks/useMessageHistory'
 
-export const SeraphChatHistory = () => {
-  const { history, scrollbars } = useMessageHistory()
+export const SeraphChatHistory = ({ history, scrollbars }) => {
   return (
     <div className="flex-1 overflow-hidden bg-[--ds-black]">
       <Scrollbars ref={ref => (scrollbars.current = ref)}>
