@@ -58,6 +58,7 @@ export const PortalDialog = ({
         {!noTrigger && <Button {...triggerButton}>{triggerText}</Button>}
       </DialogTrigger>
       <DialogContent
+        onPointerDownOutside={e => e.preventDefault()}
         className={cn(
           'max-w-[448px] sm:rounded-[5px] p-0 m-0 px-8 pt-14 pb-8 flex-col w-full gap-8',
           type === DialogType.INFO && 'border-ds-neutral',
@@ -84,7 +85,11 @@ export const PortalDialog = ({
 
         {children}
         <DialogFooter {...base.footer}>
-          <Button {...footerButton}>
+          <Button
+            {...footerButton}
+            {...(footerButton?.isLoading && { disabled: true },
+            { isLoading: undefined })}
+          >
             {footerButton?.isLoading && <Loading />}
             {footerText}
           </Button>
