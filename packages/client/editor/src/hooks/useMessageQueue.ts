@@ -26,7 +26,9 @@ export const useMessageQueue = () => {
       console.warn('Could not stream text, not a string', text)
       return
     }
+
     messageQueue.current.push(text)
+    processQueue()
   }
 
   return { processQueue, streamToConsole }
