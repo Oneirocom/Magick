@@ -34,6 +34,7 @@ export const useMessageHistory = () => {
     autoscroll,
     setAutoscroll,
     printToConsole,
+    setHistory,
     onClear,
   }
 }
