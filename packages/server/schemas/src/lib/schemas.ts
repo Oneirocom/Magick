@@ -78,7 +78,9 @@ export const agentSchema = Type.Object(
     draftAgentId: Type.Optional(Type.String()),
     embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
-    image: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
+    
+    image: Type.Optional(Type.Union([Type.Null(), Type.String()])),
+    description: Type.Optional(Type.Union([Type.Null(), Type.String()])),
   },
   {
     $id: 'Agent',
