@@ -3310,6 +3310,7 @@ export namespace Prisma {
     embeddingModel: string | null
     isDraft: boolean | null
     draftAgentId: string | null
+    description: string | null
   }
 
   export type AgentsMaxAggregateOutputType = {
@@ -3333,6 +3334,7 @@ export namespace Prisma {
     embeddingModel: string | null
     isDraft: boolean | null
     draftAgentId: string | null
+    description: string | null
   }
 
   export type AgentsCountAggregateOutputType = {
@@ -3358,6 +3360,7 @@ export namespace Prisma {
     embeddingModel: number
     isDraft: number
     draftAgentId: number
+    description: number
     _all: number
   }
 
@@ -3383,6 +3386,7 @@ export namespace Prisma {
     embeddingModel?: true
     isDraft?: true
     draftAgentId?: true
+    description?: true
   }
 
   export type AgentsMaxAggregateInputType = {
@@ -3406,6 +3410,7 @@ export namespace Prisma {
     embeddingModel?: true
     isDraft?: true
     draftAgentId?: true
+    description?: true
   }
 
   export type AgentsCountAggregateInputType = {
@@ -3431,6 +3436,7 @@ export namespace Prisma {
     embeddingModel?: true
     isDraft?: true
     draftAgentId?: true
+    description?: true
     _all?: true
   }
 
@@ -3529,6 +3535,7 @@ export namespace Prisma {
     embeddingModel: string | null
     isDraft: boolean
     draftAgentId: string | null
+    description: string | null
     _count: AgentsCountAggregateOutputType | null
     _min: AgentsMinAggregateOutputType | null
     _max: AgentsMaxAggregateOutputType | null
@@ -3571,6 +3578,7 @@ export namespace Prisma {
     embeddingModel?: boolean
     isDraft?: boolean
     draftAgentId?: boolean
+    description?: boolean
     agent_credentials?: boolean | agents$agent_credentialsArgs<ExtArgs>
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
     chatMessages?: boolean | agents$chatMessagesArgs<ExtArgs>
@@ -3604,6 +3612,7 @@ export namespace Prisma {
     embeddingModel?: boolean
     isDraft?: boolean
     draftAgentId?: boolean
+    description?: boolean
   }
 
   export type agentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3652,6 +3661,7 @@ export namespace Prisma {
       embeddingModel: string | null
       isDraft: boolean
       draftAgentId: string | null
+      description: string | null
     }, ExtArgs["result"]["agents"]>
     composites: {}
   }
@@ -4081,6 +4091,7 @@ export namespace Prisma {
     readonly embeddingModel: FieldRef<"agents", 'String'>
     readonly isDraft: FieldRef<"agents", 'Boolean'>
     readonly draftAgentId: FieldRef<"agents", 'String'>
+    readonly description: FieldRef<"agents", 'String'>
   }
     
 
@@ -18805,7 +18816,8 @@ export namespace Prisma {
     embeddingProvider: 'embeddingProvider',
     embeddingModel: 'embeddingModel',
     isDraft: 'isDraft',
-    draftAgentId: 'draftAgentId'
+    draftAgentId: 'draftAgentId',
+    description: 'description'
   };
 
   export type AgentsScalarFieldEnum = (typeof AgentsScalarFieldEnum)[keyof typeof AgentsScalarFieldEnum]
@@ -19100,7 +19112,8 @@ export namespace Prisma {
     version: 'version',
     embeddingProvider: 'embeddingProvider',
     embeddingModel: 'embeddingModel',
-    draftAgentId: 'draftAgentId'
+    draftAgentId: 'draftAgentId',
+    description: 'description'
   };
 
   export type agentsOrderByRelevanceFieldEnum = (typeof agentsOrderByRelevanceFieldEnum)[keyof typeof agentsOrderByRelevanceFieldEnum]
@@ -19464,6 +19477,7 @@ export namespace Prisma {
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
     draftAgentId?: UuidNullableFilter<"agents"> | string | null
+    description?: StringNullableFilter<"agents"> | string | null
     agent_credentials?: Agent_credentialsListRelationFilter
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: XOR<SpellReleasesNullableRelationFilter, spellReleasesWhereInput> | null
     chatMessages?: ChatMessagesListRelationFilter
@@ -19496,6 +19510,7 @@ export namespace Prisma {
     embeddingModel?: SortOrderInput | SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     agent_credentials?: agent_credentialsOrderByRelationAggregateInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesOrderByWithRelationAndSearchRelevanceInput
     chatMessages?: chatMessagesOrderByRelationAggregateInput
@@ -19532,6 +19547,7 @@ export namespace Prisma {
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
     draftAgentId?: UuidNullableFilter<"agents"> | string | null
+    description?: StringNullableFilter<"agents"> | string | null
     agent_credentials?: Agent_credentialsListRelationFilter
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: XOR<SpellReleasesNullableRelationFilter, spellReleasesWhereInput> | null
     chatMessages?: ChatMessagesListRelationFilter
@@ -19564,6 +19580,7 @@ export namespace Prisma {
     embeddingModel?: SortOrderInput | SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     _count?: agentsCountOrderByAggregateInput
     _max?: agentsMaxOrderByAggregateInput
     _min?: agentsMinOrderByAggregateInput
@@ -19595,6 +19612,7 @@ export namespace Prisma {
     embeddingModel?: StringNullableWithAggregatesFilter<"agents"> | string | null
     isDraft?: BoolWithAggregatesFilter<"agents"> | boolean
     draftAgentId?: UuidNullableWithAggregatesFilter<"agents"> | string | null
+    description?: StringNullableWithAggregatesFilter<"agents"> | string | null
   }
 
   export type chatMessagesWhereInput = {
@@ -20758,6 +20776,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -20790,6 +20809,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -20820,6 +20840,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -20852,6 +20873,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -20883,6 +20905,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
   }
 
   export type agentsUpdateManyMutationInput = {
@@ -20907,6 +20930,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type agentsUncheckedUpdateManyInput = {
@@ -20932,6 +20956,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type chatMessagesCreateInput = {
@@ -22415,6 +22440,7 @@ export namespace Prisma {
     embeddingModel?: SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrder
+    description?: SortOrder
   }
 
   export type agentsMaxOrderByAggregateInput = {
@@ -22438,6 +22464,7 @@ export namespace Prisma {
     embeddingModel?: SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrder
+    description?: SortOrder
   }
 
   export type agentsMinOrderByAggregateInput = {
@@ -22461,6 +22488,7 @@ export namespace Prisma {
     embeddingModel?: SortOrder
     isDraft?: SortOrder
     draftAgentId?: SortOrder
+    description?: SortOrder
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -24361,6 +24389,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -24392,6 +24421,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -24470,6 +24500,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -24501,6 +24532,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -24983,6 +25015,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -25014,6 +25047,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -25059,6 +25093,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -25090,6 +25125,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -25157,6 +25193,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -25188,6 +25225,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     pluginState?: pluginStateUncheckedCreateNestedManyWithoutAgentsInput
@@ -25233,6 +25271,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -25264,6 +25303,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     pluginState?: pluginStateUncheckedUpdateManyWithoutAgentsNestedInput
@@ -25293,6 +25333,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -25324,6 +25365,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -25369,6 +25411,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -25400,6 +25443,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -25429,6 +25473,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsCreateNestedManyWithoutAgentsInput
@@ -25459,6 +25504,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -25499,6 +25545,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -25530,6 +25577,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -25614,6 +25662,7 @@ export namespace Prisma {
     embeddingModel?: StringNullableFilter<"agents"> | string | null
     isDraft?: BoolFilter<"agents"> | boolean
     draftAgentId?: UuidNullableFilter<"agents"> | string | null
+    description?: StringNullableFilter<"agents"> | string | null
   }
 
   export type agentsUpsertWithoutSpellReleases_spellReleases_agentIdToagentsInput = {
@@ -25649,6 +25698,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -25680,6 +25730,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -25795,6 +25846,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsCreateNestedManyWithoutAgentsInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesCreateNestedOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesInput
     chatMessages?: chatMessagesCreateNestedManyWithoutAgentsInput
@@ -25826,6 +25878,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
     agent_credentials?: agent_credentialsUncheckedCreateNestedManyWithoutAgentsInput
     chatMessages?: chatMessagesUncheckedCreateNestedManyWithoutAgentsInput
     graphEvents?: graphEventsUncheckedCreateNestedManyWithoutAgentsInput
@@ -25871,6 +25924,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: spellReleasesUpdateOneWithoutAgents_agents_currentSpellReleaseIdTospellReleasesNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
@@ -25902,6 +25956,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -26191,6 +26246,7 @@ export namespace Prisma {
     embeddingModel?: string | null
     isDraft?: boolean
     draftAgentId?: string | null
+    description?: string | null
   }
 
   export type spellsCreateManySpellReleasesInput = {
@@ -26225,6 +26281,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUpdateManyWithoutAgentsNestedInput
@@ -26255,6 +26312,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     agent_credentials?: agent_credentialsUncheckedUpdateManyWithoutAgentsNestedInput
     chatMessages?: chatMessagesUncheckedUpdateManyWithoutAgentsNestedInput
     graphEvents?: graphEventsUncheckedUpdateManyWithoutAgentsNestedInput
@@ -26285,6 +26343,7 @@ export namespace Prisma {
     embeddingModel?: NullableStringFieldUpdateOperationsInput | string | null
     isDraft?: BoolFieldUpdateOperationsInput | boolean
     draftAgentId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type spellsUpdateWithoutSpellReleasesInput = {
