@@ -58,6 +58,7 @@ export class ImageUploader {
     image: string,
     type: UploadImageType
   ): Promise<PutObjectOutput> {
+    console.log('Uploading image to S3', { id, type })
     const { folder, fileKey } = this.typeToFolderAndFileKeyMap[type]
     const buffer = this.createBufferFromImage(image)
 
@@ -69,10 +70,14 @@ export class ImageUploader {
       ContentType: 'image/jpeg',
     }
 
+    console.log('Uploading image to S3', { s3Params })
+
     const command = new PutObjectCommand(s3Params)
 
     try {
+      console.log('Uploading image to S3', { command })
       return await this.s3.send(command)
+      console.log('Image uploaded to S3', { id, type })
     } catch (error) {
       console.error('Error uploading image to S3', { error })
       throw error
