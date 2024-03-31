@@ -61,7 +61,7 @@ const AgentListItem = ({
             className="object-cover w-full h-full rounded-full"
             src={
               agent?.image
-                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${agent?.image}`
+                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}/${agent?.image}`
                 : defaultImage(agent?.id || '1')
             }
             alt={agent.name.at(0) || 'A'}
