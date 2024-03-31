@@ -7,7 +7,7 @@ export interface UploadPresignerConfig {
   region: string;
   endpoint: string;
   bucketName: string;
-  presignTypes: Record<string, { folder: string; fileKey: string }>;
+  presignTypes: Record<string, { folder: string; fileKey?: string }>;
 }
 
 export class UploadPresigner {
@@ -15,7 +15,7 @@ export class UploadPresigner {
   private readonly bucketName: string;
   private readonly typeToFolderAndFileKeyMap: Record<
     string,
-    { folder: string; fileKey: string }
+    { folder: string; fileKey?: string }
   >;
 
   constructor(config: UploadPresignerConfig) {
@@ -34,21 +34,27 @@ export class UploadPresigner {
 
   public async getPresignedUrl(
     id: string,
+    fileName: string,
     type: string
-  ): Promise<string | null> {
+  ) {
     const { folder, fileKey } = this.typeToFolderAndFileKeyMap[type];
-    const key = `${folder}/${id}/${fileKey}`;
+    const key = fileKey ? `${folder}/${id}/${fileKey}/${fileName}` : `${folder}/${id}/${fileName}`;
+
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
-      ContentType: 'image/jpeg',
+      ContentType: 'application/octet-stream',
     });
 
     console.log('Generating presigned URL', { key });
+
     try {
       const url = await getSignedUrl(this.s3, command, { expiresIn: 3600 });
       console.log('Generated presigned URL', { url });
-      return url;
+      return {
+        url: url,
+        key: key,
+      }
     } catch (error) {
       console.error('Error generating presigned URL', { error });
       return null;
