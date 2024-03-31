@@ -148,8 +148,8 @@ export function AgentMenu({ data }) {
           <AvatarImage
             className="object-cover w-full h-full rounded-full"
             src={
-              currentAgent?.image
-                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${currentAgent?.image}`
+              publishedAgent?.image
+                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}/${publishedAgent?.image}`
                 : defaultImage(currentAgent?.id || '1')
             }
             alt={currentAgent?.name.at(0) || 'A'}
@@ -194,7 +194,7 @@ export function AgentMenu({ data }) {
           {draftAgent && (
             <AgentListItem
               key={draftAgent.id}
-              agent={draftAgent}
+              agent={{ ...draftAgent, image: publishedAgent?.image || null }}
               onSelectAgent={handleSelectAgent}
               isDraft
             />
