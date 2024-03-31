@@ -1,32 +1,44 @@
 import { rootApi } from './api'
+import type { Prisma } from '@magickml/server-db'
+
+export type KnowledgeItem = Prisma.$knowledgePayload['scalars']
+export interface KnowledgeResponse {
+  total: number
+  limit: number
+  skip: number
+  data: KnowledgeItem[]
+}
 
 export const knowledgeApi = rootApi.injectEndpoints({
   endpoints: builder => ({
-    getKnowledge: builder.query({
+    getKnowledge: builder.query<
+      KnowledgeResponse,
+      { limit?: number; skip?: number }
+    >({
       providesTags: ['Knowledge'],
-      query: () => ({
+      query: ({ limit = 1000, skip = 0 }) => ({
         url: `knowledge`,
+        params: { limit, skip },
       }),
     }),
-    getOneKnowledge: builder.query({
+    getOneKnowledge: builder.query<KnowledgeItem, { knowledgeId: string }>({
       providesTags: ['OneKnowledge'],
-      query: ({ knowledgeId }) => {
-        return {
-          url: `knowledge/${knowledgeId}`,
-          params: {},
-        }
-      },
+      query: ({ knowledgeId }) => ({
+        url: `knowledge/${knowledgeId}`,
+        params: {},
+      }),
     }),
-    getKnowledgeById: builder.query({
+    getKnowledgeById: builder.query<KnowledgeItem, { knowledgeId: string }>({
       providesTags: ['OneKnowledge'],
-      query: ({ knowledgeId }) => {
-        return {
-          url: `knowledge/${knowledgeId}`,
-          params: {},
-        }
-      },
+      query: ({ knowledgeId }) => ({
+        url: `knowledge/${knowledgeId}`,
+        params: {},
+      }),
     }),
-    createKnowledge: builder.mutation({
+    createKnowledge: builder.mutation<
+      KnowledgeItem,
+      { knowledge: Omit<KnowledgeItem, 'id' | 'createdAt' | 'updatedAt'> }
+    >({
       invalidatesTags: ['Knowledge'],
       query: ({ knowledge }) => ({
         url: `knowledge`,
@@ -34,17 +46,18 @@ export const knowledgeApi = rootApi.injectEndpoints({
         body: knowledge,
       }),
     }),
-    updateKnowledge: builder.mutation({
+    updateKnowledge: builder.mutation<
+      KnowledgeItem,
+      { knowledge: Partial<KnowledgeItem> }
+    >({
       invalidatesTags: ['Knowledge', 'OneKnowledge'],
-      query: ({ knowledge }) => {
-        return {
-          url: `knowledge/${knowledge.id}`,
-          method: 'PATCH',
-          body: knowledge,
-        }
-      },
+      query: ({ knowledge }) => ({
+        url: `knowledge/${knowledge.id}`,
+        method: 'PATCH',
+        body: knowledge,
+      }),
     }),
-    deleteKnowledge: builder.mutation({
+    deleteKnowledge: builder.mutation<void, { knowledgeId: string }>({
       invalidatesTags: ['Knowledge', 'OneKnowledge'],
       query: ({ knowledgeId }) => ({
         url: `knowledge/${knowledgeId}`,
