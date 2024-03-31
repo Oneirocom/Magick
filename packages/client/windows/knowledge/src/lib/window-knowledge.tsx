@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useGetKnowledgeQuery } from 'client/state'
+import { useDeleteKnowledgeMutation, useGetKnowledgeQuery } from 'client/state'
 import { LoadingScreen } from 'client/core'
 import {
   Button,
@@ -13,6 +13,7 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { WindowHeader, WindowContainer } from 'windows-shared'
 import type { KnowledgeItem } from 'client/state'
 import { AddKnowledgeDialog } from './dialogs/knowledge-add-dialog'
+import { useSnackbar } from 'notistack'
 
 type Props = {}
 
@@ -24,6 +25,37 @@ export const KnowledgeWindow = (props: Props) => {
     limit,
     skip: (page - 1) * limit,
   })
+
+  const [deleteKnowledge] = useDeleteKnowledgeMutation()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleKnowledgeDelete = async (knowledgeId: string) => {
+    try {
+      await deleteKnowledge({ knowledgeId }).unwrap()
+      enqueueSnackbar('Knowledge deleted', { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar('Error deleting knowledge', { variant: 'error' })
+    }
+  }
+
+  const renderRowActionMenu = (row: Row<KnowledgeItem>) => (
+    <>
+      <DropdownMenuItem
+        onClick={() => console.log('View knowledge:', row.original)}
+      >
+        View Knowledge
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        onClick={() => console.log('Edit knowledge:', row.original)}
+      >
+        Edit Knowledge
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={() => handleKnowledgeDelete(row.original.id)}>
+        Delete Knowledge
+      </DropdownMenuItem>
+    </>
+  )
 
   const columns: ColumnDef<KnowledgeItem, unknown>[] = [
     {
@@ -97,27 +129,6 @@ export const KnowledgeWindow = (props: Props) => {
       ),
     },
   ]
-
-  const renderRowActionMenu = (row: Row<KnowledgeItem>) => (
-    <>
-      <DropdownMenuItem
-        onClick={() => console.log('View knowledge:', row.original)}
-      >
-        View Knowledge
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onClick={() => console.log('Edit knowledge:', row.original)}
-      >
-        Edit Knowledge
-      </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem
-        onClick={() => console.log('Delete knowledge:', row.original)}
-      >
-        Delete Knowledge
-      </DropdownMenuItem>
-    </>
-  )
 
   if (isLoading) {
     return <LoadingScreen />
