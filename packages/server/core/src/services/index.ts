@@ -14,6 +14,7 @@ import { webhook } from './webhook/webhook-service'
 import { health } from './health/health-service'
 import { pluginState } from './state/plugin-state-service'
 import { pluginCommand } from './commands/plugin-command-service'
+import { presigner } from './presigner/presigner-service'
 
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
 import type { Application } from '../declarations'
@@ -41,6 +42,7 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(health)
   app.configure(pluginState)
   app.configure(pluginCommand)
+  app.configure(presigner)
 
   // Wait for a tick to handle race condition
   // TODO: handle this race condition better
