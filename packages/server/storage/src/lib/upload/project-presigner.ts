@@ -16,7 +16,7 @@ const types: UploadPresignerConfig['presignTypes'] = {
 const config: UploadPresignerConfig = {
   accessKeyId: process.env?.['PROJECT_AWS_ACCESS_KEY_ID'] || '',
   secretAccessKey: process.env?.['PROJECT_AWS_SECRET_ACCESS'] || '',
-  region: process.env?.['PROJECT_AWS_REGION'] || '',
+  region: process.env?.['PROJECT_AWS_REGION'] || 'PROJECT_AWS_REGION',
   endpoint: process.env?.['PROJECT_AWS_ENDPOINT'] || '',
   bucketName: process.env?.['PROJECT_AWS_BUCKET_NAME'] || '',
   presignTypes: types,

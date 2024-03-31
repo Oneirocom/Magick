@@ -21,11 +21,11 @@ const types: UploadPresignerConfig['presignTypes'] = {
 };
 
 const config: UploadPresignerConfig = {
-  accessKeyId: process.env?.['NEXT_AWS_ACCESS_KEY_ID'] || '',
-  secretAccessKey: process.env?.['NEXT_AWS_SECRET_ACCESS_KEY'] || '',
-  region: process.env?.['NEXT_AWS_REGION'] || '',
+  accessKeyId: process.env?.['PROJECT_AWS_ACCESS_KEY_ID'] || '',
+  secretAccessKey: process.env?.['PROJECT_AWS_SECRET_ACCESS_KEY'] || '',
+  region: process.env?.['PROJECT_AWS_REGION'] || 'east-1',
   endpoint: process.env?.['PROJECT_AWS_BUCKET_ENDPOINT'] || '',
-  bucketName: process.env?.['NEXT_AWS_BUCKET_NAME'] || '',
+  bucketName: process.env?.['PROJECT_AWS_BUCKET_NAME'] || '',
   presignTypes: types,
 };
 
