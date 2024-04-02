@@ -61,10 +61,6 @@ const TextEditor = props => {
       })
     }
 
-    if (activeInput) {
-      dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
-    }
-
     if (!selectedNode.data?.configuration?.textEditorOptions?.options?.language)
       return
     const { textEditorOptions } = configuration
@@ -112,6 +108,18 @@ const TextEditor = props => {
       socketInputs: [...configuration.socketInputs, ...sockets.filter(Boolean)],
     })
   }, [debouncedCode])
+
+  // Handle updating the nodes input socket value
+  useEffect(() => {
+    if (code === undefined || !selectedNode || !activeInput) return
+
+    const formattedCode = code.replace('\r\n', '\n')
+    if (formattedCode === activeInput.value) return
+
+    if (activeInput) {
+      dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
+    }
+  }, [code, selectedNode, activeInput])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
