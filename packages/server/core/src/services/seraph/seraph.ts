@@ -18,28 +18,39 @@ import { checkPermissions } from '../../lib/feathersPermissions'
 export * from './seraph.class'
 export * from './seraph.schema'
 
+// Update these to match seraph emitter
 const SERAPH_EVENTS = [
+  'error',
+  'message',
+  'info',
+  'token',
   'request',
   'response',
-  'error',
-  'info',
-  'functionStart',
-  'functionEnd',
+  'functionExecution',
+  'functionResult',
+  'middlewareExecution',
+  'middlewareResult',
 ]
 
 /**
  * Configure the seraph events service by registering it, its hooks, and its options.
  * @param app - The Feathers application
  */
-export const seraphEvent = (app: Application) => {
+export const seraph = (app: Application) => {
   // Register the seraph events service on the Feathers application
-  app.use('seraphEvents', new SeraphService(getOptions(app), app), {
+  app.use('seraph', new SeraphService(getOptions(app), app), {
     methods: ['create', 'find', 'get'],
     events: SERAPH_EVENTS,
   })
 
+  // const seraph = app.get('seraph')
+
+  // seraph.on('token', (token: string) => {
+  //   app.services('seraph').emit('token', token)
+  // })
+
   // Initialize hooks for the seraph events service
-  app.service('seraphEvents').hooks({
+  app.service('seraph').hooks({
     around: {
       all: [
         schemaHooks.resolveExternal(seraphEventExternalResolver),
@@ -77,6 +88,6 @@ export const seraphEvent = (app: Application) => {
 
 declare module '../../declarations' {
   interface ServiceTypes {
-    seraphEvents: SeraphService
+    seraph: SeraphService
   }
 }
