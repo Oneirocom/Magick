@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 import {
   ISeraphEvent,
   SeraphEvents,
-  SeraphFunction,
   SeraphRequest,
 } from '../../../../shared/servicesShared/src'
 
@@ -23,26 +22,13 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   const [info, setInfo] = useState<string | undefined>()
   const [error, setError] = useState<string | undefined>()
   const [response, setResponse] = useState<ISeraphEvent>()
-  const [functionStart, setFunctionStart] = useState<
-    SeraphFunction | undefined
-  >()
-  const [functionEnd, setFunctionEnd] = useState<SeraphFunction | undefined>()
 
   // set up listeners for response, error, info,
   useEffect(() => {
     const destoryResponseListener = subscribe(
       $SERAPH_RESPONSE(tab.id),
       (event, data) => {
-        switch (data.response?.type) {
-          case SeraphEvents.functionStart:
-            setFunctionStart(data.response.functionStart)
-            break
-          case SeraphEvents.functionEnd:
-            setFunctionEnd(data.response.functionEnd)
-            break
-          default:
-            setResponse(data.response.message)
-        }
+        console.log('RESPONSE', event)
         setResponse(data.response)
       }
     )
@@ -67,6 +53,12 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
       destroyInfoListener()
     }
   }, [$SERAPH_RESPONSE, $SERAPH_ERROR, $SERAPH_INFO])
+
+  useEffect(() => {
+    if (!response) return
+    setHistory(prevHistory => [...prevHistory, response])
+    // streamToConsole(response.response?.message || '')
+  }, [response])
 
   // fetch seraph chat history
   useEffect(() => {
@@ -98,10 +90,8 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
 
   return {
     info,
-    error: requestError || error,
     response,
+    error: requestError || error,
     makeSeraphRequest,
-    functionStart,
-    functionEnd,
   }
 }
