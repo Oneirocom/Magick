@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
@@ -13,7 +13,7 @@ import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 import { ChatInput } from './ChatInput'
 import { Button, Checkbox, Label } from '@magickml/client-ui'
 import posthog from 'posthog-js'
-import { useMessageHistory } from '../../hooks/useMessageHistory'
+import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
 import { useSelector } from 'react-redux'
@@ -36,7 +36,6 @@ const ChatWindow = ({ tab, spellName }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
-  const { localState, onDataChange } = usePlaytestData(tab.id)
 
   const {
     history,
@@ -45,11 +44,13 @@ const ChatWindow = ({ tab, spellName }) => {
     setAutoscroll,
     printToConsole,
     onClear,
-  } = useMessageHistory()
+  } = useMessageHistory<Message>()
 
   const { streamToConsole } = useMessageQueue()
 
   const MESSAGE_AGENT = events.MESSAGE_AGENT
+
+  const { localState, onDataChange } = usePlaytestData(tab.id)
 
   // React to new events
   React.useEffect(() => {
