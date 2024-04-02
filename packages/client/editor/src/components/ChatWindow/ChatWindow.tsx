@@ -53,7 +53,7 @@ const ChatWindow = ({ tab, spellName }) => {
   const { localState, onDataChange } = usePlaytestData(tab.id)
 
   // React to new events
-  React.useEffect(() => {
+  useEffect(() => {
     if (!lastEvent || !spell?.id) return
 
     const { data, event, actionName } = lastEvent
