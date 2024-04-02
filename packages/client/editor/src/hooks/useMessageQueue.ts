@@ -31,5 +31,5 @@ export const useMessageQueue = () => {
     processQueue()
   }
 
-  return { processQueue, streamToConsole }
+  return { processQueue, streamToConsole, messageQueue }
 }
