@@ -71,7 +71,7 @@ const ChatWindow = ({ tab, spellName }) => {
     } else if (actionName === STREAM_MESSAGE) {
       streamToConsole(content)
     }
-  }, [lastEvent, printToConsole, spell?.id, streamToConsole])
+  }, [lastEvent])
 
   // Handle message sending
   const onSend = async () => {
