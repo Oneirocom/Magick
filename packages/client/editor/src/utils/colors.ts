@@ -1,4 +1,5 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
+import { AgentIcon, StarIcon } from '@magickml/icons'
 
 export type color =
   | 'red'
@@ -42,4 +43,16 @@ export const categoryColorMap: Record<NodeSpecJSON['category'], color> = {
   Effect: 'lime',
   Time: 'purple',
   None: 'green',
+}
+
+export const categoryIconMap: Record<NodeSpecJSON['category'], any> = {
+  Event: StarIcon,
+  Logic: AgentIcon,
+  Variable: AgentIcon,
+  Query: AgentIcon,
+  Action: AgentIcon,
+  Flow: AgentIcon,
+  Effect: AgentIcon,
+  Time: AgentIcon,
+  None: AgentIcon,
 }
