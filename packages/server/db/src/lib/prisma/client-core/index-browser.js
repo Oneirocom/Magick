@@ -136,7 +136,8 @@ exports.Prisma.AgentsScalarFieldEnum = {
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
   isDraft: 'isDraft',
-  draftAgentId: 'draftAgentId'
+  draftAgentId: 'draftAgentId',
+  description: 'description'
 };
 
 exports.Prisma.ChatMessagesScalarFieldEnum = {
@@ -362,7 +363,8 @@ exports.Prisma.agentsOrderByRelevanceFieldEnum = {
   version: 'version',
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
-  draftAgentId: 'draftAgentId'
+  draftAgentId: 'draftAgentId',
+  description: 'description'
 };
 
 exports.Prisma.chatMessagesOrderByRelevanceFieldEnum = {

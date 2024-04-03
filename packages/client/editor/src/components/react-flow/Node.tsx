@@ -157,10 +157,9 @@ export const Node: React.FC<NodeProps> = ({
   }, [spellEvent])
 
   const isActive = (x: string) => {
+    if (activeInput?.nodeId !== id) return false
     return activeInput?.name === x
   }
-
-  console.log('value inputs', valueInputs)
 
   return (
     <NodeContainer

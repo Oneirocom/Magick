@@ -46,3 +46,5 @@ export const services = async (app: Application): Promise<void> => {
   // TODO: handle this race condition better
   await new Promise(resolve => setTimeout(resolve, 1))
 }
+
+export { type SpellData } from './spells/spells.schema'

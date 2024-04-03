@@ -2,3 +2,8 @@
   background: rgba(255, 255, 255, 0.249) !important;
   transition-delay: 0.2s !important;
 }
+
+.pane-container .pane .pane-body:focus:before,
+.pane-container .pane .pane-body:focus-within:before {
+  outline-offset: 0;
+}

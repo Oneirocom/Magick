@@ -1,3 +1,5 @@
+import { ISeraphEvent } from 'servicesShared'
+
 export type PubSubEvents = {
   ADD_SUBSPELL: string
   UPDATE_SUBSPELL: string
@@ -55,5 +57,9 @@ export interface PubSubContext {
   events: PubSubEvents
 }
 
-export type PubSubData = Record<string, unknown> | string | unknown[]
+export type PubSubData =
+  | Record<string, unknown>
+  | string
+  | unknown[]
+  | ISeraphEvent
 export type PubSubCallback = (event: string, data: PubSubData) => void

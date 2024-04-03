@@ -53,6 +53,12 @@
       "@magickml/portal-providers": [
         "portal/cloud/packages/providers/src/index.ts"
       ],
+      "@magickml/portal-server-core": [
+        "portal/cloud/packages/server/core/src/index.ts"
+      ],
+      "@magickml/portal-server-router": [
+        "portal/cloud/packages/server/router/src/index.ts"
+      ],
       "@magickml/portal-state": ["portal/cloud/packages/state/src/index.ts"],
       "@magickml/portal-templates": [
         "portal/cloud/packages/templates/src/index.ts"

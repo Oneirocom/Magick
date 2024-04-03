@@ -10,6 +10,7 @@ type ActiveInputType = {
   name: string
   inputType: string
   value: string
+  nodeId: string
 }
 
 /**
@@ -50,6 +51,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
       name: '',
       inputType: '',
       value: '',
+      nodeId: '',
     },
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
@@ -201,6 +203,7 @@ export const selectActiveInput = state =>
     name: string
     inputType: string
     value: string
+    nodeId: string
   }
 
 export const selectPastState = state => state.globalConfig.pastState

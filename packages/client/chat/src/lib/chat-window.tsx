@@ -54,8 +54,8 @@ export const ChatWindow = ({
     <>
       <div
         className={cn(
-          'pb-24 flex-col grow w-full h-full lg:px-0 relative overflow-hidden transition-all duration-150 ease-in-out flex',
-          'lg:max-w-5xl mx-auto md:max-w-2xl',
+          'flex-col grow w-full h-full lg:px-0 relative overflow-hidden transition-all duration-150 ease-in-out flex',
+
           classNames
         )}
       >
@@ -65,7 +65,6 @@ export const ChatWindow = ({
           agentAvatar={agentAvatar}
         />
 
-        <div className="absolute bottom-0 left-0 right-0 w-full mx-auto md:bottom-14 lg:px-5 lg:bottom-0">
           <ChatInput
             value={input}
             handleChange={handleChange}
@@ -74,7 +73,7 @@ export const ChatWindow = ({
             isResponding={isResponding}
             agentName={agentName}
           />
-        </div>
+     
       </div>
     </>
   )

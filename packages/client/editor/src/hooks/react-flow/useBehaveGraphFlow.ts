@@ -104,7 +104,7 @@ export const useBehaveGraphFlow = ({
     return () => {
       reloadGraphEvent()
     }
-  }, [$RELOAD_GRAPH])
+  }, [$RELOAD_GRAPH, tab.id, setGraphJson, subscribe])
 
   const nodeTypes = useCustomNodeTypes({
     tab,
