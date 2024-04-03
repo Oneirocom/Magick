@@ -6,7 +6,12 @@ import {
 import cx from 'classnames'
 import React, { PropsWithChildren } from 'react'
 
-import { categoryColorMap, colors, valueTypeColorMap } from '../../utils/colors'
+import {
+  categoryColorMap,
+  categoryIconMap,
+  colors,
+  valueTypeColorMap,
+} from '../../utils/colors'
 import { SpellInterface } from 'server/schemas'
 
 import css from './node.module.css'
@@ -18,6 +23,7 @@ type Config = {
 
 type NodeProps = {
   title: string
+  label: string
   category?: NodeSpecJSON['category']
   selected: boolean
   onClick?: () => void
@@ -34,6 +40,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   selected,
   children,
   fired,
+  label,
   config,
   running,
   graph,
@@ -43,6 +50,8 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   if (colorName === undefined) {
     colorName = 'red'
   }
+
+  const NodeIcon = categoryIconMap[category]
 
   let [backgroundColor, textColor] = colors[colorName]
 
@@ -72,11 +81,16 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
         >
           <div
             className={cx(
-              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100`
+              `${backgroundColor} ${textColor} px-2 py-0.5 rounded-t opacity-100 flex flex-row gap-1 items-center`
             )}
           >
-            {title}
-            {config?.label && ` - ${config.label}`}
+            <div className="flex mr-1">
+              <NodeIcon width={24} height={24} />
+            </div>
+            <div>
+              <h2 className="text-md font-medium">{label}</h2>
+              <h3 className="text-xs">{title}</h3>
+            </div>
           </div>
           <div className={`flex flex-col gap-1 py-1`}>{children}</div>
         </div>
