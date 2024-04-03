@@ -35,7 +35,8 @@ export const usePlaytestData = (tabId: string) => {
     }
   }, [config.projectId, dispatch, localState, tabId])
 
-  const onDataChange = (dataText: string) => {
+  const onDataChange = (dataText: string | undefined) => {
+    if (!dataText) return
     dispatch(
       upsertLocalState({
         id: tabId,
