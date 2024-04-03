@@ -30,7 +30,7 @@ class SeraphIterator implements AsyncIterator<string> {
     const stream = this.llmManager.streamResponse(
       this.systemPrompt,
       messages,
-      1024
+      4000
     )
 
     stream.on('text', token => {
@@ -57,6 +57,8 @@ class SeraphIterator implements AsyncIterator<string> {
     })
 
     const finalMessage = await stream.finalMessage()
+
+    console.log('FINAL MESSAGE:', finalMessage)
 
     const llmResponse = finalMessage.content[0].text
 
