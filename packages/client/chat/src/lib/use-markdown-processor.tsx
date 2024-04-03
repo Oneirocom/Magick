@@ -82,38 +82,38 @@ export const useMarkdownProcessor = (content: string) => {
             <img src={src} alt={alt} className="" />
           ),
           h1: ({ children, id }: JSX.IntrinsicElements['h1']) => (
-            <h1 className=" font-semibold text-3xl my-3" id={id}>
+            <h1 className=" font-semibold text-2xl my-3" id={id}>
               {children}
             </h1>
           ),
           h2: ({ children, id }: JSX.IntrinsicElements['h2']) => (
-            <h2 className=" font-medium text-3xl my-3" id={id}>
+            <h2 className=" font-medium text-2xl my-3" id={id}>
               {children}
             </h2>
           ),
           h3: ({ children, id }: JSX.IntrinsicElements['h3']) => (
-            <h3 className=" font-semibold text-2xl my-3" id={id}>
+            <h3 className=" font-semibold text-xl my-3" id={id}>
               {children}
             </h3>
           ),
           h4: ({ children, id }: JSX.IntrinsicElements['h4']) => (
-            <h4 className=" font-medium text-2xl my-2" id={id}>
+            <h4 className=" font-medium text-xl my-2" id={id}>
               {children}
             </h4>
           ),
           h5: ({ children, id }: JSX.IntrinsicElements['h5']) => (
-            <h5 className=" font-semibold text-xl ,y-2" id={id}>
+            <h5 className=" font-semibold text-lg ,y-2" id={id}>
               {children}
             </h5>
           ),
           h6: ({ children, id }: JSX.IntrinsicElements['h6']) => (
-            <h6 className=" font-medium text-xl" id={id}>
+            <h6 className=" font-medium text-lg" id={id}>
               {children}
             </h6>
           ),
           p: (props: JSX.IntrinsicElements['p']) => {
             return (
-              <p className=" text-sm md:text-base lg:text-lg ">
+              <p className=" text-xs md:text-sm lg:text-base ">
                 {props.children}
               </p>
             )
@@ -128,7 +128,7 @@ export const useMarkdownProcessor = (content: string) => {
           pre: ({ children }: JSX.IntrinsicElements['pre']) => {
             return (
               <div className="relative mb-6">
-                <pre className="whitespace-pre-wrap p-4 rounded-lg rounded-tl-none rounded-br-none bg-[#f0f5f6] dark:bg-[#262b2e] [&>code.hljs]:p-0 [&>code.hljs]:bg-transparent font-code text-sm md:text-base lg:text-lg overflow-x-auto flex items-start">
+                <pre className="whitespace-pre-wrap p-4 rounded-lg rounded-tl-none rounded-br-none bg-ds-neutral [&>code.hljs]:p-0 [&>code.hljs]:bg-transparent font-code text-xs md:text-sm lg:text-base overflow-x-auto flex items-start">
                   {children}
                 </pre>
               </div>
@@ -154,7 +154,7 @@ export const useMarkdownProcessor = (content: string) => {
                 (child, index) => (
                   <li key={index} className="flex gap-2 items-start">
                     <div
-                      className=" text-sm md:text-base lg:text-lg font-semibold shrink-0 min-w-[1.4ch]"
+                      className=" text-xs md:text-sm lg:text-base font-semibold shrink-0 min-w-[1.4ch]"
                       aria-hidden
                     >
                       {index + 1}.
@@ -166,7 +166,7 @@ export const useMarkdownProcessor = (content: string) => {
             </ol>
           ),
           li: ({ children }: JSX.IntrinsicElements['li']) => (
-            <div className=" text-sm md:text-base lg:text-lg">{children}</div>
+            <div className=" text-xs md:text-sm lg:text-base">{children}</div>
           ),
           table: ({ children }: JSX.IntrinsicElements['table']) => (
             <div className="overflow-x-auto ">
@@ -176,15 +176,15 @@ export const useMarkdownProcessor = (content: string) => {
             </div>
           ),
           thead: ({ children }: JSX.IntrinsicElements['thead']) => (
-            <thead className="bg-[#f0f5f6] dark:bg-[#262b2e]">{children}</thead>
+            <thead className="bg-ds-neutral">{children}</thead>
           ),
           th: ({ children }: JSX.IntrinsicElements['th']) => (
-            <th className="border-2 border-black dark:border-white p-2  text-sm md:text-base lg:text-lg font-semibold ">
+            <th className="border-2 border-black dark:border-white p-2  text-xs md:text-sm lg:text-base font-semibold ">
               {children}
             </th>
           ),
           td: ({ children }: JSX.IntrinsicElements['td']) => (
-            <td className="border-2 border-black dark:border-white p-2  text-sm md:text-base lg:text-lg ">
+            <td className="border-2 border-black dark:border-white p-2  text-xs md:text-sm lg:text-base ">
               {children}
             </td>
           ),
@@ -250,7 +250,7 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements['code']) => {
   }
 
   return (
-    <code className="inline-block font-code bg-[#f0f5f6] dark:bg-[#262b2e]  p-0.5 -my-0.5 rounded">
+    <code className="inline-block font-code bg-ds-neutral  p-0.5 -my-0.5 rounded">
       {children}
     </code>
   )
@@ -274,14 +274,14 @@ const Latex = ({ content }: { content: string }) => {
     return (
       <div className="flex gap-2 items-center">
         <span className="loading loading-spinner w-4 h-4 " />
-        <p className=" text-sm md:text-base lg:text-lg text-slate-700">
+        <p className=" text-xs md:text-sm lg:text-base text-slate-700">
           Rendering equation...
         </p>
       </div>
     )
   } else if (diagram === false) {
     return (
-      <p className=" text-sm md:text-base lg:text-lg text-slate-700">
+      <p className=" text-xs md:text-sm lg:text-base text-slate-700">
         Unable to render this equation.
       </p>
     )
@@ -325,12 +325,12 @@ const Mermaid = ({ content }: { content: string }) => {
     return (
       <div className="flex gap-2 items-center">
         <span className="loading-spinner" />
-        <p className=" text-sm md:text-base lg:text-lg">Rendering diagram...</p>
+        <p className=" text-xs md:text-sm lg:text-base">Rendering diagram...</p>
       </div>
     )
   } else if (diagram === false) {
     return (
-      <p className=" text-sm md:text-base lg:text-lg">
+      <p className=" text-xs md:text-sm lg:text-base">
         Unable to render this diagram. Try copying it into the{' '}
         <Link href="https://mermaid.live/edit" target="_blank">
           Mermaid Live Editor

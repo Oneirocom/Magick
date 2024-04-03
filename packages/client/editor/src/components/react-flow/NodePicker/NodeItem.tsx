@@ -49,7 +49,7 @@ export const NodeItem = ({
                   e.stopPropagation()
                   handleClick({ item: subItem?.type })
                 }}
-                className="py-2 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer"
+                className="py-1 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer"
               >
                 <span className="ml-[14%]">
                   {subItem.title ?? subItem?.type}

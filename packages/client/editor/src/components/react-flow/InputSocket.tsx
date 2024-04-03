@@ -33,6 +33,7 @@ export type InputSocketProps = {
   isActive: boolean
   textEditorState: string
   valueTypeName?: string
+  nodeId: string
 } & InputSocketSpecJSON
 
 const InputFieldForValue = ({
@@ -45,6 +46,7 @@ const InputFieldForValue = ({
   connected,
   hideValue = false,
   isActive,
+  nodeId,
 }: Pick<
   InputSocketProps,
   | 'choices'
@@ -56,6 +58,7 @@ const InputFieldForValue = ({
   | 'connected'
   | 'hideValue'
   | 'isActive'
+  | 'nodeId'
 >) => {
   const dispatch = useDispatch()
   const activeInput = useSelector(selectActiveInput)
@@ -73,13 +76,15 @@ const InputFieldForValue = ({
   const handleChange = ({ key, value }: { key: string; value: any }) => {
     onChange(key, value)
     setInputVal(value)
-    dispatch(setActiveInput({ name, inputType: valueType, value }))
+    dispatch(setActiveInput({ name, inputType: valueType, value, nodeId }))
   }
 
   const onFocus = (x: string) => {
     if (valueType === 'string') {
       onChange(name, x)
-      dispatch(setActiveInput({ name, inputType: valueType, value: x }))
+      dispatch(
+        setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
+      )
       return
     }
     dispatch(setActiveInput(null))
@@ -170,6 +175,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
   lastEventInput,
   isActive,
   textEditorState,
+  nodeId,
   ...rest
 }) => {
   const { name, valueTypeName } = rest
@@ -206,6 +212,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
           hideValue={isArraySocket || isObjectSocket}
           isActive={isActive}
           valueType={valueType}
+          nodeId={nodeId}
         />
       )}
       <Popover>

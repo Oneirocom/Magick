@@ -8,6 +8,7 @@ import { NodePickerMenu } from './NodePickerMenu'
 import useFilteredAndGroupedNodes from './useFilteredAndGroupedNodes'
 import { autoCompleteSearchTerm } from './autoCompleteSearchTerm'
 import { NodePickerProps } from './types'
+import { Input } from '@magickml/client-ui'
 
 export const NodePicker: React.FC<NodePickerProps> = ({
   pickedNodePosition,
@@ -73,16 +74,16 @@ export const NodePicker: React.FC<NodePickerProps> = ({
 
   return (
     <div
-      className="fixed z-10 w-[340px] text-sm text-white border-2 border-[var(--ds-black)] rounded-md bg-[var(--ds-card-alt)] py-1"
+      className="fixed z-10 w-[240px] text-sm text-white border-2 border-[var(--ds-black)] rounded-md bg-[var(--ds-card-alt)] py-1"
       style={{ top: position.y, left: position.x }}
     >
       <div className="text-md px-2 py-1 font-bold">Node Selection</div>
       <div className="px-2 pb-1">
-        <input
+        <Input
           type="text"
           autoFocus
           placeholder="Search"
-          className="w-full bg-[#282d33] disabled:bg-gray-700 rounded-md py-1 focus:ring-2 focus:ring-[var(--ds-primary)] focus:outline-none"
+          className="w-full bg-[#282d33] disabled:bg-gray-700 rounded-md py-1 focus:ring-1 focus:ring[--ds-primary] focus:outline-none focus-visible:ring-1 focus-visible:ring-[--ds-primary] focus-visible:outline-none"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />

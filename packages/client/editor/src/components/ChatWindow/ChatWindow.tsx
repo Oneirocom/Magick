@@ -146,18 +146,16 @@ const ChatWindow = ({ tab, spellName }) => {
     const { data, event, actionName } = lastEvent
     const { content } = data
 
-    if (event?.runInfo?.spellId !== spell.id) return
-    if (event.channel !== spell.id) return
+    if (event?.runInfo?.spellId !== spell.id || event.channel !== spell.id)
+      return
 
     if (actionName === SEND_MESSAGE) {
       console.log('MESSAGE RECEIVED', content)
       printToConsole(content)
-    }
-
-    if (actionName === STREAM_MESSAGE) {
+    } else if (actionName === STREAM_MESSAGE) {
       streamToConsole(content)
     }
-  }, [lastEvent])
+  }, [lastEvent, printToConsole, spell?.id, streamToConsole])
 
   // Keep scrollbar at the bottom of its window.
   useEffect(() => {
