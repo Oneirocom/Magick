@@ -17,6 +17,9 @@ export const useMessageHistory = <TMessage>() => {
   }, [history, autoScroll])
 
   const printToConsole = (text: string) => {
+    if (typeof text !== 'string')
+      return console.warn('could not split text, not a string', text)
+
     const newMessage: Message = {
       sender: 'agent',
       content: `Agent: ${text}`,
