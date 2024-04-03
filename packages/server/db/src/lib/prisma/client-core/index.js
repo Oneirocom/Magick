@@ -525,7 +525,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/coffee/migrate/magick/packages/server/db/src/lib/prisma/client-core",
+      "value": "/Users/parzival/workspace/oneirocom/magickML/packages/server/db/src/lib/prisma/client-core",
       "fromEnvVar": null
     },
     "config": {
@@ -535,7 +535,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
@@ -604,8 +604,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "src/lib/prisma/client-core/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
+path.join(process.cwd(), "src/lib/prisma/client-core/libquery_engine-darwin-arm64.dylib.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/lib/prisma/client-core/schema.prisma")
