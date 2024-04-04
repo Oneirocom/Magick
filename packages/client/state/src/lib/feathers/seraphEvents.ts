@@ -1,25 +1,8 @@
 import root from './root'
 
-const seraphEventService = root.injectService<
-  'seraph',
-  ['request', 'response', 'error', 'info', 'functionStart', 'functionEnd']
->({
+const seraphEventService = root.injectService<'seraph', ['event']>({
   name: 'seraph',
-  events: [
-    'request',
-    'response',
-    'error',
-    'info',
-    'functionStart',
-    'functionEnd',
-  ],
+  events: ['event'],
 })
 
-export const {
-  useSelectSeraphRequest,
-  useSelectSeraphResponse,
-  useSelectSeraphError,
-  useSelectSeraphInfo,
-  useSelectSeraphFunctionStart,
-  useSelectSeraphFunctionEnd,
-} = seraphEventService.selectors
+export const { useSelectSeraphEvent } = seraphEventService.selectors
