@@ -5,8 +5,8 @@ export type Message = {
   content: string
 }
 
-export const useMessageHistory = <TMessage>() => {
-  const [history, setHistory] = useState<TMessage[]>([])
+export const useMessageHistory = () => {
+  const [history, setHistory] = useState<Message[]>([])
   const scrollbars = useRef<any>()
   const [autoScroll, setAutoScroll] = useState<boolean>(true)
 
@@ -24,7 +24,7 @@ export const useMessageHistory = <TMessage>() => {
       sender: 'agent',
       content: `Agent: ${text}`,
     }
-    setHistory(prevHistory => [...prevHistory, newMessage] as TMessage[])
+    setHistory(prevHistory => [...prevHistory, newMessage] as Message[])
   }
 
   const onClear = () => {
