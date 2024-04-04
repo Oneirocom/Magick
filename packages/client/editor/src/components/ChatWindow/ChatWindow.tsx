@@ -45,7 +45,7 @@ const ChatWindow = ({ tab, spellName }) => {
     printToConsole,
     onClear,
     setHistory,
-  } = useMessageHistory<Message>()
+  } = useMessageHistory()
 
   const { streamToConsole } = useMessageQueue({
     setHistory,
@@ -82,7 +82,6 @@ const ChatWindow = ({ tab, spellName }) => {
 
     const newHistory = [...history, newMessage]
     setHistory(newHistory)
-    setValue('')
 
     if (!localState?.playtestData) {
       enqueueSnackbar('No data provided', {
@@ -116,8 +115,8 @@ const ChatWindow = ({ tab, spellName }) => {
       isPlaytest: true,
     }
 
-    setValue('')
     publish(MESSAGE_AGENT, eventPayload)
+    setValue('')
 
     posthog.capture('playtest_message_sent', {
       projectId: config.projectId,
