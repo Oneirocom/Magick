@@ -11,60 +11,42 @@ import {
 } from '../../../../shared/servicesShared/src'
 
 export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
+  const [eventData, setEventData] = useState<ISeraphEvent>()
   const { data: seraphChatHistory } = useGetSeraphChatHistoryQuery({ agentId })
-  const [createSeraphRequest, { error: requestError }] =
+  const [createSeraphRequest, { error: requestRecordError }] =
     useCreateSeraphRequestMutation()
 
   const { publish, subscribe, events } = usePubSub()
-  const { $SERAPH_REQUEST, $SERAPH_RESPONSE, $SERAPH_ERROR, $SERAPH_INFO } =
-    events
-
-  const [info, setInfo] = useState<string | undefined>()
-  const [error, setError] = useState<string | undefined>()
-  const [response, setResponse] = useState<ISeraphEvent>()
+  const { $SERAPH_EVENT } = events
 
   // set up listeners for response, error, info,
   useEffect(() => {
     const destoryResponseListener = subscribe(
-      $SERAPH_RESPONSE(tab.id),
+      $SERAPH_EVENT(tab.id),
       (event, data) => {
         console.log('RESPONSE', event)
-        setResponse(data.response)
+        setEventData(data)
       }
     )
-    const destroyErrorListener = subscribe(
-      $SERAPH_ERROR(tab.id),
-      (event, data) => {
-        console.log('ERROR', event)
-        setError(data.error)
-      }
-    )
-    const destroyInfoListener = subscribe(
-      $SERAPH_INFO(tab.id),
-      (event, data) => {
-        console.log('INFO', event)
-        setInfo(data.info)
-      }
-    )
-
     return () => {
       destoryResponseListener()
-      destroyErrorListener()
-      destroyInfoListener()
     }
-  }, [$SERAPH_RESPONSE, $SERAPH_ERROR, $SERAPH_INFO])
+  }, [$SERAPH_EVENT, tab.id])
 
   useEffect(() => {
-    if (!response) return
-    setHistory(prevHistory => [...prevHistory, response])
-    // streamToConsole(response.response?.message || '')
-  }, [response])
+    if (!eventData) return
+    setHistory(prevHistory => [...prevHistory, eventData])
+  }, [eventData])
 
   // fetch seraph chat history
   useEffect(() => {
-    if (seraphChatHistory?.length === history.length) return
-    if (seraphChatHistory?.length === 0) return
-    if (!seraphChatHistory) return
+    if (
+      seraphChatHistory?.length === history.length ||
+      seraphChatHistory?.length === 0 ||
+      !seraphChatHistory
+    )
+      return
+
     setHistory(seraphChatHistory)
   }, [seraphChatHistory])
 
@@ -75,23 +57,25 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
       projectId,
       type: SeraphEvents.request,
       spellId: tab.params.spellId,
-      request,
+      data: { request },
       createdAt: new Date().toISOString(),
     }
     try {
-      setResponse(undefined)
+      setEventData(undefined)
       const data = await createSeraphRequest(seraphRequest)
       if (!data) throw new Error('Error creating seraph request')
-      publish($SERAPH_REQUEST(tab.id), { request: seraphRequest })
+      publish($SERAPH_EVENT(tab.id), { seraphRequest })
     } catch (error) {
       console.error('Error making seraph request', error)
     }
   }
 
+  const seraphError = eventData?.data?.error
+
   return {
-    info,
-    response,
-    error: requestError || error,
+    error: seraphError || requestRecordError,
+    eventData,
+    setEventData,
     makeSeraphRequest,
   }
 }
