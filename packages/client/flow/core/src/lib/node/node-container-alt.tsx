@@ -4,7 +4,7 @@ import {
   VariableJSON,
 } from '@magickml/behave-graph'
 import React, { PropsWithChildren } from 'react'
-import { categoryColorMap, colors, valueTypeColorMap } from '../../utils/colors'
+import { categoryColorMap, colors, valueTypeColorMap } from '../utils/colors'
 import { SpellInterface } from 'server/schemas'
 import {
   BackgroundGradient,
@@ -36,7 +36,7 @@ type NodeProps = {
   graph: SpellInterface['graph']
 }
 
-const NodeContainerV2: React.FC<PropsWithChildren<NodeProps>> = ({
+export const NodeContainerV2: React.FC<PropsWithChildren<NodeProps>> = ({
   title,
   category = NodeCategory.None,
   selected,
@@ -137,5 +137,3 @@ const NodeContainerV2: React.FC<PropsWithChildren<NodeProps>> = ({
     </BackgroundGradient>
   )
 }
-
-export default NodeContainerV2

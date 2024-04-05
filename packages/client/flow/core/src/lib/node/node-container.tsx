@@ -1,20 +1,11 @@
-import {
-  NodeCategory,
-  NodeSpecJSON,
-  VariableJSON,
-} from '@magickml/behave-graph'
-import cx from 'classnames'
-import React, { PropsWithChildren } from 'react'
+import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
+import { cn } from '@magickml/client-ui'
+import { type PropsWithChildren } from 'react'
 
-import {
-  categoryColorMap,
-  categoryIconMap,
-  colors,
-  valueTypeColorMap,
-} from '../../utils/colors'
-import { SpellInterface } from 'server/schemas'
+import { categoryColorMap, colors, valueTypeColorMap } from '../utils/colors'
+import type { SpellInterfaceWithGraph } from 'server/schemas'
 
-import css from './node.module.css'
+// import css from './node.module.css'
 
 type Config = {
   label?: string
@@ -31,7 +22,7 @@ type NodeProps = {
   error: boolean
   running: boolean
   config: Config
-  graph: SpellInterface['graph']
+  graph: SpellInterfaceWithGraph['graph']
 }
 
 const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
@@ -58,7 +49,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   if (config?.variableId) {
     const variable = graph.variables.find(
       variable => variable.id === config.variableId
-    ) as VariableJSON
+    )
     if (variable) {
       const colorName = valueTypeColorMap[variable.valueTypeName]
       if (colorName) {
@@ -69,19 +60,19 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
 
   return (
     <div className="p-5">
-      <div className={cx('relative')}>
+      <div className={cn('relative')}>
         <div
-          className={cx(
+          className={cn(
             'rounded text-white text-sm bg-[var(--foreground-color)] w-[250px] transition-all duration-300 opacity-100',
             selected && 'outline outline-1',
             fired && 'outline outline-2 outline-green-500',
-            running && css.running,
+            // running && css.running,
             error && 'outline outline-2 outline-red-500'
           )}
         >
           <div
-            className={cx(
-              `${backgroundColor} ${textColor} px-2 py-0.5 rounded-t opacity-100 flex flex-row gap-1 items-center`
+            className={cn(
+              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100`
             )}
           >
             <div className="flex mr-1">
