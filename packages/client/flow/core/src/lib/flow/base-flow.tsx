@@ -13,34 +13,34 @@ import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 
 type BaseFlowHandlers = Pick<
-ReturnType<typeof useFlowHandlers>,
-| 'handleOnConnect'
-| 'handleStartConnect'
-| 'handleStopConnect'
-| 'handlePaneClick'
-| 'handlePaneContextMenu'
-| 'nodePickerPosition'
-| 'pickedNodeVisibility'
-| 'handleAddNode'
-| 'closeNodePicker'
-| 'nodePickFilters'
-| 'nodeMenuVisibility'
-| 'handleNodeContextMenu'
-| 'openNodeMenu'
-| 'setOpenNodeMenu'
-| 'nodeMenuActions'
-| 'isValidConnectionHandler'
-| 'onEdgeUpdate'
+  ReturnType<typeof useFlowHandlers>,
+  | 'handleOnConnect'
+  | 'handleStartConnect'
+  | 'handleStopConnect'
+  | 'handlePaneClick'
+  | 'handlePaneContextMenu'
+  | 'nodePickerPosition'
+  | 'pickedNodeVisibility'
+  | 'handleAddNode'
+  | 'closeNodePicker'
+  | 'nodePickFilters'
+  | 'nodeMenuVisibility'
+  | 'handleNodeContextMenu'
+  | 'openNodeMenu'
+  | 'setOpenNodeMenu'
+  | 'nodeMenuActions'
+  | 'isValidConnectionHandler'
+  | 'onEdgeUpdate'
 >
 
 type BaseFlowBehaveGraphFlow = Pick<
-BehaveGraphFlow,
-| 'setGraphJson'
-| 'onNodesChange'
-| 'onEdgesChange'
-| 'nodeTypes'
-| 'nodes'
-| 'edges'
+  BehaveGraphFlow,
+  | 'setGraphJson'
+  | 'onNodesChange'
+  | 'onEdgesChange'
+  | 'nodeTypes'
+  | 'nodes'
+  | 'edges'
 >
 
 type BaseFlowProps = {
@@ -74,10 +74,8 @@ function isEmptyObject(obj: object): boolean {
 
 export const BaseFlow: React.FC<BaseFlowProps> = ({
   spell,
-  parentRef,
   tab,
   readOnly = false,
-  windowDimensions,
   behaveGraphFlow,
   flowHandlers,
   pubSub,
@@ -148,12 +146,6 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     isValidConnectionHandler,
     onEdgeUpdate,
   } = flowHandlers
-  // ...behaveGraphFlow,
-  // specJSON,
-  // parentRef,
-  // tab,
-  // windowDimensions,
-  // })
 
   const togglePlay = () => {
     if (!publish || !events || !currentAgentId) return
