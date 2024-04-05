@@ -1,8 +1,6 @@
 import React from 'react'
-import { type Tab, usePubSub } from '@magickml/providers'
+import { type Tab } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
-import { useSelector } from 'react-redux'
-import { RootState, useSelectAgentsSpell } from 'client/state'
 import { BaseFlow } from './base-flow'
 import { useBehaveGraphFlow } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
@@ -24,10 +22,6 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
   parentRef,
   windowDimensions,
 }) => {
-  const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
-  const pubSub = usePubSub()
-
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
     specJson: getNodeSpec(spell),
@@ -42,9 +36,6 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
       readOnly={true}
       windowDimensions={windowDimensions}
       behaveGraphFlow={behaveGraphFlow}
-      pubSub={pubSub}
-      globalConfig={globalConfig}
-      lastSpellEvent={lastSpellEvent}
     />
   )
 }
