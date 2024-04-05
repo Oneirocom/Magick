@@ -106,7 +106,7 @@ export interface ICoreLLMService {
 
 export type SeraphRequest = {
   message: string
-  systemPrompt: string
+  systemPrompt?: string
 }
 
 export type SeraphFunction = {
