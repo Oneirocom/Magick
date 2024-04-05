@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropsWithChildren } from 'react';
-import { useOnPressKey } from '../../../hooks/react-flow/useOnPressKey';
+import { useOnPressKey } from '../../hooks/useOnPressKey';
 
 export type ModalAction = {
   label: string;
