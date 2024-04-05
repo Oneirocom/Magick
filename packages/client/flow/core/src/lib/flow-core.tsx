@@ -1,25 +1,21 @@
 import React, { useEffect } from 'react'
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
-
-import CustomControls from './Controls'
-// import { NodePicker } from './NodePicker'
-import { NodePicker } from './NodePicker/NodePicker'
-import { useBehaveGraphFlow } from '../../hooks/react-flow/useBehaveGraphFlow'
-import { useFlowHandlers } from '../../hooks/react-flow/useFlowHandlers'
+import CustomControls from './controls/Controls'
+import { NodePicker } from './node-picker/NodePicker'
+import { useBehaveGraphFlow } from './hooks/useBehaveGraphFlow'
+import { useFlowHandlers } from './hooks/useFlowHandlers'
 import { Tab, usePubSub } from '@magickml/providers'
-
-// import './flowOverrides.css'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterfaceWithGraph } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { useSelector } from 'react-redux'
 import { RootState, useSelectAgentsSpell } from 'client/state'
-import { nodeColor } from '../../utils/nodeColor'
-import { ContextNodeMenu } from './ContextNodeMenu'
-import CustomEdge from './CustomEdge'
+import { nodeColor } from './utils/nodeColor'
+import { ContextNodeMenu } from './controls/context-node-menu'
+import CustomEdge from './node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 
 type FlowProps = {
-  spell: SpellInterface
+  spell: SpellInterfaceWithGraph
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
