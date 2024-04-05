@@ -33,6 +33,7 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
   const nodeTypes = useCustomNodeTypes({
     spell,
     specJson: getNodeSpec(spell),
+    type: 'readonly',
   })
 
   const [nodes, edges] = behaveToFlow(spell)
