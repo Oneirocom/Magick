@@ -1,5 +1,4 @@
 import {
-  IGridviewPanelProps,
   IPaneviewPanelProps,
   PaneviewReact,
   PaneviewReadyEvent,
@@ -7,6 +6,7 @@ import {
 import { usePanelControls } from '../hooks/usePanelControls'
 import LogWindow from '../components/LogWindow/logWindow'
 import SeraphWindow from '../components/SeraphWindow/SeraphWindow'
+import { useTabLayout } from '@magickml/providers'
 
 const components = {
   default: (props: IPaneviewPanelProps<{ title: string }>) => {
@@ -36,7 +36,7 @@ const components = {
       </div>
     )
   },
-  SeraphWindow: (props: IPaneviewPanelProps<{ spellName }>) => {
+  SeraphWindow: (props: IPaneviewPanelProps<{ spellName: string }>) => {
     return (
       <div
         style={{
@@ -51,11 +51,9 @@ const components = {
   },
 }
 
-const RightSidebar = (
-  props: IGridviewPanelProps<{ title: string; id: string; spellName; user }>
-) => {
+const RightSidebar = props => {
   usePanelControls(props, 'none', 'ctrl+l')
-
+  const tab = useTabLayout()
   const onReady = (event: PaneviewReadyEvent) => {
     event.api.addPanel({
       id: 'Logs',
@@ -66,17 +64,16 @@ const RightSidebar = (
       isExpanded: true,
       title: 'Logs',
     })
-    // if (!process.env.PRODUCTION) {
-    //   event.api.addPanel({
-    //     id: 'Seraph',
-    //     component: 'SeraphWindow',
-    //     params: {
-    //       spellName: props.params.spellName,
-    //     },
-    //     isExpanded: true,
-    //     title: 'Seraph',
-    //   })
-    // }
+
+    event.api.addPanel({
+      id: 'Seraph',
+      component: 'SeraphWindow',
+      isExpanded: true,
+      params: {
+        tab,
+      },
+      title: 'Seraph',
+    })
   }
 
   return (
