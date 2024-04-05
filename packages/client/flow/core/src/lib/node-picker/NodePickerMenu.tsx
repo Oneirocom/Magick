@@ -7,7 +7,7 @@ export const NodePickerMenu = ({
   pickedNodePosition,
   instance,
 }: {
-  groupedData: any
+  groupedData: any[]
   onPickNode: (type: string, position: XYPosition) => void
   pickedNodePosition: XYPosition
   instance: ReactFlowInstance

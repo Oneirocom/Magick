@@ -1,3 +1,14 @@
+interface SearchResultsProps {
+  filteredNodes: {
+    type: string
+  }[]
+  focusedIndex: number
+  setFocusedIndex: (index: number) => void
+  pickedNodePosition: any
+  onPickNode: (type: string, position: any) => void
+  instance: any
+}
+
 export const SearchResults = ({
   filteredNodes,
   focusedIndex,
@@ -5,7 +16,7 @@ export const SearchResults = ({
   pickedNodePosition,
   onPickNode,
   instance,
-}) => {
+}: SearchResultsProps) => {
   return (
     <>
       <div className="p-2 text-xs text-gray-400">
