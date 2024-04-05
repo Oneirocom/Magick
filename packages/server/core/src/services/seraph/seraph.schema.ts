@@ -16,16 +16,11 @@ export const seraphEventExternalResolver = resolve<ISeraphEvent, HookContext>(
   {}
 )
 
-// Schema for creating new entries, removing additional fields
-// Define the properties for the new schema
 const seraphEventDataSchemaProperties = {
   agentId: seraphEventSchema.properties.agentId,
   projectId: seraphEventSchema.properties.projectId,
   type: seraphEventSchema.properties.type,
-  request: seraphEventSchema.properties.request,
-  response: seraphEventSchema.properties.response,
-  error: seraphEventSchema.properties.error,
-  info: seraphEventSchema.properties.info,
+  data: seraphEventSchema.properties.data,
   createdAt: seraphEventSchema.properties.createdAt,
 }
 
@@ -83,4 +78,4 @@ export const seraphEventQueryResolver = resolve<SeraphEventQuery, HookContext>(
   {}
 )
 
-export const seraphEventJsonFields = ['request', 'response']
+export const seraphEventJsonFields = ['data']
