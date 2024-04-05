@@ -2,7 +2,7 @@ import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useEffect, useState } from 'react'
 import { NodeTypes } from 'reactflow'
 
-import { Node } from '../node/node'
+import { CoreNode } from '../node/core-node'
 import type { SpellInterfaceWithGraph } from 'server/schemas'
 import { Tab } from '@magickml/providers'
 
@@ -20,7 +20,7 @@ const getCustomNodeTypes = (
       const nodeJSON = spell?.graph.nodes?.find(node => node.id === props.id)
 
       return (
-        <Node
+        <CoreNode
           spec={node}
           nodeJSON={nodeJSON || empty}
           allSpecs={allSpecs}

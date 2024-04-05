@@ -19,7 +19,7 @@ export const NodeItem = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleClick = ({ item }: { item: string }) => {
+  const handleClick = ({ item }) => {
     onPickNode(item, instance.project(pickedNodePosition))
   }
 
@@ -47,7 +47,7 @@ export const NodeItem = ({
                 key={subItem?.title ?? subItem?.type}
                 onClick={e => {
                   e.stopPropagation()
-                  if (subItem?.type) handleClick({ item: subItem?.type })
+                  handleClick({ item: subItem?.type })
                 }}
                 className="py-1 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer"
               >
