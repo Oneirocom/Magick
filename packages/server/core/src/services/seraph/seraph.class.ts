@@ -49,7 +49,22 @@ export class SeraphService<
 
   async create(params: SeraphEventData): Promise<ISeraphEvent> {
     app.get('logger').debug('Creating seraph event: %o', params)
-    return this._create(params)
+    const seraph = app.get('seraph')
+
+    const systemPrompt = await seraph.generateSystemPrompt()
+    if (!systemPrompt) throw new Error('Failed to generate system prompt')
+
+    const newSeraphEventParams = {
+      ...params,
+      systemPrompt,
+    }
+
+    console.log('HELLO', newSeraphEventParams)
+    return this._create(newSeraphEventParams)
+  }
+
+  async getSeraphChatHistory(params: ServiceParams): Promise<ISeraphEvent[]> {
+    return this._find(params) as Promise<ISeraphEvent[]>
   }
 }
 
