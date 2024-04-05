@@ -2,40 +2,56 @@ import React from 'react'
 import { type Tab } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { BaseFlow } from './base-flow'
-import { useBehaveGraphFlow } from '../hooks'
+import { useCustomNodeTypes } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
+import { behaveToFlow } from '../utils/transformers/behaveToFlow'
 
 type ReadOnlyFlowProps = {
   spell: SpellInterfaceWithGraph
   parentRef: React.RefObject<HTMLDivElement>
-  tab: Tab
   windowDimensions: { width: number; height: number }
 }
 
-const readonlyTab: Tab = {
+// dummy implementations
+const tab: Tab = {
   id: 'readonly',
   name: 'readonly',
   type: 'readonly',
 }
+
+const onEdgesChange = () => (): void => {}
+
+const onNodesChange = () => (): void => {}
+
+const setGraphJson = (): void => {}
+
 export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
   spell,
   parentRef,
   windowDimensions,
 }) => {
-  const behaveGraphFlow = useBehaveGraphFlow({
+  const nodeTypes = useCustomNodeTypes({
     spell,
     specJson: getNodeSpec(spell),
-    tab: readonlyTab,
   })
+
+  const [nodes, edges] = behaveToFlow(spell)
 
   return (
     <BaseFlow
       spell={spell}
       parentRef={parentRef}
-      tab={readonlyTab}
+      tab={tab}
       readOnly={true}
       windowDimensions={windowDimensions}
-      behaveGraphFlow={behaveGraphFlow}
+      behaveGraphFlow={{
+        nodes,
+        edges,
+        nodeTypes,
+        setGraphJson,
+        onNodesChange,
+        onEdgesChange,
+      }}
     />
   )
 }
