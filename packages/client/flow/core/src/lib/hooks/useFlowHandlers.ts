@@ -22,9 +22,9 @@ import {
 } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 
-import { calculateNewEdge } from '../../utils/calculateNewEdge'
-import { getNodePickerFilters } from '../../utils/getPickerFilters'
-import { isValidConnection } from '../../utils/isValidConnection'
+import { calculateNewEdge } from '../utils/calculateNewEdge'
+import { getNodePickerFilters } from '../utils/getPickerFilters'
+import { isValidConnection } from '../utils/isValidConnection'
 import { useBehaveGraphFlow } from './useBehaveGraphFlow'
 import { Tab } from '@magickml/providers'
 import {
@@ -34,11 +34,12 @@ import {
   setLayoutChangeEvent,
   setNodes,
 } from 'client/state'
-import { getSourceSocket } from '../../utils/getSocketsByNodeTypeAndHandleType'
+import { getSourceSocket } from '../utils/getSocketsByNodeTypeAndHandleType'
 import { useDispatch, useSelector } from 'react-redux'
 import posthog from 'posthog-js'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
+type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
 
 const useNodePickFilters = ({
   nodes,
@@ -127,7 +128,7 @@ export const useFlowHandlers = ({
     setPickedNodeVisibility(undefined)
   }, [])
 
-  const onEdgeUpdate = useCallback(
+  const onEdgeUpdate = useCallback<OnEdgeUpdate>(
     (oldEdge, newConnection) => {
       console.log('onEdgeUpdate', oldEdge, newConnection)
       return setEdges(tab.id, edges => {
