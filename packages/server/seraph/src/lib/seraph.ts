@@ -9,16 +9,17 @@ import { SeraphIterator } from './seraph_iterator'
 import { BaseCognitiveFunction } from './base_cognitive_function'
 import { IMiddleware, MiddlewareManager } from './middlewareManager'
 import EventEmitter from 'events'
+import { SeraphFunction } from 'servicesShared'
 
 type SeraphEvents = {
   error: (error: Error | string) => void
   message: (role: 'user' | 'assistant', message: string) => void
   info: (info: string, data?: Record<string, unknown>) => void
   token: (token: string) => void
-  functionExecution: (functionName: string) => void
-  functionResult: (functionName: string, result: string) => void
-  middlewareExecution: (middlewareName: string) => void
-  middlewareResult: (middlewareName: string, result: string) => void
+  functionExecution: (seraphFunction: SeraphFunction) => void
+  functionResult: (seraphFunction: SeraphFunction) => void
+  middlewareExecution: (middlewareData: SeraphFunction) => void
+  middlewareResult: (middlewareData: SeraphFunction) => void
 }
 
 type SeraphOptions = {
@@ -163,11 +164,11 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
     ...
     </parameters>
     </invoke>
-    </function_calls> 
+    </function_calls>
 
     Here are the tools available:
     ${toolsDescription}
-    
+
     You have the ability to call side effect functions that will not return a response, but will perform an action.  The available actions are:
 
     ${middlewarePrompts}
