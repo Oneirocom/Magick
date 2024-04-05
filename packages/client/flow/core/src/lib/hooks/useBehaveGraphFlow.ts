@@ -1,10 +1,9 @@
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
-
-import { behaveToFlow } from '../../utils/transformers/behaveToFlow'
-import { flowToBehave } from '../../utils/transformers/flowToBehave'
-import { autoLayout } from '../../utils/autoLayout'
-import { hasPositionMetaData } from '../../utils/hasPositionMetaData'
+import { behaveToFlow } from '../utils/transformers/behaveToFlow'
+import { flowToBehave } from '../utils/transformers/flowToBehave'
+import { autoLayout } from '../utils/autoLayout'
+import { hasPositionMetaData } from '../utils/hasPositionMetaData'
 import { useCustomNodeTypes } from './useCustomNodeTypes'
 import { Tab, usePubSub } from '@magickml/providers'
 import {
@@ -21,7 +20,7 @@ import {
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterfaceWithGraph } from 'server/schemas'
 
 /**
  * Hook that returns the nodes and edges for react-flow, and the graphJson for the behave-graph.
@@ -35,7 +34,7 @@ export const useBehaveGraphFlow = ({
   specJson,
   tab,
 }: {
-  spell: SpellInterface
+  spell: SpellInterfaceWithGraph
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
