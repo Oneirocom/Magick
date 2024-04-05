@@ -122,3 +122,6 @@ export const useBehaveGraphFlow = ({
     nodeTypes,
   }
 }
+
+
+export type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
