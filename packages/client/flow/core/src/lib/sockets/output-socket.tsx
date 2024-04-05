@@ -2,10 +2,10 @@ import { NodeSpecJSON, OutputSocketSpecJSON } from '@magickml/behave-graph'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ReactJson from 'react-json-view'
-import cx from 'classnames'
+import { cn } from '@magickml/client-ui'
 import { Handle, Position } from 'reactflow'
 
-import { colors, valueTypeColorMap } from '../../utils/colors'
+import { colors, valueTypeColorMap } from '../utils/colors'
 import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'
 
 export type OutputSocketProps = {
@@ -21,7 +21,6 @@ export default function OutputSocket(props: OutputSocketProps) {
   if (colorName === undefined) {
     colorName = 'red'
   }
-  // @ts-ignore
   const [backgroundColor, borderColor] = colors[colorName]
   const showName = isFlowSocket === false || name !== 'flow'
 
@@ -43,7 +42,7 @@ export default function OutputSocket(props: OutputSocketProps) {
             id={name}
             type="source"
             position={Position.Right}
-            className={cx(
+            className={cn(
               borderColor,
               connected ? backgroundColor : 'bg-gray-800'
             )}

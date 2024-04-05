@@ -5,7 +5,7 @@ import cx from 'classnames'
 import React, { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 
-import { colors, valueTypeColorMap } from '../../utils/colors'
+import { colors, valueTypeColorMap } from '../utils/colors'
 import {
   Input,
   Popover,
@@ -19,7 +19,6 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
-import { TextInputField } from './TextInputField'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectActiveInput, setActiveInput } from 'client/state'
 
@@ -128,7 +127,7 @@ const InputFieldForValue = ({
             </Select>
           )}
           {valueType === 'string' && !showChoices && (
-            <TextInputField
+            <Input
               value={inputVal}
               onChange={e =>
                 handleChange({ key: name, value: e.currentTarget.value })
