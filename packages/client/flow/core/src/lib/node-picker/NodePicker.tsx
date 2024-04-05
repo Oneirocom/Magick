@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useReactFlow } from 'reactflow'
-
-import { useOnPressKey } from '../../../hooks/react-flow/useOnPressKey'
-
+import { useOnPressKey } from '../hooks/useOnPressKey'
 import { SearchResults } from './SearchResults'
 import { NodePickerMenu } from './NodePickerMenu'
 import useFilteredAndGroupedNodes from './useFilteredAndGroupedNodes'
@@ -25,8 +23,8 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   useOnPressKey('Escape', onClose)
 
   const { filteredNodes, groupedData } = useFilteredAndGroupedNodes({
-    specJSON,
-    filters,
+    specJSON: specJSON || [],
+    filters: filters || { handleType: 'source', valueType: '' },
     search,
   })
 
