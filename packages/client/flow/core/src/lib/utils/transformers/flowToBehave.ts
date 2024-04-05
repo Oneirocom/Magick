@@ -1,5 +1,5 @@
-import { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import { Edge, Node } from 'reactflow'
+import type { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
+import type { Edge, Node } from 'reactflow'
 
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null

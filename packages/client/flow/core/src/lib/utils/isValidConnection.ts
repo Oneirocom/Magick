@@ -1,5 +1,5 @@
-import { NodeSpecJSON } from '@magickml/behave-graph'
-import { Connection, ReactFlowInstance } from 'reactflow'
+import type { NodeSpecJSON } from '@magickml/behave-graph'
+import type { Connection, ReactFlowInstance } from 'reactflow'
 
 import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
 import { isHandleConnected } from './isHandleConnected'

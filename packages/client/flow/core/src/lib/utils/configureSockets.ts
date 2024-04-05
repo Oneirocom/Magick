@@ -46,7 +46,7 @@ export const getAllSockets = (
 }
 
 export const getSocketValueType = (
-  socketName,
+  socketName: string,
   data: Record<string, any>,
   spec: NodeSpecJSON
 ) => {

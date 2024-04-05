@@ -1,7 +1,6 @@
-import { NodeSpecJSON } from '@magickml/behave-graph'
-import { Node, OnConnectStartParams } from 'reactflow'
+import type { NodeSpecJSON } from '@magickml/behave-graph'
+import type { Node, OnConnectStartParams } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
-
 import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
 
 export const calculateNewEdge = (
