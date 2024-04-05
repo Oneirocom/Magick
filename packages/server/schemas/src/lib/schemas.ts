@@ -1,6 +1,7 @@
 // DOCUMENTED
 import { Static, Type } from '@feathersjs/typebox'
 import { SeraphEvents } from 'servicesShared'
+import type { NodeJSON, ValueJSON, VariableJSON } from '@magickml/behave-graph'
 /**
  * Full data model schema for a spell.
  *
@@ -39,6 +40,15 @@ export const spellSchema = Type.Object(
 
 /** The interface for a spell object that's based on the `spellSchema`. */
 export type SpellInterface = Static<typeof spellSchema>
+
+export interface SpellInterfaceWithGraph extends SpellInterface {
+  graph: {
+    id: string
+    values: ValueJSON[]
+    variables: VariableJSON[]
+    nodes: NodeJSON[]
+  }
+}
 
 /**
  * Full data model schema for an agent.
