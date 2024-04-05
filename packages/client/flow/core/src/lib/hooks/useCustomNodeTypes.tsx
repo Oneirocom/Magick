@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { NodeTypes } from 'reactflow'
 
 import { CoreNode } from '../node/core-node'
+import { ReadOnlyNode } from '../node/readonly-node'
 import type { SpellInterfaceWithGraph } from 'server/schemas'
-import { Tab } from '@magickml/providers'
 
 const empty: NodeJSON = {
   id: '',
@@ -13,14 +13,23 @@ const empty: NodeJSON = {
 
 const getCustomNodeTypes = (
   allSpecs: NodeSpecJSON[],
-  spell: SpellInterfaceWithGraph
+  spell: SpellInterfaceWithGraph,
+  type: 'readonly' | 'core' = 'core'
 ) => {
   return allSpecs.reduce((nodes: NodeTypes, node) => {
     nodes[node.type] = props => {
       const nodeJSON = spell?.graph.nodes?.find(node => node.id === props.id)
 
-      return (
+      return type === 'core' ? (
         <CoreNode
+          spec={node}
+          nodeJSON={nodeJSON || empty}
+          allSpecs={allSpecs}
+          spell={spell}
+          {...props}
+        />
+      ) : (
+        <ReadOnlyNode
           spec={node}
           nodeJSON={nodeJSON || empty}
           allSpecs={allSpecs}
@@ -36,15 +45,16 @@ const getCustomNodeTypes = (
 export const useCustomNodeTypes = ({
   specJson,
   spell,
+  type = 'core',
 }: {
   specJson: NodeSpecJSON[] | undefined
   spell: SpellInterfaceWithGraph
-  tab: Tab
+  type?: 'readonly' | 'core'
 }) => {
   const [customNodeTypes, setCustomNodeTypes] = useState<NodeTypes>()
   useEffect(() => {
     if (!specJson) return
-    const customNodeTypes = getCustomNodeTypes(specJson, spell)
+    const customNodeTypes = getCustomNodeTypes(specJson, spell, type)
 
     setCustomNodeTypes(customNodeTypes)
   }, [specJson, spell])
