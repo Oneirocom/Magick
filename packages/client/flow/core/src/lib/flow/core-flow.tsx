@@ -4,7 +4,7 @@ import { SpellInterfaceWithGraph } from 'server/schemas'
 import { useSelector } from 'react-redux'
 import { RootState, useSelectAgentsSpell } from 'client/state'
 import { BaseFlow } from './base-flow'
-import { useBehaveGraphFlow } from '../hooks'
+import { useBehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
 
 type FlowProps = {
@@ -25,11 +25,20 @@ export const CoreFlow: React.FC<FlowProps> = ({
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
   const pubSub = usePubSub()
+  const specJSON = getNodeSpec(spell)
 
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
     specJson: getNodeSpec(spell),
     tab,
+  })
+
+  const flowHandlers = useFlowHandlers({
+    ...behaveGraphFlow,
+    specJSON,
+    parentRef,
+    tab,
+    windowDimensions,
   })
 
   return (
@@ -40,6 +49,7 @@ export const CoreFlow: React.FC<FlowProps> = ({
       readOnly={readOnly}
       windowDimensions={windowDimensions}
       behaveGraphFlow={behaveGraphFlow}
+      flowHandlers={flowHandlers}
       pubSub={pubSub}
       globalConfig={globalConfig}
       lastSpellEvent={lastSpellEvent}
