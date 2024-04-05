@@ -1,2 +1,2 @@
-export * from './lib/flow-core'
+export * from './lib/flow'
 export * from './lib/hooks'
