@@ -1,16 +1,8 @@
-interface AutoCompleteSearchTermProps {
-  filteredNodes: {
-    type: string
-  }[]
-  search: string
-  setSearch: (search: string) => void
-}
-
 export const autoCompleteSearchTerm = ({
   filteredNodes,
   search,
   setSearch,
-}: AutoCompleteSearchTermProps) => {
+}) => {
   if (!filteredNodes || search.length === 0 || filteredNodes?.length === 0)
     return
 
@@ -21,7 +13,7 @@ export const autoCompleteSearchTerm = ({
   if (relevantItems.length === 0) return
 
   // Function to find the most common prefix among an array of strings
-  const findMostCommonPrefix = (arr: string[]) => {
+  const findMostCommonPrefix = arr => {
     if (arr.length === 0) return ''
 
     let prefix = ''

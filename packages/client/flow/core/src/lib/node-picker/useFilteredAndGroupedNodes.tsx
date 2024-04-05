@@ -1,23 +1,9 @@
-import type { NodePickerFilters } from './types'
-import { NodeCategory, type NodeSpecJSON } from '@magickml/behave-graph'
+import { NodeCategory } from '@magickml/behave-graph'
 import { useMemo } from 'react'
 
-interface UseFilteredAndGroupedNodesProps {
-  specJSON: NodeSpecJSON[]
-  filters: NodePickerFilters
-  search: string
-}
-
-export const useFilteredAndGroupedNodes = ({
-  specJSON,
-  filters,
-  search,
-}: UseFilteredAndGroupedNodesProps) => {
+export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
   // Utility function to combine node sockets with configuration defaults
-  const combineSocketsWithDefaults = (
-    node: NodeSpecJSON,
-    socketType: keyof NodeSpecJSON
-  ) => [
+  const combineSocketsWithDefaults = (node, socketType) => [
     ...node[socketType],
     ...(node.configuration
       .filter(
@@ -47,7 +33,7 @@ export const useFilteredAndGroupedNodes = ({
   )
 
   // If category is 'None' we want to check the typeParts and then handles those in a case
-  const getGroup = (node: NodeSpecJSON) => {
+  const getGroup = node => {
     if (node.category === 'None') {
       switch (node.type.split('/')[0]) {
         case 'action': {
@@ -78,10 +64,9 @@ export const useFilteredAndGroupedNodes = ({
 
   const groupedData = useMemo(() => {
     if (!search) {
-      return filteredNodes.reduce((result: any[], node) => {
+      return filteredNodes.reduce((result, node) => {
         const category = getGroup(node)
 
-        // let categoryGroup = result.find(item => item.title === category)
         let categoryGroup = result.find(item => item.title === category)
         if (!categoryGroup) {
           categoryGroup = { title: category, subItems: [] }
