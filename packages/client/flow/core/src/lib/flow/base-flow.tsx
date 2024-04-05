@@ -6,7 +6,7 @@ import { type BehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
-import { RootState, useSelectAgentsSpell } from 'client/state'
+import { RootState } from 'client/state'
 import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
 import CustomEdge from '../node/custom-edge'
@@ -18,7 +18,35 @@ type BaseFlowProps = {
   tab: Tab
   readOnly?: boolean
   windowDimensions: { width: number; height: number }
-  behaveGraphFlow: Pick<BehaveGraphFlow, 'setGraphJson' | 'onNodesChange' | 'onEdgesChange' | 'nodeTypes' | 'nodes' | 'edges'>
+  behaveGraphFlow: Pick<
+    BehaveGraphFlow,
+    | 'setGraphJson'
+    | 'onNodesChange'
+    | 'onEdgesChange'
+    | 'nodeTypes'
+    | 'nodes'
+    | 'edges'
+  >
+  flowHandlers: Pick<
+    ReturnType<typeof useFlowHandlers>,
+    | 'handleOnConnect'
+    | 'handleStartConnect'
+    | 'handleStopConnect'
+    | 'handlePaneClick'
+    | 'handlePaneContextMenu'
+    | 'nodePickerPosition'
+    | 'pickedNodeVisibility'
+    | 'handleAddNode'
+    | 'closeNodePicker'
+    | 'nodePickFilters'
+    | 'nodeMenuVisibility'
+    | 'handleNodeContextMenu'
+    | 'openNodeMenu'
+    | 'setOpenNodeMenu'
+    | 'nodeMenuActions'
+    | 'isValidConnectionHandler'
+    | 'onEdgeUpdate'
+  >
   pubSub?: ReturnType<typeof usePubSub>
   globalConfig?: RootState['globalConfig'] | undefined
   lastSpellEvent?: any
@@ -47,6 +75,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   readOnly = false,
   windowDimensions,
   behaveGraphFlow,
+  flowHandlers,
   pubSub,
   globalConfig,
   lastSpellEvent,
@@ -114,13 +143,13 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     nodeMenuActions,
     isValidConnectionHandler,
     onEdgeUpdate,
-  } = useFlowHandlers({
-    ...behaveGraphFlow,
-    specJSON,
-    parentRef,
-    tab,
-    windowDimensions,
-  })
+  } = flowHandlers
+  // ...behaveGraphFlow,
+  // specJSON,
+  // parentRef,
+  // tab,
+  // windowDimensions,
+  // })
 
   const togglePlay = () => {
     if (!publish || !events || !currentAgentId) return
