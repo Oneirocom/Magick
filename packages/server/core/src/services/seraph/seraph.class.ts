@@ -49,7 +49,7 @@ export class SeraphService<
 
   async create(params: SeraphEventData): Promise<ISeraphEvent> {
     app.get('logger').debug('Creating seraph event: %o', params)
-    const seraph = app.get('seraph')
+    const seraph = app.get('seraphCore')
 
     const systemPrompt = await seraph.generateSystemPrompt()
     if (!systemPrompt) throw new Error('Failed to generate system prompt')
