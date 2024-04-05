@@ -7,6 +7,7 @@ import { usePanelControls } from '../hooks/usePanelControls'
 import LogWindow from '../components/LogWindow/logWindow'
 import SeraphWindow from '../components/SeraphWindow/SeraphWindow'
 import { useTabLayout } from '@magickml/providers'
+import { useFeatureFlag, Features } from '../hooks/useFeatureFlag'
 
 const components = {
   default: (props: IPaneviewPanelProps<{ title: string }>) => {
@@ -37,6 +38,8 @@ const components = {
     )
   },
   SeraphWindow: (props: IPaneviewPanelProps<{ spellName: string }>) => {
+    const showSeraph = useFeatureFlag(Features.SERAPH_CHAT_WINDOW)
+    if (!showSeraph) return <></>
     return (
       <div
         style={{
@@ -52,8 +55,8 @@ const components = {
 }
 
 const RightSidebar = props => {
-  usePanelControls(props, 'none', 'ctrl+l')
   const tab = useTabLayout()
+  usePanelControls(props, 'none', 'ctrl+l')
   const onReady = (event: PaneviewReadyEvent) => {
     event.api.addPanel({
       id: 'Logs',
