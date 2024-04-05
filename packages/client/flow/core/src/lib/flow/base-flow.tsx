@@ -12,41 +12,45 @@ import { ContextNodeMenu } from '../controls/context-node-menu'
 import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 
+type BaseFlowHandlers = Pick<
+ReturnType<typeof useFlowHandlers>,
+| 'handleOnConnect'
+| 'handleStartConnect'
+| 'handleStopConnect'
+| 'handlePaneClick'
+| 'handlePaneContextMenu'
+| 'nodePickerPosition'
+| 'pickedNodeVisibility'
+| 'handleAddNode'
+| 'closeNodePicker'
+| 'nodePickFilters'
+| 'nodeMenuVisibility'
+| 'handleNodeContextMenu'
+| 'openNodeMenu'
+| 'setOpenNodeMenu'
+| 'nodeMenuActions'
+| 'isValidConnectionHandler'
+| 'onEdgeUpdate'
+>
+
+type BaseFlowBehaveGraphFlow = Pick<
+BehaveGraphFlow,
+| 'setGraphJson'
+| 'onNodesChange'
+| 'onEdgesChange'
+| 'nodeTypes'
+| 'nodes'
+| 'edges'
+>
+
 type BaseFlowProps = {
   spell: SpellInterfaceWithGraph
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
   windowDimensions: { width: number; height: number }
-  behaveGraphFlow: Pick<
-    BehaveGraphFlow,
-    | 'setGraphJson'
-    | 'onNodesChange'
-    | 'onEdgesChange'
-    | 'nodeTypes'
-    | 'nodes'
-    | 'edges'
-  >
-  flowHandlers: Pick<
-    ReturnType<typeof useFlowHandlers>,
-    | 'handleOnConnect'
-    | 'handleStartConnect'
-    | 'handleStopConnect'
-    | 'handlePaneClick'
-    | 'handlePaneContextMenu'
-    | 'nodePickerPosition'
-    | 'pickedNodeVisibility'
-    | 'handleAddNode'
-    | 'closeNodePicker'
-    | 'nodePickFilters'
-    | 'nodeMenuVisibility'
-    | 'handleNodeContextMenu'
-    | 'openNodeMenu'
-    | 'setOpenNodeMenu'
-    | 'nodeMenuActions'
-    | 'isValidConnectionHandler'
-    | 'onEdgeUpdate'
-  >
+  behaveGraphFlow: BaseFlowBehaveGraphFlow
+  flowHandlers: BaseFlowHandlers
   pubSub?: ReturnType<typeof usePubSub>
   globalConfig?: RootState['globalConfig'] | undefined
   lastSpellEvent?: any
