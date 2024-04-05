@@ -6,6 +6,7 @@ import SeraphCLI from './seraphCLI'
 import { MemoryStorageMiddleware } from './middleware/memory_storage_middleware'
 import { BashExecutor } from './cognitive_functions/bash_executor'
 import { GitManager } from './cognitive_functions/git_manager'
+import { importPrivatePrompts } from './utils'
 
 dotenv.config()
 
@@ -22,27 +23,6 @@ if (!process.env['ANTHROPIC_API_KEY']) {
     'ANTHROPIC_API_KEY is not defined. Please add to your environment variables.'
   )
   process.exit(1)
-}
-interface PrivatePromptModule {
-  prompt: string
-}
-
-const privatePrompts = ['./private_prompts/seraph_3_cli.ts']
-
-const importPrivatePrompts = async () => {
-  return Promise.all(
-    privatePrompts.map(async module => {
-      try {
-        const imported = (await import(module)) as PrivatePromptModule
-        return imported.prompt
-      } catch (error) {
-        console.error('Failed to import private module:', error)
-        return null
-      }
-    })
-  ).then(prompts => {
-    return prompts.filter(prompt => prompt !== null).join('\n')
-  })
 }
 
 ;(async () => {
