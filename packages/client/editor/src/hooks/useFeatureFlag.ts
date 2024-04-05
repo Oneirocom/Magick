@@ -3,8 +3,9 @@ import { useConfig } from '@magickml/providers'
 import { useGetUserQuery } from 'client/state'
 import { useEffect, useState } from 'react'
 import { Roles } from '@magickml/portal-config'
+import posthog from 'posthog-js'
 
-enum Features {
+export enum Features {
   SERAPH_CHAT_WINDOW = 'SERAPH_CHAT_WINDOW',
 }
 
@@ -29,10 +30,15 @@ export const useFeatureFlag = (feature: Features): boolean => {
     }
 
     if (userData && userData.user) {
+      const posthogFlagEnabled = posthog.isFeatureEnabled(feature)
+      const hogFlagIsTrue = posthogFlagEnabled === true
+
       const userHasAccess =
         featureList[feature].includes(userData.user.subscriptionName) ||
         featureList[feature].includes(userData.user.role) ||
-        featureList[feature].includes(true)
+        featureList[feature].includes(true) ||
+        hogFlagIsTrue
+
       setHasAccess(userHasAccess)
     }
   }, [userData, feature])
