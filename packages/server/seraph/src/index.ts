@@ -1,1 +1,6 @@
 export * from './lib/seraph'
+export * from './lib/utils'
+export * from './lib/middleware/memory_storage_middleware'
+export * from './lib/cognitive_functions/memory/memory'
+export * from './lib/cognitive_functions/bash_executor'
+export * from './lib/cognitive_functions/git_manager'
