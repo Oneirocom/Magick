@@ -67,7 +67,7 @@ declare module './declarations' {
     environment: Environment
     posthog: ReturnType<typeof createPosthogClient>
     credentialsManager: CredentialsManager
-    seraph: Seraph
+    seraphCore: Seraph
   }
 }
 
@@ -94,7 +94,7 @@ export async function initApp(environment: Environment = 'default') {
   seraph.registerCognitiveFunction(new BashExecutor(seraph))
   seraph.registerCognitiveFunction(new GitManager(seraph))
 
-  app.set('seraph', seraph)
+  app.set('seraphCore', seraph)
 
   app.set('posthog', createPosthogClient(app))
 
