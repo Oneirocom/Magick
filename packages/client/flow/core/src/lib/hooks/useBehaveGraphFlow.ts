@@ -106,7 +106,6 @@ export const useBehaveGraphFlow = ({
   }, [$RELOAD_GRAPH, tab.id, setGraphJson, subscribe])
 
   const nodeTypes = useCustomNodeTypes({
-    tab,
     spell,
     specJson,
   })
@@ -122,6 +121,5 @@ export const useBehaveGraphFlow = ({
     nodeTypes,
   }
 }
-
 
 export type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
