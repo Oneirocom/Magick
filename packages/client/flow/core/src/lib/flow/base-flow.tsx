@@ -18,7 +18,7 @@ type BaseFlowProps = {
   tab: Tab
   readOnly?: boolean
   windowDimensions: { width: number; height: number }
-  behaveGraphFlow: BehaveGraphFlow
+  behaveGraphFlow: Pick<BehaveGraphFlow, 'setGraphJson' | 'onNodesChange' | 'onEdgesChange' | 'nodeTypes' | 'nodes' | 'edges'>
   pubSub?: ReturnType<typeof usePubSub>
   globalConfig?: RootState['globalConfig'] | undefined
   lastSpellEvent?: any
