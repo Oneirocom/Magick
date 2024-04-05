@@ -53,6 +53,25 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
         onNodesChange,
         onEdgesChange,
       }}
+      flowHandlers={{
+        handleOnConnect: () => {},
+        handleStartConnect: () => {},
+        handleStopConnect: () => {},
+        handlePaneClick: () => {},
+        handlePaneContextMenu: () => {},
+        nodePickerPosition: { x: 0, y: 0 },
+        pickedNodeVisibility: { x: 0, y: 0 },
+        handleAddNode: () => {},
+        closeNodePicker: () => {},
+        nodePickFilters: undefined,
+        nodeMenuVisibility: { x: 0, y: 0 },
+        handleNodeContextMenu: () => {},
+        openNodeMenu: false,
+        setOpenNodeMenu: () => {},
+        nodeMenuActions: [],
+        isValidConnectionHandler: () => true,
+        onEdgeUpdate: () => {},
+      }}
     />
   )
 }
