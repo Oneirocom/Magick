@@ -4,38 +4,34 @@ import {
   NodeProps as FlowNodeProps,
   useEdges,
   useUpdateNodeInternals,
-} from 'reactflow'
-
-import InputSocket from './InputSocket'
-// import NodeContainerV2 from './NodeContainerV2'
-import OutputSocket from './OutputSocket'
-import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
-import { isHandleConnected } from '../../utils/isHandleConnected'
+} from 'reactflow'  
+import InputSocket from '../sockets/input-socket'
+import OutputSocket from '../sockets/output-socket'
+import { useChangeNodeData } from '../hooks/useChangeNodeData'
+import { isHandleConnected } from '../utils/isHandleConnected'
 import {
   selectActiveInput,
   setActiveInput,
   useSelectAgentsSpell,
 } from 'client/state'
-import { SpellInterface } from 'server/schemas'
-import { getConfig } from '../../utils/getNodeConfig'
-import { configureSockets } from '../../utils/configureSockets'
+import { SpellInterfaceWithGraph } from 'server/schemas'
+import { getConfig } from '../utils/getNodeConfig'
+import { configureSockets } from '../utils/configureSockets'
 import { enqueueSnackbar } from 'notistack'
 import { debounce } from 'lodash'
-import { Tab, usePubSub } from '@magickml/providers'
+import { usePubSub } from '@magickml/providers'
 import { useDispatch, useSelector } from 'react-redux'
-import NodeContainer from './NodeContainer'
+import NodeContainer from './node-container'
 
 type NodeProps = FlowNodeProps & {
-  tab: Tab
   spec: NodeSpecJSON
   allSpecs: NodeSpecJSON[]
-  spell: SpellInterface
+  spell: SpellInterfaceWithGraph
   nodeJSON: NodeJSON
 }
 
 export const Node: React.FC<NodeProps> = ({
   id,
-  tab,
   data,
   spec,
   selected,
