@@ -1,6 +1,6 @@
 import { IDockviewPanelProps } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
-import { Flow } from '../react-flow/Flow'
+import { Flow } from '@magickml/flow-core'
 
 import { Tab } from '@magickml/providers'
 import { RootState, useGetSpellByNameQuery } from 'client/state'
