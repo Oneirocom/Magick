@@ -1,10 +1,21 @@
+import type { Node } from 'reactflow'
+import type { NodeSpecJSON } from '@magickml/behave-graph'
 import { categoryColorMap, colors, valueTypeColorMap } from './colors'
+import { SpellInterfaceWithGraph } from 'server/schemas'
 
-function getCategory(node, specJson) {
-  return specJson.find(spec => spec.type === node.type)?.category || 'None'
+function getCategory(node: Node, specJson: NodeSpecJSON[]) {
+  return (
+    (specJson.find(spec => spec.type === node.type)
+      ?.category as NodeSpecJSON['category']) ||
+    ('None' as NodeSpecJSON['category'])
+  )
 }
 
-export function nodeColor(node, specJson, spell) {
+export function nodeColor(
+  node: Node,
+  specJson: NodeSpecJSON[],
+  spell: SpellInterfaceWithGraph
+) {
   const nodeCategory = getCategory(node, specJson)
   let colorName = categoryColorMap[nodeCategory]
 
@@ -33,7 +44,7 @@ export function nodeColor(node, specJson, spell) {
   return color
 }
 
-function getHexColorFromTailwindClass(className) {
+function getHexColorFromTailwindClass(className: string) {
   // Create a temporary element
   const tempElement = document.createElement('div')
   tempElement.className = className

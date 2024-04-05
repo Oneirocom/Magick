@@ -1,6 +1,6 @@
-import { GraphJSON } from '@magickml/behave-graph'
+import type { GraphJSON } from '@magickml/behave-graph'
+import type { Edge, Node } from 'reactflow'
 import { getNodeSpec } from 'shared/nodeSpec'
-import { Edge, Node } from 'reactflow'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'

@@ -1,4 +1,4 @@
-type Socket = {
+interface Socket {
   name: string
   key: string
   valueType: string

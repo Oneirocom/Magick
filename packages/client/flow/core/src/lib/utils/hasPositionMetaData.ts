@@ -1,10 +1,10 @@
-import { GraphJSON } from '@magickml/behave-graph';
+import type { GraphJSON } from '@magickml/behave-graph'
 
 export const hasPositionMetaData = (graph: GraphJSON): boolean => {
-  if (graph.nodes === undefined) return false;
+  if (graph.nodes === undefined) return false
   return graph.nodes.some(
-    (node) =>
+    node =>
       node.metadata?.positionX !== undefined ||
       node.metadata?.positionY !== undefined
-  );
-};
+  )
+}

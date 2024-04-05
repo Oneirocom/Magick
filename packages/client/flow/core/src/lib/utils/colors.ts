@@ -22,7 +22,7 @@ export const colors: Record<color, [string, string, string]> = {
   orange: ['bg-orange-700', 'border-orange-700', 'text-white'],
 }
 
-export const valueTypeColorMap: Record<string, string> = {
+export const valueTypeColorMap: Record<string, color> = {
   flow: 'white',
   number: 'green',
   float: 'green',
