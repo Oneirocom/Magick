@@ -10,9 +10,11 @@ import { useGlobalLayout } from '../contexts/GlobalLayoutProvider'
 import MainPanel from '../layout/mainPanel'
 import FileDrawer from '../layout/fileDrawer'
 import RightSidebar from '../layout/rightSidebar'
-import { useDockviewTheme } from 'client/state'
+import { useDockviewTheme, useGetUserQuery } from 'client/state'
 import ModalProvider from '../contexts/ModalProvider'
 import { StatusBar } from '../components/StatusBar/statusBar'
+import { useConfig } from '@magickml/providers'
+import posthog from 'posthog-js'
 
 const components = {
   MainPanel,
@@ -92,6 +94,14 @@ const loadDefaultLayout = (api: GridviewApi) => {
 const MagickV2 = () => {
   const { getLayout, setApi } = useGlobalLayout()
   const { theme } = useDockviewTheme()
+  const config = useConfig()
+  const { data: userData, isLoading } = useGetUserQuery({
+    projectId: config.projectId,
+  })
+
+  if (isLoading) return null
+
+  posthog.setPersonPropertiesForFlags({ email: userData?.user?.email })
 
   const onReady = (event: GridviewReadyEvent) => {
     const layout = getLayout()
