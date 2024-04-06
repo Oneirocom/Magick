@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { useSelector } from 'react-redux'
@@ -25,11 +25,12 @@ export const CoreFlow: React.FC<FlowProps> = ({
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
   const pubSub = usePubSub()
-  const specJSON = getNodeSpec(spell)
+
+  const specJSON = useMemo(() => getNodeSpec(spell), [spell])
 
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
-    specJson: getNodeSpec(spell),
+    specJson: specJSON,
     tab,
   })
 
