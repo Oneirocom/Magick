@@ -131,7 +131,7 @@ export enum SeraphEvents {
   middlewareResult = 'middlewareResult',
 }
 
-type SeraphEventTypes = {
+export type SeraphEventTypes = {
   request?: SeraphRequest
   functionExecution?: SeraphFunction
   functionResult?: SeraphFunction
