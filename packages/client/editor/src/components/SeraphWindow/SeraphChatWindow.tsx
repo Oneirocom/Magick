@@ -1,34 +1,39 @@
-import React, {
-  useEffect,
-  // useEffect,
-  useState,
-} from 'react'
+import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
-// import { useSnackbar } from 'notistack'
+import { useSnackbar } from 'notistack'
 
-import {
-  //  useConfig,
-  usePubSub,
-} from '@magickml/providers'
+// import { useConfig } from '@magickml/providers'
 import {
   RootState,
   useGetSpellByNameQuery,
-  // useSelectAgentsEvent,
+  useSelectSeraphEvent,
 } from 'client/state'
+import posthog from 'posthog-js'
 
 import { useSelector } from 'react-redux'
 import { SeraphChatInput } from './SeraphChatInput'
 import { SeraphChatHistory } from './SeraphChatHistory'
 import { useSeraph } from '../../hooks/useSeraph'
 import { useMessageHistory } from '../../hooks/useMessageHistory'
-// import { useMessageQueue } from '../../hooks/useMessageQueue'
-import { ISeraphEvent, SeraphEvents, SeraphRequest } from 'servicesShared'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
+import { ISeraphEvent, SeraphEvents, SeraphRequest } from 'servicesShared'
 
-const SeraphChatWindow = ({ tab, spellName }) => {
+const SeraphChatWindow = props => {
+  const [value, setValue] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [functionEventData, setFunctionEventData] = useState<ISeraphEvent>()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [middlewareEventData, setMiddlewareEventData] = useState<ISeraphEvent>()
+
+  const { enqueueSnackbar } = useSnackbar()
+
   // const config = useConfig()
 
-  // const { enqueueSnackbar } = useSnackbar()
+  const { tab } = props
+
+  const spellName = tab.params.spellName
+
+  const { lastItem: lastEvent } = useSelectSeraphEvent()
   const { spell } = useGetSpellByNameQuery(
     { spellName },
     {
@@ -36,16 +41,25 @@ const SeraphChatWindow = ({ tab, spellName }) => {
       selectFromResult: ({ data }) => ({ spell: data?.data[0] }),
     }
   )
-  const [value, setValue] = useState('')
+
+  console.log('SPELL', tab.params.spellName)
+
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
+
   const { currentAgentId } = globalConfig
 
-  const { history, scrollbars, printToConsole, setHistory } =
-    useMessageHistory<ISeraphEvent>()
+  const {
+    history,
+    scrollbars,
+    printToConsole,
+    setHistory,
+    // setAutoscroll,
+    // autoscroll,
+  } = useMessageHistory()
 
-  const { streamToConsole, messageQueue } = useMessageQueue()
+  const { streamToConsole } = useMessageQueue({ setHistory })
 
-  const { response, makeSeraphRequest } = useSeraph({
+  const { makeSeraphRequest } = useSeraph({
     tab,
     projectId: spell?.projectId,
     agentId: currentAgentId,
@@ -53,43 +67,78 @@ const SeraphChatWindow = ({ tab, spellName }) => {
     setHistory,
   })
 
-  const typeChunk = () => {
-    // Process all messages in the queue at once
-    // const messagesToProcess = [...messageQueue.current]
-    // messageQueue.current = [] // Clear the queue as we're processing all messages
-    // setHistory(prevHistory => {
-    //   const newHistory = [...prevHistory]
-    //   messagesToProcess.forEach(currentMessage => {
-    //     if (
-    //       newHistory.length === 0 ||
-    //       newHistory[newHistory.length - 1].sender !== 'agent'
-    //     ) {
-    //       newHistory.push({ sender: 'agent', content: currentMessage })
-    //     } else {
-    //       newHistory[newHistory.length - 1].content += currentMessage
-    //     }
-    //   })
-    //   return newHistory
-    // })
-  }
+  // React to new events
+  useEffect(() => {
+    // Early return if lastEvent or spell.id is not defined
+    if (
+      !lastEvent?.data?.content ||
+      lastEvent?.event?.runInfo?.spellId !== spell?.id ||
+      lastEvent.event.channel !== spell?.id
+    )
+      return
 
-  // const processQueue = () => {
-  //   if (messageQueue.current.length > 0) {
-  //     typeChunk() // Directly call typeChunk to process all messages
-  //   }
-  // }
+    const seraphEvent = lastEvent.data.content as ISeraphEvent
+    console.log('SERAPH EVENT RECEIVED', seraphEvent)
+
+    // Handling common actions in a function to reduce code repetition
+    const handleEvent = (
+      message: string | undefined,
+      variant: 'info' | 'error' = 'info'
+    ) => {
+      if (variant === 'error') {
+        enqueueSnackbar(message, { variant })
+      }
+      printToConsole(message || '')
+    }
+
+    // Using an object to map event types to their specific actions
+    const eventActions = {
+      [SeraphEvents.message]: () => handleEvent(seraphEvent.data.message),
+      [SeraphEvents.error]: () => handleEvent(seraphEvent.data.error, 'error'),
+      [SeraphEvents.functionResult]: () => setFunctionEventData(seraphEvent),
+      [SeraphEvents.functionExecution]: () => setFunctionEventData(seraphEvent),
+      [SeraphEvents.info]: () => handleEvent(seraphEvent.data.info),
+      [SeraphEvents.middlewareExecution]: () =>
+        setMiddlewareEventData(seraphEvent),
+      [SeraphEvents.middlewareResult]: () =>
+        setMiddlewareEventData(seraphEvent),
+      [SeraphEvents.token]: () => streamToConsole(seraphEvent.data.token || ''),
+    }
+
+    // Execute the action if the event type matches
+    eventActions[seraphEvent.type]?.()
+
+    streamToConsole(lastEvent.data.content)
+  }, [lastEvent])
 
   // Handle message sending
   const onSend = async () => {
-    printToConsole(value)
+    if (!value || !currentAgentId || !spell) return
+    try {
+      const newMessage = {
+        sender: 'user',
+        content: `You: ${value}`,
+      }
 
-    const eventPayload: SeraphRequest = {
-      message: value,
-      systemPrompt: spell.systemPrompt,
+      const eventPayload: SeraphRequest = {
+        message: value,
+      }
+
+      const success = makeSeraphRequest(eventPayload)
+      if (!success) return
+
+      const newHistory = [...history, newMessage]
+      setHistory(newHistory)
+      setValue('')
+
+      posthog.capture('seraph_request_sent', {
+        spellId: spell.id,
+        projectId: spell.projectId,
+        agentId: currentAgentId,
+      })
+    } catch (error) {
+      console.error('Error sending message', error)
     }
-
-    makeSeraphRequest(eventPayload)
-    setValue('')
   }
 
   const onChange = e => {
