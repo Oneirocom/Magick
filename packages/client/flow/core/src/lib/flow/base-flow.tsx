@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
 import CustomControls from '../controls/Controls'
 import { NodePicker } from '../node-picker/NodePicker'
@@ -86,10 +86,16 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     setGraphJson,
     onNodesChange,
     onEdgesChange,
-    nodeTypes,
+    nodeTypes: behaveNodeTypes,
     nodes,
     edges,
   } = behaveGraphFlow
+
+  // memoize node types
+  const nodeTypes = useMemo(() => {
+    if (!behaveNodeTypes) return {}
+    return behaveNodeTypes
+  }, [behaveNodeTypes])
 
   const { projectId, currentAgentId } = globalConfig || {}
   const { publish, events } = pubSub || {}
