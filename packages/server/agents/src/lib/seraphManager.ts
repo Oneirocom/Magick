@@ -2,10 +2,10 @@ import { EventEmitter } from 'events'
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { getLogger } from 'server/logger'
-import { SeraphCore, SeraphOptions } from './seraphCore'
-import { ISeraphEvent, SeraphEvents, SeraphEventTypes } from './types'
-import { AGENT_SERAPH_EVENT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
+import { SeraphCore, SeraphOptions } from '@magickml/seraph'
+import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
+import { AGENT_SERAPH_EVENT } from 'communication'
 
 export class SeraphManager extends EventEmitter {
   private seraphCore: SeraphCore
@@ -23,7 +23,7 @@ export class SeraphManager extends EventEmitter {
     seraphOptions: SeraphOptions
     agentId: string
     projectId: string
-    pubSub: RedisPubSub
+    pubSub: any
   }) {
     super()
     this.seraphCore = new SeraphCore(seraphOptions)
