@@ -41,7 +41,7 @@ import {
   GitManager,
   MemoryRetrieval,
   MemoryStorageMiddleware,
-  Seraph,
+  SeraphCore,
   importPrivatePrompts,
 } from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
@@ -67,7 +67,7 @@ declare module './declarations' {
     environment: Environment
     posthog: ReturnType<typeof createPosthogClient>
     credentialsManager: CredentialsManager
-    seraphCore: Seraph
+    seraphCore: SeraphCore
   }
 }
 
@@ -82,7 +82,7 @@ export async function initApp(environment: Environment = 'default') {
   const prompt =
     (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
 
-  const seraph = new Seraph({
+  const seraph = new SeraphCore({
     prompt,
     openAIApiKey: process.env['OPENAI_API_KEY'] as string,
     anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
