@@ -1,5 +1,4 @@
 import pino from 'pino'
-
 import {
   AGENT_ERROR,
   AGENT_WARN,
@@ -7,7 +6,6 @@ import {
   AGENT_LOG,
   AGENT_SERAPH_EVENT,
 } from 'communication'
-
 import { type Worker } from 'server/communication'
 import { Application } from 'server/core'
 import { getLogger } from 'server/logger'
@@ -20,9 +18,9 @@ import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
 import { EventPayload } from 'server/plugin'
-
 import { ISeraphEvent } from 'servicesShared'
-import { SeraphCore } from '@magickml/seraph'
+import { SeraphManager } from '@magickml/seraph'
+
 // import { StateService } from './StateService'
 
 // type AgentData = {
@@ -53,7 +51,7 @@ export class Agent implements AgentInterface {
   pluginManager: PluginManager
   outputTypes: any[] = []
   heartbeatInterval: NodeJS.Timer
-  seraph: SeraphCore
+  seraphManager: SeraphManager
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
@@ -195,7 +193,7 @@ export class Agent implements AgentInterface {
     })
     this.commandHub.registerDomain('agent', 'seraph', {
       processEvent: async data => {
-        this.seraph.processInput(data.message, 'agent', false)
+        this.seraphManager.processInput(data.message, 'agent', false)
       },
     })
   }
