@@ -5,8 +5,6 @@ import { type PropsWithChildren } from 'react'
 import { categoryColorMap, colors, valueTypeColorMap } from '../utils/colors'
 import type { SpellInterfaceWithGraph } from 'server/schemas'
 
-// import css from './node.module.css'
-
 type Config = {
   label?: string
   variableId?: string
