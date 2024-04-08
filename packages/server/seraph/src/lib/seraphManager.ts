@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { getLogger } from 'server/logger'
 import { SeraphCore, SeraphOptions } from './seraphCore'
-import { ISeraphEvent, SeraphEvents, SeraphEventTypes } from 'servicesShared'
+import { ISeraphEvent, SeraphEvents, SeraphEventTypes } from './types'
 import { AGENT_SERAPH_EVENT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
 
