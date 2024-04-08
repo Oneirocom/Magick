@@ -8,7 +8,7 @@ import os from 'os'
 import { Command } from 'commander'
 import { createLogUpdate } from 'log-update'
 import { SeraphCore } from './seraphCore'
-import { SeraphFunction } from 'servicesShared'
+import { SeraphFunction } from './types'
 
 const logUpdate = createLogUpdate(process.stdout, {
   showCursor: true,

@@ -8,8 +8,8 @@ import { FeedbackProcessor } from './feedback_processor'
 import { SeraphIterator } from './seraph_iterator'
 import { BaseCognitiveFunction } from './base_cognitive_function'
 import { IMiddleware, MiddlewareManager } from './middlewareManager'
-import EventEmitter from 'events'
-import { SeraphFunction, SeraphRequest } from 'servicesShared'
+import { EventEmitter } from 'events'
+import { SeraphFunction, SeraphRequest } from './types'
 
 type SeraphEvents = {
   request: (request: SeraphRequest) => void

@@ -1,7 +1,7 @@
 // cognitive_function_executor.ts
-import { SeraphFunction } from 'servicesShared'
 import { BaseCognitiveFunction } from './base_cognitive_function'
 import { SeraphCore } from './seraphCore'
+import { SeraphFunction } from './types'
 
 /**
  * The CognitiveFunctionExecutor class executes cognitive functions.
