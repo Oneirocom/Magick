@@ -1,5 +1,5 @@
 {
-  "name": "seraph",
+  "name": "@magickml/seraph",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/seraph/src",
   "projectType": "library",
