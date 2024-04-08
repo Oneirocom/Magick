@@ -114,7 +114,7 @@ export type SeraphFunction = {
   messageTitle: string
   message: string
   icon?: JSX.Element
-  result?: Record<string, unknown>
+  result?: string
   startedAt?: string
   finishedAt?: string
 }
@@ -139,7 +139,7 @@ export type SeraphEventTypes = {
   middlewareResult?: SeraphFunction
   message?: string
   token?: string
-  error?: string
+  error?: string | Error
   info?: string
 }
 
