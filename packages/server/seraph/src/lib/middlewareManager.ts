@@ -3,7 +3,7 @@ import { ZodType } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { SeraphCore } from './seraphCore'
-import { SeraphFunction } from 'servicesShared'
+import { SeraphFunction } from './types'
 
 export interface IMiddleware {
   name: string
