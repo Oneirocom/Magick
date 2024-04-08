@@ -1,4 +1,4 @@
-import { Seraph } from './seraph'
+import { SeraphCore } from './seraphCore'
 // import inquirer from 'inquirer'
 import * as dotenv from 'dotenv'
 import { MemoryRetrieval } from './cognitive_functions/memory/memory'
@@ -29,7 +29,7 @@ if (!process.env['ANTHROPIC_API_KEY']) {
   const prompt =
     (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
 
-  const seraph = new Seraph({
+  const seraph = new SeraphCore({
     prompt,
     openAIApiKey: process.env['OPENAI_API_KEY'] as string,
     anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
