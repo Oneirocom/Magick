@@ -51,8 +51,8 @@ type BaseFlowProps = {
   windowDimensions: { width: number; height: number }
   behaveGraphFlow: BaseFlowBehaveGraphFlow
   flowHandlers: BaseFlowHandlers
-  pubSub?: ReturnType<typeof usePubSub>
-  globalConfig?: RootState['globalConfig'] | undefined
+  pubSub?: ReturnType<typeof usePubSub> // should split this into separate handler props
+  globalConfig?: RootState['globalConfig'] | undefined // could split this into projectId and currentAgentId
   lastSpellEvent?: any
 }
 
