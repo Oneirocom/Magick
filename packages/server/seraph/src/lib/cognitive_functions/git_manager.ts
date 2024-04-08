@@ -3,7 +3,7 @@ import { exec } from 'child_process'
 import { promises as fs } from 'fs'
 import { promisify } from 'util'
 import { BaseCognitiveFunction } from '../base_cognitive_function'
-import { Seraph } from '../seraph'
+import { SeraphCore } from '../seraphCore'
 
 const execAsync = promisify(exec)
 
@@ -30,9 +30,9 @@ const functionDefinition = {
 }
 
 class GitManager extends BaseCognitiveFunction {
-  private seraph: Seraph
+  private seraph: SeraphCore
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     super(functionDefinition)
     this.seraph = seraph
   }
