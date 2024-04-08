@@ -12,7 +12,7 @@ type FlowProps = {
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
-  windowDimensions: { width: number; height: number }
+  windowDimensions:{ width: number; height: number }
 }
 
 export const CoreFlow: React.FC<FlowProps> = ({

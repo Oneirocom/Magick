@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { type Tab } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { BaseFlow } from './base-flow'
 import { useCustomNodeTypes } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { behaveToFlow } from '../utils/transformers/behaveToFlow'
+import { XYPosition } from 'reactflow'
 
 type ReadOnlyFlowProps = {
   spell: SpellInterfaceWithGraph
@@ -30,9 +31,13 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
   parentRef,
   windowDimensions,
 }) => {
+  console.log('loading readonly flow: ', spell.id, spell.name)
+
+  const specJson = useMemo(() => getNodeSpec(spell), [spell])
+
   const nodeTypes = useCustomNodeTypes({
     spell,
-    specJson: getNodeSpec(spell),
+    specJson,
     type: 'readonly',
   })
 
