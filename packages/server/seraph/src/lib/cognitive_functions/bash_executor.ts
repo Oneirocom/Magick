@@ -3,7 +3,7 @@ import { BaseCognitiveFunction } from '../base_cognitive_function'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import * as readline from 'readline'
-import { Seraph } from '../seraph'
+import { SeraphCore } from '../seraphCore'
 
 const execAsync = promisify(exec)
 
@@ -27,8 +27,8 @@ const functionDefinition = {
 }
 
 class BashExecutor extends BaseCognitiveFunction {
-  seraph: Seraph
-  constructor(seraph: Seraph) {
+  seraph: SeraphCore
+  constructor(seraph: SeraphCore) {
     super(functionDefinition)
     this.seraph = seraph
   }
