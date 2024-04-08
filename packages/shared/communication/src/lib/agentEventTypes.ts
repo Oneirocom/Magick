@@ -9,6 +9,8 @@ export const AGENT_LOG = (agentId: string) => `agent:${agentId}:server:log`
 export const AGENT_WARN = (agentId: string) => `agent:${agentId}:server:warn`
 export const AGENT_ERROR = (agentId: string) => `agent:${agentId}:server:error`
 export const AGENT_EVENT = (agentId: string) => `agent:${agentId}:server:event`
+export const AGENT_SERAPH_EVENT = (agentId: string) =>
+  `agent:${agentId}:server:seraphEvent`
 
 export const AGENT_PONG = (agentId: string) => `agent:${agentId}:server:pong`
 
