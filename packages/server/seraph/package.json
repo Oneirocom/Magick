@@ -21,7 +21,11 @@
     "xml2js": "^0.6.2",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.4",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "uuid": "^9.0.0",
+    "pino": "8.14.1",
+    "communication":"*",
+    "servicesShared": "*"
   },
   "type": "module",
   "main": "./src/index.js",
