@@ -1,6 +1,6 @@
 export const defaultImagePath = '/images/default/'
 export const defaultBannerImagePath = '/images/banners/default/'
-export const bucketImagePath = process.env.NEXT_PUBLIC_BUCKET_PREFIX
+export const bucketImagePath = process.env['NEXT_PUBLIC_BUCKET_PREFIX']
 export const hashStringToInt = (s: string, max: number) => {
   let h = 0
   for (let i = 0; i < s.length; i++) {
