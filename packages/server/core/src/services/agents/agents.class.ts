@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
+import { ISeraphEvent } from 'servicesShared'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -93,6 +94,21 @@ export class AgentService<
     this.authorizeAgentPermissions(agentId, params)
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.ping(agentId)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
+  }
+
+  async processSeraphEvent(seraphEvent: ISeraphEvent, params?: ServiceParams) {
+    const agentId = seraphEvent.agentId
+
+    this.authorizeAgentPermissions(agentId, params)
+
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.processSeraphEvent(seraphEvent)
 
     return {
       data: {
