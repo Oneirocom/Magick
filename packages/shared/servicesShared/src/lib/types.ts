@@ -139,7 +139,7 @@ export type SeraphEventTypes = {
   middlewareResult?: SeraphFunction
   message?: string
   token?: string
-  error?: string | Error
+  error?: string
   info?: string
 }
 
