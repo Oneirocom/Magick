@@ -19,7 +19,7 @@ import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
 import { EventPayload } from 'server/plugin'
 import { ISeraphEvent } from 'servicesShared'
-import { SeraphManager } from '@magickml/seraph'
+import { SeraphManager } from './seraphManager'
 
 // import { StateService } from './StateService'
 
