@@ -2,7 +2,8 @@
 import { ZodType } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
-import { Seraph } from './seraph'
+import { SeraphCore } from './seraphCore'
+import { SeraphFunction } from 'servicesShared'
 
 export interface IMiddleware {
   name: string
@@ -16,9 +17,9 @@ export interface IMiddleware {
 
 export class MiddlewareManager {
   private middlewares: IMiddleware[] = []
-  private seraph: Seraph
+  private seraph: SeraphCore
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     this.seraph = seraph
   }
 
@@ -53,14 +54,26 @@ export class MiddlewareManager {
         const middleware = this.middlewares.find(m => m.name === middlewareName)
 
         if (middleware) {
-          this.seraph.emit('middlewareExecution', middlewareName)
+          const middlewareStart: SeraphFunction = {
+            name: middlewareName,
+            messageTitle: 'Middleware Execution',
+            message: `Running middleware: ${middlewareName}`,
+          }
+          this.seraph.emit('middlewareExecution', middlewareStart)
           const schema = middleware.schema
           const parsedParameters = schema.parse(parameters)
           const result = await middleware.run?.(
             JSON.stringify(parsedParameters),
             conversationId
           )
-          this.seraph.emit('middlewareResult', middlewareName, result || 'Done')
+
+          const middlewareEnd: SeraphFunction = {
+            name: middlewareName,
+            messageTitle: 'Middleware Execution',
+            message: `Middleware ${middlewareName} finished`,
+            result: result || 'Done',
+          }
+          this.seraph.emit('middlewareResult', middlewareEnd)
         }
       }
     }
@@ -96,7 +109,7 @@ export class MiddlewareManager {
         const xmlSchema = this.jsonSchemaToXml(jsonSchema)
         const fullPrompt = `
           ${basePrompt}
-          
+
           XML Schema for ${middleware.name} Middleware:
           ${xmlSchema}
         `
