@@ -97,7 +97,7 @@ export const rootApi = createApi({
     'OneKnowledge',
     'PluginState',
     'PluginCommand',
-    'SeraphChatHistory',
+    'AgentSeraphEvents',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })
