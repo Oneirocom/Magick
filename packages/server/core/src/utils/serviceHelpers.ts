@@ -87,6 +87,11 @@ export function saveGraphEvent(event: GraphEventPayload) {
     eventType,
   } = event
 
+  if (!content) {
+    console.log('NO CONTENT', event)
+    return
+  }
+
   app.get('posthog').track(eventType, event, agentId)
 
   return app.service('graphEvents').create({
