@@ -98,6 +98,11 @@ export type tasks = $Result.DefaultSelection<Prisma.$tasksPayload>
  * 
  */
 export type Webhook = $Result.DefaultSelection<Prisma.$WebhookPayload>
+/**
+ * Model SeraphEventSchema
+ * 
+ */
+export type SeraphEventSchema = $Result.DefaultSelection<Prisma.$SeraphEventSchemaPayload>
 
 /**
  * Enums
@@ -428,6 +433,16 @@ export class PrismaClient<
     * ```
     */
   get webhook(): Prisma.WebhookDelegate<ExtArgs>;
+
+  /**
+   * `prisma.seraphEventSchema`: Exposes CRUD operations for the **SeraphEventSchema** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SeraphEventSchemas
+    * const seraphEventSchemas = await prisma.seraphEventSchema.findMany()
+    * ```
+    */
+  get seraphEventSchema(): Prisma.SeraphEventSchemaDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -914,7 +929,8 @@ export namespace Prisma {
     spellReleases: 'spellReleases',
     spells: 'spells',
     tasks: 'tasks',
-    Webhook: 'Webhook'
+    Webhook: 'Webhook',
+    SeraphEventSchema: 'SeraphEventSchema'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -931,7 +947,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'agent_credentials' | 'agents' | 'chatMessages' | 'credentials' | 'documents' | 'embeddings' | 'public_events' | 'graphEvents' | 'public_knex_migrations' | 'public_knex_migrations_lock' | 'knowledge' | 'pluginState' | 'request' | 'spellReleases' | 'spells' | 'tasks' | 'webhook'
+      modelProps: 'agent_credentials' | 'agents' | 'chatMessages' | 'credentials' | 'documents' | 'embeddings' | 'public_events' | 'graphEvents' | 'public_knex_migrations' | 'public_knex_migrations_lock' | 'knowledge' | 'pluginState' | 'request' | 'spellReleases' | 'spells' | 'tasks' | 'webhook' | 'seraphEventSchema'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -2054,6 +2070,72 @@ export namespace Prisma {
           count: {
             args: Prisma.WebhookCountArgs<ExtArgs>,
             result: $Utils.Optional<WebhookCountAggregateOutputType> | number
+          }
+        }
+      }
+      SeraphEventSchema: {
+        payload: Prisma.$SeraphEventSchemaPayload<ExtArgs>
+        fields: Prisma.SeraphEventSchemaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SeraphEventSchemaFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SeraphEventSchemaFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>
+          }
+          findFirst: {
+            args: Prisma.SeraphEventSchemaFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SeraphEventSchemaFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>
+          }
+          findMany: {
+            args: Prisma.SeraphEventSchemaFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>[]
+          }
+          create: {
+            args: Prisma.SeraphEventSchemaCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>
+          }
+          createMany: {
+            args: Prisma.SeraphEventSchemaCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.SeraphEventSchemaDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>
+          }
+          update: {
+            args: Prisma.SeraphEventSchemaUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>
+          }
+          deleteMany: {
+            args: Prisma.SeraphEventSchemaDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SeraphEventSchemaUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.SeraphEventSchemaUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SeraphEventSchemaPayload>
+          }
+          aggregate: {
+            args: Prisma.SeraphEventSchemaAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateSeraphEventSchema>
+          }
+          groupBy: {
+            args: Prisma.SeraphEventSchemaGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<SeraphEventSchemaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SeraphEventSchemaCountArgs<ExtArgs>,
+            result: $Utils.Optional<SeraphEventSchemaCountAggregateOutputType> | number
           }
         }
       }
@@ -18771,6 +18853,883 @@ export namespace Prisma {
 
 
   /**
+   * Model SeraphEventSchema
+   */
+
+  export type AggregateSeraphEventSchema = {
+    _count: SeraphEventSchemaCountAggregateOutputType | null
+    _min: SeraphEventSchemaMinAggregateOutputType | null
+    _max: SeraphEventSchemaMaxAggregateOutputType | null
+  }
+
+  export type SeraphEventSchemaMinAggregateOutputType = {
+    id: string | null
+    agentId: string | null
+    projectId: string | null
+    type: string | null
+    createdAt: Date | null
+  }
+
+  export type SeraphEventSchemaMaxAggregateOutputType = {
+    id: string | null
+    agentId: string | null
+    projectId: string | null
+    type: string | null
+    createdAt: Date | null
+  }
+
+  export type SeraphEventSchemaCountAggregateOutputType = {
+    id: number
+    agentId: number
+    projectId: number
+    type: number
+    data: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SeraphEventSchemaMinAggregateInputType = {
+    id?: true
+    agentId?: true
+    projectId?: true
+    type?: true
+    createdAt?: true
+  }
+
+  export type SeraphEventSchemaMaxAggregateInputType = {
+    id?: true
+    agentId?: true
+    projectId?: true
+    type?: true
+    createdAt?: true
+  }
+
+  export type SeraphEventSchemaCountAggregateInputType = {
+    id?: true
+    agentId?: true
+    projectId?: true
+    type?: true
+    data?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SeraphEventSchemaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeraphEventSchema to aggregate.
+     */
+    where?: SeraphEventSchemaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeraphEventSchemas to fetch.
+     */
+    orderBy?: SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput | SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SeraphEventSchemaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeraphEventSchemas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeraphEventSchemas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SeraphEventSchemas
+    **/
+    _count?: true | SeraphEventSchemaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SeraphEventSchemaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SeraphEventSchemaMaxAggregateInputType
+  }
+
+  export type GetSeraphEventSchemaAggregateType<T extends SeraphEventSchemaAggregateArgs> = {
+        [P in keyof T & keyof AggregateSeraphEventSchema]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSeraphEventSchema[P]>
+      : GetScalarType<T[P], AggregateSeraphEventSchema[P]>
+  }
+
+
+
+
+  export type SeraphEventSchemaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeraphEventSchemaWhereInput
+    orderBy?: SeraphEventSchemaOrderByWithAggregationInput | SeraphEventSchemaOrderByWithAggregationInput[]
+    by: SeraphEventSchemaScalarFieldEnum[] | SeraphEventSchemaScalarFieldEnum
+    having?: SeraphEventSchemaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SeraphEventSchemaCountAggregateInputType | true
+    _min?: SeraphEventSchemaMinAggregateInputType
+    _max?: SeraphEventSchemaMaxAggregateInputType
+  }
+
+  export type SeraphEventSchemaGroupByOutputType = {
+    id: string
+    agentId: string
+    projectId: string
+    type: string
+    data: JsonValue
+    createdAt: Date | null
+    _count: SeraphEventSchemaCountAggregateOutputType | null
+    _min: SeraphEventSchemaMinAggregateOutputType | null
+    _max: SeraphEventSchemaMaxAggregateOutputType | null
+  }
+
+  type GetSeraphEventSchemaGroupByPayload<T extends SeraphEventSchemaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SeraphEventSchemaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SeraphEventSchemaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SeraphEventSchemaGroupByOutputType[P]>
+            : GetScalarType<T[P], SeraphEventSchemaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SeraphEventSchemaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    projectId?: boolean
+    type?: boolean
+    data?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["seraphEventSchema"]>
+
+  export type SeraphEventSchemaSelectScalar = {
+    id?: boolean
+    agentId?: boolean
+    projectId?: boolean
+    type?: boolean
+    data?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $SeraphEventSchemaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SeraphEventSchema"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      agentId: string
+      projectId: string
+      type: string
+      data: Prisma.JsonValue
+      createdAt: Date | null
+    }, ExtArgs["result"]["seraphEventSchema"]>
+    composites: {}
+  }
+
+
+  type SeraphEventSchemaGetPayload<S extends boolean | null | undefined | SeraphEventSchemaDefaultArgs> = $Result.GetResult<Prisma.$SeraphEventSchemaPayload, S>
+
+  type SeraphEventSchemaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SeraphEventSchemaFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SeraphEventSchemaCountAggregateInputType | true
+    }
+
+  export interface SeraphEventSchemaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SeraphEventSchema'], meta: { name: 'SeraphEventSchema' } }
+    /**
+     * Find zero or one SeraphEventSchema that matches the filter.
+     * @param {SeraphEventSchemaFindUniqueArgs} args - Arguments to find a SeraphEventSchema
+     * @example
+     * // Get one SeraphEventSchema
+     * const seraphEventSchema = await prisma.seraphEventSchema.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends SeraphEventSchemaFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, SeraphEventSchemaFindUniqueArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one SeraphEventSchema that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {SeraphEventSchemaFindUniqueOrThrowArgs} args - Arguments to find a SeraphEventSchema
+     * @example
+     * // Get one SeraphEventSchema
+     * const seraphEventSchema = await prisma.seraphEventSchema.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends SeraphEventSchemaFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, SeraphEventSchemaFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first SeraphEventSchema that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaFindFirstArgs} args - Arguments to find a SeraphEventSchema
+     * @example
+     * // Get one SeraphEventSchema
+     * const seraphEventSchema = await prisma.seraphEventSchema.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends SeraphEventSchemaFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, SeraphEventSchemaFindFirstArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first SeraphEventSchema that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaFindFirstOrThrowArgs} args - Arguments to find a SeraphEventSchema
+     * @example
+     * // Get one SeraphEventSchema
+     * const seraphEventSchema = await prisma.seraphEventSchema.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends SeraphEventSchemaFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, SeraphEventSchemaFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more SeraphEventSchemas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SeraphEventSchemas
+     * const seraphEventSchemas = await prisma.seraphEventSchema.findMany()
+     * 
+     * // Get first 10 SeraphEventSchemas
+     * const seraphEventSchemas = await prisma.seraphEventSchema.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const seraphEventSchemaWithIdOnly = await prisma.seraphEventSchema.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends SeraphEventSchemaFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SeraphEventSchemaFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a SeraphEventSchema.
+     * @param {SeraphEventSchemaCreateArgs} args - Arguments to create a SeraphEventSchema.
+     * @example
+     * // Create one SeraphEventSchema
+     * const SeraphEventSchema = await prisma.seraphEventSchema.create({
+     *   data: {
+     *     // ... data to create a SeraphEventSchema
+     *   }
+     * })
+     * 
+    **/
+    create<T extends SeraphEventSchemaCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, SeraphEventSchemaCreateArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many SeraphEventSchemas.
+     *     @param {SeraphEventSchemaCreateManyArgs} args - Arguments to create many SeraphEventSchemas.
+     *     @example
+     *     // Create many SeraphEventSchemas
+     *     const seraphEventSchema = await prisma.seraphEventSchema.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends SeraphEventSchemaCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SeraphEventSchemaCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a SeraphEventSchema.
+     * @param {SeraphEventSchemaDeleteArgs} args - Arguments to delete one SeraphEventSchema.
+     * @example
+     * // Delete one SeraphEventSchema
+     * const SeraphEventSchema = await prisma.seraphEventSchema.delete({
+     *   where: {
+     *     // ... filter to delete one SeraphEventSchema
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends SeraphEventSchemaDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, SeraphEventSchemaDeleteArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one SeraphEventSchema.
+     * @param {SeraphEventSchemaUpdateArgs} args - Arguments to update one SeraphEventSchema.
+     * @example
+     * // Update one SeraphEventSchema
+     * const seraphEventSchema = await prisma.seraphEventSchema.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends SeraphEventSchemaUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, SeraphEventSchemaUpdateArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more SeraphEventSchemas.
+     * @param {SeraphEventSchemaDeleteManyArgs} args - Arguments to filter SeraphEventSchemas to delete.
+     * @example
+     * // Delete a few SeraphEventSchemas
+     * const { count } = await prisma.seraphEventSchema.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends SeraphEventSchemaDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SeraphEventSchemaDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SeraphEventSchemas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SeraphEventSchemas
+     * const seraphEventSchema = await prisma.seraphEventSchema.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends SeraphEventSchemaUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, SeraphEventSchemaUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SeraphEventSchema.
+     * @param {SeraphEventSchemaUpsertArgs} args - Arguments to update or create a SeraphEventSchema.
+     * @example
+     * // Update or create a SeraphEventSchema
+     * const seraphEventSchema = await prisma.seraphEventSchema.upsert({
+     *   create: {
+     *     // ... data to create a SeraphEventSchema
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SeraphEventSchema we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends SeraphEventSchemaUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, SeraphEventSchemaUpsertArgs<ExtArgs>>
+    ): Prisma__SeraphEventSchemaClient<$Result.GetResult<Prisma.$SeraphEventSchemaPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of SeraphEventSchemas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaCountArgs} args - Arguments to filter SeraphEventSchemas to count.
+     * @example
+     * // Count the number of SeraphEventSchemas
+     * const count = await prisma.seraphEventSchema.count({
+     *   where: {
+     *     // ... the filter for the SeraphEventSchemas we want to count
+     *   }
+     * })
+    **/
+    count<T extends SeraphEventSchemaCountArgs>(
+      args?: Subset<T, SeraphEventSchemaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SeraphEventSchemaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SeraphEventSchema.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SeraphEventSchemaAggregateArgs>(args: Subset<T, SeraphEventSchemaAggregateArgs>): Prisma.PrismaPromise<GetSeraphEventSchemaAggregateType<T>>
+
+    /**
+     * Group by SeraphEventSchema.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeraphEventSchemaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SeraphEventSchemaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SeraphEventSchemaGroupByArgs['orderBy'] }
+        : { orderBy?: SeraphEventSchemaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SeraphEventSchemaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSeraphEventSchemaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SeraphEventSchema model
+   */
+  readonly fields: SeraphEventSchemaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SeraphEventSchema.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SeraphEventSchemaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the SeraphEventSchema model
+   */ 
+  interface SeraphEventSchemaFieldRefs {
+    readonly id: FieldRef<"SeraphEventSchema", 'String'>
+    readonly agentId: FieldRef<"SeraphEventSchema", 'String'>
+    readonly projectId: FieldRef<"SeraphEventSchema", 'String'>
+    readonly type: FieldRef<"SeraphEventSchema", 'String'>
+    readonly data: FieldRef<"SeraphEventSchema", 'Json'>
+    readonly createdAt: FieldRef<"SeraphEventSchema", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * SeraphEventSchema findUnique
+   */
+  export type SeraphEventSchemaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * Filter, which SeraphEventSchema to fetch.
+     */
+    where: SeraphEventSchemaWhereUniqueInput
+  }
+
+
+  /**
+   * SeraphEventSchema findUniqueOrThrow
+   */
+  export type SeraphEventSchemaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * Filter, which SeraphEventSchema to fetch.
+     */
+    where: SeraphEventSchemaWhereUniqueInput
+  }
+
+
+  /**
+   * SeraphEventSchema findFirst
+   */
+  export type SeraphEventSchemaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * Filter, which SeraphEventSchema to fetch.
+     */
+    where?: SeraphEventSchemaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeraphEventSchemas to fetch.
+     */
+    orderBy?: SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput | SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeraphEventSchemas.
+     */
+    cursor?: SeraphEventSchemaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeraphEventSchemas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeraphEventSchemas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeraphEventSchemas.
+     */
+    distinct?: SeraphEventSchemaScalarFieldEnum | SeraphEventSchemaScalarFieldEnum[]
+  }
+
+
+  /**
+   * SeraphEventSchema findFirstOrThrow
+   */
+  export type SeraphEventSchemaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * Filter, which SeraphEventSchema to fetch.
+     */
+    where?: SeraphEventSchemaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeraphEventSchemas to fetch.
+     */
+    orderBy?: SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput | SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeraphEventSchemas.
+     */
+    cursor?: SeraphEventSchemaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeraphEventSchemas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeraphEventSchemas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeraphEventSchemas.
+     */
+    distinct?: SeraphEventSchemaScalarFieldEnum | SeraphEventSchemaScalarFieldEnum[]
+  }
+
+
+  /**
+   * SeraphEventSchema findMany
+   */
+  export type SeraphEventSchemaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * Filter, which SeraphEventSchemas to fetch.
+     */
+    where?: SeraphEventSchemaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeraphEventSchemas to fetch.
+     */
+    orderBy?: SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput | SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SeraphEventSchemas.
+     */
+    cursor?: SeraphEventSchemaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeraphEventSchemas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeraphEventSchemas.
+     */
+    skip?: number
+    distinct?: SeraphEventSchemaScalarFieldEnum | SeraphEventSchemaScalarFieldEnum[]
+  }
+
+
+  /**
+   * SeraphEventSchema create
+   */
+  export type SeraphEventSchemaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SeraphEventSchema.
+     */
+    data: XOR<SeraphEventSchemaCreateInput, SeraphEventSchemaUncheckedCreateInput>
+  }
+
+
+  /**
+   * SeraphEventSchema createMany
+   */
+  export type SeraphEventSchemaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SeraphEventSchemas.
+     */
+    data: SeraphEventSchemaCreateManyInput | SeraphEventSchemaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * SeraphEventSchema update
+   */
+  export type SeraphEventSchemaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SeraphEventSchema.
+     */
+    data: XOR<SeraphEventSchemaUpdateInput, SeraphEventSchemaUncheckedUpdateInput>
+    /**
+     * Choose, which SeraphEventSchema to update.
+     */
+    where: SeraphEventSchemaWhereUniqueInput
+  }
+
+
+  /**
+   * SeraphEventSchema updateMany
+   */
+  export type SeraphEventSchemaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SeraphEventSchemas.
+     */
+    data: XOR<SeraphEventSchemaUpdateManyMutationInput, SeraphEventSchemaUncheckedUpdateManyInput>
+    /**
+     * Filter which SeraphEventSchemas to update
+     */
+    where?: SeraphEventSchemaWhereInput
+  }
+
+
+  /**
+   * SeraphEventSchema upsert
+   */
+  export type SeraphEventSchemaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SeraphEventSchema to update in case it exists.
+     */
+    where: SeraphEventSchemaWhereUniqueInput
+    /**
+     * In case the SeraphEventSchema found by the `where` argument doesn't exist, create a new SeraphEventSchema with this data.
+     */
+    create: XOR<SeraphEventSchemaCreateInput, SeraphEventSchemaUncheckedCreateInput>
+    /**
+     * In case the SeraphEventSchema was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SeraphEventSchemaUpdateInput, SeraphEventSchemaUncheckedUpdateInput>
+  }
+
+
+  /**
+   * SeraphEventSchema delete
+   */
+  export type SeraphEventSchemaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+    /**
+     * Filter which SeraphEventSchema to delete.
+     */
+    where: SeraphEventSchemaWhereUniqueInput
+  }
+
+
+  /**
+   * SeraphEventSchema deleteMany
+   */
+  export type SeraphEventSchemaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeraphEventSchemas to delete
+     */
+    where?: SeraphEventSchemaWhereInput
+  }
+
+
+  /**
+   * SeraphEventSchema without action
+   */
+  export type SeraphEventSchemaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeraphEventSchema
+     */
+    select?: SeraphEventSchemaSelect<ExtArgs> | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -19040,6 +19999,18 @@ export namespace Prisma {
   export type WebhookScalarFieldEnum = (typeof WebhookScalarFieldEnum)[keyof typeof WebhookScalarFieldEnum]
 
 
+  export const SeraphEventSchemaScalarFieldEnum: {
+    id: 'id',
+    agentId: 'agentId',
+    projectId: 'projectId',
+    type: 'type',
+    data: 'data',
+    createdAt: 'createdAt'
+  };
+
+  export type SeraphEventSchemaScalarFieldEnum = (typeof SeraphEventSchemaScalarFieldEnum)[keyof typeof SeraphEventSchemaScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -19288,6 +20259,16 @@ export namespace Prisma {
   };
 
   export type WebhookOrderByRelevanceFieldEnum = (typeof WebhookOrderByRelevanceFieldEnum)[keyof typeof WebhookOrderByRelevanceFieldEnum]
+
+
+  export const SeraphEventSchemaOrderByRelevanceFieldEnum: {
+    id: 'id',
+    agentId: 'agentId',
+    projectId: 'projectId',
+    type: 'type'
+  };
+
+  export type SeraphEventSchemaOrderByRelevanceFieldEnum = (typeof SeraphEventSchemaOrderByRelevanceFieldEnum)[keyof typeof SeraphEventSchemaOrderByRelevanceFieldEnum]
 
 
   /**
@@ -20705,6 +21686,64 @@ export namespace Prisma {
     status?: EnumWebhookStatusWithAggregatesFilter<"Webhook"> | $Enums.WebhookStatus
     createdAt?: DateTimeWithAggregatesFilter<"Webhook"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Webhook"> | Date | string
+  }
+
+  export type SeraphEventSchemaWhereInput = {
+    AND?: SeraphEventSchemaWhereInput | SeraphEventSchemaWhereInput[]
+    OR?: SeraphEventSchemaWhereInput[]
+    NOT?: SeraphEventSchemaWhereInput | SeraphEventSchemaWhereInput[]
+    id?: UuidFilter<"SeraphEventSchema"> | string
+    agentId?: UuidFilter<"SeraphEventSchema"> | string
+    projectId?: StringFilter<"SeraphEventSchema"> | string
+    type?: StringFilter<"SeraphEventSchema"> | string
+    data?: JsonFilter<"SeraphEventSchema">
+    createdAt?: DateTimeNullableFilter<"SeraphEventSchema"> | Date | string | null
+  }
+
+  export type SeraphEventSchemaOrderByWithRelationAndSearchRelevanceInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    projectId?: SortOrder
+    type?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrderInput | SortOrder
+    _relevance?: SeraphEventSchemaOrderByRelevanceInput
+  }
+
+  export type SeraphEventSchemaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SeraphEventSchemaWhereInput | SeraphEventSchemaWhereInput[]
+    OR?: SeraphEventSchemaWhereInput[]
+    NOT?: SeraphEventSchemaWhereInput | SeraphEventSchemaWhereInput[]
+    agentId?: UuidFilter<"SeraphEventSchema"> | string
+    projectId?: StringFilter<"SeraphEventSchema"> | string
+    type?: StringFilter<"SeraphEventSchema"> | string
+    data?: JsonFilter<"SeraphEventSchema">
+    createdAt?: DateTimeNullableFilter<"SeraphEventSchema"> | Date | string | null
+  }, "id">
+
+  export type SeraphEventSchemaOrderByWithAggregationInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    projectId?: SortOrder
+    type?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrderInput | SortOrder
+    _count?: SeraphEventSchemaCountOrderByAggregateInput
+    _max?: SeraphEventSchemaMaxOrderByAggregateInput
+    _min?: SeraphEventSchemaMinOrderByAggregateInput
+  }
+
+  export type SeraphEventSchemaScalarWhereWithAggregatesInput = {
+    AND?: SeraphEventSchemaScalarWhereWithAggregatesInput | SeraphEventSchemaScalarWhereWithAggregatesInput[]
+    OR?: SeraphEventSchemaScalarWhereWithAggregatesInput[]
+    NOT?: SeraphEventSchemaScalarWhereWithAggregatesInput | SeraphEventSchemaScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SeraphEventSchema"> | string
+    agentId?: UuidWithAggregatesFilter<"SeraphEventSchema"> | string
+    projectId?: StringWithAggregatesFilter<"SeraphEventSchema"> | string
+    type?: StringWithAggregatesFilter<"SeraphEventSchema"> | string
+    data?: JsonWithAggregatesFilter<"SeraphEventSchema">
+    createdAt?: DateTimeNullableWithAggregatesFilter<"SeraphEventSchema"> | Date | string | null
   }
 
   export type agent_credentialsCreateInput = {
@@ -22157,6 +23196,69 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SeraphEventSchemaCreateInput = {
+    id: string
+    agentId: string
+    projectId: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string | null
+  }
+
+  export type SeraphEventSchemaUncheckedCreateInput = {
+    id: string
+    agentId: string
+    projectId: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string | null
+  }
+
+  export type SeraphEventSchemaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SeraphEventSchemaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SeraphEventSchemaCreateManyInput = {
+    id: string
+    agentId: string
+    projectId: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string | null
+  }
+
+  export type SeraphEventSchemaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SeraphEventSchemaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -23424,6 +24526,37 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumWebhookStatusFilter<$PrismaModel>
     _max?: NestedEnumWebhookStatusFilter<$PrismaModel>
+  }
+
+  export type SeraphEventSchemaOrderByRelevanceInput = {
+    fields: SeraphEventSchemaOrderByRelevanceFieldEnum | SeraphEventSchemaOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type SeraphEventSchemaCountOrderByAggregateInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    projectId?: SortOrder
+    type?: SortOrder
+    data?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SeraphEventSchemaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    projectId?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SeraphEventSchemaMinOrderByAggregateInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    projectId?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type agentsCreateNestedOneWithoutAgent_credentialsInput = {
@@ -26461,6 +27594,10 @@ export namespace Prisma {
      * @deprecated Use WebhookDefaultArgs instead
      */
     export type WebhookArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WebhookDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SeraphEventSchemaDefaultArgs instead
+     */
+    export type SeraphEventSchemaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SeraphEventSchemaDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

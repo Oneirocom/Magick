@@ -7,7 +7,8 @@ import path from 'path'
 import os from 'os'
 import { Command } from 'commander'
 import { createLogUpdate } from 'log-update'
-import { Seraph } from './seraph'
+import { SeraphCore } from './seraphCore'
+import { SeraphFunction } from './types'
 
 const logUpdate = createLogUpdate(process.stdout, {
   showCursor: true,
@@ -20,11 +21,11 @@ type CliCommand = {
 }
 
 class SeraphCLI {
-  private seraph: Seraph
+  private seraph: SeraphCore
   private conversationId: string
   commands: CliCommand[] = []
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     this.seraph = seraph
     this.conversationId = 'cli_conversation'
 
@@ -79,32 +80,38 @@ class SeraphCLI {
       }
     })
 
-    this.seraph.on('functionExecution', (functionName: string) => {
-      console.log(chalk.yellow(`Executing function: ${functionName}`))
+    this.seraph.on('functionExecution', (functionExecution: SeraphFunction) => {
+      console.log(chalk.yellow(`Executing function: ${functionExecution.name}`))
     })
 
-    this.seraph.on('functionResult', (functionName: string, result: string) => {
+    this.seraph.on('functionResult', (functionResult: SeraphFunction) => {
       const formattedResult = boxen(
-        chalk.magenta(`Function Result (${functionName}):`) + '\n' + result,
+        chalk.magenta(`Function Result (${functionResult.name}):`) +
+          '\n' +
+          functionResult.result,
         { padding: 1, borderStyle: 'round', borderColor: 'magenta' }
       )
       console.log(formattedResult)
     })
 
-    this.seraph.on('middlewareExecution', (middlewareName: string) => {
-      console.log(chalk.yellow(`Executing middleware: ${middlewareName}`))
-    })
-
     this.seraph.on(
-      'middlewareResult',
-      (middlewareName: string, result: string) => {
+      'middlewareExecution',
+      (middlewareExecution: SeraphFunction) => {
         console.log(
-          chalk.magenta(
-            `Middleware Result (${middlewareName}):` + '\n' + result
-          )
+          chalk.yellow(`Executing middleware: ${middlewareExecution.name}`)
         )
       }
     )
+
+    this.seraph.on('middlewareResult', (middlewareResult: SeraphFunction) => {
+      console.log(
+        chalk.magenta(
+          `Middleware Result (${middlewareResult.name}):` +
+            '\n' +
+            middlewareResult.result
+        )
+      )
+    })
 
     // Add other event listeners here...
   }

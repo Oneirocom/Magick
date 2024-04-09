@@ -9,9 +9,10 @@ import { SeraphIterator } from './seraph_iterator'
 import { BaseCognitiveFunction } from './base_cognitive_function'
 import { IMiddleware, MiddlewareManager } from './middlewareManager'
 import { EventEmitter } from 'events'
-import { SeraphFunction } from './types'
+import { SeraphFunction, SeraphRequest } from './types'
 
 type SeraphEvents = {
+  request: (request: SeraphRequest) => void
   error: (error: Error | string) => void
   message: (role: 'user' | 'assistant', message: string) => void
   info: (info: string, data?: Record<string, unknown>) => void
@@ -22,7 +23,7 @@ type SeraphEvents = {
   middlewareResult: (middlewareData: SeraphFunction) => void
 }
 
-type SeraphOptions = {
+export type SeraphOptions = {
   prompt: string
   openAIApiKey: string
   anthropicApiKey: string
@@ -31,7 +32,7 @@ type SeraphOptions = {
  * The Seraph class represents the main entry point for the AI system.
  * It manages cognitive functions, conversation context, and the cognitive loop.
  */
-class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
+class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
   cognitiveFunctions: Record<string, BaseCognitiveFunction> = {}
   conversationManager: ConversationManager
   cognitiveFunctionExecutor: CognitiveFunctionExecutor
@@ -222,4 +223,4 @@ class Seraph extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) {
   }
 }
 
-export { Seraph }
+export { SeraphCore }

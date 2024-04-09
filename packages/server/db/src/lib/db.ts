@@ -8,8 +8,9 @@ const globalForPrismaCore = globalThis as { prismaCore?: PrismaClient }
 export const prismaCore =
   globalForPrismaCore.prismaCore ||
   new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+    log:
+      process.env['NODE_ENV'] === 'development' ? ['error', 'warn'] : ['error'],
   })
 
-if (process.env.NODE_ENV !== 'production')
+if (process.env['NODE_ENV'] !== 'production')
   globalForPrismaCore.prismaCore = prismaCore

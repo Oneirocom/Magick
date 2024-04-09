@@ -200,7 +200,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       dispatch(setIsDirty(true))
       onSaveDiff(null, lastSpellState, () => {
         dispatch(undoState({ value: lastSpellState }))
-        publish($RELOAD_GRAPH(tab.id), { spellState: lastSpellState })
+        publish($RELOAD_GRAPH(tab.id), {
+          spellState: lastSpellState,
+          agentId: tab.agentId,
+          projectId: config.projectId,
+        })
       })
     }
   }, [pastState, isSaving, dispatch, onSaveDiff, publish, tab.id])
@@ -215,7 +219,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       dispatch(setIsDirty(true))
       onSaveDiff(null, futureSpellState, () => {
         dispatch(redoState({ value: futureSpellState }))
-        publish($RELOAD_GRAPH(tab.id), { spellState: futureSpellState })
+        publish($RELOAD_GRAPH(tab.id), {
+          spellState: futureSpellState,
+          agentId: tab.agentId,
+          projectId: config.projectId,
+        })
       })
     }
   }, [futureState, isSaving, dispatch, onSaveDiff, publish, tab.id])

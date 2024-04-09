@@ -5,7 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { IMiddleware } from '../middlewareManager'
 import { metadataManager } from '../cognitive_functions/memory'
-import { Seraph } from '../seraph'
+import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -14,10 +14,10 @@ const __dirname = path.dirname(__filename)
 class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'
   private index: LocalIndex
-  private seraph: Seraph
+  private seraph: SeraphCore
   private openAIApi: OpenAI
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     this.openAIApi = new OpenAI({
       apiKey: seraph.options.openAIApiKey,
     })
@@ -77,7 +77,7 @@ class MemoryStorageMiddleware implements IMiddleware {
     const metadataPrompt = await metadataManager.getPromptInjection()
     const fullPrompt = `
       ${basePrompt}
-      
+
       ${metadataPrompt}
     `
 

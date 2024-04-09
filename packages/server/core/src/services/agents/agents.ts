@@ -59,6 +59,7 @@ const AGENT_EVENTS = [
   'error',
   'warn',
   'pong',
+  'seraphEvent',
 ]
 
 /**
@@ -79,6 +80,7 @@ export const agent = (app: Application) => {
       'ping',
       'subscribe',
       'message',
+      'processSeraphEvent',
     ],
     events: AGENT_EVENTS,
   })
