@@ -177,6 +177,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
     this.app
       .service('spells')
+      .on('patched', this.watchSpellUpdateHandler.bind(this))
+
+    this.app
+      .service('spells')
       .on('created', this.watchSpellCreatedHandler.bind(this))
   }
 
@@ -187,6 +191,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * this.app.service('spells').on('updated', this.watchSpellHandler.bind(this));
    */
   private watchSpellUpdateHandler(spell: SpellInterface) {
+    console.log('SPELL UPDATED', spell.id, this.hasSpellCaster(spell.id))
     if (!this.watchSpells) return
     if (this.agent.projectId !== spell.projectId) return
 
@@ -623,6 +628,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.app
       .service('spells')
       .removeListener('updated', this.watchSpellUpdateHandler)
+
+    this.app
+      .service('spells')
+      .removeListener('patched', this.watchSpellUpdateHandler)
 
     this.app
       .service('spells')
