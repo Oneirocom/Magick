@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 import {
   RootState,
   useGetSpellByNameQuery,
-  useSelectSeraphEvent,
+  useSelectAgentsSeraphEvent,
 } from 'client/state'
 import posthog from 'posthog-js'
 
@@ -33,7 +33,7 @@ const SeraphChatWindow = props => {
 
   const spellName = tab.params.spellName
 
-  const { lastItem: lastEvent } = useSelectSeraphEvent()
+  const { lastItem: lastEvent } = useSelectAgentsSeraphEvent()
   const { spell } = useGetSpellByNameQuery(
     { spellName },
     {
