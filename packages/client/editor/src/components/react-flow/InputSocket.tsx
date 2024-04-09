@@ -65,6 +65,7 @@ const InputFieldForValue = ({
   const showChoices = choices?.length && choices.length > 0
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
   const hideValueInput = hideValue || connected
+  const [isFocused, setIsFocused] = useState(false)
 
   const inputClass = cx('h-5 text-sm')
 
@@ -81,6 +82,7 @@ const InputFieldForValue = ({
 
   const onFocus = (x: string) => {
     if (valueType === 'string') {
+      setIsFocused(true)
       onChange(name, x)
       dispatch(
         setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
@@ -90,8 +92,12 @@ const InputFieldForValue = ({
     dispatch(setActiveInput(null))
   }
 
+  const onBlur = () => {
+    setIsFocused(false)
+  }
+
   useEffect(() => {
-    if (!isActive || !activeInput?.name) return
+    if (!isActive || !activeInput?.name || isFocused) return
     onChange(activeInput?.name, activeInput?.value)
     setInputVal(activeInput?.value || '')
   }, [isActive, activeInput])
@@ -127,7 +133,8 @@ const InputFieldForValue = ({
               onChange={e =>
                 handleChange({ key: name, value: e.currentTarget.value })
               }
-              onFocus={() => onFocus(inputVal)}
+              handleBlur={onBlur}
+              onFocus={onFocus}
               className="m-1 h-6"
             />
           )}
@@ -153,13 +160,14 @@ const InputFieldForValue = ({
             />
           )}
           {valueType === 'boolean' && !showChoices && (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center red">
               <Switch
-                defaultValue={value || 0}
-                onChange={value => {
+                value={value}
+                defaultChecked={value}
+                onCheckedChange={value => {
                   onChange(name, value)
                 }}
-                onFocus={() => onFocus(value)}
+                // onFocus={() => onFocus(value)}
               />
             </div>
           )}
