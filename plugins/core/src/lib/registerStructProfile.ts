@@ -22,6 +22,7 @@ import { Path, PathAsInteger, PathAsString } from './values/Object/Path'
 import { makeValidate } from './nodes/logic/Validate'
 import { LogObject } from './nodes/debug/LogObject'
 import { LogList } from './nodes/debug/LogArray'
+import { ObjectCreate } from './values/Object/Create'
 
 export const getCoreValuesMap = memo<ValueTypeMap>(() => {
   const valueTypes = [ObjectValue, ArrayValue]
@@ -47,6 +48,7 @@ export const getCoreNodesMap = (logger: ILogger) => {
     Concat3,
     ObjectConstant,
     ObjectEqual,
+    ObjectCreate,
     MergeDeep,
     Path,
     PathAsInteger,
