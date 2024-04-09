@@ -1,15 +1,12 @@
 import React, {
-  useEffect,
   // useEffect,
   useState,
 } from 'react'
 import { Window } from 'client/core'
 // import { useSnackbar } from 'notistack'
 
-import {
-  //  useConfig,
-  usePubSub,
-} from '@magickml/providers'
+import //  useConfig,
+'@magickml/providers'
 import {
   RootState,
   useGetSpellByNameQuery,
@@ -22,8 +19,7 @@ import { SeraphChatHistory } from './SeraphChatHistory'
 import { useSeraph } from '../../hooks/useSeraph'
 import { useMessageHistory } from '../../hooks/useMessageHistory'
 // import { useMessageQueue } from '../../hooks/useMessageQueue'
-import { ISeraphEvent, SeraphEvents, SeraphRequest } from 'servicesShared'
-import { useMessageQueue } from '../../hooks/useMessageQueue'
+import { ISeraphEvent, SeraphRequest } from 'servicesShared'
 
 const SeraphChatWindow = ({ tab, spellName }) => {
   // const config = useConfig()
@@ -43,41 +39,13 @@ const SeraphChatWindow = ({ tab, spellName }) => {
   const { history, scrollbars, printToConsole, setHistory } =
     useMessageHistory<ISeraphEvent>()
 
-  const { streamToConsole, messageQueue } = useMessageQueue()
-
-  const { response, makeSeraphRequest } = useSeraph({
+  const { makeSeraphRequest } = useSeraph({
     tab,
     projectId: spell?.projectId,
     agentId: currentAgentId,
     history,
     setHistory,
   })
-
-  const typeChunk = () => {
-    // Process all messages in the queue at once
-    // const messagesToProcess = [...messageQueue.current]
-    // messageQueue.current = [] // Clear the queue as we're processing all messages
-    // setHistory(prevHistory => {
-    //   const newHistory = [...prevHistory]
-    //   messagesToProcess.forEach(currentMessage => {
-    //     if (
-    //       newHistory.length === 0 ||
-    //       newHistory[newHistory.length - 1].sender !== 'agent'
-    //     ) {
-    //       newHistory.push({ sender: 'agent', content: currentMessage })
-    //     } else {
-    //       newHistory[newHistory.length - 1].content += currentMessage
-    //     }
-    //   })
-    //   return newHistory
-    // })
-  }
-
-  // const processQueue = () => {
-  //   if (messageQueue.current.length > 0) {
-  //     typeChunk() // Directly call typeChunk to process all messages
-  //   }
-  // }
 
   // Handle message sending
   const onSend = async () => {
