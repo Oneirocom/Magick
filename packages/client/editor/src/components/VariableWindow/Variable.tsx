@@ -144,7 +144,7 @@ export const Variable = ({
         ...variable,
         [property]: value,
       })
-    }, 500)
+    }, 2000)
 
   return (
     <div className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2 p-2 pl-4">
