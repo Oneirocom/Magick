@@ -143,6 +143,32 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     this.disableInput = false
   }
 
+  public async processRequest({
+    userInput,
+    conversationId,
+  }): Promise<string | void> {
+    if (this.disableInput) return ''
+
+    this.conversationManager.updateContext(conversationId, userInput, 'user')
+
+    const systemPrompt = await this.generateSystemPrompt()
+
+    const seraphProcessor = new SeraphIterator(
+      this,
+      conversationId,
+      systemPrompt
+    )
+
+    this.disableInput = true
+
+    for await (const iteratorResponse of seraphProcessor) {
+      this.emit('message', 'assistant', iteratorResponse)
+      return iteratorResponse
+    }
+
+    this.disableInput = false
+  }
+
   async generateSystemPrompt(): Promise<string> {
     const toolsDescription = await this.getToolsDescription()
     const middlewarePrompts =
