@@ -3921,6 +3921,53 @@
     "configuration": []
   },
   {
+    "type": "action/object/create",
+    "category": "Action",
+    "label": "Object Create",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "object",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer"
+        ]
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "logic/mergeDeep/object",
     "category": "Logic",
     "label": "Merge Deep",
