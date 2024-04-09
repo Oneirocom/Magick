@@ -1,6 +1,6 @@
 import {
-  useGetSeraphChatHistoryQuery,
-  useCreateSeraphRequestMutation,
+  useCreateAgentSeraphEventMutation,
+  useGetAgentSeraphEventsQuery,
 } from 'client/state'
 import { usePubSub } from '@magickml/providers'
 import { useEffect, useState } from 'react'
@@ -12,19 +12,24 @@ import {
 
 export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   const [eventData, setEventData] = useState<ISeraphEvent>()
-  const { data: seraphChatHistory } = useGetSeraphChatHistoryQuery({ agentId })
-  const [createSeraphRequest, { error: requestRecordError }] =
-    useCreateSeraphRequestMutation()
 
-  const { publish, subscribe, events } = usePubSub()
-  const { $SERAPH_EVENT } = events
+  const {
+    data: seraphChatHistory,
+    error,
+    isLoading,
+  } = useGetAgentSeraphEventsQuery({ agentId })
+
+  const [createSeraphRequest, { error: requestRecordError }] =
+    useCreateAgentSeraphEventMutation()
+
+  const { subscribe, events } = usePubSub()
 
   // set up listeners for response, error, info,
   useEffect(() => {
     const destoryResponseListener = subscribe(
       events.$SERAPH_EVENT(tab.id),
       (event, data) => {
-        console.log('RESPONSE', { event, data })
+        console.log('Seraph Event Received', { event, data })
         setEventData(data)
       }
     )
@@ -43,7 +48,9 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
     if (
       seraphChatHistory?.length === history.length ||
       seraphChatHistory?.length === 0 ||
-      !seraphChatHistory
+      !seraphChatHistory ||
+      isLoading ||
+      error
     )
       return
 
@@ -64,7 +71,6 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
       setEventData(undefined)
       const data = await createSeraphRequest(seraphRequest)
       if (!data) throw new Error('Error creating seraph request')
-      publish($SERAPH_EVENT(tab.id), seraphRequest)
       return true
     } catch (error) {
       console.error('Error making seraph request', error)
