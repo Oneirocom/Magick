@@ -299,3 +299,14 @@ enum WebhookStatus {
 
   @@schema("public")
 }
+
+model SeraphEventSchema {
+  id        String    @id @db.Uuid
+  agentId   String    @db.Uuid
+  projectId String    @db.VarChar(255)
+  type      String    @db.VarChar(255)
+  data      Json
+  createdAt DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@schema("public")
+}

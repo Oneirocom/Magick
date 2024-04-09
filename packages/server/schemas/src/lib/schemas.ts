@@ -1,5 +1,6 @@
 // DOCUMENTED
 import { Static, Type } from '@feathersjs/typebox'
+import { SeraphEvents } from 'servicesShared'
 /**
  * Full data model schema for a spell.
  *
@@ -78,7 +79,7 @@ export const agentSchema = Type.Object(
     draftAgentId: Type.Optional(Type.String()),
     embedModel: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
     rootSpell: Type.Optional(Type.Union([Type.Null(), Type.String()])), // DEPRECATED
-    
+
     image: Type.Optional(Type.Union([Type.Null(), Type.String()])),
     description: Type.Optional(Type.Union([Type.Null(), Type.String()])),
   },
@@ -251,42 +252,64 @@ export type UserInterface = UserSchema
 
 export const seraphEventSchema = Type.Object(
   {
-    id: Type.String(),
+    id: Type.Optional(Type.String()),
     agentId: Type.String(),
     projectId: Type.String(),
-    type: Type.String(),
-    request: Type.Optional(
-      Type.Object({
-        message: Type.String(),
-        systemPrompt: Type.String(),
-        createdAt: Type.String(),
-      })
-    ),
-    response: Type.Optional(
-      Type.Object({
-        message: Type.String(),
-        functionStart: Type.Object({
-          functionName: Type.String(),
+    spellId: Type.Optional(Type.String()),
+    type: Type.Enum(SeraphEvents),
+    data: Type.Object({
+      request: Type.Optional(
+        Type.Object({
+          message: Type.String(),
+          systemPrompt: Type.Optional(Type.String()),
+        })
+      ),
+      functionExecution: Type.Optional(
+        Type.Object({
+          name: Type.String(),
+          messageTitle: Type.String(),
           message: Type.String(),
           icon: Type.Optional(Type.String()),
+          result: Type.Optional(Type.Any()),
           startedAt: Type.Optional(Type.String({ format: 'date-time' })),
           finishedAt: Type.Optional(Type.String({ format: 'date-time' })),
-        }),
-        functionResult: Type.Object({
-          functionName: Type.String(),
+        })
+      ),
+      functionResult: Type.Optional(
+        Type.Object({
+          name: Type.String(),
+          messageTitle: Type.String(),
           message: Type.String(),
           icon: Type.Optional(Type.String()),
+          result: Type.Optional(Type.Any()),
           startedAt: Type.Optional(Type.String({ format: 'date-time' })),
           finishedAt: Type.Optional(Type.String({ format: 'date-time' })),
-        }),
-        error: Type.String(),
-        info: Type.String(),
-        createdAt: Type.Optional(Type.String({ format: 'date-time' })),
-      })
-    ),
-    error: Type.String(),
-    info: Type.String(),
-    createdAt: Type.Optional(Type.String({ format: 'date-time' })),
+        })
+      ),
+      middlewareExecution: Type.Optional(
+        Type.Object({
+          name: Type.String(),
+          messageTitle: Type.String(),
+          message: Type.String(),
+          icon: Type.Optional(Type.String()),
+          result: Type.Optional(Type.Any()),
+          startedAt: Type.Optional(Type.String({ format: 'date-time' })),
+          finishedAt: Type.Optional(Type.String({ format: 'date-time' })),
+        })
+      ),
+      middlewareResult: Type.Optional(
+        Type.Object({
+          name: Type.String(),
+          messageTitle: Type.String(),
+          message: Type.String(),
+          icon: Type.Optional(Type.String()),
+          result: Type.Optional(Type.Any()),
+          startedAt: Type.Optional(Type.String({ format: 'date-time' })),
+          finishedAt: Type.Optional(Type.String({ format: 'date-time' })),
+        })
+      ),
+    }),
+    createdAt: Type.String({ format: 'date-time' }),
   },
   {
     $id: 'SeraphEvent',

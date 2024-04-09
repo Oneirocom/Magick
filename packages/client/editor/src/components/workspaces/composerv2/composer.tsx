@@ -28,6 +28,7 @@ import {
   getLayoutFromLocalStorage,
   saveLayoutToLocalStorage,
 } from '../../../utils/layoutLocalStorage'
+import SeraphChatWindow from '../../SeraphWindow/SeraphChatWindow'
 
 const components = {
   default: (props: IDockviewPanelProps<{ title: string; spellId: string }>) => {
@@ -47,6 +48,11 @@ const components = {
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
     return <ChatWindow {...props.params} />
+  },
+  Seraph: (
+    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
+  ) => {
+    return <SeraphChatWindow {...props.params} />
   },
   Properties: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>

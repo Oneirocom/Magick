@@ -332,41 +332,71 @@ export const useFlowHandlers = ({
     { label: 'Paste', onClick: paste },
   ]
 
-  const handleStopConnect: OnConnectEnd = useCallback(e => {
-    blockClose = true
-    e.preventDefault()
-    const element = e.target as HTMLElement
-    if (element.classList.contains('react-flow__pane')) {
-      const bounds = parentRef?.current?.getBoundingClientRect()
+  const handleStopConnect: OnConnectEnd = useCallback(
+    e => {
+      blockClose = true
+      e.preventDefault()
+      const element = e.target as HTMLElement
+      if (element.classList.contains('react-flow__pane')) {
+        const bounds = parentRef?.current?.getBoundingClientRect()
 
-      if (!bounds) return
+        if (!bounds) return
 
-      let clientX, clientY
+        let clientX, clientY
 
-      if (e instanceof MouseEvent) {
-        clientX = e.clientX
-        clientY = e.clientY
-      } else if (e instanceof TouchEvent && e.touches.length > 0) {
-        clientX = e.touches[0].clientX
-        clientY = e.touches[0].clientY
+        if (e instanceof MouseEvent) {
+          clientX = e.clientX
+          clientY = e.clientY
+        } else if (e instanceof TouchEvent && e.touches.length > 0) {
+          clientX = e.touches[0].clientX
+          clientY = e.touches[0].clientY
+        }
+
+        const nodePickerWidth = 240 // Set the fixed width of the node picker
+        const nodePickerHeight = 251 // Set the fixed height of the node picker
+
+        // Calculate initial positions relative to the parent container
+        let xPosition = clientX - bounds.left
+        let yPosition = clientY - bounds.top
+
+        // Adjust if the node picker would open off the right side of the viewport
+        if (xPosition + nodePickerWidth > bounds.width) {
+          xPosition = bounds.width - nodePickerWidth
+        }
+
+        // Adjust if the node picker would open off the bottom of the viewport
+        if (yPosition + nodePickerHeight > bounds.height) {
+          yPosition = bounds.height - nodePickerHeight
+        }
+
+        // Ensure the node picker stays within the visible area of the viewport
+        xPosition = Math.max(
+          0,
+          Math.min(xPosition, window.innerWidth - nodePickerWidth)
+        )
+        yPosition = Math.max(
+          0,
+          Math.min(yPosition, window.innerHeight - nodePickerHeight)
+        )
+
+        setPickedNodeVisibility({
+          x: xPosition,
+          y: yPosition,
+        })
+        setNodePickerPosition({
+          x: xPosition + bounds.left,
+          y: yPosition + bounds.top,
+        })
+
+        setTimeout(() => {
+          blockClose = false
+        }, 500)
+      } else {
+        setLastConnectStart(undefined)
       }
-
-      setPickedNodeVisibility({
-        x: clientX - bounds.left + window.scrollX,
-        y: clientY - bounds.top + window.scrollY,
-      })
-      setNodePickerPosition({
-        x: clientX,
-        y: clientY,
-      })
-
-      setTimeout(() => {
-        blockClose = false
-      }, 500)
-    } else {
-      setLastConnectStart(undefined)
-    }
-  }, [])
+    },
+    [parentRef]
+  )
 
   const handlePaneClick = useCallback(() => {
     if (blockClose) return

@@ -106,7 +106,7 @@ export interface ICoreLLMService {
 
 export type SeraphRequest = {
   message: string
-  systemPrompt: string
+  systemPrompt?: string
 }
 
 export type SeraphFunction = {
@@ -114,36 +114,41 @@ export type SeraphFunction = {
   messageTitle: string
   message: string
   icon?: JSX.Element
-  result?: Record<string, unknown>
+  result?: string
   startedAt?: string
   finishedAt?: string
 }
 
-export type SeraphResponse = {
-  message: string
-  functionStart?: SeraphFunction
-  functionResult?: SeraphFunction
-  createdAt: string
-}
-
 export enum SeraphEvents {
   request = 'request',
-  response = 'response',
   error = 'error',
+  message = 'message',
   info = 'info',
-  functionStart = 'functionStart',
-  functionEnd = 'functionEnd',
+  token = 'token',
+  functionExecution = 'functionExecution',
+  functionResult = 'functionResult',
+  middlewareExecution = 'middlewareExecution',
+  middlewareResult = 'middlewareResult',
+}
+
+export type SeraphEventTypes = {
+  request?: SeraphRequest
+  functionExecution?: SeraphFunction
+  functionResult?: SeraphFunction
+  middlewareExecution?: SeraphFunction
+  middlewareResult?: SeraphFunction
+  message?: string
+  token?: string
+  error?: string
+  info?: string
 }
 
 export interface ISeraphEvent {
   id?: string
   agentId: string
   projectId: string
-  type: SeraphEvents
   spellId?: string
-  request?: SeraphRequest
-  response?: SeraphResponse
-  error?: string
-  info?: string
+  type: SeraphEvents
+  data: SeraphEventTypes
   createdAt: string
 }

@@ -5,7 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { BaseCognitiveFunction } from '../../base_cognitive_function'
 import { metadataManager } from './metadata_manager'
-import { Seraph } from '../../seraph'
+import { SeraphCore } from '../../seraphCore'
 
 const __filename = fileURLToPath(import.meta.url) // get the resolved path to the file
 const __dirname = path.dirname(__filename) // get the name of the directory
@@ -56,10 +56,10 @@ const functionDefinition = {
 
 class MemoryStorage extends BaseCognitiveFunction {
   private index: LocalIndex
-  private seraph: Seraph
+  private seraph: SeraphCore
   private openAIApi: OpenAI
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     super(functionDefinition)
 
     this.seraph = seraph
@@ -102,10 +102,10 @@ class MemoryStorage extends BaseCognitiveFunction {
 
 class MemoryRetrieval extends BaseCognitiveFunction {
   private index: LocalIndex
-  private seraph: Seraph
+  private seraph: SeraphCore
   private openAIApi: OpenAI
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     super({
       name: 'memoryRetrieval',
       description:
