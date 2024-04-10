@@ -79,6 +79,18 @@ export class Agent implements AgentInterface {
 
     this.commandHub = new CommandHub(this, this.pubsub)
 
+    this.seraphManager = new SeraphManager({
+      seraphOptions: {
+        prompt: 'How can I help you?',
+        openAIApiKey: process.env.OPENAI_API_KEY || '',
+        anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
+      },
+      agentId: this.id,
+      projectId: this.projectId,
+      pubSub: this.pubsub,
+      commandHub: this.commandHub,
+    })
+
     this.pluginManager = new PluginManager({
       pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
       connection: this.app.get('redis'),
@@ -193,7 +205,7 @@ export class Agent implements AgentInterface {
     })
     this.commandHub.registerDomain('agent', 'seraph', {
       processEvent: async data => {
-        this.seraphManager.processInput(data.message, 'agent', false)
+        this.seraphManager.processEvent(data)
       },
     })
   }
