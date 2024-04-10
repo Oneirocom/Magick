@@ -9,19 +9,9 @@ type ReadOnlyNodeProps = Omit<
 
 export const ReadOnlyNode: React.FC<ReadOnlyNodeProps> = props => {
   const { id, spec, spell, ...rest } = props
-  // const { lastItem: spellEvent } = useSelectAgentsSpell()
-  // const activeInput = useSelector(selectActiveInput)
 
-  const activeInput = {
-    name: 'input',
-    inputType: 'text',
-    value: 'value',
-    nodeId: '',
-  }
-  const spellEvent = {
-    event: 'event',
-    message: 'message',
-  }
+  const activeInput = null
+  const spellEvent = null
 
   const onResetNodeState = () => {
     // Dummy onResetNodeState logic
@@ -35,7 +25,10 @@ export const ReadOnlyNode: React.FC<ReadOnlyNodeProps> = props => {
 
   return (
     <BaseNode
-      {...props}
+      id={id}
+      spec={spec}
+      spell={spell}
+      {...rest}
       activeInput={activeInput}
       setActiveInput={setActiveInputWrapper}
       onResetNodeState={onResetNodeState}
