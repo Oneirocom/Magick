@@ -2,7 +2,7 @@ import {
   useCreateAgentSeraphEventMutation,
   useGetAgentSeraphEventsQuery,
 } from 'client/state'
-import { usePubSub } from '@magickml/providers'
+import { useFeathers } from '@magickml/providers'
 import { useEffect, useState } from 'react'
 import {
   ISeraphEvent,
@@ -11,6 +11,7 @@ import {
 } from '../../../../shared/servicesShared/src'
 
 export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
+  const { client } = useFeathers()
   const [eventData, setEventData] = useState<ISeraphEvent>()
 
   const {
@@ -22,21 +23,20 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   const [createSeraphRequest, { error: requestRecordError }] =
     useCreateAgentSeraphEventMutation()
 
-  const { subscribe, events } = usePubSub()
-
   // set up listeners for response, error, info,
   useEffect(() => {
-    const destoryResponseListener = subscribe(
-      events.$SERAPH_EVENT(tab.id),
-      (event, data) => {
-        console.log('Seraph Event Received', { event, data })
+    if (!client) return
+
+    const unsubscribeResponse = client
+      .service('agents')
+      .on('seraphEvent', (data: ISeraphEvent) => {
         setEventData(data)
-      }
-    )
+      })
+
     return () => {
-      destoryResponseListener()
+      unsubscribeResponse()
     }
-  }, [])
+  }, [client])
 
   useEffect(() => {
     if (!eventData) return
