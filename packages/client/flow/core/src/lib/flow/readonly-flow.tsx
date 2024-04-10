@@ -5,7 +5,6 @@ import { BaseFlow } from './base-flow'
 import { useCustomNodeTypes } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { behaveToFlow } from '../utils/transformers/behaveToFlow'
-import { XYPosition } from 'reactflow'
 
 type ReadOnlyFlowProps = {
   spell: SpellInterfaceWithGraph
@@ -41,7 +40,10 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
     type: 'readonly',
   })
 
-  const [nodes, edges] = behaveToFlow(spell)
+  const [nodes, edges] = useMemo(() => {
+    const [flowNodes, flowEdges] = behaveToFlow(spell.graph)
+    return [flowNodes, flowEdges]
+  }, [spell.graph])
 
   return (
     <BaseFlow
