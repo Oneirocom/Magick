@@ -6,106 +6,61 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import { SeraphCore, SeraphOptions } from '@magickml/seraph'
 import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
 import { AGENT_SERAPH_EVENT } from 'communication'
+import { CommandHub } from 'server/command-hub'
 
 export class SeraphManager extends EventEmitter {
   private seraphCore: SeraphCore
   private agentId: string
   private projectId: string
-  pubSub: RedisPubSub
-  logger: pino.Logger = getLogger()
+  private pubSub: RedisPubSub
+  private logger: pino.Logger = getLogger()
+  private commandHub: CommandHub
 
   constructor({
     seraphOptions,
     agentId,
     projectId,
     pubSub,
+    commandHub,
   }: {
     seraphOptions: SeraphOptions
     agentId: string
     projectId: string
     pubSub: any
+    commandHub: CommandHub
   }) {
     super()
     this.seraphCore = new SeraphCore(seraphOptions)
     this.agentId = agentId
     this.projectId = projectId
     this.pubSub = pubSub
+    this.commandHub = commandHub
 
+    this.registerCommands()
     this.registerEventListeners()
   }
 
+  registerCommands() {
+    this.commandHub.registerDomain('agent', 'seraph', {
+      processEvent: async data => {
+        this.processEvent(data)
+      },
+    })
+  }
+
   private registerEventListeners() {
-    this.seraphCore.on('error', (data: SeraphEventTypes['error']) => {
-      const event: ISeraphEvent = this.createSeraphEvent(SeraphEvents.error, {
-        error: data,
-      })
-      this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-    })
-
-    this.seraphCore.on('message', (data: SeraphEventTypes['message']) => {
-      const event: ISeraphEvent = this.createSeraphEvent(SeraphEvents.message, {
-        message: data,
-      })
-      this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-    })
-
-    this.seraphCore.on('info', (data: SeraphEventTypes['info']) => {
-      const event: ISeraphEvent = this.createSeraphEvent(SeraphEvents.info, {
-        info: data,
-      })
-      this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-    })
-
-    this.seraphCore.on('token', (data: SeraphEventTypes['token']) => {
-      const event: ISeraphEvent = this.createSeraphEvent(SeraphEvents.token, {
-        token: data,
-      })
-      this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-    })
-
-    this.seraphCore.on(
-      'functionExecution',
-      (data: SeraphEventTypes['functionExecution']) => {
-        const event: ISeraphEvent = this.createSeraphEvent(
-          SeraphEvents.functionExecution,
-          { functionExecution: data }
-        )
-        this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-      }
+    const eventTypes = Object.values(SeraphEvents).filter(
+      event => event !== SeraphEvents.request
     )
 
-    this.seraphCore.on(
-      'functionResult',
-      (data: SeraphEventTypes['functionResult']) => {
-        const event: ISeraphEvent = this.createSeraphEvent(
-          SeraphEvents.functionResult,
-          { functionResult: data }
-        )
-        this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-      }
-    )
-
-    this.seraphCore.on(
-      'middlewareExecution',
-      (data: SeraphEventTypes['middlewareExecution']) => {
-        const event: ISeraphEvent = this.createSeraphEvent(
-          SeraphEvents.middlewareExecution,
-          { middlewareExecution: data }
-        )
-        this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-      }
-    )
-
-    this.seraphCore.on(
-      'middlewareResult',
-      (data: SeraphEventTypes['middlewareResult']) => {
-        const event: ISeraphEvent = this.createSeraphEvent(
-          SeraphEvents.middlewareResult,
-          { middlewareResult: data }
-        )
-        this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), event)
-      }
-    )
+    eventTypes.forEach(event => {
+      this.seraphCore.on(event, (data: SeraphEventTypes[typeof event]) => {
+        const eventData: ISeraphEvent = this.createSeraphEvent(event, {
+          [event]: data,
+        })
+        this.publishEvent(eventData)
+      })
+    })
   }
 
   private createSeraphEvent(
@@ -122,20 +77,27 @@ export class SeraphManager extends EventEmitter {
     }
   }
 
-  public async processInput(
-    userInput: string,
-    conversationId: string,
-    iterate: boolean = true
-  ): Promise<void> {
-    for await (const response of this.seraphCore.processInput(
-      userInput,
-      conversationId,
-      iterate
-    )) {
-      const event: ISeraphEvent = this.createSeraphEvent(SeraphEvents.message, {
-        message: response,
-      })
-      this.emit('message', event)
+  private async publishEvent(eventData: ISeraphEvent): Promise<void> {
+    this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), eventData)
+  }
+
+  public async processEvent(eventData: ISeraphEvent): Promise<void> {
+    const { data, type, agentId } = eventData
+    const { message } = data
+
+    this.logger.debug(
+      { eventData },
+      `Processing event ${type} for agent ${this.agentId}`
+    )
+
+    if (message === undefined) {
+      this.logger.error('Message is undefined')
+      return
     }
+
+    await this.seraphCore.processRequest({
+      userInput: message,
+      conversationId: agentId,
+    })
   }
 }
