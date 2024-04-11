@@ -124,7 +124,7 @@ export const agent = (app: Application) => {
       try {
         const result = await app.service('agents').createSeraphEvent({
           agentId,
-          action,
+          eventData: action,
         })
         return result
       } catch (error: any) {
