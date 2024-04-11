@@ -1,8 +1,8 @@
 import {
-  useGetSeraphChatHistoryQuery,
-  useCreateSeraphRequestMutation,
+  useCreateAgentSeraphEventMutation,
+  useGetAgentSeraphEventsQuery,
 } from 'client/state'
-import { usePubSub } from '@magickml/providers'
+import { useFeathers } from '@magickml/providers'
 import { useEffect, useState } from 'react'
 import {
   ISeraphEvent,
@@ -11,27 +11,32 @@ import {
 } from '../../../../shared/servicesShared/src'
 
 export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
+  const { client } = useFeathers()
   const [eventData, setEventData] = useState<ISeraphEvent>()
-  const { data: seraphChatHistory } = useGetSeraphChatHistoryQuery({ agentId })
-  const [createSeraphRequest, { error: requestRecordError }] =
-    useCreateSeraphRequestMutation()
 
-  const { publish, subscribe, events } = usePubSub()
-  const { $SERAPH_EVENT } = events
+  const {
+    data: seraphChatHistory,
+    error,
+    isLoading,
+  } = useGetAgentSeraphEventsQuery({ agentId })
+
+  const [createSeraphRequest, { error: requestRecordError }] =
+    useCreateAgentSeraphEventMutation()
 
   // set up listeners for response, error, info,
   useEffect(() => {
-    const destoryResponseListener = subscribe(
-      events.$SERAPH_EVENT(tab.id),
-      (event, data) => {
-        console.log('RESPONSE', { event, data })
+    if (!client) return
+
+    const unsubscribeResponse = client
+      .service('agents')
+      .on('seraphEvent', (data: ISeraphEvent) => {
         setEventData(data)
-      }
-    )
+      })
+
     return () => {
-      destoryResponseListener()
+      unsubscribeResponse()
     }
-  }, [])
+  }, [client])
 
   useEffect(() => {
     if (!eventData) return
@@ -43,7 +48,9 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
     if (
       seraphChatHistory?.length === history.length ||
       seraphChatHistory?.length === 0 ||
-      !seraphChatHistory
+      !seraphChatHistory ||
+      isLoading ||
+      error
     )
       return
 
@@ -64,7 +71,6 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
       setEventData(undefined)
       const data = await createSeraphRequest(seraphRequest)
       if (!data) throw new Error('Error creating seraph request')
-      publish($SERAPH_EVENT(tab.id), seraphRequest)
       return true
     } catch (error) {
       console.error('Error making seraph request', error)

@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
-import { ISeraphEvent } from 'servicesShared'
+import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -226,6 +226,64 @@ export class AgentService<
     })
 
     return true
+  }
+
+  async getSeraphEvents({
+    agentId,
+  }: {
+    agentId: string
+  }): Promise<ISeraphEvent[]> {
+    try {
+      if (!agentId) throw new Error('agentId missing')
+      const seraphEvents = await this.app
+        .get('dbClient')
+        .select('*')
+        .from('seraphEvents')
+        .where({ agentId })
+        .orderBy('createdAt', 'desc')
+        .limit(100)
+
+      return seraphEvents
+    } catch (error: any) {
+      console.error('Error getting seraph events', error)
+      throw new Error(`Error getting seraph events: ${error.message}`)
+    }
+  }
+
+  async createSeraphEvent({
+    agentId,
+    eventData,
+  }: {
+    agentId: string
+    eventData: SeraphEventTypes
+  }): Promise<boolean> {
+    try {
+      if (!agentId) throw new Error('agentId missing')
+      if (!eventData) throw new Error('event data missing')
+
+      const seraphEventData: ISeraphEvent = {
+        id: uuidv4(),
+        agentId,
+        projectId: '',
+        type: SeraphEvents.request,
+        data: eventData,
+        createdAt: new Date().toISOString(),
+      }
+
+      const event = await this.app
+        .get('dbClient')
+        .insert(seraphEventData)
+        .into('seraphEvents')
+
+      if (!event) throw new Error('Error creating seraph event')
+
+      this.app.get('agentCommander').processSeraphEvent(seraphEventData)
+
+      return true
+    } catch (error: any) {
+      console.error('Error creating seraph event', error)
+      throw new Error(`Error creating seraph event: ${error.message}`)
+    }
   }
 
   async createRelease({
