@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
-import { ISeraphEvent, SeraphEvents } from 'servicesShared'
+import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -252,34 +252,34 @@ export class AgentService<
 
   async createSeraphEvent({
     agentId,
-    action,
+    eventData,
   }: {
     agentId: string
-    action: any
-  }): Promise<ISeraphEvent> {
+    eventData: SeraphEventTypes
+  }): Promise<boolean> {
     try {
       if (!agentId) throw new Error('agentId missing')
-      if (!action) throw new Error('action missing')
+      if (!eventData) throw new Error('event data missing')
 
-      const seraphEvent: ISeraphEvent = {
+      const seraphEventData: ISeraphEvent = {
         id: uuidv4(),
         agentId,
         projectId: '',
         type: SeraphEvents.request,
-        data: action,
+        data: eventData,
         createdAt: new Date().toISOString(),
       }
 
-      const pubSub = this.app.get('pubsub')
       const event = await this.app
         .get('dbClient')
-        .insert(seraphEvent)
+        .insert(seraphEventData)
         .into('seraphEvents')
+
       if (!event) throw new Error('Error creating seraph event')
 
-      pubSub.publish('seraphEvent', seraphEvent)
+      this.app.get('agentCommander').processSeraphEvent(seraphEventData)
 
-      return seraphEvent
+      return true
     } catch (error: any) {
       console.error('Error creating seraph event', error)
       throw new Error(`Error creating seraph event: ${error.message}`)
