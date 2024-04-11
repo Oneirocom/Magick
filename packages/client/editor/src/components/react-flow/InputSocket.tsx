@@ -106,7 +106,7 @@ const InputFieldForValue = ({
     <div className={containerClass}>
       {/* flex layout these divs 50 50 */}
       <div className="flex flex-1 items-center h-8">
-        <p className="flex capitalize">{name}</p>
+        <p className="flex">{name}</p>
       </div>
       {!hideValueInput && (
         <div className="flex-1 justify-center">
@@ -210,7 +210,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
       {isFlowSocket && (
         <>
           <FontAwesomeIcon icon={faCaretRight} color="#ffffff" size="lg" />
-          {showName && <div className="capitalize mr-2 truncate">{name}</div>}
+          {showName && <div className="mr-2 truncate">{name}</div>}
         </>
       )}
       {!isFlowSocket && (
@@ -238,7 +238,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
         <PopoverContent className="w-120" style={{ zIndex: 150 }} side="left">
           <ReactJson
             src={{
-              [name]: lastEventInput || undefined,
+              [name]: lastEventInput,
             }}
             style={{ width: 400, overflow: 'scroll' }}
             theme="tomorrow"

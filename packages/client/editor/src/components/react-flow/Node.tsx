@@ -161,6 +161,9 @@ export const Node: React.FC<NodeProps> = ({
     return activeInput?.name === x
   }
 
+  console.log('Last inputs', lastInputs)
+  console.log('Last outputs', lastOutputs)
+
   return (
     <NodeContainer
       fired={done}
@@ -197,7 +200,7 @@ export const Node: React.FC<NodeProps> = ({
               lastEventOutput={
                 lastOutputs
                   ? lastOutputs.find((event: any) => event.name === output.name)
-                      ?.value
+                      .value
                   : undefined
               }
               connected={isHandleConnected(edges, id, output.name, 'source')}
@@ -220,7 +223,7 @@ export const Node: React.FC<NodeProps> = ({
               lastInputs
                 ? lastInputs.find((event: any) => {
                     return event.name === input.name
-                  })?.value
+                  }).value
                 : undefined
             }
             onChange={handleChange}
