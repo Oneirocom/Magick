@@ -1454,6 +1454,47 @@
     ]
   },
   {
+    "type": "logic/object/destructure",
+    "category": "Logic",
+    "label": "Destructure",
+    "inputs": [
+      {
+        "name": "object",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer",
+          "object"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "logic/string",
     "category": "None",
     "label": "String",

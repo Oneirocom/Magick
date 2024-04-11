@@ -60,6 +60,7 @@ import {
   CORE_DEPENDENCIES,
 } from './configx'
 import { getMessageHistory } from './nodes/actions/messageHistory'
+import { objectDestructure } from './nodes/functions/destructure'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -109,6 +110,7 @@ export class CorePlugin extends CoreEventsPlugin<
     getSecretNode,
     FetchNode,
     getMessageHistory,
+    objectDestructure,
   ]
   values = []
   credentials = corePluginCredentials
