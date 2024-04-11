@@ -162,6 +162,7 @@ export const VariableWindow = (props: Props) => {
         {spell.graph.variables.map(variable => {
           return (
             <Variable
+              key={variable.id}
               variable={variable}
               updateVariable={saveVariable}
               deleteVariable={deleteVariable}
