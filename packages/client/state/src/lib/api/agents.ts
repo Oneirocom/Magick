@@ -1,3 +1,4 @@
+import { ISeraphEvent } from 'servicesShared'
 import { rootApi } from './api'
 
 export const agentApi = rootApi.injectEndpoints({
@@ -59,6 +60,25 @@ export const agentApi = rootApi.injectEndpoints({
         body: agent,
       }),
     }),
+    getAgentSeraphEvents: builder.query<ISeraphEvent[], { agentId: string }>({
+      providesTags: ['AgentSeraphEvents'],
+      query: ({ agentId }) => {
+        return {
+          url: `agents/seraphEvents?agentId=${agentId}`,
+          params: {},
+        }
+      },
+    }),
+    createAgentSeraphEvent: builder.mutation({
+      invalidatesTags: ['AgentSeraphEvents'],
+      query: ({ agentId, action }) => {
+        return {
+          url: `agents/createSeraphEvent?agentId=${agentId}`,
+          method: 'POST',
+          body: action,
+        }
+      },
+    }),
   }),
 })
 
@@ -73,4 +93,6 @@ export const {
   useLazyGetAgentQuery,
   useLazyGetAgentByIdQuery,
   useLazyGetAgentsQuery,
+  useGetAgentSeraphEventsQuery,
+  useCreateAgentSeraphEventMutation,
 } = agentApi

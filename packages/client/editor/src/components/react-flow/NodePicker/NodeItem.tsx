@@ -1,5 +1,5 @@
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { XYPosition } from 'reactflow'
+import { ReactFlowInstance, XYPosition } from 'reactflow'
 import { ItemType } from './types'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
@@ -15,7 +15,7 @@ export const NodeItem = ({
   pickedNodePosition: XYPosition
   onPickNode: (type: string, position: XYPosition) => void
   index: number
-  instance: any
+  instance: ReactFlowInstance
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 

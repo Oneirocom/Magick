@@ -108,6 +108,31 @@ export const agent = (app: Application) => {
     },
   })
 
+  app.use('/agents/seraphEvents', {
+    get: async ({ agentId }: { agentId: string }) => {
+      try {
+        const result = await app.service('agents').getSeraphEvents({ agentId })
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:seraphEvents: ${error.message}`)
+      }
+    },
+  })
+
+  app.use('/agents/createSeraphEvent', {
+    create: async ({ agentId, action }: { agentId: string; action: any }) => {
+      try {
+        const result = await app.service('agents').createSeraphEvent({
+          agentId,
+          eventData: action,
+        })
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:createSeraphEvent: ${error.message}`)
+      }
+    },
+  })
+
   const pubSub = app.get<'pubsub'>('pubsub')
 
   // this handles relaying all agent messages up to connected clients.
@@ -206,6 +231,12 @@ declare module '../../declarations' {
   interface ServiceTypes {
     agents: AgentService
     '/agents/createRelease': {
+      create: ReturnType<any>
+    }
+    '/agents/seraphEvents': {
+      get: ReturnType<any>
+    }
+    '/agents/createSeraphEvent': {
       create: ReturnType<any>
     }
   }
