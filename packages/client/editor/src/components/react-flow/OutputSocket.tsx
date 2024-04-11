@@ -27,7 +27,7 @@ export default function OutputSocket(props: OutputSocketProps) {
 
   return (
     <div className="flex grow items-center justify-end h-7">
-      {showName && <div className="capitalize">{name}</div>}
+      {showName && <div>{name}</div>}
       {isFlowSocket && (
         <FontAwesomeIcon
           icon={faCaretRight}
@@ -52,7 +52,7 @@ export default function OutputSocket(props: OutputSocketProps) {
         <PopoverContent className="w-120" style={{ zIndex: 150 }} side="right">
           <ReactJson
             src={{
-              [name]: props.lastEventOutput || undefined,
+              [name]: props.lastEventOutput,
             }}
             theme="tomorrow"
             name={false}
