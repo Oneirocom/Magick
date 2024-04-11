@@ -37,6 +37,7 @@ export type ConfigurationComponentProps = {
 
 const ConfigurationComponents = {
   socketInputs: SocketConfig,
+  socketOutputs: SocketConfig,
   eventStateProperties: EventStateProperties,
   variableNames: VariableNames,
   valueType: ValueType,

@@ -130,7 +130,8 @@ export const SocketConfig = ({
 
   return (
     <div>
-      <h4>Input Sockets</h4>
+      {configKey === 'socketInputs' && <h3>Input Sockets</h3>}
+      {configKey === 'socketOutputs' && <h3>Output Sockets</h3>}
       {sockets.map((socket: any) => (
         <SingleElement
           name={socket.name}
