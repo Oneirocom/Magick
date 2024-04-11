@@ -21,7 +21,7 @@ export const objectDestructure = makeFunctionNodeDefinition({
     },
     socketValues: {
       valueType: 'array',
-      defaultValue: ['string', 'array', 'boolean', 'integer'],
+      defaultValue: ['string', 'array', 'boolean', 'integer', 'object'],
     },
     socketOutputs: {
       valueType: 'array',
