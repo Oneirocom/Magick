@@ -300,7 +300,7 @@ enum WebhookStatus {
   @@schema("public")
 }
 
-model SeraphEventSchema {
+model SeraphEvent {
   id        String    @id @db.Uuid
   agentId   String    @db.Uuid
   projectId String    @db.VarChar(255)
