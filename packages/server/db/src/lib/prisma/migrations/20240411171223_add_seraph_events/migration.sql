@@ -1,9 +1,9 @@
 -- CreateTable
 CREATE TABLE "public"."seraphEvents" (
   "id" UUID NOT NULL,
-  "agentId" UUID NOT NULL,
-  "projectId" VARCHAR(255) NOT NULL,
-  "spellId" VARCHAR(255),
+  "agentId" TEXT,
+  "projectId" TEXT,
+  "spellId" TEXT,
   "type" VARCHAR(255) NOT NULL,
   "data" JSONB NOT NULL,
   "createdAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
