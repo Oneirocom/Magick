@@ -26,16 +26,9 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   // set up listeners for response, error, info,
   useEffect(() => {
     if (!client) return
-
-    const unsubscribeResponse = client
-      .service('agents')
-      .on('seraphEvent', (data: ISeraphEvent) => {
-        setEventData(data)
-      })
-
-    return () => {
-      unsubscribeResponse()
-    }
+    client.service('agents').on('seraphEvent', (data: ISeraphEvent) => {
+      setEventData(data)
+    })
   }, [client])
 
   useEffect(() => {
