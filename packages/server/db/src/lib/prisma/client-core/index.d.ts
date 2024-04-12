@@ -18866,6 +18866,7 @@ export namespace Prisma {
     id: string | null
     agentId: string | null
     projectId: string | null
+    spellId: string | null
     type: string | null
     createdAt: Date | null
   }
@@ -18874,6 +18875,7 @@ export namespace Prisma {
     id: string | null
     agentId: string | null
     projectId: string | null
+    spellId: string | null
     type: string | null
     createdAt: Date | null
   }
@@ -18882,6 +18884,7 @@ export namespace Prisma {
     id: number
     agentId: number
     projectId: number
+    spellId: number
     type: number
     data: number
     createdAt: number
@@ -18893,6 +18896,7 @@ export namespace Prisma {
     id?: true
     agentId?: true
     projectId?: true
+    spellId?: true
     type?: true
     createdAt?: true
   }
@@ -18901,6 +18905,7 @@ export namespace Prisma {
     id?: true
     agentId?: true
     projectId?: true
+    spellId?: true
     type?: true
     createdAt?: true
   }
@@ -18909,6 +18914,7 @@ export namespace Prisma {
     id?: true
     agentId?: true
     projectId?: true
+    spellId?: true
     type?: true
     data?: true
     createdAt?: true
@@ -18991,6 +18997,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    spellId: string | null
     type: string
     data: JsonValue
     createdAt: Date | null
@@ -19017,6 +19024,7 @@ export namespace Prisma {
     id?: boolean
     agentId?: boolean
     projectId?: boolean
+    spellId?: boolean
     type?: boolean
     data?: boolean
     createdAt?: boolean
@@ -19026,6 +19034,7 @@ export namespace Prisma {
     id?: boolean
     agentId?: boolean
     projectId?: boolean
+    spellId?: boolean
     type?: boolean
     data?: boolean
     createdAt?: boolean
@@ -19039,6 +19048,7 @@ export namespace Prisma {
       id: string
       agentId: string
       projectId: string
+      spellId: string | null
       type: string
       data: Prisma.JsonValue
       createdAt: Date | null
@@ -19439,6 +19449,7 @@ export namespace Prisma {
     readonly id: FieldRef<"SeraphEvent", 'String'>
     readonly agentId: FieldRef<"SeraphEvent", 'String'>
     readonly projectId: FieldRef<"SeraphEvent", 'String'>
+    readonly spellId: FieldRef<"SeraphEvent", 'String'>
     readonly type: FieldRef<"SeraphEvent", 'String'>
     readonly data: FieldRef<"SeraphEvent", 'Json'>
     readonly createdAt: FieldRef<"SeraphEvent", 'DateTime'>
@@ -20003,6 +20014,7 @@ export namespace Prisma {
     id: 'id',
     agentId: 'agentId',
     projectId: 'projectId',
+    spellId: 'spellId',
     type: 'type',
     data: 'data',
     createdAt: 'createdAt'
@@ -20265,6 +20277,7 @@ export namespace Prisma {
     id: 'id',
     agentId: 'agentId',
     projectId: 'projectId',
+    spellId: 'spellId',
     type: 'type'
   };
 
@@ -21694,7 +21707,8 @@ export namespace Prisma {
     NOT?: SeraphEventWhereInput | SeraphEventWhereInput[]
     id?: UuidFilter<"SeraphEvent"> | string
     agentId?: UuidFilter<"SeraphEvent"> | string
-    projectId?: StringFilter<"SeraphEvent"> | string
+    projectId?: UuidFilter<"SeraphEvent"> | string
+    spellId?: UuidNullableFilter<"SeraphEvent"> | string | null
     type?: StringFilter<"SeraphEvent"> | string
     data?: JsonFilter<"SeraphEvent">
     createdAt?: DateTimeNullableFilter<"SeraphEvent"> | Date | string | null
@@ -21704,6 +21718,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    spellId?: SortOrderInput | SortOrder
     type?: SortOrder
     data?: SortOrder
     createdAt?: SortOrderInput | SortOrder
@@ -21716,7 +21731,8 @@ export namespace Prisma {
     OR?: SeraphEventWhereInput[]
     NOT?: SeraphEventWhereInput | SeraphEventWhereInput[]
     agentId?: UuidFilter<"SeraphEvent"> | string
-    projectId?: StringFilter<"SeraphEvent"> | string
+    projectId?: UuidFilter<"SeraphEvent"> | string
+    spellId?: UuidNullableFilter<"SeraphEvent"> | string | null
     type?: StringFilter<"SeraphEvent"> | string
     data?: JsonFilter<"SeraphEvent">
     createdAt?: DateTimeNullableFilter<"SeraphEvent"> | Date | string | null
@@ -21726,6 +21742,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    spellId?: SortOrderInput | SortOrder
     type?: SortOrder
     data?: SortOrder
     createdAt?: SortOrderInput | SortOrder
@@ -21740,7 +21757,8 @@ export namespace Prisma {
     NOT?: SeraphEventScalarWhereWithAggregatesInput | SeraphEventScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"SeraphEvent"> | string
     agentId?: UuidWithAggregatesFilter<"SeraphEvent"> | string
-    projectId?: StringWithAggregatesFilter<"SeraphEvent"> | string
+    projectId?: UuidWithAggregatesFilter<"SeraphEvent"> | string
+    spellId?: UuidNullableWithAggregatesFilter<"SeraphEvent"> | string | null
     type?: StringWithAggregatesFilter<"SeraphEvent"> | string
     data?: JsonWithAggregatesFilter<"SeraphEvent">
     createdAt?: DateTimeNullableWithAggregatesFilter<"SeraphEvent"> | Date | string | null
@@ -23200,6 +23218,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    spellId?: string | null
     type: string
     data: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string | null
@@ -23209,6 +23228,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    spellId?: string | null
     type: string
     data: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string | null
@@ -23218,6 +23238,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23227,6 +23248,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23236,6 +23258,7 @@ export namespace Prisma {
     id: string
     agentId: string
     projectId: string
+    spellId?: string | null
     type: string
     data: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string | null
@@ -23245,6 +23268,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23254,6 +23278,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     agentId?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    spellId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24538,6 +24563,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    spellId?: SortOrder
     type?: SortOrder
     data?: SortOrder
     createdAt?: SortOrder
@@ -24547,6 +24573,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    spellId?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
   }
@@ -24555,6 +24582,7 @@ export namespace Prisma {
     id?: SortOrder
     agentId?: SortOrder
     projectId?: SortOrder
+    spellId?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
   }
