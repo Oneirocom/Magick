@@ -81,6 +81,8 @@ export const agent = (app: Application) => {
       'subscribe',
       'message',
       'processSeraphEvent',
+      'createSeraphEvent',
+      'getSeraphEvents',
     ],
     events: AGENT_EVENTS,
   })
@@ -109,9 +111,9 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/seraphEvents', {
-    get: async ({ agentId }: { agentId: string }) => {
+    find: async params => {
       try {
-        const result = await app.service('agents').getSeraphEvents({ agentId })
+        const result = await app.service('agents').getSeraphEvents(params)
         return result
       } catch (error: any) {
         throw new Error(`Error in agents:seraphEvents: ${error.message}`)
@@ -120,12 +122,9 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/createSeraphEvent', {
-    create: async ({ agentId, action }: { agentId: string; action: any }) => {
+    create: async data => {
       try {
-        const result = await app.service('agents').createSeraphEvent({
-          agentId,
-          eventData: action,
-        })
+        const result = await app.service('agents').createSeraphEvent(data)
         return result
       } catch (error: any) {
         throw new Error(`Error in agents:createSeraphEvent: ${error.message}`)
@@ -141,7 +140,6 @@ export const agent = (app: Application) => {
     pubSub.patternSubscribe('agent*', (message, channel) => {
       // parse  the channel from agent:agentId:domain:messageType
       const agentId = channel.split(':')[1]
-
       // parse the domain of the agent message
       const domain = channel.split(':')[2]
 
@@ -174,6 +172,7 @@ export const agent = (app: Application) => {
       // this is where we relay messages up based upon the time.
       // note for every custom type we need to add it to the above
       // todo harder typing on all message transports
+      console.log('Publishing event', messageType, cleanMessage, agentId)
       app.service('agents').emit(messageType, {
         ...cleanMessage,
         timestamp: new Date().toISOString(),
@@ -234,7 +233,7 @@ declare module '../../declarations' {
       create: ReturnType<any>
     }
     '/agents/seraphEvents': {
-      get: ReturnType<any>
+      find: ReturnType<any>
     }
     '/agents/createSeraphEvent': {
       create: ReturnType<any>
