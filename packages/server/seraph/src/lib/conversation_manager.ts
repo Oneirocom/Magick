@@ -1,8 +1,8 @@
 // conversation_manager.ts
+
 /**
  * The ConversationManager class manages conversation context.
  */
-
 export type Message = {
   role: 'user' | 'assistant'
   content: string
@@ -25,10 +25,19 @@ class ConversationManager {
       role,
       content: _message,
     }
+
     if (!this.conversations[conversationId]) {
       this.conversations[conversationId] = []
     }
-    this.conversations[conversationId].push(message)
+
+    // Check if the message already exists in the array
+    const existingMessage = this.conversations[conversationId].find(
+      m => m.role === message.role && m.content === message.content
+    )
+
+    if (!existingMessage) {
+      this.conversations[conversationId].push(message)
+    }
   }
 
   public removeLastMessage(conversationId: string): void {
