@@ -62,9 +62,10 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     getAgentSeraphEvents: builder.query<ISeraphEvent[], { agentId: string }>({
       providesTags: ['AgentSeraphEvents'],
-      query: agentId => {
+      query: ({ agentId }) => {
         return {
           url: `agents/seraphEvents?agentId=${agentId}`,
+          method: 'GET',
           params: {},
         }
       },
@@ -72,7 +73,6 @@ export const agentApi = rootApi.injectEndpoints({
     createAgentSeraphEvent: builder.mutation<boolean, ISeraphEvent>({
       invalidatesTags: ['AgentSeraphEvents'],
       query: seraphEvent => {
-        console.log('createAgentSeraphEvent', seraphEvent)
         return {
           url: `agents/createSeraphEvent`,
           method: 'POST',
