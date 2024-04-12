@@ -1,7 +1,7 @@
 import List from '@mui/material/List'
 import { DrawerItem } from './DrawerItem'
 import ArticleIcon from '@mui/icons-material/Article'
-import BackupIcon from '@mui/icons-material/Backup'
+// import BackupIcon from '@mui/icons-material/Backup'
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
 import MultipleStopIcon from '@mui/icons-material/MultipleStop'
@@ -71,12 +71,12 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       tooltip: 'Secrets Tooltip',
       tooltipText: drawerTooltipText.secrets,
     },
-    {
-      name: 'Requests',
-      Icon: BackupIcon,
-      tooltip: 'Requests Tooltip',
-      tooltipText: drawerTooltipText.requests,
-    },
+    // {
+    //   name: 'Requests',
+    //   Icon: BackupIcon,
+    //   tooltip: 'Requests Tooltip',
+    //   tooltipText: drawerTooltipText.requests,
+    // },
     {
       name: 'Events',
       Icon: MultipleStopIcon,
