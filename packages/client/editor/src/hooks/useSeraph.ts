@@ -4,6 +4,7 @@ import {
 } from 'client/state'
 import { useFeathers } from '@magickml/providers'
 import { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import {
   ISeraphEvent,
   SeraphEvents,
@@ -26,6 +27,7 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   // set up listeners for response, error, info,
   useEffect(() => {
     if (!client) return
+
     client.service('agents').on('seraphEvent', (data: ISeraphEvent) => {
       setEventData(data)
     })
@@ -54,6 +56,7 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   const makeSeraphRequest = async (request: SeraphRequest) => {
     try {
       const seraphRequest: ISeraphEvent = {
+        id: uuidv4(),
         agentId,
         projectId,
         type: SeraphEvents.request,
