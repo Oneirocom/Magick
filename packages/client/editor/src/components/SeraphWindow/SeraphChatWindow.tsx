@@ -34,6 +34,7 @@ const SeraphChatWindow = props => {
   const spellName = tab.params.spellName
 
   const { lastItem: lastEvent } = useSelectAgentsSeraphEvent()
+
   const { spell } = useGetSpellByNameQuery(
     { spellName },
     {
@@ -41,8 +42,6 @@ const SeraphChatWindow = props => {
       selectFromResult: ({ data }) => ({ spell: data?.data[0] }),
     }
   )
-
-  console.log('SPELL', tab.params.spellName)
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
 
@@ -70,15 +69,10 @@ const SeraphChatWindow = props => {
   // React to new events
   useEffect(() => {
     // Early return if lastEvent or spell.id is not defined
-    if (
-      !lastEvent?.data?.content ||
-      lastEvent?.event?.runInfo?.spellId !== spell?.id ||
-      lastEvent.event.channel !== spell?.id
-    )
-      return
+    if (!lastEvent?.data?.message) return
 
     const seraphEvent = lastEvent.data.content as ISeraphEvent
-    console.log('SERAPH EVENT RECEIVED', seraphEvent)
+    console.log('SERAPH MESSAGE RECEIVED', seraphEvent)
 
     // Handling common actions in a function to reduce code repetition
     const handleEvent = (
