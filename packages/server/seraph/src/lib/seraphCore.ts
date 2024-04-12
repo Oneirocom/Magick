@@ -14,7 +14,7 @@ import { SeraphFunction, SeraphRequest } from './types'
 type SeraphEvents = {
   request: (request: SeraphRequest) => void
   error: (error: Error | string) => void
-  message: (role: 'user' | 'assistant', message: string) => void
+  message: (message: string) => void
   info: (info: string, data?: Record<string, unknown>) => void
   token: (token: string) => void
   functionExecution: (seraphFunction: SeraphFunction) => void
@@ -135,7 +135,7 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
 
     // Yield responses from the SeraphIterator
     for await (const iteratorResponse of seraphIterator) {
-      this.emit('message', 'assistant', iteratorResponse)
+      this.emit('message', iteratorResponse)
       if (iterate) {
         yield iteratorResponse
       }
@@ -147,22 +147,21 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     userInput,
     conversationId,
   }): Promise<string | void> {
-    if (this.disableInput) return ''
+    if (this.disableInput) return
 
     this.conversationManager.updateContext(conversationId, userInput, 'user')
 
     const systemPrompt = await this.generateSystemPrompt()
 
-    const seraphProcessor = new SeraphIterator(
+    const seraphIterator = new SeraphIterator(
       this,
       conversationId,
       systemPrompt
     )
-
     this.disableInput = true
 
-    for await (const iteratorResponse of seraphProcessor) {
-      this.emit('message', 'assistant', iteratorResponse)
+    for await (const iteratorResponse of seraphIterator) {
+      this.emit('message', iteratorResponse)
       return iteratorResponse
     }
 
@@ -241,7 +240,10 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     const messageRegex = /<message>([\s\S]*?)<\/message>/
     const match = response.match(messageRegex)
 
+    // console.log('EXTRACT MESSAGE:', response, match)
+
     if (match && match.length > 1) {
+      // console.log('EXTRACT MESSAGE:', match[1].trim())
       return match[1].trim()
     }
 
