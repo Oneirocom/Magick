@@ -83,7 +83,7 @@ export class SeraphManager extends EventEmitter {
 
   public async processEvent(eventData: ISeraphEvent): Promise<void> {
     const { data, type, agentId } = eventData
-    const { message } = data
+    const { message } = data.request || {}
 
     this.logger.debug(
       { eventData },
