@@ -62,7 +62,7 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     getAgentSeraphEvents: builder.query<ISeraphEvent[], { agentId: string }>({
       providesTags: ['AgentSeraphEvents'],
-      query: ({ agentId }) => {
+      query: agentId => {
         return {
           url: `agents/seraphEvents?agentId=${agentId}`,
           params: {},
