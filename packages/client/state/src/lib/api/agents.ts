@@ -71,12 +71,12 @@ export const agentApi = rootApi.injectEndpoints({
     }),
     createAgentSeraphEvent: builder.mutation<boolean, ISeraphEvent>({
       invalidatesTags: ['AgentSeraphEvents'],
-      query: ({ agentId, data }) => {
-        // console.log('createAgentSeraphEvent', agentId, data)
+      query: seraphEvent => {
+        console.log('createAgentSeraphEvent', seraphEvent)
         return {
-          url: `agents/createSeraphEvent?agentId=${agentId}`,
+          url: `agents/createSeraphEvent`,
           method: 'POST',
-          body: data,
+          body: seraphEvent,
         }
       },
     }),
