@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
-import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
+import { ISeraphEvent } from 'servicesShared'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -228,12 +228,9 @@ export class AgentService<
     return true
   }
 
-  async getSeraphEvents({
-    agentId,
-  }: {
-    agentId: string
-  }): Promise<ISeraphEvent[]> {
+  async getSeraphEvents(params?: ServiceParams): Promise<ISeraphEvent[]> {
     try {
+      const agentId = params.query.agentId
       if (!agentId) throw new Error('agentId missing')
       const seraphEvents = await this.app
         .get('dbClient')
@@ -242,7 +239,6 @@ export class AgentService<
         .where({ agentId })
         .orderBy('createdAt', 'desc')
         .limit(100)
-
       return seraphEvents
     } catch (error: any) {
       console.error('Error getting seraph events', error)
@@ -250,34 +246,19 @@ export class AgentService<
     }
   }
 
-  async createSeraphEvent({
-    agentId,
-    eventData,
-  }: {
-    agentId: string
-    eventData: SeraphEventTypes
-  }): Promise<boolean> {
+  async createSeraphEvent(data: ISeraphEvent): Promise<boolean> {
     try {
-      if (!agentId) throw new Error('agentId missing')
-      if (!eventData) throw new Error('event data missing')
+      if (!data) throw new Error('seraph event data missing')
+      console.log('SERAPH STAGE 2:', data)
 
-      const seraphEventData: ISeraphEvent = {
-        id: uuidv4(),
-        agentId,
-        projectId: '',
-        type: SeraphEvents.request,
-        data: eventData,
-        createdAt: new Date().toISOString(),
-      }
-
-      const event = await this.app
+      const eventData = await this.app
         .get('dbClient')
-        .insert(seraphEventData)
+        .insert(data)
         .into('seraphEvents')
 
-      if (!event) throw new Error('Error creating seraph event')
+      if (!eventData) throw new Error('Error creating seraph event')
 
-      this.app.get('agentCommander').processSeraphEvent(seraphEventData)
+      this.app.get('agentCommander').processSeraphEvent(data)
 
       return true
     } catch (error: any) {
