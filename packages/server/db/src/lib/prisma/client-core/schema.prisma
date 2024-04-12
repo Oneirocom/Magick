@@ -303,7 +303,8 @@ enum WebhookStatus {
 model SeraphEvent {
   id        String    @id @db.Uuid
   agentId   String    @db.Uuid
-  projectId String    @db.VarChar(255)
+  projectId String    @db.Uuid
+  spellId   String?   @db.Uuid
   type      String    @db.VarChar(255)
   data      Json
   createdAt DateTime? @default(now()) @db.Timestamptz(6)

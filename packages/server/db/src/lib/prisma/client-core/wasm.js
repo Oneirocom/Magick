@@ -316,6 +316,7 @@ exports.Prisma.SeraphEventScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
+  spellId: 'spellId',
   type: 'type',
   data: 'data',
   createdAt: 'createdAt'
@@ -509,6 +510,7 @@ exports.Prisma.SeraphEventOrderByRelevanceFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
+  spellId: 'spellId',
   type: 'type'
 };
 exports.WebhookMethod = exports.$Enums.WebhookMethod = {
