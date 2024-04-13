@@ -78,7 +78,7 @@ export class SeraphManager extends EventEmitter {
   }
 
   private async publishEvent(eventData: ISeraphEvent): Promise<void> {
-    this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), eventData)
+    this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), { data: eventData })
   }
 
   public async processEvent(eventData: ISeraphEvent): Promise<void> {
