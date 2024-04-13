@@ -69,9 +69,9 @@ const SeraphChatWindow = props => {
   // React to new events
   useEffect(() => {
     // Early return if lastEvent or spell.id is not defined
-    if (!lastEvent?.data?.message) return
+    if (!lastEvent?.data?.data.message) return
 
-    const seraphEvent = lastEvent.data.content as ISeraphEvent
+    const seraphEvent = lastEvent.data as ISeraphEvent
     console.log('SERAPH MESSAGE RECEIVED', seraphEvent)
 
     // Handling common actions in a function to reduce code repetition
