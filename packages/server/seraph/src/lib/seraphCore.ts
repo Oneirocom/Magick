@@ -160,12 +160,17 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     )
     this.disableInput = true
 
+    let fullResponse = ''
+
     for await (const iteratorResponse of seraphIterator) {
-      this.emit('message', iteratorResponse)
-      return iteratorResponse
+      fullResponse += iteratorResponse
     }
 
+    this.emit('message', fullResponse.trim())
+
     this.disableInput = false
+
+    return fullResponse
   }
 
   async generateSystemPrompt(): Promise<string> {
