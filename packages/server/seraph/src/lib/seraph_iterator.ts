@@ -62,8 +62,6 @@ class SeraphIterator implements AsyncIterator<string> {
 
     const finalMessage = await stream.finalMessage()
 
-    console.log('FINAL MESSAGE:', finalMessage)
-
     const llmResponse = finalMessage.content[0].text
 
     this.seraph.middlewareManager.runMiddleware(
