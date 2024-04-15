@@ -89,6 +89,7 @@ export class Agent implements AgentInterface {
       projectId: this.projectId,
       pubSub: this.pubsub,
       commandHub: this.commandHub,
+      app: this.app,
     })
 
     this.pluginManager = new PluginManager({
