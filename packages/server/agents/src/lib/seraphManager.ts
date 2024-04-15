@@ -7,6 +7,7 @@ import { SeraphCore, SeraphOptions } from '@magickml/seraph'
 import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
 import { AGENT_SERAPH_EVENT } from 'communication'
 import { CommandHub } from 'server/command-hub'
+import { app } from 'server/core'
 
 export class SeraphManager extends EventEmitter {
   private seraphCore: SeraphCore
@@ -59,6 +60,7 @@ export class SeraphManager extends EventEmitter {
           [event]: data,
         })
         this.publishEvent(eventData)
+        this.logSeraphEvent(eventData)
       })
     })
   }
@@ -77,10 +79,24 @@ export class SeraphManager extends EventEmitter {
     }
   }
 
-  private async publishEvent(eventData: ISeraphEvent): Promise<void> {
+  private publishEvent(eventData: ISeraphEvent): void {
     this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), { data: eventData })
   }
 
+  private logSeraphEvent(eventData: ISeraphEvent): Promise<void> {
+    const isTokenEvent = eventData.type === SeraphEvents.token
+    if (isTokenEvent && eventData.data.token !== '<END>') return // Don't log token events
+
+    try {
+      this.logger.debug(
+        { eventData },
+        `Logging event ${eventData.type} for agent ${this.agentId}`
+      )
+      app.get('dbClient').insert(eventData).into('seraph_events')
+    } catch (err) {
+      this.logger.error('Error logging seraph event', err)
+    }
+  }
   public async processEvent(eventData: ISeraphEvent): Promise<void> {
     const { data, type, agentId } = eventData
     const { message } = data.request || {}
