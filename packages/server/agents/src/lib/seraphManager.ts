@@ -7,7 +7,7 @@ import { SeraphCore, SeraphOptions } from '@magickml/seraph'
 import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
 import { AGENT_SERAPH_EVENT } from 'communication'
 import { CommandHub } from 'server/command-hub'
-import { app } from 'server/core'
+import { Application } from 'server/core'
 
 export class SeraphManager extends EventEmitter {
   private seraphCore: SeraphCore
@@ -16,6 +16,7 @@ export class SeraphManager extends EventEmitter {
   private pubSub: RedisPubSub
   private logger: pino.Logger = getLogger()
   private commandHub: CommandHub
+  private app: Application
 
   constructor({
     seraphOptions,
@@ -23,12 +24,14 @@ export class SeraphManager extends EventEmitter {
     projectId,
     pubSub,
     commandHub,
+    app,
   }: {
     seraphOptions: SeraphOptions
     agentId: string
     projectId: string
-    pubSub: any
+    pubSub: RedisPubSub
     commandHub: CommandHub
+    app: Application
   }) {
     super()
     this.seraphCore = new SeraphCore(seraphOptions)
@@ -36,6 +39,7 @@ export class SeraphManager extends EventEmitter {
     this.projectId = projectId
     this.pubSub = pubSub
     this.commandHub = commandHub
+    this.app = app
 
     this.registerCommands()
     this.registerEventListeners()
@@ -86,7 +90,7 @@ export class SeraphManager extends EventEmitter {
     this.pubSub.publish(AGENT_SERAPH_EVENT(this.agentId), { data: eventData })
   }
 
-  private logSeraphEvent(eventData: ISeraphEvent): Promise<void> {
+  private async logSeraphEvent(eventData: ISeraphEvent): Promise<void> {
     const isTokenEvent = eventData.type === SeraphEvents.token
     if (isTokenEvent && !eventData?.data.token.includes('<END>')) return // Don't log token events
 
@@ -95,7 +99,7 @@ export class SeraphManager extends EventEmitter {
         { eventData },
         `Logging seraph event ${eventData.type} for agent ${this.agentId}`
       )
-      app.get('dbClient').insert(eventData).into('seraph_events')
+      await this.app.get('dbClient').insert(eventData).into('seraphEvents')
     } catch (err) {
       this.logger.error('Error logging seraph event', err)
     }
