@@ -161,9 +161,6 @@ export const Node: React.FC<NodeProps> = ({
     return activeInput?.name === x
   }
 
-  console.log('Last inputs', lastInputs)
-  console.log('Last outputs', lastOutputs)
-
   return (
     <NodeContainer
       fired={done}
