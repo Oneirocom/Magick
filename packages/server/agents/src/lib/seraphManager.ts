@@ -55,10 +55,13 @@ export class SeraphManager extends EventEmitter {
     )
 
     eventTypes.forEach(event => {
-      this.seraphCore.on(event, (data: SeraphEventTypes[typeof event]) => {
+      this.seraphCore.on(event, data => {
         const eventData: ISeraphEvent = this.createSeraphEvent(event, {
           [event]: data,
         })
+
+        if (eventData.type === SeraphEvents.message && !eventData.data.message)
+          return
         this.publishEvent(eventData)
         this.logSeraphEvent(eventData)
       })
@@ -85,12 +88,12 @@ export class SeraphManager extends EventEmitter {
 
   private logSeraphEvent(eventData: ISeraphEvent): Promise<void> {
     const isTokenEvent = eventData.type === SeraphEvents.token
-    if (isTokenEvent && eventData.data.token !== '<END>') return // Don't log token events
+    if (isTokenEvent && !eventData?.data.token.includes('<END>')) return // Don't log token events
 
     try {
       this.logger.debug(
         { eventData },
-        `Logging event ${eventData.type} for agent ${this.agentId}`
+        `Logging seraph event ${eventData.type} for agent ${this.agentId}`
       )
       app.get('dbClient').insert(eventData).into('seraph_events')
     } catch (err) {
