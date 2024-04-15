@@ -254,6 +254,7 @@ class CoreMemoryService {
         n_results: numDocuments,
         where: metadata,
         citations: true,
+        app_id: this.agentId,
       })
 
       // const responseJson = await pythonResponse.serialize()
