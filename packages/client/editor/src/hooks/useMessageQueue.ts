@@ -19,10 +19,7 @@ export const useMessageQueue = ({ setHistory }) => {
   }, [])
 
   const streamToConsole = (text: string) => {
-    if (typeof text !== 'string') {
-      console.warn('Could not stream text, not a string', text)
-      return
-    }
+    if (!text) return
 
     messageQueue.current.push(text)
     processQueue()
