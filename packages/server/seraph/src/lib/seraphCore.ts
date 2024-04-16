@@ -166,7 +166,8 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
       fullResponse += iteratorResponse
     }
 
-    this.emit('message', fullResponse.trim())
+    const data = fullResponse.trim()
+    this.emit('message', data)
 
     this.disableInput = false
 
