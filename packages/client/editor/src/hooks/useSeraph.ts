@@ -10,6 +10,7 @@ import {
   SeraphEvents,
   SeraphRequest,
 } from '../../../../shared/servicesShared/src'
+import { Message } from './useMessageHistory'
 
 export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   const { client } = useFeathers()
@@ -28,14 +29,23 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
   useEffect(() => {
     if (!client) return
 
-    client.service('agents').on('seraphEvent', (data: ISeraphEvent) => {
-      setEventData(data)
-    })
+    client
+      .service('agents')
+      .on('seraphEvent', (data: { data: ISeraphEvent }) => {
+        const { data: eventData } = data
+        setEventData(eventData)
+      })
   }, [client])
 
   useEffect(() => {
-    if (!eventData) return
-    setHistory(prevHistory => [...prevHistory, eventData])
+    if (eventData === undefined) return
+    if (eventData.type === SeraphEvents.token || !eventData.data.message) return
+
+    const newMessage: Message = {
+      sender: 'assistant',
+      content: eventData.data.message || '',
+    }
+    setHistory(prevHistory => [...prevHistory, newMessage] as Message[])
   }, [eventData])
 
   // fetch seraph chat history
@@ -48,8 +58,20 @@ export const useSeraph = ({ tab, projectId, agentId, history, setHistory }) => {
       error
     )
       return
-
-    setHistory(seraphChatHistory)
+    const newMessages = seraphChatHistory
+      .filter(
+        event =>
+          event.type === SeraphEvents.message ||
+          event.type === SeraphEvents.request
+      )
+      .map((event: ISeraphEvent) => {
+        const isMessage = event.type === SeraphEvents.message
+        return {
+          sender: isMessage ? 'assistant' : 'user',
+          content: isMessage ? event.data.message : event.data.request?.message,
+        }
+      })
+    setHistory(newMessages)
   }, [seraphChatHistory])
 
   // function to make a request
