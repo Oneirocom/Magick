@@ -113,8 +113,8 @@ export class DiscordPlugin extends WebSocketPlugin<
    */
   getActionHandlers() {
     return {
-      [SEND_MESSAGE]: this.handleSendMessage.bind(this),
-      [STREAM_MESSAGE]: this.handleSendMessage.bind(this),
+      [DISCORD_ACTIONS[SEND_MESSAGE]]: this.handleSendMessage.bind(this),
+      [DISCORD_ACTIONS[STREAM_MESSAGE]]: this.handleSendMessage.bind(this),
     }
   }
 
