@@ -274,7 +274,7 @@ export class Agent implements AgentInterface {
 
   seraphEvent(event: ISeraphEvent) {
     this.logger.info('Processing seraph event: %o', event)
-    this.publishEvent(AGENT_SERAPH_EVENT(this.id), event)
+    this.publishEvent(AGENT_SERAPH_EVENT(this.id), { data: event })
   }
 
   /**
