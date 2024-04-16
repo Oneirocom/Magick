@@ -4,6 +4,7 @@ export type EventFormat<
   Data = Record<string, unknown>,
   Y = Record<string, unknown>
 > = {
+  plugin?: string
   content: string
   sender: string
   channel: string
