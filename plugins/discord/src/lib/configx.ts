@@ -14,6 +14,7 @@ import {
   PluginStateType,
 } from 'server/plugin'
 import { PluginCredential } from 'server/credentials'
+import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 
 // BASE
 export const discordPluginName = 'discord' as const
@@ -108,6 +109,9 @@ export type DiscordEvent = EventPayload<
   DiscordEventPayload[keyof DiscordEventPayload],
   DiscordEventMetadata
 >
+
+// ACTIONS
+export const DISCORD_ACTIONS = createEventsEnum([SEND_MESSAGE, STREAM_MESSAGE])
 
 // DEPENDENCIES
 export enum DISCORD_DEPENDENCIES {
