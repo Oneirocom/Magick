@@ -164,6 +164,9 @@ export const VariableWindow = (props: Props) => {
             <Variable
               key={variable.id}
               variable={variable}
+              deleteAllVariableNodes={() => {
+                deleteAllVariableNodes(variable)
+              }}
               updateVariable={saveVariable}
               deleteVariable={deleteVariable}
             />
