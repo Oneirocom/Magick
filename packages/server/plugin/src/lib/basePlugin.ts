@@ -301,11 +301,10 @@ export abstract class BasePlugin<
 
   defineActions() {
     const handlers = this.getActionHandlers()
-    console.log('ACTION handlers', handlers)
+
     for (const [actionName, displayName] of Object.entries(
       this.config.actions
     )) {
-      console.log('ACTION registering', actionName, displayName)
       if (!handlers[actionName]) {
         throw new Error(`Missing action handler for ${actionName}`)
       }
@@ -566,7 +565,7 @@ export abstract class BasePlugin<
     messageDetails: EventFormat<Data, Metadata>
   ): EventPayload<Data, Metadata> {
     return {
-      plugin: this.name,
+      plugin: messageDetails.plugin || this.name,
       connector: this.name,
       client: messageDetails.client,
       eventName: event,
