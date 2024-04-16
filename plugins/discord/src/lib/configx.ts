@@ -109,12 +109,6 @@ export type DiscordEvent = EventPayload<
   DiscordEventMetadata
 >
 
-// ACTIONS
-export const DISCORD_ACTIONS = createEventsEnum([
-  'sendMessage',
-  'streamMessage',
-])
-
 // DEPENDENCIES
 export enum DISCORD_DEPENDENCIES {
   DISCORD_KEY = 'discordClient',
