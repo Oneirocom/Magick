@@ -35,6 +35,7 @@ import {
   EDITS_PER_SECOND,
   EMBED_MAX_LENGTH,
 } from './configx'
+import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 // import { streamDiscordMessage } from './nodes/actions/streamDiscordMessage'
 
 export class DiscordPlugin extends WebSocketPlugin<
@@ -105,10 +106,15 @@ export class DiscordPlugin extends WebSocketPlugin<
   }
 
   // ACTIONS
+  /**
+   * Here we are handling the generic events that come from the core magick plugin
+   * and mapping them to the specific actions that we want to take in the discord plugin.
+   * We can also handle other actionshere.  These are listened for on the event bus.
+   */
   getActionHandlers() {
     return {
-      [DISCORD_ACTIONS.sendMessage]: this.handleSendMessage.bind(this),
-      [DISCORD_ACTIONS.streamMessage]: this.handleSendMessage.bind(this),
+      [SEND_MESSAGE]: this.handleSendMessage.bind(this),
+      [STREAM_MESSAGE]: this.handleSendMessage.bind(this),
     }
   }
 
@@ -121,12 +127,8 @@ export class DiscordPlugin extends WebSocketPlugin<
     actionPayload: ActionPayload<DiscordEventPayload[K]>
   ) {
     const { event } = actionPayload
-    const { plugin } = event
-    if (plugin === discordPluginName) {
-      // this.client.sendMessage(actionPayload)
-    } else {
-      this.centralEventBus.emit('createMessage', actionPayload)
-    }
+
+    this.sendMessage(actionPayload.data.content, event)
   }
 
   // OTHER ABSTRACTS FROM WS PLUGIN & BASE PLUGIN
@@ -188,7 +190,16 @@ export class DiscordPlugin extends WebSocketPlugin<
           return
         }
 
-        console.log('!!!!!!!!!!!!!!!!event name', eventName)
+        if (eventName === 'messageCreate') {
+          this.triggerMessageReceived(
+            this.utils.createEventPayload<typeof eventName>(
+              eventName,
+              payload as DiscordEventPayload[typeof eventName],
+              this.getContext()
+            )
+          )
+        }
+
         this.emitEvent(
           eventName,
           this.utils.createEventPayload<typeof eventName>(
