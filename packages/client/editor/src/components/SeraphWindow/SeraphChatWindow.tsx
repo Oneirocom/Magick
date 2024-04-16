@@ -14,16 +14,22 @@ import { useSelector } from 'react-redux'
 import { SeraphChatInput } from './SeraphChatInput'
 import { SeraphChatHistory } from './SeraphChatHistory'
 import { useSeraph } from '../../hooks/useSeraph'
-import { useMessageHistory } from '../../hooks/useMessageHistory'
+import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
-import { ISeraphEvent, SeraphEvents, SeraphRequest } from 'servicesShared'
+import {
+  ISeraphEvent,
+  SeraphEvents,
+  SeraphFunction,
+  SeraphRequest,
+} from 'servicesShared'
 
 const SeraphChatWindow = props => {
   const [value, setValue] = useState('')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [functionEventData, setFunctionEventData] = useState<ISeraphEvent>()
+  const [functionEventData, setFunctionEventData] = useState<SeraphFunction>()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [middlewareEventData, setMiddlewareEventData] = useState<ISeraphEvent>()
+  const [middlewareEventData, setMiddlewareEventData] =
+    useState<SeraphFunction>()
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -54,9 +60,9 @@ const SeraphChatWindow = props => {
     setHistory,
     // setAutoscroll,
     // autoscroll,
-  } = useMessageHistory()
+  } = useMessageHistory({ seraph: true })
 
-  const { streamToConsole } = useMessageQueue({ setHistory })
+  const { streamToConsole } = useMessageQueue({ setHistory, seraph: true })
 
   const { makeSeraphRequest } = useSeraph({
     tab,
@@ -68,11 +74,9 @@ const SeraphChatWindow = props => {
 
   // React to new events
   useEffect(() => {
-    // Early return if lastEvent or spell.id is not defined
-    if (!lastEvent?.data?.data.message) return
-
+    const lastEventData = lastEvent?.data.data
+    if (!lastEventData) return
     const seraphEvent = lastEvent.data as ISeraphEvent
-    console.log('SERAPH MESSAGE RECEIVED', seraphEvent)
 
     // Handling common actions in a function to reduce code repetition
     const handleEvent = (
@@ -89,29 +93,38 @@ const SeraphChatWindow = props => {
     const eventActions = {
       [SeraphEvents.message]: () => handleEvent(seraphEvent.data.message),
       [SeraphEvents.error]: () => handleEvent(seraphEvent.data.error, 'error'),
-      [SeraphEvents.functionResult]: () => setFunctionEventData(seraphEvent),
-      [SeraphEvents.functionExecution]: () => setFunctionEventData(seraphEvent),
+      [SeraphEvents.functionResult]: () =>
+        setFunctionEventData(seraphEvent.data.functionResult),
+      [SeraphEvents.functionExecution]: () =>
+        setFunctionEventData(seraphEvent.data.functionExecution),
       [SeraphEvents.info]: () => handleEvent(seraphEvent.data.info),
       [SeraphEvents.middlewareExecution]: () =>
-        setMiddlewareEventData(seraphEvent),
+        setMiddlewareEventData(seraphEvent.data.middlewareExecution),
       [SeraphEvents.middlewareResult]: () =>
-        setMiddlewareEventData(seraphEvent),
-      [SeraphEvents.token]: () => streamToConsole(seraphEvent.data.token || ''),
+        setMiddlewareEventData(seraphEvent.data.middlewareResult),
+      [SeraphEvents.token]: () =>
+        streamToConsole({
+          text: seraphEvent.data.token || '',
+          type: 'token',
+        }),
     }
 
     // Execute the action if the event type matches
     eventActions[seraphEvent.type]?.()
 
-    streamToConsole(lastEvent.data.content)
+    // type will be request at this point
+    if (lastEventData.request) {
+      printToConsole(lastEventData.request.message)
+    }
   }, [lastEvent])
 
   // Handle message sending
   const onSend = async () => {
     if (!value || !currentAgentId || !spell) return
     try {
-      const newMessage = {
+      const newMessage: Message = {
         sender: 'user',
-        content: `You: ${value}`,
+        content: value,
       }
 
       const eventPayload: SeraphRequest = {
