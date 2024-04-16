@@ -1,6 +1,14 @@
 import { useRef, useEffect } from 'react'
 
-export const useMessageQueue = ({ setHistory }) => {
+export const useMessageQueue = ({
+  setHistory,
+  seraph,
+}: {
+  setHistory: React.Dispatch<
+    React.SetStateAction<{ sender: string; content: string }[]>
+  >
+  seraph?: boolean
+}) => {
   const messageQueue = useRef<string[]>([])
   const queueTimer = useRef<any>(null)
 
@@ -18,11 +26,22 @@ export const useMessageQueue = ({ setHistory }) => {
     }
   }, [])
 
-  const streamToConsole = (text: string) => {
-    if (!text) return
+  const streamToConsole = (event: { type: string; text: string }) => {
+    if (!event?.text) return
 
-    messageQueue.current.push(text)
-    processQueue()
+    if (
+      event.type === 'token' &&
+      !event.text.includes('<END>') &&
+      !event.text.includes('<START>')
+    ) {
+      messageQueue.current.push(event.text)
+      processQueue()
+    } else if (event.type === 'message') {
+      setHistory(prevHistory => [
+        ...prevHistory,
+        { sender: 'assistant', content: event.text },
+      ])
+    }
   }
 
   const typeChunk = () => {
@@ -33,13 +52,16 @@ export const useMessageQueue = ({ setHistory }) => {
     setHistory(prevHistory => {
       const newHistory = [...prevHistory]
       messagesToProcess.forEach(currentMessage => {
-        if (
-          newHistory.length === 0 ||
-          newHistory[newHistory.length - 1].sender !== 'agent'
-        ) {
-          newHistory.push({ sender: 'agent', content: currentMessage })
+        const lastMessage = newHistory[newHistory.length - 1]
+        const sender = seraph ? 'user' : 'agent'
+
+        if (!lastMessage || lastMessage.sender !== sender) {
+          newHistory.push({
+            sender,
+            content: currentMessage,
+          })
         } else {
-          newHistory[newHistory.length - 1].content += currentMessage
+          lastMessage.content += currentMessage
         }
       })
       return newHistory
