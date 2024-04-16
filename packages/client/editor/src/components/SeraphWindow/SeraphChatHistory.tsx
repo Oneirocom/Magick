@@ -28,14 +28,14 @@ export const SeraphChatHistory = ({ history, scrollbars }) => {
                   <UserMessage message={message.content} />
                 </li>
               )
-            } else if (message.sender === 'seraph') {
+            } else if (message.sender === 'assistant') {
               return (
                 <li key={index}>
                   <SeraphMessage message={message.content} />
                 </li>
               )
             } else {
-              return null
+              return <></>
             }
           })}
         </ul>
