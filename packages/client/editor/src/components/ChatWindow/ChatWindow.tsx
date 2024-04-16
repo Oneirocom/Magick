@@ -45,7 +45,7 @@ const ChatWindow = ({ tab, spellName }) => {
     printToConsole,
     onClear,
     setHistory,
-  } = useMessageHistory()
+  } = useMessageHistory({})
 
   const { streamToConsole } = useMessageQueue({
     setHistory,
