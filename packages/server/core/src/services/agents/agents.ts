@@ -172,7 +172,6 @@ export const agent = (app: Application) => {
       // this is where we relay messages up based upon the time.
       // note for every custom type we need to add it to the above
       // todo harder typing on all message transports
-      console.log('Publishing event', messageType, cleanMessage, agentId)
       app.service('agents').emit(messageType, {
         ...cleanMessage,
         timestamp: new Date().toISOString(),
