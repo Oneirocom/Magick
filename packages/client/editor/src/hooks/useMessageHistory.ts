@@ -5,7 +5,7 @@ export type Message = {
   content: string
 }
 
-export const useMessageHistory = () => {
+export const useMessageHistory = ({ seraph }: { seraph?: boolean }) => {
   const [history, setHistory] = useState<Message[]>([])
   const scrollbars = useRef<any>()
   const [autoScroll, setAutoScroll] = useState<boolean>(true)
@@ -21,8 +21,8 @@ export const useMessageHistory = () => {
       return console.warn('could not split text, not a string', text)
 
     const newMessage: Message = {
-      sender: 'agent',
-      content: `Agent: ${text}`,
+      sender: seraph ? 'user' : 'agent',
+      content: seraph ? text : `Agent: ${text}`,
     }
     setHistory(prevHistory => [...prevHistory, newMessage] as Message[])
   }
