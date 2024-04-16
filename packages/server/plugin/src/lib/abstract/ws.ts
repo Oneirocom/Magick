@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
-import BasePlugin, { BasePluginInit } from '../basePlugin'
-import { PluginCredentialsType } from 'server/plugin'
+import { BasePluginInit } from '../basePlugin'
+import { CoreEventsPlugin, PluginCredentialsType } from 'server/plugin'
 import { PluginStateType } from 'plugin-state'
 import { EventPayload } from '../events/event-manager'
 
@@ -27,7 +27,7 @@ export abstract class WebSocketPlugin<
   Data = Record<string, unknown>,
   Metadata = Record<string, unknown>,
   State extends PluginStateType = PluginStateType
-> extends BasePlugin<
+> extends CoreEventsPlugin<
   Events,
   Actions,
   Dependencies,
