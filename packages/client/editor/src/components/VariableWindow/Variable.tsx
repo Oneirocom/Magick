@@ -19,6 +19,15 @@ const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 // todo we need to centralize these types
 const valueTypes = ['boolean', 'string', 'float', 'array', 'object']
 
+const initialValueMap = {
+  boolean: false,
+  string: '',
+  float: 0.0,
+  integer: 0,
+  array: '[]',
+  object: '{}',
+}
+
 interface DefaultInputProps {
   valueType: string
   initialValue: any
@@ -36,19 +45,19 @@ const DefaultInput = ({
 }: DefaultInputProps) => {
   // determine fallback value based on type
   if (valueType === 'boolean') {
-    initialValue = initialValue || false
+    initialValue = initialValue || initialValueMap.boolean
   } else if (valueType === 'number') {
-    initialValue = initialValue || 0
+    initialValue = initialValue || initialValueMap.integer
   } else if (valueType === 'float') {
-    initialValue = initialValue || 0.0
+    initialValue = initialValue || initialValueMap.float
   } else if (valueType === 'integer') {
-    initialValue = initialValue || 0
+    initialValue = initialValue || initialValueMap.integer
   } else if (valueType === 'string') {
-    initialValue = initialValue || ''
+    initialValue = initialValue || initialValueMap.string
   } else if (valueType === 'array') {
-    initialValue = initialValue || '[]'
+    initialValue = initialValue || initialValueMap.array
   } else if (valueType === 'object') {
-    initialValue = initialValue || '{}'
+    initialValue = initialValue || initialValueMap.object
   } else if (showChoices && choices.length > 0) {
     initialValue = choices[0].value
   } else {
@@ -131,19 +140,26 @@ type VariableProps = {
   variable: VariableJSON
   updateVariable: (variable: VariableJSON) => void
   deleteVariable: (variableId: string) => void
+  deleteAllVariableNodes: () => void
 }
 
 export const Variable = ({
   variable,
   updateVariable,
   deleteVariable,
+  deleteAllVariableNodes,
 }: VariableProps) => {
   const updateProperty = (property: keyof VariableJSON) =>
     debounce(value => {
+      console.log('Property', property, 'changed to', value)
       updateVariable({
         ...variable,
         [property]: value,
       })
+
+      if (property === 'valueTypeName') {
+        deleteAllVariableNodes()
+      }
     }, 2000)
 
   return (
