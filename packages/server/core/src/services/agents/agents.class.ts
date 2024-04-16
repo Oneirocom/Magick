@@ -237,7 +237,7 @@ export class AgentService<
         .select('*')
         .from('seraphEvents')
         .where({ agentId })
-        .orderBy('createdAt', 'desc')
+        .orderBy('createdAt', 'asc')
         .limit(100)
       return seraphEvents
     } catch (error: any) {
