@@ -92,7 +92,7 @@ export class SeraphManager extends EventEmitter {
 
   private async logSeraphEvent(eventData: ISeraphEvent): Promise<void> {
     const isTokenEvent = eventData.type === SeraphEvents.token
-    if (isTokenEvent && !eventData?.data.token.includes('<END>')) return // Don't log token events
+    if (isTokenEvent) return // Don't log token events
 
     try {
       this.logger.debug(
