@@ -61,6 +61,7 @@ import {
 } from './configx'
 import { getMessageHistory } from './nodes/actions/messageHistory'
 import { objectDestructure } from './nodes/functions/destructure'
+import { DATABASE_URL } from 'shared/config'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -229,7 +230,7 @@ export class CorePlugin extends CoreEventsPlugin<
         this.actionQueueName
       ),
       [CORE_DEP_KEYS.I_VARIABLE_SERVICE]: new VariableService(
-        this.connection,
+        DATABASE_URL as string,
         this.agentId,
         spellCaster
       ),
