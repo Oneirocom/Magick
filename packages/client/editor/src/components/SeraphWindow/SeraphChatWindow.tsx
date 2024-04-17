@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   RootState,
   useCreateAgentSeraphEventMutation,
+  useGetAgentSeraphEventsQuery,
   useGetSpellByNameQuery,
   useSelectAgentsSeraphEvent,
 } from 'client/state'
@@ -31,7 +32,6 @@ const SeraphChatWindow = props => {
     useState<SeraphFunction>()
 
   const { enqueueSnackbar } = useSnackbar()
-  // const config = useConfig()
   const { tab } = props
   const spellName = tab.params.spellName
 
@@ -50,6 +50,10 @@ const SeraphChatWindow = props => {
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
+
+  const { data: seraphChatHistory } = useGetAgentSeraphEventsQuery({
+    agentId: currentAgentId,
+  })
 
   const {
     history,
@@ -79,15 +83,26 @@ const SeraphChatWindow = props => {
     }
   }
 
+  useEffect(() => {
+    if (seraphChatHistory?.length) {
+      const formattedHistory = seraphChatHistory.map((event: ISeraphEvent) => {
+        const isMessage = event.type === SeraphEvents.message
+        return {
+          sender: isMessage ? 'assistant' : 'user',
+          content: isMessage ? event.data.message : event.data.request?.message,
+        } as Message
+      })
+      setHistory(formattedHistory)
+    }
+  }, [seraphChatHistory, setHistory])
+
   // React to new events
   useEffect(() => {
     const lastEventData = lastEvent?.data.data
     if (!lastEventData) return
     const seraphEvent = lastEvent.data as ISeraphEvent
-    if (!seraphEvent) {
-      console.log('seraphEvent is undefined!!!!!!!')
-      return
-    }
+    if (!seraphEvent) return
+
     // Handling common actions in a function to reduce code repetition
     const handleEvent = (
       message: string | undefined,
