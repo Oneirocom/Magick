@@ -5,7 +5,7 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
   const UserMessage = ({ message }) => (
     <div className="flex flex-row mb-2">
       <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
-        {message.trimStart()}
+        {message?.trimStart()}
       </div>
     </div>
   )
@@ -13,7 +13,7 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
   const SeraphMessage = ({ message }) => (
     <div className="flex flex-row mb-2">
       <div className="bg-slate-700 p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
-        {message.trimStart()}
+        {message?.trimStart()}
       </div>
     </div>
   )
