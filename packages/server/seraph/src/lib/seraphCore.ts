@@ -143,10 +143,7 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     this.disableInput = false
   }
 
-  public async processRequest({
-    userInput,
-    conversationId,
-  }): Promise<string | void> {
+  public async processRequest({ userInput, conversationId }): Promise<void> {
     if (this.disableInput) return
 
     this.conversationManager.updateContext(conversationId, userInput, 'user')
@@ -170,8 +167,6 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     this.emit('message', data)
 
     this.disableInput = false
-
-    return fullResponse
   }
 
   async generateSystemPrompt(): Promise<string> {
