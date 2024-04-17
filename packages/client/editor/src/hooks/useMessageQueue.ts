@@ -26,21 +26,12 @@ export const useMessageQueue = ({
     }
   }, [])
 
-  const streamToConsole = (event: { type: string; text: string }) => {
-    if (!event?.text) return
+  const streamToConsole = (text: string) => {
+    if (text === undefined) return
 
-    if (
-      event.type === 'token' &&
-      !event.text.includes('<END>') &&
-      !event.text.includes('<START>')
-    ) {
-      messageQueue.current.push(event.text)
+    if (!text.includes('<END>') && !text.includes('<START>')) {
+      messageQueue.current.push(text)
       processQueue()
-    } else if (event.type === 'message') {
-      setHistory(prevHistory => [
-        ...prevHistory,
-        { sender: 'assistant', content: event.text },
-      ])
     }
   }
 
@@ -53,7 +44,7 @@ export const useMessageQueue = ({
       const newHistory = [...prevHistory]
       messagesToProcess.forEach(currentMessage => {
         const lastMessage = newHistory[newHistory.length - 1]
-        const sender = seraph ? 'user' : 'agent'
+        const sender = seraph ? 'assistant' : 'agent'
 
         if (!lastMessage || lastMessage.sender !== sender) {
           newHistory.push({
