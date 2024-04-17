@@ -1,14 +1,17 @@
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { SeraphEvents } from 'servicesShared'
+import { SeraphEvents, SeraphFunction } from 'servicesShared'
+import { useState } from 'react'
 
 export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
-  const UserMessage = ({ message }) => (
-    <div className="flex flex-row mb-2">
-      <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
-        {message?.trimStart()}
+  const UserMessage = ({ message }: { message: string }) => {
+    return (
+      <div className="flex flex-row mb-2">
+        <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
+          {message?.trimStart()}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   const SeraphMessage = ({ message }) => (
     <div className="flex flex-row mb-2">
@@ -18,23 +21,91 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
     </div>
   )
 
-  const FunctionMessage = ({ functionName }) => (
-    <div className="flex flex-row mb-2">
-      <div className="bg-blue-500 p-2 rounded text-white flex-1 text-sm font-mono">
-        <i className="fas fa-spinner fa-spin mr-2"></i>
-        Executing function: {functionName}
-      </div>
-    </div>
-  )
+  const FunctionMessage = ({
+    functionData,
+  }: {
+    functionData: SeraphFunction
+  }) => {
+    const [showResult, setShowResult] = useState(false)
 
-  const MiddlewareMessage = ({ middlewareName }) => (
-    <div className="flex flex-row mb-2">
-      <div className="bg-green-500 p-2 rounded text-white flex-1 text-sm font-mono">
-        <i className="fas fa-cog fa-spin mr-2"></i>
-        Executing middleware: {middlewareName}
+    const toggleResult = () => {
+      setShowResult(prevState => !prevState)
+    }
+
+    return (
+      <div className="flex flex-row mb-2">
+        <div className="bg-blue-500 p-2 rounded text-white flex-1 text-sm font-mono">
+          <div className="flex items-center">
+            {/* {functionData.icon && (
+              <div className="mr-2">{functionData.icon}</div>
+            )} */}
+            <div>
+              <div className="font-bold">{functionData.messageTitle}</div>
+              <div>{functionData.message || 'Executing function...'}</div>
+            </div>
+          </div>
+          {functionData.result && (
+            <div className="mt-2">
+              <button
+                className="text-white underline focus:outline-none"
+                onClick={toggleResult}
+              >
+                {showResult ? 'Hide Result' : 'Show Result'}
+              </button>
+              {showResult && (
+                <div className="mt-2 p-2 bg-blue-600 rounded">
+                  {functionData.result}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  const MiddlewareMessage = ({
+    middlewareData,
+  }: {
+    middlewareData: SeraphFunction
+  }) => {
+    const [showResult, setShowResult] = useState(false)
+
+    const toggleResult = () => {
+      setShowResult(prevState => !prevState)
+    }
+
+    return (
+      <div className="flex flex-row mb-2">
+        <div className="bg-green-500 p-2 rounded text-white flex-1 text-sm font-mono">
+          <div className="flex items-center">
+            {/* {middlewareData.icon && (
+              <div className="mr-2">{middlewareData.icon}</div>
+            )} */}
+            <div>
+              <div className="font-bold">{middlewareData.messageTitle}</div>
+              <div>{middlewareData.message || 'Running middleware...'}</div>
+            </div>
+          </div>
+          {middlewareData.result && (
+            <div className="mt-2">
+              <button
+                className="text-white underline focus:outline-none"
+                onClick={toggleResult}
+              >
+                {showResult ? 'Hide Result' : 'Show Result'}
+              </button>
+              {showResult && (
+                <div className="mt-2 p-2 bg-green-600 rounded">
+                  {middlewareData.result}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   const ErrorMessage = ({ error }) => (
     <div className="flex flex-row mb-2">
@@ -78,17 +149,15 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
           {seraphEventData[SeraphEvents.functionExecution] && (
             <li>
               <FunctionMessage
-                functionName={
-                  seraphEventData[SeraphEvents.functionExecution].name
-                }
+                functionData={seraphEventData[SeraphEvents.functionExecution]}
               />
             </li>
           )}
           {seraphEventData[SeraphEvents.middlewareExecution] && (
             <li>
               <MiddlewareMessage
-                middlewareName={
-                  seraphEventData[SeraphEvents.middlewareExecution].name
+                middlewareData={
+                  seraphEventData[SeraphEvents.middlewareExecution]
                 }
               />
             </li>
