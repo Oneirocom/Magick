@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
 import { useSnackbar } from 'notistack'
-
-// import { useConfig } from '@magickml/providers'
+import { v4 as uuidv4 } from 'uuid'
 import {
   RootState,
+  useCreateAgentSeraphEventMutation,
   useGetSpellByNameQuery,
   useSelectAgentsSeraphEvent,
 } from 'client/state'
@@ -13,7 +13,6 @@ import posthog from 'posthog-js'
 import { useSelector } from 'react-redux'
 import { SeraphChatInput } from './SeraphChatInput'
 import { SeraphChatHistory } from './SeraphChatHistory'
-import { useSeraph } from '../../hooks/useSeraph'
 import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import {
@@ -32,14 +31,14 @@ const SeraphChatWindow = props => {
     useState<SeraphFunction>()
 
   const { enqueueSnackbar } = useSnackbar()
-
   // const config = useConfig()
-
   const { tab } = props
-
   const spellName = tab.params.spellName
 
   const { lastItem: lastEvent } = useSelectAgentsSeraphEvent()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [createSeraphRequest, { error: requestRecordError }] =
+    useCreateAgentSeraphEventMutation()
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -50,7 +49,6 @@ const SeraphChatWindow = props => {
   )
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
-
   const { currentAgentId } = globalConfig
 
   const {
@@ -64,20 +62,32 @@ const SeraphChatWindow = props => {
 
   const { streamToConsole } = useMessageQueue({ setHistory, seraph: true })
 
-  const { makeSeraphRequest } = useSeraph({
-    tab,
-    projectId: spell?.projectId,
-    agentId: currentAgentId,
-    history,
-    setHistory,
-  })
+  const makeSeraphRequest = async (request: SeraphRequest) => {
+    if (!currentAgentId || !spell) return
+    const newRequest: ISeraphEvent = {
+      id: uuidv4(),
+      agentId: currentAgentId,
+      projectId: spell.projectId,
+      type: SeraphEvents.request,
+      spellId: tab.params.spellId,
+      data: { request },
+      createdAt: new Date().toISOString(),
+    }
+    const data = await createSeraphRequest(newRequest)
+    if (!data) {
+      enqueueSnackbar('Error sending message', { variant: 'error' })
+    }
+  }
 
   // React to new events
   useEffect(() => {
     const lastEventData = lastEvent?.data.data
     if (!lastEventData) return
     const seraphEvent = lastEvent.data as ISeraphEvent
-
+    if (!seraphEvent) {
+      console.log('seraphEvent is undefined!!!!!!!')
+      return
+    }
     // Handling common actions in a function to reduce code repetition
     const handleEvent = (
       message: string | undefined,
@@ -91,7 +101,7 @@ const SeraphChatWindow = props => {
 
     // Using an object to map event types to their specific actions
     const eventActions = {
-      [SeraphEvents.message]: () => handleEvent(seraphEvent.data.message),
+      [SeraphEvents.message]: () => {},
       [SeraphEvents.error]: () => handleEvent(seraphEvent.data.error, 'error'),
       [SeraphEvents.functionResult]: () =>
         setFunctionEventData(seraphEvent.data.functionResult),
@@ -102,11 +112,7 @@ const SeraphChatWindow = props => {
         setMiddlewareEventData(seraphEvent.data.middlewareExecution),
       [SeraphEvents.middlewareResult]: () =>
         setMiddlewareEventData(seraphEvent.data.middlewareResult),
-      [SeraphEvents.token]: () =>
-        streamToConsole({
-          text: seraphEvent.data.token || '',
-          type: 'token',
-        }),
+      [SeraphEvents.token]: () => streamToConsole(seraphEvent.data.token || ''),
     }
 
     // Execute the action if the event type matches
