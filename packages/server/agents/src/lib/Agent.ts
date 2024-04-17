@@ -204,11 +204,6 @@ export class Agent implements AgentInterface {
         })
       },
     })
-    this.commandHub.registerDomain('agent', 'seraph', {
-      processEvent: async data => {
-        this.seraphManager.processEvent(data)
-      },
-    })
   }
 
   trackEvent(
