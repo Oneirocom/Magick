@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   RootState,
   useCreateAgentSeraphEventMutation,
+  useDeleteAgentSeraphEventMutation,
   useGetAgentSeraphEventsQuery,
   useGetSpellByNameQuery,
   useSelectAgentsSeraphEvent,
@@ -49,6 +50,7 @@ const SeraphChatWindow = props => {
   const { history, scrollbars, printToConsole, setHistory } = useMessageHistory(
     { seraph: true }
   )
+  const [deleteSeraphEvent] = useDeleteAgentSeraphEventMutation()
 
   const { streamToConsole } = useMessageQueue({ setHistory, seraph: true })
 
@@ -76,8 +78,18 @@ const SeraphChatWindow = props => {
         return {
           sender: isMessage ? 'assistant' : 'user',
           content: isMessage ? event.data.message : event.data.request?.message,
+          id: event.id,
         } as Message
       })
+      //check if the last message is from the user and remove it if so
+      const lastMessage = formattedHistory[formattedHistory.length - 1]
+      if (lastMessage.sender === 'user') {
+        formattedHistory.pop()
+
+        void deleteSeraphEvent({
+          seraphEventId: lastMessage.id || '',
+        })
+      }
       setHistory(formattedHistory)
     }
   }, [seraphChatHistory, setHistory])
@@ -187,6 +199,7 @@ const SeraphChatWindow = props => {
             history={history}
             scrollbars={scrollbars}
             seraphEventData={seraphEventData}
+            setSeraphEventData={setSeraphEventData}
           />
           <SeraphChatInput onChange={onChange} value={value} onSend={onSend} />
         </div>
