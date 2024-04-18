@@ -21,7 +21,12 @@ type BaseNodeProps = FlowNodeProps & {
   spell: SpellInterfaceWithGraph
   nodeJSON: NodeJSON
   selected: boolean
-  activeInput: { nodeId: string; name: string } | null
+  activeInput: {
+    nodeId: string
+    name: string
+    value: any
+    inputType: string
+  } | null
   setActiveInput: (input: { nodeId: string; name: string } | null) => void
   onResetNodeState: () => void
   spellEvent: any
@@ -152,6 +157,8 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
               connected={isHandleConnected(edges, id, flowInput.name, 'target')}
               nodeId={id}
               isActive={isActive(flowInput.name)}
+              activeInput={activeInput}
+              setActiveInput={setActiveInput}
             />
           )}
           {output && (
