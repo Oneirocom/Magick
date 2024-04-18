@@ -19,7 +19,7 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectActiveInput, setActiveInput } from 'client/state'
 
 export type InputSocketProps = {
@@ -33,6 +33,20 @@ export type InputSocketProps = {
   textEditorState: string
   valueTypeName?: string
   nodeId: string
+  activeInput: {
+    nodeId: string
+    name: string
+    value: any
+    inputType: string
+  } | null
+  setActiveInput: (
+    input: {
+      nodeId: string
+      name: string
+      value: any
+      inputType: string
+    } | null
+  ) => void
 } & InputSocketSpecJSON
 
 const InputFieldForValue = ({
@@ -46,6 +60,8 @@ const InputFieldForValue = ({
   hideValue = false,
   isActive,
   nodeId,
+  activeInput,
+  setActiveInput,
 }: Pick<
   InputSocketProps,
   | 'choices'
@@ -58,9 +74,10 @@ const InputFieldForValue = ({
   | 'hideValue'
   | 'isActive'
   | 'nodeId'
+  | 'activeInput'
+  | 'setActiveInput'
 >) => {
-  const dispatch = useDispatch()
-  const activeInput = useSelector(selectActiveInput)
+  // const activeInput = useSelector(selectActiveInput)
   const showChoices = choices?.length && choices.length > 0
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
   const hideValueInput = hideValue || connected
@@ -76,19 +93,19 @@ const InputFieldForValue = ({
   const handleChange = ({ key, value }: { key: string; value: any }) => {
     onChange(key, value)
     setInputVal(value)
-    dispatch(setActiveInput({ name, inputType: valueType, value, nodeId }))
+    setActiveInput({ name, inputType: valueType, value, nodeId })
   }
 
   const onFocus = (x: string) => {
     if (valueType === 'string') {
       setIsFocused(true)
       onChange(name, x)
-      dispatch(
-        setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
-      )
+
+      setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
+
       return
     }
-    dispatch(setActiveInput(null))
+    setActiveInput(null)
   }
 
   const onBlur = () => {
