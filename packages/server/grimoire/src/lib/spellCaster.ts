@@ -394,9 +394,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   }
 
   getCurrentEventStateKey() {
-    return this.graph
-      .getDependency<IStateService>(CORE_DEP_KEYS.STATE_SERVICE)
-      ?.getStateKey()
+    // return this.graph
+    //   .getDependency<IStateService>(CORE_DEP_KEYS.STATE_SERVICE)
+    //   ?.getState()
+    return {} as any
   }
 
   /**
