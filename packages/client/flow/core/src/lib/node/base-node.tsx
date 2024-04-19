@@ -142,6 +142,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       selected={selected}
       graph={spell.graph}
       config={config}
+      label={spec.label}
     >
       {pairs.map(([flowInput, output], ix) => (
         <div

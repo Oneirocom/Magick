@@ -2,7 +2,12 @@ import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
 import { cn } from '@magickml/client-ui'
 import { type PropsWithChildren } from 'react'
 
-import { categoryColorMap, colors, valueTypeColorMap } from '../utils/colors'
+import {
+  categoryColorMap,
+  categoryIconMap,
+  colors,
+  valueTypeColorMap,
+} from '../utils/colors'
 import type { SpellInterfaceWithGraph } from 'server/schemas'
 
 type Config = {
