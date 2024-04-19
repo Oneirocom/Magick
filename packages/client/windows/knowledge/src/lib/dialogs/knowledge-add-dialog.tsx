@@ -53,9 +53,12 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
         projectId,
         knowledge: newKnowledge.map(k => ({
           ...k,
-          dataType: 'auto',
+          name: formKnowledge.name,
+          sourceUrl: formKnowledge.sourceUrl,
+          tag: formKnowledge.tag,
+          dataType: formKnowledge.dataType,
         })),
-      })
+      }).unwrap()
 
       console.log('Knowledge created:', response)
       toast.success('Knowledge saved successfully')
