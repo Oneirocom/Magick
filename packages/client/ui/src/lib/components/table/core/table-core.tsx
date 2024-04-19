@@ -1,9 +1,5 @@
 import * as React from 'react'
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from '@radix-ui/react-icons'
+import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -21,15 +17,11 @@ import {
 import {
   Button,
   ButtonProps,
-  Checkbox,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Input,
   InputProps,
   Table,
   TableBody,
@@ -173,7 +165,11 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <TableHead className='text-sm' key={header.id} {...tableHeadProps}>
+                    <TableHead
+                      className="text-sm"
+                      key={header.id}
+                      {...tableHeadProps}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(

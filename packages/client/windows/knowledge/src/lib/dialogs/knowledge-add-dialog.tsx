@@ -14,15 +14,16 @@ import { KnowledgeDialogTab } from './add/types'
 import {
   addKnowledgeDialogAtom,
   addKnowledgeFormAtom,
+  AddKnowledgeType,
 } from './add/schema-state'
 
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useResetAtom } from 'jotai/utils'
 import toast from 'react-hot-toast'
 import { useCreateKnowledgeMutation } from 'client/state'
 import { useConfig } from '@magickml/providers'
 
-const ACCEPT =
+export const ACCEPT =
   '.eml, .html, .json, .md, .msg, .rst, .rtf, .txt, .xml, .jpeg, .jpg, .png, .csv, .doc, .docx, .epub, .odt, .pdf, .ppt, .pptx, .tsv, .xlsx'
 
 type AddKnowledgeDialogProps = {
@@ -32,46 +33,51 @@ type AddKnowledgeDialogProps = {
 export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
   openState,
 }) => {
-  const [tabState, setTabState] = useState<KnowledgeDialogTab>(
-    KnowledgeDialogTab.URL
-  )
-
-  const { projectId } = useConfig()
-
-  const resetFiles = useResetAtom(addKnowledgeDialogAtom)
-  const resetForm = useResetAtom(addKnowledgeFormAtom)
-  const [newKnowledge, setNewKnowledge] = useAtom(addKnowledgeDialogAtom)
-  const [formKnowledge, setFormKnowledge] = useAtom(addKnowledgeFormAtom)
-
-  const [createKnowledge, createKnowlegeMeta] = useCreateKnowledgeMutation()
-
-  const uploadDisabled = useState(false)
-
-  const handleCreateKnowledge = async () => {
-    try {
-      const response = await createKnowledge({
-        projectId,
-        knowledge: newKnowledge.map(k => ({
-          ...k,
-          name: formKnowledge.name,
-          sourceUrl: formKnowledge.sourceUrl,
-          tag: formKnowledge.tag,
-          dataType: formKnowledge.dataType,
-        })),
-      }).unwrap()
-
-      console.log('Knowledge created:', response)
-      toast.success('Knowledge saved successfully')
-      openState[1](false)
-    } catch (error) {
-      console.error('Error saving knowledge:', error)
-    }
-  }
-
+  /* Constants */
   const dataTypes = Object.values(DataType).map(type => ({
     label: type,
     value: type,
   }))
+
+  /* State */
+  const [tabState, setTabState] = useState<KnowledgeDialogTab>(
+    KnowledgeDialogTab.URL
+  )
+  const uploadDisabled = useState(false)
+  const resetFiles = useResetAtom(addKnowledgeDialogAtom)
+  const resetForm = useResetAtom(addKnowledgeFormAtom)
+  const reset = () => {
+    resetFiles()
+    resetForm()
+  }
+  const newKnowledge = useAtomValue(addKnowledgeDialogAtom)
+  const [formKnowledge, setFormKnowledge] = useAtom(addKnowledgeFormAtom)
+
+  /* Hooks */
+  const { projectId } = useConfig()
+  const [createKnowledge, createKnowlegeMeta] = useCreateKnowledgeMutation()
+  const handleCreateKnowledge = async () => {
+    let knowledge: AddKnowledgeType[] = []
+    if (tabState === KnowledgeDialogTab.UPLOAD) {
+      knowledge = newKnowledge
+    } else {
+      knowledge = [formKnowledge]
+    }
+
+    try {
+      await createKnowledge({
+        projectId,
+        knowledge,
+      })
+
+      reset()
+      toast.success('Knowledge saved successfully')
+      openState[1](false)
+    } catch (error) {
+      resetFiles()
+      toast.error('Failed to save knowledge')
+    }
+  }
 
   return (
     <PortalDialog
@@ -104,7 +110,6 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
         variant: 'portal-primary',
       }}
     >
-      {JSON.stringify(newKnowledge, null, 2)}
       <Tabs
         value={tabState}
         onValueChange={value => setTabState(value as KnowledgeDialogTab)} // safe to cast with the enum

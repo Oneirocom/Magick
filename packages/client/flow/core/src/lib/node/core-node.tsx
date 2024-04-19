@@ -1,5 +1,5 @@
 // CoreNode.tsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { enqueueSnackbar } from 'notistack'
 import { usePubSub } from '@magickml/providers'
@@ -17,7 +17,7 @@ type CoreNodeProps = Omit<
 >
 
 export const CoreNode: React.FC<CoreNodeProps> = props => {
-  const { id, spec, spell, ...rest } = props
+  const { id, spell } = props
   const { events, subscribe } = usePubSub()
   const dispatch = useDispatch()
   const { lastItem: spellEvent } = useSelectAgentsSpell()
