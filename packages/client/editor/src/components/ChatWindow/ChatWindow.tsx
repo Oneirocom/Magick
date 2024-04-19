@@ -134,7 +134,7 @@ const ChatWindow = ({ tab, spellName }) => {
   }
 
   const toolbar = (
-    <div className="flex space-x-1 justify-right items-right mt-1.5 mb-1.5 pl-1 pr-2">
+    <div className="inline-flex space-x-1 justify-right items-center mt-1.5 mb-1.5 pl-1 pr-2">
       <Button
         variant="basic"
         onClick={toggleData}
