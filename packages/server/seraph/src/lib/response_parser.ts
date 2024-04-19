@@ -13,41 +13,47 @@ class ResponseParser {
     functionName: string | null
     functionArgs: Record<string, any> | null
   }> {
-    const functionCallMatch = /<invoke>(.*?)<\/invoke>/s.exec(response)
-    if (functionCallMatch) {
-      const functionCallXml = functionCallMatch[0]
-      const parsedXml = await parseStringPromise(functionCallXml)
+    try {
+      const functionCallMatch = /<invoke>(.*?)<\/invoke>/s.exec(response)
+      if (functionCallMatch) {
+        const functionCallXml = functionCallMatch[0]
+        const parsedXml = await parseStringPromise(functionCallXml)
 
-      const invoke = parsedXml['invoke']
-      if (
-        invoke &&
-        invoke['tool_name'] &&
-        invoke['tool_name'].length > 0 &&
-        invoke['parameters'] &&
-        invoke['parameters'].length > 0
-      ) {
-        const functionName = invoke['tool_name'][0]
-        const functionSchema = this.cognitiveFunctions[functionName]
+        const invoke = parsedXml['invoke']
+        if (
+          invoke &&
+          invoke['tool_name'] &&
+          invoke['tool_name'].length > 0 &&
+          invoke['parameters'] &&
+          invoke['parameters'].length > 0
+        ) {
+          const functionName = invoke['tool_name'][0]
+          const functionSchema = this.cognitiveFunctions[functionName]
 
-        if (functionSchema) {
-          const functionArgs: Record<string, any> = {}
-          const parameters = invoke['parameters'][0]
-          for (const param of Object.keys(parameters)) {
-            if (
-              Array.isArray(parameters[param]) &&
-              parameters[param].length > 0
-            ) {
-              const paramValue = parameters[param][0]
-              const paramType = functionSchema.parameters[param].type
-              functionArgs[param] = convertValueToType(paramValue, paramType)
+          if (functionSchema) {
+            const functionArgs: Record<string, any> = {}
+            const parameters = invoke['parameters'][0]
+            for (const param of Object.keys(parameters)) {
+              if (
+                Array.isArray(parameters[param]) &&
+                parameters[param].length > 0
+              ) {
+                const paramValue = parameters[param][0]
+                const paramType = functionSchema.parameters[param].type
+                functionArgs[param] = convertValueToType(paramValue, paramType)
+              }
             }
+            return { functionName, functionArgs }
           }
-          return { functionName, functionArgs }
         }
       }
-    }
 
-    return { functionName: null, functionArgs: null }
+      return { functionName: null, functionArgs: null }
+    } catch (error) {
+      console.log('Error parsing function in response:', response)
+      console.error(error)
+      return { functionName: null, functionArgs: null }
+    }
   }
 }
 
