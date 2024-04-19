@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react'
 import { Roles } from '@magickml/portal-config'
 import posthog from 'posthog-js'
 
+const flags = {
+  SERAPH_CHAT_WINDOW: process.env.NEXT_PUBLIC_FEATURE_SERAPH_CHAT_WINDOW,
+}
+
 export enum Features {
   SERAPH_CHAT_WINDOW = 'SERAPH_CHAT_WINDOW',
 }
@@ -23,7 +27,8 @@ export const useFeatureFlag = (feature: Features): boolean => {
 
   useEffect(() => {
     // Checking for local environment override
-    const envOverride = process.env[`REACT_APP_FEATURE_${feature}`]
+    const envOverride = flags[feature]
+
     if (envOverride !== undefined) {
       setHasAccess(envOverride === 'true')
       return
