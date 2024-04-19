@@ -62,7 +62,7 @@ class SeraphIterator implements AsyncIterator<string> {
 
     const finalMessage = await stream.finalMessage()
 
-    const llmResponse = finalMessage.content[0].text
+    const llmResponse = finalMessage?.content[0]?.text || ''
 
     this.seraph.middlewareManager.runMiddleware(
       llmResponse,
