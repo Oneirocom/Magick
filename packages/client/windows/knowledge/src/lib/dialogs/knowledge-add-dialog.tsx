@@ -1,33 +1,68 @@
 import {
-  Dropdown,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   InputWithLabel,
   PortalDialog,
   SelectWithLabel,
 } from '@magickml/client-ui'
 import { useState } from 'react'
-import { DataType } from '../file-types'
+import { DataType } from './add/file-types'
+import { KnowledgeUploadContent } from './add/knowledge-upload-content'
+import { KnowledgeDialogTab } from './add/types'
+import {
+  addKnowledgeDialogAtom,
+  addKnowledgeFormAtom,
+} from './add/schema-state'
+
+import { useAtom } from 'jotai'
+import { useResetAtom } from 'jotai/utils'
+import toast from 'react-hot-toast'
+import { useCreateKnowledgeMutation } from 'client/state'
+import { useConfig } from '@magickml/providers'
+
+const ACCEPT =
+  '.eml, .html, .json, .md, .msg, .rst, .rtf, .txt, .xml, .jpeg, .jpg, .png, .csv, .doc, .docx, .epub, .odt, .pdf, .ppt, .pptx, .tsv, .xlsx'
 
 type AddKnowledgeDialogProps = {
-  isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  openState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
 
 export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
-  isOpen,
-  setIsOpen,
+  openState,
 }) => {
-  const [name, setName] = useState('')
-  const [url, setUrl] = useState('')
-  const [tag, setTag] = useState('')
-  const [dataType, setDataType] = useState('')
-  const addKnowledgeVersion = async ({
-    templateId,
-  }: {
-    templateId: string
-  }) => {}
+  const [tabState, setTabState] = useState<KnowledgeDialogTab>(
+    KnowledgeDialogTab.URL
+  )
 
-  const handleAddKnowledge = async () => {
-    await addKnowledgeVersion({ templateId: '123' })
+  const { projectId } = useConfig()
+
+  const resetFiles = useResetAtom(addKnowledgeDialogAtom)
+  const resetForm = useResetAtom(addKnowledgeFormAtom)
+  const [newKnowledge, setNewKnowledge] = useAtom(addKnowledgeDialogAtom)
+  const [formKnowledge, setFormKnowledge] = useAtom(addKnowledgeFormAtom)
+
+  const [createKnowledge, createKnowlegeMeta] = useCreateKnowledgeMutation()
+
+  const uploadDisabled = useState(false)
+
+  const handleCreateKnowledge = async () => {
+    try {
+      const response = await createKnowledge({
+        projectId,
+        knowledge: newKnowledge.map(k => ({
+          ...k,
+          dataType: 'auto',
+        })),
+      })
+
+      console.log('Knowledge created:', response)
+      toast.success('Knowledge saved successfully')
+      openState[1](false)
+    } catch (error) {
+      console.error('Error saving knowledge:', error)
+    }
   }
 
   const dataTypes = Object.values(DataType).map(type => ({
@@ -35,50 +70,106 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
     value: type,
   }))
 
-  const isLoading = false
-
   return (
     <PortalDialog
       base={{
         root: {
-          open: isOpen,
-          onOpenChange: setIsOpen,
+          open: openState[0],
+          onOpenChange: openState[1],
         },
+        content: { className: 'w-full max-w-2xl' },
       }}
       title="Add Knowledge"
-      description="Turn your data into memories for your agent."
-      footerText={`${isLoading ? 'Updating' : 'Update'} Template`}
+      description={
+        tabState === KnowledgeDialogTab.URL
+          ? 'Upload your data from a URL into memories for your agent.'
+          : 'Upload your data from a file into memories for your agent.'
+      }
+      footerText={
+        tabState === KnowledgeDialogTab.URL
+          ? 'Upload Knowledge From URL'
+          : 'Upload Knowledge From File'
+      }
       footerButton={{
-        onClick: handleAddKnowledge,
-        isLoading: isLoading,
+        disabled:
+          createKnowlegeMeta.isLoading || tabState === KnowledgeDialogTab.UPLOAD
+            ? uploadDisabled[0]
+            : false,
+        onClick: handleCreateKnowledge,
+        isLoading: createKnowlegeMeta.isLoading,
         className: 'w-full',
         variant: 'portal-primary',
       }}
     >
-      <InputWithLabel
-        id="name"
-        label="Name"
-        placeholder="Enter a name for your knowledge"
+      {JSON.stringify(newKnowledge, null, 2)}
+      <Tabs
+        value={tabState}
+        onValueChange={value => setTabState(value as KnowledgeDialogTab)} // safe to cast with the enum
+        defaultValue={KnowledgeDialogTab.URL}
         className="w-full"
-      />
+      >
+        {/* Tabs List */}
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value={KnowledgeDialogTab.URL}>URL</TabsTrigger>
+          <TabsTrigger value={KnowledgeDialogTab.UPLOAD}>Upload</TabsTrigger>
+        </TabsList>
 
-      <InputWithLabel
-        id="sourceUrl"
-        label="Source URL"
-        placeholder="Enter a source URL"
-        className="w-full"
-      />
-      <div className="grid grid-cols-2 gap-x-2">
-        <InputWithLabel id="tag" label="Tag" placeholder="Enter a tag" />
+        {/* URL Tab */}
+        <TabsContent
+          value={KnowledgeDialogTab.URL}
+          className="flex flex-col gap-y-4 pt-2"
+        >
+          <InputWithLabel
+            id="name"
+            label="Name"
+            placeholder="Enter a name for this new knowledge entry"
+            className="w-full"
+            value={formKnowledge.name}
+            onChange={e =>
+              setFormKnowledge({ ...formKnowledge, name: e.target.value })
+            }
+            required
+          />
+          <InputWithLabel
+            id="sourceUrl"
+            label="Source URL"
+            placeholder="Enter a source URL to download the knowledge from"
+            className="w-full"
+            value={formKnowledge.sourceUrl}
+            onChange={e =>
+              setFormKnowledge({ ...formKnowledge, sourceUrl: e.target.value })
+            }
+            disabled={!!formKnowledge.sourceUrl}
+          />
 
-        <SelectWithLabel
-          id="dataType"
-          label="Data Type"
-          className="w-full"
-          options={dataTypes}
-          group='Data Type'
-        />
-      </div>
+          <div className="grid grid-cols-2 gap-x-2">
+            <InputWithLabel
+              id="tag"
+              label="Tag"
+              placeholder="Enter a tag"
+              value={formKnowledge.tag}
+              onChange={e =>
+                setFormKnowledge({ ...formKnowledge, tag: e.target.value })
+              }
+            />
+            <SelectWithLabel
+              id="dataType"
+              label="Data Type"
+              className="w-full"
+              options={dataTypes}
+              group="Data Type"
+              value={formKnowledge.dataType}
+              onValueChange={(value: string) =>
+                setFormKnowledge({ ...formKnowledge, dataType: value })
+              }
+              required
+            />
+          </div>
+        </TabsContent>
+
+        {/* Upload Tab */}
+        <KnowledgeUploadContent disabledState={uploadDisabled} />
+      </Tabs>
     </PortalDialog>
   )
 }
