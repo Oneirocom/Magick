@@ -6,20 +6,18 @@ import {
   AGENT_LOG,
   AGENT_SERAPH_EVENT,
 } from 'communication'
-import { type Worker } from 'server/communication'
 import { Application } from 'server/core'
 import { getLogger } from 'server/logger'
 import { EventMetadata } from 'server/event-tracker'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
 import { EventPayload } from 'server/plugin'
 import { ISeraphEvent } from 'servicesShared'
-import { SeraphManager } from './seraphManager'
+import { SeraphManager } from '@magickml/seraph-manager'
 
 // import { StateService } from './StateService'
 
@@ -40,14 +38,12 @@ export class Agent implements AgentInterface {
   data!: AgentInterface
   projectId!: string
   logger: pino.Logger = getLogger()
-  worker: Worker
   commandHub: CommandHub
   version!: string
   pubsub: RedisPubSub
   ready = false
   app: Application
   spellbook: Spellbook<Agent, Application>
-  agentManager: CloudAgentWorker
   pluginManager: PluginManager
   outputTypes: any[] = []
   heartbeatInterval: NodeJS.Timer
@@ -56,24 +52,19 @@ export class Agent implements AgentInterface {
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
    * @param agentData {AgentData} - The instance's data.
-   * @param agentManager {AgentManager} - The instance's manager.
    */
   constructor(
     agentData: AgentInterface,
-    agentManager: CloudAgentWorker,
-    worker: Worker,
     pubsub: RedisPubSub,
     app: Application
   ) {
     this.id = agentData.id
     this.app = app
-    this.agentManager = agentManager
 
     this.update(agentData)
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
 
     // Set up the agent worker to handle incoming messages
-    this.worker = worker
 
     this.pubsub = pubsub
 
@@ -81,7 +72,6 @@ export class Agent implements AgentInterface {
 
     this.seraphManager = new SeraphManager({
       seraphOptions: {
-        prompt: 'How can I help you?',
         openAIApiKey: process.env.OPENAI_API_KEY || '',
         anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
       },
