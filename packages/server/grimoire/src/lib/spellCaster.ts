@@ -393,6 +393,12 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.executeGraph = true
   }
 
+  getCurrentEventStateKey() {
+    return this.graph
+      .getDependency<IStateService>(CORE_DEP_KEYS.STATE_SERVICE)
+      ?.getStateKey()
+  }
+
   /**
    * Starts the run loop.  This is called by the spellbook when the spell is started.
    */
