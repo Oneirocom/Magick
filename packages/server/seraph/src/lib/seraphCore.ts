@@ -143,12 +143,20 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     this.disableInput = false
   }
 
-  public async processRequest({ userInput, conversationId }): Promise<void> {
+  public async processRequest({
+    userInput,
+    conversationId,
+    systemMessage,
+  }: {
+    userInput: string
+    conversationId: string
+    systemMessage?: string
+  }): Promise<void> {
     if (this.disableInput) return
 
     this.conversationManager.updateContext(conversationId, userInput, 'user')
 
-    const systemPrompt = await this.generateSystemPrompt()
+    const systemPrompt = await this.generateSystemPrompt(systemMessage)
 
     const seraphIterator = new SeraphIterator(
       this,
@@ -169,7 +177,7 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     this.disableInput = false
   }
 
-  async generateSystemPrompt(): Promise<string> {
+  async generateSystemPrompt(additionalPrompt?: string): Promise<string> {
     const toolsDescription = await this.getToolsDescription()
     const middlewarePrompts =
       await this.middlewareManager.getMiddlewarePrompts()
@@ -178,6 +186,8 @@ class SeraphCore extends (EventEmitter as new () => TypedEmitter<SeraphEvents>) 
     This is the Seraph AI system.  This is your core directive and prompt:
     ${this.prompt}
     </system_prompt>
+
+    ${additionalPrompt}
 
     <user_instructions>
     In this environment you have access to a set of tools you can use to answer the user's question and help them to accomplish their tasks.
