@@ -71,3 +71,6 @@ docstore.json
 .ide.prod.env
 
 **/**/*.node
+
+
+plugins/portal
