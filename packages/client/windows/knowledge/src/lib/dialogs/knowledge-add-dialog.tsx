@@ -11,17 +11,14 @@ import { useState } from 'react'
 import { DataType } from './add/file-types'
 import { KnowledgeUploadContent } from './add/knowledge-upload-content'
 import { KnowledgeDialogTab } from './add/types'
-import {
-  addKnowledgeDialogAtom,
-  addKnowledgeFormAtom,
-  AddKnowledgeType,
-} from './add/schema-state'
+import { addKnowledgeDialogAtom, addKnowledgeFormAtom } from './add/state'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { useResetAtom } from 'jotai/utils'
 import toast from 'react-hot-toast'
 import { useCreateKnowledgeMutation } from 'client/state'
 import { useConfig } from '@magickml/providers'
+import { AddKnowledge } from 'servicesShared'
 
 export const ACCEPT =
   '.eml, .html, .json, .md, .msg, .rst, .rtf, .txt, .xml, .jpeg, .jpg, .png, .csv, .doc, .docx, .epub, .odt, .pdf, .ppt, .pptx, .tsv, .xlsx'
@@ -57,7 +54,7 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
   const { projectId } = useConfig()
   const [createKnowledge, createKnowlegeMeta] = useCreateKnowledgeMutation()
   const handleCreateKnowledge = async () => {
-    let knowledge: AddKnowledgeType[] = []
+    let knowledge: AddKnowledge[] = []
     if (tabState === KnowledgeDialogTab.UPLOAD) {
       knowledge = newKnowledge
     } else {

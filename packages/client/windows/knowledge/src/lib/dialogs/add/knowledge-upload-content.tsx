@@ -8,12 +8,9 @@ import {
 } from 'client/state'
 import { KnowledgeDialogTab } from './types'
 import { useAtom } from 'jotai'
-import {
-  addKnowledgeDialogAtom,
-  addKnowledgeSchema,
-  addKnowledgeFormAtom,
-} from './schema-state'
+import { addKnowledgeDialogAtom, addKnowledgeFormAtom } from './state'
 import toast from 'react-hot-toast'
+import { AddKnowledgeSchema } from 'servicesShared'
 
 type KnowledgeUploadContentProps = {
   disabledState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -71,7 +68,7 @@ export const KnowledgeUploadContent: React.FC<
       const uploadedFiles = await Promise.all(filePromises)
 
       for (const file of uploadedFiles) {
-        const parse = addKnowledgeSchema.safeParse({
+        const parse = AddKnowledgeSchema.safeParse({
           tag: 'tag',
           name: file?.name || '',
           sourceUrl: file?.id,
