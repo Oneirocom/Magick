@@ -1,5 +1,6 @@
 import { UploadIcon } from '@radix-ui/react-icons'
 import { cn } from '@magickml/client-ui'
+import { getAcceptAttribute } from 'servicesShared'
 
 type KnowledgeUploadInputProps = {
   inputProps: React.ComponentProps<'input'>
@@ -40,7 +41,7 @@ export const KnowledgeUploadInput: React.FC<KnowledgeUploadInputProps> = ({
           id="dropzone-file"
           type="file"
           className="hidden"
-          accept={allowedTypes.join(', ')}
+          accept={getAcceptAttribute()}
           {...rest}
         />
       </label>
