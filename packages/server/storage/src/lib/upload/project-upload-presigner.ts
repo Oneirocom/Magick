@@ -31,10 +31,10 @@ export enum ProjectPresignType {
 }
 
 const bucketConfig: BucketConfig = {
-  accessKeyId: process.env?.['PROJECT_AWS_ACCESS_KEY_ID'] || '',
-  secretAccessKey: process.env?.['PROJECT_AWS_SECRET_ACCESS'] || '',
+  accessKeyId: process.env?.['PROJECT_AWS_ACCESS_KEY'] || '',
+  secretAccessKey: process.env?.['PROJECT_AWS_SECRET_KEY'] || '',
   region: process.env?.['PROJECT_AWS_REGION'] || 'east-1',
-  endpoint: process.env?.['PROJECT_AWS_ENDPOINT'] || '',
+  endpoint: process.env?.['PROJECT_AWS_BUCKET_ENDPOINT'] || '',
   bucketName: process.env?.['PROJECT_AWS_BUCKET_NAME'] || '',
 }
 
