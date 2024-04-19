@@ -74,3 +74,24 @@ export const AcceptValues = z.enum([
 export function getAcceptAttribute(): string {
   return AcceptValues.options.join(', ')
 }
+
+/* This is the base schema for both file and url knowledge uploads 
+/* We send an array of these to the server regardless of source */
+export const AddKnowledgeSchema = z.object({
+  tag: z.string(),
+  name: z.string(),
+  sourceUrl: z.string(),
+  dataType: z.string(), // TODO: use z.enum in shared package e2e. not doing now because of circular dependency
+})
+
+export type AddKnowledge = z.infer<typeof AddKnowledgeSchema>
+
+/* This is the schema for the create knowledge mutation */
+export const CreateKnowledgeMutationSchema = z.object({
+  projectId: z.string(),
+  knowledge: z.array(AddKnowledgeSchema),
+})
+
+export type CreateKnowledgeMutation = z.infer<
+  typeof CreateKnowledgeMutationSchema
+>
