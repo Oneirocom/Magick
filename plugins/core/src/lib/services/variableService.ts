@@ -19,7 +19,10 @@ export class VariableService {
   private agentId: string
 
   constructor(postgresUrl: string, agentId: string, spellCaster: SpellCaster) {
-    this.keyv = new Keyv(postgresUrl, { namespace: agentId })
+    this.keyv = new Keyv(postgresUrl, {
+      namespace: agentId,
+      schema: 'variables',
+    })
     this.agentId = agentId
     this.spellCaster = spellCaster
   }
