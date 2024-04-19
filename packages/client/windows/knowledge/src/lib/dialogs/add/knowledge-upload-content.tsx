@@ -10,7 +10,7 @@ import { KnowledgeDialogTab } from './types'
 import { useAtom } from 'jotai'
 import {
   addKnowledgeDialogAtom,
-  addKnowledgeDialogSchema,
+  addKnowledgeSchema,
   addKnowledgeFormAtom,
 } from './schema-state'
 import toast from 'react-hot-toast'
@@ -71,7 +71,7 @@ export const KnowledgeUploadContent: React.FC<
       const uploadedFiles = await Promise.all(filePromises)
 
       for (const file of uploadedFiles) {
-        const parse = addKnowledgeDialogSchema.safeParse({
+        const parse = addKnowledgeSchema.safeParse({
           tag: 'tag',
           name: file?.name || '',
           sourceUrl: file?.id,

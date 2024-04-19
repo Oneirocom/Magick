@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cx from 'classnames'
 import React, { useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
-
 import { colors, valueTypeColorMap } from '../utils/colors'
 import {
   Input,
@@ -19,8 +18,6 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
-import { useSelector } from 'react-redux'
-import { selectActiveInput, setActiveInput } from 'client/state'
 
 export type InputSocketProps = {
   connected: boolean
@@ -150,7 +147,8 @@ const InputFieldForValue = ({
                 handleChange({ key: name, value: e.currentTarget.value })
               }
               handleBlur={onBlur}
-              onFocus={onFocus}
+              // @ts-ignore
+              onFocus={onFocus} //TODO: REBASE_CHECK
               className="m-1 h-6"
             />
           )}

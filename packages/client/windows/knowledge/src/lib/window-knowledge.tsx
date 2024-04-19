@@ -16,7 +16,7 @@ import { useSnackbar } from 'notistack'
 export const KnowledgeWindow = () => {
   const openState = useState(false)
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+  const [limit] = useState(10)
   const { data: knowledge, isLoading } = useGetKnowledgeQuery({
     limit,
     skip: (page - 1) * limit,

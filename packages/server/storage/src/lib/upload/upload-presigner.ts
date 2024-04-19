@@ -70,7 +70,6 @@ export class UploadPresigner {
   }: GetPresignedUrlOptions): Promise<PresignedUrlResponse | null> {
     const { folder, fileKey } = this.uploadConfig[type]
     const { rootFolderName, rootFolderId } = this.rootFolder || {}
-    // const r = rootFolderName ? `${rootFolderName}/${rootFolderId}` : ''
     let r = ''
     if (rootFolderName) {
       r = `${rootFolderName}/`
@@ -80,13 +79,6 @@ export class UploadPresigner {
       r += `${rootFolderId}/`
     }
 
-    const f = `${folder}/${id}`
-
-    const name = fileName || fileKey
-
-    //r: `projects/${data.projectId}/
-    //
-    // knowledge/${uuid}/${file.originalFilename}`
     const key = `${r}${folder}/${id}/${fileName || fileKey}`
 
     const command = new PutObjectCommand({
