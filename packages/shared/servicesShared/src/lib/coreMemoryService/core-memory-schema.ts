@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-
 export const IndirectDataTypeSchema = z.enum([
   'youtube_video',
   'pdf_file',
@@ -83,6 +82,16 @@ export function isValidAcceptValue(value: string): boolean {
     AcceptValues.options.map(option => option.replace(/\*/g, '.*')).join('|')
   )
   return regex.test(value)
+}
+
+/* Takes in an AcceptValue and returns a DataType */
+export const getDataTypeFromAcceptValue = (acceptValue: string) => {
+  const v = AcceptValues.options.reduce((acc, curr) => {
+    if (acceptValue.includes(curr)) {
+      return curr
+    }
+    return acc
+  }, 'unstructured')
 }
 
 /* This is the base schema for both file and url knowledge uploads 
