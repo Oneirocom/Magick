@@ -1,3 +1,3 @@
 export * from './upload-presigner'
-export * from './public-presigner'
-export * from './project-presigner'
+export * from './public-upload-presigner'
+export * from './project-upload-presigner'
