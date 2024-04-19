@@ -48,7 +48,7 @@
     "db:push": "npx nx run server-db:push",
     "db:push:acceptLoss": "npx nx run server-db:push:acceptLoss",
     "db:pull": "npx nx run server-db:pull",
-    "db:studio": "npx nx run server-db:studio",
+    "db:studio": "npx prisma studio --schema packages/server/db/src/lib/prisma/schema.prisma",
     "db:seed": "npx nx run server-db:seed",
     "db:deploy": "npx prisma migrate deploy --schema packages/server/db/src/lib/prisma/schema.prisma",
     "db:dev": "npx prisma migrate dev --schema packages/server/db/src/lib/prisma/schema.prisma",
