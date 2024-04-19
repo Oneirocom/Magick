@@ -30,22 +30,29 @@ class PresignedUrlService implements PresignedUrlServiceMethods {
     body: PresignedUrlBody,
     params: Params
   ): Promise<{ url: string; key: string } | null> {
+    console.log('create presigned url')
     const id = v4()
-    const { fileName, type } = PresignedUrlBody.parse(body)
     const projectId = params.query?.projectId as string | undefined
-    if (!projectId) {
-      throw new Error('projectId is required')
+
+    const parse = PresignedUrlBody.safeParse(body)
+    if (!projectId || !parse.success) {
+      throw new Error(`Invalid request: ${!projectId ? 'projectId' : 'body'}`)
     }
 
+    const { fileName, type } = parse.data
+
     const projectPresigner = getProjectPresigner(projectId)
+    try {
+      const presignedUrl = await projectPresigner.getPresignedUrl({
+        type: ProjectPresignType[type],
+        id,
+        fileName,
+      })
 
-    const presignedUrl = await projectPresigner.getPresignedUrl({
-      type: ProjectPresignType[type],
-      id,
-      fileName,
-    })
-
-    return presignedUrl
+      return presignedUrl
+    } catch (e) {
+      throw Error('Error generating presigned URL')
+    }
   }
 }
 

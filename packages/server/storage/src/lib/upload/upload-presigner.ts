@@ -96,7 +96,7 @@ export class UploadPresigner {
     })
 
     try {
-      const url = await getSignedUrl(this.s3, command, { expiresIn: 3600 })
+      const url = await getSignedUrl(this.s3, command, { expiresIn: 3600 }) // 1 hour
       console.log('Generated presigned URL', { url })
       return {
         url: url,
