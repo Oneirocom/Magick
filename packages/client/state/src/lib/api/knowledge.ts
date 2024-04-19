@@ -36,14 +36,17 @@ export const knowledgeApi = rootApi.injectEndpoints({
       }),
     }),
     createKnowledge: builder.mutation<
-      KnowledgeItem,
-      { knowledge: Omit<KnowledgeItem, 'id' | 'createdAt' | 'updatedAt'> }
+      unknown,
+      {
+        projectId: string
+        knowledge: Omit<KnowledgeItem, 'id' | 'createdAt' | 'updatedAt'>
+      }
     >({
       invalidatesTags: ['Knowledge'],
-      query: ({ knowledge }) => ({
+      query: body => ({
         url: `knowledge`,
         method: 'POST',
-        body: knowledge,
+        body,
       }),
     }),
     updateKnowledge: builder.mutation<
