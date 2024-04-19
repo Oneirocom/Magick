@@ -5,9 +5,6 @@
 import type { Params } from '@feathersjs/feathers'
 import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex'
 import { KnexAdapter } from '@feathersjs/knex'
-import { v4 } from 'uuid'
-import fs from 'fs'
-
 import type { Application } from '../../declarations'
 import type {
   KnowledgeData,
@@ -15,15 +12,6 @@ import type {
   KnowledgeQuery,
 } from './knowledge.schema'
 import { CoreMemoryService } from 'plugin/core'
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import {
-  AWS_ACCESS_KEY,
-  AWS_BUCKET_ENDPOINT,
-  AWS_BUCKET_NAME,
-  AWS_REGION,
-  AWS_SECRET_KEY,
-  AWS_PUBLIC_BUCKET_PREFIX,
-} from 'shared/config'
 import { DataType } from 'servicesShared'
 
 // Extended parameter type for KnowledgeService support
@@ -43,86 +31,9 @@ export class KnowledgeService<
   ServiceParams,
   KnowledgePatch
 > {
-  s3: S3Client
-  bucketName: string = AWS_BUCKET_NAME
-
   constructor(args) {
     super(args)
-    this.s3 = new S3Client({
-      credentials: {
-        accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_KEY,
-      },
-      region: AWS_REGION,
-      endpoint: AWS_BUCKET_ENDPOINT,
-      forcePathStyle: true,
-    })
   }
-
-  // async handleFiles(
-  //   data: KnowledgeData,
-  //   options: any,
-  //   memoryService: CoreMemoryService
-  // ) {
-  //   const results = [] as any[]
-
-  //   for (const file of data.files) {
-  //     const filePath = file.filepath // Path where the knowledge is temporarily stored
-  //     const fileStream = fs.createReadStream(filePath) // Create a readable stream
-  //     const uuid = v4()
-
-  //     const path = `projects/${data.projectId}/knowledge/${uuid}/${file.originalFilename}` // The name you want the uploaded knowledge to have in S3
-  //     const s3Params = {
-  //       Bucket: this.bucketName,
-  //       Key: path,
-  //       Body: fileStream, // Use the stream here
-  //       ContentType: file.mimetype || 'application/octet-stream', // Use the correct MIME type
-  //     }
-
-  //     const command = new PutObjectCommand(s3Params)
-
-  //     try {
-  //       await this.s3.send(command)
-
-  //       // Make sure to turn this into a proper URL
-  //       const sourceUrl = new URL(
-  //         `${AWS_PUBLIC_BUCKET_PREFIX}/${path}`
-  //       ).toString()
-  //       // Construct the S3 URL
-  //       const metaData = {
-  //         ...options.metadata,
-  //         fileName: file.originalFilename,
-  //         sourceUrl,
-  //         s3Key: path,
-  //       }
-
-  //       console.log('ADDING TO EMBEDCHAIN:', sourceUrl, metaData)
-  //       // If you need to add the S3 knowledge reference or other info to embedchain
-  //       const memoryResult = await memoryService.add(sourceUrl, {
-  //         metadata: metaData,
-  //       })
-
-  //       console.log('Embedchain result:', memoryResult)
-
-  //       const knowledgeData = {
-  //         dataType: data.dataType || file.mimetype,
-  //         sourceUrl,
-  //         metadata: metaData,
-  //         projectId: data.projectId,
-  //         memoryId: memoryResult,
-  //         name: file.originalFilename,
-  //       }
-
-  //       const result = await this._create(knowledgeData)
-  //       results.push(result)
-  //     } catch (error) {
-  //       console.error('Error uploading to S3:', error)
-  //       throw error // Rethrow the error or handle it as per your error handling policy
-  //     }
-  //   }
-
-  //   return results
-  // }
 
   /**
    * Creates a new knowledge
@@ -143,6 +54,7 @@ export class KnowledgeService<
     }
 
     const returnData = [] as KnowledgeData[]
+
     for (const data of knowledge) {
       if (data.dataType) {
         // validate datatype against DataType enum
@@ -155,8 +67,10 @@ export class KnowledgeService<
         }
       }
 
-      if (data.files && data.sourceUrl) {
-        throw new Error('Cannot have both files and sourceUrl')
+      if (data.files) {
+        throw new Error(
+          'Files are no longer directly supported. Use sourceUrl instead.'
+        )
       }
 
       const options = {
@@ -170,11 +84,7 @@ export class KnowledgeService<
       const memoryService = new CoreMemoryService(true)
       await memoryService.initialize(data.projectId as string)
 
-      // if (data.files && data.files.length > 0) {
-      //   return this.handleFiles(data, options, memoryService)
-      // }
-
-      // if we are here, we are handling other data types.
+      // Add the data to the memory
       const result = await memoryService.add(data.sourceUrl as string, options)
 
       const knowledgeData = {
