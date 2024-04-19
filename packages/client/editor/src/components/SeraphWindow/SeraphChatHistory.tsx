@@ -7,6 +7,7 @@ export const SeraphChatHistory = ({
   scrollbars,
   seraphEventData,
   setSeraphEventData,
+  // resubmitRequest,
 }) => {
   const UserMessage = ({ message }: { message: string }) => {
     return (
