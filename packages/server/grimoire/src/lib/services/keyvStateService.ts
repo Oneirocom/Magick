@@ -173,6 +173,17 @@ export class KeyvStateService implements IStateService {
   }
 
   /**
+   * Retrieves the state key for the current event being processed.
+   */
+  getStateKey(): string {
+    const event = this.eventStore?.currentEvent()
+
+    if (!event) return ''
+
+    return event.stateKey || ''
+  }
+
+  /**
    * Retrieves the state for a given node.
    *
    * @param nodeId - The ID of the node whose state is to be retrieved.
