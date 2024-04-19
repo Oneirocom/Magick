@@ -1,10 +1,10 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers'
 import { Application } from '../../declarations'
 import { z } from 'zod'
-import { projectPresigner, ProjectPresignType } from 'server-storage'
+import { getProjectPresigner, ProjectPresignType } from 'server-storage'
+import { v4 } from 'uuid'
 
 const PresignedUrlBody = z.object({
-  id: z.string(),
   fileName: z.string(),
   type: z.nativeEnum(ProjectPresignType),
   key: z.string().optional(),
@@ -30,19 +30,20 @@ class PresignedUrlService implements PresignedUrlServiceMethods {
     body: PresignedUrlBody,
     params: Params
   ): Promise<{ url: string; key: string } | null> {
-    const { id, fileName, type } = PresignedUrlBody.parse(body)
-    const projectId = params.query?.projectId as string
-
+    const id = v4()
+    const { fileName, type } = PresignedUrlBody.parse(body)
+    const projectId = params.query?.projectId as string | undefined
     if (!projectId) {
-      throw new Error('Missing projectId query parameter')
+      throw new Error('projectId is required')
     }
 
-    // Generate the presigned URL using the projectPresigner
-    const presignedUrl = await projectPresigner.getPresignedUrl(
+    const projectPresigner = getProjectPresigner(projectId)
+
+    const presignedUrl = await projectPresigner.getPresignedUrl({
+      type: ProjectPresignType[type],
       id,
       fileName,
-      type
-    )
+    })
 
     return presignedUrl
   }
