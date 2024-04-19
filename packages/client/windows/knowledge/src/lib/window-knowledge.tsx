@@ -1,24 +1,20 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDeleteKnowledgeMutation, useGetKnowledgeQuery } from 'client/state'
 import { LoadingScreen } from 'client/core'
 import {
-  Button,
   Checkbox,
   DataTable,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@magickml/client-ui'
-import { CaretSortIcon } from '@radix-ui/react-icons'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { WindowHeader, WindowContainer } from 'windows-shared'
 import type { KnowledgeItem } from 'client/state'
 import { AddKnowledgeDialog } from './dialogs/knowledge-add-dialog'
 import { useSnackbar } from 'notistack'
 
-type Props = {}
-
-export const KnowledgeWindow = (props: Props) => {
-  const [addOpen, setAddOpen] = useState(false)
+export const KnowledgeWindow = () => {
+  const openState = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
   const { data: knowledge, isLoading } = useGetKnowledgeQuery({
@@ -136,7 +132,7 @@ export const KnowledgeWindow = (props: Props) => {
 
   return (
     <>
-      <AddKnowledgeDialog isOpen={addOpen} setIsOpen={setAddOpen} />
+      <AddKnowledgeDialog openState={openState} />
 
       <WindowContainer>
         <WindowHeader
@@ -145,7 +141,7 @@ export const KnowledgeWindow = (props: Props) => {
           cta="Add Knowledge"
           ctaProps={{
             variant: 'portal-primary',
-            onClick: () => setAddOpen(true),
+            onClick: () => openState[1](true),
           }}
         />
         <div className="px-8">
