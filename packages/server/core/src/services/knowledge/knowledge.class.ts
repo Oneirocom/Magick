@@ -59,122 +59,138 @@ export class KnowledgeService<
     })
   }
 
-  async handleFiles(
-    data: KnowledgeData,
-    options: any,
-    memoryService: CoreMemoryService
-  ) {
-    const results = [] as any[]
+  // async handleFiles(
+  //   data: KnowledgeData,
+  //   options: any,
+  //   memoryService: CoreMemoryService
+  // ) {
+  //   const results = [] as any[]
 
-    for (const file of data.files) {
-      const filePath = file.filepath // Path where the knowledge is temporarily stored
-      const fileStream = fs.createReadStream(filePath) // Create a readable stream
-      const uuid = v4()
+  //   for (const file of data.files) {
+  //     const filePath = file.filepath // Path where the knowledge is temporarily stored
+  //     const fileStream = fs.createReadStream(filePath) // Create a readable stream
+  //     const uuid = v4()
 
-      const path = `projects/${data.projectId}/knowledge/${uuid}/${file.originalFilename}` // The name you want the uploaded knowledge to have in S3
-      const s3Params = {
-        Bucket: this.bucketName,
-        Key: path,
-        Body: fileStream, // Use the stream here
-        ContentType: file.mimetype || 'application/octet-stream', // Use the correct MIME type
-      }
+  //     const path = `projects/${data.projectId}/knowledge/${uuid}/${file.originalFilename}` // The name you want the uploaded knowledge to have in S3
+  //     const s3Params = {
+  //       Bucket: this.bucketName,
+  //       Key: path,
+  //       Body: fileStream, // Use the stream here
+  //       ContentType: file.mimetype || 'application/octet-stream', // Use the correct MIME type
+  //     }
 
-      const command = new PutObjectCommand(s3Params)
+  //     const command = new PutObjectCommand(s3Params)
 
-      try {
-        await this.s3.send(command)
+  //     try {
+  //       await this.s3.send(command)
 
-        // Make sure to turn this into a proper URL
-        const sourceUrl = new URL(
-          `${AWS_PUBLIC_BUCKET_PREFIX}/${path}`
-        ).toString()
-        // Construct the S3 URL
-        const metaData = {
-          ...options.metadata,
-          fileName: file.originalFilename,
-          sourceUrl,
-          s3Key: path,
-        }
+  //       // Make sure to turn this into a proper URL
+  //       const sourceUrl = new URL(
+  //         `${AWS_PUBLIC_BUCKET_PREFIX}/${path}`
+  //       ).toString()
+  //       // Construct the S3 URL
+  //       const metaData = {
+  //         ...options.metadata,
+  //         fileName: file.originalFilename,
+  //         sourceUrl,
+  //         s3Key: path,
+  //       }
 
-        console.log('ADDING TO EMBEDCHAIN:', sourceUrl, metaData)
-        // If you need to add the S3 knowledge reference or other info to embedchain
-        const memoryResult = await memoryService.add(sourceUrl, {
-          metadata: metaData,
-        })
+  //       console.log('ADDING TO EMBEDCHAIN:', sourceUrl, metaData)
+  //       // If you need to add the S3 knowledge reference or other info to embedchain
+  //       const memoryResult = await memoryService.add(sourceUrl, {
+  //         metadata: metaData,
+  //       })
 
-        console.log('Embedchain result:', memoryResult)
+  //       console.log('Embedchain result:', memoryResult)
 
-        const knowledgeData = {
-          dataType: data.dataType || file.mimetype,
-          sourceUrl,
-          metadata: metaData,
-          projectId: data.projectId,
-          memoryId: memoryResult,
-          name: file.originalFilename,
-        }
+  //       const knowledgeData = {
+  //         dataType: data.dataType || file.mimetype,
+  //         sourceUrl,
+  //         metadata: metaData,
+  //         projectId: data.projectId,
+  //         memoryId: memoryResult,
+  //         name: file.originalFilename,
+  //       }
 
-        const result = await this._create(knowledgeData)
-        results.push(result)
-      } catch (error) {
-        console.error('Error uploading to S3:', error)
-        throw error // Rethrow the error or handle it as per your error handling policy
-      }
-    }
+  //       const result = await this._create(knowledgeData)
+  //       results.push(result)
+  //     } catch (error) {
+  //       console.error('Error uploading to S3:', error)
+  //       throw error // Rethrow the error or handle it as per your error handling policy
+  //     }
+  //   }
 
-    return results
-  }
+  //   return results
+  // }
 
   /**
    * Creates a new knowledge
    * @param data {KnowledgeData} The knowledge data to create
    * @return {Promise<any>} The created knowledge
    */
-  async create(data: KnowledgeData): Promise<any> {
-    if (!data.projectId) {
+  async create({
+    projectId,
+    knowledge,
+  }: {
+    projectId: string
+    knowledge: KnowledgeData[]
+  }) {
+    console.log('Creating knowledge:', knowledge)
+
+    if (!projectId) {
       throw new Error('Project id is required')
     }
 
-    if (data.dataType) {
-      // validate datatype against DataType enum
-      const dataType = DataType[data.dataType as keyof typeof DataType]
+    const returnData = [] as KnowledgeData[]
+    for (const data of knowledge) {
+      if (data.dataType) {
+        // validate datatype against DataType enum
+        console.log('Data type:', data.dataType)
+        // const dataType = DataType[data.dataType as keyof typeof DataType]
+        const dataType = DataType.AUTO
 
-      if (!dataType) {
-        throw new Error('Invalid data type.')
+        if (!dataType) {
+          throw new Error('Invalid data type.')
+        }
       }
+
+      if (data.files && data.sourceUrl) {
+        throw new Error('Cannot have both files and sourceUrl')
+      }
+
+      const options = {
+        metadata: {
+          ...data?.metadata,
+          tag: data?.tag || 'none',
+        },
+        ...(data?.dataType && { dataType: data?.dataType as DataType }),
+      }
+
+      const memoryService = new CoreMemoryService(true)
+      await memoryService.initialize(data.projectId as string)
+
+      // if (data.files && data.files.length > 0) {
+      //   return this.handleFiles(data, options, memoryService)
+      // }
+
+      // if we are here, we are handling other data types.
+      const result = await memoryService.add(data.sourceUrl as string, options)
+
+      const knowledgeData = {
+        dataType: data.dataType,
+        sourceUrl: data.sourceUrl,
+        metadata: options.metadata,
+        projectId: data.projectId,
+        memoryId: result,
+        name: data.name,
+      }
+
+      await this._create(knowledgeData)
+      returnData.push(knowledgeData)
     }
 
-    if (data.files && data.sourceUrl) {
-      throw new Error('Cannot have both files and sourceUrl')
-    }
-
-    const options = {
-      metadata: {
-        ...data?.metadata,
-        tag: data?.tag || 'none',
-      },
-      ...(data?.dataType && { dataType: data?.dataType as DataType }),
-    }
-
-    const memoryService = new CoreMemoryService(true)
-    await memoryService.initialize(data.projectId as string)
-
-    if (data.files && data.files.length > 0) {
-      return this.handleFiles(data, options, memoryService)
-    }
-
-    // if we are here, we are handling other data types.
-    const result = await memoryService.add(data.sourceUrl as string, options)
-
-    const knowledgeData = {
-      dataType: data.dataType,
-      sourceUrl: data.sourceUrl,
-      metadata: options.metadata,
-      projectId: data.projectId,
-      memoryId: result,
-      name: data.name,
-    }
-
-    return this._create(knowledgeData)
+    return returnData
   }
 
   async get(knowledgeId: string, params: ServiceParams) {
