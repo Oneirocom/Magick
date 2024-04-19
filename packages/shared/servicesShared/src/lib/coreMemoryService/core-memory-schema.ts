@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+
 export const IndirectDataTypeSchema = z.enum([
   'youtube_video',
   'pdf_file',
@@ -42,6 +43,7 @@ export type ZIndirectDataType = z.infer<typeof IndirectDataTypeSchema>
 export type ZSpecialDataType = z.infer<typeof SpecialDataTypeSchema>
 export type ZDataType = z.infer<typeof DataTypeSchema>
 
+/* Accept attribute values for file uploads */
 export const AcceptValues = z.enum([
   'application/pdf',
   'text/html',
@@ -73,6 +75,14 @@ export const AcceptValues = z.enum([
 
 export function getAcceptAttribute(): string {
   return AcceptValues.options.join(', ')
+}
+
+/* This validates with type/* included */
+export function isValidAcceptValue(value: string): boolean {
+  const regex = new RegExp(
+    AcceptValues.options.map(option => option.replace(/\*/g, '.*')).join('|')
+  )
+  return regex.test(value)
 }
 
 /* This is the base schema for both file and url knowledge uploads 
