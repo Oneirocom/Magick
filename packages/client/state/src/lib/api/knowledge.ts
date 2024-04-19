@@ -9,6 +9,16 @@ export interface KnowledgeResponse {
   data: KnowledgeItem[]
 }
 
+export interface KnowledgeCreateMutation {
+  projectId: string
+  knowledge: {
+    name: string
+    dataType: string
+    sourceUrl: string
+    tag: string
+  }[]
+}
+
 export const knowledgeApi = rootApi.injectEndpoints({
   endpoints: builder => ({
     getKnowledge: builder.query<
@@ -35,13 +45,7 @@ export const knowledgeApi = rootApi.injectEndpoints({
         params: {},
       }),
     }),
-    createKnowledge: builder.mutation<
-      unknown,
-      {
-        projectId: string
-        knowledge: Omit<KnowledgeItem, 'id' | 'createdAt' | 'updatedAt'>
-      }
-    >({
+    createKnowledge: builder.mutation<unknown, KnowledgeCreateMutation>({
       invalidatesTags: ['Knowledge'],
       query: body => ({
         url: `knowledge`,
