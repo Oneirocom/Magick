@@ -195,7 +195,7 @@ class CoreMemoryService {
     }
   ) {
     const kwargs = {
-      ...(options?.dataType && { data_type: options?.dataType }),
+      // ...(options?.dataType && { data_type: options?.dataType }),
       metadata: options?.metadata || {},
     }
 

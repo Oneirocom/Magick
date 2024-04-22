@@ -1,3 +1,2 @@
 export * from './image-uploader'
-export * from './presigned-uploader'
-export * from './public-presign-uploader'
+export * from './upload'

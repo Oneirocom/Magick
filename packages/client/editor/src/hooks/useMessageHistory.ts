@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 export type Message = {
   sender: string
   content: string
+  id?: string
 }
 
 export const useMessageHistory = ({ seraph }: { seraph?: boolean }) => {

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   RootState,
   useCreateAgentSeraphEventMutation,
+  useDeleteAgentSeraphEventMutation,
   useGetAgentSeraphEventsQuery,
   useGetSpellByNameQuery,
   useSelectAgentsSeraphEvent,
@@ -23,6 +24,7 @@ const SeraphChatWindow = props => {
   const [seraphEventData, setSeraphEventData] = useState<
     Record<SeraphEvents, any>
   >({} as Record<SeraphEvents, any>)
+  const [initialHistorySet, setInitialHistory] = useState<boolean>(false)
 
   const { enqueueSnackbar } = useSnackbar()
   const { tab } = props
@@ -49,6 +51,7 @@ const SeraphChatWindow = props => {
   const { history, scrollbars, printToConsole, setHistory } = useMessageHistory(
     { seraph: true }
   )
+  const [deleteSeraphEvent] = useDeleteAgentSeraphEventMutation()
 
   const { streamToConsole } = useMessageQueue({ setHistory, seraph: true })
 
@@ -70,17 +73,72 @@ const SeraphChatWindow = props => {
   }
 
   useEffect(() => {
-    if (seraphChatHistory?.length) {
+    if (seraphChatHistory?.length && !initialHistorySet) {
       const formattedHistory = seraphChatHistory.map((event: ISeraphEvent) => {
         const isMessage = event.type === SeraphEvents.message
         return {
           sender: isMessage ? 'assistant' : 'user',
           content: isMessage ? event.data.message : event.data.request?.message,
+          id: event.id,
         } as Message
       })
+
+      const filteredHistory = formattedHistory.reduce((acc, curr, index) => {
+        const prevMessage = acc[acc.length - 1]
+
+        if (prevMessage?.sender !== curr.sender) {
+          acc.push(curr)
+        } else {
+          // If the current message has the same sender as the previous one
+          if (curr.sender === 'user') {
+            // If both messages are from the user, remove the current message
+            void deleteSeraphEvent({
+              seraphEventId: curr.id || '',
+            })
+          } else {
+            // If both messages are from the assistant, remove the previous message from the server and skip the current one
+            void deleteSeraphEvent({
+              seraphEventId: prevMessage.id || '',
+            })
+            acc[acc.length - 1] = curr
+          }
+        }
+
+        return acc
+      }, [] as Message[])
+
+      // Ensure the last item in the history is from the assistant
+      if (filteredHistory.length > 0) {
+        const lastMessage = filteredHistory[filteredHistory.length - 1]
+        if (lastMessage.sender === 'user') {
+          void deleteSeraphEvent({
+            seraphEventId: lastMessage.id || '',
+          })
+          filteredHistory.pop()
+        }
+      }
+
+      setHistory(filteredHistory)
+      setInitialHistory(true)
+    } else if (seraphChatHistory?.length && initialHistorySet) {
+      const formattedHistory = seraphChatHistory.map((event: ISeraphEvent) => {
+        const isMessage = event.type === SeraphEvents.message
+        return {
+          sender: isMessage ? 'assistant' : 'user',
+          content: isMessage ? event.data.message : event.data.request?.message,
+          id: event.id,
+        } as Message
+      })
+
       setHistory(formattedHistory)
     }
-  }, [seraphChatHistory, setHistory])
+  }, [
+    seraphChatHistory,
+    setHistory,
+    deleteSeraphEvent,
+    initialHistorySet,
+    setInitialHistory,
+  ])
 
   useEffect(() => {
     const lastEventData = lastEvent?.data.data
@@ -157,7 +215,16 @@ const SeraphChatWindow = props => {
       const eventPayload: SeraphRequest = {
         message: value,
       }
+      const lastEvent = history[history.length - 1]
 
+      if (lastEvent?.sender === 'user') {
+        const newHistory = [...history]
+        newHistory.pop()
+        await deleteSeraphEvent({
+          seraphEventId: lastEvent.id || '',
+        })
+        if (newHistory) setHistory(newHistory)
+      }
       const success = makeSeraphRequest(eventPayload)
       if (!success) return
 
@@ -179,6 +246,18 @@ const SeraphChatWindow = props => {
     setValue(e.target.value)
   }
 
+  // const resubmitRequest = () => {
+  //   if (!lastEvent) return
+
+  //   const seraphEvent = lastEvent.data as ISeraphEvent
+  //   if (!seraphEvent) return
+
+  //   const eventPayload = seraphEvent.data.request
+  //   if (!eventPayload) return
+
+  //   void makeSeraphRequest(eventPayload)
+  // }
+
   return (
     <div className="flex-grow border-0 justify-between rounded bg:[--deep-background-color]">
       <Window>
@@ -187,6 +266,8 @@ const SeraphChatWindow = props => {
             history={history}
             scrollbars={scrollbars}
             seraphEventData={seraphEventData}
+            setSeraphEventData={setSeraphEventData}
+            // resubmitRequest={resubmitRequest}
           />
           <SeraphChatInput onChange={onChange} value={value} onSend={onSend} />
         </div>

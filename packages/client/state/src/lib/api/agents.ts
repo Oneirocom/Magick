@@ -80,6 +80,18 @@ export const agentApi = rootApi.injectEndpoints({
         }
       },
     }),
+    deleteAgentSeraphEvent: builder.mutation<
+      boolean,
+      { seraphEventId: string }
+    >({
+      invalidatesTags: ['AgentSeraphEvents'],
+      query: ({ seraphEventId }) => {
+        return {
+          url: `agents/deleteSeraphEvent/${seraphEventId}`,
+          method: 'DELETE',
+        }
+      },
+    }),
   }),
 })
 
@@ -96,4 +108,5 @@ export const {
   useLazyGetAgentsQuery,
   useGetAgentSeraphEventsQuery,
   useCreateAgentSeraphEventMutation,
+  useDeleteAgentSeraphEventMutation,
 } = agentApi
