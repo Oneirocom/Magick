@@ -12,7 +12,8 @@ import type {
   KnowledgeQuery,
 } from './knowledge.schema'
 import { CoreMemoryService } from 'plugin/core'
-import { DataType } from 'servicesShared'
+import { DataType, getDataTypeFromAcceptValue } from 'servicesShared'
+import { CreateKnowledgeMutation, isValidAcceptValue } from 'servicesShared'
 
 // Extended parameter type for KnowledgeService support
 export type KnowledgeParams = KnexAdapterParams<KnowledgeQuery>
@@ -40,15 +41,7 @@ export class KnowledgeService<
    * @param data {KnowledgeData} The knowledge data to create
    * @return {Promise<any>} The created knowledge
    */
-  async create({
-    projectId,
-    knowledge,
-  }: {
-    projectId: string
-    knowledge: KnowledgeData[]
-  }) {
-    console.log('Creating knowledge:', knowledge)
-
+  async create({ projectId, knowledge }: CreateKnowledgeMutation) {
     if (!projectId) {
       throw new Error('Project id is required')
     }
@@ -56,42 +49,30 @@ export class KnowledgeService<
     const returnData = [] as KnowledgeData[]
 
     for (const data of knowledge) {
-      if (data.dataType) {
-        // validate datatype against DataType enum
-        console.log('Data type:', data.dataType)
-        // const dataType = DataType[data.dataType as keyof typeof DataType]
-        const dataType = DataType.AUTO
-
-        if (!dataType) {
-          throw new Error('Invalid data type.')
-        }
+      if (!isValidAcceptValue(data.dataType)) {
+        throw new Error('Invalid data type')
       }
 
-      if (data.files) {
-        throw new Error(
-          'Files are no longer directly supported. Use sourceUrl instead.'
-        )
-      }
+      const dataType = getDataTypeFromAcceptValue(data.dataType)
 
       const options = {
         metadata: {
-          ...data?.metadata,
           tag: data?.tag || 'none',
         },
-        ...(data?.dataType && { dataType: data?.dataType as DataType }),
+        ...(dataType && { dataType: dataType as DataType }),
       }
 
       const memoryService = new CoreMemoryService(true)
-      await memoryService.initialize(data.projectId as string)
+      await memoryService.initialize(projectId)
 
       // Add the data to the memory
       const result = await memoryService.add(data.sourceUrl as string, options)
 
       const knowledgeData = {
-        dataType: data.dataType,
+        dataType: dataType,
         sourceUrl: data.sourceUrl,
         metadata: options.metadata,
-        projectId: data.projectId,
+        projectId: projectId,
         memoryId: result,
         name: data.name,
       }
