@@ -2,7 +2,13 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { SeraphEvents, SeraphFunction } from 'servicesShared'
 import { useState } from 'react'
 
-export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
+export const SeraphChatHistory = ({
+  history,
+  scrollbars,
+  seraphEventData,
+  setSeraphEventData,
+  // resubmitRequest,
+}) => {
   const UserMessage = ({ message }: { message: string }) => {
     return (
       <div className="flex flex-row mb-2">
@@ -23,13 +29,18 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
 
   const FunctionMessage = ({
     functionData,
+    onClearEventData,
   }: {
     functionData: SeraphFunction
+    onClearEventData: () => void
   }) => {
     const [showResult, setShowResult] = useState(false)
 
     const toggleResult = () => {
       setShowResult(prevState => !prevState)
+      if (!showResult) {
+        onClearEventData()
+      }
     }
 
     return (
@@ -66,13 +77,18 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
 
   const MiddlewareMessage = ({
     middlewareData,
+    onClearEventData,
   }: {
     middlewareData: SeraphFunction
+    onClearEventData: () => void
   }) => {
     const [showResult, setShowResult] = useState(false)
 
     const toggleResult = () => {
       setShowResult(prevState => !prevState)
+      if (!showResult) {
+        onClearEventData()
+      }
     }
 
     return (
@@ -150,6 +166,7 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
             <li>
               <FunctionMessage
                 functionData={seraphEventData[SeraphEvents.functionExecution]}
+                onClearEventData={setSeraphEventData(undefined)}
               />
             </li>
           )}
@@ -159,6 +176,7 @@ export const SeraphChatHistory = ({ history, scrollbars, seraphEventData }) => {
                 middlewareData={
                   seraphEventData[SeraphEvents.middlewareExecution]
                 }
+                onClearEventData={setSeraphEventData(undefined)}
               />
             </li>
           )}

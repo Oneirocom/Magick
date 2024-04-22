@@ -80,6 +80,7 @@ export const agent = (app: Application) => {
       'ping',
       'subscribe',
       'message',
+      'deleteSeraphEvent',
       'processSeraphEvent',
       'createSeraphEvent',
       'getSeraphEvents',
@@ -128,6 +129,19 @@ export const agent = (app: Application) => {
         return result
       } catch (error: any) {
         throw new Error(`Error in agents:createSeraphEvent: ${error.message}`)
+      }
+    },
+  })
+
+  app.use('/agents/deleteSeraphEvent', {
+    remove: async seraphEventId => {
+      try {
+        const result = await app.service('agents').deleteSeraphEvent({
+          seraphEventId: seraphEventId,
+        })
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:deleteSeraphEvents: ${error.message}`)
       }
     },
   })
@@ -236,6 +250,9 @@ declare module '../../declarations' {
     }
     '/agents/createSeraphEvent': {
       create: ReturnType<any>
+    }
+    '/agents/deleteSeraphEvent': {
+      remove: ReturnType<any>
     }
   }
 }

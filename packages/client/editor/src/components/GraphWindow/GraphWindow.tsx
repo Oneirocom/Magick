@@ -1,6 +1,6 @@
 import { IDockviewPanelProps } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
-import { Flow } from '../react-flow/Flow'
+import { CoreFlow } from '@magickml/flow-core'
 
 import { Tab } from '@magickml/providers'
 import { RootState, useGetSpellByNameQuery } from 'client/state'
@@ -61,7 +61,7 @@ const GraphWindow = (props: Props) => {
 
   return (
     <div style={{ height, width }} ref={parentRef}>
-      <Flow
+      <CoreFlow
         windowDimensions={{ height, width }}
         parentRef={parentRef}
         tab={props.params.tab}

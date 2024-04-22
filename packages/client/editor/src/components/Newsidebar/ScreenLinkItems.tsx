@@ -52,7 +52,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
   const isV2 = agent?.version === '2.0'
 
   const DrawerItems: (DrawerItem | React.JSX.Element)[] = [
-    // todo remake this events page
     {
       name: 'Knowledge',
       Icon: ArticleIcon,

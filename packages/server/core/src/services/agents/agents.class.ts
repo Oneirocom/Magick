@@ -267,6 +267,29 @@ export class AgentService<
     }
   }
 
+  async deleteSeraphEvent(data): Promise<boolean> {
+    try {
+      const { seraphEventId } = data
+      if (!seraphEventId) {
+        throw new Error('agentId missing')
+      }
+
+      const deletedEvents = await this.app
+        .get('dbClient')
+        .from('seraphEvents')
+        .where({ id: seraphEventId })
+        .del()
+
+      if (!deletedEvents) {
+        throw new Error('Error deleting seraph event')
+      }
+
+      return true
+    } catch (error: any) {
+      throw new Error(`Error deleting seraph event: ${error.message}`)
+    }
+  }
+
   async createRelease({
     agentId,
     description,

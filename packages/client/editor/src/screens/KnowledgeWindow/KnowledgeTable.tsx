@@ -257,6 +257,7 @@ function KnowledgeTable({ knowledgeData }) {
     }
     formData.append('agentId', currentAgentId)
 
+    // @ts-ignore
     createKnowledge({ knowledge: formData })
       .unwrap()
       .then(() => {
@@ -288,6 +289,7 @@ function KnowledgeTable({ knowledgeData }) {
     getKnowledgeById(doc.id)
       .unwrap()
       .then(res => {
+        // @ts-ignore
         setKnowledge(res.content)
         setContentModal(true)
       })
