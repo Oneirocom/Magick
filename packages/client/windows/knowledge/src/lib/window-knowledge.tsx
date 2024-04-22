@@ -5,7 +5,7 @@ import {
   Checkbox,
   DataTable,
   DropdownMenuItem,
-  DropdownMenuSeparator,
+  // DropdownMenuSeparator,
 } from '@magickml/client-ui'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { WindowHeader, WindowContainer } from 'windows-shared'
@@ -36,7 +36,7 @@ export const KnowledgeWindow = () => {
 
   const renderRowActionMenu = (row: Row<KnowledgeItem>) => (
     <>
-      <DropdownMenuItem
+      {/* <DropdownMenuItem
         onClick={() => console.log('View knowledge:', row.original)}
       >
         View Knowledge
@@ -46,7 +46,7 @@ export const KnowledgeWindow = () => {
       >
         Edit Knowledge
       </DropdownMenuItem>
-      <DropdownMenuSeparator />
+      <DropdownMenuSeparator /> */}
       <DropdownMenuItem onClick={() => handleKnowledgeDelete(row.original.id)}>
         Delete Knowledge
       </DropdownMenuItem>
@@ -85,17 +85,17 @@ export const KnowledgeWindow = () => {
         <span className="text-xs">{row.original.dataType}</span>
       ),
     },
-    {
-      accessorKey: 'sourceUrl',
-      header: 'Source URL',
-      size: 48,
-      maxSize: 48,
-      cell: ({ row }) => (
-        <span className="text-xs">
-          {row.original.sourceUrl ? row.original.sourceUrl : 'N/A'}
-        </span>
-      ),
-    },
+    // {
+    //   accessorKey: 'sourceUrl',
+    //   header: 'Source URL',
+    //   size: 48,
+    //   maxSize: 48,
+    //   cell: ({ row }) => (
+    //     <span className="text-xs">
+    //       {row.original.sourceUrl ? row.original.sourceUrl : 'N/A'}
+    //     </span>
+    //   ),
+    // },
 
     {
       accessorKey: 'data',
