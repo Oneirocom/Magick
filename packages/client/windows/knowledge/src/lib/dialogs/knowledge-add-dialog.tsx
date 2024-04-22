@@ -38,7 +38,7 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
 
   /* State */
   const [tabState, setTabState] = useState<KnowledgeDialogTab>(
-    KnowledgeDialogTab.URL
+    KnowledgeDialogTab.UPLOAD
   )
   const uploadDisabled = useState(false)
   const resetFiles = useResetAtom(addKnowledgeDialogAtom)
@@ -115,7 +115,12 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
       >
         {/* Tabs List */}
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value={KnowledgeDialogTab.URL}>URL</TabsTrigger>
+          <TabsTrigger
+            className="opacity-50 pointer-events-none"
+            value={KnowledgeDialogTab.URL}
+          >
+            URL
+          </TabsTrigger>
           <TabsTrigger value={KnowledgeDialogTab.UPLOAD}>Upload</TabsTrigger>
         </TabsList>
 
