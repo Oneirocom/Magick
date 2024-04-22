@@ -92,6 +92,7 @@ export const getDataTypeFromAcceptValue = (acceptValue: string) => {
     }
     return acc
   }, 'unstructured')
+  return v as ZIndirectDataType
 }
 
 /* This is the base schema for both file and url knowledge uploads 

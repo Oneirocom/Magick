@@ -13,4 +13,6 @@ export const addKnowledgeFormAtom = atomWithReset<AddKnowledge>(
 )
 
 /* This is an array used for create knowledge mutations */
-export const addKnowledgeDialogAtom = atomWithReset<AddKnowledge[]>([])
+export const addKnowledgeDialogAtom = atomWithReset<
+  (AddKnowledge & { status?: string })[]
+>([])
