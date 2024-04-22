@@ -1,6 +1,5 @@
 import { atomWithReset } from 'jotai/utils'
 import { AddKnowledgeSchema, type AddKnowledge } from 'servicesShared'
-import { z } from 'zod'
 
 /* This is used for form elements for both file and url uploads. Its a single object */
 export const addKnowledgeFormAtom = atomWithReset<AddKnowledge>(
