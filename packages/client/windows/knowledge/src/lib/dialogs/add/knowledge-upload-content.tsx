@@ -10,7 +10,7 @@ import { KnowledgeDialogTab } from './types'
 import { useAtom } from 'jotai'
 import { addKnowledgeDialogAtom, addKnowledgeFormAtom } from './state'
 import toast from 'react-hot-toast'
-import { AddKnowledgeSchema } from 'servicesShared'
+import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
 
 type KnowledgeUploadContentProps = {
   disabledState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -34,6 +34,15 @@ export const KnowledgeUploadContent: React.FC<
       const filePromises = Array.from(files).map(async file => {
         const fileType = file.name.split('.').pop()
 
+        const newFile = {
+          tag: 'tag',
+          name: file.name,
+          sourceUrl: '',
+          dataType: file.type,
+          status: 'uploading',
+        }
+        setNewKnowledge([...newKnowledge, newFile])
+
         const response = await getPresignedUrl({
           //
           id: file.name,
@@ -49,35 +58,64 @@ export const KnowledgeUploadContent: React.FC<
             headers: { 'Content-Type': file.type },
           })
 
+          // Update the file status to 'uploaded' after successful upload
+          setNewKnowledge(prevKnowledge =>
+            prevKnowledge.map(knowledge =>
+              knowledge.name === file.name
+                ? { ...knowledge, status: 'uploaded', sourceUrl: key }
+                : knowledge
+            )
+          )
+
           return {
-            id: key,
-            type: fileType,
-            status: 'uploaded',
+            tag: 'tag',
             name: file.name,
-            rawType: file.type,
+            sourceUrl: key,
+            dataType: file.type,
+            status: 'uploaded',
           }
         } else if ('error' in response) {
           toast.error('Error generating URL for upload')
+
+          // Update the file status to 'error' if URL generation fails
+          setNewKnowledge(prevKnowledge =>
+            prevKnowledge.map(knowledge =>
+              knowledge.name === file.name
+                ? { ...knowledge, status: 'error' }
+                : knowledge
+            )
+          )
+
+          return {
+            tag: 'tag',
+            name: file.name,
+            sourceUrl: '',
+            dataType: file.type,
+            status: 'error',
+          }
         } else {
           toast.error('Error uploading file. Please try again.')
-        }
 
-        return null
+          // Update the file status to 'error' if upload fails
+          setNewKnowledge(prevKnowledge =>
+            prevKnowledge.map(knowledge =>
+              knowledge.name === file.name
+                ? { ...knowledge, status: 'error' }
+                : knowledge
+            )
+          )
+
+          return {
+            tag: 'tag',
+            name: file.name,
+            sourceUrl: '',
+            dataType: file.type,
+            status: 'error',
+          }
+        }
       })
 
-      const uploadedFiles = await Promise.all(filePromises)
-
-      for (const file of uploadedFiles) {
-        const parse = AddKnowledgeSchema.safeParse({
-          tag: 'tag',
-          name: file?.name || '',
-          sourceUrl: file?.id,
-          dataType: file?.rawType,
-        })
-        if (parse.success) {
-          setNewKnowledge([...newKnowledge, parse.data])
-        }
-      }
+      await Promise.all(filePromises)
     }
   }
 
@@ -90,11 +128,16 @@ export const KnowledgeUploadContent: React.FC<
             disabled: getPresignedUrlState.isLoading,
           }}
         />
-
-        <div className="flex flex-row-wrap">
+        <span className="text-sm font-semibold">Uploaded Files:</span>
+        <div className="flex flex-row-wrap gap-2">
           {newKnowledge.map((knowledge, index) => (
-            <Badge key={index} variant="outline" className="border-ds-neutral">
+            <Badge
+              key={index}
+              variant="outline"
+              className="border-ds-neutral gap-x-2 inline-flex items-center"
+            >
               {knowledge.name}
+              <KnowledgeBadgeStatus status={knowledge.status ?? ''} />
             </Badge>
           ))}
         </div>
@@ -109,4 +152,17 @@ export const KnowledgeUploadContent: React.FC<
       />
     </TabsContent>
   )
+}
+
+const KnowledgeBadgeStatus: React.FC<{ status: string }> = ({ status }) => {
+  switch (status) {
+    case 'uploaded':
+      return <CheckIcon className="w-4 h-4 text-ds-alert" />
+    case 'uploading':
+      return <span className="loading loading-ring loading-xs" />
+    case 'error':
+      return <Cross1Icon className="w-4 h-4 text-ds-error" />
+    default:
+      return null
+  }
 }
