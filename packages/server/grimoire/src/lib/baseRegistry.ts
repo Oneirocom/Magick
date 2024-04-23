@@ -30,6 +30,12 @@ export class BaseRegistry {
       agent.app,
       agent.id
     )
+
+    this.dependencies.IEventStore.on('done', event => {
+      if (event) {
+        this.agent.emit('eventComplete', event)
+      }
+    })
   }
 
   init(graph: IGraph, graphNodes: GraphNodes) {
