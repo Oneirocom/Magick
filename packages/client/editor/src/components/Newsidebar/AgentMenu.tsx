@@ -40,7 +40,7 @@ export function AgentMenu({ data }) {
   const [createAgentRelease] = useCreateAgentReleaseMutation()
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
-    client.service('agents').subscribe({ agentId: agent.id })
+    client.service('agents').subscribe(agent.id)
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
     dispatch(setCurrentAgentId(agent.id))
@@ -52,7 +52,7 @@ export function AgentMenu({ data }) {
     const handleDataUpdate = async () => {
       if (!data) return
 
-      const draft = data.find(agent => agent.isDraft) || []
+      const draft = data.find(agent => agent.isDraft)
       const published = data.find(agent => agent.currentSpellReleaseId)
 
       if (draft) {
