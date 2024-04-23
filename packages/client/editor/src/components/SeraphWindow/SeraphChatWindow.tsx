@@ -18,6 +18,7 @@ import { SeraphChatHistory } from './SeraphChatHistory'
 import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { ISeraphEvent, SeraphEvents, SeraphRequest } from 'servicesShared'
+import SeraphTopBar from './SeraphTopBar'
 
 const SeraphChatWindow = props => {
   const [value, setValue] = useState('')
@@ -246,21 +247,23 @@ const SeraphChatWindow = props => {
     setValue(e.target.value)
   }
 
-  // const resubmitRequest = () => {
-  //   if (!lastEvent) return
+  const resubmitRequest = () => {
+    if (!lastEvent) return
 
-  //   const seraphEvent = lastEvent.data as ISeraphEvent
-  //   if (!seraphEvent) return
+    const seraphRequest = lastEvent.data.request
+    if (!seraphRequest) return
 
-  //   const eventPayload = seraphEvent.data.request
-  //   if (!eventPayload) return
-
-  //   void makeSeraphRequest(eventPayload)
-  // }
+    void makeSeraphRequest(seraphRequest)
+  }
 
   return (
     <div className="flex-grow border-0 justify-between rounded bg:[--deep-background-color]">
       <Window>
+        <SeraphTopBar
+          clearHistory={() => setHistory([])}
+          requestError={seraphEventData.error}
+          resubmitRequest={resubmitRequest}
+        />
         <div className="flex flex-col h-full bg-[--ds-black] w-[96%] m-auto">
           <SeraphChatHistory
             history={history}
