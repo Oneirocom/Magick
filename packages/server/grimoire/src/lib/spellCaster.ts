@@ -385,7 +385,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
 
   /**
    * Triggers the graph to execfute.  The flag is used in the loop to determine
-   * if the graph should be executed.
+   * if the graph should be executed
    * @example
    * spellCaster.triggerGraphExecution()
    */
