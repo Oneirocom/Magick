@@ -40,7 +40,7 @@ export function AgentMenu({ data }) {
   const [createAgentRelease] = useCreateAgentReleaseMutation()
 
   const setCurrentAgent = useCallback((agent: AgentInterface) => {
-    client.service('agents').subscribe(agent.id)
+    client.service('agents').subscribe({ agentId: agent.id })
     _setCurrentAgent(agent)
     // store this current agent in the global state for use in the editor
     dispatch(setCurrentAgentId(agent.id))
@@ -52,15 +52,14 @@ export function AgentMenu({ data }) {
     const handleDataUpdate = async () => {
       if (!data) return
 
-      const draft = data.find(agent => agent.isDraft)
+      const draft = data.find(agent => agent.isDraft) || []
+      const published = data.find(agent => agent.currentSpellReleaseId)
 
       if (draft) {
         setDraftAgent(draft)
-        setCurrentAgent(currentAgent || draft)
+        setCurrentAgent(draft)
       }
-
-      const published = data.find(agent => agent.currentSpellReleaseId)
-      setPublishedAgent(published)
+      if (published) setPublishedAgent(published)
     }
 
     handleDataUpdate()
@@ -77,7 +76,6 @@ export function AgentMenu({ data }) {
   }
 
   const handleSelectAgent = (agent: AgentInterface) => {
-    console.log('AGENT', agent)
     setCurrentAgent(agent)
     toggleMenu()
   }
@@ -152,7 +150,7 @@ export function AgentMenu({ data }) {
                 ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}/${publishedAgent?.image}`
                 : defaultImage(currentAgent?.id || '1')
             }
-            alt={currentAgent?.name.at(0) || 'A'}
+            alt={currentAgent?.name?.at(0) || 'A'}
           />
           {currentAgent?.image ? currentAgent?.name.at(0) || 'A' : null}
         </Avatar>
