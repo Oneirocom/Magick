@@ -15,21 +15,36 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
-import { EventPayload } from 'server/plugin'
+import { ActionPayload, EventPayload } from 'server/plugin'
 import { ISeraphEvent } from 'servicesShared'
 import { SeraphManager } from '@magickml/seraph-manager'
+import EventEmitter from 'events'
+import TypedEmitter from 'typed-emitter'
 
-// import { StateService } from './StateService'
+export type AgentEventPayload<
+  Data = Record<string, unknown>,
+  Y = Record<string, unknown>
+> = Partial<
+  Exclude<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName'>
+> &
+  Pick<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName'>
 
-// type AgentData = {
-//   state: {
-
-//   }
+type AgentEvents = {
+  message: (event: EventPayload) => void
+  messageReceived: (event: ActionPayload) => void
+  messageStream: (event: ActionPayload) => void
+  eventComplete: (event: EventPayload | null) => void
+  error: (error: ActionPayload) => void
+}
 
 /**
- * The Agent class that implements AgentInterface.
+ * Agent class represents an agent instance.
+ * It contains the agent's data, methods to update the agent, and methods to handle events.
  */
-export class Agent implements AgentInterface {
+export class Agent
+  extends (EventEmitter as new () => TypedEmitter<AgentEvents>)
+  implements AgentInterface
+{
   name = ''
   id: any
   secrets: any
@@ -58,6 +73,7 @@ export class Agent implements AgentInterface {
     pubsub: RedisPubSub,
     app: Application
   ) {
+    super()
     this.id = agentData.id
     this.app = app
 
@@ -85,7 +101,7 @@ export class Agent implements AgentInterface {
     this.pluginManager = new PluginManager({
       pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
       connection: this.app.get('redis'),
-      agentId: this.id,
+      agent: this,
       pubSub: this.app.get('pubsub'),
       projectId: this.projectId,
       commandHub: this.commandHub,
@@ -116,6 +132,26 @@ export class Agent implements AgentInterface {
 
     // initialzie spellbook
     this.initializeSpellbook()
+  }
+
+  formatEvent<Data = Record<string, unknown>, Y = Record<string, unknown>>(
+    partialEvent: AgentEventPayload<Data, Y>
+  ): EventPayload<Data, Y> {
+    return {
+      channel: 'agent',
+      connector: 'agent',
+      client: 'agent',
+      agentId: this.id,
+      observer: this.id,
+      channelType: 'agent',
+      rawData: {},
+      timestamp: new Date().toISOString(),
+      data: {} as Data,
+      metadata: {} as Y,
+      status: 'success',
+      plugin: 'core',
+      ...partialEvent,
+    }
   }
 
   /**
@@ -202,10 +238,15 @@ export class Agent implements AgentInterface {
     event: EventPayload
   ) {
     // remove unwanted data
-    delete event.content
-    delete event.rawData
-    delete event.rawData
-    delete event.data
+    if (event?.hasOwnProperty('content')) {
+      delete event.content
+    }
+    if (event?.hasOwnProperty('rawData')) {
+      delete event.rawData
+    }
+    if (event?.hasOwnProperty('data')) {
+      delete event.data
+    }
 
     metadata.event = event
 
