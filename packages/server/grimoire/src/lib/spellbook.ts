@@ -344,8 +344,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   async refreshSpells() {
-    this.clearAllSpellCasters()
-    this.resetAllSpellCasterStates()
+    await this.clearAllSpellCasters()
+    await this.resetAllSpellCasterStates()
 
     const spellsData = await this.app.service('spells').find({
       query: {
@@ -354,7 +354,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         spellReleaseId: this.agent.currentSpellReleaseId || 'null',
       },
     })
-    this.loadSpells(spellsData.data)
+    await this.loadSpells(spellsData.data)
   }
 
   /**
