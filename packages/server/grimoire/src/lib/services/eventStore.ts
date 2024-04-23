@@ -1,8 +1,10 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
+import TypedEmitter from 'typed-emitter'
 import { Application, saveGraphEvent } from 'server/core'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import { getEventProperties } from '../utils'
 import { EventTypes, SEND_MESSAGE } from 'communication'
+import EventEmitter from 'events'
 
 type EventProperties =
   | 'sender'
@@ -49,7 +51,14 @@ type Message = {
 
 type EventWithKey = EventPayload & { stateKey: string }
 
-export class EventStore implements IEventStore {
+type EventStoreEvents = {
+  done: (event: EventPayload | null) => void
+}
+
+export class EventStore
+  extends (EventEmitter as new () => TypedEmitter<EventStoreEvents>)
+  implements IEventStore
+{
   private asyncNodeCounter: number = 0
   private _currentEvent: EventPayload | null
   private status: StatusEnum
@@ -59,6 +68,7 @@ export class EventStore implements IEventStore {
   private agentId: string
 
   constructor(stateService: IStateService, app: Application, agentId: string) {
+    super()
     this.stateService = stateService
     this._currentEvent = null
     this.status = StatusEnum.INIT
@@ -146,11 +156,8 @@ export class EventStore implements IEventStore {
 
     const graphEventsService = this.app.service('graphEvents')
 
-    const fromUser = eventPropertyKeys['from user']
-    const toUser = eventPropertyKeys['to user']
-
-    delete eventPropertyKeys['from user']
-    delete eventPropertyKeys['to user']
+    const fromUser = eventPropertyKeys.includes('from user')
+    const toUser = eventPropertyKeys.includes('to user')
 
     const eventProperties = getEventProperties(
       this._currentEvent,
@@ -235,11 +242,12 @@ export class EventStore implements IEventStore {
     if (this.status === StatusEnum.AWAIT) return
 
     // We sync the state and clear it from the state service after the event is done.
-    await this.stateService.syncAndClearState()
 
     if (this.asyncNodeCounter === 0) {
       // If there are no async nodes, we can change the status ready, showing it is ready for the next event.
       this.status = StatusEnum.READY
+      this.emit('done', this._currentEvent)
+      await this.stateService.syncAndClearState()
     }
   }
 }
