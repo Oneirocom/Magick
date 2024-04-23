@@ -2,8 +2,6 @@ import { Worker, Job } from 'bullmq'
 import { getLogger } from 'server/logger'
 import { Application, app } from 'server/core'
 
-import { BullMQWorker } from 'server/communication'
-
 import { Agent } from 'server/agents'
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
 import { type RedisPubSub } from 'server/redis-pubsub'
@@ -79,13 +77,7 @@ export class CloudAgentWorker {
       return
     }
 
-    const agent = new Agent(
-      agentData,
-      this,
-      new BullMQWorker(this.app.get('redis')),
-      this.app.get('pubsub'),
-      app
-    )
+    const agent = new Agent(agentData, this.app.get('pubsub'), app)
 
     this.listenForChanges(agentId)
 
