@@ -62,6 +62,7 @@ import {
 import { getMessageHistory } from './nodes/actions/messageHistory'
 import { objectDestructure } from './nodes/functions/destructure'
 import { DATABASE_URL } from 'shared/config'
+import { Agent } from 'server/agents'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -121,21 +122,21 @@ export class CorePlugin extends CoreEventsPlugin<
 
   constructor({
     connection,
-    agentId,
+    agent,
     pubSub,
     projectId,
   }: {
     connection: Redis
-    agentId: string
+    agent: Agent
     pubSub: RedisPubSub
     projectId: string
   }) {
-    super({ name: corePluginName, connection, agentId, projectId })
-    this.client = new CoreEventClient({ pubSub, agentId })
+    super({ name: corePluginName, connection, agent, projectId })
+    this.client = new CoreEventClient({ pubSub, agent })
 
     this.coreLLMService = new CoreLLMService({
       projectId,
-      agentId,
+      agentId: this.agentId,
     })
 
     this.userService = new CoreUserService({ projectId })
@@ -180,6 +181,7 @@ export class CorePlugin extends CoreEventsPlugin<
   handleDisableCommand() {}
   handleLinkCommand() {}
   handleUnlinkCommand() {}
+
   handleWebhookCommand(payload: CoreWebhookPayload) {
     if (!validateCoreWebhookPayload(payload)) {
       return
@@ -207,7 +209,7 @@ export class CorePlugin extends CoreEventsPlugin<
   getActionHandlers() {
     return {
       [CORE_ACTIONS.messageSend]: this.handleSendMessage,
-      [CORE_ACTIONS.messageStream]: this.handleSendMessage,
+      [CORE_ACTIONS.messageStream]: this.handleStreamMessage,
       [CORE_ACTIONS.error]: this.handleSendMessage,
     }
   }
@@ -299,18 +301,31 @@ export class CorePlugin extends CoreEventsPlugin<
     this.emitEvent(EventTypes.ON_MESSAGE, event)
   }
 
-  handleSendMessage(actionPayload: ActionPayload) {
+  private handleMessageSend(
+    actionPayload: ActionPayload,
+    messageHandler: (payload: ActionPayload) => void
+  ) {
     const { actionName, event } = actionPayload
     const { plugin } = event
     const eventName = `${plugin}:${actionName}`
     this.logger.trace(`Sending message to ${eventName} on core plugin`)
-    // handle sending a message back out.
 
     if (plugin === corePluginName) {
-      this.client.sendMessage(actionPayload)
+      messageHandler(actionPayload)
     } else {
       this.centralEventBus.emit(eventName, actionPayload)
     }
+  }
+
+  handleStreamMessage(payload: ActionPayload) {
+    this.handleMessageSend(payload, this.client.streamMessage.bind(this.client))
+  }
+
+  handleSendMessage(actionPayload: ActionPayload) {
+    this.handleMessageSend(
+      actionPayload,
+      this.client.sendMessage.bind(this.client)
+    )
   }
 
   /**
