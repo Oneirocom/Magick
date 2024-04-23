@@ -230,7 +230,7 @@ export class AgentService<
 
   async getSeraphEvents(params?: ServiceParams): Promise<ISeraphEvent[]> {
     try {
-      const agentId = params.query.agentId
+      const agentId = params?.query?.agentId
       if (!agentId) throw new Error('agentId missing')
       const seraphEvents = await this.app
         .get('dbClient')
