@@ -1,5 +1,6 @@
 import { AGENT_ERROR, AGENT_EVENT, EventTypes } from 'communication'
 import pino from 'pino'
+import { Agent } from 'server/agents'
 import { getLogger } from 'server/logger'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
@@ -32,6 +33,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 class CoreEventClient {
   private logger: pino.Logger = getLogger()
   private pubSub: RedisPubSub
+  private agent: Agent
   private agentId: string
   private eventHandlers: Map<string, ((message: EventPayload) => void)[]>
 
@@ -40,11 +42,13 @@ class CoreEventClient {
    * @param redisConnection The Redis connection to use for subscribing to channels.
    * @param agentId The agent ID to use for subscribing to channels.
    */
-  constructor({ pubSub, agentId }: { pubSub: RedisPubSub; agentId: string }) {
+  constructor({ pubSub, agent }: { pubSub: RedisPubSub; agent: Agent }) {
     this.pubSub = pubSub
-    this.agentId = agentId
+    this.agent = agent
+    this.agentId = agent?.id || ''
     this.eventHandlers = new Map()
     this.subscribeToCoreEvents()
+    this.subscribeToAgentEvents()
   }
 
   /**
@@ -64,6 +68,13 @@ class CoreEventClient {
     const pattern = `agent:${this.agentId}:Core:*`
     this.logger.debug(`Subscribing to pattern '${pattern}'`)
     this.pubSub.patternSubscribe(pattern, this.coreEventHandler.bind(this))
+  }
+
+  private subscribeToAgentEvents(): void {
+    if (!this.agent) return
+    this.agent.on('message', event => {
+      this.triggerEvent(EventTypes.ON_MESSAGE, event)
+    })
   }
 
   /**
@@ -89,6 +100,10 @@ class CoreEventClient {
     this.logger.debug(`Received event of type '${eventType}'`)
     event.plugin = 'core'
 
+    this.triggerEvent(eventType, event)
+  }
+
+  triggerEvent(eventType: string, event: EventPayload): void {
     this.eventHandlers.get(eventType)?.forEach(handler => handler(event))
   }
 
@@ -154,10 +169,17 @@ class CoreEventClient {
 
   sendMessage(payload: ActionPayload): void {
     this.pubSub.publish(AGENT_EVENT(this.agentId), payload)
+    this.agent.emit('messageReceived', payload)
+  }
+
+  streamMessage(payload: ActionPayload): void {
+    this.pubSub.publish(AGENT_EVENT(this.agentId), payload)
+    this.agent.emit('messageStream', payload)
   }
 
   onError(payload: ActionPayload): void {
     this.pubSub.publish(AGENT_ERROR(this.agentId), payload)
+    this.agent.emit('error', payload)
   }
 
   /**
