@@ -77,8 +77,8 @@ export class DiscordPlugin extends WebSocketPlugin<
   })
   utils = new DiscordMessageUtils(this.agentId)
 
-  constructor({ connection, agentId, projectId }: BasePluginInit) {
-    super({ name: discordPluginName, connection, agentId, projectId })
+  constructor({ connection, agent, projectId }: BasePluginInit) {
+    super({ name: discordPluginName, connection, agent, projectId })
   }
 
   // CONFIG

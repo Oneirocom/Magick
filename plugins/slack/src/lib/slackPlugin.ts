@@ -35,6 +35,7 @@ import {
   SlackBaseMessageEvent,
   SendSlackMessage,
 } from './configx'
+import { Agent } from 'server/agents'
 
 export class SlackPlugin extends WebSocketPlugin<
   typeof SLACK_EVENTS,
@@ -62,17 +63,17 @@ export class SlackPlugin extends WebSocketPlugin<
 
   constructor({
     connection,
-    agentId,
+    agent,
     pubSub,
     projectId,
   }: {
     connection: Redis
-    agentId: string
+    agent: Agent
     pubSub: RedisPubSub
     projectId: string
   }) {
-    super({ name: slackPluginName, connection, agentId, projectId })
-    this.client = new SlackEventClient(pubSub, agentId)
+    super({ name: slackPluginName, connection, agent, projectId })
+    this.client = new SlackEventClient(pubSub, this.agentId)
   }
 
   getPluginConfig() {

@@ -45,6 +45,7 @@ import {
   AWS_REGION,
   AWS_BUCKET_NAME,
 } from 'shared/config'
+import { Agent } from 'server/agents'
 
 type ValueOf<T> = T[keyof T]
 
@@ -60,7 +61,7 @@ export type WebhookPayload<
 
 export interface BasePluginInit {
   name: string
-  agentId: string
+  agent: Agent
   connection: Redis
   projectId: string
   state?: Record<string, unknown>
@@ -92,6 +93,7 @@ export abstract class BasePlugin<
 
   abstract nodes?: NodeDefinition[]
   abstract values?: ValueType[]
+  protected agent: Agent
   protected agentId: string
   protected projectId: string
   abstract defaultState: PluginStateType<State>
@@ -115,7 +117,7 @@ export abstract class BasePlugin<
    * const queueName = this.getQueueName();
    */
   get eventQueueName() {
-    return `agent:${this.agentId}:${this.name}:event`
+    return `agent:${this.agent.id}:${this.name}:event`
   }
 
   /**
@@ -126,7 +128,7 @@ export abstract class BasePlugin<
    * const queueName = this.getActionQueueName();
    */
   get actionQueueName() {
-    return `agent:${this.agentId}:${this.name}:action`
+    return `agent:${this.agent.id}:${this.name}:action`
   }
 
   /**
@@ -135,17 +137,18 @@ export abstract class BasePlugin<
    * @example
    * const myPlugin = new BasePlugin('MyPlugin');
    */
-  constructor({ name, agentId, connection, projectId }: BasePluginInit) {
+  constructor({ name, agent, connection, projectId }: BasePluginInit) {
     super({ name })
     this.config = this.getPluginConfig()
-    this.agentId = agentId
+    this.agent = agent
+    this.agentId = agent?.id || ''
     this.projectId = projectId
     this.connection = connection
     this.eventEmitter = new EventEmitter()
     this.events = []
 
     this.credentialsManager = new BaseCredentialsManager<Credentials>(
-      agentId,
+      this.agentId,
       name,
       projectId
     )
@@ -156,7 +159,7 @@ export abstract class BasePlugin<
 
     this.commandManager = new BaseCommandManager()
 
-    this.actionsManager = new BaseActionManager(agentId)
+    this.actionsManager = new BaseActionManager(this.agentId)
 
     this.storageManager = new S3PluginStorageManager(
       this.agentId,
@@ -437,7 +440,7 @@ export abstract class BasePlugin<
 
         saveGraphEvent({
           sender: payload.sender,
-          observer: this.agentId,
+          observer: this.agent.id,
           agentId: payload.agentId,
           connector: payload.connector,
           connectorData: JSON.stringify(payload.data),
@@ -567,22 +570,15 @@ export abstract class BasePlugin<
     return {
       plugin: messageDetails.plugin || this.name,
       connector: this.name,
-      client: messageDetails.client,
       eventName: event,
       status: messageDetails.status || 'success',
-      content: messageDetails.content,
-      sender: messageDetails.sender,
-      observer: messageDetails.observer,
-      channel: messageDetails.channel,
-      agentId: this.agentId,
+      agentId: this.agent.id,
       isPlaytest: messageDetails?.isPlaytest || false,
       spellId: messageDetails?.spellId,
       // entities: messageDetails.entities,
-      channelType: messageDetails.channelType,
-      rawData: messageDetails.rawData,
       metadata: messageDetails.metadata || ({} as Metadata),
-      data: messageDetails.data || ({} as Data),
       timestamp: new Date().toISOString(),
+      ...messageDetails,
     }
   }
 }
