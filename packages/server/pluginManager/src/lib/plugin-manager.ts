@@ -10,6 +10,7 @@ import * as plugins from './../../../../../plugins'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
 import { CommandHub } from 'server/command-hub'
+import { Agent } from 'server/agents'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
@@ -86,11 +87,11 @@ export class PluginManager extends EventEmitter {
   commandHub: CommandHub
 
   /**
-   * The agent ID of the agent running the plugin manager.
-   * @type {string}
+   * The Agent class instance.
+   * @type {Agent}
    * @memberof PluginManager
    */
-  agentId: string
+  agent: Agent
 
   /**
    * Creates an instance of PluginManager.
@@ -111,20 +112,20 @@ export class PluginManager extends EventEmitter {
   constructor({
     pluginDirectory,
     connection,
-    agentId,
+    agent,
     pubSub,
     projectId,
     commandHub,
   }: {
     pluginDirectory: string
     connection: Redis
-    agentId: string
+    agent: Agent
     pubSub: RedisPubSub
     projectId: string
     commandHub: CommandHub
   }) {
     super()
-    this.agentId = agentId
+    this.agent = agent
     this.projectId = projectId
     this.pubSub = pubSub
     this.connection = connection
@@ -173,7 +174,7 @@ export class PluginManager extends EventEmitter {
         // Create an instance of the plugin
         // @ts-ignore
         const pluginInstance = new PluginClass({
-          agentId: this.agentId,
+          agent: this.agent,
           connection: this.connection,
           pubSub: this.pubSub,
           projectId: this.projectId,

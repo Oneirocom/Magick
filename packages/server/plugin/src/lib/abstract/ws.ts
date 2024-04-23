@@ -39,8 +39,8 @@ export abstract class WebSocketPlugin<
   Metadata,
   State
 > {
-  constructor({ name, connection, agentId, projectId }: BasePluginInit) {
-    super({ name, connection, agentId, projectId })
+  constructor({ name, connection, agent, projectId }: BasePluginInit) {
+    super({ name, connection, agent, projectId })
   }
 
   /**

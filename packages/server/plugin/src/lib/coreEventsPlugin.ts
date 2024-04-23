@@ -4,6 +4,7 @@ import EventEmitter from 'events'
 import { EventTypes } from 'communication'
 import { type PluginStateType } from 'plugin-state'
 import { type EventPayload } from './events/event-manager'
+import { Agent } from 'server/agents'
 
 /**
  * CorePlugin is the base class for all plugins that are used to
@@ -45,15 +46,15 @@ export abstract class CoreEventsPlugin<
   constructor({
     name,
     connection,
-    agentId,
+    agent,
     projectId,
   }: {
     name: string
     connection: Redis
-    agentId: string
+    agent: Agent
     projectId: string
   }) {
-    super({ name, connection, agentId, projectId })
+    super({ name, connection, agent, projectId })
     // Initialize CoreEventPlugin specific stuff if needed
   }
 
