@@ -4,7 +4,7 @@ import { KnowledgeUploadContent } from './add/knowledge-upload-content'
 import { KnowledgeDialogTab } from './add/types'
 import { addKnowledgeDialogAtom, addKnowledgeFormAtom } from './add/state'
 
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useResetAtom } from 'jotai/utils'
 import toast from 'react-hot-toast'
 import { useCreateKnowledgeMutation } from 'client/state'
@@ -35,7 +35,7 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
     resetForm()
   }
   const newKnowledge = useAtomValue(addKnowledgeDialogAtom)
-  const [formKnowledge, setFormKnowledge] = useAtom(addKnowledgeFormAtom)
+  const formKnowledge = useAtomValue(addKnowledgeFormAtom)
 
   /* Hooks */
   const { projectId } = useConfig()
