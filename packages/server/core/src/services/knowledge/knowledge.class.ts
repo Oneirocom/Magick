@@ -49,11 +49,16 @@ export class KnowledgeService<
     const returnData = [] as KnowledgeData[]
 
     for (const data of knowledge) {
-      if (!isValidAcceptValue(data.dataType)) {
-        throw new Error('Invalid data type')
+      console.log('Creating knowledge:', data)
+      let dataType: DataType | undefined
+      if (!data.external) {
+        if (!isValidAcceptValue(data.dataType)) {
+          throw new Error('Invalid data type')
+        }
+        dataType = getDataTypeFromAcceptValue(data.dataType) as DataType
+      } else {
+        dataType = data.dataType as DataType
       }
-
-      const dataType = getDataTypeFromAcceptValue(data.dataType)
 
       const options = {
         metadata: {
@@ -65,12 +70,16 @@ export class KnowledgeService<
       const memoryService = new CoreMemoryService(true)
       await memoryService.initialize(projectId)
 
+      const url = data.external
+        ? data.sourceUrl
+        : `${process.env.PROJECT_BUCKET_PREFIX}/${data.sourceUrl}`
+
       // Add the data to the memory
-      const result = await memoryService.add(data.sourceUrl as string, options)
+      const result = await memoryService.add(url, options)
 
       const knowledgeData = {
-        dataType: dataType,
-        sourceUrl: data.sourceUrl,
+        dataType: data.external ? data.dataType : undefined, // TODO: fix the dataType for uploads. its very close to being correct. for now auto-detect
+        sourceUrl: process.env.PROJECT_BUCKET_PREFIX + result,
         metadata: options.metadata,
         projectId: projectId,
         memoryId: result,
