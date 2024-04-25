@@ -75,13 +75,13 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
         >
           <div
             className={cn(
-              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100`
+              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100 flex`
             )}
           >
-            <div className="flex mr-1">
+            <div className="flex items-center mr-1">
               <NodeIcon width={24} height={24} />
             </div>
-            <div>
+            <div className="ml-1">
               <h2 className="text-md font-medium">{label}</h2>
               <h3 className="text-xs">{title}</h3>
             </div>
