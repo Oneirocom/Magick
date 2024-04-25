@@ -137,12 +137,12 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       fired={done}
       error={error}
       running={running}
-      title={spec.label}
+      label={config?.label ?? spec.label}
+      title={spec?.type ?? 'Node'}
       category={spec.category}
       selected={selected}
       graph={spell.graph}
       config={config}
-      label={spec.label}
     >
       {pairs.map(([flowInput, output], ix) => (
         <div
