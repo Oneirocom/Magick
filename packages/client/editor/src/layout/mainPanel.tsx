@@ -8,7 +8,6 @@ import {
 } from 'dockview'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useTabLayout } from '@magickml/providers'
-import Events from '../screens/EventWindow'
 import Requests from '../screens/RequestWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
 import { SecretWindow } from 'windows/secrets'
@@ -20,6 +19,7 @@ import WelcomeScreen from '../components/Watermark/watermark'
 import { ConfigWindow } from 'windows/config'
 import posthog from 'posthog-js'
 import { KnowledgeWindow } from 'window-knowledge'
+import { EventsWindow } from 'windows-events'
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
   const onContextMenu = (event: React.MouseEvent) => {
@@ -49,7 +49,7 @@ const tabComponents = {
 
 const getComponents = () => {
   return {
-    Events,
+    Events: () => <EventsWindow />,
     Requests,
     Knowledge: () => <KnowledgeWindow />,
     Agents,
