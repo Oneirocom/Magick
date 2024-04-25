@@ -4,7 +4,7 @@ import {
   NodeProps as FlowNodeProps,
   useEdges,
   useUpdateNodeInternals,
-} from 'reactflow'  
+} from 'reactflow'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'
@@ -156,6 +156,9 @@ export const Node: React.FC<NodeProps> = ({
     if (activeInput?.nodeId !== id) return false
     return activeInput?.name === x
   }
+
+  console.log('spec', spec)
+  console.log('config', config)
 
   return (
     <NodeContainer
