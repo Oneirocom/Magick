@@ -8,10 +8,9 @@ import { Agent } from 'server/agents'
 const app = express()
 
 const agentApp = await initApp()
-const agentId = 'b0387ccc-f3f2-4da6-bcad-ce30c021ee26'
 
 const expressWs = expressWsConfig(app)
-const port = 3000
+const port = 8000
 
 // Your other API endpoints
 expressWs.app.get('/', (req, res) => {
@@ -19,12 +18,15 @@ expressWs.app.get('/', (req, res) => {
 })
 
 expressWs.app.ws(
-  '/llm-websocket/:call_id',
+  '/:agentId/llm-websocket/:call_id',
   async (ws: WebSocket, req: Request) => {
     const callId = req.params.call_id
+    const agentId = req.params.agentId
 
     const agentData = await agentApp.service('agents').get(agentId)
+
     const agent = new Agent(agentData, agentApp.get('pubsub'), agentApp)
+
     const llmClient = new LLMDummyMock(agent)
 
     ws.on('error', (err: Error) => {
@@ -66,8 +68,6 @@ expressWs.app.ws(
         end_call: false,
       }
 
-      console.log('Sending response: ', response)
-
       ws.send(JSON.stringify(response))
     })
 
@@ -78,7 +78,7 @@ expressWs.app.ws(
         content_complete: true,
         end_call: false,
       }
-      console.log('Event complete', res)
+
       ws.send(JSON.stringify(res))
     })
 
@@ -100,8 +100,6 @@ expressWs.app.ws(
           // process live transcript update if needed
           return
         }
-
-        console.log('LLM websocket message received: ', request)
 
         const transcript = request.transcript
         const content = transcript[transcript.length - 1].content
