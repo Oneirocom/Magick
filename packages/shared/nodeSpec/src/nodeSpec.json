@@ -472,6 +472,33 @@
     ]
   },
   {
+    "type": "action/json/parse",
+    "category": "Action",
+    "label": "Json Parse",
+    "inputs": [
+      {
+        "name": "json",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "object",
+        "valueType": "object"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "flow/array/forEach",
     "category": "Flow",
     "label": "For Each",
@@ -1419,6 +1446,11 @@
         "valueType": "flow"
       },
       {
+        "name": "alterateRoles",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
         "name": "entries",
         "valueType": "integer",
         "defaultValue": 10
@@ -1493,6 +1525,25 @@
         "defaultValue": []
       }
     ]
+  },
+  {
+    "type": "logic/string/isDefined",
+    "category": "None",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/string",

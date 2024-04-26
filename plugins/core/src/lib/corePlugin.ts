@@ -63,6 +63,8 @@ import { getMessageHistory } from './nodes/actions/messageHistory'
 import { objectDestructure } from './nodes/functions/destructure'
 import { DATABASE_URL } from 'shared/config'
 import { Agent } from 'server/agents'
+import { IsDefined } from './nodes/logic/strings/isDefined'
+import { jsonParse } from './nodes/actions/jsonParse'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -91,6 +93,7 @@ export class CorePlugin extends CoreEventsPlugin<
     variableSet,
     arrayPush,
     jsonStringify,
+    jsonParse,
     forEach,
     arrayLength,
     arrayClear,
@@ -113,6 +116,7 @@ export class CorePlugin extends CoreEventsPlugin<
     FetchNode,
     getMessageHistory,
     objectDestructure,
+    IsDefined,
   ]
   values = []
   credentials = corePluginCredentials
