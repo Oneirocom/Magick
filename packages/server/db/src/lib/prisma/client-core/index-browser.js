@@ -136,7 +136,8 @@ exports.Prisma.AgentsScalarFieldEnum = {
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
   isDraft: 'isDraft',
-  draftAgentId: 'draftAgentId'
+  draftAgentId: 'draftAgentId',
+  description: 'description'
 };
 
 exports.Prisma.ChatMessagesScalarFieldEnum = {
@@ -311,6 +312,16 @@ exports.Prisma.WebhookScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SeraphEventScalarFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  projectId: 'projectId',
+  spellId: 'spellId',
+  type: 'type',
+  data: 'data',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -362,7 +373,8 @@ exports.Prisma.agentsOrderByRelevanceFieldEnum = {
   version: 'version',
   embeddingProvider: 'embeddingProvider',
   embeddingModel: 'embeddingModel',
-  draftAgentId: 'draftAgentId'
+  draftAgentId: 'draftAgentId',
+  description: 'description'
 };
 
 exports.Prisma.chatMessagesOrderByRelevanceFieldEnum = {
@@ -493,6 +505,14 @@ exports.Prisma.WebhookOrderByRelevanceFieldEnum = {
   agentId: 'agentId',
   url: 'url'
 };
+
+exports.Prisma.SeraphEventOrderByRelevanceFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  projectId: 'projectId',
+  spellId: 'spellId',
+  type: 'type'
+};
 exports.WebhookMethod = exports.$Enums.WebhookMethod = {
   GET: 'GET',
   POST: 'POST',
@@ -529,7 +549,8 @@ exports.Prisma.ModelName = {
   spellReleases: 'spellReleases',
   spells: 'spells',
   tasks: 'tasks',
-  Webhook: 'Webhook'
+  Webhook: 'Webhook',
+  SeraphEvent: 'SeraphEvent'
 };
 
 /**

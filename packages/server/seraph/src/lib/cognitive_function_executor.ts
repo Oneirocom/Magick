@@ -1,15 +1,16 @@
 // cognitive_function_executor.ts
 import { BaseCognitiveFunction } from './base_cognitive_function'
-import { Seraph } from './seraph'
+import { SeraphCore } from './seraphCore'
+import { SeraphFunction } from './types'
 
 /**
  * The CognitiveFunctionExecutor class executes cognitive functions.
  */
 class CognitiveFunctionExecutor {
   private cognitiveFunctions: Record<string, BaseCognitiveFunction> = {}
-  seraph: Seraph
+  seraph: SeraphCore
 
-  constructor(seraph: Seraph) {
+  constructor(seraph: SeraphCore) {
     this.seraph = seraph
   }
 
@@ -38,11 +39,24 @@ class CognitiveFunctionExecutor {
       throw new Error(`Cognitive function '${functionName}' not found.`)
     }
 
-    this.seraph.emit('functionExecution', functionName)
+    const fnStartPayload: SeraphFunction = {
+      name: cognitiveFunction.name,
+      messageTitle: `${cognitiveFunction.name}`,
+      message: `${cognitiveFunction.name} started`,
+    }
+
+    this.seraph.emit('functionExecution', fnStartPayload)
 
     const result = await cognitiveFunction.execute(functionArgs)
 
-    this.seraph.emit('functionResult', functionName, result)
+    const fnResultPayload: SeraphFunction = {
+      name: cognitiveFunction.name,
+      messageTitle: `${cognitiveFunction.name}`,
+      message: `${cognitiveFunction.name} finished`,
+      result,
+    }
+
+    this.seraph.emit('functionResult', fnResultPayload)
 
     return result
   }

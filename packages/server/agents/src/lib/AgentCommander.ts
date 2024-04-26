@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
 import { EventPayload } from 'server/plugin'
 import { RedisPubSub } from 'server/redis-pubsub'
+import { ISeraphEvent } from 'servicesShared'
 
 export interface AgentCommandData {
   agentId?: string
@@ -80,6 +81,14 @@ export class AgentCommander extends EventEmitter {
       agentId,
       command: `agent:core:ping`,
       data: {},
+    })
+  }
+
+  processSeraphEvent(seraphEvent: ISeraphEvent) {
+    this.command({
+      agentId: seraphEvent.agentId,
+      command: `agent:seraph:processEvent`,
+      data: seraphEvent,
     })
   }
 

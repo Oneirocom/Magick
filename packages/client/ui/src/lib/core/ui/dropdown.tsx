@@ -6,12 +6,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from './select'
+import { cn } from '../../utils/shadcn'
 
 interface DropdownProps {
   options: Array<{ value: string; label: string; icon?: string }>
   selectedValue: string
   onChange: (value: string) => void
   placeholder?: string
+  className?: string
 }
 
 export const Dropdown: FC<DropdownProps> = ({
@@ -19,13 +21,19 @@ export const Dropdown: FC<DropdownProps> = ({
   selectedValue,
   onChange,
   placeholder,
+  className,
 }) => {
   return (
     <Select onValueChange={onChange} value={selectedValue}>
-      <SelectTrigger className="w-full border-ds-neutral normal-case data-[placeholder]:text-white/50">
+      <SelectTrigger
+        className={cn(
+          'h-10 border-ds-neutral bg-ds-card-alt rounded-[5px] normal-case data-[placeholder]:text-white/50',
+          className
+        )}
+      >
         <SelectValue placeholder={placeholder || 'Select an option'} />
       </SelectTrigger>
-      <SelectContent className="bg-[#2b2b30]">
+      <SelectContent className="bg-ds-card-alt">
         {options.map(option => (
           <SelectItem
             key={option.value}

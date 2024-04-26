@@ -1,4 +1,4 @@
-import { Seraph } from './seraph'
+import { SeraphCore } from './seraphCore'
 // import inquirer from 'inquirer'
 import * as dotenv from 'dotenv'
 import { MemoryRetrieval } from './cognitive_functions/memory/memory'
@@ -6,6 +6,7 @@ import SeraphCLI from './seraphCLI'
 import { MemoryStorageMiddleware } from './middleware/memory_storage_middleware'
 import { BashExecutor } from './cognitive_functions/bash_executor'
 import { GitManager } from './cognitive_functions/git_manager'
+import { importPrivatePrompts } from './utils'
 
 dotenv.config()
 
@@ -23,33 +24,12 @@ if (!process.env['ANTHROPIC_API_KEY']) {
   )
   process.exit(1)
 }
-interface PrivatePromptModule {
-  prompt: string
-}
-
-const privatePrompts = ['./private_prompts/seraph_3_cli.ts']
-
-const importPrivatePrompts = async () => {
-  return Promise.all(
-    privatePrompts.map(async module => {
-      try {
-        const imported = (await import(module)) as PrivatePromptModule
-        return imported.prompt
-      } catch (error) {
-        console.error('Failed to import private module:', error)
-        return null
-      }
-    })
-  ).then(prompts => {
-    return prompts.filter(prompt => prompt !== null).join('\n')
-  })
-}
 
 ;(async () => {
   const prompt =
     (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
 
-  const seraph = new Seraph({
+  const seraph = new SeraphCore({
     prompt,
     openAIApiKey: process.env['OPENAI_API_KEY'] as string,
     anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,

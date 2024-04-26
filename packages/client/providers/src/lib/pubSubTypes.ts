@@ -1,3 +1,5 @@
+import { ISeraphEvent } from 'servicesShared'
+
 export type PubSubEvents = {
   ADD_SUBSPELL: string
   UPDATE_SUBSPELL: string
@@ -41,10 +43,7 @@ export type PubSubEvents = {
   $REFRESH_EVENT_TABLE: (tabId: string) => string
   $RUN_AGENT: (tabId: string) => string
   $RELOAD_GRAPH: (tabId: string) => string
-  $SERAPH_REQUEST: (tabId: string) => string
-  $SERAPH_RESPONSE: (tabId: string) => string
-  $SERAPH_ERROR: (tabId: string) => string
-  $SERAPH_INFO: (tabId: string) => string
+  $SERAPH_EVENT: (tabId: string) => string
 }
 
 export interface PubSubContext {
@@ -55,5 +54,9 @@ export interface PubSubContext {
   events: PubSubEvents
 }
 
-export type PubSubData = Record<string, unknown> | string | unknown[]
+export type PubSubData =
+  | Record<string, unknown>
+  | string
+  | unknown[]
+  | ISeraphEvent
 export type PubSubCallback = (event: string, data: PubSubData) => void

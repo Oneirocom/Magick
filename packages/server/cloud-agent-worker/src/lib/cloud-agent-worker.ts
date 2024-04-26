@@ -2,8 +2,6 @@ import { Worker, Job } from 'bullmq'
 import { getLogger } from 'server/logger'
 import { Application, app } from 'server/core'
 
-import { BullMQWorker } from 'server/communication'
-
 import { Agent } from 'server/agents'
 import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
 import { type RedisPubSub } from 'server/redis-pubsub'
@@ -47,7 +45,33 @@ export class CloudAgentWorker {
     return this.currentAgents[agentId]
   }
 
+  async checkAgentRunning(agentId: string): Promise<boolean> {
+    const redis = this.app.get('redis')
+    const heartbeatKey = `agent:heartbeat:${agentId}`
+    const heartbeat = await redis.get(heartbeatKey)
+
+    if (heartbeat) {
+      const lastHeartbeat = parseInt(heartbeat, 10)
+      const currentTime = Date.now()
+      const heartbeatThreshold = 60000 // Consider agent as running if heartbeat is within 60 seconds
+
+      if (currentTime - lastHeartbeat <= heartbeatThreshold) {
+        return true
+      }
+    }
+
+    return false
+  }
+
   async addAgent(agentId: string) {
+    // const isAgentRunning = await this.checkAgentRunning(agentId)
+    // if (isAgentRunning) {
+    //   this.logger.info(
+    //     `Agent ${agentId} is already running on another worker, skipping creation`
+    //   )
+    //   return
+    // }
+
     this.logger.info(`Creating agent ${agentId}...`)
     const agentDBRes = await app.service('agents').find({
       query: {
@@ -79,13 +103,7 @@ export class CloudAgentWorker {
       return
     }
 
-    const agent = new Agent(
-      agentData,
-      this,
-      new BullMQWorker(this.app.get('redis')),
-      this.app.get('pubsub'),
-      app
-    )
+    const agent = new Agent(agentData, this.app.get('pubsub'), app)
 
     this.listenForChanges(agentId)
 
@@ -125,16 +143,6 @@ export class CloudAgentWorker {
     }
 
     const agent = agentDBResult[0]
-
-    // start or stop the agent if the enabled state changed
-    if (agent.enabled && !this.currentAgents[agentId]) {
-      this.logger.info(`Agent ${agentId} enabled, adding agent`)
-      await this.addAgent(agentId)
-    }
-    if (!agent.enabled && this.currentAgents[agentId]) {
-      this.logger.info(`Agent ${agentId} disabled, removing agent`)
-      await this.removeAgent(agentId)
-    }
 
     // update the agent's rootSpellId if it changed
     // we may want to make this updating flow more robust in the future
@@ -182,7 +190,8 @@ export class CloudAgentWorker {
     new Worker(
       'agent:create',
       async (job: Job) => {
-        await this.agentUpdated(job.data.agentId)
+        console.log('###################ADDDDDING AGENT', job.data.agentId)
+        await this.addAgent(job.data.agentId)
       },
       {
         connection: app.get('redis'),

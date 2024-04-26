@@ -385,12 +385,19 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
 
   /**
    * Triggers the graph to execfute.  The flag is used in the loop to determine
-   * if the graph should be executed.
+   * if the graph should be executed
    * @example
    * spellCaster.triggerGraphExecution()
    */
   triggerGraphExecution(): void {
     this.executeGraph = true
+  }
+
+  getCurrentEventStateKey() {
+    // return this.graph
+    //   .getDependency<IStateService>(CORE_DEP_KEYS.STATE_SERVICE)
+    //   ?.getState()
+    return {} as any
   }
 
   /**

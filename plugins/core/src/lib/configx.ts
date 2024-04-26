@@ -452,6 +452,11 @@ export const CORE_DEPENDENCIES = {
 // COMMANDS
 export enum CORE_COMMANDS {}
 
-export const coreRemovedNodes = ['variable/get', 'variable/set', 'time/delay']
+export const coreRemovedNodes = [
+  'variable/get',
+  'variable/set',
+  'time/delay',
+  'lifecycle/onTick',
+]
 
 // METHODS

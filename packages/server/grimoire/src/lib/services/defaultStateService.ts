@@ -22,6 +22,14 @@ export class DefaultStateService implements IStateService {
     this.eventStore = graph.getDependency<EventStore>(CORE_DEP_KEYS.EVENT_STORE)
   }
 
+  getStateKey(): string {
+    const event = this.eventStore?.currentEvent()
+
+    if (!event) return ''
+
+    return event.stateKey || ''
+  }
+
   // eslint-disable-next-line
   formatKey(nodeId: string, event: EventPayload): string {
     return `${nodeId}}`

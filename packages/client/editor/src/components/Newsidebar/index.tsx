@@ -72,6 +72,13 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
               draftAgentId: draftAgent.id,
             }).unwrap()
           }
+
+          if (draftAgent.name !== agent.name) {
+            await updateAgent({
+              id: draftAgent.id,
+              name: agent.name,
+            }).unwrap()
+          }
         }
 
         if (agents.total === 1) {

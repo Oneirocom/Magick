@@ -16,12 +16,6 @@ export type Log = {
   messageType: string
 }
 
-// interface LogMessageProps {
-//   log: any // Define the log type according to your data structure
-//   style: React.CSSProperties
-//   onExpandCollapse: (size: number) => void
-// }
-
 const LIST_ITEM_HEIGHT = 25
 
 const LogHeader = ({

@@ -34,6 +34,7 @@
       "@magickml/feathersRedux": [
         "packages/client/feathers-redux-toolkit/src/index.ts"
       ],
+      "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/portal-api": ["portal/cloud/packages/api/src/index.ts"],
       "@magickml/portal-api-client": [
@@ -53,6 +54,12 @@
       "@magickml/portal-providers": [
         "portal/cloud/packages/providers/src/index.ts"
       ],
+      "@magickml/portal-server-core": [
+        "portal/cloud/packages/server/core/src/index.ts"
+      ],
+      "@magickml/portal-server-router": [
+        "portal/cloud/packages/server/router/src/index.ts"
+      ],
       "@magickml/portal-state": ["portal/cloud/packages/state/src/index.ts"],
       "@magickml/portal-templates": [
         "portal/cloud/packages/templates/src/index.ts"
@@ -67,6 +74,9 @@
       ],
       "@magickml/providers": ["packages/client/providers/src/index.ts"],
       "@magickml/seraph": ["packages/server/seraph/src/index.ts"],
+      "@magickml/seraph-manager": [
+        "packages/server/seraphManager/src/index.ts"
+      ],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-db": ["packages/server/db/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
@@ -115,6 +125,9 @@
       "shared/utils": ["packages/shared/utils/src/index.ts"],
       "stylesheets": ["packages/client/stylesheets/src/index.ts"],
       "token-validation": ["packages/server/token-validation/src/index.ts"],
+      "window-knowledge": ["packages/client/windows/knowledge/src/index.ts"],
+      "windows-events": ["packages/client/windows/events/src/index.ts"],
+      "windows-shared": ["packages/client/windows/shared/src/index.ts"],
       "windows/config": ["packages/client/windows/config/src/index.ts"],
       "windows/secrets": ["packages/client/windows/secrets/src/index.ts"]
     }

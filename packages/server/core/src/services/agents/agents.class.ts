@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { EventPayload } from 'server/plugin'
 import { AgentInterface } from 'server/schemas'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
+import { ISeraphEvent } from 'servicesShared'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>
@@ -93,6 +94,21 @@ export class AgentService<
     this.authorizeAgentPermissions(agentId, params)
     const agentCommander = this.app.get('agentCommander')
     await agentCommander.ping(agentId)
+
+    return {
+      data: {
+        success: true,
+      },
+    }
+  }
+
+  async processSeraphEvent(seraphEvent: ISeraphEvent, params?: ServiceParams) {
+    const agentId = seraphEvent.agentId
+
+    this.authorizeAgentPermissions(agentId, params)
+
+    const agentCommander = this.app.get('agentCommander')
+    await agentCommander.processSeraphEvent(seraphEvent)
 
     return {
       data: {
@@ -210,6 +226,68 @@ export class AgentService<
     })
 
     return true
+  }
+
+  async getSeraphEvents(params?: ServiceParams): Promise<ISeraphEvent[]> {
+    try {
+      const agentId = params?.query?.agentId
+      if (!agentId) throw new Error('agentId missing')
+      const seraphEvents = await this.app
+        .get('dbClient')
+        .select('*')
+        .from('seraphEvents')
+        .where({ agentId })
+        .orderBy('createdAt', 'asc')
+        .limit(100)
+      return seraphEvents
+    } catch (error: any) {
+      console.error('Error getting seraph events', error)
+      throw new Error(`Error getting seraph events: ${error.message}`)
+    }
+  }
+
+  async createSeraphEvent(data: ISeraphEvent): Promise<boolean> {
+    try {
+      if (!data) throw new Error('seraph event data missing')
+      console.log('SERAPH STAGE 2:', data)
+
+      const eventData = await this.app
+        .get('dbClient')
+        .insert(data)
+        .into('seraphEvents')
+
+      if (!eventData) throw new Error('Error creating seraph event')
+
+      this.app.get('agentCommander').processSeraphEvent(data)
+
+      return true
+    } catch (error: any) {
+      console.error('Error creating seraph event', error)
+      throw new Error(`Error creating seraph event: ${error.message}`)
+    }
+  }
+
+  async deleteSeraphEvent(data): Promise<boolean> {
+    try {
+      const { seraphEventId } = data
+      if (!seraphEventId) {
+        throw new Error('agentId missing')
+      }
+
+      const deletedEvents = await this.app
+        .get('dbClient')
+        .from('seraphEvents')
+        .where({ id: seraphEventId })
+        .del()
+
+      if (!deletedEvents) {
+        throw new Error('Error deleting seraph event')
+      }
+
+      return true
+    } catch (error: any) {
+      throw new Error(`Error deleting seraph event: ${error.message}`)
+    }
   }
 
   async createRelease({

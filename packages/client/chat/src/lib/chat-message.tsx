@@ -27,8 +27,8 @@ export const ChatMessageBlob = ({ message, agentAvatar }: Props) => {
 
       <div
         className={cn(
-          message.entity === 'user' ? 'dark:bg-[#262b2e] bg-[#f0f5f6] ' : '',
-          'relative flex flex-col rounded-lg rounded-tl-none rounded-br-none px-4 py-2 text-left color-transition gap-3'
+          message.entity === 'user' ? 'bg-ds-card' : '',
+          'relative flex flex-col rounded-[5px] rounded-tl-none rounded-br-none px-4 py-2 text-left color-transition gap-3'
         )}
       >
         {content}

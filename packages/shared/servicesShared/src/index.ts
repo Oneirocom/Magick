@@ -14,3 +14,5 @@ export * from './lib/userService/types'
 export * from './lib/coreMemoryService/coreMemoryTypes'
 
 export * from './lib/types'
+
+export * from './lib/coreMemoryService/core-memory-schema'

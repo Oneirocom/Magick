@@ -60,11 +60,15 @@ export const generateLayoutConfig = (
   {
     id: 'Graph',
     component: 'Graph',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Graph',
       tab,
       spellId,
       spellName,
+    },
+    constraints: {
+      minimumWidth: 300,
     },
   },
   {
@@ -83,6 +87,7 @@ export const generateLayoutConfig = (
   {
     id: 'Variables',
     component: 'Variables',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Variables',
       tab,
@@ -95,6 +100,7 @@ export const generateLayoutConfig = (
   {
     id: 'Test',
     component: 'Test',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Test',
       tab,
@@ -107,6 +113,7 @@ export const generateLayoutConfig = (
   {
     id: 'Text Editor',
     component: 'TextEditor',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Text Editor',
       tab,
@@ -167,16 +174,11 @@ export const applyConstraintsFromConfig = ({
   spellId: string
   spellName: string
 }) => {
+  const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
   api.panels.forEach(panel => {
-    const layoutConfig = generateLayoutConfig(tab, spellId, spellName)
     layoutConfig.map(config => {
-      if (config.constraints) {
-        const { minimumWidth, maximumWidth, minimumHeight, maximumHeight } =
-          config.constraints
-        if (minimumWidth) panel.group.api.setConstraints({ minimumWidth })
-        if (maximumWidth) panel.group.api.setConstraints({ maximumWidth })
-        if (minimumHeight) panel.group.api.setConstraints({ minimumHeight })
-        if (maximumHeight) panel.group.api.setConstraints({ maximumHeight })
+      if (config.constraints && panel.id === config.id) {
+        panel.group.api.setConstraints(config.constraints)
       }
     })
   })

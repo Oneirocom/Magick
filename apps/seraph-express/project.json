@@ -1,0 +1,53 @@
+{
+  "name": "seraph-express",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/seraph-express/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/seraph-express",
+        "main": "apps/seraph-express/src/main.ts",
+        "tsConfig": "apps/seraph-express/tsconfig.app.json",
+        "assets": ["apps/seraph-express/src/assets"],
+        "webpackConfig": "apps/seraph-express/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "seraph-express:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "seraph-express:build:development"
+        },
+        "production": {
+          "buildTarget": "seraph-express:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/seraph-express/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

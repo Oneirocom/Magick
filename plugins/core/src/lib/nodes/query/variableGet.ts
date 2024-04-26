@@ -67,12 +67,11 @@ export const variableGet = makeFunctionNodeDefinition({
     if (!variableService) return
 
     // pass in config object as well.  Lets us check things like if the variable is stored globally, on event, etc.
-    const value = await variableService.getVariable(variable.name)
+    let value = await variableService.getVariable(variable.name)
 
     if (value === undefined) {
       // set the variable to the default value
-      await variableService.setVariable(variable.name, variable.initialValue)
-      write(output.name, variable.initialValue)
+      value = variable.initialValue
     }
 
     write(output.name, value)

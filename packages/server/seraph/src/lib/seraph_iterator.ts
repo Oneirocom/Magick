@@ -1,14 +1,18 @@
-import { Seraph } from './seraph'
+import { SeraphCore } from './seraphCore'
 import { LLMManager } from './llm_manager'
 
 class SeraphIterator implements AsyncIterator<string> {
-  private seraph: Seraph
+  private seraph: SeraphCore
   private conversationId: string
   private systemPrompt: string
   private llmManager: LLMManager
   private done: boolean = false
 
-  constructor(seraph: Seraph, conversationId: string, systemPrompt: string) {
+  constructor(
+    seraph: SeraphCore,
+    conversationId: string,
+    systemPrompt: string
+  ) {
     this.seraph = seraph
     this.conversationId = conversationId
     this.systemPrompt = systemPrompt
@@ -30,7 +34,7 @@ class SeraphIterator implements AsyncIterator<string> {
     const stream = this.llmManager.streamResponse(
       this.systemPrompt,
       messages,
-      1024
+      4000
     )
 
     stream.on('text', token => {
@@ -58,7 +62,7 @@ class SeraphIterator implements AsyncIterator<string> {
 
     const finalMessage = await stream.finalMessage()
 
-    const llmResponse = finalMessage.content[0].text
+    const llmResponse = finalMessage?.content[0]?.text || ''
 
     this.seraph.middlewareManager.runMiddleware(
       llmResponse,

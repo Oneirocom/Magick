@@ -1,6 +1,4 @@
 import Keyv from 'keyv'
-import KeyvRedis from '@keyv/redis'
-import Redis from 'ioredis'
 import { EventStore, SpellCaster } from 'server/grimoire'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
 import { CORE_DEP_KEYS } from '../config'
@@ -20,9 +18,11 @@ export class VariableService {
   private spellCaster: SpellCaster
   private agentId: string
 
-  constructor(connection: Redis, agentId: string, spellCaster: SpellCaster) {
-    const keyvRedis = new KeyvRedis(connection)
-    this.keyv = new Keyv({ store: keyvRedis })
+  constructor(postgresUrl: string, agentId: string, spellCaster: SpellCaster) {
+    this.keyv = new Keyv(postgresUrl, {
+      namespace: agentId,
+      schema: 'variables',
+    })
     this.agentId = agentId
     this.spellCaster = spellCaster
   }
