@@ -106,6 +106,7 @@ const InputFieldForValue = ({
   }
 
   const onBlur = () => {
+    console.log('BLUR')
     setIsFocused(false)
   }
 
@@ -146,9 +147,11 @@ const InputFieldForValue = ({
               onChange={e =>
                 handleChange({ key: name, value: e.currentTarget.value })
               }
-              handleBlur={onBlur}
+              onBlur={onBlur}
               // @ts-ignore
-              onFocus={onFocus} //TODO: REBASE_CHECK
+              onFocus={() => {
+                onFocus(value)
+              }} //TODO: REBASE_CHECK
               className="m-1 h-6"
             />
           )}

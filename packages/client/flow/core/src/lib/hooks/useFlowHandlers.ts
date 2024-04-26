@@ -144,7 +144,7 @@ export const useFlowHandlers = ({
       const connection = {
         ..._connection,
         type: 'custom-edge',
-        updatable: 'target',
+        updatable: true,
       }
 
       // get source node

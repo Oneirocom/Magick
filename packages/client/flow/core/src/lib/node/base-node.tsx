@@ -198,6 +198,8 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
             connected={isHandleConnected(edges, id, input.name, 'target')}
             nodeId={id}
             isActive={isActive(input.name)}
+            activeInput={activeInput}
+            setActiveInput={setActiveInput}
           />
         </div>
       ))}

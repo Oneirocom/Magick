@@ -1,5 +1,5 @@
 // CoreNode.tsx
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { enqueueSnackbar } from 'notistack'
 import { usePubSub } from '@magickml/providers'
@@ -39,11 +39,12 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
     // Add any other reset logic here
   }
 
-  const setActiveInputWrapper = (
-    input: { nodeId: string; name: string } | null
-  ) => {
-    dispatch(setActiveInput(input))
-  }
+  const setActiveInputWrapper = useCallback(
+    (input: { nodeId: string; name: string } | null) => {
+      dispatch(setActiveInput(input))
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     if (!spellEvent) return

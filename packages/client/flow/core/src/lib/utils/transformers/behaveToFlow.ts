@@ -48,7 +48,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
             target: nodeJSON.id,
             type: 'custom-edge',
             targetHandle: inputKey,
-            updatable: 'target',
+            updatable: true,
             data: {
               valueType,
             },
