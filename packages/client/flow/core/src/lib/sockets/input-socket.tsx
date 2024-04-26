@@ -90,16 +90,15 @@ const InputFieldForValue = ({
   const handleChange = ({ key, value }: { key: string; value: any }) => {
     onChange(key, value)
     setInputVal(value)
-    dispatch(setActiveInput({ name, inputType: valueType, value, nodeId }))
+    setActiveInput({ name, inputType: valueType, value, nodeId })
   }
 
   const onFocus = (x: string) => {
     if (valueType === 'string') {
       setIsFocused(true)
       onChange(name, x)
-      dispatch(
-        setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
-      )
+      setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
+
       return
     }
     setActiveInput(null)
