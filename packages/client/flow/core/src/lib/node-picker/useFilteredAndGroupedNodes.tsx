@@ -18,18 +18,27 @@ export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
   const filteredNodes = useMemo(
     () =>
       specJSON.filter(node => {
+        // Apply search term to node type, make sure to handle cases where search is undefined or empty
+        const matchesSearch = search
+          ? node.type.toLowerCase().includes(search.toLowerCase())
+          : true
+
         if (filters) {
           const sockets = combineSocketsWithDefaults(
             node,
             filters.handleType === 'source' ? 'outputs' : 'inputs'
           )
-          return sockets.some(socket => socket.valueType === filters.valueType)
+          // Ensure node matches both the socket filter and the search term
+          return (
+            matchesSearch &&
+            sockets.some(socket => socket.valueType === filters.valueType)
+          )
         } else {
-          const term = search.toLowerCase()
-          return node.type.toLowerCase().includes(term)
+          // If there are no filters, return nodes based on search term match
+          return matchesSearch
         }
       }),
-    [specJSON, filters, search]
+    [specJSON, filters, search] // Ensure useMemo dependencies are correctly listed
   )
 
   // If category is 'None' we want to check the typeParts and then handles those in a case

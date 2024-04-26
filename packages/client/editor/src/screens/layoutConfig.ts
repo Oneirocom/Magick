@@ -60,6 +60,7 @@ export const generateLayoutConfig = (
   {
     id: 'Graph',
     component: 'Graph',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Graph',
       tab,
@@ -86,6 +87,7 @@ export const generateLayoutConfig = (
   {
     id: 'Variables',
     component: 'Variables',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Variables',
       tab,
@@ -98,6 +100,7 @@ export const generateLayoutConfig = (
   {
     id: 'Test',
     component: 'Test',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Test',
       tab,
@@ -110,6 +113,7 @@ export const generateLayoutConfig = (
   {
     id: 'Text Editor',
     component: 'TextEditor',
+    tabComponent: 'permanentTab',
     params: {
       title: 'Text Editor',
       tab,

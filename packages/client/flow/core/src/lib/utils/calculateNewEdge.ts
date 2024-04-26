@@ -36,6 +36,10 @@ export const calculateNewEdge = (
       sourceHandle: connection.handleId,
       target: destinationNodeId,
       targetHandle: newSocket?.name,
+      type: 'custom-edge',
+      data: {
+        valueType: originSocket?.valueType,
+      },
     }
   }
 
@@ -45,5 +49,9 @@ export const calculateNewEdge = (
     targetHandle: connection.handleId,
     source: destinationNodeId,
     sourceHandle: newSocket?.name,
+    type: 'custom-edge',
+    data: {
+      valueType: originSocket?.valueType,
+    },
   }
 }
