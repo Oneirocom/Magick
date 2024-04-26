@@ -25,7 +25,8 @@ export interface IEventStore {
   saveAgentEvent: (data: ActionPayload) => void
   getMessages: (
     eventPropertyKeys: EventProperties[],
-    limit?: number
+    limit?: number,
+    alternateRoles?: boolean
   ) => Promise<Message[]>
   setEvent: (event: EventWithKey) => void
   init: (nodes: GraphNodes) => void
@@ -46,7 +47,7 @@ export enum StatusEnum {
 
 type Message = {
   role: string
-  content: string
+  content: string | { type: string; text: string }[]
 }
 
 type EventWithKey = EventPayload & { stateKey: string }
@@ -112,7 +113,8 @@ export class EventStore
 
   public async getMessages(
     eventPropertyKeys: EventProperties[],
-    limit: number = 100
+    limit: number = 100,
+    alternateRoles: boolean = false
   ) {
     eventPropertyKeys.push('from user')
     eventPropertyKeys.push('to user')
@@ -126,21 +128,38 @@ export class EventStore
       const role = event.sender === this.agentId ? 'assistant' : 'user'
 
       if (!event.content) {
-        // if this is an assistant message, also remove last user message
-        if (role === 'assistant') {
-          transformed.pop()
-        }
         continue
       }
 
-      if (role === expectedRole) {
+      if (alternateRoles) {
+        if (role === expectedRole) {
+          transformed.push({
+            role,
+            content: [{ type: 'text', text: event.content }],
+          })
+          // Update the expected role for the next message
+          expectedRole = role === 'assistant' ? 'user' : 'assistant'
+        } else {
+          // If the role doesn't match the expected role, add the content to the last message's content array
+          if (transformed.length > 0) {
+            const lastMessage = transformed[transformed.length - 1]
+            ;(lastMessage.content as { type: string; text: string }[]).push({
+              type: 'text',
+              text: event.content,
+            })
+          } else {
+            // If there are no previous messages, create a new message with the current role and content
+            transformed.push({
+              role,
+              content: [{ type: 'text', text: event.content }],
+            })
+          }
+        }
+      } else {
         transformed.push({
           role,
           content: event.content,
         })
-
-        // Update the expected role for the next message
-        expectedRole = role === 'assistant' ? 'user' : 'assistant'
       }
     }
 
