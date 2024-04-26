@@ -1,233 +1,97 @@
-// DOCUMENTED
+import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
 import Editor from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
-import React, { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-
-import { useDispatch, useSelector } from 'react-redux'
-import { usePubSub, useConfig } from '@magickml/providers'
-// import css from './magick.module.css'
+import { useConfig, usePubSub } from '@magickml/providers'
 import {
   RootState,
-  addLocalState,
-  selectStateBytabId,
-  upsertLocalState,
-  useAppSelector,
   useGetSpellByNameQuery,
   useSelectAgentsEvent,
 } from 'client/state'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
-// import { Checkbox, FormControlLabel } from '@mui/material'
 import { ChatInput } from './ChatInput'
 import { Button, Checkbox, Label } from '@magickml/client-ui'
 import posthog from 'posthog-js'
+import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
+import { useMessageQueue } from '../../hooks/useMessageQueue'
+import { usePlaytestData } from '../../hooks/usePlaytestData'
+import { useSelector } from 'react-redux'
 
-// Default playtest data.
-const defaultPlaytestData = {
-  sender: 'user',
-  observer: 'assistant',
-}
-
-type Message = {
-  sender: string
-  content: string
-}
-
-/**
- * Playtest component - The main component for handling playtesting functionality.
- */
 const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
 
+  const { enqueueSnackbar } = useSnackbar()
   const { spell } = useGetSpellByNameQuery(
     { spellName },
     {
       skip: !spellName,
-      selectFromResult: data => ({
-        spell: data?.data?.data[0],
-      }),
+      selectFromResult: ({ data }) => ({ spell: data?.data[0] }),
     }
   )
 
   const { lastItem: lastEvent } = useSelectAgentsEvent()
-
-  const scrollbars = useRef<any>()
-  const [history, setHistory] = useState<Message[]>([])
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
-  const [autoscroll, setAutoscroll] = useState<boolean>(true)
-  const isStreaming = useRef(false)
-  const messageQueue = useRef<string[]>([])
-  const typingTimer = useRef<any>(null)
-  const queueTimer = useRef<any>(null)
-
-  const setIsStreaming = value => {
-    isStreaming.current = value
-  }
-
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
 
-  const localState = useAppSelector(state => {
-    return selectStateBytabId(state.localState, tab.id)
+  const {
+    history,
+    scrollbars,
+    autoscroll,
+    setAutoscroll,
+    printToConsole,
+    onClear,
+    setHistory,
+  } = useMessageHistory({})
+
+  const { streamToConsole } = useMessageQueue({
+    setHistory,
   })
 
-  const { MESSAGE_AGENT } = events
+  const MESSAGE_AGENT = events.MESSAGE_AGENT
 
-  // Print to console callback function.
-  const printToConsole = (_text: string) => {
-    if (typeof _text !== 'string')
-      return console.warn('could not split text, not a string', _text)
-    const text = `Agent: ${_text}`
+  const { localState, onDataChange } = usePlaytestData(tab.id)
 
-    const newMessage: Message = {
-      sender: 'agent',
-      content: text,
-    }
-
-    setHistory(prevHistory => [...prevHistory, newMessage])
-  }
-
-  const typeChunk = () => {
-    // Process all messages in the queue at once
-    const messagesToProcess = [...messageQueue.current]
-    messageQueue.current = [] // Clear the queue as we're processing all messages
-
-    setHistory(prevHistory => {
-      const newHistory = [...prevHistory]
-      messagesToProcess.forEach(currentMessage => {
-        if (
-          newHistory.length === 0 ||
-          newHistory[newHistory.length - 1].sender !== 'agent'
-        ) {
-          newHistory.push({ sender: 'agent', content: currentMessage })
-        } else {
-          newHistory[newHistory.length - 1].content += currentMessage
-        }
-      })
-      return newHistory
-    })
-  }
-
-  const processQueue = () => {
-    if (messageQueue.current.length > 0) {
-      typeChunk() // Directly call typeChunk to process all messages
-    }
-  }
-
-  const streamToConsole = _text => {
-    if (typeof _text !== 'string') {
-      console.warn('Could not stream text, not a string', _text)
-      return
-    }
-
-    messageQueue.current.push(_text)
-    processQueue()
-  }
-
-  useEffect(() => {
-    queueTimer.current = setInterval(processQueue, 100) as unknown as null
-    return () => {
-      if (queueTimer.current)
-        clearInterval(queueTimer.current as unknown as number)
-      if (typingTimer.current)
-        clearInterval(typingTimer.current as unknown as number)
-    }
-  }, [])
-
-  // note here that we can do better than this by using things like a sessionId, etc.
+  // React to new events
   useEffect(() => {
     if (!lastEvent || !spell?.id) return
 
     const { data, event, actionName } = lastEvent
     const { content } = data
 
-    if (event?.runInfo?.spellId !== spell.id) return
-    if (event.channel !== spell.id) return
+    if (event?.runInfo?.spellId !== spell.id || event.channel !== spell.id)
+      return
 
     if (actionName === SEND_MESSAGE) {
       console.log('MESSAGE RECEIVED', content)
       printToConsole(content)
-    }
-
-    if (actionName === STREAM_MESSAGE) {
+    } else if (actionName === STREAM_MESSAGE) {
       streamToConsole(content)
     }
   }, [lastEvent])
 
-  // Keep scrollbar at the bottom of its window.
-  useEffect(() => {
-    if (!scrollbars.current) return
-    if (!autoscroll) return
-    scrollbars.current.scrollToBottom()
-  }, [history])
-
-  // Sync up localState into data field for persistence.
-  useEffect(() => {
-    // Set up a default for the local state here.
-    if (!localState) {
-      dispatch(
-        addLocalState({
-          id: tab.id,
-          playtestData: JSON.stringify({
-            ...defaultPlaytestData,
-            projectId: config.projectId,
-          }),
-        })
-      )
-      return
-    }
-  }, [config.projectId, dispatch, localState, tab.id])
-
-  // Available editor options.
-  const options = {
-    minimap: {
-      enabled: false,
-    },
-    wordWrap: 'bounded' as const,
-    fontSize: 14,
-  }
-
-  const handleEditorWillMount = monaco => {
-    monaco.editor.defineTheme('sds-dark', {
-      base: 'vs-dark',
-      inherit: true,
-      rules: [],
-      colors: {
-        'editor.background': '#272727',
-      },
-    })
-  }
-
-  // Send playtest input to the system.
+  // Handle message sending
   const onSend = async () => {
-    const newMessage: Message = {
+    const newMessage = {
       sender: 'user',
       content: `You: ${value}`,
     }
+
     const newHistory = [...history, newMessage]
-    setHistory(newHistory as [])
-    setValue('')
+    setHistory(newHistory)
 
-    // make sure when a user sends a message, we stop streaming mode from the agent
-    setIsStreaming(false)
-
-    const json = localState?.playtestData
-
-    if (!json) {
+    if (!localState?.playtestData) {
       enqueueSnackbar('No data provided', {
         variant: 'error',
       })
       return
     }
 
-    // Validate the JSON data.
     try {
-      JSON.parse(json)
+      JSON.parse(localState.playtestData)
     } catch (e) {
       enqueueSnackbar('Invalid data - JSON is poorly formatted', {
         variant: 'error',
@@ -235,7 +99,7 @@ const ChatWindow = ({ tab, spellName }) => {
       return
     }
 
-    const data = JSON.parse(json)
+    const data = JSON.parse(localState.playtestData)
 
     const eventPayload = {
       content: value,
@@ -251,8 +115,8 @@ const ChatWindow = ({ tab, spellName }) => {
       isPlaytest: true,
     }
 
-    setValue('')
     publish(MESSAGE_AGENT, eventPayload)
+    setValue('')
 
     posthog.capture('playtest_message_sent', {
       projectId: config.projectId,
@@ -261,70 +125,39 @@ const ChatWindow = ({ tab, spellName }) => {
     })
   }
 
-  // Update state when playtest data is changed.
-  const onDataChange = dataText => {
-    dispatch(
-      upsertLocalState({
-        id: tab.id,
-        playtestData: dataText ?? defaultPlaytestData,
-      })
-    )
-  }
-
   const onChange = e => {
     setValue(e.target.value)
-  }
-
-  const onClear = () => {
-    setHistory([])
   }
 
   const toggleData = () => {
     setOpenData(!openData)
   }
 
-  // const onSelectChange = async ({ value }) => {
-  //   setPlaytestOption(value)
-  // }
-
   const toolbar = (
-    <div className="flex space-x-1 justify-right items-right mt-1.5 mb-1.5 pl-1 pr-2">
-      <div className="flex space-x-1 items-center mr-1">
-        <Button
-          variant="basic"
-          onClick={toggleData}
-          className="h-6 w-14 font-medium"
-        >
-          Data
-        </Button>
-        <Button
-          variant="basic"
-          onClick={onClear}
-          className="h-6 w-14 font-medium"
-        >
-          Clear
-        </Button>
-        <Label className="font-medium text-xs">Autoscroll</Label>
-        <Checkbox
-          className=""
-          onCheckedChange={() => {
-            setAutoscroll(!autoscroll)
-          }}
-          defaultChecked
-        />
-      </div>
+    <div className="inline-flex space-x-1 justify-right items-center mt-1.5 mb-1.5 pl-1 pr-2">
+      <Button
+        variant="basic"
+        onClick={toggleData}
+        className="h-6 w-14 font-medium"
+      >
+        Data
+      </Button>
+      <Button
+        variant="basic"
+        onClick={onClear}
+        className="h-6 w-14 font-medium"
+      >
+        Clear
+      </Button>
+      <Label className="font-medium text-xs">Autoscroll</Label>
+      <Checkbox
+        className=""
+        onCheckedChange={() => setAutoscroll(!autoscroll)}
+        defaultChecked={autoscroll}
+      />
     </div>
   )
 
-  if (document.getElementById('api-key')) {
-    document
-      .getElementById('api-key')
-      ?.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-          event.preventDefault()
-        }
-      })
-  }
   const UserMessage = ({ message }) => (
     <div className="flex flex-row mb-2">
       <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
@@ -343,16 +176,23 @@ const ChatWindow = ({ tab, spellName }) => {
 
   return (
     <Window toolbar={toolbar}>
+      {/* Chat window layout */}
       <div className="flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto">
+        {/* Data editor section */}
         <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
           <Scrollbars ref={scrollbars}>
             <Editor
               theme="sds-dark"
               language="json"
               value={localState?.playtestData}
-              options={options}
+              options={{
+                minimap: { enabled: false },
+                wordWrap: 'bounded',
+                fontSize: 14,
+              }}
               defaultValue={
-                localState?.playtestData || JSON.stringify(defaultPlaytestData)
+                localState?.playtestData ||
+                JSON.stringify({ sender: 'user', observer: 'assistant' })
               }
               onChange={onDataChange}
               beforeMount={handleEditorWillMount}
@@ -362,20 +202,22 @@ const ChatWindow = ({ tab, spellName }) => {
         <div
           className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
         ></div>
+
+        {/* Chat history section */}
         <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
           <Scrollbars ref={ref => (scrollbars.current = ref)}>
             <ul className="list-none m-0 p-2">
-              {history.map((printItem: Message, key: any) => {
-                if (printItem.sender === 'user') {
+              {history.map((message: Message, index) => {
+                if (message.sender === 'user') {
                   return (
-                    <li key={key}>
-                      <UserMessage message={printItem.content} />
+                    <li key={index}>
+                      <UserMessage message={message.content} />
                     </li>
                   )
-                } else if (printItem.sender === 'agent') {
+                } else if (message.sender === 'agent') {
                   return (
-                    <li key={key}>
-                      <AgentMessage message={printItem.content} />
+                    <li key={index}>
+                      <AgentMessage message={message.content} />
                     </li>
                   )
                 } else {
@@ -385,6 +227,8 @@ const ChatWindow = ({ tab, spellName }) => {
             </ul>
           </Scrollbars>
         </div>
+
+        {/* Input section */}
         <ChatInput onChange={onChange} value={value} onSend={onSend} />
       </div>
     </Window>
@@ -392,3 +236,15 @@ const ChatWindow = ({ tab, spellName }) => {
 }
 
 export default ChatWindow
+
+// Helper function to set Monaco Editor theme
+const handleEditorWillMount = monaco => {
+  monaco.editor.defineTheme('sds-dark', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [],
+    colors: {
+      'editor.background': '#272727',
+    },
+  })
+}

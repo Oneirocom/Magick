@@ -15,11 +15,5 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "[sql]": {
-    "editor.defaultFormatter": "mtxr.sqltools"
-  },
   "WillLuke.nextjs.hasPrompted": true,
-  "[xml]": {
-    "editor.defaultFormatter": "redhat.vscode-xml"
-  }
 }

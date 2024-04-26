@@ -2,6 +2,10 @@ import Anthropic from '@anthropic-ai/sdk'
 import { Message } from './conversation_manager'
 import { MessageStream } from '@anthropic-ai/sdk/lib/MessageStream'
 
+// const MODEL = 'claude-3-opus-20240229'
+// const MODEL = 'claude-3-sonnet-20240229'
+const MODEL = 'claude-3-haiku-20240307'
+
 class LLMManager {
   private anthropic: Anthropic
 
@@ -15,7 +19,7 @@ class LLMManager {
     maxTokens: number
   ): MessageStream {
     const stream = this.anthropic.messages.stream({
-      model: 'claude-3-opus-20240229',
+      model: MODEL,
       stop_sequences: ['</function_calls>'],
       system: systemPrompt,
       max_tokens: maxTokens,
@@ -31,7 +35,7 @@ class LLMManager {
     maxTokens: number
   ): Promise<string> {
     const msg = await this.anthropic.messages.create({
-      model: 'claude-3-opus-20240229',
+      model: MODEL,
       // model: 'claude-3-sonnet-20240229',
       // model: 'claude-3-haiku-20240307',
       stop_sequences: ['</function_calls>'],

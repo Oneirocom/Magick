@@ -128,7 +128,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            className={styles.tableCellHeader}
+            className="bg-primary opacity-90"
             style={{ minWidth: headCell.minWidth }}
           >
             {(headCell.id as any) === 'checkbox' ? (
@@ -288,7 +288,10 @@ export const TableComponent = ({
   return (
     <React.Fragment>
       <TableContainer>
-        <Table sx={{ minWidth: 750, fontSize: '1rem !important' }} aria-labelledby="tableTitle">
+        <Table
+          sx={{ minWidth: 750, fontSize: '1rem !important' }}
+          aria-labelledby="tableTitle"
+        >
           <EnhancedTableHead
             numSelected={selectedRows?.length ?? 0}
             order={order}
@@ -356,11 +359,11 @@ export const TableComponent = ({
                             )}
                           </IconButton>
                         ) : // Render truncatedValue or full value based on expansion state
-                          isExpanded ? (
-                            value
-                          ) : (
-                            truncatedValue
-                          )}
+                        isExpanded ? (
+                          value
+                        ) : (
+                          truncatedValue
+                        )}
                       </TableCell>
                     )
                   })}

@@ -1,8 +1,10 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
+import TypedEmitter from 'typed-emitter'
 import { Application, saveGraphEvent } from 'server/core'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import { getEventProperties } from '../utils'
 import { EventTypes, SEND_MESSAGE } from 'communication'
+import EventEmitter from 'events'
 
 type EventProperties =
   | 'sender'
@@ -23,7 +25,8 @@ export interface IEventStore {
   saveAgentEvent: (data: ActionPayload) => void
   getMessages: (
     eventPropertyKeys: EventProperties[],
-    limit?: number
+    limit?: number,
+    alternateRoles?: boolean
   ) => Promise<Message[]>
   setEvent: (event: EventWithKey) => void
   init: (nodes: GraphNodes) => void
@@ -44,12 +47,19 @@ export enum StatusEnum {
 
 type Message = {
   role: string
-  content: string
+  content: string | { type: string; text: string }[]
 }
 
 type EventWithKey = EventPayload & { stateKey: string }
 
-export class EventStore implements IEventStore {
+type EventStoreEvents = {
+  done: (event: EventPayload | null) => void
+}
+
+export class EventStore
+  extends (EventEmitter as new () => TypedEmitter<EventStoreEvents>)
+  implements IEventStore
+{
   private asyncNodeCounter: number = 0
   private _currentEvent: EventPayload | null
   private status: StatusEnum
@@ -59,6 +69,7 @@ export class EventStore implements IEventStore {
   private agentId: string
 
   constructor(stateService: IStateService, app: Application, agentId: string) {
+    super()
     this.stateService = stateService
     this._currentEvent = null
     this.status = StatusEnum.INIT
@@ -102,7 +113,8 @@ export class EventStore implements IEventStore {
 
   public async getMessages(
     eventPropertyKeys: EventProperties[],
-    limit: number = 100
+    limit: number = 100,
+    alternateRoles: boolean = false
   ) {
     eventPropertyKeys.push('from user')
     eventPropertyKeys.push('to user')
@@ -116,21 +128,38 @@ export class EventStore implements IEventStore {
       const role = event.sender === this.agentId ? 'assistant' : 'user'
 
       if (!event.content) {
-        // if this is an assistant message, also remove last user message
-        if (role === 'assistant') {
-          transformed.pop()
-        }
         continue
       }
 
-      if (role === expectedRole) {
+      if (alternateRoles) {
+        if (role === expectedRole) {
+          transformed.push({
+            role,
+            content: [{ type: 'text', text: event.content }],
+          })
+          // Update the expected role for the next message
+          expectedRole = role === 'assistant' ? 'user' : 'assistant'
+        } else {
+          // If the role doesn't match the expected role, add the content to the last message's content array
+          if (transformed.length > 0) {
+            const lastMessage = transformed[transformed.length - 1]
+            ;(lastMessage.content as { type: string; text: string }[]).push({
+              type: 'text',
+              text: event.content,
+            })
+          } else {
+            // If there are no previous messages, create a new message with the current role and content
+            transformed.push({
+              role,
+              content: [{ type: 'text', text: event.content }],
+            })
+          }
+        }
+      } else {
         transformed.push({
           role,
           content: event.content,
         })
-
-        // Update the expected role for the next message
-        expectedRole = role === 'assistant' ? 'user' : 'assistant'
       }
     }
 
@@ -146,11 +175,8 @@ export class EventStore implements IEventStore {
 
     const graphEventsService = this.app.service('graphEvents')
 
-    const fromUser = eventPropertyKeys['from user']
-    const toUser = eventPropertyKeys['to user']
-
-    delete eventPropertyKeys['from user']
-    delete eventPropertyKeys['to user']
+    const fromUser = eventPropertyKeys.includes('from user')
+    const toUser = eventPropertyKeys.includes('to user')
 
     const eventProperties = getEventProperties(
       this._currentEvent,
@@ -235,11 +261,12 @@ export class EventStore implements IEventStore {
     if (this.status === StatusEnum.AWAIT) return
 
     // We sync the state and clear it from the state service after the event is done.
-    await this.stateService.syncAndClearState()
 
     if (this.asyncNodeCounter === 0) {
       // If there are no async nodes, we can change the status ready, showing it is ready for the next event.
       this.status = StatusEnum.READY
+      this.emit('done', this._currentEvent)
+      await this.stateService.syncAndClearState()
     }
   }
 }

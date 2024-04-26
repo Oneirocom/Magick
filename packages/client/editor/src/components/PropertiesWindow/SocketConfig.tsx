@@ -1,17 +1,16 @@
 import { useCallback, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import SingleElement from './SingleElement'
-// import InputSocket from '../react-flow/InputSocket'
 
 import {
   Button,
+  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
-import { TextInputField } from '../react-flow/TextInputField'
 
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -52,7 +51,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
       <div className="flex h-20 mr-2">
         <div className="flex gap-2 items-center h-10 ">
           {/* Input field */}
-          <TextInputField
+          <Input
             value={value}
             type="text"
             onChange={onChange}
@@ -130,7 +129,8 @@ export const SocketConfig = ({
 
   return (
     <div>
-      <h4>Input Sockets</h4>
+      {configKey === 'socketInputs' && <h3>Input Sockets</h3>}
+      {configKey === 'socketOutputs' && <h3>Output Sockets</h3>}
       {sockets.map((socket: any) => (
         <SingleElement
           name={socket.name}

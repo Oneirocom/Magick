@@ -36,10 +36,6 @@ export const SecretWindow = (): JSX.Element => {
     return <div>Loading...</div>
   }
 
-  console.log('THIS ', {
-    credentials,
-    columns,
-  })
   return (
     <div className="w-full h-full overflow-y-auto overflow-x-hidden">
       <div className="inline-flex w-full justify-between items-center space-x-2 p-8">

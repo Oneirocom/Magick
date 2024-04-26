@@ -69,22 +69,21 @@ const configureCustomServices = (
       'command',
       'message',
       'ping',
+      'processSeraphEvent',
     ],
-    events: ['log', 'result', 'spell', 'event', 'error', 'warn', 'pong'],
+    events: [
+      'log',
+      'result',
+      'spell',
+      'event',
+      'error',
+      'warn',
+      'pong',
+      'seraphEvent',
+    ],
   })
   app.use('request', socketClient.service('request'), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
-  })
-  app.use('seraph', socketClient.service('seraph'), {
-    methods: ['request', 'find', 'get', 'create'],
-    events: [
-      'request',
-      'response',
-      'error',
-      'info',
-      'functionStart',
-      'functionEnd',
-    ],
   })
 }
 

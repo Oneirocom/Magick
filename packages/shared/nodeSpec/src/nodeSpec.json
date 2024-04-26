@@ -472,6 +472,33 @@
     ]
   },
   {
+    "type": "action/json/parse",
+    "category": "Action",
+    "label": "Json Parse",
+    "inputs": [
+      {
+        "name": "json",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "object",
+        "valueType": "object"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "flow/array/forEach",
     "category": "Flow",
     "label": "For Each",
@@ -1419,6 +1446,11 @@
         "valueType": "flow"
       },
       {
+        "name": "alterateRoles",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
         "name": "entries",
         "valueType": "integer",
         "defaultValue": 10
@@ -1452,6 +1484,66 @@
         ]
       }
     ]
+  },
+  {
+    "type": "logic/object/destructure",
+    "category": "Logic",
+    "label": "Destructure",
+    "inputs": [
+      {
+        "name": "object",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer",
+          "object"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/string/isDefined",
+    "category": "None",
+    "label": "Concat",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/string",
@@ -3919,6 +4011,53 @@
       }
     ],
     "configuration": []
+  },
+  {
+    "type": "action/object/create",
+    "category": "Action",
+    "label": "Object Create",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "object",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer"
+        ]
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
   },
   {
     "type": "logic/mergeDeep/object",

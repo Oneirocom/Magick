@@ -18,6 +18,10 @@ export const getMessageHistory = makeFlowNodeDefinition({
   },
   in: {
     flow: 'flow',
+    alterateRoles: {
+      valueType: 'boolean',
+      defaultValue: false,
+    },
     entries: {
       valueType: 'integer',
       defaultValue: 10,
@@ -38,9 +42,12 @@ export const getMessageHistory = makeFlowNodeDefinition({
     }
 
     const limit = Number(read('entries')) as number
+    const alterateRoles = Boolean(read('alterateRoles')) as boolean
 
     const messages =
-      (await eventStore.getMessages(eventState, limit)).reverse() || []
+      (
+        await eventStore.getMessages(eventState, limit, alterateRoles)
+      ).reverse() || []
 
     if (messages.length > 0 && messages[0].role === 'assistant') {
       messages.shift()

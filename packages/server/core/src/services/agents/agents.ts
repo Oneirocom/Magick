@@ -59,6 +59,7 @@ const AGENT_EVENTS = [
   'error',
   'warn',
   'pong',
+  'seraphEvent',
 ]
 
 /**
@@ -79,6 +80,10 @@ export const agent = (app: Application) => {
       'ping',
       'subscribe',
       'message',
+      'deleteSeraphEvent',
+      'processSeraphEvent',
+      'createSeraphEvent',
+      'getSeraphEvents',
     ],
     events: AGENT_EVENTS,
   })
@@ -106,6 +111,41 @@ export const agent = (app: Application) => {
     },
   })
 
+  app.use('/agents/seraphEvents', {
+    find: async params => {
+      try {
+        const result = await app.service('agents').getSeraphEvents(params)
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:seraphEvents: ${error.message}`)
+      }
+    },
+  })
+
+  app.use('/agents/createSeraphEvent', {
+    create: async data => {
+      try {
+        const result = await app.service('agents').createSeraphEvent(data)
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:createSeraphEvent: ${error.message}`)
+      }
+    },
+  })
+
+  app.use('/agents/deleteSeraphEvent', {
+    remove: async seraphEventId => {
+      try {
+        const result = await app.service('agents').deleteSeraphEvent({
+          seraphEventId: seraphEventId,
+        })
+        return result
+      } catch (error: any) {
+        throw new Error(`Error in agents:deleteSeraphEvents: ${error.message}`)
+      }
+    },
+  })
+
   const pubSub = app.get<'pubsub'>('pubsub')
 
   // this handles relaying all agent messages up to connected clients.
@@ -114,7 +154,6 @@ export const agent = (app: Application) => {
     pubSub.patternSubscribe('agent*', (message, channel) => {
       // parse  the channel from agent:agentId:domain:messageType
       const agentId = channel.split(':')[1]
-
       // parse the domain of the agent message
       const domain = channel.split(':')[2]
 
@@ -205,6 +244,15 @@ declare module '../../declarations' {
     agents: AgentService
     '/agents/createRelease': {
       create: ReturnType<any>
+    }
+    '/agents/seraphEvents': {
+      find: ReturnType<any>
+    }
+    '/agents/createSeraphEvent': {
+      create: ReturnType<any>
+    }
+    '/agents/deleteSeraphEvent': {
+      remove: ReturnType<any>
     }
   }
 }

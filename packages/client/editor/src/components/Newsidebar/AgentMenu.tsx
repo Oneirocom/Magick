@@ -53,14 +53,13 @@ export function AgentMenu({ data }) {
       if (!data) return
 
       const draft = data.find(agent => agent.isDraft)
+      const published = data.find(agent => agent.currentSpellReleaseId)
 
       if (draft) {
         setDraftAgent(draft)
-        setCurrentAgent(currentAgent || draft)
+        setCurrentAgent(draft)
       }
-
-      const published = data.find(agent => agent.currentSpellReleaseId)
-      setPublishedAgent(published)
+      if (published) setPublishedAgent(published)
     }
 
     handleDataUpdate()
@@ -77,7 +76,6 @@ export function AgentMenu({ data }) {
   }
 
   const handleSelectAgent = (agent: AgentInterface) => {
-    console.log('AGENT', agent)
     setCurrentAgent(agent)
     toggleMenu()
   }
@@ -148,11 +146,11 @@ export function AgentMenu({ data }) {
           <AvatarImage
             className="object-cover w-full h-full rounded-full"
             src={
-              currentAgent?.image
-                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}${currentAgent?.image}`
+              publishedAgent?.image
+                ? `${process.env.NEXT_PUBLIC_BUCKET_PREFIX}/${publishedAgent?.image}`
                 : defaultImage(currentAgent?.id || '1')
             }
-            alt={currentAgent?.name.at(0) || 'A'}
+            alt={currentAgent?.name?.at(0) || 'A'}
           />
           {currentAgent?.image ? currentAgent?.name.at(0) || 'A' : null}
         </Avatar>
@@ -194,7 +192,7 @@ export function AgentMenu({ data }) {
           {draftAgent && (
             <AgentListItem
               key={draftAgent.id}
-              agent={draftAgent}
+              agent={{ ...draftAgent, image: publishedAgent?.image || null }}
               onSelectAgent={handleSelectAgent}
               isDraft
             />

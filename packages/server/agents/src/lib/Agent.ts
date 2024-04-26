@@ -1,30 +1,50 @@
 import pino from 'pino'
-
-import { AGENT_ERROR, AGENT_WARN, AGENT_PONG, AGENT_LOG } from 'communication'
-
-import { type Worker } from 'server/communication'
+import {
+  AGENT_ERROR,
+  AGENT_WARN,
+  AGENT_PONG,
+  AGENT_LOG,
+  AGENT_SERAPH_EVENT,
+} from 'communication'
 import { Application } from 'server/core'
 import { getLogger } from 'server/logger'
 import { EventMetadata } from 'server/event-tracker'
 import { Spellbook } from 'server/grimoire'
 import { AgentInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { CloudAgentWorker } from 'server/cloud-agent-worker'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
-import { EventPayload } from 'server/plugin'
-// import { StateService } from './StateService'
+import { ActionPayload, EventPayload } from 'server/plugin'
+import { ISeraphEvent } from 'servicesShared'
+import { SeraphManager } from '@magickml/seraph-manager'
+import EventEmitter from 'events'
+import TypedEmitter from 'typed-emitter'
 
-// type AgentData = {
-//   state: {
+export type AgentEventPayload<
+  Data = Record<string, unknown>,
+  Y = Record<string, unknown>
+> = Partial<
+  Exclude<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName'>
+> &
+  Pick<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName'>
 
-//   }
+type AgentEvents = {
+  message: (event: EventPayload) => void
+  messageReceived: (event: ActionPayload) => void
+  messageStream: (event: ActionPayload) => void
+  eventComplete: (event: EventPayload | null) => void
+  error: (error: ActionPayload) => void
+}
 
 /**
- * The Agent class that implements AgentInterface.
+ * Agent class represents an agent instance.
+ * It contains the agent's data, methods to update the agent, and methods to handle events.
  */
-export class Agent implements AgentInterface {
+export class Agent
+  extends (EventEmitter as new () => TypedEmitter<AgentEvents>)
+  implements AgentInterface
+{
   name = ''
   id: any
   secrets: any
@@ -33,48 +53,55 @@ export class Agent implements AgentInterface {
   data!: AgentInterface
   projectId!: string
   logger: pino.Logger = getLogger()
-  worker: Worker
   commandHub: CommandHub
   version!: string
   pubsub: RedisPubSub
   ready = false
   app: Application
   spellbook: Spellbook<Agent, Application>
-  agentManager: CloudAgentWorker
   pluginManager: PluginManager
   outputTypes: any[] = []
   heartbeatInterval: NodeJS.Timer
+  seraphManager: SeraphManager
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
    * @param agentData {AgentData} - The instance's data.
-   * @param agentManager {AgentManager} - The instance's manager.
    */
   constructor(
     agentData: AgentInterface,
-    agentManager: CloudAgentWorker,
-    worker: Worker,
     pubsub: RedisPubSub,
     app: Application
   ) {
+    super()
     this.id = agentData.id
     this.app = app
-    this.agentManager = agentManager
 
     this.update(agentData)
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
 
     // Set up the agent worker to handle incoming messages
-    this.worker = worker
 
     this.pubsub = pubsub
 
     this.commandHub = new CommandHub(this, this.pubsub)
 
+    this.seraphManager = new SeraphManager({
+      seraphOptions: {
+        openAIApiKey: process.env.OPENAI_API_KEY || '',
+        anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
+      },
+      agentId: this.id,
+      projectId: this.projectId,
+      pubSub: this.pubsub,
+      commandHub: this.commandHub,
+      app: this.app,
+    })
+
     this.pluginManager = new PluginManager({
       pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
       connection: this.app.get('redis'),
-      agentId: this.id,
+      agent: this,
       pubSub: this.app.get('pubsub'),
       projectId: this.projectId,
       commandHub: this.commandHub,
@@ -105,6 +132,26 @@ export class Agent implements AgentInterface {
 
     // initialzie spellbook
     this.initializeSpellbook()
+  }
+
+  formatEvent<Data = Record<string, unknown>, Y = Record<string, unknown>>(
+    partialEvent: AgentEventPayload<Data, Y>
+  ): EventPayload<Data, Y> {
+    return {
+      channel: 'agent',
+      connector: 'agent',
+      client: 'agent',
+      agentId: this.id,
+      observer: this.id,
+      channelType: 'agent',
+      rawData: {},
+      timestamp: new Date().toISOString(),
+      data: {} as Data,
+      metadata: {} as Y,
+      status: 'success',
+      plugin: 'core',
+      ...partialEvent,
+    }
   }
 
   /**
@@ -191,10 +238,15 @@ export class Agent implements AgentInterface {
     event: EventPayload
   ) {
     // remove unwanted data
-    delete event.content
-    delete event.rawData
-    delete event.rawData
-    delete event.data
+    if (event?.hasOwnProperty('content')) {
+      delete event.content
+    }
+    if (event?.hasOwnProperty('rawData')) {
+      delete event.rawData
+    }
+    if (event?.hasOwnProperty('data')) {
+      delete event.data
+    }
 
     metadata.event = event
 
@@ -244,6 +296,11 @@ export class Agent implements AgentInterface {
       message,
       data,
     })
+  }
+
+  seraphEvent(event: ISeraphEvent) {
+    this.logger.info('Processing seraph event: %o', event)
+    this.publishEvent(AGENT_SERAPH_EVENT(this.id), { data: event })
   }
 
   /**

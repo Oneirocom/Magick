@@ -12,7 +12,7 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
-          'border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground',
+          'border border-ds-neutral hover:border-ds-primary bg-transparent shadow-sm',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
         ghost:
@@ -26,16 +26,16 @@ const buttonVariants = cva(
           'bg-transparent font-montserrat lg:dark:bg-[#262b2e] text-base gap-x-2 rounded-lg lg:bg-[#e9edf1] hover:bg-secondary-highlight/80 dark:hover:bg-[#3C3F41] text-black dark:text-white font-montserrat',
 
         'portal-primary':
-          'bg-ds-primary text-ds-black font-bold font-montserrat',
+          'bg-ds-primary text-ds-black font-semibold font-montserrat',
         'portal-neutral':
-          'bg-ds-neutral text-ds-white font-medium font-montserrat border border-ds-white/40',
-          clear: '',
+          'bg-ds-neutral text-ds-white font-medium font-montserrat',
+        clear: '',
       },
       size: {
         default: 'h-9 px-4 py-2',
-        sm: 'h-8 rounded-lg px-3 text-xs',
-        md: 'h-10 rounded-lg px-4 text-base',
-        lg: 'h-12 rounded-lg px-4',
+        sm: 'h-8 rounded-[5px] px-3 text-xs',
+        md: 'h-10 rounded-[5px] px-4 text-base',
+        lg: 'h-12 rounded-[5px] px-4',
         icon: 'h-9 w-9',
         responsive: 'h-8 lg:h-12 rounded-md px-3 lg:px-4 text-xs lg:text-base',
       },

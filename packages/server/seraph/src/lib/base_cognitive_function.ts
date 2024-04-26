@@ -21,7 +21,7 @@ abstract class BaseCognitiveFunction {
 
   abstract getPromptInjection(): Promise<string>
 
-  abstract execute(args: Record<string, any> | null): Promise<string>
+  abstract execute(args: Record<string, any> | null): Promise<string> | string
 
   async getFeedback(prompt, getUserFeedback) {
     if (typeof getUserFeedback !== 'function') {

@@ -1,4 +1,3 @@
-// DOCUMENTED
 import checkPermissions from 'feathers-permissions'
 import { authenticate } from '@feathersjs/authentication'
 import { NotAuthenticated } from '@feathersjs/errors/lib'
@@ -17,7 +16,12 @@ import pino from 'pino'
 import Redis from 'ioredis'
 import { RedisPubSub } from 'server/redis-pubsub'
 
-import { REDIS_URL, API_ACCESS_KEY } from 'shared/config'
+import {
+  REDIS_URL,
+  API_ACCESS_KEY,
+  PAGINATE_MAX,
+  PAGINATE_DEFAULT,
+} from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
 
 import { dbClient } from './dbClient'
@@ -32,6 +36,14 @@ import handleSockets from './sockets/sockets'
 import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
 import { CredentialsManager } from 'server/credentials'
+import {
+  BashExecutor,
+  GitManager,
+  MemoryRetrieval,
+  MemoryStorageMiddleware,
+  SeraphCore,
+  importPrivatePrompts,
+} from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
 import { stringify } from 'shared/utils'
 
@@ -55,6 +67,7 @@ declare module './declarations' {
     environment: Environment
     posthog: ReturnType<typeof createPosthogClient>
     credentialsManager: CredentialsManager
+    seraphCore: SeraphCore
   }
 }
 
@@ -66,6 +79,23 @@ export async function initApp(environment: Environment = 'default') {
   const credentialsManager = new CredentialsManager()
   app.set('credentialsManager', credentialsManager)
 
+  const prompt =
+    (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
+
+  const seraph = new SeraphCore({
+    prompt,
+    openAIApiKey: process.env['OPENAI_API_KEY'] as string,
+    anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
+  })
+
+  seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
+  // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
+  seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
+  seraph.registerCognitiveFunction(new BashExecutor(seraph))
+  seraph.registerCognitiveFunction(new GitManager(seraph))
+
+  app.set('seraphCore', seraph)
+
   app.set('posthog', createPosthogClient(app))
 
   const port = parseInt(process.env.PORT || '3030', 10)
@@ -74,8 +104,8 @@ export async function initApp(environment: Environment = 'default') {
   const host = process.env.HOST || 'localhost'
   app.set('host', host)
 
-  const paginateDefault = parseInt(process.env.PAGINATE_DEFAULT || '10', 10)
-  const paginateMax = parseInt(process.env.PAGINATE_MAX || '50', 10)
+  const paginateDefault = parseInt(PAGINATE_DEFAULT || '10', 10)
+  const paginateMax = parseInt(PAGINATE_MAX || '50', 10)
   const paginate = {
     default: paginateDefault,
     max: paginateMax,

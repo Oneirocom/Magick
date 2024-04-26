@@ -1,6 +1,6 @@
 // seraph_iterator.test.ts
 import { SeraphIterator } from '../seraph_iterator'
-import { Seraph } from '../seraph'
+import { Seraph } from '../seraphCore'
 import { LLMManager } from '../llm_manager'
 import { CognitiveFunctionSchema } from '../zod_schemas'
 

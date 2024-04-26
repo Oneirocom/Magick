@@ -59,8 +59,6 @@ export const arrayCreate = makeFlowNodeDefinition({
       return acc
     }, [])
 
-    console.log('NEW ARRAY', newArray)
-
     write('array', newArray)
     commit('flow')
   },

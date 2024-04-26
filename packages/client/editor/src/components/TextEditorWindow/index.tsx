@@ -9,7 +9,7 @@ import {
   selectActiveInput,
   setActiveInput,
 } from 'client/state'
-import { useChangeNodeData } from '../../hooks/react-flow/useChangeNodeData'
+import { useChangeNodeData } from '@magickml/flow-core'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
 

@@ -2,6 +2,7 @@ import {
   EventNodeInstance,
   EventNodeSetupParams,
   IEventNodeDefinition,
+  IGraph,
   INodeDefinition,
   NodeConfigurationDescription,
   NodeType,
@@ -35,7 +36,7 @@ interface ExtendedConfig extends NodeConfigurationDescription {
   }
 }
 
-type CustomEventNodeConfig<
+export type CustomEventNodeConfig<
   TEventPayload extends EventPayload,
   TInput extends SocketsDefinition,
   TOutput extends SocketsDefinition,
@@ -45,8 +46,12 @@ type CustomEventNodeConfig<
     event: TEventPayload,
     args: EventNodeSetupParams<TInput, TOutput, TState>
   ) => void // Define the type more precisely if possible
-  dependencyName: string
-  eventName: string
+  dependencyName?: string
+  eventName?: string
+  customListener?: (
+    getDependency: IGraph['getDependency'],
+    onStartEvent: (event: TEventPayload) => void
+  ) => void
 }
 
 /**
@@ -182,11 +187,18 @@ export function makeMagickEventNodeDefinition<
             engine.onNodeExecutionEnd.emit(node)
           }
 
-          // todo we should hard type this base emitter better
-          const customEventEmitter = getDependency<BaseEmitter>(
-            eventConfig.dependencyName
-          )
-          customEventEmitter?.on(eventConfig.eventName, onStartEvent)
+          if (eventConfig.customListener) {
+            eventConfig.customListener(getDependency, onStartEvent)
+          }
+
+          if (eventConfig.dependencyName && eventConfig.eventName) {
+            // todo we should hard type this base emitter better
+            const customEventEmitter = getDependency<BaseEmitter>(
+              eventConfig.dependencyName
+            )
+
+            customEventEmitter?.on(eventConfig.eventName, onStartEvent)
+          }
         },
         dispose: () => {
           return {}
