@@ -1527,6 +1527,41 @@
     ]
   },
   {
+    "type": "queries/messages/clearMessageHistory",
+    "category": "Flow",
+    "label": "Clear Message History",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": [
+          "channel",
+          "connector"
+        ]
+      }
+    ]
+  },
+  {
     "type": "logic/string/isDefined",
     "category": "None",
     "label": "Concat",
