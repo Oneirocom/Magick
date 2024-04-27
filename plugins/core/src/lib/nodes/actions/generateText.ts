@@ -169,8 +169,6 @@ export const generateText = makeFlowNodeDefinition({
           { role: 'user', content: prompt },
         ] as Message[]
 
-        console.log('allMessages:', allMessages)
-
         const request = {
           model,
           messages: allMessages,
