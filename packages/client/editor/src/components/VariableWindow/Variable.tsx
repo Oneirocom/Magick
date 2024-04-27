@@ -121,9 +121,9 @@ const DefaultInput = ({
       )}
       {valueType === 'boolean' && !showChoices && (
         <div className="flex gap-2 h-10 items-center">
-          <p>True</p>
-          <Switch value={value || 0} onChange={updateValue} />
           <p>False</p>
+          <Switch value={value || 0} onChange={updateValue} />
+          <p>True</p>
         </div>
       )}
       {valueType === 'array' && !showChoices && (
