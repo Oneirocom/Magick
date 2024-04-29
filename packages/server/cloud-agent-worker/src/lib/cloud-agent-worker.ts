@@ -14,6 +14,8 @@ export interface AgentListRecord {
   currentAgents: string[]
 }
 
+const HEARTBEAT_THRESHOLD = 60000
+
 // I get that it's confusing extending AgentManager, but it's the best way to
 // get the functionality I want without having to rewrite a bunch of stuff.
 // Agent Managers just managed agents for a single instance of the server anyway
@@ -45,15 +47,24 @@ export class CloudAgentWorker {
     return this.currentAgents[agentId]
   }
 
+  async setAgentStatus(agentId: string, status: 'active' | 'inactive') {
+    const redis = this.app.get('redis')
+    const agentStatusKey = `agent:status:${agentId}`
+
+    const expiry = 120 // Example: Expiry of 2x heartbeat interval
+    await redis.set(agentStatusKey, status, 'EX', expiry)
+  }
+
   async checkAgentRunning(agentId: string): Promise<boolean> {
     const redis = this.app.get('redis')
     const heartbeatKey = `agent:heartbeat:${agentId}`
+
     const heartbeat = await redis.get(heartbeatKey)
 
     if (heartbeat) {
       const lastHeartbeat = parseInt(heartbeat, 10)
       const currentTime = Date.now()
-      const heartbeatThreshold = 60000 // Consider agent as running if heartbeat is within 60 seconds
+      const heartbeatThreshold = HEARTBEAT_THRESHOLD // Consider agent as running if heartbeat is within 60 seconds
 
       if (currentTime - lastHeartbeat <= heartbeatThreshold) {
         return true
@@ -64,13 +75,13 @@ export class CloudAgentWorker {
   }
 
   async addAgent(agentId: string) {
-    // const isAgentRunning = await this.checkAgentRunning(agentId)
-    // if (isAgentRunning) {
-    //   this.logger.info(
-    //     `Agent ${agentId} is already running on another worker, skipping creation`
-    //   )
-    //   return
-    // }
+    const isAgentRunning = await this.checkAgentRunning(agentId)
+    if (isAgentRunning) {
+      this.logger.trace(
+        `Agent ${agentId} is already running on another worker, skipping creation`
+      )
+      return
+    }
 
     this.logger.info(`Creating agent ${agentId}...`)
     const agentDBRes = await app.service('agents').find({
@@ -105,6 +116,8 @@ export class CloudAgentWorker {
 
     const agent = new Agent(agentData, this.app.get('pubsub'), app)
 
+    this.setAgentStatus(agentId, 'active')
+
     this.listenForChanges(agentId)
 
     this.currentAgents[agentId] = agent
@@ -121,7 +134,9 @@ export class CloudAgentWorker {
     }
 
     await this.currentAgents[agentId]?.onDestroy()
-    this.currentAgents[agentId] = null
+    delete this.currentAgents[agentId]
+
+    this.setAgentStatus(agentId, 'inactive')
 
     this.pubSub.unsubscribe(AGENT_UPDATE_JOB(agentId))
   }
@@ -143,15 +158,6 @@ export class CloudAgentWorker {
     }
 
     const agent = agentDBResult[0]
-
-    // update the agent's rootSpellId if it changed
-    // we may want to make this updating flow more robust in the future
-    if (
-      this.currentAgents[agentId] &&
-      agent.rootSpellId != this.currentAgents[agentId].rootSpellId
-    ) {
-      this.currentAgents[agentId].rootSpellId = agent.rootSpellId
-    }
 
     if (this.currentAgents[agentId]) {
       this.currentAgents[agentId].update(agent)
@@ -190,7 +196,6 @@ export class CloudAgentWorker {
     new Worker(
       'agent:create',
       async (job: Job) => {
-        console.log('###################ADDDDDING AGENT', job.data.agentId)
         await this.addAgent(job.data.agentId)
       },
       {
