@@ -196,7 +196,7 @@ export class Agent
     }
 
     const spells = spellsData.data
-    this.spellbook.loadSpells(spells)
+    await this.spellbook.loadSpells(spells)
   }
 
   startHeartbeat() {
@@ -208,7 +208,7 @@ export class Agent
       const timestamp = Date.now()
       redis.set(HEARTBEAT_KEY, timestamp.toString())
       // Optionally set an expiry longer than the heartbeat interval
-      redis.expire(HEARTBEAT_KEY, 60) // Expires after 60 seconds
+      redis.expire(HEARTBEAT_KEY, 15) // Expires after 60 seconds
     }, AGENT_HEARTBEAT_INTERVAL_MSEC)
   }
 
