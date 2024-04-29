@@ -106,6 +106,7 @@ const ChatWindow = ({ tab, spellName }) => {
       sender: data.sender || 'user',
       observer: data.observer || 'assistant',
       client: 'cloud.magickml.com',
+      // TODO this should be a sessiON ID for this IDE session
       channel: spell.id,
       projectId: config.projectId,
       channelType: 'spell playtest',
