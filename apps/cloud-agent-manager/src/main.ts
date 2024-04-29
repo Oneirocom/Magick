@@ -32,11 +32,12 @@ if (PRODUCTION || DONT_CRASH_ON_ERROR) {
     logger.error(e.stack, 'Unhandled rejection: %s\n From: %o', e)
   })
 }
-console.log('INIT APP')
+
+logger.info('Initializing app...')
 await initApp()
 
-console.log('INIT AGENT COMMANDER')
+logger.info('Initializing agent commander...')
 await initAgentCommander()
 
-console.log('START')
+logger.info('Initializing cloud agent manager...')
 start()
