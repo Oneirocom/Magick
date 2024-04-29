@@ -119,7 +119,7 @@ export function makeMagickEventNodeDefinition<
     nodeFactory: (graph, config, id) =>
       new EventNodeInstance({
         ...makeCommonProps(NodeType.Event, definition, config, graph, id),
-        initialState: undefined,
+        initialState: definition.initialState || undefined,
         init: async args => {
           const {
             node,
