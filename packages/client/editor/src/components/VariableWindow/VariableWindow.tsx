@@ -121,7 +121,7 @@ export const VariableWindow = (props: Props) => {
       name: newVariableName,
       id: uuidv4(),
       valueTypeName: 'string',
-      initialValue: [],
+      initialValue: '',
     }
 
     const graph = spell.graph
