@@ -122,7 +122,12 @@ const DefaultInput = ({
       {valueType === 'boolean' && !showChoices && (
         <div className="flex gap-2 h-10 items-center">
           <p>False</p>
-          <Switch value={value || 0} onChange={updateValue} />
+          <Switch
+            value={value}
+            onCheckedChange={e => {
+              updateValue(e)
+            }}
+          />
           <p>True</p>
         </div>
       )}
@@ -149,9 +154,8 @@ export const Variable = ({
   deleteVariable,
   deleteAllVariableNodes,
 }: VariableProps) => {
-  const updateProperty = (property: keyof VariableJSON) =>
-    debounce(value => {
-      console.log('Property', property, 'changed to', value)
+  const updateProperty = (property: keyof VariableJSON) => {
+    return debounce(value => {
       updateVariable({
         ...variable,
         [property]: value,
@@ -161,6 +165,7 @@ export const Variable = ({
         deleteAllVariableNodes()
       }
     }, 2000)
+  }
 
   return (
     <div className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2 p-2 pl-4">
