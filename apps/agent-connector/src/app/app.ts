@@ -46,8 +46,9 @@ export async function app(fastify: FastifyInstance) {
   const voiceId = '09mMp1DS2qzVMMRC8S2P'
   const model = 'eleven_turbo_v2'
 
-  fastify.get('/ws/:agentId', { websocket: true }, async socket => {
-    const agentId = '0644d18a-401c-4777-85fa-c600801ac685'
+  fastify.get('/ws/:agentId', { websocket: true }, async (socket, req) => {
+    // const agentId = '0644d18a-401c-4777-85fa-c600801ac685'
+    const agentId = req.url.split('/')[2]
     console.log('Agent ID', agentId)
     if (!agentId) {
       socket.close()
