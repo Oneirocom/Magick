@@ -1,6 +1,6 @@
 import { NodeCategory, makeAsyncNodeDefinition } from '@magickml/behave-graph'
 
-const hardStop = 1000
+// const hardStop = 1000
 
 export const whileLoop = makeAsyncNodeDefinition({
   typeName: 'flow/whileLoop',
@@ -29,19 +29,18 @@ export const whileLoop = makeAsyncNodeDefinition({
   initialState: {
     isDisposed: false,
   },
-  triggered: ({ configuration, state, finished = () => {}, commit, read }) => {
-    const { maxIterations } = configuration
-    const stop = maxIterations < hardStop ? maxIterations : hardStop
+  triggered: ({ state, finished = () => {}, commit, read }) => {
+    // const { maxIterations } = configuration
+    // const stop = maxIterations < hardStop ? maxIterations : hardStop
 
     const loopBodyIteration = (i: number) => {
       if (state.isDisposed) {
-        finished();
-        return;
+        finished()
+        return
       }
 
-
       const condition = read('condition')
-      if (i < stop && !condition) {
+      if (condition) {
         commit('loopBody', async resolveSockets => {
           await resolveSockets()
           loopBodyIteration(i + 1)
