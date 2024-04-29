@@ -4,9 +4,9 @@ import { initApp } from 'server/core'
 import { z } from 'zod'
 import { fastifyCors } from '@fastify/cors'
 import { fastifyWebsocket } from '@fastify/websocket'
-import axios, { type AxiosResponse } from 'axios'
 import { v4 } from 'uuid'
 import WebSocket from 'ws'
+import axios from 'axios'
 
 const numId = () => {
   return Math.floor(Math.random() * 1000000)
@@ -43,7 +43,7 @@ export async function app(fastify: FastifyInstance) {
   })
 
   const apiKey = process.env.ELEVENLABS_API_KEY
-  const voiceId = '21m00Tcm4TlvDq8ikWAM'
+  const voiceId = '09mMp1DS2qzVMMRC8S2P'
   const model = 'eleven_turbo_v2'
 
   fastify.get('/ws/:agentId', { websocket: true }, async socket => {
@@ -107,45 +107,77 @@ export async function app(fastify: FastifyInstance) {
         })
       )
 
-      // Generate audio using ElevenLabs API
-      try {
-        const response = await axios.post(
-          `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-          {
-            text: actionPayload.data.content,
-            model_id: model,
-            xi_api_key: apiKey,
-          },
-          {
-            responseType: 'arraybuffer',
-            headers: {
-              'Content-Type': 'application/json',
-              accept: 'audio/mpeg',
-            },
-          }
-        )
+      // Open WebSocket connection to ElevenLabs API
+      const elevenLabsSocket = new WebSocket(
+        `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}`
+      )
 
-        const audioData = response.data
-        const audioBase64 = Buffer.from(audioData, 'binary').toString('base64')
+      elevenLabsSocket.onopen = () => {
+        // Send the initial message with the API key and voice settings
+        const initialMessage = JSON.stringify({
+          text: ' ',
+          voice_settings: { stability: 0.5, similarity_boost: 0.8 },
+          xi_api_key: apiKey,
+        })
+        elevenLabsSocket.send(initialMessage)
 
-        // Send the audio data to the client in smaller chunks
-        const chunkSize = 1024 * 10 // 10KB chunks
-        for (let i = 0; i < audioBase64.length; i += chunkSize) {
-          const chunk = audioBase64.slice(i, i + chunkSize)
-          if (socket.readyState === WebSocket.OPEN) {
-            socket.send(
-              JSON.stringify({
-                type: 'audio',
-                data: chunk,
-                responseId: responseId,
-                isComplete: i + chunkSize >= audioBase64.length,
-              })
-            )
-            await new Promise(resolve => setTimeout(resolve, 100)) // Delay between chunks to avoid overwhelming the client
+        // Send the text message
+        const textMessage = JSON.stringify({
+          text: actionPayload.data.content + ' ',
+          try_trigger_generation: true,
+        })
+        elevenLabsSocket.send(textMessage)
+
+        // Send the EOS message
+        const eosMessage = JSON.stringify({ text: '' })
+        elevenLabsSocket.send(eosMessage)
+      }
+
+      elevenLabsSocket.onmessage = async event => {
+        const response = JSON.parse(event.data as any)
+        if (response.audio) {
+          const audioData = Buffer.from(response.audio, 'base64')
+          // const audioBase64 = audioData.toString('base64')
+
+          // Store the audio data in a buffer
+          const audioBuffer = Buffer.from(audioData)
+
+          // Send the audio data to the client in smaller chunks
+          const chunkSize = 1024 * 10 // 10KB chunks
+          for (let i = 0; i < audioBuffer.length; i += chunkSize) {
+            const chunk = audioBuffer.slice(i, i + chunkSize)
+            const chunkBase64 = chunk.toString('base64')
+            if (socket.readyState === WebSocket.OPEN) {
+              socket.send(
+                JSON.stringify({
+                  type: 'audio',
+                  data: chunkBase64,
+                  responseId: responseId,
+                  isComplete: i + chunkSize >= audioBuffer.length,
+                })
+              )
+              await new Promise(resolve => setTimeout(resolve, 100)) // Delay between chunks to avoid overwhelming the client
+            }
           }
         }
-      } catch (error) {
-        console.error('Error generating audio:', error)
+        if (response.isFinal) {
+          elevenLabsSocket.close()
+        }
+      }
+
+      elevenLabsSocket.onerror = error => {
+        console.error('WebSocket error:', error)
+        elevenLabsSocket.close()
+      }
+
+      elevenLabsSocket.onclose = event => {
+        if (event.wasClean) {
+          console.log(
+            `WebSocket connection closed cleanly, code=${event.code} reason=${event.reason}`
+          )
+        } else {
+          console.log('WebSocket connection died')
+        }
       }
     })
 
@@ -180,16 +212,21 @@ export async function app(fastify: FastifyInstance) {
   })
 
   fastify.get('/aai-token', async function () {
-    const response: AxiosResponse<TokenResponse> = await axios.post(
-      'https://api.assemblyai.com/v2/realtime/token',
-      { expires_in: 3600 },
-      { headers: { authorization: `${process.env.AAI_KEY}` } }
-    )
+    try {
+      const response = await axios.post<TokenResponse>(
+        'https://api.assemblyai.com/v2/realtime/token',
+        { expires_in: 3600 },
+        { headers: { authorization: `${process.env.AAI_KEY}` } }
+      )
 
-    if (!response?.data?.token) {
-      throw new Error('No data')
+      if (!response?.data?.token) {
+        throw new Error('No data')
+      }
+
+      return response.data
+    } catch (error) {
+      console.error('Error generating AAI token:', error)
+      throw error
     }
-
-    return response.data
   })
 }
