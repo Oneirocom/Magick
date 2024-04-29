@@ -1,6 +1,7 @@
 export const corePluginName = 'core' as const
 
 export const CORE_DEP_KEYS = {
+  AGENT: 'agent',
   ACTION_SERVICE: 'coreActionService',
   STATE_SERVICE: 'IStateService',
   EVENT_STORE: 'IEventStore',
