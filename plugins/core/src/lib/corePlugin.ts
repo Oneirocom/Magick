@@ -66,6 +66,7 @@ import { Agent } from 'server/agents'
 import { IsDefined } from './nodes/logic/strings/isDefined'
 import { jsonParse } from './nodes/actions/jsonParse'
 import { clearMessageHistory } from './nodes/actions/clearMessageHistory'
+import { LifecycleOnTick } from './nodes/lifecycle/onTick'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -119,6 +120,7 @@ export class CorePlugin extends CoreEventsPlugin<
     objectDestructure,
     clearMessageHistory,
     IsDefined,
+    LifecycleOnTick,
   ]
   values = []
   credentials = corePluginCredentials
@@ -233,6 +235,7 @@ export class CorePlugin extends CoreEventsPlugin<
     }
 
     return {
+      [CORE_DEP_KEYS.AGENT]: this.agent,
       [CORE_DEP_KEYS.ACTION_SERVICE]: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
