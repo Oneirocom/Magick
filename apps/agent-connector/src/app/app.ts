@@ -47,7 +47,6 @@ export async function app(fastify: FastifyInstance) {
   const model = 'eleven_turbo_v2'
 
   fastify.get('/ws/:agentId', { websocket: true }, async (socket, req) => {
-    // const agentId = '0644d18a-401c-4777-85fa-c600801ac685'
     const agentId = req.url.split('/')[2]
     console.log('Agent ID', agentId)
     if (!agentId) {
