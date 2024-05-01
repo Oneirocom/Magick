@@ -25,9 +25,12 @@ export type AgentEventPayload<
   Data = Record<string, unknown>,
   Y = Record<string, unknown>
 > = Partial<
-  Exclude<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName'>
+  Exclude<
+    EventPayload<Data, Y>,
+    'content' | 'sender' | 'eventName' | 'skipSave'
+  >
 > &
-  Pick<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName'>
+  Pick<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName' | 'skipSave'>
 
 type AgentEvents = {
   message: (event: EventPayload) => void
