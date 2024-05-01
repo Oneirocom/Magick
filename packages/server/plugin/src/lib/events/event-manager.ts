@@ -33,6 +33,7 @@ export type EventPayload<T = unknown, Y = unknown> = {
   agentId: string
   isPlaytest?: boolean
   spellId?: string
+  skipSave?: boolean
   // entities: any[]
   channelType: string
   rawData: unknown
