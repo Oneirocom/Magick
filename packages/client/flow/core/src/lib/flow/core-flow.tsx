@@ -12,7 +12,7 @@ type FlowProps = {
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
-  windowDimensions:{ width: number; height: number }
+  windowDimensions: { width: number; height: number }
 }
 
 export const CoreFlow: React.FC<FlowProps> = ({
@@ -26,7 +26,7 @@ export const CoreFlow: React.FC<FlowProps> = ({
   const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
   const pubSub = usePubSub()
 
-  const specJSON = useMemo(() => getNodeSpec(spell), [spell])
+  const specJSON = useMemo(() => getNodeSpec(spell), [spell.graph.variables])
 
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
@@ -45,6 +45,7 @@ export const CoreFlow: React.FC<FlowProps> = ({
   return (
     <BaseFlow
       spell={spell}
+      specJSON={specJSON}
       parentRef={parentRef}
       tab={tab}
       readOnly={readOnly}
