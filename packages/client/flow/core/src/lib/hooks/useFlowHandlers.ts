@@ -130,7 +130,6 @@ export const useFlowHandlers = ({
 
   const onEdgeUpdate = useCallback<OnEdgeUpdate>(
     (oldEdge, newConnection) => {
-      console.log('onEdgeUpdate', oldEdge, newConnection)
       return setEdges(tab.id, edges => {
         const newEdges = updateEdge(oldEdge, newConnection, edges)
         return newEdges
