@@ -229,29 +229,25 @@ export class KeyvStateService implements IStateService {
    * @example
    * await stateService.rehydrateState(graphNodes, 'specific-event-key');
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async rehydrateState(nodes: GraphNodes, eventKey?: string) {
-    // Assume that you have a way to get all node IDs that need rehydration
-    const nodeIds = Object.keys(nodes)
-
-    for await (const nodeId of nodeIds) {
-      let key
-      if (eventKey) {
-        key = this.formatKey(nodeId, eventKey)
-      }
-
-      if (!eventKey && this.eventStore && this.eventStore.currentEvent()) {
-        const event = this.eventStore.currentEvent()
-        key = this.formatKeyFromEvent(nodeId, event!)
-      }
-
-      if (!key) key = this.formatKey(nodeId)
-
-      const state = await this.keyv.get(key)
-
-      if (state !== null) {
-        this.tempStateCache[nodeId] = state
-      }
-    }
+    // // Assume that you have a way to get all node IDs that need rehydration
+    // const nodeIds = Object.keys(nodes)
+    // for await (const nodeId of nodeIds) {
+    //   let key
+    //   if (eventKey) {
+    //     key = this.formatKey(nodeId, eventKey)
+    //   }
+    //   if (!eventKey && this.eventStore && this.eventStore.currentEvent()) {
+    //     const event = this.eventStore.currentEvent()
+    //     key = this.formatKeyFromEvent(nodeId, event!)
+    //   }
+    //   if (!key) key = this.formatKey(nodeId)
+    //   const state = await this.keyv.get(key)
+    //   if (state !== null) {
+    //     this.tempStateCache[nodeId] = state
+    //   }
+    // }
   }
 
   /**
@@ -284,20 +280,18 @@ export class KeyvStateService implements IStateService {
    * This approach ensures data consistency and reduces memory footprint.
    */
   async syncAndClearState() {
-    Object.keys(this.tempStateCache)
-      .filter(Boolean)
-      .forEach(async nodeId => {
-        if (this.eventStore) {
-          const event = this.eventStore.currentEvent()
-
-          if (event) {
-            const key = this.formatKeyFromEvent(nodeId, event)
-            await this.keyv.set(key, this.tempStateCache[nodeId])
-          }
-        }
-      })
-
-    // Clearing the temporary state cache
-    this.tempStateCache = {}
+    // Object.keys(this.tempStateCache)
+    //   .filter(Boolean)
+    //   .forEach(async nodeId => {
+    //     if (this.eventStore) {
+    //       const event = this.eventStore.currentEvent()
+    //       if (event) {
+    //         const key = this.formatKeyFromEvent(nodeId, event)
+    //         await this.keyv.set(key, this.tempStateCache[nodeId])
+    //       }
+    //     }
+    //   })
+    // // Clearing the temporary state cache
+    // this.tempStateCache = {}
   }
 }
