@@ -68,7 +68,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
           className={cn(
             'rounded text-white text-sm bg-[var(--foreground-color)] w-[250px] transition-all duration-300 opacity-100',
             selected && 'outline outline-1',
-            fired && 'outline outline-2 outline-green-500',
+            running && 'outline outline-2 outline-green-500',
             // running && css.running,
             error && 'outline outline-2 outline-red-500'
           )}
