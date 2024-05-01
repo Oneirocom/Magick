@@ -119,7 +119,7 @@ const TextEditor = props => {
     if (activeInput) {
       dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
     }
-  }, [code, selectedNode, activeInput])
+  }, [debouncedCode, selectedNode, activeInput])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
