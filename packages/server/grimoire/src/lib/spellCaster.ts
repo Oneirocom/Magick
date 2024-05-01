@@ -23,6 +23,7 @@ import { PluginManager } from 'server/pluginManager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
+import { debounce } from 'lodash'
 
 interface IAgent {
   id: string
@@ -98,6 +99,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   private limitInSteps: number
   private connection: Redis
   private isRunning: boolean = true
+  private debounceMap: Map<string, Function> = new Map()
 
   constructor({
     loopDelay = 100,
@@ -224,24 +226,35 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.engine.onNodeExecutionEnd.addListener(
       this.executionEndHandler.bind(this)
     )
-
-    this.engine.onNodeExecutionError.addListener(
-      this.executionErrorhandler.bind(this)
-    )
-
-    // this.engine.onNodeCommit.addListener(this.nodeCommitHandler.bind(this))
+    // this.engine.onNodeExecutionError.addListener(
+    //   this.executionErrorhandler.bind(this)
+    // )
   }
 
-  nodeCommitHandler = async payload => {
-    const event = `${this.spell.id}-${payload.node.id}-commit`
+  private debounceEvent(
+    event: string,
+    callback: Function,
+    delay: number,
+    options: any = {}
+  ) {
+    if (!this.debounceMap.has(event)) {
+      const debouncedFunction = debounce(
+        () => {
+          callback()
+        },
+        delay,
+        {
+          leading: false,
+          trailing: true,
+          ...options,
+        }
+      )
 
-    this.emitNodeWork({
-      node: payload.node,
-      event,
-      data: {
-        socket: payload.socket,
-      },
-    })
+      this.debounceMap.set(event, debouncedFunction)
+    }
+
+    const debouncedFunction = this.debounceMap.get(event)
+    if (debouncedFunction) debouncedFunction()
   }
 
   /**
@@ -253,13 +266,22 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executionStartHandler = async (node: any) => {
     const event = `${this.spell.id}-${node.id}-start`
 
-    this.emitNodeWork({
-      node,
+    this.debounceEvent(
       event,
-      data: {
-        inputs: node.inputs,
+      () => {
+        this.emitNodeWork({
+          node,
+          event,
+          data: {
+            inputs: node.inputs,
+          },
+        })
       },
-    })
+      500,
+      {
+        leading: true,
+      }
+    )
   }
 
   /**
@@ -270,15 +292,25 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    */
   executionEndHandler = async (node: any) => {
     const event = `${this.spell.id}-${node.id}-end`
+    const startEvent = `${this.spell.id}-${node.id}-start`
 
-    this.emitNodeWork({
-      node,
+    this.debounceEvent(
       event,
-      log: true,
-      data: {
-        outputs: node.outputs,
+      () => {
+        this.emitNodeWork({
+          node,
+          event,
+          data: {
+            outputs: node.outputs,
+          },
+        })
+        this.debounceMap.delete(startEvent)
       },
-    })
+      4000,
+      {
+        leading: false,
+      }
+    )
   }
 
   executionErrorhandler = async ({ node, error }) => {
@@ -476,6 +508,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
     this.stopRunLoop()
     if (this.engine) this.engine.dispose()
+    this.clearLifecycleListeners()
+  }
+
+  clearLifecycleListeners() {
+    this.lifecycleEventEmitter?.endEvent.clear()
+    this.lifecycleEventEmitter?.startEvent.clear()
+    this.lifecycleEventEmitter?.tickEvent.clear()
   }
 
   /**
