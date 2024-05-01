@@ -12,13 +12,13 @@ import { isHandleConnected } from '../utils/isHandleConnected'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { getConfig } from '../utils/getNodeConfig'
 import { configureSockets } from '../utils/configureSockets'
-import { debounce } from 'lodash'
 import NodeContainer from './node-container'
 
 type BaseNodeProps = FlowNodeProps & {
   spec: NodeSpecJSON
   allSpecs: NodeSpecJSON[]
   spell: SpellInterfaceWithGraph
+  resetNodeState: boolean
   nodeJSON: NodeJSON
   selected: boolean
   activeInput: {
@@ -42,6 +42,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   nodeJSON,
   activeInput,
   setActiveInput,
+  resetNodeState = false,
   onResetNodeState,
   spellEvent,
 }: BaseNodeProps) => {
@@ -60,14 +61,17 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   const handleChange = useChangeNodeData(id)
 
   useEffect(() => {
+    if (resetNodeState) {
+      setRunning(false)
+      setDone(false)
+      setError(false)
+      onResetNodeState()
+    }
+  }, [resetNodeState])
+
+  useEffect(() => {
     if (!selected) setActiveInput(null)
   }, [selected])
-
-  const DELAY = 3000
-
-  const debounceDone = debounce(() => {
-    setDone(false)
-  }, DELAY)
 
   // if the node doesn't have a config yet, we need to make one for it and add it to the react flow node data
   if (!data.configuration) {
@@ -107,10 +111,11 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     if (!spellEvent) return
     if (spellEvent.event === endEventName) {
       setLastOutputs(spellEvent.outputs)
-      setRunning(false)
-      setDone(true)
 
-      debounceDone()
+      setTimeout(() => {
+        setRunning(false)
+        setDone(true)
+      }, 2000)
     }
   }, [spellEvent])
 
