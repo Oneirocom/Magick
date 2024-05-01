@@ -88,7 +88,6 @@ export function saveGraphEvent(event: GraphEventPayload) {
   } = event
 
   if (!content) {
-    console.log('NO CONTENT', event)
     return
   }
 
