@@ -2,7 +2,7 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cx from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 import { colors, valueTypeColorMap } from '../utils/colors'
 import {
@@ -18,6 +18,7 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
+import { debounce } from 'lodash'
 
 export type InputSocketProps = {
   connected: boolean
@@ -77,8 +78,8 @@ const InputFieldForValue = ({
   // const activeInput = useSelector(selectActiveInput)
   const showChoices = choices?.length && choices.length > 0
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
-  const hideValueInput = hideValue || connected
   const [isFocused, setIsFocused] = useState(false)
+  const hideValueInput = hideValue || connected
 
   const inputClass = cx('h-5 text-sm')
 
@@ -87,10 +88,17 @@ const InputFieldForValue = ({
     !hideValueInput && 'bg-[var(--foreground-color)]'
   )
 
+  const debouncedChangeHandler = useCallback(
+    debounce((key, value) => {
+      onChange(key, value)
+      setActiveInput({ name, inputType: valueType, value, nodeId })
+    }, 1000),
+    [onChange]
+  )
+
   const handleChange = ({ key, value }: { key: string; value: any }) => {
-    onChange(key, value)
     setInputVal(value)
-    setActiveInput({ name, inputType: valueType, value, nodeId })
+    debouncedChangeHandler(key, value)
   }
 
   const onFocus = (x: string) => {
@@ -106,7 +114,6 @@ const InputFieldForValue = ({
   }
 
   const onBlur = () => {
-    console.log('BLUR')
     setIsFocused(false)
   }
 
@@ -162,7 +169,7 @@ const InputFieldForValue = ({
               className={inputClass}
               value={Number(value)}
               onChange={e => onChange(name, e.currentTarget.value)}
-              onFocus={() => onFocus(value)}
+              // onFocus={() => onFocus(value)}
             />
           )}
           {valueType === 'integer' && !showChoices && (
@@ -173,7 +180,7 @@ const InputFieldForValue = ({
               onChange={e => {
                 onChange(name, Number(e.currentTarget.value))
               }}
-              onFocus={() => onFocus(value)}
+              // onFocus={() => onFocus(value)}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
