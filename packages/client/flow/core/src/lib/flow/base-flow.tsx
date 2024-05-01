@@ -5,7 +5,6 @@ import { NodePicker } from '../node-picker/NodePicker'
 import { type BehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
-import { getNodeSpec } from 'shared/nodeSpec'
 import { RootState } from 'client/state'
 import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
@@ -48,6 +47,7 @@ type BaseFlowProps = {
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
+  specJSON: NodeSpecJSON[]
   windowDimensions: { width: number; height: number }
   behaveGraphFlow: BaseFlowBehaveGraphFlow
   flowHandlers: BaseFlowHandlers
@@ -75,6 +75,7 @@ function isEmptyObject(obj: object): boolean {
 export const BaseFlow: React.FC<BaseFlowProps> = ({
   spell,
   tab,
+  specJSON,
   readOnly = false,
   behaveGraphFlow,
   flowHandlers,
@@ -100,15 +101,11 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   const { projectId, currentAgentId } = globalConfig || {}
   const { publish, events } = pubSub || {}
 
-  const [specJSON, setSpecJSON] = React.useState<NodeSpecJSON[]>([])
   const [playing, setPlaying] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
   useEffect(() => {
     if (!spell) return
-
-    const specs = getNodeSpec(spell)
-    setSpecJSON(specs)
 
     if (!publish || !events || !currentAgentId) return
     // trigger initial sync
