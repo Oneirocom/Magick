@@ -47,6 +47,7 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
 
   return (
     <BaseFlow
+      specJSON={specJson}
       spell={spell}
       parentRef={parentRef}
       tab={tab}
