@@ -438,6 +438,8 @@ export abstract class BasePlugin<
         this.centralEventBus.emit(this.eventQueueName, payload)
         // await this.eventQueue.addJob(event.eventName, payload)
 
+        if (payload.skipSave) return
+
         saveGraphEvent({
           sender: payload.sender,
           observer: this.agent.id,
