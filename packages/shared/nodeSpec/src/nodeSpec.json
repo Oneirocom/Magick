@@ -289,6 +289,11 @@
         "defaultValue": ""
       },
       {
+        "name": "valueTypeName",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
         "name": "variableNames",
         "valueType": "array",
         "defaultValue": []
@@ -332,6 +337,11 @@
         "name": "variableId",
         "valueType": "string",
         "defaultValue": ""
+      },
+      {
+        "name": "valueTypeName",
+        "valueType": "string",
+        "defaultValue": "string"
       },
       {
         "name": "variableNames",
@@ -1671,6 +1681,29 @@
     ]
   },
   {
+    "type": "flow/wait",
+    "category": "Flow",
+    "label": "Wait",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "milliseconds",
+        "valueType": "integer",
+        "defaultValue": 1000
+      }
+    ],
+    "outputs": [
+      {
+        "name": "done",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/array/randomElement",
     "category": "Logic",
     "label": "Random Element",
@@ -1719,6 +1752,24 @@
         "defaultValue": []
       }
     ]
+  },
+  {
+    "type": "variables/reset",
+    "category": "Action",
+    "label": "Reset Variables",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/string",
