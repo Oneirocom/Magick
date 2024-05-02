@@ -27,7 +27,7 @@ import { split } from './nodes/logic/strings/split'
 import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { CoreUserService } from './services/userService/coreUserService'
-import { arrayCreate } from './values/Array/Create'
+import { arrayCreate, arrayCreateFunction } from './values/Array/Create'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
 import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
@@ -67,6 +67,7 @@ import { IsDefined } from './nodes/logic/strings/isDefined'
 import { jsonParse } from './nodes/actions/jsonParse'
 import { clearMessageHistory } from './nodes/actions/clearMessageHistory'
 import { LifecycleOnTick } from './nodes/lifecycle/onTick'
+import { arrayRandomElement } from './values/Array/Random'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -106,6 +107,7 @@ export class CorePlugin extends CoreEventsPlugin<
     arrayRemoveLast,
     arrayMerge,
     arrayCreate,
+    arrayCreateFunction,
     addKnowledge,
     queryKnowledge,
     searchKnowledge,
@@ -121,6 +123,7 @@ export class CorePlugin extends CoreEventsPlugin<
     clearMessageHistory,
     IsDefined,
     LifecycleOnTick,
+    arrayRandomElement,
   ]
   values = []
   credentials = corePluginCredentials

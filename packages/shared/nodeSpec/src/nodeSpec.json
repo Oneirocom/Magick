@@ -892,6 +892,54 @@
     ]
   },
   {
+    "type": "logic/array/create",
+    "category": "Logic",
+    "label": "Array Create",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "action/knowledge/add",
     "category": "Action",
     "label": "Add Knowledge",
@@ -1619,6 +1667,56 @@
           "agentId",
           "sender"
         ]
+      }
+    ]
+  },
+  {
+    "type": "logic/array/randomElement",
+    "category": "Logic",
+    "label": "Random Element",
+    "inputs": [
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
       }
     ]
   },
