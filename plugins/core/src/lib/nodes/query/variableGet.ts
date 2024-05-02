@@ -24,6 +24,10 @@ export const variableGet = makeFunctionNodeDefinition({
       valueType: 'string',
       defaultValue: '',
     },
+    valueTypeName: {
+      valueType: 'string',
+      defaultValue: 'string',
+    },
     variableNames: {
       valueType: 'array',
       defaultValue: [],
