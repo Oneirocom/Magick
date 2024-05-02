@@ -68,6 +68,8 @@ import { jsonParse } from './nodes/actions/jsonParse'
 import { clearMessageHistory } from './nodes/actions/clearMessageHistory'
 import { LifecycleOnTick } from './nodes/lifecycle/onTick'
 import { arrayRandomElement } from './values/Array/Random'
+import { wait } from './nodes/flow/wait'
+import { variablesReset } from './nodes/query/variableReset'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -123,7 +125,9 @@ export class CorePlugin extends CoreEventsPlugin<
     clearMessageHistory,
     IsDefined,
     LifecycleOnTick,
+    wait,
     arrayRandomElement,
+    variablesReset,
   ]
   values = []
   credentials = corePluginCredentials
