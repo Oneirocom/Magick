@@ -190,6 +190,12 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     }
   }
 
+  loadInitialEvent(event: EventPayload) {
+    this.graph
+      .getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
+      ?.setInitialEvent(event)
+  }
+
   /**
    * Returns a dependency from the registry.
    * @param key - The key of the dependency.
@@ -226,9 +232,9 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.engine.onNodeExecutionEnd.addListener(
       this.executionEndHandler.bind(this)
     )
-    // this.engine.onNodeExecutionError.addListener(
-    //   this.executionErrorhandler.bind(this)
-    // )
+    this.engine.onNodeExecutionError.addListener(
+      this.executionErrorhandler.bind(this)
+    )
   }
 
   private debounceEvent(
