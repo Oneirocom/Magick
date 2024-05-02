@@ -21,7 +21,7 @@ const valueTypes = ['boolean', 'string', 'float', 'array', 'object']
 
 const initialValueMap = {
   boolean: false,
-  string: '',
+  string: ' ',
   float: 0.0,
   integer: 0,
   array: '[]',
@@ -61,7 +61,7 @@ const DefaultInput = ({
   } else if (showChoices && choices.length > 0) {
     initialValue = choices[0].value
   } else {
-    initialValue = ''
+    initialValue = ' '
   }
 
   const [value, setValue] = useState(initialValue)
@@ -156,13 +156,22 @@ export const Variable = ({
 }: VariableProps) => {
   const updateProperty = (property: keyof VariableJSON) => {
     return debounce(value => {
-      updateVariable({
-        ...variable,
-        [property]: value,
-      })
-
       if (property === 'valueTypeName') {
         deleteAllVariableNodes()
+        console.log('update', {
+          [property]: value,
+          initialValue: initialValueMap[value],
+        })
+        updateVariable({
+          ...variable,
+          [property]: value,
+          initialValue: initialValueMap[value],
+        })
+      } else {
+        updateVariable({
+          ...variable,
+          [property]: value,
+        })
       }
     }, 2000)
   }

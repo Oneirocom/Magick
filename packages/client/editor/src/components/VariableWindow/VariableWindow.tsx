@@ -51,18 +51,25 @@ export const VariableWindow = (props: Props) => {
 
   const deleteAllVariableNodes = useCallback(
     (variable: VariableJSON) => {
-      const newNodes = nodes.filter(node => !node.type?.includes(variable.name))
+      // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName'
+      const regex = new RegExp(`variables/(set|get)/${variable.name}`)
 
+      // Filter nodes to get the new list without the matched nodes
+      const newNodes = nodes.filter(node => node.type && !regex.test(node.type))
+
+      // Get the ids of nodes that match the regex
       const removedNodes = nodes
-        .filter(node => node.type?.includes(variable.name))
+        .filter(node => node.type && regex.test(node.type))
         .map(node => node.id)
 
+      // Filter edges to remove any that are connected to the removed nodes
       const newEdges = edges.filter(
         edge =>
           !removedNodes.includes(edge.source) &&
           !removedNodes.includes(edge.target)
       )
 
+      // Uncomment these lines if you want to update state
       setNodes(tab.id, newNodes)
       setEdges(tab.id, newEdges)
     },
