@@ -2,6 +2,7 @@ import {
   NodeCategory,
   SocketsList,
   makeFlowNodeDefinition,
+  makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 
 export const arrayCreate = makeFlowNodeDefinition({
@@ -61,5 +62,62 @@ export const arrayCreate = makeFlowNodeDefinition({
 
     write('array', newArray)
     commit('flow')
+  },
+})
+
+export const arrayCreateFunction = makeFunctionNodeDefinition({
+  typeName: 'logic/array/create',
+  category: NodeCategory.Logic,
+  label: 'Array Create',
+  configuration: {
+    hiddenProperties: {
+      valueType: 'array',
+      defaultValue: ['hiddenProperties', 'valueTypes', 'valueTypeOptions'],
+    },
+    valueType: {
+      valueType: 'string',
+      defaultValue: 'string',
+    },
+    valueTypeOptions: {
+      valueType: 'object',
+      defaultValue: {
+        values: ['string', 'number', 'float', 'boolean', 'object', 'array'],
+        socketName: 'Item',
+      },
+    },
+    socketInputs: {
+      valueType: 'array',
+      defaultValue: [],
+    },
+  },
+  in: configuration => {
+    const startSockets: SocketsList = []
+
+    const socketArray = configuration?.socketInputs.length
+      ? configuration.socketInputs
+      : []
+
+    const sockets: SocketsList =
+      socketArray.map(socketInput => {
+        return {
+          key: socketInput.name,
+          name: socketInput.name,
+          valueType: socketInput.valueType,
+        }
+      }) || []
+
+    return [...startSockets, ...sockets]
+  },
+  out: {
+    array: 'array',
+  },
+  exec: async ({ read, write, configuration }) => {
+    const newArray = configuration.socketInputs.reduce((acc, socketInput) => {
+      const item = read(socketInput.name)
+      acc.push(item)
+      return acc
+    }, [])
+
+    write('array', newArray)
   },
 })
