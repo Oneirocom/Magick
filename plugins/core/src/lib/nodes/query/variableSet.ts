@@ -25,6 +25,10 @@ export const variableSet = makeFlowNodeDefinition({
       valueType: 'string',
       defaultValue: '',
     },
+    valueTypeName: {
+      valueType: 'string',
+      defaultValue: 'string',
+    },
     variableNames: {
       valueType: 'array',
       defaultValue: [],

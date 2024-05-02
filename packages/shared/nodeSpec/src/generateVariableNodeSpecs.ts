@@ -22,6 +22,7 @@ export const getVariableConfig = (
 
   const configUpdate = {
     variableId: variable.id,
+    valueTypeName: variable.valueTypeName,
     label: variable.name,
   }
 
@@ -32,6 +33,8 @@ export const getVariableConfig = (
   if (socketOutputs) {
     configUpdate['socketOutputs'] = [socket]
   }
+
+  console.log('generated config update', configUpdate)
 
   return configUpdate
 }
