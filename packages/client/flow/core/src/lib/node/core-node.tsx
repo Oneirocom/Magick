@@ -13,7 +13,11 @@ import { BaseNode } from './base-node'
 type BaseNodeProps = React.ComponentProps<typeof BaseNode>
 type CoreNodeProps = Omit<
   BaseNodeProps,
-  'activeInput' | 'setActiveInput' | 'onResetNodeState' | 'spellEvent'
+  | 'activeInput'
+  | 'setActiveInput'
+  | 'onResetNodeState'
+  | 'spellEvent'
+  | 'resetNodeState'
 >
 
 export const CoreNode: React.FC<CoreNodeProps> = props => {

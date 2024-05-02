@@ -18,7 +18,7 @@ type BaseNodeProps = FlowNodeProps & {
   spec: NodeSpecJSON
   allSpecs: NodeSpecJSON[]
   spell: SpellInterfaceWithGraph
-  resetNodeState: boolean
+  resetNodeState?: boolean
   nodeJSON: NodeJSON
   selected: boolean
   activeInput: {
