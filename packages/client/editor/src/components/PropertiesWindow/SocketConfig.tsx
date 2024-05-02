@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
+import { useSnackbar } from 'notistack'
 
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -19,9 +20,10 @@ import {
  * @param {Function} props.addSocket - Function to add a new socket.
  * @returns {React.JSX.Element} Form input to add a new socket.
  */
-const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
+const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
   const [value, setValue] = useState('')
   const [selectedValueType, setSelectedValueType] = useState('string')
+  const { enqueueSnackbar } = useSnackbar()
 
   /**
    * Update the input value when changed.
@@ -40,6 +42,15 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
   const onAdd = e => {
     if (!value) return
     e.preventDefault()
+    const socketExists = sockets.some(socket => socket.name === value)
+
+    if (socketExists) {
+      enqueueSnackbar('Socket already exists', {
+        variant: 'error',
+      })
+      return
+    }
+
     addSocket({ name: value, valueType: definedValueType || selectedValueType })
     setValue('')
     setSelectedValueType('string')
@@ -131,16 +142,17 @@ export const SocketConfig = ({
     <div>
       {configKey === 'socketInputs' && <h3>Input Sockets</h3>}
       {configKey === 'socketOutputs' && <h3>Output Sockets</h3>}
-      {sockets.map((socket: any) => (
+      {sockets.map((socket: any, i) => (
         <SingleElement
           name={socket.name}
-          key={socket.name}
+          key={socket.name + i}
           delete={deleteSocket}
           type={socket.valueType}
         />
       ))}
       <div>
         <AddNewSocket
+          sockets={sockets}
           addSocket={addSocket}
           valueTypes={socketValues}
           definedValueType={valueType}
