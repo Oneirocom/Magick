@@ -1,7 +1,7 @@
 import { usePubSub } from '@magickml/providers'
 import { Button } from '@magickml/client-ui'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
-import { RootState } from 'client/state'
+import { RootState, selectTabNodes } from 'client/state'
 import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { cx } from 'class-variance-authority'
@@ -15,6 +15,7 @@ const VerticalDivider = () => (
 export const StatusBar = () => {
   const { publish, events } = usePubSub()
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+  const nodes = useSelector(selectTabNodes(currentTab?.id))
   const { syncing, connected } = useSelector(
     (state: RootState) => state.statusBar
   )
@@ -81,7 +82,7 @@ export const StatusBar = () => {
         />
       </div>
       <VerticalDivider />
-      <p className="truncate">Current Tab: {currentTab?.title}</p>
+      <p className="truncate">Total nodes: {(nodes || []).length}</p>
       <VerticalDivider />
       <p className="truncate">Current agent: {currentAgentId}</p>
       <VerticalDivider />
