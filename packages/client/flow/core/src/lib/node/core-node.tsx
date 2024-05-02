@@ -21,7 +21,7 @@ type CoreNodeProps = Omit<
 >
 
 export const CoreNode: React.FC<CoreNodeProps> = props => {
-  const { id, spell } = props
+  const { id, spellId } = props
   const { events, subscribe } = usePubSub()
   const dispatch = useDispatch()
   const { lastItem: spellEvent } = useSelectAgentsSpell()
@@ -59,7 +59,7 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
 
   useEffect(() => {
     if (!spellEvent) return
-    if (spellEvent.event === `${spell.id}-${id}-error`) {
+    if (spellEvent.event === `${spellId}-${id}-error`) {
       const truncatedMessage =
         spellEvent.message.length > 100
           ? spellEvent.message.substring(

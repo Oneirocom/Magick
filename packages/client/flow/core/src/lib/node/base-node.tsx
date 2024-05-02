@@ -1,5 +1,5 @@
-import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import React, { useEffect, useState } from 'react'
+import { NodeSpecJSON } from '@magickml/behave-graph'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   NodeProps as FlowNodeProps,
   useEdges,
@@ -9,17 +9,16 @@ import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'
 import { isHandleConnected } from '../utils/isHandleConnected'
-import { SpellInterfaceWithGraph } from 'server/schemas'
-import { getConfig } from '../utils/getNodeConfig'
+// import { SpellInterfaceWithGraph } from 'server/schemas'
+// import { getConfig } from '../utils/getNodeConfig'
 import { configureSockets } from '../utils/configureSockets'
 import NodeContainer from './node-container'
 
 type BaseNodeProps = FlowNodeProps & {
   spec: NodeSpecJSON
   allSpecs: NodeSpecJSON[]
-  spell: SpellInterfaceWithGraph
+  spellId: string
   resetNodeState?: boolean
-  nodeJSON: NodeJSON
   selected: boolean
   activeInput: {
     nodeId: string
@@ -38,8 +37,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   spec,
   selected,
   allSpecs,
-  spell,
-  nodeJSON,
+  spellId,
   activeInput,
   setActiveInput,
   resetNodeState = false,
@@ -73,29 +71,28 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     if (!selected) setActiveInput(null)
   }, [selected])
 
-  // if the node doesn't have a config yet, we need to make one for it and add it to the react flow node data
-  if (!data.configuration) {
-    const config = getConfig(nodeJSON, spec)
-    handleChange('configuration', config)
-  }
-
-  if (!data.nodeSpec) {
-    handleChange('nodeSpec', spec)
-  }
+  useEffect(() => {
+    if (!data.nodeSpec) {
+      handleChange('nodeSpec', spec)
+    }
+  }, [data])
 
   useEffect(() => {
     updateNodeInternals(id)
   }, [data])
 
   const { configuration: config } = data
-  const { pairs, valueInputs } = configureSockets(data, spec)
+  const { pairs, valueInputs } = useMemo(
+    () => configureSockets(data, spec),
+    [data, spec]
+  )
 
   useEffect(() => {
-    if (!spell || !id) return
-    setEndEventName(`${spell.id}-${id}-end`)
-    setStartEventName(`${spell.id}-${id}-start`)
-    setErrorEventName(`${spell.id}-${id}-error`)
-  }, [spell, id])
+    if (!spellId || !id) return
+    setEndEventName(`${spellId}-${id}-end`)
+    setStartEventName(`${spellId}-${id}-start`)
+    setErrorEventName(`${spellId}-${id}-error`)
+  }, [spellId, id])
 
   // Handle start event
   useEffect(() => {
@@ -132,10 +129,13 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     }
   }, [spellEvent])
 
-  const isActive = (x: string) => {
-    if (activeInput?.nodeId !== id) return false
-    return activeInput?.name === x
-  }
+  const isActive = useCallback(
+    (inputName: string) => {
+      if (!activeInput) return false
+      return activeInput.nodeId === id && activeInput.name === inputName
+    },
+    [activeInput]
+  )
 
   return (
     <NodeContainer
@@ -146,7 +146,6 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       title={spec?.type ?? 'Node'}
       category={spec.category}
       selected={selected}
-      graph={spell.graph}
       config={config}
     >
       {pairs.map(([flowInput, output], ix) => (

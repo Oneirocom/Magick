@@ -48,18 +48,21 @@ export const useBehaveGraphFlow = ({
 
   const [graphJson, setStoredGraphJson] = useState<GraphJSON | undefined>()
 
-  const setGraphJson = useCallback((graphJson: GraphJSON) => {
-    if (!graphJson) return
+  const setGraphJson = useCallback(
+    (graphJson: GraphJSON) => {
+      if (!graphJson) return
 
-    const [nodes, edges] = behaveToFlow(graphJson)
+      const [nodes, edges] = behaveToFlow(graphJson, spell)
 
-    if (hasPositionMetaData(graphJson) === false) {
-      autoLayout(nodes, edges)
-    }
-    setNodes(tab.id, nodes)
-    setEdges(tab.id, edges)
-    setStoredGraphJson(graphJson)
-  }, [])
+      if (hasPositionMetaData(graphJson) === false) {
+        autoLayout(nodes, edges)
+      }
+      setNodes(tab.id, nodes)
+      setEdges(tab.id, edges)
+      setStoredGraphJson(graphJson)
+    },
+    [spell]
+  )
 
   useEffect(() => {
     // we only want to do this on initial load
@@ -106,7 +109,7 @@ export const useBehaveGraphFlow = ({
   }, [$RELOAD_GRAPH, tab.id, setGraphJson, subscribe])
 
   const nodeTypes = useCustomNodeTypes({
-    spell,
+    spellId: spell.id,
     specJson,
   })
 

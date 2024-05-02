@@ -37,6 +37,7 @@ import {
 import { getSourceSocket } from '../utils/getSocketsByNodeTypeAndHandleType'
 import { useDispatch, useSelector } from 'react-redux'
 import posthog from 'posthog-js'
+import { getConfigFromNodeSpec } from '../utils/getNodeConfig'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
@@ -207,11 +208,16 @@ export const useFlowHandlers = ({
   const handleAddNode = useCallback(
     (nodeType: string, position: XYPosition) => {
       closeNodePicker()
+      // handle add configuration here so we don't need to do it in the node.
+      const nodeSpec = specJSON?.find(spec => spec.type === nodeType)
+      console.log('nodeSpec', nodeSpec)
       const newNode = {
         id: uuidv4(),
         type: nodeType,
         position,
-        data: {},
+        data: {
+          configuration: nodeSpec ? getConfigFromNodeSpec(nodeSpec) : {},
+        },
       }
       onNodesChange(tab.id)([
         {

@@ -35,13 +35,13 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
   const specJson = useMemo(() => getNodeSpec(spell), [spell])
 
   const nodeTypes = useCustomNodeTypes({
-    spell,
+    spellId: spell.id,
     specJson,
     type: 'readonly',
   })
 
   const [nodes, edges] = useMemo(() => {
-    const [flowNodes, flowEdges] = behaveToFlow(spell.graph)
+    const [flowNodes, flowEdges] = behaveToFlow(spell.graph, spell)
     return [flowNodes, flowEdges]
   }, [spell.graph])
 
