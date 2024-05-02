@@ -16,6 +16,7 @@ type EventProperties =
 
 export interface IEventStore {
   currentEvent: () => EventPayload | null
+  initialEvent: () => EventPayload | null
   queryEvents: (
     eventPropertyKeys: EventProperties[],
     messageTypes: string[],
@@ -30,6 +31,7 @@ export interface IEventStore {
     alternateRoles?: boolean
   ) => Promise<Message[]>
   setEvent: (event: EventWithKey) => void
+  setInitialEvent: (event: EventPayload) => void
   init: (nodes: GraphNodes) => void
   finish: () => void
   done: () => void
@@ -63,6 +65,7 @@ export class EventStore
 {
   private asyncNodeCounter: number = 0
   private _currentEvent: EventPayload | null
+  private _initialEvent: EventPayload | null
   private status: StatusEnum
   private stateService: IStateService
   private graphNodes!: GraphNodes
@@ -73,6 +76,7 @@ export class EventStore
     super()
     this.stateService = stateService
     this._currentEvent = null
+    this._initialEvent = null
     this.status = StatusEnum.INIT
     this.app = app
     this.agentId = agentId
@@ -200,13 +204,25 @@ export class EventStore
   }
 
   public currentEvent(): EventPayload | null {
-    return this._currentEvent
+    return this._currentEvent || this._initialEvent
+  }
+
+  public initialEvent(): EventPayload | null {
+    return this._initialEvent
+  }
+
+  public setInitialEvent(event: EventPayload) {
+    this._initialEvent = event
   }
 
   public async setEvent(event: EventWithKey) {
     this._currentEvent = event
 
     this.status = StatusEnum.RUNNING
+
+    if (!this._initialEvent) {
+      this._initialEvent = event
+    }
 
     // We rehydrate the state from the state service when the event is set.
     // This allows us to have the state available for the event.
