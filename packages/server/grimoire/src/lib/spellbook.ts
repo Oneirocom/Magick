@@ -309,7 +309,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     const eventKey = _payload.channel || 'default'
     const payload = { ..._payload }
 
-    const spellCasters = await this.createOrGetSpellCasters(eventKey)
+    const spellCasters = await this.createOrGetSpellCasters(eventKey, payload)
 
     for (const [spellId, spellCaster] of spellCasters) {
       if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
@@ -319,11 +319,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     }
   }
 
-  async createOrGetSpellCasters(eventKey: string) {
+  async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
     const spellCasters = this.eventMap.get(eventKey)
     if (!spellCasters) {
-      const spellPromises = Array.from(this.spells.values()).map(spell =>
-        this.loadSpell(spell)
+      const spellPromises = Array.from(this.spells.values()).map(
+        async spell => {
+          const spellCaster = await this.loadSpell(spell)
+          spellCaster?.loadInitialEvent(event)
+          return spellCaster
+        }
       )
       const loadedSpells = await Promise.all(spellPromises)
       const validSpellCasters = loadedSpells.filter(
