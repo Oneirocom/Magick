@@ -1,4 +1,5 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
+import { jsonrepair } from 'jsonrepair'
 
 export const jsonParse = makeFlowNodeDefinition({
   typeName: 'action/json/parse',
@@ -14,8 +15,9 @@ export const jsonParse = makeFlowNodeDefinition({
   },
   initialState: undefined,
   triggered: ({ read, write, commit }) => {
-    const json = read('json')
-    const object = JSON.parse(json as string)
+    const json = read('json') as string
+    const repaired = jsonrepair(json)
+    const object = JSON.parse(repaired as string)
     write('object', object)
     commit('flow')
   },
