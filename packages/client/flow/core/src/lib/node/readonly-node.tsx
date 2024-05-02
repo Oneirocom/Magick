@@ -12,7 +12,7 @@ type ReadOnlyNodeProps = Omit<
 >
 
 export const ReadOnlyNode: React.FC<ReadOnlyNodeProps> = props => {
-  const { id, spec, spell, ...rest } = props
+  const { id, spec, spellId, ...rest } = props
 
   const activeInput = null
   const spellEvent = null
@@ -31,7 +31,7 @@ export const ReadOnlyNode: React.FC<ReadOnlyNodeProps> = props => {
     <BaseNode
       id={id}
       spec={spec}
-      spell={spell}
+      spellId={spellId}
       {...rest}
       activeInput={activeInput}
       setActiveInput={setActiveInputWrapper}

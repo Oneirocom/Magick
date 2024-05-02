@@ -8,11 +8,11 @@ import {
   colors,
   valueTypeColorMap,
 } from '../utils/colors'
-import type { SpellInterfaceWithGraph } from 'server/schemas'
 
 type Config = {
   label?: string
   variableId?: string
+  valueTypeName?: string
 }
 
 type NodeProps = {
@@ -25,7 +25,6 @@ type NodeProps = {
   error: boolean
   running: boolean
   config: Config
-  graph: SpellInterfaceWithGraph['graph']
 }
 
 const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
@@ -33,11 +32,9 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   category = NodeCategory.None,
   selected,
   children,
-  fired,
   label,
   config,
   running,
-  graph,
   error,
 }) => {
   let colorName = categoryColorMap[category]
@@ -49,17 +46,14 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
 
   let [backgroundColor, textColor] = colors[colorName]
 
-  if (config?.variableId) {
-    const variable = graph.variables.find(
-      variable => variable.id === config.variableId
-    )
-    if (variable) {
-      const colorName = valueTypeColorMap[variable.valueTypeName]
-      if (colorName) {
-        ;[backgroundColor, textColor] = colors[colorName]
-      }
+  console.log('config', config)
+  if (config?.valueTypeName) {
+    const colorName = valueTypeColorMap[config.valueTypeName]
+    if (colorName) {
+      ;[backgroundColor, textColor] = colors[colorName]
     }
   }
+  // }
 
   return (
     <div className="p-5">
@@ -81,9 +75,9 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
             <div className="flex items-center mr-1">
               <NodeIcon width={24} height={24} />
             </div>
-            <div className="ml-1">
+            <div className="ml-1 truncate">
               <h2 className="text-md font-medium">{label}</h2>
-              <h3 className="text-xs">{title}</h3>
+              <p className="text-xs truncate">{title}</p>
             </div>
           </div>
           <div className={`flex flex-col gap-1 py-1`}>{children}</div>

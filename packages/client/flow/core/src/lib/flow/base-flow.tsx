@@ -102,7 +102,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   const { publish, events } = pubSub || {}
 
   const [playing, setPlaying] = React.useState(false)
-  const [miniMapOpen, setMiniMapOpen] = React.useState(true)
+  const [miniMapOpen, setMiniMapOpen] = React.useState(false)
 
   useEffect(() => {
     if (!spell) return
@@ -218,7 +218,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
         <MiniMap
           nodeStrokeWidth={3}
           maskColor="#69696930"
-          nodeColor={node => nodeColor(node, specJSON, spell)}
+          nodeColor={node => nodeColor(node, specJSON)}
           pannable
           zoomable
         />

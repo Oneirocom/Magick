@@ -4,8 +4,12 @@ import { getNodeSpec } from 'shared/nodeSpec'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'
+import { SpellInterface } from 'server/schemas'
 
-export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
+export const behaveToFlow = (
+  graph: GraphJSON,
+  spell: SpellInterface
+): [Node[], Edge[]] => {
   const nodes: Node[] = []
   const edges: Edge[] = []
   const nodeSpecs = getNodeSpec()
@@ -17,6 +21,16 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
       throw new Error(`Node spec not found for node type: ${nodeJSON.type}`)
     }
     const configuration = getConfig(nodeJSON, spec)
+
+    // PATCH FOR VARIABLE NODES
+    if (nodeJSON.type === 'variable' && configuration.variableId) {
+      const variable = spell.graph.variables.find(
+        variable => variable.id === configuration.variableId
+      )
+      if (variable) {
+        configuration.valueTypeName = variable.valueTypeName
+      }
+    }
 
     const node: Node = {
       id: nodeJSON.id,
@@ -62,6 +76,18 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
 
     if (nodeJSON.flows) {
       for (const [inputKey, link] of Object.entries(nodeJSON.flows)) {
+        console.log('PUSHING EDGE', {
+          id: uuidv4(),
+          source: nodeJSON.id,
+          sourceHandle: inputKey,
+          type: 'custom-edge',
+          target: link.nodeId,
+          targetHandle: link.socket,
+          updatable: 'target',
+          data: {
+            valueType: 'flow',
+          },
+        })
         edges.push({
           id: uuidv4(),
           source: nodeJSON.id,
