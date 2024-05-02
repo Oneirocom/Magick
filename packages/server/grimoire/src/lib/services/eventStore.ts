@@ -117,7 +117,6 @@ export class EventStore
     const events = await this.queryEvents(eventPropertyKeys, eventTypes)
 
     for (const event of events) {
-      console.log('EVENT', event)
       await this.app.service('graphEvents').remove(event.id, {})
     }
   }
