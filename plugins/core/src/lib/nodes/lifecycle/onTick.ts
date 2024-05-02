@@ -3,7 +3,7 @@ import {
   ILifecycleEventEmitter,
   NodeCategory,
 } from '@magickml/behave-graph'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { IEventStore, makeMagickEventNodeDefinition } from 'server/grimoire'
 import { CORE_DEP_KEYS } from '../../config'
 import { Agent } from 'server/agents'
 
@@ -36,17 +36,23 @@ export const LifecycleOnTick = makeMagickEventNodeDefinition(
       )
 
       const agent = graph.getDependency<Agent>(CORE_DEP_KEYS.AGENT)
+      const eventStore = graph.getDependency<IEventStore>(
+        CORE_DEP_KEYS.EVENT_STORE
+      )
+      const initialEvent = eventStore?.initialEvent()
 
-      if (!agent) return
+      if (!agent || !eventStore) return
 
       let lastTickTime = Date.now()
 
       const onTickEvent = () => {
         const event = agent?.formatEvent<{}>({
+          ...initialEvent,
           content: '',
           eventName: 'tick',
           sender: agent.id,
           data: {},
+          metadata: {},
           skipSave: true,
         })
 
