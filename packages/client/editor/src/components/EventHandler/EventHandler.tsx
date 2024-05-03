@@ -11,16 +11,13 @@ import {
   setSyncing,
   selectPastState,
   selectFutureState,
-  applyState,
-  undoState,
-  redoState,
   selectIsDirty,
-  setIsDirty,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
 import { useHotkeys } from 'react-hotkeys-hook'
 import posthog from 'posthog-js'
+import { debounce } from 'lodash'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -76,6 +73,61 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     $EXPORT,
   } = events
 
+  useHotkeys('ctrl+z, meta+z', () => onUndo())
+  useHotkeys('ctrl+shift+z, meta+shift+z', () => onRedo())
+
+  const addUndoState = (spellid, state) => {
+    // state for each spell is an array of states we add to
+    const key = `spell-state-undo-${spellid}`
+
+    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
+
+    // ensure we keep a maximum of 50 states
+    if (currentState.length >= 50) {
+      currentState.shift()
+    }
+
+    localStorage.setItem(key, JSON.stringify([...currentState, state]))
+  }
+
+  const removeLastUndoState = spellid => {
+    const key = `spell-state-undo-${spellid}`
+    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
+    const removedState = currentState.pop()
+
+    console.log('removedState', removedState)
+
+    addRedoState(spellid, removedState)
+
+    localStorage.setItem(key, JSON.stringify(currentState))
+
+    return removedState
+  }
+
+  const addRedoState = (spellid, state) => {
+    const key = `spell-state-redo-${spellid}`
+    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
+
+    // ensure we keep a maximum of 50 states
+    if (currentState.length >= 50) {
+      currentState.shift()
+    }
+
+    localStorage.setItem(key, JSON.stringify([...currentState, state]))
+  }
+
+  const removeLastRedoState = spellid => {
+    const key = `spell-state-redo-${spellid}`
+    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
+    const state = currentState.pop()
+
+    addUndoState(spellid, state)
+
+    localStorage.setItem(key, JSON.stringify(currentState))
+
+    return state
+  }
+
   /**
    * Save the current spell
    */
@@ -93,6 +145,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     }
 
     if (!updatedSpell.type) updatedSpell.type = type
+
+    addUndoState(currentSpell.id, currentSpell)
 
     const response = await saveSpellMutation({
       spell: updatedSpell,
@@ -153,7 +207,10 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
           name: currentSpell.name,
           spellId: currentSpell.id,
         })
-        dispatch(applyState({ value: currentSpell, clearFuture: !isDirty }))
+        // dispatch(applyState({ value: currentSpell, clearFuture: !isDirty }))
+
+        addUndoState(currentSpell.id, currentSpell)
+
         spellRef.current = diffResponse
         onSuccessCB && onSuccessCB()
         // extend the timeout to 500ms to give the user a chance to see the sync icon
@@ -195,41 +252,37 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * Trigger the undo action in the editor
    */
   const onUndo = useCallback(() => {
-    if (pastState?.length > 0 && !isSaving) {
-      const lastSpellState = pastState[pastState?.length - 1]
-      dispatch(setIsDirty(true))
-      onSaveDiff(null, lastSpellState, () => {
-        dispatch(undoState({ value: lastSpellState }))
-        publish($RELOAD_GRAPH(tab.id), {
-          spellState: lastSpellState,
-          agentId: tab.agentId,
-          projectId: config.projectId,
-        })
-      })
-    }
-  }, [pastState, isSaving, dispatch, onSaveDiff, publish, tab.id])
+    console.log('UNDOING')
+    if (!spellRef?.current?.id || isSaving) return
+    const lastSpellState = removeLastUndoState(spellRef.current.id)
+
+    if (!lastSpellState) return
+    publish($RELOAD_GRAPH(tab.id), {
+      spellState: lastSpellState,
+      agentId: tab.agentId,
+      projectId: config.projectId,
+    })
+
+    debounce(() => {
+      onSaveDiff(null, lastSpellState, () => {})
+    }, 500)
+  }, [pastState, isSaving, onSaveDiff, publish, tab.id])
 
   /**
    * Trigger the redo action in the editor
    */
   const onRedo = useCallback(async () => {
-    if (futureState.length > 0 && !isSaving) {
-      const futureSpellState = futureState[futureState?.length - 1]
+    if (!spellRef?.current?.id || isSaving) return
+    const lastSpellState = removeLastRedoState(spellRef.current.id)
 
-      dispatch(setIsDirty(true))
-      onSaveDiff(null, futureSpellState, () => {
-        dispatch(redoState({ value: futureSpellState }))
-        publish($RELOAD_GRAPH(tab.id), {
-          spellState: futureSpellState,
-          agentId: tab.agentId,
-          projectId: config.projectId,
-        })
-      })
-    }
+    if (!lastSpellState) return
+    publish($RELOAD_GRAPH(tab.id), {
+      spellState: lastSpellState,
+      agentId: tab.agentId,
+      projectId: config.projectId,
+    })
+    onSaveDiff(null, lastSpellState, () => {})
   }, [futureState, isSaving, dispatch, onSaveDiff, publish, tab.id])
-
-  useHotkeys('ctrl+z', () => onUndo())
-  useHotkeys('ctrl+shift+z', () => onRedo())
 
   /**
    * Trigger the delete action in the editor
