@@ -70,7 +70,7 @@ import { LifecycleOnTick } from './nodes/lifecycle/onTick'
 import { arrayRandomElement } from './values/Array/Random'
 import { wait } from './nodes/flow/wait'
 import { variablesReset } from './nodes/query/variableReset'
-import { generateTextAsync } from './nodes/actions/generateTextAsync'
+import { flowSwitch } from './nodes/flow/switch'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -103,9 +103,9 @@ export class CorePlugin extends CoreEventsPlugin<
     clearMessageHistory,
     delay,
     FetchNode,
+    flowSwitch,
     forEach,
     generateText,
-    generateTextAsync,
     getMessageHistory,
     getSecretNode,
     getStateNode,
