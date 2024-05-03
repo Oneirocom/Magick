@@ -12,7 +12,7 @@ import {
 } from 'client/state'
 import { v4 as uuidv4 } from 'uuid'
 import { IDockviewPanelProps } from 'dockview'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { enqueueSnackbar } from 'notistack'
 import { Variable } from './Variable'
 import { useSelector } from 'react-redux'
@@ -26,6 +26,7 @@ type Props = IDockviewPanelProps<{
 
 export const VariableWindow = (props: Props) => {
   const { tab, spellName } = props.params
+  const [variables, setVariables] = useState<VariableJSON[]>([])
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -48,6 +49,12 @@ export const VariableWindow = (props: Props) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewVariableName(e.target.value)
   }
+
+  useEffect(() => {
+    if (spell?.graph) {
+      setVariables([...spell.graph.variables])
+    }
+  }, [spell])
 
   const deleteAllVariableNodes = useCallback(
     (variable: VariableJSON) => {
@@ -165,20 +172,22 @@ export const VariableWindow = (props: Props) => {
           +
         </Button>
       </div>
-      <div>
-        {spell.graph.variables.map(variable => {
-          return (
-            <Variable
-              key={variable.id}
-              variable={variable}
-              deleteAllVariableNodes={() => {
-                deleteAllVariableNodes(variable)
-              }}
-              updateVariable={saveVariable}
-              deleteVariable={deleteVariable}
-            />
-          )
-        })}
+      <div className="mb-5">
+        {variables
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(variable => {
+            return (
+              <Variable
+                key={variable.id}
+                variable={variable}
+                deleteAllVariableNodes={() => {
+                  deleteAllVariableNodes(variable)
+                }}
+                updateVariable={saveVariable}
+                deleteVariable={deleteVariable}
+              />
+            )
+          })}
       </div>
     </Window>
   )
