@@ -46,7 +46,6 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
 
   let [backgroundColor, textColor] = colors[colorName]
 
-  console.log('config', config)
   if (config?.valueTypeName) {
     const colorName = valueTypeColorMap[config.valueTypeName]
     if (colorName) {
@@ -56,7 +55,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   // }
 
   return (
-    <div className="p-5">
+    <div className="p-3">
       <div className={cn('relative')}>
         <div
           className={cn(
