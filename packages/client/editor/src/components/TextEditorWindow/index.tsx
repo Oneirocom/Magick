@@ -25,6 +25,7 @@ const TextEditor = props => {
     wordWrap: 'on',
     minimap: { enabled: false },
     fontSize: 16,
+    lineNumbers: false,
   })
 
   const updateNodeData = useChangeNodeData(selectedNode?.id)
