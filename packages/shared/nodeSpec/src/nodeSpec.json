@@ -684,6 +684,52 @@
     "configuration": []
   },
   {
+    "type": "flow/switch",
+    "category": "Flow",
+    "label": "Switch",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "default",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "flow"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "flow/array/forEach",
     "category": "Flow",
     "label": "For Each",
@@ -754,127 +800,6 @@
     "type": "magick/generateText",
     "category": "Action",
     "label": "Generate Text",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "prompt",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "system",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "messages",
-        "valueType": "array",
-        "defaultValue": "[]"
-      },
-      {
-        "name": "modelOverride",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "stop",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "temperature",
-        "valueType": "float",
-        "defaultValue": 0.5
-      },
-      {
-        "name": "maxRetries",
-        "valueType": "integer",
-        "defaultValue": 3
-      },
-      {
-        "name": "top_p",
-        "valueType": "integer",
-        "defaultValue": 1
-      },
-      {
-        "name": "seed",
-        "valueType": "integer",
-        "defaultValue": 42
-      },
-      {
-        "name": "maxTokens",
-        "valueType": "integer",
-        "defaultValue": 256
-      }
-    ],
-    "outputs": [
-      {
-        "name": "response",
-        "valueType": "string"
-      },
-      {
-        "name": "completionResponse",
-        "valueType": "object"
-      },
-      {
-        "name": "done",
-        "valueType": "flow"
-      },
-      {
-        "name": "onStream",
-        "valueType": "flow"
-      },
-      {
-        "name": "stream",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "modelProviders",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "modelProvider",
-        "valueType": "string",
-        "defaultValue": "openai"
-      },
-      {
-        "name": "models",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "model",
-        "valueType": "string",
-        "defaultValue": "gpt-3.5-turbo"
-      },
-      {
-        "name": "customBaseUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "hiddenProperties",
-        "valueType": "string",
-        "defaultValue": [
-          "hiddenProperties",
-          "modelProvider",
-          "model",
-          "models",
-          "customBaseUrl"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "magick/generateTextAsync",
-    "category": "Action",
-    "label": "Generate Text Async",
     "inputs": [
       {
         "name": "flow",
