@@ -1,21 +1,14 @@
-import { python } from 'pythonia'
-import { PRODUCTION } from 'shared/config'
-
 import {
   // CompletionParams,
-  ICoreBudgetManagerService,
+  // CompletionResponse,
   ICoreLLMService,
 } from 'servicesShared'
-import { CoreBudgetManagerService } from '../coreBudgetManagerService/coreBudgetMangerService'
 import { CoreUserService } from '../userService/coreUserService'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
-import {
-  AllModels,
-  CompletionResponse,
-  LLMCredential,
-  findProvider,
-} from 'servicesShared'
+import { AllModels, LLMCredential, findProvider } from 'servicesShared'
 import { saveRequest } from 'server/core'
+import { getLogger } from 'server/logger'
+import OpenAI from 'openai'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -25,31 +18,28 @@ type ConstructorParams = {
 }
 
 export class CoreLLMService implements ICoreLLMService {
-  protected liteLLM: any
-  protected coreBudgetManagerService: ICoreBudgetManagerService | undefined
   protected credentials: LLMCredential[] = []
   protected projectId: string
   protected agentId: string
   protected userService: CoreUserService
+  protected openAISDK: OpenAI
+  protected logger: any
 
   constructor({ projectId, agentId }: ConstructorParams) {
     this.projectId = projectId
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
+    this.openAISDK = new OpenAI({
+      baseURL: 'https://magickml.litellm.ai/',
+      apiKey: process.env['LITELLM_PROXY_API_KEY'],
+    })
   }
+
   async initialize() {
     try {
-      this.liteLLM = await python('litellm')
-      this.liteLLM.set_verbose = true
-      this.liteLLM.drop_params = true
-      this.coreBudgetManagerService = new CoreBudgetManagerService({
-        projectId: this.projectId,
-        agentId: this.agentId,
-      })
-
-      await this.coreBudgetManagerService.initialize()
+      this.logger = getLogger()
     } catch (error: any) {
-      console.error('Error initializing LiteLLM:', error)
+      console.error('Error initializing CoreLLMService:', error)
       throw error
     }
   }
@@ -62,30 +52,11 @@ export class CoreLLMService implements ICoreLLMService {
   }) {
     let attempts = 0
     const chunks: any[] = []
-    const messages = request.messages.filter(Boolean)
+
     const startTime = Date.now()
 
     while (attempts < maxRetries) {
       try {
-        if (PRODUCTION) {
-          const estimatedCost =
-            await this.coreBudgetManagerService?.projectedCost({
-              model: request.model,
-              messages: request.messages,
-              projectId: this.projectId,
-            })
-
-          const totalBudget =
-            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
-          if (estimatedCost === undefined || totalBudget === undefined) {
-            throw new Error('Invalid user')
-          }
-
-          if (estimatedCost > totalBudget) {
-            throw new Error('Budget limit exceeded')
-          }
-        }
-
         const userData = await this.userService.getUser()
         const credential = await this.getCredentialForUser({
           userData,
@@ -101,37 +72,24 @@ export class CoreLLMService implements ICoreLLMService {
           messages: request.messages,
           ...request.options,
           stream: true,
-          api_key: credential,
+          // api_key: credential,
         }
 
-        const stream = await this.liteLLM.completion$(body)
+        const stream = await this.openAISDK.beta.chat.completions.stream(body)
 
         for await (const chunk of stream) {
           chunks.push(chunk)
 
-          const chunkJSON = await chunk.json()
-          const chunkVal = await chunkJSON.valueOf()
-          yield chunkVal
+          yield chunk as any
         }
 
-        const completionResponsePython =
-          await this.liteLLM.stream_chunk_builder$(chunks, { messages })
+        const chatCompletion = await stream.finalChatCompletion()
 
-        if (PRODUCTION) {
-          await this.coreBudgetManagerService?.updateCost(
-            this.projectId,
-            completionResponsePython
-          )
-        }
-
-        const fullResponseJson = await completionResponsePython.json()
-        const completionResponse =
-          (await fullResponseJson.valueOf()) as CompletionResponse
         saveRequest({
           projectId: this.projectId,
           agentId: this.agentId,
           requestData: JSON.stringify(request.options),
-          responseData: JSON.stringify(completionResponse),
+          responseData: JSON.stringify(chatCompletion),
           model: request.model,
           startTime: startTime,
           status: '',
@@ -141,18 +99,16 @@ export class CoreLLMService implements ICoreLLMService {
           type: 'completion',
           hidden: false,
           processed: false,
-          totalTokens: fullResponseJson.usage.total_tokens,
-          spell: spellId,
+          totalTokens: chatCompletion.usage?.total_tokens,
+          spell: { id: spellId } as any,
           nodeId: null,
         })
-        return {
-          ...completionResponse,
-          _python_object: completionResponsePython,
-        }
+
+        return chatCompletion as any
       } catch (error) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
-        if (attempts >= maxRetries) {
+        if (attempts < maxRetries) {
           await sleep(delayMs)
         } else {
           throw error
@@ -193,8 +149,8 @@ export class CoreLLMService implements ICoreLLMService {
     if (!providerKey) {
       throw new Error(`No provider key found for ${model}`)
     }
-    let credential = this.credentials.find(c => c.name === providerKey)?.value
-    const MAGICK_API_KEY = process.env[providerKey]
+    let credential
+    const MAGICK_API_KEY = process.env['LITELLM_PROXY_API_KEY']
 
     if (process.env.NODE_ENV === 'development') {
       credential = MAGICK_API_KEY
@@ -202,7 +158,7 @@ export class CoreLLMService implements ICoreLLMService {
 
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName.trim()
-      if (userSubscriptionName === PortalSubscriptions.WIZARD && providerKey) {
+      if (userSubscriptionName === PortalSubscriptions.WIZARD) {
         credential = MAGICK_API_KEY
       } else if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
         credential = this.credentials.find(c => c.name === providerKey)?.value
