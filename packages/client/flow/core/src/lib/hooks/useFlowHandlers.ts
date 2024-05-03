@@ -38,6 +38,7 @@ import { getSourceSocket } from '../utils/getSocketsByNodeTypeAndHandleType'
 import { useDispatch, useSelector } from 'react-redux'
 import posthog from 'posthog-js'
 import { getConfigFromNodeSpec } from '../utils/getNodeConfig'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
@@ -92,6 +93,14 @@ export const useFlowHandlers = ({
   const { screenToFlowPosition, getNodes } = instance
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
+
+  //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
+  useHotkeys('meta+c, ctrl+c', () => {
+    copy()
+  })
+  useHotkeys('meta+v, ctrl+v', () => {
+    paste()
+  })
 
   useOnViewportChange({
     onStart: () => {
@@ -294,8 +303,21 @@ export const useFlowHandlers = ({
 
   const copy = useCallback(() => {
     const selectedNodes = getNodes().filter(node => node.selected)
+    const selectedEdges = edges.filter(edge =>
+      selectedNodes.some(
+        node => node.id === edge.source || node.id === edge.target
+      )
+    )
+
+    console.log('selectedEdges', selectedEdges)
     if (!selectedNodes.length) return
-    localStorage.setItem('copiedNodes', JSON.stringify(selectedNodes))
+    localStorage.setItem(
+      'copiedNodes',
+      JSON.stringify({
+        nodes: selectedNodes,
+        edges: selectedEdges,
+      })
+    )
     setTargetNodes(undefined)
   }, [nodes])
 
@@ -307,28 +329,45 @@ export const useFlowHandlers = ({
   )
 
   const paste = useCallback(() => {
+    console.log('pasting')
     const copiedNodes = localStorage.getItem('copiedNodes')
     if (!copiedNodes) return
 
+    const { nodes, edges } = JSON.parse(copiedNodes)
     const { x: pasteX, y: pasteY } = screenToFlowPosition({
       x: mousePosRef.current.x,
       y: mousePosRef.current.y,
     })
 
-    const bufferedNodes = JSON.parse(copiedNodes) as Node[]
+    const bufferedNodes = nodes as Node[]
     const minX = Math.min(...bufferedNodes.map(node => node.position.x))
     const minY = Math.min(...bufferedNodes.map(node => node.position.y))
+
+    const oldToNewIdMap: Record<string, string> = {}
 
     const newNodes: NodeChange[] = bufferedNodes.map(node => {
       const id = uuidv4()
       const x = pasteX + (node.position.x - minX)
       const y = pasteY + (node.position.y - minY)
-
-      return { item: { ...node, id, position: { x, y } }, type: 'add' }
+      oldToNewIdMap[node.id] = id
+      return {
+        item: { ...node, id, position: { x, y } },
+        type: 'add',
+      }
     })
 
+    const newEdges = edges.map((edge: Edge) => ({
+      type: 'add',
+      item: {
+        ...edge,
+        id: uuidv4(),
+        source: oldToNewIdMap[edge.source],
+        target: oldToNewIdMap[edge.target],
+      },
+    }))
+
     onNodesChange(tab.id)(newNodes)
-    localStorage.removeItem('copiedNodes')
+    onEdgesChange(tab.id)(newEdges)
   }, [screenToFlowPosition, onNodesChange, tab])
 
   const nodeMenuActions = [
@@ -469,9 +508,6 @@ export const useFlowHandlers = ({
     },
     []
   )
-  //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
-  // useHotkeys('meta+c, ctrl+c', copy)
-  // useHotkeys('meta+v, ctrl+v', paste)
 
   return {
     handleOnConnect,
