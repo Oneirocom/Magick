@@ -19,6 +19,7 @@ export const variableSet = makeFlowNodeDefinition({
         'socketOutputs',
         'socketInputs',
         'label',
+        'valueTypeName',
       ],
     },
     variableId: {

@@ -18,6 +18,7 @@ export const variableGet = makeFunctionNodeDefinition({
         'variableId',
         'socketOutputs',
         'label',
+        'valueTypeName',
       ],
     },
     variableId: {
