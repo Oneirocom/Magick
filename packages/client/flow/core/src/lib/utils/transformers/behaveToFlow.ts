@@ -76,18 +76,6 @@ export const behaveToFlow = (
 
     if (nodeJSON.flows) {
       for (const [inputKey, link] of Object.entries(nodeJSON.flows)) {
-        console.log('PUSHING EDGE', {
-          id: uuidv4(),
-          source: nodeJSON.id,
-          sourceHandle: inputKey,
-          type: 'custom-edge',
-          target: link.nodeId,
-          targetHandle: link.socket,
-          updatable: 'target',
-          data: {
-            valueType: 'flow',
-          },
-        })
         edges.push({
           id: uuidv4(),
           source: nodeJSON.id,
