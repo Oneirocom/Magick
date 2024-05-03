@@ -161,6 +161,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
           spellId: spell.id,
         },
       })
+      publish(events.RESET_NODE_STATE)
     } else {
       publish(events.SEND_COMMAND, {
         projectId,
