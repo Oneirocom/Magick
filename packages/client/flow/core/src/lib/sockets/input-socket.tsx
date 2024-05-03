@@ -105,7 +105,6 @@ const InputFieldForValue = ({
     if (valueType === 'string') {
       setIsFocused(true)
       onChange(name, x)
-
       setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
 
       return

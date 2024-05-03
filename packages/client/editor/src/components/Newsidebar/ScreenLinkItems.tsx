@@ -70,12 +70,6 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       tooltip: 'Secrets Tooltip',
       tooltipText: drawerTooltipText.secrets,
     },
-    // {
-    //   name: 'Requests',
-    //   Icon: BackupIcon,
-    //   tooltip: 'Requests Tooltip',
-    //   tooltipText: drawerTooltipText.requests,
-    // },
     {
       name: 'Events',
       Icon: MultipleStopIcon,

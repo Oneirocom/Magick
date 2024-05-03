@@ -8,7 +8,7 @@ import { AGENT_DELETE_JOB } from 'communication'
 import { Reporter } from './Reporters'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
 
-const CHECK_INTERVAL = 10000 // Check every 15 seconds
+const CHECK_INTERVAL = 10000 // Check every 10 seconds
 
 interface CloudAgentManagerConstructor {
   pubSub: RedisPubSub
@@ -23,17 +23,23 @@ export class CloudAgentManagerV2 {
   pubSub: RedisPubSub
 
   constructor(args: CloudAgentManagerConstructor) {
-    this.logger.info('Cloud Agent Manager Startup')
     this.newQueue = args.newQueue
     this.newQueue.initialize('agent:create')
     this.agentStateReporter = args.agentStateReporter
     this.pubSub = app.get('pubsub')
-    this.start()
   }
 
   async start() {
+    this.logger.info('Bootstrapping agents...')
     // On manager startup, bring all enabled agents online if not already.
     await this.bootstrapAgents()
+
+    this.logger.info('Grace period before monitoring agents...')
+    //initial grace period before we start monitoring agents
+    const initialDelay = 15000 // 10-second grace period
+    await new Promise(resolve => setTimeout(resolve, initialDelay))
+
+    this.logger.info('Monitoring agents...')
     // Start monitoring heartbeats and managing agents.
     setInterval(() => this.manageAgents(), CHECK_INTERVAL)
   }
@@ -90,15 +96,14 @@ export class CloudAgentManagerV2 {
     const onlineAgents = [] as string[]
 
     for (const agentId of agentIds) {
-      const heartbeat: number | null = await new Promise(resolve => {
-        app.get('redis').get(`agent:heartbeat:${agentId}`, (err, reply) => {
-          if (err || !reply)
-            resolve(null) // Treat errors as missing heartbeats for simplicity.
-          else resolve(Number(reply))
-        })
-      })
+      const heartbeat: string | null = await app
+        .get('redis')
+        .get(`agent:heartbeat:${agentId}`)
 
-      if (heartbeat && now - heartbeat < AGENT_HEARTBEAT_INTERVAL_MSEC) {
+      if (
+        heartbeat &&
+        now - Number(heartbeat) < AGENT_HEARTBEAT_INTERVAL_MSEC
+      ) {
         onlineAgents.push(agentId)
       }
     }
@@ -106,9 +111,43 @@ export class CloudAgentManagerV2 {
     return onlineAgents
   }
 
-  createAgent(agentId) {
-    this.logger.info(`Creating agent ${agentId}...`)
-    this.newQueue.addJob('agent:create', { agentId })
+  async acquireLock(lockKey: string, timeout: number = 5000): Promise<boolean> {
+    const startTime = Date.now()
+    while (Date.now() - startTime < timeout) {
+      const result = await this.pubSub.setnx(lockKey, '1')
+      if (result === 1) {
+        await this.pubSub.expire(lockKey, 10)
+        return true
+      }
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+    return false
+  }
+
+  async releaseLock(lockKey: string): Promise<void> {
+    await this.pubSub.del(lockKey)
+  }
+
+  async createAgent(agentId) {
+    const lockKey = `agent:lock:${agentId}`
+    const lock = await this.acquireLock(lockKey)
+
+    if (!lock) {
+      this.logger.info(
+        `Agent ${agentId} is already being created by another worker`
+      )
+      return
+    }
+
+    try {
+      const onlineAgents = await this.fetchOnlineAgents()
+      if (!onlineAgents.includes(agentId)) {
+        this.logger.info(`Creating agent ${agentId}...`)
+        this.newQueue.addJob('agent:create', { agentId })
+      }
+    } finally {
+      await this.releaseLock(lockKey)
+    }
   }
 
   stopAgent(agentId) {

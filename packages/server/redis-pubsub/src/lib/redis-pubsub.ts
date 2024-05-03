@@ -125,6 +125,24 @@ export class RedisPubSub extends EventEmitter {
     this.publisher = await this.createConnection(this.redisCloudUrl)
     this.subscriber = await this.createConnection(this.redisCloudUrl)
 
+    // Define the expire command
+    this.publisher.defineCommand('expire', {
+      numberOfKeys: 1,
+      lua: 'return redis.call("expire", KEYS[1], ARGV[1])',
+    })
+
+    // Define the setnx command
+    this.publisher.defineCommand('setnx', {
+      numberOfKeys: 1,
+      lua: 'return redis.call("setnx", KEYS[1], ARGV[1])',
+    })
+
+    // Define the del command
+    // this.publisher.defineCommand('del', {
+    //   numberOfKeys: -1,
+    //   lua: 'return redis.call("del", unpack(KEYS))',
+    // })
+
     console.log('Connecting to redis pubsub')
     // await this.client.connect()
     // await this.subscriber.connect()
@@ -223,6 +241,63 @@ export class RedisPubSub extends EventEmitter {
         })
       })
     })
+  }
+
+  /**
+   * Sets an expiration time for a given key.
+   *
+   * @param key - The key to set the expiration time for.
+   * @param seconds - The number of seconds after which the key should expire.
+   *
+   * Example:
+   * await redisPubSub.expire('myKey', 60);
+   */
+  async expire(key: string, seconds: number): Promise<void> {
+    try {
+      await this.publisher.expire(key, seconds)
+    } catch (err) {
+      console.error('Failed to set expiration time:', err)
+      throw err
+    }
+  }
+
+  /**
+   * Sets the value of a key only if the key does not exist.
+   *
+   * @param key - The key to set the value for.
+   * @param value - The value to set for the key.
+   * @returns A promise that resolves to 1 if the key was set, or 0 if the key already exists.
+   *
+   * Example:
+   * const result = await redisPubSub.setnx('myKey', 'myValue');
+   */
+  async setnx(key: string, value: string): Promise<number> {
+    try {
+      const result = await this.publisher.setnx(key, value)
+      return result
+    } catch (err) {
+      console.error('Failed to set value with setnx:', err)
+      throw err
+    }
+  }
+
+  /**
+   * Deletes one or more keys from Redis.
+   *
+   * @param keys - The key(s) to delete.
+   * @returns A promise that resolves to the number of keys that were removed.
+   *
+   * Example:
+   * const count = await redisPubSub.del('myKey');
+   */
+  async del(...keys: string[]): Promise<number> {
+    try {
+      const count = await this.publisher.del(...keys)
+      return count
+    } catch (err) {
+      console.error('Failed to delete keys:', err)
+      throw err
+    }
   }
 
   /**
