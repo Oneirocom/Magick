@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import SingleElement from './SingleElement'
 
@@ -22,7 +22,7 @@ import { useSnackbar } from 'notistack'
  */
 const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
   const [value, setValue] = useState('')
-  const [selectedValueType, setSelectedValueType] = useState('string')
+  const [selectedValueType, setSelectedValueType] = useState(valueTypes[0])
   const { enqueueSnackbar } = useSnackbar()
 
   /**
@@ -33,6 +33,14 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
   const onChange = e => {
     setValue(e.target.value)
   }
+
+  useEffect(() => {
+    if (definedValueType) {
+      setSelectedValueType(definedValueType)
+    } else {
+      setSelectedValueType(valueTypes[0])
+    }
+  }, [definedValueType, valueTypes])
 
   /**
    * Add a new socket on form submission.
@@ -53,7 +61,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
 
     addSocket({ name: value, valueType: definedValueType || selectedValueType })
     setValue('')
-    setSelectedValueType('string')
+    setSelectedValueType(valueTypes[0])
   }
 
   return (
