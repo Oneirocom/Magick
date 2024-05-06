@@ -184,7 +184,7 @@ export class SlackPlugin extends WebSocketPlugin<
       plugin: 'slack',
       agentId: this.agentId,
       channelType: message.channel_type,
-      rawData: message,
+      rawData: JSON.stringify(message),
       timestamp: new Date().toISOString(),
       data: message,
       metadata: {

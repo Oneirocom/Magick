@@ -147,7 +147,7 @@ export class Agent
       agentId: this.id,
       observer: this.id,
       channelType: 'agent',
-      rawData: {},
+      rawData: '',
       timestamp: new Date().toISOString(),
       data: {} as Data,
       metadata: {} as Y,

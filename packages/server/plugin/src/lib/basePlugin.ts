@@ -569,6 +569,11 @@ export abstract class BasePlugin<
     event,
     messageDetails: EventFormat<Data, Metadata>
   ): EventPayload<Data, Metadata> {
+    const rawData =
+      typeof messageDetails.rawData === 'string'
+        ? messageDetails.rawData
+        : JSON.stringify(messageDetails.rawData)
+
     return {
       plugin: messageDetails.plugin || this.name,
       connector: this.name,
@@ -581,6 +586,7 @@ export abstract class BasePlugin<
       metadata: messageDetails.metadata || ({} as Metadata),
       timestamp: new Date().toISOString(),
       ...messageDetails,
+      rawData: rawData,
     }
   }
 }
