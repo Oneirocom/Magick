@@ -57,7 +57,7 @@ export class BaseActionManager {
     await action.handler(data as ActionPayload)
 
     // const { actionName, event } = data
-    if (data.skipSave) return
+    if (data.skipSave || data.event.skipSave) return
 
     saveGraphEvent({
       sender: this.agentId,
