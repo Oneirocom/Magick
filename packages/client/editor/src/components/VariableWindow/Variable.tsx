@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react'
 const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 
 // todo we need to centralize these types
-const valueTypes = ['boolean', 'string', 'float', 'array', 'object']
+const valueTypes = ['boolean', 'string', 'float', 'array', 'object', 'integer']
 
 const initialValueMap = {
   boolean: false,
