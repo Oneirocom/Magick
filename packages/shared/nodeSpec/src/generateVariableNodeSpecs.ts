@@ -34,8 +34,6 @@ export const getVariableConfig = (
     configUpdate['socketOutputs'] = [socket]
   }
 
-  console.log('generated config update', configUpdate)
-
   return configUpdate
 }
 
