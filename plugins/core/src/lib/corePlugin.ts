@@ -73,6 +73,11 @@ import { variablesReset } from './nodes/query/variableReset'
 import { flowSwitch } from './nodes/flow/switch'
 import { addMessage } from './nodes/actions/addMessage'
 import { stringChunker } from './nodes/actions/stringChunker'
+import { MemoryStreamService } from './services/memoryStreamService'
+import { addMemory } from './nodes/actions/addMemory'
+import { onMemory } from './nodes/events/onMemory'
+import { getMemories } from './nodes/actions/getMemories'
+import { clearMemories } from './nodes/actions/clearMemories'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -93,6 +98,7 @@ export class CorePlugin extends CoreEventsPlugin<
   client: CoreEventClient
   nodes = [
     addKnowledge,
+    addMemory,
     addMessage,
     arrayClear,
     arrayCreate,
@@ -103,12 +109,14 @@ export class CorePlugin extends CoreEventsPlugin<
     arrayRandomElement,
     arrayRemoveFirst,
     arrayRemoveLast,
+    clearMemories,
     clearMessageHistory,
     delay,
     FetchNode,
     flowSwitch,
     forEach,
     generateText,
+    getMemories,
     getMessageHistory,
     getSecretNode,
     getStateNode,
@@ -118,6 +126,7 @@ export class CorePlugin extends CoreEventsPlugin<
     LifecycleOnTick,
     messageEvent,
     objectDestructure,
+    onMemory,
     queryEventHistory,
     queryKnowledge,
     regex,
@@ -249,6 +258,10 @@ export class CorePlugin extends CoreEventsPlugin<
 
     return {
       [CORE_DEP_KEYS.AGENT]: this.agent,
+      [CORE_DEP_KEYS.MEMORY_STREAM_SERVICE]: new MemoryStreamService(
+        this.agentId,
+        spellCaster
+      ),
       [CORE_DEP_KEYS.ACTION_SERVICE]: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
@@ -261,6 +274,7 @@ export class CorePlugin extends CoreEventsPlugin<
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
       // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
+
       [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
       [CORE_DEP_KEYS.GET_SECRET]:
         this.credentialsManager.getCustomCredential.bind(this),
