@@ -2,8 +2,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSnackbar } from 'notistack'
 
-import { diff } from '../../utils/json0'
-
 import { useConfig, useFeathers } from '@magickml/providers'
 import {
   useLazyGetSpellQuery,
@@ -15,7 +13,6 @@ import {
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
-import { useHotkeys } from 'react-hotkeys-hook'
 import posthog from 'posthog-js'
 import { debounce } from 'lodash'
 
@@ -73,8 +70,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     $EXPORT,
   } = events
 
-  useHotkeys('ctrl+z, meta+z', () => onUndo())
-  useHotkeys('ctrl+shift+z, meta+shift+z', () => onRedo())
+  // useHotkeys('ctrl+z, meta+z', () => onUndo())
+  // useHotkeys('ctrl+shift+z, meta+shift+z', () => onRedo())
 
   const addUndoState = (spellid, state) => {
     // state for each spell is an array of states we add to
@@ -146,6 +143,9 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     if (!updatedSpell.type) updatedSpell.type = type
 
+    setIsSaving(true)
+    dispatch(setSyncing(true))
+
     addUndoState(currentSpell.id, currentSpell)
 
     const response = await saveSpellMutation({
@@ -160,6 +160,16 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       })
       return
     }
+
+    setTimeout(() => {
+      dispatch(setSyncing(false))
+      setIsSaving(false)
+      posthog.capture('spell_updated', {
+        spellId: currentSpell.id,
+        projectId: config.projectId,
+      })
+      return
+    }, 1000)
 
     enqueueSnackbar('Spell saved', {
       variant: 'success',
@@ -185,33 +195,19 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
       if (currentSpell.spellReleaseId) return
 
-      const jsonDiff = diff(currentSpell, updatedSpell)
-
-      // no point saving if nothing has changed
-      if (jsonDiff.length === 0) {
-        console.warn('No changes to save')
-        return
-      }
-      // While Importing spell, the graph is first created, then the imported graph is loaded
-      // This might be causing issue at the server end.import { GlobalConfig } from '../../../../dist/packages/editor/state/globalConfig.d';
-
-      if (updatedSpell.graph.nodes.length === 0) return
-
       try {
         setIsSaving(true)
         dispatch(setSyncing(true))
         // We save the diff. Doing this via feathers but may want to switch to rtk query
-        const diffResponse = await client.service('spells').saveDiff({
+        const response = await client.service('spells').patch(currentSpell.id, {
+          ...updatedSpell,
           projectId: config.projectId,
-          diff: jsonDiff,
-          name: currentSpell.name,
-          spellId: currentSpell.id,
         })
         // dispatch(applyState({ value: currentSpell, clearFuture: !isDirty }))
 
         addUndoState(currentSpell.id, currentSpell)
 
-        spellRef.current = diffResponse
+        spellRef.current = response
         onSuccessCB && onSuccessCB()
         // extend the timeout to 500ms to give the user a chance to see the sync icon
         setTimeout(() => {
@@ -224,7 +220,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
           return
         }, 1000)
 
-        if ('error' in diffResponse) {
+        if ('error' in response) {
           enqueueSnackbar('Error Updating spell', {
             variant: 'error',
           })
