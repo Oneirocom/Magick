@@ -1,5 +1,4 @@
 import { python } from 'pythonia'
-import { PRODUCTION } from 'shared/config'
 
 import {
   // CompletionParams,
