@@ -71,6 +71,8 @@ import { arrayRandomElement } from './values/Array/Random'
 import { wait } from './nodes/flow/wait'
 import { variablesReset } from './nodes/query/variableReset'
 import { flowSwitch } from './nodes/flow/switch'
+import { addMessage } from './nodes/actions/addMessage'
+import { stringChunker } from './nodes/actions/stringChunker'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -91,6 +93,7 @@ export class CorePlugin extends CoreEventsPlugin<
   client: CoreEventClient
   nodes = [
     addKnowledge,
+    addMessage,
     arrayClear,
     arrayCreate,
     arrayCreateFunction,
@@ -123,6 +126,7 @@ export class CorePlugin extends CoreEventsPlugin<
     sendMessage,
     split,
     streamMessage,
+    stringChunker,
     textTemplate,
     variableGet,
     variableSet,
