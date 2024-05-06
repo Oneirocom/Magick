@@ -22,8 +22,11 @@ export interface IEventStore {
     messageTypes: string[],
     limit?: number
   ) => any
-  saveAgentMessage: (content: string) => void
-  saveAgentEvent: (data: ActionPayload) => void
+  saveAgentMessage: (content: string) => Promise<void>
+  saveUserMessage: (content: string) => Promise<void>
+  addMessage: (content: string, role: 'user' | 'assistant') => Promise<void>
+  saveUserEvent: (data: ActionPayload) => Promise<void>
+  saveAgentEvent: (data: ActionPayload) => Promise<void>
   deleteMessages: (eventPropertyKeys: EventProperties[]) => Promise<void>
   getMessages: (
     eventPropertyKeys: EventProperties[],
@@ -88,12 +91,12 @@ export class EventStore
     this.status = StatusEnum.READY
   }
 
-  public saveAgentMessage(content: string) {
+  public async saveAgentMessage(content: string) {
     const event = this.currentEvent()
 
     if (!event) return
 
-    this.saveAgentEvent({
+    return this.saveAgentEvent({
       ...event,
       data: { content },
       event,
@@ -101,8 +104,28 @@ export class EventStore
     })
   }
 
+  public async saveUserMessage(content: string) {
+    const event = this.currentEvent()
+
+    if (!event) return
+
+    return this.saveUserEvent({
+      event,
+      data: { content },
+      actionName: SEND_MESSAGE,
+    })
+  }
+
+  public async addMessage(content: string, role: 'user' | 'assistant') {
+    if (role === 'user') {
+      await this.saveUserMessage(content)
+    } else {
+      await this.saveAgentMessage(content)
+    }
+  }
+
   public async saveAgentEvent(data: ActionPayload) {
-    saveGraphEvent({
+    await saveGraphEvent({
       sender: this.agentId,
       // we are assuming here that the observer of this action is the
       //  original sender.  We may be wrong.
@@ -116,13 +139,31 @@ export class EventStore
     })
   }
 
+  public async saveUserEvent(data: ActionPayload) {
+    await saveGraphEvent({
+      sender: data.event.sender,
+      observer: this.agentId,
+      agentId: this.agentId,
+      connector: data.event.connector,
+      connectorData: JSON.stringify(data.event.data),
+      content: data.data.content,
+      eventType: data.actionName,
+      event: data.event as EventPayload,
+    })
+  }
+
   public async deleteMessages(eventPropertyKeys: EventProperties[]) {
     const eventTypes = [EventTypes.ON_MESSAGE, EventTypes.SEND_MESSAGE]
     const events = await this.queryEvents(eventPropertyKeys, eventTypes)
 
-    for (const event of events) {
-      await this.app.service('graphEvents').remove(event.id, {})
-    }
+    const eventIds = events.map((event: any) => event.id)
+    await this.app.service('graphEvents').remove(null, {
+      query: {
+        id: {
+          $in: eventIds,
+        },
+      },
+    })
   }
 
   public async getMessages(
