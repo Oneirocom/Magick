@@ -146,6 +146,44 @@
     "configuration": []
   },
   {
+    "type": "magick/addMessage",
+    "category": "Action",
+    "label": "Add message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "role",
+        "valueType": "string",
+        "defaultValue": "user",
+        "choices": [
+          {
+            "text": "user",
+            "value": "user"
+          },
+          {
+            "text": "assistant",
+            "value": "assistant"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "action/array/clear",
     "category": "Action",
     "label": "Clear",
@@ -1488,6 +1526,11 @@
         "name": "content",
         "valueType": "string",
         "defaultValue": ""
+      },
+      {
+        "name": "skipSave",
+        "valueType": "boolean",
+        "defaultValue": false
       }
     ],
     "outputs": [
@@ -1546,6 +1589,53 @@
     "configuration": []
   },
   {
+    "type": "action/string/chunker",
+    "category": "Action",
+    "label": "String Chunker",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "chunkSize",
+        "valueType": "integer",
+        "defaultValue": 2
+      },
+      {
+        "name": "delay",
+        "valueType": "integer",
+        "defaultValue": 100
+      }
+    ],
+    "outputs": [
+      {
+        "name": "done",
+        "valueType": "flow"
+      },
+      {
+        "name": "stream",
+        "valueType": "flow"
+      },
+      {
+        "name": "chunk",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "chunkSize",
+        "valueType": "integer",
+        "defaultValue": 1
+      }
+    ]
+  },
+  {
     "type": "logic/string/template",
     "category": "Logic",
     "label": "Text Template",
@@ -1589,7 +1679,8 @@
           "string",
           "array",
           "boolean",
-          "integer"
+          "integer",
+          "float"
         ]
       },
       {

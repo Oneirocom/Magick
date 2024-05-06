@@ -3,23 +3,25 @@ import { CoreActionService } from '../../services/coreActionService'
 import { IEventStore } from 'server/grimoire'
 import { CORE_DEP_KEYS } from '../../config'
 
-export const sendMessage = makeFlowNodeDefinition({
-  typeName: 'magick/sendMessage',
+export const addMessage = makeFlowNodeDefinition({
+  typeName: 'magick/addMessage',
   category: NodeCategory.Action,
-  label: 'Send Message',
+  label: 'Add message',
   in: {
     flow: 'flow',
     content: 'string',
-    skipSave: {
-      valueType: 'boolean',
-      defaultValue: false,
+    role: {
+      valueType: 'string',
+      choices: ['user', 'assistant'],
+      defaultValue: 'user',
+      label: 'Role',
     },
   },
   out: {
     flow: 'flow',
   },
   initialState: undefined,
-  triggered: ({ commit, read, graph: { getDependency } }) => {
+  triggered: async ({ commit, read, graph: { getDependency } }) => {
     const coreActionService = getDependency<CoreActionService>(
       CORE_DEP_KEYS.ACTION_SERVICE
     )
@@ -29,21 +31,9 @@ export const sendMessage = makeFlowNodeDefinition({
       throw new Error('No coreActionService or eventStore provided')
     }
 
-    const skipSave = Boolean(read('skipSave'))
-    const content = read('content')
-    const _event = eventStore.currentEvent()
-
-    if (!_event) {
-      throw new Error('No event found')
-    }
-
-    const event = { ..._event }
-
-    if (skipSave) {
-      event.skipSave = true
-    }
-
-    coreActionService?.sendMessage(event, { content })
+    const content = read('content') as string
+    const role = read('role') as 'user' | 'assistant'
+    await eventStore.addMessage(content, role)
 
     commit('flow')
   },
