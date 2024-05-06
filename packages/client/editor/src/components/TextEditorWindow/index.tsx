@@ -70,7 +70,7 @@ const TextEditor = props => {
 
     if (language !== 'handlebars') return
     // socket regex looks for handlebars style {{socketName}}
-    const socketRegex = /{{(.+?)}}/g
+    const socketRegex = /{{(?![/#]|this\b|\.\w+)(\w+)}}/g
 
     const socketMatches = code.matchAll(socketRegex)
     const sockets: InputSocketSpecJSON[] = []
