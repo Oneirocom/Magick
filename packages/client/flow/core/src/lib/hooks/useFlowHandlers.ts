@@ -94,7 +94,6 @@ export const useFlowHandlers = ({
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
 
-  //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
   useHotkeys('meta+c, ctrl+c', () => {
     copy()
   })
