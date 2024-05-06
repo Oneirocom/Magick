@@ -1,5 +1,4 @@
 import { python } from 'pythonia'
-import { PRODUCTION } from 'shared/config'
 
 import {
   // CompletionParams,
@@ -67,25 +66,6 @@ export class CoreLLMService implements ICoreLLMService {
 
     while (attempts < maxRetries) {
       try {
-        if (PRODUCTION) {
-          const estimatedCost =
-            await this.coreBudgetManagerService?.projectedCost({
-              model: request.model,
-              messages: request.messages,
-              projectId: this.projectId,
-            })
-
-          const totalBudget =
-            await this.coreBudgetManagerService?.getTotalBudget(this.projectId)
-          if (estimatedCost === undefined || totalBudget === undefined) {
-            throw new Error('Invalid user')
-          }
-
-          if (estimatedCost > totalBudget) {
-            throw new Error('Budget limit exceeded')
-          }
-        }
-
         const userData = await this.userService.getUser()
         const credential = await this.getCredentialForUser({
           userData,
@@ -116,13 +96,6 @@ export class CoreLLMService implements ICoreLLMService {
 
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
-
-        if (PRODUCTION) {
-          await this.coreBudgetManagerService?.updateCost(
-            this.projectId,
-            completionResponsePython
-          )
-        }
 
         const fullResponseJson = await completionResponsePython.json()
         const completionResponse =
