@@ -1,20 +1,21 @@
 export const corePluginName = 'core' as const
 
 export const CORE_DEP_KEYS = {
-  AGENT: 'agent',
   ACTION_SERVICE: 'coreActionService',
-  STATE_SERVICE: 'IStateService',
-  EVENT_STORE: 'IEventStore',
-  I_VARIABLE_SERVICE: 'IVariableService',
-  LLM_SERVICE: 'coreLLMService',
+  AGENT: 'agent',
   BUDGET_MANAGER_SERVICE: 'coreBudgetManagerService',
-  MEMORY_SERVICE: 'coreMemoryService',
-  IMAGE_SERVICE: 'coreImageService',
-  LOGGER: 'ILogger',
+  DOWNLOAD_FILE: 'downloadFile',
+  EVENT_STORE: 'IEventStore',
   GET_SECRET: 'getSecret',
   GET_STATE: 'getState',
+  I_VARIABLE_SERVICE: 'IVariableService',
+  IMAGE_SERVICE: 'coreImageService',
+  LLM_SERVICE: 'coreLLMService',
+  LOGGER: 'ILogger',
+  MEMORY_SERVICE: 'coreMemoryService',
+  MEMORY_STREAM_SERVICE: 'memoryStreamService',
+  STATE_SERVICE: 'IStateService',
   UPLOAD_FILE: 'uploadFile',
-  DOWNLOAD_FILE: 'downloadFile',
 } as const
 
 export const coreRemovedNodes = ['variable/get', 'variable/set', 'time/delay']

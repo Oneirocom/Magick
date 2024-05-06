@@ -146,6 +146,57 @@
     "configuration": []
   },
   {
+    "type": "action/memory/addMemory",
+    "category": "Action",
+    "label": "Add Memory",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "role",
+        "valueType": "string",
+        "defaultValue": "assistant",
+        "choices": [
+          {
+            "text": "user",
+            "value": "user"
+          },
+          {
+            "text": "assistant",
+            "value": "assistant"
+          }
+        ]
+      },
+      {
+        "name": "type",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memory",
+        "valueType": "object"
+      },
+      {
+        "name": "message",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "magick/addMessage",
     "category": "Action",
     "label": "Add message",
@@ -590,6 +641,29 @@
     ]
   },
   {
+    "type": "action/memory/clearMemories",
+    "category": "Action",
+    "label": "Clear Memories",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "filter",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "queries/messages/clearMessageHistory",
     "category": "Flow",
     "label": "Clear Message History",
@@ -956,6 +1030,47 @@
     ]
   },
   {
+    "type": "action/memory/getMemories",
+    "category": "Action",
+    "label": "Get Memories",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "limit",
+        "valueType": "integer",
+        "defaultValue": 10
+      },
+      {
+        "name": "type",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "filter",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memories",
+        "valueType": "array"
+      },
+      {
+        "name": "messages",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "queries/messages/getMessageHistory",
     "category": "Flow",
     "label": "Message History",
@@ -1302,6 +1417,48 @@
         "name": "socketOutputs",
         "valueType": "array",
         "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "events/memory/onMemory",
+    "category": "Event",
+    "label": "On Memory Added",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memory",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
       }
     ]
   },
