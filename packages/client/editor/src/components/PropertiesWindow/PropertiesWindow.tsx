@@ -49,6 +49,7 @@ const ConfigurationComponents = {
 export const PropertiesWindow = (props: Props) => {
   const selectedNode = useSelector(selectActiveNode(props.tab.id))
   const [spec, setSpec] = useState<NodeSpecJSON | null>(null)
+  const [currentNode, setCurrentNode] = useState<Node | null>(null)
   const [configuration, setConfiguration] = useState<Record<
     string,
     any
@@ -70,16 +71,24 @@ export const PropertiesWindow = (props: Props) => {
   const nodeSpecs = getNodeSpec()
 
   useEffect(() => {
-    if (!spell || !selectedNode || !nodeSpecs) return
-    const { configuration } = selectedNode.data
-    if (!configuration) {
-      handleChange('configuration', spell.configuration)
+    if (!nodeSpecs || currentNode?.id === selectedNode?.id) return
+
+    if (!selectedNode) {
+      setCurrentNode(null)
+      setSpec(null)
+      return
     }
-    setConfiguration(configuration)
+
+    const { configuration } = selectedNode.data
+    if (configuration) setConfiguration(configuration)
 
     const spec = nodeSpecs.find(spec => spec.type === selectedNode.type)
+
     setSpec(spec || null)
-  }, [spell, selectedNode, nodeSpecs])
+
+    setCurrentNode(selectedNode)
+    console.log('selectedNode', selectedNode)
+  }, [selectedNode, nodeSpecs])
 
   const updateConfigKey = (key: string, value: any) => {
     const newConfig = {
@@ -97,7 +106,11 @@ export const PropertiesWindow = (props: Props) => {
     handleChange('configuration', newConfig)
   }
 
-  if (!spell || !spec || !configuration || !selectedNode) return null
+  if (!spell || !spec || !selectedNode) return null
+
+  if (!configuration) {
+    return null
+  }
 
   return (
     <Window borderless>
@@ -125,7 +138,7 @@ export const PropertiesWindow = (props: Props) => {
               fullConfig: configuration,
               config: config,
               nodeSpec: spec,
-              node: selectedNode,
+              node: currentNode as Node,
               tab: props.tab,
               updateConfigKey,
               updateConfigKeys,
