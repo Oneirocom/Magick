@@ -1,4 +1,5 @@
 import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { cn } from '@magickml/client-ui'
 import { type PropsWithChildren } from 'react'
 
@@ -8,6 +9,7 @@ import {
   colors,
   valueTypeColorMap,
 } from '../utils/colors'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Config = {
   label?: string
@@ -21,6 +23,8 @@ type NodeProps = {
   category?: NodeSpecJSON['category']
   selected: boolean
   onClick?: () => void
+  socketsVisible: boolean
+  toggleSocketVisibility: () => void
   fired: boolean
   error: boolean
   running: boolean
@@ -35,6 +39,8 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   label,
   config,
   running,
+  socketsVisible,
+  toggleSocketVisibility,
   error,
 }) => {
   let colorName = categoryColorMap[category]
@@ -68,15 +74,24 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
         >
           <div
             className={cn(
-              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100 flex`
+              `${backgroundColor} ${textColor} px-2 py-1 rounded-t opacity-100 flex justify-between items-center`
             )}
           >
-            <div className="flex items-center mr-1">
-              <NodeIcon width={24} height={24} />
+            <div className="flex items-center">
+              <div className="flex items-center mr-1">
+                <NodeIcon width={24} height={24} />
+              </div>
+              <div className="ml-1 truncate">
+                <h2 className="text-md font-medium">{label}</h2>
+                <p className="text-xs truncate w-44">{title}</p>
+              </div>
             </div>
-            <div className="ml-1 truncate">
-              <h2 className="text-md font-medium">{label}</h2>
-              <p className="text-xs truncate">{title}</p>
+            <div className="flex items-center">
+              <FontAwesomeIcon
+                icon={socketsVisible ? faEye : faEyeSlash}
+                onClick={toggleSocketVisibility}
+                className="cursor-pointer"
+              />
             </div>
           </div>
           <div className={`flex flex-col gap-1 py-1`}>{children}</div>
