@@ -54,7 +54,7 @@ export const onMemory = makeMagickEventNodeDefinition(
     },
     dispose: ({ graph, state }) => {
       const memoryStreamService = graph.getDependency<MemoryStreamService>(
-        CORE_DEP_KEYS.MEMORY_SERVICE
+        CORE_DEP_KEYS.MEMORY_STREAM_SERVICE
       )
 
       if (!memoryStreamService || !state.onMemoryEvent) return {}
