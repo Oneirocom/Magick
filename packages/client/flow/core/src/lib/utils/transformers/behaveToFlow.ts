@@ -13,7 +13,30 @@ export const behaveToFlow = (
   const nodes: Node[] = []
   const edges: Edge[] = []
   const nodeSpecs = getNodeSpec()
-  console.log('Converting graph to flow')
+
+  graph?.data?.comments?.forEach(comment => {
+    nodes.push({
+      id: comment.id,
+      type: 'comment',
+      style: {
+        height: comment.height,
+        width: comment.width,
+      },
+      width: comment.width,
+      height: comment.height,
+      position: {
+        x: comment.metadata?.positionX
+          ? Number(comment.metadata?.positionX)
+          : 0,
+        y: comment.metadata?.positionY
+          ? Number(comment.metadata?.positionY)
+          : 0,
+      },
+      data: {
+        text: comment.text,
+      },
+    })
+  })
 
   graph.nodes?.forEach(nodeJSON => {
     const spec = nodeSpecs.find(spec => spec.type === nodeJSON.type)
