@@ -45,6 +45,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   spellEvent,
 }: BaseNodeProps) => {
   const updateNodeInternals = useUpdateNodeInternals()
+  const [socketsVisible, setSocketsVisible] = useState(true)
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
@@ -57,6 +58,15 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   const [error, setError] = useState(false)
   const edges = useEdges()
   const handleChange = useChangeNodeData(id)
+
+  useEffect(() => {
+    if (typeof data.socketsVisible === 'undefined') {
+      setSocketsVisible(true)
+      return
+    }
+
+    setSocketsVisible(data.socketsVisible)
+  }, [data.socketsVisible])
 
   useEffect(() => {
     if (resetNodeState) {
@@ -137,6 +147,12 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     [activeInput]
   )
 
+  const toggleSocketVisibility = () => {
+    const newState = !socketsVisible
+    setSocketsVisible(newState)
+    handleChange('socketsVisible', newState)
+  }
+
   return (
     <NodeContainer
       fired={done}
@@ -146,6 +162,8 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       title={spec?.type ?? 'Node'}
       category={spec.category}
       selected={selected}
+      socketsVisible={socketsVisible}
+      toggleSocketVisibility={toggleSocketVisibility}
       config={config}
     >
       {pairs.map(([flowInput, output], ix) => (
@@ -170,6 +188,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
             <OutputSocket
               {...output}
               specJSON={allSpecs}
+              hide={!socketsVisible}
               lastEventOutput={
                 lastOutputs
                   ? lastOutputs.find((event: any) => event.name === output.name)
@@ -190,6 +209,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
           <InputSocket
             {...input}
             specJSON={allSpecs}
+            hide={!socketsVisible}
             value={data[input.name] ?? input.defaultValue}
             lastEventInput={
               lastInputs

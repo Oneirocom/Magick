@@ -7,15 +7,17 @@ import { Handle, Position } from 'reactflow'
 
 import { colors, valueTypeColorMap } from '../utils/colors'
 import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'
+import { cx } from 'class-variance-authority'
 
 export type OutputSocketProps = {
   connected: boolean
   specJSON: NodeSpecJSON[]
   lastEventOutput: any
+  hide?: boolean
 } & OutputSocketSpecJSON
 
 export default function OutputSocket(props: OutputSocketProps) {
-  const { connected, valueType, name } = props
+  const { connected, valueType, name, hide } = props
   const isFlowSocket = valueType === 'flow'
   let colorName = valueTypeColorMap[valueType]
   if (colorName === undefined) {
@@ -24,8 +26,13 @@ export default function OutputSocket(props: OutputSocketProps) {
   const [backgroundColor, borderColor] = colors[colorName]
   const showName = isFlowSocket === false || name !== 'flow'
 
+  const className = cx(
+    'flex grow items-center justify-end h-7',
+    !connected && hide ? 'hidden' : ''
+  )
+
   return (
-    <div className="flex grow items-center justify-end h-7">
+    <div className={className}>
       {showName && <div>{name}</div>}
       {isFlowSocket && (
         <FontAwesomeIcon

@@ -31,6 +31,7 @@ export type InputSocketProps = {
   textEditorState: string
   valueTypeName?: string
   nodeId: string
+  hide?: boolean
   activeInput: {
     nodeId: string
     name: string
@@ -207,6 +208,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
   isActive,
   textEditorState,
   nodeId,
+  hide,
   ...rest
 }) => {
   const { name, valueTypeName } = rest
@@ -228,8 +230,13 @@ const InputSocket: React.FC<InputSocketProps> = ({
   // @ts-ignore
   const [backgroundColor, borderColor] = colors[colorName]
   const showName = isFlowSocket === false || name !== 'flow'
+
+  const className = cx(
+    'flex grow items-center justify-start h-7 w-full',
+    !connected && hide ? 'hidden' : ''
+  )
   return (
-    <div className="flex grow items-center justify-start h-7 w-full">
+    <div className={className}>
       {isFlowSocket && (
         <>
           <FontAwesomeIcon icon={faCaretRight} color="#ffffff" size="lg" />

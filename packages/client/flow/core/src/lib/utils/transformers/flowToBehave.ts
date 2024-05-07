@@ -4,7 +4,7 @@ import type { Edge, Node } from 'reactflow'
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null
 
-const USED_DATA_PROPERTIES = ['configuration', 'nodeSpec']
+const USED_DATA_PROPERTIES = ['configuration', 'nodeSpec', 'socketsVisible']
 
 function formatVariableNode(nodeType: string): string {
   if (
@@ -33,7 +33,6 @@ export const flowToBehave = (
 
   nodes.forEach(node => {
     if (node.type === 'comment') {
-      console.log('comment node', node)
       graph.data = graph.data || {}
       graph.data.comments = graph.data.comments || []
       graph.data.comments.push({
