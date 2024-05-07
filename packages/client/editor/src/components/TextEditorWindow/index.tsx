@@ -50,7 +50,7 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (code === undefined) return
-    if (!selectedNode) return
+    if (!selectedNode || !selectedNode?.data?.configuration) return
 
     const { configuration } = selectedNode.data
 
@@ -124,7 +124,8 @@ const TextEditor = props => {
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
-    if (!selectedNode) return
+    if (!selectedNode || !selectedNode?.data?.configuration) return
+
     const { configuration } = selectedNode.data
     const { textEditorData } = configuration
     if (textEditorData === undefined) return
@@ -139,7 +140,7 @@ const TextEditor = props => {
     setCode(activeInput.value)
   }, [activeInput])
 
-  if (!selectedNode) return null
+  if (!selectedNode || !selectedNode?.data?.configuration) return null
 
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
