@@ -62,6 +62,8 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
         onEdgesChange,
       }}
       flowHandlers={{
+        socketsVisible: true,
+        toggleSocketVisibility: () => {},
         handleOnConnect: () => {},
         handleStartConnect: () => {},
         handleStopConnect: () => {},

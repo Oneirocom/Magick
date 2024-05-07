@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
-import SeraphChatWindow from './SeraphChatWindow'
+// import SeraphChatWindow from './SeraphChatWindow'
 
 const SeraphWindow = ({ spellName }: { spellName: string }) => {
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
@@ -9,7 +9,7 @@ const SeraphWindow = ({ spellName }: { spellName: string }) => {
   if (!currentTab) return null
   return (
     <div className="flex flex-col h-full text-white bg-[--ds-black]">
-      <SeraphChatWindow tab={currentTab} spellName={spellName} />
+      {/* <SeraphChatWindow tab={currentTab} spellName={spellName} /> */}
     </div>
   )
 }
