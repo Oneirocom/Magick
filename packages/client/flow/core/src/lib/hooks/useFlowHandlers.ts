@@ -86,6 +86,8 @@ export const useFlowHandlers = ({
   const [nodePickerPosition, setNodePickerPosition] = useState<XYPosition>()
   const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
+  const [blockClose, setBlockClose] = useState(false)
+  const [socketsVisible, setSocketsVisible] = useState(true)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
   const rfDomNode = useStore(state => state.domNode)
   const [currentKeyPressed, setCurrentKeyPressed] = useState<string | null>(
@@ -153,10 +155,11 @@ export const useFlowHandlers = ({
   }, [rfDomNode])
 
   const closeNodePicker = useCallback(() => {
+    if (blockClose) return
     setLastConnectStart(undefined)
     setNodePickerPosition(undefined)
     setPickedNodeVisibility(undefined)
-  }, [])
+  }, [blockClose])
 
   const onEdgeUpdate = useCallback<OnEdgeUpdate>(
     (oldEdge, newConnection) => {
@@ -231,8 +234,6 @@ export const useFlowHandlers = ({
     },
     [instance, nodes, specJSON]
   )
-
-  let blockClose = false
 
   const handleAddComment = useCallback(
     (position: XYPosition) => {
@@ -419,7 +420,7 @@ export const useFlowHandlers = ({
 
   const handleStopConnect: OnConnectEnd = useCallback(
     e => {
-      blockClose = true
+      setBlockClose(true)
       e.preventDefault()
       const element = e.target as HTMLElement
       if (element.classList.contains('react-flow__pane')) {
@@ -468,32 +469,65 @@ export const useFlowHandlers = ({
           x: xPosition,
           y: yPosition,
         })
-        setNodePickerPosition({
-          x: xPosition + bounds.left,
-          y: yPosition + bounds.top,
-        })
+
+        if (!currentKeyPressed) {
+          setNodePickerPosition({
+            x: xPosition + bounds.left,
+            y: yPosition + bounds.top,
+          })
+        }
 
         setTimeout(() => {
-          blockClose = false
+          setBlockClose(false)
         }, 500)
       } else {
         setLastConnectStart(undefined)
       }
     },
-    [parentRef]
+    [parentRef, currentKeyPressed]
   )
+
+  const nodeCreator = (event, keyPressed) => {
+    switch (keyPressed) {
+      case 'b':
+        handleAddNode(
+          'flow/branch',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      case 'g':
+        handleAddNode(
+          'magick/generateText',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      case 'a':
+        handleAddNode(
+          'action/memory/addMemory',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      case 'c':
+        handleAddComment(
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      default:
+        return false
+    }
+    setLastConnectStart(undefined)
+    return true
+  }
 
   const handlePaneClick = useCallback(
     e => {
-      // console.log('pane click', currentKeyPressed)
-      // // check if c letter key is pressed
-      // if (currentKeyPressed === 'c') {
-      //   handleAddComment(screenToFlowPosition({ x: e.clientX, y: e.clientY }))
-      // }
-      if (blockClose) return
+      const created = nodeCreator(e, currentKeyPressed)
+
+      if (created && blockClose) return
+
       closeNodePicker()
     },
-    [closeNodePicker, currentKeyPressed]
+    [closeNodePicker, currentKeyPressed, blockClose]
   )
 
   const handlePaneContextMenu = useCallback(
@@ -557,6 +591,23 @@ export const useFlowHandlers = ({
     []
   )
 
+  const toggleSocketVisibility = useCallback(() => {
+    const newState = !socketsVisible
+    setSocketsVisible(newState)
+
+    const updatedNodes = nodes.map(node => ({
+      ...node,
+      data: {
+        ...node.data,
+        socketsVisible: newState,
+      },
+    })) as Node[]
+
+    setNodes(tab.id, updatedNodes)
+
+    // onNodesChange(tab.id)(updatedNodes)
+  }, [socketsVisible, nodes, setNodes])
+
   return {
     handleOnConnect,
     onEdgeUpdate,
@@ -578,5 +629,7 @@ export const useFlowHandlers = ({
     openNodeMenu,
     nodeMenuActions,
     handleAddComment,
+    toggleSocketVisibility,
+    socketsVisible,
   }
 }
