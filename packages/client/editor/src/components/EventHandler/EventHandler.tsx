@@ -80,7 +80,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     const currentState = JSON.parse(localStorage.getItem(key) || '[]')
 
     // ensure we keep a maximum of 50 states
-    if (currentState.length >= 50) {
+    if (currentState.length >= 20) {
       currentState.shift()
     }
 
