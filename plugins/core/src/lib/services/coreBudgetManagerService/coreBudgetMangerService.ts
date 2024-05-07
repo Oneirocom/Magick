@@ -6,7 +6,7 @@ import {
   IBudgetManagerService,
   ICoreBudgetManagerService,
 } from 'servicesShared'
-import { PORTAL_AGENT_KEY, PORTAL_URL } from 'shared/config'
+import { PORTAL_AGENT_KEY, PORTAL_URL, PRODUCTION } from 'shared/config'
 
 import { Application, app } from 'server/core'
 import { CompletionModel, CompletionResponse, Message } from 'servicesShared'
@@ -32,6 +32,9 @@ export class CoreBudgetManagerService implements ICoreBudgetManagerService {
 
       const userData = await this.userService.getUser()
       const userId = userData.user.id
+
+      if (!PRODUCTION) return
+
       this.liteLLMBudgetManager = (await liteLLM.BudgetManager(
         this.projectId,
         'hosted',
