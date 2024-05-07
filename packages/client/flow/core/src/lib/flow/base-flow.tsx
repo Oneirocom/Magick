@@ -10,6 +10,7 @@ import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
 import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
+import { CommentNode } from '../nodeTypes/comment'
 
 type BaseFlowHandlers = Pick<
   ReturnType<typeof useFlowHandlers>,
@@ -95,7 +96,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   // memoize node types
   const nodeTypes = useMemo(() => {
     if (!behaveNodeTypes) return {}
-    return behaveNodeTypes
+    return { ...behaveNodeTypes, comment: CommentNode }
   }, [behaveNodeTypes])
 
   const { projectId, currentAgentId } = globalConfig || {}
