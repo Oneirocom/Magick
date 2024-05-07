@@ -155,11 +155,10 @@ export const useFlowHandlers = ({
   }, [rfDomNode])
 
   const closeNodePicker = useCallback(() => {
-    if (blockClose) return
     setLastConnectStart(undefined)
     setNodePickerPosition(undefined)
     setPickedNodeVisibility(undefined)
-  }, [blockClose])
+  }, [])
 
   const onEdgeUpdate = useCallback<OnEdgeUpdate>(
     (oldEdge, newConnection) => {
@@ -495,6 +494,13 @@ export const useFlowHandlers = ({
           screenToFlowPosition({ x: event.clientX, y: event.clientY })
         )
         break
+      case 't': {
+        handleAddNode(
+          'logic/string/template',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      }
       case 'g':
         handleAddNode(
           'magick/generateText',
@@ -521,9 +527,12 @@ export const useFlowHandlers = ({
 
   const handlePaneClick = useCallback(
     e => {
-      const created = nodeCreator(e, currentKeyPressed)
+      if (currentKeyPressed) {
+        nodeCreator(e, currentKeyPressed)
+        closeNodePicker()
+      }
 
-      if (created && blockClose) return
+      if (blockClose) return
 
       closeNodePicker()
     },
