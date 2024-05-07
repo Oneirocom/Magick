@@ -151,8 +151,6 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     nodeMenuActions,
     isValidConnectionHandler,
     onEdgeUpdate,
-    socketsVisible,
-    toggleSocketVisibility,
   } = flowHandlers
 
   const togglePlay = () => {
@@ -210,8 +208,6 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       <CustomControls
         playing={playing}
         togglePlay={togglePlay}
-        toggleVisibility={toggleSocketVisibility}
-        socketsVisible={socketsVisible}
         setBehaviorGraph={setGraphJson}
         specJson={specJSON}
         miniMapOpen={miniMapOpen}
