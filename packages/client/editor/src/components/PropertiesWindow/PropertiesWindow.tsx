@@ -71,7 +71,7 @@ export const PropertiesWindow = (props: Props) => {
   const nodeSpecs = getNodeSpec()
 
   useEffect(() => {
-    if (!nodeSpecs || currentNode?.id === selectedNode?.id) return
+    if (!nodeSpecs) return
 
     if (!selectedNode) {
       setCurrentNode(null)
