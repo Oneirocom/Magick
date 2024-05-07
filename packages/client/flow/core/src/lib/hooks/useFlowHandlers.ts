@@ -88,6 +88,9 @@ export const useFlowHandlers = ({
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
   const rfDomNode = useStore(state => state.domNode)
+  const [currentKeyPressed, setCurrentKeyPressed] = useState<string | null>(
+    null
+  )
   const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
   const instance = useReactFlow()
   const { screenToFlowPosition, getNodes } = instance
@@ -106,6 +109,24 @@ export const useFlowHandlers = ({
       closeNodePicker()
     },
   })
+
+  useEffect(() => {
+    // record current key pressed event
+    const onKeyDown = (event: KeyboardEvent) => {
+      setCurrentKeyPressed(event.key)
+    }
+    const onKeyUp = () => {
+      setCurrentKeyPressed(null)
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+    }
+  }, [])
 
   useEffect(() => {
     if (layoutChangeEvent) {
@@ -213,6 +234,27 @@ export const useFlowHandlers = ({
 
   let blockClose = false
 
+  const handleAddComment = useCallback(
+    (position: XYPosition) => {
+      const newNode = {
+        id: uuidv4(),
+        type: 'comment',
+        position,
+        data: {
+          text: '',
+          cxonfiguration: {},
+        },
+      }
+      onNodesChange(tab.id)([
+        {
+          type: 'add',
+          item: newNode,
+        },
+      ])
+    },
+    [closeNodePicker, onNodesChange, tab.id]
+  )
+
   const handleAddNode = useCallback(
     (nodeType: string, position: XYPosition) => {
       closeNodePicker()
@@ -308,7 +350,6 @@ export const useFlowHandlers = ({
       )
     )
 
-    console.log('selectedEdges', selectedEdges)
     if (!selectedNodes.length) return
     localStorage.setItem(
       'copiedNodes',
@@ -442,10 +483,18 @@ export const useFlowHandlers = ({
     [parentRef]
   )
 
-  const handlePaneClick = useCallback(() => {
-    if (blockClose) return
-    closeNodePicker()
-  }, [closeNodePicker])
+  const handlePaneClick = useCallback(
+    e => {
+      // console.log('pane click', currentKeyPressed)
+      // // check if c letter key is pressed
+      // if (currentKeyPressed === 'c') {
+      //   handleAddComment(screenToFlowPosition({ x: e.clientX, y: e.clientY }))
+      // }
+      if (blockClose) return
+      closeNodePicker()
+    },
+    [closeNodePicker, currentKeyPressed]
+  )
 
   const handlePaneContextMenu = useCallback(
     (mouseClick: React.MouseEvent) => {
@@ -528,5 +577,6 @@ export const useFlowHandlers = ({
     setOpenNodeMenu,
     openNodeMenu,
     nodeMenuActions,
+    handleAddComment,
   }
 }
