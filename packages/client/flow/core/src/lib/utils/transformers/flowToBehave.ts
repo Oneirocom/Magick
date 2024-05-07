@@ -32,6 +32,23 @@ export const flowToBehave = (
   }
 
   nodes.forEach(node => {
+    if (node.type === 'comment') {
+      console.log('comment node', node)
+      graph.data = graph.data || {}
+      graph.data.comments = graph.data.comments || []
+      graph.data.comments.push({
+        id: node.id,
+        text: node.data.text,
+        width: node.width,
+        height: node.height,
+        metadata: {
+          positionX: String(node.position.x),
+          positionY: String(node.position.y),
+        },
+      })
+      return
+    }
+
     if (node.type === undefined) return
 
     const nodeSpec = nodeSpecJSON.find(nodeSpec => nodeSpec.type === node.type)
