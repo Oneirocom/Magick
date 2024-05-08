@@ -1,12 +1,10 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+// upload-presigner.ts
+import { Storage } from '@google-cloud/storage'
 
 export interface BucketConfig {
-  accessKeyId: string
-  secretAccessKey: string
-  region: string
-  endpoint: string
-  bucketName: string
+  projectId: string
+  privateKey: string
+  clientEmail: string
 }
 
 export type BucketType = 'public' | 'project'
@@ -20,6 +18,7 @@ export interface UploadConfig {
   folder: string
   fileKey: string
 }
+
 export interface BucketSettings {
   type: BucketType
   uploadConfig: Record<string, UploadConfig>
@@ -43,22 +42,21 @@ export interface PresignedUrlResponse {
 }
 
 export class UploadPresigner {
-  private readonly s3: S3Client
+  private readonly storage: Storage
   private readonly bucketName: string
   private readonly uploadConfig: Record<string, UploadConfig>
   private readonly rootFolder: RootFolderConfig | null
 
   constructor({ config, settings }: UploadPresignerConfig) {
-    this.s3 = new S3Client({
+    this.storage = new Storage({
+      projectId: config.projectId,
       credentials: {
-        accessKeyId: config.accessKeyId,
-        secretAccessKey: config.secretAccessKey,
+        client_email: config.clientEmail,
+        private_key: config.privateKey.replace(/\\n/g, '\n'),
       },
-      region: config.region,
-      endpoint: config.endpoint,
-      forcePathStyle: true,
     })
-    this.bucketName = config.bucketName
+    this.bucketName =
+      settings.type === 'public' ? 'v2-prod-public' : 'v2-prod-projects'
     this.uploadConfig = settings.uploadConfig
     this.rootFolder = settings.rootFolder
   }
@@ -70,29 +68,32 @@ export class UploadPresigner {
   }: GetPresignedUrlOptions): Promise<PresignedUrlResponse | null> {
     const { folder, fileKey } = this.uploadConfig[type]
     const { rootFolderName, rootFolderId } = this.rootFolder || {}
+
     let r = ''
     if (rootFolderName) {
       r = `${rootFolderName}/`
     }
-
     if (rootFolderId) {
       r += `${rootFolderId}/`
     }
 
     const key = `${r}${folder}/${id}/${fileName || fileKey}`
 
-    const command = new PutObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-      ContentType: 'application/octet-stream',
-    })
-
     try {
-      const url = await getSignedUrl(this.s3, command, { expiresIn: 3600 }) // 1 hour
+      const [url] = await this.storage
+        .bucket(this.bucketName)
+        .file(key)
+        .getSignedUrl({
+          version: 'v4',
+          action: 'write',
+          expires: Date.now() + 3600 * 1000, // 1 hour
+          contentType: 'application/octet-stream',
+        })
+
       console.log('Generated presigned URL', { url })
       return {
-        url: url,
-        key: key,
+        url,
+        key,
       }
     } catch (error) {
       console.error('Error generating presigned URL', { error })
