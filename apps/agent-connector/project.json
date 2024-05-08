@@ -47,6 +47,10 @@
       "options": {
         "jestConfig": "apps/agent-connector/jest.config.ts"
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/agent-connector/Dockerfile . -t agent-connector"
     }
   },
   "tags": []
