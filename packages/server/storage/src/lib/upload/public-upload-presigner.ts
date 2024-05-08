@@ -1,3 +1,4 @@
+// public-presigner.ts
 import { UploadPresigner, UploadPresignerConfig } from './upload-presigner'
 
 export enum PublicPresignType {
@@ -25,13 +26,10 @@ const config: UploadPresignerConfig = {
     },
     rootFolder: null,
   },
-
   config: {
-    accessKeyId: process.env?.['NEXT_AWS_ACCESS_KEY_ID'] || '',
-    secretAccessKey: process.env?.['NEXT_AWS_SECRET_ACCESS_KEY'] || '',
-    region: process.env?.['NEXT_AWS_REGION'] || 'east-1',
-    endpoint: process.env?.['NEXT_AWS_BUCKET_ENDPOINT'] || '',
-    bucketName: process.env?.['NEXT_AWS_BUCKET_NAME'] || '',
+    projectId: process.env['GOOGLE_CLOUD_PROJECT_ID'] || '',
+    privateKey: process.env['GOOGLE_CLOUD_PRIVATE_KEY'] || '',
+    clientEmail: process.env['GOOGLE_CLOUD_CLIENT_EMAIL'] || '',
   },
 }
 

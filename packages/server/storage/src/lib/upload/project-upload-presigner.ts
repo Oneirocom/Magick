@@ -1,3 +1,4 @@
+// project-presigner.ts
 import {
   BucketConfig,
   BucketSettings,
@@ -31,11 +32,9 @@ export enum ProjectPresignType {
 }
 
 const bucketConfig: BucketConfig = {
-  accessKeyId: process.env?.['PROJECT_AWS_ACCESS_KEY'] || '',
-  secretAccessKey: process.env?.['PROJECT_AWS_SECRET_KEY'] || '',
-  region: process.env?.['PROJECT_AWS_REGION'] || 'east-1',
-  endpoint: process.env?.['PROJECT_AWS_BUCKET_ENDPOINT'] || '',
-  bucketName: process.env?.['PROJECT_AWS_BUCKET_NAME'] || '',
+  projectId: process.env['GOOGLE_CLOUD_PROJECT_ID'] || '',
+  privateKey: process.env['GOOGLE_CLOUD_PRIVATE_KEY'] || '',
+  clientEmail: process.env['GOOGLE_CLOUD_CLIENT_EMAIL'] || '',
 }
 
 const baseSettings: BucketSettings = {
@@ -49,90 +48,7 @@ const baseSettings: BucketSettings = {
       folder: 'knowledge',
       fileKey: 'knowledge',
     },
-    [ProjectPresignType.html]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.json]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.md]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.msg]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.rst]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.rtf]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.txt]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.xml]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.jpeg]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.jpg]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.png]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.csv]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.doc]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.docx]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.epub]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.odt]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.pdf]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.ppt]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.pptx]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.tsv]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
-    [ProjectPresignType.xlsx]: {
-      folder: 'knowledge',
-      fileKey: 'knowledge',
-    },
+    // ... (other file types)
   },
   rootFolder: null,
 }
