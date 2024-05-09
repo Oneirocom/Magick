@@ -87,7 +87,6 @@ export const PropertiesWindow = (props: Props) => {
     setSpec(spec || null)
 
     setCurrentNode(selectedNode)
-    console.log('selectedNode', selectedNode)
   }, [selectedNode, nodeSpecs])
 
   const updateConfigKey = (key: string, value: any) => {
