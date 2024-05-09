@@ -68,6 +68,7 @@ export const behaveToFlow = (
       },
       data: {
         nodeSpec: spec,
+        nodeTitle: nodeJSON?.metadata?.nodeTitle,
         configuration,
       } as { [key: string]: any },
     }
