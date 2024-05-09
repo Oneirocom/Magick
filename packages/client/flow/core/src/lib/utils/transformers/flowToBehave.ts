@@ -4,7 +4,12 @@ import type { Edge, Node } from 'reactflow'
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null
 
-const USED_DATA_PROPERTIES = ['configuration', 'nodeSpec', 'socketsVisible']
+const USED_DATA_PROPERTIES = [
+  'configuration',
+  'nodeSpec',
+  'socketsVisible',
+  'nodeTitle',
+]
 
 function formatVariableNode(nodeType: string): string {
   if (
@@ -60,6 +65,7 @@ export const flowToBehave = (
       metadata: {
         positionX: String(node.position.x),
         positionY: String(node.position.y),
+        nodeTitle: node.data.nodeTitle,
       },
       configuration: node.data.configuration || {},
     }
