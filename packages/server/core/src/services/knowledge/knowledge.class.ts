@@ -13,7 +13,7 @@ import type {
 } from './knowledge.schema'
 import { CoreMemoryService } from 'plugin/core'
 // import { DataType, getDataTypeFromAcceptValue } from 'servicesShared'
-import { CreateKnowledgeMutation, isValidAcceptValue } from 'servicesShared'
+import { CreateKnowledgeMutation } from 'servicesShared'
 import { Storage } from '@google-cloud/storage'
 
 // Extended parameter type for KnowledgeService support
