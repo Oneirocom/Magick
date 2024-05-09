@@ -57,9 +57,9 @@ export class UploadPresigner {
     })
     this.bucketName =
       settings.type === 'public'
-        ? process.env['PUBLIC_BUCKET_NAME'] ||
+        ? process.env['GOOGLE_PUBLIC_BUCKET_NAME'] ||
           'you-forgot-to-set-a-public-bucket-name'
-        : process.env['PRIVATE_BUCKET_NAME'] ||
+        : process.env['GOOGLE_PRIVATE_BUCKET_NAME'] ||
           'you-forgot-to-set-a-private-bucket-name'
 
     this.uploadConfig = settings.uploadConfig
