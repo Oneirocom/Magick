@@ -1,7 +1,6 @@
 import { TabsContent, InputWithLabel, Badge } from '@magickml/client-ui'
 import { KnowledgeUploadInput } from './knowledge-upload-input'
 import { useConfig } from '@magickml/providers'
-import axios from 'axios'
 import {
   ClientProjectPresignType,
   useGetPresignedUrlMutation,
