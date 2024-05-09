@@ -83,7 +83,7 @@ export class UploadPresigner {
     }
 
     const key = `${r}${folder}/${id}/${fileName || fileKey}`
-    const stamped = `${key}?t=${Date.now()}`
+    const stamped = `${key}-t=${Date.now()}`
 
     try {
       const [url] = await this.storage
