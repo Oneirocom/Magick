@@ -235,6 +235,30 @@
     "configuration": []
   },
   {
+    "type": "logic/array/includes",
+    "category": "Logic",
+    "label": "Includes",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "b",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "action/array/clear",
     "category": "Action",
     "label": "Clear",
@@ -716,6 +740,32 @@
     "outputs": [
       {
         "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/doOnceAsync",
+    "category": "Flow",
+    "label": "DoOnceAsync",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reset",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "onReset",
         "valueType": "flow"
       }
     ],
@@ -1461,6 +1511,29 @@
         ]
       }
     ]
+  },
+  {
+    "type": "logic/string/parseCommand",
+    "category": "None",
+    "label": "Parse Command",
+    "inputs": [
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "command",
+        "valueType": "string"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "queries/events/eventHistory",
