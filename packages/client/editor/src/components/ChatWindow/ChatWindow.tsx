@@ -66,7 +66,6 @@ const ChatWindow = ({ tab, spellName }) => {
       return
 
     if (actionName === SEND_MESSAGE) {
-      console.log('MESSAGE RECEIVED', content)
       printToConsole(content)
     } else if (actionName === STREAM_MESSAGE) {
       streamToConsole(content)
