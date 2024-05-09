@@ -18,7 +18,7 @@ import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { CORE_DEP_KEYS } from 'plugin/core'
-import { AGENT_SPELL } from 'communication'
+import { AGENT_SPELL, AGENT_SPELL_STATE } from 'communication'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
@@ -91,7 +91,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   spell!: SpellInterface
   executeGraph = false
   pluginManager: PluginManager
-  busy: boolean = false
+  busy: boolean = true
+  private debug = false
   private agent
   private logger: pino.Logger
   private loopDelay: number
@@ -130,6 +131,20 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     if (initialState) {
       this.isRunning = initialState.isRunning
     }
+  }
+
+  getState(): SpellState {
+    return {
+      isRunning: this.isRunning,
+      debug: this.debug,
+    }
+  }
+
+  syncState() {
+    this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
+      spellId: this.spell.id,
+      state: this.getState(),
+    })
   }
 
   /**
@@ -180,6 +195,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       this.engine = new Engine(graph.nodes)
       this.initializeHandlers()
       this.start()
+
+      this.syncState()
       return this
     } catch (err: any) {
       this.error(
@@ -270,6 +287,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionStartHandler = async (node: any) => {
+    if (!this.debug) return
     const event = `${this.spell.id}-${node.id}-start`
 
     this.debounceEvent(
@@ -283,7 +301,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
           },
         })
       },
-      500,
+      1000,
       {
         leading: true,
       }
@@ -297,6 +315,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionEndHandler = async (node: any) => {
+    if (!this.debug) return
     const event = `${this.spell.id}-${node.id}-end`
     const startEvent = `${this.spell.id}-${node.id}-start`
 
@@ -455,6 +474,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       this.lifecycleEventEmitter?.endEvent.emit()
     }
     this.isRunning = false
+  }
+
+  toggleDebug(debug: boolean) {
+    this.debug = debug
   }
 
   /**
