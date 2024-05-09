@@ -369,7 +369,6 @@ export const useFlowHandlers = ({
   )
 
   const paste = useCallback(() => {
-    console.log('pasting')
     const copiedNodes = localStorage.getItem('copiedNodes')
     if (!copiedNodes) return
 
