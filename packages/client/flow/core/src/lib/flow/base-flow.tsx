@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
 import CustomControls from '../controls/Controls'
 import { NodePicker } from '../node-picker/NodePicker'
@@ -56,7 +56,7 @@ type BaseFlowProps = {
   flowHandlers: BaseFlowHandlers
   pubSub?: ReturnType<typeof usePubSub> // should split this into separate handler props
   globalConfig?: RootState['globalConfig'] | undefined // could split this into projectId and currentAgentId
-  lastSpellEvent?: any
+  lastStateEvent?: any
 }
 
 const edgeTypes = {
@@ -84,7 +84,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   flowHandlers,
   pubSub,
   globalConfig,
-  lastSpellEvent,
+  lastStateEvent,
 }) => {
   const {
     setGraphJson,
@@ -105,33 +105,27 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   const { publish, events } = pubSub || {}
 
   const [playing, setPlaying] = React.useState(false)
+  const [isDebug, setIsDebug] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(false)
 
   useEffect(() => {
-    if (!spell) return
-
-    if (!publish || !events || !currentAgentId) return
-    // trigger initial sync
-    publish(events.SEND_COMMAND, {
-      agentId: currentAgentId,
-      command: 'agent:spellbook:syncState',
-      data: {
-        spellId: spell.id,
-      },
-    })
-  }, [spell])
-
-  useEffect(() => {
-    if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
-    if (!lastSpellEvent.state) return
+    console.log('last state event')
+    if (!lastStateEvent || lastStateEvent.spellId !== spell.id) return
+    if (!lastStateEvent.state) return
 
     // Process only spell state events here
-    if (lastSpellEvent.state.isRunning) {
+    if (lastStateEvent.state.isRunning) {
       setPlaying(true)
-    } else if (!lastSpellEvent.state.isRunning) {
+    } else if (!lastStateEvent.state.isRunning) {
       setPlaying(false)
     }
-  }, [lastSpellEvent])
+
+    if (lastStateEvent.state.isDebug) {
+      setIsDebug(true)
+    } else if (!lastStateEvent.state.isDebug) {
+      setIsDebug(false)
+    }
+  }, [lastStateEvent])
 
   const {
     handleOnConnect,
@@ -178,6 +172,23 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     setPlaying(!playing)
   }
 
+  const toggleDebug = useCallback(() => {
+    if (!publish || !events || !currentAgentId) return
+    const newState = !isDebug
+
+    publish(events.SEND_COMMAND, {
+      projectId,
+      agentId: currentAgentId,
+      command: 'agent:spellbook:toggleDebug',
+      data: {
+        spellId: spell.id,
+        debug: newState,
+      },
+    })
+
+    setIsDebug(newState)
+  }, [isDebug, publish, events, currentAgentId])
+
   if (!nodeTypes || isEmptyObject(nodeTypes)) return null
 
   return (
@@ -208,6 +219,8 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       <CustomControls
         playing={playing}
         togglePlay={togglePlay}
+        isDebug={isDebug}
+        toggleDebug={toggleDebug}
         setBehaviorGraph={setGraphJson}
         specJson={specJSON}
         miniMapOpen={miniMapOpen}
