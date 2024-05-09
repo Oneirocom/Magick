@@ -13,15 +13,15 @@ const config: UploadPresignerConfig = {
     uploadConfig: {
       [PublicPresignType.projectAvatar]: {
         folder: 'projects',
-        fileKey: 'avatar.jpg',
+        fileKey: 'avatar',
       },
       [PublicPresignType.agentAvatar]: {
         folder: 'agents',
-        fileKey: 'avatar.jpg',
+        fileKey: 'avatar',
       },
       [PublicPresignType.templateAvatar]: {
         folder: 'templates',
-        fileKey: 'avatar.jpg',
+        fileKey: 'avatar',
       },
     },
     rootFolder: null,
