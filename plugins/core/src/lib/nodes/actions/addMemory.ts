@@ -1,4 +1,8 @@
-import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
+import {
+  ILogger,
+  NodeCategory,
+  makeFlowNodeDefinition,
+} from '@magickml/behave-graph'
 import { MemoryStreamService } from '../../services/memoryStreamService'
 import { CORE_DEP_KEYS } from '../../config'
 
@@ -34,8 +38,14 @@ export const addMemory = makeFlowNodeDefinition({
       CORE_DEP_KEYS.MEMORY_STREAM_SERVICE
     )
 
+    const logger = getDependency<ILogger>(CORE_DEP_KEYS.LOGGER)
+
     if (!memoryService) {
       throw new Error('Memory service not found')
+    }
+
+    if (!logger) {
+      throw new Error('Logger not found')
     }
 
     const content = read('content') as string
@@ -47,6 +57,8 @@ export const addMemory = makeFlowNodeDefinition({
       role,
       type,
     })
+
+    logger.log('info', `Memory ${type} added: ${content}`)
 
     write('memory', memory)
     write('message', message)
