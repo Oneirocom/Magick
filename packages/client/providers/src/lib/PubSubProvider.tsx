@@ -78,7 +78,6 @@ export const PubSubProvider = ({ children }) => {
 
   // Publish function
   const publish = (event: string, data?: PubSubData) => {
-    console.log('DATA', data)
     return PubSub.publish(event, data)
   }
 
