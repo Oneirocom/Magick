@@ -106,6 +106,8 @@ export class CoreLLMService implements ICoreLLMService {
 
         const stream = await this.liteLLM.completion$(body)
 
+        yield { choices: [{ delta: { content: '<START>' } }] }
+
         for await (const chunk of stream) {
           chunks.push(chunk)
 
@@ -113,6 +115,8 @@ export class CoreLLMService implements ICoreLLMService {
           const chunkVal = await chunkJSON.valueOf()
           yield chunkVal
         }
+
+        yield { choices: [{ delta: { content: '<END>' } }] }
 
         const completionResponsePython =
           await this.liteLLM.stream_chunk_builder$(chunks, { messages })
