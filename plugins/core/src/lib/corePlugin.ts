@@ -78,6 +78,9 @@ import { addMemory } from './nodes/actions/addMemory'
 import { onMemory } from './nodes/events/onMemory'
 import { getMemories } from './nodes/actions/getMemories'
 import { clearMemories } from './nodes/actions/clearMemories'
+import { parseCommand } from './nodes/logic/strings/parseCommand'
+import { DoOnceAsync } from './nodes/flow/doOnceAsync'
+import { arrayIncludes } from './values/Array/Includes'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -100,6 +103,7 @@ export class CorePlugin extends CoreEventsPlugin<
     addKnowledge,
     addMemory,
     addMessage,
+    arrayIncludes,
     arrayClear,
     arrayCreate,
     arrayCreateFunction,
@@ -112,6 +116,7 @@ export class CorePlugin extends CoreEventsPlugin<
     clearMemories,
     clearMessageHistory,
     delay,
+    DoOnceAsync,
     FetchNode,
     flowSwitch,
     forEach,
@@ -127,6 +132,7 @@ export class CorePlugin extends CoreEventsPlugin<
     messageEvent,
     objectDestructure,
     onMemory,
+    parseCommand,
     queryEventHistory,
     queryKnowledge,
     regex,
