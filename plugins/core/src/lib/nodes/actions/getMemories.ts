@@ -19,7 +19,6 @@ export const getMemories = makeFlowNodeDefinition({
     },
     filter: {
       label: 'Filter',
-      defaultValue: {},
       valueType: 'object',
     },
   },
@@ -43,7 +42,7 @@ export const getMemories = makeFlowNodeDefinition({
     const limit = Number(read('limit')) as number
     const type = read('type') as string
 
-    if (type && !filter.type) {
+    if (type) {
       filter.type = type
     }
 
