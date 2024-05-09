@@ -39,10 +39,12 @@ export const stringChunker = makeFlowNodeDefinition({
     const chunkSize = Number(read('chunkSize')) as number
     const delay = Number(read('delay')) as number
 
-    const chunks = [] as string[]
+    const chunks = ['<START>'] as string[]
     for (let i = 0; i < content.length; i += chunkSize) {
       chunks.push(content.slice(i, i + chunkSize))
     }
+
+    chunks.push('<END>')
 
     const emitChunk = (index: number) => {
       if (index < chunks.length) {
