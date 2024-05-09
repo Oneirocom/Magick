@@ -26,7 +26,7 @@ export const CoreFlow: React.FC<FlowProps> = ({
   const { lastItem: lastStateEvent } = useSelectAgentsState()
   const pubSub = usePubSub()
 
-  const specJSON = useMemo(() => getNodeSpec(spell), [spell.graph.variables])
+  const specJSON = useMemo(() => getNodeSpec(), [])
 
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
@@ -40,6 +40,7 @@ export const CoreFlow: React.FC<FlowProps> = ({
     parentRef,
     tab,
     windowDimensions,
+    spell,
   })
 
   return (
