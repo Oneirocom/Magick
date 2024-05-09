@@ -1,8 +1,12 @@
 // DOCUMENTED
-import { ConfigProvider, FeathersProvider, PubSubProvider } from '@magickml/providers'
+import {
+  ConfigProvider,
+  FeathersProvider,
+  PubSubProvider,
+} from '@magickml/providers'
 import { createTheme, ThemeProvider } from '@mui/material'
 import ToastProvider from './ToastProvider'
-import { TabProvider } from '@magickml/providers';
+import { TabProvider } from '@magickml/providers'
 import { GlobalLayoutProvider } from './GlobalLayoutProvider'
 
 // Create a dark theme for the application
