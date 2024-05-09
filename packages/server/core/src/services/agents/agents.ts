@@ -53,6 +53,7 @@ const AGENT_EVENTS = [
   'log',
   'result',
   'spell',
+  'state',
   'run',
   'command',
   'event',
