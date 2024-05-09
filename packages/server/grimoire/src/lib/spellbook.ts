@@ -23,6 +23,7 @@ interface IAgent extends IAgentLogger {
 
 export type SpellState = {
   isRunning: boolean
+  debug: boolean
 }
 
 /**
@@ -125,6 +126,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   get initialState() {
     return {
       isRunning: true,
+      debug: true,
     }
   }
 
@@ -243,7 +245,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * spellbook.updateSpellState(spellId, { isRunning: true });
    */
   updateSpellState(spellId: string, update: Partial<SpellState>) {
-    const state = this.stateMap.get(spellId) || { isRunning: false }
+    const state = this.stateMap.get(spellId) || {
+      isRunning: false,
+      debug: true,
+    }
     this.stateMap.set(spellId, { ...state, ...update })
   }
 
@@ -255,6 +260,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   initializeCommands() {
     this.commandHub.registerDomain('agent', 'spellbook', {
       toggleLive: this.toggleLive.bind(this),
+      toggleDebug: this.toggleDebug.bind(this),
       pauseSpell: this.pauseSpell.bind(this),
       playSpell: this.playSpell.bind(this),
       killSpell: this.killSpell.bind(this),
@@ -381,19 +387,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * this.syncState(data);
    */
-  syncState(data) {
-    const { spellId } = data
-
-    if (!this.hasSpellCaster(spellId)) return
-
-    const state = this.stateMap.get(spellId)
-
-    if (!state) return
-
-    this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
-      spellId,
-      state,
-    })
+  syncState() {
+    for (const [spellId, spellState] of this.stateMap.entries()) {
+      this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
+        spellId,
+        state: spellState,
+      })
+    }
   }
 
   // todo: refresh spells doesnt need to laod spells right now.  We can just reset the state.
@@ -418,6 +418,23 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.logger.trace(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
+  }
+
+  /**
+   * Toggles the debug flag.
+   */
+  toggleDebug(data) {
+    this.logger.trace(`Toggling debug to ${data.debug}`)
+    const { spellId, debug } = data
+
+    for (const spellCasters of this.eventMap.values()) {
+      const spellCaster = spellCasters.get(spellId)
+      if (spellCaster) {
+        spellCaster.toggleDebug(debug)
+
+        this.updateSpellState(spellId, { debug })
+      }
+    }
   }
 
   /**
