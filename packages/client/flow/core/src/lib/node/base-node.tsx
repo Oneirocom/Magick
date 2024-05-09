@@ -158,13 +158,15 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       fired={done}
       error={error}
       running={running}
-      label={config?.label ?? spec.label}
+      nodeTitle={data?.nodeTitle}
+      label={spec.label}
       title={spec?.type ?? 'Node'}
       category={spec.category}
       selected={selected}
       socketsVisible={socketsVisible}
       toggleSocketVisibility={toggleSocketVisibility}
       config={config}
+      handleChange={handleChange}
     >
       {pairs.map(([flowInput, output], ix) => (
         <div
