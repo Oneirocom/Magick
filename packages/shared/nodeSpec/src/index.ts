@@ -7,6 +7,8 @@ import {
   sortNodeSpecsByType,
 } from './generateVariableNodeSpecs'
 
+export * from './generateVariableNodeSpecs'
+
 export const getNodeSpec = (spell?: SpellInterface): NodeSpecJSON[] => {
   if (!spell) return nodeSpec.sort(sortNodeSpecsByType) as NodeSpecJSON[]
 
