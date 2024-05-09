@@ -39,6 +39,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import posthog from 'posthog-js'
 import { getConfigFromNodeSpec } from '../utils/getNodeConfig'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { SpellInterfaceWithGraph } from 'server/schemas'
+import { getNodeSpec } from 'shared/nodeSpec'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
@@ -72,6 +74,7 @@ export const useFlowHandlers = ({
   parentRef,
   tab,
   windowDimensions,
+  spell,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
   nodes: Node[]
   edges: Edge[]
@@ -79,6 +82,7 @@ export const useFlowHandlers = ({
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   windowDimensions: { width: number; height: number }
+  spell: SpellInterfaceWithGraph
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
@@ -256,11 +260,30 @@ export const useFlowHandlers = ({
   )
 
   const handleAddNode = useCallback(
-    (nodeType: string, position: XYPosition) => {
+    (_nodeType: string, position: XYPosition, _nodeSpec?: NodeSpecJSON) => {
       closeNodePicker()
+      console.log('adding node', _nodeType, position)
+      const fullSpecJSON = getNodeSpec(spell)
       // handle add configuration here so we don't need to do it in the node.
-      const nodeSpec = specJSON?.find(spec => spec.type === nodeType)
-      console.log('nodeSpec', nodeSpec)
+      const nodeSpecRaw =
+        _nodeSpec || fullSpecJSON?.find(spec => spec.type === _nodeType)
+
+      const nodeSpec = { ...nodeSpecRaw } as NodeSpecJSON
+
+      if (!nodeSpec) return
+
+      let nodeType = _nodeType
+      const regex = new RegExp(`^variables/(get|set)/(.+)$`)
+
+      if (nodeType.match(regex)) {
+        const variableType = nodeType.replace(
+          /^(variables\/(get|set))\/(.+)$/,
+          '$1'
+        )
+        nodeSpec.type = variableType
+        nodeType = variableType
+      }
+
       const newNode = {
         id: uuidv4(),
         type: nodeType,
@@ -286,16 +309,21 @@ export const useFlowHandlers = ({
       const originNode = nodes.find(node => node.id === lastConnectStart.nodeId)
       if (originNode === undefined) return
       if (!specJSON) return
+
+      // repopulate the specJSON with variable nodes if a spell is provided
+      // this is to handle the case where a variable node is being connected
+      const newEdge = calculateNewEdge(
+        originNode,
+        _nodeType,
+        newNode.id,
+        lastConnectStart,
+        fullSpecJSON
+      )
+
       onEdgesChange(tab.id)([
         {
           type: 'add',
-          item: calculateNewEdge(
-            originNode,
-            nodeType,
-            newNode.id,
-            lastConnectStart,
-            specJSON
-          ),
+          item: newEdge,
         },
       ])
     },
@@ -306,6 +334,7 @@ export const useFlowHandlers = ({
       onEdgesChange,
       onNodesChange,
       specJSON,
+      spell,
     ]
   )
 
