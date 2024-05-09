@@ -15,7 +15,7 @@ export const AGENT_SERAPH_EVENT = (agentId: string) =>
 export const AGENT_PONG = (agentId: string) => `agent:${agentId}:server:pong`
 
 export const AGENT_SPELL_STATE = (agentId: string) =>
-  `agent:${agentId}:server:spell`
+  `agent:${agentId}:server:state`
 
 export const AGENT_COMMAND = (agentId: string) =>
   `agent:${agentId}:action:command`
