@@ -58,17 +58,6 @@ export class KnowledgeService<
     const returnData = [] as KnowledgeData[]
 
     for (const data of knowledge) {
-      console.log('Creating knowledge:', data)
-      let dataType: DataType | undefined
-      if (!data.external) {
-        if (!isValidAcceptValue(data.dataType)) {
-          throw new Error('Invalid data type')
-        }
-        dataType = getDataTypeFromAcceptValue(data.dataType) as DataType
-      } else {
-        dataType = data.dataType as DataType
-      }
-
       const memoryService = new CoreMemoryService(true)
       await memoryService.initialize(projectId)
 
