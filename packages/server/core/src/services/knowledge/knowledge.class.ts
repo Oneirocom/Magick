@@ -12,7 +12,7 @@ import type {
   KnowledgeQuery,
 } from './knowledge.schema'
 import { CoreMemoryService } from 'plugin/core'
-import { DataType, getDataTypeFromAcceptValue } from 'servicesShared'
+// import { DataType, getDataTypeFromAcceptValue } from 'servicesShared'
 import { CreateKnowledgeMutation, isValidAcceptValue } from 'servicesShared'
 import { Storage } from '@google-cloud/storage'
 
