@@ -56,7 +56,12 @@ export class UploadPresigner {
       },
     })
     this.bucketName =
-      settings.type === 'public' ? 'v2-prod-public' : 'v2-prod-projects'
+      settings.type === 'public'
+        ? process.env['PUBLIC_BUCKET_NAME'] ||
+          'you-forgot-to-set-a-public-bucket-name'
+        : process.env['PRIVATE_BUCKET_NAME'] ||
+          'you-forgot-to-set-a-private-bucket-name'
+
     this.uploadConfig = settings.uploadConfig
     this.rootFolder = settings.rootFolder
   }
@@ -78,11 +83,12 @@ export class UploadPresigner {
     }
 
     const key = `${r}${folder}/${id}/${fileName || fileKey}`
+    const stamped = `${key}?t=${Date.now()}`
 
     try {
       const [url] = await this.storage
         .bucket(this.bucketName)
-        .file(key)
+        .file(stamped)
         .getSignedUrl({
           version: 'v4',
           action: 'write',
@@ -93,7 +99,7 @@ export class UploadPresigner {
       console.log('Generated presigned URL', { url })
       return {
         url,
-        key,
+        key: stamped,
       }
     } catch (error) {
       console.error('Error generating presigned URL', { error })
