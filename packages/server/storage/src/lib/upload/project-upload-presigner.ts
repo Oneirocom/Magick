@@ -48,7 +48,90 @@ const baseSettings: BucketSettings = {
       folder: 'knowledge',
       fileKey: 'knowledge',
     },
-    // ... (other file types)
+    [ProjectPresignType.html]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.json]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.md]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.msg]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.rst]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.rtf]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.txt]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.xml]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.jpeg]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.jpg]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.png]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.csv]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.doc]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.docx]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.epub]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.odt]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.pdf]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.ppt]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.pptx]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.tsv]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
+    [ProjectPresignType.xlsx]: {
+      folder: 'knowledge',
+      fileKey: 'knowledge',
+    },
   },
   rootFolder: null,
 }
