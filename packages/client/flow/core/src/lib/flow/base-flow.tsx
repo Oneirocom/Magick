@@ -248,6 +248,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
           onPickNode={handleAddNode}
           onClose={closeNodePicker}
           specJSON={specJSON}
+          spell={spell}
         />
       )}
 
