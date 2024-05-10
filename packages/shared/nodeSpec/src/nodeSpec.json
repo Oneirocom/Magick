@@ -1972,15 +1972,16 @@
         "name": "hiddenProperties",
         "valueType": "array",
         "defaultValue": [
-          "socketValues"
+          "socketValues",
+          "hiddenProperties"
         ]
       },
       {
         "name": "socketValues",
         "valueType": "array",
         "defaultValue": [
-          "array",
           "string",
+          "array",
           "boolean",
           "integer",
           "float",
