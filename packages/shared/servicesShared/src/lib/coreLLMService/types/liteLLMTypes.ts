@@ -2,7 +2,7 @@ import {
   ChatCompletionFunctionCallOption,
   ChatCompletionMessageParam,
 } from 'openai/resources'
-import { CompletionModel } from './completionModels'
+import { Model } from './models'
 
 export type LiteLLMOptions = {
   api_base?: string
@@ -48,7 +48,7 @@ export type CompletionOptions = {
 } & LiteLLMOptions
 
 export type CompletionRequest = {
-  model: CompletionModel
+  model: Model
   messages: ChatCompletionMessageParam[]
   options?: CompletionOptions
   api_key?: string
