@@ -12,8 +12,9 @@ import type {
   KnowledgeQuery,
 } from './knowledge.schema'
 import { CoreMemoryService } from 'plugin/core'
-import { DataType, getDataTypeFromAcceptValue } from 'servicesShared'
-import { CreateKnowledgeMutation, isValidAcceptValue } from 'servicesShared'
+import { DataType } from 'servicesShared'
+import { CreateKnowledgeMutation } from 'servicesShared'
+import { Storage } from '@google-cloud/storage'
 
 // Extended parameter type for KnowledgeService support
 export type KnowledgeParams = KnexAdapterParams<KnowledgeQuery>
@@ -32,8 +33,16 @@ export class KnowledgeService<
   ServiceParams,
   KnowledgePatch
 > {
+  storage: Storage
   constructor(args) {
     super(args)
+    this.storage = new Storage({
+      projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+      credentials: {
+        client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      },
+    })
   }
 
   /**
@@ -49,30 +58,33 @@ export class KnowledgeService<
     const returnData = [] as KnowledgeData[]
 
     for (const data of knowledge) {
-      console.log('Creating knowledge:', data)
-      let dataType: DataType | undefined
-      if (!data.external) {
-        if (!isValidAcceptValue(data.dataType)) {
-          throw new Error('Invalid data type')
-        }
-        dataType = getDataTypeFromAcceptValue(data.dataType) as DataType
-      } else {
-        dataType = data.dataType as DataType
-      }
-
-      const options = {
-        metadata: {
-          tag: data?.tag || 'none',
-        },
-        ...(dataType && { dataType: dataType as DataType }),
-      }
-
       const memoryService = new CoreMemoryService(true)
       await memoryService.initialize(projectId)
 
       const url = data.external
         ? data.sourceUrl
-        : `${process.env.PROJECT_BUCKET_PREFIX}/${data.sourceUrl}`
+        : await this.storage
+            .bucket(process.env.GOOGLE_PRIVATE_BUCKET_NAME)
+            .file(data.sourceUrl)
+            .getSignedUrl({
+              version: 'v4',
+              action: 'read',
+              expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+            })
+            .then(urls => urls[0])
+
+      const type = data.external
+        ? data.dataType
+          ? data.dataType
+          : undefined
+        : undefined
+
+      const options = {
+        metadata: {
+          tag: data?.tag || 'none',
+        },
+        dataType: type as DataType,
+      }
 
       // Add the data to the memory
       const result = await memoryService.add(url, options)
