@@ -19,7 +19,9 @@ import {
   OnConnectStart,
   OnConnectEnd,
   useOnViewportChange,
-} from 'reactflow'
+  IsValidConnection,
+  ReactFlowProps,
+} from '@xyflow/react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { calculateNewEdge } from '../utils/calculateNewEdge'
@@ -41,6 +43,8 @@ import { getConfigFromNodeSpec } from '../utils/getNodeConfig'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
+import { MagickEdgeType } from '../node/custom-edge'
+import { MagickNodeType } from '../node/base-node'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
@@ -50,7 +54,7 @@ const useNodePickFilters = ({
   lastConnectStart,
   specJSON,
 }: {
-  nodes: Node[]
+  nodes: MagickNodeType[]
   lastConnectStart: OnConnectStartParams | undefined
   specJSON: NodeSpecJSON[] | undefined
 }) => {
@@ -76,8 +80,8 @@ export const useFlowHandlers = ({
   windowDimensions,
   spell,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
-  nodes: Node[]
-  edges: Edge[]
+  nodes: MagickNodeType[]
+  edges: MagickEdgeType[]
   specJSON: NodeSpecJSON[] | undefined
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
@@ -98,7 +102,7 @@ export const useFlowHandlers = ({
     null
   )
   const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
-  const instance = useReactFlow()
+  const instance = useReactFlow<MagickNodeType, MagickEdgeType>()
   const { screenToFlowPosition, getNodes } = instance
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
@@ -228,9 +232,8 @@ export const useFlowHandlers = ({
     [tab, nodes, edges]
   )
 
-  const isValidConnectionHandler = useCallback(
-    (connection: Connection) => {
-      console.log('validating connection')
+  const isValidConnectionHandler: IsValidConnection = useCallback(
+    connection => {
       const newNode = nodes.find(node => node.id === connection.target)
       if (!newNode || !specJSON) return false
       return isValidConnection(connection, instance, specJSON)
@@ -567,41 +570,42 @@ export const useFlowHandlers = ({
     [closeNodePicker, currentKeyPressed, blockClose]
   )
 
-  const handlePaneContextMenu = useCallback(
-    (mouseClick: React.MouseEvent) => {
-      mouseClick.preventDefault()
-      if (parentRef && parentRef.current) {
-        const bounds = parentRef.current.getBoundingClientRect()
+  const handlePaneContextMenu: ReactFlowProps['onPaneContextMenu'] =
+    useCallback(
+      mouseClick => {
+        mouseClick.preventDefault()
+        if (parentRef && parentRef.current) {
+          const bounds = parentRef.current.getBoundingClientRect()
 
-        const nodePickerWidth = 240
-        const nodePickerHeight = 251
+          const nodePickerWidth = 240
+          const nodePickerHeight = 251
 
-        // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
-        let xPosition = mouseClick.clientX - bounds.left
-        let yPosition = mouseClick.clientY - bounds.top
+          // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
+          let xPosition = mouseClick.clientX - bounds.left
+          let yPosition = mouseClick.clientY - bounds.top
 
-        // Adjust if the context menu would open off the right side of the viewport
-        if (xPosition + nodePickerWidth > bounds.width) {
-          xPosition = bounds.width - nodePickerWidth * 1.05
+          // Adjust if the context menu would open off the right side of the viewport
+          if (xPosition + nodePickerWidth > bounds.width) {
+            xPosition = bounds.width - nodePickerWidth * 1.05
+          }
+
+          // Adjust if the context menu would open off the bottom of the viewport
+          if (yPosition + nodePickerHeight > bounds.height) {
+            yPosition = bounds.height - nodePickerHeight * 1.05
+          }
+
+          setPickedNodeVisibility({
+            x: Math.max(0, xPosition), // Prevent negative values
+            y: Math.max(0, yPosition), // Prevent negative values
+          })
+          setNodePickerPosition({
+            x: Math.max(0, xPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
+            y: Math.max(0, yPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
+          })
         }
-
-        // Adjust if the context menu would open off the bottom of the viewport
-        if (yPosition + nodePickerHeight > bounds.height) {
-          yPosition = bounds.height - nodePickerHeight * 1.05
-        }
-
-        setPickedNodeVisibility({
-          x: Math.max(0, xPosition), // Prevent negative values
-          y: Math.max(0, yPosition), // Prevent negative values
-        })
-        setNodePickerPosition({
-          x: Math.max(0, xPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
-          y: Math.max(0, yPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
-        })
-      }
-    },
-    [parentRef, windowDimensions]
-  )
+      },
+      [parentRef, windowDimensions]
+    )
 
   const nodePickFilters = useNodePickFilters({
     nodes,

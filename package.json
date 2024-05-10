@@ -208,6 +208,7 @@
     "@types/multer": "^1.4.7",
     "@types/pubsub-js": "1.8.3",
     "@uiw/react-codemirror": "^4.21.24",
+    "@xyflow/react": "^12.0.0-next.18",
     "arr-flatten": "^1.1.0",
     "axios": "1.6.0",
     "axios-retry": "^3.8.0",

@@ -3,7 +3,7 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cx from 'classnames'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Handle, Position } from 'reactflow'
+import { Handle, Position } from '@xyflow/react'
 import { colors, valueTypeColorMap } from '../utils/colors'
 import {
   Input,

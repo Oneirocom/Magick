@@ -1,6 +1,7 @@
-import type { Node } from 'reactflow'
+import type { Node } from '@xyflow/react'
 import type { NodeSpecJSON } from '@magickml/behave-graph'
 import { categoryColorMap, colors, valueTypeColorMap } from './colors'
+import { MagickNodeType } from '../node/base-node'
 
 function getCategory(node: Node, specJson: NodeSpecJSON[]) {
   return (
@@ -10,7 +11,7 @@ function getCategory(node: Node, specJson: NodeSpecJSON[]) {
   )
 }
 
-export function nodeColor(node: Node, specJson: NodeSpecJSON[]) {
+export function nodeColor(node: MagickNodeType, specJson: NodeSpecJSON[]) {
   const nodeCategory = getCategory(node, specJson)
   let colorName = categoryColorMap[nodeCategory]
 

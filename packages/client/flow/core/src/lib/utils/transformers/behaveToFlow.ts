@@ -1,17 +1,18 @@
 import type { GraphJSON } from '@magickml/behave-graph'
-import type { Edge, Node } from 'reactflow'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'
 import { SpellInterface } from 'server/schemas'
+import { MagickNodeType } from '../../node/base-node'
+import { MagickEdgeType } from '../../node/custom-edge'
 
 export const behaveToFlow = (
   graph: GraphJSON,
   spell: SpellInterface
-): [Node[], Edge[]] => {
-  const nodes: Node[] = []
-  const edges: Edge[] = []
+): [MagickNodeType[], MagickEdgeType[]] => {
+  const nodes: MagickNodeType[] = []
+  const edges: MagickEdgeType[] = []
   const nodeSpecs = getNodeSpec()
 
   graph?.data?.comments?.forEach(comment => {
@@ -55,7 +56,7 @@ export const behaveToFlow = (
       }
     }
 
-    const node: Node = {
+    const node: MagickNodeType = {
       id: nodeJSON.id,
       type: nodeJSON.type,
       position: {

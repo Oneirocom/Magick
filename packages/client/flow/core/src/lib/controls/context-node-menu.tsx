@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from '@mui/material'
 import { memo } from 'react'
-import { XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
 
 type Action = {
   label: string

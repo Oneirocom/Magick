@@ -1,5 +1,6 @@
 import type { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import type { Edge, Node } from 'reactflow'
+import type { Edge } from '@xyflow/react'
+import { MagickNodeType } from '../../node/base-node'
 
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null
@@ -25,7 +26,7 @@ function formatVariableNode(nodeType: string): string {
 }
 
 export const flowToBehave = (
-  nodes: Node[],
+  nodes: MagickNodeType[],
   edges: Edge[],
   nodeSpecJSON: NodeSpecJSON[],
   spellGraph: GraphJSON
@@ -65,9 +66,9 @@ export const flowToBehave = (
       metadata: {
         positionX: String(node.position.x),
         positionY: String(node.position.y),
-        nodeTitle: node.data.nodeTitle,
+        nodeTitle: node.data.nodeTitle as string,
       },
-      configuration: node.data.configuration || {},
+      configuration: node.data.configuration || ({} as any),
     }
 
     // handle configuration properties

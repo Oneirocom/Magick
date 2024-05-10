@@ -21,7 +21,7 @@ type NodeProps = {
   title: string
   label: string
   category?: NodeSpecJSON['category']
-  selected: boolean
+  selected: boolean | undefined
   onClick?: () => void
   socketsVisible: boolean
   toggleSocketVisibility: () => void

@@ -3,8 +3,16 @@ import {
   getBezierPath,
   EdgeLabelRenderer,
   useReactFlow,
-} from 'reactflow'
+  Edge,
+} from '@xyflow/react'
 import { valueTypeColorMap } from '../utils/colors'
+
+type EdgeData = {
+  valueType: string
+  [key: string]: any
+}
+
+export type MagickEdgeType = Edge<EdgeData, string>
 
 export default function CustomEdge({
   id,
@@ -16,7 +24,7 @@ export default function CustomEdge({
   targetPosition,
   data,
   selected,
-}: EdgeProps) {
+}: EdgeProps<MagickEdgeType>) {
   const edgePathData = getBezierPath({
     sourceX,
     sourceY,
@@ -31,7 +39,7 @@ export default function CustomEdge({
   const instance = useReactFlow()
 
   const strokeColor =
-    valueTypeColorMap[data.valueType as keyof typeof valueTypeColorMap] ||
+    valueTypeColorMap[data?.valueType as keyof typeof valueTypeColorMap] ||
     'white'
 
   const edgeButtonStyle = {

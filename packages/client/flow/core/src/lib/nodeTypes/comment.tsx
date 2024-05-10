@@ -1,8 +1,9 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { NodeResizer, NodeProps, ResizeParams } from 'reactflow'
+import { NodeResizer, NodeProps, OnResize } from '@xyflow/react'
 import { useChangeNodeData } from '../hooks'
+import { MagickNodeType } from '../node/base-node'
 
-const CommentNodeRaw = ({ data, selected, id }: NodeProps) => {
+const CommentNodeRaw = ({ data, selected, id }: NodeProps<MagickNodeType>) => {
   const [isEditing, setIsEditing] = useState(false)
   const [commentText, setCommentText] = useState(data.text || 'Comment')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -15,7 +16,7 @@ const CommentNodeRaw = ({ data, selected, id }: NodeProps) => {
     }
   }, [commentText])
 
-  const onResize = (event, params: ResizeParams & { direction: number[] }) => {
+  const onResize: OnResize = (event, params) => {
     if (!textareaRef.current) return
     textareaRef.current.style.height = 'auto'
     textareaRef.current.style.height = `${params.height - 20}px`

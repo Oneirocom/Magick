@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
+import { Background, BackgroundVariant, ReactFlow, MiniMap } from '@xyflow/react'
 
 import CustomControls from '../controls/Controls'
 import { NodePicker } from '../node-picker/NodePicker'
@@ -16,49 +16,49 @@ import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 
 type FlowProps = {
-  spell: SpellInterfaceWithGraph
-  parentRef: React.RefObject<HTMLDivElement>
-  tab: Tab
-  readOnly?: boolean
-  windowDimensions: { width: number; height: number }
+spell: SpellInterfaceWithGraph
+parentRef: React.RefObject<HTMLDivElement>
+tab: Tab
+readOnly?: boolean
+windowDimensions: { width: number; height: number }
 }
 
 const edgeTypes = {
-  'custom-edge': CustomEdge,
+'custom-edge': CustomEdge,
 }
 
 const proOptions = {
-  // passing in the account property will enable hiding the attribution
-  // for versions < 10.2 you can use account: 'paid-enterprise'
-  account: 'paid-pro',
-  // in combination with the account property, hideAttribution: true will remove the attribution
-  hideAttribution: true,
+// passing in the account property will enable hiding the attribution
+// for versions < 10.2 you can use account: 'paid-enterprise'
+account: 'paid-pro',
+// in combination with the account property, hideAttribution: true will remove the attribution
+hideAttribution: true,
 }
 
 function isEmptyObject(obj: object): boolean {
-  return Object.keys(obj).length === 0
+return Object.keys(obj).length === 0
 }
 
 export const OGFlow: React.FC<FlowProps> = ({
-  spell,
-  parentRef,
-  tab,
-  readOnly = false,
-  windowDimensions,
+spell,
+parentRef,
+tab,
+readOnly = false,
+windowDimensions,
 }) => {
-  const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
-  const { projectId, currentAgentId } = globalConfig
-  const { publish, events } = usePubSub()
+const globalConfig = useSelector((state: RootState) => state.globalConfig)
+const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
+const { projectId, currentAgentId } = globalConfig
+const { publish, events } = usePubSub()
 
-  const [specJson, setSpecJson] = React.useState<NodeSpecJSON[]>([])
-  const [playing, setPlaying] = React.useState(false)
-  const [miniMapOpen, setMiniMapOpen] = React.useState(true)
+const [specJson, setSpecJson] = React.useState<NodeSpecJSON[]>([])
+const [playing, setPlaying] = React.useState(false)
+const [miniMapOpen, setMiniMapOpen] = React.useState(true)
 
-  const { SEND_COMMAND } = events
+const { SEND_COMMAND } = events
 
-  useEffect(() => {
-    if (!spell) return
+useEffect(() => {
+if (!spell) return
 
     const specs = getNodeSpec(spell)
     setSpecJson(specs)
@@ -71,11 +71,12 @@ export const OGFlow: React.FC<FlowProps> = ({
         spellId: spell.id,
       },
     })
-  }, [spell])
 
-  useEffect(() => {
-    if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
-    if (!lastSpellEvent.state) return
+}, [spell])
+
+useEffect(() => {
+if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
+if (!lastSpellEvent.state) return
 
     // Process only spell state events here
     if (lastSpellEvent.state.isRunning) {
@@ -83,124 +84,124 @@ export const OGFlow: React.FC<FlowProps> = ({
     } else if (!lastSpellEvent.state.isRunning) {
       setPlaying(false)
     }
-  }, [lastSpellEvent])
 
-  const {
-    nodes,
-    edges,
-    onNodesChange,
-    onEdgesChange,
-    setGraphJson,
-    nodeTypes,
-  } = useBehaveGraphFlow({
-    spell,
-    specJson,
-    tab,
-  })
+}, [lastSpellEvent])
 
-  const {
-    handleOnConnect,
-    handleStartConnect,
-    handleStopConnect,
-    handlePaneClick,
-    handlePaneContextMenu,
-    nodePickerPosition,
-    pickedNodeVisibility,
-    handleAddNode,
-    closeNodePicker,
-    nodePickFilters,
-    nodeMenuVisibility,
-    handleNodeContextMenu,
-    openNodeMenu,
-    setOpenNodeMenu,
-    nodeMenuActions,
-    isValidConnectionHandler,
-    onEdgeUpdate,
-  } = useFlowHandlers({
-    nodes,
-    edges,
-    onEdgesChange,
-    onNodesChange,
-    specJSON: specJson,
-    parentRef,
-    tab,
-    windowDimensions,
-  })
+const {
+nodes,
+edges,
+onNodesChange,
+onEdgesChange,
+setGraphJson,
+nodeTypes,
+} = useBehaveGraphFlow({
+spell,
+specJson,
+tab,
+})
 
-  const togglePlay = () => {
-    if (playing) {
-      publish(SEND_COMMAND, {
-        projectId,
-        agentId: currentAgentId,
-        command: 'agent:spellbook:pauseSpell',
-        data: {
-          spellId: spell.id,
-        },
-      })
-    } else {
-      publish(SEND_COMMAND, {
-        projectId,
-        agentId: currentAgentId,
-        command: 'agent:spellbook:playSpell',
-        data: {
-          spellId: spell.id,
-        },
-      })
-    }
-    setPlaying(!playing)
-  }
+const {
+handleOnConnect,
+handleStartConnect,
+handleStopConnect,
+handlePaneClick,
+handlePaneContextMenu,
+nodePickerPosition,
+pickedNodeVisibility,
+handleAddNode,
+closeNodePicker,
+nodePickFilters,
+nodeMenuVisibility,
+handleNodeContextMenu,
+openNodeMenu,
+setOpenNodeMenu,
+nodeMenuActions,
+isValidConnectionHandler,
+onEdgeUpdate,
+} = useFlowHandlers({
+nodes,
+edges,
+onEdgesChange,
+onNodesChange,
+specJSON: specJson,
+parentRef,
+tab,
+windowDimensions,
+})
 
-  if (!nodeTypes || isEmptyObject(nodeTypes)) return null
+const togglePlay = () => {
+if (playing) {
+publish(SEND_COMMAND, {
+projectId,
+agentId: currentAgentId,
+command: 'agent:spellbook:pauseSpell',
+data: {
+spellId: spell.id,
+},
+})
+} else {
+publish(SEND_COMMAND, {
+projectId,
+agentId: currentAgentId,
+command: 'agent:spellbook:playSpell',
+data: {
+spellId: spell.id,
+},
+})
+}
+setPlaying(!playing)
+}
 
-  return (
-    <ReactFlow
-      proOptions={proOptions}
-      nodeTypes={nodeTypes}
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange(tab.id)}
-      onEdgesChange={onEdgesChange(tab.id)}
-      nodesDraggable={!readOnly}
-      nodesConnectable={!readOnly}
-      elementsSelectable={!readOnly}
-      onConnect={handleOnConnect}
-      edgeTypes={edgeTypes}
-      isValidConnection={isValidConnectionHandler}
-      onEdgeUpdate={onEdgeUpdate}
-      onConnectStart={handleStartConnect}
-      onConnectEnd={handleStopConnect}
-      elevateEdgesOnSelect={true}
-      fitView
-      fitViewOptions={{ maxZoom: 2, minZoom: 0.1 }}
-      minZoom={0.1}
-      onPaneClick={handlePaneClick}
-      onPaneContextMenu={handlePaneContextMenu}
-      onNodeContextMenu={handleNodeContextMenu}
-    >
-      <CustomControls
-        playing={playing}
-        togglePlay={togglePlay}
-        setBehaviorGraph={setGraphJson}
-        specJson={specJson}
-        miniMapOpen={miniMapOpen}
-        toggleMiniMap={() => setMiniMapOpen(!miniMapOpen)}
-      />
-      <Background
-        variant={BackgroundVariant.Lines}
-        color="var(--background-color-light)"
-        style={{ backgroundColor: 'var(--background-color)' }}
-      />
-      {miniMapOpen && (
-        <MiniMap
-          nodeStrokeWidth={3}
-          maskColor="#69696930"
-          nodeColor={node => nodeColor(node, specJson, spell)}
-          pannable
-          zoomable
-        />
-      )}
-      {nodePickerPosition && !readOnly && (
-        <NodePicker
+if (!nodeTypes || isEmptyObject(nodeTypes)) return null
+
+return (
+<ReactFlow
+proOptions={proOptions}
+nodeTypes={nodeTypes}
+nodes={nodes}
+edges={edges}
+onNodesChange={onNodesChange(tab.id)}
+onEdgesChange={onEdgesChange(tab.id)}
+nodesDraggable={!readOnly}
+nodesConnectable={!readOnly}
+elementsSelectable={!readOnly}
+onConnect={handleOnConnect}
+edgeTypes={edgeTypes}
+isValidConnection={isValidConnectionHandler}
+onEdgeUpdate={onEdgeUpdate}
+onConnectStart={handleStartConnect}
+onConnectEnd={handleStopConnect}
+elevateEdgesOnSelect={true}
+fitView
+fitViewOptions={{ maxZoom: 2, minZoom: 0.1 }}
+minZoom={0.1}
+onPaneClick={handlePaneClick}
+onPaneContextMenu={handlePaneContextMenu}
+onNodeContextMenu={handleNodeContextMenu} >
+<CustomControls
+playing={playing}
+togglePlay={togglePlay}
+setBehaviorGraph={setGraphJson}
+specJson={specJson}
+miniMapOpen={miniMapOpen}
+toggleMiniMap={() => setMiniMapOpen(!miniMapOpen)}
+/>
+<Background
+variant={BackgroundVariant.Lines}
+color="var(--background-color-light)"
+style={{ backgroundColor: 'var(--background-color)' }}
+/>
+{miniMapOpen && (
+<MiniMap
+nodeStrokeWidth={3}
+maskColor="#69696930"
+nodeColor={node => nodeColor(node, specJson, spell)}
+pannable
+zoomable
+/>
+)}
+{nodePickerPosition && !readOnly && (
+<NodePicker
           position={nodePickerPosition}
           pickedNodePosition={pickedNodeVisibility}
           filters={nodePickFilters}
@@ -208,7 +209,7 @@ export const OGFlow: React.FC<FlowProps> = ({
           onClose={closeNodePicker}
           specJSON={specJson}
         />
-      )}
+)}
 
       {openNodeMenu && (
         <ContextNodeMenu
@@ -219,5 +220,6 @@ export const OGFlow: React.FC<FlowProps> = ({
         />
       )}
     </ReactFlow>
-  )
+
+)
 }

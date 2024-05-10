@@ -1,6 +1,6 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { useEffect, useState } from 'react'
-import { NodeTypes } from 'reactflow'
+import { NodeTypes } from '@xyflow/react'
 
 import { CoreNode } from '../node/core-node'
 import { ReadOnlyNode } from '../node/readonly-node'

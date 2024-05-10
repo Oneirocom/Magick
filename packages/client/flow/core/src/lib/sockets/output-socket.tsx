@@ -3,7 +3,7 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ReactJson from 'react-json-view'
 import { cn } from '@magickml/client-ui'
-import { Handle, Position } from 'reactflow'
+import { Handle, Position } from '@xyflow/react'
 
 import { colors, valueTypeColorMap } from '../utils/colors'
 import { Popover, PopoverContent, PopoverTrigger } from '@magickml/client-ui'

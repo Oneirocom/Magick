@@ -1,10 +1,11 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  Node,
   NodeProps as FlowNodeProps,
   useEdges,
   useUpdateNodeInternals,
-} from 'reactflow'
+} from '@xyflow/react'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'
@@ -14,12 +15,14 @@ import { isHandleConnected } from '../utils/isHandleConnected'
 import { configureSockets } from '../utils/configureSockets'
 import NodeContainer from './node-container'
 
-type BaseNodeProps = FlowNodeProps & {
+export type MagickNodeType = Node<Record<string, any>, string>
+
+type BaseNodeProps = FlowNodeProps<MagickNodeType> & {
   spec: NodeSpecJSON
   allSpecs: NodeSpecJSON[]
   spellId: string
   resetNodeState?: boolean
-  selected: boolean
+  selected?: boolean | undefined
   activeInput: {
     nodeId: string
     name: string
