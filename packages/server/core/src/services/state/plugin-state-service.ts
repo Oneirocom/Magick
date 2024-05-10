@@ -1,8 +1,4 @@
-import {
-  Params,
-  ServiceMethods,
-  type Id,
-} from '@feathersjs/feathers'
+import { Params, ServiceMethods, type Id } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { prismaCore, type Prisma } from '@magickml/server-db'
 
