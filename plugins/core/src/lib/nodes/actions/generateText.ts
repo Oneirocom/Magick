@@ -6,13 +6,6 @@ import {
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { CORE_DEP_KEYS } from '../../config'
 import { IEventStore } from 'server/grimoire'
-import {
-  CompletionModel,
-  // GoogleAIStudioModels,
-  LLMProviders,
-  OpenAIChatCompletionModels,
-} from 'servicesShared'
-
 type Message = {
   role: string
   content: string
@@ -29,7 +22,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     modelProvider: {
       valueType: 'string',
-      defaultValue: LLMProviders.OpenAI,
+      defaultValue: 'OpenAI',
     },
     models: {
       valueType: 'array',
@@ -37,7 +30,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     model: {
       valueType: 'string',
-      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
+      defaultValue: 'gpt-3.5-turbo',
     },
     customBaseUrl: {
       valueType: 'string',
@@ -149,8 +142,7 @@ export const generateText = makeFlowNodeDefinition({
         const customBaseUrl: string = configuration.customBaseUrl || ''
         const max_tokens: number = Number(read('maxTokens')) || 256
         // const modelProvider: LLMProviders = configuration.modelProvider
-        const model: CompletionModel =
-          read('modelOverride') || configuration.model
+        const model: string = read('modelOverride') || configuration.model
 
         // Check for custom OpenAI and empty base URL
         // if (modelProvider === LLMProviders.CustomOpenAI && !customBaseUrl) {
@@ -174,6 +166,7 @@ export const generateText = makeFlowNodeDefinition({
         const request = {
           model,
           messages: allMessages,
+          provider: configuration.modelProvider,
           options: {
             temperature,
             top_p,

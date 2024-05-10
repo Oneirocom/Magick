@@ -1,98 +1,4 @@
 import { PluginCredential } from 'server/credentials'
-import { CompletionModel } from './completionModels'
-import { EmbeddingModel } from '../../coreEmbeddingService/types'
-
-export enum LLMProviders {
-  OpenAI = 'openai',
-  Azure = 'azure_openai',
-  Anthropic = 'anthropic',
-  Sagemaker = 'sagemaker',
-  Bedrock = 'aws_bedrock',
-  Anyscale = 'anyscale',
-  PerplexityAI = 'perplexity',
-  VLLM = 'vllm',
-  DeepInfra = 'deepinfra',
-  Cohere = 'cohere',
-  TogetherAI = 'together',
-  AlephAlpha = 'alephalpha',
-  Baseten = 'baseten',
-  OpenRouter = 'openrouter',
-  CustomAPI = 'customapi',
-  Petals = 'petals',
-  Ollama = 'ollama',
-  GoogleAIStudio = 'google',
-  Palm = 'palm',
-  HuggingFace = 'huggingface',
-  Xinference = 'xinference',
-  CloudflareWorkersAI = 'cloudflareworkersai',
-  AI21 = 'ai21',
-  NLPCloud = 'nlpcloud',
-  VoyageAI = 'voyageai',
-  Replicate = 'replicate',
-  Meta = 'meta',
-  Mistral = 'mistralai',
-  VertexAI = 'vertexai',
-  Groq = 'groq',
-}
-
-export enum LLMProviderDisplayNames {
-  OpenAI = 'OpenAI',
-  Azure = 'Azure OpenAI',
-  Anthropic = 'Anthropic',
-  Sagemaker = 'Sagemaker',
-  Bedrock = 'AWS Bedrock',
-  Anyscale = 'Anyscale',
-  PerplexityAI = 'Perplexity AI',
-  VLLM = 'VLLM',
-  DeepInfra = 'DeepInfra',
-  Cohere = 'Cohere',
-  TogetherAI = 'Together AI',
-  AlephAlpha = 'Aleph Alpha',
-  Baseten = 'Baseten',
-  OpenRouter = 'OpenRouter',
-  CustomAPI = 'Custom API',
-  Petals = 'Petals',
-  Ollama = 'Ollama',
-  GoogleAIStudio = 'Gemini - Google AI Studio',
-  Palm = 'Palm',
-  HuggingFace = 'Hugging Face',
-  Xinference = 'Xinference',
-  CloudflareWorkersAI = 'Cloudflare Workers AI',
-  AI21 = 'AI21',
-  NLPCloud = 'NLP Cloud',
-  VoyageAI = 'Voyage AI',
-  Replicate = 'Replicate',
-  Meta = 'Meta',
-  Mistral = 'Mistral AI',
-  VertexAI = 'Vertex AI',
-  Groq = 'Groq',
-}
-
-export enum LLMProviderPrefixes {
-  Azure = 'azure',
-  Sagemaker = 'sagemaker',
-  Bedrock = 'bedrock',
-  Anyscale = 'anyscale',
-  PerplexityAI = 'perplexity',
-  VLLM = 'vllm',
-  DeepInfra = 'deepinfra',
-  TogetherAI = 'together_ai',
-  Baseten = 'baseten',
-  OpenRouter = 'openrouter',
-  CustomOpenAI = 'openai',
-  Petals = 'petals',
-  Ollama = 'ollama',
-  GoogleAIStudio = 'gemini',
-  Palm = 'palm',
-  HuggingFace = 'huggingface',
-  Xinference = 'xinference',
-  CloudflareWorkersAI = 'cloudflare',
-  VoyageAI = 'voyage',
-  Replicate = 'replicate/deployments',
-  Mistral = 'mistral',
-  Groq = 'groq',
-}
-
 export enum LLMProviderKeys {
   OpenAI = 'OPENAI_API_KEY',
   Azure = 'AZURE_API_KEY',
@@ -125,16 +31,6 @@ export enum LLMProviderKeys {
   VertexAI = 'VERTEXAI_API_KEY',
   Groq = 'GROQ_API_KEY',
   Unknown = 'unknown',
-}
-
-export type ProviderRecord = {
-  provider: LLMProviders
-  displayName: LLMProviderDisplayNames
-  keyName: LLMProviderKeys
-  completionModels: CompletionModel[]
-  embeddingModels: EmbeddingModel[]
-  allModels: (CompletionModel | EmbeddingModel)[]
-  vendorModelPrefix: LLMProviderPrefixes | ''
 }
 
 export type LLMCredential = PluginCredential & {

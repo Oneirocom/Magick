@@ -11,7 +11,6 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
-import { LLMProviderKeys } from 'servicesShared'
 import { variableGet } from './nodes/query/variableGet'
 import { VariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
@@ -65,6 +64,7 @@ import { DATABASE_URL } from 'shared/config'
 import { Agent } from 'server/agents'
 import { IsDefined } from './nodes/logic/strings/isDefined'
 import { jsonParse } from './nodes/actions/jsonParse'
+import { LLMProviderKeys } from 'servicesShared'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
