@@ -93,6 +93,8 @@
       "client/state": ["packages/client/state/src/index.ts"],
       "clientConfig": ["packages/client/config/src/index.ts"],
       "communication": ["packages/shared/communication/src/index.ts"],
+      "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
+      "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
       "plugin-state": ["packages/server/plugin-state/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
