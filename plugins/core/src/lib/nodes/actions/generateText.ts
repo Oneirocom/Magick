@@ -22,7 +22,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     modelProvider: {
       valueType: 'string',
-      defaultValue: 'OpenAI',
+      defaultValue: 'openai',
     },
     models: {
       valueType: 'array',
