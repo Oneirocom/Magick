@@ -1,11 +1,7 @@
-import {
-  // CompletionParams,
-  // CompletionResponse,
-  ICoreLLMService,
-} from 'servicesShared'
+import { ICoreLLMService, LLMProviderKeys } from 'servicesShared'
 import { CoreUserService } from '../userService/coreUserService'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
-import { AllModels, LLMCredential, findProvider } from 'servicesShared'
+import { LLMCredential } from 'servicesShared'
 import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
 import OpenAI from 'openai'
@@ -30,8 +26,8 @@ export class CoreLLMService implements ICoreLLMService {
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
     this.openAISDK = new OpenAI({
-      baseURL: 'https://magickml.litellm.ai/',
-      apiKey: process.env['LITELLM_PROXY_API_KEY'],
+      baseURL: 'https://api.keywordsai.co/api/',
+      apiKey: process.env['KEYWORDS_API_KEY'],
     })
   }
 
@@ -61,6 +57,7 @@ export class CoreLLMService implements ICoreLLMService {
         const credential = await this.getCredentialForUser({
           userData,
           model: request.model,
+          provider: request.provider,
         })
 
         if (!credential) {
@@ -68,11 +65,13 @@ export class CoreLLMService implements ICoreLLMService {
         }
 
         const body = {
-          model: request.model,
+          model: request.model.model_name,
           messages: request.messages,
           ...request.options,
           stream: true,
-          // api_key: credential,
+          extra_body: {
+            customer_identifier: userData.user.id,
+          },
         }
 
         const stream = await this.openAISDK.beta.chat.completions.stream(body)
@@ -95,7 +94,7 @@ export class CoreLLMService implements ICoreLLMService {
           status: '',
           statusCode: 200,
           parameters: JSON.stringify(request.options),
-          provider: findProvider(request.model)?.provider,
+          provider: request.provider,
           type: 'completion',
           hidden: false,
           processed: false,
@@ -134,23 +133,25 @@ export class CoreLLMService implements ICoreLLMService {
   private getCredentialForUser = async ({
     userData,
     model,
+    provider,
   }: {
     userData: any
-    model: AllModels
+    model: string
+    provider: string
   }) => {
     const isFineTune = model.includes('ft')
 
     if (isFineTune) {
-      const modelName = model.split(':')[1]
-      return this.credentials.find(c => c.serviceType === modelName)?.value
+      return this.credentials.find(c => c.serviceType === model)?.value
     }
 
-    const providerKey = findProvider(model)?.keyName
+    const providerKey =
+      LLMProviderKeys[provider as keyof typeof LLMProviderKeys]
     if (!providerKey) {
       throw new Error(`No provider key found for ${model}`)
     }
     let credential
-    const MAGICK_API_KEY = process.env['LITELLM_PROXY_API_KEY']
+    const MAGICK_API_KEY = process.env['KEYWORDS_API_KEY']
 
     if (process.env.NODE_ENV === 'development') {
       credential = MAGICK_API_KEY
