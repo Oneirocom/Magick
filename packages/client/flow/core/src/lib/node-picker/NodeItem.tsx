@@ -1,8 +1,9 @@
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { ReactFlowInstance, XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
 import { ItemType } from './types'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
+import { MagickReactFlowInstance } from '../flow'
 
 export const NodeItem = ({
   item,
@@ -15,12 +16,12 @@ export const NodeItem = ({
   pickedNodePosition: XYPosition
   onPickNode: (type: string, position: XYPosition) => void
   index: number
-  instance: ReactFlowInstance
+  instance: MagickReactFlowInstance
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleClick = ({ item }) => {
-    onPickNode(item, instance.project(pickedNodePosition))
+    onPickNode(item, instance.screenToFlowPosition(pickedNodePosition))
   }
 
   if (!item) return <></>

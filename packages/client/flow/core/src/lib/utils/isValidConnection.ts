@@ -1,12 +1,13 @@
 import type { NodeSpecJSON } from '@magickml/behave-graph'
-import type { Connection, ReactFlowInstance } from 'reactflow'
+import type { Connection, Edge } from '@xyflow/react'
 
 import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
 import { isHandleConnected } from './isHandleConnected'
+import { MagickReactFlowInstance } from '../flow'
 
 export const isValidConnection = (
-  connection: Connection,
-  instance: ReactFlowInstance,
+  connection: Connection | Edge,
+  instance: MagickReactFlowInstance,
   specJSON: NodeSpecJSON[]
 ) => {
   if (connection.source === null || connection.target === null) return false

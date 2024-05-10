@@ -1,5 +1,6 @@
+import { MagickReactFlowInstance } from '../flow'
 import { NodeItem } from './NodeItem'
-import { ReactFlowInstance, XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
 
 export const NodePickerMenu = ({
   groupedData,
@@ -10,7 +11,7 @@ export const NodePickerMenu = ({
   groupedData: any
   onPickNode: (type: string, position: XYPosition) => void
   pickedNodePosition: XYPosition
-  instance: ReactFlowInstance
+  instance: MagickReactFlowInstance
 }) => {
   return (
     <div className="max-h-[320px] overflow-y-scroll w-full">

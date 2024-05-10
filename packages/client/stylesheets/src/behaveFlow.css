@@ -16,13 +16,13 @@ select {
   height: 10px;
 }
 
-.react-flow__handle-right {
-  right: -6px;
+/* .react-flow__handle-right {
+  right: 6px;
 }
 
 .react-flow__handle-left {
-  left: -6px;
-}
+  left: 6px;
+} */
 
 .react-flow__edge-path {
   stroke: #b1b1b7;

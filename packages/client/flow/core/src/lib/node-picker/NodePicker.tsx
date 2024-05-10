@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow } from '@xyflow/react'
 
 import { useOnPressKey } from '../hooks/useOnPressKey'
 
@@ -10,6 +10,8 @@ import { autoCompleteSearchTerm } from './autoCompleteSearchTerm'
 import { NodePickerProps } from './types'
 import { Input } from '@magickml/client-ui'
 import { getNodeSpec } from 'shared/nodeSpec'
+import { MagickNodeType } from '../node/base-node'
+import { MagickEdgeType } from '../node/custom-edge'
 
 export const NodePicker: React.FC<NodePickerProps> = ({
   pickedNodePosition,
@@ -23,7 +25,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   const [search, setSearch] = useState('')
   const [nodeSpecs, setNodeSpecs] = useState(specJSON)
   const [focusedIndex, setFocusedIndex] = useState(0)
-  const instance = useReactFlow()
+  const instance = useReactFlow<MagickNodeType, MagickEdgeType>()
 
   useOnPressKey('Escape', onClose)
 
@@ -64,7 +66,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
         if (pickedNodePosition) {
           onPickNode(
             filteredNodes[focusedIndex]?.type,
-            instance.project(pickedNodePosition)
+            instance.screenToFlowPosition(pickedNodePosition)
           )
         }
       }

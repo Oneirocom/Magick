@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
+import {
+  Background,
+  BackgroundVariant,
+  ReactFlow,
+  MiniMap,
+  ReactFlowInstance,
+} from '@xyflow/react'
 import CustomControls from '../controls/Controls'
 import { NodePicker } from '../node-picker/NodePicker'
 import { type BehaveGraphFlow, useFlowHandlers } from '../hooks'
@@ -8,9 +14,15 @@ import { SpellInterfaceWithGraph } from 'server/schemas'
 import { RootState } from 'client/state'
 import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
-import CustomEdge from '../node/custom-edge'
+import CustomEdge, { MagickEdgeType } from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { CommentNode } from '../nodeTypes/comment'
+import { MagickNodeType } from '../node/base-node'
+
+export type MagickReactFlowInstance = ReactFlowInstance<
+  MagickNodeType,
+  MagickEdgeType
+>
 
 type BaseFlowHandlers = Pick<
   ReturnType<typeof useFlowHandlers>,
@@ -192,7 +204,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   if (!nodeTypes || isEmptyObject(nodeTypes)) return null
 
   return (
-    <ReactFlow
+    <ReactFlow<MagickNodeType, MagickEdgeType>
       proOptions={proOptions}
       nodeTypes={nodeTypes}
       nodes={nodes}
@@ -228,11 +240,12 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       />
       <Background
         variant={BackgroundVariant.Lines}
+        patternClassName="color-[var(--background-color-light)]"
         color="var(--background-color-light)"
         style={{ backgroundColor: 'var(--background-color)' }}
       />
       {miniMapOpen && (
-        <MiniMap
+        <MiniMap<MagickNodeType>
           nodeStrokeWidth={3}
           maskColor="#69696930"
           nodeColor={node => nodeColor(node, specJSON)}

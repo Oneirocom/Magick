@@ -1,5 +1,5 @@
 import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
-import { XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 
 export type NodePickerFilters = {

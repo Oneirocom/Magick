@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import React from 'react'
-import { ControlButton, Controls } from 'reactflow'
+import { ControlButton, Controls } from '@xyflow/react'
 
 import { ClearModal } from './modals/ClearModal'
 
