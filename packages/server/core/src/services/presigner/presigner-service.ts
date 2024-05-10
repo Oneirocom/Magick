@@ -40,6 +40,7 @@ class PresignedUrlService implements PresignedUrlServiceMethods {
     }
 
     const { fileName, type } = parse.data
+    console.log('create presigned url', { fileName, type, id, projectId })
 
     const projectPresigner = getProjectPresigner(projectId)
     try {
@@ -51,6 +52,7 @@ class PresignedUrlService implements PresignedUrlServiceMethods {
 
       return presignedUrl
     } catch (e) {
+      console.error('Error generating presigned URL', e)
       throw Error('Error generating presigned URL')
     }
   }

@@ -1,3 +1,4 @@
+// project-presigner.ts
 import {
   BucketConfig,
   BucketSettings,
@@ -31,11 +32,9 @@ export enum ProjectPresignType {
 }
 
 const bucketConfig: BucketConfig = {
-  accessKeyId: process.env?.['PROJECT_AWS_ACCESS_KEY'] || '',
-  secretAccessKey: process.env?.['PROJECT_AWS_SECRET_KEY'] || '',
-  region: process.env?.['PROJECT_AWS_REGION'] || 'east-1',
-  endpoint: process.env?.['PROJECT_AWS_BUCKET_ENDPOINT'] || '',
-  bucketName: process.env?.['PROJECT_AWS_BUCKET_NAME'] || '',
+  projectId: process.env['GOOGLE_CLOUD_PROJECT_ID'] || '',
+  privateKey: process.env['GOOGLE_CLOUD_PRIVATE_KEY'] || '',
+  clientEmail: process.env['GOOGLE_CLOUD_CLIENT_EMAIL'] || '',
 }
 
 const baseSettings: BucketSettings = {

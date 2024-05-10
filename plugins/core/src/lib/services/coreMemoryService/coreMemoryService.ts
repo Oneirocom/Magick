@@ -201,6 +201,7 @@ class CoreMemoryService {
 
     try {
       if (!this.app) this.initialize(this.agentId)
+      console.log('Adding to Embedchain:', data, kwargs)
 
       const result = await this.app.add$(data, kwargs)
 
