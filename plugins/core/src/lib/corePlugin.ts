@@ -81,6 +81,7 @@ import { clearMemories } from './nodes/actions/clearMemories'
 import { parseCommand } from './nodes/logic/strings/parseCommand'
 import { DoOnceAsync } from './nodes/flow/doOnceAsync'
 import { arrayIncludes } from './values/Array/Includes'
+import { getManyVariables } from './nodes/query/getManyVariables'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -144,6 +145,7 @@ export class CorePlugin extends CoreEventsPlugin<
     stringChunker,
     textTemplate,
     variableGet,
+    getManyVariables,
     variableSet,
     variablesReset,
     wait,
