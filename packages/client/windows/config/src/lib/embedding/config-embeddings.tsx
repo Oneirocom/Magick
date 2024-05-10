@@ -1,18 +1,7 @@
 import { useEffect, useState } from 'react'
-import {
-  useListCredentialsQuery,
-  useUpdateAgentMutation,
-  useGetUserQuery,
-} from 'client/state'
+import { useUpdateAgentMutation, useGetUserQuery } from 'client/state'
 import { useConfig } from '@magickml/providers'
 
-import {
-  LLMProviders,
-  ProviderRecord,
-  EmbeddingModel,
-  providers,
-  getProvidersWithUserKeys,
-} from 'servicesShared'
 import { EmbeddingProviderDropdown } from './embedding-provider'
 import { EmbeddingModelDropdown } from './embedding-model'
 
@@ -21,57 +10,36 @@ export const ConfigEmbeddings = ({
 }: {
   agentId: string
 }): JSX.Element => {
-  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] =
-    useState<ProviderRecord>()
-  const [activeEmbeddingModels, setActiveEmbeddingModels] = useState<
-    EmbeddingModel[]
-  >([])
-  const [selectedEmbeddingModel, setSelectedEmbeddingModel] =
-    useState<EmbeddingModel>()
-  const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
+  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] = useState()
+
+  const [selectedEmbeddingModel, setSelectedEmbeddingModel] = useState<string>()
 
   const config = useConfig()
 
-  const { data: credentials } = useListCredentialsQuery({
-    projectId: config.projectId,
-  })
-
-  const { data: userData } = useGetUserQuery({
+  const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
     projectId: config.projectId,
   })
 
   const [updateAgent] = useUpdateAgentMutation()
 
   useEffect(() => {
-    if (credentials) {
-      const creds = credentials.map(cred => cred.name)
-      const providers = getProvidersWithUserKeys(creds as any)
-      setProvidersWithKeys(providers)
-    }
-  }, [credentials])
-
-  useEffect(() => {
-    setActiveEmbeddingModels(selectedEmbeddingProvider?.embeddingModels || [])
-  }, [selectedEmbeddingProvider])
-
-  useEffect(() => {
     if (userData) {
       const provider = userData.embeddingProvider
       const model = userData.embeddingModel
-      setSelectedEmbeddingProvider(providers[provider])
+      setSelectedEmbeddingProvider(provider)
       setSelectedEmbeddingModel(model)
     }
   }, [userData])
 
-  const handleEmbeddingProviderChange = (provider: LLMProviders) => {
-    setSelectedEmbeddingProvider(providers[provider])
+  const handleEmbeddingProviderChange = provider => {
+    setSelectedEmbeddingProvider(provider)
     updateAgent({
       id: agentId,
       embeddingProvider: provider,
     })
   }
 
-  const handleEmbeddingModelChange = (model: EmbeddingModel) => {
+  const handleEmbeddingModelChange = (model: string) => {
     setSelectedEmbeddingModel(model)
     updateAgent({
       id: agentId,
@@ -79,23 +47,21 @@ export const ConfigEmbeddings = ({
     })
   }
 
-  const modelsWithKeys = providersWithKeys
-    .map(provider => {
-      return providers[provider].embeddingModels
-    })
-    .flat()
+  if (isUserDataLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="flex flex-col max-w-2xl w-full gap-y-4">
       <EmbeddingProviderDropdown
-        selectedEmbeddingProvider={selectedEmbeddingProvider?.provider}
+        selectedEmbeddingProvider={selectedEmbeddingProvider}
         onChange={handleEmbeddingProviderChange}
       />
       <EmbeddingModelDropdown
-        activeEmbeddingModels={activeEmbeddingModels}
+        activeEmbeddingModels={['text-embedding-ada-002']}
         selectedEmbeddingModel={selectedEmbeddingModel}
         userData={userData}
-        modelsWithKeys={modelsWithKeys}
+        modelsWithKeys={['text-embedding-ada-002']}
         onChange={handleEmbeddingModelChange}
       />
     </div>
