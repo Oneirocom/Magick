@@ -13,13 +13,13 @@ export const getManyVariables = makeFunctionNodeDefinition({
   configuration: {
     hiddenProperties: {
       valueType: 'array',
-      defaultValue: ['socketValues'],
+      defaultValue: ['socketValues', 'hiddenProperties'],
     },
     socketValues: {
       valueType: 'array',
       defaultValue: [
-        'array',
         'string',
+        'array',
         'boolean',
         'integer',
         'float',
@@ -67,12 +67,13 @@ export const getManyVariables = makeFunctionNodeDefinition({
     })
 
     if (outputs.length) {
-      for (const socketOutput of outputs) {
+      const promises = outputs.map(async socketOutput => {
         const variable = Object.values(variables).find(
           v => v.name === socketOutput.name
         )
-        if (!variable) continue
-        let value = await variableService.getVariable(variable.name)
+        if (!variable) return
+
+        let value = variableService.getVariable(variable.name)
 
         if (value === undefined) {
           // set the variable to the default value
@@ -80,7 +81,9 @@ export const getManyVariables = makeFunctionNodeDefinition({
         }
 
         write(socketOutput.name, value)
-      }
+      })
+
+      await Promise.all(promises)
     }
   },
 })
