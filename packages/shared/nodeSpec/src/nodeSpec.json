@@ -1460,6 +1460,7 @@
           "array",
           "boolean",
           "integer",
+          "float",
           "object"
         ]
       },
@@ -1952,6 +1953,39 @@
         "name": "variableNames",
         "valueType": "array",
         "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "variables/getMany",
+    "category": "Query",
+    "label": "Get Many Variables",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "socketValues"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "array",
+          "string",
+          "boolean",
+          "integer",
+          "float",
+          "object"
+        ]
       },
       {
         "name": "socketOutputs",
