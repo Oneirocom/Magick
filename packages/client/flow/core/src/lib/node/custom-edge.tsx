@@ -6,6 +6,7 @@ import {
   Edge,
 } from '@xyflow/react'
 import { valueTypeColorMap } from '../utils/colors'
+import React, { useState } from 'react'
 
 type EdgeData = {
   valueType: string
@@ -25,6 +26,7 @@ export default function CustomEdge({
   data,
   selected,
 }: EdgeProps<MagickEdgeType>) {
+  const [isHovered, setIsHovered] = useState(false)
   const edgePathData = getBezierPath({
     sourceX,
     sourceY,
@@ -60,37 +62,52 @@ export default function CustomEdge({
 
   return (
     <>
-      <g>
+      <g
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <path
           id={id}
           d={edgePathData[0]}
           stroke={strokeColor}
           fill="none"
           strokeWidth={selected ? 6 : 3}
+          style={{ cursor: 'pointer' }}
+        />
+        {/* Invisible stroke to increase hover area */}
+        <path
+          d={edgePathData[0]}
+          stroke="transparent"
+          fill="none"
+          strokeWidth={24} // Double the visible stroke width
+          style={{ pointerEvents: 'stroke', cursor: 'pointer' }}
         />
         {/* Optionally, add arrowheads or other SVG elements here */}
       </g>
-      <EdgeLabelRenderer>
-        <div
-          style={{
-            position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            fontSize: 12,
-            // everything inside EdgeLabelRenderer has no pointer events by default
-            // if you have an interactive element, set pointer-events: all
-            pointerEvents: 'all',
-          }}
-          className="nodrag nopan"
-        >
-          <button
-            style={edgeButtonStyle}
-            className="edgebutton"
-            onClick={onEdgeClick}
+
+      {isHovered && (
+        <EdgeLabelRenderer>
+          <div
+            style={{
+              position: 'absolute',
+              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+              fontSize: 12,
+              pointerEvents: 'all',
+            }}
+            className="nodrag nopan"
           >
-            ×
-          </button>
-        </div>
-      </EdgeLabelRenderer>
+            <button
+              style={edgeButtonStyle}
+              className="edgebutton"
+              onClick={onEdgeClick}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              ×
+            </button>
+          </div>
+        </EdgeLabelRenderer>
+      )}
     </>
   )
 }
