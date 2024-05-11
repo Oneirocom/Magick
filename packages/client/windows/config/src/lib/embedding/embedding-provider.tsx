@@ -1,28 +1,26 @@
 import { Dropdown } from '@magickml/client-ui'
 import { type FC } from 'react'
-import { LLMProviders, availableEmbeddingProviders } from 'servicesShared'
 
 interface EmbeddingProviderDropdownProps {
-  selectedEmbeddingProvider?: LLMProviders
-  onChange: (provider: LLMProviders) => void
+  selectedEmbeddingProvider?: string
+  onChange: (provider: string) => void
 }
 
 export const EmbeddingProviderDropdown: FC<EmbeddingProviderDropdownProps> = ({
   selectedEmbeddingProvider,
   onChange,
 }) => {
-  const providerOptions = availableEmbeddingProviders.map(prov => ({
-    value: prov.provider,
-    label: prov.displayName,
-  }))
+  const providerOptions = [
+    { label: 'Open AI', value: 'text-embedding-ada-002' },
+  ]
 
   return (
     <div className="flex flex-col gap-y-2 w-full">
-      <p className='font-semibold'>Embedding Model Provider</p>
+      <p className="font-semibold">Embedding Model Provider</p>
       <Dropdown
         options={providerOptions}
         selectedValue={selectedEmbeddingProvider || ''}
-        onChange={value => onChange(value as LLMProviders)}
+        onChange={value => onChange(value)}
         placeholder="Select a provider"
       />
     </div>

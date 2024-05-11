@@ -11,7 +11,6 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
-import { LLMProviderKeys } from 'servicesShared'
 import { variableGet } from './nodes/query/variableGet'
 import { VariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
@@ -82,6 +81,7 @@ import { parseCommand } from './nodes/logic/strings/parseCommand'
 import { DoOnceAsync } from './nodes/flow/doOnceAsync'
 import { arrayIncludes } from './values/Array/Includes'
 import { getManyVariables } from './nodes/query/getManyVariables'
+import { LLMProviderKeys } from 'servicesShared'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -280,7 +280,6 @@ export class CorePlugin extends CoreEventsPlugin<
         spellCaster
       ),
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
-      // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
 
       [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
