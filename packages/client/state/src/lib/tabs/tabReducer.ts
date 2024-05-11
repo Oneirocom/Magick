@@ -9,6 +9,11 @@ export const selectTabNodes = tabId => state => {
   return tabState?.nodes
 }
 
+export const selectTabNodesLength = tabId => state => {
+  const tabState = selectTabState(tabId)(state)
+  return tabState?.nodes.length
+}
+
 export const selectTabEdges = tabId => state => {
   const tabState = selectTabState(tabId)(state)
   return tabState?.edges
