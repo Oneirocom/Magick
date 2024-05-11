@@ -3,13 +3,10 @@ import { ConfigurationComponentProps } from './PropertiesWindow'
 import { useConfig } from '@magickml/providers'
 import { useListCredentialsQuery, useGetUserQuery } from 'client/state'
 import {
-  LLMProviders,
-  EmbeddingModel,
-  availableProviders,
-  providers,
+  Model,
   getProvidersWithUserKeys,
+  groupModelsByProvider,
   isModelAvailableToUser,
-  removeFirstVendorTag,
 } from 'servicesShared'
 import {
   Select,
@@ -22,33 +19,81 @@ import {
 export const EmbeddingProviderOptions: React.FC<
   ConfigurationComponentProps
 > = props => {
-  const [selectedProvider, setSelectedProvider] = useState<LLMProviders | ''>(
+  const [selectedProvider, setSelectedProvider] = useState(
     props.fullConfig.modelProvider || ''
   )
-  const [selectedModel, setSelectedModel] = useState<EmbeddingModel | ''>(
+  const [selectedModel, setSelectedModel] = useState(
     props.fullConfig.model || ''
   )
-  const [activeModels, setActiveModels] = useState<EmbeddingModel[]>([])
-  const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
+  const [activeModels, setActiveModels] = useState<Model[]>([])
+
+  const [providersWithUserKeys, setProvidersWithUserKeys] = useState<
+    Record<string, { models: Model[]; apiKey: string }>
+  >({})
+
+  const [providerData, setProviderData] = useState<
+    Record<string, { models: Model[]; apiKey: string }>
+  >({})
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const config = useConfig()
   const { data: credentials } = useListCredentialsQuery({
     projectId: config.projectId,
   })
-  const { data: userData } = useGetUserQuery({ projectId: config.projectId })
+  const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
+    projectId: config.projectId,
+  })
 
   useEffect(() => {
-    const creds = credentials?.map(cred => cred.name) || []
-    const providersWithUserKeys = getProvidersWithUserKeys(creds as any)
-    setProvidersWithKeys(providersWithUserKeys)
-  }, [credentials])
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          'https://api.keywordsai.co/api/models/public'
+        )
+        const data = await response.json()
+        const { models } = data
+
+        const groupedModels = groupModelsByProvider(models)
+
+        setProviderData(groupedModels)
+
+        if (userData) {
+          setSelectedProvider(props.fullConfig.modelProvider || '')
+          setSelectedModel(props.fullConfig.model || '')
+          setActiveModels(
+            groupedModels[props.fullConfig.modelProvider].models || []
+          )
+        }
+
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error fetching models:', error)
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [userData])
+
+  useEffect(() => {
+    if (!providerData) return
+
+    setProvidersWithUserKeys(
+      getProvidersWithUserKeys(providerData, credentials || [])
+    )
+  }, [credentials, providerData])
 
   useEffect(() => {
     if (selectedProvider) {
-      const models = providers[selectedProvider]?.embeddingModels || []
+      const models = providerData[selectedProvider].models || []
       setActiveModels(models)
     }
   }, [selectedProvider])
+
+  if (isLoading || isUserDataLoading || !userData) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
@@ -57,17 +102,15 @@ export const EmbeddingProviderOptions: React.FC<
       <div className="flex flex-col mt-1">
         <Select
           value={selectedProvider}
-          onValueChange={(newValue: LLMProviders | '') =>
-            setSelectedProvider(newValue)
-          }
+          onValueChange={(newValue: string) => setSelectedProvider(newValue)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select Provider" />
           </SelectTrigger>
           <SelectContent>
-            {availableProviders.map(prov => (
-              <SelectItem key={prov.provider} value={prov.provider}>
-                {prov.displayName}
+            {Object.keys(providerData).map(provider => (
+              <SelectItem key={provider} value={provider}>
+                {provider}
               </SelectItem>
             ))}
           </SelectContent>
@@ -80,9 +123,9 @@ export const EmbeddingProviderOptions: React.FC<
         <div className="flex flex-col mt-1">
           <Select
             value={selectedModel}
-            onValueChange={(newValue: EmbeddingModel | '') =>
+            onValueChange={(newValue: string) => {
               setSelectedModel(newValue)
-            }
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select a model" />
@@ -92,13 +135,15 @@ export const EmbeddingProviderOptions: React.FC<
                 const isAvailable = isModelAvailableToUser({
                   userData,
                   model,
-                  modelsWithKeys: providersWithKeys.flatMap(
-                    provider => providers[provider]?.embeddingModels || []
-                  ),
+                  providersWithUserKeys,
                 })
                 return (
-                  <SelectItem key={model} value={model} disabled={!isAvailable}>
-                    {removeFirstVendorTag(model)}
+                  <SelectItem
+                    key={model.model_name}
+                    value={model.model_name}
+                    disabled={!isAvailable}
+                  >
+                    {model.model_name}
                   </SelectItem>
                 )
               })}

@@ -1,17 +1,12 @@
 import { Dropdown } from '@magickml/client-ui'
 import { type FC } from 'react'
-import {
-  EmbeddingModel,
-  isModelAvailableToUser,
-  removeFirstVendorTag,
-} from 'servicesShared'
 
 interface EmbeddingModelDropdownProps {
-  activeEmbeddingModels: EmbeddingModel[]
-  selectedEmbeddingModel?: EmbeddingModel
+  activeEmbeddingModels: string[]
+  selectedEmbeddingModel?: string
   userData?: any
-  modelsWithKeys: EmbeddingModel[]
-  onChange: (model: EmbeddingModel) => void
+  modelsWithKeys: string[]
+  onChange: (model: string) => void
 }
 
 export const EmbeddingModelDropdown: FC<EmbeddingModelDropdownProps> = ({
@@ -21,18 +16,7 @@ export const EmbeddingModelDropdown: FC<EmbeddingModelDropdownProps> = ({
   modelsWithKeys,
   onChange,
 }) => {
-  const modelOptions = activeEmbeddingModels.map(model => {
-    const isAvailable = isModelAvailableToUser({
-      userData,
-      model,
-      modelsWithKeys,
-    })
-    return {
-      value: model,
-      label: removeFirstVendorTag(model),
-      disabled: !isAvailable,
-    }
-  })
+  const modelOptions = [{ value: 'text-embedding-ada-002', label: 'Ada 002' }]
 
   return (
     <div className="flex flex-col gap-y-1 w-full">
@@ -40,7 +24,7 @@ export const EmbeddingModelDropdown: FC<EmbeddingModelDropdownProps> = ({
       <Dropdown
         options={modelOptions}
         selectedValue={selectedEmbeddingModel || ''}
-        onChange={value => onChange(value as EmbeddingModel)}
+        onChange={value => onChange(value)}
         placeholder="Select a model"
       />
     </div>
