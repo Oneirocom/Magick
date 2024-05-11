@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { Window } from 'client/core'
 import { SocketConfig } from './SocketConfig'
 import { NodeSpecJSON } from '@magickml/behave-graph'
-import { Node } from '@xyflow/react'
+import { Node, useOnSelectionChange } from '@xyflow/react'
 import { useChangeNodeData } from '@magickml/flow-core'
 import { EventStateProperties } from './EventStateProperties'
 import { SpellInterface } from 'server/schemas'
@@ -47,13 +47,23 @@ const ConfigurationComponents = {
 }
 
 export const PropertiesWindow = (props: Props) => {
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null)
   const [spec, setSpec] = useState<NodeSpecJSON | null>(null)
   const [currentNode, setCurrentNode] = useState<Node | null>(null)
   const [configuration, setConfiguration] = useState<Record<
     string,
     any
   > | null>(null)
+
+  useOnSelectionChange({
+    onChange: ({ nodes }) => {
+      if (nodes.length > 1) {
+        setSelectedNode(null)
+        return
+      }
+      setSelectedNode(nodes[0])
+    },
+  })
 
   const spellName = props.spellName
   const { spell } = useGetSpellByNameQuery(
