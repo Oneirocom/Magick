@@ -60,7 +60,7 @@ const components = {
     return <PropertiesWindow {...props.params} />
   },
   TextEditor: (props: IDockviewPanelProps<{ tab: Tab; spellId: string }>) => {
-    return <TextEditor {...props.params} />
+    return <TextEditor />
   },
   Graph: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
