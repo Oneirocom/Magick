@@ -1,6 +1,5 @@
 import type { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
-import type { Edge } from '@xyflow/react'
 
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null

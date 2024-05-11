@@ -1,6 +1,6 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Node, NodeProps as FlowNodeProps, useEdges } from '@xyflow/react'
+import { NodeProps as FlowNodeProps, useEdges } from '@xyflow/react'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'

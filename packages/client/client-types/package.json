@@ -2,7 +2,8 @@
   "name": "@magickml/client-types",
   "version": "0.0.1",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@xyflow/react": "^12.0.0-next.18"
   },
   "type": "commonjs",
   "main": "./src/index.js",
