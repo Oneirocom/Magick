@@ -3,17 +3,10 @@ import {
   getBezierPath,
   EdgeLabelRenderer,
   useReactFlow,
-  Edge,
 } from '@xyflow/react'
 import { valueTypeColorMap } from '../utils/colors'
-import React, { useState } from 'react'
-
-type EdgeData = {
-  valueType: string
-  [key: string]: any
-}
-
-export type MagickEdgeType = Edge<EdgeData, string>
+import { useState } from 'react'
+import { MagickEdgeType } from '@magickml/client-types'
 
 export default function CustomEdge({
   id,

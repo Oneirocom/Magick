@@ -10,8 +10,7 @@ import { autoCompleteSearchTerm } from './autoCompleteSearchTerm'
 import { NodePickerProps } from './types'
 import { Input } from '@magickml/client-ui'
 import { getNodeSpec } from 'shared/nodeSpec'
-import { MagickNodeType } from '../node/base-node'
-import { MagickEdgeType } from '../node/custom-edge'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 export const NodePicker: React.FC<NodePickerProps> = ({
   pickedNodePosition,

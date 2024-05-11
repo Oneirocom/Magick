@@ -43,8 +43,7 @@ import { getConfigFromNodeSpec } from '../utils/getNodeConfig'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
-import { MagickEdgeType } from '../node/custom-edge'
-import { MagickNodeType } from '../node/base-node'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void

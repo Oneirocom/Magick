@@ -14,10 +14,10 @@ import { SpellInterfaceWithGraph } from 'server/schemas'
 import { RootState } from 'client/state'
 import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
-import CustomEdge, { MagickEdgeType } from '../node/custom-edge'
+import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { CommentNode } from '../nodeTypes/comment'
-import { MagickNodeType } from '../node/base-node'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 export type MagickReactFlowInstance = ReactFlowInstance<
   MagickNodeType,

@@ -1,9 +1,8 @@
-import type { Node } from '@xyflow/react'
 import type { NodeSpecJSON } from '@magickml/behave-graph'
 import { categoryColorMap, colorHexMap, valueTypeColorMap } from './colors'
-import { MagickNodeType } from '../node/base-node'
+import { MagickNodeType } from '@magickml/client-types'
 
-function getCategory(node: Node, specJson: NodeSpecJSON[]) {
+function getCategory(node: MagickNodeType, specJson: NodeSpecJSON[]) {
   return (
     (specJson.find(spec => spec.type === node.type)
       ?.category as NodeSpecJSON['category']) ||
