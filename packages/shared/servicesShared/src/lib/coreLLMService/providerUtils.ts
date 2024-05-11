@@ -1,63 +1,56 @@
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { UserResponse } from '../userService/types'
-import { AllModels } from './types/models'
-import {
-  LLMProviderKeys,
-  LLMProviders,
-  ProviderRecord,
-} from './types/providerTypes'
-import { providers } from './types/providers'
-
-export function findProvider(model: AllModels): ProviderRecord | undefined {
-  for (const providerKey in providers) {
-    const provider = providers[providerKey]
-    if (provider.allModels.includes(model)) {
-      return provider
-    }
-  }
-  return undefined
-}
+import { Model } from './types/models'
 
 export function getProvidersWithUserKeys(
-  keys: LLMProviderKeys[]
-): LLMProviders[] {
-  const provider = Object.values(providers)
-    .filter(provider => keys.includes(provider.keyName))
-    .map(provider => provider.provider)
-  return provider
+  providerData: Record<string, { models: Model[]; apiKey: string }>,
+  credentials: { name: string }[]
+): Record<string, { models: Model[]; apiKey: string }> {
+  const providerApiKeys = Object.keys(providerData)?.map(
+    provider => providerData[provider].apiKey
+  )
+  const userKeys = credentials?.map(cred => cred.name) || []
+
+  const providerUserKeyMatch = providerApiKeys.filter(apiKey =>
+    userKeys.includes(apiKey)
+  )
+
+  const providersWithKeys =
+    Object.keys(providerData)
+      ?.map(provider => {
+        if (providerUserKeyMatch.includes(providerData[provider].apiKey)) {
+          return {
+            [provider]: {
+              models: providerData[provider].models,
+              apiKey: providerData[provider].apiKey,
+            },
+          }
+        }
+      })
+      ?.filter(Boolean) || []
+
+  const providersWithUserKeys = providersWithKeys.reduce((acc, curr) => {
+    return { ...acc, ...curr }
+  }, {})
+  return providersWithUserKeys
 }
-
-export function removeFirstVendorTag(modelName) {
-  // Define a regex pattern to match the first vendor tag
-  const prefixPattern = /^([^/]+\/)?(.+)$/
-
-  // Use regex to extract the model name without the first vendor tag
-  const match = modelName.match(prefixPattern)
-  if (match && match.length === 3) {
-    return match[2] // The second capture group is the model name without the first vendor tag
-  }
-  // If no tag is found, return the original model name
-  return modelName
-}
-
 export function isModelAvailableToUser({
   userData,
   model,
-  modelsWithKeys,
+  providersWithUserKeys,
 }: {
   userData: UserResponse
-  model: AllModels
-  modelsWithKeys: AllModels[]
+  model: Model
+  providersWithUserKeys: Record<string, { models: Model[]; apiKey: string }>
 }): boolean {
+  console.log('AVAILABLE', { userData, model, providersWithUserKeys })
+
   if (userData && userData.user) {
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName?.trim()
-      //TODO: Update this when Aspirant is used
+
       if (userSubscriptionName === PortalSubscriptions.NEOPHYTE) {
-        // Only models with keys are available for Journeyman subscription
         if (
-          //TODO: remove balance check
-          userData?.user?.balance > 0 ||
           userData?.user?.promoCredit > 0 ||
           userData?.user?.introCredit > 0
         ) {
@@ -65,19 +58,47 @@ export function isModelAvailableToUser({
           return true
         }
       }
-      if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
-        // Only models with keys are available for Apprentice subscription
-        const hasBalance = userData.user.balance > 0
-        return hasBalance ? true : modelsWithKeys.includes(model)
-      }
+
       if (userSubscriptionName === PortalSubscriptions.WIZARD) {
         // All models are available for Wizard subscription
         return true
+      }
+
+      if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
+        const modelMatch =
+          providersWithUserKeys[model.provider.provider_name]?.models.includes(
+            model
+          )
+
+        if (modelMatch) {
+          return true
+        } else {
+          // The user hasn't supplied their own API key for the model's provider
+          return false
+        }
       }
     } else {
       return false
     }
   }
+
   // If no subscription and no balance, model is not available
   return false
+}
+
+export function groupModelsByProvider(models: Model[]) {
+  const providers: Record<string, { models: Model[]; apiKey: string }> = {}
+  for (const model of models) {
+    const providerName = model.provider.provider_name
+    const providerKey = model.provider.api_key
+
+    if (!providers[providerName]) {
+      providers[providerName] = {
+        apiKey: providerKey,
+        models: [],
+      }
+    }
+    providers[providerName].models.push(model)
+  }
+  return providers
 }
