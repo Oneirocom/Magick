@@ -468,32 +468,27 @@ export const useFlowHandlers = ({
           clientY = e.touches[0].clientY
         }
 
-        const nodePickerWidth = 240 // Set the fixed width of the node picker
-        const nodePickerHeight = 251 // Set the fixed height of the node picker
+        const nodePickerWidth = 240
+        const nodePickerHeight = 251
 
-        // Calculate initial positions relative to the parent container
-        let xPosition = clientX - bounds.left
-        let yPosition = clientY - bounds.top
+        // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
+        let xNodePickerPosition = clientX - bounds.left
+        let yNodePickerPosition = clientY - bounds.top
 
-        // Adjust if the node picker would open off the right side of the viewport
-        if (xPosition + nodePickerWidth > bounds.width) {
-          xPosition = bounds.width - nodePickerWidth
+        const { x: xPosition, y: yPosition } = screenToFlowPosition({
+          x: clientX,
+          y: clientY,
+        })
+
+        // Adjust if the context menu would open off the right side of the viewport
+        if (xNodePickerPosition + nodePickerWidth > bounds.width) {
+          xNodePickerPosition = bounds.width - nodePickerWidth * 1.05
         }
 
-        // Adjust if the node picker would open off the bottom of the viewport
-        if (yPosition + nodePickerHeight > bounds.height) {
-          yPosition = bounds.height - nodePickerHeight
+        // Adjust if the context menu would open off the bottom of the viewport
+        if (yNodePickerPosition + nodePickerHeight > bounds.height) {
+          yNodePickerPosition = bounds.height - nodePickerHeight * 1.05
         }
-
-        // Ensure the node picker stays within the visible area of the viewport
-        xPosition = Math.max(
-          0,
-          Math.min(xPosition, window.innerWidth - nodePickerWidth)
-        )
-        yPosition = Math.max(
-          0,
-          Math.min(yPosition, window.innerHeight - nodePickerHeight)
-        )
 
         setPickedNodeVisibility({
           x: xPosition,
@@ -502,8 +497,8 @@ export const useFlowHandlers = ({
 
         if (!currentKeyPressed) {
           setNodePickerPosition({
-            x: xPosition + bounds.left,
-            y: yPosition + bounds.top,
+            x: Math.max(0, xNodePickerPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
+            y: Math.max(0, yNodePickerPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
           })
         }
 
@@ -581,26 +576,31 @@ export const useFlowHandlers = ({
           const nodePickerHeight = 251
 
           // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
-          let xPosition = mouseClick.clientX - bounds.left
-          let yPosition = mouseClick.clientY - bounds.top
+          let xNodePickerPosition = mouseClick.clientX - bounds.left
+          let yNodePickerPosition = mouseClick.clientY - bounds.top
+
+          const { x: xPosition, y: yPosition } = screenToFlowPosition({
+            x: mouseClick.clientX,
+            y: mouseClick.clientY,
+          })
 
           // Adjust if the context menu would open off the right side of the viewport
-          if (xPosition + nodePickerWidth > bounds.width) {
-            xPosition = bounds.width - nodePickerWidth * 1.05
+          if (xNodePickerPosition + nodePickerWidth > bounds.width) {
+            xNodePickerPosition = bounds.width - nodePickerWidth * 1.05
           }
 
           // Adjust if the context menu would open off the bottom of the viewport
-          if (yPosition + nodePickerHeight > bounds.height) {
-            yPosition = bounds.height - nodePickerHeight * 1.05
+          if (yNodePickerPosition + nodePickerHeight > bounds.height) {
+            yNodePickerPosition = bounds.height - nodePickerHeight * 1.05
           }
 
           setPickedNodeVisibility({
-            x: Math.max(0, xPosition), // Prevent negative values
-            y: Math.max(0, yPosition), // Prevent negative values
+            x: xPosition,
+            y: yPosition,
           })
           setNodePickerPosition({
-            x: Math.max(0, xPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
-            y: Math.max(0, yPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
+            x: Math.max(0, xNodePickerPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
+            y: Math.max(0, yNodePickerPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
           })
         }
       },
