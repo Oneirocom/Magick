@@ -21,10 +21,7 @@ export const SearchResults = ({
             onMouseEnter={() => setFocusedIndex(index)}
             onClick={() => {
               if (!pickedNodePosition) return
-              onPickNode(
-                type,
-                instance.screenToFlowPosition(pickedNodePosition)
-              )
+              onPickNode(type, pickedNodePosition)
             }}
           >
             <div className="">{type}</div>
