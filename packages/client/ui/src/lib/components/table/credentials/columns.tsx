@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../../../core/ui'
-import { useConfig } from '@magickml/providers'
 import { useDeleteCredentialMutation } from 'client/state'
 
 export type Credential = {
@@ -92,11 +91,13 @@ export const columns: ColumnDef<Credential>[] = [
 ]
 
 const ActionsCell = ({ credential }: { credential: Credential }) => {
-  const { projectId } = useConfig()
   const [deleteCredential] = useDeleteCredentialMutation()
 
   const handleDelete = async () => {
-    await deleteCredential({ credentialId: credential.id, projectId })
+    await deleteCredential({
+      credentialId: credential.id,
+      projectId: credential.projectId,
+    })
   }
 
   return (
