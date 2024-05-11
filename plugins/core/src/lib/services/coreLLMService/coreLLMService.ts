@@ -5,6 +5,7 @@ import { LLMCredential } from 'servicesShared'
 import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
 import OpenAI from 'openai'
+import { ChatCompletionStreamParams } from 'openai/lib/ChatCompletionStream'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -26,7 +27,7 @@ export class CoreLLMService implements ICoreLLMService {
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
     this.openAISDK = new OpenAI({
-      baseURL: 'https://api.keywordsai.co/api/',
+      baseURL: process.env['KEYWORDS_API_URL'],
       apiKey: process.env['KEYWORDS_API_KEY'],
     })
   }
@@ -54,6 +55,7 @@ export class CoreLLMService implements ICoreLLMService {
     while (attempts < maxRetries) {
       try {
         const userData = await this.userService.getUser()
+
         const credential = await this.getCredentialForUser({
           userData,
           model: request.model,
@@ -64,8 +66,8 @@ export class CoreLLMService implements ICoreLLMService {
           throw new Error('No credential found')
         }
 
-        const body = {
-          model: request.model.model_name,
+        const _body = {
+          model: request.model,
           messages: request.messages,
           ...request.options,
           stream: true,
@@ -73,6 +75,11 @@ export class CoreLLMService implements ICoreLLMService {
             customer_identifier: userData.user.id,
           },
         }
+
+        // filter and remove undefined values
+        const body = Object.fromEntries(
+          Object.entries(_body).filter(([, v]) => v !== undefined)
+        ) as ChatCompletionStreamParams
 
         const stream = await this.openAISDK.beta.chat.completions.stream(body)
 
