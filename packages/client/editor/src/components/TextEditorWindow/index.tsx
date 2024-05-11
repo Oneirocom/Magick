@@ -5,16 +5,15 @@ import { useDebounce } from 'use-debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
 import {
-  selectActiveNode,
   selectActiveInput,
   setActiveInput,
 } from 'client/state'
 import { MagickNodeType, useChangeNodeData } from '@magickml/flow-core'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
-import { useOnSelectionChange, Node } from '@xyflow/react'
+import { useOnSelectionChange } from '@xyflow/react'
 
-const TextEditor = props => {
+const TextEditor = () => {
   const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
   const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
