@@ -9,17 +9,27 @@ import {
   selectActiveInput,
   setActiveInput,
 } from 'client/state'
-import { useChangeNodeData } from '@magickml/flow-core'
+import { MagickNodeType, useChangeNodeData } from '@magickml/flow-core'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
+import { useOnSelectionChange, Node } from '@xyflow/react'
 
 const TextEditor = props => {
   const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
+  const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
+
+  useOnSelectionChange({
+    onChange: ({ nodes }) => {
+      if (nodes.length > 1) {
+        setSelectedNode(null)
+        return
+      }
+      setSelectedNode(nodes[0])
+    },
+  })
 
   const [debouncedCode] = useDebounce(code, 2000)
-
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
 
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
