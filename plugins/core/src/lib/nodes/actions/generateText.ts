@@ -155,11 +155,14 @@ export const generateText = makeFlowNodeDefinition({
           messages.pop()
         }
 
+        // only add system message if it exists
         const allMessages = [
-          { role: 'system', content: system },
+          ...(system ? [{ role: 'system', content: system }] : []),
           ...messages,
           { role: 'user', content: prompt },
         ] as Message[]
+
+        console.log('Messages', allMessages)
 
         const request = {
           model,
@@ -168,8 +171,8 @@ export const generateText = makeFlowNodeDefinition({
           options: {
             temperature,
             top_p,
-            stop_sequences: stop ? [stop] : undefined,
-            base_url: customBaseUrl || undefined,
+            ...(stop ? { stop_sequences: [stop] } : {}),
+            ...(customBaseUrl ? { base_url: customBaseUrl } : {}),
             max_tokens,
           },
         }
