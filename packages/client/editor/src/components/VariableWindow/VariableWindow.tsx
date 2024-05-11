@@ -3,10 +3,6 @@ import { Tab, useConfig } from '@magickml/providers'
 import { Window } from 'client/core'
 import {
   selectGraphJson,
-  selectTabEdges,
-  selectTabNodes,
-  setEdges,
-  setNodes,
   useGetSpellByNameQuery,
   useSaveSpellMutation,
 } from 'client/state'
@@ -17,6 +13,7 @@ import { enqueueSnackbar } from 'notistack'
 import { Variable } from './Variable'
 import { useSelector } from 'react-redux'
 import { Button, Input } from '@magickml/client-ui'
+import { useReactFlow } from '@xyflow/react'
 
 type Props = IDockviewPanelProps<{
   tab: Tab
@@ -38,8 +35,7 @@ export const VariableWindow = (props: Props) => {
     }
   )
 
-  const nodes = useSelector(selectTabNodes(tab.id))
-  const edges = useSelector(selectTabEdges(tab.id))
+  const instance = useReactFlow()
 
   const [newVariableName, setNewVariableName] = useState<string>('')
   const graphJson = useSelector(selectGraphJson(tab.id))
@@ -56,32 +52,31 @@ export const VariableWindow = (props: Props) => {
     }
   }, [spell])
 
-  const deleteAllVariableNodes = useCallback(
-    (variable: VariableJSON) => {
-      // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName'
-      const regex = new RegExp(`variables/(set|get)/${variable.name}`)
+  const deleteAllVariableNodes = useCallback((variable: VariableJSON) => {
+    // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName'
+    const regex = new RegExp(`variables/(set|get)/${variable.name}`)
+    const nodes = instance.getNodes()
+    const edges = instance.getEdges()
 
-      // Filter nodes to get the new list without the matched nodes
-      const newNodes = nodes.filter(node => node.type && !regex.test(node.type))
+    // Filter nodes to get the new list without the matched nodes
+    const newNodes = nodes.filter(node => node.type && !regex.test(node.type))
 
-      // Get the ids of nodes that match the regex
-      const removedNodes = nodes
-        .filter(node => node.type && regex.test(node.type))
-        .map(node => node.id)
+    // Get the ids of nodes that match the regex
+    const removedNodes = nodes
+      .filter(node => node.type && regex.test(node.type))
+      .map(node => node.id)
 
-      // Filter edges to remove any that are connected to the removed nodes
-      const newEdges = edges.filter(
-        edge =>
-          !removedNodes.includes(edge.source) &&
-          !removedNodes.includes(edge.target)
-      )
+    // Filter edges to remove any that are connected to the removed nodes
+    const newEdges = edges.filter(
+      edge =>
+        !removedNodes.includes(edge.source) &&
+        !removedNodes.includes(edge.target)
+    )
 
-      // Uncomment these lines if you want to update state
-      setNodes(tab.id, newNodes)
-      setEdges(tab.id, newEdges)
-    },
-    [nodes, edges]
-  )
+    // Uncomment these lines if you want to update state
+    instance.setNodes(newNodes)
+    instance.setEdges(newEdges)
+  }, [])
 
   const saveVariable = useCallback(
     (variable: VariableJSON) => {
