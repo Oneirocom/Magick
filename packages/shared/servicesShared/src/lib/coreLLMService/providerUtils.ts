@@ -32,7 +32,10 @@ export function getProvidersWithUserKeys(
   const providersWithUserKeys = providersWithKeys.reduce((acc, curr) => {
     return { ...acc, ...curr }
   }, {})
-  return providersWithUserKeys
+  return providersWithUserKeys as Record<
+    string,
+    { models: Model[]; apiKey: string }
+  >
 }
 export function isModelAvailableToUser({
   userData,
