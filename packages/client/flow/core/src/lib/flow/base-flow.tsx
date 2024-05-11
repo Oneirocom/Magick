@@ -121,7 +121,6 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   const [miniMapOpen, setMiniMapOpen] = React.useState(false)
 
   useEffect(() => {
-    console.log('last state event')
     if (!lastStateEvent || lastStateEvent.spellId !== spell.id) return
     if (!lastStateEvent.state) return
 
