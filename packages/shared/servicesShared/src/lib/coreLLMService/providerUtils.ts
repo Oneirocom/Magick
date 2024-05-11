@@ -6,36 +6,29 @@ export function getProvidersWithUserKeys(
   providerData: Record<string, { models: Model[]; apiKey: string }>,
   credentials: { name: string }[]
 ): Record<string, { models: Model[]; apiKey: string }> {
-  const providerApiKeys = Object.keys(providerData)?.map(
+  const providerApiKeys = Object.keys(providerData).map(
     provider => providerData[provider].apiKey
   )
-  const userKeys = credentials?.map(cred => cred.name) || []
+
+  const userKeys = credentials.map(cred => cred.name)
 
   const providerUserKeyMatch = providerApiKeys.filter(apiKey =>
     userKeys.includes(apiKey)
   )
 
-  const providersWithKeys =
-    Object.keys(providerData)
-      ?.map(provider => {
-        if (providerUserKeyMatch.includes(providerData[provider].apiKey)) {
-          return {
-            [provider]: {
-              models: providerData[provider].models,
-              apiKey: providerData[provider].apiKey,
-            },
-          }
-        }
-      })
-      ?.filter(Boolean) || []
+  const providersWithKeys = Object.keys(providerData).reduce<
+    Record<string, { models: Model[]; apiKey: string }>
+  >((acc, provider) => {
+    const { models, apiKey } = providerData[provider]
 
-  const providersWithUserKeys = providersWithKeys.reduce((acc, curr) => {
-    return { ...acc, ...curr }
+    if (providerUserKeyMatch.includes(apiKey)) {
+      acc[provider] = { models, apiKey }
+    }
+
+    return acc
   }, {})
-  return providersWithUserKeys as Record<
-    string,
-    { models: Model[]; apiKey: string }
-  >
+
+  return providersWithKeys
 }
 export function isModelAvailableToUser({
   userData,
