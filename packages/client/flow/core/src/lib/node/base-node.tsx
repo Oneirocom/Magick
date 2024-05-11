@@ -1,11 +1,6 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  Node,
-  NodeProps as FlowNodeProps,
-  useEdges,
-  useUpdateNodeInternals,
-} from '@xyflow/react'
+import { Node, NodeProps as FlowNodeProps, useEdges } from '@xyflow/react'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'
@@ -47,7 +42,6 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   onResetNodeState,
   spellEvent,
 }: BaseNodeProps) => {
-  const updateNodeInternals = useUpdateNodeInternals()
   const [socketsVisible, setSocketsVisible] = useState(true)
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
@@ -88,10 +82,6 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     if (!data.nodeSpec) {
       handleChange('nodeSpec', spec)
     }
-  }, [data])
-
-  useEffect(() => {
-    updateNodeInternals(id)
   }, [data])
 
   const { configuration: config } = data

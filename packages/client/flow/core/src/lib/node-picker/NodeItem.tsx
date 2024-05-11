@@ -21,7 +21,7 @@ export const NodeItem = ({
   const [isOpen, setIsOpen] = useState(false)
 
   const handleClick = ({ item }) => {
-    onPickNode(item, instance.screenToFlowPosition(pickedNodePosition))
+    onPickNode(item, pickedNodePosition)
   }
 
   if (!item) return <></>

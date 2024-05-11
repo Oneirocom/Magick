@@ -15,6 +15,9 @@ export const behaveToFlow = (
   const edges: MagickEdgeType[] = []
   const nodeSpecs = getNodeSpec()
 
+  // Start logging time for performance
+  console.time('behaveToFlow')
+
   graph?.data?.comments?.forEach(comment => {
     nodes.push({
       id: comment.id,
@@ -115,7 +118,10 @@ export const behaveToFlow = (
         })
       }
     }
+
+    // finish logging performance time
   })
+  console.timeEnd('behaveToFlow')
 
   return [nodes, edges]
 }

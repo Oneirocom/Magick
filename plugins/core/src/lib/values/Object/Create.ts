@@ -1,10 +1,10 @@
 import {
   NodeCategory,
   SocketsList,
-  makeFlowNodeDefinition,
+  makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 
-export const ObjectCreate = makeFlowNodeDefinition({
+export const ObjectCreate = makeFunctionNodeDefinition({
   typeName: 'action/object/create',
   category: NodeCategory.Action,
   label: 'Object Create',
@@ -23,7 +23,7 @@ export const ObjectCreate = makeFlowNodeDefinition({
     },
   },
   in: configuration => {
-    const startSockets: SocketsList = [{ key: 'flow', valueType: 'flow' }]
+    const startSockets: SocketsList = []
 
     const socketArray = configuration?.socketInputs.length
       ? configuration.socketInputs
@@ -41,11 +41,9 @@ export const ObjectCreate = makeFlowNodeDefinition({
     return [...startSockets, ...sockets]
   },
   out: {
-    flow: 'flow',
     object: 'object',
   },
-  initialState: undefined,
-  triggered: async ({ commit, read, write, configuration }) => {
+  exec: async ({ read, write, configuration }) => {
     const newArray = configuration.socketInputs.reduce((acc, socketInput) => {
       const item = read(socketInput.name)
       acc[socketInput.name] = item
@@ -53,6 +51,5 @@ export const ObjectCreate = makeFlowNodeDefinition({
     }, {})
 
     write('object', newArray)
-    commit('flow')
   },
 })

@@ -15,7 +15,7 @@ import { ValueType } from './ValueType'
 import { DefaultConfig } from './DefaultConfig'
 import { CompletionProviderOptions } from './CompletionProviderOptions'
 import { SelectedEvents } from './SelectedEvents'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Props = {
   tab: Tab
@@ -68,7 +68,7 @@ export const PropertiesWindow = (props: Props) => {
 
   const handleChange = useChangeNodeData(selectedNode?.id)
 
-  const nodeSpecs = getNodeSpec()
+  const nodeSpecs = useMemo(() => getNodeSpec(), [])
 
   useEffect(() => {
     if (!nodeSpecs) return

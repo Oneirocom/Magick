@@ -4646,17 +4646,8 @@
     "type": "action/object/create",
     "category": "Action",
     "label": "Object Create",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
+    "inputs": [],
     "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
       {
         "name": "object",
         "valueType": "object"
