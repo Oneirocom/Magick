@@ -1,5 +1,5 @@
 import { GraphJSON } from '@magickml/behave-graph'
-import { MagickEdgeType, MagickNodeType } from '@magickml/flow-core'
+import { MagickNodeType, MagickEdgeType } from '@magickml/client-types'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import {
   applyEdgeChanges,

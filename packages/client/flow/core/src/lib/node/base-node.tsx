@@ -9,8 +9,7 @@ import { isHandleConnected } from '../utils/isHandleConnected'
 // import { getConfig } from '../utils/getNodeConfig'
 import { configureSockets } from '../utils/configureSockets'
 import NodeContainer from './node-container'
-
-export type MagickNodeType = Node<Record<string, any>, string>
+import { MagickNodeType } from '@magickml/client-types'
 
 type BaseNodeProps = FlowNodeProps<MagickNodeType> & {
   spec: NodeSpecJSON

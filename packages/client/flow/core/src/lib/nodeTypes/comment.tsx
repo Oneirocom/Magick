@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { NodeResizer, NodeProps, OnResize } from '@xyflow/react'
 import { useChangeNodeData } from '../hooks'
-import { MagickNodeType } from '../node/base-node'
+import { MagickNodeType } from '@magickml/client-types'
 
 const CommentNodeRaw = ({ data, selected, id }: NodeProps<MagickNodeType>) => {
   const [isEditing, setIsEditing] = useState(false)

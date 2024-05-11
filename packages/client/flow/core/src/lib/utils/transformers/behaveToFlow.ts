@@ -4,8 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'
 import { SpellInterface } from 'server/schemas'
-import { MagickNodeType } from '../../node/base-node'
-import { MagickEdgeType } from '../../node/custom-edge'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 export const behaveToFlow = (
   graph: GraphJSON,
