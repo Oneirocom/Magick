@@ -82,6 +82,7 @@ import { DoOnceAsync } from './nodes/flow/doOnceAsync'
 import { arrayIncludes } from './values/Array/Includes'
 import { getManyVariables } from './nodes/query/getManyVariables'
 import { LLMProviderKeys } from 'servicesShared'
+import { arrayAccess } from './values/Array/Access'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -104,6 +105,7 @@ export class CorePlugin extends CoreEventsPlugin<
     addKnowledge,
     addMemory,
     addMessage,
+    arrayAccess,
     arrayIncludes,
     arrayClear,
     arrayCreate,

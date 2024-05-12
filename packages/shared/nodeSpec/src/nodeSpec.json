@@ -235,6 +235,30 @@
     "configuration": []
   },
   {
+    "type": "logic/array/access",
+    "category": "Logic",
+    "label": "Array Access",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "logic/array/includes",
     "category": "Logic",
     "label": "Includes",
