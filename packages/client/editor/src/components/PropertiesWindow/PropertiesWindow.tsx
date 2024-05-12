@@ -103,6 +103,7 @@ export const PropertiesWindow = (props: Props) => {
       ...configuration,
       [key]: value,
     }
+    setConfiguration(newConfig)
     handleChange('configuration', newConfig)
   }
 
@@ -111,6 +112,7 @@ export const PropertiesWindow = (props: Props) => {
       ...configuration,
       ...keys,
     }
+    setConfiguration(newConfig)
     handleChange('configuration', newConfig)
   }
 
