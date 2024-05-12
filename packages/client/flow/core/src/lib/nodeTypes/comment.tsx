@@ -45,7 +45,7 @@ const CommentNodeRaw = ({ data, selected, id }: NodeProps<MagickNodeType>) => {
       <NodeResizer
         onResize={onResize}
         color="#ff0071"
-        isVisible={selected}
+        isVisible={selected || false}
         minWidth={100}
         minHeight={30}
       />
