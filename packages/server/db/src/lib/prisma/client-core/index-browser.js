@@ -312,7 +312,7 @@ exports.Prisma.WebhookScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.SeraphEventScalarFieldEnum = {
+exports.Prisma.SeraphEventsScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
@@ -517,7 +517,7 @@ exports.Prisma.WebhookOrderByRelevanceFieldEnum = {
   url: 'url'
 };
 
-exports.Prisma.SeraphEventOrderByRelevanceFieldEnum = {
+exports.Prisma.seraphEventsOrderByRelevanceFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
@@ -570,7 +570,7 @@ exports.Prisma.ModelName = {
   spells: 'spells',
   tasks: 'tasks',
   Webhook: 'Webhook',
-  SeraphEvent: 'SeraphEvent',
+  seraphEvents: 'seraphEvents',
   Memory: 'Memory'
 };
 
