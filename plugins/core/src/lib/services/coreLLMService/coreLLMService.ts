@@ -1,4 +1,4 @@
-import { ICoreLLMService } from 'servicesShared'
+import { ICoreLLMService, UserResponse } from 'servicesShared'
 import { CoreUserService } from '../userService/coreUserService'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { LLMCredential } from 'servicesShared'
@@ -6,6 +6,7 @@ import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
 import OpenAI from 'openai'
 import { ChatCompletionStreamParams } from 'openai/lib/ChatCompletionStream'
+import pino from 'pino'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -20,7 +21,8 @@ export class CoreLLMService implements ICoreLLMService {
   protected agentId: string
   protected userService: CoreUserService
   protected openAISDK: OpenAI
-  protected logger: any
+  protected logger: pino.Logger<pino.LoggerOptions> | undefined
+  protected userData: UserResponse | undefined
 
   constructor({ projectId, agentId }: ConstructorParams) {
     this.projectId = projectId
@@ -35,6 +37,8 @@ export class CoreLLMService implements ICoreLLMService {
   async initialize() {
     try {
       this.logger = getLogger()
+      const userData = await this.userService.getUser()
+      this.userData = userData
     } catch (error: any) {
       console.error('Error initializing CoreLLMService:', error)
       throw error
@@ -52,9 +56,15 @@ export class CoreLLMService implements ICoreLLMService {
 
     const startTime = Date.now()
 
-    while (attempts < maxRetries) {
+    const actualMaxRetries = Math.max(1, maxRetries)
+
+    while (attempts < actualMaxRetries) {
       try {
-        const userData = await this.userService.getUser()
+        const userData =
+          attempts > 0 && !this.userData?.user.useWallet
+            ? await this.userService.getUser()
+            : this.userData
+
         const providerApiKeyName = request.providerApiKeyName
 
         const credential = await this.getCredentialForUser({
@@ -73,7 +83,17 @@ export class CoreLLMService implements ICoreLLMService {
           ...request.options,
           stream: true,
           extra_body: {
-            customer_identifier: userData.user.id,
+            // Spend from mp until empty then use wallet
+            customer_identifier: userData?.user.useWallet
+              ? userData?.user.walletUser?.customer_identifier
+              : userData?.user.mpUser?.customer_identifier,
+
+            customer_credentials: {
+              // this provider should be the id field of the provider
+              [request.provider]: {
+                api_key: credential,
+              },
+            },
           },
         }
 
@@ -117,7 +137,7 @@ export class CoreLLMService implements ICoreLLMService {
       } catch (error) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
         attempts++
-        if (attempts < maxRetries) {
+        if (attempts < actualMaxRetries) {
           await sleep(delayMs)
         } else {
           throw error
