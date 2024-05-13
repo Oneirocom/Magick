@@ -39,8 +39,6 @@ export function isModelAvailableToUser({
   model: Model
   providersWithUserKeys: Record<string, { models: Model[]; apiKey: string }>
 }): boolean {
-  console.log('AVAILABLE', { userData, model, providersWithUserKeys })
-
   if (userData && userData.user) {
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName?.trim()

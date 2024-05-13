@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import { useConfig } from '@magickml/providers'
-import {
-  useListCredentialsQuery,
-  useGetUserQuery,
-  selectActiveNode,
-} from 'client/state'
+import { useListCredentialsQuery, useGetUserQuery } from 'client/state'
 import {
   isModelAvailableToUser,
   groupModelsByProvider,
@@ -19,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
-import { useSelector } from 'react-redux'
 
 export const CompletionProviderOptions: React.FC<
   ConfigurationComponentProps
@@ -43,7 +38,6 @@ export const CompletionProviderOptions: React.FC<
   const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery({
     projectId: config.projectId,
   })
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,15 +49,30 @@ export const CompletionProviderOptions: React.FC<
         const { models } = data
 
         const groupedModels = groupModelsByProvider(models)
-
         setProviderData(groupedModels)
 
         if (userData) {
-          setSelectedProvider(props.fullConfig.modelProvider || '')
-          setSelectedModel(props.fullConfig.model || '')
-          setActiveModels(
-            groupedModels[props.fullConfig.modelProvider].models || []
-          )
+          let modelProvider = props.fullConfig.modelProvider
+          const model = props.fullConfig.model
+
+          if (!groupedModels[props.fullConfig.modelProvider]) {
+            // set up fallback for the model provider in case config is wrong
+            props.updateConfigKey('modelProvider', 'OpenAI')
+            modelProvider = 'OpenAI'
+          }
+
+          setSelectedProvider(modelProvider || 'OpenAI')
+          setSelectedModel(model || 'gpt-3.5-turbo')
+          setActiveModels(groupedModels[modelProvider].models || [])
+
+          // If the API key has not been set, set it to the key name
+          // We need this for backwards compatibility
+          if (!props.fullConfig.modelProviderApiKey) {
+            props.updateConfigKey(
+              'providerApiKeyName',
+              groupedModels[modelProvider].apiKey
+            )
+          }
         }
 
         setIsLoading(false)
@@ -77,11 +86,11 @@ export const CompletionProviderOptions: React.FC<
   }, [userData])
 
   useEffect(() => {
-    if (selectedNode && selectedNode.id === lastActiveNodeId) return
-    setLastActiveNodeId(selectedNode?.id || '')
+    if (props.node && props.node.id === lastActiveNodeId) return
+    setLastActiveNodeId(props.node?.id || '')
     setSelectedProvider(props.fullConfig.modelProvider || '')
     setSelectedModel(props.fullConfig.model || '')
-  }, [selectedNode])
+  }, [props.node])
 
   useEffect(() => {
     setSelectedProvider(props.fullConfig.modelProvider || '')
@@ -110,7 +119,11 @@ export const CompletionProviderOptions: React.FC<
 
   const onSelectProvider = (provider: string) => {
     setSelectedProvider(provider)
-    props.updateConfigKey('modelProvider', provider)
+
+    props.updateConfigKeys({
+      modelProvider: provider,
+      providerApiKeyName: providerData[provider]?.apiKey || '',
+    })
   }
 
   if (isLoading || isUserDataLoading || !userData) {
