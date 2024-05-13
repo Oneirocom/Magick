@@ -165,7 +165,7 @@ export const CompletionProviderOptions: React.FC<
             <SelectTrigger>
               <SelectValue placeholder="Select a model" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-60 overflow-y-auto">
               {activeModels.map(model => {
                 const isAvailable = isModelAvailableToUser({
                   userData,
