@@ -1,4 +1,4 @@
-import { ICoreLLMService, LLMProviderKeys } from 'servicesShared'
+import { ICoreLLMService } from 'servicesShared'
 import { CoreUserService } from '../userService/coreUserService'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { LLMCredential } from 'servicesShared'
@@ -55,11 +55,12 @@ export class CoreLLMService implements ICoreLLMService {
     while (attempts < maxRetries) {
       try {
         const userData = await this.userService.getUser()
+        const providerApiKeyName = request.providerApiKeyName
 
         const credential = await this.getCredentialForUser({
           userData,
+          providerApiKeyName,
           model: request.model,
-          provider: request.provider,
         })
 
         if (!credential) {
@@ -141,12 +142,12 @@ export class CoreLLMService implements ICoreLLMService {
 
   private getCredentialForUser = async ({
     userData,
+    providerApiKeyName,
     model,
-    provider,
   }: {
     userData: any
     model: string
-    provider: string
+    providerApiKeyName: string
   }) => {
     const isFineTune = model.includes('ft')
 
@@ -154,9 +155,7 @@ export class CoreLLMService implements ICoreLLMService {
       return this.credentials.find(c => c.serviceType === model)?.value
     }
 
-    const providerKey =
-      LLMProviderKeys[provider as keyof typeof LLMProviderKeys]
-    if (!providerKey) {
+    if (!providerApiKeyName) {
       throw new Error(`No provider key found for ${model}`)
     }
     let credential
@@ -171,7 +170,9 @@ export class CoreLLMService implements ICoreLLMService {
       if (userSubscriptionName === PortalSubscriptions.WIZARD) {
         credential = MAGICK_API_KEY
       } else if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
-        credential = this.credentials.find(c => c.name === providerKey)?.value
+        credential = this.credentials.find(
+          c => c.name === providerApiKeyName
+        )?.value
       } else {
         if (userData.user.balance > 0 || userData.user.promoCredit > 0) {
           credential = MAGICK_API_KEY

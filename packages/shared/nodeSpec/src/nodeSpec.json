@@ -1073,7 +1073,12 @@
       {
         "name": "modelProvider",
         "valueType": "string",
-        "defaultValue": "openai"
+        "defaultValue": "OpenAI"
+      },
+      {
+        "name": "providerApiKeyName",
+        "valueType": "string",
+        "defaultValue": "OPENAI_API_KEY"
       },
       {
         "name": "models",
@@ -1098,7 +1103,8 @@
           "modelProvider",
           "model",
           "models",
-          "customBaseUrl"
+          "customBaseUrl",
+          "providerApiKeyName"
         ]
       }
     ]

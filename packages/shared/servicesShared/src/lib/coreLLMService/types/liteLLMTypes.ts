@@ -49,6 +49,7 @@ export type CompletionOptions = {
 
 export type CompletionRequest = {
   model: Model
+  providerApiKey?: string
   messages: ChatCompletionMessageParam[]
   options?: CompletionOptions
   api_key?: string

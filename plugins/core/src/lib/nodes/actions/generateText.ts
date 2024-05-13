@@ -22,7 +22,11 @@ export const generateText = makeFlowNodeDefinition({
     },
     modelProvider: {
       valueType: 'string',
-      defaultValue: 'openai',
+      defaultValue: 'OpenAI',
+    },
+    providerApiKeyName: {
+      valueType: 'string',
+      defaultValue: 'OPENAI_API_KEY',
     },
     models: {
       valueType: 'array',
@@ -44,6 +48,7 @@ export const generateText = makeFlowNodeDefinition({
         'model',
         'models',
         'customBaseUrl',
+        'providerApiKeyName',
       ],
     },
   },
@@ -140,6 +145,8 @@ export const generateText = makeFlowNodeDefinition({
         const maxRetries: number = Number(read('maxRetries')) || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
+        const providerApiKeyName: string =
+          configuration.providerApiKeyName || undefined
         const max_tokens: number = Number(read('maxTokens')) || 256
         // const modelProvider: LLMProviders = configuration.modelProvider
         const model: string = read('modelOverride') || configuration.model
@@ -162,10 +169,9 @@ export const generateText = makeFlowNodeDefinition({
           { role: 'user', content: prompt },
         ] as Message[]
 
-        console.log('Messages', allMessages)
-
         const request = {
           model,
+          providerApiKeyName,
           messages: allMessages,
           provider: configuration.modelProvider,
           options: {
