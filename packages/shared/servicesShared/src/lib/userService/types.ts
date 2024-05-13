@@ -1,3 +1,4 @@
+import { ProxyUser } from '@magickml/portal-utils-server'
 import { z } from 'zod'
 
 export enum SubscriptionNames {
@@ -34,6 +35,9 @@ export interface User {
   subscriptionName?: SubscriptionNames
   promoCredit: number
   introCredit: number
+  mpUser: ProxyUser
+  walletUser: ProxyUser
+  useWallet: boolean
 }
 
 export interface UserResponse {
