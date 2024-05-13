@@ -19,8 +19,12 @@ import {
 export const CompletionProviderOptions: React.FC<
   ConfigurationComponentProps
 > = props => {
-  const [selectedProvider, setSelectedProvider] = useState<string>('')
-  const [selectedModel, setSelectedModel] = useState('')
+  const [selectedProvider, setSelectedProvider] = useState<string>(
+    props.fullConfig.modelProvider || ''
+  )
+  const [selectedModel, setSelectedModel] = useState(
+    props.fullConfig.model || ''
+  )
   const [activeModels, setActiveModels] = useState<Model[]>([])
   const [providersWithUserKeys, setProvidersWithUserKeys] = useState<
     Record<string, { models: Model[]; apiKey: string }>
@@ -61,7 +65,7 @@ export const CompletionProviderOptions: React.FC<
             modelProvider = 'OpenAI'
           }
 
-          setSelectedProvider(modelProvider || 'OpenAI')
+          setSelectedProvider(modelProvider || 'openai')
           setSelectedModel(model || 'gpt-3.5-turbo')
           setActiveModels(groupedModels[modelProvider].models || [])
 
@@ -95,7 +99,7 @@ export const CompletionProviderOptions: React.FC<
   useEffect(() => {
     setSelectedProvider(props.fullConfig.modelProvider || '')
     setSelectedModel(props.fullConfig.model || '')
-  }, [props.fullConfig.modelProvider, props.fullConfig.model])
+  }, [props.fullConfig.modelProvider])
 
   useEffect(() => {
     if (!providerData) return
@@ -118,10 +122,11 @@ export const CompletionProviderOptions: React.FC<
   }
 
   const onSelectProvider = (provider: string) => {
+    const providerId = providerData[provider].models[0].provider.provider_id
     setSelectedProvider(provider)
 
     props.updateConfigKeys({
-      modelProvider: provider,
+      modelProvider: providerId,
       providerApiKeyName: providerData[provider]?.apiKey || '',
     })
   }
