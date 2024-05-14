@@ -6,6 +6,7 @@ import {
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { CORE_DEP_KEYS } from '../../config'
 import { IEventStore } from 'server/grimoire'
+import { getProviderIdMapping } from 'servicesShared'
 
 type Message = {
   role: string
@@ -149,15 +150,15 @@ export const generateText = makeFlowNodeDefinition({
         const providerApiKeyName: string =
           configuration.providerApiKeyName || undefined
         const max_tokens: number = Number(read('maxTokens')) || 256
-        // const modelProvider: LLMProviders = configuration.modelProvider
-        const model: string = read('modelOverride') || configuration.model
+        let modelProvider: string = getProviderIdMapping(
+          configuration.modelProvider
+        )
+        let model: string = read('modelOverride') || configuration.model
 
-        // Check for custom OpenAI and empty base URL
-        // if (modelProvider === LLMProviders.CustomOpenAI && !customBaseUrl) {
-        //   throw new Error(
-        //     'Custom base URL is required for Custom OpenAI provider'
-        //   )
-        // }
+        if (modelProvider === 'unsupported') {
+          modelProvider = 'openai'
+          model = 'gpt-3.5-turbo'
+        }
 
         if (messages[messages.length - 1]?.role === 'user') {
           messages.pop()
@@ -174,7 +175,7 @@ export const generateText = makeFlowNodeDefinition({
           model,
           providerApiKeyName,
           messages: allMessages,
-          provider: configuration.modelProvider,
+          provider: modelProvider,
           options: {
             temperature,
             top_p,
