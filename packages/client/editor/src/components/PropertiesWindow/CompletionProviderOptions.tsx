@@ -61,11 +61,11 @@ export const CompletionProviderOptions: React.FC<
 
           if (!groupedModels[props.fullConfig.modelProvider]) {
             // set up fallback for the model provider in case config is wrong
-            props.updateConfigKey('modelProvider', 'OpenAI')
-            modelProvider = 'OpenAI'
+            props.updateConfigKey('modelProvider', 'openai')
+            modelProvider = 'openai'
           }
 
-          setSelectedProvider(modelProvider || 'openai')
+          setSelectedProvider(modelProvider?.toLowerCase() || 'openai')
           setSelectedModel(model || 'gpt-3.5-turbo')
           setActiveModels(groupedModels[modelProvider].models || [])
 
