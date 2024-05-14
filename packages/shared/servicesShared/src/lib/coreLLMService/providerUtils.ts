@@ -5,6 +5,8 @@ import { Model } from './types/models'
 export const legacyProviderIdMapping = {
   openai: 'openai',
   azure_openai: 'azure_openai',
+  azure_openai_vision: 'azure_openai_vision',
+  google_palm: 'google_palm',
   anthropic: 'anthropic',
   sagemaker: 'unsupported',
   aws_bedrock: 'bedrock',
@@ -13,10 +15,11 @@ export const legacyProviderIdMapping = {
   vllm: 'unsupported',
   deepinfra: 'unsupported',
   cohere: 'cohere',
+  togetherai: 'togetherai',
+  openrouter: 'openrouter',
   together: 'togetherai',
   alephalpha: 'unsupported',
   baseten: 'unsupported',
-  openrouter: 'openrouter',
   customapi: 'unsupported',
   petals: 'unsupported',
   ollama: 'unsupported',
@@ -32,7 +35,12 @@ export const legacyProviderIdMapping = {
   meta: 'unsupported',
   mistralai: 'mistral',
   vertexai: 'google_vertex_ai',
+  mistral: 'mistral',
+  google_vertex_ai: 'google_vertex_ai',
+  google_gemini_ai: 'google_gemini_ai',
   groq: 'groq',
+  fireworks: 'fireworks',
+  bedrock: 'bedrock',
 }
 
 export const getProviderIdMapping = (providerId: string): string => {
