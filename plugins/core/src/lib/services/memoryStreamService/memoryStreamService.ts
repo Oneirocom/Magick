@@ -1,11 +1,5 @@
 import { EventEmitter } from 'events'
 import { v4 as uuidv4 } from 'uuid'
-import { PrismaClient } from '@prisma/client'
-import {
-  PrismaSqlFilter,
-  PrismaVectorStore,
-} from '@langchain/community/vectorstores/prisma'
-import { OpenAIEmbeddings } from '@langchain/openai'
 import { EventPayload } from 'server/plugin'
 import { prismaCore } from '@magickml/server-db'
 import { EventStore, SpellCaster } from 'server/grimoire'
@@ -26,33 +20,33 @@ export class MemoryStreamService extends EventEmitter {
   private agentId: string
   private spellCaster: SpellCaster
   private prisma: typeof prismaCore
-  private vectorStore: PrismaVectorStore<
-    Memory,
-    string,
-    {
-      id: true
-      content: true
-    },
-    PrismaSqlFilter<Memory>
-  >
+  // private vectorStore: PrismaVectorStore<
+  //   Memory,
+  //   string,
+  //   {
+  //     id: true
+  //     content: true
+  //   },
+  //   PrismaSqlFilter<Memory>
+  // >
 
   constructor(agentId: string, spellCaster: SpellCaster) {
     super()
     this.agentId = agentId
     this.spellCaster = spellCaster
     this.prisma = prismaCore
-    this.vectorStore = PrismaVectorStore.withModel<Memory>(this.prisma).create(
-      new OpenAIEmbeddings(),
-      {
-        prisma: this.prisma as PrismaClient,
-        tableName: 'Memory',
-        vectorColumnName: 'vector',
-        columns: {
-          id: PrismaVectorStore.IdColumn,
-          content: PrismaVectorStore.ContentColumn,
-        },
-      }
-    )
+    // this.vectorStore = PrismaVectorStore.withModel<Memory>(this.prisma).create(
+    //   new OpenAIEmbeddings(),
+    //   {
+    //     prisma: this.prisma as PrismaClient,
+    //     tableName: 'Memory',
+    //     vectorColumnName: 'vector',
+    //     columns: {
+    //       id: PrismaVectorStore.IdColumn,
+    //       content: PrismaVectorStore.ContentColumn,
+    //     },
+    //   }
+    // )
   }
 
   get eventStore(): EventStore {
@@ -117,7 +111,7 @@ export class MemoryStreamService extends EventEmitter {
   async deleteMemory(id: string) {
     // Delete from the database and vector store
     const deletedMemory = await this.prisma.memory.delete({ where: { id } })
-    await this.vectorStore.delete(deletedMemory)
+    // await this.vectorStore.delete(deletedMemory)
 
     this.emit('memoryDeleted', deletedMemory)
 
@@ -178,9 +172,9 @@ export class MemoryStreamService extends EventEmitter {
     })
   }
 
-  async similaritySearch(query: string, k: number) {
-    return this.vectorStore.similaritySearch(query, k)
-  }
+  // async similaritySearch(query: string, k: number) {
+  //   return this.vectorStore.similaritySearch(query, k)
+  // }
 }
 
 function generateUniqueId() {
