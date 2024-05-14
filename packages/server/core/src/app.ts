@@ -21,6 +21,7 @@ import {
   API_ACCESS_KEY,
   PAGINATE_MAX,
   PAGINATE_DEFAULT,
+  DATABASE_URL,
 } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
 
@@ -37,8 +38,6 @@ import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
 import { CredentialsManager } from 'server/credentials'
 import {
-  BashExecutor,
-  GitManager,
   MemoryRetrieval,
   MemoryStorageMiddleware,
   SeraphCore,
@@ -46,6 +45,7 @@ import {
 } from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
 import { stringify } from 'shared/utils'
+import Keyv from 'keyv'
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -68,6 +68,7 @@ declare module './declarations' {
     posthog: ReturnType<typeof createPosthogClient>
     credentialsManager: CredentialsManager
     seraphCore: SeraphCore
+    keyv: Keyv
   }
 }
 
@@ -91,8 +92,6 @@ export async function initApp(environment: Environment = 'default') {
   seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
   // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
   seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
-  seraph.registerCognitiveFunction(new BashExecutor(seraph))
-  seraph.registerCognitiveFunction(new GitManager(seraph))
 
   app.set('seraphCore', seraph)
 
@@ -131,6 +130,13 @@ export async function initApp(environment: Environment = 'default') {
     }
     await next()
   })
+
+  // set up global keyv
+  const keyv = new Keyv(DATABASE_URL, {
+    schema: 'keyv',
+  })
+
+  app.set('keyv', keyv)
 
   // sync up messages between the app and the runner
   logger.info('SETTING UP REDIS')
