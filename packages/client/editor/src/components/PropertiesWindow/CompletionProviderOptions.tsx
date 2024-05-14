@@ -47,7 +47,6 @@ export const CompletionProviderOptions: React.FC<
   useEffect(() => {
     if (!userData) return
     const fetchData = async () => {
-      console.log('Fetching models...')
       try {
         const response = await fetch(
           'https://api.keywordsai.co/api/models/public'

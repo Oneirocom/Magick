@@ -82,21 +82,16 @@ export class CoreLLMService implements ICoreLLMService {
           messages: request.messages,
           ...request.options,
           stream: true,
-          extra_body: {
-            // Spend from mp until empty then use wallet
-            customer_identifier: userData?.user.useWallet
-              ? userData?.user.walletUser?.customer_identifier
-              : userData?.user.mpUser?.customer_identifier,
-
-            customer_credentials: {
-              // this provider should be the id field of the provider
-              [request.provider]: {
-                api_key: credential,
-              },
+          customer_identifier: userData?.user.useWallet
+            ? userData?.user.walletUser?.customer_identifier
+            : userData?.user.mpUser?.customer_identifier,
+          customer_credentials: {
+            // this provider should be the id field of the provider
+            [request.provider]: {
+              api_key: credential,
             },
           },
         }
-
         // filter and remove undefined values
         const body = Object.fromEntries(
           Object.entries(_body).filter(([, v]) => v !== undefined)
