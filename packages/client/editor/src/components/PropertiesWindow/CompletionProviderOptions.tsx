@@ -7,6 +7,7 @@ import {
   groupModelsByProvider,
   Model,
   getProvidersWithUserKeys,
+  getProviderIdMapping,
 } from 'servicesShared'
 import {
   Select,
@@ -31,7 +32,7 @@ export const CompletionProviderOptions: React.FC<
   >({})
   const [lastActiveNodeId, setLastActiveNodeId] = useState<string | null>(null)
   const [providerData, setProviderData] = useState<
-    Record<string, { models: Model[]; apiKey: string }>
+    Record<string, { models: Model[]; apiKey: string; providerName: string }>
   >({})
   const [isLoading, setIsLoading] = useState(true)
 
@@ -44,7 +45,9 @@ export const CompletionProviderOptions: React.FC<
   })
 
   useEffect(() => {
+    if (!userData) return
     const fetchData = async () => {
+      console.log('Fetching models...')
       try {
         const response = await fetch(
           'https://api.keywordsai.co/api/models/public'
@@ -55,30 +58,41 @@ export const CompletionProviderOptions: React.FC<
         const groupedModels = groupModelsByProvider(models)
         setProviderData(groupedModels)
 
-        if (userData) {
-          let modelProvider = props.fullConfig.modelProvider
-          const model = props.fullConfig.model
+        let modelProvider = getProviderIdMapping(
+          props.fullConfig.modelProvider.toLowerCase()
+        )
 
-          if (!groupedModels[props.fullConfig.modelProvider]) {
-            // set up fallback for the model provider in case config is wrong
-            props.updateConfigKey('modelProvider', 'openai')
-            modelProvider = 'openai'
-          }
-
-          setSelectedProvider(modelProvider?.toLowerCase() || 'openai')
-          setSelectedModel(model || 'gpt-3.5-turbo')
-          setActiveModels(groupedModels[modelProvider].models || [])
-
-          // If the API key has not been set, set it to the key name
-          // We need this for backwards compatibility
-          if (!props.fullConfig.modelProviderApiKey) {
-            props.updateConfigKey(
-              'providerApiKeyName',
-              groupedModels[modelProvider].apiKey
-            )
-          }
+        let model = props.fullConfig.model
+        let updateConfig = false
+        if (modelProvider === 'unsupported') {
+          // set up fallback for the model provider in case config is wrong
+          modelProvider = 'openai'
+          model = 'gpt-3.5-turbo'
+          updateConfig = true
         }
 
+        setSelectedProvider(modelProvider || 'openai')
+        setSelectedModel(
+          groupedModels[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
+        )
+        setActiveModels(
+          groupedModels[modelProvider]?.models || groupedModels['openai'].models
+        )
+
+        // If the API key has not been set, set it to the key name
+        // We need this for backwards compatibility
+        let updateApiKey = false
+        if (!props.fullConfig.providerApiKeyName) {
+          updateApiKey = true
+        }
+
+        if (updateConfig || updateApiKey) {
+          props.updateConfigKeys({
+            modelProvider,
+            model: model || 'gpt-3.5-turbo',
+            providerApiKeyName: modelProvider,
+          })
+        }
         setIsLoading(false)
       } catch (error) {
         console.error('Error fetching models:', error)
@@ -90,30 +104,71 @@ export const CompletionProviderOptions: React.FC<
   }, [userData])
 
   useEffect(() => {
-    if (props.node && props.node.id === lastActiveNodeId) return
+    if ((props.node && props.node.id === lastActiveNodeId) || !providerData)
+      return
     setLastActiveNodeId(props.node?.id || '')
-    setSelectedProvider(props.fullConfig.modelProvider || '')
-    setSelectedModel(props.fullConfig.model || '')
-  }, [props.node])
+    let modelProvider = getProviderIdMapping(props.fullConfig.modelProvider)
+    let model = props.fullConfig.model
+    let updateConfig = false
+    if (modelProvider === 'unsupported') {
+      // set up fallback for the model provider in case config is wrong
+      modelProvider = 'openai'
+      model = 'gpt-3.5-turbo'
+      updateConfig = true
+    }
 
-  useEffect(() => {
-    setSelectedProvider(props.fullConfig.modelProvider || '')
-    setSelectedModel(props.fullConfig.model || '')
-  }, [props.fullConfig.modelProvider])
+    setSelectedProvider(modelProvider)
+    setSelectedModel(
+      providerData[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
+    )
+    setActiveModels(
+      providerData[modelProvider]?.models || providerData['openai']?.models
+    )
+    updateConfig &&
+      props.updateConfigKeys({
+        modelProvider,
+        model: model || 'gpt-3.5-turbo',
+      })
+  }, [props.node, providerData])
 
   useEffect(() => {
     if (!providerData) return
+    let modelProvider = getProviderIdMapping(props.fullConfig.modelProvider)
 
+    let model = props.fullConfig.model
+    let updateConfig = false
+    if (modelProvider === 'unsupported') {
+      // set up fallback for the model provider in case config is wrong
+      modelProvider = 'openai'
+      model = 'gpt-3.5-turbo'
+      updateConfig = true
+    }
+    setSelectedProvider(modelProvider)
+    setSelectedModel(
+      providerData[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
+    )
+    setActiveModels(
+      providerData[modelProvider]?.models || providerData['openai']?.models
+    )
+
+    updateConfig &&
+      props.updateConfigKeys({
+        modelProvider,
+        model: model || 'gpt-3.5-turbo',
+      })
+  }, [selectedProvider, providerData])
+
+  useEffect(() => {
+    if (!providerData) return
     setProvidersWithUserKeys(
       getProvidersWithUserKeys(providerData, credentials || [])
     )
   }, [credentials, providerData])
 
   useEffect(() => {
-    if (selectedProvider) {
-      const models = providerData[selectedProvider]?.models || []
-      setActiveModels(models)
-    }
+    if (!selectedProvider) return
+    const models = providerData[selectedProvider]?.models || []
+    setActiveModels(models)
   }, [selectedProvider])
 
   const onSelectModel = (model: string) => {
@@ -148,11 +203,15 @@ export const CompletionProviderOptions: React.FC<
             <SelectValue placeholder="Select Provider" />
           </SelectTrigger>
           <SelectContent>
-            {Object.keys(providerData).map(provider => (
-              <SelectItem key={provider} value={provider}>
-                {provider}
-              </SelectItem>
-            ))}
+            {Object.entries(providerData).map(
+              ([provider, { providerName }]) => {
+                return (
+                  <SelectItem key={provider} value={provider}>
+                    {providerName}
+                  </SelectItem>
+                )
+              }
+            )}
           </SelectContent>
         </Select>
       </div>
@@ -170,7 +229,7 @@ export const CompletionProviderOptions: React.FC<
             <SelectTrigger>
               <SelectValue placeholder="Select a model" />
             </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto">
+            <SelectContent>
               {activeModels.map(model => {
                 const isAvailable = isModelAvailableToUser({
                   userData,
