@@ -63,8 +63,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private eventMap: Map<string, Map<string, SpellCaster<Agent>>> = new Map()
   private spells: Map<string, SpellInterface> = new Map()
 
-  private stateMap: Map<string, SpellState> = new Map()
-
   private commandHub: CommandHub
 
   /**
@@ -244,12 +242,31 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * spellbook.updateSpellState(spellId, { isRunning: true });
    */
-  updateSpellState(spellId: string, update: Partial<SpellState>) {
-    const state = this.stateMap.get(spellId) || {
-      isRunning: false,
+  async updateSpellState(spellId: string, update: Partial<SpellState>) {
+    // here we will use keyv
+    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const keyv = this.app.get('keyv')
+
+    const currentState = (await keyv.get(key)) || {
+      isRunning: true,
       debug: true,
     }
-    this.stateMap.set(spellId, { ...state, ...update })
+
+    await keyv.set(key, { ...currentState, ...update })
+  }
+
+  async getSpellState(spellId: string): Promise<SpellState> {
+    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const keyv = this.app.get('keyv')
+
+    const currentState = await keyv.get(key)
+
+    if (!currentState) {
+      this.updateSpellState(spellId, this.initialState)
+      return this.initialState
+    }
+
+    return currentState
   }
 
   /**
@@ -387,8 +404,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * this.syncState(data);
    */
-  syncState() {
-    for (const [spellId, spellState] of this.stateMap.entries()) {
+  async syncState() {
+    for (const [spellId] of this.spells.keys()) {
+      const spellState = await this.getSpellState(spellId)
       this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
         spellId,
         state: spellState,
@@ -423,7 +441,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   /**
    * Toggles the debug flag.
    */
-  toggleDebug(data) {
+  async toggleDebug(data) {
     this.logger.trace(`Toggling debug to ${data.debug}`)
     const { spellId, debug } = data
 
@@ -431,10 +449,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       const spellCaster = spellCasters.get(spellId)
       if (spellCaster) {
         spellCaster.toggleDebug(debug)
-
-        this.updateSpellState(spellId, { debug })
       }
     }
+
+    await this.updateSpellState(spellId, { debug })
   }
 
   /**
@@ -509,7 +527,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
     this.spells.set(spell.id, spell)
 
-    const initialState = this.stateMap.get(spell.id) || this.initialState
+    const initialState = await this.getSpellState(spell.id)
 
     try {
       const spellCaster = new SpellCaster<Agent>({
@@ -598,7 +616,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         this.eventMap.delete(eventKey)
       }
     }
-    this.stateMap.delete(spellId)
   }
 
   clearAllSpellCasters() {
@@ -609,7 +626,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       }
     }
     this.eventMap.clear()
-    this.stateMap.clear()
   }
 
   /**
@@ -643,7 +659,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
    */
-  playSpell(data) {
+  async playSpell(data) {
     const { spellId } = data
     for (const spellCasters of this.eventMap.values()) {
       const spellCaster = spellCasters.get(spellId)
@@ -651,7 +667,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         spellCaster.startRunLoop()
       }
     }
-    this.updateSpellState(spellId, { isRunning: true })
+    await this.updateSpellState(spellId, { isRunning: true })
   }
 
   /**
@@ -659,7 +675,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
    */
-  pauseSpell(data) {
+  async pauseSpell(data) {
     const { spellId } = data
     for (const spellCasters of this.eventMap.values()) {
       const spellCaster = spellCasters.get(spellId)
@@ -667,7 +683,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         spellCaster.stopRunLoop()
       }
     }
-    this.updateSpellState(spellId, { isRunning: false })
+    await this.updateSpellState(spellId, { isRunning: false })
   }
 
   /**
@@ -727,7 +743,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   clear() {
     this.eventMap.clear()
-    this.stateMap.clear()
     this.pluginManager.centralEventBus.removeAllListeners()
   }
 }
