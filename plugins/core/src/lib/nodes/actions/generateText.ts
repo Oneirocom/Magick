@@ -6,6 +6,7 @@ import {
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { CORE_DEP_KEYS } from '../../config'
 import { IEventStore } from 'server/grimoire'
+
 type Message = {
   role: string
   content: string
@@ -22,7 +23,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     modelProvider: {
       valueType: 'string',
-      defaultValue: 'OpenAI',
+      defaultValue: 'openai',
     },
     providerApiKeyName: {
       valueType: 'string',
