@@ -1073,7 +1073,7 @@
       {
         "name": "modelProvider",
         "valueType": "string",
-        "defaultValue": "OpenAI"
+        "defaultValue": "openai"
       },
       {
         "name": "providerApiKeyName",
