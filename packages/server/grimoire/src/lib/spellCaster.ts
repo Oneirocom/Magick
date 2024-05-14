@@ -92,7 +92,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executeGraph = false
   pluginManager: PluginManager
   busy: boolean = true
-  private debug = false
+  private debug = true
   private agent
   private logger: pino.Logger
   private loopDelay: number
@@ -130,6 +130,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     // set the initial state if it is passed in
     if (initialState) {
       this.isRunning = initialState.isRunning
+      this.debug = initialState.debug
     }
   }
 
