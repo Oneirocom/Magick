@@ -2,6 +2,43 @@ import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { UserResponse } from '../userService/types'
 import { Model } from './types/models'
 
+export const legacyProviderIdMapping = {
+  openai: 'openai',
+  azure_openai: 'azure_openai',
+  anthropic: 'anthropic',
+  sagemaker: 'unsupported',
+  aws_bedrock: 'bedrock',
+  anyscale: 'unsupported',
+  perplexity: 'perplexity',
+  vllm: 'unsupported',
+  deepinfra: 'unsupported',
+  cohere: 'cohere',
+  together: 'togetherai',
+  alephalpha: 'unsupported',
+  baseten: 'unsupported',
+  openrouter: 'openrouter',
+  customapi: 'unsupported',
+  petals: 'unsupported',
+  ollama: 'unsupported',
+  google: 'google_palm',
+  palm: 'google_palm',
+  huggingface: 'unsupported',
+  xinference: 'unsupported',
+  cloudflareworkersai: 'unsupported',
+  ai21: 'unsupported',
+  nlpcloud: 'unsupported',
+  voyageai: 'unsupported',
+  replicate: 'unsupported',
+  meta: 'unsupported',
+  mistralai: 'mistral',
+  vertexai: 'google_vertex_ai',
+  groq: 'groq',
+}
+
+export const getProviderIdMapping = (providerId: string): string => {
+  return legacyProviderIdMapping[providerId] || 'unsupported'
+}
+
 export function getProvidersWithUserKeys(
   providerData: Record<string, { models: Model[]; apiKey: string }>,
   credentials: { name: string }[]
@@ -81,18 +118,23 @@ export function isModelAvailableToUser({
 }
 
 export function groupModelsByProvider(models: Model[]) {
-  const providers: Record<string, { models: Model[]; apiKey: string }> = {}
+  const providers: Record<
+    string,
+    { models: Model[]; apiKey: string; providerName: string }
+  > = {}
   for (const model of models) {
+    const providerId = model.provider.provider_id
     const providerName = model.provider.provider_name
     const providerKey = model.provider.api_key
 
-    if (!providers[providerName]) {
-      providers[providerName] = {
+    if (!providers[providerId]) {
+      providers[providerId] = {
         apiKey: providerKey,
+        providerName: providerName,
         models: [],
       }
     }
-    providers[providerName].models.push(model)
+    providers[providerId].models.push(model)
   }
   return providers
 }
