@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow } from '@xyflow/react'
 
 import { useOnPressKey } from '../hooks/useOnPressKey'
 
@@ -9,6 +9,8 @@ import useFilteredAndGroupedNodes from './useFilteredAndGroupedNodes'
 import { autoCompleteSearchTerm } from './autoCompleteSearchTerm'
 import { NodePickerProps } from './types'
 import { Input } from '@magickml/client-ui'
+import { getNodeSpec } from 'shared/nodeSpec'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 export const NodePicker: React.FC<NodePickerProps> = ({
   pickedNodePosition,
@@ -17,15 +19,26 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   filters,
   specJSON,
   position,
+  spell,
 }: NodePickerProps) => {
   const [search, setSearch] = useState('')
+  const [nodeSpecs, setNodeSpecs] = useState(specJSON)
   const [focusedIndex, setFocusedIndex] = useState(0)
-  const instance = useReactFlow()
+  const instance = useReactFlow<MagickNodeType, MagickEdgeType>()
 
   useOnPressKey('Escape', onClose)
 
+  // We need to recreate the node specs here with the spell to populate variable nodes
+  // This is to prevent the spell form rerendering the graph every time a variable changes.
+  // So we isolate the variable nodes to the node picker
+  useEffect(() => {
+    if (!specJSON) return
+    const nodeSpecs = getNodeSpec(spell)
+    setNodeSpecs(nodeSpecs)
+  }, [specJSON, spell])
+
   const { filteredNodes, groupedData } = useFilteredAndGroupedNodes({
-    specJSON,
+    specJSON: nodeSpecs,
     filters,
     search,
   })
@@ -52,7 +65,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
         if (pickedNodePosition) {
           onPickNode(
             filteredNodes[focusedIndex]?.type,
-            instance.project(pickedNodePosition)
+            instance.screenToFlowPosition(pickedNodePosition)
           )
         }
       }

@@ -15,6 +15,7 @@ export const forEach = makeFlowNodeDefinition({
         'hiddenProperties',
         'valueTypes',
         'socketInputs',
+        'socketOutputs',
         'valueTypeOptions',
       ],
     },

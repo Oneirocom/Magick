@@ -1,5 +1,5 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
-import { Node, OnConnectStartParams } from 'reactflow'
+import { Node, OnConnectStartParams } from '@xyflow/react'
 import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
 import { NodePickerFilters } from '../node-picker/types'
 

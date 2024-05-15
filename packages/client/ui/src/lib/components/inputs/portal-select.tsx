@@ -42,7 +42,7 @@ export const SelectWithLabel: React.FC<InputWithLabelProps> = ({
         >
           <SelectValue placeholder={props.placeholder || 'Select an option'} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="max-h-52 overflow-y-auto">
           <SelectGroup>
             <SelectLabel>{props.group}</SelectLabel>
             {props.options.map(option => (

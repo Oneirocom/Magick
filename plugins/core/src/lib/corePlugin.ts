@@ -11,7 +11,6 @@ import { sendMessage } from './nodes/actions/sendMessage'
 import { textTemplate } from './nodes/functions/textTemplate'
 import { registerStructProfile } from './registerStructProfile'
 import { streamMessage } from './nodes/actions/streamMessage'
-import { LLMProviderKeys } from 'servicesShared'
 import { variableGet } from './nodes/query/variableGet'
 import { VariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
@@ -27,7 +26,7 @@ import { split } from './nodes/logic/strings/split'
 import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { CoreUserService } from './services/userService/coreUserService'
-import { arrayCreate } from './values/Array/Create'
+import { arrayCreate, arrayCreateFunction } from './values/Array/Create'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
 import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
@@ -66,6 +65,24 @@ import { Agent } from 'server/agents'
 import { IsDefined } from './nodes/logic/strings/isDefined'
 import { jsonParse } from './nodes/actions/jsonParse'
 import { clearMessageHistory } from './nodes/actions/clearMessageHistory'
+import { LifecycleOnTick } from './nodes/lifecycle/onTick'
+import { arrayRandomElement } from './values/Array/Random'
+import { wait } from './nodes/flow/wait'
+import { variablesReset } from './nodes/query/variableReset'
+import { flowSwitch } from './nodes/flow/switch'
+import { addMessage } from './nodes/actions/addMessage'
+import { stringChunker } from './nodes/actions/stringChunker'
+import { MemoryStreamService } from './services/memoryStreamService'
+import { addMemory } from './nodes/actions/addMemory'
+import { onMemory } from './nodes/events/onMemory'
+import { getMemories } from './nodes/actions/getMemories'
+import { clearMemories } from './nodes/actions/clearMemories'
+import { parseCommand } from './nodes/logic/strings/parseCommand'
+import { DoOnceAsync } from './nodes/flow/doOnceAsync'
+import { arrayIncludes } from './values/Array/Includes'
+import { getManyVariables } from './nodes/query/getManyVariables'
+import { LLMProviderKeys } from 'servicesShared'
+import { arrayAccess } from './values/Array/Access'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -85,40 +102,57 @@ export class CorePlugin extends CoreEventsPlugin<
   override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
-    messageEvent,
-    sendMessage,
-    textTemplate,
-    generateText,
-    streamMessage,
-    variableGet,
-    variableSet,
-    arrayPush,
-    jsonStringify,
-    jsonParse,
-    forEach,
-    arrayLength,
+    addKnowledge,
+    addMemory,
+    addMessage,
+    arrayAccess,
+    arrayIncludes,
     arrayClear,
-    whileLoop,
-    regex,
-    split,
+    arrayCreate,
+    arrayCreateFunction,
+    arrayLength,
+    arrayMerge,
+    arrayPush,
+    arrayRandomElement,
     arrayRemoveFirst,
     arrayRemoveLast,
-    arrayMerge,
-    arrayCreate,
-    addKnowledge,
+    clearMemories,
+    clearMessageHistory,
+    delay,
+    DoOnceAsync,
+    FetchNode,
+    flowSwitch,
+    forEach,
+    generateText,
+    getMemories,
+    getMessageHistory,
+    getSecretNode,
+    getStateNode,
+    IsDefined,
+    jsonParse,
+    jsonStringify,
+    LifecycleOnTick,
+    messageEvent,
+    objectDestructure,
+    onMemory,
+    parseCommand,
+    queryEventHistory,
     queryKnowledge,
+    regex,
     searchKnowledge,
     searchManyKnowledge,
-    delay,
-    queryEventHistory,
+    sendMessage,
+    split,
+    streamMessage,
+    stringChunker,
+    textTemplate,
+    variableGet,
+    getManyVariables,
+    variableSet,
+    variablesReset,
+    wait,
     webhookEventNode,
-    getStateNode,
-    getSecretNode,
-    FetchNode,
-    getMessageHistory,
-    objectDestructure,
-    clearMessageHistory,
-    IsDefined,
+    whileLoop,
   ]
   values = []
   credentials = corePluginCredentials
@@ -233,6 +267,11 @@ export class CorePlugin extends CoreEventsPlugin<
     }
 
     return {
+      [CORE_DEP_KEYS.AGENT]: this.agent,
+      [CORE_DEP_KEYS.MEMORY_STREAM_SERVICE]: new MemoryStreamService(
+        this.agentId,
+        spellCaster
+      ),
       [CORE_DEP_KEYS.ACTION_SERVICE]: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
@@ -243,8 +282,8 @@ export class CorePlugin extends CoreEventsPlugin<
         spellCaster
       ),
       [CORE_DEP_KEYS.LLM_SERVICE]: this.coreLLMService,
-      // [CORE_DEP_KEYS.BUDGET_MANAGER_SERVICE]: this.coreBudgetManagerService,
       [CORE_DEP_KEYS.MEMORY_SERVICE]: this.coreMemoryService,
+
       [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
       [CORE_DEP_KEYS.GET_SECRET]:
         this.credentialsManager.getCustomCredential.bind(this),

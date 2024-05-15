@@ -1,7 +1,7 @@
 import { graphActions } from './graphSlice'
 
 import { createStore } from '../store'
-import { Connection, Edge, EdgeChange, Node, NodeChange } from 'reactflow'
+import { Connection, Edge, EdgeChange, Node, NodeChange } from '@xyflow/react'
 
 export const setNodes = (tabId: string, nodes: Node[]) => {
   const store = createStore()

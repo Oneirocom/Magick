@@ -56,7 +56,7 @@ const components = {
 
 const RightSidebar = props => {
   const tab = useTabLayout()
-  usePanelControls(props, 'none', 'ctrl+l')
+  usePanelControls(props, 'none', 'ctrl+l, meta+l')
   const onReady = (event: PaneviewReadyEvent) => {
     event.api.addPanel({
       id: 'Logs',

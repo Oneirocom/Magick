@@ -22,6 +22,7 @@ export const getVariableConfig = (
 
   const configUpdate = {
     variableId: variable.id,
+    valueTypeName: variable.valueTypeName,
     label: variable.name,
   }
 

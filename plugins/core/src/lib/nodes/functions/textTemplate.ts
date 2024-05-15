@@ -35,7 +35,7 @@ export const textTemplate = makeFunctionNodeDefinition({
     },
     socketValues: {
       valueType: 'array',
-      defaultValue: ['string', 'array', 'boolean', 'integer'],
+      defaultValue: ['string', 'array', 'boolean', 'integer', 'float'],
     },
     socketInputs: {
       valueType: 'array',
@@ -70,6 +70,11 @@ export const textTemplate = makeFunctionNodeDefinition({
     }, {})
 
     const string = configuration.textEditorData.replace('\r\n', '\n')
+
+    Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+      // @ts-ignore
+      return arg1 == arg2 ? options.fn(this) : options.inverse(this)
+    })
 
     const template = Handlebars.compile(string, { noEscape: true })
     const compiled = template(inputs)

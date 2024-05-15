@@ -1,10 +1,15 @@
 import type { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import type { Edge, Node } from 'reactflow'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null
 
-const USED_DATA_PROPERTIES = ['configuration', 'nodeSpec']
+const USED_DATA_PROPERTIES = [
+  'configuration',
+  'nodeSpec',
+  'socketsVisible',
+  'nodeTitle',
+]
 
 function formatVariableNode(nodeType: string): string {
   if (
@@ -20,8 +25,8 @@ function formatVariableNode(nodeType: string): string {
 }
 
 export const flowToBehave = (
-  nodes: Node[],
-  edges: Edge[],
+  nodes: MagickNodeType[],
+  edges: MagickEdgeType[],
   nodeSpecJSON: NodeSpecJSON[],
   spellGraph: GraphJSON
 ): GraphJSON => {
@@ -32,6 +37,22 @@ export const flowToBehave = (
   }
 
   nodes.forEach(node => {
+    if (node.type === 'comment') {
+      graph.data = graph.data || {}
+      graph.data.comments = graph.data.comments || []
+      graph.data.comments.push({
+        id: node.id,
+        text: node.data.text,
+        width: node.width,
+        height: node.height,
+        metadata: {
+          positionX: String(node.position.x),
+          positionY: String(node.position.y),
+        },
+      })
+      return
+    }
+
     if (node.type === undefined) return
 
     const nodeSpec = nodeSpecJSON.find(nodeSpec => nodeSpec.type === node.type)
@@ -44,8 +65,9 @@ export const flowToBehave = (
       metadata: {
         positionX: String(node.position.x),
         positionY: String(node.position.y),
+        nodeTitle: node.data.nodeTitle as string,
       },
-      configuration: node.data.configuration || {},
+      configuration: node.data.configuration || ({} as any),
     }
 
     // handle configuration properties
@@ -64,9 +86,9 @@ export const flowToBehave = (
     edges
       .filter(edge => edge.target === node.id)
       .forEach(edge => {
-        const inputSpec = nodeSpec.inputs.find(
-          input => input.name === edge.targetHandle
-        )
+        const configSockets = node.data.configuration?.socketInputs || []
+        const inputs = [...nodeSpec.inputs, ...configSockets]
+        const inputSpec = inputs.find(input => input.name === edge.targetHandle)
         if (inputSpec && inputSpec.valueType === 'flow') {
           // skip flows
           return
@@ -86,12 +108,16 @@ export const flowToBehave = (
     edges
       .filter(edge => edge.source === node.id)
       .forEach(edge => {
-        const outputSpec = nodeSpec.outputs.find(
+        const configSockets = node.data.configuration?.socketOutputs || []
+        const outputs = [...nodeSpec.outputs, ...configSockets]
+
+        const outputSpec = outputs.find(
           output => output.name === edge.sourceHandle
         )
         if (outputSpec && outputSpec.valueType !== 'flow') {
           return
         }
+
         if (behaveNode.flows === undefined) {
           behaveNode.flows = {}
         }

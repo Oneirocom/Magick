@@ -161,19 +161,19 @@ const NewMenuBar = props => {
       items: {
         new_spell: {
           onClick: onNew,
-          hotKey: 'alt+n, ctrl+n',
+          hotKey: 'alt+n, meta+n',
         },
         import_spell: {
           onClick: onImport,
-          hotKey: 'alt+i, ctrl+i',
+          hotKey: 'alt+i, meta+i',
         },
         save_spell: {
           onClick: onSave,
-          hotKey: 'alt+s, ctrl+s',
+          hotKey: 'alt+s, meta+s',
         },
         export_spell: {
           onClick: onExport,
-          hotKey: 'alt+shift+e, ctrl+shift+e',
+          hotKey: 'meta+shift+e, ctrl+shift+e',
         },
         import_project: {
           onClick: onImportProject,
@@ -184,11 +184,11 @@ const NewMenuBar = props => {
       items: {
         undo: {
           onClick: onUndo,
-          hotKey: 'alt+z',
+          hotKey: 'alt+z, meta+z',
         },
         redo: {
           onClick: onRedo,
-          hotKey: 'alt+y, ctrl+y, alt+shift+z',
+          hotKey: 'ctrl+shift+z, meta+shift+z',
         },
         delete: {
           onClick: onDelete,

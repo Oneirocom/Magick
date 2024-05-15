@@ -1,897 +1,5 @@
 [
   {
-    "type": "magick/onMessage",
-    "category": "Event",
-    "label": "On Message",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "content",
-        "valueType": "string"
-      },
-      {
-        "name": "event",
-        "valueType": "object"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "eventState"
-        ]
-      },
-      {
-        "name": "eventState",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "eventStateProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "connector",
-          "client",
-          "channel",
-          "agentId",
-          "sender"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "magick/sendMessage",
-    "category": "Action",
-    "label": "Send Message",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "content",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "logic/string/template",
-    "category": "Logic",
-    "label": "Text Template",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "textEditorOptions",
-          "textEditorData",
-          "socketValues"
-        ]
-      },
-      {
-        "name": "textEditorData",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "textEditorOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "options": {
-            "language": "handlebars",
-            "name": "Text template"
-          }
-        }
-      },
-      {
-        "name": "socketValues",
-        "valueType": "array",
-        "defaultValue": [
-          "string",
-          "array",
-          "boolean",
-          "integer"
-        ]
-      },
-      {
-        "name": "socketInputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "magick/generateText",
-    "category": "Action",
-    "label": "Generate Text",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "prompt",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "system",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "messages",
-        "valueType": "array",
-        "defaultValue": "[]"
-      },
-      {
-        "name": "modelOverride",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "stop",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "temperature",
-        "valueType": "float",
-        "defaultValue": 0.5
-      },
-      {
-        "name": "maxRetries",
-        "valueType": "integer",
-        "defaultValue": 3
-      },
-      {
-        "name": "top_p",
-        "valueType": "integer",
-        "defaultValue": 1
-      },
-      {
-        "name": "seed",
-        "valueType": "integer",
-        "defaultValue": 42
-      },
-      {
-        "name": "maxTokens",
-        "valueType": "integer",
-        "defaultValue": 256
-      }
-    ],
-    "outputs": [
-      {
-        "name": "response",
-        "valueType": "string"
-      },
-      {
-        "name": "completionResponse",
-        "valueType": "object"
-      },
-      {
-        "name": "done",
-        "valueType": "flow"
-      },
-      {
-        "name": "onStream",
-        "valueType": "flow"
-      },
-      {
-        "name": "stream",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "modelProviders",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "modelProvider",
-        "valueType": "string",
-        "defaultValue": "openai"
-      },
-      {
-        "name": "models",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "model",
-        "valueType": "string",
-        "defaultValue": "gpt-3.5-turbo"
-      },
-      {
-        "name": "customBaseUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "hiddenProperties",
-        "valueType": "string",
-        "defaultValue": [
-          "hiddenProperties",
-          "modelProvider",
-          "model",
-          "models",
-          "customBaseUrl"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "magick/streamMessage",
-    "category": "Action",
-    "label": "Stream Message",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "content",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "variables/get",
-    "category": "Query",
-    "label": "Get",
-    "inputs": [],
-    "outputs": [],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "variableId",
-          "socketOutputs",
-          "label"
-        ]
-      },
-      {
-        "name": "variableId",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "variableNames",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "variables/set",
-    "category": "Query",
-    "label": "Set",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "variableId",
-          "socketOutputs",
-          "socketInputs",
-          "label"
-        ]
-      },
-      {
-        "name": "variableId",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "variableNames",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "socketInputs",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "logic/array/push",
-    "category": "Action",
-    "label": "Array Push",
-    "inputs": [
-      {
-        "name": "array",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      },
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "valueTypes",
-          "socketInputs",
-          "valueTypeOptions"
-        ]
-      },
-      {
-        "name": "valueType",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "valueTypeOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "values": [
-            "string",
-            "number",
-            "float",
-            "boolean",
-            "object",
-            "array"
-          ],
-          "socketName": "Item"
-        }
-      },
-      {
-        "name": "socketInputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "action/json/stringify",
-    "category": "Action",
-    "label": "Json Stringify",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "string",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "valueTypes",
-          "socketInputs",
-          "valueTypeOptions"
-        ]
-      },
-      {
-        "name": "valueType",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "valueTypeOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "values": [
-            "string",
-            "number",
-            "float",
-            "boolean",
-            "object",
-            "array"
-          ],
-          "socketName": "Item"
-        }
-      },
-      {
-        "name": "socketInputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "action/json/parse",
-    "category": "Action",
-    "label": "Json Parse",
-    "inputs": [
-      {
-        "name": "json",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "object",
-        "valueType": "object"
-      },
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "flow/array/forEach",
-    "category": "Flow",
-    "label": "For Each",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "completed",
-        "valueType": "flow"
-      },
-      {
-        "name": "loopBody",
-        "valueType": "flow"
-      },
-      {
-        "name": "index",
-        "valueType": "integer"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "valueTypes",
-          "socketInputs",
-          "valueTypeOptions"
-        ]
-      },
-      {
-        "name": "valueType",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "valueTypeOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "values": [
-            "string",
-            "number",
-            "float",
-            "boolean",
-            "object",
-            "array"
-          ],
-          "socketName": "Array Item"
-        }
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "logic/array/length",
-    "category": "Logic",
-    "label": "Length",
-    "inputs": [
-      {
-        "name": "a",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "integer"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "action/array/clear",
-    "category": "Action",
-    "label": "Clear",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "flow/whileLoop",
-    "category": "Flow",
-    "label": "While Loop",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "condition",
-        "valueType": "boolean",
-        "defaultValue": false
-      }
-    ],
-    "outputs": [
-      {
-        "name": "completed",
-        "valueType": "flow"
-      },
-      {
-        "name": "loopBody",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "maxIterations",
-        "valueType": "number",
-        "defaultValue": 10
-      }
-    ]
-  },
-  {
-    "type": "logic/string/match",
-    "category": "Logic",
-    "label": "Match",
-    "inputs": [
-      {
-        "name": "match",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "string",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "boolean"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "logic/split/string",
-    "category": "None",
-    "label": "Split",
-    "inputs": [
-      {
-        "name": "string",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "seperator",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "array"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "logic/array/removeFirst",
-    "category": "Action",
-    "label": "Remove First",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "valueTypes",
-          "socketOutputs",
-          "valueTypeOptions"
-        ]
-      },
-      {
-        "name": "valueType",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "valueTypeOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "values": [
-            "string",
-            "number",
-            "float",
-            "boolean",
-            "object",
-            "array"
-          ],
-          "socketName": "Item"
-        }
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "logic/array/removeLast",
-    "category": "Action",
-    "label": "Remove Last",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "valueTypes",
-          "socketOutputs",
-          "valueTypeOptions"
-        ]
-      },
-      {
-        "name": "valueType",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "valueTypeOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "values": [
-            "string",
-            "number",
-            "float",
-            "boolean",
-            "object",
-            "array"
-          ],
-          "socketName": "Item"
-        }
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "logic/array/merge",
-    "category": "Logic",
-    "label": "Merge",
-    "inputs": [
-      {
-        "name": "array1",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      },
-      {
-        "name": "array2",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "array"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "action/array/create",
-    "category": "Action",
-    "label": "Array Create",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "array",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "valueTypes",
-          "valueTypeOptions"
-        ]
-      },
-      {
-        "name": "valueType",
-        "valueType": "string",
-        "defaultValue": "string"
-      },
-      {
-        "name": "valueTypeOptions",
-        "valueType": "object",
-        "defaultValue": {
-          "values": [
-            "string",
-            "number",
-            "float",
-            "boolean",
-            "object",
-            "array"
-          ],
-          "socketName": "Item"
-        }
-      },
-      {
-        "name": "socketInputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
     "type": "action/knowledge/add",
     "category": "Action",
     "label": "Add Knowledge",
@@ -1038,6 +146,1503 @@
     "configuration": []
   },
   {
+    "type": "action/memory/addMemory",
+    "category": "Action",
+    "label": "Add Memory",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "role",
+        "valueType": "string",
+        "defaultValue": "assistant",
+        "choices": [
+          {
+            "text": "user",
+            "value": "user"
+          },
+          {
+            "text": "assistant",
+            "value": "assistant"
+          }
+        ]
+      },
+      {
+        "name": "type",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memory",
+        "valueType": "object"
+      },
+      {
+        "name": "message",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "magick/addMessage",
+    "category": "Action",
+    "label": "Add message",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "role",
+        "valueType": "string",
+        "defaultValue": "user",
+        "choices": [
+          {
+            "text": "user",
+            "value": "user"
+          },
+          {
+            "text": "assistant",
+            "value": "assistant"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array/access",
+    "category": "Logic",
+    "label": "Array Access",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "b",
+        "valueType": "integer",
+        "defaultValue": 0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array/includes",
+    "category": "Logic",
+    "label": "Includes",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "b",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/array/clear",
+    "category": "Action",
+    "label": "Clear",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/array/create",
+    "category": "Action",
+    "label": "Array Create",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/create",
+    "category": "Logic",
+    "label": "Array Create",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/length",
+    "category": "Logic",
+    "label": "Length",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array/merge",
+    "category": "Logic",
+    "label": "Merge",
+    "inputs": [
+      {
+        "name": "array1",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "array2",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/array/push",
+    "category": "Action",
+    "label": "Array Push",
+    "inputs": [
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/randomElement",
+    "category": "Logic",
+    "label": "Random Element",
+    "inputs": [
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/removeFirst",
+    "category": "Action",
+    "label": "Remove First",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "logic/array/removeLast",
+    "category": "Action",
+    "label": "Remove Last",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "action/memory/clearMemories",
+    "category": "Action",
+    "label": "Clear Memories",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "filter",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "queries/messages/clearMessageHistory",
+    "category": "Flow",
+    "label": "Clear Message History",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": [
+          "channel",
+          "connector"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "flow/delay",
+    "category": "Time",
+    "label": "Delay",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "duration",
+        "valueType": "float",
+        "defaultValue": 1
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/doOnceAsync",
+    "category": "Flow",
+    "label": "DoOnceAsync",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "reset",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "onReset",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "actions/http/fetch",
+    "category": "Action",
+    "label": "Fetch",
+    "inputs": [
+      {
+        "name": "url",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "method",
+        "valueType": "string",
+        "defaultValue": "",
+        "choices": [
+          {
+            "text": "GET",
+            "value": "GET"
+          },
+          {
+            "text": "POST",
+            "value": "POST"
+          },
+          {
+            "text": "PUT",
+            "value": "PUT"
+          },
+          {
+            "text": "DELETE",
+            "value": "DELETE"
+          },
+          {
+            "text": "PATCH",
+            "value": "PATCH"
+          }
+        ]
+      },
+      {
+        "name": "headers",
+        "valueType": "object",
+        "defaultValue": "{}"
+      },
+      {
+        "name": "body",
+        "valueType": "object",
+        "defaultValue": "{}"
+      },
+      {
+        "name": "authToken",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "authTokenHeader",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "response",
+        "valueType": "object"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/switch",
+    "category": "Flow",
+    "label": "Switch",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "default",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "flow"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "flow/array/forEach",
+    "category": "Flow",
+    "label": "For Each",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "array",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "completed",
+        "valueType": "flow"
+      },
+      {
+        "name": "loopBody",
+        "valueType": "flow"
+      },
+      {
+        "name": "index",
+        "valueType": "integer"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "socketOutputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Array Item"
+        }
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "magick/generateText",
+    "category": "Action",
+    "label": "Generate Text",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "prompt",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "system",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "messages",
+        "valueType": "array",
+        "defaultValue": "[]"
+      },
+      {
+        "name": "modelOverride",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "stop",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "temperature",
+        "valueType": "float",
+        "defaultValue": 0.5
+      },
+      {
+        "name": "maxRetries",
+        "valueType": "integer",
+        "defaultValue": 3
+      },
+      {
+        "name": "top_p",
+        "valueType": "integer",
+        "defaultValue": 1
+      },
+      {
+        "name": "seed",
+        "valueType": "integer",
+        "defaultValue": 42
+      },
+      {
+        "name": "maxTokens",
+        "valueType": "integer",
+        "defaultValue": 256
+      }
+    ],
+    "outputs": [
+      {
+        "name": "response",
+        "valueType": "string"
+      },
+      {
+        "name": "completionResponse",
+        "valueType": "object"
+      },
+      {
+        "name": "done",
+        "valueType": "flow"
+      },
+      {
+        "name": "onStream",
+        "valueType": "flow"
+      },
+      {
+        "name": "stream",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "modelProviders",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "modelProvider",
+        "valueType": "string",
+        "defaultValue": "openai"
+      },
+      {
+        "name": "providerApiKeyName",
+        "valueType": "string",
+        "defaultValue": "OPENAI_API_KEY"
+      },
+      {
+        "name": "models",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "model",
+        "valueType": "string",
+        "defaultValue": "gpt-3.5-turbo"
+      },
+      {
+        "name": "customBaseUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "hiddenProperties",
+        "valueType": "string",
+        "defaultValue": [
+          "hiddenProperties",
+          "modelProvider",
+          "model",
+          "models",
+          "customBaseUrl",
+          "providerApiKeyName"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "action/memory/getMemories",
+    "category": "Action",
+    "label": "Get Memories",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "limit",
+        "valueType": "integer",
+        "defaultValue": 10
+      },
+      {
+        "name": "type",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "filter",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memories",
+        "valueType": "array"
+      },
+      {
+        "name": "messages",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "queries/messages/getMessageHistory",
+    "category": "Flow",
+    "label": "Message History",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "alterateRoles",
+        "valueType": "boolean",
+        "defaultValue": false
+      },
+      {
+        "name": "entries",
+        "valueType": "integer",
+        "defaultValue": 10
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "messages",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": [
+          "channel",
+          "connector"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "agent/getSecret",
+    "category": "Action",
+    "label": "Get Agent Secret",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "value",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "agent/getState",
+    "category": "Action",
+    "label": "Get Agent State",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "plugin",
+        "valueType": "string",
+        "defaultValue": "core",
+        "choices": [
+          {
+            "text": "core",
+            "value": "core"
+          },
+          {
+            "text": "discord",
+            "value": "discord"
+          },
+          {
+            "text": "slack",
+            "value": "slack"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "state",
+        "valueType": "object"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/string/isDefined",
+    "category": "None",
+    "label": "Is Defined",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/json/parse",
+    "category": "Action",
+    "label": "Json Parse",
+    "inputs": [
+      {
+        "name": "json",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "object",
+        "valueType": "object"
+      },
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/json/stringify",
+    "category": "Action",
+    "label": "Json Stringify",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "string",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "valueTypes",
+          "socketInputs",
+          "valueTypeOptions"
+        ]
+      },
+      {
+        "name": "valueType",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "values": [
+            "string",
+            "number",
+            "float",
+            "boolean",
+            "object",
+            "array"
+          ],
+          "socketName": "Item"
+        }
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "lifecycles/onTick",
+    "category": "Event",
+    "label": "On Tick",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "deltaSeconds",
+        "valueType": "float"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "magick/onMessage",
+    "category": "Event",
+    "label": "On Message",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      },
+      {
+        "name": "event",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "logic/object/destructure",
+    "category": "Logic",
+    "label": "Destructure",
+    "inputs": [
+      {
+        "name": "object",
+        "valueType": "object",
+        "defaultValue": "{}"
+      }
+    ],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer",
+          "float",
+          "object"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "events/memory/onMemory",
+    "category": "Event",
+    "label": "On Memory Added",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memory",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "logic/string/parseCommand",
+    "category": "None",
+    "label": "Parse Command",
+    "inputs": [
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "command",
+        "valueType": "string"
+      },
+      {
+        "name": "content",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "queries/events/eventHistory",
+    "category": "Flow",
+    "label": "Event History",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "entries",
+        "valueType": "integer",
+        "defaultValue": 10
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "events",
+        "valueType": "array"
+      },
+      {
+        "name": "strings",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState",
+          "availableEvents"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": [
+          "sender",
+          "agentId"
+        ]
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "client",
+          "connector",
+          "channel",
+          "from user",
+          "to user"
+        ]
+      },
+      {
+        "name": "availableEvents",
+        "valueType": "array",
+        "defaultValue": [
+          "messageReceived",
+          "webhookReceived",
+          "messageSend",
+          "messageStream"
+        ]
+      },
+      {
+        "name": "selectedEvents",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "action/knowledge/query",
     "category": "Action",
     "label": "Query Knowledge",
@@ -1060,6 +1665,30 @@
       {
         "name": "knowledge",
         "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/string/match",
+    "category": "Logic",
+    "label": "Match",
+    "inputs": [
+      {
+        "name": "match",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
       }
     ],
     "configuration": []
@@ -1147,18 +1776,23 @@
     "configuration": []
   },
   {
-    "type": "flow/delay",
-    "category": "Time",
-    "label": "Delay",
+    "type": "magick/sendMessage",
+    "category": "Action",
+    "label": "Send Message",
     "inputs": [
       {
         "name": "flow",
         "valueType": "flow"
       },
       {
-        "name": "duration",
-        "valueType": "float",
-        "defaultValue": 1
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "skipSave",
+        "valueType": "boolean",
+        "defaultValue": false
       }
     ],
     "outputs": [
@@ -1170,32 +1804,108 @@
     "configuration": []
   },
   {
-    "type": "queries/events/eventHistory",
-    "category": "Flow",
-    "label": "Event History",
+    "type": "logic/split/string",
+    "category": "None",
+    "label": "Split",
+    "inputs": [
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "seperator",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "magick/streamMessage",
+    "category": "Action",
+    "label": "Stream Message",
     "inputs": [
       {
         "name": "flow",
         "valueType": "flow"
       },
       {
-        "name": "entries",
-        "valueType": "integer",
-        "defaultValue": 10
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
       }
     ],
     "outputs": [
       {
         "name": "flow",
         "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "action/string/chunker",
+    "category": "Action",
+    "label": "String Chunker",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
       },
       {
-        "name": "events",
-        "valueType": "array"
+        "name": "content",
+        "valueType": "string",
+        "defaultValue": ""
       },
       {
-        "name": "strings",
-        "valueType": "array"
+        "name": "chunkSize",
+        "valueType": "integer",
+        "defaultValue": 2
+      },
+      {
+        "name": "delay",
+        "valueType": "integer",
+        "defaultValue": 100
+      }
+    ],
+    "outputs": [
+      {
+        "name": "done",
+        "valueType": "flow"
+      },
+      {
+        "name": "stream",
+        "valueType": "flow"
+      },
+      {
+        "name": "chunk",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "chunkSize",
+        "valueType": "integer",
+        "defaultValue": 1
+      }
+    ]
+  },
+  {
+    "type": "logic/string/template",
+    "category": "Logic",
+    "label": "Text Template",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "string"
       }
     ],
     "configuration": [
@@ -1204,45 +1914,214 @@
         "valueType": "array",
         "defaultValue": [
           "hiddenProperties",
-          "eventState",
-          "availableEvents"
+          "textEditorOptions",
+          "textEditorData",
+          "socketValues"
         ]
       },
       {
-        "name": "eventState",
+        "name": "textEditorData",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "textEditorOptions",
+        "valueType": "object",
+        "defaultValue": {
+          "options": {
+            "language": "handlebars",
+            "name": "Text template"
+          }
+        }
+      },
+      {
+        "name": "socketValues",
         "valueType": "array",
         "defaultValue": [
-          "sender",
-          "agentId"
+          "string",
+          "array",
+          "boolean",
+          "integer",
+          "float"
         ]
       },
       {
-        "name": "eventStateProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "client",
-          "connector",
-          "channel",
-          "from user",
-          "to user"
-        ]
-      },
-      {
-        "name": "availableEvents",
-        "valueType": "array",
-        "defaultValue": [
-          "messageReceived",
-          "webhookReceived",
-          "messageSend",
-          "messageStream"
-        ]
-      },
-      {
-        "name": "selectedEvents",
+        "name": "socketInputs",
         "valueType": "array",
         "defaultValue": []
       }
     ]
+  },
+  {
+    "type": "variables/get",
+    "category": "Query",
+    "label": "Get",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs",
+          "label",
+          "valueTypeName"
+        ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeName",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "variables/getMany",
+    "category": "Query",
+    "label": "Get Many Variables",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "socketValues",
+          "hiddenProperties"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer",
+          "float",
+          "object"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "variables/set",
+    "category": "Query",
+    "label": "Set",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs",
+          "socketInputs",
+          "label",
+          "valueTypeName"
+        ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeName",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
+    "type": "variables/reset",
+    "category": "Action",
+    "label": "Reset Variables",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "flow/wait",
+    "category": "Flow",
+    "label": "Wait",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "milliseconds",
+        "valueType": "integer",
+        "defaultValue": 1000
+      }
+    ],
+    "outputs": [
+      {
+        "name": "done",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "magick/onWebhook",
@@ -1295,290 +2174,37 @@
     ]
   },
   {
-    "type": "agent/getState",
-    "category": "Action",
-    "label": "Get Agent State",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "plugin",
-        "valueType": "string",
-        "defaultValue": "core",
-        "choices": [
-          {
-            "text": "core",
-            "value": "core"
-          },
-          {
-            "text": "discord",
-            "value": "discord"
-          },
-          {
-            "text": "slack",
-            "value": "slack"
-          }
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "state",
-        "valueType": "object"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "agent/getSecret",
-    "category": "Action",
-    "label": "Get Agent Secret",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "value",
-        "valueType": "string"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "actions/http/fetch",
-    "category": "Action",
-    "label": "Fetch",
-    "inputs": [
-      {
-        "name": "url",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "method",
-        "valueType": "string",
-        "defaultValue": "",
-        "choices": [
-          {
-            "text": "GET",
-            "value": "GET"
-          },
-          {
-            "text": "POST",
-            "value": "POST"
-          },
-          {
-            "text": "PUT",
-            "value": "PUT"
-          },
-          {
-            "text": "DELETE",
-            "value": "DELETE"
-          },
-          {
-            "text": "PATCH",
-            "value": "PATCH"
-          }
-        ]
-      },
-      {
-        "name": "headers",
-        "valueType": "object",
-        "defaultValue": "{}"
-      },
-      {
-        "name": "body",
-        "valueType": "object",
-        "defaultValue": "{}"
-      },
-      {
-        "name": "authToken",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "authTokenHeader",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "response",
-        "valueType": "object"
-      },
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "queries/messages/getMessageHistory",
+    "type": "flow/whileLoop",
     "category": "Flow",
-    "label": "Message History",
+    "label": "While Loop",
     "inputs": [
       {
         "name": "flow",
         "valueType": "flow"
       },
       {
-        "name": "alterateRoles",
+        "name": "condition",
         "valueType": "boolean",
         "defaultValue": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "completed",
+        "valueType": "flow"
       },
       {
-        "name": "entries",
-        "valueType": "integer",
+        "name": "loopBody",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "maxIterations",
+        "valueType": "number",
         "defaultValue": 10
       }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "messages",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "eventState"
-        ]
-      },
-      {
-        "name": "eventState",
-        "valueType": "array",
-        "defaultValue": [
-          "channel",
-          "connector"
-        ]
-      }
     ]
-  },
-  {
-    "type": "logic/object/destructure",
-    "category": "Logic",
-    "label": "Destructure",
-    "inputs": [
-      {
-        "name": "object",
-        "valueType": "object",
-        "defaultValue": "{}"
-      }
-    ],
-    "outputs": [],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "textEditorOptions",
-          "textEditorData",
-          "socketValues"
-        ]
-      },
-      {
-        "name": "socketValues",
-        "valueType": "array",
-        "defaultValue": [
-          "string",
-          "array",
-          "boolean",
-          "integer",
-          "object"
-        ]
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "queries/messages/clearMessageHistory",
-    "category": "Flow",
-    "label": "Clear Message History",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "eventState"
-        ]
-      },
-      {
-        "name": "eventState",
-        "valueType": "array",
-        "defaultValue": [
-          "channel",
-          "connector"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "logic/string/isDefined",
-    "category": "None",
-    "label": "Concat",
-    "inputs": [
-      {
-        "name": "a",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "boolean"
-      }
-    ],
-    "configuration": []
   },
   {
     "type": "logic/string",
@@ -4051,17 +4677,8 @@
     "type": "action/object/create",
     "category": "Action",
     "label": "Object Create",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
+    "inputs": [],
     "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
       {
         "name": "object",
         "valueType": "object"

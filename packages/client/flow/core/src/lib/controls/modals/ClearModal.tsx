@@ -1,5 +1,5 @@
 import React from 'react'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow } from '@xyflow/react'
 
 import { Modal } from './Modal'
 

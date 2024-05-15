@@ -1,6 +1,10 @@
 import { VariableJSON } from '@magickml/behave-graph'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Input,
   Label,
   Select,
@@ -17,11 +21,11 @@ import { useEffect, useState } from 'react'
 const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 
 // todo we need to centralize these types
-const valueTypes = ['boolean', 'string', 'float', 'array', 'object']
+const valueTypes = ['boolean', 'string', 'float', 'array', 'object', 'integer']
 
 const initialValueMap = {
   boolean: false,
-  string: '',
+  string: ' ',
   float: 0.0,
   integer: 0,
   array: '[]',
@@ -61,7 +65,7 @@ const DefaultInput = ({
   } else if (showChoices && choices.length > 0) {
     initialValue = choices[0].value
   } else {
-    initialValue = ''
+    initialValue = ' '
   }
 
   const [value, setValue] = useState(initialValue)
@@ -122,7 +126,12 @@ const DefaultInput = ({
       {valueType === 'boolean' && !showChoices && (
         <div className="flex gap-2 h-10 items-center">
           <p>False</p>
-          <Switch value={value || 0} onChange={updateValue} />
+          <Switch
+            value={value}
+            onCheckedChange={e => {
+              updateValue(e)
+            }}
+          />
           <p>True</p>
         </div>
       )}
@@ -149,72 +158,92 @@ export const Variable = ({
   deleteVariable,
   deleteAllVariableNodes,
 }: VariableProps) => {
-  const updateProperty = (property: keyof VariableJSON) =>
-    debounce(value => {
-      console.log('Property', property, 'changed to', value)
-      updateVariable({
-        ...variable,
-        [property]: value,
-      })
-
+  const updateProperty = (property: keyof VariableJSON) => {
+    return debounce(value => {
       if (property === 'valueTypeName') {
         deleteAllVariableNodes()
+        console.log('update', {
+          [property]: value,
+          initialValue: initialValueMap[value],
+        })
+        updateVariable({
+          ...variable,
+          [property]: value,
+          initialValue: initialValueMap[value],
+        })
+      } else {
+        updateVariable({ ...variable, [property]: value })
       }
     }, 2000)
+  }
 
   return (
-    <div className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2 p-2 pl-4">
-      <div className="flex flex-row">
-        <div className="flex flex-col w-full gap-2">
-          <div className="flex flex-row mb2 gap-2 w-full">
-            <div className="flex-grow">
-              <p>Name</p>
-              <Input
-                disabled
-                className={inputClass}
-                value={variable.name}
-                onChange={e => updateProperty('name')(e.target.value)}
-              />
-            </div>
+    <Accordion
+      type="single"
+      collapsible
+      className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2"
+    >
+      <AccordionItem value={variable.id}>
+        <AccordionTrigger className="flex items-center justify-between w-full p-2 pl-4">
+          <p>
+            {variable.name} -{' '}
+            <span className="text-stone-500">{variable.valueTypeName}</span>
+          </p>
+        </AccordionTrigger>
+        <AccordionContent>
+          <div className="flex flex-row p-2">
+            <div className="flex flex-col w-full gap-2">
+              <div className="flex flex-row mb2 gap-2 w-full">
+                <div className="flex-grow">
+                  <p>Name</p>
+                  <Input
+                    disabled
+                    className={inputClass}
+                    value={variable.name}
+                    onChange={e => updateProperty('name')(e.target.value)}
+                  />
+                </div>
 
-            <div className="flex-grow">
-              <Label>Type</Label>
-              <div className="my-2">
-                <Select
-                  onValueChange={updateProperty('valueTypeName')}
-                  defaultValue={variable.valueTypeName}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {valueTypes.map(type => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex-grow">
+                  <Label>Type</Label>
+                  <div className="my-2">
+                    <Select
+                      onValueChange={updateProperty('valueTypeName')}
+                      defaultValue={variable.valueTypeName}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {valueTypes.map(type => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full">
+                <p>Default value</p>
+                <DefaultInput
+                  valueType={variable.valueTypeName}
+                  initialValue={variable.initialValue}
+                  onChange={updateProperty('initialValue')}
+                />
               </div>
             </div>
+            <div className="flex items-center px-2 pl-4">
+              <TrashIcon
+                className="h-6 w-6 cursor-pointer hover:text-sky-300 transition-all duration-200 ease-in-out"
+                onClick={() => deleteVariable(variable.id)}
+              />
+            </div>
           </div>
-
-          <div className="w-full">
-            <p>Default value</p>
-            <DefaultInput
-              valueType={variable.valueTypeName}
-              initialValue={variable.initialValue}
-              onChange={updateProperty('initialValue')}
-            />
-          </div>
-        </div>
-        <div className="flex items-center px-2 pl-4">
-          <TrashIcon
-            className="h-6 w-6 cursor-pointer hover:text-sky-300 transition-all duration-200 ease-in-out"
-            onClick={() => deleteVariable(variable.id)}
-          />
-        </div>
-      </div>
-    </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   )
 }

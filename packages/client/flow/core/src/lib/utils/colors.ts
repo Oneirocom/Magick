@@ -22,6 +22,18 @@ export const colors: Record<color, [string, string, string]> = {
   orange: ['bg-orange-700', 'border-orange-700', 'text-white'],
 }
 
+export const colorHexMap: Record<color, string> = {
+  red: '#BE123C',
+  green: '#16A34A',
+  lime: '#84CC16',
+  purple: '#6D28D9',
+  blue: '#0EA5E9',
+  gray: '#6B7280',
+  white: '#FFFFFF',
+  orange: '#C2410C',
+};
+
+
 export const valueTypeColorMap: Record<string, color> = {
   flow: 'white',
   number: 'green',

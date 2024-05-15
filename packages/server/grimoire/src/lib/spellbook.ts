@@ -3,7 +3,6 @@ import { IRegistry } from '@magickml/behave-graph'
 import type { BasePlugin, EventPayload } from 'server/plugin'
 import { SpellInterface } from 'server/schemas'
 import { SpellCaster } from './spellCaster'
-import isEqual from 'lodash/isEqual'
 import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
 import { IAgentLogger } from 'server/agents'
@@ -24,6 +23,7 @@ interface IAgent extends IAgentLogger {
 
 export type SpellState = {
   isRunning: boolean
+  debug: boolean
 }
 
 /**
@@ -57,12 +57,11 @@ export type SpellState = {
  */
 export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   /**
-   * Map of spell runners for each spell id.
+   * Map of spell runners for each spell id stored by event channel
    * We use this to scale spell runners and to keep track of them.
    */
-  private spellMap: Map<string, SpellCaster<Agent>[]> = new Map()
-
-  private stateMap: Map<string, SpellState> = new Map()
+  private eventMap: Map<string, Map<string, SpellCaster<Agent>>> = new Map()
+  private spells: Map<string, SpellInterface> = new Map()
 
   private commandHub: CommandHub
 
@@ -125,6 +124,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   get initialState() {
     return {
       isRunning: true,
+      debug: true,
     }
   }
 
@@ -182,6 +182,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.app
       .service('spells')
       .on('created', this.watchSpellCreatedHandler.bind(this))
+
+    this.app
+      .service('spells')
+      .on('removed', this.watchSpellDeleteHandler.bind(this))
   }
 
   /**
@@ -191,7 +195,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * this.app.service('spells').on('updated', this.watchSpellHandler.bind(this));
    */
   private watchSpellUpdateHandler(spell: SpellInterface) {
-    console.log('SPELL UPDATED', spell.id, this.hasSpellCaster(spell.id))
     if (!this.watchSpells) return
     if (this.agent.projectId !== spell.projectId) return
 
@@ -218,7 +221,18 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     if (this.agent.projectId !== spell.projectId) return
 
     this.logger.debug(`Creating spell ${spell.id} in agent ${this.agent.id}`)
-    this.loadSpell(spell)
+    this.spells.set(spell.id, spell)
+  }
+
+  private watchSpellDeleteHandler(spell: SpellInterface) {
+    if (!this.watchSpells) return
+    if (spell.type !== 'behave') return
+    if (this.hasSpellCaster(spell.id)) return
+    if (this.agent.projectId !== spell.projectId) return
+
+    if (this.hasSpellCaster(spell.id)) {
+      this.clearSpellCasters(spell.id)
+    }
   }
 
   /**
@@ -228,9 +242,31 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * spellbook.updateSpellState(spellId, { isRunning: true });
    */
-  updateSpellState(spellId: string, update: Partial<SpellState>) {
-    const state = this.stateMap.get(spellId) || { isRunning: false }
-    this.stateMap.set(spellId, { ...state, ...update })
+  async updateSpellState(spellId: string, update: Partial<SpellState>) {
+    // here we will use keyv
+    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const keyv = this.app.get('keyv')
+
+    const currentState = (await keyv.get(key)) || {
+      isRunning: true,
+      debug: true,
+    }
+
+    await keyv.set(key, { ...currentState, ...update })
+  }
+
+  async getSpellState(spellId: string): Promise<SpellState> {
+    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const keyv = this.app.get('keyv')
+
+    const currentState = await keyv.get(key)
+
+    if (!currentState) {
+      this.updateSpellState(spellId, this.initialState)
+      return this.initialState
+    }
+
+    return currentState
   }
 
   /**
@@ -241,6 +277,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   initializeCommands() {
     this.commandHub.registerDomain('agent', 'spellbook', {
       toggleLive: this.toggleLive.bind(this),
+      toggleDebug: this.toggleDebug.bind(this),
       pauseSpell: this.pauseSpell.bind(this),
       playSpell: this.playSpell.bind(this),
       killSpell: this.killSpell.bind(this),
@@ -292,34 +329,73 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     eventName: string,
     _payload: EventPayload
   ) {
-    this.logger.trace(`Handling event ${eventName} for ${dependency}`)
-    // Iterate over alll spell casters
-    for (const [spellId, spellMap] of this.spellMap.entries()) {
+    const eventKey = _payload.channel || 'default'
+    const payload = { ..._payload }
+
+    const spellCasters = await this.createOrGetSpellCasters(eventKey, payload)
+
+    for (const [spellId, spellCaster] of spellCasters) {
       if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
 
       this.logger.trace(`Handling event ${eventName} for ${spellId}`)
-
-      // Clone the payload so we don't mutate it when we pass it down to each spellcaster
-      const payload = { ..._payload }
-
-      // Get the first available spell runner
-      const availableCaster = spellMap.find(runner => !runner.isBusy())
-      if (availableCaster) {
-        // Trigger the event in the spell runner
-        availableCaster.handleEvent(dependency, eventName, payload)
-        continue
-      }
-
-      // If there are no available spell runners, we create a new one
-      const spellCaster = await this.loadById(spellId)
-
-      if (!spellCaster) {
-        this.agent.error(`Error handling event ${eventName} for ${spellId}`)
-        continue
-      }
-
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
+  }
+
+  async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
+    const spellCasters = this.eventMap.get(eventKey)
+    if (!spellCasters) {
+      const spellPromises = Array.from(this.spells.values()).map(
+        async spell => {
+          const spellCaster = await this.loadSpell(spell)
+          spellCaster?.loadInitialEvent(event)
+          return spellCaster
+        }
+      )
+      const loadedSpells = await Promise.all(spellPromises)
+      const validSpellCasters = loadedSpells.filter(
+        (spellCaster): spellCaster is SpellCaster<Agent> => !!spellCaster
+      )
+      const spellMap = new Map(
+        validSpellCasters.map(spellCaster => [
+          spellCaster.spell.id,
+          spellCaster,
+        ])
+      )
+      this.eventMap.set(eventKey, spellMap)
+      return spellMap
+    }
+    return spellCasters
+  }
+  /**
+   * Gets the spell runner for the given spell id.
+   * @param {string} spellId - Id of the spell.
+   * @returns {SpellCaster | undefined} - Spell runner instance.
+   * @example
+   * const spellCaster = spellbook.getSpellCaster(spellId);
+   */
+  async getOrCreateSpellCaster(spellId: string, eventKey: string) {
+    let spellCasters = this.eventMap.get(eventKey)
+
+    if (!spellCasters) {
+      spellCasters = new Map()
+      this.eventMap.set(eventKey, spellCasters)
+    }
+
+    let spellCaster = spellCasters.get(spellId)
+
+    if (!spellCaster) {
+      spellCaster = (await this.loadById(spellId)) || undefined
+      if (spellCaster) {
+        spellCasters.set(spellId, spellCaster)
+      } else {
+        this.agent.error(
+          `Error creating spellcaster for eventKey: ${eventKey} for ${spellId}`
+        )
+      }
+    }
+
+    return spellCaster
   }
 
   /**
@@ -328,21 +404,17 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * this.syncState(data);
    */
-  syncState(data) {
-    const { spellId } = data
-
-    if (!this.hasSpellCaster(spellId)) return
-
-    const state = this.stateMap.get(spellId)
-
-    if (!state) return
-
-    this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
-      spellId,
-      state,
-    })
+  async syncState() {
+    for (const [spellId] of this.spells.keys()) {
+      const spellState = await this.getSpellState(spellId)
+      this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
+        spellId,
+        state: spellState,
+      })
+    }
   }
 
+  // todo: refresh spells doesnt need to laod spells right now.  We can just reset the state.
   async refreshSpells() {
     await this.clearAllSpellCasters()
     await this.resetAllSpellCasterStates()
@@ -367,6 +439,23 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Toggles the debug flag.
+   */
+  async toggleDebug(data) {
+    this.logger.trace(`Toggling debug to ${data.debug}`)
+    const { spellId, debug } = data
+
+    for (const spellCasters of this.eventMap.values()) {
+      const spellCaster = spellCasters.get(spellId)
+      if (spellCaster) {
+        spellCaster.toggleDebug(debug)
+      }
+    }
+
+    await this.updateSpellState(spellId, { debug })
+  }
+
+  /**
    * Loads the spell casters for the given spells.  We use this to load the spells when the agent starts.
    * With this new system, we no longer need a single root spell but all spells can process events in parallel.
    * @param {SpellInterface[]} spells - Array of spell instances.
@@ -374,7 +463,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * await spellbook.loadSpells(spells);
    */
-  async loadSpells(spells: SpellInterface[]) {
+  loadSpells(spells: SpellInterface[]) {
     if (!spells) {
       this.logger.error(
         `SPELLBOOK: No spells provided for agent ${this.agent.id}`
@@ -385,9 +474,14 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.logger.trace(
       `SPELLBOOK: Spells: ${JSON.stringify(spells.map(s => s.id))}`
     )
-    await Promise.all(spells.map(spell => this.loadSpell(spell)))
-  }
 
+    this.clearAllSpellCasters()
+    this.spells.clear()
+
+    for (const spell of spells) {
+      this.spells.set(spell.id, spell)
+    }
+  }
   /**
    * Loads the spell runner for the given spell id.
    * @param {string} spellId - Id of the spell.
@@ -400,16 +494,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     try {
       const spell = await this.app.service('spells').get(spellId)
 
-      if (
-        this.hasSpellCaster(spellId) &&
-        this.getReadySpellCaster(spellId) &&
-        isEqual(this.getReadySpellCaster(spellId)!.spell.graph, spell.graph)
-      ) {
-        return this.getReadySpellCaster(spellId)
-      }
-
       this.logger.debug(`Reloading spell ${spellId}`)
-      return this.loadSpell(spell)
+      return await this.loadSpell(spell)
     } catch (error) {
       console.log('Error!', error)
       this.logger.error(
@@ -439,7 +525,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       return null
     }
 
-    const initialState = this.stateMap.get(spell.id) || this.initialState
+    this.spells.set(spell.id, spell)
+
+    const initialState = await this.getSpellState(spell.id)
 
     try {
       const spellCaster = new SpellCaster<Agent>({
@@ -451,13 +539,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
       await spellCaster.initialize(spell)
 
-      const spellCasterList = this.spellMap.get(spell.id)
-      if (spellCasterList) {
-        spellCasterList.push(spellCaster)
-      } else {
-        this.spellMap.set(spell.id, [spellCaster])
-        this.stateMap.set(spell.id, { isRunning: true })
-      }
+      // we want to make sure we ALWAYS maintain a reference to the spellCaster
+      // this.cachePool.set(spell.id, spellCaster)
 
       return spellCaster
     } catch (err) {
@@ -476,20 +559,14 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   async updateSpell(spell: SpellInterface): Promise<void> {
     // clear out all instances of the spell
-    this.clearSpellCasters(spell.id)
-    // load the updated spell into memory
-    this.loadSpell(spell)
-  }
+    const newSpellCaster = await this.loadSpell(spell)
 
-  /**
-   * Returns a ready spell runner for the given spell id.
-   * @param {string} spellId - Id of the spell.
-   * @returns {SpellRunner | undefined} - Ready spell runner instance.
-   * @example
-   * const spellRunner = spellbook.getReadySpellRunner(spellId);
-   */
-  getReadySpellCaster(spellId: string): SpellCaster<Agent> | null {
-    return this.spellMap.get(spellId)?.find(runner => !runner.isBusy()) || null
+    if (!newSpellCaster) {
+      this.agent.error(`Error updating spell ${spell.id}`)
+      return
+    }
+    this.replaceSpellCaster(spell.id, newSpellCaster)
+    // load the updated spell into memory
   }
 
   /**
@@ -500,9 +577,25 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * const hasSpellRunner = spellbook.hasSpellRunner(spellId);
    */
   hasSpellCaster(spellId: string): boolean {
-    return this.spellMap.has(spellId)
+    for (const spellCasters of this.eventMap.values()) {
+      if (spellCasters.has(spellId)) {
+        return true
+      }
+    }
+    return false
   }
 
+  replaceSpellCaster(spellId: string, spellCaster: SpellCaster<Agent>) {
+    for (const spellCasters of this.eventMap.values()) {
+      if (spellCasters.has(spellId)) {
+        const oldSpellCaster = spellCasters.get(spellId)
+        if (oldSpellCaster) {
+          oldSpellCaster.dispose()
+        }
+        spellCasters.set(spellId, spellCaster)
+      }
+    }
+  }
   /**
    * Clears the spell runners for the given spell id.
    * We run through all spellcasters held in memory and clear them.
@@ -512,15 +605,27 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * spellbook.clearSpellCasters(spellId);
    */
   clearSpellCasters(spellId: string) {
-    // go over each spellcaster and clear it
-    const spellCasterList = this.spellMap.get(spellId)
-    if (spellCasterList) {
-      for (const spellCaster of spellCasterList) {
+    for (const [eventKey, spellCasters] of this.eventMap) {
+      const spellCaster = spellCasters.get(spellId)
+      if (spellCaster) {
         spellCaster.dispose()
+        spellCaster.resetState()
+        spellCasters.delete(spellId)
+      }
+      if (spellCasters.size === 0) {
+        this.eventMap.delete(eventKey)
       }
     }
-    this.spellMap.delete(spellId)
-    this.stateMap.delete(spellId)
+  }
+
+  clearAllSpellCasters() {
+    for (const spellCasters of this.eventMap.values()) {
+      for (const spellCaster of spellCasters.values()) {
+        spellCaster.dispose()
+        spellCaster.resetState()
+      }
+    }
+    this.eventMap.clear()
   }
 
   /**
@@ -529,28 +634,12 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @param {string} spellId - Id of the spell.
    */
   resetSpellCasterStates(spellId: string) {
-    const spellCasterList = this.spellMap.get(spellId)
-    if (spellCasterList) {
-      for (const spellCaster of spellCasterList) {
+    for (const spellCasters of this.eventMap.values()) {
+      const spellCaster = spellCasters.get(spellId)
+      if (spellCaster) {
         spellCaster.resetState()
       }
     }
-  }
-
-  /**
-   * Clears all spell runners.
-   * We run through all spellcasters held in memory and clear them.
-   * This stops the loop, disposes the engine, and then deletes the spellcasters from the map.
-   */
-  clearAllSpellCasters() {
-    // go over each spellcaster and clear it
-    for (const spellCasterList of this.spellMap.values()) {
-      for (const spellCaster of spellCasterList) {
-        spellCaster.dispose()
-      }
-    }
-    this.spellMap.clear()
-    this.stateMap.clear()
   }
 
   /*
@@ -558,8 +647,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * This will go into the state service and wipe all keys from memory.
    */
   resetAllSpellCasterStates() {
-    for (const spellCasterList of this.spellMap.values()) {
-      for (const spellCaster of spellCasterList) {
+    for (const spellCasters of this.eventMap.values()) {
+      for (const spellCaster of spellCasters.values()) {
         spellCaster.resetState()
       }
     }
@@ -570,12 +659,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
    */
-  playSpell(data) {
+  async playSpell(data) {
     const { spellId } = data
-    for (const spellCaster of this.spellMap.get(spellId) || []) {
-      spellCaster.startRunLoop()
+    for (const spellCasters of this.eventMap.values()) {
+      const spellCaster = spellCasters.get(spellId)
+      if (spellCaster) {
+        spellCaster.startRunLoop()
+      }
     }
-    this.updateSpellState(spellId, { isRunning: true })
+    await this.updateSpellState(spellId, { isRunning: true })
   }
 
   /**
@@ -583,12 +675,15 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
    */
-  pauseSpell(data) {
+  async pauseSpell(data) {
     const { spellId } = data
-    for (const spellCaster of this.spellMap.get(spellId) || []) {
-      spellCaster.stopRunLoop()
+    for (const spellCasters of this.eventMap.values()) {
+      const spellCaster = spellCasters.get(spellId)
+      if (spellCaster) {
+        spellCaster.stopRunLoop()
+      }
     }
-    this.updateSpellState(spellId, { isRunning: false })
+    await this.updateSpellState(spellId, { isRunning: false })
   }
 
   /**
@@ -601,7 +696,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   killSpells() {
     this.agent.log(`Killing all spells in agent ${this.agent.id}`)
     this.clearAllSpellCasters()
-    this.resetAllSpellCasterStates()
+    // this.resetAllSpellCasterStates()
   }
 
   /**
@@ -624,7 +719,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   onDestroy() {
     this.clear()
     this.resetAllSpellCasterStates()
-    //
+    this.clearAllSpellCasters()
+
     this.app
       .service('spells')
       .removeListener('updated', this.watchSpellUpdateHandler)
@@ -636,14 +732,17 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.app
       .service('spells')
       .removeListener('created', this.watchSpellCreatedHandler)
+
+    this.app
+      .service('spells')
+      .removeListener('removed', this.watchSpellDeleteHandler)
   }
 
   /**
    * Clears the spell runner map.
    */
   clear() {
-    this.spellMap = new Map()
-    this.stateMap = new Map()
+    this.eventMap.clear()
     this.pluginManager.centralEventBus.removeAllListeners()
   }
 }

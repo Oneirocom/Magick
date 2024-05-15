@@ -1,7 +1,6 @@
 import { TabsContent, InputWithLabel, Badge } from '@magickml/client-ui'
 import { KnowledgeUploadInput } from './knowledge-upload-input'
 import { useConfig } from '@magickml/providers'
-import axios from 'axios'
 import {
   ClientProjectPresignType,
   useGetPresignedUrlMutation,
@@ -14,6 +13,41 @@ import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
 
 type KnowledgeUploadContentProps = {
   disabledState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+}
+
+export interface UploadImageProps {
+  presignedUrl: {
+    url: string
+    key: string
+  }
+  imageFile: File
+}
+
+export const uploadImage = async ({
+  presignedUrl,
+  imageFile,
+}: UploadImageProps) => {
+  const url = new URL(presignedUrl.url)
+  const headers = new Headers()
+  for (const [key, value] of url.searchParams.entries()) {
+    if (key.startsWith('x-goog-')) {
+      headers.set(key, value)
+    }
+  }
+
+  headers.set('Content-Type', 'application/octet-stream')
+
+  const res = await fetch(url.toString(), {
+    method: 'PUT',
+    body: imageFile,
+    headers,
+  })
+
+  if (res.status !== 200) {
+    throw new Error('Failed to upload image. Please try a different image.')
+  } else {
+    return presignedUrl.key
+  }
 }
 
 export const KnowledgeUploadContent: React.FC<
@@ -52,11 +86,15 @@ export const KnowledgeUploadContent: React.FC<
         })
 
         if ('data' in response && response.data) {
-          const { url, key } = response.data
+          const upload: UploadImageProps = {
+            presignedUrl: {
+              url: response.data.url,
+              key: response.data.key,
+            },
+            imageFile: file,
+          }
 
-          await axios.put(url, file, {
-            headers: { 'Content-Type': file.type },
-          })
+          const key = await uploadImage(upload)
 
           // Update the file status to 'uploaded' after successful upload
           setNewKnowledge(prevKnowledge =>

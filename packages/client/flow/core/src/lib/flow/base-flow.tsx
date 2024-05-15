@@ -1,16 +1,28 @@
-import React, { useEffect, useMemo } from 'react'
-import { Background, BackgroundVariant, ReactFlow, MiniMap } from 'reactflow'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import {
+  Background,
+  BackgroundVariant,
+  ReactFlow,
+  MiniMap,
+  ReactFlowInstance,
+} from '@xyflow/react'
 import CustomControls from '../controls/Controls'
 import { NodePicker } from '../node-picker/NodePicker'
 import { type BehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
-import { getNodeSpec } from 'shared/nodeSpec'
 import { RootState } from 'client/state'
 import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
 import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
+import { CommentNode } from '../nodeTypes/comment'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
+
+export type MagickReactFlowInstance = ReactFlowInstance<
+  MagickNodeType,
+  MagickEdgeType
+>
 
 type BaseFlowHandlers = Pick<
   ReturnType<typeof useFlowHandlers>,
@@ -31,6 +43,8 @@ type BaseFlowHandlers = Pick<
   | 'nodeMenuActions'
   | 'isValidConnectionHandler'
   | 'onEdgeUpdate'
+  | 'socketsVisible'
+  | 'toggleSocketVisibility'
 >
 
 type BaseFlowBehaveGraphFlow = Pick<
@@ -48,12 +62,13 @@ type BaseFlowProps = {
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
+  specJSON: NodeSpecJSON[]
   windowDimensions: { width: number; height: number }
   behaveGraphFlow: BaseFlowBehaveGraphFlow
   flowHandlers: BaseFlowHandlers
   pubSub?: ReturnType<typeof usePubSub> // should split this into separate handler props
   globalConfig?: RootState['globalConfig'] | undefined // could split this into projectId and currentAgentId
-  lastSpellEvent?: any
+  lastStateEvent?: any
 }
 
 const edgeTypes = {
@@ -75,12 +90,13 @@ function isEmptyObject(obj: object): boolean {
 export const BaseFlow: React.FC<BaseFlowProps> = ({
   spell,
   tab,
+  specJSON,
   readOnly = false,
   behaveGraphFlow,
   flowHandlers,
   pubSub,
   globalConfig,
-  lastSpellEvent,
+  lastStateEvent,
 }) => {
   const {
     setGraphJson,
@@ -94,44 +110,33 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   // memoize node types
   const nodeTypes = useMemo(() => {
     if (!behaveNodeTypes) return {}
-    return behaveNodeTypes
+    return { ...behaveNodeTypes, comment: CommentNode }
   }, [behaveNodeTypes])
 
   const { projectId, currentAgentId } = globalConfig || {}
   const { publish, events } = pubSub || {}
 
-  const [specJSON, setSpecJSON] = React.useState<NodeSpecJSON[]>([])
   const [playing, setPlaying] = React.useState(false)
-  const [miniMapOpen, setMiniMapOpen] = React.useState(true)
+  const [isDebug, setIsDebug] = React.useState(false)
+  const [miniMapOpen, setMiniMapOpen] = React.useState(false)
 
   useEffect(() => {
-    if (!spell) return
-
-    const specs = getNodeSpec(spell)
-    setSpecJSON(specs)
-
-    if (!publish || !events || !currentAgentId) return
-    // trigger initial sync
-    publish(events.SEND_COMMAND, {
-      agentId: currentAgentId,
-      command: 'agent:spellbook:syncState',
-      data: {
-        spellId: spell.id,
-      },
-    })
-  }, [spell])
-
-  useEffect(() => {
-    if (!lastSpellEvent || lastSpellEvent.spellId !== spell.id) return
-    if (!lastSpellEvent.state) return
+    if (!lastStateEvent || lastStateEvent.spellId !== spell.id) return
+    if (!lastStateEvent.state) return
 
     // Process only spell state events here
-    if (lastSpellEvent.state.isRunning) {
+    if (lastStateEvent.state.isRunning) {
       setPlaying(true)
-    } else if (!lastSpellEvent.state.isRunning) {
+    } else if (!lastStateEvent.state.isRunning) {
       setPlaying(false)
     }
-  }, [lastSpellEvent])
+
+    if (lastStateEvent.state.isDebug) {
+      setIsDebug(true)
+    } else if (!lastStateEvent.state.isDebug) {
+      setIsDebug(false)
+    }
+  }, [lastStateEvent])
 
   const {
     handleOnConnect,
@@ -164,6 +169,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
           spellId: spell.id,
         },
       })
+      publish(events.RESET_NODE_STATE)
     } else {
       publish(events.SEND_COMMAND, {
         projectId,
@@ -177,10 +183,27 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     setPlaying(!playing)
   }
 
+  const toggleDebug = useCallback(() => {
+    if (!publish || !events || !currentAgentId) return
+    const newState = !isDebug
+
+    publish(events.SEND_COMMAND, {
+      projectId,
+      agentId: currentAgentId,
+      command: 'agent:spellbook:toggleDebug',
+      data: {
+        spellId: spell.id,
+        debug: newState,
+      },
+    })
+
+    setIsDebug(newState)
+  }, [isDebug, publish, events, currentAgentId])
+
   if (!nodeTypes || isEmptyObject(nodeTypes)) return null
 
   return (
-    <ReactFlow
+    <ReactFlow<MagickNodeType, MagickEdgeType>
       proOptions={proOptions}
       nodeTypes={nodeTypes}
       nodes={nodes}
@@ -207,6 +230,8 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       <CustomControls
         playing={playing}
         togglePlay={togglePlay}
+        isDebug={isDebug}
+        toggleDebug={toggleDebug}
         setBehaviorGraph={setGraphJson}
         specJson={specJSON}
         miniMapOpen={miniMapOpen}
@@ -214,14 +239,15 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       />
       <Background
         variant={BackgroundVariant.Lines}
+        patternClassName="color-[var(--background-color-light)]"
         color="var(--background-color-light)"
         style={{ backgroundColor: 'var(--background-color)' }}
       />
       {miniMapOpen && (
-        <MiniMap
+        <MiniMap<MagickNodeType>
           nodeStrokeWidth={3}
           maskColor="#69696930"
-          nodeColor={node => nodeColor(node, specJSON, spell)}
+          nodeColor={node => nodeColor(node, specJSON)}
           pannable
           zoomable
         />
@@ -234,6 +260,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
           onPickNode={handleAddNode}
           onClose={closeNodePicker}
           specJSON={specJSON}
+          spell={spell}
         />
       )}
 

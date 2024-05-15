@@ -438,6 +438,8 @@ export abstract class BasePlugin<
         this.centralEventBus.emit(this.eventQueueName, payload)
         // await this.eventQueue.addJob(event.eventName, payload)
 
+        if (payload.skipSave) return
+
         saveGraphEvent({
           sender: payload.sender,
           observer: this.agent.id,
@@ -567,6 +569,11 @@ export abstract class BasePlugin<
     event,
     messageDetails: EventFormat<Data, Metadata>
   ): EventPayload<Data, Metadata> {
+    const rawData =
+      typeof messageDetails.rawData === 'string'
+        ? messageDetails.rawData
+        : JSON.stringify(messageDetails.rawData)
+
     return {
       plugin: messageDetails.plugin || this.name,
       connector: this.name,
@@ -579,6 +586,7 @@ export abstract class BasePlugin<
       metadata: messageDetails.metadata || ({} as Metadata),
       timestamp: new Date().toISOString(),
       ...messageDetails,
+      rawData: rawData,
     }
   }
 }

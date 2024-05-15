@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import SingleElement from './SingleElement'
 
@@ -11,6 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
+import { useSnackbar } from 'notistack'
+import { useReactFlow } from '@xyflow/react'
+import { setEdges } from 'client/state'
 
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -19,9 +22,10 @@ import {
  * @param {Function} props.addSocket - Function to add a new socket.
  * @returns {React.JSX.Element} Form input to add a new socket.
  */
-const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
+const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
   const [value, setValue] = useState('')
-  const [selectedValueType, setSelectedValueType] = useState('string')
+  const [selectedValueType, setSelectedValueType] = useState(valueTypes[0])
+  const { enqueueSnackbar } = useSnackbar()
 
   /**
    * Update the input value when changed.
@@ -32,6 +36,14 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
     setValue(e.target.value)
   }
 
+  useEffect(() => {
+    if (definedValueType) {
+      setSelectedValueType(definedValueType)
+    } else {
+      setSelectedValueType(valueTypes[0])
+    }
+  }, [definedValueType, valueTypes])
+
   /**
    * Add a new socket on form submission.
    *
@@ -40,9 +52,18 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
   const onAdd = e => {
     if (!value) return
     e.preventDefault()
+    const socketExists = sockets.some(socket => socket.name === value)
+
+    if (socketExists) {
+      enqueueSnackbar('Socket already exists', {
+        variant: 'error',
+      })
+      return
+    }
+
     addSocket({ name: value, valueType: definedValueType || selectedValueType })
     setValue('')
-    setSelectedValueType('string')
+    setSelectedValueType(valueTypes[0])
   }
 
   return (
@@ -99,13 +120,17 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType }) => {
 }
 
 export const SocketConfig = ({
+  node,
   config,
   updateConfigKey,
   fullConfig,
+  tab,
 }: ConfigurationComponentProps) => {
   const defaultValues = ['string', 'integer', 'boolean']
   const [configKey, sockets = []] = config
   const { socketValues = defaultValues, valueType = null } = fullConfig
+
+  const instance = useReactFlow()
 
   const addSocket = useCallback(
     socket => {
@@ -123,6 +148,22 @@ export const SocketConfig = ({
   )
 
   const deleteSocket = (name: string) => {
+    const edges = instance.getEdges()
+
+    const newEdges = edges.filter(edge => {
+      if (configKey === 'socketInputs') {
+        return edge.target !== node.id && edge.targetHandle !== name
+      }
+
+      if (configKey === 'socketOutputs') {
+        return edge.source !== node.id && edge.sourceHandle !== name
+      }
+
+      return true
+    })
+
+    setEdges(tab.id, newEdges)
+
     const newValue = sockets.filter((socket: any) => socket.name !== name)
     updateConfigKey(configKey, newValue)
   }
@@ -131,16 +172,17 @@ export const SocketConfig = ({
     <div>
       {configKey === 'socketInputs' && <h3>Input Sockets</h3>}
       {configKey === 'socketOutputs' && <h3>Output Sockets</h3>}
-      {sockets.map((socket: any) => (
+      {sockets.map((socket: any, i) => (
         <SingleElement
           name={socket.name}
-          key={socket.name}
+          key={socket.name + i}
           delete={deleteSocket}
           type={socket.valueType}
         />
       ))}
       <div>
         <AddNewSocket
+          sockets={sockets}
           addSocket={addSocket}
           valueTypes={socketValues}
           definedValueType={valueType}

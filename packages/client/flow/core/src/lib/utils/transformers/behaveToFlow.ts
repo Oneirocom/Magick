@@ -1,15 +1,45 @@
 import type { GraphJSON } from '@magickml/behave-graph'
-import type { Edge, Node } from 'reactflow'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'
+import { SpellInterface } from 'server/schemas'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
-export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
-  const nodes: Node[] = []
-  const edges: Edge[] = []
+export const behaveToFlow = (
+  graph: GraphJSON,
+  spell: SpellInterface
+): [MagickNodeType[], MagickEdgeType[]] => {
+  const nodes: MagickNodeType[] = []
+  const edges: MagickEdgeType[] = []
   const nodeSpecs = getNodeSpec()
-  console.log('Converting graph to flow')
+
+  // Start logging time for performance
+  console.time('behaveToFlow')
+
+  graph?.data?.comments?.forEach(comment => {
+    nodes.push({
+      id: comment.id,
+      type: 'comment',
+      style: {
+        height: comment.height,
+        width: comment.width,
+      },
+      width: comment.width,
+      height: comment.height,
+      position: {
+        x: comment.metadata?.positionX
+          ? Number(comment.metadata?.positionX)
+          : 0,
+        y: comment.metadata?.positionY
+          ? Number(comment.metadata?.positionY)
+          : 0,
+      },
+      data: {
+        text: comment.text,
+      },
+    })
+  })
 
   graph.nodes?.forEach(nodeJSON => {
     const spec = nodeSpecs.find(spec => spec.type === nodeJSON.type)
@@ -18,7 +48,17 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
     }
     const configuration = getConfig(nodeJSON, spec)
 
-    const node: Node = {
+    // PATCH FOR VARIABLE NODES
+    if (nodeJSON.type === 'variable' && configuration.variableId) {
+      const variable = spell.graph.variables.find(
+        variable => variable.id === configuration.variableId
+      )
+      if (variable) {
+        configuration.valueTypeName = variable.valueTypeName
+      }
+    }
+
+    const node: MagickNodeType = {
       id: nodeJSON.id,
       type: nodeJSON.type,
       position: {
@@ -31,6 +71,7 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
       },
       data: {
         nodeSpec: spec,
+        nodeTitle: nodeJSON?.metadata?.nodeTitle,
         configuration,
       } as { [key: string]: any },
     }
@@ -76,7 +117,10 @@ export const behaveToFlow = (graph: GraphJSON): [Node[], Edge[]] => {
         })
       }
     }
+
+    // finish logging performance time
   })
+  console.timeEnd('behaveToFlow')
 
   return [nodes, edges]
 }

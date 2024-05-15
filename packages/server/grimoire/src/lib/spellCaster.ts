@@ -18,11 +18,12 @@ import { SpellInterface } from 'server/schemas'
 import { type EventPayload } from 'server/plugin'
 import { getLogger } from 'server/logger'
 import { CORE_DEP_KEYS } from 'plugin/core'
-import { AGENT_SPELL } from 'communication'
+import { AGENT_SPELL, AGENT_SPELL_STATE } from 'communication'
 import { PluginManager } from 'server/pluginManager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
+import { debounce } from 'lodash'
 
 interface IAgent {
   id: string
@@ -90,7 +91,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   spell!: SpellInterface
   executeGraph = false
   pluginManager: PluginManager
-  busy: boolean = false
+  busy: boolean = true
+  private debug = true
   private agent
   private logger: pino.Logger
   private loopDelay: number
@@ -98,6 +100,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   private limitInSteps: number
   private connection: Redis
   private isRunning: boolean = true
+  private debounceMap: Map<string, Function> = new Map()
 
   constructor({
     loopDelay = 100,
@@ -127,7 +130,22 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     // set the initial state if it is passed in
     if (initialState) {
       this.isRunning = initialState.isRunning
+      this.debug = initialState.debug
     }
+  }
+
+  getState(): SpellState {
+    return {
+      isRunning: this.isRunning,
+      debug: this.debug,
+    }
+  }
+
+  syncState() {
+    this.agent.pubsub.publish(AGENT_SPELL_STATE(this.agent.id), {
+      spellId: this.spell.id,
+      state: this.getState(),
+    })
   }
 
   /**
@@ -178,6 +196,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       this.engine = new Engine(graph.nodes)
       this.initializeHandlers()
       this.start()
+
+      this.syncState()
       return this
     } catch (err: any) {
       this.error(
@@ -186,6 +206,12 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
       )
       return this
     }
+  }
+
+  loadInitialEvent(event: EventPayload) {
+    this.graph
+      .getDependency<IEventStore>(CORE_DEP_KEYS.EVENT_STORE)
+      ?.setInitialEvent(event)
   }
 
   /**
@@ -224,24 +250,35 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.engine.onNodeExecutionEnd.addListener(
       this.executionEndHandler.bind(this)
     )
-
     this.engine.onNodeExecutionError.addListener(
       this.executionErrorhandler.bind(this)
     )
-
-    // this.engine.onNodeCommit.addListener(this.nodeCommitHandler.bind(this))
   }
 
-  nodeCommitHandler = async payload => {
-    const event = `${this.spell.id}-${payload.node.id}-commit`
+  private debounceEvent(
+    event: string,
+    callback: Function,
+    delay: number,
+    options: any = {}
+  ) {
+    if (!this.debounceMap.has(event)) {
+      const debouncedFunction = debounce(
+        () => {
+          callback()
+        },
+        delay,
+        {
+          leading: false,
+          trailing: true,
+          ...options,
+        }
+      )
 
-    this.emitNodeWork({
-      node: payload.node,
-      event,
-      data: {
-        socket: payload.socket,
-      },
-    })
+      this.debounceMap.set(event, debouncedFunction)
+    }
+
+    const debouncedFunction = this.debounceMap.get(event)
+    if (debouncedFunction) debouncedFunction()
   }
 
   /**
@@ -251,15 +288,25 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionStartHandler = async (node: any) => {
+    if (!this.debug) return
     const event = `${this.spell.id}-${node.id}-start`
 
-    this.emitNodeWork({
-      node,
+    this.debounceEvent(
       event,
-      data: {
-        inputs: node.inputs,
+      () => {
+        this.emitNodeWork({
+          node,
+          event,
+          data: {
+            inputs: node.inputs,
+          },
+        })
       },
-    })
+      1000,
+      {
+        leading: true,
+      }
+    )
   }
 
   /**
@@ -269,16 +316,27 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionEndHandler = async (node: any) => {
+    if (!this.debug) return
     const event = `${this.spell.id}-${node.id}-end`
+    const startEvent = `${this.spell.id}-${node.id}-start`
 
-    this.emitNodeWork({
-      node,
+    this.debounceEvent(
       event,
-      log: true,
-      data: {
-        outputs: node.outputs,
+      () => {
+        this.emitNodeWork({
+          node,
+          event,
+          data: {
+            outputs: node.outputs,
+          },
+        })
+        this.debounceMap.delete(startEvent)
       },
-    })
+      4000,
+      {
+        leading: false,
+      }
+    )
   }
 
   executionErrorhandler = async ({ node, error }) => {
@@ -419,6 +477,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.isRunning = false
   }
 
+  toggleDebug(debug: boolean) {
+    this.debug = debug
+  }
+
   /**
    * This is the main entrypoint for the spellCaster.  It is called by the spellbook
    * when a spell receives an event.  We pass the event to the engine and it will
@@ -476,6 +538,13 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     this.logger.debug(`Disposing spell caster for ${this.spell.id}`)
     this.stopRunLoop()
     if (this.engine) this.engine.dispose()
+    this.clearLifecycleListeners()
+  }
+
+  clearLifecycleListeners() {
+    this.lifecycleEventEmitter?.endEvent.clear()
+    this.lifecycleEventEmitter?.startEvent.clear()
+    this.lifecycleEventEmitter?.tickEvent.clear()
   }
 
   /**

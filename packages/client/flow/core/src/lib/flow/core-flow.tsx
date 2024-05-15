@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { useSelector } from 'react-redux'
-import { RootState, useSelectAgentsSpell } from 'client/state'
+import { RootState, useSelectAgentsState } from 'client/state'
 import { BaseFlow } from './base-flow'
 import { useBehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
@@ -12,7 +12,7 @@ type FlowProps = {
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   readOnly?: boolean
-  windowDimensions:{ width: number; height: number }
+  windowDimensions: { width: number; height: number }
 }
 
 export const CoreFlow: React.FC<FlowProps> = ({
@@ -23,10 +23,10 @@ export const CoreFlow: React.FC<FlowProps> = ({
   windowDimensions,
 }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { lastItem: lastSpellEvent } = useSelectAgentsSpell()
+  const { lastItem: lastStateEvent } = useSelectAgentsState()
   const pubSub = usePubSub()
 
-  const specJSON = useMemo(() => getNodeSpec(spell), [spell])
+  const specJSON = useMemo(() => getNodeSpec(), [])
 
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
@@ -40,11 +40,13 @@ export const CoreFlow: React.FC<FlowProps> = ({
     parentRef,
     tab,
     windowDimensions,
+    spell,
   })
 
   return (
     <BaseFlow
       spell={spell}
+      specJSON={specJSON}
       parentRef={parentRef}
       tab={tab}
       readOnly={readOnly}
@@ -53,7 +55,7 @@ export const CoreFlow: React.FC<FlowProps> = ({
       flowHandlers={flowHandlers}
       pubSub={pubSub}
       globalConfig={globalConfig}
-      lastSpellEvent={lastSpellEvent}
+      lastStateEvent={lastStateEvent}
     />
   )
 }

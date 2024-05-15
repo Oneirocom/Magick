@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { GraphJSON } from '@magickml/behave-graph'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow } from '@xyflow/react'
 import { Modal } from './Modal'
 import {
   Select,

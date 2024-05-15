@@ -12,7 +12,8 @@ export const usePanelControls = (
   const { subscribe } = usePubSub()
 
   if (keyCommand) {
-    useHotkeys(keyCommand, () => {
+    useHotkeys(keyCommand, e => {
+      e.preventDefault()
       if (currentWidth > 0) {
         close()
       } else {
@@ -22,11 +23,11 @@ export const usePanelControls = (
   }
 
   const open = () => {
-    // props.api.setVisible(true)
+    props.api.setVisible(true)
   }
 
   const close = () => {
-    // props.api.setVisible(false)
+    props.api.setVisible(false)
   }
 
   useEffect(() => {

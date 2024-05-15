@@ -28,11 +28,10 @@ export const useMessageQueue = ({
 
   const streamToConsole = (text: string) => {
     if (text === undefined) return
+    if (text === '<END>') return
 
-    if (!text.includes('<END>') && !text.includes('<START>')) {
-      messageQueue.current.push(text)
-      processQueue()
-    }
+    messageQueue.current.push(text)
+    processQueue()
   }
 
   const typeChunk = () => {
@@ -42,17 +41,21 @@ export const useMessageQueue = ({
 
     setHistory(prevHistory => {
       const newHistory = [...prevHistory]
-      messagesToProcess.forEach(currentMessage => {
-        const lastMessage = newHistory[newHistory.length - 1]
-        const sender = seraph ? 'assistant' : 'agent'
+      const sender = seraph ? 'assistant' : 'agent'
 
-        if (!lastMessage || lastMessage.sender !== sender) {
-          newHistory.push({
-            sender,
-            content: currentMessage,
-          })
+      messagesToProcess.forEach(currentMessage => {
+        if (currentMessage === '<START>') {
+          // If the current message is '<START>', create a new message in the history
+          newHistory.push({ sender, content: '' })
         } else {
-          lastMessage.content += currentMessage
+          const lastMessage = newHistory[newHistory.length - 1]
+          if (lastMessage && lastMessage.sender === sender) {
+            // Append the current message to the last message if the sender is the same
+            lastMessage.content += currentMessage
+          } else {
+            // Create a new message in the history if the sender is different
+            newHistory.push({ sender, content: currentMessage })
+          }
         }
       })
       return newHistory

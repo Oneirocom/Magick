@@ -7,6 +7,7 @@ import {
   NodeConfigurationDescription,
   NodeType,
   SocketsDefinition,
+  StateReturn,
   makeCommonProps,
 } from '@magickml/behave-graph'
 import { BaseEmitter, EventPayload } from 'server/plugin'
@@ -36,22 +37,34 @@ interface ExtendedConfig extends NodeConfigurationDescription {
   }
 }
 
+type DisposeCallback<TState = any> = {
+  graph: IGraph
+  state: TState
+}
+
 export type CustomEventNodeConfig<
   TEventPayload extends EventPayload,
   TInput extends SocketsDefinition,
   TOutput extends SocketsDefinition,
-  TState
+  TState = any
 > = {
-  handleEvent: (
+  handleEvent?: (
     event: TEventPayload,
     args: EventNodeSetupParams<TInput, TOutput, TState>
   ) => void // Define the type more precisely if possible
   dependencyName?: string
   eventName?: string
+  init?: (
+    args: EventNodeSetupParams<TInput, TOutput, TState> & {
+      handleState: (event: TEventPayload, storeEvent?: boolean) => void
+      finish: () => void
+    }
+  ) => StateReturn<TState> | undefined
   customListener?: (
     getDependency: IGraph['getDependency'],
     onStartEvent: (event: TEventPayload) => void
   ) => void
+  dispose?: (args: DisposeCallback<TState>) => Record<string, unknown>
 }
 
 /**
@@ -119,7 +132,7 @@ export function makeMagickEventNodeDefinition<
     nodeFactory: (graph, config, id) =>
       new EventNodeInstance({
         ...makeCommonProps(NodeType.Event, definition, config, graph, id),
-        initialState: undefined,
+        initialState: definition.initialState || undefined,
         init: async args => {
           const {
             node,
@@ -148,15 +161,21 @@ export function makeMagickEventNodeDefinition<
             })
           }
 
-          // Create a new args object with the new commit function
-          const newArgs = {
-            ...args,
-            commit: innerCommit,
+          const finish = () => {
+            if (node && engine) engine.onNodeExecutionEnd.emit(node)
           }
 
-          // Create a new onStartEvent function that will rehydrate the state before handling the event.
-          // This also acts as a wrapper hanlder around the generic handler event which is passed in.
-          const onStartEvent = async (event: TEventPayload) => {
+          // Create a new args object with the new commit function
+          const handleEventArgs = {
+            ...args,
+            commit: innerCommit,
+            finish: finish,
+          }
+
+          const handleEventState = async (
+            event: TEventPayload,
+            storeEvent = true
+          ) => {
             // attach event key to the event here
             // we set the current event in the event store for access in the state
             const eventStore = getDependency<IEventStore>(
@@ -177,14 +196,23 @@ export function makeMagickEventNodeDefinition<
 
             // Store the event in the event store to be used during the processing of the event
             // this also rehydrates the state for the graph
-            eventStore?.setEvent(eventWithKey)
+            if (storeEvent) eventStore?.setEvent(eventWithKey)
 
-            // Pass all init args and the event to the callback
-            eventConfig.handleEvent(event, newArgs)
             if (!node || !engine) return
 
             // This allows us to send up the signal that the event node has been triggered by the listener
-            engine.onNodeExecutionEnd.emit(node)
+            engine.onNodeExecutionStart.emit(node)
+          }
+
+          // Create a new onStartEvent function that will rehydrate the state before handling the event.
+          // This also acts as a wrapper hanlder around the generic handler event which is passed in.
+          const onStartEvent = async (event: TEventPayload) => {
+            await handleEventState(event)
+            // Pass all init args and the event to the callback
+            if (eventConfig.handleEvent) {
+              eventConfig.handleEvent(event, handleEventArgs)
+            }
+            finish()
           }
 
           if (eventConfig.customListener) {
@@ -198,10 +226,27 @@ export function makeMagickEventNodeDefinition<
             )
 
             customEventEmitter?.on(eventConfig.eventName, onStartEvent)
+
+            return {}
           }
-        },
-        dispose: () => {
+
+          if (eventConfig.init) {
+            const newArgs = {
+              ...handleEventArgs,
+              handleState: handleEventState,
+            }
+            const returned = eventConfig.init(newArgs)
+
+            return returned
+          }
+
           return {}
+        },
+        dispose: ({ graph, state }) => {
+          const returned = eventConfig.dispose?.({ graph, state })
+          return {
+            ...returned,
+          }
         },
       }),
   }

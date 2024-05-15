@@ -1,5 +1,5 @@
 import type { NodeSpecJSON } from '@magickml/behave-graph'
-import type { Node, OnConnectStartParams } from 'reactflow'
+import type { Node, OnConnectStartParams } from '@xyflow/react'
 import { v4 as uuidv4 } from 'uuid'
 import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'
 

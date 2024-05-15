@@ -1,4 +1,4 @@
-import type { Edge } from 'reactflow'
+import type { Edge } from '@xyflow/react'
 
 export const isHandleConnected = (
   edges: Edge[],

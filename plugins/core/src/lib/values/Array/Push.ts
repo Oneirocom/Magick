@@ -62,14 +62,16 @@ export const arrayPush = makeFlowNodeDefinition({
     const options = configuration?.valueTypeOptions
     const value = read(options.socketName)
     const array = read('array') as ArrayVariable<any>
-    array.push(value)
-
-    // mutate the original array in memory if we are interacting with an array variable
-    if (ArrayVariable.isInstance(array) && array.key) {
-      const variableService =
-        getDependency<IVariableService>('IVariableService')
-      await variableService?.setByKey(array.key, array)
+    if (typeof value !== 'undefined') {
+      array.push(value)
+      // mutate the original array in memory if we are interacting with an array variable
+      if (ArrayVariable.isInstance(array) && array.key) {
+        const variableService =
+          getDependency<IVariableService>('IVariableService')
+        await variableService?.setByKey(array.key, array)
+      }
     }
+
     write('array', array)
     commit('flow')
   },

@@ -66,7 +66,6 @@ const ChatWindow = ({ tab, spellName }) => {
       return
 
     if (actionName === SEND_MESSAGE) {
-      console.log('MESSAGE RECEIVED', content)
       printToConsole(content)
     } else if (actionName === STREAM_MESSAGE) {
       streamToConsole(content)
@@ -106,6 +105,7 @@ const ChatWindow = ({ tab, spellName }) => {
       sender: data.sender || 'user',
       observer: data.observer || 'assistant',
       client: 'cloud.magickml.com',
+      // TODO this should be a sessiON ID for this IDE session
       channel: spell.id,
       projectId: config.projectId,
       channelType: 'spell playtest',

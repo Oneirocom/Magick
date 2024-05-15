@@ -21,7 +21,7 @@ export const SearchResults = ({
             onMouseEnter={() => setFocusedIndex(index)}
             onClick={() => {
               if (!pickedNodePosition) return
-              onPickNode(type, instance.project(pickedNodePosition))
+              onPickNode(type, pickedNodePosition)
             }}
           >
             <div className="">{type}</div>

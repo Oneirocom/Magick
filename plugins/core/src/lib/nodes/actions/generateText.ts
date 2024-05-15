@@ -6,12 +6,7 @@ import {
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
 import { CORE_DEP_KEYS } from '../../config'
 import { IEventStore } from 'server/grimoire'
-import {
-  CompletionModel,
-  // GoogleAIStudioModels,
-  LLMProviders,
-  OpenAIChatCompletionModels,
-} from 'servicesShared'
+import { getProviderIdMapping } from 'servicesShared'
 
 type Message = {
   role: string
@@ -29,7 +24,11 @@ export const generateText = makeFlowNodeDefinition({
     },
     modelProvider: {
       valueType: 'string',
-      defaultValue: LLMProviders.OpenAI,
+      defaultValue: 'openai',
+    },
+    providerApiKeyName: {
+      valueType: 'string',
+      defaultValue: 'OPENAI_API_KEY',
     },
     models: {
       valueType: 'array',
@@ -37,7 +36,7 @@ export const generateText = makeFlowNodeDefinition({
     },
     model: {
       valueType: 'string',
-      defaultValue: OpenAIChatCompletionModels.GPT35Turbo,
+      defaultValue: 'gpt-3.5-turbo',
     },
     customBaseUrl: {
       valueType: 'string',
@@ -51,6 +50,7 @@ export const generateText = makeFlowNodeDefinition({
         'model',
         'models',
         'customBaseUrl',
+        'providerApiKeyName',
       ],
     },
   },
@@ -147,36 +147,40 @@ export const generateText = makeFlowNodeDefinition({
         const maxRetries: number = Number(read('maxRetries')) || 1
         const stop: string = read('stop') || ''
         const customBaseUrl: string = configuration.customBaseUrl || ''
+        const providerApiKeyName: string =
+          configuration.providerApiKeyName || undefined
         const max_tokens: number = Number(read('maxTokens')) || 256
-        // const modelProvider: LLMProviders = configuration.modelProvider
-        const model: CompletionModel =
-          read('modelOverride') || configuration.model
+        let modelProvider: string = getProviderIdMapping(
+          configuration.modelProvider
+        )
+        let model: string = read('modelOverride') || configuration.model
 
-        // Check for custom OpenAI and empty base URL
-        // if (modelProvider === LLMProviders.CustomOpenAI && !customBaseUrl) {
-        //   throw new Error(
-        //     'Custom base URL is required for Custom OpenAI provider'
-        //   )
-        // }
+        if (modelProvider === 'unsupported') {
+          modelProvider = 'openai'
+          model = 'gpt-3.5-turbo'
+        }
 
         if (messages[messages.length - 1]?.role === 'user') {
           messages.pop()
         }
 
+        // only add system message if it exists
         const allMessages = [
-          { role: 'system', content: system },
+          ...(system ? [{ role: 'system', content: system }] : []),
           ...messages,
           { role: 'user', content: prompt },
         ] as Message[]
 
         const request = {
           model,
+          providerApiKeyName,
           messages: allMessages,
+          provider: modelProvider,
           options: {
             temperature,
             top_p,
-            stop_sequences: stop ? [stop] : undefined,
-            base_url: customBaseUrl || undefined,
+            ...(stop ? { stop_sequences: [stop] } : {}),
+            ...(customBaseUrl ? { base_url: customBaseUrl } : {}),
             max_tokens,
           },
         }
@@ -187,9 +191,9 @@ export const generateText = makeFlowNodeDefinition({
             write('response', result.value.choices[0].message.content || '')
             console.log('result:', result)
             write('completionResponse', result.value) // Assuming the last value is the completion response
-            await eventStore.saveAgentMessage(
-              result.value.choices[0].message.content
-            )
+            // await eventStore.saveAgentMessage(
+            //   result.value.choices[0].message.content
+            // )
             commit('done')
           } else {
             const chunk = result.value

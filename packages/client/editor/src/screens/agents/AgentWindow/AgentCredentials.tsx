@@ -31,14 +31,10 @@ import { useConfig, useTabLayout } from '@magickml/providers'
 import clsx from 'clsx'
 
 import {
-  LLMProviders,
-  ProviderRecord,
-  EmbeddingModel,
-  availableEmbeddingProviders,
-  providers,
+  Model,
   getProvidersWithUserKeys,
+  groupModelsByProvider,
   isModelAvailableToUser,
-  removeFirstVendorTag,
 } from 'servicesShared'
 
 import { Dropdown } from '@magickml/client-ui'
@@ -108,14 +104,17 @@ function findMatchingAgentCredential(
 const Header = ({ agentId }: { agentId: string }): JSX.Element => {
   const { openTab } = useTabLayout()
   const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] =
-    useState<ProviderRecord>()
-  const [activeEmbeddingModels, setActiveEmbeddingModels] = useState<
-    EmbeddingModel[]
-  >([])
-  const [selectedEmbeddingModel, setSelectedEmbeddingModel] =
-    useState<EmbeddingModel>()
-  const [providersWithKeys, setProvidersWithKeys] = useState<LLMProviders[]>([])
-
+    useState<string>('')
+  const [activeEmbeddingModels, setActiveEmbeddingModels] = useState<Model[]>(
+    []
+  )
+  const [selectedEmbeddingModel, setSelectedEmbeddingModel] = useState<string>()
+  const [providersWithUserKeys, setProvidersWithUserKeys] = useState<
+    Record<string, { models: Model[]; apiKey: string }>
+  >({})
+  const [providerData, setProviderData] = useState<
+    Record<string, { models: Model[]; apiKey: string }>
+  >({})
   const config = useConfig()
 
   const { data: credentials } = useListCredentialsQuery({
@@ -129,22 +128,43 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
   const [updateAgent] = useUpdateAgentMutation()
 
   useEffect(() => {
-    if (credentials) {
-      const creds = credentials.map(cred => cred.name)
-      const providers = getProvidersWithUserKeys(creds as any)
-      setProvidersWithKeys(providers)
-    }
-  }, [credentials])
+    if (!providerData) return
+
+    setProvidersWithUserKeys(
+      getProvidersWithUserKeys(providerData, credentials || [])
+    )
+  }, [credentials, providerData])
 
   useEffect(() => {
-    setActiveEmbeddingModels(selectedEmbeddingProvider?.embeddingModels || [])
+    const fetchModels = async () => {
+      try {
+        const response = await fetch(
+          'https://api.keywordsai.co/api/models/public'
+        )
+        const data = await response.json()
+        const { models } = data
+        const groupedModels = groupModelsByProvider(models)
+
+        setProviderData(groupedModels)
+      } catch (error) {
+        console.error('Error fetching models:', error)
+      }
+    }
+
+    fetchModels()
+  }, [])
+
+  useEffect(() => {
+    setActiveEmbeddingModels(
+      providerData[selectedEmbeddingProvider].models || []
+    )
   }, [selectedEmbeddingProvider])
 
   useEffect(() => {
     if (userData) {
       const provider = userData.embeddingProvider
       const model = userData.embeddingModel
-      setSelectedEmbeddingProvider(providers[provider])
+      setSelectedEmbeddingProvider(provider)
       setSelectedEmbeddingModel(model)
     }
   }, [userData])
@@ -158,15 +178,15 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
     })
   }
 
-  const handleEmbeddingProviderChange = (provider: LLMProviders) => {
-    setSelectedEmbeddingProvider(providers[provider])
+  const handleEmbeddingProviderChange = (provider: string) => {
+    setSelectedEmbeddingProvider(provider)
     updateAgent({
       id: agentId,
       embeddingProvider: provider,
     })
   }
 
-  const handleEmbeddingModelChange = (model: EmbeddingModel) => {
+  const handleEmbeddingModelChange = (model: string) => {
     setSelectedEmbeddingModel(model)
     updateAgent({
       id: agentId,
@@ -174,26 +194,15 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
     })
   }
 
-  const providerOptions = availableEmbeddingProviders.map(prov => ({
-    value: prov.provider,
-    label: prov.displayName,
-  }))
-
-  const modelsWithKeys = providersWithKeys
-    .map(provider => {
-      return providers[provider].embeddingModels
-    })
-    .flat()
-
   const modelOptions = activeEmbeddingModels.map(model => {
     const isAvailable = isModelAvailableToUser({
       userData,
-      model,
-      modelsWithKeys: modelsWithKeys,
+      model: model,
+      providersWithUserKeys,
     })
     return {
-      value: model,
-      label: removeFirstVendorTag(model),
+      value: model.model_name,
+      label: model.display_name,
       disabled: !isAvailable,
     }
   })
@@ -204,11 +213,12 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
         <div className="flex flex-col mt-1">
           <h3>Embedding Provider</h3>
           <Dropdown
-            options={providerOptions}
-            selectedValue={selectedEmbeddingProvider?.provider as LLMProviders}
-            onChange={value =>
-              handleEmbeddingProviderChange(value as LLMProviders)
-            }
+            options={Object.keys(providerData).map(provider => ({
+              value: provider,
+              label: provider,
+            }))}
+            selectedValue={selectedEmbeddingProvider}
+            onChange={value => handleEmbeddingProviderChange(value)}
             placeholder="Select a provider"
           />
         </div>
@@ -217,10 +227,8 @@ const Header = ({ agentId }: { agentId: string }): JSX.Element => {
           <div className="flex flex-col mt-1">
             <Dropdown
               options={modelOptions}
-              selectedValue={selectedEmbeddingModel as EmbeddingModel}
-              onChange={value =>
-                handleEmbeddingModelChange(value as EmbeddingModel)
-              }
+              selectedValue={selectedEmbeddingModel || ''}
+              onChange={value => handleEmbeddingModelChange(value)}
               placeholder="Select a model"
             />
           </div>

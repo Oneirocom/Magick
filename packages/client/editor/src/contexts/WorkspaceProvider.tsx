@@ -1,10 +1,8 @@
 // DOCUMENTED
-import { ReactFlowProvider } from 'reactflow'
+import { ReactFlowProvider } from '@xyflow/react'
 
 /** An array of providers used in the application */
-const providers = [
-  ReactFlowProvider
-]
+const providers = [ReactFlowProvider]
 
 /**
  * Composes providers for react application

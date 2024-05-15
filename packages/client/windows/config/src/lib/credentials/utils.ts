@@ -113,6 +113,8 @@ export function findCredentialId({
   secretName,
   arr,
 }: FindCredentialIdParams): FindCredentialIdReturn {
+  if (!arr || arr.length === 0) return { linked: false }
+
   for (const obj of arr) {
     if (
       obj.credentials &&

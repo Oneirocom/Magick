@@ -10,6 +10,10 @@ export const sendMessage = makeFlowNodeDefinition({
   in: {
     flow: 'flow',
     content: 'string',
+    skipSave: {
+      valueType: 'boolean',
+      defaultValue: false,
+    },
   },
   out: {
     flow: 'flow',
@@ -25,11 +29,18 @@ export const sendMessage = makeFlowNodeDefinition({
       throw new Error('No coreActionService or eventStore provided')
     }
 
+    const skipSave = Boolean(read('skipSave'))
     const content = read('content')
-    const event = eventStore.currentEvent()
+    const _event = eventStore.currentEvent()
 
-    if (!event) {
+    if (!_event) {
       throw new Error('No event found')
+    }
+
+    const event = { ..._event }
+
+    if (skipSave) {
+      event.skipSave = true
     }
 
     coreActionService?.sendMessage(event, { content })
