@@ -34,7 +34,7 @@ export const FetchNode = makeFlowNodeDefinition({
     flow: 'flow',
   },
   initialState: undefined,
-  triggered: async ({ commit, read }) => {
+  triggered: async ({ commit, read, write }) => {
     const url = read('url') as string
     const method = read('method') as string
     const headers = (read('headers') || {}) as Record<string, string>
@@ -53,7 +53,7 @@ export const FetchNode = makeFlowNodeDefinition({
     })
 
     const responseData = await response.json()
-    commit('response', responseData)
+    write('response', responseData)
     commit('flow')
   },
 })
