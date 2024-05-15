@@ -7,6 +7,7 @@ import { getLogger } from 'server/logger'
 import OpenAI from 'openai'
 import { ChatCompletionStreamParams } from 'openai/lib/ChatCompletionStream'
 import pino from 'pino'
+import { PRODUCTION } from 'clientConfig'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -73,25 +74,33 @@ export class CoreLLMService implements ICoreLLMService {
           model: request.model,
         })
 
-        if (!credential) {
-          throw new Error('No credential found')
-        }
+        console.log('PRODUCTION', PRODUCTION)
 
         const _body = {
           model: request.model,
           messages: request.messages,
           ...request.options,
           stream: true,
-          customer_identifier: userData?.user.useWallet
-            ? userData?.user.walletUser?.customer_identifier
-            : userData?.user.mpUser?.customer_identifier,
-          customer_credentials: {
-            // this provider should be the id field of the provider
-            [request.provider]: {
-              api_key: credential,
-            },
-          },
+          ...(PRODUCTION
+            ? {
+                customer_identifier: userData?.user.useWallet
+                  ? userData?.user.walletUser?.customer_identifier
+                  : userData?.user.mpUser?.customer_identifier,
+              }
+            : {}),
+          ...(credential
+            ? {
+                customer_credentials: {
+                  // Assuming `request.provider` is the id field of the provider
+                  [request.provider]: {
+                    api_key: credential,
+                  },
+                },
+              }
+            : {}),
         }
+
+        console.log('BODY', _body)
         // filter and remove undefined values
         const body = Object.fromEntries(
           Object.entries(_body).filter(([, v]) => v !== undefined)
@@ -174,23 +183,22 @@ export class CoreLLMService implements ICoreLLMService {
       throw new Error(`No provider key found for ${model}`)
     }
     let credential
-    const MAGICK_API_KEY = process.env['KEYWORDS_API_KEY']
 
     if (process.env.NODE_ENV === 'development') {
-      credential = MAGICK_API_KEY
+      credential = null
     }
 
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName.trim()
       if (userSubscriptionName === PortalSubscriptions.WIZARD) {
-        credential = MAGICK_API_KEY
+        credential = null
       } else if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
         credential = this.credentials.find(
           c => c.name === providerApiKeyName
         )?.value
       } else {
         if (userData.user.balance > 0 || userData.user.promoCredit > 0) {
-          credential = MAGICK_API_KEY
+          credential = null
         }
       }
     }
