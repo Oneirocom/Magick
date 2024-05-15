@@ -1,4 +1,5 @@
 import { GraphJSON } from '@magickml/behave-graph'
+import { MagickNodeType, MagickEdgeType } from '@magickml/client-types'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import {
   applyEdgeChanges,
@@ -9,11 +10,11 @@ import {
   EdgeChange,
   Connection,
   NodeChange,
-} from 'reactflow'
+} from '@xyflow/react'
 
 export type GraphState = {
-  nodes: Node[]
-  edges: Edge[]
+  nodes: MagickNodeType[]
+  edges: MagickEdgeType[]
   graphJson: GraphJSON
 }
 

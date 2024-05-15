@@ -20,7 +20,7 @@ export type EventFormat<
   status?: 'success' | 'error' | 'pending' | 'unknown'
 }
 
-export type EventPayload<T = unknown, Y = unknown> = {
+export type EventPayload<T = any, Y = any> = {
   connector: string
   eventName: string
   status: 'success' | 'error' | 'pending' | 'unknown'
@@ -33,9 +33,10 @@ export type EventPayload<T = unknown, Y = unknown> = {
   agentId: string
   isPlaytest?: boolean
   spellId?: string
+  skipSave?: boolean
   // entities: any[]
   channelType: string
-  rawData: unknown
+  rawData: string
   timestamp: string
   stateKey?: string
   runInfo?: {

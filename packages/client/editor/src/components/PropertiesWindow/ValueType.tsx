@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow } from '@xyflow/react'
 import {
   Select,
   SelectTrigger,

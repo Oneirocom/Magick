@@ -1,63 +1,95 @@
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { UserResponse } from '../userService/types'
-import { AllModels } from './types/models'
-import {
-  LLMProviderKeys,
-  LLMProviders,
-  ProviderRecord,
-} from './types/providerTypes'
-import { providers } from './types/providers'
+import { Model } from './types/models'
 
-export function findProvider(model: AllModels): ProviderRecord | undefined {
-  for (const providerKey in providers) {
-    const provider = providers[providerKey]
-    if (provider.allModels.includes(model)) {
-      return provider
-    }
-  }
-  return undefined
+export const legacyProviderIdMapping = {
+  openai: 'openai',
+  azure_openai: 'azure_openai',
+  azure_openai_vision: 'azure_openai_vision',
+  anthropic: 'anthropic',
+  perplexity: 'perplexity',
+  cohere: 'cohere',
+  togetherai: 'togetherai',
+  openrouter: 'openrouter',
+  together: 'togetherai',
+  mistralai: 'mistral',
+  mistral: 'mistral',
+  palm: 'google_palm',
+  google: 'google_palm',
+  google_palm: 'google_palm',
+  vertexai: 'google_vertex_ai',
+  google_vertex_ai: 'google_vertex_ai',
+  google_gemini_ai: 'google_gemini_ai',
+  groq: 'groq',
+  fireworks: 'fireworks',
+  aws_bedrock: 'bedrock',
+  bedrock: 'bedrock',
+  sagemaker: 'unsupported',
+  anyscale: 'unsupported',
+  vllm: 'unsupported',
+  deepinfra: 'unsupported',
+  huggingface: 'unsupported',
+  xinference: 'unsupported',
+  cloudflareworkersai: 'unsupported',
+  ai21: 'unsupported',
+  nlpcloud: 'unsupported',
+  voyageai: 'unsupported',
+  replicate: 'unsupported',
+  meta: 'unsupported',
+  alephalpha: 'unsupported',
+  baseten: 'unsupported',
+  customapi: 'unsupported',
+  petals: 'unsupported',
+  ollama: 'unsupported',
+}
+
+export const getProviderIdMapping = (providerId: string): string => {
+  return legacyProviderIdMapping[providerId] || 'unsupported'
 }
 
 export function getProvidersWithUserKeys(
-  keys: LLMProviderKeys[]
-): LLMProviders[] {
-  const provider = Object.values(providers)
-    .filter(provider => keys.includes(provider.keyName))
-    .map(provider => provider.provider)
-  return provider
+  providerData: Record<string, { models: Model[]; apiKey: string }>,
+  credentials: { name: string }[]
+): Record<string, { models: Model[]; apiKey: string }> {
+  const providerApiKeys = Object.keys(providerData).map(
+    provider => providerData[provider].apiKey
+  )
+
+  const userKeys = credentials.map(cred => cred.name)
+
+  const providerUserKeyMatch = providerApiKeys.filter(apiKey =>
+    userKeys.includes(apiKey)
+  )
+
+  const providersWithKeys = Object.keys(providerData).reduce<
+    Record<string, { models: Model[]; apiKey: string }>
+  >((acc, provider) => {
+    const { models, apiKey } = providerData[provider]
+
+    if (providerUserKeyMatch.includes(apiKey)) {
+      acc[provider] = { models, apiKey }
+    }
+
+    return acc
+  }, {})
+
+  return providersWithKeys
 }
-
-export function removeFirstVendorTag(modelName) {
-  // Define a regex pattern to match the first vendor tag
-  const prefixPattern = /^([^/]+\/)?(.+)$/
-
-  // Use regex to extract the model name without the first vendor tag
-  const match = modelName.match(prefixPattern)
-  if (match && match.length === 3) {
-    return match[2] // The second capture group is the model name without the first vendor tag
-  }
-  // If no tag is found, return the original model name
-  return modelName
-}
-
 export function isModelAvailableToUser({
   userData,
   model,
-  modelsWithKeys,
+  providersWithUserKeys,
 }: {
   userData: UserResponse
-  model: AllModels
-  modelsWithKeys: AllModels[]
+  model: Model
+  providersWithUserKeys: Record<string, { models: Model[]; apiKey: string }>
 }): boolean {
   if (userData && userData.user) {
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName?.trim()
-      //TODO: Update this when Aspirant is used
+
       if (userSubscriptionName === PortalSubscriptions.NEOPHYTE) {
-        // Only models with keys are available for Journeyman subscription
         if (
-          //TODO: remove balance check
-          userData?.user?.balance > 0 ||
           userData?.user?.promoCredit > 0 ||
           userData?.user?.introCredit > 0
         ) {
@@ -65,19 +97,52 @@ export function isModelAvailableToUser({
           return true
         }
       }
-      if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
-        // Only models with keys are available for Apprentice subscription
-        const hasBalance = userData.user.balance > 0
-        return hasBalance ? true : modelsWithKeys.includes(model)
-      }
+
       if (userSubscriptionName === PortalSubscriptions.WIZARD) {
         // All models are available for Wizard subscription
         return true
+      }
+
+      if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {
+        const modelMatch =
+          providersWithUserKeys[model.provider.provider_name]?.models.includes(
+            model
+          )
+
+        if (modelMatch) {
+          return true
+        } else {
+          // The user hasn't supplied their own API key for the model's provider
+          return false
+        }
       }
     } else {
       return false
     }
   }
+
   // If no subscription and no balance, model is not available
   return false
+}
+
+export function groupModelsByProvider(models: Model[]) {
+  const providers: Record<
+    string,
+    { models: Model[]; apiKey: string; providerName: string }
+  > = {}
+  for (const model of models) {
+    const providerId = model.provider.provider_id
+    const providerName = model.provider.provider_name
+    const providerKey = model.provider.api_key
+
+    if (!providers[providerId]) {
+      providers[providerId] = {
+        apiKey: providerKey,
+        providerName: providerName,
+        models: [],
+      }
+    }
+    providers[providerId].models.push(model)
+  }
+  return providers
 }

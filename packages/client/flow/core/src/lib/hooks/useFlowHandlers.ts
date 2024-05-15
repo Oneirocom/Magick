@@ -19,7 +19,9 @@ import {
   OnConnectStart,
   OnConnectEnd,
   useOnViewportChange,
-} from 'reactflow'
+  IsValidConnection,
+  ReactFlowProps,
+} from '@xyflow/react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { calculateNewEdge } from '../utils/calculateNewEdge'
@@ -37,6 +39,11 @@ import {
 import { getSourceSocket } from '../utils/getSocketsByNodeTypeAndHandleType'
 import { useDispatch, useSelector } from 'react-redux'
 import posthog from 'posthog-js'
+import { getConfigFromNodeSpec } from '../utils/getNodeConfig'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { SpellInterfaceWithGraph } from 'server/schemas'
+import { getNodeSpec } from 'shared/nodeSpec'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
@@ -46,7 +53,7 @@ const useNodePickFilters = ({
   lastConnectStart,
   specJSON,
 }: {
-  nodes: Node[]
+  nodes: MagickNodeType[]
   lastConnectStart: OnConnectStartParams | undefined
   specJSON: NodeSpecJSON[] | undefined
 }) => {
@@ -70,13 +77,15 @@ export const useFlowHandlers = ({
   parentRef,
   tab,
   windowDimensions,
+  spell,
 }: Pick<BehaveGraphFlow, 'onEdgesChange' | 'onNodesChange'> & {
-  nodes: Node[]
-  edges: Edge[]
+  nodes: MagickNodeType[]
+  edges: MagickEdgeType[]
   specJSON: NodeSpecJSON[] | undefined
   parentRef: React.RefObject<HTMLDivElement>
   tab: Tab
   windowDimensions: { width: number; height: number }
+  spell: SpellInterfaceWithGraph
 }) => {
   const [lastConnectStart, setLastConnectStart] =
     useState<OnConnectStartParams>()
@@ -84,19 +93,49 @@ export const useFlowHandlers = ({
   const [nodePickerPosition, setNodePickerPosition] = useState<XYPosition>()
   const [nodeMenuVisibility, setNodeMenuVisibility] = useState<XYPosition>()
   const [openNodeMenu, setOpenNodeMenu] = useState(false)
+  const [blockClose, setBlockClose] = useState(false)
+  const [socketsVisible, setSocketsVisible] = useState(true)
   const [targetNodes, setTargetNodes] = useState<Node[] | undefined>(undefined)
   const rfDomNode = useStore(state => state.domNode)
+  const [currentKeyPressed, setCurrentKeyPressed] = useState<string | null>(
+    null
+  )
   const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
-  const instance = useReactFlow()
+  const instance = useReactFlow<MagickNodeType, MagickEdgeType>()
   const { screenToFlowPosition, getNodes } = instance
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
+
+  useHotkeys('meta+c, ctrl+c', () => {
+    copy()
+  })
+  useHotkeys('meta+v, ctrl+v', () => {
+    paste()
+  })
 
   useOnViewportChange({
     onStart: () => {
       closeNodePicker()
     },
   })
+
+  useEffect(() => {
+    // record current key pressed event
+    const onKeyDown = (event: KeyboardEvent) => {
+      setCurrentKeyPressed(event.key)
+    }
+    const onKeyUp = () => {
+      setCurrentKeyPressed(null)
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+    }
+  }, [])
 
   useEffect(() => {
     if (layoutChangeEvent) {
@@ -130,7 +169,6 @@ export const useFlowHandlers = ({
 
   const onEdgeUpdate = useCallback<OnEdgeUpdate>(
     (oldEdge, newConnection) => {
-      console.log('onEdgeUpdate', oldEdge, newConnection)
       return setEdges(tab.id, edges => {
         const newEdges = updateEdge(oldEdge, newConnection, edges)
         return newEdges
@@ -193,9 +231,8 @@ export const useFlowHandlers = ({
     [tab, nodes, edges]
   )
 
-  const isValidConnectionHandler = useCallback(
-    (connection: Connection) => {
-      console.log('validating connection')
+  const isValidConnectionHandler: IsValidConnection = useCallback(
+    connection => {
       const newNode = nodes.find(node => node.id === connection.target)
       if (!newNode || !specJSON) return false
       return isValidConnection(connection, instance, specJSON)
@@ -203,16 +240,59 @@ export const useFlowHandlers = ({
     [instance, nodes, specJSON]
   )
 
-  let blockClose = false
+  const handleAddComment = useCallback(
+    (position: XYPosition) => {
+      const newNode = {
+        id: uuidv4(),
+        type: 'comment',
+        position,
+        data: {
+          text: '',
+          cxonfiguration: {},
+        },
+      }
+      onNodesChange(tab.id)([
+        {
+          type: 'add',
+          item: newNode,
+        },
+      ])
+    },
+    [closeNodePicker, onNodesChange, tab.id]
+  )
 
   const handleAddNode = useCallback(
-    (nodeType: string, position: XYPosition) => {
+    (_nodeType: string, position: XYPosition, _nodeSpec?: NodeSpecJSON) => {
       closeNodePicker()
+      console.log('adding node', _nodeType, position)
+      const fullSpecJSON = getNodeSpec(spell)
+      // handle add configuration here so we don't need to do it in the node.
+      const nodeSpecRaw =
+        _nodeSpec || fullSpecJSON?.find(spec => spec.type === _nodeType)
+
+      const nodeSpec = { ...nodeSpecRaw } as NodeSpecJSON
+
+      if (!nodeSpec) return
+
+      let nodeType = _nodeType
+      const regex = new RegExp(`^variables/(get|set)/(.+)$`)
+
+      if (nodeType.match(regex)) {
+        const variableType = nodeType.replace(
+          /^(variables\/(get|set))\/(.+)$/,
+          '$1'
+        )
+        nodeSpec.type = variableType
+        nodeType = variableType
+      }
+
       const newNode = {
         id: uuidv4(),
         type: nodeType,
         position,
-        data: {},
+        data: {
+          configuration: nodeSpec ? getConfigFromNodeSpec(nodeSpec) : {},
+        },
       }
       onNodesChange(tab.id)([
         {
@@ -231,16 +311,21 @@ export const useFlowHandlers = ({
       const originNode = nodes.find(node => node.id === lastConnectStart.nodeId)
       if (originNode === undefined) return
       if (!specJSON) return
+
+      // repopulate the specJSON with variable nodes if a spell is provided
+      // this is to handle the case where a variable node is being connected
+      const newEdge = calculateNewEdge(
+        originNode,
+        _nodeType,
+        newNode.id,
+        lastConnectStart,
+        fullSpecJSON
+      )
+
       onEdgesChange(tab.id)([
         {
           type: 'add',
-          item: calculateNewEdge(
-            originNode,
-            nodeType,
-            newNode.id,
-            lastConnectStart,
-            specJSON
-          ),
+          item: newEdge,
         },
       ])
     },
@@ -251,6 +336,7 @@ export const useFlowHandlers = ({
       onEdgesChange,
       onNodesChange,
       specJSON,
+      spell,
     ]
   )
 
@@ -289,8 +375,20 @@ export const useFlowHandlers = ({
 
   const copy = useCallback(() => {
     const selectedNodes = getNodes().filter(node => node.selected)
+    const selectedEdges = edges.filter(edge =>
+      selectedNodes.some(
+        node => node.id === edge.source || node.id === edge.target
+      )
+    )
+
     if (!selectedNodes.length) return
-    localStorage.setItem('copiedNodes', JSON.stringify(selectedNodes))
+    localStorage.setItem(
+      'copiedNodes',
+      JSON.stringify({
+        nodes: selectedNodes,
+        edges: selectedEdges,
+      })
+    )
     setTargetNodes(undefined)
   }, [nodes])
 
@@ -305,25 +403,41 @@ export const useFlowHandlers = ({
     const copiedNodes = localStorage.getItem('copiedNodes')
     if (!copiedNodes) return
 
+    const { nodes, edges } = JSON.parse(copiedNodes)
     const { x: pasteX, y: pasteY } = screenToFlowPosition({
       x: mousePosRef.current.x,
       y: mousePosRef.current.y,
     })
 
-    const bufferedNodes = JSON.parse(copiedNodes) as Node[]
+    const bufferedNodes = nodes as Node[]
     const minX = Math.min(...bufferedNodes.map(node => node.position.x))
     const minY = Math.min(...bufferedNodes.map(node => node.position.y))
+
+    const oldToNewIdMap: Record<string, string> = {}
 
     const newNodes: NodeChange[] = bufferedNodes.map(node => {
       const id = uuidv4()
       const x = pasteX + (node.position.x - minX)
       const y = pasteY + (node.position.y - minY)
-
-      return { item: { ...node, id, position: { x, y } }, type: 'add' }
+      oldToNewIdMap[node.id] = id
+      return {
+        item: { ...node, id, position: { x, y } },
+        type: 'add',
+      }
     })
 
+    const newEdges = edges.map((edge: Edge) => ({
+      type: 'add',
+      item: {
+        ...edge,
+        id: uuidv4(),
+        source: oldToNewIdMap[edge.source],
+        target: oldToNewIdMap[edge.target],
+      },
+    }))
+
     onNodesChange(tab.id)(newNodes)
-    localStorage.removeItem('copiedNodes')
+    onEdgesChange(tab.id)(newEdges)
   }, [screenToFlowPosition, onNodesChange, tab])
 
   const nodeMenuActions = [
@@ -335,7 +449,7 @@ export const useFlowHandlers = ({
 
   const handleStopConnect: OnConnectEnd = useCallback(
     e => {
-      blockClose = true
+      setBlockClose(true)
       e.preventDefault()
       const element = e.target as HTMLElement
       if (element.classList.contains('react-flow__pane')) {
@@ -353,92 +467,144 @@ export const useFlowHandlers = ({
           clientY = e.touches[0].clientY
         }
 
-        const nodePickerWidth = 240 // Set the fixed width of the node picker
-        const nodePickerHeight = 251 // Set the fixed height of the node picker
+        const nodePickerWidth = 240
+        const nodePickerHeight = 251
 
-        // Calculate initial positions relative to the parent container
-        let xPosition = clientX - bounds.left
-        let yPosition = clientY - bounds.top
+        // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
+        let xNodePickerPosition = clientX - bounds.left
+        let yNodePickerPosition = clientY - bounds.top
 
-        // Adjust if the node picker would open off the right side of the viewport
-        if (xPosition + nodePickerWidth > bounds.width) {
-          xPosition = bounds.width - nodePickerWidth
+        const { x: xPosition, y: yPosition } = screenToFlowPosition({
+          x: clientX,
+          y: clientY,
+        })
+
+        // Adjust if the context menu would open off the right side of the viewport
+        if (xNodePickerPosition + nodePickerWidth > bounds.width) {
+          xNodePickerPosition = bounds.width - nodePickerWidth * 1.05
         }
 
-        // Adjust if the node picker would open off the bottom of the viewport
-        if (yPosition + nodePickerHeight > bounds.height) {
-          yPosition = bounds.height - nodePickerHeight
+        // Adjust if the context menu would open off the bottom of the viewport
+        if (yNodePickerPosition + nodePickerHeight > bounds.height) {
+          yNodePickerPosition = bounds.height - nodePickerHeight * 1.05
         }
-
-        // Ensure the node picker stays within the visible area of the viewport
-        xPosition = Math.max(
-          0,
-          Math.min(xPosition, window.innerWidth - nodePickerWidth)
-        )
-        yPosition = Math.max(
-          0,
-          Math.min(yPosition, window.innerHeight - nodePickerHeight)
-        )
 
         setPickedNodeVisibility({
           x: xPosition,
           y: yPosition,
         })
-        setNodePickerPosition({
-          x: xPosition + bounds.left,
-          y: yPosition + bounds.top,
-        })
+
+        if (!currentKeyPressed) {
+          setNodePickerPosition({
+            x: Math.max(0, xNodePickerPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
+            y: Math.max(0, yNodePickerPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
+          })
+        }
 
         setTimeout(() => {
-          blockClose = false
+          setBlockClose(false)
         }, 500)
       } else {
         setLastConnectStart(undefined)
       }
     },
-    [parentRef]
+    [parentRef, currentKeyPressed]
   )
 
-  const handlePaneClick = useCallback(() => {
-    if (blockClose) return
-    closeNodePicker()
-  }, [closeNodePicker])
-
-  const handlePaneContextMenu = useCallback(
-    (mouseClick: React.MouseEvent) => {
-      mouseClick.preventDefault()
-      if (parentRef && parentRef.current) {
-        const bounds = parentRef.current.getBoundingClientRect()
-
-        const nodePickerWidth = 240
-        const nodePickerHeight = 251
-
-        // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
-        let xPosition = mouseClick.clientX - bounds.left
-        let yPosition = mouseClick.clientY - bounds.top
-
-        // Adjust if the context menu would open off the right side of the viewport
-        if (xPosition + nodePickerWidth > bounds.width) {
-          xPosition = bounds.width - nodePickerWidth * 1.05
-        }
-
-        // Adjust if the context menu would open off the bottom of the viewport
-        if (yPosition + nodePickerHeight > bounds.height) {
-          yPosition = bounds.height - nodePickerHeight * 1.05
-        }
-
-        setPickedNodeVisibility({
-          x: Math.max(0, xPosition), // Prevent negative values
-          y: Math.max(0, yPosition), // Prevent negative values
-        })
-        setNodePickerPosition({
-          x: Math.max(0, xPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
-          y: Math.max(0, yPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
-        })
+  const nodeCreator = (event, keyPressed) => {
+    switch (keyPressed) {
+      case 'b':
+        handleAddNode(
+          'flow/branch',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      case 't': {
+        handleAddNode(
+          'logic/string/template',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
       }
+      case 'g':
+        handleAddNode(
+          'magick/generateText',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      case 'a':
+        handleAddNode(
+          'action/memory/addMemory',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      case 'c':
+        handleAddComment(
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      default:
+        return false
+    }
+    setLastConnectStart(undefined)
+    return true
+  }
+
+  const handlePaneClick = useCallback(
+    e => {
+      if (currentKeyPressed) {
+        nodeCreator(e, currentKeyPressed)
+        closeNodePicker()
+      }
+
+      if (blockClose) return
+
+      closeNodePicker()
     },
-    [parentRef, windowDimensions]
+    [closeNodePicker, currentKeyPressed, blockClose]
   )
+
+  const handlePaneContextMenu: ReactFlowProps['onPaneContextMenu'] =
+    useCallback(
+      mouseClick => {
+        mouseClick.preventDefault()
+        if (parentRef && parentRef.current) {
+          const bounds = parentRef.current.getBoundingClientRect()
+
+          const nodePickerWidth = 240
+          const nodePickerHeight = 251
+
+          // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
+          let xNodePickerPosition = mouseClick.clientX - bounds.left
+          let yNodePickerPosition = mouseClick.clientY - bounds.top
+
+          const { x: xPosition, y: yPosition } = screenToFlowPosition({
+            x: mouseClick.clientX,
+            y: mouseClick.clientY,
+          })
+
+          // Adjust if the context menu would open off the right side of the viewport
+          if (xNodePickerPosition + nodePickerWidth > bounds.width) {
+            xNodePickerPosition = bounds.width - nodePickerWidth * 1.05
+          }
+
+          // Adjust if the context menu would open off the bottom of the viewport
+          if (yNodePickerPosition + nodePickerHeight > bounds.height) {
+            yNodePickerPosition = bounds.height - nodePickerHeight * 1.05
+          }
+
+          setPickedNodeVisibility({
+            x: xPosition,
+            y: yPosition,
+          })
+          setNodePickerPosition({
+            x: Math.max(0, xNodePickerPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
+            y: Math.max(0, yNodePickerPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
+          })
+        }
+      },
+      [parentRef, windowDimensions]
+    )
 
   const nodePickFilters = useNodePickFilters({
     nodes,
@@ -464,9 +630,23 @@ export const useFlowHandlers = ({
     },
     []
   )
-  //  COPY and PASTING WITH HOTKEYS IS NOT WORKING AS EXPECTED FOR THE UNKNOWN REASON
-  // useHotkeys('meta+c, ctrl+c', copy)
-  // useHotkeys('meta+v, ctrl+v', paste)
+
+  const toggleSocketVisibility = useCallback(() => {
+    const newState = !socketsVisible
+    setSocketsVisible(newState)
+
+    const updatedNodes = nodes.map(node => ({
+      ...node,
+      data: {
+        ...node.data,
+        socketsVisible: newState,
+      },
+    })) as Node[]
+
+    setNodes(tab.id, updatedNodes)
+
+    // onNodesChange(tab.id)(updatedNodes)
+  }, [socketsVisible, nodes, setNodes])
 
   return {
     handleOnConnect,
@@ -488,5 +668,8 @@ export const useFlowHandlers = ({
     setOpenNodeMenu,
     openNodeMenu,
     nodeMenuActions,
+    handleAddComment,
+    toggleSocketVisibility,
+    socketsVisible,
   }
 }

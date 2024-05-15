@@ -2,10 +2,19 @@ import root from './root'
 
 const agentEventService = root.injectService<
   'agents',
-  ['log', 'results', 'spell', 'event', 'warn', 'error', 'seraphEvent']
+  ['log', 'results', 'spell', 'event', 'warn', 'error', 'seraphEvent', 'state']
 >({
   name: 'agents',
-  events: ['log', 'results', 'spell', 'event', 'warn', 'error', 'seraphEvent'],
+  events: [
+    'log',
+    'results',
+    'spell',
+    'event',
+    'warn',
+    'error',
+    'seraphEvent',
+    'state',
+  ],
 })
 
 export const {
@@ -15,4 +24,5 @@ export const {
   useSelectAgentsWarn,
   useSelectAgentsError,
   useSelectAgentsSeraphEvent,
+  useSelectAgentsState,
 } = agentEventService.selectors

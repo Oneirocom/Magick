@@ -4,27 +4,35 @@ import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
-import {
-  selectActiveNode,
-  selectActiveInput,
-  setActiveInput,
-} from 'client/state'
+import { selectActiveInput, setActiveInput } from 'client/state'
 import { useChangeNodeData } from '@magickml/flow-core'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
+import { useOnSelectionChange } from '@xyflow/react'
+import { MagickNodeType } from '@magickml/client-types'
 
 const TextEditor = props => {
   const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
+  const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
+
+  useOnSelectionChange({
+    onChange: ({ nodes }) => {
+      if (nodes.length > 1) {
+        setSelectedNode(null)
+        return
+      }
+      setSelectedNode(nodes[0])
+    },
+  })
 
   const [debouncedCode] = useDebounce(code, 2000)
-
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
 
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
     fontSize: 16,
+    lineNumbers: false,
   })
 
   const updateNodeData = useChangeNodeData(selectedNode?.id)
@@ -49,7 +57,7 @@ const TextEditor = props => {
 
   useEffect(() => {
     if (code === undefined) return
-    if (!selectedNode) return
+    if (!selectedNode || !selectedNode?.data?.configuration) return
 
     const { configuration } = selectedNode.data
 
@@ -69,7 +77,7 @@ const TextEditor = props => {
 
     if (language !== 'handlebars') return
     // socket regex looks for handlebars style {{socketName}}
-    const socketRegex = /{{(.+?)}}/g
+    const socketRegex = /{{(?![/#]|this\b|\.\w+)(\w+)}}/g
 
     const socketMatches = code.matchAll(socketRegex)
     const sockets: InputSocketSpecJSON[] = []
@@ -119,11 +127,12 @@ const TextEditor = props => {
     if (activeInput) {
       dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
     }
-  }, [code, selectedNode, activeInput])
+  }, [debouncedCode, selectedNode, activeInput])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
-    if (!selectedNode) return
+    if (!selectedNode || !selectedNode?.data?.configuration) return
+
     const { configuration } = selectedNode.data
     const { textEditorData } = configuration
     if (textEditorData === undefined) return
@@ -138,7 +147,7 @@ const TextEditor = props => {
     setCode(activeInput.value)
   }, [activeInput])
 
-  if (!selectedNode) return null
+  if (!selectedNode || !selectedNode?.data?.configuration) return null
 
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration

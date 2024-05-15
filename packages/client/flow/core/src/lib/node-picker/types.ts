@@ -1,5 +1,6 @@
 import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
-import { XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
+import { SpellInterfaceWithGraph } from 'server/schemas'
 
 export type NodePickerFilters = {
   handleType: 'source' | 'target'
@@ -17,7 +18,12 @@ export type NodePickerProps = {
   pickedNodePosition: XYPosition | undefined
   position: XYPosition
   filters?: NodePickerFilters
-  onPickNode: (type: string, position: XYPosition) => void
+  onPickNode: (
+    type: string,
+    position: XYPosition,
+    nodeSpec?: NodeSpecJSON
+  ) => void
   onClose: () => void
   specJSON: NodeSpecJSON[] | undefined
+  spell: SpellInterfaceWithGraph
 }

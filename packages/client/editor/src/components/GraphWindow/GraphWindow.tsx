@@ -37,6 +37,12 @@ const GraphWindow = (props: Props) => {
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
+    if (!props.api || (height && width)) return
+    setHeight(props.api.height)
+    setWidth(props.api.width)
+  }, [props.api])
+
+  useEffect(() => {
     const dispose = props.api.onDidDimensionsChange(event => {
       setWidth(event.width)
       setHeight(event.height)
@@ -47,7 +53,8 @@ const GraphWindow = (props: Props) => {
     }
   })
 
-  useHotkeys('meta+f, ctrl+f', () => {
+  useHotkeys('meta+f, ctrl+f', e => {
+    e.preventDefault()
     const isMaximized = props.api.isMaximized()
 
     if (isMaximized) {
@@ -57,7 +64,7 @@ const GraphWindow = (props: Props) => {
     }
   })
 
-  if (!spell) return null
+  if (!spell || !height || !width) return null
 
   return (
     <div style={{ height, width }} ref={parentRef}>

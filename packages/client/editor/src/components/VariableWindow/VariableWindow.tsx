@@ -3,20 +3,17 @@ import { Tab, useConfig } from '@magickml/providers'
 import { Window } from 'client/core'
 import {
   selectGraphJson,
-  selectTabEdges,
-  selectTabNodes,
-  setEdges,
-  setNodes,
   useGetSpellByNameQuery,
   useSaveSpellMutation,
 } from 'client/state'
 import { v4 as uuidv4 } from 'uuid'
 import { IDockviewPanelProps } from 'dockview'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { enqueueSnackbar } from 'notistack'
 import { Variable } from './Variable'
 import { useSelector } from 'react-redux'
 import { Button, Input } from '@magickml/client-ui'
+import { useReactFlow } from '@xyflow/react'
 
 type Props = IDockviewPanelProps<{
   tab: Tab
@@ -26,6 +23,7 @@ type Props = IDockviewPanelProps<{
 
 export const VariableWindow = (props: Props) => {
   const { tab, spellName } = props.params
+  const [variables, setVariables] = useState<VariableJSON[]>([])
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -37,8 +35,7 @@ export const VariableWindow = (props: Props) => {
     }
   )
 
-  const nodes = useSelector(selectTabNodes(tab.id))
-  const edges = useSelector(selectTabEdges(tab.id))
+  const instance = useReactFlow()
 
   const [newVariableName, setNewVariableName] = useState<string>('')
   const graphJson = useSelector(selectGraphJson(tab.id))
@@ -49,25 +46,37 @@ export const VariableWindow = (props: Props) => {
     setNewVariableName(e.target.value)
   }
 
-  const deleteAllVariableNodes = useCallback(
-    (variable: VariableJSON) => {
-      const newNodes = nodes.filter(node => !node.type?.includes(variable.name))
+  useEffect(() => {
+    if (spell?.graph) {
+      setVariables([...spell.graph.variables])
+    }
+  }, [spell])
 
-      const removedNodes = nodes
-        .filter(node => node.type?.includes(variable.name))
-        .map(node => node.id)
+  const deleteAllVariableNodes = useCallback((variable: VariableJSON) => {
+    // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName'
+    const regex = new RegExp(`variables/(set|get)/${variable.name}`)
+    const nodes = instance.getNodes()
+    const edges = instance.getEdges()
 
-      const newEdges = edges.filter(
-        edge =>
-          !removedNodes.includes(edge.source) &&
-          !removedNodes.includes(edge.target)
-      )
+    // Filter nodes to get the new list without the matched nodes
+    const newNodes = nodes.filter(node => node.type && !regex.test(node.type))
 
-      setNodes(tab.id, newNodes)
-      setEdges(tab.id, newEdges)
-    },
-    [nodes, edges]
-  )
+    // Get the ids of nodes that match the regex
+    const removedNodes = nodes
+      .filter(node => node.type && regex.test(node.type))
+      .map(node => node.id)
+
+    // Filter edges to remove any that are connected to the removed nodes
+    const newEdges = edges.filter(
+      edge =>
+        !removedNodes.includes(edge.source) &&
+        !removedNodes.includes(edge.target)
+    )
+
+    // Uncomment these lines if you want to update state
+    instance.setNodes(newNodes)
+    instance.setEdges(newEdges)
+  }, [])
 
   const saveVariable = useCallback(
     (variable: VariableJSON) => {
@@ -121,7 +130,7 @@ export const VariableWindow = (props: Props) => {
       name: newVariableName,
       id: uuidv4(),
       valueTypeName: 'string',
-      initialValue: [],
+      initialValue: '',
     }
 
     const graph = spell.graph
@@ -158,20 +167,22 @@ export const VariableWindow = (props: Props) => {
           +
         </Button>
       </div>
-      <div>
-        {spell.graph.variables.map(variable => {
-          return (
-            <Variable
-              key={variable.id}
-              variable={variable}
-              deleteAllVariableNodes={() => {
-                deleteAllVariableNodes(variable)
-              }}
-              updateVariable={saveVariable}
-              deleteVariable={deleteVariable}
-            />
-          )
-        })}
+      <div className="mb-5">
+        {variables
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(variable => {
+            return (
+              <Variable
+                key={variable.id}
+                variable={variable}
+                deleteAllVariableNodes={() => {
+                  deleteAllVariableNodes(variable)
+                }}
+                updateVariable={saveVariable}
+                deleteVariable={deleteVariable}
+              />
+            )
+          })}
       </div>
     </Window>
   )

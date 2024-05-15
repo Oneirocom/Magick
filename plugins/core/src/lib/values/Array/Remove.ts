@@ -44,7 +44,9 @@ export const arrayRemoveLast = makeFlowNodeDefinition({
     const startSockets: SocketsList = [{ key: 'flow', valueType: 'flow' }]
 
     const socketArray =
-      configuration?.socketoutput?.length > 0 ? configuration.socketoutput : []
+      configuration?.socketOutputs?.length > 0
+        ? configuration.socketOutputs
+        : []
 
     return [...startSockets, ...socketArray]
   },

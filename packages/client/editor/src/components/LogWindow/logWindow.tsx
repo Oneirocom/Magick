@@ -19,6 +19,8 @@ export type Log = {
 const LIST_ITEM_HEIGHT = 25
 
 const LogHeader = ({
+  showRawLogs,
+  setShowRawLogs,
   showSpellLogs,
   showLogLogs,
   showErrorLogs,
@@ -27,15 +29,23 @@ const LogHeader = ({
   setShowErrorLogs,
 }) => {
   return (
-    <div className="flex justify-between mb-6 border-b border-gray-800 pb-5">
-      <h1 className="text-l font-semibold">Application Logs</h1>
-      <div className="flex gap-4">
+    <div className="flex mb-6 border-b border-gray-800 pb-5">
+      <div className="flex gap-2">
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={showRawLogs}
+            onChange={() => setShowRawLogs(prev => !prev)}
+            className="w-4 h-4 mr-2 border rounded border-gray-700 focus:border-blue-500"
+          />
+          <span>Raw</span>
+        </label>
         <label className="flex items-center">
           <input
             type="checkbox"
             checked={showSpellLogs}
             onChange={() => setShowSpellLogs(prev => !prev)}
-            className="w-5 h-5 mr-2 border rounded border-gray-700 focus:border-blue-500"
+            className="w-4 h-4 mr-2 border rounded border-gray-700 focus:border-blue-500"
           />
           <span>Spell</span>
         </label>
@@ -44,7 +54,7 @@ const LogHeader = ({
             type="checkbox"
             checked={showLogLogs}
             onChange={() => setShowLogLogs(prev => !prev)}
-            className="w-5 h-5 mr-2 border rounded border-gray-700 focus:border-blue-500"
+            className="w-4 h-4 mr-2 border rounded border-gray-700 focus:border-blue-500"
           />
           <span>Info</span>
         </label>
@@ -53,7 +63,7 @@ const LogHeader = ({
             type="checkbox"
             checked={showErrorLogs}
             onChange={() => setShowErrorLogs(prev => !prev)}
-            className="w-5 h-5 mr-2 border rounded border-gray-700 focus:border-blue-500"
+            className="w-4 h-4 mr-2 border rounded border-gray-700 focus:border-blue-500"
           />
           <span>Error</span>
         </label>
@@ -62,11 +72,12 @@ const LogHeader = ({
   )
 }
 
-const LogMessage = ({ log, style, onExpandCollapse }) => {
+const LogMessage = ({ log, style, onExpandCollapse, showRawLogs }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const isRefAvailable = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const expandRef = useRef<HTMLDivElement>(null) // Updated to specify HTML element type
+  const expandRef = useRef<HTMLDivElement>(null) // Upd
+  const cleanExpandRef = useRef<HTMLDivElement>(null)
   const isExpandedRef = useRef(isExpanded)
 
   const timestamp = format(new Date(log.timestamp), 'MMM-dd-yy-HH:mm')
@@ -76,12 +87,14 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
   }, [isExpanded])
 
   useLayoutEffect(() => {
-    if (expandRef.current) {
+    const expandedRef = showRawLogs ? expandRef.current : cleanExpandRef.current
+
+    if (expandedRef) {
       const resizeObserver = new ResizeObserver(() => {
-        const expandHeight = expandRef.current?.offsetHeight ?? 0 // Use nullish coalescing to handle potential null
+        const expandHeight = expandedRef.offsetHeight ?? 0
         const expandedHeight = LIST_ITEM_HEIGHT + expandHeight
 
-        if (isExpandedRef.current) {
+        if ((isExpandedRef.current && showRawLogs) || !showRawLogs) {
           onExpandCollapse(expandedHeight)
         } else {
           onExpandCollapse(LIST_ITEM_HEIGHT)
@@ -89,12 +102,12 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
       })
 
       // Start observing
-      resizeObserver.observe(expandRef.current)
+      resizeObserver.observe(expandedRef)
 
       // Cleanup
       return () => resizeObserver.disconnect()
     }
-  }, [expandRef.current])
+  }, [showRawLogs, cleanExpandRef.current, expandRef.current])
 
   useEffect(() => {
     if (!isRefAvailable) return
@@ -128,68 +141,87 @@ const LogMessage = ({ log, style, onExpandCollapse }) => {
       style={style}
       ref={containerRef}
     >
-      <div
-        className="flex flex-row justify-between w-full items-center gap-5 "
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <span className="text-md text-[#328597] whitespace-nowrap">
-          {timestamp}
-        </span>
-        <span className={`text-md ${textColor} break-all flex-grow truncate`}>
-          {log.messageType}: {log.message}
-        </span>
-        <div>
-          {isExpanded ? (
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+      {showRawLogs && (
+        <>
+          <div
+            className="flex flex-row justify-between w-full items-center gap-5 "
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            <span className="text-md text-[#328597] whitespace-nowrap">
+              {timestamp}
+            </span>
+            <span
+              className={`text-md ${textColor} break-all flex-grow truncate`}
             >
-              <path
-                d="M6 9L12 15L18 9"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-            </svg>
-          ) : (
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 15L12 9L18 15"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-            </svg>
-          )}
-        </div>
-      </div>
-      <div ref={expandRef}>
-        {isExpanded && (
-          <div className="mt-2">
-            <ReactJson
-              src={log}
-              enableClipboard={false}
-              theme="twilight"
-              collapsed={false}
-              style={{ overflow: 'auto', background: 'transparent' }}
-            />
+              {log.messageType}: {log.message}
+            </span>
+            <div>
+              {isExpanded ? (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 9L12 15L18 9"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              ) : (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 15L12 9L18 15"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+          <div ref={expandRef}>
+            {isExpanded && (
+              <div className="mt-2">
+                <ReactJson
+                  src={log}
+                  enableClipboard={false}
+                  theme="twilight"
+                  collapsed={false}
+                  style={{ overflow: 'auto', background: 'transparent' }}
+                />
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {!showRawLogs && (
+        <div className="flex flex-col justify-between w-full items-start">
+          <div className="flex flex-row justify-between w-full items-center gap-5">
+            <span
+              className={`text-md ${textColor} break-all flex-grow`}
+              ref={cleanExpandRef}
+            >
+              {log.messageType}: {log.message}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
-const LogContainer = ({ logs, autoscroll }) => {
+const LogContainer = ({ logs, autoscroll, showRawLogs }) => {
   const listRef = useRef<any>(null)
   const rowHeights = useRef({})
 
@@ -221,6 +253,7 @@ const LogContainer = ({ logs, autoscroll }) => {
           >
             {({ index, style }) => (
               <LogMessage
+                showRawLogs={showRawLogs}
                 key={index}
                 log={logs[index]}
                 style={style}
@@ -266,9 +299,10 @@ const LogsComponent = () => {
   const { lastItem: lastErrorLog } = useSelectAgentsError()
   const [combinedData, setCombinedData] = useState<Log[]>([])
   const [autoscroll, setAutoscroll] = useState(true)
-  const [showSpellLogs, setShowSpellLogs] = useState(true)
+  const [showSpellLogs, setShowSpellLogs] = useState(false)
   const [showLogLogs, setShowLogLogs] = useState(true)
   const [showErrorLogs, setShowErrorLogs] = useState(true)
+  const [showRawLogs, setShowRawLogs] = useState(false)
 
   useEffect(() => {
     // Create a new entry only if the new log item is not undefined
@@ -288,7 +322,7 @@ const LogsComponent = () => {
     }
 
     addIfUnique(lastLog as Log, 'log') // Cast to Log type to avoid errors
-    addIfUnique(lastSpellLog as Log, 'spell')
+    // addIfUnique(lastSpellLog as Log, 'spell')
     addIfUnique(lastErrorLog as Log, 'error')
 
     // Update the combinedData state with new entries if any
@@ -324,6 +358,8 @@ const LogsComponent = () => {
     <div className="flex flex-col h-full p-4 text-white">
       {/* Clean up the props to this header */}
       <LogHeader
+        setShowRawLogs={setShowRawLogs}
+        showRawLogs={showRawLogs}
         showLogLogs={showLogLogs}
         showSpellLogs={showSpellLogs}
         setShowSpellLogs={setShowSpellLogs}
@@ -331,7 +367,11 @@ const LogsComponent = () => {
         setShowErrorLogs={setShowErrorLogs}
         showErrorLogs={showErrorLogs}
       />
-      <LogContainer logs={logs} autoscroll={autoscroll} />
+      <LogContainer
+        logs={logs}
+        autoscroll={autoscroll}
+        showRawLogs={showRawLogs}
+      />
       <LogFooter
         autoscroll={autoscroll}
         setAutoscroll={setAutoscroll}

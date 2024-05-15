@@ -1,4 +1,4 @@
-import { ReactFlowState, useStore } from 'reactflow'
+import { ReactFlowState, useStore } from '@xyflow/react'
 
 const getState = (state: ReactFlowState) => {
   console.log('STATE', state)
@@ -18,13 +18,13 @@ export const ConnectionLine = ({
   toX,
   toY,
 }: ConnectionLineProps) => {
-  const { connectionHandleId } = useStore(getState)
+  const { connectionStartHandle } = useStore(getState)
 
   return (
     <g>
       <path
         fill="none"
-        stroke={connectionHandleId || '#000'}
+        stroke={connectionStartHandle?.nodeId || '#000'}
         strokeWidth={1.5}
         className="animated"
         d={`M${fromX},${fromY} C ${fromX} ${toY} ${fromX} ${toY} ${toX},${toY}`}
@@ -34,7 +34,7 @@ export const ConnectionLine = ({
         cy={toY}
         fill="#fff"
         r={3}
-        stroke={connectionHandleId || '#000'}
+        stroke={connectionStartHandle?.nodeId || '#000'}
         strokeWidth={1.5}
       />
     </g>

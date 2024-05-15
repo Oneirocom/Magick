@@ -1,15 +1,23 @@
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import { faPause, faPlay, faSitemap } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPause,
+  faPlay,
+  faSitemap,
+  faBug,
+  faBugSlash,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import React from 'react'
-import { ControlButton, Controls } from 'reactflow'
+import { ControlButton, Controls } from '@xyflow/react'
 
 import { ClearModal } from './modals/ClearModal'
 
 export type CustomControlsProps = {
   playing: boolean
   togglePlay: () => void
+  toggleDebug: () => void
+  isDebug: boolean
   setBehaviorGraph: (value: GraphJSON) => void
   specJson: NodeSpecJSON[] | undefined
   miniMapOpen: boolean
@@ -18,7 +26,9 @@ export type CustomControlsProps = {
 
 export const CustomControls: React.FC<CustomControlsProps> = ({
   playing,
+  isDebug,
   togglePlay,
+  toggleDebug,
   toggleMiniMap,
 }) => {
   const [clearModalOpen, setClearModalOpen] = useState(false)
@@ -32,6 +42,9 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
         <ControlButton title="Minimap" onClick={toggleMiniMap}>
           <FontAwesomeIcon icon={faSitemap} />
         </ControlButton>
+        <ControlButton title="Debug" onClick={toggleDebug}>
+          <FontAwesomeIcon icon={isDebug ? faBug : faBugSlash} />
+        </ControlButton>
         {/* <ControlButton title="Load" onClick={() => setLoadModalOpen(true)}>
           <FontAwesomeIcon icon={faUpload} />
         </ControlButton> */}
@@ -39,7 +52,7 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
           <FontAwesomeIcon icon={faTrash} />
         </ControlButton> */}
         <ControlButton title="Run" onClick={togglePlay}>
-          <FontAwesomeIcon icon={playing ? faPause : faPlay} />
+          <FontAwesomeIcon icon={playing ? faPlay : faPause} />
         </ControlButton>
       </Controls>
       <ClearModal

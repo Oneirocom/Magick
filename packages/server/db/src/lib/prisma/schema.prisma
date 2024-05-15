@@ -300,7 +300,7 @@ enum WebhookStatus {
   @@schema("public")
 }
 
-model SeraphEvent {
+model seraphEvents {
   id        String    @id @db.Uuid
   agentId   String    @db.Uuid
   projectId String    @db.Uuid
@@ -308,6 +308,20 @@ model SeraphEvent {
   type      String    @db.VarChar(255)
   data      Json
   createdAt DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@schema("public")
+}
+
+model Memory {
+  id        String                 @id @default(cuid())
+  role      String
+  content   String
+  type      String?
+  event     Json
+  channel   String
+  agentId   String
+  createdAt DateTime               @default(now())
+  vector    Unsupported("vector")?
 
   @@schema("public")
 }

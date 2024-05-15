@@ -13,7 +13,7 @@ import { PostHogProvider } from 'posthog-js/react'
 import { AppConfig } from '@magickml/providers'
 
 import 'dockview/dist/styles/dockview.css'
-import 'reactflow/dist/style.css'
+import '@xyflow/react/dist/style.css'
 import '../../../packages/client/stylesheets/src/lib/styles/behaveFlow.css'
 import '../../../packages/client/stylesheets/src/lib/design-globals/design-globals.css'
 import '../../../packages/client/stylesheets/src/lib/App.css'

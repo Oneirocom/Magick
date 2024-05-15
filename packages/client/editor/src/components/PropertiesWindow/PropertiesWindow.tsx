@@ -1,12 +1,11 @@
 import cx from 'classnames'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { Tab } from '@magickml/providers'
-import { selectActiveNode, useGetSpellByNameQuery } from 'client/state'
-import { useSelector } from 'react-redux'
+import { useGetSpellByNameQuery } from 'client/state'
 import { Window } from 'client/core'
 import { SocketConfig } from './SocketConfig'
 import { NodeSpecJSON } from '@magickml/behave-graph'
-import { Node } from 'reactflow'
+import { Node, useOnSelectionChange } from '@xyflow/react'
 import { useChangeNodeData } from '@magickml/flow-core'
 import { EventStateProperties } from './EventStateProperties'
 import { SpellInterface } from 'server/schemas'
@@ -15,7 +14,7 @@ import { ValueType } from './ValueType'
 import { DefaultConfig } from './DefaultConfig'
 import { CompletionProviderOptions } from './CompletionProviderOptions'
 import { SelectedEvents } from './SelectedEvents'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Props = {
   tab: Tab
@@ -47,12 +46,23 @@ const ConfigurationComponents = {
 }
 
 export const PropertiesWindow = (props: Props) => {
-  const selectedNode = useSelector(selectActiveNode(props.tab.id))
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null)
   const [spec, setSpec] = useState<NodeSpecJSON | null>(null)
+  const [currentNode, setCurrentNode] = useState<Node | null>(null)
   const [configuration, setConfiguration] = useState<Record<
     string,
     any
   > | null>(null)
+
+  useOnSelectionChange({
+    onChange: ({ nodes }) => {
+      if (nodes.length > 1) {
+        setSelectedNode(null)
+        return
+      }
+      setSelectedNode(nodes[0])
+    },
+  })
 
   const spellName = props.spellName
   const { spell } = useGetSpellByNameQuery(
@@ -67,25 +77,33 @@ export const PropertiesWindow = (props: Props) => {
 
   const handleChange = useChangeNodeData(selectedNode?.id)
 
-  const nodeSpecs = getNodeSpec()
+  const nodeSpecs = useMemo(() => getNodeSpec(), [])
 
   useEffect(() => {
-    if (!spell || !selectedNode || !nodeSpecs) return
-    const { configuration } = selectedNode.data
-    if (!configuration) {
-      handleChange('configuration', spell.configuration)
+    if (!nodeSpecs) return
+
+    if (!selectedNode) {
+      setCurrentNode(null)
+      setSpec(null)
+      return
     }
-    setConfiguration(configuration)
+
+    const { configuration } = selectedNode.data
+    if (configuration) setConfiguration(configuration)
 
     const spec = nodeSpecs.find(spec => spec.type === selectedNode.type)
+
     setSpec(spec || null)
-  }, [spell, selectedNode, nodeSpecs])
+
+    setCurrentNode(selectedNode)
+  }, [selectedNode, nodeSpecs])
 
   const updateConfigKey = (key: string, value: any) => {
     const newConfig = {
       ...configuration,
       [key]: value,
     }
+    setConfiguration(newConfig)
     handleChange('configuration', newConfig)
   }
 
@@ -94,10 +112,15 @@ export const PropertiesWindow = (props: Props) => {
       ...configuration,
       ...keys,
     }
+    setConfiguration(newConfig)
     handleChange('configuration', newConfig)
   }
 
-  if (!spell || !spec || !configuration || !selectedNode) return null
+  if (!spell || !spec || !selectedNode) return null
+
+  if (!configuration) {
+    return null
+  }
 
   return (
     <Window borderless>
@@ -109,7 +132,12 @@ export const PropertiesWindow = (props: Props) => {
       {
         Object.entries(configuration || {})
           .filter(
-            ([key, value]) => !configuration.hiddenProperties?.includes(key)
+            ([key, value]) =>
+              !configuration.hiddenProperties?.includes(key) &&
+              !spec?.configuration
+                .find(config => config.name === 'hiddenProperties')
+                ?.defaultValue// @ts-ignore
+                ?.includes(key)
           )
           .map((config: [key: string, any], index) => {
             const [key] = config
@@ -125,7 +153,7 @@ export const PropertiesWindow = (props: Props) => {
               fullConfig: configuration,
               config: config,
               nodeSpec: spec,
-              node: selectedNode,
+              node: currentNode as Node,
               tab: props.tab,
               updateConfigKey,
               updateConfigKeys,

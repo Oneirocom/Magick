@@ -1,5 +1,5 @@
 // CoreNode.tsx
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { enqueueSnackbar } from 'notistack'
 import { usePubSub } from '@magickml/providers'
@@ -13,19 +13,26 @@ import { BaseNode } from './base-node'
 type BaseNodeProps = React.ComponentProps<typeof BaseNode>
 type CoreNodeProps = Omit<
   BaseNodeProps,
-  'activeInput' | 'setActiveInput' | 'onResetNodeState' | 'spellEvent'
+  | 'activeInput'
+  | 'setActiveInput'
+  | 'onResetNodeState'
+  | 'spellEvent'
+  | 'resetNodeState'
 >
 
 export const CoreNode: React.FC<CoreNodeProps> = props => {
-  const { id, spell } = props
+  const { id, spellId } = props
   const { events, subscribe } = usePubSub()
   const dispatch = useDispatch()
   const { lastItem: spellEvent } = useSelectAgentsSpell()
   const activeInput = useSelector(selectActiveInput)
+  const [resetNodeState, setResetNodeState] = useState(false)
 
   useEffect(() => {
     const unsubscribe = subscribe(events.RESET_NODE_STATE, () => {
-      onResetNodeState()
+      setTimeout(() => {
+        onResetNodeState()
+      }, 1000)
     })
 
     return () => {
@@ -35,8 +42,12 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
 
   const onResetNodeState = () => {
     // Reset node state logic
+    setResetNodeState(true)
     dispatch(setActiveInput(null))
-    // Add any other reset logic here
+
+    setTimeout(() => {
+      setResetNodeState(false)
+    }, 100)
   }
 
   const setActiveInputWrapper = useCallback(
@@ -48,7 +59,7 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
 
   useEffect(() => {
     if (!spellEvent) return
-    if (spellEvent.event === `${spell.id}-${id}-error`) {
+    if (spellEvent.event === `${spellId}-${id}-error`) {
       const truncatedMessage =
         spellEvent.message.length > 100
           ? spellEvent.message.substring(
@@ -66,6 +77,7 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
   return (
     <BaseNode
       {...props}
+      resetNodeState={resetNodeState}
       activeInput={activeInput}
       setActiveInput={setActiveInputWrapper}
       onResetNodeState={onResetNodeState}

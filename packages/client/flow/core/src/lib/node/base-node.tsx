@@ -1,26 +1,22 @@
-import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import React, { useEffect, useState } from 'react'
-import {
-  NodeProps as FlowNodeProps,
-  useEdges,
-  useUpdateNodeInternals,
-} from 'reactflow'
+import { NodeSpecJSON } from '@magickml/behave-graph'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { NodeProps as FlowNodeProps, useEdges } from '@xyflow/react'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'
 import { isHandleConnected } from '../utils/isHandleConnected'
-import { SpellInterfaceWithGraph } from 'server/schemas'
-import { getConfig } from '../utils/getNodeConfig'
+// import { SpellInterfaceWithGraph } from 'server/schemas'
+// import { getConfig } from '../utils/getNodeConfig'
 import { configureSockets } from '../utils/configureSockets'
-import { debounce } from 'lodash'
 import NodeContainer from './node-container'
+import { MagickNodeType } from '@magickml/client-types'
 
-type BaseNodeProps = FlowNodeProps & {
+type BaseNodeProps = FlowNodeProps<MagickNodeType> & {
   spec: NodeSpecJSON
   allSpecs: NodeSpecJSON[]
-  spell: SpellInterfaceWithGraph
-  nodeJSON: NodeJSON
-  selected: boolean
+  spellId: string
+  resetNodeState?: boolean
+  selected?: boolean | undefined
   activeInput: {
     nodeId: string
     name: string
@@ -38,14 +34,14 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   spec,
   selected,
   allSpecs,
-  spell,
-  nodeJSON,
+  spellId,
   activeInput,
   setActiveInput,
+  resetNodeState = false,
   onResetNodeState,
   spellEvent,
 }: BaseNodeProps) => {
-  const updateNodeInternals = useUpdateNodeInternals()
+  const [socketsVisible, setSocketsVisible] = useState(true)
   const [endEventName, setEndEventName] = useState<string | null>(null)
   const [startEventName, setStartEventName] = useState<string | null>(null)
   const [errorEventName, setErrorEventName] = useState<string | null>(null)
@@ -60,38 +56,45 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   const handleChange = useChangeNodeData(id)
 
   useEffect(() => {
+    if (typeof data.socketsVisible === 'undefined') {
+      setSocketsVisible(true)
+      return
+    }
+
+    setSocketsVisible(data.socketsVisible)
+  }, [data.socketsVisible])
+
+  useEffect(() => {
+    if (resetNodeState) {
+      setRunning(false)
+      setDone(false)
+      setError(false)
+      onResetNodeState()
+    }
+  }, [resetNodeState])
+
+  useEffect(() => {
     if (!selected) setActiveInput(null)
   }, [selected])
 
-  const DELAY = 3000
-
-  const debounceDone = debounce(() => {
-    setDone(false)
-  }, DELAY)
-
-  // if the node doesn't have a config yet, we need to make one for it and add it to the react flow node data
-  if (!data.configuration) {
-    const config = getConfig(nodeJSON, spec)
-    handleChange('configuration', config)
-  }
-
-  if (!data.nodeSpec) {
-    handleChange('nodeSpec', spec)
-  }
-
   useEffect(() => {
-    updateNodeInternals(id)
+    if (!data.nodeSpec) {
+      handleChange('nodeSpec', spec)
+    }
   }, [data])
 
   const { configuration: config } = data
-  const { pairs, valueInputs } = configureSockets(data, spec)
+  const { pairs, valueInputs } = useMemo(
+    () => configureSockets(data, spec),
+    [data, spec]
+  )
 
   useEffect(() => {
-    if (!spell || !id) return
-    setEndEventName(`${spell.id}-${id}-end`)
-    setStartEventName(`${spell.id}-${id}-start`)
-    setErrorEventName(`${spell.id}-${id}-error`)
-  }, [spell, id])
+    if (!spellId || !id) return
+    setEndEventName(`${spellId}-${id}-end`)
+    setStartEventName(`${spellId}-${id}-start`)
+    setErrorEventName(`${spellId}-${id}-error`)
+  }, [spellId, id])
 
   // Handle start event
   useEffect(() => {
@@ -107,10 +110,11 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     if (!spellEvent) return
     if (spellEvent.event === endEventName) {
       setLastOutputs(spellEvent.outputs)
-      setRunning(false)
-      setDone(true)
 
-      debounceDone()
+      setTimeout(() => {
+        setRunning(false)
+        setDone(true)
+      }, 2000)
     }
   }, [spellEvent])
 
@@ -127,9 +131,18 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     }
   }, [spellEvent])
 
-  const isActive = (x: string) => {
-    if (activeInput?.nodeId !== id) return false
-    return activeInput?.name === x
+  const isActive = useCallback(
+    (inputName: string) => {
+      if (!activeInput) return false
+      return activeInput.nodeId === id && activeInput.name === inputName
+    },
+    [activeInput]
+  )
+
+  const toggleSocketVisibility = () => {
+    const newState = !socketsVisible
+    setSocketsVisible(newState)
+    handleChange('socketsVisible', newState)
   }
 
   return (
@@ -137,12 +150,15 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       fired={done}
       error={error}
       running={running}
-      label={config?.label ?? spec.label}
+      nodeTitle={data?.nodeTitle}
+      label={spec.label}
       title={spec?.type ?? 'Node'}
       category={spec.category}
       selected={selected}
-      graph={spell.graph}
+      socketsVisible={socketsVisible}
+      toggleSocketVisibility={toggleSocketVisibility}
       config={config}
+      handleChange={handleChange}
     >
       {pairs.map(([flowInput, output], ix) => (
         <div
@@ -166,6 +182,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
             <OutputSocket
               {...output}
               specJSON={allSpecs}
+              hide={!socketsVisible}
               lastEventOutput={
                 lastOutputs
                   ? lastOutputs.find((event: any) => event.name === output.name)
@@ -186,6 +203,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
           <InputSocket
             {...input}
             specJSON={allSpecs}
+            hide={!socketsVisible}
             value={data[input.name] ?? input.defaultValue}
             lastEventInput={
               lastInputs

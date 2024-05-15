@@ -43,6 +43,7 @@ export const VariableNames = ({
 
       const configUpdate: Record<string, any> = {
         variableId: variable.id,
+        valueTypeName: variable.valueTypeName,
         label: variable.name,
       }
 

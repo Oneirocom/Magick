@@ -18,11 +18,16 @@ export const variableGet = makeFunctionNodeDefinition({
         'variableId',
         'socketOutputs',
         'label',
+        'valueTypeName',
       ],
     },
     variableId: {
       valueType: 'string',
       defaultValue: '',
+    },
+    valueTypeName: {
+      valueType: 'string',
+      defaultValue: 'string',
     },
     variableNames: {
       valueType: 'array',

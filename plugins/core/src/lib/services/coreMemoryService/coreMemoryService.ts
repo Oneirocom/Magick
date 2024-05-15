@@ -1,15 +1,6 @@
 import { python } from 'pythonia'
 import flatten from 'arr-flatten'
-import {
-  AllModels,
-  CompletionModel,
-  DataType,
-  EmbeddingModel,
-  LLMCredential,
-  OpenAIChatCompletionModels,
-  OpenAIEmbeddingModels,
-  findProvider,
-} from 'servicesShared'
+import { DataType, LLMCredential, LLMProviderKeys } from 'servicesShared'
 import { PRODUCTION, PINECONE_INDEX_NAME } from 'shared/config'
 
 type SearchArgs = {
@@ -96,8 +87,8 @@ class CoreMemoryService {
       // Use Pythonia to create an instance of the Embedchain App
       this.embedchain = await python('embedchain')
       // Ste initial LLM and Embedder models
-      this.setLLM(OpenAIChatCompletionModels.GPT35Turbo)
-      this.setEmbedder(OpenAIEmbeddingModels.TextEmbeddingAda002)
+      this.setLLM('gpt-3.5-turbo')
+      this.setEmbedder('text-embedding-ada-002')
 
       // Set agent ID to namespace the app
       this.baseConfig.app.config.id = agentId
@@ -112,13 +103,14 @@ class CoreMemoryService {
     }
   }
 
-  setModel(model: CompletionModel) {
+  setModel(model: string) {
     this.setLLM(model)
   }
 
-  private setLLM(model: CompletionModel) {
-    const providerName = findProvider(model)?.provider
-    const credential = this.getCredential(model)
+  // Note: Currently hard coding this to open ai as we switch how to get models with keywords
+  private setLLM(model: string) {
+    const providerName = 'openai'
+    const credential = this.getCredential()
     const params = this.changeLLMParams()
 
     this.baseConfig.llm = {
@@ -131,9 +123,9 @@ class CoreMemoryService {
     }
   }
 
-  private setEmbedder(model: EmbeddingModel) {
-    const providerName = findProvider(model)?.provider
-    const credential = this.getCredential(model)
+  private setEmbedder(model: string) {
+    const providerName = 'openai'
+    const credential = this.getCredential()
 
     this.baseConfig.embedder = {
       provider: providerName,
@@ -171,8 +163,8 @@ class CoreMemoryService {
     return Object.values(DataType)
   }
 
-  private getCredential(model: AllModels): string {
-    const provider = findProvider(model)?.keyName
+  private getCredential(): string {
+    const provider = LLMProviderKeys.OpenAI
     let credential = this.credentials.find(
       c => c.serviceType === provider
     )?.value
@@ -201,6 +193,7 @@ class CoreMemoryService {
 
     try {
       if (!this.app) this.initialize(this.agentId)
+      console.log('Adding to Embedchain:', data, kwargs)
 
       const result = await this.app.add$(data, kwargs)
 

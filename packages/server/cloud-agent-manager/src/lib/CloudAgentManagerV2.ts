@@ -78,15 +78,19 @@ export class CloudAgentManagerV2 {
   }
 
   async fetchEnabledAgents() {
-    const enabledAgents = (await app.service('agents').find({
-      paginate: false,
-      query: {
-        enabled: true,
-        version: '2.0',
-      },
-    })) as AgentInterface[]
-
-    return enabledAgents.map(agent => agent.id)
+    try {
+      const enabledAgents = (await app.service('agents').find({
+        paginate: false,
+        query: {
+          enabled: true,
+          version: '2.0',
+        },
+      })) as AgentInterface[]
+      return enabledAgents.map(agent => agent.id)
+    } catch (err) {
+      console.log('ERROR', err)
+      throw new Error('Failed to fetch enabled agents')
+    }
   }
 
   async fetchOnlineAgents() {

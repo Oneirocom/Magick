@@ -1,18 +1,23 @@
-import { ILifecycleEventEmitter, NodeCategory } from '@magickml/behave-graph'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import {
+  Assert,
+  ILifecycleEventEmitter,
+  NodeCategory,
+} from '@magickml/behave-graph'
+import { IEventStore, makeMagickEventNodeDefinition } from 'server/grimoire'
+import { CORE_DEP_KEYS } from '../../config'
+import { Agent } from 'server/agents'
 
 type State = {
   onTickEvent?: (() => void) | undefined
-  lastTickTime: number
 }
 
 const makeInitialState = (): State => ({
-  lastTickTime: Date.now(),
+  onTickEvent: undefined,
 })
 
 export const LifecycleOnTick = makeMagickEventNodeDefinition(
   {
-    typeName: 'lifecycle/onTick',
+    typeName: 'lifecycles/onTick',
     label: 'On Tick',
     category: NodeCategory.Event,
     in: {},
@@ -23,21 +28,65 @@ export const LifecycleOnTick = makeMagickEventNodeDefinition(
     initialState: makeInitialState(),
   },
   {
-    customListener: (getDependency, onStartEvent) => {
-      const lifecycleEventEmitter = getDependency<ILifecycleEventEmitter>(
+    init: ({ state, commit, write, graph, handleState, finish }) => {
+      Assert.mustBeTrue(state.onTickEvent === undefined)
+
+      const lifecycleEventEmitter = graph.getDependency<ILifecycleEventEmitter>(
         'ILifecycleEventEmitter'
       )
 
-      lifecycleEventEmitter?.tickEvent.addListener(() => {
-        onStartEvent()
-      })
+      const agent = graph.getDependency<Agent>(CORE_DEP_KEYS.AGENT)
+      const eventStore = graph.getDependency<IEventStore>(
+        CORE_DEP_KEYS.EVENT_STORE
+      )
+      const initialEvent = eventStore?.initialEvent()
+
+      if (!agent || !eventStore) return
+
+      let lastTickTime = Date.now()
+
+      const onTickEvent = () => {
+        const event = agent?.formatEvent<{}>({
+          ...initialEvent,
+          content: '',
+          eventName: 'tick',
+          sender: agent.id,
+          data: {},
+          metadata: {},
+          skipSave: true,
+        })
+
+        // handle state, but don't store the event
+        handleState(event, false)
+
+        const currentTime = Date.now()
+        const deltaSeconds = (currentTime - lastTickTime) * 0.001
+        write('deltaSeconds', deltaSeconds)
+        commit('flow', () => {
+          finish()
+        })
+        lastTickTime = currentTime
+      }
+
+      lifecycleEventEmitter?.tickEvent.addListener(onTickEvent)
+
+      return {
+        onTickEvent,
+      }
     },
-    handleEvent: (event, { write, commit, state }) => {
-      const { lastTickTime } = state
-      const currentTime = Date.now()
-      const deltaSeconds = (currentTime - lastTickTime) * 0.001
-      write('deltaSeconds', deltaSeconds)
-      commit('flow')
+    dispose: ({ graph, state }) => {
+      const lifecycleEventEmitter = graph.getDependency<ILifecycleEventEmitter>(
+        'ILifecycleEventEmitter'
+      )
+
+      if (!lifecycleEventEmitter || !state.onTickEvent) return {}
+
+      lifecycleEventEmitter?.tickEvent.removeListener(state.onTickEvent)
+      lifecycleEventEmitter?.tickEvent.clear()
+
+      return {
+        onTickEvent: undefined,
+      }
     },
   }
 )

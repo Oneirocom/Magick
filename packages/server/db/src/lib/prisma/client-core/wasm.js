@@ -312,13 +312,24 @@ exports.Prisma.WebhookScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.SeraphEventScalarFieldEnum = {
+exports.Prisma.SeraphEventsScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
   spellId: 'spellId',
   type: 'type',
   data: 'data',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MemoryScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  content: 'content',
+  type: 'type',
+  event: 'event',
+  channel: 'channel',
+  agentId: 'agentId',
   createdAt: 'createdAt'
 };
 
@@ -506,12 +517,21 @@ exports.Prisma.WebhookOrderByRelevanceFieldEnum = {
   url: 'url'
 };
 
-exports.Prisma.SeraphEventOrderByRelevanceFieldEnum = {
+exports.Prisma.seraphEventsOrderByRelevanceFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   projectId: 'projectId',
   spellId: 'spellId',
   type: 'type'
+};
+
+exports.Prisma.MemoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  role: 'role',
+  content: 'content',
+  type: 'type',
+  channel: 'channel',
+  agentId: 'agentId'
 };
 exports.WebhookMethod = exports.$Enums.WebhookMethod = {
   GET: 'GET',
@@ -550,7 +570,8 @@ exports.Prisma.ModelName = {
   spells: 'spells',
   tasks: 'tasks',
   Webhook: 'Webhook',
-  SeraphEvent: 'SeraphEvent'
+  seraphEvents: 'seraphEvents',
+  Memory: 'Memory'
 };
 
 /**
