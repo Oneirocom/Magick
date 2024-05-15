@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from '@magickml/client-ui'
 import { useSnackbar } from 'notistack'
+import { useReactFlow } from '@xyflow/react'
+import { setEdges } from 'client/state'
 
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -118,13 +120,17 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
 }
 
 export const SocketConfig = ({
+  node,
   config,
   updateConfigKey,
   fullConfig,
+  tab,
 }: ConfigurationComponentProps) => {
   const defaultValues = ['string', 'integer', 'boolean']
   const [configKey, sockets = []] = config
   const { socketValues = defaultValues, valueType = null } = fullConfig
+
+  const instance = useReactFlow()
 
   const addSocket = useCallback(
     socket => {
@@ -142,6 +148,22 @@ export const SocketConfig = ({
   )
 
   const deleteSocket = (name: string) => {
+    const edges = instance.getEdges()
+
+    const newEdges = edges.filter(edge => {
+      if (configKey === 'socketInputs') {
+        return edge.target !== node.id && edge.targetHandle !== name
+      }
+
+      if (configKey === 'socketOutputs') {
+        return edge.source !== node.id && edge.sourceHandle !== name
+      }
+
+      return true
+    })
+
+    setEdges(tab.id, newEdges)
+
     const newValue = sockets.filter((socket: any) => socket.name !== name)
     updateConfigKey(configKey, newValue)
   }
