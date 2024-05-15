@@ -84,7 +84,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       currentState.shift()
     }
 
-    localStorage.setItem(key, JSON.stringify([...currentState, state]))
+    try {
+      localStorage.setItem(key, JSON.stringify([...currentState, state]))
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const removeLastUndoState = spellid => {
@@ -96,7 +100,12 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     addRedoState(spellid, removedState)
 
-    localStorage.setItem(key, JSON.stringify(currentState))
+    try {
+      localStorage.setItem(key, JSON.stringify(currentState))
+    } catch (e) {
+      console.error(e)
+      return null
+    }
 
     return removedState
   }
@@ -110,7 +119,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       currentState.shift()
     }
 
-    localStorage.setItem(key, JSON.stringify([...currentState, state]))
+    try {
+      localStorage.setItem(key, JSON.stringify([...currentState, state]))
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const removeLastRedoState = spellid => {
@@ -120,7 +133,12 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     addUndoState(spellid, state)
 
-    localStorage.setItem(key, JSON.stringify(currentState))
+    try {
+      localStorage.setItem(key, JSON.stringify(currentState))
+    } catch (e) {
+      console.error(e)
+      return null
+    }
 
     return state
   }
