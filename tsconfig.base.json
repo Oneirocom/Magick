@@ -49,7 +49,6 @@
       "@magickml/portal-db": ["portal/cloud/packages/db/src/index.ts"],
       "@magickml/portal-hooks": ["portal/cloud/packages/hooks/src/index.ts"],
       "@magickml/portal-layout": ["portal/cloud/packages/layout/src/index.ts"],
-      "@magickml/portal-mail": ["portal/cloud/packages/mail/src/index.ts"],
       "@magickml/portal-pages": ["portal/cloud/packages/pages/src/index.ts"],
       "@magickml/portal-providers": [
         "portal/cloud/packages/providers/src/index.ts"
