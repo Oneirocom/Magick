@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '../utils/shadcn'
 import { motion } from 'framer-motion'
 
