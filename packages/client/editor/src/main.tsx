@@ -1,9 +1,10 @@
-// DOCUMENTED
+'use client'
+
 /**
  * A module which exports a functional component - MagickIDE
  * @module MagickIDE
  */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 
 import 'regenerator-runtime/runtime'
@@ -27,9 +28,9 @@ enum LoadingStatus {
  */
 export type MagickIDEProps = {
   config: AppConfig
-  loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+  loading?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
   // TODO: type it with the enum, but we have to move the enum out of the package for the parent to import
-  loadingStatus: [string, React.Dispatch<React.SetStateAction<string>>]
+  loadingStatus?: [string, React.Dispatch<React.SetStateAction<string>>]
 }
 
 /**
@@ -39,9 +40,9 @@ export type MagickIDEProps = {
  */
 export const MagickIDE = ({
   config,
-  loading,
-  loadingStatus,
 }: MagickIDEProps): React.ReactElement | null => {
+  const loading = useState(true)
+  const loadingStatus = useState(LoadingStatus.INITIALIZING)
   useEffect(() => {
     ;(async () => {
       loadingStatus[1](LoadingStatus.CONNECTING)
