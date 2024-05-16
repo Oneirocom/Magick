@@ -1,4 +1,5 @@
-// CoreNode.tsx
+"use client"
+
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { enqueueSnackbar } from 'notistack'

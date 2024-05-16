@@ -1,3 +1,5 @@
+"use client"
+
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
 import { behaveToFlow } from '../utils/transformers/behaveToFlow'

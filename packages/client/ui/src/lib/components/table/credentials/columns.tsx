@@ -1,3 +1,4 @@
+"use client";
 import { ColumnDef } from '@tanstack/react-table'
 import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {

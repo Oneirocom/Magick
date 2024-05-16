@@ -1,4 +1,4 @@
-// DOCUMENTED
+"use client"
 
 // Import required modules
 import { PubSubContext, PubSubData, PubSubEvents } from './pubSubTypes'
