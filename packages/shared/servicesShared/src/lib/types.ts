@@ -1,3 +1,4 @@
+import { Model } from 'servicesShared'
 import {
   CompletionResponse,
   CompletionRequest,
@@ -50,6 +51,14 @@ export type CreateBudgetParams = {
   duration: BudgetDuration
 }
 
+export type ProviderData = Record<
+  string,
+  {
+    models: Model[]
+    apiKey: string
+    providerName: string
+  }
+>
 export interface ICoreBudgetManagerService {
   initialize(): Promise<void>
   createBudget(params: CreateBudgetParams): Promise<boolean>

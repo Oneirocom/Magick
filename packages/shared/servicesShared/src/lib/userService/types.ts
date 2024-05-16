@@ -1,4 +1,4 @@
-import { ProxyUser } from '@magickml/portal-utils-server'
+import { ProxyUser } from 'portal/cloud/packages/utils/server/src/lib/keywords'
 import { z } from 'zod'
 
 export enum SubscriptionNames {
