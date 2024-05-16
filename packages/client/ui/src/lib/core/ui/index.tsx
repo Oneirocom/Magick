@@ -1,4 +1,4 @@
-"use client";
+'use client'
 export * from './accordion'
 export * from './alert-dialog'
 export * from './avatar'
@@ -32,3 +32,4 @@ export * from './dropdown'
 export * from './slider'
 export * from './command'
 export * from './separator'
+export * from './skeleton'
