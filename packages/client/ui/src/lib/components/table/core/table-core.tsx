@@ -1,3 +1,4 @@
+'use client'
 import * as React from 'react'
 import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
