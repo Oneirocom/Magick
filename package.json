@@ -129,7 +129,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@frigade/react": "^1.38.31",
+    "@frigade/react": "^2.1.29",
     "@google-cloud/storage": "^7.11.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
