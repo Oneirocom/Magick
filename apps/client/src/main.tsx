@@ -48,6 +48,7 @@ if (window === window.parent) {
       token: DEFAULT_USER_TOKEN,
       userId: '',
       email: undefined,
+      providerData: {},
     }
 
     const Root = () => {
