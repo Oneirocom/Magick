@@ -4,7 +4,7 @@ import { initApp } from 'server/core'
 import { z } from 'zod'
 import { fastifyCors } from '@fastify/cors'
 import { fastifyWebsocket } from '@fastify/websocket'
-import { streamSpeech, elevenlabs } from 'modelfusion'
+import { streamSpeech, elevenlabs, generateSpeech } from 'modelfusion'
 import { v4 } from 'uuid'
 import WebSocket from 'ws'
 import axios from 'axios'
@@ -207,16 +207,26 @@ export async function app(fastify: FastifyInstance) {
       console.log('agent.on message', content)
     })
 
-    agent.on('messageReceived', actionPayload => {
+    agent.on('messageReceived', async actionPayload => {
       console.log('agent.on messageReceived', actionPayload)
+      const text = actionPayload.data.content
       socket.send(
         JSON.stringify({
           id: new Date().toISOString(),
           sender: agentData.name,
-          text: actionPayload.data.content,
+          text,
           type: 'message',
         })
       )
+
+      const speech = await generateSpeech({
+        model: elevenlabs.SpeechGenerator({
+          model: model,
+          voice: voiceId,
+        }),
+        text,
+      })
+      socket.send(speech)
     })
 
     // on disconnect
