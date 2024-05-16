@@ -9,7 +9,6 @@ import {
   setSyncing,
   selectPastState,
   selectFutureState,
-  selectIsDirty,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
@@ -56,7 +55,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
   const pastState = useSelector(selectPastState)
   const futureState = useSelector(selectFutureState)
-  const isDirty = useSelector(selectIsDirty)
 
   const { events, subscribe, publish } = pubSub
 
@@ -251,15 +249,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         return
       }
     },
-    [
-      dispatch,
-      client,
-      config.projectId,
-      enqueueSnackbar,
-      setIsSaving,
-      spellRef,
-      isDirty,
-    ]
+    [dispatch, client, config.projectId, enqueueSnackbar, setIsSaving, spellRef]
   )
 
   /**
