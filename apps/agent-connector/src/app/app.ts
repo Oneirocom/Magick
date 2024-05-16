@@ -101,7 +101,7 @@ export async function app(fastify: FastifyInstance) {
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
   })
 
-  const voiceId = 'bn5HJAJ1igu4dFplCXkQ'
+  const voiceId = 'ijaOS620XRUqeVbPeOqJ'
   const model = 'eleven_turbo_v2'
 
   fastify.get('/ws/:agentId', { websocket: true }, async (socket, req) => {
@@ -170,26 +170,30 @@ export async function app(fastify: FastifyInstance) {
           console.log('Starting text to speech')
           textGenerator = createTextStreamGenerator()
 
-          const speechStream = await streamSpeech({
-            model: elevenlabs.SpeechGenerator({
-              model: model,
-              voice: voiceId,
-              optimizeStreamingLatency: 1,
-              voiceSettings: { stability: 1, similarityBoost: 0.35 },
-              generationConfig: {
-                chunkLengthSchedule: [50, 90, 120, 150, 200],
-              },
-            }),
-            text: textGenerator,
-          })
+          try {
+            const speechStream = await streamSpeech({
+              model: elevenlabs.SpeechGenerator({
+                model: model,
+                voice: voiceId,
+                optimizeStreamingLatency: 1,
+                voiceSettings: { stability: 1, similarityBoost: 0.35 },
+                generationConfig: {
+                  chunkLengthSchedule: [50, 90, 120, 150, 200],
+                },
+              }),
+              text: textGenerator,
+            })
 
-          // part is a Uint8Array
-          for await (const part of speechStream) {
-            if (socket.readyState === WebSocket.OPEN) {
-              console.log('Sending chunk')
-              socket.send(part) // Send the chunk directly as binary data
-              await new Promise(resolve => setTimeout(resolve, 10)) // Throttle sending
+            // part is a Uint8Array
+            for await (const part of speechStream) {
+              if (socket.readyState === WebSocket.OPEN) {
+                console.log('Sending chunk')
+                socket.send(part) // Send the chunk directly as binary data
+                await new Promise(resolve => setTimeout(resolve, 10)) // Throttle sending
+              }
             }
+          } catch (err) {
+            console.error('Error streaming speech', err)
           }
         } else if (content === '<END>') {
           textGenerator.endStream()
@@ -219,14 +223,18 @@ export async function app(fastify: FastifyInstance) {
         })
       )
 
-      const speech = await generateSpeech({
-        model: elevenlabs.SpeechGenerator({
-          model: model,
-          voice: voiceId,
-        }),
-        text,
-      })
-      socket.send(speech)
+      try {
+        const speech = await generateSpeech({
+          model: elevenlabs.SpeechGenerator({
+            model: model,
+            voice: voiceId,
+          }),
+          text,
+        })
+        socket.send(speech)
+      } catch (err) {
+        console.error('Error generating speech', err)
+      }
     })
 
     // on disconnect
