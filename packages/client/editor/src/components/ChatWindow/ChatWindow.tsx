@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
 import Editor from '@monaco-editor/react'

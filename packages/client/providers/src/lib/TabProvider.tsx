@@ -1,3 +1,5 @@
+"use client"
+
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { DockviewApi, SerializedDockview } from 'dockview'
 import { getWorkspaceLayout } from 'client/layouts'
