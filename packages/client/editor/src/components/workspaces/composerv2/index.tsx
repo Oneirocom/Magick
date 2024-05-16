@@ -1,3 +1,5 @@
+"use client"
+
 import { GridviewReact, IDockviewPanelProps, Orientation } from 'dockview'
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { Tab, useDockviewTheme } from 'client/state'

@@ -1,4 +1,5 @@
-// DOCUMENTED
+"use client"
+
 import { Window } from 'client/core'
 import { usePubSub } from '@magickml/providers'
 import { useCallback, useEffect, useRef, useState } from 'react'
