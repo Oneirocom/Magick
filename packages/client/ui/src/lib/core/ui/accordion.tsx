@@ -1,3 +1,4 @@
+"use client";
 import * as React from 'react'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons'

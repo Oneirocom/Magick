@@ -1,3 +1,4 @@
+"use client";
 import * as React from 'react'
 import { Label, Input } from '../../core/ui'
 import { cn } from '../../utils/shadcn'

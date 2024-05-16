@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/legacy/image";
 import React, { useState } from 'react';
 
