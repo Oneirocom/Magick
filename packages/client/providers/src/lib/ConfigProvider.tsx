@@ -2,6 +2,7 @@
 // Import required dependencies
 import { DEFAULT_PROJECT_ID } from 'clientConfig'
 import { createContext, useContext, useState } from 'react'
+import { ProviderData } from 'servicesShared'
 
 // Define AppConfig type
 export type AppConfig = {
@@ -11,6 +12,7 @@ export type AppConfig = {
   userId: string
   posthogEnabled?: boolean
   email: string | undefined
+  providerData: ProviderData
 }
 
 // Define ConfigContext interface
@@ -19,6 +21,8 @@ export interface ConfigContext {
   setApiUrl: (url: string) => void
   projectId: string
   setProjectId: (id: string) => void
+  providerData: ProviderData
+  setProviderData: (providerData: ProviderData) => void
 }
 
 // Create context for ConfigContext
@@ -38,6 +42,7 @@ export const defaultConfig: AppConfig = {
   token: '',
   userId: '',
   email: undefined,
+  providerData: {},
 }
 
 /**
@@ -48,12 +53,17 @@ export const ConfigProvider = ({ config = defaultConfig, children }) => {
   const [projectId, setProjectId] = useState<ConfigContext['projectId']>(
     config.projectId
   )
+  const [providerData, setProviderData] = useState<
+    ConfigContext['providerData']
+  >(config.providerData)
 
   const publicInterface: ConfigContext = {
     apiUrl,
     setApiUrl,
     projectId,
     setProjectId,
+    providerData,
+    setProviderData,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
