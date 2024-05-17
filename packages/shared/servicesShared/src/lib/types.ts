@@ -4,6 +4,7 @@ import {
   Chunk,
   Message,
 } from './coreLLMService/types/liteLLMTypes'
+import { Model } from './coreLLMService/types/models'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
@@ -50,6 +51,14 @@ export type CreateBudgetParams = {
   duration: BudgetDuration
 }
 
+export type ProviderData = Record<
+  string,
+  {
+    models: Model[]
+    apiKey: string
+    providerName: string
+  }
+>
 export interface ICoreBudgetManagerService {
   initialize(): Promise<void>
   createBudget(params: CreateBudgetParams): Promise<boolean>
