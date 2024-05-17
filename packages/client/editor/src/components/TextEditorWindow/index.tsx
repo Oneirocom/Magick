@@ -1,3 +1,4 @@
+'use client'
 // import { debounce } from 'lodash'
 import Editor from '@monaco-editor/react'
 import { useEffect, useState } from 'react'
@@ -127,7 +128,7 @@ const TextEditor = props => {
     if (activeInput) {
       dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
     }
-  }, [debouncedCode, selectedNode, activeInput])
+  }, [debouncedCode])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
