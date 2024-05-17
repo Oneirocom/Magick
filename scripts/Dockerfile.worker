@@ -1,10 +1,10 @@
-# Stage 1: Preliminary check
-FROM magickml/magick:latest as preliminary
+FROM magickml/magick:latest
 
 ARG GITHUB_TOKEN
 ARG BRANCH=development
+ARG RAILWAY_GIT_COMMIT_SHA
 
-# Configure git to use the token and clone the repository
+# Configure git to use the token
 RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 RUN git clone --branch ${BRANCH} --depth 1 https://www.github.com/oneirocom/magick.git /app
 
@@ -13,43 +13,12 @@ WORKDIR /app
 # Clone the submodule
 RUN git submodule update --init --recursive portal/cloud
 
-# Install nx globally
-RUN npm install
-
-# Test run and print to console
-RUN npx nx show projects --affected 
-
-# Check affected projects
-RUN npx nx show projects --affected > affected_projects.txt
-
-# Exit if the affected project is not 'cloud-agent-worker-app'
-RUN if ! grep -q '@magickml/cloud-agent-worker-app' affected_projects.txt; then \
-        echo 'cloud-agent-worker-app not affected, exiting build'; \
-        exit 1; \
-    fi
-
-# Stage 2: Base setup and build
-FROM magickml/magick:latest as base
-
-WORKDIR /app
-
-# Copy files from the preliminary stage
-COPY --from=preliminary /app /app
-
-# Install dependencies
 RUN poetry install --no-interaction --no-ansi -vvv
 # RUN poetry install --no-root
 
-# Build the project
+RUN npm install
+
 RUN npm run build-cloud-agent-worker
-
-# Stage 3: Final stage
-FROM magickml/magick:latest
-
-WORKDIR /app
-
-# Copy necessary files from the base stage
-COPY --from=base /app /app
 
 ENTRYPOINT [ "npm", "run" ]
 CMD [ "start-cloud-agent-worker" ]
