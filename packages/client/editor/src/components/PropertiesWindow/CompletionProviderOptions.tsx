@@ -4,7 +4,6 @@ import { useConfig } from '@magickml/providers'
 import { useListCredentialsQuery, useGetUserQuery } from 'client/state'
 import {
   isModelAvailableToUser,
-  groupModelsByProvider,
   Model,
   getProvidersWithUserKeys,
   getProviderIdMapping,
@@ -20,6 +19,8 @@ import {
 export const CompletionProviderOptions: React.FC<
   ConfigurationComponentProps
 > = props => {
+  const providerData = useConfig().providerData
+
   const [selectedProvider, setSelectedProvider] = useState<string>(
     props.fullConfig.modelProvider || ''
   )
@@ -31,9 +32,6 @@ export const CompletionProviderOptions: React.FC<
     Record<string, { models: Model[]; apiKey: string }>
   >({})
   const [lastActiveNodeId, setLastActiveNodeId] = useState<string | null>(null)
-  const [providerData, setProviderData] = useState<
-    Record<string, { models: Model[]; apiKey: string; providerName: string }>
-  >({})
   const [isLoading, setIsLoading] = useState(true)
 
   const config = useConfig()
@@ -45,62 +43,44 @@ export const CompletionProviderOptions: React.FC<
   })
 
   useEffect(() => {
-    if (!userData) return
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          'https://api.keywordsai.co/api/models/public'
-        )
-        const data = await response.json()
-        const { models } = data
+    if (!userData || !providerData) return
+    let modelProvider = getProviderIdMapping(
+      props.fullConfig.modelProvider.toLowerCase()
+    )
 
-        const groupedModels = groupModelsByProvider(models)
-        setProviderData(groupedModels)
-
-        let modelProvider = getProviderIdMapping(
-          props.fullConfig.modelProvider.toLowerCase()
-        )
-
-        let model = props.fullConfig.model
-        let updateConfig = false
-        if (modelProvider === 'unsupported') {
-          // set up fallback for the model provider in case config is wrong
-          modelProvider = 'openai'
-          model = 'gpt-3.5-turbo'
-          updateConfig = true
-        }
-
-        setSelectedProvider(modelProvider || 'openai')
-        setSelectedModel(
-          groupedModels[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
-        )
-        setActiveModels(
-          groupedModels[modelProvider]?.models || groupedModels['openai'].models
-        )
-
-        // If the API key has not been set, set it to the key name
-        // We need this for backwards compatibility
-        let updateApiKey = false
-        if (!props.fullConfig.providerApiKeyName) {
-          updateApiKey = true
-        }
-
-        if (updateConfig || updateApiKey) {
-          props.updateConfigKeys({
-            modelProvider,
-            model: model || 'gpt-3.5-turbo',
-            providerApiKeyName: modelProvider,
-          })
-        }
-        setIsLoading(false)
-      } catch (error) {
-        console.error('Error fetching models:', error)
-        setIsLoading(false)
-      }
+    let model = props.fullConfig.model
+    let updateConfig = false
+    if (modelProvider === 'unsupported') {
+      // set up fallback for the model provider in case config is wrong
+      modelProvider = 'openai'
+      model = 'gpt-3.5-turbo'
+      updateConfig = true
     }
 
-    fetchData()
-  }, [userData])
+    setSelectedProvider(modelProvider || 'openai')
+    setSelectedModel(
+      providerData[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
+    )
+    setActiveModels(
+      providerData[modelProvider]?.models || providerData['openai'].models
+    )
+
+    // If the API key has not been set, set it to the key name
+    // We need this for backwards compatibility
+    let updateApiKey = false
+    if (!props.fullConfig.providerApiKeyName) {
+      updateApiKey = true
+    }
+
+    if (updateConfig || updateApiKey) {
+      props.updateConfigKeys({
+        modelProvider,
+        model: model || 'gpt-3.5-turbo',
+        providerApiKeyName: modelProvider,
+      })
+    }
+    setIsLoading(false)
+  }, [userData, providerData])
 
   useEffect(() => {
     if ((props.node && props.node.id === lastActiveNodeId) || !providerData)
@@ -165,10 +145,10 @@ export const CompletionProviderOptions: React.FC<
   }, [credentials, providerData])
 
   useEffect(() => {
-    if (!selectedProvider) return
+    if (!selectedProvider || !providerData) return
     const models = providerData[selectedProvider]?.models || []
     setActiveModels(models)
-  }, [selectedProvider])
+  }, [selectedProvider, providerData])
 
   const onSelectModel = (model: string) => {
     setSelectedModel(model)
@@ -176,6 +156,7 @@ export const CompletionProviderOptions: React.FC<
   }
 
   const onSelectProvider = (provider: string) => {
+    if (!providerData) return
     const providerId = providerData[provider].models[0].provider.provider_id
     setSelectedProvider(provider)
 
