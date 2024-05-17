@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import {
   Dialog,
   DialogContent,
@@ -53,6 +53,7 @@ export const PortalDialog = ({
   type,
   noTrigger = true,
 }: PortalDialogProps) => {
+  const { className, ...rest } = base.content || {}
   return (
     <Dialog {...base.root}>
       <DialogTrigger asChild {...base.trigger}>
@@ -65,9 +66,10 @@ export const PortalDialog = ({
           type === DialogType.INFO && 'border-ds-neutral',
           type === DialogType.ERROR && 'border-ds-error',
           type === DialogType.SUCCESS && 'border-ds-alert',
-          type === DialogType.WARNING && 'border-ds-warning'
+          type === DialogType.WARNING && 'border-ds-warning',
+          className
         )}
-        {...base.content}
+        {...rest}
       >
         <DialogHeader className="w-full gap-8" {...base.header}>
           <DialogTitle
@@ -101,7 +103,5 @@ export const PortalDialog = ({
 }
 
 const Loading = () => {
-  return (
-    <span className="loading loading-spinner text-ds-black mr-1" />
-  )
+  return <span className="loading loading-spinner text-ds-black mr-1" />
 }
