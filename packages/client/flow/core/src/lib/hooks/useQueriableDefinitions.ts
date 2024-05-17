@@ -1,3 +1,5 @@
+"use client"
+
 import { IQueryableRegistry } from '@magickml/behave-graph';
 import { useMemo } from 'react';
 

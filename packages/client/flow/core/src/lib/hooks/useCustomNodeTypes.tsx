@@ -1,3 +1,5 @@
+"use client"
+
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { useEffect, useState } from 'react'
 import { NodeTypes } from '@xyflow/react'

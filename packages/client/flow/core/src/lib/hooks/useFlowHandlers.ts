@@ -1,3 +1,5 @@
+"use client"
+
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import {
   MouseEvent as ReactMouseEvent,
