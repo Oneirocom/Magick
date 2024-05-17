@@ -1,10 +1,10 @@
-import { Model } from 'servicesShared'
 import {
   CompletionResponse,
   CompletionRequest,
   Chunk,
   Message,
 } from './coreLLMService/types/liteLLMTypes'
+import { Model } from './coreLLMService/types/models'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
