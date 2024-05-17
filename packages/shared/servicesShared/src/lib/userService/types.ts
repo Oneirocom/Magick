@@ -1,4 +1,3 @@
-import { ProxyUser } from 'portal/cloud/packages/utils/server/src/lib/keywords'
 import { z } from 'zod'
 
 export enum SubscriptionNames {
@@ -6,6 +5,23 @@ export enum SubscriptionNames {
   Wizard = 'Wizard Subscription',
 }
 
+type ProxyUser = {
+  id: string
+  name: string
+  customer_identifier: string
+  created_at: string
+  last_active: string
+  top_models: {}
+  email: string
+  period_start: string
+  period_end: string
+  budget_duration: string
+  period_budget: number
+  total_budget: number
+  total_usage: number
+  total_period_usage: number
+  organization: number
+}
 interface StripeProduct {
   name: SubscriptionNames
   price: number
