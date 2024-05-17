@@ -246,8 +246,6 @@ export async function app(fastify: FastifyInstance) {
 
         if (!sendAudio) return
 
-        console.log('sending audio', text)
-
         try {
           const speech = await generateSpeech({
             model: elevenlabs.SpeechGenerator({
