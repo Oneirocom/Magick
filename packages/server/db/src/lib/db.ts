@@ -1,7 +1,8 @@
-import { PrismaClient } from './prisma/client-core'
+import { PrismaClient } from '@prisma/client-core'
 
-export * from './prisma/client-core'
-export type * from './prisma/client-core/index.d.ts'
+export * from '@prisma/client-core'
+
+export type * from '@prisma/client-core/index.d.ts'
 
 const globalForPrismaCore = globalThis as { prismaCore?: PrismaClient }
 
