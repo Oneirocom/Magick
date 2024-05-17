@@ -30,7 +30,14 @@ type GetImageParams = {
 
 export const getImage = (params: GetImageParams) => {
   if (params.image) {
-    if (params.image.startsWith('/')) {
+    if (
+      // this is a hack ill do better later
+      params.image.startsWith('/') ||
+      params.image.startsWith('templates') ||
+      params.image.startsWith('projects') ||
+      params.image.startsWith('users') ||
+      params.image.startsWith('agents')
+    ) {
       return `${bucketImagePath}${params.image}`
     } else {
       return params.image
