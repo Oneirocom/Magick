@@ -39,40 +39,40 @@
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/pages-agents": ["portal/cloud/next/pages/agents/src/index.ts"],
       "@magickml/pages-agents/server": [
-        "portal/packages/pages/agents/src/server.ts"
+        "portal/cloud/next/pages/agents/src/server.ts"
       ],
       "@magickml/pages-billing": [
         "portal/cloud/next/pages/billing/src/index.ts"
       ],
       "@magickml/pages-billing/server": [
-        "portal/packages/pages/billing/src/server.ts"
+        "portal/cloud/next/pages/billing/src/server.ts"
       ],
       "@magickml/pages-editor": ["portal/cloud/next/pages/editor/src/index.ts"],
       "@magickml/pages-editor/server": [
-        "portal/packages/pages/editor/src/server.ts"
+        "portal/cloud/next/pages/editor/src/server.ts"
       ],
       "@magickml/pages-legal": ["portal/cloud/next/pages/legal/src/index.ts"],
       "@magickml/pages-legal/server": [
-        "portal/packages/pages/legal/src/server.ts"
+        "portal/cloud/next/pages/legal/src/server.ts"
       ],
       "@magickml/pages-shared": ["portal/cloud/next/pages/shared/src/index.ts"],
       "@magickml/pages-subscribe": [
         "portal/cloud/next/pages/subscribe/src/index.ts"
       ],
       "@magickml/pages-subscribe/server": [
-        "portal/packages/pages/subscribe/src/server.ts"
+        "portal/cloud/next/pages/subscribe/src/server.ts"
       ],
       "@magickml/pages-template": [
         "portal/cloud/next/pages/template/src/index.ts"
       ],
       "@magickml/pages-template/server": [
-        "portal/packages/pages/template/src/server.ts"
+        "portal/cloud/next/pages/template/src/server.ts"
       ],
       "@magickml/pages-templates": [
         "portal/cloud/next/pages/templates/src/index.ts"
       ],
       "@magickml/pages-templates/server": [
-        "portal/packages/pages/templates/src/server.ts"
+        "portal/cloud/next/pages/templates/src/server.ts"
       ],
       "@magickml/portal-api": ["portal/cloud/packages/api/src/index.ts"],
       "@magickml/portal-auth": ["portal/cloud/packages/auth/src/index.ts"],
