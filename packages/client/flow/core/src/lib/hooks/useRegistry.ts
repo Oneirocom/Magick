@@ -1,3 +1,5 @@
+"use client"
+
 import { IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import { useMemo } from 'react'
 
