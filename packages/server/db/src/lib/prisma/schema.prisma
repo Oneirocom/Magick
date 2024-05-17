@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    output          = "../../../../../../../node_modules/@prisma/client-core"
+    output          = "../../../../../../../node_modules/@prisma/client/core"
     previewFeatures = ["fullTextSearch", "multiSchema", "postgresqlExtensions"]
     name            = "prisma"
 }
