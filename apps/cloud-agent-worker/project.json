@@ -43,12 +43,8 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/cloud-agent-worker",
-          "packages/server/cloud-agent-worker/**/*.ts"
-        ]
+        "lintFilePatterns": ["packages/server/cloud-agent-worker/**/*.ts"]
       }
     },
     "test": {
