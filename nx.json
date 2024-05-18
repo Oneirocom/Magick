@@ -7,7 +7,8 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "accessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU="
+        "accessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU=",
+        "cacheableOperations": ["build-storybook"]
       }
     },
     "vercel": {
@@ -64,6 +65,15 @@
     },
     "e2e": {
       "inputs": ["default", "^default"]
+    },
+    "build-storybook": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{projectRoot}/.storybook/**/*",
+        "{projectRoot}/tsconfig.storybook.json"
+      ]
     }
   },
   "generators": {
