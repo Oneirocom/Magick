@@ -1,3 +1,5 @@
+"use client"
+
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import {
   faPause,

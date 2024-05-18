@@ -1,3 +1,4 @@
+"use client";
 import type { Edge } from '@xyflow/react'
 
 export const isHandleConnected = (

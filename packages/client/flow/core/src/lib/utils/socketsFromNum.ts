@@ -1,3 +1,4 @@
+"use client";
 interface Socket {
   name: string
   key: string

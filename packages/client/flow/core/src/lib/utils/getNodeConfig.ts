@@ -1,3 +1,4 @@
+"use client";
 import { NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
 
 export const getConfig = (

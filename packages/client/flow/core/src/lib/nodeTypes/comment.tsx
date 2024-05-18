@@ -1,3 +1,5 @@
+"use client"
+
 import { memo, useEffect, useRef, useState } from 'react'
 import { NodeResizer, NodeProps, OnResize } from '@xyflow/react'
 import { useChangeNodeData } from '../hooks'
