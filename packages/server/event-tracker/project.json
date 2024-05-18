@@ -6,12 +6,8 @@
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/server/event-tracker",
-          "packages/server/pluginManager/**/*.ts"
-        ]
+        "lintFilePatterns": ["packages/server/pluginManager/**/*.ts"]
       }
     },
     "build": {
