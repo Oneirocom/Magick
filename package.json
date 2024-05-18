@@ -386,7 +386,6 @@
     "@docusaurus/module-type-aliases": "2.4.1",
     "@feathersjs/cli": "5.0.5",
     "@feathersjs/rest-client": "5.0.5",
-    "@nrwl/next": "17.3.2",
     "@nx-plus/docusaurus": "15.0.0-rc.0",
     "@nx/cypress": "17.3.2",
     "@nx/esbuild": "17.3.2",
