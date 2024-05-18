@@ -81,7 +81,9 @@
     "vercel-install": "./vercel-submodule-workaround.sh && npm i",
     "bucket:init": "ts-node ./scripts/init-bucket.ts",
     "seraph:codegen": "node ./scripts/seraphCodegen/seraphCodegen.js",
-    "ogmeta:test": "node ./scripts/ogmeta.js"
+    "ogmeta:test": "node ./scripts/ogmeta.js",
+    "storybook:dev": "npx nx run portal:storybook",
+    "storybook:build": "npx nx run portal:build-storybook"
   },
   "resolutions": {
     "@types/react": "18.0.2"
@@ -375,6 +377,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@storybook/addon-themes": "^7.6.19",
     "@babel/core": "^7.14.5",
     "@babel/plugin-transform-react-jsx": "^7.23.4",
     "@babel/plugin-transform-typescript": "^7.23.6",
@@ -398,6 +401,7 @@
     "@nx/plugin": "17.2.8",
     "@nx/react": "17.2.8",
     "@nx/rollup": "17.2.8",
+    "@nx/storybook": "17.2.8",
     "@nx/vite": "17.2.8",
     "@nx/web": "17.2.8",
     "@nx/webpack": "17.2.8",
@@ -413,6 +417,13 @@
     "@semantic-release/npm": "10.0.4",
     "@semantic-release/release-notes-generator": "11.0.3",
     "@sindresorhus/tsconfig": "^3.0.1",
+    "@storybook/addon-essentials": "^7.5.3",
+    "@storybook/addon-interactions": "^7.5.3",
+    "@storybook/core-server": "^7.5.3",
+    "@storybook/jest": "^0.2.3",
+    "@storybook/nextjs": "^7.5.3",
+    "@storybook/test-runner": "^0.13.0",
+    "@storybook/testing-library": "^0.2.2",
     "@svgr/cli": "^8.1.0",
     "@svgr/rollup": "^8.0.1",
     "@svgr/webpack": "^8.0.1",
