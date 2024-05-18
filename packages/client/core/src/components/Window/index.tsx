@@ -1,3 +1,4 @@
+"use client"
 // DOCUMENTED
 import * as React from 'react'
 import { ReactElement, useEffect, useRef } from 'react'
@@ -17,17 +18,17 @@ const WindowLayout: React.FC<{
   scrollToBottom: boolean
   children: React.ReactNode
 }> = ({ scrollToBottom, children }) => {
-  const scrollbars = useRef<any>()
+  const scrollbars = useRef<Scrollbars | null>(null)
 
   useEffect(() => {
-    scrollbars.current.scrollToBottom()
+    if (scrollToBottom && scrollbars.current) {
+      scrollbars.current.scrollToBottom()
+    }
   }, [scrollToBottom])
 
   return (
     <div className={css['window-layout']}>
-      <Scrollbars ref={ref => (scrollbars.current = ref)}>
-        {children}
-      </Scrollbars>
+      <Scrollbars ref={scrollbars}>{children}</Scrollbars>
     </div>
   )
 }

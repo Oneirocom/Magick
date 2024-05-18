@@ -143,7 +143,7 @@ export const SeraphChatHistory = ({
 
   return (
     <div className="flex-1 overflow-hidden bg-[--ds-black]">
-      <Scrollbars ref={ref => (scrollbars.current = ref)}>
+      <Scrollbars ref={scrollbars}>
         <ul className="list-none m-0 p-2">
           {history.map((message, index) => {
             if (message.sender === 'user') {
@@ -166,7 +166,7 @@ export const SeraphChatHistory = ({
             <li>
               <FunctionMessage
                 functionData={seraphEventData[SeraphEvents.functionExecution]}
-                onClearEventData={setSeraphEventData(undefined)}
+                onClearEventData={() => setSeraphEventData(undefined)}
               />
             </li>
           )}
@@ -176,7 +176,7 @@ export const SeraphChatHistory = ({
                 middlewareData={
                   seraphEventData[SeraphEvents.middlewareExecution]
                 }
-                onClearEventData={setSeraphEventData(undefined)}
+                onClearEventData={() => setSeraphEventData(undefined)}
               />
             </li>
           )}
