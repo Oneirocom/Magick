@@ -37,6 +37,7 @@
       ],
       "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
+      "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
       "@magickml/pages-agents": ["portal/cloud/next/pages/agents/src/index.ts"],
       "@magickml/pages-agents/server": [
         "portal/cloud/next/pages/agents/src/server.ts"
@@ -113,6 +114,8 @@
       "@magickml/portal-utils-shared": [
         "portal/cloud/packages/utils/shared/src/index.ts"
       ],
+      "@magickml/prose": ["portal/cloud/next/prose/src/index.ts"],
+      "@magickml/prose/server": ["portal/cloud/next/prose/src/server.ts"],
       "@magickml/providers": ["packages/client/providers/src/index.ts"],
       "@magickml/seraph": ["packages/server/seraph/src/index.ts"],
       "@magickml/seraph-manager": [
@@ -134,7 +137,6 @@
       "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
       "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
-      "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
       "plugin-state": ["packages/server/plugin-state/src/index.ts"],
       "plugin/core": ["plugins/core/src/index.ts"],
       "plugins/shared": ["plugins/shared/src/index.ts"],
