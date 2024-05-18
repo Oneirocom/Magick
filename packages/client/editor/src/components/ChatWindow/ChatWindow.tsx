@@ -22,7 +22,6 @@ import { useSelector } from 'react-redux'
 
 const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
-
   const { enqueueSnackbar } = useSnackbar()
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -207,7 +206,7 @@ const ChatWindow = ({ tab, spellName }) => {
 
         {/* Chat history section */}
         <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
-          <Scrollbars ref={ref => (scrollbars.current = ref)}>
+          <Scrollbars ref={scrollbars}>
             <ul className="list-none m-0 p-2">
               {history.map((message: Message, index) => {
                 if (message.sender === 'user') {
