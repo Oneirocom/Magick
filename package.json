@@ -53,7 +53,7 @@
     "db:dev": "npx prisma migrate dev --schema packages/server/db/src/lib/prisma/schema.prisma",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
-    "portal:dev": "npx nx serve --watch portal",
+    "portal:dev": "npx nx serve portal",
     "portal:build": "npx nx build portal",
     "portal:start": "npx nx run portal:serve:production",
     "portal:build:vercel": "npx nx build portal --runner=vercel",
@@ -339,6 +339,7 @@
     "reshaped": "^2.7.1",
     "runtypes": "^6.7.0",
     "serp": "2.2.2",
+    "sharp": "^0.33.4",
     "shiki": "^1.5.1",
     "socket.io": "4.6.1",
     "socket.io-client": "4.6.1",
@@ -377,7 +378,6 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@storybook/addon-themes": "^7.6.19",
     "@babel/core": "^7.14.5",
     "@babel/plugin-transform-react-jsx": "^7.23.4",
     "@babel/plugin-transform-typescript": "^7.23.6",
@@ -419,6 +419,7 @@
     "@sindresorhus/tsconfig": "^3.0.1",
     "@storybook/addon-essentials": "^7.5.3",
     "@storybook/addon-interactions": "^7.5.3",
+    "@storybook/addon-themes": "^7.6.19",
     "@storybook/core-server": "^7.5.3",
     "@storybook/jest": "^0.2.3",
     "@storybook/nextjs": "^7.5.3",
@@ -556,4 +557,3 @@
     }
   }
 }
-
