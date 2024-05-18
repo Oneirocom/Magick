@@ -1,3 +1,5 @@
+"use client"
+
 import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { cn } from '@magickml/client-ui'

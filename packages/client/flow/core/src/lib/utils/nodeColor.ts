@@ -1,3 +1,4 @@
+"use client";
 import type { NodeSpecJSON } from '@magickml/behave-graph'
 import { categoryColorMap, colorHexMap, valueTypeColorMap } from './colors'
 import { MagickNodeType } from '@magickml/client-types'

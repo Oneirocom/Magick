@@ -1,3 +1,4 @@
+"use client";
 import type { Edge, Node } from '@xyflow/react'
 
 export const autoLayout = (nodes: Node[], edges: Edge[]) => {
