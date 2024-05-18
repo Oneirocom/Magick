@@ -1,26 +1,34 @@
 {
   "migrations": [
     {
-      "version": "17.2.0-beta.0",
-      "description": "Simplify eslintFilePatterns",
-      "implementation": "./src/migrations/update-17-2-0/simplify-eslint-patterns",
-      "package": "@nx/eslint",
-      "name": "simplify-eslint-patterns"
+      "cli": "nx",
+      "version": "17.3.0-beta.6",
+      "description": "Updates the nx wrapper.",
+      "implementation": "./src/migrations/update-17-3-0/update-nxw",
+      "package": "nx",
+      "name": "17.3.0-update-nx-wrapper"
     },
     {
-      "version": "17.2.0-beta.10",
-      "description": "Update vite config.",
-      "implementation": "./src/migrations/update-17-2-0/update-vite-config",
-      "package": "@nx/vite",
-      "name": "update-vite-config"
+      "version": "17.2.9",
+      "description": "Move executor options to target defaults",
+      "implementation": "./src/migrations/update-17-2-9/move-options-to-target-defaults",
+      "package": "@nx/eslint",
+      "name": "move-options-to-target-defaults"
     },
     {
       "cli": "nx",
-      "version": "17.2.1-beta.0",
-      "description": "Add webpack.config.js file when webpackConfig is not defined",
-      "implementation": "./src/migrations/update-17-2-1/webpack-config-setup",
-      "package": "@nx/webpack",
-      "name": "update-17-2-1-webpack-config-setup"
+      "version": "17.3.1-beta.0",
+      "description": "Add project property to playwright config",
+      "implementation": "./src/migrations/update-17-3-1/add-project-to-config",
+      "package": "@nx/playwright",
+      "name": "17-3-1-add-project-to-config"
+    },
+    {
+      "version": "17.3.0-beta.0",
+      "description": "Move the vitest coverage thresholds in their own object if exists and add reporters.",
+      "implementation": "./src/migrations/update-17-3-0/vitest-coverage-and-reporters",
+      "package": "@nx/vite",
+      "name": "vitest-coverage-and-reporters"
     }
   ]
 }
