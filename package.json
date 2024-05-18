@@ -55,6 +55,7 @@
     "portal:cli:install": "npm link dist/apps/cli",
     "portal:dev": "npx nx serve --watch portal",
     "portal:build": "npx nx build portal",
+    "portal:start": "npx nx run portal:serve:production",
     "portal:build:vercel": "npx nx build portal --runner=vercel",
     "portal:update": "git submodule update --remote --merge --init portal/cloud",
     "portal:up": "docker compose --env-file ./.env.local -f portal-compose.yml up -d",
