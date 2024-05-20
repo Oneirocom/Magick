@@ -1,8 +1,8 @@
 import { makeInNOutFunctionDesc } from '@magickml/behave-graph'
 
-export const split = makeInNOutFunctionDesc({
+export const stringSplit = makeInNOutFunctionDesc({
   name: 'logic/split/string',
-  label: 'Split',
+  label: 'String Split',
   in: [{ string: 'string' }, { seperator: 'string' }],
   out: [{ result: 'array' }],
   exec: (a: string, b: string) => {
