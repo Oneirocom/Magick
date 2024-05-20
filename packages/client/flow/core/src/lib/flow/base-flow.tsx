@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useCallback, useEffect, useMemo } from 'react'
 import {
@@ -127,17 +127,8 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     if (!lastStateEvent.state) return
 
     // Process only spell state events here
-    if (lastStateEvent.state.isRunning) {
-      setPlaying(true)
-    } else if (!lastStateEvent.state.isRunning) {
-      setPlaying(false)
-    }
-
-    if (lastStateEvent.state.isDebug) {
-      setIsDebug(true)
-    } else if (!lastStateEvent.state.isDebug) {
-      setIsDebug(false)
-    }
+    setPlaying(lastStateEvent.state.isRunning)
+    setIsDebug(lastStateEvent.state.debug)
   }, [lastStateEvent])
 
   const {
