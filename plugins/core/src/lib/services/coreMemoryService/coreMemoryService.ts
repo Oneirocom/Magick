@@ -3,7 +3,11 @@ import { PineconeStore } from '@langchain/pinecone'
 import { Pinecone as PineconeClient } from '@pinecone-database/pinecone'
 import { VectorDBQAChain } from 'langchain/chains'
 import { DataType, type LLMCredential } from 'servicesShared'
-import { PRODUCTION, PINECONE_INDEX_NAME } from 'shared/config'
+import {
+  PRODUCTION,
+  PINECONE_INDEX_NAME,
+  PINECONE_API_KEY,
+} from 'shared/config'
 
 type SearchArgs = {
   query: string
@@ -53,9 +57,13 @@ class CoreMemoryService implements ICoreMemoryService {
   async initialize(agentId: string) {
     this.agentId = agentId
 
+    if (!PINECONE_API_KEY) {
+      throw new Error('Pinecone API key not found')
+    }
+
     try {
       const pinecone = new PineconeClient({
-        apiKey: this.getCredential('pinecone'),
+        apiKey: PINECONE_API_KEY,
       })
 
       this.pineconeIndex = pinecone.Index(PINECONE_INDEX_NAME)
