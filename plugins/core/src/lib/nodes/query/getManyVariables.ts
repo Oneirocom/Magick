@@ -80,6 +80,29 @@ export const getManyVariables = makeFunctionNodeDefinition({
           value = variable.initialValue
         }
 
+        switch (variable.valueTypeName) {
+          case 'integer':
+            value = BigInt(value)
+            break
+          case 'float':
+            value = parseFloat(value)
+            break
+          case 'boolean':
+            value = Boolean(value)
+            break
+          case 'string':
+            value = String(value)
+            break
+          case 'array':
+            value = Array.isArray(value) ? value : [value]
+            break
+          case 'object':
+            value = typeof value === 'object' ? value : {}
+            break
+          default:
+            break
+        }
+
         write(socketOutput.name, value)
       })
 
