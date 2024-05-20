@@ -22,7 +22,7 @@ import { arrayLength } from './values/Array/Length'
 import { arrayClear } from './values/Array/Clear'
 import { whileLoop } from './nodes/flow/whileLoop'
 import { regex } from './nodes/logic/match'
-import { split } from './nodes/logic/strings/split'
+import { stringSplit } from './nodes/logic/strings/split'
 import { arrayRemoveFirst, arrayRemoveLast } from './values/Array/Remove'
 import { arrayMerge } from './values/Array/Merge'
 import { CoreUserService } from './services/userService/coreUserService'
@@ -83,6 +83,7 @@ import { arrayIncludes } from './values/Array/Includes'
 import { getManyVariables } from './nodes/query/getManyVariables'
 import { LLMProviderKeys } from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
+import { flowSplit } from './nodes/flow/split'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -122,6 +123,7 @@ export class CorePlugin extends CoreEventsPlugin<
     DoOnceAsync,
     FetchNode,
     flowSwitch,
+    flowSplit,
     forEach,
     generateText,
     getMemories,
@@ -142,7 +144,7 @@ export class CorePlugin extends CoreEventsPlugin<
     searchKnowledge,
     searchManyKnowledge,
     sendMessage,
-    split,
+    stringSplit,
     streamMessage,
     stringChunker,
     textTemplate,
