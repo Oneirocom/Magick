@@ -22,6 +22,17 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
+  "plugins": [
+    {
+      "plugin": "@nx/next/plugin",
+      "options": {
+        "startTargetName": "start",
+        "buildTargetName": "build",
+        "devTargetName": "dev",
+        "serveStaticTargetName": "serve-static"
+      }
+    }
+  ],
   "pluginsConfig": {
     "@nx/js": {
       "analyzeSourceFiles": true
