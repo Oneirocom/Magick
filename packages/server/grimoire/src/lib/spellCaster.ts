@@ -92,6 +92,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   executeGraph = false
   pluginManager: PluginManager
   busy: boolean = true
+  isLive: boolean = false
   private debug = true
   private agent
   private logger: pino.Logger
@@ -288,7 +289,8 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionStartHandler = async (node: any) => {
-    if (!this.debug) return
+    console.log('IS LIVE', this.isLive)
+    if (!this.debug || !this.isLive) return
     const event = `${this.spell.id}-${node.id}-start`
 
     this.debounceEvent(
@@ -316,7 +318,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionEndHandler = async (node: any) => {
-    if (!this.debug) return
+    if (!this.debug || !this.isLive) return
     const event = `${this.spell.id}-${node.id}-end`
     const startEvent = `${this.spell.id}-${node.id}-start`
 
@@ -464,6 +466,10 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   startRunLoop(): void {
     this.lifecycleEventEmitter?.startEvent.emit()
     this.isRunning = true
+  }
+
+  toggleLive(live: boolean) {
+    this.isLive = live
   }
 
   /**
