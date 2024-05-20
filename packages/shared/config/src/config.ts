@@ -122,11 +122,14 @@ export const VERTEXAI_LOCATION = getVarForEnvironment('VERTEXAI_LOCATION')
 export const PINECONE_INDEX_NAME =
   getVarForEnvironment('PINECONE_INDEX_NAME') || 'magick-dev-1536'
 
+export const PINECONE_API_KEY = getVarForEnvironment('PINECONE_API_KEY')
+
 export const AGENT_HEARTBEAT_INTERVAL_MSEC =
   Number(getVarForEnvironment('AGENT_HEARTBEAT_INTERVAL_MSEC')) || 10000
 
 export const PORTAL_BOT_URL = getVarForEnvironment('PORTAL_BOT_URL') || false
 
 export const BETA_FEATURES = {
-  functions: getVarForEnvironment('NEXT_PUBLIC_BETA_FEATURES_FUNCTIONS') === 'true',
+  functions:
+    getVarForEnvironment('NEXT_PUBLIC_BETA_FEATURES_FUNCTIONS') === 'true',
 }
