@@ -1,6 +1,8 @@
-import { python } from 'pythonia'
-import flatten from 'arr-flatten'
-import { DataType, LLMCredential, LLMProviderKeys } from 'servicesShared'
+import { OpenAIEmbeddings, OpenAI } from '@langchain/openai'
+import { PineconeStore } from '@langchain/pinecone'
+import { Pinecone as PineconeClient } from '@pinecone-database/pinecone'
+import { VectorDBQAChain } from 'langchain/chains'
+import { DataType, type LLMCredential } from 'servicesShared'
 import { PRODUCTION, PINECONE_INDEX_NAME } from 'shared/config'
 
 type SearchArgs = {
@@ -18,10 +20,18 @@ type SearchManyArgs = {
 export interface ICoreMemoryService {
   initialize(agentId: string): Promise<void>
   addCredential(credential: LLMCredential): void
-  add(data: string, dataType?: string): Promise<any>
+  add(
+    data: string,
+    options?: {
+      dataType?: string
+      metadata?: Record<string, any>
+    }
+  ): Promise<string>
+  remove(memoryId: string): Promise<boolean>
   query(query: string): Promise<any>
   search(args: SearchArgs): Promise<any>
   searchMany(args: SearchManyArgs): Promise<any>
+  getDataSources(): Promise<any>
 }
 
 interface EmbedchainCredential {
@@ -30,52 +40,11 @@ interface EmbedchainCredential {
   value: string
 }
 
-type ModelParams = {
-  temperature: number
-  max_tokens: number
-  top_p: number
-  stream: boolean
-}
-
-const defaultParams = {
-  temperature: 0.7,
-  max_tokens: 100,
-  top_p: 1,
-  stream: false,
-}
-
-class CoreMemoryService {
-  private embedchain: any
+class CoreMemoryService implements ICoreMemoryService {
   private agentId!: string
-  private app!: any
+  private pineconeIndex: any
   private credentials: EmbedchainCredential[] = []
   private useEnv: boolean = false
-
-  private baseConfig: any = {
-    app: {
-      config: {
-        id: '',
-      },
-    },
-    vectordb: {
-      provider: 'pinecone',
-      config: {
-        metric: 'cosine',
-        vector_dimension: 1536,
-        index_name: PINECONE_INDEX_NAME,
-        serverless_config: {
-          cloud: 'aws',
-          region: 'us-west-2',
-        },
-      },
-    },
-    llm: {
-      config: {},
-    },
-    embedder: {
-      config: {},
-    },
-  }
 
   constructor(useEnv?: boolean) {
     this.useEnv = useEnv || false
@@ -83,68 +52,17 @@ class CoreMemoryService {
 
   async initialize(agentId: string) {
     this.agentId = agentId
+
     try {
-      // Use Pythonia to create an instance of the Embedchain App
-      this.embedchain = await python('embedchain')
-      // Ste initial LLM and Embedder models
-      this.setLLM('gpt-3.5-turbo')
-      this.setEmbedder('text-embedding-ada-002')
-
-      // Set agent ID to namespace the app
-      this.baseConfig.app.config.id = agentId
-
-      this.app = await this.embedchain.App.from_config$({
-        config: this.baseConfig,
+      const pinecone = new PineconeClient({
+        apiKey: this.getCredential('pinecone'),
       })
+
+      this.pineconeIndex = pinecone.Index(PINECONE_INDEX_NAME)
     } catch (error: any) {
-      console.error('Error initializing Embedchain with Pythonia:', error)
-      this.app = null
+      console.error('Error initializing Pinecone:', error)
       throw error
     }
-  }
-
-  setModel(model: string) {
-    this.setLLM(model)
-  }
-
-  // Note: Currently hard coding this to open ai as we switch how to get models with keywords
-  private setLLM(model: string) {
-    const providerName = 'openai'
-    const credential = this.getCredential()
-    const params = this.changeLLMParams()
-
-    this.baseConfig.llm = {
-      provider: providerName,
-      config: {
-        api_key: credential,
-        model: model,
-        ...params,
-      },
-    }
-  }
-
-  private setEmbedder(model: string) {
-    const providerName = 'openai'
-    const credential = this.getCredential()
-
-    this.baseConfig.embedder = {
-      provider: providerName,
-      config: {
-        api_key: credential,
-        model: model,
-      },
-    }
-  }
-
-  private changeLLMParams(params: Partial<ModelParams> = {}) {
-    const newParams = {
-      ...(this.baseConfig?.llm?.params || {}),
-      ...params,
-      ...defaultParams,
-    }
-
-    this.baseConfig.llm.config = newParams
-    return newParams
   }
 
   addCredential(credential: LLMCredential): void {
@@ -163,104 +81,117 @@ class CoreMemoryService {
     return Object.values(DataType)
   }
 
-  private getCredential(): string {
-    const provider = LLMProviderKeys.OpenAI
+  private getCredential(serviceType: string): string {
     let credential = this.credentials.find(
-      c => c.serviceType === provider
+      c => c.serviceType === serviceType
     )?.value
 
-    if (!credential && provider && (!PRODUCTION || this.useEnv)) {
-      credential = process.env[provider]
+    if (!credential && serviceType && (!PRODUCTION || this.useEnv)) {
+      credential = process.env[serviceType]
     }
 
     if (!credential) {
-      throw new Error(`No credential found for ${provider}`)
+      throw new Error(`No credential found for ${serviceType}`)
     }
     return credential
   }
 
   async add(
     data: string,
-    options?: {
-      dataType?: DataType
-      metadata?: Record<string, any>
-    }
-  ) {
-    const kwargs = {
-      ...(options?.dataType && { data_type: options?.dataType }),
-      metadata: options?.metadata || {},
-    }
-
+    {
+      dataType = DataType.TEXT,
+      metadata = {},
+    }: { dataType?: string; metadata?: Record<string, any> } = {}
+  ): Promise<string> {
     try {
-      if (!this.app) this.initialize(this.agentId)
-      console.log('Adding to Embedchain:', data, kwargs)
+      if (!this.pineconeIndex) {
+        throw new Error('Pinecone index not initialized')
+      }
 
-      const result = await this.app.add$(data, kwargs)
+      const docs = [
+        {
+          pageContent: data,
+          metadata: {
+            ...metadata,
+            dataType,
+          },
+        },
+      ]
 
-      return result
+      await PineconeStore.fromDocuments(docs, new OpenAIEmbeddings(), {
+        pineconeIndex: this.pineconeIndex,
+        namespace: this.agentId,
+        textKey: 'pageContent',
+      })
+
+      // Return a unique identifier for the added document
+      return crypto.randomUUID()
     } catch (error: any) {
-      console.error('Error adding to Embedchain:', error)
+      console.error('Error adding to Pinecone:', error)
       throw error
     }
   }
 
-  async remove(memoryId: string) {
+  async remove(memoryId: string): Promise<boolean> {
     try {
-      if (!this.app) this.initialize(this.agentId)
-      await this.app.delete(memoryId)
+      if (!this.pineconeIndex) {
+        throw new Error('Pinecone index not initialized')
+      }
+
+      await this.pineconeIndex.delete1({
+        ids: [memoryId],
+        namespace: this.agentId,
+      })
+
       return true
     } catch (error: any) {
-      console.error('Error removing from Embedchain:', error)
+      console.error('Error removing from Pinecone:', error)
       throw error
     }
   }
 
   async query(query: string) {
     try {
-      if (!this.app) await this.initialize(this.agentId)
-      const pythonResponse = await this.app.query$(query, { citations: true })
-      const response = await pythonResponse.valueOf()
-      return response
-    } catch (error: any) {
-      console.error('Error querying Embedchain:', error)
-      throw error
-    }
-  }
+      const vectorStore = await PineconeStore.fromExistingIndex(
+        new OpenAIEmbeddings(),
+        {
+          pineconeIndex: this.pineconeIndex,
+          namespace: this.agentId,
+        }
+      )
+      const model = new OpenAI()
+      const chain = VectorDBQAChain.fromLLM(model, vectorStore)
+      const response = await chain.call({ query })
 
-  async getDataSources() {
-    try {
-      if (!this.app) this.initialize(this.agentId)
-      const pythonResponse = await this.app.get_data_sources()
-      const response = await pythonResponse.valueOf()
       return response
     } catch (error: any) {
-      console.error('Error getting data sources from Embedchain:', error)
+      console.error('Error querying Pinecone:', error)
       throw error
     }
   }
 
   async search({ query, numDocuments = 3, metadata = {} }: SearchArgs) {
     try {
-      if (!this.app) this.initialize(this.agentId)
+      const vectorStore = await PineconeStore.fromExistingIndex(
+        new OpenAIEmbeddings(),
+        {
+          pineconeIndex: this.pineconeIndex,
+          namespace: this.agentId,
+        }
+      )
 
-      const pythonResponse = await this.app.db.query$(query, {
-        n_results: numDocuments,
-        where: metadata,
-        citations: true,
-        app_id: this.agentId,
-      })
+      const results = await vectorStore.similaritySearch(
+        query,
+        numDocuments,
+        metadata
+      )
 
-      // const responseJson = await pythonResponse.serialize()
-      const response = await pythonResponse.valueOf()
-
-      const results = [] as { context: string; metadata: Record<string, any> }[]
-      for (const result of response) {
-        results.push({ context: result[0], metadata: result[1] })
-      }
-
-      return results
+      return results.map(result => ({
+        context: result.pageContent,
+        metadata: result.metadata,
+      }))
     } catch (error: any) {
-      console.error('Error searching Embedchain:', error)
+      console.error('Error searching Pinecone:', error)
       throw error
     }
   }
@@ -269,27 +200,57 @@ class CoreMemoryService {
     queries,
     numDocuments = 3,
     metadata = {},
-  }: {
-    queries: string[]
-    numDocuments?: number
-    metadata?: Record<string, any>
-  }) {
+  }: SearchManyArgs) {
     try {
-      if (!this.app) this.initialize(this.agentId)
-      const responses = await Promise.all(
-        queries.map(
-          async query => await this.search({ query, numDocuments, metadata })
-        )
+      const vectorStore = await PineconeStore.fromExistingIndex(
+        new OpenAIEmbeddings(),
+        {
+          pineconeIndex: this.pineconeIndex,
+          namespace: this.agentId,
+        }
       )
 
-      return flatten(responses)
+      const results = await Promise.all(
+        queries.map(async query => {
+          const result = await vectorStore.similaritySearch(
+            query,
+            numDocuments,
+            metadata
+          )
+          return result.map(item => ({
+            context: item.pageContent,
+            metadata: item.metadata,
+          }))
+        })
+      )
+
+      return results.flat()
     } catch (error: any) {
-      console.error('Error searching Embedchain:', error)
+      console.error('Error searching Pinecone:', error)
       throw error
     }
   }
 
-  // Placeholder for future methods that interact with the Embedchain App
+  async getDataSources(): Promise<any> {
+    try {
+      if (!this.pineconeIndex) {
+        throw new Error('Pinecone index not initialized')
+      }
+
+      const response = await this.pineconeIndex.describeIndexStats({
+        describeIndexStatsRequest: {
+          filter: {
+            namespace: this.agentId,
+          },
+        },
+      })
+
+      return response
+    } catch (error: any) {
+      console.error('Error getting data sources from Pinecone:', error)
+      throw error
+    }
+  }
 }
 
 export { CoreMemoryService }
