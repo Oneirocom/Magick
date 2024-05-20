@@ -42,25 +42,31 @@ export const CompletionProviderOptions: React.FC<
     projectId: config.projectId,
   })
 
+  // Handle initial loading
   useEffect(() => {
-    if (!userData || !providerData) return
+    if (props.node && props.node.id === lastActiveNodeId) return
+    setLastActiveNodeId(props.node?.id || '')
+
+    if (!userData && !providerData) return
+
+    // get the model provider
     let modelProvider = getProviderIdMapping(
       props.fullConfig.modelProvider.toLowerCase()
     )
 
     let model = props.fullConfig.model
     let updateConfig = false
+
+    // correct config if the model provider is not supported for backward compatibility
     if (modelProvider === 'unsupported') {
-      // set up fallback for the model provider in case config is wrong
       modelProvider = 'openai'
       model = 'gpt-3.5-turbo'
       updateConfig = true
     }
 
+    // set the selected provider, model, and active models
     setSelectedProvider(modelProvider || 'openai')
-    setSelectedModel(
-      providerData[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
-    )
+    setSelectedModel(model || 'gpt-3.5-turbo')
     setActiveModels(
       providerData[modelProvider]?.models || providerData['openai'].models
     )
@@ -72,6 +78,7 @@ export const CompletionProviderOptions: React.FC<
       updateApiKey = true
     }
 
+    // update the config if needed
     if (updateConfig || updateApiKey) {
       props.updateConfigKeys({
         modelProvider,
@@ -79,63 +86,10 @@ export const CompletionProviderOptions: React.FC<
         providerApiKeyName: modelProvider,
       })
     }
+
+    // set loading to false
     setIsLoading(false)
-  }, [userData, providerData])
-
-  useEffect(() => {
-    if ((props.node && props.node.id === lastActiveNodeId) || !providerData)
-      return
-    setLastActiveNodeId(props.node?.id || '')
-    let modelProvider = getProviderIdMapping(props.fullConfig.modelProvider)
-    let model = props.fullConfig.model
-    let updateConfig = false
-    if (modelProvider === 'unsupported') {
-      // set up fallback for the model provider in case config is wrong
-      modelProvider = 'openai'
-      model = 'gpt-3.5-turbo'
-      updateConfig = true
-    }
-
-    setSelectedProvider(modelProvider)
-    setSelectedModel(
-      providerData[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
-    )
-    setActiveModels(
-      providerData[modelProvider]?.models || providerData['openai']?.models
-    )
-    updateConfig &&
-      props.updateConfigKeys({
-        modelProvider,
-        model: model || 'gpt-3.5-turbo',
-      })
-  }, [props.node, providerData])
-
-  useEffect(() => {
-    if (!providerData) return
-    let modelProvider = getProviderIdMapping(props.fullConfig.modelProvider)
-
-    let model = props.fullConfig.model
-    let updateConfig = false
-    if (modelProvider === 'unsupported') {
-      // set up fallback for the model provider in case config is wrong
-      modelProvider = 'openai'
-      model = 'gpt-3.5-turbo'
-      updateConfig = true
-    }
-    setSelectedProvider(modelProvider)
-    setSelectedModel(
-      providerData[modelProvider]?.models[0]?.model_name || 'gpt-3.5-turbo'
-    )
-    setActiveModels(
-      providerData[modelProvider]?.models || providerData['openai']?.models
-    )
-
-    updateConfig &&
-      props.updateConfigKeys({
-        modelProvider,
-        model: model || 'gpt-3.5-turbo',
-      })
-  }, [selectedProvider, providerData])
+  }, [userData, providerData, props.node])
 
   useEffect(() => {
     if (!providerData) return
@@ -158,10 +112,17 @@ export const CompletionProviderOptions: React.FC<
   const onSelectProvider = (provider: string) => {
     if (!providerData) return
     const providerId = providerData[provider].models[0].provider.provider_id
+    const model = providerData[provider]?.models[0]?.model_name
+
+    console.log('model', model)
     setSelectedProvider(provider)
+
+    setSelectedModel(model)
+    setActiveModels(providerData[provider]?.models)
 
     props.updateConfigKeys({
       modelProvider: providerId,
+      model: model,
       providerApiKeyName: providerData[provider]?.apiKey || '',
     })
   }
@@ -218,6 +179,7 @@ export const CompletionProviderOptions: React.FC<
                 })
                 return (
                   <SelectItem
+                    className="truncate"
                     key={model.model_name}
                     value={model.model_name}
                     disabled={!isAvailable}
