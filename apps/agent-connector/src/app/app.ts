@@ -167,7 +167,12 @@ export async function app(fastify: FastifyInstance) {
 
       /* AGENT MESSAGE OUTPUT STREAM */
       agent.on('messageStream', async actionPayload => {
-        if (actionPayload.event.channel !== channelId) return // Ignore messages not for this channel
+        console.log(
+          'Comparing channelId',
+          actionPayload.event.channel,
+          channelId
+        )
+        // if (actionPayload.event.channel !== channelId) return // Ignore messages not for this channel
         try {
           const event = actionPayload.event
           const responseId = (event.data as { responseId: string }).responseId
@@ -232,7 +237,12 @@ export async function app(fastify: FastifyInstance) {
       })
 
       agent.on('messageReceived', async actionPayload => {
-        if (actionPayload.event.channel !== channelId) return // Ignore messages not for this channel
+        console.log(
+          'Comparing channelId',
+          actionPayload.event.channel,
+          channelId
+        )
+        // if (actionPayload.event.channel !== channelId) return // Ignore messages not for this channel
         console.log('agent.on messageReceived', actionPayload)
         const text = actionPayload.data.content
         socket.send(
