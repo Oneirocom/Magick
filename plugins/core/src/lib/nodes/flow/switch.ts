@@ -52,7 +52,7 @@ export const flowSwitch = makeFlowNodeDefinition({
     return [...startSockets, ...sockets]
   },
   triggered: ({ read, commit, configuration }) => {
-    const string = read('string') as string
+    const string = (read('string') as string).trim()
 
     const outputs = configuration.socketOutputs
     const outputMap = outputs.map(output => {
