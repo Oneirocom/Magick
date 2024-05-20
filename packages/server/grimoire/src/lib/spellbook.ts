@@ -244,7 +244,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   async updateSpellState(spellId: string, update: Partial<SpellState>) {
     // here we will use keyv
-    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const key = `agent:${this.agent.id}spell:${spellId}:state`
     const keyv = this.app.get('keyv')
 
     const currentState = (await keyv.get(key)) || {
@@ -256,13 +256,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   async getSpellState(spellId: string): Promise<SpellState> {
-    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const key = `agent:${this.agent.id}spell:${spellId}:state`
     const keyv = this.app.get('keyv')
 
     const currentState = await keyv.get(key)
 
     if (!currentState) {
-      this.updateSpellState(spellId, this.initialState)
+      await this.updateSpellState(spellId, this.initialState)
       return this.initialState
     }
 
