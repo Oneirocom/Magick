@@ -73,7 +73,7 @@ export const getManyVariables = makeFunctionNodeDefinition({
         )
         if (!variable) return
 
-        let value = variableService.getVariable(variable.name)
+        let value = await variableService.getVariable(variable.name)
 
         if (value === undefined) {
           // set the variable to the default value
