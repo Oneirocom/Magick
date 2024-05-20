@@ -53,7 +53,7 @@
     "db:dev": "npx prisma migrate dev --schema packages/server/db/src/lib/prisma/schema.prisma",
     "portal:cli:build": "npx nx build cli && node scripts/rename-to-mjs.js && cd dist/apps/cli && npm pack",
     "portal:cli:install": "npm link dist/apps/cli",
-    "portal:dev": "npx nx serve portal",
+    "portal:dev": "npx nx dev portal --port 4000",
     "portal:build": "npx nx build portal",
     "portal:start": "npx nx run portal:serve:production",
     "portal:build:vercel": "npx nx build portal --runner=vercel",
