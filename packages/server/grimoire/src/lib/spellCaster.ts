@@ -289,26 +289,26 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionStartHandler = async (node: any) => {
-    console.log('IS LIVE', this.isLive)
-    if (!this.debug || !this.isLive) return
-    const event = `${this.spell.id}-${node.id}-start`
+    if (this.debug && this.isLive) {
+      const event = `${this.spell.id}-${node.id}-start`
 
-    this.debounceEvent(
-      event,
-      () => {
-        this.emitNodeWork({
-          node,
-          event,
-          data: {
-            inputs: node.inputs,
-          },
-        })
-      },
-      1000,
-      {
-        leading: true,
-      }
-    )
+      this.debounceEvent(
+        event,
+        () => {
+          this.emitNodeWork({
+            node,
+            event,
+            data: {
+              inputs: node.inputs,
+            },
+          })
+        },
+        1000,
+        {
+          leading: true,
+        }
+      )
+    }
   }
 
   /**
@@ -318,27 +318,28 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the node work event is emitted.
    */
   executionEndHandler = async (node: any) => {
-    if (!this.debug || !this.isLive) return
-    const event = `${this.spell.id}-${node.id}-end`
-    const startEvent = `${this.spell.id}-${node.id}-start`
+    if (this.debug && this.isLive) {
+      const event = `${this.spell.id}-${node.id}-end`
+      const startEvent = `${this.spell.id}-${node.id}-start`
 
-    this.debounceEvent(
-      event,
-      () => {
-        this.emitNodeWork({
-          node,
-          event,
-          data: {
-            outputs: node.outputs,
-          },
-        })
-        this.debounceMap.delete(startEvent)
-      },
-      4000,
-      {
-        leading: false,
-      }
-    )
+      this.debounceEvent(
+        event,
+        () => {
+          this.emitNodeWork({
+            node,
+            event,
+            data: {
+              outputs: node.outputs,
+            },
+          })
+          this.debounceMap.delete(startEvent)
+        },
+        4000,
+        {
+          leading: false,
+        }
+      )
+    }
   }
 
   executionErrorhandler = async ({ node, error }) => {
