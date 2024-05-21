@@ -184,26 +184,26 @@ export class KeywordsService {
     walletUser: ProxyUser
   }) {
     try {
-      if (!mpUser.period_budget) {
+      if (mpUser.period_budget === undefined) {
         await fetch(
           `${this.apiUrl}/api/user/update/${mpUser.customer_identifier}`,
           {
             method: 'PATCH',
             headers: this.getHeaders(),
             body: JSON.stringify({
-              period_budget: mpUser?.period_budget || 0,
+              period_budget: 0,
             }),
           }
         )
       }
-      if (!walletUser.period_budget) {
+      if (walletUser.period_budget === undefined) {
         await fetch(
           `${this.apiUrl}/api/user/update/${walletUser.customer_identifier}`,
           {
             method: 'PATCH',
             headers: this.getHeaders(),
             body: JSON.stringify({
-              period_budget: walletUser?.period_budget || 0,
+              period_budget: 0,
             }),
           }
         )

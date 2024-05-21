@@ -49,19 +49,23 @@ const DefaultInput = ({
 }: DefaultInputProps) => {
   // determine fallback value based on type
   if (valueType === 'boolean') {
-    initialValue = initialValue || initialValueMap.boolean
-  } else if (valueType === 'number') {
-    initialValue = initialValue || initialValueMap.integer
+    initialValue =
+      initialValue !== undefined ? initialValue : initialValueMap.boolean
+  } else if (valueType === 'number' || valueType === 'integer') {
+    initialValue =
+      initialValue !== undefined ? initialValue : initialValueMap.integer
   } else if (valueType === 'float') {
-    initialValue = initialValue || initialValueMap.float
-  } else if (valueType === 'integer') {
-    initialValue = initialValue || initialValueMap.integer
+    initialValue =
+      initialValue !== undefined ? initialValue : initialValueMap.float
   } else if (valueType === 'string') {
-    initialValue = initialValue || initialValueMap.string
+    initialValue =
+      initialValue !== undefined ? initialValue : initialValueMap.string
   } else if (valueType === 'array') {
-    initialValue = initialValue || initialValueMap.array
+    initialValue =
+      initialValue !== undefined ? initialValue : initialValueMap.array
   } else if (valueType === 'object') {
-    initialValue = initialValue || initialValueMap.object
+    initialValue =
+      initialValue !== undefined ? initialValue : initialValueMap.object
   } else if (showChoices && choices.length > 0) {
     initialValue = choices[0].value
   } else {
@@ -70,7 +74,7 @@ const DefaultInput = ({
 
   const [value, setValue] = useState(initialValue)
 
-  const updateValue = value => {
+  const updateValue = (value: any) => {
     setValue(value)
     onChange(value)
   }
@@ -111,16 +115,16 @@ const DefaultInput = ({
         <Input
           type="number"
           className={inputClass}
-          value={value || 0}
-          onChange={e => updateValue(e.currentTarget.value)}
+          value={value !== undefined ? value : 0}
+          onChange={e => updateValue(parseFloat(e.currentTarget.value))}
         />
       )}
       {valueType === 'integer' && !showChoices && (
         <Input
           type="number"
           className={inputClass}
-          value={value || 0}
-          onChange={e => updateValue(e.currentTarget.value)}
+          value={value !== undefined ? value : ''}
+          onChange={e => updateValue(parseInt(e.currentTarget.value, 10))}
         />
       )}
       {valueType === 'boolean' && !showChoices && (
