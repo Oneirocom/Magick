@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 export const SearchResults = ({
   filteredNodes,
@@ -21,7 +21,8 @@ export const SearchResults = ({
               index === focusedIndex ? 'bg-[#282d33]' : 'hover:bg-[#282d33]'
             }`}
             onMouseEnter={() => setFocusedIndex(index)}
-            onClick={() => {
+            onClick={e => {
+              e.stopPropagation()
               if (!pickedNodePosition) return
               onPickNode(type, pickedNodePosition)
             }}
