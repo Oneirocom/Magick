@@ -1,3 +1,4 @@
+"use client";
 // https://github.com/shadcn-ui/ui/pull/2350
 import React from 'react'
 import { StarIcon } from '@radix-ui/react-icons'

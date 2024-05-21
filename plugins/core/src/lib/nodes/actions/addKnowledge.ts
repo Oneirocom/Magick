@@ -31,7 +31,9 @@ export const addKnowledge = makeFlowNodeDefinition({
     )
     const knowledge = read('knowledge') as string
 
-    await coreMemoryService?.add(knowledge, dataType)
+    await coreMemoryService?.add(knowledge, {
+      dataType,
+    })
 
     commit('flow')
   },

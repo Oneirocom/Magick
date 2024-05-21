@@ -30,8 +30,14 @@ type GetImageParams = {
 
 export const getImage = (params: GetImageParams) => {
   if (params.image) {
-    if (params.image.startsWith('/')) {
-      return `${bucketImagePath}${params.image}`
+    if (
+      // this is a hack ill do better later
+      params.image.startsWith('/') ||
+      slashless(params.image)
+    ) {
+      return `${bucketImagePath}${slashless(params.image) && `/`}${
+        params.image
+      }`
     } else {
       return params.image
     }
@@ -43,4 +49,13 @@ export const getImage = (params: GetImageParams) => {
         return defaultBannerImage(params.id)
     }
   }
+}
+
+function slashless(imagePath: string): boolean {
+  return (
+    imagePath.startsWith('templates') ||
+    imagePath.startsWith('projects') ||
+    imagePath.startsWith('users') ||
+    imagePath.startsWith('agents')
+  )
 }

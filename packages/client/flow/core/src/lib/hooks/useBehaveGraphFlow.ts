@@ -1,3 +1,5 @@
+"use client"
+
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
 import { behaveToFlow } from '../utils/transformers/behaveToFlow'
@@ -15,8 +17,6 @@ import {
   onNodesChange,
   onConnect,
   graphActions,
-  // setIsDirty,
-  // selectIsDirty,
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'

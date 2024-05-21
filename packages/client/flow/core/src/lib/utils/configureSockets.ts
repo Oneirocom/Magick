@@ -1,3 +1,4 @@
+"use client";
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { socketsFromNumInputs } from './socketsFromNum'
 

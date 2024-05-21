@@ -244,7 +244,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    */
   async updateSpellState(spellId: string, update: Partial<SpellState>) {
     // here we will use keyv
-    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const key = `agent:${this.agent.id}spell:${spellId}:state`
     const keyv = this.app.get('keyv')
 
     const currentState = (await keyv.get(key)) || {
@@ -256,13 +256,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   async getSpellState(spellId: string): Promise<SpellState> {
-    const key = `$agent:${this.agent.id}spell:${spellId}:state`
+    const key = `agent:${this.agent.id}spell:${spellId}:state`
     const keyv = this.app.get('keyv')
 
     const currentState = await keyv.get(key)
 
     if (!currentState) {
-      this.updateSpellState(spellId, this.initialState)
+      await this.updateSpellState(spellId, this.initialState)
       return this.initialState
     }
 
@@ -436,6 +436,16 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.logger.trace(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
+
+    for (const spellCasters of this.eventMap.values()) {
+      for (const spellCaster of spellCasters.values()) {
+        if (live) {
+          spellCaster.toggleLive(true)
+        } else {
+          spellCaster.toggleLive(false)
+        }
+      }
+    }
   }
 
   /**
@@ -538,6 +548,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       })
 
       await spellCaster.initialize(spell)
+
+      if (this.watchSpells) {
+        spellCaster.toggleLive(true)
+      }
 
       // we want to make sure we ALWAYS maintain a reference to the spellCaster
       // this.cachePool.set(spell.id, spellCaster)

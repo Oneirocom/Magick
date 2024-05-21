@@ -1,3 +1,5 @@
+"use client"
+
 import { NodeCategory } from '@magickml/behave-graph'
 import { useMemo } from 'react'
 

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useMemo } from 'react'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'

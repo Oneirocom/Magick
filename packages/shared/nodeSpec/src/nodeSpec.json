@@ -916,6 +916,32 @@
     ]
   },
   {
+    "type": "flow/split",
+    "category": "Flow",
+    "label": "Flow Split",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow1",
+        "valueType": "flow"
+      },
+      {
+        "name": "flow2",
+        "valueType": "flow"
+      },
+      {
+        "name": "done",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "flow/array/forEach",
     "category": "Flow",
     "label": "For Each",
@@ -1806,7 +1832,7 @@
   {
     "type": "logic/split/string",
     "category": "None",
-    "label": "Split",
+    "label": "String Split",
     "inputs": [
       {
         "name": "string",

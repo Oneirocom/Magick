@@ -1,4 +1,5 @@
-// DOCUMENTED
+"use client"
+
 import {
   ConfigProvider,
   FeathersProvider,

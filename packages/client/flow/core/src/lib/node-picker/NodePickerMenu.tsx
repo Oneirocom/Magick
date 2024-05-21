@@ -1,3 +1,5 @@
+"use client"
+
 import { MagickReactFlowInstance } from '../flow'
 import { NodeItem } from './NodeItem'
 import { XYPosition } from '@xyflow/react'

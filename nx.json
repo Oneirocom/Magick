@@ -1,13 +1,11 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "affected": {
-    "defaultBase": "main"
-  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "accessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU="
+        "accessToken": "NzM1Yjk0OWEtMDE4Ny00YWE2LTg4OGYtOWU4M2QzOWE1YjA5fHJlYWQtd3JpdGU=",
+        "cacheableOperations": ["build-storybook"]
       }
     },
     "vercel": {
@@ -24,6 +22,17 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
+  "plugins": [
+    {
+      "plugin": "@nx/next/plugin",
+      "options": {
+        "startTargetName": "start",
+        "buildTargetName": "build",
+        "devTargetName": "dev",
+        "serveStaticTargetName": "serve-static"
+      }
+    }
+  ],
   "pluginsConfig": {
     "@nx/js": {
       "analyzeSourceFiles": true
@@ -64,6 +73,19 @@
     },
     "e2e": {
       "inputs": ["default", "^default"]
+    },
+    "build-storybook": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{projectRoot}/.storybook/**/*",
+        "{projectRoot}/tsconfig.storybook.json"
+      ]
+    },
+    "@nx/eslint:lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
     }
   },
   "generators": {
@@ -96,5 +118,7 @@
       }
     }
   },
-  "defaultProject": "@magickml/server"
+  "defaultProject": "@magickml/server",
+  "useInferencePlugins": false,
+  "defaultBase": "main"
 }

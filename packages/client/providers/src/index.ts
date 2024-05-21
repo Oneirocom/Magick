@@ -1,3 +1,5 @@
+'use client'
+
 export * from './lib/ConfigProvider'
 export * from './lib/FeathersProvider'
 export * from './lib/PubSubProvider'

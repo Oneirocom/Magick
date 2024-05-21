@@ -1,3 +1,4 @@
+"use client";
 // https://reactflow.dev/learn/advanced-use/testing#using-jest
 
 // To make sure that the tests are working, it's important that you are using

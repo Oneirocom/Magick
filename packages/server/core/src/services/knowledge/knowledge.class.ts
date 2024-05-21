@@ -12,7 +12,6 @@ import type {
   KnowledgeQuery,
 } from './knowledge.schema'
 import { CoreMemoryService } from 'plugin/core'
-import { DataType } from 'servicesShared'
 import { CreateKnowledgeMutation } from 'servicesShared'
 import { Storage } from '@google-cloud/storage'
 
@@ -83,7 +82,7 @@ export class KnowledgeService<
         metadata: {
           tag: data?.tag || 'none',
         },
-        dataType: type as DataType,
+        dataType: type,
       }
 
       // Add the data to the memory

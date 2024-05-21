@@ -1,3 +1,4 @@
+"use client";
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { AgentIcon, StarIcon } from '@magickml/icons'
 

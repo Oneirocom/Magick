@@ -1,3 +1,5 @@
+'use client'
+
 import type { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 

@@ -7,7 +7,7 @@ export const WindowContainer = ({
   ...props
 }: WindowContainerProps) => {
   return (
-    <div className="w-full h-full overflow-y-auto overflow-x-hidden font-montserrat">
+    <div className="w-full h-full overflow-y-auto overflow-x-hidden font-sans">
       {children}
     </div>
   )
