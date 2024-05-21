@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { MagickReactFlowInstance } from '../flow'
 import { NodeItem } from './NodeItem'
@@ -20,7 +20,7 @@ export const NodePickerMenu = ({
       {groupedData.map((item, index) => {
         const isLast = index === groupedData.length - 1
         return (
-          <>
+          <div key={index}>
             <NodeItem
               index={index}
               key={'node-item' + index}
@@ -35,7 +35,7 @@ export const NodePickerMenu = ({
                 className="border-b border-black w-full"
               />
             )}
-          </>
+          </div>
         )
       })}
     </div>
