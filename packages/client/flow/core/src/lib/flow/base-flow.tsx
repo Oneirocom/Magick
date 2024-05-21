@@ -215,7 +215,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       elevateEdgesOnSelect={true}
       fitView
       fitViewOptions={{ maxZoom: 2, minZoom: 0.1 }}
-      minZoom={0.1}
+      minZoom={0.05}
       onPaneClick={handlePaneClick}
       onPaneContextMenu={handlePaneContextMenu}
       onNodeContextMenu={handleNodeContextMenu}
