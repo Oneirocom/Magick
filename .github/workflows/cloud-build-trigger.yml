@@ -1,0 +1,31 @@
+name: Trigger Cloud Build on Push
+
+on:
+  push:
+    branches:
+      - development
+      - main
+
+jobs:
+  webhook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Trigger Cloud Build
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{
+              "projectId": "'"${{ secrets.GCP_PROJECT_ID }}"'",
+              "repoName": "'"${{ github.repository }}"'",
+              "branchName": "'"${GITHUB_REF##*/}"'",
+              "commitSha": "'"${{ github.sha }}"'",
+              "substitutions": {
+                "_COMMIT_SHA": "'"${{ github.sha }}"'",
+                "_BRANCH_NAME": "'"${GITHUB_REF##*/}"'",
+                "_REPO_NAME": "'"${{ github.repository }}"'"
+              }
+            }' \
+            "https://cloudbuild.googleapis.com/v1/projects/${{ secrets.GCP_PROJECT_ID }}/triggers/${{ secrets.GCP_TRIGGER_NAME }}:webhook?key=${{ secrets.GCP_API_KEY }}&secret=${{ secrets.GCP_WEBHOOK_SECRET }}"
