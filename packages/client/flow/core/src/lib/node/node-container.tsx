@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
@@ -60,7 +60,7 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
   const NodeIcon = categoryIconMap[category]
   let [backgroundColor, textColor] = colors[colorName]
   if (config?.valueTypeName) {
-    const variableName = config.socketOutputs[0].name
+    const variableName = config.socketOutputs[0]?.name
     innerLabel = variableName && `${label} ${variableName}`
     const colorName = valueTypeColorMap[config.valueTypeName]
     if (colorName) {
