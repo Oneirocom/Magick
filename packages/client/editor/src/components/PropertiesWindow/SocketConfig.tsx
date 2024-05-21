@@ -152,11 +152,11 @@ export const SocketConfig = ({
 
     const newEdges = edges.filter(edge => {
       if (configKey === 'socketInputs') {
-        return edge.target !== node.id && edge.targetHandle !== name
+        return !(edge.target === node.id && edge.targetHandle === name)
       }
 
       if (configKey === 'socketOutputs') {
-        return edge.source !== node.id && edge.sourceHandle !== name
+        return !(edge.source === node.id && edge.sourceHandle === name)
       }
 
       return true
