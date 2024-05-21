@@ -1,5 +1,5 @@
 {
-  "name": "flow-core",
+  "name": "@magickml/flow-core",
   "version": "0.0.1",
   "main": "./index.js",
   "types": "./index.d.ts",

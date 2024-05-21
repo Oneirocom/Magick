@@ -1,3 +1,5 @@
+'use client'
+
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import {
   MouseEvent as ReactMouseEvent,
@@ -522,6 +524,20 @@ export const useFlowHandlers = ({
       case 't': {
         handleAddNode(
           'logic/string/template',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      }
+      case 's': {
+        handleAddNode(
+          'magick/sendMessage',
+          screenToFlowPosition({ x: event.clientX, y: event.clientY })
+        )
+        break
+      }
+      case 'm': {
+        handleAddNode(
+          'magick/onMessage',
           screenToFlowPosition({ x: event.clientX, y: event.clientY })
         )
         break

@@ -1,3 +1,4 @@
+"use client";
 import type { NodeSpecJSON } from '@magickml/behave-graph'
 import type { Connection, Edge } from '@xyflow/react'
 

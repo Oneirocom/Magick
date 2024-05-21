@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable no-promise-executor-return */
 export function sleep(durationInSeconds: number) {
   return new Promise((resolve) =>

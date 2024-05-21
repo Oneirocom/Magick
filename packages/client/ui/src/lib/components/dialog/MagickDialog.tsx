@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   cn,
@@ -94,7 +95,7 @@ export const MagickDialog: FunctionComponent<MagickDialogProps> = ({
             <DialogDescription
               className={clsx(
                 destructive ? 'text-red-500' : 'text-black dark:text-ds-white',
-                'font-montserrat font-medium text-xs'
+                'font-sans font-medium text-xs'
               )}
             >
               {description}

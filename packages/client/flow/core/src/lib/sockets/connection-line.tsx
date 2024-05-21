@@ -1,3 +1,5 @@
+"use client"
+
 import { ReactFlowState, useStore } from '@xyflow/react'
 
 const getState = (state: ReactFlowState) => {

@@ -1,3 +1,4 @@
+"use client";
 import type { GraphJSON } from '@magickml/behave-graph'
 
 export const hasPositionMetaData = (graph: GraphJSON): boolean => {

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useEffect } from 'react'
 import { GraphJSON } from '@magickml/behave-graph'
 import { useReactFlow } from '@xyflow/react'

@@ -1,3 +1,5 @@
+"use client"
+
 import type { GraphJSON } from '@magickml/behave-graph'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { v4 as uuidv4 } from 'uuid'

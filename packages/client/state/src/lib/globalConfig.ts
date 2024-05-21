@@ -28,7 +28,6 @@ export interface GlobalConfig {
   activeInput: ActiveInputType
   pastState: SaveDiffData[]
   futureState: SaveDiffData[]
-  isDirty: boolean
   layoutChangeEvent: boolean
 }
 
@@ -55,7 +54,6 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     },
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
-    isDirty: false as boolean,
     layoutChangeEvent: false as boolean,
   },
   reducers: {
@@ -137,9 +135,6 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
         state.futureState = updatedFutureState
       }
     },
-    setIsDirty: (state: GlobalConfig, action: PayloadAction<boolean>): void => {
-      state.isDirty = action.payload
-    },
     setCurrentAgentId: (
       state: GlobalConfig,
       action: PayloadAction<string>
@@ -190,7 +185,6 @@ export const {
   applyState,
   undoState,
   redoState,
-  setIsDirty,
 } = globalConfigSlice.actions
 
 /**
@@ -208,6 +202,5 @@ export const selectActiveInput = state =>
 
 export const selectPastState = state => state.globalConfig.pastState
 export const selectFutureState = state => state.globalConfig.futureState
-export const selectIsDirty = state => state.globalConfig.isDirty
 export const selectLayoutChangeEvent = state =>
   state.globalConfig.layoutChangeEvent

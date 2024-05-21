@@ -1,3 +1,4 @@
+"use client";
 import { useMotionTemplate, useMotionValue, motion } from 'framer-motion'
 import { cn } from '../utils/shadcn'
 import React from 'react'

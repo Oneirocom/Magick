@@ -1,3 +1,5 @@
+"use client"
+
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { XYPosition } from '@xyflow/react'
 import { ItemType } from './types'

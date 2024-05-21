@@ -1,3 +1,4 @@
+"use client";
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { Node, OnConnectStartParams } from '@xyflow/react'
 import { getSocketsByNodeTypeAndHandleType } from './getSocketsByNodeTypeAndHandleType'

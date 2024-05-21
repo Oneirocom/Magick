@@ -1,3 +1,5 @@
+"use client"
+
 import { Menu, MenuItem } from '@mui/material'
 import { memo } from 'react'
 import { XYPosition } from '@xyflow/react'
