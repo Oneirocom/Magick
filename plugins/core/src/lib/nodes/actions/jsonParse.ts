@@ -15,7 +15,11 @@ export const jsonParse = makeFlowNodeDefinition({
   },
   initialState: undefined,
   triggered: ({ read, write, commit }) => {
-    const json = read('json') as string
+    let json = read('json') as string
+
+    // Strip off markdown-style JSON delimiters (including backticks)
+    json = json.replace(/`json\s*|\s*`/g, '')
+
     const repaired = jsonrepair(json)
     const object = JSON.parse(repaired as string)
     write('object', object)
