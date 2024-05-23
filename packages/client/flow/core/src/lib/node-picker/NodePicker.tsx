@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useEffect, useState } from 'react'
 import { useReactFlow } from '@xyflow/react'
@@ -65,10 +65,7 @@ export const NodePicker: React.FC<NodePickerProps> = ({
       }
       if (event.key === 'Enter') {
         if (pickedNodePosition) {
-          onPickNode(
-            filteredNodes[focusedIndex]?.type,
-            instance.screenToFlowPosition(pickedNodePosition)
-          )
+          onPickNode(filteredNodes[focusedIndex]?.type, pickedNodePosition)
         }
       }
     }
