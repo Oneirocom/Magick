@@ -79,7 +79,6 @@ export class CoreLLMService implements ICoreLLMService {
         const _body = {
           model: request.model,
           messages: request.messages,
-          ...request.options,
           stream: true,
           ...(PRODUCTION
             ? {
@@ -106,7 +105,10 @@ export class CoreLLMService implements ICoreLLMService {
           Object.entries(_body).filter(([, v]) => v !== undefined)
         ) as ChatCompletionStreamParams
 
-        const stream = await this.openAISDK.beta.chat.completions.stream(body)
+        const stream = await this.openAISDK.beta.chat.completions.stream(
+          body,
+          request.options
+        )
 
         yield { choices: [{ delta: { content: '<START>' } }] }
 
