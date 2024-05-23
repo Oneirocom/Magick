@@ -102,7 +102,7 @@ export async function app(fastify: FastifyInstance) {
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
   })
 
-  const voiceId = 'ijaOS620XRUqeVbPeOqJ'
+  let voiceId = 'Z7HNXT9nFlPyYvAISoB6'
   const model = 'eleven_turbo_v2'
 
   fastify.get(
@@ -162,6 +162,12 @@ export async function app(fastify: FastifyInstance) {
           console.log('Toggling send audio!')
           sendAudio = !sendAudio
           console.log('sendAudio', sendAudio)
+        }
+
+        if (type === 'voiceId') {
+          console.log('Changing voiceId')
+          voiceId = data.text
+          console.log('voiceId', voiceId)
         }
       })
 
