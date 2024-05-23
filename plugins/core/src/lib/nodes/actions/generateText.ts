@@ -188,7 +188,10 @@ export const generateText = makeFlowNodeDefinition({
         const processNextChunk = async iterator => {
           const result = await iterator.next()
           if (result.done) {
-            write('response', result.value.choices[0].message.content || '')
+            write(
+              'response',
+              result.value.choices[0].message.content.trim() || ''
+            )
             console.log('result:', result.value.choices[0].message.content)
             write('completionResponse', result.value) // Assuming the last value is the completion response
             // await eventStore.saveAgentMessage(
