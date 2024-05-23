@@ -102,7 +102,6 @@ export async function app(fastify: FastifyInstance) {
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
   })
 
-  let voiceId = 'Z7HNXT9nFlPyYvAISoB6'
   const model = 'eleven_turbo_v2'
 
   fastify.get(
@@ -126,10 +125,60 @@ export async function app(fastify: FastifyInstance) {
 
       const agent = new Agent(agentData, agentApp.get('pubsub'), agentApp)
 
-      let textGenerator = createTextStreamGenerator()
+      let currentSpeechStream: AsyncIterable<Uint8Array> | null = null
+      let isSpeechStreamRunning = false // Flag to track if a stream is in progress
+      let voiceId = 'Z7HNXT9nFlPyYvAISoB6'
+
+      const textGeneratorQueue = new Map<string, TextStreamGenerator>()
+      const speechQueue: {
+        responseId: string
+      }[] = []
+
+      async function processSpeechQueue() {
+        while (speechQueue.length > 0) {
+          isSpeechStreamRunning = true
+
+          const { responseId } = speechQueue.shift()!
+          const textGenerator = textGeneratorQueue.get(responseId)
+          if (!textGenerator) {
+            console.error('No text generator found for responseId', responseId)
+            continue
+          }
+
+          try {
+            console.log('Starting speech stream')
+            currentSpeechStream = await streamSpeech({
+              model: elevenlabs.SpeechGenerator({
+                model: model,
+                voice: voiceId,
+                optimizeStreamingLatency: 3,
+                voiceSettings: { stability: 1, similarityBoost: 0.35 },
+                generationConfig: {
+                  chunkLengthSchedule: [50, 90, 120, 150, 200],
+                },
+              }),
+              text: textGenerator,
+            })
+
+            for await (const part of currentSpeechStream) {
+              console.log('socket.readyState', socket.readyState)
+              if (socket.readyState === WebSocket.OPEN) {
+                console.log('Sending chunk')
+                socket.send(part) // Send the chunk directly as binary data
+                await new Promise(resolve => setTimeout(resolve, 10)) // Throttle sending
+              }
+            }
+          } catch (err) {
+            console.error('Error streaming speech', err)
+          } finally {
+            textGeneratorQueue.delete(responseId)
+            isSpeechStreamRunning = false // Mark the stream as finished
+          }
+        }
+      }
 
       /* USER INPUT STREAM */
-      socket.on('message', message => {
+      socket.on('message', async message => {
         const data = messageSchema.parse(JSON.parse(message.toString()))
         console.log('socket.on message', data)
         const { type } = data
@@ -173,15 +222,11 @@ export async function app(fastify: FastifyInstance) {
 
       /* AGENT MESSAGE OUTPUT STREAM */
       agent.on('messageStream', async actionPayload => {
-        console.log(
-          'Comparing channelId',
-          actionPayload.event.channel,
-          channelId
-        )
         // if (actionPayload.event.channel !== channelId) return // Ignore messages not for this channel
         try {
           const event = actionPayload.event
           const responseId = (event.data as { responseId: string }).responseId
+          console.log('responseId', responseId)
           const content = actionPayload.data.content
 
           // Send the text chunk to the client
@@ -195,41 +240,38 @@ export async function app(fastify: FastifyInstance) {
             })
           )
 
+          console.log('Send audio', sendAudio)
+
           if (!sendAudio) return
 
           if (content === '<START>') {
             console.log('Starting text to speech')
-            textGenerator = createTextStreamGenerator()
 
-            try {
-              const speechStream = await streamSpeech({
-                model: elevenlabs.SpeechGenerator({
-                  model: model,
-                  voice: voiceId,
-                  optimizeStreamingLatency: 1,
-                  voiceSettings: { stability: 1, similarityBoost: 0.35 },
-                  generationConfig: {
-                    chunkLengthSchedule: [50, 90, 120, 150, 200],
-                  },
-                }),
-                text: textGenerator,
-              })
+            // Queue the speech generation request
+            const newTextGenerator = createTextStreamGenerator()
+            console.log('Pushing to queue with responseId', responseId)
+            textGeneratorQueue.set(responseId, newTextGenerator)
+            speechQueue.push({ responseId })
 
-              // part is a Uint8Array
-              for await (const part of speechStream) {
-                if (socket.readyState === WebSocket.OPEN) {
-                  console.log('Sending chunk')
-                  socket.send(part) // Send the chunk directly as binary data
-                  await new Promise(resolve => setTimeout(resolve, 10)) // Throttle sending
-                }
-              }
-            } catch (err) {
-              console.error('Error streaming speech', err)
+            // If no stream is running, start processing the queue
+            if (!isSpeechStreamRunning) {
+              processSpeechQueue()
             }
           } else if (content === '<END>') {
-            textGenerator.endStream()
+            // Find the correct text generator in the queue and end it
+
+            const textGenerator = textGeneratorQueue.get(responseId)
+
+            if (textGenerator) {
+              textGenerator.endStream()
+            }
           } else {
-            textGenerator.addToken(content)
+            const textGenerator = textGeneratorQueue.get(responseId)
+
+            if (textGenerator) {
+              console.log('Adding content to text generator')
+              textGenerator.addToken(content)
+            }
           }
         } catch (error) {
           console.error('Error in agent.on messageStream', error)
@@ -243,11 +285,6 @@ export async function app(fastify: FastifyInstance) {
       })
 
       agent.on('messageReceived', async actionPayload => {
-        console.log(
-          'Comparing channelId',
-          actionPayload.event.channel,
-          channelId
-        )
         // if (actionPayload.event.channel !== channelId) return // Ignore messages not for this channel
         console.log('agent.on messageReceived', actionPayload)
         const text = actionPayload.data.content
