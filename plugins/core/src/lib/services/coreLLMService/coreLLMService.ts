@@ -74,12 +74,11 @@ export class CoreLLMService implements ICoreLLMService {
           model: request.model,
         })
 
-        console.log('PRODUCTION', PRODUCTION)
-
         const _body = {
           model: request.model,
           messages: request.messages,
           stream: true,
+          ...request.options,
           ...(PRODUCTION
             ? {
                 customer_identifier: userData?.user.useWallet
@@ -105,10 +104,7 @@ export class CoreLLMService implements ICoreLLMService {
           Object.entries(_body).filter(([, v]) => v !== undefined)
         ) as ChatCompletionStreamParams
 
-        const stream = await this.openAISDK.beta.chat.completions.stream(
-          body,
-          request.options
-        )
+        const stream = await this.openAISDK.beta.chat.completions.stream(body)
 
         yield { choices: [{ delta: { content: '<START>' } }] }
 
