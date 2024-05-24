@@ -16,7 +16,8 @@ const USED_DATA_PROPERTIES = [
 function formatVariableNode(nodeType: string): string {
   if (
     nodeType.startsWith('variables/set') ||
-    nodeType.startsWith('variables/get')
+    nodeType.startsWith('variables/get') ||
+    nodeType.startsWith('variables/on')
   ) {
     // Split the string by '/'
     const parts = nodeType.split('/')
