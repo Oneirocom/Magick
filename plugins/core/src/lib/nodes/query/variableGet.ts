@@ -8,7 +8,7 @@ import { CORE_DEP_KEYS } from '../../config'
 
 export const variableGet = makeFunctionNodeDefinition({
   typeName: 'variables/get',
-  category: NodeCategory.Query,
+  category: NodeCategory.Variable,
   label: 'Get',
   configuration: {
     hiddenProperties: {

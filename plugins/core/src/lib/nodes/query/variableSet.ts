@@ -8,7 +8,7 @@ import { CORE_DEP_KEYS } from '../../config'
 
 export const variableSet = makeFlowNodeDefinition({
   typeName: 'variables/set',
-  category: NodeCategory.Query,
+  category: NodeCategory.Variable,
   label: 'Set',
   configuration: {
     hiddenProperties: {
