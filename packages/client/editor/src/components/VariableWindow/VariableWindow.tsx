@@ -53,8 +53,8 @@ export const VariableWindow = (props: Props) => {
   }, [spell])
 
   const deleteAllVariableNodes = useCallback((variable: VariableJSON) => {
-    // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName'
-    const regex = new RegExp(`variables/(set|get)/${variable.name}`)
+    // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName' and 'variables/on/variableName'
+    const regex = new RegExp(`variables/(set|get|on)/${variable.name}`)
     const nodes = instance.getNodes()
     const edges = instance.getEdges()
 
