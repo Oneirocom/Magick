@@ -226,8 +226,8 @@ export async function app(fastify: FastifyInstance) {
         try {
           const event = actionPayload.event
           const responseId = (event.data as { responseId: string }).responseId
-          console.log('responseId', responseId)
           const content = actionPayload.data.content
+          console.log('agent.on messageStream', content)
 
           // Send the text chunk to the client
           socket.send(
@@ -239,8 +239,6 @@ export async function app(fastify: FastifyInstance) {
               responseId: responseId,
             })
           )
-
-          console.log('Send audio', sendAudio)
 
           if (!sendAudio) return
 
