@@ -111,11 +111,14 @@ export function makeMagickEventNodeDefinition<
   IEventNodeDefinition<TInput, TOutput, TConfig, TState>,
   'init' | 'dispose'
 > {
+  const hiddenProperties =
+    definition.configuration?.hiddenProperties?.defaultValue || []
+
   definition.configuration = {
     ...definition.configuration,
     hiddenProperties: {
       valueType: 'array',
-      defaultValue: ['hiddenProperties', 'eventState'],
+      defaultValue: ['hiddenProperties', 'eventState', ...hiddenProperties],
     },
     eventState: {
       valueType: 'array',
