@@ -2,9 +2,22 @@ import Keyv from 'keyv'
 import { EventStore, SpellCaster } from 'server/grimoire'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
 import { CORE_DEP_KEYS } from '../config'
+import EventEmitter from 'events'
+import TypedEmitter from 'typed-emitter'
+import { EventPayload } from 'server/plugin'
+
+type Payload = {
+  name: string
+  value: any
+  event: EventPayload
+}
+
+export type VariableServiceEvents = {
+  variableChanged: (payload: Payload) => void
+}
 
 // This is the interface you'll use to get and set variables.
-export interface IVariableService {
+export interface IVariableService extends TypedEmitter<VariableServiceEvents> {
   setVariable(name: string, value: any): Promise<void>
   getVariable(name: string): Promise<any>
 
@@ -13,12 +26,16 @@ export interface IVariableService {
 }
 
 // This is the class you'll use to get and set variables.
-export class VariableService {
+export class VariableService
+  extends (EventEmitter as new () => TypedEmitter<VariableServiceEvents>)
+  implements IVariableService
+{
   private keyv: Keyv
   private spellCaster: SpellCaster
   private agentId: string
 
   constructor(postgresUrl: string, agentId: string, spellCaster: SpellCaster) {
+    super()
     this.keyv = new Keyv(postgresUrl, {
       namespace: agentId,
       schema: 'variables',
@@ -27,14 +44,29 @@ export class VariableService {
     this.spellCaster = spellCaster
   }
 
-  getEventKey(): string | undefined {
+  get eventStore(): EventStore {
     const eventStore = this.spellCaster.graph.getDependency<EventStore>(
       CORE_DEP_KEYS.EVENT_STORE
     )
 
-    if (!eventStore) return undefined
+    if (!eventStore) {
+      throw new Error('Event store not found')
+    }
 
-    const event = eventStore.currentEvent()
+    return eventStore
+  }
+
+  get currentEvent() {
+    const currentEvent = this.eventStore.currentEvent()
+    if (!currentEvent) {
+      throw new Error('Current event not found')
+    }
+
+    return currentEvent
+  }
+
+  getEventKey(): string | undefined {
+    const event = this.eventStore.currentEvent()
     if (!event || !event.stateKey) return undefined
 
     return event.stateKey
@@ -49,8 +81,15 @@ export class VariableService {
     return `${baseKey}:${eventKey}`
   }
 
+  getNameFromKey(key: string) {
+    const parts = key.split(':')
+    return parts[parts.length - 1]
+  }
+
   async setByKey(key: string, value: any): Promise<void> {
     await this.keyv.set(key, value)
+    const name = this.getNameFromKey(key)
+    this.emit('variableChanged', { name, value, event: this.currentEvent })
   }
 
   async getByKey(key: string): Promise<any> {
@@ -71,6 +110,7 @@ export class VariableService {
     }
 
     await this.keyv.set(key, value)
+    this.emit('variableChanged', { name, value, event: this.currentEvent })
   }
 
   // Get a variable from the storage.
