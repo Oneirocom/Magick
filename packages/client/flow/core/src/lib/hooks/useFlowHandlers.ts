@@ -277,11 +277,11 @@ export const useFlowHandlers = ({
       if (!nodeSpec) return
 
       let nodeType = _nodeType
-      const regex = new RegExp(`^variables/(get|set)/(.+)$`)
+      const regex = new RegExp(`^variables/(get|set|on)/(.+)$`)
 
       if (nodeType.match(regex)) {
         const variableType = nodeType.replace(
-          /^(variables\/(get|set))\/(.+)$/,
+          /^(variables\/(get|set|on))\/(.+)$/,
           '$1'
         )
         nodeSpec.type = variableType
