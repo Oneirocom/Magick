@@ -10,10 +10,10 @@ type ConfigUpdate = {
 
 export const getVariableConfig = (
   variable: VariableJSON,
-  configuraton: Record<string, any>
+  configuration: Record<string, any>
 ): ConfigUpdate => {
-  const socketInputs = configuraton.socketInputs
-  const socketOutputs = configuraton.socketOutputs
+  const socketInputs = configuration.socketInputs
+  const socketOutputs = configuration.socketOutputs
 
   const socket = {
     name: variable.name,
@@ -62,7 +62,7 @@ function updateDefaultValues(
 function createVariableNodeSpec(
   variableSpec: NodeSpecJSON,
   variable: VariableJSON,
-  type: 'get' | 'set'
+  type: 'get' | 'set' | 'on'
 ): NodeSpecJSON {
   const newSpec = updateDefaultValues(
     variableSpec,
@@ -88,8 +88,11 @@ export const generateVariableNodeSpecs = (
 ) => {
   const getVariableSpec = allSpecs.find(spec => spec.type === 'variables/get')
   const setVariableSpec = allSpecs.find(spec => spec.type === 'variables/set')
+  const onVariableSpec = allSpecs.find(spec => spec.type === 'variables/on')
 
-  if (!getVariableSpec || !setVariableSpec) {
+  console.log('on variable spec', onVariableSpec)
+
+  if (!getVariableSpec || !setVariableSpec || !onVariableSpec) {
     return []
   }
 
@@ -98,6 +101,9 @@ export const generateVariableNodeSpecs = (
   )
   const setConfiguration = configurationArrayToObject(
     setVariableSpec.configuration
+  )
+  const onConfiguration = configurationArrayToObject(
+    onVariableSpec.configuration
   )
 
   const variableNodeSpecs = spell.graph.variables
@@ -110,11 +116,16 @@ export const generateVariableNodeSpecs = (
         setVariableSpec,
         getVariableConfig(variable, setConfiguration)
       )
+      const onSpec = updateDefaultValues(
+        onVariableSpec,
+        getVariableConfig(variable, onConfiguration)
+      )
 
       const getSpecJSON = createVariableNodeSpec(getSpec, variable, 'get')
       const setSpecJSON = createVariableNodeSpec(setSpec, variable, 'set')
+      const onSpecJSON = createVariableNodeSpec(onSpec, variable, 'on')
 
-      return [getSpecJSON, setSpecJSON]
+      return [getSpecJSON, setSpecJSON, onSpecJSON]
     })
     .flat()
 
