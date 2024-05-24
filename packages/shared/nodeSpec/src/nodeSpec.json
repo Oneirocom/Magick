@@ -1529,6 +1529,69 @@
     ]
   },
   {
+    "type": "variables/on",
+    "category": "Variable",
+    "label": "On Variable",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState",
+          "hiddenProperties",
+          "variableId",
+          "socketOutputs",
+          "label",
+          "valueTypeName"
+        ]
+      },
+      {
+        "name": "variableId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "valueTypeName",
+        "valueType": "string",
+        "defaultValue": "string"
+      },
+      {
+        "name": "variableNames",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
     "type": "events/memory/onMemory",
     "category": "Event",
     "label": "On Memory Added",
@@ -1980,7 +2043,7 @@
   },
   {
     "type": "variables/get",
-    "category": "Query",
+    "category": "Variable",
     "label": "Get",
     "inputs": [],
     "outputs": [],
@@ -2054,7 +2117,7 @@
   },
   {
     "type": "variables/set",
-    "category": "Query",
+    "category": "Variable",
     "label": "Set",
     "inputs": [
       {
