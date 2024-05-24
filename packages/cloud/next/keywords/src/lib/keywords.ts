@@ -220,4 +220,61 @@ export class KeywordsService {
     const { models } = data
     return this.groupModelsByProvider(models)
   }
+
+  async handleSubscriptionRenewal({
+    userId,
+    subscriptionName,
+  }: {
+    userId: string
+    subscriptionName: string
+  }): Promise<ProxyUser | null> {
+    const isWizard = subscriptionName === 'WIZARD'
+    let mpUser: ProxyUser
+    if (isWizard) {
+      mpUser = await this.fetchProxyWallet(`MP_${userId}`)
+
+      if (!mpUser.customer_identifier) {
+        throw new Error('User proxy data not found')
+      }
+
+      mpUser = await this.updateProxyWallet(`MP_${userId}`, {
+        period_budget: 10,
+        period_start: new Date().toISOString(),
+        budget_duration: 'monthly',
+      })
+
+      if (!mpUser.customer_identifier) {
+        throw new Error('Failed to update mp user')
+      }
+      return mpUser
+    }
+    return null
+  }
+
+  async handleSubscriptionCancellation({
+    userId,
+    subscriptionName,
+  }: {
+    userId: string
+    subscriptionName: string
+  }) {
+    const isWizard = subscriptionName === 'WIZARD'
+    if (isWizard) {
+      const mpUser = await this.fetchProxyWallet(`MP_${userId}`)
+
+      if (!mpUser.customer_identifier) {
+        throw new Error('User proxy data not found')
+      }
+
+      const updatedMpUser = await this.updateProxyWallet(`MP_${userId}`, {
+        period_budget: 0,
+        period_start: new Date().toISOString(),
+        budget_duration: 'monthly',
+      })
+
+      if (!updatedMpUser.customer_identifier) {
+        throw new Error('Failed to update mp user')
+      }
+    }
+  }
 }
