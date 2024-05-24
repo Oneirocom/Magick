@@ -84,6 +84,7 @@ import { getManyVariables } from './nodes/query/getManyVariables'
 import { LLMProviderKeys } from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
+import { onVariableChanged } from './nodes/events/onVariableChanged'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -136,6 +137,7 @@ export class CorePlugin extends CoreEventsPlugin<
     LifecycleOnTick,
     messageEvent,
     objectDestructure,
+    onVariableChanged,
     onMemory,
     parseCommand,
     queryEventHistory,
