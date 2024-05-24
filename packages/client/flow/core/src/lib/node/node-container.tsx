@@ -68,6 +68,13 @@ const NodeContainer: React.FC<PropsWithChildren<NodeProps>> = ({
     }
   }
 
+  if (title.includes('variables/on')) {
+    const variableName = config.socketOutputs[0]?.name
+    const eventColorName = categoryColorMap['Event']
+    innerLabel = `On ${variableName || 'Variable'}`
+    ;[backgroundColor, textColor] = colors[eventColorName]
+  }
+
   const handleLabelDoubleClick = () => {
     setIsEditing(true)
   }
