@@ -46,6 +46,7 @@ export const flowToBehave = (
       graph.data.comments.push({
         id: node.id,
         text: node.data.text,
+        fontSize: node.data.fontSize,
         width: node.width,
         height: node.height,
         metadata: {
