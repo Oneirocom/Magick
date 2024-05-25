@@ -713,7 +713,7 @@
   },
   {
     "type": "queries/messages/clearMessageHistory",
-    "category": "Flow",
+    "category": "Query",
     "label": "Clear Message History",
     "inputs": [
       {
@@ -1156,6 +1156,11 @@
         "defaultValue": ""
       },
       {
+        "name": "types",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
         "name": "filter",
         "valueType": "object",
         "defaultValue": "{}"
@@ -1179,7 +1184,7 @@
   },
   {
     "type": "queries/messages/getMessageHistory",
-    "category": "Flow",
+    "category": "Query",
     "label": "Message History",
     "inputs": [
       {
@@ -1652,13 +1657,17 @@
       {
         "name": "content",
         "valueType": "string"
+      },
+      {
+        "name": "isCommand",
+        "valueType": "boolean"
       }
     ],
     "configuration": []
   },
   {
     "type": "queries/events/eventHistory",
-    "category": "Flow",
+    "category": "Action",
     "label": "Event History",
     "inputs": [
       {
