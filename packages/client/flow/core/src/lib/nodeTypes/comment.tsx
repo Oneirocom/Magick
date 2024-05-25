@@ -62,8 +62,6 @@ const CommentNodeRaw = ({ data, selected, id }: NodeProps<MagickNodeType>) => {
         onResize={onResize}
         color="#ff0071"
         isVisible={selected || false}
-        minWidth={300}
-        minHeight={50}
       />
       <NodeToolbar position={Position.Top} className="flex gap-2">
         <Button
