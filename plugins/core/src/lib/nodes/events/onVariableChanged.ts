@@ -86,11 +86,14 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
       }
 
       const onVariableChangedEvent = ({ name, value, event }) => {
-        if (
-          configuration.variableNames.length &&
-          !configuration.variableNames.includes(name)
-        )
-          return
+        const variableId = configuration.variableId
+        if (!variableId) return
+
+        const variable = graph.variables[variableId]
+        if (!variable) return
+
+        if (variable.name !== name) return
+
         const output = configuration.socketOutputs[0]
         handleState(event, false)
         write(output.name, value)
