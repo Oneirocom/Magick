@@ -25,7 +25,11 @@ export const variablesReset = makeFlowNodeDefinition({
 
     // iterate over all variables
     for (const variable of Object.values(variables)) {
-      await variableService.setVariable(variable.name, variable.initialValue)
+      await variableService.setVariable(
+        variable.name,
+        variable.initialValue,
+        true
+      )
     }
 
     commit('flow')
