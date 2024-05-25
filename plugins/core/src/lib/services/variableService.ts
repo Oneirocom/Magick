@@ -9,6 +9,7 @@ import { EventPayload } from 'server/plugin'
 type Payload = {
   name: string
   value: any
+  lastValue: any
   event: EventPayload
 }
 
@@ -89,10 +90,16 @@ export class VariableService
   async setByKey(key: string, value: any, skipSend = false): Promise<void> {
     await this.keyv.set(key, value)
     const name = this.getNameFromKey(key)
+    const lastValue = await this.keyv.get(key)
 
     console.log('Skip send: ', skipSend)
     if (skipSend) return
-    this.emit('variableChanged', { name, value, event: this.currentEvent })
+    this.emit('variableChanged', {
+      name,
+      value,
+      lastValue,
+      event: this.currentEvent,
+    })
   }
 
   async getByKey(key: string): Promise<any> {
@@ -111,12 +118,17 @@ export class VariableService
     if (Array.isArray(value)) {
       value = new ArrayVariable(value, key)
     }
-
+    const lastValue = await this.keyv.get(key)
     await this.keyv.set(key, value)
     console.log('Skip send: ', skipSend)
     console.log('For name: ', name)
     if (skipSend) return
-    this.emit('variableChanged', { name, value, event: this.currentEvent })
+    this.emit('variableChanged', {
+      name,
+      value,
+      lastValue,
+      event: this.currentEvent,
+    })
   }
 
   // Get a variable from the storage.
