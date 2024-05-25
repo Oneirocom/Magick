@@ -4,7 +4,7 @@ import { IEventStore } from 'server/grimoire'
 export const clearMessageHistory = makeFlowNodeDefinition({
   typeName: 'queries/messages/clearMessageHistory',
   otherTypeNames: ['events/clearMessageHistory'],
-  category: NodeCategory.Flow,
+  category: NodeCategory.Query,
   label: 'Clear Message History',
   configuration: {
     hiddenProperties: {
