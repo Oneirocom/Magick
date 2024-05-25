@@ -5,7 +5,7 @@ import { IEventStore } from 'server/grimoire'
 export const queryEventHistory = makeFlowNodeDefinition({
   typeName: 'queries/events/eventHistory',
   otherTypeNames: ['events/eventHistory'],
-  category: NodeCategory.Flow,
+  category: NodeCategory.Action,
   label: 'Event History',
   configuration: {
     hiddenProperties: {
