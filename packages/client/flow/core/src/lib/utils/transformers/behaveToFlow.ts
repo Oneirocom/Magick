@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import type { GraphJSON } from '@magickml/behave-graph'
 import { getNodeSpec } from 'shared/nodeSpec'
@@ -39,6 +39,7 @@ export const behaveToFlow = (
       },
       data: {
         text: comment.text,
+        fontSize: comment.fontSize,
       },
     })
   })
