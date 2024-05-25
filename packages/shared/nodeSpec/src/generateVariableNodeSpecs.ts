@@ -10,7 +10,8 @@ type ConfigUpdate = {
 
 export const getVariableConfig = (
   variable: VariableJSON,
-  configuration: Record<string, any>
+  configuration: Record<string, any>,
+  type?: 'get' | 'set' | 'on'
 ): ConfigUpdate => {
   const socketInputs = configuration.socketInputs
   const socketOutputs = configuration.socketOutputs
@@ -32,6 +33,16 @@ export const getVariableConfig = (
 
   if (socketOutputs) {
     configUpdate['socketOutputs'] = [socket]
+  }
+
+  if (type === 'on') {
+    configUpdate['socketOutputs'] = [
+      socket,
+      {
+        name: 'lastValue',
+        valueType: variable.valueTypeName,
+      },
+    ]
   }
 
   return configUpdate
@@ -118,7 +129,7 @@ export const generateVariableNodeSpecs = (
       )
       const onSpec = updateDefaultValues(
         onVariableSpec,
-        getVariableConfig(variable, onConfiguration)
+        getVariableConfig(variable, onConfiguration, 'on')
       )
 
       const getSpecJSON = createVariableNodeSpec(getSpec, variable, 'get')

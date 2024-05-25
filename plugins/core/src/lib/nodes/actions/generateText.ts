@@ -171,6 +171,8 @@ export const generateText = makeFlowNodeDefinition({
           { role: 'user', content: prompt },
         ] as Message[]
 
+        const stopSequences = stop.split(',').map(s => s.trim())
+
         const request = {
           model,
           providerApiKeyName,
@@ -179,11 +181,13 @@ export const generateText = makeFlowNodeDefinition({
           options: {
             temperature,
             top_p,
-            ...(stop ? { stop_sequences: [stop] } : {}),
+            ...(stop ? { stop: stopSequences } : {}),
             ...(customBaseUrl ? { base_url: customBaseUrl } : {}),
             max_tokens,
           },
         }
+
+        console.log('REQUEST OPTIONS', request.options)
 
         const processNextChunk = async iterator => {
           const result = await iterator.next()
