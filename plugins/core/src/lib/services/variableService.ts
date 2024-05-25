@@ -18,10 +18,10 @@ export type VariableServiceEvents = {
 
 // This is the interface you'll use to get and set variables.
 export interface IVariableService extends TypedEmitter<VariableServiceEvents> {
-  setVariable(name: string, value: any): Promise<void>
+  setVariable(name: string, value: any, skipSend?: boolean): Promise<void>
   getVariable(name: string): Promise<any>
 
-  setByKey(key: string, value: any): Promise<void>
+  setByKey(key: string, value: any, skipSend?: boolean): Promise<void>
   getByKey(key: string): Promise<any>
 }
 
@@ -86,9 +86,12 @@ export class VariableService
     return parts[parts.length - 1]
   }
 
-  async setByKey(key: string, value: any): Promise<void> {
+  async setByKey(key: string, value: any, skipSend = false): Promise<void> {
     await this.keyv.set(key, value)
     const name = this.getNameFromKey(key)
+
+    console.log('Skip send: ', skipSend)
+    if (skipSend) return
     this.emit('variableChanged', { name, value, event: this.currentEvent })
   }
 
@@ -102,7 +105,7 @@ export class VariableService
   }
 
   // Set a variable in the storage.
-  async setVariable(name: string, value: any): Promise<void> {
+  async setVariable(name: string, value: any, skipSend = false): Promise<void> {
     const key = this.getKey(name)
 
     if (Array.isArray(value)) {
@@ -110,6 +113,9 @@ export class VariableService
     }
 
     await this.keyv.set(key, value)
+    console.log('Skip send: ', skipSend)
+    console.log('For name: ', name)
+    if (skipSend) return
     this.emit('variableChanged', { name, value, event: this.currentEvent })
   }
 
