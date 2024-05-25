@@ -17,6 +17,10 @@ export const getMemories = makeFlowNodeDefinition({
       label: 'Type',
       valueType: 'string',
     },
+    types: {
+      label: 'Types',
+      valueType: 'array',
+    },
     filter: {
       label: 'Filter',
       valueType: 'object',
@@ -41,14 +45,18 @@ export const getMemories = makeFlowNodeDefinition({
     const filter = read('filter') as Partial<Omit<Memory, 'event'>>
     const limit = Number(read('limit')) as number
     const type = read('type') as string
+    const types = (read('types') as string[]) || []
 
     if (type) {
-      filter.type = type
+      if (!types.includes(type)) {
+        types.push(type)
+      }
     }
 
     const { memories, messages } = await memoryService.getMemories(
       limit,
-      filter
+      filter,
+      types
     )
     write('memories', memories)
     write('messages', messages)
