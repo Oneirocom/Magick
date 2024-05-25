@@ -134,7 +134,13 @@ export class MemoryStreamService extends EventEmitter {
     return deletedMemories
   }
 
-  async getMemories(limit = 10, filter: Partial<Omit<Memory, 'event'>>) {
+  async getMemories(
+    limit = 10,
+    filter: Partial<Omit<Memory, 'event'>>,
+    types: string[] = []
+  ) {
+    const typeFilter = types.length > 0 ? { type: { in: types } } : {}
+
     const memories = (
       await this.prisma.memory.findMany({
         take: limit,
@@ -142,6 +148,7 @@ export class MemoryStreamService extends EventEmitter {
         where: {
           channel: this.currentEvent.channel,
           agentId: this.agentId,
+          ...typeFilter,
           ...filter,
         },
       })
