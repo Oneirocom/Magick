@@ -20580,7 +20580,7 @@ export namespace Prisma {
     agentId: number
     channelKey: number
     channelName: number
-    intialEvent: number
+    initialEvent: number
     channelActive: number
     createdAt: number
     _all: number
@@ -20610,7 +20610,7 @@ export namespace Prisma {
     agentId?: true
     channelKey?: true
     channelName?: true
-    intialEvent?: true
+    initialEvent?: true
     channelActive?: true
     createdAt?: true
     _all?: true
@@ -20693,7 +20693,7 @@ export namespace Prisma {
     agentId: string
     channelKey: string
     channelName: string
-    intialEvent: JsonValue
+    initialEvent: JsonValue
     channelActive: boolean
     createdAt: Date
     _count: Agent_channelsCountAggregateOutputType | null
@@ -20720,7 +20720,7 @@ export namespace Prisma {
     agentId?: boolean
     channelKey?: boolean
     channelName?: boolean
-    intialEvent?: boolean
+    initialEvent?: boolean
     channelActive?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["agent_channels"]>
@@ -20730,7 +20730,7 @@ export namespace Prisma {
     agentId?: boolean
     channelKey?: boolean
     channelName?: boolean
-    intialEvent?: boolean
+    initialEvent?: boolean
     channelActive?: boolean
     createdAt?: boolean
   }
@@ -20745,7 +20745,7 @@ export namespace Prisma {
       agentId: string
       channelKey: string
       channelName: string
-      intialEvent: Prisma.JsonValue
+      initialEvent: Prisma.JsonValue
       channelActive: boolean
       createdAt: Date
     }, ExtArgs["result"]["agent_channels"]>
@@ -21146,7 +21146,7 @@ export namespace Prisma {
     readonly agentId: FieldRef<"agent_channels", 'String'>
     readonly channelKey: FieldRef<"agent_channels", 'String'>
     readonly channelName: FieldRef<"agent_channels", 'String'>
-    readonly intialEvent: FieldRef<"agent_channels", 'Json'>
+    readonly initialEvent: FieldRef<"agent_channels", 'Json'>
     readonly channelActive: FieldRef<"agent_channels", 'Boolean'>
     readonly createdAt: FieldRef<"agent_channels", 'DateTime'>
   }
@@ -21724,7 +21724,7 @@ export namespace Prisma {
     agentId: 'agentId',
     channelKey: 'channelKey',
     channelName: 'channelName',
-    intialEvent: 'intialEvent',
+    initialEvent: 'initialEvent',
     channelActive: 'channelActive',
     createdAt: 'createdAt'
   };
@@ -23571,7 +23571,7 @@ export namespace Prisma {
     agentId?: StringFilter<"agent_channels"> | string
     channelKey?: StringFilter<"agent_channels"> | string
     channelName?: StringFilter<"agent_channels"> | string
-    intialEvent?: JsonFilter<"agent_channels">
+    initialEvent?: JsonFilter<"agent_channels">
     channelActive?: BoolFilter<"agent_channels"> | boolean
     createdAt?: DateTimeFilter<"agent_channels"> | Date | string
   }
@@ -23581,7 +23581,7 @@ export namespace Prisma {
     agentId?: SortOrder
     channelKey?: SortOrder
     channelName?: SortOrder
-    intialEvent?: SortOrder
+    initialEvent?: SortOrder
     channelActive?: SortOrder
     createdAt?: SortOrder
     _relevance?: agent_channelsOrderByRelevanceInput
@@ -23595,7 +23595,7 @@ export namespace Prisma {
     agentId?: StringFilter<"agent_channels"> | string
     channelKey?: StringFilter<"agent_channels"> | string
     channelName?: StringFilter<"agent_channels"> | string
-    intialEvent?: JsonFilter<"agent_channels">
+    initialEvent?: JsonFilter<"agent_channels">
     channelActive?: BoolFilter<"agent_channels"> | boolean
     createdAt?: DateTimeFilter<"agent_channels"> | Date | string
   }, "id">
@@ -23605,7 +23605,7 @@ export namespace Prisma {
     agentId?: SortOrder
     channelKey?: SortOrder
     channelName?: SortOrder
-    intialEvent?: SortOrder
+    initialEvent?: SortOrder
     channelActive?: SortOrder
     createdAt?: SortOrder
     _count?: agent_channelsCountOrderByAggregateInput
@@ -23621,7 +23621,7 @@ export namespace Prisma {
     agentId?: StringWithAggregatesFilter<"agent_channels"> | string
     channelKey?: StringWithAggregatesFilter<"agent_channels"> | string
     channelName?: StringWithAggregatesFilter<"agent_channels"> | string
-    intialEvent?: JsonWithAggregatesFilter<"agent_channels">
+    initialEvent?: JsonWithAggregatesFilter<"agent_channels">
     channelActive?: BoolWithAggregatesFilter<"agent_channels"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"agent_channels"> | Date | string
   }
@@ -25228,7 +25228,7 @@ export namespace Prisma {
     agentId: string
     channelKey: string
     channelName: string
-    intialEvent: JsonNullValueInput | InputJsonValue
+    initialEvent: JsonNullValueInput | InputJsonValue
     channelActive?: boolean
     createdAt?: Date | string
   }
@@ -25238,7 +25238,7 @@ export namespace Prisma {
     agentId: string
     channelKey: string
     channelName: string
-    intialEvent: JsonNullValueInput | InputJsonValue
+    initialEvent: JsonNullValueInput | InputJsonValue
     channelActive?: boolean
     createdAt?: Date | string
   }
@@ -25248,7 +25248,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     channelKey?: StringFieldUpdateOperationsInput | string
     channelName?: StringFieldUpdateOperationsInput | string
-    intialEvent?: JsonNullValueInput | InputJsonValue
+    initialEvent?: JsonNullValueInput | InputJsonValue
     channelActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25258,7 +25258,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     channelKey?: StringFieldUpdateOperationsInput | string
     channelName?: StringFieldUpdateOperationsInput | string
-    intialEvent?: JsonNullValueInput | InputJsonValue
+    initialEvent?: JsonNullValueInput | InputJsonValue
     channelActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25268,7 +25268,7 @@ export namespace Prisma {
     agentId: string
     channelKey: string
     channelName: string
-    intialEvent: JsonNullValueInput | InputJsonValue
+    initialEvent: JsonNullValueInput | InputJsonValue
     channelActive?: boolean
     createdAt?: Date | string
   }
@@ -25278,7 +25278,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     channelKey?: StringFieldUpdateOperationsInput | string
     channelName?: StringFieldUpdateOperationsInput | string
-    intialEvent?: JsonNullValueInput | InputJsonValue
+    initialEvent?: JsonNullValueInput | InputJsonValue
     channelActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25288,7 +25288,7 @@ export namespace Prisma {
     agentId?: StringFieldUpdateOperationsInput | string
     channelKey?: StringFieldUpdateOperationsInput | string
     channelName?: StringFieldUpdateOperationsInput | string
-    intialEvent?: JsonNullValueInput | InputJsonValue
+    initialEvent?: JsonNullValueInput | InputJsonValue
     channelActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26644,7 +26644,7 @@ export namespace Prisma {
     agentId?: SortOrder
     channelKey?: SortOrder
     channelName?: SortOrder
-    intialEvent?: SortOrder
+    initialEvent?: SortOrder
     channelActive?: SortOrder
     createdAt?: SortOrder
   }
