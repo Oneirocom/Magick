@@ -108,6 +108,11 @@ export type seraphEvents = $Result.DefaultSelection<Prisma.$seraphEventsPayload>
  * 
  */
 export type Memory = $Result.DefaultSelection<Prisma.$MemoryPayload>
+/**
+ * Model agent_channels
+ * 
+ */
+export type agent_channels = $Result.DefaultSelection<Prisma.$agent_channelsPayload>
 
 /**
  * Enums
@@ -458,6 +463,16 @@ export class PrismaClient<
     * ```
     */
   get memory(): Prisma.MemoryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.agent_channels`: Exposes CRUD operations for the **agent_channels** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Agent_channels
+    * const agent_channels = await prisma.agent_channels.findMany()
+    * ```
+    */
+  get agent_channels(): Prisma.agent_channelsDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -953,7 +968,8 @@ export namespace Prisma {
     tasks: 'tasks',
     Webhook: 'Webhook',
     seraphEvents: 'seraphEvents',
-    Memory: 'Memory'
+    Memory: 'Memory',
+    agent_channels: 'agent_channels'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -970,7 +986,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'agent_credentials' | 'agents' | 'chatMessages' | 'credentials' | 'documents' | 'embeddings' | 'public_events' | 'graphEvents' | 'public_knex_migrations' | 'public_knex_migrations_lock' | 'knowledge' | 'pluginState' | 'request' | 'spellReleases' | 'spells' | 'tasks' | 'webhook' | 'seraphEvents' | 'memory'
+      modelProps: 'agent_credentials' | 'agents' | 'chatMessages' | 'credentials' | 'documents' | 'embeddings' | 'public_events' | 'graphEvents' | 'public_knex_migrations' | 'public_knex_migrations_lock' | 'knowledge' | 'pluginState' | 'request' | 'spellReleases' | 'spells' | 'tasks' | 'webhook' | 'seraphEvents' | 'memory' | 'agent_channels'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -2225,6 +2241,72 @@ export namespace Prisma {
           count: {
             args: Prisma.MemoryCountArgs<ExtArgs>,
             result: $Utils.Optional<MemoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      agent_channels: {
+        payload: Prisma.$agent_channelsPayload<ExtArgs>
+        fields: Prisma.agent_channelsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.agent_channelsFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.agent_channelsFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>
+          }
+          findFirst: {
+            args: Prisma.agent_channelsFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.agent_channelsFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>
+          }
+          findMany: {
+            args: Prisma.agent_channelsFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>[]
+          }
+          create: {
+            args: Prisma.agent_channelsCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>
+          }
+          createMany: {
+            args: Prisma.agent_channelsCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.agent_channelsDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>
+          }
+          update: {
+            args: Prisma.agent_channelsUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>
+          }
+          deleteMany: {
+            args: Prisma.agent_channelsDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.agent_channelsUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.agent_channelsUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>
+          }
+          aggregate: {
+            args: Prisma.Agent_channelsAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateAgent_channels>
+          }
+          groupBy: {
+            args: Prisma.agent_channelsGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<Agent_channelsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.agent_channelsCountArgs<ExtArgs>,
+            result: $Utils.Optional<Agent_channelsCountAggregateOutputType> | number
           }
         }
       }
@@ -20466,6 +20548,881 @@ export namespace Prisma {
 
 
   /**
+   * Model agent_channels
+   */
+
+  export type AggregateAgent_channels = {
+    _count: Agent_channelsCountAggregateOutputType | null
+    _min: Agent_channelsMinAggregateOutputType | null
+    _max: Agent_channelsMaxAggregateOutputType | null
+  }
+
+  export type Agent_channelsMinAggregateOutputType = {
+    id: string | null
+    agentId: string | null
+    channelKey: string | null
+    channelName: string | null
+    channelActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type Agent_channelsMaxAggregateOutputType = {
+    id: string | null
+    agentId: string | null
+    channelKey: string | null
+    channelName: string | null
+    channelActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type Agent_channelsCountAggregateOutputType = {
+    id: number
+    agentId: number
+    channelKey: number
+    channelName: number
+    intialEvent: number
+    channelActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type Agent_channelsMinAggregateInputType = {
+    id?: true
+    agentId?: true
+    channelKey?: true
+    channelName?: true
+    channelActive?: true
+    createdAt?: true
+  }
+
+  export type Agent_channelsMaxAggregateInputType = {
+    id?: true
+    agentId?: true
+    channelKey?: true
+    channelName?: true
+    channelActive?: true
+    createdAt?: true
+  }
+
+  export type Agent_channelsCountAggregateInputType = {
+    id?: true
+    agentId?: true
+    channelKey?: true
+    channelName?: true
+    intialEvent?: true
+    channelActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type Agent_channelsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which agent_channels to aggregate.
+     */
+    where?: agent_channelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of agent_channels to fetch.
+     */
+    orderBy?: agent_channelsOrderByWithRelationAndSearchRelevanceInput | agent_channelsOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: agent_channelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` agent_channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` agent_channels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned agent_channels
+    **/
+    _count?: true | Agent_channelsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Agent_channelsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Agent_channelsMaxAggregateInputType
+  }
+
+  export type GetAgent_channelsAggregateType<T extends Agent_channelsAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgent_channels]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgent_channels[P]>
+      : GetScalarType<T[P], AggregateAgent_channels[P]>
+  }
+
+
+
+
+  export type agent_channelsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: agent_channelsWhereInput
+    orderBy?: agent_channelsOrderByWithAggregationInput | agent_channelsOrderByWithAggregationInput[]
+    by: Agent_channelsScalarFieldEnum[] | Agent_channelsScalarFieldEnum
+    having?: agent_channelsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Agent_channelsCountAggregateInputType | true
+    _min?: Agent_channelsMinAggregateInputType
+    _max?: Agent_channelsMaxAggregateInputType
+  }
+
+  export type Agent_channelsGroupByOutputType = {
+    id: string
+    agentId: string
+    channelKey: string
+    channelName: string
+    intialEvent: JsonValue
+    channelActive: boolean
+    createdAt: Date
+    _count: Agent_channelsCountAggregateOutputType | null
+    _min: Agent_channelsMinAggregateOutputType | null
+    _max: Agent_channelsMaxAggregateOutputType | null
+  }
+
+  type GetAgent_channelsGroupByPayload<T extends agent_channelsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Agent_channelsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Agent_channelsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Agent_channelsGroupByOutputType[P]>
+            : GetScalarType<T[P], Agent_channelsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type agent_channelsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    channelKey?: boolean
+    channelName?: boolean
+    intialEvent?: boolean
+    channelActive?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["agent_channels"]>
+
+  export type agent_channelsSelectScalar = {
+    id?: boolean
+    agentId?: boolean
+    channelKey?: boolean
+    channelName?: boolean
+    intialEvent?: boolean
+    channelActive?: boolean
+    createdAt?: boolean
+  }
+
+
+
+  export type $agent_channelsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "agent_channels"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      agentId: string
+      channelKey: string
+      channelName: string
+      intialEvent: Prisma.JsonValue
+      channelActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["agent_channels"]>
+    composites: {}
+  }
+
+
+  type agent_channelsGetPayload<S extends boolean | null | undefined | agent_channelsDefaultArgs> = $Result.GetResult<Prisma.$agent_channelsPayload, S>
+
+  type agent_channelsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<agent_channelsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: Agent_channelsCountAggregateInputType | true
+    }
+
+  export interface agent_channelsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['agent_channels'], meta: { name: 'agent_channels' } }
+    /**
+     * Find zero or one Agent_channels that matches the filter.
+     * @param {agent_channelsFindUniqueArgs} args - Arguments to find a Agent_channels
+     * @example
+     * // Get one Agent_channels
+     * const agent_channels = await prisma.agent_channels.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends agent_channelsFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, agent_channelsFindUniqueArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one Agent_channels that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {agent_channelsFindUniqueOrThrowArgs} args - Arguments to find a Agent_channels
+     * @example
+     * // Get one Agent_channels
+     * const agent_channels = await prisma.agent_channels.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends agent_channelsFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first Agent_channels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {agent_channelsFindFirstArgs} args - Arguments to find a Agent_channels
+     * @example
+     * // Get one Agent_channels
+     * const agent_channels = await prisma.agent_channels.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends agent_channelsFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsFindFirstArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first Agent_channels that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {agent_channelsFindFirstOrThrowArgs} args - Arguments to find a Agent_channels
+     * @example
+     * // Get one Agent_channels
+     * const agent_channels = await prisma.agent_channels.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends agent_channelsFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Agent_channels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {agent_channelsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Agent_channels
+     * const agent_channels = await prisma.agent_channels.findMany()
+     * 
+     * // Get first 10 Agent_channels
+     * const agent_channels = await prisma.agent_channels.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agent_channelsWithIdOnly = await prisma.agent_channels.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends agent_channelsFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a Agent_channels.
+     * @param {agent_channelsCreateArgs} args - Arguments to create a Agent_channels.
+     * @example
+     * // Create one Agent_channels
+     * const Agent_channels = await prisma.agent_channels.create({
+     *   data: {
+     *     // ... data to create a Agent_channels
+     *   }
+     * })
+     * 
+    **/
+    create<T extends agent_channelsCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, agent_channelsCreateArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Agent_channels.
+     * @param {agent_channelsCreateManyArgs} args - Arguments to create many Agent_channels.
+     * @example
+     * // Create many Agent_channels
+     * const agent_channels = await prisma.agent_channels.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+    **/
+    createMany<T extends agent_channelsCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Agent_channels.
+     * @param {agent_channelsDeleteArgs} args - Arguments to delete one Agent_channels.
+     * @example
+     * // Delete one Agent_channels
+     * const Agent_channels = await prisma.agent_channels.delete({
+     *   where: {
+     *     // ... filter to delete one Agent_channels
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends agent_channelsDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, agent_channelsDeleteArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one Agent_channels.
+     * @param {agent_channelsUpdateArgs} args - Arguments to update one Agent_channels.
+     * @example
+     * // Update one Agent_channels
+     * const agent_channels = await prisma.agent_channels.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends agent_channelsUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, agent_channelsUpdateArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Agent_channels.
+     * @param {agent_channelsDeleteManyArgs} args - Arguments to filter Agent_channels to delete.
+     * @example
+     * // Delete a few Agent_channels
+     * const { count } = await prisma.agent_channels.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends agent_channelsDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Agent_channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {agent_channelsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Agent_channels
+     * const agent_channels = await prisma.agent_channels.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends agent_channelsUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, agent_channelsUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Agent_channels.
+     * @param {agent_channelsUpsertArgs} args - Arguments to update or create a Agent_channels.
+     * @example
+     * // Update or create a Agent_channels
+     * const agent_channels = await prisma.agent_channels.upsert({
+     *   create: {
+     *     // ... data to create a Agent_channels
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Agent_channels we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends agent_channelsUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, agent_channelsUpsertArgs<ExtArgs>>
+    ): Prisma__agent_channelsClient<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Agent_channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {agent_channelsCountArgs} args - Arguments to filter Agent_channels to count.
+     * @example
+     * // Count the number of Agent_channels
+     * const count = await prisma.agent_channels.count({
+     *   where: {
+     *     // ... the filter for the Agent_channels we want to count
+     *   }
+     * })
+    **/
+    count<T extends agent_channelsCountArgs>(
+      args?: Subset<T, agent_channelsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Agent_channelsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Agent_channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Agent_channelsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Agent_channelsAggregateArgs>(args: Subset<T, Agent_channelsAggregateArgs>): Prisma.PrismaPromise<GetAgent_channelsAggregateType<T>>
+
+    /**
+     * Group by Agent_channels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {agent_channelsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends agent_channelsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: agent_channelsGroupByArgs['orderBy'] }
+        : { orderBy?: agent_channelsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, agent_channelsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgent_channelsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the agent_channels model
+   */
+  readonly fields: agent_channelsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for agent_channels.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__agent_channelsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the agent_channels model
+   */ 
+  interface agent_channelsFieldRefs {
+    readonly id: FieldRef<"agent_channels", 'String'>
+    readonly agentId: FieldRef<"agent_channels", 'String'>
+    readonly channelKey: FieldRef<"agent_channels", 'String'>
+    readonly channelName: FieldRef<"agent_channels", 'String'>
+    readonly intialEvent: FieldRef<"agent_channels", 'Json'>
+    readonly channelActive: FieldRef<"agent_channels", 'Boolean'>
+    readonly createdAt: FieldRef<"agent_channels", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * agent_channels findUnique
+   */
+  export type agent_channelsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * Filter, which agent_channels to fetch.
+     */
+    where: agent_channelsWhereUniqueInput
+  }
+
+  /**
+   * agent_channels findUniqueOrThrow
+   */
+  export type agent_channelsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * Filter, which agent_channels to fetch.
+     */
+    where: agent_channelsWhereUniqueInput
+  }
+
+  /**
+   * agent_channels findFirst
+   */
+  export type agent_channelsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * Filter, which agent_channels to fetch.
+     */
+    where?: agent_channelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of agent_channels to fetch.
+     */
+    orderBy?: agent_channelsOrderByWithRelationAndSearchRelevanceInput | agent_channelsOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for agent_channels.
+     */
+    cursor?: agent_channelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` agent_channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` agent_channels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of agent_channels.
+     */
+    distinct?: Agent_channelsScalarFieldEnum | Agent_channelsScalarFieldEnum[]
+  }
+
+  /**
+   * agent_channels findFirstOrThrow
+   */
+  export type agent_channelsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * Filter, which agent_channels to fetch.
+     */
+    where?: agent_channelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of agent_channels to fetch.
+     */
+    orderBy?: agent_channelsOrderByWithRelationAndSearchRelevanceInput | agent_channelsOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for agent_channels.
+     */
+    cursor?: agent_channelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` agent_channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` agent_channels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of agent_channels.
+     */
+    distinct?: Agent_channelsScalarFieldEnum | Agent_channelsScalarFieldEnum[]
+  }
+
+  /**
+   * agent_channels findMany
+   */
+  export type agent_channelsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * Filter, which agent_channels to fetch.
+     */
+    where?: agent_channelsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of agent_channels to fetch.
+     */
+    orderBy?: agent_channelsOrderByWithRelationAndSearchRelevanceInput | agent_channelsOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing agent_channels.
+     */
+    cursor?: agent_channelsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` agent_channels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` agent_channels.
+     */
+    skip?: number
+    distinct?: Agent_channelsScalarFieldEnum | Agent_channelsScalarFieldEnum[]
+  }
+
+  /**
+   * agent_channels create
+   */
+  export type agent_channelsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * The data needed to create a agent_channels.
+     */
+    data: XOR<agent_channelsCreateInput, agent_channelsUncheckedCreateInput>
+  }
+
+  /**
+   * agent_channels createMany
+   */
+  export type agent_channelsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many agent_channels.
+     */
+    data: agent_channelsCreateManyInput | agent_channelsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * agent_channels update
+   */
+  export type agent_channelsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * The data needed to update a agent_channels.
+     */
+    data: XOR<agent_channelsUpdateInput, agent_channelsUncheckedUpdateInput>
+    /**
+     * Choose, which agent_channels to update.
+     */
+    where: agent_channelsWhereUniqueInput
+  }
+
+  /**
+   * agent_channels updateMany
+   */
+  export type agent_channelsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update agent_channels.
+     */
+    data: XOR<agent_channelsUpdateManyMutationInput, agent_channelsUncheckedUpdateManyInput>
+    /**
+     * Filter which agent_channels to update
+     */
+    where?: agent_channelsWhereInput
+  }
+
+  /**
+   * agent_channels upsert
+   */
+  export type agent_channelsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * The filter to search for the agent_channels to update in case it exists.
+     */
+    where: agent_channelsWhereUniqueInput
+    /**
+     * In case the agent_channels found by the `where` argument doesn't exist, create a new agent_channels with this data.
+     */
+    create: XOR<agent_channelsCreateInput, agent_channelsUncheckedCreateInput>
+    /**
+     * In case the agent_channels was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<agent_channelsUpdateInput, agent_channelsUncheckedUpdateInput>
+  }
+
+  /**
+   * agent_channels delete
+   */
+  export type agent_channelsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+    /**
+     * Filter which agent_channels to delete.
+     */
+    where: agent_channelsWhereUniqueInput
+  }
+
+  /**
+   * agent_channels deleteMany
+   */
+  export type agent_channelsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which agent_channels to delete
+     */
+    where?: agent_channelsWhereInput
+  }
+
+  /**
+   * agent_channels without action
+   */
+  export type agent_channelsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -20762,6 +21719,19 @@ export namespace Prisma {
   export type MemoryScalarFieldEnum = (typeof MemoryScalarFieldEnum)[keyof typeof MemoryScalarFieldEnum]
 
 
+  export const Agent_channelsScalarFieldEnum: {
+    id: 'id',
+    agentId: 'agentId',
+    channelKey: 'channelKey',
+    channelName: 'channelName',
+    intialEvent: 'intialEvent',
+    channelActive: 'channelActive',
+    createdAt: 'createdAt'
+  };
+
+  export type Agent_channelsScalarFieldEnum = (typeof Agent_channelsScalarFieldEnum)[keyof typeof Agent_channelsScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -21033,6 +22003,16 @@ export namespace Prisma {
   };
 
   export type MemoryOrderByRelevanceFieldEnum = (typeof MemoryOrderByRelevanceFieldEnum)[keyof typeof MemoryOrderByRelevanceFieldEnum]
+
+
+  export const agent_channelsOrderByRelevanceFieldEnum: {
+    id: 'id',
+    agentId: 'agentId',
+    channelKey: 'channelKey',
+    channelName: 'channelName'
+  };
+
+  export type agent_channelsOrderByRelevanceFieldEnum = (typeof agent_channelsOrderByRelevanceFieldEnum)[keyof typeof agent_channelsOrderByRelevanceFieldEnum]
 
 
   /**
@@ -22581,6 +23561,69 @@ export namespace Prisma {
     channel?: StringWithAggregatesFilter<"Memory"> | string
     agentId?: StringWithAggregatesFilter<"Memory"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Memory"> | Date | string
+  }
+
+  export type agent_channelsWhereInput = {
+    AND?: agent_channelsWhereInput | agent_channelsWhereInput[]
+    OR?: agent_channelsWhereInput[]
+    NOT?: agent_channelsWhereInput | agent_channelsWhereInput[]
+    id?: StringFilter<"agent_channels"> | string
+    agentId?: StringFilter<"agent_channels"> | string
+    channelKey?: StringFilter<"agent_channels"> | string
+    channelName?: StringFilter<"agent_channels"> | string
+    intialEvent?: JsonFilter<"agent_channels">
+    channelActive?: BoolFilter<"agent_channels"> | boolean
+    createdAt?: DateTimeFilter<"agent_channels"> | Date | string
+  }
+
+  export type agent_channelsOrderByWithRelationAndSearchRelevanceInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    channelKey?: SortOrder
+    channelName?: SortOrder
+    intialEvent?: SortOrder
+    channelActive?: SortOrder
+    createdAt?: SortOrder
+    _relevance?: agent_channelsOrderByRelevanceInput
+  }
+
+  export type agent_channelsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: agent_channelsWhereInput | agent_channelsWhereInput[]
+    OR?: agent_channelsWhereInput[]
+    NOT?: agent_channelsWhereInput | agent_channelsWhereInput[]
+    agentId?: StringFilter<"agent_channels"> | string
+    channelKey?: StringFilter<"agent_channels"> | string
+    channelName?: StringFilter<"agent_channels"> | string
+    intialEvent?: JsonFilter<"agent_channels">
+    channelActive?: BoolFilter<"agent_channels"> | boolean
+    createdAt?: DateTimeFilter<"agent_channels"> | Date | string
+  }, "id">
+
+  export type agent_channelsOrderByWithAggregationInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    channelKey?: SortOrder
+    channelName?: SortOrder
+    intialEvent?: SortOrder
+    channelActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: agent_channelsCountOrderByAggregateInput
+    _max?: agent_channelsMaxOrderByAggregateInput
+    _min?: agent_channelsMinOrderByAggregateInput
+  }
+
+  export type agent_channelsScalarWhereWithAggregatesInput = {
+    AND?: agent_channelsScalarWhereWithAggregatesInput | agent_channelsScalarWhereWithAggregatesInput[]
+    OR?: agent_channelsScalarWhereWithAggregatesInput[]
+    NOT?: agent_channelsScalarWhereWithAggregatesInput | agent_channelsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"agent_channels"> | string
+    agentId?: StringWithAggregatesFilter<"agent_channels"> | string
+    channelKey?: StringWithAggregatesFilter<"agent_channels"> | string
+    channelName?: StringWithAggregatesFilter<"agent_channels"> | string
+    intialEvent?: JsonWithAggregatesFilter<"agent_channels">
+    channelActive?: BoolWithAggregatesFilter<"agent_channels"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"agent_channels"> | Date | string
   }
 
   export type agent_credentialsCreateInput = {
@@ -24180,6 +25223,76 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type agent_channelsCreateInput = {
+    id?: string
+    agentId: string
+    channelKey: string
+    channelName: string
+    intialEvent: JsonNullValueInput | InputJsonValue
+    channelActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type agent_channelsUncheckedCreateInput = {
+    id?: string
+    agentId: string
+    channelKey: string
+    channelName: string
+    intialEvent: JsonNullValueInput | InputJsonValue
+    channelActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type agent_channelsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    channelKey?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    intialEvent?: JsonNullValueInput | InputJsonValue
+    channelActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type agent_channelsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    channelKey?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    intialEvent?: JsonNullValueInput | InputJsonValue
+    channelActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type agent_channelsCreateManyInput = {
+    id?: string
+    agentId: string
+    channelKey: string
+    channelName: string
+    intialEvent: JsonNullValueInput | InputJsonValue
+    channelActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type agent_channelsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    channelKey?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    intialEvent?: JsonNullValueInput | InputJsonValue
+    channelActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type agent_channelsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentId?: StringFieldUpdateOperationsInput | string
+    channelKey?: StringFieldUpdateOperationsInput | string
+    channelName?: StringFieldUpdateOperationsInput | string
+    intialEvent?: JsonNullValueInput | InputJsonValue
+    channelActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -25517,6 +26630,40 @@ export namespace Prisma {
     type?: SortOrder
     channel?: SortOrder
     agentId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type agent_channelsOrderByRelevanceInput = {
+    fields: agent_channelsOrderByRelevanceFieldEnum | agent_channelsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type agent_channelsCountOrderByAggregateInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    channelKey?: SortOrder
+    channelName?: SortOrder
+    intialEvent?: SortOrder
+    channelActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type agent_channelsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    channelKey?: SortOrder
+    channelName?: SortOrder
+    channelActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type agent_channelsMinOrderByAggregateInput = {
+    id?: SortOrder
+    agentId?: SortOrder
+    channelKey?: SortOrder
+    channelName?: SortOrder
+    channelActive?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28563,6 +29710,10 @@ export namespace Prisma {
      * @deprecated Use MemoryDefaultArgs instead
      */
     export type MemoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MemoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use agent_channelsDefaultArgs instead
+     */
+    export type agent_channelsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = agent_channelsDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
