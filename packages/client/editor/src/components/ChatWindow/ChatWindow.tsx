@@ -19,7 +19,7 @@ import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
 import { useSelector } from 'react-redux'
-import { useMarkdownProcessor } from 'packages/client/chat/src/lib/use-markdown-processor'
+import { useMarkdownProcessor } from 'chat-window'
 
 const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
