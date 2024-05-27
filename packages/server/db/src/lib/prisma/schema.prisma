@@ -332,7 +332,7 @@ model agent_channels {
   agentId       String
   channelKey    String
   channelName   String
-  intialEvent   Json
+  initialEvent  Json
   channelActive Boolean  @default(true)
   createdAt     DateTime @default(now())
 

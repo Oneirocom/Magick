@@ -350,7 +350,7 @@ exports.Prisma.Agent_channelsScalarFieldEnum = {
   agentId: 'agentId',
   channelKey: 'channelKey',
   channelName: 'channelName',
-  intialEvent: 'intialEvent',
+  initialEvent: 'initialEvent',
   channelActive: 'channelActive',
   createdAt: 'createdAt'
 };

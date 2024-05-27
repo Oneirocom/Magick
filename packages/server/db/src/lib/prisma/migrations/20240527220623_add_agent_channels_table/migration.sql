@@ -4,7 +4,7 @@ CREATE TABLE "public"."agent_channels" (
     "agentId" TEXT NOT NULL,
     "channelKey" TEXT NOT NULL,
     "channelName" TEXT NOT NULL,
-    "intialEvent" JSONB NOT NULL,
+    "initialEvent" JSONB NOT NULL,
     "channelActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
