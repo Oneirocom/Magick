@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
@@ -19,6 +19,7 @@ import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
 import { useSelector } from 'react-redux'
+import { useMarkdownProcessor } from 'packages/client/chat/src/lib/use-markdown-processor'
 
 const ChatWindow = ({ tab, spellName }) => {
   const config = useConfig()
@@ -159,21 +160,27 @@ const ChatWindow = ({ tab, spellName }) => {
     </div>
   )
 
-  const UserMessage = ({ message }) => (
-    <div className="flex flex-row mb-2">
-      <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
-        {message}
+  const UserMessage = ({ message }) => {
+    const content = useMarkdownProcessor(message) as JSX.Element
+    return (
+      <div className="flex flex-row mb-2">
+        <div className="bg-transparent p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
+          {content}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
-  const AgentMessage = ({ message }) => (
-    <div className="flex flex-row mb-2">
-      <div className="bg-slate-700 p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
-        {message}
+  const AgentMessage = ({ message }) => {
+    const content = useMarkdownProcessor(message) as JSX.Element
+    return (
+      <div className="flex flex-row mb-2">
+        <div className="bg-[var(--foreground-color)] p-2 rounded text-white flex-1 text-sm font-mono whitespace-pre-line">
+          {content}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <Window toolbar={toolbar}>
