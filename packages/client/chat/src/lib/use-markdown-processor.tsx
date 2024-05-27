@@ -14,6 +14,7 @@ import {
 import flattenChildren from 'react-keyed-flatten-children'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeReact from 'rehype-react'
+import 'highlight.js/styles/monokai.css'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
@@ -128,7 +129,7 @@ export const useMarkdownProcessor = (content: string) => {
           pre: ({ children }: JSX.IntrinsicElements['pre']) => {
             return (
               <div className="relative mb-6">
-                <pre className="whitespace-pre-wrap p-4 rounded-lg rounded-tl-none rounded-br-none bg-ds-neutral [&>code.hljs]:p-0 [&>code.hljs]:bg-transparent font-code text-xs md:text-sm lg:text-base overflow-x-auto flex items-start">
+                <pre className="whitespace-pre-wrap p-4 rounded-lg rounded-tl-none rounded-br-none bg-black [&>code.hljs]:p-0 [&>code.hljs]:bg-transparent font-code text-xs md:text-sm lg:text-base overflow-x-auto flex items-start">
                   {children}
                 </pre>
               </div>
@@ -250,7 +251,7 @@ const CodeBlock = ({ children, className }: JSX.IntrinsicElements['code']) => {
   }
 
   return (
-    <code className="inline-block font-code bg-ds-neutral  p-0.5 -my-0.5 rounded">
+    <code className="inline-block font-code bg-black p-0.5 -my-0.5 rounded">
       {children}
     </code>
   )
@@ -392,12 +393,12 @@ This is a complex list:
     - One
     - Two
     - Three
-  
+
 2. **Bold**: Three
     - One
     - Two
     - Three
-  
+
 3. **Bold**: Four
     - One
     - Two
