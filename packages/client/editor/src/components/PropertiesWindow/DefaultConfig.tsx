@@ -1,4 +1,3 @@
-import { cx } from 'class-variance-authority'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import { useState } from 'react'
 import { Input, Switch } from '@magickml/client-ui'
