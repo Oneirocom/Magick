@@ -14,7 +14,7 @@ type Payload = {
 }
 
 export type VariableServiceEvents = {
-  variableChanged: (payload: Payload) => void
+  [key: string]: (payload: Payload) => void
 }
 
 // This is the interface you'll use to get and set variables.
@@ -93,7 +93,7 @@ export class VariableService
     const lastValue = await this.keyv.get(key)
 
     if (skipSend) return
-    this.emit('variableChanged', {
+    this.emit(name, {
       name,
       value,
       lastValue,
@@ -120,7 +120,7 @@ export class VariableService
     const lastValue = await this.keyv.get(key)
     await this.keyv.set(key, value)
     if (skipSend) return
-    this.emit('variableChanged', {
+    this.emit(name, {
       name,
       value,
       lastValue,

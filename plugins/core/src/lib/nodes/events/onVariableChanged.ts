@@ -85,15 +85,15 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
         throw new Error('VariableService dependency not found')
       }
 
-      const onVariableChangedEvent = ({ name, value, event }) => {
-        const variableId = configuration.variableId
-        if (!variableId) return
+      const variableId = configuration.variableId
+      if (!variableId) return
 
-        const variable = graph.variables[variableId]
-        if (!variable) return
+      const variable = graph.variables[variableId]
+      if (!variable) return
 
-        if (variable.name !== name) return
+      const variableName = variable.name
 
+      const onVariableChangedEvent = ({ value, event }) => {
         const output = configuration.socketOutputs[0]
         handleState(event, false)
         write(output.name, value)
@@ -102,7 +102,7 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
         })
       }
 
-      variableService.on('variableChanged', onVariableChangedEvent)
+      variableService.on(variableName, onVariableChangedEvent)
 
       return {
         onVariableChangedEvent,
