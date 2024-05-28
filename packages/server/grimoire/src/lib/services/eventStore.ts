@@ -257,17 +257,20 @@ export class EventStore
   }
 
   public async setEvent(event: EventWithKey) {
+    if (!this._initialEvent) {
+      this._initialEvent = event
+
+      // rehydrate the state here for the graph since we are starting a new event
+      await this.stateService.rehydrateState(this.graphNodes, event.stateKey)
+    } else {
+      // lets sync the state from the last event before we set the new one to make sure we are up to date
+      // This doesnt actually clear from the state for now.
+      this.stateService.syncState()
+    }
+
     this._currentEvent = event
 
     this.status = StatusEnum.RUNNING
-
-    if (!this._initialEvent) {
-      this._initialEvent = event
-    }
-
-    // We rehydrate the state from the state service when the event is set.
-    // This allows us to have the state available for the event.
-    await this.stateService.rehydrateState(this.graphNodes, event.stateKey)
   }
 
   /**
@@ -308,10 +311,13 @@ export class EventStore
     // Only change the status to RUNNING if all async nodes have finished
     if (this.asyncNodeCounter === 0) {
       this.status = StatusEnum.DONE
+      this.done()
     }
   }
 
   public async done() {
+    // always sync the state here on done
+    this.stateService.syncState()
     // If the event status is awaiting, it means the engine is waiting for the event to be done.
     // So we don't want to change the status to done yet.
     // We assume that another process will change the status to done when the event is complete.
@@ -323,7 +329,7 @@ export class EventStore
       // If there are no async nodes, we can change the status ready, showing it is ready for the next event.
       this.status = StatusEnum.READY
       this.emit('done', this._currentEvent)
-      await this.stateService.syncAndClearState()
+      await this.stateService.syncState()
     }
   }
 }
