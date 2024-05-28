@@ -55,8 +55,6 @@ export const arrayRandomElement = makeFunctionNodeDefinition({
 
     const item = arrayCopy[Math.floor(Math.random() * arrayCopy.length)]
 
-    console.log('options', options)
-
     write(options?.socketName || 'Item', item)
   },
 })
