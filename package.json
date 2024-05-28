@@ -520,7 +520,7 @@
     "typescript": "5.4.5",
     "url-loader": "^4.1.1",
     "vite": "5.0.12",
-    "vite-plugin-dts": "^2.3.0",
+    "vite-plugin-dts": "~3.8.1",
     "vite-plugin-eslint": "1.8.1",
     "vite-plugin-externals": "0.6.2",
     "vite-plugin-markdown": "2.1.0",

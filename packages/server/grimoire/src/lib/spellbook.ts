@@ -339,21 +339,20 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       : 'default'
     const payload = { ..._payload }
 
-    const isChannelActive = await this.isChannelActive(eventKey)
-
-    if (!isChannelActive) return
-
+    const isChannelActive = await this.isChannelActiveOrDefined(eventKey)
+    // we need a way to determin if this is the initial time it is set, if so we want to set it then
     const spellCasters = await this.createOrGetSpellCasters(eventKey, payload)
 
     for (const [spellId, spellCaster] of spellCasters) {
       if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
 
+      if (isChannelActive === false) return
       this.logger.trace(`Handling event ${eventName} for ${spellId}`)
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
   }
 
-  async isChannelActive(eventKey: string) {
+  async isChannelActiveOrDefined(eventKey: string) {
     const agentChannel = await this.prisma.agent_channels
       .findFirst({
         where: {
@@ -366,7 +365,11 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         console.error('Error fetching agent channel', err)
       })
 
-    return !!agentChannel
+    if (agentChannel) {
+      return agentChannel.channelActive
+    }
+
+    return undefined
   }
 
   async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
@@ -382,6 +385,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       .catch(err => {
         console.error('Error fetching agent channel', err)
       })
+
+    console.log('agentChannel!!!!!!', agentChannel)
 
     if (!agentChannel) {
       const newAgentChannel = await this.prisma.agent_channels
@@ -435,7 +440,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         agentId: this.agent.id,
       },
     })
-    const channelPromises = agentChannels.map(async agentChannel => {
+    const channelPromises = agentChannels?.map(async agentChannel => {
       const spellCasters = await this.loadSpellCastersByEventKey(
         agentChannel.channelKey,
         agentChannel.initialEvent as EventPayload
