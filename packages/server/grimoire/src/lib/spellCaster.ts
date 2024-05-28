@@ -202,7 +202,6 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
 
       return this
     } catch (err: any) {
-      console.log('Registry', this.registry.nodes)
       console.log('Error initializing spell', err)
       this.error(
         `Error initializing spell ${this.spell.id} ${this.spell.name}`,

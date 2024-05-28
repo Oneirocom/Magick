@@ -329,7 +329,9 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     eventName: string,
     _payload: EventPayload
   ) {
-    const eventKey = _payload.channel || 'default'
+    const eventKey = _payload.channel
+      ? `${dependency}:${_payload.channel}`
+      : 'default'
     const payload = { ..._payload }
 
     const spellCasters = await this.createOrGetSpellCasters(eventKey, payload)
