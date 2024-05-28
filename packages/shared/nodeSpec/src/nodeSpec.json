@@ -2174,6 +2174,11 @@
         "defaultValue": []
       },
       {
+        "name": "emitEvent",
+        "valueType": "boolean",
+        "defaultValue": true
+      },
+      {
         "name": "socketOutputs",
         "valueType": "array",
         "defaultValue": []
