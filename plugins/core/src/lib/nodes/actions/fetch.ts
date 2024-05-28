@@ -1,5 +1,7 @@
 import { makeFlowNodeDefinition, NodeCategory } from '@magickml/behave-graph'
 
+type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+
 export const FetchNode = makeFlowNodeDefinition({
   typeName: 'actions/http/fetch',
   category: NodeCategory.Action,
@@ -36,7 +38,7 @@ export const FetchNode = makeFlowNodeDefinition({
   initialState: undefined,
   triggered: async ({ commit, read, write }) => {
     const url = read('url') as string
-    const method = read('method') as string
+    const method = read('method') as Methods
     const headers = (read('headers') || {}) as Record<string, string>
     const body = read('body') || {}
     const authToken = read('authToken')
@@ -46,10 +48,13 @@ export const FetchNode = makeFlowNodeDefinition({
     if (authToken) {
       headers[authTokenHeader] = `Bearer ${authToken}`
     }
+
+    const sendBody = method === 'POST' || method === 'PUT' || method === 'PATCH'
+
     const response = await fetch(url, {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      ...(sendBody ? { body: JSON.stringify(body) } : {}),
     })
 
     const responseData = await response.json()
