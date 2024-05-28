@@ -162,11 +162,11 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.commandHub = commandHub
     this.app = app
     this.agent = agent
+    this.prisma = new PrismaClient()
     this.init()
     this.pluginManager.on('pluginsLoaded', () => {
       this.initializePlugins()
     })
-    this.prisma = new PrismaClient()
   }
 
   init() {
