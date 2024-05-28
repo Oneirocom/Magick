@@ -116,6 +116,21 @@ export async function app(fastify: FastifyInstance) {
         return
       }
 
+      // Initialize connection management
+      const pingInterval = setInterval(() => {
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.ping() // Send a ping to the client
+          console.log('Ping sent to client')
+        } else {
+          console.log('WebSocket is not open')
+        }
+      }, 30000) // Send a ping every 30 seconds
+
+      // Setup event listener for pong responses (optional)
+      socket.on('pong', () => {
+        console.log('Pong received from client')
+      })
+
       let sendAudio = false
 
       // startup agent
@@ -315,11 +330,13 @@ export async function app(fastify: FastifyInstance) {
       socket.on('close', () => {
         agent.removeAllListeners()
         agent.onDestroy()
+        clearInterval(pingInterval) // Clear the interval on connection close
       })
 
       socket.on('error', () => {
         agent.removeAllListeners()
         agent.onDestroy()
+        clearInterval(pingInterval) // Clear the interval on connection close
       })
     }
   )
