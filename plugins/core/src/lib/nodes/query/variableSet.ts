@@ -38,6 +38,10 @@ export const variableSet = makeFlowNodeDefinition({
       valueType: 'array',
       defaultValue: [],
     },
+    emitEvent: {
+      valueType: 'boolean',
+      defaultValue: true,
+    },
     socketOutputs: {
       valueType: 'array',
       defaultValue: [],
@@ -89,6 +93,8 @@ export const variableSet = makeFlowNodeDefinition({
     const output = configuration.socketOutputs[0]
     const inputName = configuration.socketInputs[0]
     const inputValue = read(inputName.name)
+    const emitEvent = Boolean(configuration.emitEvent)
+    const skipSend = !emitEvent
 
     if (!variable) return
 
@@ -98,7 +104,7 @@ export const variableSet = makeFlowNodeDefinition({
 
     if (!variableService) return
 
-    await variableService.setVariable(variable.name, inputValue)
+    await variableService.setVariable(variable.name, inputValue, skipSend)
 
     write(output.name, inputValue)
     commit('flow')
