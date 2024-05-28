@@ -92,7 +92,6 @@ export class VariableService
     const name = this.getNameFromKey(key)
     const lastValue = await this.keyv.get(key)
 
-    console.log('Skip send: ', skipSend)
     if (skipSend) return
     this.emit('variableChanged', {
       name,
@@ -120,8 +119,6 @@ export class VariableService
     }
     const lastValue = await this.keyv.get(key)
     await this.keyv.set(key, value)
-    console.log('Skip send: ', skipSend)
-    console.log('For name: ', name)
     if (skipSend) return
     this.emit('variableChanged', {
       name,
