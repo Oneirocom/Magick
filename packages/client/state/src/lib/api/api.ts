@@ -98,6 +98,7 @@ export const rootApi = createApi({
     'PluginState',
     'PluginCommand',
     'AgentSeraphEvents',
+    'AgentChannels',
   ], // Define tagTypes for invalidation
   endpoints: () => ({}), // Provide an empty object for endpoints
 })

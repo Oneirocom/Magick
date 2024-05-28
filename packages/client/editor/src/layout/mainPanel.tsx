@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   DockviewReact,
@@ -13,6 +13,7 @@ import { useTabLayout } from '@magickml/providers'
 import Requests from '../screens/RequestWindow'
 import Agents from '../screens/agents/AgentManagerWindow'
 import { SecretWindow } from 'windows/secrets'
+
 import ComposerV2 from '../components/workspaces/composerv2'
 import NewMenuBar from '../components/MenuBar/newMenuBar'
 
@@ -22,6 +23,7 @@ import { ConfigWindow } from 'windows/config'
 import posthog from 'posthog-js'
 import { KnowledgeWindow } from 'window-knowledge'
 import { EventsWindow } from 'windows-events'
+import { ChannelsWindow } from 'window-agent-channels'
 
 const TabHeader = (props: IDockviewPanelHeaderProps) => {
   const onContextMenu = (event: React.MouseEvent) => {
@@ -57,6 +59,7 @@ const getComponents = () => {
     Agents,
     Config: () => <ConfigWindow />,
     Secrets: () => <SecretWindow />,
+    Channels: () => <ChannelsWindow />,
     behave: ComposerV2,
     spell: (props: IDockviewPanelProps<{ title: string }>) => {
       return (
