@@ -55,7 +55,6 @@ export const categoryColorMap: Record<NodeSpecJSON['category'], color> = {
   Effect: 'lime',
   Time: 'purple',
   None: 'green',
-  Math: 'red', // Add this line
 }
 
 export const categoryIconMap: Record<NodeSpecJSON['category'], any> = {
@@ -68,5 +67,4 @@ export const categoryIconMap: Record<NodeSpecJSON['category'], any> = {
   Effect: AgentIcon,
   Time: AgentIcon,
   None: AgentIcon,
-  Math: AgentIcon,
 }
