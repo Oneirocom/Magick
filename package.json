@@ -152,7 +152,7 @@
     "@langchain/openai": "^0.0.33",
     "@langchain/pinecone": "^0.0.6",
     "@langchain/textsplitters": "^0.0.2",
-    "@magickml/behave-graph": "^0.14.11",
+    "@magickml/behave-graph": "^0.14.12",
     "@magickml/behave-graph-scene": "0.11.0",
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@monaco-editor/react": "4.5.1",
