@@ -1,5 +1,5 @@
 import { ConfigurationComponentProps } from './PropertiesWindow'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input, Switch } from '@magickml/client-ui'
 
 export const DefaultConfig = ({
@@ -14,6 +14,10 @@ export const DefaultConfig = ({
     setInputVal(value)
     updateConfigKey(key, value)
   }
+
+  useEffect(() => {
+    setInputVal(inputValue)
+  }, [inputValue])
 
   return (
     <div>
@@ -53,7 +57,7 @@ export const DefaultConfig = ({
           <div className="flex gap-2 items-center red">
             <Switch
               defaultChecked={inputVal}
-              value={inputVal || 0}
+              value={inputVal}
               onCheckedChange={value => onChange(name, value)}
               // onFocus={() => onFocus(value)}
             />
