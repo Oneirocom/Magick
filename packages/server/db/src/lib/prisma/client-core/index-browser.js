@@ -345,6 +345,16 @@ exports.Prisma.MemoryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.Agent_channelsScalarFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  channelKey: 'channelKey',
+  channelName: 'channelName',
+  initialEvent: 'initialEvent',
+  channelActive: 'channelActive',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -545,6 +555,13 @@ exports.Prisma.MemoryOrderByRelevanceFieldEnum = {
   channel: 'channel',
   agentId: 'agentId'
 };
+
+exports.Prisma.agent_channelsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  channelKey: 'channelKey',
+  channelName: 'channelName'
+};
 exports.WebhookMethod = exports.$Enums.WebhookMethod = {
   GET: 'GET',
   POST: 'POST',
@@ -583,7 +600,8 @@ exports.Prisma.ModelName = {
   tasks: 'tasks',
   Webhook: 'Webhook',
   seraphEvents: 'seraphEvents',
-  Memory: 'Memory'
+  Memory: 'Memory',
+  agent_channels: 'agent_channels'
 };
 
 /**

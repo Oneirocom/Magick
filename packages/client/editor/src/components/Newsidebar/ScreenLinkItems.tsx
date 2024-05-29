@@ -5,6 +5,7 @@ import ArticleIcon from '@mui/icons-material/Article'
 import SettingsIcon from '@mui/icons-material/Settings'
 import SecretsIcon from '@mui/icons-material/Password'
 import MultipleStopIcon from '@mui/icons-material/MultipleStop'
+import CallSplitIcon from '@mui/icons-material/CallSplit'
 // import StorageIcon from '@mui/icons-material/Storage'
 import { useTabLayout } from '@magickml/providers'
 import React from 'react'
@@ -24,6 +25,7 @@ export const drawerTooltipText = {
   settings: 'Global settings used in the Playtest window.',
   config: 'Configure your agents integrations, data, and more.',
   secrets: 'Manage your secrets',
+  channels: 'Manage the channels you Agent is running on',
 }
 
 type DrawerItem = {
@@ -75,6 +77,12 @@ export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
       Icon: MultipleStopIcon,
       tooltip: 'Events Tooltip',
       tooltipText: drawerTooltipText.events,
+    },
+    {
+      name: 'Channels',
+      Icon: CallSplitIcon,
+      tooltip: 'Channels Tooltip',
+      tooltipText: drawerTooltipText.channels,
     },
   ]
 
