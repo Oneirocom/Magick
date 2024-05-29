@@ -30,7 +30,7 @@ const KnowledgePackCard: React.FC<KnowledgePackCardProps> = ({
   updated,
   documents,
 }) => {
-  const [active, setActive] = useAtom(activePackIdAtom)
+  const [, setActive] = useAtom(activePackIdAtom)
 
   return (
     <Card className="flex flex-col gap-2 border border-gray-300 dark:border-gray-700 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">

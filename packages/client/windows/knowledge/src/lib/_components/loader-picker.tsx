@@ -1,9 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { z, ZodTypeAny } from 'zod'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { ZodTypeAny } from 'zod'
 import {
   FileIcon,
   FileSpreadsheetIcon,
@@ -16,7 +14,6 @@ import {
   FileJsonIcon,
 } from 'lucide-react'
 import {
-  LoaderTypeSchema,
   type LoaderType,
   TextLoaderSchema,
   YoutubeLoaderSchema,
@@ -30,15 +27,8 @@ import {
   PptLoaderSchema,
   ConfluenceLoaderSchema,
   JsonLoaderSchema,
-  loaderSchemaMap,
 } from '@magickml/embedder/schema'
-import {
-  TextareaWithLabel,
-  InputWithLabel,
-  SelectWithLabel,
-  SwitchWithLabel,
-  Button,
-} from '@magickml/client-ui'
+import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtomValue } from 'jotai'
 import { activePackIdAtom } from '../_pkg/state'
