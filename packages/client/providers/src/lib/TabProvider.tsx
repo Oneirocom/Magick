@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { DockviewApi, SerializedDockview } from 'dockview'
@@ -34,6 +34,7 @@ type DocviewContext = {
 
   renameTab: (id: string, newName: string) => void
   isTabOpen: (id: string) => boolean
+  isTabActive: (id: string) => boolean
 }
 
 // Creating the context
@@ -150,6 +151,16 @@ export const TabProvider = ({ children }) => {
     return !!panel
   }
 
+  const isTabActive = (id: string) => {
+    if (!api) return false
+
+    const panel = api.getPanel(id)
+
+    if (!panel) return false
+
+    return panel.api.isActive || false
+  }
+
   const renameTab = (id: string, newName: string) => {
     if (!api) return
 
@@ -227,6 +238,7 @@ export const TabProvider = ({ children }) => {
     isTabOpen,
     renameTab,
     closeTab,
+    isTabActive,
   }
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>
 }
