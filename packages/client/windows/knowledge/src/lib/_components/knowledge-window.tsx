@@ -27,7 +27,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
-      process.env.NEXT_PUBLIC_EMBEDDER_URL || 'http://localhost:3000/api',
+      process.env.NEXT_PUBLIC_EMBEDDER_SERVER_URL || 'http://localhost:3000/api',
     options: {
       axiosConfig: {
         withCredentials: true,

@@ -14,10 +14,10 @@ export function generateToken(payload: TokenPayload) {
   try {
     const val = TokenPayloadSchema.parse(payload)
 
-    const secret = process.env['NITRO_JWT_SECRET']
-    const exp = process.env['NITRO_JWT_EXPIRES_IN']
+    const secret = process.env['EMBEDDER_JWT_SECRET']
+    const exp = process.env['EMBEDDER_JWT_EXPIRES_IN']
     if (!secret || !exp) {
-      throw err('NITRO_JWT_SECRET or NITRO_JWT_EXPIRES_IN not set')
+      throw err('EMBEDDER_JWT_SECRET or EMBEDDER_JWT_EXPIRES_IN not set')
     }
 
     // Include standard claims
@@ -38,10 +38,10 @@ export function generateToken(payload: TokenPayload) {
 }
 
 export function validateToken(token: string) {
-  const secret = process.env['NITRO_JWT_SECRET']
-  const exp = process.env['NITRO_JWT_EXPIRES_IN']
+  const secret = process.env['EMBEDDER_JWT_SECRET']
+  const exp = process.env['EMBEDDER_JWT_EXPIRES_IN']
   if (!secret || !exp) {
-    throw err('NITRO_JWT_SECRET or NITRO_JWT_EXPIRES_IN not set')
+    throw err('EMBEDDER_JWT_SECRET or EMBEDDER_JWT_EXPIRES_IN not set')
   }
 
   try {
