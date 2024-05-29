@@ -1,8 +1,4 @@
-import {
-  NodeCategory,
-  NodeDefinition,
-  makeFlowNodeDefinition,
-} from '@magickml/behave-graph'
+import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { z } from 'zod'
 
 import { Zodios, ZodiosEndpointDefinition, ZodiosOptions } from '@zodios/core'
