@@ -1,0 +1,21 @@
+FROM magickml/magick:latest
+
+ARG GITHUB_TOKEN
+ARG BRANCH=development
+
+ARG RAILWAY_GIT_COMMIT_SHA
+# Configure git to use the token
+RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+RUN git clone --branch ${BRANCH} --depth 1 https://www.github.com/oneirocom/magick.git /app
+
+WORKDIR /app
+
+# Clone the submodule
+RUN git submodule update --init --recursive portal/cloud
+
+RUN npm install
+
+RUN npm run embedder:build
+
+ENTRYPOINT [ "npm", "run" ]
+CMD [ "embedder:serve" ]
