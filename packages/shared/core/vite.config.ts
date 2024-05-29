@@ -24,8 +24,8 @@ export default defineConfig({
     mdPlugin({ mode: [Mode.HTML, Mode.TOC, Mode.REACT] }),
     dts({
       entryRoot: 'src',
-      tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
-      skipDiagnostics: true,
+      tsconfigPath: join(__dirname, 'tsconfig.lib.json'),
+      // skipDiagnostics: true,
     }),
     react(),
     nxViteTsPaths(),
