@@ -1,0 +1,41 @@
+import { z } from "zod";
+import {
+  NodeCategory
+} from '@magickml/behave-graph'
+import {
+    {{#each schemas}}
+    {{@key}},
+    {{/each}}
+} from './schema';
+
+
+
+const nodes = [
+{{#each endpoints}}
+  {
+    typeName: "{{options.apiClientName}}/{{toCamelCase method}}_{{toCamelCase path}}",
+    category: NodeCategory.Action,
+    label: "{{method}} {{path}}",
+    in: {
+      flow: 'flow',
+      {{!-- prompt: {
+        valueType: 'string',
+        defaultValue: '',
+      }, --}}
+      
+    {{#ifArrayNotEmpty parameters}}
+    {{#each parameters}}
+      {{name}}: {
+        valueType: 'string',
+        defaultValue: '',
+      },
+    {{/each}}
+    {{/ifArrayNotEmpty}}
+    },
+    configuration: []
+  },
+{{/each}}
+];
+
+ 
+ {{!-- = in: { flow: 'flow', prompt: { valueType: 'string', defaultValue: '', }, }, --}}
