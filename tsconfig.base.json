@@ -32,6 +32,44 @@
       "@magickml/client-types": ["packages/client/client-types/src/index.ts"],
       "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
       "@magickml/docs": ["apps/docs/src/index.ts"],
+      "@magickml/embedder-client-react": [
+        "packages/embedder/client/react/src/index.ts"
+      ],
+      "@magickml/embedder/api/jobs": [
+        "packages/embedder/api/jobs/src/index.ts"
+      ],
+      "@magickml/embedder/api/loaders": [
+        "packages/embedder/api/loaders/src/index.ts"
+      ],
+      "@magickml/embedder/api/packs": [
+        "packages/embedder/api/packs/src/index.ts"
+      ],
+      "@magickml/embedder/auth/plugin": [
+        "packages/embedder/auth/plugin/src/index.ts"
+      ],
+      "@magickml/embedder/auth/token": [
+        "packages/embedder/auth/token/src/index.ts"
+      ],
+      "@magickml/embedder/client/ts": [
+        "packages/embedder/client/ts/src/index.ts"
+      ],
+      "@magickml/embedder/config": ["packages/embedder/config/src/index.ts"],
+      "@magickml/embedder/db/pinecone": [
+        "packages/embedder/db/pinecone/src/index.ts"
+      ],
+      "@magickml/embedder/db/prisma": [
+        "packages/embedder/db/prisma/src/index.ts"
+      ],
+      "@magickml/embedder/db/sql": ["packages/embedder/db/sql/src/index.ts"],
+      "@magickml/embedder/db/sql/generated/*": [
+        "packages/embedder/db/sql/src/lib/prisma/client-embedder/*"
+      ],
+      "@magickml/embedder/loaders/core": [
+        "packages/embedder/loaders/core/src/index.ts"
+      ],
+      "@magickml/embedder/queue": ["packages/embedder/queue/src/index.ts"],
+      "@magickml/embedder/schema": ["packages/embedder/schema/src/index.ts"],
+      "@magickml/embedder/worker": ["packages/embedder/worker/src/index.ts"],
       "@magickml/feathersRedux": [
         "packages/client/feathers-redux-toolkit/src/index.ts"
       ],
@@ -124,6 +162,9 @@
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-db": ["packages/server/db/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
+      "@magickml/zode": ["packages/zode/src/index.ts"],
+      "@magickml/zodekit": ["nx/zodekit/src/index.ts"],
+      "@packmvp": ["../anne/server/client/sdk.ts"],
       "chat-window": ["packages/client/chat/src/index.ts"],
       "client/core": ["packages/client/core/src/index.ts"],
       "client/editor": ["packages/client/editor/src/index.ts"],
@@ -134,6 +175,7 @@
       "client/state": ["packages/client/state/src/index.ts"],
       "clientConfig": ["packages/client/config/src/index.ts"],
       "communication": ["packages/shared/communication/src/index.ts"],
+      "embedder-db-pg": ["packages/embedder/db/pg/src/index.ts"],
       "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
       "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
