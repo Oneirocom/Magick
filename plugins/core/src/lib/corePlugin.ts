@@ -28,7 +28,7 @@ import { arrayMerge } from './values/Array/Merge'
 import { CoreUserService } from './services/userService/coreUserService'
 import { arrayCreate, arrayCreateFunction } from './values/Array/Create'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
-// import { addKnowledge } from './nodes/actions/addKnowledge'
+import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
@@ -85,7 +85,7 @@ import { LLMProviderKeys } from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
-import { addSource, createPack } from './nodes/knowledge'
+// import { addSource, createPack } from './nodes/knowledge'
 import { makeEmbedderClient } from '@magickml/embedder/client/ts'
 import { generateToken } from '@magickml/embedder/auth/token'
 
@@ -107,7 +107,7 @@ export class CorePlugin extends CoreEventsPlugin<
   override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
-    // addKnowledge,
+    addKnowledge,
     addMemory,
     addMessage,
     arrayAccess,
@@ -160,8 +160,8 @@ export class CorePlugin extends CoreEventsPlugin<
     wait,
     webhookEventNode,
     whileLoop,
-    addSource,
-    createPack,
+    // addSource,
+    // createPack,
   ]
   values = []
   credentials = corePluginCredentials
