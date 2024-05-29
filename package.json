@@ -87,7 +87,9 @@
     "gc:ar:login": "npx google-artifactregistry-auth -y",
     "publish:local": "npx nx release publish --registry http://localhost:4873",
     "publish": " nx release publish --registry https://us-west1-npm.pkg.dev/magick-387817/magickml",
-    "embedder:buildall": "nx run-many -t build --projects=embedder-*"
+    "embedder:buildall": "nx run-many -t build --projects=embedder-*",
+    "embedder:build": "nx run embedder:build",
+    "embedder:serve": "nx run embedder:serve"
   },
   "resolutions": {
     "@types/react": "18.0.2"

@@ -10,3 +10,4 @@ packages/client
 portal
 .git
 .gitmodules
+.env.local
