@@ -15,6 +15,7 @@ export const CORE_DEP_KEYS = {
   MEMORY_SERVICE: 'coreMemoryService',
   MEMORY_STREAM_SERVICE: 'memoryStreamService',
   STATE_SERVICE: 'IStateService',
+  EMBEDDER_CLIENT: 'embedderClient',
   UPLOAD_FILE: 'uploadFile',
 } as const
 
