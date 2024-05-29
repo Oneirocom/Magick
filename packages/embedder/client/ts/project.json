@@ -1,0 +1,26 @@
+{
+  "name": "embedder-client-ts",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/client/ts/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/client/ts",
+        "main": "packages/embedder/client/ts/src/index.ts",
+        "tsConfig": "packages/embedder/client/ts/tsconfig.lib.json",
+        "assets": ["packages/embedder/client/ts/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/embedder/client/ts/jest.config.ts"
+      }
+    }
+  }
+}
