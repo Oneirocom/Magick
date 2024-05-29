@@ -163,12 +163,17 @@ export class MemoryStreamService extends EventEmitter {
   }
 
   formatMemories(memories: Memory[]) {
-    return memories.map(memory => {
-      return {
-        role: memory.role,
-        content: memory.content,
-      }
-    })
+    return (
+      memories
+        // Filter out empty memories
+        .filter(memory => memory.content !== '')
+        .map(memory => {
+          return {
+            role: memory.role,
+            content: memory.content,
+          }
+        })
+    )
   }
 
   async withMonologue(content: string, type?: string) {
