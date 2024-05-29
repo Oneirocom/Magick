@@ -2,8 +2,14 @@ import { err, info } from '@magickml/embedder/config'
 import { processEmbedJob } from '@magickml/embedder/queue'
 import { Worker } from 'bullmq'
 import { defineNitroPlugin } from 'nitropack/runtime'
+import { ConnectionOptions } from 'bullmq'
 
-const connection = { host: 'localhost', port: 6379 }
+const connection: ConnectionOptions = {
+  host: process.env['EMBEDDER_REDIS_HOST'] || 'localhost',
+  port: Number(process.env['EMBEDDER_REDIS_PORT']) || 6379,
+  username: process.env['EMBEDDER_REDIS_USERNAME'],
+  password: process.env['EMBEDDER_REDIS_PASSWORD'],
+}
 
 export const embedderWorkerPlugin = defineNitroPlugin(() => {
   const queueName = 'embedJobs'
