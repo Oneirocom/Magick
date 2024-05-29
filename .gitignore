@@ -74,6 +74,9 @@ docstore.json
 
 
 plugins/portal
-
-.nitro
+# Nuxt/Nitro dev/build outputs
 .output
+.data
+.nuxt
+.nitro
+.cache
