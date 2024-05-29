@@ -3,6 +3,8 @@
 import { DEFAULT_PROJECT_ID } from 'clientConfig'
 import { createContext, useContext, useState } from 'react'
 import { ProviderData } from 'servicesShared'
+import { embedderTokenAtom } from 'window-knowledge'
+import { useSetAtom } from 'jotai'
 
 // Define AppConfig type
 export type AppConfig = {
@@ -13,6 +15,7 @@ export type AppConfig = {
   posthogEnabled?: boolean
   email: string | undefined
   providerData: ProviderData
+  embedderToken: string
 }
 
 // Define ConfigContext interface
@@ -43,6 +46,7 @@ export const defaultConfig: AppConfig = {
   userId: '',
   email: undefined,
   providerData: {},
+  embedderToken: '',
 }
 
 /**
@@ -56,6 +60,9 @@ export const ConfigProvider = ({ config = defaultConfig, children }) => {
   const [providerData, setProviderData] = useState<
     ConfigContext['providerData']
   >(config.providerData)
+
+  const setEmbedderToken = useSetAtom(embedderTokenAtom)
+  setEmbedderToken(config.embedderToken)
 
   const publicInterface: ConfigContext = {
     apiUrl,
