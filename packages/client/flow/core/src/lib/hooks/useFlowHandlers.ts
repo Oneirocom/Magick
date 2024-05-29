@@ -30,7 +30,7 @@ import { calculateNewEdge } from '../utils/calculateNewEdge'
 import { getNodePickerFilters } from '../utils/getPickerFilters'
 import { isValidConnection } from '../utils/isValidConnection'
 import { useBehaveGraphFlow } from './useBehaveGraphFlow'
-import { Tab } from '@magickml/providers'
+import { Tab, useTabLayout } from '@magickml/providers'
 import {
   onConnect as onConnectState,
   selectLayoutChangeEvent,
@@ -46,6 +46,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
+import { useHistory } from './useHistory'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
 type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
@@ -108,6 +109,39 @@ export const useFlowHandlers = ({
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
 
+  const { isTabActive } = useTabLayout()
+
+  const setTabEdges = useCallback(
+    (edges: MagickEdgeType[]) => {
+      setEdges(tab.id, edges)
+    },
+    [tab.id]
+  )
+
+  const setTabNodes = useCallback(
+    (nodes: MagickNodeType[]) => {
+      setNodes(tab.id, nodes)
+    },
+    [tab.id]
+  )
+
+  const { undo, redo, takeSnapshot } = useHistory({
+    setEdges: setTabEdges as (edges: MagickEdgeType[]) => void,
+    setNodes: setTabNodes as (nodes: MagickNodeType[]) => void,
+    edges,
+    nodes,
+  })
+
+  useHotkeys('Meta+z', () => {
+    if (!isTabActive(tab.id)) return
+    undo()
+  })
+
+  useHotkeys('Meta+Shift+z', () => {
+    if (!isTabActive(tab.id)) return
+    redo()
+  })
+
   useHotkeys('meta+c, ctrl+c', () => {
     copy()
   })
@@ -163,6 +197,18 @@ export const useFlowHandlers = ({
     }
   }, [rfDomNode])
 
+  const handleNodeDragStart = useCallback(() => {
+    takeSnapshot()
+  }, [takeSnapshot])
+
+  const handleSelectionDragStart = useCallback(() => {
+    takeSnapshot()
+  }, [takeSnapshot])
+
+  const handleDelete = useCallback(() => {
+    takeSnapshot()
+  }, [takeSnapshot])
+
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
     setNodePickerPosition(undefined)
@@ -181,6 +227,7 @@ export const useFlowHandlers = ({
 
   const handleOnConnect = useCallback(
     (_connection: Connection) => {
+      takeSnapshot()
       const connection = {
         ..._connection,
         type: 'custom-edge',
@@ -266,7 +313,7 @@ export const useFlowHandlers = ({
   const handleAddNode = useCallback(
     (_nodeType: string, position: XYPosition, _nodeSpec?: NodeSpecJSON) => {
       closeNodePicker()
-      console.log('adding node', _nodeType, position)
+      takeSnapshot()
       const fullSpecJSON = getNodeSpec(spell)
       // handle add configuration here so we don't need to do it in the node.
       const nodeSpecRaw =
@@ -687,5 +734,8 @@ export const useFlowHandlers = ({
     handleAddComment,
     toggleSocketVisibility,
     socketsVisible,
+    handleDelete,
+    handleNodeDragStart,
+    handleSelectionDragStart,
   }
 }

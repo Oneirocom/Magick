@@ -47,6 +47,9 @@ type BaseFlowHandlers = Pick<
   | 'onEdgeUpdate'
   | 'socketsVisible'
   | 'toggleSocketVisibility'
+  | 'handleSelectionDragStart'
+  | 'handleDelete'
+  | 'handleNodeDragStart'
 >
 
 type BaseFlowBehaveGraphFlow = Pick<
@@ -149,6 +152,9 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     nodeMenuActions,
     isValidConnectionHandler,
     onEdgeUpdate,
+    handleNodeDragStart,
+    handleDelete,
+    handleSelectionDragStart,
   } = flowHandlers
 
   const togglePlay = () => {
@@ -207,6 +213,9 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       nodesConnectable={!readOnly}
       elementsSelectable={!readOnly}
       onConnect={handleOnConnect}
+      onNodeDragStart={handleNodeDragStart}
+      onSelectionDragStart={handleSelectionDragStart}
+      onDelete={handleDelete}
       edgeTypes={edgeTypes}
       isValidConnection={isValidConnectionHandler}
       onEdgeUpdate={onEdgeUpdate}
