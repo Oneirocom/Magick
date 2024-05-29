@@ -9,6 +9,7 @@ import { IAgentLogger } from 'server/agents'
 import { type CommandHub } from 'server/command-hub'
 import { AGENT_SPELL_STATE } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
+import { PrismaClient } from '@magickml/server-db'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -64,6 +65,8 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   private spells: Map<string, SpellInterface> = new Map()
 
   private commandHub: CommandHub
+
+  private prisma: PrismaClient
 
   /**
    * Application instance.  Typed to main app.
@@ -159,6 +162,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     this.commandHub = commandHub
     this.app = app
     this.agent = agent
+    this.prisma = new PrismaClient()
     this.init()
     this.pluginManager.on('pluginsLoaded', () => {
       this.initializePlugins()
@@ -169,6 +173,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     // Initialize the plugins first
     this.initializePlugins()
     this.initializeCommands()
+    this.initializeChannels()
 
     // Listen for spell changes
     this.app
@@ -334,70 +339,116 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       : 'default'
     const payload = { ..._payload }
 
+    const isChannelActive = await this.isChannelActiveOrDefined(eventKey)
+    // we need a way to determin if this is the initial time it is set, if so we want to set it then
     const spellCasters = await this.createOrGetSpellCasters(eventKey, payload)
 
     for (const [spellId, spellCaster] of spellCasters) {
       if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
 
+      if (isChannelActive === false) return
       this.logger.trace(`Handling event ${eventName} for ${spellId}`)
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
   }
 
+  async isChannelActiveOrDefined(eventKey: string) {
+    const agentChannel = await this.prisma.agent_channels
+      .findFirst({
+        where: {
+          agentId: this.agent.id,
+          channelKey: eventKey,
+          channelActive: true,
+        },
+      })
+      .catch(err => {
+        console.error('Error fetching agent channel', err)
+      })
+
+    if (agentChannel) {
+      return agentChannel.channelActive
+    }
+
+    return undefined
+  }
+
   async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
     const spellCasters = this.eventMap.get(eventKey)
+    const agentId = this.agent.id
+    const agentChannel = await this.prisma.agent_channels
+      .findFirst({
+        where: {
+          agentId,
+          channelKey: eventKey,
+        },
+      })
+      .catch(err => {
+        console.error('Error fetching agent channel', err)
+      })
+
+    console.log('agentChannel!!!!!!', agentChannel)
+
+    if (!agentChannel) {
+      const newAgentChannel = await this.prisma.agent_channels
+        .create({
+          data: {
+            agentId,
+            channelKey: eventKey,
+            channelName: `agentChannel:${agentId}:${eventKey}`,
+            initialEvent: event,
+            // initialState: await this.getSpellState(event.spellId || ''),
+          },
+        })
+        .catch(err => {
+          console.error('Error creating agent channel', err)
+        })
+      if (!newAgentChannel) {
+        throw new Error('Error creating agent channel')
+      }
+    }
     if (!spellCasters) {
-      const spellPromises = Array.from(this.spells.values()).map(
-        async spell => {
-          const spellCaster = await this.loadSpell(spell)
-          spellCaster?.loadInitialEvent(event)
-          return spellCaster
-        }
-      )
-      const loadedSpells = await Promise.all(spellPromises)
-      const validSpellCasters = loadedSpells.filter(
-        (spellCaster): spellCaster is SpellCaster<Agent> => !!spellCaster
-      )
-      const spellMap = new Map(
-        validSpellCasters.map(spellCaster => [
-          spellCaster.spell.id,
-          spellCaster,
-        ])
-      )
-      this.eventMap.set(eventKey, spellMap)
-      return spellMap
+      return await this.loadSpellCastersByEventKey(eventKey, event)
+      //load spell casters for event
     }
     return spellCasters
   }
-  /**
-   * Gets the spell runner for the given spell id.
-   * @param {string} spellId - Id of the spell.
-   * @returns {SpellCaster | undefined} - Spell runner instance.
-   * @example
-   * const spellCaster = spellbook.getSpellCaster(spellId);
-   */
-  async getOrCreateSpellCaster(spellId: string, eventKey: string) {
-    let spellCasters = this.eventMap.get(eventKey)
 
-    if (!spellCasters) {
-      spellCasters = new Map()
-      this.eventMap.set(eventKey, spellCasters)
-    }
+  async loadSpellCastersByEventKey(
+    eventKey: string,
+    event: EventPayload,
+    initialState?: SpellState
+  ) {
+    const spellPromises = Array.from(this.spells.values()).map(async spell => {
+      const spellCaster = await this.loadSpell(spell, initialState)
+      spellCaster?.loadInitialEvent(event)
+      return spellCaster
+    })
+    const loadedSpells = await Promise.all(spellPromises)
+    const validSpellCasters = loadedSpells.filter(
+      (spellCaster): spellCaster is SpellCaster<Agent> => !!spellCaster
+    )
+    const spellMap = new Map(
+      validSpellCasters.map(spellCaster => [spellCaster.spell.id, spellCaster])
+    )
+    this.eventMap.set(eventKey, spellMap)
+    return spellMap
+  }
 
-    let spellCaster = spellCasters.get(spellId)
+  async initializeChannels() {
+    const agentChannels = await this.prisma.agent_channels.findMany({
+      where: {
+        agentId: this.agent.id,
+      },
+    })
+    const channelPromises = agentChannels?.map(async agentChannel => {
+      const spellCasters = await this.loadSpellCastersByEventKey(
+        agentChannel.channelKey,
+        agentChannel.initialEvent as EventPayload
+      )
 
-    if (!spellCaster) {
-      spellCaster = (await this.loadById(spellId)) || undefined
-      if (spellCaster) {
-        spellCasters.set(spellId, spellCaster)
-      } else {
-        this.agent.error(
-          `Error creating spellcaster for eventKey: ${eventKey} for ${spellId}`
-        )
-      }
-    }
-
-    return spellCaster
+      return spellCasters
+    })
+    await Promise.all(channelPromises)
   }
 
   /**
@@ -530,7 +581,10 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    *   graph: {},
    * });
    */
-  async loadSpell(spell: SpellInterface): Promise<SpellCaster<Agent> | null> {
+  async loadSpell(
+    spell: SpellInterface,
+    _initialState?: SpellState
+  ): Promise<SpellCaster<Agent> | null> {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
@@ -539,7 +593,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
 
     this.spells.set(spell.id, spell)
 
-    const initialState = await this.getSpellState(spell.id)
+    const initialState = _initialState ?? (await this.getSpellState(spell.id))
 
     try {
       const spellCaster = new SpellCaster<Agent>({

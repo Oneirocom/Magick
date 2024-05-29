@@ -121,11 +121,11 @@ export class KeywordsService {
         ) as Promise<ProxyUser>,
       ])
 
-      if (!mpUser.period_end || !walletUser.period_end) {
-        await this.ensurePeriodBudget({ mpUser, walletUser })
-      }
+      if (mpUser?.customer_identifier && walletUser?.customer_identifier) {
+        if (!mpUser.period_end || !walletUser.period_end) {
+          await this.ensurePeriodBudget({ mpUser, walletUser })
+        }
 
-      if (mpUser.customer_identifier && walletUser.customer_identifier) {
         return { mpUser, walletUser }
       }
       return { mpUser: null, walletUser: null }
@@ -142,15 +142,23 @@ export class KeywordsService {
         headers: this.getHeaders(),
       }
       const [mpUser, walletUser] = await Promise.all([
-        fetch(`${this.apiUrl}/api/user/create/MP_${userId}`, options).then(
-          res => res.json()
-        ) as Promise<ProxyUser>,
-        fetch(`${this.apiUrl}/api/user/create/WALLET_${userId}`, options).then(
-          res => res.json()
-        ) as Promise<ProxyUser>,
+        fetch(`${this.apiUrl}/api/users/create/`, {
+          ...options,
+          body: JSON.stringify({
+            customer_identifier: `MP_${userId}`,
+          }),
+        }).then(res => {
+          return res.json()
+        }) as Promise<ProxyUser>,
+        fetch(`${this.apiUrl}/api/users/create/`, {
+          ...options,
+          body: JSON.stringify({ customer_identifier: `WALLET_${userId}` }),
+        }).then(res => {
+          return res.json()
+        }) as Promise<ProxyUser>,
       ])
 
-      if (!mpUser.customer_identifier || !walletUser.customer_identifier)
+      if (!mpUser?.customer_identifier || !walletUser?.customer_identifier)
         throw new Error('Error creating wallet users')
 
       return { mpUser, walletUser }
@@ -165,10 +173,13 @@ export class KeywordsService {
       const options: RequestInit = {
         method: 'POST',
         headers: this.getHeaders(),
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          customer_identifier: proxyUser,
+          ...data,
+        }),
       }
-      return await fetch(`${this.apiUrl}/api/user/create/`, options).then(res =>
-        res.json()
+      return await fetch(`${this.apiUrl}/api/users/create/`, options).then(
+        res => res.json()
       )
     } catch (error) {
       console.error('Error creating wallet user:', error)

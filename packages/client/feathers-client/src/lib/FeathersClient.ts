@@ -85,6 +85,17 @@ const configureCustomServices = (
   app.use('request', socketClient.service('request'), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
   })
+  app.use('agentChannels', socketClient.service('agentChannels'), {
+    methods: [
+      'find',
+      'get',
+      'create',
+      'patch',
+      'remove',
+      'toggleChannel',
+      'getChannels',
+    ],
+  })
 }
 
 /**
