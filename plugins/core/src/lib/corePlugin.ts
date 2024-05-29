@@ -86,10 +86,7 @@ import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
 import { addSource, createPack } from './nodes/knowledge'
-import {
-  createEmbedderClient,
-  makeEmbedderClient,
-} from '@magickml/embedder/client/ts'
+import { makeEmbedderClient } from '@magickml/embedder/client/ts'
 import { generateToken } from '@magickml/embedder/auth/token'
 
 /**
