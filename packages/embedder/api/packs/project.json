@@ -1,0 +1,26 @@
+{
+  "name": "embedder-api-packs",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/api/packs/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/api/packs",
+        "main": "packages/embedder/api/packs/src/index.ts",
+        "tsConfig": "packages/embedder/api/packs/tsconfig.lib.json",
+        "assets": ["packages/embedder/api/packs/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/embedder/api/packs/jest.config.ts"
+      }
+    }
+  }
+}
