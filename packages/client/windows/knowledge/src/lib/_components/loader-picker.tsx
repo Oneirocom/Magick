@@ -27,6 +27,7 @@ import {
   PptLoaderSchema,
   ConfluenceLoaderSchema,
   JsonLoaderSchema,
+  LoaderTypeSchema,
 } from '@magickml/embedder/schema'
 import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'

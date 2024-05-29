@@ -21,9 +21,7 @@ import { embedderTokenAtom } from '../_pkg/state'
 import { Loader } from '@magickml/embedder/schema'
 import { ColumnDef } from '@tanstack/react-table'
 
-type KnowledgeWindowProps = {
-  token: string
-}
+type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const token = useAtomValue(embedderTokenAtom)
   const client = createEmbedderReactClient({
