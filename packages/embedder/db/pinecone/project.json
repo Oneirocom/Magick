@@ -1,0 +1,20 @@
+{
+  "name": "embedder-db-pinecone",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/db/pinecone/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/db/pinecone",
+        "tsConfig": "packages/embedder/db/pinecone/tsconfig.lib.json",
+        "packageJson": "packages/embedder/db/pinecone/package.json",
+        "main": "packages/embedder/db/pinecone/src/index.ts",
+        "assets": ["packages/embedder/db/pinecone/*.md"]
+      }
+    }
+  }
+}
