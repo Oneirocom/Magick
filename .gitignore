@@ -74,3 +74,6 @@ docstore.json
 
 
 plugins/portal
+
+.nitro
+.output
