@@ -28,7 +28,7 @@ import { arrayMerge } from './values/Array/Merge'
 import { CoreUserService } from './services/userService/coreUserService'
 import { arrayCreate, arrayCreateFunction } from './values/Array/Create'
 import { CoreMemoryService } from './services/coreMemoryService/coreMemoryService'
-import { addKnowledge } from './nodes/actions/addKnowledge'
+// import { addKnowledge } from './nodes/actions/addKnowledge'
 import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
@@ -85,6 +85,12 @@ import { LLMProviderKeys } from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
+import { addSource, createPack } from './nodes/knowledge'
+import {
+  createEmbedderClient,
+  makeEmbedderClient,
+} from '@magickml/embedder/client/ts'
+import { generateToken } from '@magickml/embedder/auth/token'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -104,7 +110,7 @@ export class CorePlugin extends CoreEventsPlugin<
   override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
-    addKnowledge,
+    // addKnowledge,
     addMemory,
     addMessage,
     arrayAccess,
@@ -157,6 +163,8 @@ export class CorePlugin extends CoreEventsPlugin<
     wait,
     webhookEventNode,
     whileLoop,
+    addSource,
+    createPack,
   ]
   values = []
   credentials = corePluginCredentials
@@ -276,6 +284,7 @@ export class CorePlugin extends CoreEventsPlugin<
         this.agentId,
         spellCaster
       ),
+
       [CORE_DEP_KEYS.ACTION_SERVICE]: new CoreActionService(
         this.centralEventBus,
         this.actionQueueName
@@ -291,6 +300,12 @@ export class CorePlugin extends CoreEventsPlugin<
       [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
       [CORE_DEP_KEYS.GET_SECRET]:
         this.credentialsManager.getCustomCredential.bind(this),
+      [CORE_DEP_KEYS.EMBEDDER_CLIENT]: makeEmbedderClient(
+        generateToken({
+          owner: this.projectId,
+          entity: this.projectId,
+        })
+      ),
     }
   }
 
