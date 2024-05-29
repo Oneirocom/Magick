@@ -4,9 +4,7 @@ import { defineNitroPlugin } from 'nitropack/runtime'
 export default defineNitroPlugin(nitroApp => {
   nitroApp.hooks.hook('request', event => {
     handleCors(event, {
-      origin: origin =>
-        origin === 'http://localhost:4000' ||
-        origin === 'http://localhost:3000',
+      origin: origin => true,
       methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
       credentials: true,
     })
