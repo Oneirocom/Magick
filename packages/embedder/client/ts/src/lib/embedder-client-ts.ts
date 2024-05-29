@@ -13,7 +13,7 @@ export function createEmbedderClient(baseUrl: string, options?: ZodiosOptions) {
 }
 
 export const makeEmbedderClient = (token: string) =>
-  createEmbedderClient(process.env['EMBEDDER_SERVER_URL'] || '', {
+  createEmbedderClient(process.env['NEXT_PUBLIC_EMBEDDER_SERVER_URL'] || '', {
     axiosConfig: {
       headers: {
         Authorization: `Bearer ${token}`,

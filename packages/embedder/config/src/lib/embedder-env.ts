@@ -27,14 +27,14 @@
 // }
 
 // export const env = {
-//   JWT_SECRET: validateEnv(process.env['NITRO_JWT_SECRET'], 'NITRO_JWT_SECRET'),
+//   JWT_SECRET: validateEnv(process.env['EMBEDDER_JWT_SECRET'], 'EMBEDDER_JWT_SECRET'),
 //   JWT_EXPIRES_IN: validateEnv(
-//     process.env['NITRO_JWT_EXPIRES_IN'],
-//     'NITRO_JWT_EXPIRES_IN'
+//     process.env['EMBEDDER_JWT_EXPIRES_IN'],
+//     'EMBEDDER_JWT_EXPIRES_IN'
 //   ),
 //   AUTH_ROUTE_MATCHER: validateEnv(
-//     process.env['NITRO_AUTH_ROUTE_MATCHER'],
-//     'NITRO_AUTH_ROUTE_MATCHER'
+//     process.env['EMBEDDER_AUTH_ROUTE_MATCHER'],
+//     'EMBEDDER_AUTH_ROUTE_MATCHER'
 //   ),
 //   DEV_ENTITY: validateEnv(process.env['NITRO_DEV_ENTITY'], 'NITRO_DEV_ENTITY'),
 //   DEV_OWNER: validateEnv(process.env['NITRO_DEV_OWNER'], 'NITRO_DEV_OWNER'),

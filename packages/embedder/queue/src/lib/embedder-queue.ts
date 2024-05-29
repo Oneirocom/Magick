@@ -12,7 +12,10 @@ import { JobStatusType } from '@magickml/embedder/schema'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 
-const connection = { host: 'localhost', port: 6379 }
+const connection = {
+  host: process.env.EMBEDDER_REDIS_HOST || 'localhost',
+  port: process.env.EMBEDDER_REDIS_PORT || 6379,
+}
 
 export function useBullMQ(queueName: string) {
   const queue = new Queue(queueName, { connection })

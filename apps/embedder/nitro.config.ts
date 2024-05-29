@@ -7,7 +7,7 @@ export default defineNitroConfig({
 
   runtimeConfig: {
     redis: {
-      url: process.env.NITRO_REDIS_URL,
+      url: process.env.EMBEDDER_REDIS_URL,
     },
     pinecone: {
       projectName: 'pat',
