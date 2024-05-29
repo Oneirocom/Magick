@@ -155,6 +155,13 @@ const CreateSpellModal = () => {
     },
   ]
 
+  // Submit form on Enter press
+  const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onCreate()
+    }
+  }
+
   return (
     <Modal title="New Spell" options={options} className={css['delete-modal']}>
       <div className={css['spell-details']}>
@@ -170,6 +177,7 @@ const CreateSpellModal = () => {
             className="w-full p-2 border border-gray-300 rounded text-lg"
             placeholder="Enter spell name here"
             {...register('name')}
+            onKeyDown={handleEnterPress} // Call handleEnterPress on key down
           />
           {error && <span className={css['error-message']}>{error}</span>}
         </form>

@@ -1,0 +1,42 @@
+{
+  "name": "embedder",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/embedder/src",
+  "// targets": "to see all targets run: nx show project embedder --web",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/embedder && pwd && nitro dev"
+      }
+    },
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/embedder && pwd && nitro prepare"
+      }
+    },
+
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/embedder && pwd && nitro build"
+      }
+    },
+
+    "generate": {
+      "command": "npx prisma generate --schema ./prisma/schema.prisma",
+      "options": {
+        "cwd": "apps/embedder"
+      }
+    },
+
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/embedder && node ./.output/server/index.mjs"
+      }
+    }
+  }
+}

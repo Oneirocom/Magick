@@ -31,6 +31,19 @@
         "devTargetName": "dev",
         "serveStaticTargetName": "serve-static"
       }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "eslint:lint",
+        "extensions": ["ts", "tsx", "js", "jsx", "html", "vue"]
+      }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "playwright:e2e"
+      }
     }
   ],
   "pluginsConfig": {
@@ -87,6 +100,16 @@
       "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
       "cache": true
     },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["default", "^default"]
+    },
+    "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["default", "^default"]
+    },
     "@nx/vite:build": {
       "cache": true,
       "dependsOn": ["^build"],
@@ -125,5 +148,11 @@
   },
   "defaultProject": "@magickml/server",
   "useInferencePlugins": false,
-  "defaultBase": "main"
+  "defaultBase": "main",
+  "release": {
+    "projects": ["embedder-db-prisma", "embedder-client-react"],
+    "version": {
+      "preVersionCommand": "npx nx build embedder-db-prisma"
+    }
+  }
 }

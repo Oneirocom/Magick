@@ -1,0 +1,20 @@
+{
+  "name": "embedder-worker",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/worker/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/worker",
+        "tsConfig": "packages/embedder/worker/tsconfig.lib.json",
+        "packageJson": "packages/embedder/worker/package.json",
+        "main": "packages/embedder/worker/src/index.ts",
+        "assets": ["packages/embedder/worker/*.md"]
+      }
+    }
+  }
+}

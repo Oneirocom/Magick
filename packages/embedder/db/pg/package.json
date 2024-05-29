@@ -1,0 +1,7 @@
+{
+  "name": "embedder-db-pg",
+  "version": "0.0.1",
+  "dependencies": {
+    "drizzle-zod": "^0.5.1"
+  }
+}

@@ -55,6 +55,13 @@
         "jest": true
       },
       "rules": {}
+    },
+    {
+      "files": ["./package.json", "./generators.json"],
+      "parser": "jsonc-eslint-parser",
+      "rules": {
+        "@nx/nx-plugin-checks": "error"
+      }
     }
   ]
 }

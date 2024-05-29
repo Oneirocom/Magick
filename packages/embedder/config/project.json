@@ -1,0 +1,20 @@
+{
+  "name": "embedder-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/config/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/config",
+        "tsConfig": "packages/embedder/config/tsconfig.lib.json",
+        "packageJson": "packages/embedder/config/package.json",
+        "main": "packages/embedder/config/src/index.ts",
+        "assets": ["packages/embedder/config/*.md"]
+      }
+    }
+  }
+}

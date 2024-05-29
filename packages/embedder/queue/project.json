@@ -1,0 +1,20 @@
+{
+  "name": "embedder-queue",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/queue/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/queue",
+        "tsConfig": "packages/embedder/queue/tsconfig.lib.json",
+        "packageJson": "packages/embedder/queue/package.json",
+        "main": "packages/embedder/queue/src/index.ts",
+        "assets": ["packages/embedder/queue/*.md"]
+      }
+    }
+  }
+}

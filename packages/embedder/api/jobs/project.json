@@ -1,0 +1,26 @@
+{
+  "name": "embedder-api-jobs",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/api/jobs/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/api/jobs",
+        "main": "packages/embedder/api/jobs/src/index.ts",
+        "tsConfig": "packages/embedder/api/jobs/tsconfig.lib.json",
+        "assets": ["packages/embedder/api/jobs/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/embedder/api/jobs/jest.config.ts"
+      }
+    }
+  }
+}

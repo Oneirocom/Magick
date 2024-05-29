@@ -1,0 +1,20 @@
+{
+  "name": "embedder-loaders-core",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/loaders/core/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/loaders/core",
+        "tsConfig": "packages/embedder/loaders/core/tsconfig.lib.json",
+        "packageJson": "packages/embedder/loaders/core/package.json",
+        "main": "packages/embedder/loaders/core/src/index.ts",
+        "assets": ["packages/embedder/loaders/core/*.md"]
+      }
+    }
+  }
+}
