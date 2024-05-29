@@ -4,13 +4,13 @@ import { z } from 'zod'
 import { defineNitroPlugin } from 'nitropack/runtime'
 import { err, warn } from '@magickml/embedder/config'
 
-const secret = process.env['NITRO_JWT_SECRET']
-const exp = process.env['NITRO_JWT_EXPIRES_IN']
-const authRouteMatcher = process.env['NITRO_AUTH_ROUTE_MATCHER']
+const secret = process.env['EMBEDDER_JWT_SECRET']
+const exp = process.env['EMBEDDER_JWT_EXPIRES_IN']
+const authRouteMatcher = process.env['EMBEDDER_AUTH_ROUTE_MATCHER']
 
 if (!secret || !exp || !authRouteMatcher) {
   throw err(
-    'NITRO_JWT_SECRET or NITRO_JWT_EXPIRES_IN or NITRO_AUTH_ROUTE_MATCHER not set'
+    'EMBEDDER_JWT_SECRET or EMBEDDER_JWT_EXPIRES_IN or EMBEDDER_AUTH_ROUTE_MATCHER not set'
   )
 }
 
