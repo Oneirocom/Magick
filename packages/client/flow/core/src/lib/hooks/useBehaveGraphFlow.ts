@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { useCallback, useEffect, useState } from 'react'
@@ -38,8 +38,7 @@ export const useBehaveGraphFlow = ({
   specJson: NodeSpecJSON[] | undefined
   tab: Tab
 }) => {
-  const { events, publish, subscribe } = usePubSub()
-  const { $RELOAD_GRAPH } = events
+  const { events, publish } = usePubSub()
   const dispatch = useDispatch()
   const nodes = useSelector(selectTabNodes(tab.id))
   const edges = useSelector(selectTabEdges(tab.id))
@@ -97,16 +96,6 @@ export const useBehaveGraphFlow = ({
       debouncedUpdate.cancel()
     }
   }, [debouncedUpdate, nodes, edges, specJson, spell])
-
-  useEffect(() => {
-    const reloadGraphEvent = subscribe($RELOAD_GRAPH(tab.id), (event, data) => {
-      setGraphJson(data.spellState.graph)
-    })
-
-    return () => {
-      reloadGraphEvent()
-    }
-  }, [$RELOAD_GRAPH, tab.id, setGraphJson, subscribe])
 
   const nodeTypes = useCustomNodeTypes({
     spellId: spell.id,
