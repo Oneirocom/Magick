@@ -1,0 +1,293 @@
+File: ./src/index.ts
+
+
+File: ./src/generators/generate-zode/generator.ts
+import {
+  addProjectConfiguration,
+  formatFiles,
+  generateFiles,
+  Tree,
+} from '@nx/devkit'
+import * as path from 'path'
+import { GenerateZodeGeneratorSchema } from './schema'
+
+export async function generateZodeGenerator(
+  tree: Tree,
+  options: GenerateZodeGeneratorSchema
+) {
+  const projectRoot = `libs/${options.name}`
+  addProjectConfiguration(tree, options.name, {
+    root: projectRoot,
+    projectType: 'library',
+    sourceRoot: `${projectRoot}/src`,
+    targets: {},
+  })
+  generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options)
+  await formatFiles(tree)
+}
+
+export default generateZodeGenerator
+
+
+File: ./src/generators/generate-zode/schema.d.ts
+export interface GenerateZodeGeneratorSchema {
+  name: string
+}
+
+
+File: ./src/generators/generate-zode/generator.spec.ts
+import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing'
+import { Tree, readProjectConfiguration } from '@nx/devkit'
+
+import { generateZodeGenerator } from './generator'
+import { GenerateZodeGeneratorSchema } from './schema'
+
+describe('generate-zode generator', () => {
+  let tree: Tree
+  const options: GenerateZodeGeneratorSchema = { name: 'test' }
+
+  beforeEach(() => {
+    tree = createTreeWithEmptyWorkspace()
+  })
+
+  it('should run successfully', async () => {
+    await generateZodeGenerator(tree, options)
+    const config = readProjectConfiguration(tree, 'test')
+    expect(config).toBeDefined()
+  })
+})
+
+
+File: ./src/generators/generate-zode/schema.json
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "GenerateZode",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use?"
+    }
+  },
+  "required": ["name"]
+}
+
+
+File: ./src/generators/generate-zode/files/src/index.ts.template
+const variable = "<%= name %>";
+
+File: ./tsconfig.json
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ]
+}
+
+
+File: ./tsconfig.lib.json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
+}
+
+
+File: ./generators.json
+{
+  "generators": {
+    "generate-zode": {
+      "factory": "./src/generators/generate-zode/generator",
+      "schema": "./src/generators/generate-zode/schema.json",
+      "description": "generate-zode generator"
+    }
+  }
+}
+
+
+File: ./.eslintrc.json
+{
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {}
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {}
+    },
+    {
+      "files": ["*.json"],
+      "parser": "jsonc-eslint-parser",
+      "rules": {
+        "@nx/dependency-checks": "error"
+      }
+    },
+    {
+      "files": ["./package.json", "./generators.json"],
+      "parser": "jsonc-eslint-parser",
+      "rules": {
+        "@nx/nx-plugin-checks": "error"
+      }
+    }
+  ]
+}
+
+
+File: ./project.json
+{
+  "name": "zodekit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "nx/zodekit/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/nx/zodekit",
+        "main": "nx/zodekit/src/index.ts",
+        "tsConfig": "nx/zodekit/tsconfig.lib.json",
+        "assets": [
+          "nx/zodekit/*.md",
+          {
+            "input": "./nx/zodekit/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./nx/zodekit/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./nx/zodekit",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./nx/zodekit",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    }
+  }
+}
+
+
+File: ./README.md
+# zodekit
+
+This library was generated with [Nx](https://nx.dev).
+
+## Building
+
+Run `nx build zodekit` to build the library.
+
+
+File: ./grinchset.txt
+File: ./src/index.ts
+
+
+File: ./src/generators/generate-zode/generator.ts
+import {
+  addProjectConfiguration,
+  formatFiles,
+  generateFiles,
+  Tree,
+} from '@nx/devkit'
+import * as path from 'path'
+import { GenerateZodeGeneratorSchema } from './schema'
+
+export async function generateZodeGenerator(
+  tree: Tree,
+  options: GenerateZodeGeneratorSchema
+) {
+  const projectRoot = `libs/${options.name}`
+  addProjectConfiguration(tree, options.name, {
+    root: projectRoot,
+    projectType: 'library',
+    sourceRoot: `${projectRoot}/src`,
+    targets: {},
+  })
+  generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options)
+  await formatFiles(tree)
+}
+
+export default generateZodeGenerator
+
+
+File: ./src/generators/generate-zode/schema.d.ts
+export interface GenerateZodeGeneratorSchema {
+  name: string
+}
+
+
+File: ./src/generators/generate-zode/generator.spec.ts
+import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing'
+import { Tree, readProjectConfiguration } from '@nx/devkit'
+
+import { generateZodeGenerator } from './generator'
+import { GenerateZodeGeneratorSchema } from './schema'
+
+describe('generate-zode generator', () => {
+  let tree: Tree
+  const options: GenerateZodeGeneratorSchema = { name: 'test' }
+
+  beforeEach(() => {
+    tree = createTreeWithEmptyWorkspace()
+  })
+
+  it('should run successfully', async () => {
+    await generateZodeGenerator(tree, options)
+    const config = readProjectConfiguration(tree, 'test')
+    expect(config).toBeDefined()
+  })
+})
+
+
+
+
+File: ./package.json
+{
+  "name": "@magickml/zodekit",
+  "version": "0.0.1",
+  "dependencies": {
+    "@nx/devkit": "19.0.4",
+    "tslib": "^2.3.0"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
+  "private": true,
+  "generators": "./generators.json"
+}
+
+
