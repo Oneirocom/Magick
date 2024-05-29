@@ -1,0 +1,26 @@
+{
+  "name": "embedder-schema",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/schema/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/schema",
+        "main": "packages/embedder/schema/src/index.ts",
+        "tsConfig": "packages/embedder/schema/tsconfig.lib.json",
+        "assets": ["packages/embedder/schema/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/embedder/schema/jest.config.ts"
+      }
+    }
+  }
+}
