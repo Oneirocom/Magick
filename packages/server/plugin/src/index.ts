@@ -11,3 +11,4 @@ export * from './lib/events/event-manager'
 export * from './lib/actions/action-manager'
 
 export * from './lib/abstract/ws'
+export * from './lib/abstract/zodios-node'

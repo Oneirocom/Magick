@@ -16,4 +16,7 @@
     "editor.defaultFormatter": "Prisma.prisma"
   },
   "WillLuke.nextjs.hasPrompted": true,
+  "eslint.validate": [
+    "json"
+  ]
 }

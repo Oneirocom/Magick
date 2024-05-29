@@ -1,0 +1,53 @@
+{
+  "name": "embedder-db-pg",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/embedder/db/pg/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/embedder/db/pg",
+        "tsConfig": "packages/embedder/db/pg/tsconfig.lib.json",
+        "packageJson": "packages/embedder/db/pg/package.json",
+        "main": "packages/embedder/db/pg/src/index.ts",
+        "assets": ["packages/embedder/db/pg/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/embedder/db/pg/jest.config.ts"
+      }
+    },
+
+    "push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd packages/embedder/db/pg && drizzle-kit push --config ./drizzle.config.ts"
+      }
+    },
+    "studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd packages/embedder/db/pg && drizzle-kit studio --config ./drizzle.config.ts"
+      }
+    },
+
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd packages/embedder/db/pg && drizzle-kit generate --config ./drizzle.config.ts"
+      }
+    },
+    "introspect": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd packages/embedder/db/pg && drizzle-kit introspect --config ./drizzle.config.ts"
+      }
+    }
+  }
+}

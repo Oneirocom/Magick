@@ -447,6 +447,7 @@ export const CORE_DEPENDENCIES = {
   // GET_STATE: 'getState',
   UPLOAD_FILE: 'uploadFile',
   DOWNLOAD_FILE: 'downloadFile',
+  EMBEDDER_CLIENT: 'embedderClient',
 }
 
 // COMMANDS
