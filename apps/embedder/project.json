@@ -34,7 +34,6 @@
 
     "serve": {
       "executor": "nx:run-commands",
-      "dependsOn": ["build"],
       "options": {
         "command": "cd apps/embedder && node ./.output/server/index.mjs"
       }
