@@ -1,5 +1,5 @@
 // DOCUMENTED
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
 
 import { useConfig, useFeathers } from '@magickml/providers'
@@ -7,13 +7,10 @@ import {
   useLazyGetSpellQuery,
   useSaveSpellMutation,
   setSyncing,
-  selectPastState,
-  selectFutureState,
 } from 'client/state'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
 import posthog from 'posthog-js'
-import { debounce } from 'lodash'
 
 /**
  * Event Handler component for handling various events in the editor
@@ -29,7 +26,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const [saveSpellMutation] = useSaveSpellMutation()
-  const [isSaving, setIsSaving] = useState(false)
   // TODO: is this a bug?
   const [getSpell, { data: spell }] = useLazyGetSpellQuery({
     id: spellId,
@@ -53,93 +49,9 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     spellRef.current = spell
   }, [spell])
 
-  const pastState = useSelector(selectPastState)
-  const futureState = useSelector(selectFutureState)
+  const { events, subscribe } = pubSub
 
-  const { events, subscribe, publish } = pubSub
-
-  const {
-    $DELETE,
-    $UNDO,
-    $REDO,
-    $RELOAD_GRAPH,
-    $SAVE_SPELL,
-    $SAVE_SPELL_DIFF,
-    $EXPORT,
-  } = events
-
-  // useHotkeys('ctrl+z, meta+z', () => onUndo())
-  // useHotkeys('ctrl+shift+z, meta+shift+z', () => onRedo())
-
-  const addUndoState = (spellid, state) => {
-    // state for each spell is an array of states we add to
-    const key = `spell-state-undo-${spellid}`
-
-    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
-
-    // ensure we keep a maximum of 50 states
-    if (currentState.length >= 20) {
-      currentState.shift()
-    }
-
-    try {
-      localStorage.setItem(key, JSON.stringify([...currentState, state]))
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const removeLastUndoState = spellid => {
-    const key = `spell-state-undo-${spellid}`
-    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
-    const removedState = currentState.pop()
-
-    console.log('removedState', removedState)
-
-    addRedoState(spellid, removedState)
-
-    try {
-      localStorage.setItem(key, JSON.stringify(currentState))
-    } catch (e) {
-      console.error(e)
-      return null
-    }
-
-    return removedState
-  }
-
-  const addRedoState = (spellid, state) => {
-    const key = `spell-state-redo-${spellid}`
-    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
-
-    // ensure we keep a maximum of 50 states
-    if (currentState.length >= 50) {
-      currentState.shift()
-    }
-
-    try {
-      localStorage.setItem(key, JSON.stringify([...currentState, state]))
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const removeLastRedoState = spellid => {
-    const key = `spell-state-redo-${spellid}`
-    const currentState = JSON.parse(localStorage.getItem(key) || '[]')
-    const state = currentState.pop()
-
-    addUndoState(spellid, state)
-
-    try {
-      localStorage.setItem(key, JSON.stringify(currentState))
-    } catch (e) {
-      console.error(e)
-      return null
-    }
-
-    return state
-  }
+  const { $DELETE, $SAVE_SPELL, $SAVE_SPELL_DIFF, $EXPORT } = events
 
   /**
    * Save the current spell
@@ -159,10 +71,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     if (!updatedSpell.type) updatedSpell.type = type
 
-    setIsSaving(true)
     dispatch(setSyncing(true))
-
-    addUndoState(currentSpell.id, currentSpell)
 
     const response = await saveSpellMutation({
       spell: updatedSpell,
@@ -179,7 +88,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
 
     setTimeout(() => {
       dispatch(setSyncing(false))
-      setIsSaving(false)
       posthog.capture('spell_updated', {
         spellId: currentSpell.id,
         projectId: config.projectId,
@@ -212,7 +120,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
       if (currentSpell.spellReleaseId) return
 
       try {
-        setIsSaving(true)
         dispatch(setSyncing(true))
         // We save the diff. Doing this via feathers but may want to switch to rtk query
         const response = await client.service('spells').patch(currentSpell.id, {
@@ -221,14 +128,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         })
         // dispatch(applyState({ value: currentSpell, clearFuture: !isDirty }))
 
-        addUndoState(currentSpell.id, currentSpell)
-
         spellRef.current = response
         onSuccessCB && onSuccessCB()
         // extend the timeout to 500ms to give the user a chance to see the sync icon
         setTimeout(() => {
           dispatch(setSyncing(false))
-          setIsSaving(false)
           posthog.capture('spell_updated', {
             spellId: currentSpell.id,
             projectId: config.projectId,
@@ -249,44 +153,8 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
         return
       }
     },
-    [dispatch, client, config.projectId, enqueueSnackbar, setIsSaving, spellRef]
+    [dispatch, client, config.projectId, enqueueSnackbar, spellRef]
   )
-
-  /**
-   * Trigger the undo action in the editor
-   */
-  const onUndo = useCallback(() => {
-    console.log('UNDOING')
-    if (!spellRef?.current?.id || isSaving) return
-    const lastSpellState = removeLastUndoState(spellRef.current.id)
-
-    if (!lastSpellState) return
-    publish($RELOAD_GRAPH(tab.id), {
-      spellState: lastSpellState,
-      agentId: tab.agentId,
-      projectId: config.projectId,
-    })
-
-    debounce(() => {
-      onSaveDiff(null, lastSpellState, () => {})
-    }, 500)
-  }, [pastState, isSaving, onSaveDiff, publish, tab.id])
-
-  /**
-   * Trigger the redo action in the editor
-   */
-  const onRedo = useCallback(async () => {
-    if (!spellRef?.current?.id || isSaving) return
-    const lastSpellState = removeLastRedoState(spellRef.current.id)
-
-    if (!lastSpellState) return
-    publish($RELOAD_GRAPH(tab.id), {
-      spellState: lastSpellState,
-      agentId: tab.agentId,
-      projectId: config.projectId,
-    })
-    onSaveDiff(null, lastSpellState, () => {})
-  }, [futureState, isSaving, dispatch, onSaveDiff, publish, tab.id])
 
   /**
    * Trigger the delete action in the editor
@@ -345,8 +213,6 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
   const handlerMap = {
     [$SAVE_SPELL(tab.id)]: saveSpell,
     [$EXPORT(tab.id)]: onExport,
-    [$UNDO(tab.id)]: onUndo,
-    [$REDO(tab.id)]: onRedo,
     [$DELETE(tab.id)]: onDelete,
     [$SAVE_SPELL_DIFF(tab.id)]: onSaveDiff,
   }
