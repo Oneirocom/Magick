@@ -85,16 +85,16 @@ const NewMenuBar = props => {
    * Undo handler
    */
   const onUndo = () => {
-    if (!activeTabRef.current) return
-    publish($UNDO(activeTabRef.current.id))
+    // if (!activeTabRef.current) return
+    // publish($UNDO(activeTabRef.current.id))
   }
 
   /**
    * Redo handler
    */
   const onRedo = () => {
-    if (!activeTabRef.current) return
-    publish($REDO(activeTabRef.current.id))
+    // if (!activeTabRef.current) return
+    // publish($REDO(activeTabRef.current.id))
   }
 
   /**
