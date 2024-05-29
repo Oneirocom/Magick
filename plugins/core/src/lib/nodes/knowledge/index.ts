@@ -81,7 +81,7 @@ export const addSource = makeFlowNodeDefinition({
     }
 
     try {
-      const source = await embedder.addLoader(
+      await embedder.addLoader(
         {
           name,
           description,
