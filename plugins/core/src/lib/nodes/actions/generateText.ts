@@ -164,6 +164,14 @@ export const generateText = makeFlowNodeDefinition({
           messages.pop()
         }
 
+        // handle situation where there is no prompt
+        if (!prompt) {
+          commit('done')
+          write('response', '')
+          outerResolve(undefined)
+          return
+        }
+
         // only add system message if it exists
         const allMessages = [
           ...(system ? [{ role: 'system', content: system }] : []),
