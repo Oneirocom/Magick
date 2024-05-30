@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   RootState,
+  useGetChannelsQuery,
   // useGetChannelsQuery
 } from 'client/state'
 import { Checkbox, DataTable, DropdownMenuItem } from '@magickml/client-ui'
@@ -17,9 +18,9 @@ export const ChannelsWindow = () => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
   console.log('currentAgentId', currentAgentId)
-  // const { data: channels, refetch } = useGetChannelsQuery(currentAgentId, {
-  //   skip: !currentAgentId,
-  // })
+  const { data: channels, refetch } = useGetChannelsQuery(currentAgentId, {
+    skip: !currentAgentId,
+  })
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -90,7 +91,7 @@ export const ChannelsWindow = () => {
       <div className="px-8">
         <DataTable<any, unknown>
           columns={columns}
-          data={[]}
+          data={channels || []}
           filterInputPlaceholder="Search channels..."
           columnVisibilityButtonProps={{
             children: 'Columns',
