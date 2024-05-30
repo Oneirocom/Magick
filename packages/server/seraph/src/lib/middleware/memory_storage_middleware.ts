@@ -8,6 +8,7 @@ import { metadataManager } from '../cognitive_functions/memory'
 import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
 
+// @ts-ignore
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
