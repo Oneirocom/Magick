@@ -5,6 +5,7 @@ import {
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
 import { CORE_DEP_KEYS } from '../../config'
+// import { ArrayVariable } from '../../values/Array/ArrayVariable'
 
 export const variableGet = makeFunctionNodeDefinition({
   typeName: 'variables/get',
@@ -76,7 +77,13 @@ export const variableGet = makeFunctionNodeDefinition({
 
     if (value === undefined) {
       // set the variable to the default value
-      value = variable.initialValue
+      if (variable.valueTypeName === 'array') {
+        const key = variableService.getKey(variable.name)
+        value = variable.initialValue
+        value.key = key
+      } else {
+        value = variable.initialValue
+      }
     }
 
     // parse value to the correct type
@@ -92,9 +99,6 @@ export const variableGet = makeFunctionNodeDefinition({
         break
       case 'string':
         value = String(value)
-        break
-      case 'array':
-        value = Array.isArray(value) ? value : [value]
         break
       case 'object':
         value = typeof value === 'object' ? value : {}

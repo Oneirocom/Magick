@@ -21,6 +21,7 @@ export type VariableServiceEvents = {
 export interface IVariableService extends TypedEmitter<VariableServiceEvents> {
   setVariable(name: string, value: any, skipSend?: boolean): Promise<void>
   getVariable(name: string): Promise<any>
+  getKey(name: string): string
 
   setByKey(key: string, value: any, skipSend?: boolean): Promise<void>
   getByKey(key: string): Promise<any>
