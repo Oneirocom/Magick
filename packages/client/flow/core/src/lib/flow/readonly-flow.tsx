@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useMemo } from 'react'
 import { type Tab } from '@magickml/providers'
@@ -83,6 +83,9 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
         nodeMenuActions: [],
         isValidConnectionHandler: () => true,
         onEdgeUpdate: () => {},
+        handleSelectionDragStart: () => {},
+        handleDelete: () => {},
+        handleNodeDragStart: () => {},
       }}
     />
   )
