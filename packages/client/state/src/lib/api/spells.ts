@@ -1,9 +1,4 @@
 // DOCUMENTED
-import {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/dist/query'
 import { RootState } from '../store'
 import { rootApi } from './api'
 

@@ -4,7 +4,6 @@ import {
   feathers,
 } from '@feathersjs/feathers'
 import socketio, { SocketService } from '@feathersjs/socketio-client'
-import { ConfigContext } from '@magickml/providers'
 import { io } from 'socket.io-client'
 
 /**
@@ -141,7 +140,7 @@ class FeathersClientSingleton {
     FeathersClientSingleton.instance = this
   }
 
-  async initialize(token: string, config: ConfigContext) {
+  async initialize(token: string, config: { apiUrl: any }) {
     if (this.client) return this.client
 
     const client = await buildFeathersClient(config, token)
