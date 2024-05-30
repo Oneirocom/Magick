@@ -3,6 +3,7 @@
 import { MagickReactFlowInstance } from '../flow'
 import { NodeItem } from './NodeItem'
 import { XYPosition } from '@xyflow/react'
+import { ItemType } from './types'
 
 export const NodePickerMenu = ({
   groupedData,
@@ -17,7 +18,7 @@ export const NodePickerMenu = ({
 }) => {
   return (
     <div className="max-h-[320px] overflow-y-scroll w-full">
-      {groupedData.map((item, index) => {
+      {groupedData.map((item: ItemType | undefined, index: number) => {
         const isLast = index === groupedData.length - 1
         return (
           <div key={index}>

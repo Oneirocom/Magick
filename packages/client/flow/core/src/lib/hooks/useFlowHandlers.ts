@@ -519,6 +519,8 @@ export const useFlowHandlers = ({
         const nodePickerWidth = 240
         const nodePickerHeight = 251
 
+        if (!clientX || !clientY) return
+
         // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
         let xNodePickerPosition = clientX - bounds.left
         let yNodePickerPosition = clientY - bounds.top
@@ -560,7 +562,10 @@ export const useFlowHandlers = ({
     [parentRef, currentKeyPressed]
   )
 
-  const nodeCreator = (event, keyPressed) => {
+  const nodeCreator = (
+    event: { clientX: any; clientY: any },
+    keyPressed: string
+  ) => {
     switch (keyPressed) {
       case 'b':
         handleAddNode(
@@ -614,7 +619,7 @@ export const useFlowHandlers = ({
   }
 
   const handlePaneClick = useCallback(
-    e => {
+    (e: ReactMouseEvent) => {
       if (currentKeyPressed) {
         nodeCreator(e, currentKeyPressed)
         closeNodePicker()
@@ -629,7 +634,11 @@ export const useFlowHandlers = ({
 
   const handlePaneContextMenu: ReactFlowProps['onPaneContextMenu'] =
     useCallback(
-      mouseClick => {
+      (mouseClick: {
+        preventDefault: () => void
+        clientX: number
+        clientY: number
+      }) => {
         mouseClick.preventDefault()
         if (parentRef && parentRef.current) {
           const bounds = parentRef.current.getBoundingClientRect()

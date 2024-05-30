@@ -70,7 +70,9 @@ export const createStore = (config?: any): ExtendedStore => {
     preloadedState: {
       globalConfig: config,
     },
-    middleware: getDefaultMiddleware =>
+    middleware: (
+      getDefaultMiddleware: (arg0: { serializableCheck: boolean }) => any[]
+    ) =>
       getDefaultMiddleware({
         serializableCheck: false,
       })

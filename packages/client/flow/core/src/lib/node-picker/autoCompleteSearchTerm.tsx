@@ -1,9 +1,15 @@
-"use client"
+'use client'
+
+import { NodeSpecJSON } from '@magickml/behave-graph'
 
 export const autoCompleteSearchTerm = ({
   filteredNodes,
   search,
   setSearch,
+}: {
+  filteredNodes: NodeSpecJSON[]
+  search: string
+  setSearch: (search: string) => void
 }) => {
   if (!filteredNodes || search.length === 0 || filteredNodes?.length === 0)
     return
@@ -15,7 +21,7 @@ export const autoCompleteSearchTerm = ({
   if (relevantItems.length === 0) return
 
   // Function to find the most common prefix among an array of strings
-  const findMostCommonPrefix = arr => {
+  const findMostCommonPrefix = (arr: string[]) => {
     if (arr.length === 0) return ''
 
     let prefix = ''

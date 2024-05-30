@@ -8,7 +8,7 @@
       "@nx/react/typings/image.d.ts",
       "vite/client"
     ],
-    "noImplicitAny": false,
+    "noImplicitAny": true
   },
   "exclude": [
     "**/*.spec.ts",
@@ -20,10 +20,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": [
-    "src/**/*.js",
-    "src/**/*.jsx",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ]
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
 }

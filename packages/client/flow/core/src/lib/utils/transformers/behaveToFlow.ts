@@ -1,12 +1,24 @@
 'use client'
 
-import type { GraphJSON } from '@magickml/behave-graph'
+import type { GraphJSON, Variable } from '@magickml/behave-graph'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'
 import { SpellInterface } from 'server/schemas'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
+
+export type Comment = {
+  id: string
+  height: number
+  width: number
+  metadata: {
+    positionX: number
+    positionY: number
+  }
+  text: string
+  fontSize: number
+}
 
 export const behaveToFlow = (
   graph: GraphJSON,
@@ -19,7 +31,7 @@ export const behaveToFlow = (
   // Start logging time for performance
   console.time('behaveToFlow')
 
-  graph?.data?.comments?.forEach(comment => {
+  graph?.data?.comments?.forEach((comment: Comment) => {
     nodes.push({
       id: comment.id,
       type: 'comment',
@@ -54,7 +66,7 @@ export const behaveToFlow = (
     // PATCH FOR VARIABLE NODES
     if (nodeJSON.type === 'variable' && configuration.variableId) {
       const variable = spell.graph.variables.find(
-        variable => variable.id === configuration.variableId
+        (variable: Variable) => variable.id === configuration.variableId
       )
       if (variable) {
         configuration.valueTypeName = variable.valueTypeName

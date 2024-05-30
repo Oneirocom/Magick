@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { XYPosition } from '@xyflow/react'
@@ -22,7 +22,7 @@ export const NodeItem = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleClick = ({ item }) => {
+  const handleClick = ({ item }: { item: string }) => {
     onPickNode(item, pickedNodePosition)
   }
 
@@ -50,7 +50,7 @@ export const NodeItem = ({
                 key={subItem?.title ?? subItem?.type}
                 onClick={e => {
                   e.stopPropagation()
-                  handleClick({ item: subItem?.type })
+                  handleClick({ item: subItem?.type as string })
                 }}
                 className="py-1 pr-2 pl-6 border-b-0 border-t border-black hover:underline hover:bg-[#282d33] cursor-pointer"
               >

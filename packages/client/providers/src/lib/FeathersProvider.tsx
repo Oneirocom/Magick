@@ -29,6 +29,9 @@ export const useFeathers = (): FeathersContext => useContext(Context)
 export const FeathersProvider = ({
   children,
   token,
+}: {
+  children: React.ReactNode
+  token: string
 }): React.JSX.Element | null => {
   const { currentAgentId } = useSelector<RootState, RootState['globalConfig']>(
     state => state.globalConfig
@@ -142,7 +145,7 @@ export const FeathersProvider = ({
   useEffect(() => {
     if (!client) return
 
-    const handler = (data): void => {
+    const handler = (data: { isLive: any }): void => {
       pongReceivedRef.current = true
       if (data.isLive) dispatch(setConnected(true))
 

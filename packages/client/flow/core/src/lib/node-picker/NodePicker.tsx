@@ -13,6 +13,7 @@ import { NodePickerProps } from './types'
 import { Input } from '@magickml/client-ui'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
+import { NodeSpecJSON } from '@magickml/behave-graph'
 
 export const NodePicker: React.FC<NodePickerProps> = ({
   pickedNodePosition,
@@ -40,8 +41,8 @@ export const NodePicker: React.FC<NodePickerProps> = ({
   }, [specJSON, spell])
 
   const { filteredNodes, groupedData } = useFilteredAndGroupedNodes({
-    specJSON: nodeSpecs,
-    filters,
+    specJSON: nodeSpecs as NodeSpecJSON[],
+    filters: filters as { handleType: string; valueType: string },
     search,
   })
 

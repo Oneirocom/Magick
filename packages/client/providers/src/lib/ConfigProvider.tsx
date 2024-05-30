@@ -52,7 +52,13 @@ export const defaultConfig: AppConfig = {
 /**
  * ConfigProvider component that handles global configuration
  */
-export const ConfigProvider = ({ config = defaultConfig, children }) => {
+export const ConfigProvider = ({
+  config = defaultConfig,
+  children,
+}: {
+  config: AppConfig
+  children: React.ReactNode
+}) => {
   const [apiUrl, setApiUrl] = useState<ConfigContext['apiUrl']>(config.apiUrl)
   const [projectId, setProjectId] = useState<ConfigContext['projectId']>(
     config.projectId

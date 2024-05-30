@@ -4,6 +4,7 @@ import {
   feathers,
 } from '@feathersjs/feathers'
 import socketio, { SocketService } from '@feathersjs/socketio-client'
+import { ConfigContext } from '@magickml/providers'
 import { io } from 'socket.io-client'
 
 /**
@@ -105,7 +106,10 @@ const configureCustomServices = (
  * @param token - API token.
  * @returns Feathers client
  */
-const buildFeathersClient = async (config, token): Promise<any> => {
+const buildFeathersClient = async (
+  config: { apiUrl: any },
+  token: string
+): Promise<any> => {
   const socket = io(`${config.apiUrl}?token=${token}`, {
     transports: ['websocket'],
     extraHeaders: {
@@ -137,7 +141,7 @@ class FeathersClientSingleton {
     FeathersClientSingleton.instance = this
   }
 
-  async initialize(token, config) {
+  async initialize(token: string, config: ConfigContext) {
     if (this.client) return this.client
 
     const client = await buildFeathersClient(config, token)

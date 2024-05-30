@@ -1,3 +1,4 @@
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 import { useCallback, useState } from 'react'
 
 export const useHistory = ({
@@ -7,13 +8,20 @@ export const useHistory = ({
   setNodes,
   nodes,
   edges,
+}: {
+  maxHistorySize?: number
+  enableShortcuts?: boolean
+  setEdges: (edges: MagickEdgeType[]) => void
+  setNodes: (nodes: MagickNodeType[]) => void
+  nodes: MagickNodeType[]
+  edges: MagickEdgeType[]
 }) => {
   const [history, setHistory] = useState<any>([])
   const [redoStack, setRedoStack] = useState<any>([])
 
   const takeSnapshot = useCallback(() => {
     console.log('TAKING SNAPSHOT', { nodes, edges })
-    setHistory(currentHistory => [
+    setHistory((currentHistory: any) => [
       ...currentHistory.slice(
         currentHistory.length - maxHistorySize + 1,
         currentHistory.length
@@ -26,11 +34,11 @@ export const useHistory = ({
   const undo = useCallback(() => {
     const lastEntry = history[history.length - 1]
     if (lastEntry) {
-      setHistory(previousHistory =>
+      setHistory((previousHistory: any) =>
         previousHistory.slice(0, previousHistory.length - 1)
       )
       console.log('Nodes:', nodes)
-      setRedoStack(previousRedoStack => [
+      setRedoStack((previousRedoStack: any) => [
         ...previousRedoStack,
         { nodes: nodes, edges: edges },
       ])
@@ -42,10 +50,10 @@ export const useHistory = ({
   const redo = useCallback(() => {
     const lastRedoEntry = redoStack[redoStack.length - 1]
     if (lastRedoEntry) {
-      setRedoStack(previousRedoStack =>
+      setRedoStack((previousRedoStack: any) =>
         previousRedoStack.slice(0, previousRedoStack.length - 1)
       )
-      setHistory(previousHistory => [
+      setHistory((previousHistory: any) => [
         ...previousHistory,
         { nodes: nodes, edges: edges },
       ])

@@ -43,7 +43,9 @@ export const legacyProviderIdMapping = {
   ollama: 'unsupported',
 }
 
-export const getProviderIdMapping = (providerId: string): string => {
+export const getProviderIdMapping = (
+  providerId: keyof typeof legacyProviderIdMapping
+): string => {
   return legacyProviderIdMapping[providerId] || 'unsupported'
 }
 

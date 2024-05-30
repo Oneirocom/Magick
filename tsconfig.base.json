@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "jsx": "react-jsx",
     "target": "esnext",
     "module": "esnext",
@@ -18,7 +18,7 @@
     "esModuleInterop": true,
     "inlineSources": true,
     "noPropertyAccessFromIndexSignature": false,
-    "strict": false,
+    "strict": true,
     "typeRoots": [
       "packages/@types",
       "./node_modules/@types",

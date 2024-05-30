@@ -1,8 +1,9 @@
-"use client"
+'use client'
 
 import {
   NodeCategory,
   NodeSpecJSON,
+  Variable,
   VariableJSON,
 } from '@magickml/behave-graph'
 import React, { PropsWithChildren } from 'react'
@@ -57,7 +58,7 @@ export const NodeContainerV2: React.FC<PropsWithChildren<NodeProps>> = ({
 
   if (config?.variableId) {
     const variable = graph.variables.find(
-      variable => variable.id === config.variableId
+      (variable: Variable) => variable.id === config.variableId
     ) as VariableJSON
     if (variable) {
       const colorName = valueTypeColorMap[variable.valueTypeName]
