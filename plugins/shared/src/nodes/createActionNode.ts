@@ -43,14 +43,18 @@ export const createActionNode = <
     out: outputs,
     initialState: undefined,
     triggered: async ({ commit, read, write, graph: { getDependency } }) => {
-      const dependencies = dependencyKeys.reduce((acc, key) => {
-        const dependency = getDependency(key)
-        if (!dependency) {
-          throw new Error(`Missing required dependency: ${key}`)
-        }
-        acc[key] = dependency
-        return acc
-      }, {} as { [K in TDependencies[number]]: any })
+      const dependencies = dependencyKeys.reduce(
+        (acc: { [K in TDependencies[number]]: any }, key: string) => {
+          const dependency = getDependency(key)
+          if (!dependency) {
+            throw new Error(`Missing required dependency: ${key}`)
+          }
+          // @ts-ignore
+          acc[key] = dependency
+          return acc
+        },
+        {} as { [K in TDependencies[number]]: any }
+      )
 
       function readInput<K extends keyof TInputs>(key: K): TInputs[K] {
         return read(key as any)

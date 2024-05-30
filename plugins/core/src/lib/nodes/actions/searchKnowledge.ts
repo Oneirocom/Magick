@@ -35,7 +35,7 @@ export const searchKnowledge = makeFlowNodeDefinition({
       numDocuments: Number(count),
       metadata,
     })
-    const knowledge = response.map(result => result.context)
+    const knowledge = response.map((result: { context: any }) => result.context)
     write('knowledge', knowledge)
     write('data', response)
     commit('flow')

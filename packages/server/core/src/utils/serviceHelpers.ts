@@ -55,6 +55,7 @@ export function saveRequest({
 
   // Save and create the request object in Feathers app.
   return app.service('request').create({
+    // @ts-ignore
     id: v4(),
     projectId,
     agentId,

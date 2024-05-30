@@ -61,7 +61,7 @@ export class Agent
   pubsub: RedisPubSub
   ready = false
   app: Application
-  spellbook: Spellbook<Agent, Application>
+  spellbook: Spellbook<Application>
   pluginManager: PluginManager
   outputTypes: any[] = []
   heartbeatInterval: NodeJS.Timer
@@ -242,13 +242,15 @@ export class Agent
   ) {
     // remove unwanted data
     if (event?.hasOwnProperty('content')) {
-      delete event.content
+      // @ts-ignore
+      delete event?.content
     }
     if (event?.hasOwnProperty('rawData')) {
-      delete event.rawData
+      // @ts-ignore
+      delete event?.rawData
     }
     if (event?.hasOwnProperty('data')) {
-      delete event.data
+      delete event?.data
     }
 
     metadata.event = event
@@ -257,7 +259,7 @@ export class Agent
   }
 
   // published an event to the agents event stream
-  publishEvent(event, message) {
+  publishEvent(event: string, message: Record<string, any>) {
     // this.logger.trace('AGENT: publishing event %s', event)
     this.pubsub.publish(event, {
       ...message,
@@ -268,7 +270,7 @@ export class Agent
   }
 
   // sends a log event along the event stream
-  log(message, data = {}) {
+  log(message: string, data = {}) {
     this.logger.info(data, `${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_LOG(this.id), {
       agentId: this.id,
@@ -279,7 +281,7 @@ export class Agent
     })
   }
 
-  warn(message, data = {}) {
+  warn(message: string, data = {}) {
     this.logger.warn(data, `${message} ${JSON.stringify(data)}`)
     this.publishEvent(AGENT_WARN(this.id), {
       agentId: this.id,
@@ -290,7 +292,7 @@ export class Agent
     })
   }
 
-  error(message, data = {}) {
+  error(message: string, data = {}) {
     this.logger.error(data, `${message}`)
     this.publishEvent(AGENT_ERROR(this.id), {
       agentId: this.id,

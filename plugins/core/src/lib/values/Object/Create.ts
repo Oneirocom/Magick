@@ -1,4 +1,5 @@
 import {
+  InputSocketSpecJSON,
   NodeCategory,
   SocketsList,
   makeFunctionNodeDefinition,
@@ -30,7 +31,7 @@ export const ObjectCreate = makeFunctionNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,
@@ -44,11 +45,14 @@ export const ObjectCreate = makeFunctionNodeDefinition({
     object: 'object',
   },
   exec: async ({ read, write, configuration }) => {
-    const newArray = configuration.socketInputs.reduce((acc, socketInput) => {
-      const item = read(socketInput.name)
-      acc[socketInput.name] = item
-      return acc
-    }, {})
+    const newArray = configuration.socketInputs.reduce(
+      (acc: any, socketInput: InputSocketSpecJSON) => {
+        const item = read(socketInput.name)
+        acc[socketInput.name] = item
+        return acc
+      },
+      {}
+    )
 
     write('object', newArray)
   },

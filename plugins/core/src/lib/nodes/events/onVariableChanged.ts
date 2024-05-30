@@ -1,10 +1,16 @@
-import { Assert, NodeCategory, SocketsList } from '@magickml/behave-graph'
+import {
+  Assert,
+  InputSocketSpecJSON,
+  NodeCategory,
+  SocketsList,
+} from '@magickml/behave-graph'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
 import { CORE_DEP_KEYS } from '../../config'
 import {
   VariableService,
   VariableServiceEvents,
 } from '../../services/variableService'
+import { EventPayload } from 'server/plugin'
 
 type State = {
   onVariableChangedEvent?: VariableServiceEvents['variableChanged'] | undefined
@@ -55,7 +61,7 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
         : []
 
       const sockets: SocketsList =
-        socketArray.map(socketInput => {
+        socketArray.map((socketInput: InputSocketSpecJSON) => {
           return {
             key: socketInput.name,
             name: socketInput.name,
@@ -88,12 +94,13 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
       const variableId = configuration.variableId
       if (!variableId) return
 
-      const variable = graph.variables[variableId]
-      if (!variable) return
-
-      const variableName = variable.name
-
-      const onVariableChangedEvent = ({ value, event }) => {
+      const onVariableChangedEvent = ({
+        value,
+        event,
+      }: {
+        value: string
+        event: EventPayload
+      }) => {
         const output = configuration.socketOutputs[0]
         handleState(event, false)
         write(output.name, value)
@@ -101,8 +108,6 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
           finish()
         })
       }
-
-      variableService.on(variableName, onVariableChangedEvent)
 
       return {
         onVariableChangedEvent,

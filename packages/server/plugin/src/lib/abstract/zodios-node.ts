@@ -82,6 +82,7 @@ export const createZodiosNode = ({
 
       const headers = getHeaders ? await getHeaders() : {}
 
+      // @ts-ignore
       const fn = new Zodios(baseUrl, [def], {
         ...options,
         axiosConfig: {

@@ -46,7 +46,7 @@ function createTextStreamGenerator(): TextStreamGenerator {
         const token = queue.shift()
         // Explicitly check for null to allow empty strings to be yielded
         if (token !== null) {
-          yield token
+          yield token as string
         } else {
           return // Finish the generator when a null token is encountered
         }

@@ -18,10 +18,11 @@ import {
   agentJsonFields,
 } from './agents.schema'
 import type { Application, HookContext } from '../../declarations'
-import { AgentService, getOptions } from './agents.class'
+import { AgentParams, AgentService, getOptions } from './agents.class'
 import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
 import { checkPermissions } from '../../lib/feathersPermissions'
+import { ISeraphEvent } from 'servicesShared'
 
 // Re-export agents.class and agents.schema
 export * from './agents.class'
@@ -113,7 +114,7 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/seraphEvents', {
-    find: async params => {
+    find: async (params: AgentParams) => {
       try {
         const result = await app.service('agents').getSeraphEvents(params)
         return result
@@ -124,7 +125,7 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/createSeraphEvent', {
-    create: async data => {
+    create: async (data: ISeraphEvent) => {
       try {
         const result = await app.service('agents').createSeraphEvent(data)
         return result
@@ -135,7 +136,7 @@ export const agent = (app: Application) => {
   })
 
   app.use('/agents/deleteSeraphEvent', {
-    remove: async seraphEventId => {
+    remove: async (seraphEventId: string) => {
       try {
         const result = await app.service('agents').deleteSeraphEvent({
           seraphEventId: seraphEventId,
@@ -152,7 +153,7 @@ export const agent = (app: Application) => {
   // this handles relaying all agent messages up to connected clients.
   // Only subscribe on the main server not any workers.
   if (app.get('environment') === 'server')
-    pubSub.patternSubscribe('agent*', (message, channel) => {
+    pubSub.patternSubscribe('agent*', (message: string, channel: string) => {
       // parse  the channel from agent:agentId:domain:messageType
       const agentId = channel.split(':')[1]
       // parse the domain of the agent message

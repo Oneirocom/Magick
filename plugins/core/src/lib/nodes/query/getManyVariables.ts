@@ -1,5 +1,7 @@
 import {
+  InputSocketSpecJSON,
   NodeCategory,
+  OutputSocketSpecJSON,
   SocketsList,
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
@@ -38,7 +40,7 @@ export const getManyVariables = makeFunctionNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,
@@ -59,52 +61,56 @@ export const getManyVariables = makeFunctionNodeDefinition({
 
     if (!variableService) return
 
-    const outputs = configuration.socketOutputs.filter(socketOutput => {
-      const variable = Object.values(variables).find(
-        v => v.name === socketOutput.name
-      )
-      return !!variable
-    })
-
-    if (outputs.length) {
-      const promises = outputs.map(async socketOutput => {
+    const outputs = configuration.socketOutputs.filter(
+      (socketOutput: OutputSocketSpecJSON) => {
         const variable = Object.values(variables).find(
           v => v.name === socketOutput.name
         )
-        if (!variable) return
+        return !!variable
+      }
+    )
 
-        let value = await variableService.getVariable(variable.name)
+    if (outputs.length) {
+      const promises = outputs.map(
+        async (socketOutput: OutputSocketSpecJSON) => {
+          const variable = Object.values(variables).find(
+            v => v.name === socketOutput.name
+          )
+          if (!variable) return
 
-        if (value === undefined) {
-          // set the variable to the default value
-          value = variable.initialValue
+          let value = await variableService.getVariable(variable.name)
+
+          if (value === undefined) {
+            // set the variable to the default value
+            value = variable.initialValue
+          }
+
+          switch (variable.valueTypeName) {
+            case 'integer':
+              value = BigInt(value)
+              break
+            case 'float':
+              value = parseFloat(value)
+              break
+            case 'boolean':
+              value = Boolean(value)
+              break
+            case 'string':
+              value = String(value)
+              break
+            case 'array':
+              value = Array.isArray(value) ? value : [value]
+              break
+            case 'object':
+              value = typeof value === 'object' ? value : {}
+              break
+            default:
+              break
+          }
+
+          write(socketOutput.name, value)
         }
-
-        switch (variable.valueTypeName) {
-          case 'integer':
-            value = BigInt(value)
-            break
-          case 'float':
-            value = parseFloat(value)
-            break
-          case 'boolean':
-            value = Boolean(value)
-            break
-          case 'string':
-            value = String(value)
-            break
-          case 'array':
-            value = Array.isArray(value) ? value : [value]
-            break
-          case 'object':
-            value = typeof value === 'object' ? value : {}
-            break
-          default:
-            break
-        }
-
-        write(socketOutput.name, value)
-      })
+      )
 
       await Promise.all(promises)
     }

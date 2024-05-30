@@ -26,6 +26,8 @@ class PresignedUrlService implements PresignedUrlServiceMethods {
     this.options = options
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-ignore
   async create(
     body: PresignedUrlBody,
     params: Params

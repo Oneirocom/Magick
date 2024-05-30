@@ -69,7 +69,7 @@ export function checkPermissions(options: Options = {}) {
         : value
     const requiredPermissions = ['*', `*:${method}`]
 
-    currentPermissions.forEach(permission =>
+    currentPermissions.forEach((permission: string) =>
       requiredPermissions.push(
         `${permission}`,
         `${permission}:*`,
@@ -79,12 +79,12 @@ export function checkPermissions(options: Options = {}) {
 
     debug('Required Permissions', requiredPermissions)
 
-    const permitted = permissionList.some(current =>
+    const permitted = permissionList.some((current: string) =>
       requiredPermissions.includes(current)
     )
 
     if (error !== false && !permitted) {
-     throw new Forbidden('You do not have the correct permissions.')
+      throw new Forbidden('You do not have the correct permissions.')
     }
 
     context.params = {

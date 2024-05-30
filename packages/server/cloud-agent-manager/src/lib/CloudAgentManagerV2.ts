@@ -132,7 +132,7 @@ export class CloudAgentManagerV2 {
     await this.pubSub.del(lockKey)
   }
 
-  async createAgent(agentId) {
+  async createAgent(agentId: string) {
     const lockKey = `agent:lock:${agentId}`
     const lock = await this.acquireLock(lockKey)
 
@@ -154,7 +154,7 @@ export class CloudAgentManagerV2 {
     }
   }
 
-  stopAgent(agentId) {
+  stopAgent(agentId: string) {
     // Publish a message to MQ to stop the agent.
     this.pubSub.publish(
       AGENT_DELETE_JOB(agentId),

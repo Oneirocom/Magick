@@ -37,7 +37,9 @@ const init = (options: InitOptions) => {
   const identifiedProtocolName = Object.keys(adaptors).filter(adaptor =>
     name.indexOf(adaptor) !== -1 ? adaptor : null
   )[0]
-  const adapter = adaptors[identifiedProtocolName] as typeof redis
+  const adapter = adaptors[
+    identifiedProtocolName as keyof typeof adaptors
+  ] as typeof redis
 
   if (!adapter) {
     throw new Error(`${name} is an invalid adapter (uri ${uri})`)

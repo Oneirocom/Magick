@@ -67,11 +67,12 @@ export class AgentChannelsService<
   }
 
   async getChannels(agentId: string, params?: ServiceParams) {
+    // TODO FIX THIS
+    // @ts-ignore
     return this._find({
       query: {
         agentId,
       },
-      ...params,
     })
   }
 }

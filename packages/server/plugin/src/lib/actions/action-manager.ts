@@ -19,7 +19,7 @@ export interface ActionDefinition<T extends string = string> {
   actionName: T
   displayName: string
   skipSave?: boolean
-  handler: (ActionPayload) => void | Promise<void>
+  handler: (payload: ActionPayload) => void | Promise<void>
 }
 
 export type ActionDefinitionInfo = Omit<ActionDefinition, 'handler'>

@@ -267,7 +267,7 @@ export class AgentService<
     }
   }
 
-  async deleteSeraphEvent(data): Promise<boolean> {
+  async deleteSeraphEvent(data: any): Promise<boolean> {
     try {
       const { seraphEventId } = data
       if (!seraphEventId) {

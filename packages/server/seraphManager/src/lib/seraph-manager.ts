@@ -83,7 +83,7 @@ export class SeraphManager extends EventEmitter {
     )
 
     eventTypes.forEach(event => {
-      this.seraphCore.on(event, data => {
+      this.seraphCore.on(event, (data: Record<string, any>) => {
         const eventData: ISeraphEvent = this.createSeraphEvent(event, {
           [event]: data,
         })
@@ -132,7 +132,7 @@ export class SeraphManager extends EventEmitter {
     const { data, type, agentId, spellId } = eventData
     const { message } = data.request || {}
 
-    const spell = await this.app.service('spells').get(spellId, {})
+    const spell = await this.app.service('spells').get(spellId as string, {})
 
     this.logger.debug(
       { eventData },

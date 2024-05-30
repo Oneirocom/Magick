@@ -10,6 +10,7 @@ import Redis from 'ioredis'
 import { AgentLoggingService, type Agent } from 'server/agents'
 import { EventStore } from './services/eventStore'
 import { KeyvStateService } from './services/keyvStateService'
+import { EventPayload } from 'server/plugin'
 
 export class BaseRegistry {
   connection: Redis
@@ -31,7 +32,7 @@ export class BaseRegistry {
       agent.id
     )
 
-    this.dependencies.IEventStore.on('done', event => {
+    this.dependencies.IEventStore.on('done', (event: EventPayload) => {
       if (event) {
         this.agent.emit('eventComplete', event)
       }

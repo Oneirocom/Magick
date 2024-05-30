@@ -94,7 +94,7 @@ class CoreEventClient {
    * @param message The message received on the subscribed channel.
    * @param channel The channel on which the message was received.
    */
-  coreEventHandler(event, channel) {
+  coreEventHandler(event: EventPayload, channel: string) {
     const eventType = this.extractEventType(channel)
 
     this.logger.debug(`Received event of type '${eventType}'`)

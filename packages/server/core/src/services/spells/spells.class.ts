@@ -3,6 +3,7 @@ import { NotFound } from '@feathersjs/errors/lib'
 /**
  * Imports
  */
+// @ts-ignore
 import otJson0 from 'ot-json0'
 import { KnexAdapter } from '@feathersjs/knex'
 import { BadRequest } from '@feathersjs/errors/lib'

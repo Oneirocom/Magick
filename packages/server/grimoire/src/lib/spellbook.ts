@@ -5,7 +5,7 @@ import { SpellInterface } from 'server/schemas'
 import { SpellCaster } from './spellCaster'
 import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
-import { IAgentLogger } from 'server/agents'
+import { Agent, IAgentLogger } from 'server/agents'
 import { type CommandHub } from 'server/command-hub'
 import { AGENT_SPELL_STATE } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
@@ -56,12 +56,12 @@ export type SpellState = {
  *
 
  */
-export class Spellbook<Agent extends IAgent, Application extends IApplication> {
+export class Spellbook<Application extends IApplication> {
   /**
    * Map of spell runners for each spell id stored by event channel
    * We use this to scale spell runners and to keep track of them.
    */
-  private eventMap: Map<string, Map<string, SpellCaster<Agent>>> = new Map()
+  private eventMap: Map<string, Map<string, SpellCaster>> = new Map()
   private spells: Map<string, SpellInterface> = new Map()
 
   private commandHub: CommandHub
@@ -455,7 +455,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     })
     const loadedSpells = await Promise.all(spellPromises)
     const validSpellCasters = loadedSpells.filter(
-      (spellCaster): spellCaster is SpellCaster<Agent> => !!spellCaster
+      (spellCaster): spellCaster is SpellCaster => !!spellCaster
     )
     const spellMap = new Map(
       validSpellCasters.map(spellCaster => [spellCaster.spell.id, spellCaster])
@@ -498,7 +498,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   /**
    * Toggles the watchSpells flag.
    */
-  toggleLive(data) {
+  toggleLive(data: { live: any }) {
     this.logger.trace(`Toggling watchSpells to ${data.live}`)
     const { live } = data
     this.watchSpells = live ? live : !this.watchSpells
@@ -517,7 +517,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   /**
    * Toggles the debug flag.
    */
-  async toggleDebug(data) {
+  async toggleDebug(data: { debug: any; spellId?: any }) {
     this.logger.trace(`Toggling debug to ${data.debug}`)
     const { spellId, debug } = data
 
@@ -565,7 +565,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * const spellCaster= await spellbook.loadById(spellId);
    */
-  async loadById(spellId: string): Promise<SpellCaster<Agent> | null> {
+  async loadById(spellId: string): Promise<SpellCaster | null> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
       const spell = await this.app.service('spells').get(spellId)
@@ -597,7 +597,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   async loadSpell(
     spell: SpellInterface,
     _initialState?: SpellState
-  ): Promise<SpellCaster<Agent> | null> {
+  ): Promise<SpellCaster | null> {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
@@ -609,7 +609,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     const initialState = _initialState ?? (await this.getSpellState(spell.id))
 
     try {
-      const spellCaster = new SpellCaster<Agent>({
+      const spellCaster = new SpellCaster({
         agent: this.agent,
         pluginManager: this.pluginManager,
         connection: this.app.get('redis'),
@@ -668,7 +668,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     return false
   }
 
-  replaceSpellCaster(spellId: string, spellCaster: SpellCaster<Agent>) {
+  replaceSpellCaster(spellId: string, spellCaster: SpellCaster) {
     for (const spellCasters of this.eventMap.values()) {
       if (spellCasters.has(spellId)) {
         const oldSpellCaster = spellCasters.get(spellId)
@@ -742,7 +742,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
    */
-  async playSpell(data) {
+  async playSpell(data: { spellId: any }) {
     const { spellId } = data
     for (const spellCasters of this.eventMap.values()) {
       const spellCaster = spellCasters.get(spellId)
@@ -758,7 +758,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * Used by the agent to control the spell runner via commands.
    * @param {string} spellId - Id of the spell.
    */
-  async pauseSpell(data) {
+  async pauseSpell(data: { spellId: any }) {
     const { spellId } = data
     for (const spellCasters of this.eventMap.values()) {
       const spellCaster = spellCasters.get(spellId)
@@ -789,7 +789,7 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
    * @example
    * spellbook.killSpell(spellId);
    */
-  killSpell(data) {
+  killSpell(data: { spellId: any }) {
     const { spellId } = data
     this.agent.log(`Killing spell ${spellId} in agent ${this.agent.id}`)
     this.clearSpellCasters(spellId)

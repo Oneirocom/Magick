@@ -142,19 +142,19 @@ export async function initApp(environment: Environment = 'default') {
   logger.info('SETTING UP REDIS')
   app.configure(
     feathersSync({
-      uri: REDIS_URL,
+      uri: REDIS_URL as string,
       serialize: stringify,
       deserialize: JSON.parse,
     })
   )
 
   // Initialize pubsub redis client
-  const pubsub = new RedisPubSub(REDIS_URL)
+  const pubsub = new RedisPubSub(REDIS_URL as string)
   await pubsub.initialize()
 
   app.set('pubsub', pubsub)
 
-  const redis = new Redis(REDIS_URL, {
+  const redis = new Redis(REDIS_URL as string, {
     maxRetriesPerRequest: null,
   })
   app.set('redis', redis)

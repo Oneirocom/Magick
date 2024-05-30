@@ -7,6 +7,7 @@ import { BaseCognitiveFunction } from '../../base_cognitive_function'
 import { metadataManager } from './metadata_manager'
 import { SeraphCore } from '../../seraphCore'
 
+// @ts-ignore
 const __filename = fileURLToPath(import.meta.url) // get the resolved path to the file
 const __dirname = path.dirname(__filename) // get the name of the directory
 

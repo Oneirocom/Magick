@@ -1,4 +1,5 @@
 import {
+  InputSocketSpecJSON,
   NodeCategory,
   SocketsList,
   makeFlowNodeDefinition,
@@ -38,7 +39,7 @@ export const arrayCreate = makeFlowNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,
@@ -54,11 +55,14 @@ export const arrayCreate = makeFlowNodeDefinition({
   },
   initialState: undefined,
   triggered: async ({ commit, read, write, configuration }) => {
-    const newArray = configuration.socketInputs.reduce((acc, socketInput) => {
-      const item = read(socketInput.name)
-      acc.push(item)
-      return acc
-    }, [])
+    const newArray = configuration.socketInputs.reduce(
+      (acc: any, socketInput: InputSocketSpecJSON) => {
+        const item = read(socketInput.name)
+        acc.push(item)
+        return acc
+      },
+      []
+    )
 
     write('array', newArray)
     commit('flow')
@@ -98,7 +102,7 @@ export const arrayCreateFunction = makeFunctionNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,
@@ -112,11 +116,14 @@ export const arrayCreateFunction = makeFunctionNodeDefinition({
     array: 'array',
   },
   exec: async ({ read, write, configuration }) => {
-    const newArray = configuration.socketInputs.reduce((acc, socketInput) => {
-      const item = read(socketInput.name)
-      acc.push(item)
-      return acc
-    }, [])
+    const newArray = configuration.socketInputs.reduce(
+      (acc: string[], socketInput: InputSocketSpecJSON) => {
+        const item = read(socketInput.name)
+        acc.push(item as string)
+        return acc
+      },
+      []
+    )
 
     write('array', newArray)
   },

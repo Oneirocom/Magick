@@ -23,7 +23,7 @@ export class CloudAgentWorker {
   pubSub: RedisPubSub
   subscriptions: Record<string, Function> = {}
   logger: pino.Logger = getLogger()
-  currentAgents: string[] = []
+  currentAgents: Record<string, Agent> = {}
   agentStateReporter: FeathersSyncReporter
   app: Application
 
