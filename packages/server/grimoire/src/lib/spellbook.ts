@@ -5,21 +5,13 @@ import { SpellInterface } from 'server/schemas'
 import { SpellCaster } from './spellCaster'
 import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
-import { Agent, IAgentLogger } from 'server/agents'
+import { Agent } from 'server/agents'
 import { type CommandHub } from 'server/command-hub'
 import { AGENT_SPELL_STATE } from 'communication'
-import { RedisPubSub } from 'server/redis-pubsub'
 import { PrismaClient } from '@magickml/server-db'
 
 interface IApplication extends FeathersApplication {
   service: any
-}
-
-interface IAgent extends IAgentLogger {
-  id: string
-  projectId: string
-  currentSpellReleaseId: string | null
-  pubsub: RedisPubSub
 }
 
 export type SpellState = {
