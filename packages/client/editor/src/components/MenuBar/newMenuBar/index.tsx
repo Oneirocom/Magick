@@ -45,7 +45,7 @@ const NewMenuBar = props => {
   }, [currentTab])
 
   // Grab all events we need
-  const { $SAVE_SPELL, $EXPORT, $UNDO, $REDO, $DELETE, TOGGLE_SNAP } = events
+  const { $SAVE_SPELL, $EXPORT, $DELETE, TOGGLE_SNAP } = events
 
   /**
    * Save handler
