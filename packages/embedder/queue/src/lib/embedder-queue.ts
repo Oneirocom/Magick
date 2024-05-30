@@ -17,6 +17,7 @@ const connection: ConnectionOptions = {
   port: Number(process.env['EMBEDDER_REDIS_PORT']) || 6379,
   username: process.env['EMBEDDER_REDIS_USERNAME'],
   password: process.env['EMBEDDER_REDIS_PASSWORD'],
+  tls: process.env['EMBEDDER_REDIS_HOST'] !== 'localhost' ? {} : undefined,
 }
 
 export function useBullMQ(queueName: string) {
