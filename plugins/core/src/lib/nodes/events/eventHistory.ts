@@ -59,9 +59,11 @@ export const queryEventHistory = makeFlowNodeDefinition({
       limit
     )
 
-    const eventStrings = events.map(event => {
-      return `${event.sender}: ${event.content}`
-    })
+    const eventStrings: string[] = events.map(
+      (event: { sender: any; content: any }) => {
+        return `${event.sender}: ${event.content}`
+      }
+    )
 
     write('events', events)
     write('strings', eventStrings)

@@ -1,5 +1,6 @@
 import {
   NodeCategory,
+  OutputSocketSpecJSON,
   SocketsList,
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
@@ -39,14 +40,14 @@ export const objectDestructure = makeFunctionNodeDefinition({
     object: 'object',
   },
   out: configuration => {
-    const startSockets = []
+    const startSockets = [] as any[]
 
     const socketArray = configuration?.socketOutputs.length
       ? configuration.socketOutputs
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketOutput => {
+      socketArray.map((socketOutput: OutputSocketSpecJSON) => {
         return {
           key: socketOutput.name,
           name: socketOutput.name,
@@ -58,9 +59,11 @@ export const objectDestructure = makeFunctionNodeDefinition({
   },
   exec: ({ write, read, configuration }) => {
     const object = (read('object') as Record<string, any>) || {}
-    configuration.socketOutputs.forEach(socketOutput => {
-      const value = object[socketOutput.name]
-      write(socketOutput.name, value)
-    })
+    configuration.socketOutputs.forEach(
+      (socketOutput: OutputSocketSpecJSON) => {
+        const value = object[socketOutput.name]
+        write(socketOutput.name, value)
+      }
+    )
   },
 })

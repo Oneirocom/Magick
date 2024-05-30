@@ -197,7 +197,7 @@ export const generateText = makeFlowNodeDefinition({
 
         console.log('REQUEST OPTIONS', request.options)
 
-        const processNextChunk = async iterator => {
+        const processNextChunk = async (iterator: AsyncGenerator<any>) => {
           const result = await iterator.next()
           if (result.done) {
             write(

@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars'
 import {
+  InputSocketSpecJSON,
   NodeCategory,
   SocketsList,
   makeFunctionNodeDefinition,
@@ -43,14 +44,14 @@ export const textTemplate = makeFunctionNodeDefinition({
     },
   },
   in: configuration => {
-    const startSockets = []
+    const startSockets = [] as any[]
 
     const socketArray = configuration?.socketInputs.length
       ? configuration.socketInputs
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,
@@ -64,10 +65,13 @@ export const textTemplate = makeFunctionNodeDefinition({
     result: 'string',
   },
   exec: ({ write, read, configuration }) => {
-    const inputs = configuration.socketInputs.reduce((acc, socketInput) => {
-      acc[socketInput.name] = read(socketInput.name)
-      return acc
-    }, {})
+    const inputs = configuration.socketInputs.reduce(
+      (acc: Record<string, any>, socketInput: InputSocketSpecJSON) => {
+        acc[socketInput.name] = read(socketInput.name)
+        return acc
+      },
+      {}
+    )
 
     const string = configuration.textEditorData.replace('\r\n', '\n')
 

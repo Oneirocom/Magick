@@ -63,7 +63,7 @@ export const credentials = (app: Application): void => {
         serviceType: params.query.serviceType,
       })
     },
-    remove: async (id, params: Params) => {
+    remove: async (id: string, params: Params) => {
       if (!params.query) {
         throw new Error('Query parameters are missing')
       }

@@ -1,4 +1,5 @@
 import {
+  InputSocketSpecJSON,
   NodeCategory,
   SocketsList,
   makeFunctionNodeDefinition,
@@ -46,7 +47,7 @@ export const variableGet = makeFunctionNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,

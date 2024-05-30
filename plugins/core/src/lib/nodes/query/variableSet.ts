@@ -1,4 +1,5 @@
 import {
+  InputSocketSpecJSON,
   NodeCategory,
   SocketsList,
   makeFlowNodeDefinition,
@@ -54,7 +55,7 @@ export const variableSet = makeFlowNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      variableArray.map(socketInput => {
+      variableArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,
@@ -71,7 +72,7 @@ export const variableSet = makeFlowNodeDefinition({
       : []
 
     const sockets: SocketsList =
-      socketArray.map(socketInput => {
+      socketArray.map((socketInput: InputSocketSpecJSON) => {
         return {
           key: socketInput.name,
           name: socketInput.name,

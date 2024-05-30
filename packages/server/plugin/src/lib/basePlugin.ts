@@ -522,6 +522,7 @@ export abstract class BasePlugin<
     const pluginValues = await this.getPluginValues()
     const pluginNodes = await this.getPluginNodes()
     const pluginDependencies = await this.getDependencies(spellCaster)
+    // @ts-ignore
     pluginDependencies[this.name] = new BaseEmitter<PluginEvents>()
 
     // Merge the plugin's registry with the existing registry
@@ -566,7 +567,7 @@ export abstract class BasePlugin<
    * @returns Formatted message event payload.
    */
   formatMessageEvent<Data, Metadata>(
-    event,
+    event: string,
     messageDetails: EventFormat<Data, Metadata>
   ): EventPayload<Data, Metadata> {
     const rawData =

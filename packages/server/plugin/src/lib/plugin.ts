@@ -38,7 +38,15 @@ export type PluginIOType = {
   inspectorControls?: any[]
   sockets?: any[]
   defaultResponseOutput?: string
-  handler?: ({ output, agent, event }) => Promise<void>
+  handler?: ({
+    output,
+    agent,
+    event,
+  }: {
+    output: string
+    agent: ExtendableAgent
+    event: any
+  }) => Promise<void>
 }
 
 type PluginConstuctor = {

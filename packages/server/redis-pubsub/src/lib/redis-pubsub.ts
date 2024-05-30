@@ -187,7 +187,7 @@ export class RedisPubSub extends EventEmitter {
       console.log(`Redis ${clientType} reconnecing.`)
     })
 
-    client.on('wait', time => {
+    client.on('wait', (time: string) => {
       console.log(`Redis ${clientType} is waiting:`, time)
     })
 
@@ -309,7 +309,7 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * await redisPubSub.publish('myChannel', 'Hello World');
    */
-  async publish(channel, message) {
+  async publish(channel: string, message: string | object) {
     if (this.publisher.status !== 'ready') {
       throw new Error('Publisher not ready. Ensure Redis is connected.')
     }
@@ -339,7 +339,7 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * redisPubSub.subscribe('myChannel', message => console.log(message));
    */
-  async subscribe(channel: string, callback) {
+  async subscribe(channel: string, callback: Function) {
     this.channelRefCount.set(
       channel,
       (this.channelRefCount.get(channel) || 0) + 1
@@ -351,7 +351,7 @@ export class RedisPubSub extends EventEmitter {
 
     this.channelCallbacks.get(channel)!.push(callback)
 
-    const messageListener = message => {
+    const messageListener = (message: string) => {
       let deserializedMessage
       try {
         deserializedMessage = JSON.parse(message)
@@ -388,7 +388,7 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * redisPubSub.patternSubscribe('myPattern*', (message, channel) => console.log(message, channel));
    */
-  async patternSubscribe(pattern, callback) {
+  async patternSubscribe(pattern: string, callback: Function) {
     this.patternRefCount.set(
       pattern,
       (this.patternRefCount.get(pattern) || 0) + 1
@@ -401,7 +401,11 @@ export class RedisPubSub extends EventEmitter {
 
     this.patternCallbacks.get(pattern)!.push(callback)
 
-    const messageListener = (messagePattern, channel, message) => {
+    const messageListener = (
+      messagePattern: string,
+      channel: string,
+      message: string
+    ) => {
       // check pattern
       if (messagePattern !== pattern) {
         return
@@ -438,7 +442,7 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * await redisPubSub.patternUnsubscribe('myPattern*');
    */
-  async patternUnsubscribe(pattern) {
+  async patternUnsubscribe(pattern: string) {
     const currentCount = this.patternRefCount.get(pattern) || 0
     if (currentCount > 1) {
       // Decrease reference count but don't actually unsubscribe
@@ -460,7 +464,7 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * await redisPubSub.unsubscribe('myChannel');
    */
-  async unsubscribe(channel) {
+  async unsubscribe(channel: string) {
     const currentCount = this.channelRefCount.get(channel) || 0
     if (currentCount > 1) {
       // Decrease reference count but don't actually unsubscribe
@@ -498,7 +502,7 @@ export class RedisPubSub extends EventEmitter {
    * // Later, to remove the callback
    * redisPubSub.removeCallback('myChannel', myCallback);
    */
-  removeCallback(channel, callbackToRemove) {
+  removeCallback(channel: string, callbackToRemove: Function) {
     const callbacks = this.channelCallbacks.get(channel)
     if (callbacks) {
       // Filter out the specific callback
@@ -522,7 +526,7 @@ export class RedisPubSub extends EventEmitter {
    * // Later, to remove the callback
    * redisPubSub.removePatternCallback('myPattern*', myPatternCallback);
    */
-  removePatternCallback(pattern, callbackToRemove) {
+  removePatternCallback(pattern: string, callbackToRemove: Function) {
     const callbacks = this.patternCallbacks.get(pattern)
     if (callbacks) {
       // Filter out the specific callback

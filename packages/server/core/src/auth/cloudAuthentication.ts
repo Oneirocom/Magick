@@ -34,7 +34,10 @@ export class CloudJwtService extends AuthenticationService {
    * @param params - The parameters required for authentication
    * @returns payload with permissions if exists
    */
-  override async getPayload(authResult, params) {
+  override async getPayload(
+    authResult: AuthenticationResult,
+    params: AuthenticationParams
+  ) {
     // Call original `getPayload` first
     const payload = await super.getPayload(authResult, params)
     const { user } = authResult
@@ -56,7 +59,7 @@ export class CloudJwtService extends AuthenticationService {
    */
   override async verifyAccessToken(
     token: string,
-    _optsOverride,
+    _optsOverride: Record<string, any>,
     secretOverride?: string
   ) {
     // Get secret from the configuration or use the override

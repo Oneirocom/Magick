@@ -23,8 +23,8 @@ class PluginStateService implements PluginStateServiceMethods {
   }
 
   async find(params: Params<PluginStateParams>): Promise<PluginStateBody> {
-    const agentId = params.query.agentId
-    const plugin = params.query.plugin
+    const agentId = params?.query?.agentId
+    const plugin = params?.query?.plugin
     if (typeof agentId !== 'string') {
       throw new Error('No agentId provided')
     }

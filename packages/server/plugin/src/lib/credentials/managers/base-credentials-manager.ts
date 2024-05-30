@@ -33,13 +33,17 @@ export class BaseCredentialsManager<
         },
       })
 
-      const credentials = creds.reduce((acc, credential) => {
-        acc[credential.credentials.name] = decrypt(
-          credential.credentials.value,
-          CREDENTIALS_ENCRYPTION_KEY
-        )
-        return acc
-      }, {} as PluginCredentialsType<T>)
+      const credentials = creds.reduce(
+        (acc: PluginCredentialsType<T>, credential) => {
+          // @ts-ignore
+          acc[credential.credentials.name] = decrypt(
+            credential.credentials.value,
+            CREDENTIALS_ENCRYPTION_KEY
+          )
+          return acc
+        },
+        {} as PluginCredentialsType<T>
+      )
 
       this.currentCredentials = credentials as PluginCredentialsType<T>
     } catch (error) {

@@ -2,7 +2,7 @@
 import { Params } from '@feathersjs/feathers'
 import { app } from '../../app'
 import { v4 as uuidv4 } from 'uuid'
-import { UserInterface } from 'server/schemas'
+import { AgentInterface, SpellInterface, UserInterface } from 'server/schemas'
 
 /**
  * Interface for CreateData objects
@@ -202,7 +202,8 @@ export class ProjectsService {
     }
 
     // Map agents, documents, and spells with updated information for the new project
-    const mappedAgents = (agents ?? []).map(agent => {
+    const mappedAgents = (agents ?? []).map((agent: AgentInterface) => {
+      // @ts-ignore
       delete agent.id
       if (!agent.data) agent.data = '{}'
       if ('spells' in agent) delete agent.spells // <-- Updated to fix eliza import
@@ -213,9 +214,9 @@ export class ProjectsService {
     })
 
     // Create a key value of old IDs to new IDs for spells
-    const spellKeys = {}
+    const spellKeys = {} as Record<string, string>
 
-    const mappedSpells = (spells ?? []).map(spell => {
+    const mappedSpells = (spells ?? []).map((spell: SpellInterface) => {
       delete spell.updatedAt
 
       // generate new uuid
@@ -223,14 +224,12 @@ export class ProjectsService {
       spellKeys[spell.id] = newId
       spell.id = newId
       spell.type = 'behave'
-
-      delete spell.creatorId
       spell.projectId = projectId
       return spell
     })
 
     // interate through all spells and replace the UUID of any Spell Nodes with the new UUID
-    mappedSpells.forEach(spell => {
+    mappedSpells.forEach((spell: SpellInterface) => {
       const nodes = Object.values(spell.graph.nodes) as any[]
       nodes.forEach(node => {
         if (node.name === 'Spell') {
@@ -242,7 +241,7 @@ export class ProjectsService {
     // Create and store new agents, documents, and spells
     const agentResponse: any[] = []
     if (mappedAgents.length > 0) {
-      mappedAgents.forEach(async agent => {
+      mappedAgents.forEach(async (agent: AgentInterface) => {
         // todo: clear this up so validation works
         delete agent.runState
 
@@ -260,8 +259,7 @@ export class ProjectsService {
     // }
 
     const spellResponse: any[] = []
-    mappedSpells?.forEach(async spell => {
-      delete spell.creatorId
+    mappedSpells?.forEach(async (spell: SpellInterface) => {
       const r = await app.service('spells').create(spell)
       spellResponse.push(r)
     })

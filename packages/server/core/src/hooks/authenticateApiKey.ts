@@ -1,7 +1,7 @@
 import errors from '@feathersjs/errors'
 import { HookContext } from '@feathersjs/feathers'
 
-export const authenticateApiKey = apiKeys => {
+export const authenticateApiKey = (apiKeys: string | any[]) => {
   return function (context: HookContext, next: any): Promise<any> {
     // Check if API key is present in headers or query parameters
     const apiKey =

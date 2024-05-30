@@ -226,7 +226,7 @@ export class EventStore
     const eventProperties = getEventProperties(
       this._currentEvent,
       eventPropertyKeys
-    )
+    ) as any
 
     if (fromUser) eventProperties['fromUser'] = this._currentEvent.sender
     if (toUser) eventProperties['toUser'] = this._currentEvent.sender

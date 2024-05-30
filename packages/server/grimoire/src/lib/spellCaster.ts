@@ -24,13 +24,7 @@ import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
 import { debounce } from 'lodash'
-
-interface IAgent {
-  id: string
-  log: (message: string, data: Record<string, any>) => void
-  warn: (message: string, data: Record<string, any>) => void
-  error: (message: string, data: Record<string, any>) => void
-}
+import { Agent } from 'server/agents'
 
 /**
  * @class SpellCaster
@@ -83,7 +77,7 @@ interface IAgent {
  *     // Handle initialization errors
  *   });
  */
-export class SpellCaster<Agent extends IAgent = IAgent> {
+export class SpellCaster {
   id: string = uuidv4()
   registry!: IRegistry
   engine!: Engine
@@ -94,7 +88,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
   busy: boolean = true
   isLive: boolean = false
   private debug = true
-  private agent
+  private agent: Agent
   private logger: pino.Logger
   private loopDelay: number
   private limitInSeconds: number
@@ -233,7 +227,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @param message - The message to log.
    * @param err - The error to log.w
    */
-  error(message, err: any) {
+  error(message: string, err: any) {
     this.agent.error(err.toString(), {
       message,
       spellId: this.spell.id,
@@ -344,12 +338,18 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
     }
   }
 
-  executionErrorhandler = async ({ node, error }) => {
+  executionErrorhandler = async ({
+    node,
+    error,
+  }: {
+    node: INode
+    error: unknown
+  }) => {
     const event = `${this.spell.id}-${node.id}-error`
 
-    const message = `Node ${
-      node.description.label
-    } errored: ${error.toString()}`
+    const message = `Node ${node.description.label} errored: ${(
+      error as Error
+    ).toString()}`
 
     this.emitNodeWork({
       node,
@@ -590,7 +590,7 @@ export class SpellCaster<Agent extends IAgent = IAgent> {
    * @returns A promise that resolves when the event is handled.
    * @example
    */
-  emitAgentSpellEvent(_message) {
+  emitAgentSpellEvent(_message: Record<string, any>) {
     // same message emitted from server or agent
     const message = {
       ..._message,

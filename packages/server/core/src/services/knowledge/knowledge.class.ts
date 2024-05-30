@@ -33,13 +33,16 @@ export class KnowledgeService<
   KnowledgePatch
 > {
   storage: Storage
-  constructor(args) {
+  constructor(args: any) {
     super(args)
     this.storage = new Storage({
       projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
       credentials: {
         client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        private_key: (process.env.GOOGLE_CLOUD_PRIVATE_KEY as string).replace(
+          /\\n/g,
+          '\n'
+        ),
       },
     })
   }
@@ -63,7 +66,7 @@ export class KnowledgeService<
       const url = data.external
         ? data.sourceUrl
         : await this.storage
-            .bucket(process.env.GOOGLE_PRIVATE_BUCKET_NAME)
+            .bucket(process.env.GOOGLE_PRIVATE_BUCKET_NAME as string)
             .file(data.sourceUrl)
             .getSignedUrl({
               version: 'v4',

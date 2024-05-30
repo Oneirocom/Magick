@@ -28,10 +28,10 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   // Remove foreign key constraints and columns from 'agents' table
-  await knex.schema.table('agents', (table) => {
+  await knex.schema.table('agents', async (table) => {
     table.dropForeign(['currentSpellReleaseId'])
     table.dropColumn('currentSpellReleaseId')
-    if (knex.schema.hasColumn('agents', 'createdAt')) {
+    if (await knex.schema.hasColumn('agents', 'createdAt')) {
       table.dropColumn('createdAt')
     }
   })

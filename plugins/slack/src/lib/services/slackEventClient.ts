@@ -23,7 +23,7 @@ class SlackEventClient {
     this.pubSub.patternSubscribe(pattern, this.slackEventHandler.bind(this))
   }
 
-  slackEventHandler(event, channel) {
+  slackEventHandler(event: EventPayload, channel: string) {
     const eventType = this.extractEventType(channel)
 
     this.logger.debug(`Received event of type '${eventType}'`)

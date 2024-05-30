@@ -9,7 +9,7 @@ import { ChatCompletionStreamParams } from 'openai/lib/ChatCompletionStream'
 import pino from 'pino'
 import { PRODUCTION } from 'clientConfig'
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 type ConstructorParams = {
   projectId: string
@@ -51,6 +51,11 @@ export class CoreLLMService implements ICoreLLMService {
     maxRetries = 1,
     delayMs = 1000,
     spellId,
+  }: {
+    request: any // Replace `RequestType` with the actual type of `request`
+    maxRetries?: number
+    delayMs?: number
+    spellId?: string
   }) {
     let attempts = 0
     const chunks: any[] = []

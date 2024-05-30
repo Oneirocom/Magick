@@ -311,11 +311,15 @@ export class CorePlugin extends CoreEventsPlugin<
     try {
       // Loop through all providers defined in the Providers enum except for LLMProviders.Unknown
       for (const providerKey of Object.keys(LLMProviderKeys).filter(
-        key => LLMProviderKeys[key] !== LLMProviderKeys.Unknown
+        key =>
+          LLMProviderKeys[key as keyof typeof LLMProviderKeys] !==
+          LLMProviderKeys.Unknown
       )) {
-        const provider = LLMProviderKeys[providerKey]
+        const provider =
+          LLMProviderKeys[providerKey as keyof typeof LLMProviderKeys]
 
         // Retrieve credentials for each provider
+        // @ts-ignore
         const credential = this.credentialsManager.getCredential(provider)
 
         // Check if credentials are retrieved and valid
@@ -414,7 +418,7 @@ export class CorePlugin extends CoreEventsPlugin<
    * @param event
    * @param payload
    */
-  formatPayload(_, payload) {
+  formatPayload(_: unknown, payload: EventPayload) {
     return payload
   }
 }

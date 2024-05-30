@@ -3,6 +3,7 @@ import { SpellError } from 'shared/core'
 import { SpellInterface } from 'server/schemas'
 import { app } from '../app'
 import Koa from 'koa'
+// @ts-ignore
 import otJson0 from 'ot-json0'
 
 import { Route } from '../config/types'

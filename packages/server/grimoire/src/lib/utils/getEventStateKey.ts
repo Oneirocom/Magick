@@ -9,7 +9,7 @@ export const getEventStateKey = (
 ) => {
   const stateKey =
     eventState.sort().reduce((acc, key) => {
-      const property = event[key]
+      const property = event[key as keyof EventPayload]
       if (property === undefined) return acc
 
       // only add the : if there is already a key
@@ -20,7 +20,8 @@ export const getEventStateKey = (
       }
 
       return acc
-    }, '') || event[defaultKey || DEFAULT_EVENT_STATE_PROPERTY]
+    }, '') ||
+    event[(defaultKey || DEFAULT_EVENT_STATE_PROPERTY) as keyof EventPayload]
 
   return stateKey
 }
@@ -30,11 +31,11 @@ export const getEventProperties = (
   eventState: string[]
 ) => {
   return eventState.reduce((acc, key) => {
-    const property = event[key]
+    const property = event[key as keyof EventPayload]
     if (property === undefined) return acc
 
-    acc[key] = property
+    acc[key as keyof EventPayload] = property
 
     return acc
-  }, {})
+  }, {} as Partial<EventPayload>)
 }

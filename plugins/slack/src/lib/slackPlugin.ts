@@ -160,7 +160,7 @@ export class SlackPlugin extends WebSocketPlugin<
           'signingSecret',
           'appToken',
         ]
-          .filter(key => !credentials[key])
+          .filter(key => !credentials[key as keyof typeof credentials])
           .join(', ')}`
       )
       return false
@@ -278,7 +278,7 @@ export class SlackPlugin extends WebSocketPlugin<
     }
   }
 
-  formatPayload(event, payload) {
+  formatPayload(event: string, payload: EventPayload) {
     return payload
   }
 }

@@ -30,8 +30,8 @@ export const searchManyKnowledge = makeFlowNodeDefinition({
       CORE_DEP_KEYS.MEMORY_SERVICE
     )
 
-    const deduplicateByContext = array => {
-      const unique = {}
+    const deduplicateByContext = (array: any[]) => {
+      const unique = {} as Record<string, any>
       array.forEach(item => {
         unique[item.context] = item
       })
