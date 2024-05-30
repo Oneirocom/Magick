@@ -4,8 +4,8 @@ export const agentChannelsApi = rootApi.injectEndpoints({
   endpoints: builder => ({
     getChannels: builder.query({
       providesTags: ['AgentChannels'],
-      query: agentId => ({
-        url: `agentChannels?agentId=${agentId}`,
+      query: ({ agentId, limit, page }) => ({
+        url: `agentChannels?agentId=${agentId}&limit=${limit}&page=${page}`,
         method: 'GET',
       }),
     }),

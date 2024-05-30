@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   RootState,
   useGetChannelsQuery,
+  useToggleChannelActiveMutation,
   // useGetChannelsQuery
 } from 'client/state'
 import { Checkbox, DataTable, DropdownMenuItem } from '@magickml/client-ui'
@@ -13,26 +14,37 @@ import { useSelector } from 'react-redux'
 
 export const ChannelsWindow = () => {
   const [page, setPage] = useState(1)
-  // const [limit] = useState(10)
+  const [limit] = useState(10)
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
   console.log('currentAgentId', currentAgentId)
-  const { data: channels, refetch } = useGetChannelsQuery(currentAgentId, {
-    skip: !currentAgentId,
-  })
+  const { data: channels, refetch } = useGetChannelsQuery(
+    { agentId: currentAgentId, limit, page },
+    {
+      skip: !currentAgentId,
+    }
+  )
+  const [toggleChannelActive] = useToggleChannelActiveMutation()
 
   const { enqueueSnackbar } = useSnackbar()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleToggleChannel = async (channelId: string) => {
-    enqueueSnackbar('Channel Active', { variant: 'success' })
+  const handleToggleChannel = async ({ id, channelActive }) => {
+    await toggleChannelActive({ channelId: id, channelActive: !channelActive })
+      .unwrap()
+      .then(() => {
+        enqueueSnackbar('Channel Active', { variant: 'success' })
+      })
+      .catch(() => {
+        enqueueSnackbar('Error setting channel', { variant: 'error' })
+      })
   }
 
   const renderRowActionMenu = (row: Row<any>) => {
     return (
       <>
-        <DropdownMenuItem onClick={() => handleToggleChannel(row.original.id)}>
+        <DropdownMenuItem onClick={() => handleToggleChannel(row.original)}>
           Toggle Active
         </DropdownMenuItem>
       </>
@@ -60,20 +72,24 @@ export const ChannelsWindow = () => {
       enableHiding: false,
     },
     {
-      accessorKey: 'name',
-      header: 'Name',
+      accessorKey: 'channelName',
+      header: 'Channel',
     },
     {
-      accessorKey: 'type',
-      header: 'Type',
+      accessorKey: 'channelKey',
+      header: 'Key',
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: 'Created At',
     },
     {
-      accessorKey: 'updated_at',
+      accessorKey: 'updatedAt',
       header: 'Updated At',
+    },
+    {
+      accessorKey: 'channelActive',
+      header: 'Active',
     },
   ]
 
@@ -85,13 +101,13 @@ export const ChannelsWindow = () => {
         cta="Refresh"
         ctaProps={{
           variant: 'portal-primary',
-          // onClick: refetch,
+          onClick: refetch,
         }}
       />
       <div className="px-8">
         <DataTable<any, unknown>
           columns={columns}
-          data={channels || []}
+          data={channels?.data || []}
           filterInputPlaceholder="Search channels..."
           columnVisibilityButtonProps={{
             children: 'Columns',
@@ -114,11 +130,11 @@ export const ChannelsWindow = () => {
             variant: 'outline',
             size: 'sm',
             onClick: () => {
-              // if (channels && page < Math.ceil(channels.length / limit)) {
-              //   setPage(prevPage => prevPage + 1)
-              // }
+              if (channels && page < Math.ceil(channels.length / limit)) {
+                setPage(prevPage => prevPage + 1)
+              }
             },
-            // disabled: channels && page >= Math.ceil(channels.length / limit),
+            disabled: channels && page >= Math.ceil(channels.length / limit),
             children: 'Next',
           }}
         />
