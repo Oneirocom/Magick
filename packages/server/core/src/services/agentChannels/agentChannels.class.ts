@@ -2,7 +2,6 @@ import type { Params } from '@feathersjs/feathers'
 import { KnexAdapter } from '@feathersjs/knex'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { Application } from '../../declarations'
-import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 import {
   AgentChannel,
   AgentChannelData,
