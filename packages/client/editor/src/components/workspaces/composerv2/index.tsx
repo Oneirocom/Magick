@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  DockviewReadyEvent,
   GridviewReact,
   GridviewReadyEvent,
   IDockviewPanelProps,
