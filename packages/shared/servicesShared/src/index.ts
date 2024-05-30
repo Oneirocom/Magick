@@ -1,5 +1,3 @@
-export * from './lib/coreEmbeddingService/types'
-
 export * from './lib/coreLLMService/types/models'
 export * from './lib/coreLLMService/types/providerTypes'
 export * from './lib/coreLLMService/types/liteLLMTypes'
