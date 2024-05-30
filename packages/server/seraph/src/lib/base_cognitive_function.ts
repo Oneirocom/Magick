@@ -23,7 +23,7 @@ abstract class BaseCognitiveFunction {
 
   abstract execute(args: Record<string, any> | null): Promise<string> | string
 
-  async getFeedback(prompt, getUserFeedback) {
+  async getFeedback(prompt: string, getUserFeedback: Function) {
     if (typeof getUserFeedback !== 'function') {
       throw new Error('getUserFeedback must be a function.')
     }
