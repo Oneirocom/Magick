@@ -35,26 +35,6 @@ export class AgentChannelsService<
     this.app = app
   }
 
-  async authorizeAgentPermissions(agentId: string, params?: ServiceParams) {
-    if (!agentId) {
-      console.error('agentId is required, Received null or undefined')
-      throw new BadRequest('agentId is required')
-    }
-    const agent = await this.app.service('agents').get(agentId, params)
-    if (!agent) throw new NotFound('Agent not found')
-    const projectId = agent.projectId
-    if (params?.provider) {
-      if (agent.projectId !== projectId) {
-        console.error(
-          'Agent does not belong to the project',
-          projectId,
-          agentId
-        )
-        throw new NotAuthenticated("You don't have access to this agent")
-      }
-    }
-  }
-
   async get(id: string, params?: ServiceParams) {
     console.log('GET')
     return await this._get(id, params)
@@ -88,8 +68,6 @@ export class AgentChannelsService<
   }
 
   async getChannels(agentId: string, params?: ServiceParams) {
-    console.log('GET CHANNELS')
-    await this.authorizeAgentPermissions(agentId, params)
     return this._find({
       query: {
         agentId,
@@ -108,7 +86,7 @@ export class AgentChannelsService<
 export const getOptions = (app: Application): KnexAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    name: 'agentChannels',
+    name: 'agent_channels',
     multi: ['remove', 'patch'],
     Model: app.get('dbClient'),
   }
