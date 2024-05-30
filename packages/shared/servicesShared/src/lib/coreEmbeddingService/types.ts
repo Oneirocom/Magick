@@ -40,13 +40,3 @@ interface Usage {
   prompt_tokens: number
   total_tokens: number
 }
-
-export interface IEmbeddingService {
-  initialize(): Promise<void>
-  generateEmbedding(
-    options: EmbeddingOptions & BaseEmbeddingOptions
-  ): Promise<EmbeddingOutput>
-  openAIEmbeddingHandler(
-    options: OpenAIEmbeddingOptions
-  ): Promise<EmbeddingOutput>
-}
