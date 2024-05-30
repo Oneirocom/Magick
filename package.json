@@ -78,7 +78,7 @@
     "prepare": "husky install || true",
     "lint-staged": "lint-staged",
     "postinstall": "npx nx reset && npm run generateClients && npx nx reset",
-    "vercel-install": "./vercel-submodule-workaround.sh && npx nx reset && npm i",
+    "vercel-install": "./vercel-submodule-workaround.sh && npm i && npx nx reset ",
     "bucket:init": "ts-node ./scripts/init-bucket.ts",
     "seraph:codegen": "node ./scripts/seraphCodegen/seraphCodegen.js",
     "ogmeta:test": "node ./scripts/ogmeta.js",
