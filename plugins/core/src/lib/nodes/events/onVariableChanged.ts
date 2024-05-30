@@ -94,6 +94,11 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
       const variableId = configuration.variableId
       if (!variableId) return
 
+      const variable = graph.variables[variableId]
+      if (!variable) return
+
+      const variableName = variable.name
+
       const onVariableChangedEvent = ({
         value,
         event,
@@ -108,6 +113,8 @@ export const onVariableChanged = makeMagickEventNodeDefinition(
           finish()
         })
       }
+
+      variableService.on(variableName, onVariableChangedEvent)
 
       return {
         onVariableChangedEvent,
