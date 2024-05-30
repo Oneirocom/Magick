@@ -66,7 +66,7 @@ export class AgentChannelsService<
     return this._patch(id, { channelActive: data.channelActive }, params)
   }
 
-  async getChannels(agentId: string, params?: ServiceParams) {
+  async getChannels(agentId: string) {
     // TODO FIX THIS
     // @ts-ignore
     return this._find({
