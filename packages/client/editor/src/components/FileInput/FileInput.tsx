@@ -15,16 +15,20 @@ const FileInput = ({
   sx = {},
   innerText = 'Import',
   Icon = <> </>,
+}: {
+  loadFile: (file: File) => void
+  sx?: object
+  innerText?: string
+  Icon?: React.ReactNode
 }) => {
-  const hiddenFileInput = React.useRef<HTMLInputElement>(null);
-
+  const hiddenFileInput = React.useRef<HTMLInputElement>(null)
 
   const handleClick = () => {
     hiddenFileInput.current?.click()
   }
 
-  const handleChange = event => {
-    Object.values(event.target.files).forEach(loadFile)
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    Object.values(event.target.files || {}).forEach(loadFile)
   }
   return (
     <>

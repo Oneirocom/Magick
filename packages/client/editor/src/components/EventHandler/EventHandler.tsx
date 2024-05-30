@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useSnackbar } from 'notistack'
 
-import { useConfig, useFeathers } from '@magickml/providers'
+import { Tab, useConfig, useFeathers } from '@magickml/providers'
 import {
   useLazyGetSpellQuery,
   useSaveSpellMutation,
@@ -12,13 +12,19 @@ import { useDispatch } from 'react-redux'
 import { SpellInterface } from 'server/schemas'
 import posthog from 'posthog-js'
 
+type Props = {
+  pubSub: any
+  tab: Tab
+  spellId: string
+}
+
 /**
  * Event Handler component for handling various events in the editor
  * @param {object} pubSub - PubSub object
  * @param {object} tab - The current editor's tab object
  * @returns - null, this is a functional component used for managing side effects
  */
-const EventHandler = ({ pubSub, tab, spellId }) => {
+const EventHandler = ({ pubSub, tab, spellId }: Props) => {
   const dispatch = useDispatch()
   const config = useConfig()
 
@@ -108,7 +114,11 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
    * @param {object} update - The updated spell object
    */
   const onSaveDiff = useCallback(
-    async (event, update, onSuccessCB) => {
+    async (
+      event: unknown,
+      update: Partial<SpellInterface>,
+      onSuccessCB: () => void
+    ) => {
       if (!spellRef.current) return true
 
       const currentSpell = spellRef.current
@@ -171,7 +181,7 @@ const EventHandler = ({ pubSub, tab, spellId }) => {
     const spell = { ...spellRef.current }
 
     // remove secrets, if there are any
-    function recurse(obj) {
+    function recurse(obj: { [x: string]: any }) {
       for (const key in obj) {
         if (key === 'secrets') {
           obj[key] = {}

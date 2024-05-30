@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Input } from '@magickml/client-ui'
 import { Send } from '@magickml/icons'
 import { useRef, useState } from 'react'

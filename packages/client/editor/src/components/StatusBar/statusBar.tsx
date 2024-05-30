@@ -15,7 +15,9 @@ const VerticalDivider = () => (
 export const StatusBar = () => {
   const { publish, events } = usePubSub()
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
-  const nodesLength = useSelector(selectTabNodesLength(currentTab?.id))
+  const nodesLength = useSelector(
+    selectTabNodesLength(currentTab?.id as string)
+  )
   const { syncing, connected } = useSelector(
     (state: RootState) => state.statusBar
   )

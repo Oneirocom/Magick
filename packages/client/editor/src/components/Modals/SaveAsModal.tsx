@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Modal from '../Modal/Modal'
 import css from './modalForms.module.css'
 import { getTemplates } from 'client/core'
-import { useConfig } from '@magickml/providers'
+import { Tab, useConfig } from '@magickml/providers'
 import { v4 as uuidv4 } from 'uuid'
 import { spellApi } from 'client/state'
 
@@ -19,7 +19,13 @@ const defaultGraph = getTemplates().spells[0].graph
  * @param {Function} props.closeModal - Function to close the component modal
  * @returns {React.JSX.Element} - EditSpellModal component
  */
-const EditSpellModal = ({ tab, closeModal }) => {
+const EditSpellModal = ({
+  tab,
+  closeModal,
+}: {
+  tab: Tab
+  closeModal: Function
+}): React.JSX.Element => {
   // Get config from context
   const config = useConfig()
 
@@ -77,9 +83,10 @@ const EditSpellModal = ({ tab, closeModal }) => {
     closeModal()
   })
 
-  // Define modal options
+  // Define modal option
   const options = [
     {
+      // @ts-ignore
       className: `${css['loginButton']} primary`,
       label: 'Save A Copy',
       onClick: onSubmit,
@@ -93,6 +100,7 @@ const EditSpellModal = ({ tab, closeModal }) => {
         {error && <span className={css['error-message']}>{error}</span>}
         <form>
           <div className={css['input-container']}>
+            {/* @ts-ignore */}
             <label className={css['label']} htmlFor="">
               Spell name
             </label>

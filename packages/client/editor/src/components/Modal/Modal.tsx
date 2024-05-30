@@ -38,7 +38,7 @@ const Modal = ({
    * @param {Object} e The event object.
    */
   const handleModalBackgroundClick = useCallback(
-    e => {
+    (e: React.MouseEvent) => {
       e.stopPropagation()
       closeModal()
       if (onClose) onClose()
@@ -51,7 +51,7 @@ const Modal = ({
    * It stops propagation to avoid closing the modal window and only interact with the panel elements.
    * @param {Object} e The event object.
    */
-  const handleModalPanelClick = useCallback(e => {
+  const handleModalPanelClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
   }, [])
   /**

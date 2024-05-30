@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { VariableJSON } from '@magickml/behave-graph'
+import { Variable, VariableJSON } from '@magickml/behave-graph'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import {
   Select,
@@ -22,7 +22,7 @@ export const VariableNames = ({
   useEffect(() => {
     if (spell && fullConfig) {
       const variable = spell.graph.variables.find(
-        variable => variable.id === fullConfig.variableId
+        (variable: Variable) => variable.id === fullConfig.variableId
       )
       setSelectedVariable(variable || null)
     }
@@ -30,7 +30,7 @@ export const VariableNames = ({
 
   const updateValue = (variableId: string) => {
     const variable = spell.graph.variables.find(
-      variable => variable.id === variableId
+      (variable: Variable) => variable.id === variableId
     ) as VariableJSON
 
     if (variable) {

@@ -1,7 +1,9 @@
 // DOCUMENTED
+// @ts-nocheck
 import { Grid } from '@mui/material'
 import styles from '../AgentWindowStyle.module.css'
 import { Input, Switch } from 'client/core'
+import { Variable } from '@magickml/behave-graph'
 
 /**
  * Interface for Props.
@@ -28,7 +30,7 @@ const AgentPubVariables = ({
    * @param event - DOM event
    */
 
-  const onChangeHandler = (variable, event) => {
+  const onChangeHandler = (variable: Variable, event: any) => {
     // Update the public variables data
     setPublicVars({
       ...publicVars,

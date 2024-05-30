@@ -13,12 +13,19 @@ import styles from './index.module.scss'
 import { DataType } from './knowledgeTypes'
 import { NewKnowledgeState } from './KnowledgeTable'
 
+type Props = {
+  createMode: boolean
+  setCreateMode: (value: boolean) => void
+  handleSave: (callback: () => void) => Promise<void>
+  setNewKnowledge: any
+}
+
 const KnowledgeModal = ({
   createMode,
   setCreateMode,
   handleSave,
   setNewKnowledge,
-}) => {
+}: Props) => {
   const [loading, setLoading] = useState(false)
   const [newKnowledge, setKnowledge] = useState<Partial<NewKnowledgeState>>({
     tag: '',

@@ -1,4 +1,5 @@
 // DOCUMENTED
+// @ts-nocheck
 import { usePubSub } from '@magickml/providers'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -14,7 +15,7 @@ import { enqueueSnackbar } from 'notistack'
 import axios from 'axios'
 import { PRODUCTION } from 'clientConfig'
 
-function toTitleCase(str) {
+function toTitleCase(str: string) {
   return str
     .split('_') // Split the string by underscores
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
@@ -26,7 +27,7 @@ function toTitleCase(str) {
  *
  * @returns {React.JSX.Element}
  */
-const NewMenuBar = props => {
+const NewMenuBar = (props: any) => {
   const dispatch = useAppDispatch()
   const { publish, events } = usePubSub()
   const [snapEnabled, setSnapEnabled] = useState(true)

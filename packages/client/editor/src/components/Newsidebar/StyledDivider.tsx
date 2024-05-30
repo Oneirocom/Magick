@@ -1,6 +1,6 @@
 import Divider from '@mui/material/Divider'
 
-const StyledDivider = (props) => {
+const StyledDivider = (props: any) => {
   const style = {
     backgroundColor: '#3D454A',
     borderColor: '#3D454A',
@@ -9,9 +9,9 @@ const StyledDivider = (props) => {
     marginBottom: '4px',
     marginLeft: '10px',
     marginRight: '10px',
-  };
+  }
 
-  return <Divider style={style} {...props} />;
-};
+  return <Divider style={style} {...props} />
+}
 
-export default StyledDivider;
+export default StyledDivider

@@ -15,6 +15,10 @@ const TemplatePanel = ({
   template,
   setSelectedTemplate,
   selectedTemplate,
+}: {
+  template: any
+  setSelectedTemplate: (template: any) => void
+  selectedTemplate: any
 }): React.JSX.Element => {
   // Determine if the current template is selected
   const isSelected =
@@ -32,8 +36,9 @@ const TemplatePanel = ({
   return (
     // Create a wrapper div and set isSelected and onClick
     <div
-      className={`${css['template-container']} ${css[isSelected && 'selected']
-        }`}
+      className={`${css['template-container']} ${
+        css[isSelected && 'selected']
+      }`}
       onClick={handleClick}
     >
       {/* Create the panel with styling and the background image */}

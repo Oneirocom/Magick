@@ -20,6 +20,7 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { Plugin, unified } from 'unified'
 import { visit } from 'unist-util-visit'
+//@ts-ignore
 import { HtmlGenerator, parse } from 'latex.js'
 import { useTheme } from 'next-themes'
 import {
@@ -31,10 +32,10 @@ import {
 // with paragraphs and list items. This replaces paragraphs inside
 // list items into divs to avoid nesting Capsize.
 const rehypeListItemParagraphToDiv: Plugin<[], Root> = () => {
-  return tree => {
+  return (tree: any) => {
     visit(tree, 'element', element => {
       if (element.tagName === 'li') {
-        element.children = element.children.map(child => {
+        element.children = element.children.map((child: any) => {
           if (child.type === 'element' && child.tagName === 'p') {
             child.tagName = 'div'
           }

@@ -43,13 +43,18 @@ out but can be utilized if desired.
  * @param {React.ReactNode} props.children - Children components
  * @returns {React.Element} The ToastProvider component within SnackbarProvider
  */
-const ToastProvider = ({ children }) => {
-  return <SnackbarProvider
-    maxSnack={3}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}>{children}</SnackbarProvider>
+const ToastProvider = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+    >
+      {children}
+    </SnackbarProvider>
+  )
 }
 
 // Export ToastProvider component as default

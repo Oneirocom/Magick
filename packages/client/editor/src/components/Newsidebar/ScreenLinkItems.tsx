@@ -7,7 +7,7 @@ import SecretsIcon from '@mui/icons-material/Password'
 import MultipleStopIcon from '@mui/icons-material/MultipleStop'
 import CallSplitIcon from '@mui/icons-material/CallSplit'
 // import StorageIcon from '@mui/icons-material/Storage'
-import { useTabLayout } from '@magickml/providers'
+import { Tab, useTabLayout } from '@magickml/providers'
 import React from 'react'
 import { RootState, useGetAgentByIdQuery } from 'client/state'
 import { useSelector } from 'react-redux'
@@ -37,7 +37,7 @@ type DrawerItem = {
   isV2?: boolean
 }
 
-export const ScreenLinkItems = ({ isAPIKeysSet, currentTab }) => {
+export const ScreenLinkItems = ({ currentTab }: { currentTab: Tab }) => {
   const { openTab } = useTabLayout()
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig

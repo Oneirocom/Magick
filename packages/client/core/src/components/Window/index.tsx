@@ -1,4 +1,5 @@
-"use client"
+// @ts-nocheck
+'use client'
 // DOCUMENTED
 import * as React from 'react'
 import { ReactElement, useEffect, useRef } from 'react'

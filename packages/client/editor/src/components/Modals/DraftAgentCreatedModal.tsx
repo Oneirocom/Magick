@@ -1,5 +1,5 @@
-import React from 'react';
-import Modal from '../Modal/Modal';
+import React from 'react'
+import Modal from '../Modal/Modal'
 
 /**
  * Props for the DraftAgentCreatedModal component.
@@ -14,26 +14,23 @@ import Modal from '../Modal/Modal';
  * @param {DraftAgentCreatedModalProps} props
  * @returns {React.JSX.Element}
  */
-const DraftAgentCreatedModal = ({ closeModal }) => {
-
+const DraftAgentCreatedModal = () => {
   return (
-    <Modal
-      title="Draft Agent Created"
-      icon="info"
-    >
+    <Modal title="Draft Agent Created" icon="info">
       <h3>Your Draft Agent Has Been Created</h3>
       <br />
       <p>
-        A draft version of your agent has been successfully created. To configure
-        your draft agent's settings, please visit the <strong>Config</strong> tab.
+        A draft version of your agent has been successfully created. To
+        configure your draft agent's settings, please visit the{' '}
+        <strong>Config</strong> tab.
       </p>
       <br />
       <p>
-        Remember, changes made in the draft version will not affect your live agent
-        until you publish them.
+        Remember, changes made in the draft version will not affect your live
+        agent until you publish them.
       </p>
     </Modal>
-  );
-};
+  )
+}
 
-export default DraftAgentCreatedModal;
+export default DraftAgentCreatedModal

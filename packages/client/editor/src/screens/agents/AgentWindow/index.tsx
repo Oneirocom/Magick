@@ -8,6 +8,7 @@ import AgentDetails from './AgentDetails'
 import FileInput from '../../../components/FileInput/FileInput'
 import { useConfig } from '@magickml/providers'
 import { useCreateAgentMutation } from 'client/state'
+import { AgentInterface } from 'server/schemas'
 
 /**
  * Props for AgentWindow component
@@ -33,7 +34,7 @@ const AgentWindow = ({ data, onLoadFile }: Props) => {
    * Handler for agent click
    * @param agent - clicked agent
    */
-  const onClickHandler = agent => {
+  const onClickHandler = (agent: AgentInterface) => {
     setSelectedAgentData(agent)
   }
 

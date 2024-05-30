@@ -21,11 +21,12 @@ import { DrawerProps } from '@mui/material/Drawer'
 
 import { MPBalanceBar } from './MPBalanceBar'
 import { Button } from '@magickml/client-ui'
+import { AgentInterface } from 'server/schemas'
 
 /**
  * The main Drawer component that wraps around the application content.
  */
-export function NewSidebar(DrawerProps): React.JSX.Element {
+export function NewSidebar(): React.JSX.Element {
   const [isAPIKeysSet, setAPIKeysSet] = useState(false)
   // State to keep track of the anchor element of the menu and cursor position
   const [updateAgent] = useUpdateAgentMutation()
@@ -61,9 +62,11 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
         // // In this scenario, we are assuming a project with one agent is currently live,
         // // Thus a draft should be created and a release should be made for the agent.
         if (agents.total === 2) {
-          const draftAgent = agents.data.filter(agent => agent.isDraft)[0]
+          const draftAgent = agents.data.filter(
+            (agent: AgentInterface) => agent.isDraft
+          )[0]
           const agent = agents.data.filter(
-            agent => agent.id !== draftAgent?.id
+            (agent: AgentInterface) => agent.id !== draftAgent?.id
           )[0]
 
           if (!agent.draftAgentId) {
@@ -83,9 +86,11 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
 
         if (agents.total === 1) {
           // Create a draft agent
-          const draftAgent = agents.data.filter(agent => agent.isDraft)[0]
+          const draftAgent = agents.data.filter(
+            (agent: AgentInterface) => agent.isDraft
+          )[0]
           const agent = agents.data.filter(
-            agent => agent.id !== draftAgent?.id
+            (agent: AgentInterface) => agent.id !== draftAgent?.id
           )[0]
 
           if (draftAgent) {
@@ -176,7 +181,7 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
       <AgentMenu data={data} />
 
       <div className={`${!isAPIKeysSet ? 'flex pb-4' : ''} `}>
-        <ScreenLinkItems isAPIKeysSet={isAPIKeysSet} currentTab={currentTab} />
+        <ScreenLinkItems currentTab={currentTab} />
       </div>
 
       <Divider sx={{ marginY: 2 }} />
@@ -202,6 +207,6 @@ export function NewSidebar(DrawerProps): React.JSX.Element {
   )
 }
 
-export const DrawerProvider = ({ children }: DrawerProps) => {
-  return <NewSidebar> {children}</NewSidebar>
+export const DrawerProvider = () => {
+  return <NewSidebar />
 }

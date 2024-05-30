@@ -65,7 +65,7 @@ export const ValueType = (props: ConfigurationComponentProps) => {
           <SelectValue placeholder="Select a value type" />
         </SelectTrigger>
         <SelectContent>
-          {(options.values || defaultValues).map(type => (
+          {(options.values || defaultValues).map((type: string) => (
             <SelectItem key={type} value={type}>
               {type}
             </SelectItem>

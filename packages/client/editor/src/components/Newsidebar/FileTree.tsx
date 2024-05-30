@@ -6,7 +6,7 @@ import {
   getBackendOptions,
 } from '@minoru/react-dnd-treeview'
 import { DndProvider } from 'react-dnd'
-import { useTreeData, useTabLayout, TreeNode } from '@magickml/providers'
+import { useTreeData, useTabLayout, TreeNode, Tab } from '@magickml/providers'
 
 import styles from './menu.module.css'
 import { CustomNode } from './CustomNode'
@@ -16,7 +16,7 @@ type CustomData = {
   fileSize: string
 }
 
-export const FileTree = ({ currentTab }) => {
+export const FileTree = ({ currentTab }: { currentTab: Tab }) => {
   const { treeData, setTreeData } = useTreeData()
   const { openTab } = useTabLayout()
 

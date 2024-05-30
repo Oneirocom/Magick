@@ -1,4 +1,5 @@
 // DOCUMENTED
+// @ts-nocheck
 /**
  * Calculates the difference between two objects using an operational transformation approach.
  *

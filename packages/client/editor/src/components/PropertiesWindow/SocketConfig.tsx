@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import SingleElement from './SingleElement'
 
@@ -14,7 +14,14 @@ import {
 import { useSnackbar } from 'notistack'
 import { useReactFlow } from '@xyflow/react'
 import { setEdges } from 'client/state'
+import { InputSocketSpecJSON } from '@magickml/behave-graph'
 
+type Props = {
+  addSocket: (socket: any) => void
+  valueTypes: string[]
+  definedValueType: string | null
+  sockets: any[]
+}
 /**
  * AddNewSocket component provides a form input to add a new socket.
  *
@@ -22,7 +29,13 @@ import { setEdges } from 'client/state'
  * @param {Function} props.addSocket - Function to add a new socket.
  * @returns {React.JSX.Element} Form input to add a new socket.
  */
-const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
+
+const AddNewSocket = ({
+  addSocket,
+  valueTypes,
+  definedValueType,
+  sockets,
+}: Props) => {
   const [value, setValue] = useState('')
   const [selectedValueType, setSelectedValueType] = useState(valueTypes[0])
   const { enqueueSnackbar } = useSnackbar()
@@ -32,7 +45,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
    *
    * @param {Event} e - The change event.
    */
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }
 
@@ -49,9 +62,8 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
    *
    * @param {Event} e - The submit event.
    */
-  const onAdd = e => {
+  const onAdd = () => {
     if (!value) return
-    e.preventDefault()
     const socketExists = sockets.some(socket => socket.name === value)
 
     if (socketExists) {
@@ -80,7 +92,7 @@ const AddNewSocket = ({ addSocket, valueTypes, definedValueType, sockets }) => {
             placeholder="Add new socket"
             onKeyDown={e => {
               if (e.key === 'Enter') {
-                onAdd(e)
+                onAdd()
               }
             }}
             className="w-28 h-8 pl-2 input-placeholder bg-[var(--dark-3)] border-[var(--dark-3)]"
@@ -133,7 +145,7 @@ export const SocketConfig = ({
   const instance = useReactFlow()
 
   const addSocket = useCallback(
-    socket => {
+    (socket: InputSocketSpecJSON) => {
       const newValue = [
         ...sockets,
         {
@@ -172,7 +184,7 @@ export const SocketConfig = ({
     <div>
       {configKey === 'socketInputs' && <h3>Input Sockets</h3>}
       {configKey === 'socketOutputs' && <h3>Output Sockets</h3>}
-      {sockets.map((socket: any, i) => (
+      {sockets.map((socket: any, i: number) => (
         <SingleElement
           name={socket.name}
           key={socket.name + i}

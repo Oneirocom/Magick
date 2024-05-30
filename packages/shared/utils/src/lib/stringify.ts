@@ -1,4 +1,4 @@
-export function stringify(obj) {
+export function stringify(obj: Record<string, any>) {
   let cache = [] as any[]
   const str = JSON.stringify(obj, function (key, value) {
     if (typeof value === 'object' && value !== null) {

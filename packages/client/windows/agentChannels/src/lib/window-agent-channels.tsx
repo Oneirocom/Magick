@@ -30,7 +30,13 @@ export const ChannelsWindow = () => {
   const { enqueueSnackbar } = useSnackbar()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleToggleChannel = async ({ id, channelActive }) => {
+  const handleToggleChannel = async ({
+    id,
+    channelActive,
+  }: {
+    id: string
+    channelActive: boolean
+  }) => {
     await toggleChannelActive({ channelId: id, channelActive: !channelActive })
       .unwrap()
       .then(() => {

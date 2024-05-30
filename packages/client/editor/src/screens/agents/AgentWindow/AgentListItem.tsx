@@ -30,10 +30,10 @@ const AgentListItem = ({
     return formatDistanceToNow(new Date(date), { addSuffix: true })
   }
 
-  const handleCheckboxClick = event => {
-    if (event.target.type === 'checkbox') {
-      event.stopPropagation()
-    }
+  const handleCheckboxClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation()
   }
 
   const handleCheckboxChange = (checked: boolean) => {

@@ -1,36 +1,49 @@
-import React, { useState } from 'react';
-import { Avatar, Typography } from '@mui/material';
-import { Icon, IconBtn, Modal } from 'client/core';
-import styles from './index.module.scss';
-import { enqueueSnackbar } from 'notistack';
-import { useDeleteAgentMutation } from 'client/state';
+import React, { useState } from 'react'
+import { Avatar, Typography } from '@mui/material'
+import { Icon, IconBtn, Modal } from 'client/core'
+import styles from './index.module.scss'
+import { enqueueSnackbar } from 'notistack'
+import { useDeleteAgentMutation } from 'client/state'
 
-const AgentItem = ({ keyId, agent, onClick, style }) => {
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [deleteAgent] = useDeleteAgentMutation();
+const AgentItem = ({
+  keyId,
+  agent,
+  onClick,
+  style,
+}: {
+  keyId: string
+  agent: any
+  onClick: (agent: any) => void
+  style: any
+}) => {
+  if (!agent) {
+    return null
+  }
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const [deleteAgent] = useDeleteAgentMutation()
 
-  const handleDeleteClick = (e) => {
-    e.stopPropagation();
-    setOpenConfirm(true);
-  };
+  const handleDeleteClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    setOpenConfirm(true)
+  }
 
   const handleClose = () => {
-    setOpenConfirm(false);
-  };
+    setOpenConfirm(false)
+  }
 
   const onSubmit = async () => {
     if (agent.id) {
       try {
-        await deleteAgent({ agentId: agent.id }).unwrap();
-        enqueueSnackbar('Agent deleted successfully!', { variant: 'success' });
+        await deleteAgent({ agentId: agent.id }).unwrap()
+        enqueueSnackbar('Agent deleted successfully!', { variant: 'success' })
       } catch (error) {
-        console.error('Error deleting agent:', error);
-        enqueueSnackbar('Error deleting agent!', { variant: 'error' });
+        console.error('Error deleting agent:', error)
+        enqueueSnackbar('Error deleting agent!', { variant: 'error' })
       } finally {
-        setOpenConfirm(false);
+        setOpenConfirm(false)
       }
     }
-  };
+  }
 
   const renderDeleteButton = () => {
     return !agent.default ? (
@@ -39,8 +52,8 @@ const AgentItem = ({ keyId, agent, onClick, style }) => {
         Icon={<Icon name="trash" size={20} />}
         onClick={handleDeleteClick}
       />
-    ) : null;
-  };
+    ) : null
+  }
 
   return (
     <div
@@ -65,7 +78,7 @@ const AgentItem = ({ keyId, agent, onClick, style }) => {
         children="Do you want to delete this agent?"
       />
     </div>
-  );
-};
+  )
+}
 
-export default AgentItem;
+export default AgentItem

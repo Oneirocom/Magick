@@ -13,7 +13,12 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import posthog from 'posthog-js'
 
-export const MPBalanceBar = ({ userData, isLoading }) => {
+type Props = {
+  userData: any
+  isLoading: boolean
+}
+
+export const MPBalanceBar = ({ userData, isLoading }: Props) => {
   const { client } = useFeathers()
 
   const [remainingBalance, setRemainingBalance] = useState(0)
@@ -34,7 +39,7 @@ export const MPBalanceBar = ({ userData, isLoading }) => {
   useEffect(() => {
     if (!client) return
 
-    const handler = data => {
+    const handler = (data: { newCharge: any }) => {
       const newCharge = data.newCharge
       let updatedMagickPowerBalance = magickPowerBalance
 

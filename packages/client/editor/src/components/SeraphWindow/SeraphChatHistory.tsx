@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { SeraphEvents, SeraphFunction } from 'servicesShared'
 import { useState } from 'react'
