@@ -1,0 +1,119 @@
+version: '3.4'
+services:
+  # agent-manager:
+  #   build:
+  #     dockerfile: apps/cloud-agent-manager/Dockerfile
+  #     target: development
+  #     context: .
+  #   command: npm run dev:agentManager
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - agent-worker
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+
+  # agent-worker:
+  #   build:
+  #     dockerfile: apps/cloud-agent-worker/Dockerfile
+  #     target: development
+  #     context: .
+  #   command: npm run dev:agentWorker
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - embedder
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+
+  # server:
+  #   build:
+  #     dockerfile: apps/server/Dockerfile
+  #     target: development
+  #     context: .
+  #   command: npm run dev:server
+  #   ports:
+  #     - '3030:3030'
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - agent-manager
+  #     - embedder
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+
+  embedder:
+    build:
+      dockerfile: apps/embedder/Dockerfile
+      target: development
+      context: .
+    command: npm run dev:embedder
+    # depends_on:
+    # - db
+    # - redis
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+
+  # connector:
+  #   build:
+  #     dockerfile: apps/connector/Dockerfile
+  #     target: development
+  #     context: .
+  #   command: npm run dev:connector
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - agent-manager
+  #     - agent-worker
+
+  # redis:
+  #   image: redis:latest
+  #   restart: always
+  #   ports:
+  #     - '6379:6379'
+  # db:
+  #   restart: always
+  #   image: ankane/pgvector:v0.4.1
+  #   hostname: magick_db
+  #   environment:
+  #     POSTGRES_DB: magick
+  #     POSTGRES_USER: magick
+  #     POSTGRES_PASSWORD: magick_default_pw
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # shadow-db:
+  #   restart: always
+  #   image: ankane/pgvector:v0.4.1
+  #   hostname: magick_shadow_db
+  #   environment:
+  #     POSTGRES_DB: magick_shadow
+  #     POSTGRES_USER: magick_shadow
+  #     POSTGRES_PASSWORD: magick_shadow_default_pw
+  #   ports:
+  #     - '5433:5432'
+  #   volumes:
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # s3mock:
+  #   image: adobe/s3mock
+  #   command: ['-s', '-p', '9090']
+  #   ports:
+  #     - '9090:9090'
+  #     - '9191:9191'
+
+volumes:
+  cache:
+    driver: local
+  s3-data:
+    driver: local
+
+networks:
+  default:
+    name: magick-network
