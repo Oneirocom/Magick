@@ -194,6 +194,28 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
   }
 
   /**
+   * Initializes the channels for the agent.  This is used to load the initial events for the agent.
+   */
+  async initializeChannels() {
+    const agentChannels = await this.prisma.agent_channels.findMany({
+      where: {
+        agentId: this.agent.id,
+        channelActive: true,
+      },
+    })
+    const channelPromises = agentChannels?.map(async agentChannel => {
+      this.logger.trace(`Loading spell casters for ${agentChannel.channelKey}`)
+      const spellCasters = await this.loadSpellCastersByEventKey(
+        agentChannel.channelKey,
+        agentChannel.initialEvent as EventPayload
+      )
+
+      return spellCasters
+    })
+    await Promise.all(channelPromises)
+  }
+
+  /**
    * Handles watching spell updates that stream in from feathers server
    * @param {SpellInterface} spell - The spell that was updated.
    * @example
@@ -339,41 +361,43 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
       : 'default'
     const payload = { ..._payload }
 
-    const isChannelActive = await this.isChannelActiveOrDefined(eventKey)
+    const isChannelDisabled = await this.isChannelDisabled(eventKey)
+
+    if (isChannelDisabled && !payload.isPlaytest) return
+
     // we need a way to determin if this is the initial time it is set, if so we want to set it then
     const spellCasters = await this.createOrGetSpellCasters(eventKey, payload)
 
     for (const [spellId, spellCaster] of spellCasters) {
       if (_payload.isPlaytest && spellId !== _payload?.spellId) continue
 
-      if (isChannelActive === false) return
       this.logger.trace(`Handling event ${eventName} for ${spellId}`)
       spellCaster?.handleEvent(dependency, eventName, payload)
     }
   }
 
-  async isChannelActiveOrDefined(eventKey: string) {
+  async isChannelDisabled(eventKey: string) {
     const agentChannel = await this.prisma.agent_channels
       .findFirst({
         where: {
           agentId: this.agent.id,
           channelKey: eventKey,
-          channelActive: true,
         },
       })
       .catch(err => {
         console.error('Error fetching agent channel', err)
       })
 
-    if (agentChannel) {
-      return agentChannel.channelActive
+    if (!agentChannel) {
+      return false
     }
 
-    return undefined
+    return !agentChannel.channelActive
   }
 
-  async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
-    const spellCasters = this.eventMap.get(eventKey)
+  async createOrGetAgentChannel(eventKey: string, event: EventPayload) {
+    // don't persist playtest channel events
+    if (event.isPlaytest) return
     const agentId = this.agent.id
     const agentChannel = await this.prisma.agent_channels
       .findFirst({
@@ -386,15 +410,13 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         console.error('Error fetching agent channel', err)
       })
 
-    console.log('agentChannel!!!!!!', agentChannel)
-
     if (!agentChannel) {
       const newAgentChannel = await this.prisma.agent_channels
         .create({
           data: {
             agentId,
             channelKey: eventKey,
-            channelName: `agentChannel:${agentId}:${eventKey}`,
+            channelName: event.plugin || '',
             initialEvent: event,
             // initialState: await this.getSpellState(event.spellId || ''),
           },
@@ -406,6 +428,14 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
         throw new Error('Error creating agent channel')
       }
     }
+    return agentChannel
+  }
+
+  async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
+    const spellCasters = this.eventMap.get(eventKey)
+
+    // create or get the agent channel if it doesnt exist
+    await this.createOrGetAgentChannel(eventKey, event)
     if (!spellCasters) {
       return await this.loadSpellCastersByEventKey(eventKey, event)
       //load spell casters for event
@@ -432,23 +462,6 @@ export class Spellbook<Agent extends IAgent, Application extends IApplication> {
     )
     this.eventMap.set(eventKey, spellMap)
     return spellMap
-  }
-
-  async initializeChannels() {
-    const agentChannels = await this.prisma.agent_channels.findMany({
-      where: {
-        agentId: this.agent.id,
-      },
-    })
-    const channelPromises = agentChannels?.map(async agentChannel => {
-      const spellCasters = await this.loadSpellCastersByEventKey(
-        agentChannel.channelKey,
-        agentChannel.initialEvent as EventPayload
-      )
-
-      return spellCasters
-    })
-    await Promise.all(channelPromises)
   }
 
   /**
