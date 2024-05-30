@@ -1,5 +1,5 @@
 import { info } from '@magickml/embedder/config'
-import { Queue } from 'bullmq'
+import { ConnectionOptions, Queue } from 'bullmq'
 import { RAGApplicationBuilder } from '@llm-tools/embedjs'
 // const RedisCache = require('@llm-tools/embedjs/cache/redis-cache').RedisCache
 
@@ -12,9 +12,11 @@ import { JobStatusType } from '@magickml/embedder/schema'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 
-const connection = {
-  host: process.env.EMBEDDER_REDIS_HOST || 'localhost',
-  port: process.env.EMBEDDER_REDIS_PORT || 6379,
+const connection: ConnectionOptions = {
+  host: process.env['EMBEDDER_REDIS_HOST'] || 'localhost',
+  port: Number(process.env['EMBEDDER_REDIS_PORT']) || 6379,
+  username: process.env['EMBEDDER_REDIS_USERNAME'],
+  password: process.env['EMBEDDER_REDIS_PASSWORD'],
 }
 
 export function useBullMQ(queueName: string) {
