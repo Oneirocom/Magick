@@ -1,4 +1,6 @@
 // DOCUMENTED
+// @ts-nocheck
+
 /**
  * An array of spell templates in JSON format.
  *

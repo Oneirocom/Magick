@@ -4,7 +4,7 @@ import { Window } from 'client/core'
 /**
  * The Inspector component displays the selected component's data in a window with controls for modifying the data.
  */
-const AgentControls = props => {
+const AgentControls = () => {
   const toolbar = (
     <>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}></div>

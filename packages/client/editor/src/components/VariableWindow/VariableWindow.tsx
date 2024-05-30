@@ -1,4 +1,8 @@
-import { VariableJSON } from '@magickml/behave-graph'
+import {
+  NodeJSON,
+  Variable as VariableType,
+  VariableJSON,
+} from '@magickml/behave-graph'
 import { Tab, useConfig } from '@magickml/providers'
 import { Window } from 'client/core'
 import {
@@ -81,7 +85,7 @@ export const VariableWindow = (props: Props) => {
   const saveVariable = useCallback(
     (variable: VariableJSON) => {
       const graph = spell.graph
-      const variables = graph.variables.map(v =>
+      const variables = graph.variables.map((v: VariableType) =>
         v.id === variable.id ? variable : v
       )
 
@@ -101,14 +105,20 @@ export const VariableWindow = (props: Props) => {
   const deleteVariable = useCallback(
     (variableId: string) => {
       const graph = spell.graph
-      const variable = graph.variables.find(v => v.id === variableId)
+      const variable = graph.variables.find(
+        (v: VariableType) => v.id === variableId
+      )
       const newGraph = {
         ...graph,
-        variables: graph.variables.filter(v => v.id !== variableId),
+        variables: graph.variables.filter(
+          (v: VariableType) => v.id !== variableId
+        ),
       }
       const updatedGraph = {
         ...newGraph,
-        nodes: graph.nodes.filter(node => !node.type.includes(variable.name)),
+        nodes: graph.nodes.filter(
+          (node: NodeJSON) => !node.type.includes(variable.name)
+        ),
       }
 
       const newSpell = { ...spell, graph: updatedGraph }

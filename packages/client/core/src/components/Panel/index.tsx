@@ -1,4 +1,5 @@
 // DOCUMENTED
+// @ts-nocheck
 import * as React from 'react'
 import css from './panel.module.css'
 

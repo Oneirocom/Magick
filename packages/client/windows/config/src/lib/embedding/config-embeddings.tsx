@@ -10,7 +10,8 @@ export const ConfigEmbeddings = ({
 }: {
   agentId: string
 }): JSX.Element => {
-  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] = useState()
+  const [selectedEmbeddingProvider, setSelectedEmbeddingProvider] =
+    useState<string>()
 
   const [selectedEmbeddingModel, setSelectedEmbeddingModel] = useState<string>()
 
@@ -31,7 +32,7 @@ export const ConfigEmbeddings = ({
     }
   }, [userData])
 
-  const handleEmbeddingProviderChange = provider => {
+  const handleEmbeddingProviderChange = (provider: string) => {
     setSelectedEmbeddingProvider(provider)
     updateAgent({
       id: agentId,

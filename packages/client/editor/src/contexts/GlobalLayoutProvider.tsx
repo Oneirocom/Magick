@@ -27,7 +27,11 @@ const Context = createContext<DocviewContext>(undefined!)
 // Helper hook to use Layout context
 export const useGlobalLayout = () => useContext(Context)
 
-export const GlobalLayoutProvider = ({ children }) => {
+export const GlobalLayoutProvider = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
   const [api, setApi] = useState<GridviewApi | null>(null)
   const [resizing, setResizing] = useState<Resizing | null>(null)
 

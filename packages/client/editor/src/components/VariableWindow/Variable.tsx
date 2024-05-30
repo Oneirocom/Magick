@@ -163,7 +163,7 @@ export const Variable = ({
   deleteAllVariableNodes,
 }: VariableProps) => {
   const updateProperty = (property: keyof VariableJSON) => {
-    return debounce(value => {
+    return debounce((value: keyof typeof initialValueMap) => {
       if (property === 'valueTypeName') {
         deleteAllVariableNodes()
         console.log('update', {
@@ -204,7 +204,11 @@ export const Variable = ({
                     disabled
                     className={inputClass}
                     value={variable.name}
-                    onChange={e => updateProperty('name')(e.target.value)}
+                    onChange={e =>
+                      updateProperty('name')(
+                        e.target.value as keyof typeof initialValueMap
+                      )
+                    }
                   />
                 </div>
 

@@ -35,7 +35,13 @@ import {
 import { useSelector } from 'react-redux'
 import posthog from 'posthog-js'
 
-function ActionMenu({ anchorEl, handleClose, handleDelete }) {
+type Props = {
+  anchorEl: any
+  handleClose: () => void
+  handleDelete: any
+}
+
+function ActionMenu({ anchorEl, handleClose, handleDelete }: Props) {
   return (
     <Menu
       id="action-menu"
@@ -63,7 +69,7 @@ export type NewKnowledgeState = {
  * @param {{ knowledge: any[] }} param0
  * @returns React.JSX.Element
  */
-function KnowledgeTable({ knowledgeData }) {
+function KnowledgeTable({ knowledgeData }: { knowledgeData: any[] }) {
   const [deleteKnowledge] = useDeleteKnowledgeMutation()
   const [getKnowledgeById] = useLazyGetKnowledgeByIdQuery()
   const [createKnowledge] = useCreateKnowledgeMutation()
@@ -95,7 +101,7 @@ function KnowledgeTable({ knowledgeData }) {
     files: [],
   })
 
-  const handleActionClick = (knowledge, row) => {
+  const handleActionClick = (knowledge: any, row: any) => {
     setAnchorEl(knowledge.currentTarget)
     setSelectedRow(row)
   }
@@ -184,13 +190,13 @@ function KnowledgeTable({ knowledgeData }) {
   ) as TableInstance & any //TODO: FIX Type
 
   // Function to handle sorting when a column header is clicked
-  const handleSort = column => {
+  const handleSort = (column: any) => {
     const isAsc =
       sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc
     setSortBy([{ id: column, desc: isAsc ? isAsc : false }])
   }
 
-  const rows = page.map(el => {
+  const rows = page.map((el: any) => {
     return createData({
       row: el.original,
       name: el.original.name,
@@ -284,7 +290,7 @@ function KnowledgeTable({ knowledgeData }) {
     setCreateMode(true)
   }
 
-  const handleFindDoc = doc => {
+  const handleFindDoc = (doc: any) => {
     //fetch the knowledge
     getKnowledgeById(doc.id)
       .unwrap()

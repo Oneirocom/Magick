@@ -1,3 +1,4 @@
+import { Tab } from '@magickml/providers'
 import { DockviewApi } from 'dockview'
 
 type PanelPosition = {
@@ -27,7 +28,7 @@ interface PanelConfig {
   component: string
   params: {
     title: string
-    tab?: string // Assuming 'tab', 'spellId', and 'spellName' might not be present in all configs
+    tab?: Tab // Assuming 'tab', 'spellId', and 'spellName' might not be present in all configs
     spellId?: string
     spellName?: string
   }
@@ -42,7 +43,7 @@ interface PanelConfig {
 
 // Function to generate dynamic layout configuration
 export const generateLayoutConfig = (
-  tab: string,
+  tab: Tab,
   spellId: string,
   spellName: string
 ): PanelConfig[] => [
@@ -133,7 +134,7 @@ export const applyDynamicLayoutConfig = ({
   spellName,
 }: {
   api: DockviewApi
-  tab: string
+  tab: Tab
   spellId: string
   spellName: string
 }) => {
@@ -170,7 +171,7 @@ export const applyConstraintsFromConfig = ({
   spellName,
 }: {
   api: DockviewApi
-  tab: string
+  tab: Tab
   spellId: string
   spellName: string
 }) => {

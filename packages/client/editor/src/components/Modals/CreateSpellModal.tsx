@@ -41,7 +41,7 @@ const CreateSpellModal = () => {
    * Handles loading a selected file for opening a spell.
    * @param event - FileReader onload event
    */
-  const onReaderLoad = async (event): Promise<void> => {
+  const onReaderLoad = async (event: any): Promise<void> => {
     const spellData = JSON.parse(event.target.result)
 
     posthog.capture('spell_imported', {
@@ -65,7 +65,7 @@ const CreateSpellModal = () => {
    * Load a selected file
    * @param selectedFile - File to load
    */
-  const loadFile = (selectedFile): void => {
+  const loadFile = (selectedFile: Blob): void => {
     const reader = new FileReader()
     reader.onload = onReaderLoad
     reader.readAsText(selectedFile)
@@ -96,7 +96,9 @@ const CreateSpellModal = () => {
     }
   })
 
-  const handleSpellResponse = response => {
+  const handleSpellResponse = (response: {
+    data: { name: any; type: any; id: any }
+  }) => {
     if (handleError(response)) return
     openTab({
       id: response.data.name,
@@ -113,7 +115,10 @@ const CreateSpellModal = () => {
     setLoading(false)
   }
 
-  const handleError = response => {
+  const handleError = (response: {
+    data?: { name: any; type: any; id: any }
+    error?: any
+  }) => {
     if ('error' in response) {
       if ('status' in response.error) {
         const err = response.error as any

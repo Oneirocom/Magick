@@ -1,18 +1,11 @@
-import { IGridviewPanelProps, Tab } from 'dockview'
+import { IGridviewPanelProps } from 'dockview'
 // import { DraggableElement } from './DraggableElement'
 import { Composer } from './composer'
+import { Tab } from '@magickml/providers'
 
 export const composerLayoutComponents = {
   WindowBar: (props: IGridviewPanelProps<{ title: string }>) => {
-    return (
-      <div className="flex justify-end items-center gap-4 p-4 h-9">
-        {/* <p className="text-gray-400 mr-12">Composer V2</p>
-        <DraggableElement window="Console" {...props} />
-        <DraggableElement window="TextEditor" title="Text Editor" {...props} />
-        <DraggableElement window="Test" {...props} />
-        <DraggableElement window="Variables" {...props} /> */}
-      </div>
-    )
+    return <div className="flex justify-end items-center gap-4 p-4 h-9"></div>
   },
   Composer: (
     props: IGridviewPanelProps<{

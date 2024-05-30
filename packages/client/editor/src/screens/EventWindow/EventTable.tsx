@@ -32,7 +32,13 @@ import { useDeleteEventMutation, useDeleteEventsMutation } from 'client/state'
  * @param {{ globalFilter: any, setGlobalFilter: Function }} param0
  * @returns React.JSX.Element
  */
-const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
+const GlobalFilter = ({
+  globalFilter,
+  setGlobalFilter,
+}: {
+  globalFilter: any
+  setGlobalFilter: Function
+}) => {
   const [value, setValue] = useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || undefined)
@@ -51,7 +57,15 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   )
 }
 
-function ActionMenu({ anchorEl, handleClose, handleDelete }) {
+function ActionMenu({
+  anchorEl,
+  handleClose,
+  handleDelete,
+}: {
+  anchorEl: any
+  handleClose: any
+  handleDelete: any
+}) {
   return (
     <Menu
       id="action-menu"
@@ -69,7 +83,13 @@ function ActionMenu({ anchorEl, handleClose, handleDelete }) {
  * @param {{ events: any[] }} param0
  * @returns React.JSX.Element
  */
-function EventTable({ events, refetchEvents }) {
+function EventTable({
+  events,
+  refetchEvents,
+}: {
+  events: any[]
+  refetchEvents: any
+}) {
   const [deleteEvents] = useDeleteEventsMutation()
   const [deleteEvent] = useDeleteEventMutation()
 
@@ -81,7 +101,7 @@ function EventTable({ events, refetchEvents }) {
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(0)
 
-  const handleActionClick = (event, row) => {
+  const handleActionClick = (event: any, row: any) => {
     setAnchorEl(event.currentTarget)
     setSelectedRow(row)
   }
@@ -203,13 +223,13 @@ function EventTable({ events, refetchEvents }) {
   } = tableInstance as any
 
   // Function to handle sorting when a column header is clicked
-  const handleSort = column => {
+  const handleSort = (column: any) => {
     const isAsc =
       sortBy && sortBy[0] && sortBy[0].id === column && !sortBy[0].desc
     setSortBy([{ id: column, desc: isAsc ? isAsc : false }])
   }
 
-  const rows = page.map(el => {
+  const rows = page.map((el: any) => {
     return createData(
       el.original,
       el.original.client,
@@ -285,7 +305,7 @@ function EventTable({ events, refetchEvents }) {
 
   // Get the original rows data
   const originalRows = useMemo(
-    () => flatRows.map(row => row.original),
+    () => flatRows.map((row: any) => row.original),
     [flatRows]
   )
 

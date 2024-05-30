@@ -27,6 +27,15 @@ const LogHeader = ({
   setShowLogLogs,
   setShowSpellLogs,
   setShowErrorLogs,
+}: {
+  showRawLogs: boolean
+  setShowRawLogs: React.Dispatch<React.SetStateAction<boolean>>
+  showSpellLogs: boolean
+  showLogLogs: boolean
+  showErrorLogs: boolean
+  setShowLogLogs: React.Dispatch<React.SetStateAction<boolean>>
+  setShowSpellLogs: React.Dispatch<React.SetStateAction<boolean>>
+  setShowErrorLogs: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   return (
     <div className="flex mb-6 border-b border-gray-800 pb-5">
@@ -72,7 +81,17 @@ const LogHeader = ({
   )
 }
 
-const LogMessage = ({ log, style, onExpandCollapse, showRawLogs }) => {
+const LogMessage = ({
+  log,
+  style,
+  onExpandCollapse,
+  showRawLogs,
+}: {
+  log: Log
+  style: any
+  onExpandCollapse: (height: number) => void
+  showRawLogs: boolean
+}) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const isRefAvailable = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -221,11 +240,19 @@ const LogMessage = ({ log, style, onExpandCollapse, showRawLogs }) => {
   )
 }
 
-const LogContainer = ({ logs, autoscroll, showRawLogs }) => {
+const LogContainer = ({
+  logs,
+  autoscroll,
+  showRawLogs,
+}: {
+  logs: any[]
+  autoscroll: boolean
+  showRawLogs: boolean
+}) => {
   const listRef = useRef<any>(null)
-  const rowHeights = useRef({})
+  const rowHeights = useRef<{ [key: number]: number }>({})
 
-  const getItemSize = index => {
+  const getItemSize = (index: number) => {
     return rowHeights.current[index] || LIST_ITEM_HEIGHT // Default height
   }
 
@@ -251,7 +278,13 @@ const LogContainer = ({ logs, autoscroll, showRawLogs }) => {
             itemSize={getItemSize}
             width={width}
           >
-            {({ index, style }) => (
+            {({
+              index,
+              style,
+            }: {
+              index: number
+              style: React.CSSProperties
+            }) => (
               <LogMessage
                 showRawLogs={showRawLogs}
                 key={index}
@@ -267,7 +300,15 @@ const LogContainer = ({ logs, autoscroll, showRawLogs }) => {
   )
 }
 
-const LogFooter = ({ autoscroll, setAutoscroll, onClear }) => {
+const LogFooter = ({
+  autoscroll,
+  setAutoscroll,
+  onClear,
+}: {
+  autoscroll: boolean
+  setAutoscroll: React.Dispatch<React.SetStateAction<boolean>>
+  onClear: () => void
+}) => {
   return (
     <div className="flex items-center justify-between mt-4 p-3 rounded border border-[#262730]">
       <div>
@@ -335,7 +376,7 @@ const LogsComponent = () => {
     setCombinedData([]) // Clear combinedData instead of logs
   }
 
-  const filterLogs = logs => {
+  const filterLogs = (logs: any[]) => {
     if (logs.length === 0) return []
     return logs.filter(log => {
       if (!log) return false

@@ -136,13 +136,15 @@ export const PropertiesWindow = (props: Props) => {
               !configuration.hiddenProperties?.includes(key) &&
               !spec?.configuration
                 .find(config => config.name === 'hiddenProperties')
-                ?.defaultValue// @ts-ignore
+                ?.defaultValue // @ts-ignore
                 ?.includes(key)
           )
           .map((config: [key: string, any], index) => {
             const [key] = config
             const Component =
-              ConfigurationComponents[key] || ConfigurationComponents.default
+              ConfigurationComponents[
+                key as keyof typeof ConfigurationComponents
+              ] || ConfigurationComponents.default
 
             const valueType =
               spec.configuration.find(conf => conf.name === key)?.valueType ||

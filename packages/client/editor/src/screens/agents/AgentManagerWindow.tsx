@@ -27,14 +27,13 @@ const AgentManagerWindow = () => {
     setData(agentData.data)
   }, [agentData])
 
-
   const [createNewAgent] = useCreateAgentMutation()
 
   /**
    * @description Load file and create an agent with its data.
    * @param {File} selectedFile The file containing agent data.
    */
-  const loadFile = selectedFile => {
+  const loadFile = (selectedFile: File) => {
     const fileReader = new FileReader()
     fileReader.readAsText(selectedFile)
     fileReader.onload = event => {
@@ -49,7 +48,7 @@ const AgentManagerWindow = () => {
       // if the agent's public variable keys don't match the spell's public variable keys, update the agent
       if (!data.publicVariables && data?.rootSpell?.graph?.nodes) {
         data.publicVariables = data?.rootSpell?.graph?.nodes.filter(
-          (node: { data }) => node?.data?.isPublic
+          (node: { data: { isPublic: any } }) => node?.data?.isPublic
         )
       }
 
@@ -74,10 +73,7 @@ const AgentManagerWindow = () => {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <AgentWindow
-      data={data}
-      onLoadFile={loadFile}
-    />
+    <AgentWindow data={data} onLoadFile={loadFile} />
   )
 }
 

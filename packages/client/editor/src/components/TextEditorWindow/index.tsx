@@ -1,6 +1,6 @@
 'use client'
 // import { debounce } from 'lodash'
-import Editor from '@monaco-editor/react'
+import Editor, { Monaco } from '@monaco-editor/react'
 import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,7 @@ import { InputSocketSpecJSON } from '@magickml/behave-graph'
 import { useOnSelectionChange } from '@xyflow/react'
 import { MagickNodeType } from '@magickml/client-types'
 
-const TextEditor = props => {
+const TextEditor = () => {
   const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
   const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
@@ -44,7 +44,7 @@ const TextEditor = props => {
   }
   const activeInput = useSelector(selectActiveInput)
 
-  const handleEditorWillMount = monaco => {
+  const handleEditorWillMount = (monaco: Monaco) => {
     monaco.editor.defineTheme('sds-dark', {
       base: 'vs-dark',
       inherit: true,
@@ -105,7 +105,11 @@ const TextEditor = props => {
 
       console.log('socket', socket)
 
-      if (configuration.socketInputs.find(input => input.name === socketName))
+      if (
+        configuration.socketInputs.find(
+          (input: InputSocketSpecJSON) => input.name === socketName
+        )
+      )
         continue
 
       sockets.push(socket)

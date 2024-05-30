@@ -1,10 +1,17 @@
 import { Button, Input } from '@magickml/client-ui'
 import { useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
+
+interface ChatInputProps {
+  value: string
+  onChange: (arg: any) => void
+  onSend: () => void
+}
+
 /**
  * Input component - Receives and sends playtest input.
  */
-export const ChatInput = props => {
+export const ChatInput = (props: ChatInputProps) => {
   const ref = useRef<any>(null)
   // const ref = useRef(null) as React.MutableRefObject<HTMLInputElement>
 

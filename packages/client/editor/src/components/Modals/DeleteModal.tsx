@@ -20,6 +20,12 @@ import { useForm } from 'react-hook-form'
  * @property {number} id - ID of the item to be deleted
  */
 
+type DeleteModalProps = {
+  closeModal: () => void
+  handledelete: (id: number) => void
+  id: number
+}
+
 /**
  * Displays a modal with confirmation of deletion and handles user input using react-hook-form
  *
@@ -27,7 +33,7 @@ import { useForm } from 'react-hook-form'
  * @returns {React.JSX.Element}
  * @throws Will throw an error if the required props are not passed
  */
-const DeleteModal = ({ closeModal, handledelete, id }) => {
+const DeleteModal = ({ closeModal, handledelete, id }: DeleteModalProps) => {
   if (!closeModal || !handledelete || !id) {
     throw new Error(
       'Required props closeModal, handledelete, and id not passed to DeleteModal component'

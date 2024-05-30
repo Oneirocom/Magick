@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   IPaneviewPanelProps,
@@ -56,7 +56,7 @@ const components = {
   },
 }
 
-const RightSidebar = props => {
+const RightSidebar = (props: any) => {
   const tab = useTabLayout()
   usePanelControls(props, 'none', 'ctrl+l, meta+l')
   const onReady = (event: PaneviewReadyEvent) => {

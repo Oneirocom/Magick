@@ -11,7 +11,7 @@ const providers = [ReactFlowProvider]
  * @param {React.ReactNode} params.children - Child components
  * @param {Object} params.parentProps - Parent components properties
  */
-function ComposeProviders({ providers, children, ...parentProps }) {
+function ComposeProviders({ providers, children, ...parentProps }: any) {
   const _providers = [...providers].reverse()
 
   return _providers.reduce((acc, current) => {
@@ -35,7 +35,7 @@ function ComposeProviders({ providers, children, ...parentProps }) {
  * @param {Object} params.props - Additional properties
  * @returns {React.JSX.Element} Composed providers and their children
  */
-const WorkspaceProvider = ({ children, ...props }) => (
+const WorkspaceProvider = ({ children, ...props }: any) => (
   <ComposeProviders providers={providers} {...props}>
     {children}
   </ComposeProviders>

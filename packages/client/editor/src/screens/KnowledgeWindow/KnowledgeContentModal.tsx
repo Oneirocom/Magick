@@ -3,7 +3,13 @@ import { useTreeData } from '@magickml/providers'
 import { Typography } from '@mui/material'
 import styles from './index.module.scss'
 
-function DocContentModal({ contentModal, setContentModal, knowledge }) {
+type Props = {
+  contentModal: boolean
+  setContentModal: (value: boolean) => void
+  knowledge: string
+}
+
+function DocContentModal({ contentModal, setContentModal, knowledge }: Props) {
   const { setOpenDoc } = useTreeData()
   return (
     <Modal

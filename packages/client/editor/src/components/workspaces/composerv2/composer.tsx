@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   DockviewApi,
@@ -72,7 +72,7 @@ const components = {
   },
   Variables: VariableWindow,
   Console: (
-    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName }>
+    props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
     return <Console {...props.params} />
   },
@@ -86,7 +86,14 @@ const tabComponents = {
   permanentTab: PermanentTab,
 }
 
-export const Composer = ({ tab, theme, spellId, spellName }) => {
+type Props = {
+  tab: Tab
+  theme: string
+  spellId: string
+  spellName: string
+}
+
+export const Composer = ({ tab, theme, spellId, spellName }: Props) => {
   const pubSub = usePubSub()
   const [api, setApi] = useState<DockviewApi | null>(null)
   const { events, subscribe } = usePubSub()
@@ -183,7 +190,7 @@ export const Composer = ({ tab, theme, spellId, spellName }) => {
     }
   }, [api])
 
-  const onDidDrop = event => {
+  const onDidDrop = (event: any) => {
     const component = event.nativeEvent.dataTransfer?.getData('component') || ''
     const title = event.nativeEvent.dataTransfer?.getData('title') || ''
     event.api.addPanel({

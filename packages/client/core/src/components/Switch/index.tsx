@@ -1,4 +1,5 @@
 // DOCUMENTED
+// @ts-nocheck
 // Import necessary React and Material UI components
 import * as React from 'react'
 import MUISwitch from '@mui/material/Switch'

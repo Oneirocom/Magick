@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { Window } from 'client/core'
-import Editor from '@monaco-editor/react'
+import Editor, { Monaco } from '@monaco-editor/react'
 import { useSnackbar } from 'notistack'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { useConfig, usePubSub } from '@magickml/providers'
+import { Tab, useConfig, usePubSub } from '@magickml/providers'
 import {
   RootState,
   useGetSpellByNameQuery,
@@ -21,7 +21,12 @@ import { usePlaytestData } from '../../hooks/usePlaytestData'
 import { useSelector } from 'react-redux'
 import { useMarkdownProcessor } from 'chat-window'
 
-const ChatWindow = ({ tab, spellName }) => {
+type Props = {
+  tab: Tab
+  spellName: string
+}
+
+const ChatWindow = ({ tab, spellName }: Props) => {
   const config = useConfig()
   const { enqueueSnackbar } = useSnackbar()
   const { spell } = useGetSpellByNameQuery(
@@ -127,7 +132,7 @@ const ChatWindow = ({ tab, spellName }) => {
     })
   }
 
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }
 
@@ -160,7 +165,7 @@ const ChatWindow = ({ tab, spellName }) => {
     </div>
   )
 
-  const UserMessage = ({ message }) => {
+  const UserMessage = ({ message }: { message: any }) => {
     const content = useMarkdownProcessor(message) as JSX.Element
     return (
       <div className="flex flex-row mb-2">
@@ -171,7 +176,7 @@ const ChatWindow = ({ tab, spellName }) => {
     )
   }
 
-  const AgentMessage = ({ message }) => {
+  const AgentMessage = ({ message }: { message: any }) => {
     const content = useMarkdownProcessor(message) as JSX.Element
     return (
       <div className="flex flex-row mb-2">
@@ -246,7 +251,7 @@ const ChatWindow = ({ tab, spellName }) => {
 export default ChatWindow
 
 // Helper function to set Monaco Editor theme
-const handleEditorWillMount = monaco => {
+const handleEditorWillMount = (monaco: Monaco) => {
   monaco.editor.defineTheme('sds-dark', {
     base: 'vs-dark',
     inherit: true,

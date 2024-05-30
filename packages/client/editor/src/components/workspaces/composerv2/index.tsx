@@ -1,6 +1,12 @@
-"use client"
+'use client'
 
-import { GridviewReact, IDockviewPanelProps, Orientation } from 'dockview'
+import {
+  DockviewReadyEvent,
+  GridviewReact,
+  GridviewReadyEvent,
+  IDockviewPanelProps,
+  Orientation,
+} from 'dockview'
 import WorkspaceProvider from '../../../contexts/WorkspaceProvider'
 import { Tab, useDockviewTheme } from 'client/state'
 import { usePubSub } from '@magickml/providers'
@@ -17,7 +23,7 @@ const ComposerContainer = (
   const { theme } = useDockviewTheme()
   const pubSub = usePubSub()
 
-  const onReady = event => {
+  const onReady = (event: GridviewReadyEvent) => {
     event.api.addPanel({
       id: 'WindowBar',
       component: 'WindowBar',

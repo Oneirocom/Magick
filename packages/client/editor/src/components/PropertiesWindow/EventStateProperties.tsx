@@ -10,10 +10,13 @@ export const EventStateProperties = (props: ConfigurationComponentProps) => {
   const eventStateValue = fullConfig.eventState
   const [selectedEvents, setSelectedEvents] = useState(eventStateValue || [])
 
-  const handleChange = (event, eventProperty) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    eventProperty: string
+  ) => {
     const newSelection = event.target.checked
       ? [...selectedEvents, eventProperty]
-      : selectedEvents.filter(e => e !== eventProperty)
+      : selectedEvents.filter((e: string) => e !== eventProperty)
     setSelectedEvents(newSelection)
     // would rather not hard code this string here
     updateConfigKey('eventState', newSelection)
@@ -35,7 +38,7 @@ export const EventStateProperties = (props: ConfigurationComponentProps) => {
       <Tooltip anchorSelect="#my-anchor-element" content="Hello world!" />
 
       <div className="flex flex-col">
-        {eventProperties.map((eventProperty, index) => (
+        {eventProperties.map((eventProperty: string, index: number) => (
           <FormControlLabel
             key={index}
             control={

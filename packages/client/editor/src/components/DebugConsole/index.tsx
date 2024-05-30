@@ -1,8 +1,9 @@
-"use client"
+'use client'
 
 import { Window } from 'client/core'
-import { usePubSub } from '@magickml/providers'
+import { Tab, usePubSub } from '@magickml/providers'
 import { useCallback, useEffect, useRef, useState } from 'react'
+// @ts-ignore
 import Terminal from 'react-console-emulator'
 import ReactJson from 'react-json-view'
 import { useSelector } from 'react-redux'
@@ -26,7 +27,7 @@ interface Terminal {
  * @param {Object} props.tab - Tab object.
  * @returns {React.JSX.Element} Debug console component.
  */
-const DebugConsole = ({ tab }): React.JSX.Element => {
+const DebugConsole = ({ tab }: { tab: Tab }): React.JSX.Element => {
   const [scrollToBottom, setScrollToBottom] = useState<boolean>(false)
   const { publish, subscribe, events } = usePubSub()
   const { $TRIGGER, $DEBUG_PRINT } = events
@@ -54,14 +55,23 @@ const DebugConsole = ({ tab }): React.JSX.Element => {
     publish($TRIGGER(tab.id, nodeId))
   }
 
+  type Message = {
+    nodeId: string
+    from: string
+    name: string
+    type: string
+    content: string
+  }
+
   /**
    * Format an error message.
    *
    * @param {Object} message - Message object.
    * @returns {string} Formatted error message.
    */
-  const formatErrorMessage = (message): string =>
-    `> Node ${message.nodeId}: Error in ${message.from} component${message.name ? ' ' + message.name : ''
+  const formatErrorMessage = (message: Message): string =>
+    `> Node ${message.nodeId}: Error in ${message.from} component${
+      message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -70,8 +80,9 @@ const DebugConsole = ({ tab }): React.JSX.Element => {
    * @param {Object} message - Message object.
    * @returns {string} Formatted log message.
    */
-  const formatLogMessage = (message): string =>
-    `> Node ${message.nodeId}: Message from ${message.from} component ${message.name ? ' ' + message.name : ''
+  const formatLogMessage = (message: Message): string =>
+    `> Node ${message.nodeId}: Message from ${message.from} component ${
+      message.name ? ' ' + message.name : ''
     }.`
 
   /**
@@ -81,7 +92,7 @@ const DebugConsole = ({ tab }): React.JSX.Element => {
    * @param {string} type - Message type (error or log).
    * @returns {React.JSX.Element} Rendered message.
    */
-  const Message = (message, type): React.JSX.Element => {
+  const Message = (message: Message, type: string): React.JSX.Element => {
     return (
       <div
         style={{
@@ -116,12 +127,12 @@ const DebugConsole = ({ tab }): React.JSX.Element => {
    * @param {Object} message - Message object.
    * @returns {string} Formatted message for the terminal.
    */
-  const getMessage = _message => {
+  const getMessage = (_message: Message) => {
     const message = _message.content
       ? {
-        ..._message,
-        ...JSON.parse(_message.content),
-      }
+          ..._message,
+          ...JSON.parse(_message.content),
+        }
       : _message
 
     delete message.content
@@ -130,7 +141,7 @@ const DebugConsole = ({ tab }): React.JSX.Element => {
   }
 
   // Callback function to print messages to the debugger.
-  const printToDebugger = useCallback((_, message): void => {
+  const printToDebugger = useCallback((_: unknown, message: Message): void => {
     const terminal = terminalRef.current
     if (!terminal) return
 

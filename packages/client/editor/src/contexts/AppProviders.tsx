@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   ConfigProvider,
@@ -23,7 +23,13 @@ const darkTheme = createTheme({
  * @param {Object} param0.config - Configuration options for providers.
  * @param {React.ReactNode} param0.children - Children elements to render within the composed providers.
  */
-function ComposeProviders({ config, children }) {
+function ComposeProviders({
+  config,
+  children,
+}: {
+  config: any
+  children: any
+}) {
   // Providers with their respective props
   const _providers = [
     [ConfigProvider, { config }],
@@ -51,7 +57,7 @@ function ComposeProviders({ config, children }) {
  * @param {Object} param0.config - Configuration options for providers.
  * @param {React.ReactNode} param0.children - Children elements to render within the composed providers.
  */
-const AppProviders = ({ config, children }) => (
+const AppProviders = ({ config, children }: { config: any; children: any }) => (
   <ComposeProviders config={config}>{children}</ComposeProviders>
 )
 
