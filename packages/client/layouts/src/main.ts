@@ -3,6 +3,13 @@ import fullScreen from './data/fullScreenLayout.json'
 import promptEngineering from './data/promptEngineeringLayout.json'
 import troubleShooting from './data/troubleshootingLayout.json'
 
+export type WorkspaceKeys = {
+  default: string
+  fullScreen: string
+  promptEngineering: string
+  troubleShooting: string
+}
+
 // Workspace map for initializing tabs with layout data
 export const workspaceMap = {
   default: defaultJson,
@@ -11,6 +18,8 @@ export const workspaceMap = {
   troubleShooting,
 }
 
-export const getWorkspaceLayout = layoutKey => {
-  return workspaceMap[layoutKey] || workspaceMap.default
+export const getWorkspaceLayout = (
+  layoutKey: keyof WorkspaceKeys | undefined
+) => {
+  return layoutKey ? workspaceMap[layoutKey] : workspaceMap.default
 }

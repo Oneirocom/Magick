@@ -1,4 +1,9 @@
 // DOCUMENTED
+import {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/dist/query'
 import { RootState } from '../store'
 import { rootApi } from './api'
 
@@ -38,7 +43,9 @@ export interface SpellData {
 // Reusable function to handle common query logic
 // Reusable function to handle common query logic
 const makeSpellQueryFn =
-  urlConstructor =>
+  (urlConstructor: (args: any, spellReleaseId: string) => string) =>
+  // todo fix this ignore
+  // @ts-ignore
   async (args, { getState }, _, baseQuery) => {
     // Access the spellReleaseId from the globalConfig state
     const spellReleaseId = (getState() as RootState).globalConfig

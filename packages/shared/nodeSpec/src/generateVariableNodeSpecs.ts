@@ -1,9 +1,10 @@
-import { NodeSpecJSON, VariableJSON } from '@magickml/behave-graph'
+import { NodeSpecJSON, Variable, VariableJSON } from '@magickml/behave-graph'
 import { SpellInterface } from 'server/schemas'
 
 type ConfigUpdate = {
   variableId: string
   label: string
+  valueTypeName: string
   socketInputs?: { name: string; valueType: string }[]
   socketOutputs?: { name: string; valueType: string }[]
 }
@@ -21,18 +22,18 @@ export const getVariableConfig = (
     valueType: variable.valueTypeName,
   }
 
-  const configUpdate = {
+  const configUpdate: ConfigUpdate = {
     variableId: variable.id,
     valueTypeName: variable.valueTypeName,
     label: variable.name,
   }
 
   if (socketInputs) {
-    configUpdate['socketInputs'] = [socket]
+    configUpdate.socketInputs = [socket]
   }
 
   if (socketOutputs) {
-    configUpdate['socketOutputs'] = [socket]
+    configUpdate.socketOutputs = [socket]
   }
 
   if (type === 'on') {
@@ -48,7 +49,7 @@ export const getVariableConfig = (
   return configUpdate
 }
 
-function capitalize(string) {
+function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
@@ -86,11 +87,11 @@ function createVariableNodeSpec(
 
 function configurationArrayToObject(
   configuration: { name: string; defaultValue: any }[]
-) {
+): Record<string, any> {
   return configuration.reduce((obj, item) => {
     obj[item.name] = item.defaultValue
     return obj
-  }, {})
+  }, {} as Record<string, any>)
 }
 
 export const generateVariableNodeSpecs = (
@@ -118,7 +119,7 @@ export const generateVariableNodeSpecs = (
   )
 
   const variableNodeSpecs = spell.graph.variables
-    .map(variable => {
+    .map((variable: Variable) => {
       const getSpec = updateDefaultValues(
         getVariableSpec,
         getVariableConfig(variable, getConfiguration)
@@ -143,7 +144,10 @@ export const generateVariableNodeSpecs = (
   return variableNodeSpecs
 }
 
-export const sortNodeSpecsByType = (a, b) => {
+export const sortNodeSpecsByType = (
+  a: { type: string },
+  b: { type: string }
+) => {
   if (a.type < b.type) {
     return -1
   }

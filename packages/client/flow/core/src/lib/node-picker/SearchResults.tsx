@@ -1,5 +1,9 @@
 'use client'
 
+import { NodeSpecJSON } from '@magickml/behave-graph'
+import { MagickReactFlowInstance } from '@magickml/flow-core'
+import { XYPosition } from '@xyflow/react'
+
 export const SearchResults = ({
   filteredNodes,
   focusedIndex,
@@ -7,6 +11,13 @@ export const SearchResults = ({
   pickedNodePosition,
   onPickNode,
   instance,
+}: {
+  filteredNodes: NodeSpecJSON[]
+  focusedIndex: number
+  setFocusedIndex: (index: number) => void
+  pickedNodePosition: XYPosition | undefined
+  onPickNode: (type: string, position: XYPosition) => void
+  instance: MagickReactFlowInstance
 }) => {
   return (
     <>

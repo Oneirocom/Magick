@@ -5,6 +5,7 @@
 
 import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
 import { SaveDiffData } from 'packages/client/feathers-client/src/lib/FeathersClient'
+import { RootState } from './store'
 
 type ActiveInputType = {
   name: string
@@ -192,7 +193,7 @@ export const {
  */
 export default globalConfigSlice.reducer
 
-export const selectActiveInput = state =>
+export const selectActiveInput = (state: RootState) =>
   state.globalConfig.activeInput as {
     name: string
     inputType: string
@@ -200,7 +201,9 @@ export const selectActiveInput = state =>
     nodeId: string
   }
 
-export const selectPastState = state => state.globalConfig.pastState
-export const selectFutureState = state => state.globalConfig.futureState
-export const selectLayoutChangeEvent = state =>
+export const selectPastState = (state: RootState) =>
+  state.globalConfig.pastState
+export const selectFutureState = (state: RootState) =>
+  state.globalConfig.futureState
+export const selectLayoutChangeEvent = (state: RootState) =>
   state.globalConfig.layoutChangeEvent

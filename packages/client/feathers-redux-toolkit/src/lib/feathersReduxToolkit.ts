@@ -178,10 +178,11 @@ export const createFeathersReduxToolkit = () => {
       events.forEach((event: (typeof events)[number]) => {
         const selectEventHookName = `useSelect${capitalize(name)}${capitalize(
           event
-        )}`
+        )}` as keyof EventHooks<ServiceName, Events>
 
-        const selectEventHook = () => {
+        const selectEventHook: any = () => {
           const eventState = useSelector(
+            // todo fix this any!
             (state: any) => state[this.rootReducerPath][name][event]
           )
           return {

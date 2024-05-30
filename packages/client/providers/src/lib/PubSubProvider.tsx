@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 // Import required modules
 import { PubSubContext, PubSubData, PubSubEvents } from './pubSubTypes'
@@ -66,7 +66,7 @@ export const events: PubSubEvents = {
 }
 
 // Create the PubSubProvider component
-export const PubSubProvider = ({ children }) => {
+export const PubSubProvider = ({ children }: { children: React.ReactNode }) => {
   const { client } = useFeathers()
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const globalConfigRef = useRef(globalConfig)

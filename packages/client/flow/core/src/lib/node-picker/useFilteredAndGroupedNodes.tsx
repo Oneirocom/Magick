@@ -1,11 +1,22 @@
-"use client"
+'use client'
 
-import { NodeCategory } from '@magickml/behave-graph'
+import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
 import { useMemo } from 'react'
 
-export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
+export const useFilteredAndGroupedNodes = ({
+  specJSON,
+  filters,
+  search,
+}: {
+  specJSON: NodeSpecJSON[]
+  filters: { handleType: string; valueType: string }
+  search: string
+}) => {
   // Utility function to combine node sockets with configuration defaults
-  const combineSocketsWithDefaults = (node, socketType) => [
+  const combineSocketsWithDefaults = (
+    node: NodeSpecJSON,
+    socketType: keyof NodeSpecJSON
+  ) => [
     ...node[socketType],
     ...(node.configuration
       .filter(
@@ -44,7 +55,7 @@ export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
   )
 
   // If category is 'None' we want to check the typeParts and then handles those in a case
-  const getGroup = node => {
+  const getGroup = (node: { category: string; type: string }) => {
     if (node.category === 'None') {
       switch (node.type.split('/')[0]) {
         case 'action': {
@@ -87,7 +98,7 @@ export const useFilteredAndGroupedNodes = ({ specJSON, filters, search }) => {
         categoryGroup?.subItems.push(node)
 
         return result
-      }, [])
+      }, [] as any[])
     } else {
       return []
     }

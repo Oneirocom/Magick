@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { DockviewApi, SerializedDockview } from 'dockview'
-import { getWorkspaceLayout } from 'client/layouts'
+import { WorkspaceKeys, getWorkspaceLayout } from 'client/layouts'
 import { RootState, setCurrentTab, useDockviewTheme } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePubSub } from './PubSubProvider'
@@ -14,7 +14,7 @@ export type Tab = {
   name: string
   spellName?: string
   type: string
-  workspace?: string
+  workspace?: keyof WorkspaceKeys
   switchActive?: boolean
   params?: Record<string, unknown>
 }
@@ -47,7 +47,7 @@ const generateTabLayoutKey = (projectId: string, agentId?: string) => {
   return `${projectId}/tab-layout/${agentId || 'draft-agent'}`
 }
 
-export const TabProvider = ({ children }) => {
+export const TabProvider = ({ children }: { children: React.ReactNode }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId: _currentAgentId } = globalConfig
   const currentAgentRef = useRef(_currentAgentId)
