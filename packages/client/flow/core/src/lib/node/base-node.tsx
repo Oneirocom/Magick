@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -164,11 +164,12 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     >
       {pairs.map(([flowInput, output], ix) => (
         <div
-          key={ix}
+          key={`pair-${ix}`}
           className="flex flex-row justify-between gap-8 relative px-2"
         >
           {flowInput && (
             <InputSocket
+              key={`input-${flowInput.name}`}
               {...flowInput}
               specJSON={allSpecs}
               value={data[flowInput.name] ?? flowInput.defaultValue}
@@ -182,6 +183,7 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
           )}
           {output && (
             <OutputSocket
+              key={`output-${output.name}`}
               {...output}
               specJSON={allSpecs}
               hide={!socketsVisible}
@@ -199,10 +201,11 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
 
       {valueInputs.map((input, ix) => (
         <div
-          key={ix}
+          key={`valueInput-${ix}`}
           className="flex flex-row justify-start gap-8 relative px-2"
         >
           <InputSocket
+            key={`valueInput-${input.name}`}
             {...input}
             specJSON={allSpecs}
             hide={!socketsVisible}
