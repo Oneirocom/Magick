@@ -17,7 +17,6 @@ import {
   useGetUserQuery,
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
-import { DrawerProps } from '@mui/material/Drawer'
 
 import { MPBalanceBar } from './MPBalanceBar'
 import { Button } from '@magickml/client-ui'
