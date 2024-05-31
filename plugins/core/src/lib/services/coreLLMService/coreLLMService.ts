@@ -4,10 +4,10 @@ import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { LLMCredential } from 'servicesShared'
 import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
-import OpenAI from 'openai'
 import { ChatCompletionStreamParams } from 'openai/lib/ChatCompletionStream'
 import pino from 'pino'
 import { PRODUCTION } from 'clientConfig'
+import { createOpenAI } from '@ai-sdk/openai'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -21,7 +21,7 @@ export class CoreLLMService implements ICoreLLMService {
   protected projectId: string
   protected agentId: string
   protected userService: CoreUserService
-  protected openAISDK: OpenAI
+  protected vercelAISDK: any
   protected logger: pino.Logger<pino.LoggerOptions> | undefined
   protected userData: UserResponse | undefined
 
@@ -29,7 +29,7 @@ export class CoreLLMService implements ICoreLLMService {
     this.projectId = projectId
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
-    this.openAISDK = new OpenAI({
+    this.vercelAISDK = createOpenAI({
       baseURL: process.env['KEYWORDS_API_URL'],
       apiKey: process.env['KEYWORDS_API_KEY'],
     })
@@ -82,7 +82,7 @@ export class CoreLLMService implements ICoreLLMService {
         const _body = {
           model: request.model,
           messages: request.messages,
-          stream: true,
+          temperature: request.temperature || undefined,
           ...request.options,
           ...(PRODUCTION
             ? {
@@ -109,17 +109,24 @@ export class CoreLLMService implements ICoreLLMService {
           Object.entries(_body).filter(([, v]) => v !== undefined)
         ) as ChatCompletionStreamParams
 
-        const stream = await this.openAISDK.beta.chat.completions.stream(body)
+        const stream = await this.vercelAISDK.streamText(body as any)
 
         yield { choices: [{ delta: { content: '<START>' } }] }
 
-        for await (const chunk of stream) {
-          chunks.push(chunk)
+        const reader = stream.textStream.getReader()
 
-          yield chunk as any
+        while (true) {
+          const { done, value } = await reader.read()
+          chunks.push(value)
+          if (done) {
+            break
+          }
+
+          yield value as any
         }
 
-        const chatCompletion = await stream.finalChatCompletion()
+        const chatCompletion = await stream.toAIStreamResponse()
+        const totalTokens = (await stream.usage).totalTokens
 
         saveRequest({
           projectId: this.projectId,
@@ -135,7 +142,7 @@ export class CoreLLMService implements ICoreLLMService {
           type: 'completion',
           hidden: false,
           processed: false,
-          totalTokens: chatCompletion.usage?.total_tokens,
+          totalTokens: totalTokens,
           spell: { id: spellId } as any,
           nodeId: null,
         })
