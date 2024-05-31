@@ -9,9 +9,8 @@ import {
   Checkbox,
   Badge,
 } from '@magickml/client-ui'
-
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
-import { useAtomValue, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { WindowContainer, WindowHeader } from 'windows-shared'
 import { LoaderPicker } from './loader-picker'
 import KnowledgePackCard from '../_pkg/knowledge-pack-card'
