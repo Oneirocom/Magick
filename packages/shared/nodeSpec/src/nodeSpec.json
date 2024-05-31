@@ -2427,6 +2427,95 @@
     "configuration": []
   },
   {
+    "type": "knowledge/embedder/queryPack",
+    "category": "Action",
+    "label": "Query Knowledge Pack",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "query",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "conversationId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "result",
+        "valueType": "string"
+      },
+      {
+        "name": "sources",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/getContext",
+    "category": "Action",
+    "label": "Get Context",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "query",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "context",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
     "type": "knowledge/embedder/addTextSource",
     "category": "Action",
     "label": "Add Text Source",

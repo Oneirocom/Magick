@@ -87,6 +87,8 @@ import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
 import { createPack, getManyPacks, getPack } from './nodes/knowledge'
 import { sourceNodes } from './nodes/knowledge/source'
+import { queryPack } from './nodes/knowledge/query'
+import { getContext } from './nodes/knowledge/context'
 import { makeEmbedderClient } from '@magickml/embedder/client/ts'
 import { generateToken } from '@magickml/embedder/auth/token'
 
@@ -164,6 +166,8 @@ export class CorePlugin extends CoreEventsPlugin<
     createPack,
     getPack,
     getManyPacks,
+    queryPack,
+    getContext,
     ...sourceNodes,
   ]
   values = []
