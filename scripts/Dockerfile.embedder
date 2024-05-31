@@ -15,7 +15,8 @@ RUN git submodule update --init --recursive portal/cloud
 
 RUN npm install
 
-RUN npm run embedder:build
+RUN npx nx reset
 
-ENTRYPOINT [ "npm", "run" ]
-CMD [ "embedder:serve" ]
+RUN npx nx build embedder
+
+ENTRYPOINT [ "node", "./apps/embedder/.output/server/index.mjs" ]
