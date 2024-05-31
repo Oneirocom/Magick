@@ -9,7 +9,6 @@ import {
   CardContent,
   Button,
 } from '@magickml/client-ui'
-import { FileIcon } from 'lucide-react'
 
 interface KnowledgePackCardProps {
   id: string
@@ -25,10 +24,7 @@ const KnowledgePackCard: React.FC<KnowledgePackCardProps> = ({
   id,
   title,
   description,
-  model,
   created,
-  updated,
-  documents,
 }) => {
   const [, setActive] = useAtom(activePackIdAtom)
 
@@ -58,14 +54,6 @@ const KnowledgePackCard: React.FC<KnowledgePackCardProps> = ({
             <span className="font-medium">
               {new Date(created).toDateString()}
             </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-gray-500 dark:text-gray-400">Documents:</span>
-            <div className="flex items-center gap-1">
-              <FileIcon className="h-4 w-4" />
-              <span className="font-medium">{documents}</span>
-            </div>
           </div>
         </div>
       </CardContent>
