@@ -15,19 +15,22 @@ import { useAtomValue, useAtom } from 'jotai'
 import { WindowContainer, WindowHeader } from 'windows-shared'
 import { LoaderPicker } from './loader-picker'
 import KnowledgePackCard from '../_pkg/knowledge-pack-card'
-import CreateKnowledgePackForm from '../_pkg/create-pack'
+import { CreateKnowledgePackDialog } from '../_pkg/create-pack'
 import { activePackIdAtom } from '../_pkg/state'
 import { embedderTokenAtom } from '../_pkg/state'
 import { Loader } from '@magickml/embedder/schema'
 import { ColumnDef } from '@tanstack/react-table'
+import { useState } from 'react'
 
 type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
+  const createDialogState = useState(false)
   const token = useAtomValue(embedderTokenAtom)
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
-      process.env.NEXT_PUBLIC_EMBEDDER_SERVER_URL || 'http://localhost:3000/api',
+      process.env.NEXT_PUBLIC_EMBEDDER_SERVER_URL ||
+      'http://localhost:3000/api',
     options: {
       axiosConfig: {
         withCredentials: true,
@@ -144,7 +147,10 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
               <TabsContent value="yours">
                 <div className="flex items-center justify-between py-2">
                   <h2 className="text-xl font-semibold">Knowledge Packs</h2>
-                  <CreateKnowledgePackForm client={client} />
+                  <CreateKnowledgePackDialog
+                    client={client}
+                    state={createDialogState}
+                  />
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   {knowledgePacks?.map((pack, index) => (
