@@ -46,3 +46,16 @@ export const UpdatePackResponseSchema = PackSchema
 export const DeletePackResponseSchema = z.object({
   id: z.string().uuid(),
 })
+
+export const PackQueryRequestSchema = z.object({
+  query: z.string(),
+  conversationId: z.string().optional(),
+})
+
+export const ExtractChunkDataSchema = z.object({
+  score: z.number(),
+  pageContent: z.string(),
+  metadata: z.record(z.union([z.string(), z.number(), z.boolean()])),
+})
+
+export const PackQueryContextSchema = z.array(ExtractChunkDataSchema)
