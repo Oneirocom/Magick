@@ -6,6 +6,8 @@ import {
   CreatePackResponseSchema,
   FindPackResponseSchema,
   DeletePackResponseSchema,
+  PackQueryContextSchema,
+  PackQueryRequestSchema,
 } from '@magickml/embedder/schema'
 
 export const packEndpoints = makeApi([
@@ -87,6 +89,63 @@ export const packEndpoints = makeApi([
     description: 'Get all packs for the authenticated entity and owner',
     requestFormat: 'json',
     response: z.array(FindPackResponseSchema),
+    errors: [
+      {
+        status: 400,
+        description: 'Invalid Request',
+        schema: z.any(),
+      },
+    ],
+  },
+  {
+    method: 'post',
+    path: '/packs/:id/query',
+    alias: 'queryPack',
+    description: 'Query a knowledge pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'id',
+        type: 'Path',
+        schema: idSchema,
+      },
+      {
+        name: 'body',
+        type: 'Body',
+        schema: PackQueryRequestSchema,
+      },
+    ],
+    response: z.object({
+      result: z.string(),
+      sources: z.array(z.string()),
+    }),
+    errors: [
+      {
+        status: 400,
+        description: 'Invalid Request',
+        schema: z.any(),
+      },
+    ],
+  },
+  {
+    method: 'post',
+    path: '/packs/:id/context',
+    alias: 'getContext',
+    description: 'Get context from a knowledge pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'id',
+        type: 'Path',
+        schema: idSchema,
+      },
+      {
+        name: 'body',
+        type: 'Body',
+        schema: PackQueryRequestSchema,
+      },
+    ],
+    response: PackQueryContextSchema,
     errors: [
       {
         status: 400,
