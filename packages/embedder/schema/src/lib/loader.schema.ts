@@ -16,8 +16,8 @@ export const LoaderTypeSchema = z.enum([
   'docx',
   'excel',
   'ppt',
-  'confluence',
-  'json',
+  // 'confluence',
+  // 'json',
 ])
 
 export const TextLoaderSchema = z.object({
@@ -64,16 +64,16 @@ export const PptLoaderSchema = CommonUrlLoaderSchema.extend({
   type: z.literal('ppt'),
 })
 
-export const ConfluenceLoaderSchema = z.object({
-  type: z.literal('confluence'),
-  spaceNames: z.array(z.string()),
-})
+// export const ConfluenceLoaderSchema = z.object({
+//   type: z.literal('confluence'),
+//   spaceNames: z.array(z.string()),
+// })
 
-export const JsonLoaderSchema = z.object({
-  type: z.literal('json'),
-  object: z.record(z.any()),
-  pickKeysForEmbedding: z.array(z.string()),
-})
+// export const JsonLoaderSchema = z.object({
+//   type: z.literal('json'),
+//   object: z.record(z.any()),
+//   pickKeysForEmbedding: z.array(z.string()),
+// })
 
 export const LoaderWithoutConfigSchema = z.object({
   id: z.string().uuid(),
@@ -95,8 +95,8 @@ const schemas = [
   DocxLoaderSchema,
   ExcelLoaderSchema,
   PptLoaderSchema,
-  ConfluenceLoaderSchema,
-  JsonLoaderSchema,
+  // ConfluenceLoaderSchema,
+  // JsonLoaderSchema,
 ] as const
 
 export const LoaderConfigSchema = z.union(schemas)
@@ -131,6 +131,6 @@ export const loaderSchemaMap: Record<LoaderType, z.ZodObject<any>> = {
   docx: DocxLoaderSchema,
   excel: ExcelLoaderSchema,
   ppt: PptLoaderSchema,
-  confluence: ConfluenceLoaderSchema,
-  json: JsonLoaderSchema,
+  // confluence: ConfluenceLoaderSchema,
+  // json: JsonLoaderSchema,
 }
