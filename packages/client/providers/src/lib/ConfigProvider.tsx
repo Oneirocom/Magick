@@ -3,8 +3,6 @@
 import { DEFAULT_PROJECT_ID } from 'clientConfig'
 import { createContext, useContext, useState } from 'react'
 import { ProviderData } from 'servicesShared'
-import { embedderTokenAtom } from 'window-knowledge'
-import { useSetAtom } from 'jotai'
 
 // Define AppConfig type
 export type AppConfig = {
@@ -26,6 +24,8 @@ export interface ConfigContext {
   setProjectId: (id: string) => void
   providerData: ProviderData
   setProviderData: (providerData: ProviderData) => void
+  embedderToken: string
+  setEmbedderToken: (token: string) => void
 }
 
 // Create context for ConfigContext
@@ -67,8 +67,9 @@ export const ConfigProvider = ({
     ConfigContext['providerData']
   >(config.providerData)
 
-  const setEmbedderToken = useSetAtom(embedderTokenAtom)
-  setEmbedderToken(config.embedderToken)
+  const [embedderToken, setEmbedderToken] = useState<
+    ConfigContext['embedderToken']
+  >(config.embedderToken)
 
   const publicInterface: ConfigContext = {
     apiUrl,
@@ -77,6 +78,8 @@ export const ConfigProvider = ({
     setProjectId,
     providerData,
     setProviderData,
+    embedderToken,
+    setEmbedderToken,
   }
 
   return <Context.Provider value={publicInterface}>{children}</Context.Provider>

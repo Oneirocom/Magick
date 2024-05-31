@@ -17,15 +17,15 @@ import { LoaderPicker } from './loader-picker'
 import KnowledgePackCard from '../_pkg/knowledge-pack-card'
 import { CreateKnowledgePackDialog } from '../_pkg/create-pack'
 import { activePackIdAtom } from '../_pkg/state'
-import { embedderTokenAtom } from '../_pkg/state'
 import { Loader } from '@magickml/embedder/schema'
 import { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
+import { useConfig } from '@magickml/providers'
 
 type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
+  const token = useConfig().embedderToken
   const createDialogState = useState(false)
-  const token = useAtomValue(embedderTokenAtom)
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
@@ -130,6 +130,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
 
   return (
     <WindowContainer>
+      <CreateKnowledgePackDialog client={client} state={createDialogState} />
       <WindowHeader
         title={activePackId ? 'Knowledge Pack' : 'Knowledge'}
         description="Manage knowledge for your agent."
@@ -147,10 +148,13 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
               <TabsContent value="yours">
                 <div className="flex items-center justify-between py-2">
                   <h2 className="text-xl font-semibold">Knowledge Packs</h2>
-                  <CreateKnowledgePackDialog
-                    client={client}
-                    state={createDialogState}
-                  />
+                  <Button
+                    variant="portal-primary"
+                    size="sm"
+                    onClick={() => createDialogState[1](true)}
+                  >
+                    Create
+                  </Button>
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   {knowledgePacks?.map((pack, index) => (
