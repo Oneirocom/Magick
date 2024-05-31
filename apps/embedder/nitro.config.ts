@@ -10,7 +10,7 @@ export default defineNitroConfig({
       url: process.env.EMBEDDER_REDIS_URL,
     },
     pinecone: {
-      projectName: 'pat',
+      projectName: process.env.EMBEDDER_PINECONE_PROJECT || 'magickEmbedder',
     },
   },
 
