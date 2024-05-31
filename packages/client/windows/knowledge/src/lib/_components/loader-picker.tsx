@@ -10,8 +10,8 @@ import {
   WebcamIcon,
   YoutubeIcon,
   PresentationIcon,
-  ConeIcon,
-  FileJsonIcon,
+  // ConeIcon,
+  // FileJsonIcon,
 } from 'lucide-react'
 import {
   type LoaderType,
