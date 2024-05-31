@@ -3,7 +3,6 @@ import { ConfigHeader } from './header/config-header'
 import { RootState, useGetAgentByIdQuery } from 'client/state'
 import { useEffect, useState } from 'react'
 import { ConfigCredentials } from './credentials/config-credentials'
-import { ConfigEmbeddings } from './embedding/config-embeddings'
 
 export const ConfigWindow = () => {
   const [selectedAgent, setSelectedAgent] = useState<any>(null)
@@ -30,7 +29,6 @@ export const ConfigWindow = () => {
         selectedAgentData={selectedAgent}
         setSelectedAgentData={setSelectedAgent}
       />
-      <ConfigEmbeddings agentId={selectedAgent.id} />
       <ConfigCredentials agentId={selectedAgent.id} />
     </div>
   )
