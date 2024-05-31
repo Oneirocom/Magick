@@ -97,7 +97,7 @@
     "storybook:dev": "npx nx run portal:storybook",
     "test:core": "npx nx test shared-core",
     "test": "npx nx test",
-    "vercel-install": "./vercel-submodule-workaround.sh && bun i && npx nx reset",
+    "vercel-install": "./vercel-submodule-workaround.sh && bun i --ignore-scripts && npm run postinstall && npx nx reset",
     "worker": "nx serve @magickml/cloud-agent-worker-app"
   },
   "resolutions": {
