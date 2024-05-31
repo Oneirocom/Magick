@@ -39,7 +39,7 @@ export class KnowledgeService<
       projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
       credentials: {
         client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
-        private_key: (process.env.GOOGLE_CLOUD_PRIVATE_KEY as string).replace(
+        private_key: (process.env.GOOGLE_CLOUD_PRIVATE_KEY as string)?.replace(
           /\\n/g,
           '\n'
         ),

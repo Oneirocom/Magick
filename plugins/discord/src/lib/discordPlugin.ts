@@ -184,7 +184,7 @@ export class DiscordPlugin extends WebSocketPlugin<
       (...args) => {
         // have to cast here because of the way discord.js typings are set up
         // they have a whole seperate library of the correct types returned from each event
-        const payload = args[0] as DiscordEventPayload[typeof eventName]
+        const payload = args[0] as any
 
         if (this.utils.checkIfBotMessage(payload)) {
           return

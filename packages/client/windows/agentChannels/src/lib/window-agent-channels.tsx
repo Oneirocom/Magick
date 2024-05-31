@@ -86,16 +86,16 @@ export const ChannelsWindow = () => {
       header: 'Key',
     },
     {
+      accessorKey: 'channelActive',
+      header: 'Active',
+    },
+    {
       accessorKey: 'createdAt',
       header: 'Created At',
     },
     {
       accessorKey: 'updatedAt',
       header: 'Updated At',
-    },
-    {
-      accessorKey: 'channelActive',
-      header: 'Active',
     },
   ]
 
