@@ -1,10 +1,10 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { CORE_DEP_KEYS } from '../../config'
 import type { EmbedderClient } from '@magickml/embedder/client/ts'
-import { LoaderTypeSchema } from '@magickml/embedder/schema'
+import { validatePackId } from './shared'
 
 export const createPack = makeFlowNodeDefinition({
-  typeName: 'action/knowledge/createKnowledgePack',
+  typeName: 'knowledge/embedder/createKnowledgePack',
   category: NodeCategory.Action,
   label: 'Create Knowledge Pack',
   in: {
@@ -14,7 +14,10 @@ export const createPack = makeFlowNodeDefinition({
   },
   out: {
     flow: 'flow',
-    pack: 'object',
+    id: 'string',
+    name: 'string',
+    description: 'string',
+    createdAt: 'string',
   },
   initialState: undefined,
   triggered: async ({ commit, read, write, graph }) => {
@@ -36,7 +39,11 @@ export const createPack = makeFlowNodeDefinition({
         description,
       })
 
-      write('pack', pack)
+      write('id', pack.id)
+      write('name', pack.name)
+      write('description', pack.description)
+      write('createdAt', pack.createdAt)
+
       commit('flow')
     } catch (error) {
       // Handle error
@@ -45,33 +52,20 @@ export const createPack = makeFlowNodeDefinition({
   },
 })
 
-export const addSource = makeFlowNodeDefinition({
-  typeName: 'action/knowledge/addSource',
+export const getManyPacks = makeFlowNodeDefinition({
+  typeName: 'knowledge/embedder/getManyPacks',
   category: NodeCategory.Action,
-  label: 'Create Pack',
+  label: 'Get Many Packs',
   in: {
     flow: 'flow',
-    name: 'string',
-    description: 'string',
-    type: {
-      label: 'Type',
-      choices: LoaderTypeSchema.options,
-      defaultValue: LoaderTypeSchema.options[0],
-      valueType: 'string',
-    },
   },
   out: {
     flow: 'flow',
-    success: 'boolean',
+    packs: 'array',
   },
   initialState: undefined,
-  triggered: async ({ commit, read, write, graph }) => {
-    const name = read('name')
-    const description = read('description')
-    const type = read('type')
-
+  triggered: async ({ commit, write, graph }) => {
     const { getDependency } = graph
-
     const embedder = getDependency<EmbedderClient>(
       CORE_DEP_KEYS.EMBEDDER_CLIENT
     )
@@ -81,31 +75,71 @@ export const addSource = makeFlowNodeDefinition({
     }
 
     try {
-      await embedder.addLoader(
-        {
-          name,
-          description,
-          type,
-          config: {
-            type: 'object',
-          },
-        } as any, // this client validates inputu
-        {
-          params: {
-            id: 'packId', // EMBEDDER_TODO: we want to get pack id
-          },
-        }
-      )
+      const packs = await embedder.getPacksByEntityAndOwner()
 
-      // EMBEDDER_TODO: we want to return job id
+      write('packs', packs)
 
-      write('success', true)
       commit('flow')
     } catch (error) {
-      // Handle error
-      console.error('Error creating pack:', error)
+      console.error('Error getting packs:', error)
     }
   },
 })
 
-// export const knowledgeNodes = [createPack, addSource]
+export const getPack = makeFlowNodeDefinition({
+  typeName: 'knowledge/embedder/getPack',
+  category: NodeCategory.Action,
+  label: 'Get Pack',
+  configuration: {
+    hiddenProperties: {
+      valueType: 'array',
+      defaultValue: ['packId'],
+    },
+    packId: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+  },
+  in: {
+    flow: 'flow',
+  },
+  out: {
+    flow: 'flow',
+    id: 'string',
+    name: 'string',
+    description: 'string',
+    createdAt: 'string',
+    sources: 'array',
+  },
+  initialState: undefined,
+  triggered: async ({ commit, write, configuration, graph }) => {
+    const packId = validatePackId(configuration.packId)
+
+    const { getDependency } = graph
+    const embedder = getDependency<EmbedderClient>(
+      CORE_DEP_KEYS.EMBEDDER_CLIENT
+    )
+
+    if (!embedder) {
+      throw new Error('Embedder client not found')
+    }
+
+    try {
+      const pack = await embedder.findPack({
+        params: {
+          id: packId,
+        },
+      })
+
+      write('id', pack.id)
+      write('name', pack.name)
+      write('description', pack.description)
+      write('createdAt', pack.createdAt)
+      write('sources', pack.loaders)
+
+      commit('flow')
+    } catch (error) {
+      console.error('Error getting pack:', error)
+    }
+  },
+})
