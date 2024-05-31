@@ -20,6 +20,7 @@
 
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["prepare"],
       "options": {
         "command": "cd apps/embedder && pwd && nitro build"
       }
@@ -34,6 +35,7 @@
 
     "serve": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
         "command": "cd apps/embedder && node ./.output/server/index.mjs"
       }
