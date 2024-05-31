@@ -25,8 +25,8 @@ import {
   DocxLoaderSchema,
   ExcelLoaderSchema,
   PptLoaderSchema,
-  ConfluenceLoaderSchema,
-  JsonLoaderSchema,
+  // ConfluenceLoaderSchema,
+  // JsonLoaderSchema,
   LoaderTypeSchema,
 } from '@magickml/embedder/schema'
 import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
@@ -70,11 +70,11 @@ const loaderTypeProperties: Record<
     icon: PresentationIcon,
     description: 'Load and process PowerPoint presentations.',
   },
-  confluence: {
-    icon: ConeIcon,
-    description: 'Load and process Confluence data.',
-  },
-  json: { icon: FileJsonIcon, description: 'Load and process JSON data.' },
+  // confluence: {
+  //   icon: ConeIcon,
+  //   description: 'Load and process Confluence data.',
+  // },
+  // json: { icon: FileJsonIcon, description: 'Load and process JSON data.' },
 }
 
 const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
@@ -88,8 +88,8 @@ const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
   docx: DocxLoaderSchema,
   excel: ExcelLoaderSchema,
   ppt: PptLoaderSchema,
-  confluence: ConfluenceLoaderSchema,
-  json: JsonLoaderSchema,
+  // confluence: ConfluenceLoaderSchema,
+  // json: JsonLoaderSchema,
 }
 
 type Props = {
