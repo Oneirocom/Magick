@@ -1,6 +1,6 @@
 import cx from 'classnames'
 import { getNodeSpec } from 'shared/nodeSpec'
-import { Tab } from '@magickml/providers'
+import { Tab, useConfig } from '@magickml/providers'
 import { useGetSpellByNameQuery } from 'client/state'
 import { Window } from 'client/core'
 import { SocketConfig } from './SocketConfig'
@@ -15,6 +15,21 @@ import { DefaultConfig } from './DefaultConfig'
 import { CompletionProviderOptions } from './CompletionProviderOptions'
 import { SelectedEvents } from './SelectedEvents'
 import { useEffect, useMemo, useState } from 'react'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@magickml/client-ui'
+import { createEmbedderReactClient } from '@magickml/embedder-client-react'
+import {
+  createEmbedderClient,
+  makeEmbedderClient,
+} from '@magickml/embedder/client/ts'
+import toast from 'react-hot-toast'
 
 type Props = {
   tab: Tab
@@ -45,7 +60,13 @@ const ConfigurationComponents = {
   selectedEvents: SelectedEvents,
 }
 
+enum KnowledgeNodeTypes {
+  ADD_SOURCE = 'knowledge/embedder/addSource',
+}
+
 export const PropertiesWindow = (props: Props) => {
+  /* STATE */
+
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
   const [spec, setSpec] = useState<NodeSpecJSON | null>(null)
   const [currentNode, setCurrentNode] = useState<Node | null>(null)
@@ -53,6 +74,37 @@ export const PropertiesWindow = (props: Props) => {
     string,
     any
   > | null>(null)
+
+  /* KNOWLEDGE PACK STUFF */
+  // TODO: Move this to a separate component
+
+  const client = makeEmbedderClient(useConfig().embedderToken)
+  const [knowledgePacks, setKnowledgePacks] = useState<any[] | null>(null)
+
+  // not using query client here its breaking rules of hooks somewhere
+  const fetchKnowledgePacks = async () => {
+    try {
+      const packs = await client.getPacksByEntityAndOwner()
+      setKnowledgePacks(packs)
+    } catch (error) {
+      toast.error('Failed to fetch knowledge packs')
+    }
+  }
+  // if the knowledge packs are not loaded yet, fetch them
+  useEffect(() => {
+    if (!knowledgePacks) {
+      fetchKnowledgePacks()
+    }
+  }, [knowledgePacks])
+
+  // if the node changes and is addSource, fetch the knowledge packs again
+  useEffect(() => {
+    if (selectedNode && selectedNode.type === KnowledgeNodeTypes.ADD_SOURCE) {
+      fetchKnowledgePacks()
+    }
+  }, [selectedNode])
+
+  /* REACTIVITY */
 
   useOnSelectionChange({
     onChange: ({ nodes }) => {
@@ -129,6 +181,7 @@ export const PropertiesWindow = (props: Props) => {
           <h2>{spec.label}</h2>
         </div>
       )}
+
       {
         Object.entries(configuration || {})
           .filter(
@@ -162,7 +215,6 @@ export const PropertiesWindow = (props: Props) => {
               valueType,
             }
 
-            // Check if the current element is the first or the last one in the array
             const isFirstElement = index === 0
             const borderClass = cx(
               'border-solid border-0 border-b border-[var(--background-color)] pl-4 pr-2 py-4',
@@ -176,6 +228,29 @@ export const PropertiesWindow = (props: Props) => {
             )
           }) as any
       }
+      {Object.entries(configuration || {})
+        .filter(([key]) => key === 'packId')
+        .map((config: [key: string, any]) => (
+          <div className="px-4 py-2" key={config[0]}>
+            <label htmlFor="packId">Pack ID</label>
+            <Select
+              value={configuration?.packId || ''}
+              onValueChange={e => updateConfigKey('packId', e)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a Knowledge Pack" />
+              </SelectTrigger>
+              <SelectContent>
+                {knowledgePacks?.map(pack => (
+                  <SelectGroup key={pack.id}>
+                    <SelectLabel>{pack.name}</SelectLabel>
+                    <SelectItem value={pack.id}>{pack.name}</SelectItem>
+                  </SelectGroup>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
     </Window>
   )
 }
