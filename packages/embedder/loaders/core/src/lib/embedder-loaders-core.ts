@@ -1,9 +1,9 @@
 import {
   BaseLoader,
-  ConfluenceLoader,
+  // ConfluenceLoader,
   DocxLoader,
   ExcelLoader,
-  JsonLoader,
+  // JsonLoader,
   PdfLoader,
   PptLoader,
   SitemapLoader,
@@ -49,12 +49,12 @@ export function createLoader(loader: Loader): BaseLoader {
       return new ExcelLoader(config)
     case 'ppt':
       return new PptLoader(config)
-    case 'confluence':
-      return new ConfluenceLoader({
-        spaceNames: config.spaceNames as [string, ...string[]],
-      })
-    case 'json':
-      return new JsonLoader(config)
+    // case 'confluence':
+    //   return new ConfluenceLoader({
+    //     spaceNames: config.spaceNames as [string, ...string[]],
+    //   })
+    // case 'json':
+    //   return new JsonLoader(config)
 
     default:
       throw new Error(`Unsupported loader type: ${JSON.stringify(config)}`)
