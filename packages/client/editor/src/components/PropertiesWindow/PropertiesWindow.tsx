@@ -230,18 +230,20 @@ export const PropertiesWindow = (props: Props) => {
           <div className="px-4 py-2" key={config[0]}>
             <label htmlFor="packId">Knowledge Pack</label>
             <Select
-              value={configuration?.packId || ''}
+              value={configuration?.packId || 'packId'}
+              defaultValue="packId"
               onValueChange={e => updateConfigKey('packId', e)}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a Knowledge Pack" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="packId">Select a Knowledge Pack</SelectItem>
+
                 {knowledgePacks?.map(pack => (
-                  <SelectGroup key={pack.id}>
-                    <SelectLabel>{pack.name}</SelectLabel>
-                    <SelectItem value={pack.id}>{pack.name}</SelectItem>
-                  </SelectGroup>
+                  <SelectItem key={pack.id} value={pack.id}>
+                    {pack.name}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
