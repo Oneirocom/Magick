@@ -10,7 +10,7 @@ interface UsePineconeDbProps {
 
 export function usePineconeDb({ entity, packId }: UsePineconeDbProps) {
   return new PineconeDb({
-    projectName: 'pat',
+    projectName: process.env['EMBEDDER_PINECONE_PROJECT'] || 'embedder',
     namespace: `${entity}/${packId}`,
     indexSpec: {
       serverless: {
