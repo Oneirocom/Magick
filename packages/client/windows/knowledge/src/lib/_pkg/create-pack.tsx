@@ -1,34 +1,36 @@
 import React, { useState } from 'react'
 import {
-  Dialog,
-  DialogTrigger,
-  Button,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
   InputWithLabel,
   TextareaWithLabel,
+  PortalDialog,
 } from '@magickml/client-ui'
 import toast from 'react-hot-toast'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 
-interface CreateKnowledgePackFormProps {
+type CreateKnowledgePackDialog = {
+  state: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
   client: ReturnType<typeof createEmbedderReactClient>
 }
 
-const CreateKnowledgePackForm: React.FC<CreateKnowledgePackFormProps> = ({
+export const CreateKnowledgePackDialog: React.FC<CreateKnowledgePackDialog> = ({
+  state,
   client,
 }) => {
+  const [open, setOpen] = state
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+
   const { invalidate } = client.useGetPacksByEntityAndOwner()
 
-  const { mutateAsync: createPack } = client.useCreatePack(
+  const { mutateAsync: createPack, isLoading } = client.useCreatePack(
     {},
     {
       onSuccess: async () => {
         toast.success('Knowledge pack created successfully!')
         await invalidate()
+        setName('')
+        setDescription('')
+        setOpen(false)
       },
       onError: () => {
         toast.error('Failed to create knowledge pack.')
@@ -36,35 +38,50 @@ const CreateKnowledgePackForm: React.FC<CreateKnowledgePackFormProps> = ({
     }
   )
 
-  const handleCreatePack = async () => {
+  const handleCreate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    if (!name) {
+      toast.error('Please enter a name for your knowledge pack.')
+      return
+    }
+
     await createPack({
       name,
       description,
     })
   }
 
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Create New</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
-        <DialogHeader>
-          <DialogTitle>Create New Knowledge Pack</DialogTitle>
-          <DialogDescription>
-            Fill out the details for your new knowledge pack.
-          </DialogDescription>
-        </DialogHeader>
-
+    <PortalDialog
+      base={{
+        root: {
+          open: open,
+          onOpenChange: setOpen,
+        },
+      }}
+      title="Name Your Knowledge Pack"
+      description="Fill out the details for your new knowledge pack."
+      footerText="Create"
+      footerButton={{
+        onClick: handleCreate,
+        disabled: !name,
+        isLoading: isLoading,
+        variant: 'portal-primary',
+        className: 'w-full',
+      }}
+      triggerButton={{
+        className: 'hidden',
+      }}
+    >
+      <div className="flex flex-col gap-8">
         <InputWithLabel
           id="name"
           label="Name"
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="Enter the name of the knowledge pack"
+          autoComplete="off"
         />
 
         <TextareaWithLabel
@@ -74,15 +91,7 @@ const CreateKnowledgePackForm: React.FC<CreateKnowledgePackFormProps> = ({
           onChange={e => setDescription(e.target.value)}
           placeholder="Enter a description for the knowledge pack"
         />
-
-        <DialogFooter>
-          <Button onClick={handleCreatePack} type="submit">
-            Create Pack
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </PortalDialog>
   )
 }
-
-export default CreateKnowledgePackForm
