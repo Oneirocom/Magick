@@ -85,7 +85,8 @@ import { LLMProviderKeys } from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
-// import { addSource, createPack } from './nodes/knowledge'
+import { createPack, getManyPacks, getPack } from './nodes/knowledge'
+import { sourceNodes } from './nodes/knowledge/source'
 import { makeEmbedderClient } from '@magickml/embedder/client/ts'
 import { generateToken } from '@magickml/embedder/auth/token'
 
@@ -160,8 +161,10 @@ export class CorePlugin extends CoreEventsPlugin<
     wait,
     webhookEventNode,
     whileLoop,
-    // addSource,
-    // createPack,
+    createPack,
+    getPack,
+    getManyPacks,
+    ...sourceNodes,
   ]
   values = []
   credentials = corePluginCredentials
