@@ -49,8 +49,8 @@ function GroupNodeComponentRaw({
 }: NodeProps<MagickNodeType>) {
   const reactFlowInstance = useReactFlow()
   const { getNodes, setNodes, deleteElements, getNode } = reactFlowInstance
-  const [width, setWidth] = useState(_width || 10)
-  const [height, setHeight] = useState(_height || 10)
+  const [, setWidth] = useState(_width || 10)
+  const [, setHeight] = useState(_height || 10)
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState(data.title || 'group')
 

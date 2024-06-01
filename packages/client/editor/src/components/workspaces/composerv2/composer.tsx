@@ -7,7 +7,6 @@ import {
   DockviewReadyEvent,
   IDockviewPanelHeaderProps,
   IDockviewPanelProps,
-  positionToDirection,
 } from 'dockview'
 import { useEffect, useRef, useState } from 'react'
 import { Tab } from '@magickml/providers'
