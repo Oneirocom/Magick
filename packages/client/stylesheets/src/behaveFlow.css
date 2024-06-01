@@ -76,3 +76,7 @@ input::-webkit-inner-spin-button {
 .react-flow__controls-button svg {
   color: black;
 }
+
+.react-flow__node-group {
+  padding: 0;
+}
