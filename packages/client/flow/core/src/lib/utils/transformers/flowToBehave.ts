@@ -2,6 +2,7 @@
 
 import type { GraphJSON, NodeJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
+import { getNodesBounds } from '@xyflow/react'
 
 const isNullish = (value: any): value is null | undefined =>
   value === undefined || value === null
@@ -52,6 +53,29 @@ export const flowToBehave = (
         metadata: {
           positionX: String(node.position.x),
           positionY: String(node.position.y),
+          ...(node.parentId ? { parentId: node.parentId } : {}),
+        },
+      })
+      return
+    }
+
+    if (node.type === 'group') {
+      const childNodes = nodes.filter(n => n.parentId === node.id)
+
+      const { width, height } = getNodesBounds(childNodes)
+
+      graph.data = graph.data || {}
+      graph.data.groups = graph.data.groups || []
+      graph.data.groups.push({
+        id: node.id,
+        width: width + 50,
+        height: height + 50,
+        color: node.data.color,
+        title: node.data.title,
+        metadata: {
+          positionX: String(node.position.x),
+          positionY: String(node.position.y),
+          ...(node.parentId ? { parentId: node.parentId } : {}),
         },
       })
       return
@@ -70,6 +94,7 @@ export const flowToBehave = (
         positionX: String(node.position.x),
         positionY: String(node.position.y),
         nodeTitle: node.data.nodeTitle as string,
+        ...(node.parentId ? { parentId: node.parentId } : {}),
       },
       configuration: node.data.configuration || ({} as any),
     }

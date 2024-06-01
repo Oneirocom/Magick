@@ -15,9 +15,23 @@ export type Comment = {
   metadata: {
     positionX: number
     positionY: number
+    parentId?: string
   }
   text: string
   fontSize: number
+}
+
+export type Group = {
+  id: string
+  height: number
+  width: number
+  color?: string
+  title?: string
+  metadata: {
+    positionX: number
+    positionY: number
+    parentId?: string
+  }
 }
 
 export const behaveToFlow = (
@@ -41,6 +55,8 @@ export const behaveToFlow = (
       },
       width: comment.width,
       height: comment.height,
+      parentId: comment.metadata?.parentId,
+      ...(comment.metadata?.parentId ? { extent: 'parent' } : {}),
       position: {
         x: comment.metadata?.positionX
           ? Number(comment.metadata?.positionX)
@@ -52,6 +68,28 @@ export const behaveToFlow = (
       data: {
         text: comment.text,
         fontSize: comment.fontSize,
+      },
+    })
+  })
+
+  graph?.data?.groups?.forEach((group: Group) => {
+    nodes.push({
+      id: group.id,
+      parentId: group.metadata?.parentId,
+      type: 'group',
+      style: {
+        height: group.height,
+        width: group.width,
+      },
+      width: group.width,
+      height: group.height,
+      position: {
+        x: group.metadata?.positionX ? Number(group.metadata?.positionX) : 0,
+        y: group.metadata?.positionY ? Number(group.metadata?.positionY) : 0,
+      },
+      data: {
+        color: group.color,
+        title: group.title,
       },
     })
   })
@@ -76,6 +114,8 @@ export const behaveToFlow = (
     const node: MagickNodeType = {
       id: nodeJSON.id,
       type: nodeJSON.type,
+      parentId: nodeJSON.metadata?.parentId,
+      ...(nodeJSON.metadata?.parentId ? { extent: 'parent' } : {}),
       position: {
         x: nodeJSON.metadata?.positionX
           ? Number(nodeJSON.metadata?.positionX)
