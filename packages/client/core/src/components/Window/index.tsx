@@ -29,7 +29,8 @@ const WindowLayout: React.FC<{
 
   return (
     <div className={css['window-layout']}>
-      <Scrollbars ref={scrollbars}>{children}</Scrollbars>
+      {children}
+      {/* <Scrollbars ref={scrollbars}>{children}</Scrollbars> */}
     </div>
   )
 }
