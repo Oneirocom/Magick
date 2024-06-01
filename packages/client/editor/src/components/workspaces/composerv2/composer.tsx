@@ -190,28 +190,24 @@ export const Composer = ({ tab, theme, spellId, spellName }: Props) => {
     }
   }, [api])
 
-  const onDidDrop = (event: any) => {
-    const component = event.nativeEvent.dataTransfer?.getData('component') || ''
-    const title = event.nativeEvent.dataTransfer?.getData('title') || ''
-    event.api.addPanel({
-      id: component,
-      component: component,
-      position: {
-        direction: positionToDirection(event.position),
-        referenceGroup: event.group || undefined,
-      },
-      params: {
-        title: title ? title : component,
-        tab,
-        spellId,
-        spellName,
-      },
-    })
-  }
-
-  const showDndOverlay = () => {
-    return true
-  }
+  // const onDidDrop = (event: any) => {
+  //   const component = event.nativeEvent.dataTransfer?.getData('component') || ''
+  //   const title = event.nativeEvent.dataTransfer?.getData('title') || ''
+  //   event.api.addPanel({
+  //     id: component,
+  //     component: component,
+  //     position: {
+  //       direction: positionToDirection(event.position),
+  //       referenceGroup: event.group || undefined,
+  //     },
+  //     params: {
+  //       title: title ? title : component,
+  //       tab,
+  //       spellId,
+  //       spellName,
+  //     },
+  //   })
+  // }
 
   if (!components) return null
 
@@ -219,12 +215,10 @@ export const Composer = ({ tab, theme, spellId, spellName }: Props) => {
     <>
       <EventHandler tab={tab} pubSub={pubSub} spellId={spellId} />
       <DockviewReact
-        onDidDrop={onDidDrop}
         components={components}
         tabComponents={tabComponents}
         onReady={onReady}
         className={theme}
-        showDndOverlay={showDndOverlay}
       />
     </>
   )
