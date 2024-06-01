@@ -13,10 +13,17 @@ WORKDIR /app
 # Clone the submodule
 RUN git submodule update --init --recursive portal/cloud
 
+# This application does not need the prisma clients
+RUN sed -i '/"postinstall":/d' package.json
+
 RUN npm install
 
-RUN npx nx reset
-
-RUN npx nx build embedder
+# Using the nx cli to build the app the .output folder is disappearing
+# I'll figure it out later but for now this works
+RUN cd apps/embedder && npx nitro prepare && npx nitro build
 
 ENTRYPOINT [ "node", "./apps/embedder/.output/server/index.mjs" ]
+
+# Command to build locally with file located at ./scripts/Dockerfile.embedder
+# docker build -t magick-embedder -f scripts/Dockerfile.embedder --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} --build-arg RAILWAY_GIT_COMMIT_SHA=${RAILWAY_GIT_COMMIT_SHA} .
+# docker run -p 4010:4010 magick-embedder
