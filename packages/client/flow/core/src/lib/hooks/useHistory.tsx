@@ -20,7 +20,6 @@ export const useHistory = ({
   const [redoStack, setRedoStack] = useState<any>([])
 
   const takeSnapshot = useCallback(() => {
-    console.log('TAKING SNAPSHOT', { nodes, edges })
     setHistory((currentHistory: any) => [
       ...currentHistory.slice(
         currentHistory.length - maxHistorySize + 1,
