@@ -20,6 +20,8 @@ import CustomEdge from '../node/custom-edge'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import { CommentNode } from '../nodeTypes/comment'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
+import { NodeGrouping } from '../components/nodeGroups'
+import { GroupNodeComponent } from '../nodeTypes/group'
 
 export type MagickReactFlowInstance = ReactFlowInstance<
   MagickNodeType,
@@ -50,6 +52,10 @@ type BaseFlowHandlers = Pick<
   | 'handleSelectionDragStart'
   | 'handleDelete'
   | 'handleNodeDragStart'
+  | 'handleNodeDrag'
+  | 'handleDrop'
+  | 'onDragOver'
+  | 'handleNodeDragStop'
 >
 
 type BaseFlowBehaveGraphFlow = Pick<
@@ -115,7 +121,11 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   // memoize node types
   const nodeTypes = useMemo(() => {
     if (!behaveNodeTypes) return {}
-    return { ...behaveNodeTypes, comment: CommentNode }
+    return {
+      ...behaveNodeTypes,
+      comment: CommentNode,
+      group: GroupNodeComponent,
+    }
   }, [behaveNodeTypes])
 
   const { projectId, currentAgentId } = globalConfig || {}
@@ -155,6 +165,10 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     handleNodeDragStart,
     handleDelete,
     handleSelectionDragStart,
+    handleNodeDrag,
+    handleDrop,
+    onDragOver,
+    handleNodeDragStop,
   } = flowHandlers
 
   const togglePlay = () => {
@@ -214,6 +228,10 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       elementsSelectable={!readOnly}
       onConnect={handleOnConnect}
       onNodeDragStart={handleNodeDragStart}
+      onNodeDragStop={handleNodeDragStop}
+      onNodeDrag={handleNodeDrag}
+      onDrop={handleDrop}
+      onDragOver={onDragOver}
       onSelectionDragStart={handleSelectionDragStart}
       onDelete={handleDelete}
       edgeTypes={edgeTypes}
@@ -245,6 +263,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
         color="var(--background-color-light)"
         style={{ backgroundColor: 'var(--background-color)' }}
       />
+      <NodeGrouping />
       {miniMapOpen && (
         <MiniMap<MagickNodeType>
           nodeStrokeWidth={3}
