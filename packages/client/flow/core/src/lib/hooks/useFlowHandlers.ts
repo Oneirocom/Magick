@@ -24,7 +24,7 @@ import {
   IsValidConnection,
   ReactFlowProps,
 } from '@xyflow/react'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4, v4 } from 'uuid'
 
 import { calculateNewEdge } from '../utils/calculateNewEdge'
 import { getNodePickerFilters } from '../utils/getPickerFilters'
@@ -71,6 +71,24 @@ const useNodePickFilters = ({
   return nodePickFilters
 }
 
+function calculateOffsetPosition(
+  node: { position: XYPosition; width: number; height: number },
+  parentNode: MagickNodeType
+) {
+  // Ensure both node and parentNode have necessary properties
+  if (!node || !parentNode || !parentNode.position || !node.position) {
+    return null
+  }
+
+  // Calculate the new position relative to the parent node
+  const newPosition = {
+    x: node.position.x - parentNode.position.x,
+    y: node.position.y - parentNode.position.y - 200,
+  }
+
+  return newPosition
+}
+
 export const useFlowHandlers = ({
   onEdgesChange,
   onNodesChange,
@@ -105,7 +123,7 @@ export const useFlowHandlers = ({
   )
   const mousePosRef = useRef<XYPosition>({ x: 0, y: 0 })
   const instance = useReactFlow<MagickNodeType, MagickEdgeType>()
-  const { screenToFlowPosition, getNodes } = instance
+  const { screenToFlowPosition, getNodes, getIntersectingNodes } = instance
   const layoutChangeEvent = useSelector(selectLayoutChangeEvent)
   const dispatch = useDispatch()
 
@@ -516,7 +534,7 @@ export const useFlowHandlers = ({
           clientY = e.touches[0].clientY
         }
 
-        const nodePickerWidth = 240
+        const nodePickerWidth = 320
         const nodePickerHeight = 251
 
         if (!clientX || !clientY) return
@@ -643,7 +661,7 @@ export const useFlowHandlers = ({
         if (parentRef && parentRef.current) {
           const bounds = parentRef.current.getBoundingClientRect()
 
-          const nodePickerWidth = 240
+          const nodePickerWidth = 320
           const nodePickerHeight = 251
 
           // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
@@ -720,6 +738,112 @@ export const useFlowHandlers = ({
     // onNodesChange(tab.id)(updatedNodes)
   }, [socketsVisible, nodes, setNodes])
 
+  const handleNodeDrag = useCallback(
+    (event: React.MouseEvent<Element, MouseEvent>, node: MagickNodeType) => {
+      // Get all intersecting nodes that are of type 'group'
+      // const intersectingNodes = getIntersectingNodes(node).filter(
+      //   intersectingNode => intersectingNode.type === 'group'
+      // )
+      // // Determine if the node should be marked as active
+      // const className =
+      //   intersectingNodes.length && node.parentId !== intersectingNodes[0]?.id
+      //     ? 'active'
+      //     : ''
+      // const newNodes = getNodes().map(currentNode =>
+      //   currentNode.id === node.id ? { ...currentNode, className } : currentNode
+      // )
+      // // Update the nodes state
+      // setNodes(tab.id, newNodes)
+    },
+    [getIntersectingNodes, setNodes]
+  )
+
+  const onDragOver = useCallback((event: React.DragEvent<Element>) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+  }, [])
+
+  const handleDrop = (event: React.DragEvent<Element>) => {
+    console.log('drop!')
+    const type = event.dataTransfer.getData('application/reactflow')
+    const position = screenToFlowPosition({
+      x: event.clientX - 20,
+      y: event.clientY - 20,
+    })
+    const style = type === 'group' ? { width: 400, height: 200 } : undefined
+    const intersectingNodes = getIntersectingNodes({
+      x: position.x,
+      y: position.y,
+      width: 40,
+      height: 40,
+    }).filter(node => node.type === 'group')
+    const parentNode = intersectingNodes[0]
+    const newNode: MagickNodeType = {
+      id: v4(),
+      type: type,
+      position: position,
+      data: { label: `${type}` },
+      style: style,
+    }
+    if (parentNode) {
+      newNode.position = calculateOffsetPosition(
+        { position, width: 40, height: 40 },
+        parentNode
+      ) || { x: 0, y: 0 }
+      newNode.parentId = parentNode.id
+      newNode.expandParent = true
+    }
+    const updatedNodes = getNodes().concat(newNode)
+    setNodes(tab.id, updatedNodes)
+  }
+
+  const handleNodeDragStop = useCallback(
+    (event: React.MouseEvent<Element, MouseEvent>, node: MagickNodeType) => {
+      if (node.type !== 'node' && !node.parentId) {
+        return
+      }
+
+      const intersectingNodes = getIntersectingNodes(node).filter(
+        intersectingNode => intersectingNode.type === 'group'
+      )
+      const parentGroup = intersectingNodes[0]
+
+      if (
+        intersectingNodes.length &&
+        node.parentId !== (parentGroup ? parentGroup.id : null)
+      ) {
+        const updatedNodes = getNodes().map(currentNode => {
+          if (currentNode.id === parentGroup.id) {
+            return {
+              ...currentNode,
+              className: '',
+            }
+          }
+          if (currentNode.id === node.id) {
+            const newPosition = calculateOffsetPosition(
+              {
+                position: node.position,
+                width: node.width as number,
+                height: node.height as number,
+              },
+              parentGroup
+            ) || { x: 0, y: 0 }
+            return {
+              ...currentNode,
+              position: newPosition,
+              parentNode: parentGroup.id,
+              extent: 'parent' as const,
+            }
+          }
+          return currentNode
+        })
+
+        setNodes(tab.id, updatedNodes)
+      }
+    },
+    [getIntersectingNodes, setNodes]
+  )
+
   return {
     handleOnConnect,
     onEdgeUpdate,
@@ -732,6 +856,7 @@ export const useFlowHandlers = ({
     nodePickerPosition,
     pickedNodeVisibility,
     handleAddNode,
+    handleNodeDrag,
     closeNodePicker,
     nodePickFilters,
     handleNodeContextMenu,
@@ -746,5 +871,8 @@ export const useFlowHandlers = ({
     handleDelete,
     handleNodeDragStart,
     handleSelectionDragStart,
+    handleDrop,
+    onDragOver,
+    handleNodeDragStop,
   }
 }
