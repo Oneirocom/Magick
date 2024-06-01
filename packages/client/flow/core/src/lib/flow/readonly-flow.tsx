@@ -64,6 +64,11 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
         onEdgesChange,
       }}
       flowHandlers={{
+        handleNodeDragStart: () => {},
+        handleNodeDrag: () => {},
+        handleDrop: () => {},
+        onDragOver: () => {},
+        handleNodeDragStop: () => {},
         socketsVisible: true,
         toggleSocketVisibility: () => {},
         handleOnConnect: () => {},
@@ -85,7 +90,6 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
         onEdgeUpdate: () => {},
         handleSelectionDragStart: () => {},
         handleDelete: () => {},
-        handleNodeDragStart: () => {},
       }}
     />
   )

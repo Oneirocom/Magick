@@ -9,7 +9,8 @@ import {
   getNodesBounds,
   useReactFlow,
 } from '@xyflow/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 
 const hexToRgba = (hex: string, alpha = 1) => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
@@ -53,6 +54,7 @@ function GroupNodeComponentRaw({
   const [, setHeight] = useState(_height || 10)
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState(data.title || 'group')
+  const [color, setColor] = useState(data.color || '#4f4f4f')
 
   // const store = useStoreApi();
   const nodes = getNodes()
@@ -86,6 +88,12 @@ function GroupNodeComponentRaw({
     setWidth(params.width)
     setHeight(params.height)
   }
+
+  const [debouncedColor] = useDebounce(color, 200)
+
+  useEffect(() => {
+    updateNodeColor(id, debouncedColor)
+  }, [debouncedColor])
 
   const updateNodeColor = (id: string, color: string) => {
     const node = getNode(id)
@@ -138,7 +146,6 @@ function GroupNodeComponentRaw({
 
   const { width: minWidth, height: minHeight } = getNodesBounds(childNodes)
 
-  const color = data.color || '#4f4f4f' // default to black if no color is provided
   const contentColor = rgbaToString(hexToRgba(color, 0.4)) // 50% opacity
   const headerColor = rgbaToString(hexToRgba(color, 0.7)) // 80% opacity
 
@@ -171,7 +178,7 @@ function GroupNodeComponentRaw({
         <Input
           type="color"
           defaultValue={data.color}
-          onChange={evt => updateNodeColor(id, evt.target.value)}
+          onChange={evt => setColor(evt.target.value)}
           className="nodrag w-[100px]"
         />
       </NodeToolbar>
