@@ -16,7 +16,7 @@ import {
 } from '@magickml/client-ui'
 import { cx } from 'class-variance-authority'
 import { debounce } from 'lodash'
-import { useEffect, useState } from 'react'
+import { DragEvent, useEffect, useRef, useState } from 'react'
 
 const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 
@@ -30,6 +30,10 @@ const initialValueMap = {
   integer: 0,
   array: '[]',
   object: '{}',
+}
+
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 interface DefaultInputProps {
@@ -162,6 +166,7 @@ export const Variable = ({
   deleteVariable,
   deleteAllVariableNodes,
 }: VariableProps) => {
+  const dragImageRef = useRef<HTMLDivElement>(null)
   const updateProperty = (property: keyof VariableJSON) => {
     return debounce((value: keyof typeof initialValueMap) => {
       if (property === 'valueTypeName') {
@@ -181,77 +186,105 @@ export const Variable = ({
     }, 2000)
   }
 
-  return (
-    <Accordion
-      type="single"
-      collapsible
-      className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2"
-    >
-      <AccordionItem value={variable.id}>
-        <AccordionTrigger className="flex items-center justify-between w-full p-2 pl-4">
-          <p>
-            {variable.name} -{' '}
-            <span className="text-stone-500">{variable.valueTypeName}</span>
-          </p>
-        </AccordionTrigger>
-        <AccordionContent>
-          <div className="flex flex-row p-2">
-            <div className="flex flex-col w-full gap-2">
-              <div className="flex flex-row mb2 gap-2 w-full">
-                <div className="flex-grow">
-                  <p>Name</p>
-                  <Input
-                    disabled
-                    className={inputClass}
-                    value={variable.name}
-                    onChange={e =>
-                      updateProperty('name')(
-                        e.target.value as keyof typeof initialValueMap
-                      )
-                    }
-                  />
-                </div>
+  const onDragStart = (event: DragEvent<HTMLDivElement>, nodeType: string) => {
+    console.log('dragging', nodeType)
+    event.dataTransfer.setData('application/reactflow', nodeType)
+    event.dataTransfer.effectAllowed = 'move'
 
-                <div className="flex-grow">
-                  <Label>Type</Label>
-                  <div className="my-2">
-                    <Select
-                      onValueChange={updateProperty('valueTypeName')}
-                      defaultValue={variable.valueTypeName}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {valueTypes.map(type => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+    if (dragImageRef.current) {
+      event.dataTransfer.setDragImage(dragImageRef.current, 0, 0)
+    }
+    event.stopPropagation()
+  }
+
+  const getVariableNodeType = (variable: VariableJSON) => {
+    return `variables/get${capitalize(variable.name)}`
+  }
+
+  return (
+    <div
+      className="z-10"
+      onDragStart={event => onDragStart(event, getVariableNodeType(variable))}
+      draggable="true"
+    >
+      {/* Drag image reference */}
+      <div
+        ref={dragImageRef}
+        style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}
+      >
+        Dragging {variable.name}
+      </div>
+      <Accordion
+        type="single"
+        collapsible
+        className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2"
+      >
+        <AccordionItem value={variable.id}>
+          <AccordionTrigger className="flex items-center justify-between w-full p-2 pl-4">
+            <p>
+              {variable.name} -{' '}
+              <span className="text-stone-500">{variable.valueTypeName}</span>
+            </p>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-row p-2">
+              <div className="flex flex-col w-full gap-2">
+                <div className="flex flex-row mb2 gap-2 w-full">
+                  <div className="flex-grow">
+                    <p>Name</p>
+                    <Input
+                      disabled
+                      className={inputClass}
+                      value={variable.name}
+                      onChange={e =>
+                        updateProperty('name')(
+                          e.target.value as keyof typeof initialValueMap
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div className="flex-grow">
+                    <Label>Type</Label>
+                    <div className="my-2">
+                      <Select
+                        onValueChange={updateProperty('valueTypeName')}
+                        defaultValue={variable.valueTypeName}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {valueTypes.map(type => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="w-full">
-                <p>Default value</p>
-                <DefaultInput
-                  valueType={variable.valueTypeName}
-                  initialValue={variable.initialValue}
-                  onChange={updateProperty('initialValue')}
+                <div className="w-full">
+                  <p>Default value</p>
+                  <DefaultInput
+                    valueType={variable.valueTypeName}
+                    initialValue={variable.initialValue}
+                    onChange={updateProperty('initialValue')}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center px-2 pl-4">
+                <TrashIcon
+                  className="h-6 w-6 cursor-pointer hover:text-sky-300 transition-all duration-200 ease-in-out"
+                  onClick={() => deleteVariable(variable.id)}
                 />
               </div>
             </div>
-            <div className="flex items-center px-2 pl-4">
-              <TrashIcon
-                className="h-6 w-6 cursor-pointer hover:text-sky-300 transition-all duration-200 ease-in-out"
-                onClick={() => deleteVariable(variable.id)}
-              />
-            </div>
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   )
 }
