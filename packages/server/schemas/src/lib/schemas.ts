@@ -1,7 +1,12 @@
 // DOCUMENTED
 import { Static, Type } from '@feathersjs/typebox'
 import { SeraphEvents } from 'servicesShared'
-import type { NodeJSON, ValueJSON, VariableJSON } from '@magickml/behave-graph'
+import type {
+  GraphJSON,
+  NodeJSON,
+  ValueJSON,
+  VariableJSON,
+} from '@magickml/behave-graph'
 /**
  * Full data model schema for a spell.
  *
@@ -26,6 +31,8 @@ export const spellSchema = Type.Object(
       id: Type.Optional(Type.String()),
       values: Type.Optional(Type.Any()),
       variables: Type.Optional(Type.Any()),
+      inputs: Type.Optional(Type.Any()),
+      outputs: Type.Optional(Type.Any()),
       nodes: Type.Any(), // TODO: add magick node schema validation
     }),
     spellReleaseId: Type.Optional(Type.Union([Type.String(), Type.Null()])),
@@ -39,7 +46,9 @@ export const spellSchema = Type.Object(
 )
 
 /** The interface for a spell object that's based on the `spellSchema`. */
-export type SpellInterface = Static<typeof spellSchema>
+export type SpellInterface = Static<typeof spellSchema> & {
+  graph: GraphJSON
+}
 
 export interface SpellInterfaceWithGraph extends SpellInterface {
   graph: {
