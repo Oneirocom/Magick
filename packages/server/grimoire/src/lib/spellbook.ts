@@ -336,6 +336,10 @@ export class Spellbook<Application extends IApplication> {
     })
   }
 
+  private eventKeyFromEvent(event: EventPayload) {
+    return event.channel ? `${event.plugin}:${event.channel}` : 'default'
+  }
+
   /**
    * Runs through all spells in the spell book, find the first available one and triggers the event in it.
    * @param {string} eventName - Name of the event to trigger.
@@ -348,9 +352,7 @@ export class Spellbook<Application extends IApplication> {
     eventName: string,
     _payload: EventPayload
   ) {
-    const eventKey = _payload.channel
-      ? `${dependency}:${_payload.channel}`
-      : 'default'
+    const eventKey = this.eventKeyFromEvent(_payload)
     const payload = { ..._payload }
 
     const isChannelDisabled = await this.isChannelDisabled(eventKey)
@@ -421,6 +423,13 @@ export class Spellbook<Application extends IApplication> {
       }
     }
     return agentChannel
+  }
+
+  async getSpellcasterById(spellId: string, event: EventPayload) {
+    const eventKey = this.eventKeyFromEvent(event)
+    const spellCasters = await this.createOrGetSpellCasters(eventKey, event)
+    if (!spellCasters) return null
+    return spellCasters.get(spellId)
   }
 
   async createOrGetSpellCasters(eventKey: string, event: EventPayload) {
