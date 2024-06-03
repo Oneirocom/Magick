@@ -171,7 +171,7 @@
     "@langchain/pinecone": "^0.0.6",
     "@langchain/textsplitters": "^0.0.2",
     "@llm-tools/embedjs": "^0.0.79",
-    "@magickml/behave-graph": "^0.14.12",
+    "@magickml/behave-graph": "^0.14.14",
     "@magickml/behave-graph-scene": "0.11.0",
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@monaco-editor/react": "4.5.1",
