@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,7 @@ import {
 import { BaseNode } from './base-node'
 
 type BaseNodeProps = React.ComponentProps<typeof BaseNode>
-type CoreNodeProps = Omit<
+export type CoreNodeProps = Omit<
   BaseNodeProps,
   | 'activeInput'
   | 'setActiveInput'
