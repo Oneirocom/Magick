@@ -33,6 +33,7 @@ export interface IEventStore {
     limit?: number,
     alternateRoles?: boolean
   ) => Promise<Message[]>
+  getKey: () => string | null
   setEvent: (event: EventWithKey) => void
   setInitialEvent: (event: EventPayload) => void
   init: (nodes: GraphNodes) => void
@@ -102,6 +103,11 @@ export class EventStore
       event,
       actionName: SEND_MESSAGE,
     })
+  }
+
+  public getKey() {
+    if (!this.currentEvent()) return null
+    return this.currentEvent()!.stateKey || null
   }
 
   public async saveUserMessage(content: string) {
