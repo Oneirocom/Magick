@@ -7,6 +7,7 @@ import * as pluginModules from '../plugins'
 import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
 import Redis from 'ioredis'
 import { PluginCredential } from 'packages/server/credentials/src'
+import { getBaseregistryNodeSpecs } from 'packages/server/grimoire/src/lib/baseRegistry'
 import { RedisPubSub } from 'packages/server/redis-pubsub/src'
 
 let plugins = []
@@ -20,7 +21,7 @@ const checkIfCorePlugin = PluginClass => {
 }
 
 const getUnifiedRegistry = async plugins => {
-  const unifiedRegistry = {
+  const unifiedRegistry = getBaseregistryNodeSpecs() || {
     nodes: {},
     values: {},
     dependencies: {},
