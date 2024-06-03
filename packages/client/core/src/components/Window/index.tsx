@@ -42,6 +42,7 @@ type Props = {
   darker?: boolean
   grid?: boolean
   scrollToBottom?: boolean
+  className?: string
   toolbar?: ReactElement<any, any> | false
   children: ReactElement<any, any> | ReactElement<any, any>[]
 }
@@ -82,6 +83,7 @@ export const Window: React.FC<Props> = props => {
     grid = false,
     toolbar = false,
     scrollToBottom = false,
+    className = '',
   } = props
 
   return (
@@ -96,7 +98,7 @@ export const Window: React.FC<Props> = props => {
       `}
     >
       {toolbar && <WindowToolbar>{props.toolbar}</WindowToolbar>}
-      <WindowLayout scrollToBottom={scrollToBottom}>
+      <WindowLayout className={className} clascrollToBottom={scrollToBottom}>
         {props.children}
       </WindowLayout>
     </div>
