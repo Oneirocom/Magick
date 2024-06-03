@@ -1,7 +1,8 @@
-import EventEmitter from 'events'
 import pino from 'pino'
 import Redis from 'ioredis'
 import { v4 as uuidv4 } from 'uuid'
+import EventEmitter from 'events'
+import TypedEmitter from 'typed-emitter'
 
 import {
   Engine,
@@ -25,6 +26,27 @@ import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
 import { debounce } from 'lodash'
 import { Agent } from 'server/agents'
+
+export type SocketData = {
+  socketName: string
+  value: string
+}
+
+export type InputData = {
+  flow: string
+  inputs: SocketData[]
+}
+
+export type OutputData = {
+  flow: string
+  outputs: SocketData[]
+}
+
+export interface SpellCasterEvents {
+  inputs: (data: InputData) => void
+  outputs: (data: OutputData) => void
+  [key: string]: (...args: any[]) => void
+}
 
 /**
  * @class SpellCaster
@@ -77,7 +99,7 @@ import { Agent } from 'server/agents'
  *     // Handle initialization errors
  *   });
  */
-export class SpellCaster {
+export class SpellCaster extends (EventEmitter as new () => TypedEmitter<SpellCasterEvents>) {
   id: string = uuidv4()
   registry!: IRegistry
   engine!: Engine
@@ -114,6 +136,7 @@ export class SpellCaster {
     pluginManager: PluginManager
     initialState?: SpellState
   }) {
+    super()
     this.connection = connection
     this.agent = agent
     this.pluginManager = pluginManager
@@ -154,6 +177,14 @@ export class SpellCaster {
     ] as ILifecycleEventEmitter
   }
 
+  get inputs(): NonNullable<GraphJSON['graphInputs']> {
+    return this.spell.graph.inputs || []
+  }
+
+  get outputs(): NonNullable<GraphJSON['graphOutputs']> {
+    return this.spell.graph.outputs || []
+  }
+
   /**
    * Initialize the spell caster. We are assuming here that the registry coming in is already
    * created by the main spellbook with the appropriate logger and other core dependencies.
@@ -168,7 +199,7 @@ export class SpellCaster {
       this.spell = spell
 
       // build the base registry
-      const baseRegistry = new BaseRegistry(this.agent, this.connection)
+      const baseRegistry = new BaseRegistry(this.agent, this.connection, this)
 
       // Await the plugin manager to get the registry.  Made this async to allow dependencies to be async
       this.registry = await this.pluginManager.getRegistry(
@@ -540,7 +571,6 @@ export class SpellCaster {
    * Disposes the spell caster.  We stop the run loop, dispose the engine
    * and set running to false.
    * @example
-   * spellCaster.dispose()
    * @returns A promise that resolves when the spell caster is disposed.
    */
   dispose() {
