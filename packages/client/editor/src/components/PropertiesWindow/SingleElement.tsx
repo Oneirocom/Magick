@@ -1,5 +1,6 @@
 // DOCUMENTED
-import { GridViewRounded } from '@mui/icons-material'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCodeCommit } from '@fortawesome/free-solid-svg-icons'
 import { Icon, IconBtn } from 'client/core'
 import styles from './datacontrols.module.css'
 
@@ -23,16 +24,15 @@ type Props = {
  *  @param {Props} props - The props needed for the SingleElement component.
  * @returns {React.JSX.Element} The rendered SingleElement component.
  */
-const SingleElement = ({ name, delete: handleDelete }: Props): React.JSX.Element => {
+const SingleElement = ({
+  name,
+  delete: handleDelete,
+}: Props): React.JSX.Element => {
   return (
     <div className={`${styles.flexCenterBtn} ${styles.inputContainer}`}>
       <div className={styles.flexCenterBtn}>
-        <span style={{ float: 'right' }}>
-          <IconBtn
-            Icon={<GridViewRounded color="inherit" />}
-            style={{ cursor: 'auto' }}
-            label={name}
-          />
+        <span className="pl-2 pr-4" style={{ float: 'right' }}>
+          <FontAwesomeIcon icon={faCodeCommit} />
         </span>
         <p style={{ display: 'inline' }}>{name}</p>
       </div>

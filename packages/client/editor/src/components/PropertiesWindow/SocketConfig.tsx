@@ -16,11 +16,18 @@ import { useReactFlow } from '@xyflow/react'
 import { setEdges } from 'client/state'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
 
+export type AddedSocket = {
+  name: string
+  valueType: string
+  description?: string // Added description field
+}
+
 type Props = {
-  addSocket: (socket: any) => void
+  addSocket: (socket: AddedSocket) => void
   valueTypes: string[]
   definedValueType: string | null
   sockets: any[]
+  includeDescription?: boolean
 }
 /**
  * AddNewSocket component provides a form input to add a new socket.
@@ -30,23 +37,24 @@ type Props = {
  * @returns {React.JSX.Element} Form input to add a new socket.
  */
 
-const AddNewSocket = ({
+export const AddNewSocket = ({
   addSocket,
   valueTypes,
   definedValueType,
   sockets,
+  includeDescription = false, // New prop to include description field
 }: Props) => {
   const [value, setValue] = useState('')
+  const [description, setDescription] = useState('') // State for description
   const [selectedValueType, setSelectedValueType] = useState(valueTypes[0])
   const { enqueueSnackbar } = useSnackbar()
 
-  /**
-   * Update the input value when changed.
-   *
-   * @param {Event} e - The change event.
-   */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
+  }
+
+  const onDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(e.target.value)
   }
 
   useEffect(() => {
@@ -57,12 +65,8 @@ const AddNewSocket = ({
     }
   }, [definedValueType, valueTypes])
 
-  /**
-   * Add a new socket on form submission.
-   *
-   * @param {Event} e - The submit event.
-   */
-  const onAdd = () => {
+  const onAdd = (e: React.FormEvent) => {
+    e.preventDefault()
     if (!value) return
     const socketExists = sockets.some(socket => socket.name === value)
 
@@ -73,37 +77,35 @@ const AddNewSocket = ({
       return
     }
 
-    addSocket({ name: value, valueType: definedValueType || selectedValueType })
+    addSocket({
+      name: value,
+      valueType: definedValueType || selectedValueType,
+      description: includeDescription ? description : undefined, // Pass description if included
+    })
     setValue('')
+    setDescription('') // Reset description
     setSelectedValueType(valueTypes[0])
   }
 
   return (
-    <form className="w-full mt-1">
-      {/* Flexbox container for input field and add button */}
-      <div className="flex h-20 mr-2">
-        <div className="flex gap-2 items-center h-10 ">
-          {/* Input field */}
+    <form className="w-full mt-1" onSubmit={onAdd}>
+      <div className="flex flex-col gap-1">
+        <div className="flex gap-1">
           <Input
             value={value}
             type="text"
             onChange={onChange}
             required
             placeholder="Add new socket"
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                onAdd()
-              }
-            }}
-            className="w-28 h-8 pl-2 input-placeholder bg-[var(--dark-3)] border-[var(--dark-3)]"
+            className="w-full h-8 pl-2 input-placeholder bg-[var(--dark-3)] border-[var(--dark-3)] m-0"
           />
           {!definedValueType && (
             <Select
               value={selectedValueType}
-              onValueChange={e => setSelectedValueType(e)}
+              onValueChange={value => setSelectedValueType(value)}
             >
-              <SelectTrigger className="h-8 pl-2 text-xs pr-1 font-medium border-0 bg-[var(--dark-1)]">
-                <SelectValue placeholder={'Select a type'}>
+              <SelectTrigger className="h-8 pl-2 text-xs pr-1 font-medium border-0 bg-[var(--dark-1)] w-28">
+                <SelectValue placeholder="Select a type">
                   {selectedValueType.charAt(0).toUpperCase() +
                     selectedValueType.slice(1)}
                 </SelectValue>
@@ -117,15 +119,22 @@ const AddNewSocket = ({
               </SelectContent>
             </Select>
           )}
-          {/* Add button */}
           <Button
-            onClick={onAdd}
-            // type="submit"
+            type="submit"
             className="h-8 w-8 border border-[var(--dark-3)] bg-ds-neutral rounded-sm"
           >
             +
           </Button>
         </div>
+        {includeDescription && (
+          <Input
+            value={description}
+            type="text"
+            onChange={onDescriptionChange}
+            placeholder="Socket description"
+            className="w-full h-8 pl-2 input-placeholder bg-[var(--dark-3)] border-[var(--dark-3)] m-0"
+          />
+        )}
       </div>
     </form>
   )
