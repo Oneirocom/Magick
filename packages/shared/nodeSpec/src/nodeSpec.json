@@ -1,5 +1,80 @@
 [
   {
+    "type": "action/subspell/run",
+    "category": "Action",
+    "label": "Run Subspell",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "socketOutputs",
+          "socketInputs",
+          "label"
+        ]
+      },
+      {
+        "name": "socketInputs",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "spellId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "events/subspells/input",
+    "category": "Event",
+    "label": "Subspell Input",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "events/subspells/output",
+    "category": "Event",
+    "label": "Subspell Output",
+    "inputs": [],
+    "outputs": [],
+    "configuration": []
+  },
+  {
     "type": "action/knowledge/add",
     "category": "Action",
     "label": "Add Knowledge",
