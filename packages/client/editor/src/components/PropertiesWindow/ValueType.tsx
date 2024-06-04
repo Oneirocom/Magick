@@ -8,6 +8,8 @@ import {
   SelectItem,
   SelectValue,
 } from '@magickml/client-ui' // Assuming this is the correct import path
+import { setEdges } from 'client/state'
+import { MagickEdgeType } from '@magickml/client-types'
 
 export const ValueType = (props: ConfigurationComponentProps) => {
   const defaultValues = ['number', 'string', 'boolean']
@@ -48,7 +50,7 @@ export const ValueType = (props: ConfigurationComponentProps) => {
     updateConfigKeys(configUpdate)
 
     // Disconnect any connected edges
-    reactFlow.setEdges(edges => {
+    setEdges(props.tab.id, (edges: MagickEdgeType[]) => {
       return edges.filter(
         edge =>
           (edge.source !== node.id && edge.target !== node.id) ||
