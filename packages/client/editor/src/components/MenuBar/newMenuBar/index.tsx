@@ -1,5 +1,6 @@
-// DOCUMENTED
 // @ts-nocheck
+'use client'
+// DOCUMENTED
 import { usePubSub } from '@magickml/providers'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
