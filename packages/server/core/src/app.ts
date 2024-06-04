@@ -120,16 +120,6 @@ export async function initApp(environment: Environment = 'default') {
   app.use(
     bodyParser({ jsonLimit: '200mb', formLimit: '256mb', multipart: true })
   )
-  app.use(async (ctx, next) => {
-    if (ctx.request.files?.files) {
-      if (ctx.request.files?.files instanceof Array) {
-        ctx.request.body.files = ctx.request.files?.files
-      } else {
-        ctx.request.body.files = [ctx.request.files?.files]
-      }
-    }
-    await next()
-  })
 
   // set up global keyv
   const keyv = new Keyv(DATABASE_URL, {
@@ -210,19 +200,15 @@ export async function initApp(environment: Environment = 'default') {
               id: 'api',
               permissions: ['admin', 'owner'],
             }
-
             return next()
           }
-
           if (context.path.startsWith('health')) {
             context.params.user = {
               id: 'api',
               permissions: ['admin', 'owner'],
             }
-
             return next()
           }
-
           // if the route to /webhook/:agentid/:plugin, skip auth
           if (context.path.startsWith('webhook')) {
             // add mock permissions for now
@@ -232,7 +218,6 @@ export async function initApp(environment: Environment = 'default') {
             }
             return next()
           }
-
           // if we are authenticated with the API key, skip auth
           if (context.params.authenticated && context.params.apiKey) {
             // set the user to the api user for all permissions here
@@ -242,42 +227,33 @@ export async function initApp(environment: Environment = 'default') {
             }
             return next()
           }
-
           const socket = context.params.connection
           // if we are on a socket and there is a user, skip auth
           if (socket && socket.user) {
             context.params.user = socket.user
             return next()
           }
-
           if (context.path !== 'authentication') {
             return authenticate('jwt')(context, next)
           }
         },
         async (context: HookContext, next) => {
           const { params } = context
-
           // if we are authenticated with the API key, skip auth for full access
           if (context.params.authenticated && context.params.apiKey) {
             return next()
           }
-
           const { authentication, authenticated } = params
-
           if (authenticated) {
             context.params.user = authentication.payload.user
             context.params.projectId = authentication.payload.project
-
             const queryProjectId = context.params.query.projectId
             const bodyProjectId = context.params.body?.projectId
-
             if (!queryProjectId && !bodyProjectId) {
               console.error('No project id provided.')
               throw new NotAuthenticated('No project id provided.')
             }
-
             const providedProjectId = queryProjectId || bodyProjectId
-
             if (authentication.payload.project !== providedProjectId) {
               console.error(
                 'User not authorized to access project',
@@ -289,7 +265,6 @@ export async function initApp(environment: Environment = 'default') {
               )
             }
           }
-
           return next()
         },
       ],
