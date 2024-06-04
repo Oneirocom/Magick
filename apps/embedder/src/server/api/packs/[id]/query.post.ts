@@ -5,6 +5,7 @@ import { usePineconeDb } from '@magickml/embedder/db/pinecone'
 import { eq, and } from 'drizzle-orm'
 import { authParse, PackQueryRequestSchema } from '@magickml/embedder/schema'
 import { createError } from 'h3'
+import consola from 'consola'
 
 const QueryResponseSchema = z.object({
   result: z.string(),
@@ -15,7 +16,7 @@ export default defineEventHandler(async event => {
   const { owner, entity } = authParse(event.context)
   const packId = z.string().parse(event.context.params?.id)
   const body = await readBody(event)
-  const { query, conversationId } = PackQueryRequestSchema.parse(body)
+  const { query } = PackQueryRequestSchema.parse(body)
 
   const knowledgePack = await embedderDb
     .select()
@@ -42,7 +43,8 @@ export default defineEventHandler(async event => {
     )
     .build()
 
-  const queryResult = await app.query(query, conversationId)
+  const queryResult = await app.query(query)
+  consola.info('Query result:', queryResult)
 
   return QueryResponseSchema.parse(queryResult)
 })
