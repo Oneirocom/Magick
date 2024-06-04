@@ -1,8 +1,20 @@
+// SEE: https://github.com/llm-tools/embedJs/issues/25
+// SEE: https://github.com/llm-tools/embedJs/issues/38
+// I yoinked this from here: https://github.com/llm-tools/embedJs/blob/main/src/cache/redis-cache.ts
+// There seems to be broken exports. Seems to mainly affect monorepos.
+// One thing to note is the @ts-ignore comments I added.
+// Maybe they are not in the published version because this file has errors
+// Or maybe they are in the published version, and our monorepo wont pick them up because they are broken
+// I'm going to fork it and nx-ify it and make a PR
+// If they accept it great, if not I'll move the packages into this monorepo
+
+
 import { Redis, RedisOptions } from 'ioredis'
 import { BaseCache } from '@llm-tools/embedjs'
 
 export class RedisCache implements BaseCache {
   private readonly options: RedisOptions
+  // @ts-ignore
   private redis: Redis
 
   constructor(options: RedisOptions) {
@@ -18,6 +30,7 @@ export class RedisCache implements BaseCache {
     await this.redis.set(loaderId, JSON.stringify({ chunkCount }))
   }
 
+  // @ts-ignore
   async getLoader(loaderId: string): Promise<{ chunkCount: number } | null> {
     const result = await this.redis.get(loaderId)
 
@@ -41,7 +54,7 @@ export class RedisCache implements BaseCache {
   ): Promise<T> {
     const result = await this.redis.get(loaderCombinedId)
 
-    if (!result) return null
+    if (!result) return null as any
     return JSON.parse(result)
   }
 
