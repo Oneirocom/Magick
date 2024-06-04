@@ -2,6 +2,7 @@ import { graphActions } from './graphSlice'
 
 import { createStore } from '../store'
 import { Connection, Edge, EdgeChange, Node, NodeChange } from '@xyflow/react'
+import { MagickEdgeType } from '@magickml/client-types'
 
 export const setNodes = (tabId: string, nodes: Node[]) => {
   const store = createStore()
@@ -10,7 +11,7 @@ export const setNodes = (tabId: string, nodes: Node[]) => {
 
 export const setEdges = (
   tabId: string,
-  edges: Edge[] | ((edges: Edge[]) => Edge[])
+  edges: MagickEdgeType[] | ((edges: MagickEdgeType[]) => MagickEdgeType[])
 ) => {
   if (typeof edges === 'function') {
     const store = createStore()
