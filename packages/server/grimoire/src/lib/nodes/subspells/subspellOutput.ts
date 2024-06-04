@@ -1,5 +1,5 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import { SpellCaster } from '../../spellCaster'
+import { SocketData, SpellCaster } from '../../spellCaster'
 import { BASE_DEP_KEYS, OUTPUT_EVENT } from '../../constants'
 import { IEventStore } from '../../services/eventStore'
 import { CORE_DEP_KEYS } from 'plugin/core'
@@ -16,6 +16,7 @@ export const SubspellOutput = makeFlowNodeDefinition({
     if (!spellCaster) {
       return []
     }
+    console.log('spellCaster.outputs', spellCaster.outputs)
     return spellCaster.outputs.map(output => ({
       key: output.key,
       name: output.label,
@@ -28,22 +29,17 @@ export const SubspellOutput = makeFlowNodeDefinition({
     const spellCaster = graph.getDependency<SpellCaster>(
       BASE_DEP_KEYS.I_SPELLCASTER
     )
-    const eventStore = graph.getDependency<IEventStore>(
-      CORE_DEP_KEYS.EVENT_STORE
-    )
 
-    if (!spellCaster || !eventStore) {
+    if (!spellCaster) {
       throw new Error('SpellCaster or EventStore not found')
     }
-    const event = eventStore.currentEvent()
-    if (!event) {
-      throw new Error('Current Event not found')
-    }
 
-    const outputData = spellCaster.outputs.reduce((acc, output) => {
-      acc[output.key] = read(output.key)
-      return acc
-    }, {} as Record<string, any>) // Start with an empty object
+    const outputData: SocketData[] = spellCaster.outputs
+      .filter(socket => socket.valueType !== 'flow')
+      .map(socket => ({
+        socketName: socket.key as string,
+        value: read(socket.key) as string,
+      }))
 
     spellCaster.emit(OUTPUT_EVENT, {
       flow: triggeringSocketName,

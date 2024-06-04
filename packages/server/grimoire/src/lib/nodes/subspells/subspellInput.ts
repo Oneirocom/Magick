@@ -19,6 +19,12 @@ export const SubspellInput = makeMagickEventNodeDefinition(
     label: 'Subspell Input',
     category: NodeCategory.Event,
     in: {},
+    configuration: {
+      hiddenProperties: {
+        valueType: 'array',
+        defaultValue: ['socketOutputs', 'socketInputs'],
+      },
+    },
     out: (_, graph) => {
       const spellCaster = graph.getDependency<SpellCaster>(
         BASE_DEP_KEYS.I_SPELLCASTER
@@ -53,19 +59,13 @@ export const SubspellInput = makeMagickEventNodeDefinition(
       }
 
       const onSpellCasterEvent = (data: InputData) => {
-        const { flow, inputs } = data
-
-        const event = eventStore.currentEvent()
-
-        if (!event) {
-          throw new Error('Current Event not found')
-        }
+        const { flow, inputs, event } = data
 
         for (const input of inputs) {
           write(input.socketName, input.value)
         }
 
-        handleState(event, false)
+        handleState(event)
 
         commit(flow)
       }
