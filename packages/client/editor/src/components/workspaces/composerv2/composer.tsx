@@ -66,7 +66,6 @@ const components = {
   Graph: (
     props: IDockviewPanelProps<{ tab: Tab; spellId: string; spellName: string }>
   ) => {
-    console.log('Graph props', props.params)
     return <GraphWindow {...props} />
   },
   Variables: VariableWindow,
@@ -101,10 +100,6 @@ export const Composer = ({ tab, theme, spellId, spellName }: Props) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId: _currentAgentId } = globalConfig
   const currentAgentRef = useRef(_currentAgentId)
-
-  useEffect(() => {
-    console.log('Composer', spellName, spellId)
-  }, [spellName])
 
   useEffect(() => {
     currentAgentRef.current = _currentAgentId
