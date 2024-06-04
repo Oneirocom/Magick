@@ -59,6 +59,8 @@ export const Loader = rag.table('Loader', {
   type: LoaderType('type').notNull(),
   config: jsonb('config').notNull(),
   status: PackStatus('status').notNull().default('pending'),
+  raw: jsonb('raw').default({}),
+  meta: jsonb('meta').default({}),
 })
 
 export const Job = rag.table('Job', {
