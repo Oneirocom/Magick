@@ -1,3 +1,4 @@
+'use client'
 import { GraphJSON, GraphSocketJSON } from '@magickml/behave-graph'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -17,33 +18,28 @@ const defaultSocketValues = [
 ]
 
 export const SubspellSocketConfig = ({
-  sockets,
   type,
   socketValues = defaultSocketValues,
   tab,
   graph,
+  sockets,
+  setSockets,
   title,
+  getSockets,
 }: {
-  sockets: GraphSocketJSON[]
   type: 'input' | 'output'
   socketValues?: string[]
   tab: Tab
   graph: GraphJSON
+  sockets: GraphSocketJSON[]
+  setSockets: (sockets: GraphSocketJSON[]) => void
   title: string
+  getSockets: (sockets: GraphSocketJSON[]) => GraphSocketJSON[]
 }) => {
   const { publish, events } = usePubSub()
-  const [initialSockets, setInitialSockets] = useState<GraphSocketJSON[]>(
-    sockets || []
-  )
+  const [initialSockets, setInitialSockets] = useState<GraphSocketJSON[]>([])
   const [showForm, setShowForm] = useState(false)
-  const toggleForm = () => {
-    setShowForm(!showForm)
-  }
-
-  useEffect(() => {
-    if (!sockets) return
-    setInitialSockets(sockets)
-  }, [sockets])
+  const socketKey = type === 'input' ? 'graphInputs' : 'graphOutputs'
 
   const addSocket = useCallback(
     (socket: AddedSocket) => {
@@ -53,34 +49,29 @@ export const SubspellSocketConfig = ({
         description: socket.description,
       }
 
-      const socketType = type === 'input' ? 'graphInputs' : 'graphOutputs'
-
-      const sockets = graph[socketType] || []
       const newSockets = [...sockets, newSocket]
 
-      setInitialSockets(newSockets)
+      setSockets(newSockets)
 
-      const newGraph = { ...graph, [socketType]: newSockets }
+      const newGraph = { ...graph, [socketKey]: newSockets }
 
-      publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: newGraph })
+      publish(events.$SAVE_SPELL(tab.id), { graph: newGraph })
       setShowForm(false)
     },
-    [sockets]
+    [graph, type, tab, publish, events, getSockets]
   )
 
   const deleteSocket = (name: string) => {
-    const socketType = type === 'input' ? 'graphInputs' : 'graphOutputs'
-
-    const sockets = graph[socketType] || []
+    const sockets = graph[socketKey] || []
     const newSockets = sockets.filter(
       (socket: GraphSocketJSON) => socket.key !== name
     )
 
-    const newGraph = { ...graph, [socketType]: newSockets }
+    const newGraph = { ...graph, [socketKey]: newSockets }
 
-    setInitialSockets(newSockets)
+    setSockets(newSockets)
 
-    publish(events.$SAVE_SPELL_DIFF(tab.id), { graph: newGraph })
+    publish(events.$SAVE_SPELL(tab.id), { graph: newGraph })
   }
 
   return (
@@ -109,7 +100,7 @@ export const SubspellSocketConfig = ({
           />
         </div>
       )}
-      {initialSockets.map((socket: GraphSocketJSON, i: number) => (
+      {getSockets(sockets).map((socket: GraphSocketJSON, i: number) => (
         <div className="pr-1 pl-1">
           <SingleElement
             name={socket.key}

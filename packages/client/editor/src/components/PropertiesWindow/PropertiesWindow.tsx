@@ -4,7 +4,7 @@ import { Tab, useConfig } from '@magickml/providers'
 import { useGetSpellByNameQuery } from 'client/state'
 import { Window } from 'client/core'
 import { SocketConfig } from './SocketConfig'
-import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
+import { GraphSocketJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { Node, useOnSelectionChange } from '@xyflow/react'
 import { useChangeNodeData } from '@magickml/flow-core'
 import { EventStateProperties } from './EventStateProperties'
@@ -165,52 +165,67 @@ export const PropertiesWindow = (props: Props) => {
     handleChange('configuration', newConfig)
   }
 
+  const [inputSockets, setInputSockets] = useState<GraphSocketJSON[]>([])
+  const [outputSockets, setOutputSockets] = useState<GraphSocketJSON[]>([])
+
+  useEffect(() => {
+    if (!spell) return
+
+    const inputSockets = spell.graph.graphInputs || []
+    const outputSockets = spell.graph.graphOutputs || []
+
+    setInputSockets(inputSockets)
+    setOutputSockets(outputSockets)
+  }, [spell])
+
   if (!spell) return null
 
   if (!configuration || !spec || !selectedNode) {
-    const graph = spell.graph as GraphJSON
-    const flowInputs = (graph.graphInputs || []).filter(
-      input => input.valueType === 'flow'
-    )
-    const flowOutputs = (graph.graphOutputs || []).filter(
-      output => output.valueType === 'flow'
-    )
-    const dataInputs = (graph.graphInputs || []).filter(
-      input => input.valueType !== 'flow'
-    )
-    const dataOutputs = (graph.graphOutputs || []).filter(
-      output => output.valueType !== 'flow'
-    )
-
     return (
       <Window borderless>
         <SubspellSocketConfig
-          sockets={flowInputs}
+          getSockets={sockets =>
+            sockets.filter(socket => socket.valueType === 'flow')
+          }
           type="input"
           socketValues={['flow']}
+          sockets={inputSockets}
+          setSockets={setInputSockets}
           graph={spell.graph}
           tab={props.tab}
           title="Flow Inputs"
         />
         <SubspellSocketConfig
-          sockets={flowOutputs}
-          type="input"
+          getSockets={sockets =>
+            sockets.filter(socket => socket.valueType === 'flow')
+          }
+          type="output"
+          sockets={outputSockets}
+          setSockets={setOutputSockets}
           socketValues={['flow']}
           graph={spell.graph}
           tab={props.tab}
           title="Flow Outputs"
         />
         <SubspellSocketConfig
-          sockets={dataInputs}
+          getSockets={sockets =>
+            sockets.filter(socket => socket.valueType !== 'flow')
+          }
           type="input"
+          sockets={inputSockets}
+          setSockets={setInputSockets}
           graph={spell.graph}
           tab={props.tab}
           title="Data Inputs"
         />
 
         <SubspellSocketConfig
-          sockets={dataOutputs}
-          type="input"
+          getSockets={sockets =>
+            sockets.filter(socket => socket.valueType !== 'flow')
+          }
+          type="output"
+          sockets={outputSockets}
+          setSockets={setOutputSockets}
           graph={spell.graph}
           tab={props.tab}
           title="Data Outputs"
