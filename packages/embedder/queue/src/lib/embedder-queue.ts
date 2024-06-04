@@ -1,7 +1,7 @@
 import { info } from '@magickml/embedder/config'
 import { ConnectionOptions, Queue } from 'bullmq'
 import { RAGApplicationBuilder } from '@llm-tools/embedjs'
-// const RedisCache = require('@llm-tools/embedjs/cache/redis-cache').RedisCache
+// import { RedisCache } from './redis-cache'
 
 import consola from 'consola'
 import { JsonValue } from 'type-fest'
@@ -83,6 +83,7 @@ export async function createJob(job: {
 }
 
 export async function processEmbedJob(jobId: string) {
+  // tood: just pass job in instead of db call
   const job = await embedderDb
     .select()
     .from(Job)
@@ -96,7 +97,6 @@ export async function processEmbedJob(jobId: string) {
 
   consola.info(`Processing job ${jobId}`)
 
-  // const loaders = job.loaders as LoaderSpec[];
   const loaders = job.loaders as Loader[]
 
   try {
@@ -108,7 +108,7 @@ export async function processEmbedJob(jobId: string) {
 
     const app = await new RAGApplicationBuilder()
       .setVectorDb(pineconeDbInstance)
-      // .setCache(cacheInstance as any) // TODO: fix this. ensure its working
+      // .setCache(cacheInstance as any) // TODO: Ensure this cache is namespaces correctly.
       .build()
 
     for (const loader of loaders) {
@@ -121,24 +121,30 @@ export async function processEmbedJob(jobId: string) {
         )}`
       )
 
-      await app.addLoader(createLoader(loader))
-    }
-
-    try {
-      // Process the embeddings or perform additional tasks
-      await app.query('Initial processing query')
+      const res = await app.addLoader(createLoader(loader))
+      consola.info(`[processEmbedJob] Loader added: ${JSON.stringify(res)}`)
 
       // update the loader status
-      await embedderDb.update(Loader).set({ status: 'completed' }).execute()
+      await embedderDb
+        .update(Loader)
+        .set({ status: 'completed' })
+        .where(eq(Loader.id, loader.id))
+        .execute()
 
-      consola.success(`Job ${jobId} processed successfully`)
-    } catch (error) {
-      consola.error(`Error processing job ${jobId}:`, error)
-      await embedderDb.update(Loader).set({ status: 'failed' }).execute()
-      throw error
+      // update the loader status
+      await embedderDb
+        .update(Job)
+        .set({ status: 'completed' })
+        .where(eq(Job.id, jobId))
+        .execute()
     }
   } catch (error) {
-    consola.error(`Error processing job ${jobId}:`, error)
+    consola.error(`!Error processing job ${jobId}:`, error)
+    await embedderDb
+      .update(Job)
+      .set({ status: 'failed' })
+      .where(eq(Job.id, jobId))
+      .execute()
     throw error
   }
 }
