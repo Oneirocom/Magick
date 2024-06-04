@@ -1,3 +1,4 @@
+'use client'
 import { usePubSub } from '@magickml/providers'
 import { Button } from '@magickml/client-ui'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
