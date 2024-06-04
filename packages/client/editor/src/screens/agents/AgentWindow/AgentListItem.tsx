@@ -1,5 +1,5 @@
 import React from 'react'
-// import { NodeLock } from '@magickml/icons'
+import { NodeLock } from '@magickml/icons'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { AgentInterface } from 'server/schemas'
 import {
@@ -84,8 +84,8 @@ const AgentListItem = ({
 
       {!isDraft && (
         <div className="mr-2">
-          {/* <NodeLock color="#b5b9bc" /> */}
-          <p style={{ color: 'red' }}>LOCKED</p>
+          <NodeLock color="#b5b9bc" />
+          {/* <p style={{ color: 'red' }}>LOCKED</p> */}
         </div>
       )}
     </DropdownMenuItem>
