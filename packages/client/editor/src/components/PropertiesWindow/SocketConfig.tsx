@@ -15,6 +15,7 @@ import { useSnackbar } from 'notistack'
 import { useReactFlow } from '@xyflow/react'
 import { setEdges } from 'client/state'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
+import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 export type AddedSocket = {
   name: string
@@ -151,7 +152,7 @@ export const SocketConfig = ({
   const [configKey, sockets = []] = config
   const { socketValues = defaultValues, valueType = null } = fullConfig
 
-  const instance = useReactFlow()
+  const instance = useReactFlow<MagickNodeType, MagickEdgeType>()
 
   const addSocket = useCallback(
     (socket: InputSocketSpecJSON) => {
