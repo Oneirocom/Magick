@@ -1,9 +1,9 @@
-import { useFeathers } from '@magickml/providers'
+import { useFeathers, usePubSub } from '@magickml/providers'
 import { CoreNode, CoreNodeProps } from '../node/core-node'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { SpellInterface } from 'server/schemas'
 import { useChangeNodeData } from '../hooks'
-import { GraphJSON } from '@magickml/behave-graph'
+import { isEqual } from 'lodash'
 
 type Props = CoreNodeProps & {}
 
@@ -15,8 +15,13 @@ export const SubspellNode: React.FC<Props> = ({
 }) => {
   const { client } = useFeathers()
   const [spell, setSpell] = useState<SpellInterface | null>(null)
+  const {
+    subscribe,
+    events: { $SUBSPELL_UPDATED },
+  } = usePubSub()
   const { data, id } = props
 
+  const prevConfigRef = useRef(data.configuration)
   const handleChange = useChangeNodeData(id)
 
   const updateConfigKeys = useCallback(
@@ -25,11 +30,15 @@ export const SubspellNode: React.FC<Props> = ({
         ...data.configuration,
         ...keys,
       }
-      handleChange('configuration', newConfig)
+
+      // Compare the new configuration with the previous configuration
+      if (!isEqual(newConfig, prevConfigRef.current)) {
+        handleChange('configuration', newConfig)
+        prevConfigRef.current = newConfig
+      }
     },
     [data.configuration]
   )
-
   const formatUpdate = (spell: SpellInterface) => {
     const socketInputs = spell?.graph?.graphInputs?.map(input => {
       return {
@@ -69,10 +78,7 @@ export const SubspellNode: React.FC<Props> = ({
   useEffect(() => {
     if (!spell || !client) return
 
-    console.log('SETTING UP HANDLER')
-
-    const handler = (spell: SpellInterface) => {
-      console.log('subspell updated', spell)
+    const handler = (eventName: string, spell: SpellInterface) => {
       if (spell.id !== data.configuration.spellId) return
 
       const updates = formatUpdate(spell)
@@ -80,12 +86,10 @@ export const SubspellNode: React.FC<Props> = ({
       updateConfigKeys(updates)
     }
 
-    client.service('spells').on('patched', handler)
-    client.service('spells').on('updated', handler)
+    const unsubscribe = subscribe($SUBSPELL_UPDATED(spell.id), handler)
 
     return () => {
-      client.service('spells').removeListener('patched', handler)
-      client.service('spells').removeListener('updated', handler)
+      unsubscribe()
     }
   }, [spell, client])
 
