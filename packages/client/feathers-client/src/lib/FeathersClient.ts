@@ -44,7 +44,8 @@ const configureCustomServices = (
   socketClient: TransportConnection<any>
 ): void => {
   app.use('spells', socketClient.service('spells'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'saveDiff'],
+    methods: ['find', 'get', 'create', 'patch', 'update', 'remove', 'saveDiff'],
+    events: ['patched', 'updated'],
   })
 
   app.use('events', socketClient.service('events'), {
