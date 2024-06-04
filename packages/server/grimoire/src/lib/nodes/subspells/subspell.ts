@@ -2,13 +2,25 @@ import {
   InputSocketSpecJSON,
   NodeCategory,
   SocketsList,
-  makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CORE_DEP_KEYS } from 'plugins'
 import { Agent } from 'server/agents'
 import { IEventStore } from '../../services/eventStore'
+import { INPUT_EVENT, OUTPUT_EVENT } from '../../constants'
+import { makeMagickAsyncNodeDefinition } from '../../factories/magickAsyncNode'
+import { OutputData, SocketData, SpellCaster } from '../../spellCaster'
 
-export const runSubspell = makeFlowNodeDefinition({
+type InitialState = {
+  handler: ((result: OutputData) => void) | undefined
+  spellCaster: SpellCaster | undefined
+}
+
+const getInitialState = (): InitialState => ({
+  handler: undefined,
+  spellCaster: undefined,
+})
+
+export const runSubspell = makeMagickAsyncNodeDefinition({
   typeName: 'action/subspell/run',
   category: NodeCategory.Action,
   label: 'Run Subspell',
@@ -67,15 +79,21 @@ export const runSubspell = makeFlowNodeDefinition({
 
     return sockets
   },
-  initialState: undefined,
+  initialState: getInitialState(),
   triggered: async ({
     read,
     write,
     commit,
+    finished = () => {},
     triggeringSocketName,
     graph: { getDependency },
     configuration,
+    state,
   }) => {
+    if (state.handler) {
+      return state
+    }
+
     const spellId = configuration.spellId
 
     if (!spellId) {
@@ -110,28 +128,52 @@ export const runSubspell = makeFlowNodeDefinition({
       throw new Error('No spell caster found')
     }
 
-    const inputs = configuration.socketInputs.reduce(
-      (acc: Record<string, any>, input: InputSocketSpecJSON) => {
-        acc[input.name] = read(input.name)
-        return acc
-      },
-      {}
-    ) as Record<string, any>
+    const inputs: SocketData[] = configuration.socketInputs
+      .filter((socket: { valueType: string }) => socket.valueType !== 'flow')
+      .map((socket: { key: string }) => {
+        return {
+          socketName: socket.key,
+          value: read(socket.key),
+        }
+      })
 
-    spellCaster.once(
-      'output',
-      (result: { flow: string; outputs: Record<string, any> }) => {
-        Object.entries(result.outputs).forEach(([key, value]) => {
-          write(key, value)
-        })
+    const handler = (result: OutputData) => {
+      result.outputs.forEach(({ socketName, value }) => {
+        write(socketName, value)
+      })
 
-        commit(result.flow)
-      }
-    )
+      commit(result.flow)
+      finished()
+    }
 
-    spellCaster.emit('input', {
+    spellCaster.once(OUTPUT_EVENT, handler)
+
+    spellCaster.emit(INPUT_EVENT, {
       flow: triggeringSocketName,
       inputs,
+      event: currentEvent,
     })
+
+    return {
+      handler,
+      spellCaster,
+    }
+  },
+  dispose: ({ state }) => {
+    const { spellCaster } = state
+
+    if (!spellCaster || !state.handler) {
+      return {
+        spellCaster: undefined,
+        handler: undefined,
+      }
+    }
+
+    spellCaster.off(OUTPUT_EVENT, state.handler)
+
+    return {
+      spellCaster: undefined,
+      handler: undefined,
+    }
   },
 })
