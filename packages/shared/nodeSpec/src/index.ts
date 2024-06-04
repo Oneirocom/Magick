@@ -5,9 +5,9 @@ import { SpellInterface } from 'server/schemas'
 import {
   generateVariableNodeSpecs,
   sortNodeSpecsByType,
-} from './generateVariableNodeSpecs'
+} from './generateDynamicNodeSpecs'
 
-export * from './generateVariableNodeSpecs'
+export * from './generateDynamicNodeSpecs'
 
 export const getNodeSpec = (spell?: SpellInterface): NodeSpecJSON[] => {
   if (!spell) return nodeSpec.sort(sortNodeSpecsByType) as NodeSpecJSON[]
