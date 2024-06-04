@@ -5,6 +5,10 @@ type ConfigUpdate = {
   variableId: string
   label: string
   valueTypeName: string
+} & SocketUpdate
+
+type SocketUpdate = {
+  label: string
   socketInputs?: { name: string; valueType: string }[]
   socketOutputs?: { name: string; valueType: string }[]
 }
@@ -49,6 +53,24 @@ export const getVariableConfig = (
   return configUpdate
 }
 
+export const getInputOutputConfig = (
+  configuration: Record<string, any>,
+  sockets: { name: string; valueType: string }[],
+  type: 'input' | 'output'
+): SocketUpdate => {
+  const configUpdate: SocketUpdate = {
+    label: capitalize(type),
+  }
+
+  if (type === 'input') {
+    configUpdate.socketOutputs = sockets
+  } else {
+    configUpdate.socketInputs = sockets
+  }
+
+  return configUpdate
+}
+
 function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
@@ -85,6 +107,20 @@ function createVariableNodeSpec(
   return newSpec
 }
 
+function createInputOutputNodeSpec(
+  baseSpec: NodeSpecJSON,
+  sockets: { name: string; valueType: string }[],
+  type: 'input' | 'output'
+): NodeSpecJSON {
+  const newSpec = updateDefaultValues(
+    baseSpec,
+    getInputOutputConfig(baseSpec, sockets, type)
+  )
+  newSpec.label = `${capitalize(type)} Sockets`
+  newSpec.type = `event/subspells/${type}`
+  return newSpec
+}
+
 function configurationArrayToObject(
   configuration: { name: string; defaultValue: any }[]
 ): Record<string, any> {
@@ -101,10 +137,22 @@ export const generateVariableNodeSpecs = (
   const getVariableSpec = allSpecs.find(spec => spec.type === 'variables/get')
   const setVariableSpec = allSpecs.find(spec => spec.type === 'variables/set')
   const onVariableSpec = allSpecs.find(spec => spec.type === 'variables/on')
+  const inputEventSpec = allSpecs.find(
+    spec => spec.type === 'event/subspells/input'
+  )
+  const outputEventSpec = allSpecs.find(
+    spec => spec.type === 'event/subspells/output'
+  )
 
   console.log('on variable spec', onVariableSpec)
 
-  if (!getVariableSpec || !setVariableSpec || !onVariableSpec) {
+  if (
+    !getVariableSpec ||
+    !setVariableSpec ||
+    !onVariableSpec ||
+    !inputEventSpec ||
+    !outputEventSpec
+  ) {
     return []
   }
 
@@ -141,7 +189,30 @@ export const generateVariableNodeSpecs = (
     })
     .flat()
 
-  return variableNodeSpecs
+  const inputSockets =
+    spell.graph.graphInputs?.map(input => ({
+      name: input.key,
+      valueType: input.valueType,
+    })) || []
+
+  const outputSockets =
+    spell.graph.graphOutputs?.map(output => ({
+      name: output.key,
+      valueType: output.valueType,
+    })) || []
+
+  const inputSpecJSON = createInputOutputNodeSpec(
+    inputEventSpec,
+    inputSockets,
+    'input'
+  )
+  const outputSpecJSON = createInputOutputNodeSpec(
+    outputEventSpec,
+    outputSockets,
+    'output'
+  )
+
+  return [...variableNodeSpecs, inputSpecJSON, outputSpecJSON]
 }
 
 export const sortNodeSpecsByType = (

@@ -45,7 +45,9 @@
         "valueType": "array",
         "defaultValue": [
           "hiddenProperties",
-          "eventState"
+          "eventState",
+          "socketOutputs",
+          "socketInputs"
         ]
       },
       {
