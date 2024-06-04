@@ -55,58 +55,64 @@ const EventHandler = ({ pubSub, tab, spellId }: Props) => {
     spellRef.current = spell
   }, [spell])
 
-  const { events, subscribe } = pubSub
+  const { events, subscribe, publish } = pubSub
 
-  const { $DELETE, $SAVE_SPELL, $SAVE_SPELL_DIFF, $EXPORT } = events
+  const { $DELETE, $SAVE_SPELL, $SAVE_SPELL_DIFF, $EXPORT, $SUBSPELL_UPDATED } =
+    events
 
   /**
    * Save the current spell
    */
-  const saveSpell = useCallback(async () => {
-    if (!spellRef.current) return
-    const type = spellRef.current.type || 'spell'
+  const saveSpell = useCallback(
+    async (event: string, update = {}) => {
+      if (!spellRef.current) return
+      const type = spellRef.current.type || 'spell'
 
-    const currentSpell = spellRef.current
-    const graph = currentSpell.graph
-    if (!currentSpell) return
+      const currentSpell = spellRef.current
 
-    const updatedSpell = {
-      ...currentSpell,
-      graph,
-    }
+      const graph = currentSpell.graph
+      if (!currentSpell) return
 
-    if (!updatedSpell.type) updatedSpell.type = type
+      const updatedSpell = {
+        ...currentSpell,
+        graph,
+        ...update,
+      }
 
-    dispatch(setSyncing(true))
+      if (!updatedSpell.type) updatedSpell.type = type
 
-    const response = await saveSpellMutation({
-      spell: updatedSpell,
-      projectId: config.projectId,
-    })
+      dispatch(setSyncing(true))
 
-    if ('error' in response) {
-      console.error(response.error)
-      enqueueSnackbar('Error saving spell', {
-        variant: 'error',
-      })
-      return
-    }
-
-    setTimeout(() => {
-      dispatch(setSyncing(false))
-      posthog.capture('spell_updated', {
-        spellId: currentSpell.id,
+      const response = await saveSpellMutation({
+        spell: updatedSpell,
         projectId: config.projectId,
       })
-      return
-    }, 1000)
 
-    enqueueSnackbar('Spell saved', {
-      variant: 'success',
-    })
+      if ('error' in response) {
+        console.error(response.error)
+        enqueueSnackbar('Error saving spell', {
+          variant: 'error',
+        })
+        return
+      }
 
-    // onProcess()
-  }, [spellRef, saveSpellMutation, config.projectId, enqueueSnackbar])
+      setTimeout(() => {
+        dispatch(setSyncing(false))
+        posthog.capture('spell_updated', {
+          spellId: currentSpell.id,
+          projectId: config.projectId,
+        })
+        return
+      }, 1000)
+
+      enqueueSnackbar('Spell saved', {
+        variant: 'success',
+      })
+
+      // onProcess()
+    },
+    [spellRef, saveSpellMutation, config.projectId, enqueueSnackbar]
+  )
 
   /**
    * Save an incremental diff of changes made in editor to the server
@@ -139,6 +145,8 @@ const EventHandler = ({ pubSub, tab, spellId }: Props) => {
         // dispatch(applyState({ value: currentSpell, clearFuture: !isDirty }))
 
         spellRef.current = response
+
+        publish($SUBSPELL_UPDATED(response.id), updatedSpell)
         onSuccessCB && onSuccessCB()
         // extend the timeout to 500ms to give the user a chance to see the sync icon
         setTimeout(() => {
