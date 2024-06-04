@@ -49,7 +49,7 @@ import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 import { useHistory } from './useHistory'
 
 type BehaveGraphFlow = ReturnType<typeof useBehaveGraphFlow>
-type OnEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => void
+type OnEdgeUpdate = (oldEdge: MagickEdgeType, newConnection: Connection) => void
 
 const useNodePickFilters = ({
   nodes,
@@ -235,7 +235,7 @@ export const useFlowHandlers = ({
 
   const onEdgeUpdate = useCallback<OnEdgeUpdate>(
     (oldEdge, newConnection) => {
-      return setEdges(tab.id, edges => {
+      return setEdges(tab.id, (edges: MagickEdgeType[]) => {
         const newEdges = updateEdge(oldEdge, newConnection, edges)
         return newEdges
       })
