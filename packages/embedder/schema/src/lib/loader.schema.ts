@@ -40,7 +40,7 @@ export const YoutubeSearchLoaderSchema = z.object({
   youtubeSearchString: z.string(),
 })
 
-export const WebLoaderSchema = CommonUrlLoaderSchema.extend({
+export const WebLoaderSchema = z.object({
   type: z.literal('web'),
   urlOrContent: z.string(),
 })
