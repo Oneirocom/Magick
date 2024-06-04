@@ -35,6 +35,7 @@ export type SocketData = {
 export type InputData = {
   flow: string
   inputs: SocketData[]
+  event: EventPayload
 }
 
 export type OutputData = {
@@ -178,11 +179,11 @@ export class SpellCaster extends (EventEmitter as new () => TypedEmitter<SpellCa
   }
 
   get inputs(): NonNullable<GraphJSON['graphInputs']> {
-    return this.spell.graph.inputs || []
+    return this.spell.graph.graphInputs || []
   }
 
   get outputs(): NonNullable<GraphJSON['graphOutputs']> {
-    return this.spell.graph.outputs || []
+    return this.spell.graph.graphOutputs || []
   }
 
   /**
