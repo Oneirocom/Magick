@@ -32,38 +32,41 @@ export const YoutubeLoaderSchema = z.object({
 
 export const YoutubeChannelLoaderSchema = z.object({
   type: z.literal('youtube_channel'),
-  channelId: z.string(),
+  youtubeChannelId: z.string(),
 })
 
 export const YoutubeSearchLoaderSchema = z.object({
   type: z.literal('youtube_search'),
-  searchString: z.string(),
+  youtubeSearchString: z.string(),
 })
 
 export const WebLoaderSchema = CommonUrlLoaderSchema.extend({
   type: z.literal('web'),
+  urlOrContent: z.string(),
 })
 
 export const SitemapLoaderSchema = CommonUrlLoaderSchema.extend({
   type: z.literal('sitemap'),
 })
 
-export const PdfLoaderSchema = CommonUrlLoaderSchema.extend({
+export const PdfLoaderSchema = z.object({
   type: z.literal('pdf'),
+  filePathOrUrl: z.string(),
 })
 
-export const DocxLoaderSchema = CommonUrlLoaderSchema.extend({
+export const DocxLoaderSchema = z.object({
   type: z.literal('docx'),
+  filePathOrUrl: z.string(),
 })
 
-export const ExcelLoaderSchema = CommonUrlLoaderSchema.extend({
+export const ExcelLoaderSchema = z.object({
   type: z.literal('excel'),
+  filePathOrUrl: z.string(),
 })
-
-export const PptLoaderSchema = CommonUrlLoaderSchema.extend({
+export const PptLoaderSchema = z.object({
   type: z.literal('ppt'),
+  filePathOrUrl: z.string(),
 })
-
 // export const ConfluenceLoaderSchema = z.object({
 //   type: z.literal('confluence'),
 //   spaceNames: z.array(z.string()),
