@@ -29,8 +29,7 @@ const WindowLayout: React.FC<{
 
   return (
     <div className={css['window-layout']}>
-      {children}
-      {/* <Scrollbars ref={scrollbars}>{children}</Scrollbars> */}
+      <Scrollbars ref={scrollbars}>{children}</Scrollbars>
     </div>
   )
 }
@@ -98,7 +97,7 @@ export const Window: React.FC<Props> = props => {
       `}
     >
       {toolbar && <WindowToolbar>{props.toolbar}</WindowToolbar>}
-      <WindowLayout className={className} clascrollToBottom={scrollToBottom}>
+      <WindowLayout className={className} scrollToBottom={scrollToBottom}>
         {props.children}
       </WindowLayout>
     </div>
