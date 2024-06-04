@@ -7,7 +7,9 @@ import { NodeProps, NodeTypes } from '@xyflow/react'
 import { CoreNode } from '../node/core-node'
 
 import { ReadOnlyNode } from '../node/readonly-node'
-import { SubspellNode } from '../nodeTypes/subspell'
+import { SubspellNode } from '../nodeTypes/subspellRun'
+import { SubspellInputNode } from '../nodeTypes/subspellInput'
+import { SubspellOutputNode } from '../nodeTypes/spellOutput'
 
 type Props = NodeProps & {
   data: any
@@ -24,6 +26,24 @@ const getCoreNode = (
     case 'action/subspell/run':
       return (
         <SubspellNode
+          spec={spec}
+          allSpecs={allSpecs}
+          spellId={spellId}
+          {...props}
+        />
+      )
+    case 'events/subspells/input':
+      return (
+        <SubspellInputNode
+          spec={spec}
+          allSpecs={allSpecs}
+          spellId={spellId}
+          {...props}
+        />
+      )
+    case 'events/subspells/output':
+      return (
+        <SubspellOutputNode
           spec={spec}
           allSpecs={allSpecs}
           spellId={spellId}
