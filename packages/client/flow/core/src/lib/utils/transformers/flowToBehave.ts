@@ -32,12 +32,15 @@ export const flowToBehave = (
   nodes: MagickNodeType[],
   edges: MagickEdgeType[],
   nodeSpecJSON: NodeSpecJSON[],
-  spellGraph: GraphJSON
+  _spellGraph: GraphJSON
 ): GraphJSON => {
+  const spellGraph = { ..._spellGraph }
   const graph: GraphJSON = {
     nodes: [],
     variables: spellGraph?.variables || [],
     customEvents: spellGraph?.customEvents || [],
+    graphInputs: spellGraph.graphInputs || [],
+    graphOutputs: spellGraph.graphOutputs || [],
   }
 
   nodes.forEach(node => {
