@@ -39,7 +39,6 @@ export default function (app: Application): void {
     logger.debug(`CHANNELS: Login event for ${authResult.user.id}`)
     if (!connection) {
       logger.debug(`CHANNELS: No connection for ${authResult.user.id}`)
-      return
     }
 
     // Remove the connection from the anonymous channel
@@ -49,13 +48,13 @@ export default function (app: Application): void {
       logger.debug(`CHANNELS: Joining session id ${authResult.sessionId}`)
       const sessionId = authResult.sessionId
       app.channel(sessionId).join(connection)
-      return
     }
 
     logger.debug(
       'CHANNELS: Joining authenticated channel for project %s',
       authResult.project
     )
+
     app.channel(authResult.project).join(connection)
   })
 
@@ -81,9 +80,6 @@ export default function (app: Application): void {
       // conly send the right events up the right channel
       logger.trace(`CHANNELS: Publishing to session ${sessionId}!`)
 
-      // Lets not relay up all the patch events
-      if (context.method === 'patch') return
-
       // Publish all events to the authenticated user channel
       const channel = app.channel(sessionId)
       channels.push(channel)
@@ -99,13 +95,21 @@ export default function (app: Application): void {
     // Now we need to check for the agent and broadcast to the agent channel
     const agentId =
       context.params?.agentId ||
-      context.result.agentId ||
+      context.result?.agentId ||
       context.data?.agentId ||
-      data.agentId
+      data?.agentId
 
     if (agentId) {
       const agentChannel = app.channel(`agent:${agentId}`)
       channels.push(agentChannel)
+    }
+
+    // If the event has a project, broadcast to the project channel
+    const projectId = data.projectId || context.params?.projectId
+
+    if (projectId) {
+      const projectChannel = app.channel(projectId)
+      channels.push(projectChannel)
     }
 
     return channels
