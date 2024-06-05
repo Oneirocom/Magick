@@ -143,3 +143,59 @@ export const getPack = makeFlowNodeDefinition({
     }
   },
 })
+
+export const getChunks = makeFlowNodeDefinition({
+  typeName: 'knowledge/embedder/getChunks',
+  category: NodeCategory.Action,
+  label: 'Get Chunks',
+  configuration: {
+    hiddenProperties: {
+      valueType: 'array',
+      defaultValue: ['packId', 'loaderId'],
+    },
+    packId: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+    loaderId: {
+      valueType: 'string',
+      defaultValue: '',
+    },
+  },
+  in: {
+    flow: 'flow',
+  },
+  out: {
+    flow: 'flow',
+    chunks: 'array',
+  },
+  initialState: undefined,
+  triggered: async ({ commit, write, configuration, graph }) => {
+    const packId = validatePackId(configuration.packId)
+    const loaderId = configuration.loaderId
+
+    const { getDependency } = graph
+    const embedder = getDependency<EmbedderClient>(
+      CORE_DEP_KEYS.EMBEDDER_CLIENT
+    )
+
+    if (!embedder) {
+      throw new Error('Embedder client not found')
+    }
+
+    try {
+      const chunks = await embedder.getLoaderChunks({
+        params: {
+          id: packId,
+          loaderId,
+        },
+      })
+
+      write('chunks', chunks?.chunks)
+
+      commit('flow')
+    } catch (error) {
+      console.error('Error getting loader:', error)
+    }
+  },
+})
