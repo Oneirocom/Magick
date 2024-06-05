@@ -6,8 +6,8 @@ import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
 import pino from 'pino'
 import { PRODUCTION } from 'clientConfig'
-import { OpenAIProvider, createOpenAI } from '@ai-sdk/openai'
 import { streamText } from 'ai'
+import { createOpenAI } from '@magickml/vercel-sdk-core'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -21,7 +21,6 @@ export class CoreLLMService implements ICoreLLMService {
   protected projectId: string
   protected agentId: string
   protected userService: CoreUserService
-  protected openai: OpenAIProvider
   protected logger: pino.Logger<pino.LoggerOptions> | undefined
   protected userData: UserResponse | undefined
 
@@ -29,10 +28,6 @@ export class CoreLLMService implements ICoreLLMService {
     this.projectId = projectId
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
-    this.openai = createOpenAI({
-      baseURL: process.env['KEYWORDS_API_URL'],
-      apiKey: process.env['KEYWORDS_API_KEY'],
-    })
   }
 
   async initialize() {
@@ -64,6 +59,10 @@ export class CoreLLMService implements ICoreLLMService {
 
     const actualMaxRetries = Math.max(1, maxRetries)
 
+    const useWallet = this.userData?.user.useWallet
+    const mpUser = this.userData?.user.mpUser
+    const walletUser = this.userData?.user.walletUser
+
     while (attempts < actualMaxRetries) {
       try {
         const userData =
@@ -79,28 +78,35 @@ export class CoreLLMService implements ICoreLLMService {
           model: request.model,
         })
 
+        const openai = createOpenAI({
+          baseURL: process.env['KEYWORDS_API_URL'],
+          apiKey: process.env['KEYWORDS_API_KEY'],
+          extraMetaData: {
+            ...(PRODUCTION
+              ? {
+                  customer_identifier: useWallet
+                    ? walletUser?.customer_identifier
+                    : mpUser?.customer_identifier,
+                }
+              : {}),
+            ...(credential
+              ? {
+                  customer_credentials: {
+                    // Assuming `request.provider` is the id field of the provider
+                    [request.provider]: {
+                      api_key: credential,
+                    },
+                  },
+                }
+              : {}),
+          },
+        })
+
         const _body: Parameters<typeof streamText>[0] = {
-          model: this.openai.chat(request.model),
+          model: openai.chat(request.model),
           messages: request.messages,
           temperature: request.temperature || undefined,
           ...request.options,
-          ...(PRODUCTION
-            ? {
-                customer_identifier: userData?.user.useWallet
-                  ? userData?.user.walletUser?.customer_identifier
-                  : userData?.user.mpUser?.customer_identifier,
-              }
-            : {}),
-          ...(credential
-            ? {
-                customer_credentials: {
-                  // Assuming `request.provider` is the id field of the provider
-                  [request.provider]: {
-                    api_key: credential,
-                  },
-                },
-              }
-            : {}),
         }
 
         console.log('BODY', _body)
