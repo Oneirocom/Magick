@@ -1,8 +1,6 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { SocketData, SpellCaster } from '../../spellCaster'
 import { BASE_DEP_KEYS, OUTPUT_EVENT } from '../../constants'
-import { IEventStore } from '../../services/eventStore'
-import { CORE_DEP_KEYS } from 'plugin/core'
 
 export const SubspellOutput = makeFlowNodeDefinition({
   typeName: 'events/subspells/output',

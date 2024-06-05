@@ -37,7 +37,6 @@ export const SubspellSocketConfig = ({
   getSockets: (sockets: GraphSocketJSON[]) => GraphSocketJSON[]
 }) => {
   const { publish, events } = usePubSub()
-  const [initialSockets] = useState<GraphSocketJSON[]>([])
   const [showForm, setShowForm] = useState(false)
   const socketKey = type === 'input' ? 'graphInputs' : 'graphOutputs'
 
