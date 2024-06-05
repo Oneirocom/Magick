@@ -1,12 +1,6 @@
 import { zString } from './zstring.primitive'
 import { StringValue } from './zstring.value'
-import {
-  Constant,
-  Concat,
-  Includes,
-  Length,
-  Equal as StringEqual,
-} from './zstring.nodes'
+import { Constant } from './zstring.nodes'
 import { testExec } from '../utils/tests'
 
 describe('zString Tests', () => {
