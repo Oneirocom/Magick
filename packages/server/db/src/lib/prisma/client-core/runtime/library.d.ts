@@ -185,6 +185,7 @@ declare type ComputedFieldsMap = {
 
 declare type ConnectionInfo = {
     schemaName?: string;
+    maxBindValues?: number;
 };
 
 declare interface Context {
