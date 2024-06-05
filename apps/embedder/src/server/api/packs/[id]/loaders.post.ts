@@ -19,8 +19,6 @@ export default defineEventHandler(async event => {
     })
   }
 
-  console.log('~~event.contasdasdasdsadasdasdasdasext', event.context)
-
   const { entity, owner } = authParse(event.context)
   const id = idParse(event.context.params?.id)
 
@@ -47,6 +45,8 @@ export default defineEventHandler(async event => {
       ...parse.data,
       packId: pack.id,
       status: 'pending',
+      meta: {},
+      raw: {},
     })
     .returning()
     .execute()
