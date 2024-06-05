@@ -137,3 +137,5 @@ export const loaderSchemaMap: Record<LoaderType, z.ZodObject<any>> = {
   // confluence: ConfluenceLoaderSchema,
   // json: JsonLoaderSchema,
 }
+
+export const LoaderChunkSchema = z.any()
