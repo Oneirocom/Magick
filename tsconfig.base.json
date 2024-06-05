@@ -162,6 +162,7 @@
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-db": ["packages/server/db/src/index.ts"],
       "@magickml/types": ["packages/@types/src/index.ts"],
+      "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
       "@magickml/zode": ["packages/zode/src/index.ts"],
       "@magickml/zodekit": ["nx/zodekit/src/index.ts"],
       "@packmvp": ["../anne/server/client/sdk.ts"],

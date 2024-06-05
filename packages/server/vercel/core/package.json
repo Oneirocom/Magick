@@ -1,0 +1,10 @@
+{
+  "name": "@magickml/vercel-sdk-core",
+  "version": "0.0.1",
+  "dependencies": {
+    "@ai-sdk/provider": "0.0.8",
+    "@ai-sdk/provider-utils": "0.0.11",
+    "tslib": "^2.3.0",
+    "zod": "^3.22.4"
+  }
+}
