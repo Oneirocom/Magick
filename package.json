@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "scripts": {
     "agent-connector": "nx serve agent-connector",
@@ -372,7 +372,6 @@
     "reshaped": "^2.7.1",
     "runtypes": "^6.7.0",
     "serp": "2.2.2",
-    "sharp": "^0.33.4",
     "shiki": "^1.5.1",
     "socket.io": "4.6.1",
     "socket.io-client": "4.6.1",
@@ -405,7 +404,6 @@
     "zustand": "4.3.8"
   },
   "peerDependencies": {
-    "@discordjs/opus": "0.9.0",
     "jsdom": "21.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"

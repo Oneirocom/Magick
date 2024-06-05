@@ -4,10 +4,10 @@ import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { LLMCredential } from 'servicesShared'
 import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
-import OpenAI from 'openai'
-import { ChatCompletionStreamParams } from 'openai/lib/ChatCompletionStream'
 import pino from 'pino'
 import { PRODUCTION } from 'clientConfig'
+import { streamText } from 'ai'
+import { createOpenAI } from '@magickml/vercel-sdk-core'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -21,7 +21,6 @@ export class CoreLLMService implements ICoreLLMService {
   protected projectId: string
   protected agentId: string
   protected userService: CoreUserService
-  protected openAISDK: OpenAI
   protected logger: pino.Logger<pino.LoggerOptions> | undefined
   protected userData: UserResponse | undefined
 
@@ -29,10 +28,6 @@ export class CoreLLMService implements ICoreLLMService {
     this.projectId = projectId
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
-    this.openAISDK = new OpenAI({
-      baseURL: process.env['KEYWORDS_API_URL'],
-      apiKey: process.env['KEYWORDS_API_KEY'],
-    })
   }
 
   async initialize() {
@@ -52,7 +47,7 @@ export class CoreLLMService implements ICoreLLMService {
     delayMs = 1000,
     spellId,
   }: {
-    request: any // Replace `RequestType` with the actual type of `request`
+    request: any
     maxRetries?: number
     delayMs?: number
     spellId?: string
@@ -63,6 +58,10 @@ export class CoreLLMService implements ICoreLLMService {
     const startTime = Date.now()
 
     const actualMaxRetries = Math.max(1, maxRetries)
+
+    const useWallet = this.userData?.user.useWallet
+    const mpUser = this.userData?.user.mpUser
+    const walletUser = this.userData?.user.walletUser
 
     while (attempts < actualMaxRetries) {
       try {
@@ -79,47 +78,50 @@ export class CoreLLMService implements ICoreLLMService {
           model: request.model,
         })
 
-        const _body = {
-          model: request.model,
-          messages: request.messages,
-          stream: true,
-          ...request.options,
-          ...(PRODUCTION
-            ? {
-                customer_identifier: userData?.user.useWallet
-                  ? userData?.user.walletUser?.customer_identifier
-                  : userData?.user.mpUser?.customer_identifier,
-              }
-            : {}),
-          ...(credential
-            ? {
-                customer_credentials: {
-                  // Assuming `request.provider` is the id field of the provider
-                  [request.provider]: {
-                    api_key: credential,
+        const openai = createOpenAI({
+          baseURL: process.env['KEYWORDS_API_URL'],
+          apiKey: process.env['KEYWORDS_API_KEY'],
+          extraMetaData: {
+            ...(PRODUCTION
+              ? {
+                  customer_identifier: useWallet
+                    ? walletUser?.customer_identifier
+                    : mpUser?.customer_identifier,
+                }
+              : {}),
+            ...(credential
+              ? {
+                  customer_credentials: {
+                    // Assuming `request.provider` is the id field of the provider
+                    [request.provider]: {
+                      api_key: credential,
+                    },
                   },
-                },
-              }
-            : {}),
+                }
+              : {}),
+          },
+        })
+
+        const _body: Parameters<typeof streamText>[0] = {
+          model: openai.chat(request.model),
+          messages: request.messages,
+          temperature: request.temperature || undefined,
+          ...request.options,
         }
 
         console.log('BODY', _body)
-        // filter and remove undefined values
-        const body = Object.fromEntries(
-          Object.entries(_body).filter(([, v]) => v !== undefined)
-        ) as ChatCompletionStreamParams
 
-        const stream = await this.openAISDK.beta.chat.completions.stream(body)
+        const { textStream, usage } = await streamText(_body)
 
         yield { choices: [{ delta: { content: '<START>' } }] }
 
-        for await (const chunk of stream) {
-          chunks.push(chunk)
-
-          yield chunk as any
+        for await (const textPart of textStream) {
+          chunks.push(textPart)
+          yield { choices: [{ delta: { content: textPart } }] } as any
         }
 
-        const chatCompletion = await stream.finalChatCompletion()
+        const chatCompletion = chunks.join('')
+        const totalTokens = (await usage).totalTokens
 
         saveRequest({
           projectId: this.projectId,
@@ -135,7 +137,7 @@ export class CoreLLMService implements ICoreLLMService {
           type: 'completion',
           hidden: false,
           processed: false,
-          totalTokens: chatCompletion.usage?.total_tokens,
+          totalTokens: totalTokens,
           spell: { id: spellId } as any,
           nodeId: null,
         })
