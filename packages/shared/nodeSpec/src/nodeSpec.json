@@ -2439,11 +2439,6 @@
         "name": "query",
         "valueType": "string",
         "defaultValue": ""
-      },
-      {
-        "name": "conversationId",
-        "valueType": "string",
-        "defaultValue": ""
       }
     ],
     "outputs": [
@@ -2510,6 +2505,47 @@
       },
       {
         "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/getChunks",
+    "category": "Action",
+    "label": "Get Chunks",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "chunks",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId",
+          "loaderId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "loaderId",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -2643,7 +2679,7 @@
         "defaultValue": ""
       },
       {
-        "name": "channelId",
+        "name": "youtubeChannelId",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -2697,7 +2733,7 @@
         "defaultValue": ""
       },
       {
-        "name": "searchString",
+        "name": "youtubeSearchString",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -2751,7 +2787,7 @@
         "defaultValue": ""
       },
       {
-        "name": "url",
+        "name": "urlOrContent",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -2859,7 +2895,7 @@
         "defaultValue": ""
       },
       {
-        "name": "url",
+        "name": "filePathOrUrl",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -2913,7 +2949,7 @@
         "defaultValue": ""
       },
       {
-        "name": "url",
+        "name": "filePathOrUrl",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -2967,7 +3003,7 @@
         "defaultValue": ""
       },
       {
-        "name": "url",
+        "name": "filePathOrUrl",
         "valueType": "string",
         "defaultValue": ""
       }
@@ -3021,7 +3057,7 @@
         "defaultValue": ""
       },
       {
-        "name": "url",
+        "name": "filePathOrUrl",
         "valueType": "string",
         "defaultValue": ""
       }
