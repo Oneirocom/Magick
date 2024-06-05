@@ -20,11 +20,13 @@ import { Loader } from '@magickml/embedder/schema'
 import { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 import { useConfig } from '@magickml/providers'
+import { ChunksDialog } from '../_pkg/chunks-dialog'
 
 type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const token = useConfig().embedderToken
   const createDialogState = useState(false)
+  const chunksDialogState = useState(false)
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
@@ -43,6 +45,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const { data: knowledgePacks } = client.useGetPacksByEntityAndOwner()
 
   const [activePackId, setActivePackId] = useAtom(activePackIdAtom)
+  const [activeLoaderId, setActiveLoaderId] = useState<string | null>(null)
 
   const { data: activePack } = client.useFindPack(
     {
@@ -125,11 +128,34 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
         }
       },
     },
+
+    {
+      accessorKey: 'chunks',
+      header: 'Chunks',
+      cell: ({ row }) => (
+        <Button
+          onClick={() => {
+            setActiveLoaderId(row.original.id)
+            chunksDialogState[1](true)
+          }}
+          variant="outline"
+          size="sm"
+        >
+          View
+        </Button>
+      ),
+    },
   ]
 
   return (
     <WindowContainer>
       <CreateKnowledgePackDialog client={client} state={createDialogState} />
+      <ChunksDialog
+        state={chunksDialogState}
+        client={client}
+        loaderId={activeLoaderId}
+        packId={activePackId}
+      />
       <WindowHeader
         title={activePackId ? 'Knowledge Pack' : 'Knowledge'}
         description="Manage knowledge for your agent."

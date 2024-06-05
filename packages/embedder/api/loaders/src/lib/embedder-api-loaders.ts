@@ -34,6 +34,33 @@ export const loaderEndpoints = makeApi([
       },
     ],
   },
+  {
+    method: 'get',
+    path: '/packs/:id/loaders/:loaderId',
+    alias: 'getLoaderChunks',
+    description: 'Get chunks for a specific loader in a pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'id',
+        type: 'Path',
+        schema: idSchema,
+      },
+      {
+        name: 'loaderId',
+        type: 'Path',
+        schema: idSchema,
+      },
+    ],
+    response: z.any(),
+    errors: [
+      {
+        status: 404,
+        description: 'Loader not found',
+        schema: z.any(),
+      },
+    ],
+  },
 ])
 
 export const loaderApi = new Zodios(loaderEndpoints)

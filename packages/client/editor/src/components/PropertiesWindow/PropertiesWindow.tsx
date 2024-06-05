@@ -27,6 +27,16 @@ import toast from 'react-hot-toast'
 import { SubspellSocketConfig } from './SubspellSocketConfig'
 import { SelectSpell } from './SelectSpell'
 
+import { PackSchema } from '@magickml/embedder/schema'
+import { z } from 'zod'
+
+type Pack = z.infer<typeof PackSchema> & {
+  loaders: {
+    id: string
+    name: string
+  }[]
+}
+
 type Props = {
   tab: Tab
   spellId: string
@@ -76,13 +86,13 @@ export const PropertiesWindow = (props: Props) => {
   // TODO: Move this to a separate component
 
   const client = makeEmbedderClient(useConfig().embedderToken)
-  const [knowledgePacks, setKnowledgePacks] = useState<any[] | null>(null)
+  const [knowledgePacks, setKnowledgePacks] = useState<Pack[] | null>(null)
 
   // not using query client here its breaking rules of hooks somewhere
   const fetchKnowledgePacks = async () => {
     try {
       const packs = await client.getPacksByEntityAndOwner()
-      setKnowledgePacks(packs)
+      setKnowledgePacks(packs as Pack[])
     } catch (error) {
       toast.error('Failed to fetch knowledge packs')
     }
@@ -234,6 +244,10 @@ export const PropertiesWindow = (props: Props) => {
     )
   }
 
+  const getActiveKnowledgePack = (knowledgePacks || []).find(
+    pack => pack.id === configuration.packId
+  )
+
   return (
     <Window borderless>
       {spec && (
@@ -307,6 +321,34 @@ export const PropertiesWindow = (props: Props) => {
                 {knowledgePacks?.map(pack => (
                   <SelectItem key={pack.id} value={pack.id}>
                     {pack.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
+
+      {Object.entries(configuration || {})
+        .filter(([key]) => key === 'loaderId')
+        .map((config: [key: string, any]) => (
+          <div className="px-4 py-2" key={config[0]}>
+            <label htmlFor="packId">Knowledge Entry</label>
+            <Select
+              value={configuration?.loaderId || 'loaderId'}
+              defaultValue="loaderId"
+              onValueChange={e => updateConfigKey('loaderId', e)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="loaderId">
+                  Select a Knowledge Entry
+                </SelectItem>
+
+                {getActiveKnowledgePack?.loaders?.map(loader => (
+                  <SelectItem key={loader.id} value={loader.id}>
+                    {loader.name}
                   </SelectItem>
                 ))}
               </SelectContent>

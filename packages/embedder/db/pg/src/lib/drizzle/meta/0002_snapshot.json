@@ -1,0 +1,254 @@
+{
+  "id": "9ee92218-29f1-4b50-8886-bd3478f9563a",
+  "prevId": "124a93b6-8f6f-4bce-bcf3-7b07804ab8db",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "rag.Job": {
+      "name": "Job",
+      "schema": "rag",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "entity": {
+          "name": "entity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "packId": {
+          "name": "packId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "loaders": {
+          "name": "loaders",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "finishedAt": {
+          "name": "finishedAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "PackStatus",
+          "typeSchema": "rag",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Job_packId_Pack_id_fk": {
+          "name": "Job_packId_Pack_id_fk",
+          "tableFrom": "Job",
+          "tableTo": "Pack",
+          "schemaTo": "rag",
+          "columnsFrom": [
+            "packId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "rag.Loader": {
+      "name": "Loader",
+      "schema": "rag",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "packId": {
+          "name": "packId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "LoaderType",
+          "typeSchema": "rag",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "config": {
+          "name": "config",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "PackStatus",
+          "typeSchema": "rag",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "raw": {
+          "name": "raw",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{}'::jsonb"
+        },
+        "meta": {
+          "name": "meta",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{}'::jsonb"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Loader_packId_Pack_id_fk": {
+          "name": "Loader_packId_Pack_id_fk",
+          "tableFrom": "Loader",
+          "tableTo": "Pack",
+          "schemaTo": "rag",
+          "columnsFrom": [
+            "packId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "rag.Pack": {
+      "name": "Pack",
+      "schema": "rag",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "owner": {
+          "name": "owner",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity": {
+          "name": "entity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shared": {
+          "name": "shared",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "rag.LoaderType": {
+      "name": "LoaderType",
+      "schema": "rag",
+      "values": [
+        "text",
+        "youtube",
+        "youtube_channel",
+        "youtube_search",
+        "web",
+        "sitemap",
+        "pdf",
+        "docx",
+        "excel",
+        "ppt",
+        "confluence",
+        "json"
+      ]
+    },
+    "rag.PackStatus": {
+      "name": "PackStatus",
+      "schema": "rag",
+      "values": [
+        "pending",
+        "processing",
+        "completed",
+        "failed"
+      ]
+    }
+  },
+  "schemas": {
+    "rag": "rag"
+  },
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
