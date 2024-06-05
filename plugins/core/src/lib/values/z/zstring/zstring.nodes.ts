@@ -1,6 +1,5 @@
 import { makeInNOutFunctionDesc } from '@magickml/behave-graph'
 import { zString } from './zstring.primitive'
-import { z } from 'zod'
 
 export const Constant = makeInNOutFunctionDesc({
   name: 'z/logic/string',
