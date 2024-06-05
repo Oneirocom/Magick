@@ -5,11 +5,9 @@ import { authParse } from '@magickml/embedder/schema'
 export default defineEventHandler(async event => {
   const { entity, owner } = authParse(event.context)
 
-  const packs = await embedderDb
-    .select()
-    .from(Pack)
-    .where(and(eq(Pack.entity, entity), eq(Pack.owner, owner)))
-    .execute()
-
+  const packs = embedderDb.query.Pack.findMany({
+    with: { loaders: true },
+    where: and(eq(Pack.entity, entity), eq(Pack.owner, owner)),
+  })
   return packs
 })

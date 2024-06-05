@@ -49,7 +49,7 @@ export const DeletePackResponseSchema = z.object({
 
 export const PackQueryRequestSchema = z.object({
   query: z.string(),
-  conversationId: z.string().optional(),
+  // conversationId: z.string().optional(), //We don't need this
 })
 
 export const ExtractChunkDataSchema = z.object({

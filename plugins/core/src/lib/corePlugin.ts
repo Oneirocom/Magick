@@ -85,7 +85,7 @@ import { LLMProviderKeys } from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
-import { createPack, getManyPacks, getPack } from './nodes/knowledge'
+import { createPack, getManyPacks, getPack, getChunks } from './nodes/knowledge'
 import { sourceNodes } from './nodes/knowledge/source'
 import { queryPack } from './nodes/knowledge/query'
 import { getContext } from './nodes/knowledge/context'
@@ -168,6 +168,7 @@ export class CorePlugin extends CoreEventsPlugin<
     getManyPacks,
     queryPack,
     getContext,
+    getChunks,
     ...sourceNodes,
   ]
   values = []
