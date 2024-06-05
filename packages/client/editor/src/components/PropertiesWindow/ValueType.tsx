@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ConfigurationComponentProps } from './PropertiesWindow'
-import { useReactFlow } from '@xyflow/react'
 import {
   Select,
   SelectTrigger,
@@ -17,8 +16,6 @@ export const ValueType = (props: ConfigurationComponentProps) => {
   const { valueTypeOptions: options, socketInputs, socketOutputs } = fullConfig
   const [configKey, configValue] = config
   const [valueType, setValueType] = useState(configValue || '')
-
-  const reactFlow = useReactFlow()
 
   const handleValueTypeChange = (type: string) => {
     setValueType(type)
