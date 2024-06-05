@@ -530,8 +530,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.14.0
-   * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
+   * Prisma Client JS version: 5.15.0
+   * Query Engine version: 12e25d8d06f6ea5a0252864dd9a03b1bb51f3022
    */
   export type PrismaVersion = {
     client: string
@@ -1022,6 +1022,10 @@ export namespace Prisma {
             args: Prisma.agent_credentialsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.agent_credentialsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_credentialsPayload>[]
+          }
           delete: {
             args: Prisma.agent_credentialsDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$agent_credentialsPayload>
@@ -1087,6 +1091,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.agentsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.agentsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agentsPayload>[]
           }
           delete: {
             args: Prisma.agentsDeleteArgs<ExtArgs>,
@@ -1154,6 +1162,10 @@ export namespace Prisma {
             args: Prisma.chatMessagesCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.chatMessagesCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$chatMessagesPayload>[]
+          }
           delete: {
             args: Prisma.chatMessagesDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$chatMessagesPayload>
@@ -1219,6 +1231,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.credentialsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.credentialsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$credentialsPayload>[]
           }
           delete: {
             args: Prisma.credentialsDeleteArgs<ExtArgs>,
@@ -1286,6 +1302,10 @@ export namespace Prisma {
             args: Prisma.documentsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.documentsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$documentsPayload>[]
+          }
           delete: {
             args: Prisma.documentsDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$documentsPayload>
@@ -1351,6 +1371,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.embeddingsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.embeddingsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$embeddingsPayload>[]
           }
           delete: {
             args: Prisma.embeddingsDeleteArgs<ExtArgs>,
@@ -1418,6 +1442,10 @@ export namespace Prisma {
             args: Prisma.public_eventsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.public_eventsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$public_eventsPayload>[]
+          }
           delete: {
             args: Prisma.public_eventsDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$public_eventsPayload>
@@ -1483,6 +1511,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.graphEventsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.graphEventsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$graphEventsPayload>[]
           }
           delete: {
             args: Prisma.graphEventsDeleteArgs<ExtArgs>,
@@ -1550,6 +1582,10 @@ export namespace Prisma {
             args: Prisma.public_knex_migrationsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.public_knex_migrationsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$public_knex_migrationsPayload>[]
+          }
           delete: {
             args: Prisma.public_knex_migrationsDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$public_knex_migrationsPayload>
@@ -1615,6 +1651,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.public_knex_migrations_lockCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.public_knex_migrations_lockCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$public_knex_migrations_lockPayload>[]
           }
           delete: {
             args: Prisma.public_knex_migrations_lockDeleteArgs<ExtArgs>,
@@ -1682,6 +1722,10 @@ export namespace Prisma {
             args: Prisma.knowledgeCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.knowledgeCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$knowledgePayload>[]
+          }
           delete: {
             args: Prisma.knowledgeDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$knowledgePayload>
@@ -1747,6 +1791,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.pluginStateCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.pluginStateCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$pluginStatePayload>[]
           }
           delete: {
             args: Prisma.pluginStateDeleteArgs<ExtArgs>,
@@ -1814,6 +1862,10 @@ export namespace Prisma {
             args: Prisma.requestCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.requestCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$requestPayload>[]
+          }
           delete: {
             args: Prisma.requestDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$requestPayload>
@@ -1879,6 +1931,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.spellReleasesCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.spellReleasesCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$spellReleasesPayload>[]
           }
           delete: {
             args: Prisma.spellReleasesDeleteArgs<ExtArgs>,
@@ -1946,6 +2002,10 @@ export namespace Prisma {
             args: Prisma.spellsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.spellsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$spellsPayload>[]
+          }
           delete: {
             args: Prisma.spellsDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$spellsPayload>
@@ -2011,6 +2071,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.tasksCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.tasksCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$tasksPayload>[]
           }
           delete: {
             args: Prisma.tasksDeleteArgs<ExtArgs>,
@@ -2078,6 +2142,10 @@ export namespace Prisma {
             args: Prisma.WebhookCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.WebhookCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayload>[]
+          }
           delete: {
             args: Prisma.WebhookDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$WebhookPayload>
@@ -2143,6 +2211,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.seraphEventsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.seraphEventsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$seraphEventsPayload>[]
           }
           delete: {
             args: Prisma.seraphEventsDeleteArgs<ExtArgs>,
@@ -2210,6 +2282,10 @@ export namespace Prisma {
             args: Prisma.MemoryCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.MemoryCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$MemoryPayload>[]
+          }
           delete: {
             args: Prisma.MemoryDeleteArgs<ExtArgs>,
             result: $Utils.PayloadToResult<Prisma.$MemoryPayload>
@@ -2275,6 +2351,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.agent_channelsCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.agent_channelsCreateManyAndReturnArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$agent_channelsPayload>[]
           }
           delete: {
             args: Prisma.agent_channelsDeleteArgs<ExtArgs>,
@@ -2776,6 +2856,15 @@ export namespace Prisma {
     credentials?: boolean | credentialsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["agent_credentials"]>
 
+  export type agent_credentialsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    agentId?: boolean
+    credentialId?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    agents?: boolean | agentsDefaultArgs<ExtArgs>
+    credentials?: boolean | credentialsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agent_credentials"]>
+
   export type agent_credentialsSelectScalar = {
     agentId?: boolean
     credentialId?: boolean
@@ -2783,12 +2872,14 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-
   export type agent_credentialsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agents?: boolean | agentsDefaultArgs<ExtArgs>
     credentials?: boolean | credentialsDefaultArgs<ExtArgs>
   }
-
+  export type agent_credentialsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agents?: boolean | agentsDefaultArgs<ExtArgs>
+    credentials?: boolean | credentialsDefaultArgs<ExtArgs>
+  }
 
   export type $agent_credentialsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "agent_credentials"
@@ -2804,7 +2895,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["agent_credentials"]>
     composites: {}
   }
-
 
   type agent_credentialsGetPayload<S extends boolean | null | undefined | agent_credentialsDefaultArgs> = $Result.GetResult<Prisma.$agent_credentialsPayload, S>
 
@@ -2932,6 +3022,32 @@ export namespace Prisma {
     createMany<T extends agent_credentialsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, agent_credentialsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Agent_credentials and returns the data saved in the database.
+     * @param {agent_credentialsCreateManyAndReturnArgs} args - Arguments to create many Agent_credentials.
+     * @example
+     * // Create many Agent_credentials
+     * const agent_credentials = await prisma.agent_credentials.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Agent_credentials and only return the `agentId`
+     * const agent_credentialsWithAgentIdOnly = await prisma.agent_credentials.createManyAndReturn({ 
+     *   select: { agentId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends agent_credentialsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_credentialsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$agent_credentialsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Agent_credentials.
@@ -3411,6 +3527,25 @@ export namespace Prisma {
   }
 
   /**
+   * agent_credentials createManyAndReturn
+   */
+  export type agent_credentialsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_credentials
+     */
+    select?: agent_credentialsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many agent_credentials.
+     */
+    data: agent_credentialsCreateManyInput | agent_credentialsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: agent_credentialsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * agent_credentials update
    */
   export type agent_credentialsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3825,6 +3960,33 @@ export namespace Prisma {
     _count?: boolean | AgentsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["agents"]>
 
+  export type agentsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    rootSpell?: boolean
+    publicVariables?: boolean
+    secrets?: boolean
+    name?: boolean
+    enabled?: boolean
+    updatedAt?: boolean
+    pingedAt?: boolean
+    projectId?: boolean
+    data?: boolean
+    runState?: boolean
+    image?: boolean
+    rootSpellId?: boolean
+    default?: boolean
+    createdAt?: boolean
+    currentSpellReleaseId?: boolean
+    embedModel?: boolean
+    version?: boolean
+    embeddingProvider?: boolean
+    embeddingModel?: boolean
+    isDraft?: boolean
+    draftAgentId?: boolean
+    description?: boolean
+    spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
+  }, ExtArgs["result"]["agents"]>
+
   export type agentsSelectScalar = {
     id?: boolean
     rootSpell?: boolean
@@ -3851,7 +4013,6 @@ export namespace Prisma {
     description?: boolean
   }
 
-
   export type agentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agent_credentials?: boolean | agents$agent_credentialsArgs<ExtArgs>
     spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
@@ -3862,7 +4023,9 @@ export namespace Prisma {
     Webhook?: boolean | agents$WebhookArgs<ExtArgs>
     _count?: boolean | AgentsCountOutputTypeDefaultArgs<ExtArgs>
   }
-
+  export type agentsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    spellReleases_agents_currentSpellReleaseIdTospellReleases?: boolean | agents$spellReleases_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
+  }
 
   export type $agentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "agents"
@@ -3902,7 +4065,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["agents"]>
     composites: {}
   }
-
 
   type agentsGetPayload<S extends boolean | null | undefined | agentsDefaultArgs> = $Result.GetResult<Prisma.$agentsPayload, S>
 
@@ -4030,6 +4192,32 @@ export namespace Prisma {
     createMany<T extends agentsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, agentsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Agents and returns the data saved in the database.
+     * @param {agentsCreateManyAndReturnArgs} args - Arguments to create many Agents.
+     * @example
+     * // Create many Agents
+     * const agents = await prisma.agents.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Agents and only return the `id`
+     * const agentsWithIdOnly = await prisma.agents.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends agentsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, agentsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$agentsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Agents.
@@ -4538,6 +4726,25 @@ export namespace Prisma {
   }
 
   /**
+   * agents createManyAndReturn
+   */
+  export type agentsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agents
+     */
+    select?: agentsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many agents.
+     */
+    data: agentsCreateManyInput | agentsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: agentsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * agents update
    */
   export type agentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4968,6 +5175,18 @@ export namespace Prisma {
     agents?: boolean | agentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chatMessages"]>
 
+  export type chatMessagesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    sender?: boolean
+    connector?: boolean
+    content?: boolean
+    conversationId?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    agents?: boolean | agentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["chatMessages"]>
+
   export type chatMessagesSelectScalar = {
     id?: boolean
     agentId?: boolean
@@ -4979,11 +5198,12 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-
   export type chatMessagesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agents?: boolean | agentsDefaultArgs<ExtArgs>
   }
-
+  export type chatMessagesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agents?: boolean | agentsDefaultArgs<ExtArgs>
+  }
 
   export type $chatMessagesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "chatMessages"
@@ -5002,7 +5222,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["chatMessages"]>
     composites: {}
   }
-
 
   type chatMessagesGetPayload<S extends boolean | null | undefined | chatMessagesDefaultArgs> = $Result.GetResult<Prisma.$chatMessagesPayload, S>
 
@@ -5130,6 +5349,32 @@ export namespace Prisma {
     createMany<T extends chatMessagesCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, chatMessagesCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ChatMessages and returns the data saved in the database.
+     * @param {chatMessagesCreateManyAndReturnArgs} args - Arguments to create many ChatMessages.
+     * @example
+     * // Create many ChatMessages
+     * const chatMessages = await prisma.chatMessages.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ChatMessages and only return the `id`
+     * const chatMessagesWithIdOnly = await prisma.chatMessages.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends chatMessagesCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, chatMessagesCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$chatMessagesPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a ChatMessages.
@@ -5611,6 +5856,25 @@ export namespace Prisma {
   }
 
   /**
+   * chatMessages createManyAndReturn
+   */
+  export type chatMessagesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the chatMessages
+     */
+    select?: chatMessagesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many chatMessages.
+     */
+    data: chatMessagesCreateManyInput | chatMessagesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: chatMessagesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * chatMessages update
    */
   export type chatMessagesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5927,6 +6191,20 @@ export namespace Prisma {
     _count?: boolean | CredentialsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["credentials"]>
 
+  export type credentialsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    name?: boolean
+    serviceType?: boolean
+    credentialType?: boolean
+    value?: boolean
+    description?: boolean
+    metadata?: boolean
+    pluginName?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["credentials"]>
+
   export type credentialsSelectScalar = {
     id?: boolean
     projectId?: boolean
@@ -5941,12 +6219,11 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-
   export type credentialsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agent_credentials?: boolean | credentials$agent_credentialsArgs<ExtArgs>
     _count?: boolean | CredentialsCountOutputTypeDefaultArgs<ExtArgs>
   }
-
+  export type credentialsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $credentialsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "credentials"
@@ -5968,7 +6245,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["credentials"]>
     composites: {}
   }
-
 
   type credentialsGetPayload<S extends boolean | null | undefined | credentialsDefaultArgs> = $Result.GetResult<Prisma.$credentialsPayload, S>
 
@@ -6096,6 +6372,32 @@ export namespace Prisma {
     createMany<T extends credentialsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, credentialsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Credentials and returns the data saved in the database.
+     * @param {credentialsCreateManyAndReturnArgs} args - Arguments to create many Credentials.
+     * @example
+     * // Create many Credentials
+     * const credentials = await prisma.credentials.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Credentials and only return the `id`
+     * const credentialsWithIdOnly = await prisma.credentials.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends credentialsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, credentialsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$credentialsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Credentials.
@@ -6580,6 +6882,21 @@ export namespace Prisma {
   }
 
   /**
+   * credentials createManyAndReturn
+   */
+  export type credentialsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the credentials
+     */
+    select?: credentialsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many credentials.
+     */
+    data: credentialsCreateManyInput | credentialsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * credentials update
    */
   export type credentialsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6866,6 +7183,14 @@ export namespace Prisma {
     metadata?: boolean
   }, ExtArgs["result"]["documents"]>
 
+  export type documentsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    projectId?: boolean
+    date?: boolean
+    metadata?: boolean
+  }, ExtArgs["result"]["documents"]>
+
   export type documentsSelectScalar = {
     id?: boolean
     type?: boolean
@@ -6873,7 +7198,6 @@ export namespace Prisma {
     date?: boolean
     metadata?: boolean
   }
-
 
 
   export type $documentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6888,7 +7212,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["documents"]>
     composites: {}
   }
-
 
   type documentsGetPayload<S extends boolean | null | undefined | documentsDefaultArgs> = $Result.GetResult<Prisma.$documentsPayload, S>
 
@@ -7016,6 +7339,32 @@ export namespace Prisma {
     createMany<T extends documentsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, documentsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Documents and returns the data saved in the database.
+     * @param {documentsCreateManyAndReturnArgs} args - Arguments to create many Documents.
+     * @example
+     * // Create many Documents
+     * const documents = await prisma.documents.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Documents and only return the `id`
+     * const documentsWithIdOnly = await prisma.documents.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends documentsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, documentsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$documentsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Documents.
@@ -7469,6 +7818,21 @@ export namespace Prisma {
   }
 
   /**
+   * documents createManyAndReturn
+   */
+  export type documentsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the documents
+     */
+    select?: documentsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many documents.
+     */
+    data: documentsCreateManyInput | documentsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * documents update
    */
   export type documentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7753,13 +8117,19 @@ export namespace Prisma {
     index?: boolean
   }, ExtArgs["result"]["embeddings"]>
 
+  export type embeddingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    documentId?: boolean
+    content?: boolean
+    index?: boolean
+  }, ExtArgs["result"]["embeddings"]>
+
   export type embeddingsSelectScalar = {
     id?: boolean
     documentId?: boolean
     content?: boolean
     index?: boolean
   }
-
 
 
   export type $embeddingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7773,7 +8143,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["embeddings"]>
     composites: {}
   }
-
 
   type embeddingsGetPayload<S extends boolean | null | undefined | embeddingsDefaultArgs> = $Result.GetResult<Prisma.$embeddingsPayload, S>
 
@@ -7901,6 +8270,32 @@ export namespace Prisma {
     createMany<T extends embeddingsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, embeddingsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Embeddings and returns the data saved in the database.
+     * @param {embeddingsCreateManyAndReturnArgs} args - Arguments to create many Embeddings.
+     * @example
+     * // Create many Embeddings
+     * const embeddings = await prisma.embeddings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Embeddings and only return the `id`
+     * const embeddingsWithIdOnly = await prisma.embeddings.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends embeddingsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, embeddingsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$embeddingsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Embeddings.
@@ -8353,6 +8748,21 @@ export namespace Prisma {
   }
 
   /**
+   * embeddings createManyAndReturn
+   */
+  export type embeddingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the embeddings
+     */
+    select?: embeddingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many embeddings.
+     */
+    data: embeddingsCreateManyInput | embeddingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * embeddings update
    */
   export type embeddingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8675,6 +9085,23 @@ export namespace Prisma {
     connector?: boolean
   }, ExtArgs["result"]["public_events"]>
 
+  export type public_eventsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    observer?: boolean
+    sender?: boolean
+    client?: boolean
+    channel?: boolean
+    channelType?: boolean
+    projectId?: boolean
+    content?: boolean
+    agentId?: boolean
+    entities?: boolean
+    date?: boolean
+    rawData?: boolean
+    connector?: boolean
+  }, ExtArgs["result"]["public_events"]>
+
   export type public_eventsSelectScalar = {
     id?: boolean
     type?: boolean
@@ -8691,7 +9118,6 @@ export namespace Prisma {
     rawData?: boolean
     connector?: boolean
   }
-
 
 
   export type $public_eventsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8715,7 +9141,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["public_events"]>
     composites: {}
   }
-
 
   type public_eventsGetPayload<S extends boolean | null | undefined | public_eventsDefaultArgs> = $Result.GetResult<Prisma.$public_eventsPayload, S>
 
@@ -8843,6 +9268,32 @@ export namespace Prisma {
     createMany<T extends public_eventsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, public_eventsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Public_events and returns the data saved in the database.
+     * @param {public_eventsCreateManyAndReturnArgs} args - Arguments to create many Public_events.
+     * @example
+     * // Create many Public_events
+     * const public_events = await prisma.public_events.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Public_events and only return the `id`
+     * const public_eventsWithIdOnly = await prisma.public_events.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends public_eventsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, public_eventsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_eventsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Public_events.
@@ -9305,6 +9756,21 @@ export namespace Prisma {
   }
 
   /**
+   * public_events createManyAndReturn
+   */
+  export type public_eventsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the public_events
+     */
+    select?: public_eventsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many public_events.
+     */
+    data: public_eventsCreateManyInput | public_eventsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * public_events update
    */
   export type public_eventsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9608,6 +10074,22 @@ export namespace Prisma {
     agents?: boolean | agentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["graphEvents"]>
 
+  export type graphEventsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    sender?: boolean
+    connector?: boolean
+    connectorData?: boolean
+    content?: boolean
+    eventType?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    event?: boolean
+    observer?: boolean
+    channel?: boolean
+    agents?: boolean | agentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["graphEvents"]>
+
   export type graphEventsSelectScalar = {
     id?: boolean
     agentId?: boolean
@@ -9623,11 +10105,12 @@ export namespace Prisma {
     channel?: boolean
   }
 
-
   export type graphEventsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agents?: boolean | agentsDefaultArgs<ExtArgs>
   }
-
+  export type graphEventsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agents?: boolean | agentsDefaultArgs<ExtArgs>
+  }
 
   export type $graphEventsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "graphEvents"
@@ -9650,7 +10133,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["graphEvents"]>
     composites: {}
   }
-
 
   type graphEventsGetPayload<S extends boolean | null | undefined | graphEventsDefaultArgs> = $Result.GetResult<Prisma.$graphEventsPayload, S>
 
@@ -9778,6 +10260,32 @@ export namespace Prisma {
     createMany<T extends graphEventsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, graphEventsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GraphEvents and returns the data saved in the database.
+     * @param {graphEventsCreateManyAndReturnArgs} args - Arguments to create many GraphEvents.
+     * @example
+     * // Create many GraphEvents
+     * const graphEvents = await prisma.graphEvents.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GraphEvents and only return the `id`
+     * const graphEventsWithIdOnly = await prisma.graphEvents.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends graphEventsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, graphEventsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$graphEventsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a GraphEvents.
@@ -10263,6 +10771,25 @@ export namespace Prisma {
   }
 
   /**
+   * graphEvents createManyAndReturn
+   */
+  export type graphEventsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the graphEvents
+     */
+    select?: graphEventsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many graphEvents.
+     */
+    data: graphEventsCreateManyInput | graphEventsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: graphEventsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * graphEvents update
    */
   export type graphEventsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10563,13 +11090,19 @@ export namespace Prisma {
     migration_time?: boolean
   }, ExtArgs["result"]["public_knex_migrations"]>
 
+  export type public_knex_migrationsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    batch?: boolean
+    migration_time?: boolean
+  }, ExtArgs["result"]["public_knex_migrations"]>
+
   export type public_knex_migrationsSelectScalar = {
     id?: boolean
     name?: boolean
     batch?: boolean
     migration_time?: boolean
   }
-
 
 
   export type $public_knex_migrationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10583,7 +11116,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["public_knex_migrations"]>
     composites: {}
   }
-
 
   type public_knex_migrationsGetPayload<S extends boolean | null | undefined | public_knex_migrationsDefaultArgs> = $Result.GetResult<Prisma.$public_knex_migrationsPayload, S>
 
@@ -10711,6 +11243,32 @@ export namespace Prisma {
     createMany<T extends public_knex_migrationsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, public_knex_migrationsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Public_knex_migrations and returns the data saved in the database.
+     * @param {public_knex_migrationsCreateManyAndReturnArgs} args - Arguments to create many Public_knex_migrations.
+     * @example
+     * // Create many Public_knex_migrations
+     * const public_knex_migrations = await prisma.public_knex_migrations.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Public_knex_migrations and only return the `id`
+     * const public_knex_migrationsWithIdOnly = await prisma.public_knex_migrations.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends public_knex_migrationsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, public_knex_migrationsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_knex_migrationsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Public_knex_migrations.
@@ -11163,6 +11721,21 @@ export namespace Prisma {
   }
 
   /**
+   * public_knex_migrations createManyAndReturn
+   */
+  export type public_knex_migrationsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the public_knex_migrations
+     */
+    select?: public_knex_migrationsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many public_knex_migrations.
+     */
+    data: public_knex_migrationsCreateManyInput | public_knex_migrationsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * public_knex_migrations update
    */
   export type public_knex_migrationsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11431,11 +12004,15 @@ export namespace Prisma {
     is_locked?: boolean
   }, ExtArgs["result"]["public_knex_migrations_lock"]>
 
+  export type public_knex_migrations_lockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    index?: boolean
+    is_locked?: boolean
+  }, ExtArgs["result"]["public_knex_migrations_lock"]>
+
   export type public_knex_migrations_lockSelectScalar = {
     index?: boolean
     is_locked?: boolean
   }
-
 
 
   export type $public_knex_migrations_lockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11447,7 +12024,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["public_knex_migrations_lock"]>
     composites: {}
   }
-
 
   type public_knex_migrations_lockGetPayload<S extends boolean | null | undefined | public_knex_migrations_lockDefaultArgs> = $Result.GetResult<Prisma.$public_knex_migrations_lockPayload, S>
 
@@ -11575,6 +12151,32 @@ export namespace Prisma {
     createMany<T extends public_knex_migrations_lockCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, public_knex_migrations_lockCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Public_knex_migrations_locks and returns the data saved in the database.
+     * @param {public_knex_migrations_lockCreateManyAndReturnArgs} args - Arguments to create many Public_knex_migrations_locks.
+     * @example
+     * // Create many Public_knex_migrations_locks
+     * const public_knex_migrations_lock = await prisma.public_knex_migrations_lock.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Public_knex_migrations_locks and only return the `index`
+     * const public_knex_migrations_lockWithIndexOnly = await prisma.public_knex_migrations_lock.createManyAndReturn({ 
+     *   select: { index: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends public_knex_migrations_lockCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, public_knex_migrations_lockCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_knex_migrations_lockPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Public_knex_migrations_lock.
@@ -12025,6 +12627,21 @@ export namespace Prisma {
   }
 
   /**
+   * public_knex_migrations_lock createManyAndReturn
+   */
+  export type public_knex_migrations_lockCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the public_knex_migrations_lock
+     */
+    select?: public_knex_migrations_lockSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many public_knex_migrations_locks.
+     */
+    data: public_knex_migrations_lockCreateManyInput | public_knex_migrations_lockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * public_knex_migrations_lock update
    */
   export type public_knex_migrations_lockUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12315,6 +12932,19 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["knowledge"]>
 
+  export type knowledgeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    sourceUrl?: boolean
+    dataType?: boolean
+    data?: boolean
+    projectId?: boolean
+    metadata?: boolean
+    memoryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["knowledge"]>
+
   export type knowledgeSelectScalar = {
     id?: boolean
     name?: boolean
@@ -12327,7 +12957,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
   }
-
 
 
   export type $knowledgePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12347,7 +12976,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["knowledge"]>
     composites: {}
   }
-
 
   type knowledgeGetPayload<S extends boolean | null | undefined | knowledgeDefaultArgs> = $Result.GetResult<Prisma.$knowledgePayload, S>
 
@@ -12475,6 +13103,32 @@ export namespace Prisma {
     createMany<T extends knowledgeCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, knowledgeCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Knowledges and returns the data saved in the database.
+     * @param {knowledgeCreateManyAndReturnArgs} args - Arguments to create many Knowledges.
+     * @example
+     * // Create many Knowledges
+     * const knowledge = await prisma.knowledge.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Knowledges and only return the `id`
+     * const knowledgeWithIdOnly = await prisma.knowledge.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends knowledgeCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, knowledgeCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$knowledgePayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Knowledge.
@@ -12933,6 +13587,21 @@ export namespace Prisma {
   }
 
   /**
+   * knowledge createManyAndReturn
+   */
+  export type knowledgeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the knowledge
+     */
+    select?: knowledgeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many knowledges.
+     */
+    data: knowledgeCreateManyInput | knowledgeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * knowledge update
    */
   export type knowledgeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13192,6 +13861,16 @@ export namespace Prisma {
     agents?: boolean | pluginState$agentsArgs<ExtArgs>
   }, ExtArgs["result"]["pluginState"]>
 
+  export type pluginStateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    state?: boolean
+    plugin?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agents?: boolean | pluginState$agentsArgs<ExtArgs>
+  }, ExtArgs["result"]["pluginState"]>
+
   export type pluginStateSelectScalar = {
     id?: boolean
     agentId?: boolean
@@ -13201,11 +13880,12 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-
   export type pluginStateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agents?: boolean | pluginState$agentsArgs<ExtArgs>
   }
-
+  export type pluginStateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agents?: boolean | pluginState$agentsArgs<ExtArgs>
+  }
 
   export type $pluginStatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "pluginState"
@@ -13222,7 +13902,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["pluginState"]>
     composites: {}
   }
-
 
   type pluginStateGetPayload<S extends boolean | null | undefined | pluginStateDefaultArgs> = $Result.GetResult<Prisma.$pluginStatePayload, S>
 
@@ -13350,6 +14029,32 @@ export namespace Prisma {
     createMany<T extends pluginStateCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, pluginStateCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PluginStates and returns the data saved in the database.
+     * @param {pluginStateCreateManyAndReturnArgs} args - Arguments to create many PluginStates.
+     * @example
+     * // Create many PluginStates
+     * const pluginState = await prisma.pluginState.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PluginStates and only return the `id`
+     * const pluginStateWithIdOnly = await prisma.pluginState.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends pluginStateCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, pluginStateCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$pluginStatePayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a PluginState.
@@ -13829,6 +14534,25 @@ export namespace Prisma {
   }
 
   /**
+   * pluginState createManyAndReturn
+   */
+  export type pluginStateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the pluginState
+     */
+    select?: pluginStateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many pluginStates.
+     */
+    data: pluginStateCreateManyInput | pluginStateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: pluginStateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * pluginState update
    */
   export type pluginStateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14260,6 +14984,27 @@ export namespace Prisma {
     agentId?: boolean
   }, ExtArgs["result"]["request"]>
 
+  export type requestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    requestData?: boolean
+    responseData?: boolean
+    duration?: boolean
+    status?: boolean
+    statusCode?: boolean
+    model?: boolean
+    parameters?: boolean
+    createdAt?: boolean
+    provider?: boolean
+    type?: boolean
+    hidden?: boolean
+    processed?: boolean
+    cost?: boolean
+    spell?: boolean
+    nodeId?: boolean
+    agentId?: boolean
+  }, ExtArgs["result"]["request"]>
+
   export type requestSelectScalar = {
     id?: boolean
     projectId?: boolean
@@ -14280,7 +15025,6 @@ export namespace Prisma {
     nodeId?: boolean
     agentId?: boolean
   }
-
 
 
   export type $requestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14308,7 +15052,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["request"]>
     composites: {}
   }
-
 
   type requestGetPayload<S extends boolean | null | undefined | requestDefaultArgs> = $Result.GetResult<Prisma.$requestPayload, S>
 
@@ -14436,6 +15179,32 @@ export namespace Prisma {
     createMany<T extends requestCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, requestCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Requests and returns the data saved in the database.
+     * @param {requestCreateManyAndReturnArgs} args - Arguments to create many Requests.
+     * @example
+     * // Create many Requests
+     * const request = await prisma.request.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Requests and only return the `id`
+     * const requestWithIdOnly = await prisma.request.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends requestCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, requestCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$requestPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Request.
@@ -14902,6 +15671,21 @@ export namespace Prisma {
   }
 
   /**
+   * request createManyAndReturn
+   */
+  export type requestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the request
+     */
+    select?: requestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many requests.
+     */
+    data: requestCreateManyInput | requestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * request update
    */
   export type requestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15168,6 +15952,16 @@ export namespace Prisma {
     _count?: boolean | SpellReleasesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["spellReleases"]>
 
+  export type spellReleasesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    description?: boolean
+    agentId?: boolean
+    spellId?: boolean
+    projectId?: boolean
+    createdAt?: boolean
+    agents_spellReleases_agentIdToagents?: boolean | agentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["spellReleases"]>
+
   export type spellReleasesSelectScalar = {
     id?: boolean
     description?: boolean
@@ -15177,14 +15971,15 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-
   export type spellReleasesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agents_agents_currentSpellReleaseIdTospellReleases?: boolean | spellReleases$agents_agents_currentSpellReleaseIdTospellReleasesArgs<ExtArgs>
     agents_spellReleases_agentIdToagents?: boolean | agentsDefaultArgs<ExtArgs>
     spells?: boolean | spellReleases$spellsArgs<ExtArgs>
     _count?: boolean | SpellReleasesCountOutputTypeDefaultArgs<ExtArgs>
   }
-
+  export type spellReleasesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agents_spellReleases_agentIdToagents?: boolean | agentsDefaultArgs<ExtArgs>
+  }
 
   export type $spellReleasesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "spellReleases"
@@ -15203,7 +15998,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["spellReleases"]>
     composites: {}
   }
-
 
   type spellReleasesGetPayload<S extends boolean | null | undefined | spellReleasesDefaultArgs> = $Result.GetResult<Prisma.$spellReleasesPayload, S>
 
@@ -15331,6 +16125,32 @@ export namespace Prisma {
     createMany<T extends spellReleasesCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, spellReleasesCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpellReleases and returns the data saved in the database.
+     * @param {spellReleasesCreateManyAndReturnArgs} args - Arguments to create many SpellReleases.
+     * @example
+     * // Create many SpellReleases
+     * const spellReleases = await prisma.spellReleases.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpellReleases and only return the `id`
+     * const spellReleasesWithIdOnly = await prisma.spellReleases.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends spellReleasesCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, spellReleasesCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spellReleasesPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a SpellReleases.
@@ -15814,6 +16634,25 @@ export namespace Prisma {
   }
 
   /**
+   * spellReleases createManyAndReturn
+   */
+  export type spellReleasesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the spellReleases
+     */
+    select?: spellReleasesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many spellReleases.
+     */
+    data: spellReleasesCreateManyInput | spellReleasesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: spellReleasesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * spellReleases update
    */
   export type spellReleasesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16145,6 +16984,18 @@ export namespace Prisma {
     spellReleases?: boolean | spells$spellReleasesArgs<ExtArgs>
   }, ExtArgs["result"]["spells"]>
 
+  export type spellsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    projectId?: boolean
+    graph?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    type?: boolean
+    spellReleaseId?: boolean
+    spellReleases?: boolean | spells$spellReleasesArgs<ExtArgs>
+  }, ExtArgs["result"]["spells"]>
+
   export type spellsSelectScalar = {
     id?: boolean
     name?: boolean
@@ -16156,11 +17007,12 @@ export namespace Prisma {
     spellReleaseId?: boolean
   }
 
-
   export type spellsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     spellReleases?: boolean | spells$spellReleasesArgs<ExtArgs>
   }
-
+  export type spellsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    spellReleases?: boolean | spells$spellReleasesArgs<ExtArgs>
+  }
 
   export type $spellsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "spells"
@@ -16179,7 +17031,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["spells"]>
     composites: {}
   }
-
 
   type spellsGetPayload<S extends boolean | null | undefined | spellsDefaultArgs> = $Result.GetResult<Prisma.$spellsPayload, S>
 
@@ -16307,6 +17158,32 @@ export namespace Prisma {
     createMany<T extends spellsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, spellsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Spells and returns the data saved in the database.
+     * @param {spellsCreateManyAndReturnArgs} args - Arguments to create many Spells.
+     * @example
+     * // Create many Spells
+     * const spells = await prisma.spells.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Spells and only return the `id`
+     * const spellsWithIdOnly = await prisma.spells.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends spellsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, spellsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spellsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Spells.
@@ -16788,6 +17665,25 @@ export namespace Prisma {
   }
 
   /**
+   * spells createManyAndReturn
+   */
+  export type spellsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the spells
+     */
+    select?: spellsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many spells.
+     */
+    data: spellsCreateManyInput | spellsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: spellsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * spells update
    */
   export type spellsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17135,6 +18031,18 @@ export namespace Prisma {
     agentId?: boolean
   }, ExtArgs["result"]["tasks"]>
 
+  export type tasksSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    status?: boolean
+    type?: boolean
+    objective?: boolean
+    eventData?: boolean
+    projectId?: boolean
+    date?: boolean
+    steps?: boolean
+    agentId?: boolean
+  }, ExtArgs["result"]["tasks"]>
+
   export type tasksSelectScalar = {
     id?: boolean
     status?: boolean
@@ -17146,7 +18054,6 @@ export namespace Prisma {
     steps?: boolean
     agentId?: boolean
   }
-
 
 
   export type $tasksPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17165,7 +18072,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["tasks"]>
     composites: {}
   }
-
 
   type tasksGetPayload<S extends boolean | null | undefined | tasksDefaultArgs> = $Result.GetResult<Prisma.$tasksPayload, S>
 
@@ -17293,6 +18199,32 @@ export namespace Prisma {
     createMany<T extends tasksCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, tasksCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tasks and returns the data saved in the database.
+     * @param {tasksCreateManyAndReturnArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const tasks = await prisma.tasks.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tasks and only return the `id`
+     * const tasksWithIdOnly = await prisma.tasks.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends tasksCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, tasksCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$tasksPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Tasks.
@@ -17750,6 +18682,21 @@ export namespace Prisma {
   }
 
   /**
+   * tasks createManyAndReturn
+   */
+  export type tasksCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the tasks
+     */
+    select?: tasksSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many tasks.
+     */
+    data: tasksCreateManyInput | tasksCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * tasks update
    */
   export type tasksUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18033,6 +18980,20 @@ export namespace Prisma {
     agent?: boolean | agentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["webhook"]>
 
+  export type WebhookSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    url?: boolean
+    method?: boolean
+    headers?: boolean
+    body?: boolean
+    response?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agent?: boolean | agentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webhook"]>
+
   export type WebhookSelectScalar = {
     id?: boolean
     agentId?: boolean
@@ -18046,11 +19007,12 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-
   export type WebhookInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     agent?: boolean | agentsDefaultArgs<ExtArgs>
   }
-
+  export type WebhookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agent?: boolean | agentsDefaultArgs<ExtArgs>
+  }
 
   export type $WebhookPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Webhook"
@@ -18071,7 +19033,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["webhook"]>
     composites: {}
   }
-
 
   type WebhookGetPayload<S extends boolean | null | undefined | WebhookDefaultArgs> = $Result.GetResult<Prisma.$WebhookPayload, S>
 
@@ -18199,6 +19160,32 @@ export namespace Prisma {
     createMany<T extends WebhookCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, WebhookCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Webhooks and returns the data saved in the database.
+     * @param {WebhookCreateManyAndReturnArgs} args - Arguments to create many Webhooks.
+     * @example
+     * // Create many Webhooks
+     * const webhook = await prisma.webhook.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Webhooks and only return the `id`
+     * const webhookWithIdOnly = await prisma.webhook.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends WebhookCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, WebhookCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Webhook.
@@ -18682,6 +19669,25 @@ export namespace Prisma {
   }
 
   /**
+   * Webhook createManyAndReturn
+   */
+  export type WebhookCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Webhook
+     */
+    select?: WebhookSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Webhooks.
+     */
+    data: WebhookCreateManyInput | WebhookCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Webhook update
    */
   export type WebhookUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18964,6 +19970,16 @@ export namespace Prisma {
     createdAt?: boolean
   }, ExtArgs["result"]["seraphEvents"]>
 
+  export type seraphEventsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    projectId?: boolean
+    spellId?: boolean
+    type?: boolean
+    data?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["seraphEvents"]>
+
   export type seraphEventsSelectScalar = {
     id?: boolean
     agentId?: boolean
@@ -18973,7 +19989,6 @@ export namespace Prisma {
     data?: boolean
     createdAt?: boolean
   }
-
 
 
   export type $seraphEventsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18990,7 +20005,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["seraphEvents"]>
     composites: {}
   }
-
 
   type seraphEventsGetPayload<S extends boolean | null | undefined | seraphEventsDefaultArgs> = $Result.GetResult<Prisma.$seraphEventsPayload, S>
 
@@ -19118,6 +20132,32 @@ export namespace Prisma {
     createMany<T extends seraphEventsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, seraphEventsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SeraphEvents and returns the data saved in the database.
+     * @param {seraphEventsCreateManyAndReturnArgs} args - Arguments to create many SeraphEvents.
+     * @example
+     * // Create many SeraphEvents
+     * const seraphEvents = await prisma.seraphEvents.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SeraphEvents and only return the `id`
+     * const seraphEventsWithIdOnly = await prisma.seraphEvents.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends seraphEventsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, seraphEventsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$seraphEventsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a SeraphEvents.
@@ -19573,6 +20613,21 @@ export namespace Prisma {
   }
 
   /**
+   * seraphEvents createManyAndReturn
+   */
+  export type seraphEventsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the seraphEvents
+     */
+    select?: seraphEventsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many seraphEvents.
+     */
+    data: seraphEventsCreateManyInput | seraphEventsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * seraphEvents update
    */
   export type seraphEventsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19847,6 +20902,17 @@ export namespace Prisma {
     createdAt?: boolean
   }, ExtArgs["result"]["memory"]>
 
+  export type MemorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    role?: boolean
+    content?: boolean
+    type?: boolean
+    event?: boolean
+    channel?: boolean
+    agentId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["memory"]>
+
   export type MemorySelectScalar = {
     id?: boolean
     role?: boolean
@@ -19857,7 +20923,6 @@ export namespace Prisma {
     agentId?: boolean
     createdAt?: boolean
   }
-
 
 
   export type $MemoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19875,7 +20940,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["memory"]>
     composites: {}
   }
-
 
   type MemoryGetPayload<S extends boolean | null | undefined | MemoryDefaultArgs> = $Result.GetResult<Prisma.$MemoryPayload, S>
 
@@ -20003,6 +21067,32 @@ export namespace Prisma {
     createMany<T extends MemoryCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, MemoryCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Memories and returns the data saved in the database.
+     * @param {MemoryCreateManyAndReturnArgs} args - Arguments to create many Memories.
+     * @example
+     * // Create many Memories
+     * const memory = await prisma.memory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Memories and only return the `id`
+     * const memoryWithIdOnly = await prisma.memory.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends MemoryCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, MemoryCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemoryPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Memory.
@@ -20459,6 +21549,21 @@ export namespace Prisma {
   }
 
   /**
+   * Memory createManyAndReturn
+   */
+  export type MemoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Memory
+     */
+    select?: MemorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Memories.
+     */
+    data: MemoryCreateManyInput | MemoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * Memory update
    */
   export type MemoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20725,6 +21830,16 @@ export namespace Prisma {
     createdAt?: boolean
   }, ExtArgs["result"]["agent_channels"]>
 
+  export type agent_channelsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    agentId?: boolean
+    channelKey?: boolean
+    channelName?: boolean
+    initialEvent?: boolean
+    channelActive?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["agent_channels"]>
+
   export type agent_channelsSelectScalar = {
     id?: boolean
     agentId?: boolean
@@ -20734,7 +21849,6 @@ export namespace Prisma {
     channelActive?: boolean
     createdAt?: boolean
   }
-
 
 
   export type $agent_channelsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20751,7 +21865,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["agent_channels"]>
     composites: {}
   }
-
 
   type agent_channelsGetPayload<S extends boolean | null | undefined | agent_channelsDefaultArgs> = $Result.GetResult<Prisma.$agent_channelsPayload, S>
 
@@ -20879,6 +21992,32 @@ export namespace Prisma {
     createMany<T extends agent_channelsCreateManyArgs<ExtArgs>>(
       args?: SelectSubset<T, agent_channelsCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Agent_channels and returns the data saved in the database.
+     * @param {agent_channelsCreateManyAndReturnArgs} args - Arguments to create many Agent_channels.
+     * @example
+     * // Create many Agent_channels
+     * const agent_channels = await prisma.agent_channels.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Agent_channels and only return the `id`
+     * const agent_channelsWithIdOnly = await prisma.agent_channels.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+    **/
+    createManyAndReturn<T extends agent_channelsCreateManyAndReturnArgs<ExtArgs>>(
+      args?: SelectSubset<T, agent_channelsCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$agent_channelsPayload<ExtArgs>, T, 'createManyAndReturn'>>
 
     /**
      * Delete a Agent_channels.
@@ -21326,6 +22465,21 @@ export namespace Prisma {
    * agent_channels createMany
    */
   export type agent_channelsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many agent_channels.
+     */
+    data: agent_channelsCreateManyInput | agent_channelsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * agent_channels createManyAndReturn
+   */
+  export type agent_channelsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the agent_channels
+     */
+    select?: agent_channelsSelectCreateManyAndReturn<ExtArgs> | null
     /**
      * The data used to create many agent_channels.
      */
