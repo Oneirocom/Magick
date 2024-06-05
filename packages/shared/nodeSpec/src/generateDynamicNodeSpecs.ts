@@ -138,10 +138,10 @@ export const generateVariableNodeSpecs = (
   const setVariableSpec = allSpecs.find(spec => spec.type === 'variables/set')
   const onVariableSpec = allSpecs.find(spec => spec.type === 'variables/on')
   const inputEventSpec = allSpecs.find(
-    spec => spec.type === 'event/subspells/input'
+    spec => spec.type === 'events/subspells/input'
   )
   const outputEventSpec = allSpecs.find(
-    spec => spec.type === 'event/subspells/output'
+    spec => spec.type === 'events/subspells/output'
   )
 
   console.log('on variable spec', onVariableSpec)
@@ -211,6 +211,8 @@ export const generateVariableNodeSpecs = (
     outputSockets,
     'output'
   )
+
+  console.log('variable node spec', variableNodeSpecs)
 
   return [...variableNodeSpecs, inputSpecJSON, outputSpecJSON]
 }
