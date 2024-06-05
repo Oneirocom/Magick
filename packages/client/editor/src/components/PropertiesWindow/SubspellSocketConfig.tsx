@@ -2,7 +2,7 @@
 import { GraphJSON, GraphSocketJSON } from '@magickml/behave-graph'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import SingleElement from './SingleElement'
 import { AddNewSocket, AddedSocket } from './SocketConfig'
 import { Tab, usePubSub } from '@magickml/providers'
@@ -37,7 +37,7 @@ export const SubspellSocketConfig = ({
   getSockets: (sockets: GraphSocketJSON[]) => GraphSocketJSON[]
 }) => {
   const { publish, events } = usePubSub()
-  const [initialSockets, setInitialSockets] = useState<GraphSocketJSON[]>([])
+  const [initialSockets] = useState<GraphSocketJSON[]>([])
   const [showForm, setShowForm] = useState(false)
   const socketKey = type === 'input' ? 'graphInputs' : 'graphOutputs'
 
@@ -92,7 +92,7 @@ export const SubspellSocketConfig = ({
       {showForm && (
         <div className="pr-1 pl-1">
           <AddNewSocket
-            sockets={initialSockets}
+            sockets={sockets}
             addSocket={addSocket}
             valueTypes={socketValues}
             definedValueType={null}
