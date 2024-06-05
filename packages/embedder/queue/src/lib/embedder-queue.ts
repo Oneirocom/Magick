@@ -122,12 +122,15 @@ export async function processEmbedJob(jobId: string) {
       )
 
       const res = await app.addLoader(createLoader(loader))
-      consola.info(`[processEmbedJob] Loader added: ${JSON.stringify(res)}`)
+
+      consola.success(
+        `[processEmbedJob] Loader added: ${JSON.stringify(res.raw, null, 2)}`
+      )
 
       // update the loader status
       await embedderDb
         .update(Loader)
-        .set({ status: 'completed' })
+        .set({ status: 'completed', raw: JSON.stringify(res.raw) })
         .where(eq(Loader.id, loader.id))
         .execute()
 
