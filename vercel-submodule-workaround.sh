@@ -34,5 +34,9 @@ cd .. # go folder up
 rm -rf tmp/.git # remove .git 
 mv tmp/* $SUBMODULE_PATH/ # move the submodule to the submodule path
 
+# BANDAID: set node version to 18.x
+sed -i 's/"node": "[^"]*"/"node": "18.x"/' package.json
+
+
 # clean up
 rm -rf tmp # remove the tmp folder
