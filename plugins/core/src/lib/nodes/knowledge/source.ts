@@ -35,6 +35,7 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
       flow: 'flow',
       name: 'string',
       description: 'string',
+      packId: 'string',
       ...inputs,
     },
     out: {
@@ -56,7 +57,7 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
         return acc
       }, {} as Record<string, any>)
 
-      const packId = validatePackId(configuration.packId)
+      const packId = validatePackId(read('packId') || configuration.packId)
 
       const { getDependency } = graph
 
@@ -67,6 +68,8 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
       if (!embedder) {
         throw new Error('Embedder client not found')
       }
+
+      embedder.getJobById
 
       try {
         const res = await embedder.addLoader(
