@@ -195,7 +195,7 @@ export class KeywordsService {
     walletUser: ProxyUser
   }) {
     try {
-      if (mpUser.period_budget === undefined) {
+      if (mpUser.period_budget === undefined || mpUser.period_budget === null) {
         await fetch(
           `${this.apiUrl}/api/user/update/${mpUser.customer_identifier}`,
           {
@@ -207,7 +207,10 @@ export class KeywordsService {
           }
         )
       }
-      if (walletUser.period_budget === undefined) {
+      if (
+        walletUser.period_budget === undefined ||
+        walletUser.period_budget === null
+      ) {
         await fetch(
           `${this.apiUrl}/api/user/update/${walletUser.customer_identifier}`,
           {
@@ -252,6 +255,9 @@ export class KeywordsService {
         period_budget: 10,
         period_start: new Date().toISOString(),
         budget_duration: 'monthly',
+        period_end: new Date(
+          new Date().setDate(new Date().getDate() + 30)
+        ).toISOString(),
       })
 
       if (!mpUser.customer_identifier) {
