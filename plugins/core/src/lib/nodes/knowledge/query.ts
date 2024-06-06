@@ -26,6 +26,7 @@ export const queryPack = makeFlowNodeDefinition({
   in: {
     flow: 'flow',
     query: 'string',
+    packId: 'string',
   },
   out: {
     flow: 'flow',
@@ -35,7 +36,7 @@ export const queryPack = makeFlowNodeDefinition({
   initialState: undefined,
   triggered: async ({ commit, read, write, configuration, graph }) => {
     const query = read('query') as string
-    const packId = validatePackId(configuration.packId)
+    const packId = validatePackId(read('packId') || configuration.packId)
 
     const { getDependency } = graph
     const embedder = getDependency<EmbedderClient>(

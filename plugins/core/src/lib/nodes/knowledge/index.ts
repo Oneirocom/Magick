@@ -102,6 +102,7 @@ export const getPack = makeFlowNodeDefinition({
   },
   in: {
     flow: 'flow',
+    packId: 'string',
   },
   out: {
     flow: 'flow',
@@ -112,8 +113,8 @@ export const getPack = makeFlowNodeDefinition({
     sources: 'array',
   },
   initialState: undefined,
-  triggered: async ({ commit, write, configuration, graph }) => {
-    const packId = validatePackId(configuration.packId)
+  triggered: async ({ commit, write, read, configuration, graph }) => {
+    const packId = validatePackId(read('packId') || configuration.packId)
 
     const { getDependency } = graph
     const embedder = getDependency<EmbedderClient>(
@@ -164,15 +165,19 @@ export const getChunks = makeFlowNodeDefinition({
   },
   in: {
     flow: 'flow',
+    packId: 'string',
+    loaderId: 'string',
   },
   out: {
     flow: 'flow',
     chunks: 'array',
   },
   initialState: undefined,
-  triggered: async ({ commit, write, configuration, graph }) => {
-    const packId = validatePackId(configuration.packId)
-    const loaderId = configuration.loaderId
+  triggered: async ({ commit, write, read, configuration, graph }) => {
+    const socketPackId = read('packId')
+    const socketLoaderId = read('loaderId')
+    const packId = validatePackId(socketPackId || configuration.packId)
+    const loaderId = socketLoaderId || configuration.loaderId
 
     const { getDependency } = graph
     const embedder = getDependency<EmbedderClient>(
