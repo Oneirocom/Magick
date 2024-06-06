@@ -102,12 +102,12 @@ export const MPBalanceBar = ({ userData, isLoading }: Props) => {
     // Check if the user is currently a wizard
     if (isWizard) {
       // If they have a balance, display it; otherwise, show zero
-      return `$${Number(remainingBalance || 0).toFixed(2)}`
+      return `$${Number(Math.max(0, remainingBalance)).toFixed(2)}`
     } else {
       // For non-wizard users, show the balance if it exists and is greater than 0,
       // otherwise show 'N/A'
-      return Number(remainingBalance || 0) > 0
-        ? `$${Number(remainingBalance || 0).toFixed(2)}`
+      return remainingBalance > 0
+        ? `$${Number(remainingBalance).toFixed(2)}`
         : 'N/A'
     }
   }
