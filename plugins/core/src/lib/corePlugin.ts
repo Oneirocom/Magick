@@ -91,6 +91,8 @@ import { queryPack } from './nodes/knowledge/query'
 import { getContext } from './nodes/knowledge/context'
 import { makeEmbedderClient } from '@magickml/embedder/client/ts'
 import { generateToken } from '@magickml/embedder/auth/token'
+import { stringReplace } from './nodes/functions/stringReplace'
+import { waitForEmbedderJob } from './nodes/knowledge/waitForEmbedderJob'
 
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
@@ -110,14 +112,15 @@ export class CorePlugin extends CoreEventsPlugin<
   override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
+    ...sourceNodes,
     addKnowledge,
     addMemory,
     addMessage,
     arrayAccess,
-    arrayIncludes,
     arrayClear,
     arrayCreate,
     arrayCreateFunction,
+    arrayIncludes,
     arrayLength,
     arrayMerge,
     arrayPush,
@@ -126,15 +129,21 @@ export class CorePlugin extends CoreEventsPlugin<
     arrayRemoveLast,
     clearMemories,
     clearMessageHistory,
+    createPack,
     delay,
     DoOnceAsync,
     FetchNode,
-    flowSwitch,
     flowSplit,
+    flowSwitch,
     forEach,
     generateText,
+    getChunks,
+    getContext,
+    getManyPacks,
+    getManyVariables,
     getMemories,
     getMessageHistory,
+    getPack,
     getSecretNode,
     getStateNode,
     IsDefined,
@@ -143,33 +152,28 @@ export class CorePlugin extends CoreEventsPlugin<
     LifecycleOnTick,
     messageEvent,
     objectDestructure,
-    onVariableChanged,
     onMemory,
+    onVariableChanged,
     parseCommand,
     queryEventHistory,
     queryKnowledge,
+    queryPack,
     regex,
     searchKnowledge,
     searchManyKnowledge,
     sendMessage,
-    stringSplit,
     streamMessage,
     stringChunker,
+    stringReplace,
+    stringSplit,
     textTemplate,
     variableGet,
-    getManyVariables,
     variableSet,
     variablesReset,
     wait,
+    waitForEmbedderJob,
     webhookEventNode,
     whileLoop,
-    createPack,
-    getPack,
-    getManyPacks,
-    queryPack,
-    getContext,
-    getChunks,
-    ...sourceNodes,
   ]
   values = []
   credentials = corePluginCredentials
