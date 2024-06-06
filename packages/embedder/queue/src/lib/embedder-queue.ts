@@ -12,12 +12,14 @@ import { JobStatusType } from '@magickml/embedder/schema'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 
+const useTLS = process.env['EMBEDDER_REDIS_TLS'] === 'true';
+
 const connection: ConnectionOptions = {
   host: process.env['EMBEDDER_REDIS_HOST'] || 'localhost',
   port: Number(process.env['EMBEDDER_REDIS_PORT']) || 6379,
   username: process.env['EMBEDDER_REDIS_USERNAME'],
   password: process.env['EMBEDDER_REDIS_PASSWORD'],
-  tls: process.env['EMBEDDER_REDIS_HOST'] !== 'localhost' ? {} : undefined,
+  tls: useTLS ? {} : undefined,
 }
 
 export function useBullMQ(queueName: string) {
