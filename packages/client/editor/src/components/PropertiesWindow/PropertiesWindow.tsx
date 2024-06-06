@@ -307,6 +307,12 @@ export const PropertiesWindow = (props: Props) => {
         .map((config: [key: string, any]) => (
           <div className="px-4 py-2" key={config[0]}>
             <label htmlFor="packId">Knowledge Pack</label>
+            <div className="flex items-center">
+              <p className="mr-2">Select a knowledge pack</p>
+              <p className="text-sm text-gray-400">
+                (This will be used to load data from)
+              </p>
+            </div>
             <Select
               value={configuration?.packId || 'packId'}
               defaultValue="packId"
@@ -316,7 +322,7 @@ export const PropertiesWindow = (props: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="packId">Select a Knowledge Pack</SelectItem>
+                <SelectItem value="packId">Knowledge packs</SelectItem>
 
                 {knowledgePacks?.map(pack => (
                   <SelectItem key={pack.id} value={pack.id}>
@@ -333,6 +339,12 @@ export const PropertiesWindow = (props: Props) => {
         .map((config: [key: string, any]) => (
           <div className="px-4 py-2" key={config[0]}>
             <label htmlFor="packId">Knowledge Entry</label>
+            <div className="flex items-center">
+              <p className="mr-2">Select a knowledge entry</p>
+              <p className="text-sm text-gray-400">
+                (What document do you want get data from?)
+              </p>
+            </div>
             <Select
               value={configuration?.loaderId || 'loaderId'}
               defaultValue="loaderId"
@@ -342,9 +354,7 @@ export const PropertiesWindow = (props: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="loaderId">
-                  Select a Knowledge Entry
-                </SelectItem>
+                <SelectItem value="loaderId">Knowledge Entry</SelectItem>
 
                 {getActiveKnowledgePack?.loaders?.map(loader => (
                   <SelectItem key={loader.id} value={loader.id}>

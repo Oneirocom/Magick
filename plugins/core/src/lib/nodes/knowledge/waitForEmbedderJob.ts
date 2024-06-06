@@ -1,6 +1,5 @@
 import { NodeCategory, makeAsyncNodeDefinition } from '@magickml/behave-graph'
 import type { EmbedderClient } from '@magickml/embedder/client/ts'
-import { validatePackId } from './shared'
 import { CORE_DEP_KEYS } from '../../config'
 
 type InitialState = {
@@ -53,7 +52,7 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
     triggeringSocketName,
   }) => {
     const jobId = read('jobId') as string
-    const interval = configuration.checkIntervalMs || 500
+    const interval = Number(configuration.checkIntervalMs) || 500
 
     if (!jobId) {
       console.error('Job ID not provided')
@@ -92,7 +91,7 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
       }
 
       try {
-        await new Promise(resolve => setTimeout(resolve, 5000)) // Wait for 5 seconds before next status check
+        await new Promise(resolve => setTimeout(resolve, interval || 1000))
         const jobRes = await embedder.getJobById({ params: { id: jobId } })
         const jobStatus = jobRes.status
 
