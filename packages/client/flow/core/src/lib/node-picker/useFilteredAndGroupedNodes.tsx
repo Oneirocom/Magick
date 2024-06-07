@@ -31,6 +31,9 @@ export const useFilteredAndGroupedNodes = ({
   const filteredNodes = useMemo(
     () =>
       specJSON.filter(node => {
+        if (node.type === 'lifecycle/onTick') {
+          return false
+        }
         // Apply search term to node type, make sure to handle cases where search is undefined or empty
         const matchesSearch = search
           ? node.type.toLowerCase().includes(search.toLowerCase())
