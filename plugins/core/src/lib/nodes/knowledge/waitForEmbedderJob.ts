@@ -41,11 +41,13 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
     pending: 'flow',
     processing: 'flow',
     lastStatus: 'string',
+    result: 'object',
   },
   initialState: makeInitialState(),
   triggered: async ({
     commit,
     read,
+    write,
     graph,
     state,
     configuration,
@@ -67,6 +69,7 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
     if (triggeringSocketName === 'cancel') {
       console.log('Cancellation requested.')
       state.isCancelled = true
+      state.isBusy = false
       return state
     }
 
@@ -86,6 +89,7 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
       if (state.isCancelled) {
         console.log('Operation cancelled.')
         state.isBusy = false
+        state.isCancelled = false
         commit('failed')
         return
       }
@@ -93,25 +97,35 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
       try {
         await new Promise(resolve => setTimeout(resolve, interval || 1000))
         const jobRes = await embedder.getJobById({ params: { id: jobId } })
+        const loaderStatus = jobRes.loaders[0].status
         const jobStatus = jobRes.status
 
-        if (
-          state.isBusy &&
-          jobStatus !== 'completed' &&
-          jobStatus !== 'failed'
-        ) {
+        const jobDone = jobStatus === 'completed'
+        const loaderDone = loaderStatus === 'completed'
+
+        const jobFailed = jobStatus === 'failed'
+        const loaderFailed = loaderStatus === 'failed'
+
+        const failed = jobFailed || loaderFailed
+        const done = jobDone && loaderDone
+
+        if (state.isBusy && (!failed || !done)) {
           if (jobStatus !== previousStatus) {
             commit(jobStatus, () => pollJobStatus(jobStatus))
           } else {
             pollJobStatus(previousStatus) // Continue polling without committing if status hasn't changed
           }
-        } else if (jobStatus === 'completed') {
+        } else if (done) {
+          state.isBusy = false
+          write('result', jobRes)
           commit('completed')
-        } else if (jobStatus === 'failed') {
+        } else if (failed) {
+          state.isBusy = false
           commit('failed')
         }
       } catch (error) {
         console.error('Error waiting for job completion:', error)
+        state.isBusy = false
         commit('failed')
       }
     }

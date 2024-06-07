@@ -52,6 +52,42 @@ export const createPack = makeFlowNodeDefinition({
   },
 })
 
+export const deletePack = makeFlowNodeDefinition({
+  typeName: 'knowledge/embedder/deleteKnowledgePack',
+  category: NodeCategory.Action,
+  label: 'Delete Knowledge Pack',
+  in: {
+    flow: 'flow',
+    id: 'string', // Requires the ID of the pack to delete
+  },
+  out: {
+    flow: 'flow',
+    result: 'string', // Can output the result of the deletion process
+  },
+  initialState: undefined,
+  triggered: async ({ commit, read, write, graph }) => {
+    const id = read('id') as string
+
+    const { getDependency } = graph
+    const embedder = getDependency<EmbedderClient>(
+      CORE_DEP_KEYS.EMBEDDER_CLIENT
+    )
+
+    if (!embedder) {
+      throw new Error('Embedder client not found')
+    }
+
+    try {
+      await embedder.deletePack(undefined, { params: { id } })
+
+      commit('flow')
+    } catch (error) {
+      console.error('Error deleting pack:', error)
+      write('result', 'Error deleting pack')
+    }
+  },
+})
+
 export const getManyPacks = makeFlowNodeDefinition({
   typeName: 'knowledge/embedder/getManyPacks',
   category: NodeCategory.Action,

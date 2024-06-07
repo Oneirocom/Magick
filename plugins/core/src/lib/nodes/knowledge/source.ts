@@ -41,6 +41,7 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
     out: {
       flow: 'flow',
       id: 'string',
+      jobId: 'string',
       status: 'string',
     },
     initialState: undefined,
@@ -69,8 +70,6 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
         throw new Error('Embedder client not found')
       }
 
-      embedder.getJobById
-
       try {
         const res = await embedder.addLoader(
           {
@@ -89,6 +88,7 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
           }
         )
 
+        write('jobId', res.jobId)
         write('status', res.status)
         write('id', res.id)
 
