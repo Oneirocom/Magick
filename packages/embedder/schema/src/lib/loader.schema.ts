@@ -117,6 +117,7 @@ export const AddLoaderSchema = LoaderSchema.omit({
 export const AddLoaderResponseSchema = z.object({
   status: StatusSchema,
   id: z.string().uuid(),
+  jobId: z.string().uuid(),
 })
 
 export type Loader = z.infer<typeof LoaderSchema>

@@ -13,7 +13,7 @@ export const JobSchema = z.object({
   packId: z.string().uuid(),
   loaders: z.array(z.any()), // use the LoaderSchema directly to validate this
   status: JobStatusSchema,
-  createdAt: z.date(),
-  finishedAt: z.date().optional(),
+  createdAt: z.string(),
+  finishedAt: z.string().optional().or(z.null()),
 })
 export type JobData = z.infer<typeof JobSchema>
