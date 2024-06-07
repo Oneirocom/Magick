@@ -15,12 +15,7 @@ RUN git submodule update --init --recursive portal/cloud
 
 # RUN poetry install --no-root
 
-# RUN npm i -g bun
-
-# RUN bun i
-
-RUN npm i
-
+RUN npm install
 
 RUN npm run build-cloud-agent-manager
 
