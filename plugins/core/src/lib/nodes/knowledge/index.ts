@@ -225,7 +225,7 @@ export const getChunks = makeFlowNodeDefinition({
     }
 
     try {
-      const chunks = await embedder.getLoaderChunks({
+      const chunks = await embedder.getLoader({
         params: {
           id: packId,
           loaderId,
