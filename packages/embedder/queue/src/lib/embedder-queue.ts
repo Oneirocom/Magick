@@ -12,7 +12,7 @@ import { JobStatusType } from '@magickml/embedder/schema'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 
-const useTLS = process.env['EMBEDDER_REDIS_TLS'] === 'true';
+const useTLS = process.env['EMBEDDER_REDIS_TLS'] === 'true'
 
 const connection: ConnectionOptions = {
   host: process.env['EMBEDDER_REDIS_HOST'] || 'localhost',
@@ -136,13 +136,24 @@ export async function processEmbedJob(jobId: string) {
         .where(eq(Loader.id, loader.id))
         .execute()
 
-      // update the loader status
+      //update the loader in the job
       await embedderDb
         .update(Job)
-        .set({ status: 'completed' })
+        .set({
+          loaders: loaders.map((l: Loader) =>
+            l.id === loader.id ? { ...l, status: 'completed' } : l
+          ),
+        })
         .where(eq(Job.id, jobId))
         .execute()
     }
+
+    // update the job status
+    await embedderDb
+      .update(Job)
+      .set({ status: 'completed', finishedAt: new Date().toISOString() })
+      .where(eq(Job.id, jobId))
+      .execute()
   } catch (error) {
     consola.error(`!Error processing job ${jobId}:`, error)
     await embedderDb
