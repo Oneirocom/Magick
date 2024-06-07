@@ -140,3 +140,7 @@ export const loaderSchemaMap: Record<LoaderType, z.ZodObject<any>> = {
 }
 
 export const LoaderChunkSchema = z.any()
+
+export const LoaderWithChunks = LoaderSchema.extend({
+  chunks: z.array(LoaderChunkSchema),
+})
