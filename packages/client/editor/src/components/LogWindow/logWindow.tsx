@@ -9,6 +9,7 @@ import {
   useSelectAgentsSpell,
 } from 'client/state'
 import { useModal } from '../../contexts/ModalProvider'
+import { useUser } from '@clerk/nextjs'
 
 export type Log = {
   type: string
@@ -347,12 +348,13 @@ const LogsComponent = () => {
   const [showRawLogs, setShowRawLogs] = useState(false)
 
   const { openModal } = useModal()
+  const { user } = useUser()
 
   useEffect(() => {
     // Create a new entry only if the new log item is not undefined
     const newEntries: Log[] = [] // Specify type for newEntries
 
-    const addIfUnique = (newLog: Log, type: string) => {
+    const addIfUnique = async (newLog: Log, type: string) => {
       // Specify parameter types
       if (
         newLog &&
@@ -366,6 +368,7 @@ const LogsComponent = () => {
         // Check if the error is related to budget exceeded or payment required
         if (
           type === 'error' &&
+          user?.publicMetadata?.useWallet &&
           (newLog.message.includes('has exceeded their budget') ||
             newLog.message.includes('Payment Required'))
         ) {
