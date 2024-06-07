@@ -15,9 +15,9 @@ const makeInitialState = (): InitialState => {
 }
 
 export const waitForEmbedderJob = makeAsyncNodeDefinition({
-  typeName: 'knowledge/embedder/waitForJob',
+  typeName: 'knowledge/embedder/awaitLoader',
   category: NodeCategory.Action,
-  label: 'Wait for Job Completion',
+  label: 'Await Loader',
   configuration: {
     checkIntervalMs: {
       valueType: 'integer',
@@ -28,11 +28,14 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
     flow: {
       valueType: 'flow',
     },
-    jobId: {
-      valueType: 'string',
-    },
     cancel: {
       valueType: 'flow', // Trigger input to cancel the operation
+    },
+    loaderId: {
+      valueType: 'string',
+    },
+    packId: {
+      valueType: 'string',
     },
   },
   out: {
@@ -50,28 +53,31 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
     write,
     graph,
     state,
+    finished = () => {},
     configuration,
     triggeringSocketName,
   }) => {
-    const jobId = read('jobId') as string
+    if (triggeringSocketName === 'cancel') {
+      console.log('Cancellation requested.')
+      state.isBusy = false
+      finished()
+      return state
+    }
+
+    const loaderId = read('loaderId') as string
+    const packId = read('packId') as string
     const interval = Number(configuration.checkIntervalMs) || 500
 
-    if (!jobId) {
+    if (!loaderId) {
       console.error('Job ID not provided')
       commit('failed')
+      finished()
       return state
     }
 
     const embedder = graph.getDependency<EmbedderClient>(
       CORE_DEP_KEYS.EMBEDDER_CLIENT
     )
-
-    if (triggeringSocketName === 'cancel') {
-      console.log('Cancellation requested.')
-      state.isCancelled = true
-      state.isBusy = false
-      return state
-    }
 
     if (state.isBusy) {
       console.error('Node is already busy')
@@ -80,57 +86,38 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
 
     if (!embedder) {
       console.error('Embedder client not found')
+      state.isBusy = false
+      commit('failed')
+      finished()
       return state
     }
 
     state.isBusy = true
 
-    const pollJobStatus = async (previousStatus = '') => {
-      if (state.isCancelled) {
-        console.log('Operation cancelled.')
+    while (state.isBusy) {
+      console.log('Polling job status...')
+      const loaderRes = await embedder.getLoader({
+        params: { id: packId, loaderId },
+      })
+      const loaderStatus = loaderRes.status
+
+      if (loaderStatus === 'completed') {
         state.isBusy = false
-        state.isCancelled = false
-        commit('failed')
-        return
+        write('result', loaderRes)
+        commit('completed')
+        finished()
+        return state
       }
 
-      try {
-        await new Promise(resolve => setTimeout(resolve, interval || 1000))
-        const jobRes = await embedder.getJobById({ params: { id: jobId } })
-        const loaderStatus = jobRes.loaders[0].status
-        const jobStatus = jobRes.status
-
-        const jobDone = jobStatus === 'completed'
-        const loaderDone = loaderStatus === 'completed'
-
-        const jobFailed = jobStatus === 'failed'
-        const loaderFailed = loaderStatus === 'failed'
-
-        const failed = jobFailed || loaderFailed
-        const done = jobDone && loaderDone
-
-        if (state.isBusy && (!failed || !done)) {
-          if (jobStatus !== previousStatus) {
-            commit(jobStatus, () => pollJobStatus(jobStatus))
-          } else {
-            pollJobStatus(previousStatus) // Continue polling without committing if status hasn't changed
-          }
-        } else if (done) {
-          state.isBusy = false
-          write('result', jobRes)
-          commit('completed')
-        } else if (failed) {
-          state.isBusy = false
-          commit('failed')
-        }
-      } catch (error) {
-        console.error('Error waiting for job completion:', error)
+      if (loaderStatus === 'failed') {
         state.isBusy = false
         commit('failed')
+        finished()
+        return state
       }
+
+      await new Promise(resolve => setTimeout(resolve, interval))
     }
-
-    pollJobStatus() // Start the polling loop
 
     return state
   },
