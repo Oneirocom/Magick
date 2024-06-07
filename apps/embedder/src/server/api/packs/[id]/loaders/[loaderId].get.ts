@@ -20,7 +20,7 @@ export default defineEventHandler(async event => {
       message: 'Loader not found',
     })
   }
-
+  
   const chunkGenerator = createLoader(loader).getChunks()
 
   const chunksArray: string[] = []
