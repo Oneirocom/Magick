@@ -147,7 +147,7 @@
     }
   },
   "defaultProject": "@magickml/server",
-  "useInferencePlugins": false,
+  "useInferencePlugins": true,
   "defaultBase": "main",
   "release": {
     "projects": [
