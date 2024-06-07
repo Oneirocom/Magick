@@ -8,6 +8,7 @@ import pino from 'pino'
 import { PRODUCTION } from 'clientConfig'
 import { streamText } from 'ai'
 import { createOpenAI } from '@magickml/vercel-sdk-core'
+import { clerkClient } from '@clerk/clerk-sdk-node'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -59,7 +60,7 @@ export class CoreLLMService implements ICoreLLMService {
 
     const actualMaxRetries = Math.max(1, maxRetries)
 
-    const useWallet = this.userData?.user.useWallet
+    let useWallet = this.userData?.user.useWallet
     const mpUser = this.userData?.user.mpUser
     const walletUser = this.userData?.user.walletUser
 
@@ -82,7 +83,7 @@ export class CoreLLMService implements ICoreLLMService {
           baseURL: process.env['KEYWORDS_API_URL'],
           apiKey: process.env['KEYWORDS_API_KEY'],
           extraMetaData: {
-            ...(PRODUCTION
+            ...(!PRODUCTION
               ? {
                   customer_identifier: useWallet
                     ? walletUser?.customer_identifier
@@ -143,8 +144,27 @@ export class CoreLLMService implements ICoreLLMService {
         })
 
         return chatCompletion as any
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Attempt ${attempts + 1} failed:`, error)
+
+        if (
+          (error?.responseBody?.includes(
+            'has exceeded their budget for this period'
+          ) ||
+            error?.message?.includes('Payment Required')) &&
+          !useWallet &&
+          attempts === 0 // Only switch to wallet on the first attempt
+        ) {
+          await clerkClient.users.updateUserMetadata(
+            this.userData?.user.id || '',
+            {
+              publicMetadata: {
+                useWallet: true,
+              },
+            }
+          )
+          useWallet = true
+        }
         attempts++
         if (attempts < actualMaxRetries) {
           await sleep(delayMs)

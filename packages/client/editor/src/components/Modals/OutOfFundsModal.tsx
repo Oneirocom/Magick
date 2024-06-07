@@ -15,9 +15,23 @@ const OutOfFundsModal = () => {
 
   const { mpRenewsAt } = publicMetadata || {}
 
+  // Create a new Date object from the ISO string
+  const date = new Date(mpRenewsAt as string)
+
+  // Format the date using the defined options
+  const readableDate = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZoneName: 'short',
+  }).format(date)
+
   const hasSubscriptionNeedsBalanceCopy = `Oops! It looks like you've run out of MP and money in your wallet. To
   continue running your agent please add funds to your wallet. ${
-    isWizard && `Your MP will refill on ${mpRenewsAt}.`
+    isWizard && `Your MP will refill on ${readableDate}.`
   }`
 
   const freeTrialExpiredCopy = `Oops! It looks like you've run out of your free trial MP. To continue running your agent subscribe now.`
