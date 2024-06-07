@@ -116,6 +116,10 @@
         "valueType": "string"
       },
       {
+        "name": "jobId",
+        "valueType": "string"
+      },
+      {
         "name": "status",
         "valueType": "string"
       }
@@ -172,6 +176,10 @@
       },
       {
         "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "jobId",
         "valueType": "string"
       },
       {
@@ -234,6 +242,10 @@
         "valueType": "string"
       },
       {
+        "name": "jobId",
+        "valueType": "string"
+      },
+      {
         "name": "status",
         "valueType": "string"
       }
@@ -290,6 +302,10 @@
       },
       {
         "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "jobId",
         "valueType": "string"
       },
       {
@@ -352,6 +368,10 @@
         "valueType": "string"
       },
       {
+        "name": "jobId",
+        "valueType": "string"
+      },
+      {
         "name": "status",
         "valueType": "string"
       }
@@ -408,6 +428,10 @@
       },
       {
         "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "jobId",
         "valueType": "string"
       },
       {
@@ -470,6 +494,10 @@
         "valueType": "string"
       },
       {
+        "name": "jobId",
+        "valueType": "string"
+      },
+      {
         "name": "status",
         "valueType": "string"
       }
@@ -526,6 +554,10 @@
       },
       {
         "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "jobId",
         "valueType": "string"
       },
       {
@@ -588,6 +620,10 @@
         "valueType": "string"
       },
       {
+        "name": "jobId",
+        "valueType": "string"
+      },
+      {
         "name": "status",
         "valueType": "string"
       }
@@ -644,6 +680,10 @@
       },
       {
         "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "jobId",
         "valueType": "string"
       },
       {
@@ -1476,6 +1516,33 @@
       {
         "name": "flow",
         "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "knowledge/embedder/deleteKnowledgePack",
+    "category": "Action",
+    "label": "Delete Knowledge Pack",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "id",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "result",
+        "valueType": "string"
       }
     ],
     "configuration": []
@@ -3228,6 +3295,10 @@
       {
         "name": "lastStatus",
         "valueType": "string"
+      },
+      {
+        "name": "result",
+        "valueType": "object"
       }
     ],
     "configuration": [
