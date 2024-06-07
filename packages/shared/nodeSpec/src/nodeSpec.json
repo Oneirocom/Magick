@@ -112,11 +112,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -175,11 +171,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -238,11 +230,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -301,11 +289,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -364,11 +348,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -427,11 +407,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -490,11 +466,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -553,11 +525,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -616,11 +584,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -679,11 +643,7 @@
         "valueType": "flow"
       },
       {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "jobId",
+        "name": "loaderId",
         "valueType": "string"
       },
       {
@@ -3257,22 +3217,27 @@
     "configuration": []
   },
   {
-    "type": "knowledge/embedder/waitForJob",
+    "type": "knowledge/embedder/awaitLoader",
     "category": "Action",
-    "label": "Wait for Job Completion",
+    "label": "Await Loader",
     "inputs": [
       {
         "name": "flow",
         "valueType": "flow"
       },
       {
-        "name": "jobId",
+        "name": "cancel",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
         "valueType": "string",
         "defaultValue": ""
       },
       {
-        "name": "cancel",
-        "valueType": "flow"
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
       }
     ],
     "outputs": [
