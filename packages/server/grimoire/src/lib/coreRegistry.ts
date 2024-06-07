@@ -8,7 +8,6 @@ import {
   memo,
 } from '@magickml/behave-graph'
 import { coreEmitter } from './dependencies/coreEmitter'
-import { MessageEvent } from './nodes/events/messageEvent'
 
 export const coreRegistry: IRegistry = {
   values: {},
@@ -21,7 +20,7 @@ export const coreRegistry: IRegistry = {
 
 export class CoreRegistry {
   values: ValueType[] = []
-  nodes: NodeDefinition[] = [MessageEvent]
+  nodes: NodeDefinition[] = []
   dependencies: Record<string, any> = {
     core: coreEmitter,
   }
