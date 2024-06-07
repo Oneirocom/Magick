@@ -16,7 +16,7 @@ export const ChunksDialog: React.FC<ChunksDialogProps> = ({
   packId,
 }) => {
   const [open, setOpen] = state
-  const { data, isLoading } = client.useGetLoaderChunks(
+  const { data, isLoading } = client.useGetLoader(
     {
       params: {
         id: packId || '',
