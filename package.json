@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "Apache 2.0",
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "scripts": {
     "agent-connector": "nx serve agent-connector",
@@ -44,7 +44,7 @@
     "embedder:build": "nx run embedder:build",
     "embedder:buildall": "nx run-many -t build --projects=embedder-*",
     "embedder:db:deploy": "nx run embedder-db-pg:push",
-    "embedder:dev": "nx run embedder:dev --port 4010",
+    "embedder:dev": "nx run embedder:dev",
     "embedder:prepare": "nx run embedder:prepare",
     "embedder:serve": "nx run embedder:serve",
     "find-unused-deps": "nx generate @trumbitta/nx-plugin-unused-deps:check --no-interactive",
@@ -170,7 +170,7 @@
     "@langchain/openai": "^0.0.33",
     "@langchain/pinecone": "^0.0.6",
     "@langchain/textsplitters": "^0.0.2",
-    "@llm-tools/embedjs": "^0.0.79",
+    "@llm-tools/embedjs": "https://github.com/Oneirocom/embedJs",
     "@magickml/behave-graph": "^0.14.14",
     "@magickml/behave-graph-scene": "0.11.0",
     "@minoru/react-dnd-treeview": "^3.4.4",
