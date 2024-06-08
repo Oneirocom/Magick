@@ -1,6 +1,10 @@
 'use client'
 import * as React from 'react'
-import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
+import {
+  ChevronDownIcon,
+  DotsHorizontalIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,6 +40,7 @@ import { FancyInput } from '../../../fancy'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onDelete?: (row: TData[]) => void
   tableProps?: React.HTMLAttributes<HTMLTableElement>
   tableHeaderProps?: React.HTMLAttributes<HTMLTableSectionElement>
   tableBodyProps?: React.HTMLAttributes<HTMLTableSectionElement>
@@ -55,6 +60,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onDelete,
   tableProps,
   tableHeaderProps,
   tableBodyProps,
@@ -114,6 +120,24 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
+        {onDelete && (
+          <Button
+            variant="outline"
+            className="mr-2"
+            onClick={() => {
+              const selectedRows = table.getFilteredSelectedRowModel().rows
+              const data = table
+                .getFilteredSelectedRowModel()
+                .rows.map(r => r.original)
+              onDelete(data)
+              table.getRowModel().rows = table
+                .getRowModel()
+                .rows.filter(row => !selectedRows.includes(row))
+            }}
+          >
+            Delete Selected
+          </Button>
+        )}
         <FancyInput
           placeholder={filterInputPlaceholder}
           value={
@@ -215,12 +239,23 @@ export function DataTable<TData, TValue>({
                       </DropdownMenu>
                     </TableCell>
                   )}
+                  {onDelete && (
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        className="h-8 w-8 p-0"
+                        onClick={() => onDelete([row.original])}
+                      >
+                        <TrashIcon className="h-4 w-4 text-red-600" />
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns.length + 1} // +1 for the delete button column
                   className="h-24 text-center"
                 >
                   No results.

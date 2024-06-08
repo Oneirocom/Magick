@@ -95,8 +95,11 @@ type BaseEvent = {
   guildId?: string
   fail_if_not_exists?: boolean
 }
+
+export type MessageCreateEvent = BaseEvent & APIMessage
+
 export type BaseDiscordEventPayload = {
-  [DISCORD_EVENTS.messageCreate]: BaseEvent & APIMessage
+  [DISCORD_EVENTS.messageCreate]: MessageCreateEvent
   [DISCORD_EVENTS.messageReactionAdd]: BaseEvent & APIReaction
 }
 export type DiscordEventPayload = BaseDiscordEventPayload

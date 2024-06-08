@@ -37,8 +37,8 @@ export const loaderEndpoints = makeApi([
   {
     method: 'get',
     path: '/packs/:id/loaders/:loaderId',
-    alias: 'getLoaderChunks',
-    description: 'Get chunks for a specific loader in a pack',
+    alias: 'getLoader',
+    description: 'Get loader with chunks for a specific loader in a pack',
     requestFormat: 'json',
     parameters: [
       {

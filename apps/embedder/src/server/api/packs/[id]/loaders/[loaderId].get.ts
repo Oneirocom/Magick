@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { embedderDb, Loader } from 'embedder-db-pg'
 import { and, eq } from 'drizzle-orm'
 import { createLoader } from '@magickml/embedder/loaders/core'
+import { LoaderWithChunks } from '@magickml/embedder/schema'
 
 export default defineEventHandler(async event => {
   const packId = z.string().parse(event.context.params?.id)
@@ -29,5 +30,10 @@ export default defineEventHandler(async event => {
     chunksArray.push(chunk.pageContent)
   }
 
-  return { chunks: chunksArray }
+  const response = {
+    ...loader,
+    chunks: chunksArray,
+  }
+
+  return LoaderWithChunks.parse(response)
 })

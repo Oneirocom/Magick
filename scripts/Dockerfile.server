@@ -15,9 +15,12 @@ RUN git submodule update --init --recursive portal/cloud
 
 # RUN poetry install --no-root
 
-RUN npm i -g nx
+# RUN npm i -g nx
+# RUN npm i -g bun
 
-RUN npm install
+# RUN bun i
+
+RUN npm i
 
 RUN npm run build-server
 

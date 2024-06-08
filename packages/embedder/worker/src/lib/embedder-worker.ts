@@ -4,12 +4,14 @@ import { Worker } from 'bullmq'
 import { defineNitroPlugin } from 'nitropack/runtime'
 import { ConnectionOptions } from 'bullmq'
 
+const useTLS = process.env['EMBEDDER_REDIS_TLS'] === 'true'
+
 const connection: ConnectionOptions = {
   host: process.env['EMBEDDER_REDIS_HOST'] || 'localhost',
   port: Number(process.env['EMBEDDER_REDIS_PORT']) || 6379,
   username: process.env['EMBEDDER_REDIS_USERNAME'],
   password: process.env['EMBEDDER_REDIS_PASSWORD'],
-  tls: process.env['EMBEDDER_REDIS_HOST'] !== 'localhost' ? {} : undefined,
+  tls: useTLS ? {} : undefined,
 }
 
 export const embedderWorkerPlugin = defineNitroPlugin(() => {

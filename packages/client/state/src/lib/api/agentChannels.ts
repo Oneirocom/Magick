@@ -9,6 +9,13 @@ export const agentChannelsApi = rootApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    deleteChannel: builder.mutation({
+      invalidatesTags: ['AgentChannels'],
+      query: ({ channelId }) => ({
+        url: `agentChannels/${channelId}`,
+        method: 'DELETE',
+      }),
+    }),
     toggleChannelActive: builder.mutation({
       invalidatesTags: ['AgentChannels'],
       query: ({ channelId, channelActive }) => ({
@@ -20,5 +27,8 @@ export const agentChannelsApi = rootApi.injectEndpoints({
   }),
 })
 
-export const { useGetChannelsQuery, useToggleChannelActiveMutation } =
-  agentChannelsApi
+export const {
+  useGetChannelsQuery,
+  useToggleChannelActiveMutation,
+  useDeleteChannelMutation,
+} = agentChannelsApi

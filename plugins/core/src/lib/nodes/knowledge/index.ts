@@ -52,6 +52,42 @@ export const createPack = makeFlowNodeDefinition({
   },
 })
 
+export const deletePack = makeFlowNodeDefinition({
+  typeName: 'knowledge/embedder/deleteKnowledgePack',
+  category: NodeCategory.Action,
+  label: 'Delete Knowledge Pack',
+  in: {
+    flow: 'flow',
+    id: 'string', // Requires the ID of the pack to delete
+  },
+  out: {
+    flow: 'flow',
+    result: 'string', // Can output the result of the deletion process
+  },
+  initialState: undefined,
+  triggered: async ({ commit, read, write, graph }) => {
+    const id = read('id') as string
+
+    const { getDependency } = graph
+    const embedder = getDependency<EmbedderClient>(
+      CORE_DEP_KEYS.EMBEDDER_CLIENT
+    )
+
+    if (!embedder) {
+      throw new Error('Embedder client not found')
+    }
+
+    try {
+      await embedder.deletePack(undefined, { params: { id } })
+
+      commit('flow')
+    } catch (error) {
+      console.error('Error deleting pack:', error)
+      write('result', 'Error deleting pack')
+    }
+  },
+})
+
 export const getManyPacks = makeFlowNodeDefinition({
   typeName: 'knowledge/embedder/getManyPacks',
   category: NodeCategory.Action,
@@ -102,6 +138,7 @@ export const getPack = makeFlowNodeDefinition({
   },
   in: {
     flow: 'flow',
+    packId: 'string',
   },
   out: {
     flow: 'flow',
@@ -112,8 +149,8 @@ export const getPack = makeFlowNodeDefinition({
     sources: 'array',
   },
   initialState: undefined,
-  triggered: async ({ commit, write, configuration, graph }) => {
-    const packId = validatePackId(configuration.packId)
+  triggered: async ({ commit, write, read, configuration, graph }) => {
+    const packId = validatePackId(read('packId') || configuration.packId)
 
     const { getDependency } = graph
     const embedder = getDependency<EmbedderClient>(
@@ -164,15 +201,19 @@ export const getChunks = makeFlowNodeDefinition({
   },
   in: {
     flow: 'flow',
+    packId: 'string',
+    loaderId: 'string',
   },
   out: {
     flow: 'flow',
     chunks: 'array',
   },
   initialState: undefined,
-  triggered: async ({ commit, write, configuration, graph }) => {
-    const packId = validatePackId(configuration.packId)
-    const loaderId = configuration.loaderId
+  triggered: async ({ commit, write, read, configuration, graph }) => {
+    const socketPackId = read('packId')
+    const socketLoaderId = read('loaderId')
+    const packId = validatePackId(socketPackId || configuration.packId)
+    const loaderId = socketLoaderId || configuration.loaderId
 
     const { getDependency } = graph
     const embedder = getDependency<EmbedderClient>(
@@ -184,7 +225,7 @@ export const getChunks = makeFlowNodeDefinition({
     }
 
     try {
-      const chunks = await embedder.getLoaderChunks({
+      const chunks = await embedder.getLoader({
         params: {
           id: packId,
           loaderId,

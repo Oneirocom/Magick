@@ -117,6 +117,7 @@ export const AddLoaderSchema = LoaderSchema.omit({
 export const AddLoaderResponseSchema = z.object({
   status: StatusSchema,
   id: z.string().uuid(),
+  jobId: z.string().uuid(),
 })
 
 export type Loader = z.infer<typeof LoaderSchema>
@@ -139,3 +140,7 @@ export const loaderSchemaMap: Record<LoaderType, z.ZodObject<any>> = {
 }
 
 export const LoaderChunkSchema = z.any()
+
+export const LoaderWithChunks = LoaderSchema.extend({
+  chunks: z.array(LoaderChunkSchema),
+})
