@@ -16,10 +16,12 @@ RUN git submodule update --init --recursive portal/cloud
 # This application does not need the prisma clients
 RUN sed -i '/"postinstall":/d' package.json
 
-RUN npm i -g bun
+# RUN npm i -g bun
 
-RUN bun i
+# RUN bun i
 
+
+RUN npm i
 
 # Using the nx cli to build the app the .output folder is disappearing
 # I'll figure it out later but for now this works
