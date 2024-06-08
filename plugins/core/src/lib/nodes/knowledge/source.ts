@@ -35,11 +35,12 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
       flow: 'flow',
       name: 'string',
       description: 'string',
+      packId: 'string',
       ...inputs,
     },
     out: {
       flow: 'flow',
-      id: 'string',
+      loaderId: 'string',
       status: 'string',
     },
     initialState: undefined,
@@ -56,7 +57,7 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
         return acc
       }, {} as Record<string, any>)
 
-      const packId = validatePackId(configuration.packId)
+      const packId = validatePackId(read('packId') || configuration.packId)
 
       const { getDependency } = graph
 
@@ -87,7 +88,7 @@ const makeKnowledgeSourceNode = (type: LoaderType) => {
         )
 
         write('status', res.status)
-        write('id', res.id)
+        write('loaderId', res.id)
 
         commit('flow')
       } catch (error) {

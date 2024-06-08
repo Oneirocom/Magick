@@ -76,7 +76,8 @@ export class DiscordMessageUtils {
   public createEventPayload<K extends keyof DiscordEventPayload>(
     eventName: K,
     payload: DiscordEventPayload[K],
-    context: DiscordAgentContext | null | undefined
+    context: DiscordAgentContext | null | undefined,
+    metadata = {}
   ): EventPayload<DiscordEventPayload[K]> {
     return {
       connector: 'discord',
@@ -95,6 +96,7 @@ export class DiscordMessageUtils {
       data: payload,
       metadata: {
         context,
+        ...metadata,
       },
     }
   }

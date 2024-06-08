@@ -14,7 +14,6 @@ export const SubspellOutput = makeFlowNodeDefinition({
     if (!spellCaster) {
       return []
     }
-    console.log('spellCaster.outputs', spellCaster.outputs)
     return spellCaster.outputs.map(output => ({
       key: output.key,
       name: output.label,

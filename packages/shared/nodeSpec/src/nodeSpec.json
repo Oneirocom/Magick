@@ -77,6 +77,596 @@
     "configuration": []
   },
   {
+    "type": "knowledge/embedder/addTextSource",
+    "category": "Action",
+    "label": "Add Text Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "text",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addYoutubeSource",
+    "category": "Action",
+    "label": "Add Youtube Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "videoIdOrUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addYoutube_channelSource",
+    "category": "Action",
+    "label": "Add Youtube_channel Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "youtubeChannelId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addYoutube_searchSource",
+    "category": "Action",
+    "label": "Add Youtube_search Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "youtubeSearchString",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addWebSource",
+    "category": "Action",
+    "label": "Add Web Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "urlOrContent",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addSitemapSource",
+    "category": "Action",
+    "label": "Add Sitemap Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "url",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addPdfSource",
+    "category": "Action",
+    "label": "Add Pdf Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "filePathOrUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addDocxSource",
+    "category": "Action",
+    "label": "Add Docx Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "filePathOrUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addExcelSource",
+    "category": "Action",
+    "label": "Add Excel Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "filePathOrUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/addPptSource",
+    "category": "Action",
+    "label": "Add Ppt Source",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "filePathOrUrl",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string"
+      },
+      {
+        "name": "status",
+        "valueType": "string"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
     "type": "action/knowledge/add",
     "category": "Action",
     "label": "Add Knowledge",
@@ -336,30 +926,6 @@
     "configuration": []
   },
   {
-    "type": "logic/array/includes",
-    "category": "Logic",
-    "label": "Includes",
-    "inputs": [
-      {
-        "name": "a",
-        "valueType": "array",
-        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
-      },
-      {
-        "name": "b",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "boolean"
-      }
-    ],
-    "configuration": []
-  },
-  {
     "type": "action/array/clear",
     "category": "Action",
     "label": "Clear",
@@ -490,6 +1056,30 @@
         "defaultValue": []
       }
     ]
+  },
+  {
+    "type": "logic/array/includes",
+    "category": "Logic",
+    "label": "Includes",
+    "inputs": [
+      {
+        "name": "a",
+        "valueType": "array",
+        "defaultValue": "{\"typeSignature\":\"ArrayVariable\",\"data\":[]}"
+      },
+      {
+        "name": "b",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "boolean"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/array/length",
@@ -824,6 +1414,50 @@
     ]
   },
   {
+    "type": "knowledge/embedder/createKnowledgePack",
+    "category": "Action",
+    "label": "Create Knowledge Pack",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "name",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "description",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "name",
+        "valueType": "string"
+      },
+      {
+        "name": "description",
+        "valueType": "string"
+      },
+      {
+        "name": "createdAt",
+        "valueType": "string"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "flow/delay",
     "category": "Time",
     "label": "Delay",
@@ -842,6 +1476,33 @@
       {
         "name": "flow",
         "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "knowledge/embedder/deleteKnowledgePack",
+    "category": "Action",
+    "label": "Delete Knowledge Pack",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "id",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "result",
+        "valueType": "string"
       }
     ],
     "configuration": []
@@ -947,6 +1608,32 @@
     "configuration": []
   },
   {
+    "type": "flow/split",
+    "category": "Flow",
+    "label": "Flow Split",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow1",
+        "valueType": "flow"
+      },
+      {
+        "name": "flow2",
+        "valueType": "flow"
+      },
+      {
+        "name": "done",
+        "valueType": "flow"
+      }
+    ],
+    "configuration": []
+  },
+  {
     "type": "flow/switch",
     "category": "Flow",
     "label": "Switch",
@@ -991,32 +1678,6 @@
         "defaultValue": []
       }
     ]
-  },
-  {
-    "type": "flow/split",
-    "category": "Flow",
-    "label": "Flow Split",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow1",
-        "valueType": "flow"
-      },
-      {
-        "name": "flow2",
-        "valueType": "flow"
-      },
-      {
-        "name": "done",
-        "valueType": "flow"
-      }
-    ],
-    "configuration": []
   },
   {
     "type": "flow/array/forEach",
@@ -1214,6 +1875,158 @@
     ]
   },
   {
+    "type": "knowledge/embedder/getChunks",
+    "category": "Action",
+    "label": "Get Chunks",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "chunks",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId",
+          "loaderId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/getContext",
+    "category": "Action",
+    "label": "Get Context",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "query",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "context",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/getManyPacks",
+    "category": "Action",
+    "label": "Get Many Packs",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "packs",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "variables/getMany",
+    "category": "Query",
+    "label": "Get Many Variables",
+    "inputs": [],
+    "outputs": [],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "socketValues",
+          "hiddenProperties"
+        ]
+      },
+      {
+        "name": "socketValues",
+        "valueType": "array",
+        "defaultValue": [
+          "string",
+          "array",
+          "boolean",
+          "integer",
+          "float",
+          "object"
+        ]
+      },
+      {
+        "name": "socketOutputs",
+        "valueType": "array",
+        "defaultValue": []
+      }
+    ]
+  },
+  {
     "type": "action/memory/getMemories",
     "category": "Action",
     "label": "Get Memories",
@@ -1305,6 +2118,62 @@
           "channel",
           "connector"
         ]
+      }
+    ]
+  },
+  {
+    "type": "knowledge/embedder/getPack",
+    "category": "Action",
+    "label": "Get Pack",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "id",
+        "valueType": "string"
+      },
+      {
+        "name": "name",
+        "valueType": "string"
+      },
+      {
+        "name": "description",
+        "valueType": "string"
+      },
+      {
+        "name": "createdAt",
+        "valueType": "string"
+      },
+      {
+        "name": "sources",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
       }
     ]
   },
@@ -1611,6 +2480,48 @@
     ]
   },
   {
+    "type": "events/memory/onMemory",
+    "category": "Event",
+    "label": "On Memory Added",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "memory",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "hiddenProperties",
+          "eventState"
+        ]
+      },
+      {
+        "name": "eventState",
+        "valueType": "array",
+        "defaultValue": []
+      },
+      {
+        "name": "eventStateProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "connector",
+          "client",
+          "channel",
+          "agentId",
+          "sender"
+        ]
+      }
+    ]
+  },
+  {
     "type": "variables/on",
     "category": "Variable",
     "label": "On Variable",
@@ -1654,48 +2565,6 @@
         "name": "socketOutputs",
         "valueType": "array",
         "defaultValue": []
-      },
-      {
-        "name": "eventState",
-        "valueType": "array",
-        "defaultValue": []
-      },
-      {
-        "name": "eventStateProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "connector",
-          "client",
-          "channel",
-          "agentId",
-          "sender"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "events/memory/onMemory",
-    "category": "Event",
-    "label": "On Memory Added",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "memory",
-        "valueType": "object"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "hiddenProperties",
-          "eventState"
-        ]
       },
       {
         "name": "eventState",
@@ -1845,6 +2714,55 @@
     "configuration": []
   },
   {
+    "type": "knowledge/embedder/queryPack",
+    "category": "Action",
+    "label": "Query Knowledge Pack",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "query",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "result",
+        "valueType": "string"
+      },
+      {
+        "name": "sources",
+        "valueType": "array"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "hiddenProperties",
+        "valueType": "array",
+        "defaultValue": [
+          "packId"
+        ]
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ]
+  },
+  {
     "type": "logic/string/match",
     "category": "Logic",
     "label": "Match",
@@ -1979,30 +2897,6 @@
     "configuration": []
   },
   {
-    "type": "logic/split/string",
-    "category": "None",
-    "label": "String Split",
-    "inputs": [
-      {
-        "name": "string",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "seperator",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "result",
-        "valueType": "array"
-      }
-    ],
-    "configuration": []
-  },
-  {
     "type": "magick/streamMessage",
     "category": "Action",
     "label": "Stream Message",
@@ -2071,6 +2965,59 @@
         "defaultValue": 1
       }
     ]
+  },
+  {
+    "type": "logic/string/replace",
+    "category": "Logic",
+    "label": "Replace",
+    "inputs": [
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "search",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "replace",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "name",
+        "valueType": "newString"
+      }
+    ],
+    "configuration": []
+  },
+  {
+    "type": "logic/split/string",
+    "category": "None",
+    "label": "String Split",
+    "inputs": [
+      {
+        "name": "string",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "seperator",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "valueType": "array"
+      }
+    ],
+    "configuration": []
   },
   {
     "type": "logic/string/template",
@@ -2159,40 +3106,6 @@
         "name": "variableNames",
         "valueType": "array",
         "defaultValue": []
-      },
-      {
-        "name": "socketOutputs",
-        "valueType": "array",
-        "defaultValue": []
-      }
-    ]
-  },
-  {
-    "type": "variables/getMany",
-    "category": "Query",
-    "label": "Get Many Variables",
-    "inputs": [],
-    "outputs": [],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "socketValues",
-          "hiddenProperties"
-        ]
-      },
-      {
-        "name": "socketValues",
-        "valueType": "array",
-        "defaultValue": [
-          "string",
-          "array",
-          "boolean",
-          "integer",
-          "float",
-          "object"
-        ]
       },
       {
         "name": "socketOutputs",
@@ -2304,6 +3217,64 @@
     "configuration": []
   },
   {
+    "type": "knowledge/embedder/awaitLoader",
+    "category": "Action",
+    "label": "Await Loader",
+    "inputs": [
+      {
+        "name": "flow",
+        "valueType": "flow"
+      },
+      {
+        "name": "cancel",
+        "valueType": "flow"
+      },
+      {
+        "name": "loaderId",
+        "valueType": "string",
+        "defaultValue": ""
+      },
+      {
+        "name": "packId",
+        "valueType": "string",
+        "defaultValue": ""
+      }
+    ],
+    "outputs": [
+      {
+        "name": "completed",
+        "valueType": "flow"
+      },
+      {
+        "name": "failed",
+        "valueType": "flow"
+      },
+      {
+        "name": "pending",
+        "valueType": "flow"
+      },
+      {
+        "name": "processing",
+        "valueType": "flow"
+      },
+      {
+        "name": "lastStatus",
+        "valueType": "string"
+      },
+      {
+        "name": "result",
+        "valueType": "object"
+      }
+    ],
+    "configuration": [
+      {
+        "name": "checkIntervalMs",
+        "valueType": "integer",
+        "defaultValue": 500
+      }
+    ]
+  },
+  {
     "type": "magick/onWebhook",
     "category": "Event",
     "label": "On Webhook",
@@ -2383,788 +3354,6 @@
         "name": "maxIterations",
         "valueType": "number",
         "defaultValue": 10
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/createKnowledgePack",
-    "category": "Action",
-    "label": "Create Knowledge Pack",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "name",
-        "valueType": "string"
-      },
-      {
-        "name": "description",
-        "valueType": "string"
-      },
-      {
-        "name": "createdAt",
-        "valueType": "string"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "knowledge/embedder/getPack",
-    "category": "Action",
-    "label": "Get Pack",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "name",
-        "valueType": "string"
-      },
-      {
-        "name": "description",
-        "valueType": "string"
-      },
-      {
-        "name": "createdAt",
-        "valueType": "string"
-      },
-      {
-        "name": "sources",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/getManyPacks",
-    "category": "Action",
-    "label": "Get Many Packs",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "packs",
-        "valueType": "array"
-      }
-    ],
-    "configuration": []
-  },
-  {
-    "type": "knowledge/embedder/queryPack",
-    "category": "Action",
-    "label": "Query Knowledge Pack",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "query",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "result",
-        "valueType": "string"
-      },
-      {
-        "name": "sources",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/getContext",
-    "category": "Action",
-    "label": "Get Context",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "query",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "context",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/getChunks",
-    "category": "Action",
-    "label": "Get Chunks",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "chunks",
-        "valueType": "array"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId",
-          "loaderId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "loaderId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addTextSource",
-    "category": "Action",
-    "label": "Add Text Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "text",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addYoutubeSource",
-    "category": "Action",
-    "label": "Add Youtube Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "videoIdOrUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addYoutube_channelSource",
-    "category": "Action",
-    "label": "Add Youtube_channel Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "youtubeChannelId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addYoutube_searchSource",
-    "category": "Action",
-    "label": "Add Youtube_search Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "youtubeSearchString",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addWebSource",
-    "category": "Action",
-    "label": "Add Web Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "urlOrContent",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addSitemapSource",
-    "category": "Action",
-    "label": "Add Sitemap Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "url",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addPdfSource",
-    "category": "Action",
-    "label": "Add Pdf Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "filePathOrUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addDocxSource",
-    "category": "Action",
-    "label": "Add Docx Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "filePathOrUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addExcelSource",
-    "category": "Action",
-    "label": "Add Excel Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "filePathOrUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ]
-  },
-  {
-    "type": "knowledge/embedder/addPptSource",
-    "category": "Action",
-    "label": "Add Ppt Source",
-    "inputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "name",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "description",
-        "valueType": "string",
-        "defaultValue": ""
-      },
-      {
-        "name": "filePathOrUrl",
-        "valueType": "string",
-        "defaultValue": ""
-      }
-    ],
-    "outputs": [
-      {
-        "name": "flow",
-        "valueType": "flow"
-      },
-      {
-        "name": "id",
-        "valueType": "string"
-      },
-      {
-        "name": "status",
-        "valueType": "string"
-      }
-    ],
-    "configuration": [
-      {
-        "name": "hiddenProperties",
-        "valueType": "array",
-        "defaultValue": [
-          "packId"
-        ]
-      },
-      {
-        "name": "packId",
-        "valueType": "string",
-        "defaultValue": ""
       }
     ]
   },

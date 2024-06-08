@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   RootState,
+  useDeleteChannelMutation,
   useGetChannelsQuery,
   useToggleChannelActiveMutation,
   // useGetChannelsQuery
@@ -18,7 +19,7 @@ export const ChannelsWindow = () => {
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
-  console.log('currentAgentId', currentAgentId)
+
   const { data: channels, refetch } = useGetChannelsQuery(
     { agentId: currentAgentId, limit, page },
     {
@@ -26,6 +27,8 @@ export const ChannelsWindow = () => {
     }
   )
   const [toggleChannelActive] = useToggleChannelActiveMutation()
+
+  const [deleteChannel] = useDeleteChannelMutation()
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -45,6 +48,19 @@ export const ChannelsWindow = () => {
       .catch(() => {
         enqueueSnackbar('Error setting channel', { variant: 'error' })
       })
+  }
+
+  const handleDeleteChannel = async (channels: any[]) => {
+    for (const channel of channels) {
+      try {
+        await deleteChannel({ channelId: channel.id }).unwrap()
+      } catch (err) {
+        console.error(err)
+        enqueueSnackbar('Error deleting channel', { variant: 'error' })
+      }
+    }
+
+    enqueueSnackbar('Channel(s) deleted', { variant: 'success' })
   }
 
   const renderRowActionMenu = (row: Row<any>) => {
@@ -115,6 +131,7 @@ export const ChannelsWindow = () => {
           columns={columns}
           data={channels?.data || []}
           filterInputPlaceholder="Search channels..."
+          onDelete={handleDeleteChannel}
           columnVisibilityButtonProps={{
             children: 'Columns',
           }}

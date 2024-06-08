@@ -8,6 +8,8 @@ import {
   useSelectAgentsLog,
   useSelectAgentsSpell,
 } from 'client/state'
+import { useModal } from '../../contexts/ModalProvider'
+import { useUser } from '@clerk/nextjs'
 
 export type Log = {
   type: string
@@ -95,7 +97,7 @@ const LogMessage = ({
   const [isExpanded, setIsExpanded] = useState(false)
   const isRefAvailable = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const expandRef = useRef<HTMLDivElement>(null) // Upd
+  const expandRef = useRef<HTMLDivElement>(null)
   const cleanExpandRef = useRef<HTMLDivElement>(null)
   const isExpandedRef = useRef(isExpanded)
 
@@ -345,11 +347,14 @@ const LogsComponent = () => {
   const [showErrorLogs, setShowErrorLogs] = useState(true)
   const [showRawLogs, setShowRawLogs] = useState(false)
 
+  const { openModal } = useModal()
+  const { user } = useUser()
+
   useEffect(() => {
     // Create a new entry only if the new log item is not undefined
     const newEntries: Log[] = [] // Specify type for newEntries
 
-    const addIfUnique = (newLog: Log, type: string) => {
+    const addIfUnique = async (newLog: Log, type: string) => {
       // Specify parameter types
       if (
         newLog &&
@@ -359,6 +364,18 @@ const LogsComponent = () => {
         )
       ) {
         newEntries.push({ ...newLog, messageType: type })
+
+        // Check if the error is related to budget exceeded or payment required
+        if (
+          type === 'error' &&
+          user?.publicMetadata?.useWallet &&
+          (newLog.message.includes('has exceeded their budget') ||
+            newLog.message.includes('Payment Required'))
+        ) {
+          openModal({
+            modal: 'outOfFundsModal',
+          })
+        }
       }
     }
 

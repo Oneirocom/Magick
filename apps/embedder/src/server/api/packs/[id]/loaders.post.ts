@@ -78,5 +78,9 @@ export default defineEventHandler(async event => {
   const queue = useBullMQ('embedJobs')
   await queue.add('processJob', { jobId: job.id })
 
-  return AddLoaderResponseSchema.parse({ status: loader.status, id: loader.id })
+  return AddLoaderResponseSchema.parse({
+    status: loader.status,
+    id: loader.id,
+    jobId: job.id,
+  })
 })
