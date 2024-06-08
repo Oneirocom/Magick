@@ -12,7 +12,6 @@ import { WindowHeader, WindowContainer } from 'windows-shared'
 
 import { useSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
-import { en } from '@faker-js/faker'
 
 export const ChannelsWindow = () => {
   const [page, setPage] = useState(1)
