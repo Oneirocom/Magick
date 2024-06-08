@@ -4,6 +4,7 @@ import {
   SocketsList,
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
+import { parseValue } from '../../utils/parseValue'
 
 export const objectDestructure = makeFunctionNodeDefinition({
   typeName: 'logic/object/destructure',
@@ -61,7 +62,10 @@ export const objectDestructure = makeFunctionNodeDefinition({
     const object = (read('object') as Record<string, any>) || {}
     configuration.socketOutputs.forEach(
       (socketOutput: OutputSocketSpecJSON) => {
-        const value = object[socketOutput.name]
+        let value = object[socketOutput.name]
+
+        value = parseValue(value, socketOutput.valueType)
+
         write(socketOutput.name, value)
       }
     )
