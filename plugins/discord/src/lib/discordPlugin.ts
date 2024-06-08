@@ -191,11 +191,18 @@ export class DiscordPlugin extends WebSocketPlugin<
         }
 
         if (eventName === 'messageCreate') {
+          const attachments = payload.attachments.map((attachment: any) =>
+            attachment.toJSON()
+          )
+
           this.triggerMessageReceived(
             this.utils.createEventPayload<typeof eventName>(
               eventName,
-              payload as DiscordEventPayload[typeof eventName],
-              this.getContext()
+              payload.toJSON() as DiscordEventPayload[typeof eventName],
+              this.getContext(),
+              {
+                attachments,
+              }
             )
           )
         }
@@ -204,7 +211,7 @@ export class DiscordPlugin extends WebSocketPlugin<
           eventName,
           this.utils.createEventPayload<typeof eventName>(
             eventName,
-            payload,
+            payload.toJSON(),
             this.getContext()
           )
         )
