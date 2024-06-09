@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { useModal } from '../../contexts/ModalProvider'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Button } from '@magickml/client-ui'
-import Image from 'next/legacy/image'
+import Image, { StaticImageData } from 'next/legacy/image'
 
 const Modal = ({
   options,
@@ -17,7 +17,7 @@ const Modal = ({
   className?: string
   children?: React.ReactNode
   onClose?: () => void
-  imagePath?: string
+  imagePath?: string | StaticImageData
 }) => {
   const { closeModal } = useModal()
 
