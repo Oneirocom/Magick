@@ -155,10 +155,14 @@ export class CoreLLMService implements ICoreLLMService {
           !useWallet &&
           attempts === 0 // Only switch to wallet on the first attempt
         ) {
+          const userData = await clerkClient.users.getUser(
+            this.userData?.user.id || ''
+          )
           await clerkClient.users.updateUserMetadata(
             this.userData?.user.id || '',
             {
               publicMetadata: {
+                ...userData.publicMetadata,
                 useWallet: true,
               },
             }
