@@ -23,15 +23,19 @@ export class PortalBot {
   }
 
   public async log(p: PortalBotPayload) {
-    if (this.useLogs) {
-      console.log(
-        `\x1b[35mCLERK: ${p.event}: ${
-          p.content || 'Content was undefined.'
-        }\x1b[0m`
-      )
-    }
-    if (p.slackMessage && this.botEnabled) {
-      await this.slackLog(p.slackMessage)
+    try {
+      if (this.useLogs) {
+        console.log(
+          `\x1b[35mCLERK: ${p.event}: ${
+            p.content || 'Content was undefined.'
+          }\x1b[0m`
+        )
+      }
+      if (p.slackMessage && this.botEnabled) {
+        await this.slackLog(p.slackMessage)
+      }
+    } catch (error) {
+      console.error('Error logging event:', error)
     }
   }
 
