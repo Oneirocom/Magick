@@ -6,7 +6,10 @@ export const stringReplace = makeInNOutFunctionDesc({
   category: NodeCategory.Logic,
   label: 'Replace',
   in: [{ string: 'string' }, { search: 'string' }, { replace: 'string' }],
-  out: [{ newString: 'string' }],
-  exec: (string: string, search: string, replace: string) =>
-    string.replace(search, replace),
+  out: [{ result: 'string' }],
+  exec: (string: string, search: string, replace: string) => {
+    console.log('stringReplace', string, search, replace)
+    console.log('result:', string.replace(search, replace))
+    return string.replace(search, replace)
+  },
 })
