@@ -153,9 +153,9 @@ const InputFieldForValue = ({
           {valueType === 'string' && !showChoices && (
             <Input
               value={inputVal}
-              onChange={e =>
+              onChange={e => {
                 handleChange({ key: name, value: e.currentTarget.value })
-              }
+              }}
               onBlur={onBlur}
               // @ts-ignore
               onFocus={() => {
