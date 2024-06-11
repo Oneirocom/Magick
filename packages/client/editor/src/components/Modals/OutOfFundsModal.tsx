@@ -1,6 +1,7 @@
 import { useUser } from '@clerk/nextjs'
-import Modal from '../Modal/Modal'
+import Modal from '../Modal/NewModal'
 import { PORTAL_URL } from 'clientConfig'
+import Treasure from './treasure.png'
 
 const OutOfFundsModal = () => {
   const user = useUser()
@@ -51,24 +52,25 @@ const OutOfFundsModal = () => {
             )
       },
       className:
-        'bg-blue-500 text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition duration-300',
+        'bg-[#04c9f0] text-[#0b0d0e] px-4 py-2 w-[180px] rounded font-semibold hover:bg-blue-600 transition duration-300',
     },
   ]
 
   return (
     <Modal
-      title={`${isWizard ? 'MP and Wallet Empty' : ''}`}
+      title={`${isWizard ? 'MP and Wallet Empty' : 'Free-Trial MP Expired'}`}
       options={options}
-      className="w-full max-w-md"
+      className="w-full max-w-md "
+      imagePath={Treasure}
     >
-      <div className="p-6">
-        <p className="mb-4 text-lg">
-          {isFreeUser ? freeTrialExpiredCopy : hasSubscriptionNeedsBalanceCopy}
-        </p>
-        <p className="text-lg">
-          By subscribing, you'll gain access to additional features and
-          resources that will enhance your experience with Magick.
-        </p>
+      <div className=" flex row ">
+        <div className="flex items-center justify-center mb-4">
+          <p className="mb-4 text-lg">
+            {isFreeUser
+              ? freeTrialExpiredCopy
+              : hasSubscriptionNeedsBalanceCopy}
+          </p>
+        </div>
       </div>
     </Modal>
   )

@@ -131,7 +131,7 @@ export class KeywordsService {
       return { mpUser: null, walletUser: null }
     } catch (error) {
       console.error('Error fetching proxy wallets:', error)
-      throw error
+      return { mpUser: null, walletUser: null }
     }
   }
 

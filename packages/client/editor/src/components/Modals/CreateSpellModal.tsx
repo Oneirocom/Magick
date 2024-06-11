@@ -163,6 +163,7 @@ const CreateSpellModal = () => {
   // Submit form on Enter press
   const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      e.preventDefault()
       onCreate()
     }
   }
