@@ -290,7 +290,7 @@ const openAICompletionResponseSchema = z.object({
           top_logprobs: z.array(z.record(z.string(), z.number())).nullable(),
         })
         .nullable()
-        .optional(),
+        .nullish(),
     })
   ),
   usage: z.object({
@@ -317,7 +317,7 @@ const openaiCompletionChunkSchema = z.object({
           top_logprobs: z.array(z.record(z.string(), z.number())).nullable(),
         })
         .nullable()
-        .optional(),
+        .nullish(),
     })
   ),
   usage: z
