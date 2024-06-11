@@ -8,8 +8,6 @@ export const stringReplace = makeInNOutFunctionDesc({
   in: [{ string: 'string' }, { search: 'string' }, { replace: 'string' }],
   out: [{ result: 'string' }],
   exec: (string: string, search: string, replace: string) => {
-    console.log('stringReplace', string, search, replace)
-    console.log('result:', string.replace(search, replace))
     return string.replace(search, replace)
   },
 })
