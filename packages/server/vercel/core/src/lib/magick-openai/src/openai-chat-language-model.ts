@@ -376,7 +376,7 @@ const openAIChatResponseSchema = z.object({
     z.object({
       message: z.object({
         role: z.literal('assistant'),
-        content: z.string().nullable().optional(),
+        content: z.string().nullable().nullish(),
         tool_calls: z
           .array(
             z.object({
@@ -388,7 +388,7 @@ const openAIChatResponseSchema = z.object({
               }),
             })
           )
-          .optional(),
+          .nullish(),
       }),
       index: z.number(),
       logprobs: z
@@ -409,7 +409,7 @@ const openAIChatResponseSchema = z.object({
             .nullable(),
         })
         .nullable()
-        .optional(),
+        .nullish(),
       finish_reason: z.string().optional().nullable(),
     })
   ),
@@ -425,7 +425,7 @@ const openaiChatChunkSchema = z.object({
   choices: z.array(
     z.object({
       delta: z.object({
-        role: z.enum(['assistant']).optional(),
+        role: z.enum(['assistant']).nullish(),
         content: z.string().nullable().optional(),
         tool_calls: z
           .array(
@@ -439,7 +439,7 @@ const openaiChatChunkSchema = z.object({
               }),
             })
           )
-          .optional(),
+          .nullish(),
       }),
       logprobs: z
         .object({
@@ -456,7 +456,7 @@ const openaiChatChunkSchema = z.object({
             })
           ),
         })
-        .optional(),
+        .nullish(),
       finish_reason: z.string().nullable().optional(),
       index: z.number(),
     })
