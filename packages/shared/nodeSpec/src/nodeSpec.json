@@ -2989,8 +2989,8 @@
     ],
     "outputs": [
       {
-        "name": "name",
-        "valueType": "newString"
+        "name": "result",
+        "valueType": "string"
       }
     ],
     "configuration": []
