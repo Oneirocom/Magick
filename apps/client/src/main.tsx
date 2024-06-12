@@ -49,6 +49,7 @@ if (window === window.parent) {
       userId: '',
       email: undefined,
       providerData: {},
+      embedderToken: '',
     }
 
     const Root = () => {
@@ -58,7 +59,7 @@ if (window === window.parent) {
         <MagickIDE
           config={config}
           loading={loading}
-          loadingStatus={loadingStatus}
+          loadingStatus={loadingStatus as any}
         />
       )
     }
@@ -104,7 +105,7 @@ if (window === window.parent) {
 
         const Root = () => {
           const loading = useState(true)
-          const loadingStatus = useState()
+          const loadingStatus = useState('')
 
           if (POSTHOG_ENABLED && config?.posthogEnabled) {
             return (
