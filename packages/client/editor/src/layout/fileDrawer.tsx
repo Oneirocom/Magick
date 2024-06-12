@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { TreeDataProvider, usePubSub } from '@magickml/providers'
 import { IGridviewPanelProps } from 'dockview'

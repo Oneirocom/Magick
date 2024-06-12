@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -34,7 +34,7 @@ export const usePanelControls = (
 
   useEffect(() => {
     const unsubscribe = subscribe(toggleEventName, () => {
-      if (currentWidth > 0) {
+      if (props.api.isVisible) {
         close()
       } else {
         open()
