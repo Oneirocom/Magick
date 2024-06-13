@@ -57,6 +57,11 @@ const configureCustomServices = (
     events: ['log', 'error', 'update', 'create', 'budgetUpdated'],
   })
 
+  app.use('agentManager', socketClient.service('user'), {
+    methods: ['toggleRunAll'],
+    events: ['toggleRunAll'],
+  })
+
   app.use('agents', socketClient.service('agents'), {
     methods: [
       'find',
@@ -83,6 +88,7 @@ const configureCustomServices = (
       'seraphEvent',
     ],
   })
+
   app.use('request', socketClient.service('request'), {
     methods: ['find', 'get', 'create', 'patch', 'remove'],
   })
