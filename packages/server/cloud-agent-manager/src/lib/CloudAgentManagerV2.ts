@@ -31,44 +31,50 @@ export class CloudAgentManagerV2 {
 
   async start() {
     this.logger.info('Bootstrapping agents...')
+    // On manager startup, bring all enabled agents online if not already.
     await this.bootstrapAgents()
 
     this.logger.info('Grace period before monitoring agents...')
+    //initial grace period before we start monitoring agents
     const initialDelay = 15000 // 10-second grace period
     await new Promise(resolve => setTimeout(resolve, initialDelay))
 
     this.logger.info('Monitoring agents...')
+    // Start monitoring heartbeats and managing agents.
     setInterval(() => this.manageAgents(), CHECK_INTERVAL)
   }
 
   async bootstrapAgents() {
+    // Fetch all enabled agents from Redis.
     const enabledAgents = await this.fetchEnabledAgents()
     const onlineAgents = await this.fetchOnlineAgents()
 
+    // Determine which enabled agents are not online and start them.
     const agentsToStart = enabledAgents.filter(
       agentId => !onlineAgents.includes(agentId)
     )
 
-    for (const agentId of agentsToStart) {
-      await this.createAgent(agentId)
-    }
+    agentsToStart.forEach(agentId => this.createAgent(agentId))
   }
 
   async manageAgents() {
+    // Fetch all enabled agents from Redis.
     const enabledAgents = await this.fetchEnabledAgents()
     const onlineAgents = await this.fetchOnlineAgents()
 
-    for (const agentId of enabledAgents) {
+    // Start any enabled agents that are not online.
+    enabledAgents.forEach(agentId => {
       if (!onlineAgents.includes(agentId)) {
-        await this.createAgent(agentId)
+        this.createAgent(agentId)
       }
-    }
+    })
 
-    for (const agentId of onlineAgents) {
+    // Check for any agents that are online but not enabled, and stop them.
+    onlineAgents.forEach(agentId => {
       if (!enabledAgents.includes(agentId)) {
-        await this.stopAgent(agentId)
+        this.stopAgent(agentId)
       }
-    }
+    })
   }
 
   async fetchEnabledAgents() {
@@ -82,13 +88,14 @@ export class CloudAgentManagerV2 {
       })) as AgentInterface[]
       return enabledAgents.map(agent => agent.id)
     } catch (err) {
-      this.logger.error('Failed to fetch enabled agents', err)
+      console.log('ERROR', err)
       throw new Error('Failed to fetch enabled agents')
     }
   }
 
   async fetchOnlineAgents() {
-    const agentIds = await this.fetchEnabledAgents()
+    // This function checks for agents with a recent heartbeat to determine if they are online.
+    const agentIds = await this.fetchEnabledAgents() // Assuming enabled agents are candidates for being online.
     const now = Date.now()
     const onlineAgents = [] as string[]
 
@@ -140,17 +147,18 @@ export class CloudAgentManagerV2 {
       const onlineAgents = await this.fetchOnlineAgents()
       if (!onlineAgents.includes(agentId)) {
         this.logger.info(`Creating agent ${agentId}...`)
-        await this.newQueue.addJob('agent:create', { agentId })
+        this.newQueue.addJob('agent:create', { agentId })
       }
     } finally {
       await this.releaseLock(lockKey)
     }
   }
 
-  async stopAgent(agentId: string) {
-    await this.pubSub.publish(
+  stopAgent(agentId: string) {
+    // Publish a message to MQ to stop the agent.
+    this.pubSub.publish(
       AGENT_DELETE_JOB(agentId),
-      JSON.stringify({ agentId })
+      JSON.stringify({ agentId: agentId })
     )
   }
 }
