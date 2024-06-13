@@ -269,7 +269,7 @@ export class DiscordPlugin extends WebSocketPlugin<
       }
 
       for (const batch of batches) {
-        await (channel as TextChannel).send(batch)
+        await (channel as TextChannel).send(batch.replace(/\\n/g, '\n'))
       }
     } catch (err) {
       this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
