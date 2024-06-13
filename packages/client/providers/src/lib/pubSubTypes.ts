@@ -9,6 +9,7 @@ export type PubSubEvents = {
   RUN_AGENT: string
   SEND_COMMAND: string
   TOGGLE_FILE_DRAWER: string
+  TOGGLE_RIGHT_PANEL: string
   MESSAGE_AGENT: string
   RESET_NODE_STATE: string
   $SUBSPELL_UPDATED: (spellName: string) => string
