@@ -240,14 +240,20 @@ export class DiscordPlugin extends WebSocketPlugin<
       }
 
       const MAX_LENGTH = 2000
-      const sentences = this.utils.tokenizeIntoSentences(content) // Function to split content into sentences
+      const newLines = content.split('\n')
       let currentBatch = ''
       const batches = [] as string[]
 
-      for (const sentence of sentences) {
-        if (sentence.length > MAX_LENGTH) {
+      for (const sentence of newLines) {
+        // Adding a newline character at the end of the sentence to preserve newlines
+        const sentenceWithNewline = sentence + '\n'
+
+        if (sentenceWithNewline.length > MAX_LENGTH) {
           // If a single sentence is too long, further split it.
-          const parts = this.utils.splitLongSentence(sentence, MAX_LENGTH) // Function to split long sentence
+          const parts = this.utils.splitLongSentence(
+            sentenceWithNewline,
+            MAX_LENGTH
+          ) // Function to split long sentence
           for (const part of parts) {
             if (currentBatch.length + part.length <= MAX_LENGTH) {
               currentBatch += part
@@ -256,11 +262,14 @@ export class DiscordPlugin extends WebSocketPlugin<
               currentBatch = part
             }
           }
-        } else if (currentBatch.length + sentence.length <= MAX_LENGTH) {
-          currentBatch += sentence
+        } else if (
+          currentBatch.length + sentenceWithNewline.length <=
+          MAX_LENGTH
+        ) {
+          currentBatch += sentenceWithNewline
         } else {
           batches.push(currentBatch)
-          currentBatch = sentence
+          currentBatch = sentenceWithNewline
         }
       }
 
@@ -269,7 +278,7 @@ export class DiscordPlugin extends WebSocketPlugin<
       }
 
       for (const batch of batches) {
-        await (channel as TextChannel).send(batch.replace(/\\n/g, '\n'))
+        await (channel as TextChannel).send(batch)
       }
     } catch (err) {
       this.logger.error(err, 'ERROR IN DISCORD SEND MESSAGE')
