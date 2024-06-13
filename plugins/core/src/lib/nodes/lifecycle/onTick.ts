@@ -40,14 +40,12 @@ export const LifecycleOnTick = makeMagickEventNodeDefinition(
         CORE_DEP_KEYS.EVENT_STORE
       )
       if (!eventStore) return
-      const initialEvent = eventStore.initialEvent() || undefined
-
+      const initialEvent = eventStore.initialEvent()
       if (!agent) return
 
       let lastTickTime = Date.now()
 
       const onTickEvent = () => {
-        if (initialEvent === undefined) return
         const event = agent?.formatEvent<{}>({
           ...initialEvent,
           content: '',
