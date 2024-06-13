@@ -1,6 +1,7 @@
 import type { Params } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { ToggleRunAllData } from './agentManager.schema'
+import { MANAGER_TOGGLE_RUN_ALL } from 'communication'
 
 export type AgentManagerParams = Params<ToggleRunAllData>
 
@@ -13,7 +14,7 @@ export class AgentManagerService {
 
   async toggleRunAll(data: ToggleRunAllData) {
     try {
-      await this.app.service('agentManager').toggleRunAll(data)
+      this.app.get('pubsub').publish(MANAGER_TOGGLE_RUN_ALL, data)
 
       return {
         success: true,
