@@ -67,6 +67,7 @@ export const MagickIDE = ({
           <TopBar
             rightTopBarItems={rightTopBarItems}
             leftTopBarItems={leftTopBarItems}
+            agentId={config.userId}
           />
           <App />
         </div>
