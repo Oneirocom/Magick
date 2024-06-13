@@ -14,6 +14,7 @@ import AppProviders from './contexts/AppProviders'
 import { AppConfig } from '@magickml/providers'
 import { createStore } from 'client/state'
 import { feathersClient } from 'client/feathers-client'
+import TopBar from './layout/topBar'
 
 enum LoadingStatus {
   INITIALIZING = 'Initializing editor...',
@@ -31,6 +32,8 @@ export type MagickIDEProps = {
   loading?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
   // TODO: type it with the enum, but we have to move the enum out of the package for the parent to import
   loadingStatus?: [string, React.Dispatch<React.SetStateAction<string>>]
+  rightTopBarItems?: React.ReactNode[]
+  leftTopBarItems?: React.ReactNode[]
 }
 
 /**
@@ -40,6 +43,8 @@ export type MagickIDEProps = {
  */
 export const MagickIDE = ({
   config,
+  rightTopBarItems,
+  leftTopBarItems,
 }: MagickIDEProps): React.ReactElement | null => {
   const loading = useState(true)
   const loadingStatus = useState(LoadingStatus.INITIALIZING)
@@ -58,7 +63,13 @@ export const MagickIDE = ({
   return (
     <Provider store={createStore(config)}>
       <AppProviders config={config}>
-        <App />
+        <div className="flex flex-col h-screen w-full">
+          <TopBar
+            rightTopBarItems={rightTopBarItems}
+            leftTopBarItems={leftTopBarItems}
+          />
+          <App />
+        </div>
       </AppProviders>
     </Provider>
   )
