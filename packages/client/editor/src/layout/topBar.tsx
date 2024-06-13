@@ -1,32 +1,40 @@
 'use client'
 
 import { Button } from '@magickml/client-ui'
-import {
-  //  useFeathers,
-  usePubSub,
-} from '@magickml/providers'
-// import { RootState, useSelectAgentsState } from 'client/state'
-
-import React, { useState } from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
+import { usePubSub } from '@magickml/providers'
+import React, { useEffect, useState } from 'react'
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined'
+import { useToggleRunAllMutation } from 'client/state'
+import toast from 'react-hot-toast'
 export interface TopBarProps {
   rightTopBarItems?: React.ReactNode[]
   leftTopBarItems?: React.ReactNode[]
+  agentId: string
 }
 
 const TopBar: React.FC<TopBarProps> = ({
   rightTopBarItems,
   leftTopBarItems,
+  agentId,
 }) => {
   const [isRunning, setIsRunning] = useState(false)
-  // const globalConfig = useSelector((state: RootState) => state.globalConfig)
 
   const { publish, events } = usePubSub()
-  // const dispatch = useDispatch()
-  // const { client } = useFeathers()
+  const [toggleRunAll, { data, isLoading, error }] = useToggleRunAllMutation()
 
-  // const { lastItem: lastStateEvent } = useSelectAgentsState()
+  useEffect(() => {
+    if (error) {
+      console.error('Error while toggling run all', error)
+      toast.error('Error while toggling run all')
+    }
+
+    if (data) {
+      console.log('Toggle Running Status:', data)
+      toast.success(
+        `Agent ${agentId} is ${data.runningStatus ? 'running' : 'stopped'}`
+      )
+    }
+  }, [error, data])
 
   const toggleFileDrawer = () => {
     publish(events.TOGGLE_FILE_DRAWER)
@@ -37,27 +45,8 @@ const TopBar: React.FC<TopBarProps> = ({
   }
 
   const toggleRun = () => {
-    if (isRunning) {
-      //   // TODO: Change this to a global command to pause all agents
-      //   publish(events.SEND_COMMAND, {
-      //     projectId,
-      //     agentId: currentAgentId,
-      //     command: 'agent:spellbook:pauseSpell',
-      //     data: {
-      //       spellId: spell.id,
-      //     },
-      //   })
-      //   publish(events.RESET_NODE_STATE)
-      // } else {
-      //   publish(events.SEND_COMMAND, {
-      //     projectId,
-      //     agentId: currentAgentId,
-      //     command: 'agent:spellbook:playSpell',
-      //     data: {
-      //       spellId: spell.id,
-      //     },
-      //   })
-    }
+    if (!agentId) return
+    toggleRunAll({ agentId, start: !isRunning })
     setIsRunning(!isRunning)
   }
 
@@ -78,13 +67,16 @@ const TopBar: React.FC<TopBarProps> = ({
       <div className="absolute left-1/2 transform -translate-x-1/2">
         <Button
           onClick={toggleRun}
+          disabled={isLoading}
           className={`${
             isRunning
               ? 'bg-[#363d42] hover:bg-[#565c62]'
               : 'bg-[#fe980a] hover:bg-[#f9b454]'
-          }text-white font-bold py-2 px-4 rounded h-[30px]`}
+          } text-white font-bold py-2 px-4 rounded h-[30px] ${
+            isLoading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
-          {isRunning ? 'Stop' : 'Run'}
+          {isLoading ? 'Loading...' : isRunning ? 'Stop' : 'Run'}
         </Button>
       </div>
       <div className="flex items-center space-x-2">
