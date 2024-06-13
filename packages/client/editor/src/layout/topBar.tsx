@@ -32,6 +32,10 @@ const TopBar: React.FC<TopBarProps> = ({
     publish(events.TOGGLE_FILE_DRAWER)
   }
 
+  const toggleRightPanel = () => {
+    publish(events.TOGGLE_RIGHT_PANEL)
+  }
+
   const toggleRun = () => {
     if (isRunning) {
       //   // TODO: Change this to a global command to pause all agents
@@ -87,6 +91,14 @@ const TopBar: React.FC<TopBarProps> = ({
         {rightTopBarItems?.map((item, index) => (
           <>{item}</>
         ))}
+        <div className="flex items-center space-x-2 p-1 rounded-md">
+          <Button
+            className="text-white font-bold rounded px-1 bg-transparent w-[28px] h-[28px]"
+            onClick={toggleRightPanel}
+          >
+            <ViewSidebarOutlinedIcon className="hover:text-[#06c9f0] transition duration-300" />
+          </Button>
+        </div>
       </div>
     </div>
   )
