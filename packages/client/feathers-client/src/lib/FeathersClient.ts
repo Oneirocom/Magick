@@ -57,11 +57,6 @@ const configureCustomServices = (
     events: ['log', 'error', 'update', 'create', 'budgetUpdated'],
   })
 
-  app.use('agentManager', socketClient.service('user'), {
-    methods: ['toggleRunAll'],
-    events: ['toggleRunAll'],
-  })
-
   app.use('agents', socketClient.service('agents'), {
     methods: [
       'find',
@@ -76,6 +71,7 @@ const configureCustomServices = (
       'message',
       'ping',
       'processSeraphEvent',
+      'toggleRunAll',
     ],
     events: [
       'log',
@@ -86,6 +82,7 @@ const configureCustomServices = (
       'warn',
       'pong',
       'seraphEvent',
+      'toggleRunAll',
     ],
   })
 
