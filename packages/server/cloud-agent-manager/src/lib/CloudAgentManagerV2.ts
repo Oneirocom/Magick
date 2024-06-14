@@ -7,7 +7,6 @@ import { AgentInterface } from 'server/schemas'
 import { AGENT_DELETE_JOB } from 'communication'
 import { Reporter } from './Reporters'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
-import { CommandHub } from 'server/command-hub'
 
 const CHECK_INTERVAL = 10000 // Check every 10 seconds
 
@@ -15,7 +14,6 @@ interface CloudAgentManagerConstructor {
   pubSub: RedisPubSub
   newQueue: MessageQueue
   agentStateReporter: Reporter
-  commandHub: CommandHub
 }
 
 export class CloudAgentManagerV2 {
@@ -23,48 +21,12 @@ export class CloudAgentManagerV2 {
   newQueue: MessageQueue
   agentStateReporter: Reporter
   pubSub: RedisPubSub
-  commandHub: CommandHub
 
   constructor(args: CloudAgentManagerConstructor) {
     this.newQueue = args.newQueue
     this.newQueue.initialize('agent:create')
     this.agentStateReporter = args.agentStateReporter
-    this.pubSub = args.pubSub
-    this.commandHub = new CommandHub(this, this.pubSub)
-    this.initializeCommands()
-  }
-
-  initializeCommands() {
-    this.commandHub.registerDomain('cloud', 'manager', {
-      toggleRunAll: this.toggleRunAll.bind(this),
-    })
-  }
-
-  async toggleRunAll(data: unknown) {
-    const onlineAgents = await this.fetchOnlineAgents()
-
-    const { agentId, start } = data as { agentId: string; start: boolean }
-    this.logger.info(
-      `Toggling running state of agent ${agentId} to ${
-        start ? 'start' : 'stop'
-      }`
-    )
-
-    if (start) {
-      console.log('Starting agent', agentId)
-      // Start all instances of the agent if not already running
-      if (!onlineAgents.includes(agentId)) {
-        console.log('Starting agent', agentId)
-        this.createAgent(agentId)
-      }
-    } else {
-      console.log('Stopping agent', agentId)
-      // Stop all instances of the agent if running
-      if (onlineAgents.includes(agentId)) {
-        console.log('Stopping agent', agentId)
-        this.stopAgent(agentId)
-      }
-    }
+    this.pubSub = app.get('pubsub')
   }
 
   async start() {
