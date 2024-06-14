@@ -71,7 +71,6 @@ const configureCustomServices = (
       'message',
       'ping',
       'processSeraphEvent',
-      'toggleRunAll',
     ],
     events: [
       'log',
@@ -82,7 +81,6 @@ const configureCustomServices = (
       'warn',
       'pong',
       'seraphEvent',
-      'toggleRunAll',
     ],
   })
 
