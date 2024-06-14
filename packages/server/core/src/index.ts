@@ -37,6 +37,3 @@ export * from './lib/feathersPermissions'
 export * from './types'
 
 export * from './utils'
-
-// Export agentManager
-export * from './services/agentManager/agentManager'
