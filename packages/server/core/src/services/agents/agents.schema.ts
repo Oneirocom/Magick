@@ -52,7 +52,7 @@ export const agentDataSchema = Type.Pick(
     'rootSpell', //DEPRECATED
     'draftAgentId',
     'image',
-    'description'
+    'description',
   ],
   { $id: 'AgentData' }
 )
@@ -172,3 +172,15 @@ export const agentQueryResolver = resolve<AgentQuery, HookContext>({})
  * JSON fields for agents
  */
 export const agentJsonFields = ['data']
+
+// Define the schema for the toggleRunAll event
+const toggleRunAllSchema = Type.Object({
+  agentId: Type.String(),
+  start: Type.Boolean(),
+})
+
+export type ToggleRunAllData = Static<typeof toggleRunAllSchema>
+export const toggleRunAllValidator = getDataValidator(
+  toggleRunAllSchema,
+  dataValidator
+)
