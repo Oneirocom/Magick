@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
 import React, { useMemo } from 'react'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from 'server/schemas'
 import { useSelector } from 'react-redux'
-import { RootState, useSelectAgentsState } from 'client/state'
+import { RootState } from 'client/state'
 import { BaseFlow } from './base-flow'
 import { useBehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { getNodeSpec } from 'shared/nodeSpec'
@@ -25,7 +25,6 @@ export const CoreFlow: React.FC<FlowProps> = ({
   windowDimensions,
 }) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { lastItem: lastStateEvent } = useSelectAgentsState()
   const pubSub = usePubSub()
 
   const specJSON = useMemo(() => getNodeSpec(), [])
@@ -57,7 +56,6 @@ export const CoreFlow: React.FC<FlowProps> = ({
       flowHandlers={flowHandlers}
       pubSub={pubSub}
       globalConfig={globalConfig}
-      lastStateEvent={lastStateEvent}
     />
   )
 }
