@@ -1,6 +1,8 @@
 import { Button, Input } from '@magickml/client-ui'
+import { selectEngineRunning } from 'client/state'
 import { useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { useSelector } from 'react-redux'
 
 interface ChatInputProps {
   value: string
@@ -16,6 +18,8 @@ export const ChatInput = (props: ChatInputProps) => {
   // const ref = useRef(null) as React.MutableRefObject<HTMLInputElement>
 
   const [playtestCache, setPlaytestCache] = useState<string[]>([])
+
+  const engineRunning = useSelector(selectEngineRunning)
 
   // Trigger 'onSend' when 'return' key is pressed on the input.
   useHotkeys(
@@ -109,9 +113,15 @@ export const ChatInput = (props: ChatInputProps) => {
         value={props.value}
         onChange={props.onChange}
         placeholder="Type chat input here"
+        disabled={!engineRunning}
       />
       <div className="w-100 m-auto">
-        <Button className="" variant="basic" onClick={onSend}>
+        <Button
+          className=""
+          variant="basic"
+          onClick={onSend}
+          disabled={!engineRunning}
+        >
           Send
         </Button>
       </div>
