@@ -92,6 +92,16 @@ export const agentApi = rootApi.injectEndpoints({
         }
       },
     }),
+    toggleRunAll: builder.mutation<
+      { runningStatus: boolean },
+      { agentId: string; start: boolean }
+    >({
+      query: data => ({
+        url: 'agentManager/toggleRunAll',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 })
 
@@ -109,4 +119,5 @@ export const {
   useGetAgentSeraphEventsQuery,
   useCreateAgentSeraphEventMutation,
   useDeleteAgentSeraphEventMutation,
+  useToggleRunAllMutation,
 } = agentApi
