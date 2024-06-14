@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { CoreFlow } from '@magickml/flow-core'
 
 import { Tab } from '@magickml/providers'
-import { RootState, useGetSpellByNameQuery } from 'client/state'
+import {
+  RootState,
+  selectEngineRunning,
+  useGetSpellByNameQuery,
+} from 'client/state'
 import { useSelector } from 'react-redux'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -22,6 +26,8 @@ const GraphWindow = (props: Props) => {
     RootState,
     RootState['globalConfig']
   >(state => state.globalConfig)
+
+  const engineRunning = useSelector(selectEngineRunning)
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -73,7 +79,7 @@ const GraphWindow = (props: Props) => {
         parentRef={parentRef}
         tab={props.params.tab}
         spell={spell}
-        readOnly={!!currentSpellReleaseId}
+        readOnly={!!currentSpellReleaseId || engineRunning}
       />
     </div>
   )
