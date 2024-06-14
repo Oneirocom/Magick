@@ -87,7 +87,7 @@ export const useBehaveGraphFlow = ({
   )
 
   useEffect(() => {
-    if (!specJson || !spell) return
+    if (!specJson || !spell || nodes?.length === 0) return
 
     debouncedUpdate(specJson, spell)
 
