@@ -2,7 +2,7 @@
 
 import { Button } from '@magickml/client-ui'
 import { useConfig, usePubSub } from '@magickml/providers'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -10,10 +10,13 @@ import {
   selectEngineRunning,
   setEngineRunning,
   useLazyGetAgentByIdQuery,
+  useSelectAgentsState,
 } from 'client/state'
 
 import toast from 'react-hot-toast'
 import useEditorSession from '../hooks/useEditorSession'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBug, faBugSlash } from '@fortawesome/free-solid-svg-icons'
 export interface TopBarProps {
   rightTopBarItems?: React.ReactNode[]
   leftTopBarItems?: React.ReactNode[]
@@ -31,8 +34,13 @@ const TopBar: React.FC<TopBarProps> = ({
     state => state.globalConfig
   ) as any
 
+  const { lastItem: lastStateEvent } = useSelectAgentsState()
+  const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+
   const [getAgentById, { data: agent, isLoading, isError }] =
     useLazyGetAgentByIdQuery()
+
+  const [isDebug, setIsDebug] = useState(false)
 
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
@@ -48,6 +56,14 @@ const TopBar: React.FC<TopBarProps> = ({
       toast.error('Error fetching agent')
     }
   }, [isError])
+
+  useEffect(() => {
+    if (!currentTab?.id || !lastStateEvent) return
+    if (lastStateEvent.spellId !== currentTab.id) return
+    if (!lastStateEvent.state) return
+
+    setIsDebug(lastStateEvent.state.debug)
+  }, [lastStateEvent])
 
   const toggleFileDrawer = () => {
     publish(events.TOGGLE_FILE_DRAWER)
@@ -99,6 +115,24 @@ const TopBar: React.FC<TopBarProps> = ({
     }
   }
 
+  const toggleDebug = useCallback(() => {
+    console.log({ publish, events, currentAgentId, agentId: currentTab?.id })
+    if (!publish || !events || !currentAgentId || !currentTab?.id) return
+    const newState = !isDebug
+    console.log('toggleDebug', newState)
+    publish(events.SEND_COMMAND, {
+      projectId: config.projectId,
+      agentId: currentAgentId,
+      command: 'agent:spellbook:toggleDebug',
+      data: {
+        spellId: currentTab?.id,
+        debug: newState,
+      },
+    })
+
+    setIsDebug(newState)
+  }, [isDebug, publish, events, currentAgentId, currentTab?.id])
+
   if (isLoading || !agent) return null
   const isDraftAgent = agent.isDraft
 
@@ -127,6 +161,12 @@ const TopBar: React.FC<TopBarProps> = ({
             } text-white font-bold py-2 px-4 rounded h-[30px]`}
           >
             {engineRunning ? 'Stop' : 'Run'}
+          </Button>
+          <Button
+            onClick={toggleDebug}
+            className="text-white font-bold py-2 px-4 rounded bg-transparent"
+          >
+            <FontAwesomeIcon icon={isDebug ? faBug : faBugSlash} />
           </Button>
         </div>
       )}
