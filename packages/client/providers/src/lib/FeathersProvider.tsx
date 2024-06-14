@@ -91,7 +91,7 @@ export const FeathersProvider = ({
         }, 1000)
       })
 
-      client.io.on('error', (error): void => {
+      client.io.on('error', (error: any): void => {
         dispatch(setConnected(false))
         console.info(`Connection error: ${error} \n trying to reconnect...`)
         setTimeout((): void => {
