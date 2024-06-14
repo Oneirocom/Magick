@@ -16,6 +16,7 @@ import {
   agentPatchResolver,
   agentQueryResolver,
   agentJsonFields,
+  ToggleRunAllData,
 } from './agents.schema'
 import type { Application, HookContext } from '../../declarations'
 import { AgentParams, AgentService, getOptions } from './agents.class'
@@ -86,6 +87,7 @@ export const agent = (app: Application) => {
       'processSeraphEvent',
       'createSeraphEvent',
       'getSeraphEvents',
+      'toggleRunAll',
     ],
     events: AGENT_EVENTS,
   })
@@ -145,6 +147,12 @@ export const agent = (app: Application) => {
       } catch (error: any) {
         throw new Error(`Error in agents:deleteSeraphEvents: ${error.message}`)
       }
+    },
+  })
+
+  app.use('/agents/toggleRunAll', {
+    async create(data: ToggleRunAllData) {
+      return app.service('agents').toggleRunAll(data)
     },
   })
 
@@ -255,6 +263,9 @@ declare module '../../declarations' {
     }
     '/agents/deleteSeraphEvent': {
       remove: ReturnType<any>
+    }
+    '/agents/toggleRunAll': {
+      create: ReturnType<any>
     }
   }
 }
