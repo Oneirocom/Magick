@@ -1,14 +1,9 @@
-import {
-  AGENT_COMMAND,
-  AGENT_COMMAND_PROJECT,
-  MANAGER_COMMAND,
-} from 'communication'
+import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { Agent } from 'server/agents'
-import { CloudAgentManagerV2 } from 'server/cloud-agent-manager'
+import type { Agent } from 'server/agents'
 
 export interface CommandListener<T> {
-  callback: (data: T, context: Agent | CloudAgentManagerV2) => void
+  callback: (data: T, agent: Agent) => void
 }
 
 /**
@@ -16,9 +11,9 @@ export interface CommandListener<T> {
  */
 export class CommandHub {
   /**
-   * The context instance (Agent or CloudAgentManagerV2).
+   * The agent instance.
    */
-  private context: Agent | CloudAgentManagerV2
+  private agent: Agent
   /**
    * The event map that stores the listeners for each event type.
    */
@@ -30,37 +25,33 @@ export class CommandHub {
 
   /**
    * Creates a new CommandHub instance.
-   * @param context - The context instance (Agent or CloudAgentManagerV2).
+   * @param agent - The agent instance.
    * @param worker - The worker instance.
    */
-  constructor(context: Agent | CloudAgentManagerV2, pubsub: RedisPubSub) {
-    this.context = context
+  constructor(agent: Agent, pubsub: RedisPubSub) {
+    this.agent = agent
 
-    // Generate queue name based on context type
-    const contextType = context instanceof Agent ? 'agent' : 'manager'
-    const contextEventName =
-      contextType === 'agent'
-        ? AGENT_COMMAND((context as Agent).id)
-        : MANAGER_COMMAND
+    // Generate queue name
+    const agentCommandEventName = AGENT_COMMAND(this.agent.id)
+    const agentProjectEvent = AGENT_COMMAND_PROJECT(this.agent.projectId)
 
-    // Initialize the pubsub
+    // Initialize the worker
     this.pubsub = pubsub
 
     // Subscribe to the queue
     this.pubsub.subscribe(
-      contextEventName,
+      agentCommandEventName,
       this.handleIncomingCommand.bind(this)
     )
 
-    if (contextType === 'agent') {
-      // Subscribe to the project queue for agents
-      const projectEvent = AGENT_COMMAND_PROJECT((context as Agent).projectId)
-      this.pubsub.subscribe(projectEvent, this.handleIncomingCommand.bind(this))
-    }
+    // Subscribe to the project queue so we can command all agents in a project
+    this.pubsub.subscribe(
+      agentProjectEvent,
+      this.handleIncomingCommand.bind(this)
+    )
   }
 
-  /**
-   * Handles incoming commands and publishes events to listeners.
+  /**EventHandles incoming commands and publishes events to listeners.
    * @param job - The job data.
    */
   private async handleIncomingCommand(job: any) {
@@ -76,15 +67,10 @@ export class CommandHub {
     // }
 
     if (!this.validateEventType(command)) {
-      if (this.context instanceof Agent) {
-        this.context.error(`Invalid event type received: ${command}`)
-        return
-      } else {
-        this.context.logger.error(`Invalid event type received: ${command}`)
-      }
+      this.agent.error(`Invalid event type received: ${command}`)
+      // Log this to your error handling mechanism
       return
     }
-
     this.publish(command, job.data)
   }
 
@@ -177,7 +163,7 @@ export class CommandHub {
   private publish(eventType: string, data: any) {
     const listeners = this.eventMap[eventType]
     if (listeners) {
-      listeners.forEach(listener => listener.callback(data, this.context))
+      listeners.forEach(listener => listener.callback(data, this.agent))
     }
   }
 
@@ -185,44 +171,29 @@ export class CommandHub {
    * Cleans up resources and performs necessary teardown tasks before destroying the CommandHub instance.
    */
   async onDestroy(): Promise<void> {
-    const contextType = this.context instanceof Agent ? 'agent' : 'manager'
-    const contextEventName =
-      contextType === 'agent'
-        ? AGENT_COMMAND((this.context as Agent).id)
-        : MANAGER_COMMAND
-    try {
-      await this.pubsub.unsubscribe(contextEventName)
+    // Generate queue names
+    const agentCommandEventName = AGENT_COMMAND(this.agent.id)
+    const agentProjectEvent = AGENT_COMMAND_PROJECT(this.agent.projectId)
 
-      if (contextType === 'agent') {
-        const projectEvent = AGENT_COMMAND_PROJECT(
-          (this.context as Agent).projectId
-        )
-        await this.pubsub.unsubscribe(projectEvent)
-      }
+    // Unsubscribe from the Redis PubSub channels
+    try {
+      await this.pubsub.unsubscribe(agentCommandEventName)
+      await this.pubsub.unsubscribe(agentProjectEvent)
+      this.agent.logger.debug(
+        `CommandHub: Unsubscribed from Redis PubSub channels for agent ${this.agent.id}`
+      )
     } catch (error) {
-      if (this.context instanceof Agent) {
-        this.context.logger.error(
-          `CommandHub: Error unsubscribing from Redis PubSub channels: ${error}`
-        )
-      } else {
-        this.context.logger.error(
-          `CommandHub: Error unsubscribing from Redis PubSub channels: ${error}`
-        )
-      }
+      this.agent.logger.error(
+        `CommandHub: Error unsubscribing from Redis PubSub channels: ${error}`
+      )
     }
 
     // Clear the eventMap to remove all listeners
     this.eventMap = {}
 
-    if (this.context instanceof Agent) {
-      this.context.logger.info(
-        `CommandHub: CommandHub instance for agent ${this.context.id} destroyed`
-      )
-    } else {
-      this.context.logger.info(
-        'CommandHub: CommandHub instance for AgentManager Destroyed'
-      )
-    }
+    this.agent.logger.info(
+      `CommandHub: CommandHub instance for agent ${this.agent.id} destroyed`
+    )
   }
 
   /**
