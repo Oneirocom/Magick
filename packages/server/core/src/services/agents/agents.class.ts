@@ -7,7 +7,13 @@ import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import { app } from '../../app'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
-import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
+import type {
+  Agent,
+  AgentData,
+  AgentPatch,
+  AgentQuery,
+  ToggleRunAllData,
+} from './agents.schema'
 import type { AgentCommandData } from 'server/agents'
 import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
@@ -405,6 +411,17 @@ export class AgentService<
 
   async remove(agentId: string, params?: ServiceParams) {
     return this._remove(agentId, params)
+  }
+
+  async toggleRunAll(data: ToggleRunAllData) {
+    console.log(`TOGGLE RUN ALL${data.agentId} to ${data.start}`)
+    return this.command({
+      agentId: data.agentId,
+      command: 'agent:spellbook:toggleRunAll',
+      data: {
+        start: data.start,
+      },
+    })
   }
 }
 
