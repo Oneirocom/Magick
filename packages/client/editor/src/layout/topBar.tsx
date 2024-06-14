@@ -2,10 +2,8 @@
 
 import { Button } from '@magickml/client-ui'
 import { usePubSub } from '@magickml/providers'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined'
-import { useToggleRunAllMutation } from 'client/state'
-import toast from 'react-hot-toast'
 export interface TopBarProps {
   rightTopBarItems?: React.ReactNode[]
   leftTopBarItems?: React.ReactNode[]
@@ -20,21 +18,6 @@ const TopBar: React.FC<TopBarProps> = ({
   const [isRunning, setIsRunning] = useState(false)
 
   const { publish, events } = usePubSub()
-  const [toggleRunAll, { data, isLoading, error }] = useToggleRunAllMutation()
-
-  useEffect(() => {
-    if (error) {
-      console.error('Error while toggling run all', error)
-      toast.error('Error while toggling run all')
-    }
-
-    if (data) {
-      console.log('Toggle Running Status:', data)
-      toast.success(
-        `Agent ${agentId} is ${data.runningStatus ? 'running' : 'stopped'}`
-      )
-    }
-  }, [error, data])
 
   const toggleFileDrawer = () => {
     publish(events.TOGGLE_FILE_DRAWER)
@@ -46,7 +29,15 @@ const TopBar: React.FC<TopBarProps> = ({
 
   const toggleRun = () => {
     if (!agentId) return
-    toggleRunAll({ agentId, start: !isRunning })
+    // toggleRunAll({ agentId, start: !isRunning })
+    publish(events.SEND_COMMAND, {
+      agentId: agentId,
+      command: 'agent:spellbook:toggleRunAll',
+      data: {
+        agentId,
+        start: !isRunning,
+      },
+    })
     setIsRunning(!isRunning)
   }
 
@@ -67,16 +58,13 @@ const TopBar: React.FC<TopBarProps> = ({
       <div className="absolute left-1/2 transform -translate-x-1/2">
         <Button
           onClick={toggleRun}
-          disabled={isLoading}
           className={`${
             isRunning
               ? 'bg-[#363d42] hover:bg-[#565c62]'
               : 'bg-[#fe980a] hover:bg-[#f9b454]'
-          } text-white font-bold py-2 px-4 rounded h-[30px] ${
-            isLoading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
+          } text-white font-bold py-2 px-4 rounded h-[30px]`}
         >
-          {isLoading ? 'Loading...' : isRunning ? 'Stop' : 'Run'}
+          {isRunning ? 'Stop' : 'Run'}
         </Button>
       </div>
       <div className="flex items-center space-x-2">
