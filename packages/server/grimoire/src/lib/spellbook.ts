@@ -167,15 +167,6 @@ export class Spellbook<Application extends IApplication> {
     this.initializeCommands()
     this.initializeChannels()
 
-    // Listen for spell changes
-    this.app
-      .service('spells')
-      .on('updated', this.watchSpellUpdateHandler.bind(this))
-
-    this.app
-      .service('spells')
-      .on('patched', this.watchSpellUpdateHandler.bind(this))
-
     this.app
       .service('spells')
       .on('created', this.watchSpellCreatedHandler.bind(this))
@@ -303,6 +294,8 @@ export class Spellbook<Application extends IApplication> {
       killSpells: this.killSpells.bind(this),
       syncState: this.syncState.bind(this),
       refreshSpells: this.refreshSpells.bind(this),
+      startEngineEvent: this.startEngineEvent.bind(this),
+      stopEngineEvent: this.stopEngineEvent.bind(this),
     })
   }
 
@@ -583,6 +576,18 @@ export class Spellbook<Application extends IApplication> {
     }
   }
 
+  async reloadSpells() {
+    this.logger.debug(`Reloading spells for agent ${this.agent.id}`)
+    const spellsData = await this.app.service('spells').find({
+      query: {
+        projectId: this.agent.projectId,
+        type: 'behave',
+        spellReleaseId: this.agent.currentSpellReleaseId || 'null',
+      },
+    })
+    await this.loadSpells(spellsData.data)
+  }
+
   /**
    * Loads the spell runner for the given spell.
    * @param {SpellInterface} spell - Spell instance.
@@ -795,6 +800,54 @@ export class Spellbook<Application extends IApplication> {
     this.agent.log(`Killing spell ${spellId} in agent ${this.agent.id}`)
     this.clearSpellCasters(spellId)
     this.resetSpellCasterStates(spellId)
+  }
+
+  /**
+   * Toggles the run all flag for the spellbook.
+   * Used by the agent to control the spell runner via commands.
+   * @param {any} data - Data payload.
+   * @example
+   * spellbook.startEngineEvent(data);
+   */
+
+  async startEngineEvent(eventPayload: EventPayload) {
+    const { agentId, isPlaytest } = eventPayload
+    if (agentId !== this.agent.id) return
+    const eventKey = this.eventKeyFromEvent(eventPayload)
+    if (!isPlaytest) return
+
+    await this.reloadSpells()
+    await this.createOrGetSpellCasters(eventKey, eventPayload)
+
+    this.playAllSpells()
+  }
+
+  async stopEngineEvent(eventPayload: EventPayload) {
+    const { agentId, isPlaytest } = eventPayload
+    if (agentId !== this.agent.id) return
+    const eventKey = this.eventKeyFromEvent(eventPayload)
+    if (!isPlaytest) return
+    this.clearEventSpellCasters(eventKey)
+  }
+
+  async playAllSpells() {
+    console.log('PLAYING SPELL')
+    for (const spellCasters of this.eventMap.values()) {
+      for (const spellCaster of spellCasters.values()) {
+        this.playSpell({ spellId: spellCaster.spell.id })
+        await this.updateSpellState(spellCaster.spell.id, { isRunning: true })
+      }
+    }
+  }
+
+  async clearEventSpellCasters(eventKey: string) {
+    const spellCasters = this.eventMap.get(eventKey)
+    if (!spellCasters) return
+    for (const spellCaster of spellCasters.values()) {
+      spellCaster.dispose()
+    }
+
+    this.eventMap.delete(eventKey)
   }
 
   /**
