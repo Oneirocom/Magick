@@ -20,6 +20,7 @@ import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
 import { useSelector } from 'react-redux'
 import { useMarkdownProcessor } from 'chat-window'
+import useEditorSession from '../../hooks/useEditorSession'
 
 type Props = {
   tab: Tab
@@ -43,6 +44,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
   const { publish, events } = usePubSub()
+  const editorSession = useEditorSession()
 
   const {
     history,
@@ -69,8 +71,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
     const { data, event, actionName } = lastEvent
     const { content } = data
 
-    if (event?.runInfo?.spellId !== spell.id || event.channel !== spell.id)
-      return
+    if (event?.runInfo?.spellId !== spell.id) return
 
     if (actionName === SEND_MESSAGE) {
       printToConsole(content)
@@ -111,9 +112,8 @@ const ChatWindow = ({ tab, spellName }: Props) => {
       content: value,
       sender: data.sender || 'user',
       observer: data.observer || 'assistant',
-      client: 'cloud.magickml.com',
-      // TODO this should be a sessiON ID for this IDE session
-      channel: spell.id,
+      client: 'editor',
+      channel: editorSession,
       projectId: config.projectId,
       channelType: 'spell playtest',
       rawData: value,
