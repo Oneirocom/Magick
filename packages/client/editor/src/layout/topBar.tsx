@@ -1,22 +1,27 @@
 'use client'
 
-import { Button } from '@magickml/client-ui'
-import { useConfig, usePubSub } from '@magickml/providers'
-import React, { useCallback, useEffect, useState } from 'react'
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined'
-import { useDispatch, useSelector } from 'react-redux'
 import {
-  RootState,
-  selectEngineRunning,
-  setEngineRunning,
+  faBug,
+  // faBugSlash
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useConfig, usePubSub } from '@magickml/providers'
+import useEditorSession from '../hooks/useEditorSession'
+import { useDispatch, useSelector } from 'react-redux'
+import { Button } from '@magickml/client-ui'
+import { enqueueSnackbar } from 'notistack'
+import toast from 'react-hot-toast'
+import posthog from 'posthog-js'
+import {
   useLazyGetAgentByIdQuery,
   useSelectAgentsState,
+  selectEngineRunning,
+  setEngineRunning,
+  RootState,
 } from 'client/state'
 
-import toast from 'react-hot-toast'
-import useEditorSession from '../hooks/useEditorSession'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBug, faBugSlash } from '@fortawesome/free-solid-svg-icons'
 export interface TopBarProps {
   rightTopBarItems?: React.ReactNode[]
   leftTopBarItems?: React.ReactNode[]
@@ -133,6 +138,38 @@ const TopBar: React.FC<TopBarProps> = ({
     setIsDebug(newState)
   }, [isDebug, publish, events, currentAgentId, currentTab?.id])
 
+  const onKill = () => {
+    publish(events.SEND_COMMAND, {
+      command: 'agent:spellbook:killSpells',
+    })
+
+    publish(events.RESET_NODE_STATE)
+
+    posthog.capture('kill_all_spells', {
+      agentId: currentAgentId,
+    })
+
+    enqueueSnackbar('All spells stopped.  Send an event to start them again.', {
+      variant: 'success',
+    })
+  }
+
+  const onRefresh = () => {
+    publish(events.SEND_COMMAND, {
+      command: 'agent:spellbook:refreshSpells',
+    })
+
+    publish(events.RESET_NODE_STATE)
+
+    posthog.capture('refresh_all_spells', {
+      agentId: currentAgentId,
+    })
+
+    enqueueSnackbar('All spells refreshed.', {
+      variant: 'success',
+    })
+  }
+
   if (isLoading || !agent) return null
   const isDraftAgent = agent.isDraft
 
@@ -147,32 +184,57 @@ const TopBar: React.FC<TopBarProps> = ({
         </Button>
 
         {leftTopBarItems?.map((item, index) => (
-          <>{item}</>
+          <React.Fragment key={index}>{item}</React.Fragment>
         ))}
       </div>
-      {isDraftAgent && (
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+      <div className="flex items-center space-x-4 absolute left-1/2 transform -translate-x-1/2">
+        <Button
+          className="h-6"
+          variant="secondary"
+          size="sm"
+          onClick={onRefresh}
+        >
+          Reset
+        </Button>
+        {isDraftAgent && (
           <Button
             onClick={toggleRun}
             className={`${
               engineRunning
                 ? 'bg-[#363d42] hover:bg-[#565c62]'
-                : 'bg-[#fe980a] hover:bg-[#f9b454]'
+                : 'bg-[#fe980a] hover:bg-[#d7820b]'
             } text-white font-bold py-2 px-4 rounded h-[30px]`}
           >
             {engineRunning ? 'Stop' : 'Run'}
           </Button>
-          <Button
-            onClick={toggleDebug}
-            className="text-white font-bold py-2 px-4 rounded bg-transparent"
-          >
-            <FontAwesomeIcon icon={isDebug ? faBug : faBugSlash} />
-          </Button>
-        </div>
-      )}
+        )}
+        <Button
+          className="h-6"
+          variant="destructive"
+          size="sm"
+          onClick={onKill}
+        >
+          Kill
+        </Button>
+      </div>
       <div className="flex items-center space-x-2">
+        <Button
+          className={`h-[26px] w-[28px] bg-transparent shadow-sm 0`}
+          size="sm"
+          onClick={toggleDebug}
+        >
+          <FontAwesomeIcon
+            icon={faBug}
+            className={`text-white  ${
+              isDebug
+                ? 'text-[#3acd44] hover:text-[#21f343]'
+                : 'text-[#0b0d0e] hover:text-[#3acd44]'
+            }`}
+            size="lg"
+          />
+        </Button>
         {rightTopBarItems?.map((item, index) => (
-          <>{item}</>
+          <React.Fragment key={index}>{item}</React.Fragment>
         ))}
         <div className="flex items-center space-x-2 p-1 rounded-md">
           <Button
