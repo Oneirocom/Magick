@@ -1,20 +1,16 @@
 'use client'
-import { usePubSub } from '@magickml/providers'
-import { Button } from '@magickml/client-ui'
+
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import { RootState, selectTabNodesLength } from 'client/state'
-import { enqueueSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
 import { cx } from 'class-variance-authority'
 import { cn } from '@magickml/client-ui'
-import posthog from 'posthog-js'
 
 const VerticalDivider = () => (
   <div className="inline-block h-[250px] min-h-[1em] w-0.5 self-stretch bg-[var(--background-color)] opacity-100 dark:opacity-50"></div>
 )
 
 export const StatusBar = () => {
-  const { publish, events } = usePubSub()
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
   const nodesLength = useSelector(
     selectTabNodesLength(currentTab?.id as string)
@@ -25,38 +21,6 @@ export const StatusBar = () => {
   const { currentAgentId } = useSelector(
     (state: RootState) => state.globalConfig
   )
-
-  const onKill = () => {
-    publish(events.SEND_COMMAND, {
-      command: 'agent:spellbook:killSpells',
-    })
-
-    publish(events.RESET_NODE_STATE)
-
-    posthog.capture('kill_all_spells', {
-      agentId: currentAgentId,
-    })
-
-    enqueueSnackbar('All spells stopped.  Send an event to start them again.', {
-      variant: 'success',
-    })
-  }
-
-  const onRefresh = () => {
-    publish(events.SEND_COMMAND, {
-      command: 'agent:spellbook:refreshSpells',
-    })
-
-    publish(events.RESET_NODE_STATE)
-
-    posthog.capture('refresh_all_spells', {
-      agentId: currentAgentId,
-    })
-
-    enqueueSnackbar('All spells refreshed.', {
-      variant: 'success',
-    })
-  }
 
   return (
     <div
@@ -93,25 +57,6 @@ export const StatusBar = () => {
         Current spell id: {currentTab?.params.spellId as string}
       </p>
       <VerticalDivider />
-
-      <div className="flex flex-grow justify-end">
-        <Button
-          className="h-6 mr-4"
-          variant="secondary"
-          size="sm"
-          onClick={onRefresh}
-        >
-          Reset
-        </Button>
-        <Button
-          className="h-6"
-          variant="destructive"
-          size="sm"
-          onClick={onKill}
-        >
-          Kill
-        </Button>
-      </div>
     </div>
   )
 }
