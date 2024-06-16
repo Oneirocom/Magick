@@ -42,9 +42,11 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { currentAgentId } = globalConfig
+  const { currentAgentId, engineRunning } = globalConfig
   const { publish, events } = usePubSub()
   const editorSession = useEditorSession()
+
+  const readOnly = !engineRunning
 
   const {
     history,
@@ -189,61 +191,70 @@ const ChatWindow = ({ tab, spellName }: Props) => {
 
   return (
     <Window toolbar={toolbar}>
-      {/* Chat window layout */}
-      <div className="flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto">
-        {/* Data editor section */}
-        <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
-          <Scrollbars ref={scrollbars}>
-            <Editor
-              theme="sds-dark"
-              language="json"
-              value={localState?.playtestData}
-              options={{
-                minimap: { enabled: false },
-                wordWrap: 'bounded',
-                fontSize: 14,
-              }}
-              defaultValue={
-                localState?.playtestData ||
-                JSON.stringify({ sender: 'user', observer: 'assistant' })
-              }
-              onChange={onDataChange}
-              beforeMount={handleEditorWillMount}
-            />
-          </Scrollbars>
-        </div>
-        <div
-          className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
-        ></div>
+      <>
+        <div className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center">
+          {/* Data editor section */}
+          <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
+            <Scrollbars ref={scrollbars}>
+              {/* Feedback overlay */}
 
-        {/* Chat history section */}
-        <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
-          <Scrollbars ref={scrollbars}>
-            <ul className="list-none m-0 p-2">
-              {history.map((message: Message, index) => {
-                if (message.sender === 'user') {
-                  return (
-                    <li key={index}>
-                      <UserMessage message={message.content} />
-                    </li>
-                  )
-                } else if (message.sender === 'agent') {
-                  return (
-                    <li key={index}>
-                      <AgentMessage message={message.content} />
-                    </li>
-                  )
-                } else {
-                  return null
+              <Editor
+                theme="sds-dark"
+                language="json"
+                value={localState?.playtestData}
+                options={{
+                  minimap: { enabled: false },
+                  wordWrap: 'bounded',
+                  fontSize: 14,
+                  readOnly: readOnly,
+                }}
+                defaultValue={
+                  localState?.playtestData ||
+                  JSON.stringify({ sender: 'user', observer: 'assistant' })
                 }
-              })}
-            </ul>
-          </Scrollbars>
-        </div>
+                onChange={onDataChange}
+                beforeMount={handleEditorWillMount}
+              />
+            </Scrollbars>
+          </div>
+          <div
+            className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
+          ></div>
 
-        {/* Input section */}
-        <ChatInput onChange={onChange} value={value} onSend={onSend} />
-      </div>
+          {/* Chat history section */}
+          {readOnly && (
+            <div className="relative inset-0 flex items-center justify-center z-50 h-full">
+              <div className="text-white text-lg">Read-Only Mode</div>
+            </div>
+          )}
+          <div className="flex-1 overflow-hidden bg-[var(--background-color)] relative">
+            <Scrollbars ref={scrollbars}>
+              <ul className="list-none m-0 p-2">
+                {history.map((message: Message, index) => {
+                  if (message.sender === 'user') {
+                    return (
+                      <li key={index}>
+                        <UserMessage message={message.content} />
+                      </li>
+                    )
+                  } else if (message.sender === 'agent') {
+                    return (
+                      <li key={index}>
+                        <AgentMessage message={message.content} />
+                      </li>
+                    )
+                  } else {
+                    return null
+                  }
+                })}
+              </ul>
+            </Scrollbars>
+          </div>
+
+          {/* Input section */}
+          <ChatInput onChange={onChange} value={value} onSend={onSend} />
+        </div>
+      </>
     </Window>
   )
 }
