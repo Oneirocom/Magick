@@ -193,7 +193,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       onPaneContextMenu={handlePaneContextMenu}
       onNodeContextMenu={handleNodeContextMenu}
     >
-      {!engineRunning && (
+      {engineRunning && (
         <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-[#ec1048] text- px-2 py-1 rounded-md text-sm font-bold z-50 mt-4 text-white">
           Read-Only Mode
         </div>
