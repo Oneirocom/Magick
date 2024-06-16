@@ -22,6 +22,7 @@ import { CommentNode } from '../nodeTypes/comment'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 import { NodeGrouping } from '../components/nodeGroups'
 import { GroupNodeComponent } from '../nodeTypes/group'
+import { useSelector } from 'react-redux'
 
 export type MagickReactFlowInstance = ReactFlowInstance<
   MagickNodeType,
@@ -114,6 +115,10 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     edges,
   } = behaveGraphFlow
 
+  const globalConfig = useSelector((state: RootState) => state.globalConfig)
+
+  const { engineRunning } = globalConfig
+
   // memoize node types
   const nodeTypes = useMemo(() => {
     if (!behaveNodeTypes) return {}
@@ -157,6 +162,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
 
   return (
     <ReactFlow<MagickNodeType, MagickEdgeType>
+      className="relative"
       proOptions={proOptions}
       nodeTypes={nodeTypes}
       nodes={nodes}
@@ -187,6 +193,11 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       onPaneContextMenu={handlePaneContextMenu}
       onNodeContextMenu={handleNodeContextMenu}
     >
+      {!engineRunning && (
+        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-[#ec1048] text- px-2 py-1 rounded-md text-sm font-bold z-50 mt-4 text-white">
+          Read-Only Mode
+        </div>
+      )}
       <CustomControls
         setBehaviorGraph={setGraphJson}
         specJson={specJSON}
