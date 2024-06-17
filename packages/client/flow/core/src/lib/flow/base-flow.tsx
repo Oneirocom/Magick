@@ -23,6 +23,8 @@ import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 import { NodeGrouping } from '../components/nodeGroups'
 import { GroupNodeComponent } from '../nodeTypes/group'
 import { useSelector } from 'react-redux'
+import * as Frigade from '@frigade/react'
+import { Provider as FrigadeProvider } from '@frigade/react'
 
 export type MagickReactFlowInstance = ReactFlowInstance<
   MagickNodeType,
@@ -193,6 +195,16 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       onPaneContextMenu={handlePaneContextMenu}
       onNodeContextMenu={handleNodeContextMenu}
     >
+      <FrigadeProvider
+        apiKey={process.env.NEXT_PUBLIC_FRIGADE_KEY || ''}
+        userId={undefined}
+      >
+        <Frigade.Announcement
+          flowId="flow_7mVcV55F"
+          dismissible={true}
+          className="z-10"
+        />
+      </FrigadeProvider>
       {engineRunning && (
         <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-[#ec1048] text- px-2 py-1 rounded-md text-sm font-bold z-50 mt-4 text-white">
           Read-Only Mode
