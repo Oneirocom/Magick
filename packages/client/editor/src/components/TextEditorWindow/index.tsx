@@ -129,10 +129,10 @@ const TextEditor = () => {
     const formattedCode = code.replace('\r\n', '\n')
     if (formattedCode === activeInput.value) return
 
-    if (activeInput) {
+    if (selectedNode.id === activeInput.nodeId) {
       dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
     }
-  }, [debouncedCode, activeInput, selectedNode])
+  }, [code, activeInput, selectedNode, dispatch])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
