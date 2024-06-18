@@ -30,6 +30,11 @@ const TextEditor = () => {
 
   const [debouncedCode] = useDebounce(code, 2000)
 
+  const [debouncedSetActiveInput] = useDebounce(
+    (x: Record<string, any>) => dispatch(setActiveInput(x)),
+    1000
+  )
+
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
     minimap: { enabled: false },
@@ -128,8 +133,8 @@ const TextEditor = () => {
     if (code === undefined || !selectedNode || !activeInput) return
 
     const formattedCode = code.replace('\r\n', '\n')
-
-    dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
+    // console.log('activeInput', activeInput)
+    debouncedSetActiveInput({ ...activeInput, value: formattedCode })
   }, [code, selectedNode])
 
   // Handles loading the code from selected node if a text editor data node
