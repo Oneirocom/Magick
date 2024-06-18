@@ -1,39 +1,48 @@
 'use client'
-// import { debounce } from 'lodash'
+
 import Editor, { Monaco } from '@monaco-editor/react'
 import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
-import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
-import { selectActiveInput, setActiveInput } from 'client/state'
 import { useChangeNodeData } from '@magickml/flow-core'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
 import { useOnSelectionChange } from '@xyflow/react'
 import { MagickNodeType } from '@magickml/client-types'
+import { Tab, usePubSub } from '@magickml/providers'
+import { IDockviewPanelProps } from 'dockview'
+import { useSelector } from 'react-redux'
+import { RootState } from 'client/state'
 
-const TextEditor = () => {
-  const dispatch = useDispatch()
+type Props = IDockviewPanelProps<{
+  tab: Tab
+  spellId: string
+}>
+const TextEditor = (props: Props) => {
   const [code, setCode] = useState<string | undefined>(undefined)
   const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
+  const [activeInput, setActiveInput] = useState<{
+    value: string
+    nodeId?: string
+    inputType?: string
+    name?: string
+  } | null>(null)
+  const { subscribe, publish, events } = usePubSub()
+
+  const { currentTab } = useSelector((state: RootState) => state.tabLayout)
 
   useOnSelectionChange({
     onChange: ({ nodes }) => {
-      if (nodes.length > 1) {
+      if (nodes.length > 1 || nodes[0] === undefined) {
         setSelectedNode(null)
         return
+      } else {
+        setSelectedNode(nodes[0])
       }
-
-      setSelectedNode(nodes[0])
     },
   })
 
   const [debouncedCode] = useDebounce(code, 2000)
-
-  const [debouncedSetActiveInput] = useDebounce(
-    (x: Record<string, any>) => dispatch(setActiveInput(x)),
-    1000
-  )
 
   const [editorOptions] = useState<Record<string, any>>({
     wordWrap: 'on',
@@ -48,7 +57,6 @@ const TextEditor = () => {
     if (!selectedNode) return
     updateNodeData(key, value)
   }
-  const activeInput = useSelector(selectActiveInput)
 
   const handleEditorWillMount = (monaco: Monaco) => {
     monaco.editor.defineTheme('sds-dark', {
@@ -130,12 +138,20 @@ const TextEditor = () => {
 
   // Handle updating the nodes input socket value
   useEffect(() => {
-    if (code === undefined || !selectedNode || !activeInput) return
+    if (code === undefined || !selectedNode || !currentTab) return
 
     const formattedCode = code.replace('\r\n', '\n')
-    // console.log('activeInput', activeInput)
-    debouncedSetActiveInput({ ...activeInput, value: formattedCode })
-  }, [code, selectedNode])
+    setActiveInput({
+      ...activeInput,
+      value: formattedCode,
+    })
+    publish(events.$CHAT_TO_INPUT(currentTab.id), {
+      value: formattedCode,
+      nodeId: selectedNode.id,
+      name: 'textEditorData',
+      inputType: 'string',
+    })
+  }, [code, selectedNode, currentTab])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
@@ -148,17 +164,33 @@ const TextEditor = () => {
     setCode(textEditorData)
   }, [selectedNode?.id])
 
-  // Handles setting the code from the active input
   useEffect(() => {
     if (activeInput?.value === code) return
     if (activeInput?.inputType !== 'string') return
     setCode(activeInput.value)
   }, [activeInput])
 
+  useEffect(() => {
+    if (!currentTab) return
+    const unsubscribe = subscribe(
+      events.$INPUT_TO_CHAT(currentTab.id),
+      (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
+        if (activeInput?.name !== name) {
+          setActiveInput({ value, nodeId: incomingNodeId, inputType, name })
+        }
+        setCode(value)
+      }
+    )
+    return () => {
+      unsubscribe()
+    }
+  }, [selectedNode, currentTab, activeInput])
+
   if (!selectedNode || !selectedNode?.data?.configuration) return null
 
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
+
   if (
     textEditorData === undefined &&
     (!activeInput || activeInput?.inputType !== 'string')
