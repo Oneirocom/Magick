@@ -1,9 +1,10 @@
 import { resolve } from 'path'
+import AgentModule from './modules/agent-module'
 
 export default defineNitroConfig({
   srcDir: 'server',
   //   compatibilityDate: '2024-06-17', // for v3 we will need this
-  modules: [],
+  modules: [AgentModule],
 
   runtimeConfig: {
     agentId: '123',

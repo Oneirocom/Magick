@@ -279,6 +279,7 @@
     "formdata-node": "^4.4.1",
     "framer-motion": "^11.0.13",
     "glob": "10.2.6",
+    "globby": "^14.0.1",
     "handlebars": "4.7.7",
     "ioredis": "^5.3.2",
     "jose": "4.14.4",

@@ -76,9 +76,6 @@
       "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
-      "@magickml/modules/agent-module": [
-        "packages/modules/agent-module/src/index.ts"
-      ],
       "@magickml/pages-agents": ["portal/cloud/next/pages/agents/src/index.ts"],
       "@magickml/pages-agents/server": [
         "portal/cloud/next/pages/agents/src/server.ts"
