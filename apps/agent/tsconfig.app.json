@@ -1,0 +1,203 @@
+{
+  "extends": ["./tsconfig.json"],
+  "compilerOptions": {
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@magickml/agent": ["apps/agent/src/index.ts"],
+      "@magickml/client": ["apps/client/src/index.ts"],
+      "@magickml/client-types": ["packages/client/client-types/src/index.ts"],
+      "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
+      "@magickml/docs": ["apps/docs/src/index.ts"],
+      "@magickml/embedder-client-react": [
+        "packages/embedder/client/react/src/index.ts"
+      ],
+      "@magickml/embedder/api/jobs": [
+        "packages/embedder/api/jobs/src/index.ts"
+      ],
+      "@magickml/embedder/api/loaders": [
+        "packages/embedder/api/loaders/src/index.ts"
+      ],
+      "@magickml/embedder/api/packs": [
+        "packages/embedder/api/packs/src/index.ts"
+      ],
+      "@magickml/embedder/auth/plugin": [
+        "packages/embedder/auth/plugin/src/index.ts"
+      ],
+      "@magickml/embedder/auth/token": [
+        "packages/embedder/auth/token/src/index.ts"
+      ],
+      "@magickml/embedder/client/ts": [
+        "packages/embedder/client/ts/src/index.ts"
+      ],
+      "@magickml/embedder/config": ["packages/embedder/config/src/index.ts"],
+      "@magickml/embedder/db/pinecone": [
+        "packages/embedder/db/pinecone/src/index.ts"
+      ],
+      "@magickml/embedder/db/prisma": [
+        "packages/embedder/db/prisma/src/index.ts"
+      ],
+      "@magickml/embedder/db/sql": ["packages/embedder/db/sql/src/index.ts"],
+      "@magickml/embedder/db/sql/generated/*": [
+        "packages/embedder/db/sql/src/lib/prisma/client-embedder/*"
+      ],
+      "@magickml/embedder/loaders/core": [
+        "packages/embedder/loaders/core/src/index.ts"
+      ],
+      "@magickml/embedder/queue": ["packages/embedder/queue/src/index.ts"],
+      "@magickml/embedder/schema": ["packages/embedder/schema/src/index.ts"],
+      "@magickml/embedder/worker": ["packages/embedder/worker/src/index.ts"],
+      "@magickml/feathersRedux": [
+        "packages/client/feathers-redux-toolkit/src/index.ts"
+      ],
+      "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
+      "@magickml/icons": ["packages/client/icons/src/index.ts"],
+      "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
+      "@magickml/pages-agents": ["portal/cloud/next/pages/agents/src/index.ts"],
+      "@magickml/pages-agents/server": [
+        "portal/cloud/next/pages/agents/src/server.ts"
+      ],
+      "@magickml/pages-billing": [
+        "portal/cloud/next/pages/billing/src/index.ts"
+      ],
+      "@magickml/pages-billing/server": [
+        "portal/cloud/next/pages/billing/src/server.ts"
+      ],
+      "@magickml/pages-editor": ["portal/cloud/next/pages/editor/src/index.ts"],
+      "@magickml/pages-editor/server": [
+        "portal/cloud/next/pages/editor/src/server.ts"
+      ],
+      "@magickml/pages-legal": ["portal/cloud/next/pages/legal/src/index.ts"],
+      "@magickml/pages-legal/server": [
+        "portal/cloud/next/pages/legal/src/server.ts"
+      ],
+      "@magickml/pages-shared": ["portal/cloud/next/pages/shared/src/index.ts"],
+      "@magickml/pages-subscribe": [
+        "portal/cloud/next/pages/subscribe/src/index.ts"
+      ],
+      "@magickml/pages-subscribe/server": [
+        "portal/cloud/next/pages/subscribe/src/server.ts"
+      ],
+      "@magickml/pages-template": [
+        "portal/cloud/next/pages/template/src/index.ts"
+      ],
+      "@magickml/pages-template/server": [
+        "portal/cloud/next/pages/template/src/server.ts"
+      ],
+      "@magickml/pages-templates": [
+        "portal/cloud/next/pages/templates/src/index.ts"
+      ],
+      "@magickml/pages-templates/server": [
+        "portal/cloud/next/pages/templates/src/server.ts"
+      ],
+      "@magickml/portal-api": ["portal/cloud/packages/api/src/index.ts"],
+      "@magickml/portal-auth": ["portal/cloud/packages/auth/src/index.ts"],
+      "@magickml/portal-billing": [
+        "portal/cloud/packages/billing/src/index.ts"
+      ],
+      "@magickml/portal-config": ["portal/cloud/packages/config/src/index.ts"],
+      "@magickml/portal-db": ["portal/cloud/packages/db/src/index.ts"],
+      "@magickml/portal-hooks": ["portal/cloud/packages/hooks/src/index.ts"],
+      "@magickml/portal-layout-next": ["portal/cloud/next/layout/src/index.ts"],
+      "@magickml/portal-layout-next/server": [
+        "portal/cloud/next/layout/src/server.ts"
+      ],
+      "@magickml/portal-providers": [
+        "portal/cloud/packages/providers/src/index.ts"
+      ],
+      "@magickml/portal-server-core": [
+        "portal/cloud/next/server/core/src/index.ts"
+      ],
+      "@magickml/portal-server-provider": [
+        "portal/cloud/next/server/provider/src/index.ts"
+      ],
+      "@magickml/portal-server-provider/server": [
+        "portal/cloud/packages/server/provider/src/server.ts"
+      ],
+      "@magickml/portal-server-router": [
+        "portal/cloud/next/server/router/src/index.ts"
+      ],
+      "@magickml/portal-state": ["portal/cloud/packages/state/src/index.ts"],
+      "@magickml/portal-templates": [
+        "portal/cloud/packages/templates/src/index.ts"
+      ],
+      "@magickml/portal-types": ["portal/cloud/packages/types/src/index.ts"],
+      "@magickml/portal-ui": ["portal/cloud/packages/ui/src/index.ts"],
+      "@magickml/portal-utils-server": [
+        "portal/cloud/packages/utils/server/src/index.ts"
+      ],
+      "@magickml/portal-utils-shared": [
+        "portal/cloud/packages/utils/shared/src/index.ts"
+      ],
+      "@magickml/prose": ["portal/cloud/next/prose/src/index.ts"],
+      "@magickml/prose/server": ["portal/cloud/next/prose/src/server.ts"],
+      "@magickml/providers": ["packages/client/providers/src/index.ts"],
+      "@magickml/seraph": ["packages/server/seraph/src/index.ts"],
+      "@magickml/seraph-manager": [
+        "packages/server/seraphManager/src/index.ts"
+      ],
+      "@magickml/server": ["apps/server/src/index.ts"],
+      "@magickml/server-db": ["packages/server/db/src/index.ts"],
+      "@magickml/types": ["packages/@types/src/index.ts"],
+      "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
+      "@magickml/zode": ["packages/zode/src/index.ts"],
+      "@magickml/zodekit": ["nx/zodekit/src/index.ts"],
+      "@packmvp": ["../anne/server/client/sdk.ts"],
+      "chat-window": ["packages/client/chat/src/index.ts"],
+      "client/core": ["packages/client/core/src/index.ts"],
+      "client/editor": ["packages/client/editor/src/index.ts"],
+      "client/feathers-client": [
+        "packages/client/feathers-client/src/index.ts"
+      ],
+      "client/layouts": ["packages/client/layouts/src/index.ts"],
+      "client/state": ["packages/client/state/src/index.ts"],
+      "clientConfig": ["packages/client/config/src/index.ts"],
+      "communication": ["packages/shared/communication/src/index.ts"],
+      "embedder-db-pg": ["packages/embedder/db/pg/src/index.ts"],
+      "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
+      "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
+      "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
+      "plugin-state": ["packages/server/plugin-state/src/index.ts"],
+      "plugins": ["plugins/index.ts"],
+      "plugin/core": ["plugins/core/src/index.ts"],
+      "plugins/shared": ["plugins/shared/src/index.ts"],
+      "portal-client": ["packages/server/portal-client/src/index.ts"],
+      "server-storage": ["packages/server/storage/src/index.ts"],
+      "server/agents": ["packages/server/agents/src/index.ts"],
+      "server/cloud-agent-manager": [
+        "packages/server/cloud-agent-manager/src/index.ts"
+      ],
+      "server/cloud-agent-worker": [
+        "packages/server/cloud-agent-worker/src/index.ts"
+      ],
+      "server/command-hub": ["packages/server/command-hub/src/index.ts"],
+      "server/communication": ["packages/server/communication/src/index.ts"],
+      "server/core": ["packages/server/core/src/index.ts"],
+      "server/credentials": ["packages/server/credentials/src/index.ts"],
+      "server/event-tracker": ["packages/server/event-tracker/src/index.ts"],
+      "server/grimoire": ["packages/server/grimoire/src/index.ts"],
+      "server/logger": ["packages/server/logger/src/index.ts"],
+      "server/plugin": ["packages/server/plugin/src/index.ts"],
+      "server/pluginManager": ["packages/server/pluginManager/src/index.ts"],
+      "server/redis-pubsub": ["packages/server/redis-pubsub/src/index.ts"],
+      "server/schemas": ["packages/server/schemas/src/index.ts"],
+      "servicesShared": ["packages/shared/servicesShared/src/index.ts"],
+      "shared/config": ["packages/shared/config/src/index.ts"],
+      "shared/core": ["packages/shared/core/src/index.ts"],
+      "shared/nodeSpec": ["packages/shared/nodeSpec/src/index.ts"],
+      "shared/rete": ["packages/shared/rete/src/index.ts"],
+      "shared/utils": ["packages/shared/utils/src/index.ts"],
+      "stylesheets": ["packages/client/stylesheets/src/index.ts"],
+      "token-validation": ["packages/server/token-validation/src/index.ts"],
+      "window-agent-channels": [
+        "packages/client/windows/agentChannels/src/index.ts"
+      ],
+      "window-knowledge": ["packages/client/windows/knowledge/src/index.ts"],
+      "windows-events": ["packages/client/windows/events/src/index.ts"],
+      "windows-shared": ["packages/client/windows/shared/src/index.ts"],
+      "windows/config": ["packages/client/windows/config/src/index.ts"],
+      "windows/secrets": ["packages/client/windows/secrets/src/index.ts"]
+    }
+  },
+  "exclude": []
+}
