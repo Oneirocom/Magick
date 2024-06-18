@@ -14,6 +14,7 @@ declare module 'nitropack' {
 
   interface Nitro {
     magick: {
+      agent: any
       scannedNodes: NodeHandler[]
     }
   }
@@ -27,6 +28,7 @@ export default <NitroModule>{
     console.log('Hello from my module!')
     // 1: Initalize magick object
     nitro.magick = {
+      agent: null,
       scannedNodes: [],
     }
 
