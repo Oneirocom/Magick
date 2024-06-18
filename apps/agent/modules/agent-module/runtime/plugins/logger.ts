@@ -1,5 +1,5 @@
 import { consola } from 'consola'
-import { defineNitroPlugin } from 'nitropack/runtime'
+// import { defineNitroPlugin } from 'nitropack/runtime'
 
 export default defineNitroPlugin(nitroApp => {
   consola.info('Agent Logger Plugin Loaded!')
