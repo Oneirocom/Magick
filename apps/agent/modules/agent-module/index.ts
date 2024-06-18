@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url'
 import consola from 'consola'
 
 import { getMagickNodes } from './helpers/scan'
-import { NodeHandler } from './types/shared'
+import { Grimoire } from './types/grimoire'
+import { baseGrimoireConfig } from './config'
 
 declare module 'nitropack' {
   interface NitroOptions {
@@ -13,32 +14,27 @@ declare module 'nitropack' {
   }
 
   interface Nitro {
-    magick: {
-      agent: any
-      scannedNodes: NodeHandler[]
-    }
+    grimoire: Grimoire
   }
 }
 
 export default <NitroModule>{
   async setup(nitro) {
     const resolve = (path: string) =>
+      // @ts-ignore - i think this is a bug
       fileURLToPath(new URL(path, import.meta.url))
 
     console.log('Hello from my module!')
     // 1: Initalize magick object
-    nitro.magick = {
-      agent: null,
-      scannedNodes: [],
-    }
+    nitro.grimoire = baseGrimoireConfig
 
     // Scan the folders for Magick dependencies
     const nodes = await getMagickNodes(nitro)
 
     // Store the scanned nodes
-    nitro.magick.scannedNodes = nodes
+    nitro.grimoire.scannedNodes = nodes
 
-    nitro?.magick?.scannedNodes?.forEach(node => {
+    nitro?.grimoire?.scannedNodes?.forEach(node => {
       consola.info(`Registered node: ${node.name.split('.')[0]}`)
     })
 
@@ -49,12 +45,12 @@ export default <NitroModule>{
     }
 
     nitro.options.virtual['#magick/nodes'] = () => {
-      const imports = nitro.magick.scannedNodes.map(n => n.handler)
+      const imports = nitro.grimoire.scannedNodes.map(n => n.handler)
 
       const code = `
 ${imports.map(handler => `import ${handler} from '${handler}';`).join('\n')}
 export const magickNodes = [
-${nitro.magick.scannedNodes
+${nitro.grimoire.scannedNodes
   .map(n => `  { name: '${n.name}', handler: ${n.handler} }`)
   .join(',\n')}
 ];

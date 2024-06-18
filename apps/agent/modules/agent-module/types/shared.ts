@@ -1,1 +1,1 @@
-export type NodeHandler = { name: string; handler: string }
+export type Handler = { name: string; handler: string }
