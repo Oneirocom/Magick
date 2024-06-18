@@ -25,7 +25,7 @@ export default <NitroModule>{
       fileURLToPath(new URL(path, import.meta.url))
 
     console.log('Hello from my module!')
-    // 1: Initalize magick object
+    // Initalize grimoire object
     nitro.grimoire = baseGrimoireConfig
 
     // Scan the folders for Magick dependencies
@@ -34,16 +34,13 @@ export default <NitroModule>{
     // Store the scanned nodes
     nitro.grimoire.scannedNodes = nodes
 
-    nitro?.grimoire?.scannedNodes?.forEach(node => {
-      consola.info(`Registered node: ${node.name.split('.')[0]}`)
-    })
-
     if (nitro.options.imports) {
       nitro.options.imports.dirs ??= []
-      nitro.options.imports.dirs.push(resolve('runtimes/utils/*'))
+      nitro.options.imports.dirs.push(resolve('runtime/utils/*'))
       consola.info('Added utils to imports', nitro.options.imports.dirs)
     }
 
+    // Inject virtual module for nodes
     nitro.options.virtual['#magick/nodes'] = () => {
       const imports = nitro.grimoire.scannedNodes.map(n => n.handler)
 
@@ -58,5 +55,11 @@ ${nitro.grimoire.scannedNodes
 
       return code
     }
+
+    // Initialize plugins
+    nitro.options.plugins ||= []
+
+    // Add logger plugin
+    nitro.options.plugins.push(resolve('runtime/plugins/logger.ts'))
   },
 }
