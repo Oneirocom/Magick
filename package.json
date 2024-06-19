@@ -6,6 +6,7 @@
     "node": "18.x"
   },
   "scripts": {
+    "agent": "nx dev agent-2",
     "agent-connector": "nx serve agent-connector",
     "agent-server": "nx serve agent-server",
     "dev:agentManager": "nx serve @magickml/cloud-agent-manager-app",

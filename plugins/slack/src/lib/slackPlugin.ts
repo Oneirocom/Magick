@@ -2,7 +2,7 @@ import Redis from 'ioredis'
 import { ActionPayload, EventPayload } from 'server/plugin'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
-import { RedisPubSub } from 'packages/server/redis-pubsub/src'
+
 import {
   sendSlackImage,
   sendSlackMessage,
@@ -36,6 +36,7 @@ import {
   SendSlackMessage,
 } from './configx'
 import { Agent } from 'server/agents'
+import { RedisPubSub } from 'server/redis-pubsub'
 
 export class SlackPlugin extends WebSocketPlugin<
   typeof SLACK_EVENTS,

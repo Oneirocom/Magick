@@ -3,7 +3,7 @@ import {
   NodeCategory,
   SocketsList,
 } from '@magickml/behave-graph'
-import { CORE_DEP_KEYS } from 'plugins'
+import { CORE_DEP_KEYS } from 'plugin/core'
 import { Agent } from 'server/agents'
 import { IEventStore } from '../../services/eventStore'
 import { INPUT_EVENT, OUTPUT_EVENT } from '../../constants'

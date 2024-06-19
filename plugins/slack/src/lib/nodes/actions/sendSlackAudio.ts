@@ -1,4 +1,4 @@
-import { createActionNode } from 'plugins/shared/src'
+import { createActionNode } from 'plugins/shared'
 import { EventPayload } from 'server/plugin'
 import { type SlackEventPayload, SLACK_DEPENDENCIES } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
@@ -30,7 +30,10 @@ export const sendSlackAudio = createActionNode<
     flow: { valueType: 'flow' },
   },
   process: async (
-    dependencies: { [SLACK_DEPENDENCIES.SLACK_CLIENT]: App; IEventStore: IEventStore },
+    dependencies: {
+      [SLACK_DEPENDENCIES.SLACK_CLIENT]: App
+      IEventStore: IEventStore
+    },
     inputs: { audioFile: Buffer },
     write: (key: keyof Outputs, value: any) => void,
     commit: (key: string) => void

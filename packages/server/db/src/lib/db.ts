@@ -1,6 +1,6 @@
-import { PrismaClient } from './prisma/client-core'
+import { PrismaClient } from '@magickml/server-db/prisma/client-core'
 
-export * from './prisma/client-core'
+export * from '@magickml/server-db/prisma/client-core'
 
 export type * from './prisma/client-core/index.d.ts'
 
