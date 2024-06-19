@@ -1,7 +1,7 @@
 'use client'
 
 import { NodeSpecJSON } from '@magickml/behave-graph'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { NodeProps as FlowNodeProps, useEdges } from '@xyflow/react'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
@@ -17,6 +17,13 @@ type BaseNodeProps = FlowNodeProps<MagickNodeType> & {
   spellId: string
   resetNodeState?: boolean
   selected?: boolean | undefined
+  activeInput: {
+    nodeId: string
+    name: string
+    value: any
+    inputType: string
+  } | null
+  setActiveInput: (input: { nodeId: string; name: string } | null) => void
   onResetNodeState: () => void
   spellEvent: any
 }
@@ -28,6 +35,8 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   selected,
   allSpecs,
   spellId,
+  activeInput,
+  setActiveInput,
   resetNodeState = false,
   onResetNodeState,
   spellEvent,
@@ -63,6 +72,10 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       onResetNodeState()
     }
   }, [resetNodeState])
+
+  useEffect(() => {
+    if (!selected) setActiveInput(null)
+  }, [selected])
 
   useEffect(() => {
     if (!data.nodeSpec) {
@@ -118,6 +131,14 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
     }
   }, [spellEvent])
 
+  const isActive = useCallback(
+    (inputName: string) => {
+      if (!activeInput) return false
+      return activeInput.nodeId === id && activeInput.name === inputName
+    },
+    [activeInput]
+  )
+
   const toggleSocketVisibility = () => {
     const newState = !socketsVisible
     setSocketsVisible(newState)
@@ -153,6 +174,9 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
               onChange={handleChange}
               connected={isHandleConnected(edges, id, flowInput.name, 'target')}
               nodeId={id}
+              isActive={isActive(flowInput.name)}
+              activeInput={activeInput}
+              setActiveInput={setActiveInput}
             />
           )}
           {output && (
@@ -194,6 +218,9 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
             onChange={handleChange}
             connected={isHandleConnected(edges, id, input.name, 'target')}
             nodeId={id}
+            isActive={isActive(input.name)}
+            activeInput={activeInput}
+            setActiveInput={setActiveInput}
           />
         </div>
       ))}
