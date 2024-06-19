@@ -10,26 +10,25 @@ import { InputSocketSpecJSON } from '@magickml/behave-graph'
 import { useOnSelectionChange } from '@xyflow/react'
 import { MagickNodeType } from '@magickml/client-types'
 import { usePubSub } from '@magickml/providers'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 
 const TextEditor = () => {
   const [code, setCode] = useState<string | undefined>(undefined)
   const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
-  const [activeInput, setActiveInput] = useState<{
-    value: string
-    nodeId?: string
-    inputType?: string
-    name?: string
-  } | null>(null)
   const { subscribe, publish, events } = usePubSub()
+  const dispatch = useDispatch()
 
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+  const activeInput = useSelector(
+    (state: RootState) => state.globalConfig.activeInput
+  )
 
   useOnSelectionChange({
     onChange: ({ nodes }) => {
       if (nodes.length > 1 || nodes[0] === undefined) {
         setSelectedNode(null)
+        dispatch
         return
       } else {
         setSelectedNode(nodes[0])
@@ -133,20 +132,22 @@ const TextEditor = () => {
 
   // Handle updating the nodes input socket value
   useEffect(() => {
-    if (code === undefined || !selectedNode || !currentTab) return
+    if (
+      code === undefined ||
+      !selectedNode ||
+      !currentTab ||
+      activeInput?.nodeId !== selectedNode?.id
+    )
+      return
 
     const formattedCode = code.replace('\r\n', '\n')
-    setActiveInput({
-      ...activeInput,
-      value: formattedCode,
-    })
     publish(events.$CHAT_TO_INPUT(currentTab.id), {
       value: formattedCode,
       nodeId: selectedNode.id,
-      name: 'textEditorData',
+      name: activeInput?.name || '',
       inputType: 'string',
     })
-  }, [code, selectedNode, currentTab])
+  }, [code, selectedNode, currentTab, activeInput])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
@@ -166,20 +167,17 @@ const TextEditor = () => {
   }, [activeInput])
 
   useEffect(() => {
-    if (!currentTab) return
+    if (!currentTab || !activeInput) return
     const unsubscribe = subscribe(
       events.$INPUT_TO_CHAT(currentTab.id),
       (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
-        if (activeInput?.name !== name) {
-          setActiveInput({ value, nodeId: incomingNodeId, inputType, name })
-        }
         setCode(value)
       }
     )
     return () => {
       unsubscribe()
     }
-  }, [selectedNode, currentTab, activeInput])
+  }, [currentTab, activeInput])
 
   if (!selectedNode || !selectedNode?.data?.configuration) return null
 
