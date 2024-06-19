@@ -64,6 +64,8 @@ export const events: PubSubEvents = {
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
   $RELOAD_GRAPH: tabId => `reloadGraph:${tabId}`,
   $SERAPH_EVENT: tabId => `seraphEvent:${tabId}`,
+  $INPUT_TO_CHAT: tabId => `inputToChat:${tabId}`,
+  $CHAT_TO_INPUT: tabId => `chatToInput:${tabId}`,
 }
 
 // Create the PubSubProvider component
