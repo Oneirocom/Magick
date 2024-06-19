@@ -161,6 +161,9 @@
       ],
       "@magickml/server": ["apps/server/src/index.ts"],
       "@magickml/server-db": ["packages/server/db/src/index.ts"],
+      "@magickml/server-db/prisma/client-core": [
+        "packages/server/db/src/lib/prisma/client-core"
+      ],
       "@magickml/types": ["packages/@types/src/index.ts"],
       "@magickml/vercel-sdk-core": ["packages/server/vercel/core/src/index.ts"],
       "@magickml/zode": ["packages/zode/src/index.ts"],

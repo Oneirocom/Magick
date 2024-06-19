@@ -1,4 +1,4 @@
-import { createActionNode } from 'plugins/shared/src'
+import { createActionNode } from 'plugins/shared'
 import { EventPayload } from 'server/plugin'
 import {
   type DiscordEventPayload,

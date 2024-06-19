@@ -1,4 +1,4 @@
-import { createEventsEnum } from 'plugins/shared/src'
+import { createEventsEnum } from 'plugins/shared'
 import {
   ClientEvents,
   ColorResolvable,

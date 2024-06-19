@@ -5,7 +5,7 @@ import {
 } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from 'server/grimoire'
-import { createActionNode } from 'plugins/shared/src'
+import { createActionNode } from 'plugins/shared'
 
 type Inputs = {
   flow: SocketDefinition
