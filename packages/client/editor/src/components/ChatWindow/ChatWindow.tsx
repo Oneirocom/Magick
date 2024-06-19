@@ -223,8 +223,11 @@ const ChatWindow = ({ tab, spellName }: Props) => {
 
           {/* Chat history section */}
           {readOnly && (
-            <div className="relative inset-0 flex items-center justify-center z-50 h-full">
+            <div className="relative inset-0 flex flex-col items-center justify-center z-50 h-full">
               <div className="text-white text-lg">Read-Only Mode</div>
+              <div className="text-white text-md mt-2">
+                Run your spell to test your Agent
+              </div>
             </div>
           )}
           <div className="flex-1 overflow-hidden bg-[var(--background-color)] relative">
