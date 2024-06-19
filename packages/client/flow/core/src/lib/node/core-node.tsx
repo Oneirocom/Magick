@@ -1,9 +1,14 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { enqueueSnackbar } from 'notistack'
 import { usePubSub } from '@magickml/providers'
-import { useSelectAgentsSpell } from 'client/state'
+import {
+  useSelectAgentsSpell,
+  selectActiveInput,
+  setActiveInput,
+} from 'client/state'
 import { BaseNode } from './base-node'
 
 type BaseNodeProps = React.ComponentProps<typeof BaseNode>
@@ -19,13 +24,16 @@ export type CoreNodeProps = Omit<
 export const CoreNode: React.FC<CoreNodeProps> = props => {
   const { id, spellId } = props
   const { events, subscribe } = usePubSub()
+  const dispatch = useDispatch()
   const { lastItem: spellEvent } = useSelectAgentsSpell()
+  const activeInput = useSelector(selectActiveInput)
   const [resetNodeState, setResetNodeState] = useState(false)
 
   useEffect(() => {
     const unsubscribe = subscribe(events.RESET_NODE_STATE, () => {
       setTimeout(() => {
         onResetNodeState()
+        dispatch(setActiveInput(null))
       }, 1000)
     })
 
@@ -41,6 +49,13 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
       setResetNodeState(false)
     }, 100)
   }
+
+  const setActiveInputWrapper = useCallback(
+    (input: { nodeId: string; name: string } | null) => {
+      dispatch(setActiveInput(input))
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     if (!spellEvent) return
@@ -63,6 +78,8 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
     <BaseNode
       {...props}
       resetNodeState={resetNodeState}
+      activeInput={activeInput}
+      setActiveInput={setActiveInputWrapper}
       onResetNodeState={onResetNodeState}
       spellEvent={spellEvent}
     />
