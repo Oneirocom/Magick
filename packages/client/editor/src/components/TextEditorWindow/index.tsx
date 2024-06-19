@@ -9,16 +9,11 @@ import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
 import { useOnSelectionChange } from '@xyflow/react'
 import { MagickNodeType } from '@magickml/client-types'
-import { Tab, usePubSub } from '@magickml/providers'
-import { IDockviewPanelProps } from 'dockview'
+import { usePubSub } from '@magickml/providers'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 
-type Props = IDockviewPanelProps<{
-  tab: Tab
-  spellId: string
-}>
-const TextEditor = (props: Props) => {
+const TextEditor = () => {
   const [code, setCode] = useState<string | undefined>(undefined)
   const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
   const [activeInput, setActiveInput] = useState<{
