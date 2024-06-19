@@ -252,10 +252,10 @@ const TopBar: React.FC<TopBarProps> = ({
               >
                 <FontAwesomeIcon
                   icon={faBug}
-                  className={`text-white  ${
+                  className={`${
                     isDebug
                       ? 'text-[#3acd44] hover:text-[#21f343]'
-                      : 'text-[#0b0d0e] hover:text-[#3acd44]'
+                      : 'text-white hover:text-[#3acd44]'
                   }`}
                   size="lg"
                 />
