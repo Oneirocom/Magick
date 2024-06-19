@@ -16,10 +16,17 @@ type ReadOnlyNodeProps = Omit<
 export const ReadOnlyNode: React.FC<ReadOnlyNodeProps> = props => {
   const { id, spec, spellId, ...rest } = props
 
+  const activeInput = null
   const spellEvent = null
 
   const onResetNodeState = () => {
     // Dummy onResetNodeState logic
+  }
+
+  const setActiveInputWrapper = (
+    input: { nodeId: string; name: string } | null
+  ) => {
+    // Dummy setActiveInput logic
   }
 
   return (
@@ -28,6 +35,8 @@ export const ReadOnlyNode: React.FC<ReadOnlyNodeProps> = props => {
       spec={spec}
       spellId={spellId}
       {...rest}
+      activeInput={activeInput}
+      setActiveInput={setActiveInputWrapper}
       onResetNodeState={onResetNodeState}
       spellEvent={spellEvent}
     />
