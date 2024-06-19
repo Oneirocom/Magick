@@ -6,6 +6,7 @@ import {
 import { Tab, useConfig } from '@magickml/providers'
 import { Window } from 'client/core'
 import {
+  selectEngineRunning,
   selectGraphJson,
   useGetSpellByNameQuery,
   useSaveSpellMutation,
@@ -45,6 +46,9 @@ export const VariableWindow = (props: Props) => {
   const graphJson = useSelector(selectGraphJson(tab.id))
   const { projectId } = useConfig()
   const [saveSpellMutation] = useSaveSpellMutation()
+  const engineRunning = useSelector(selectEngineRunning)
+
+  const readOnly = engineRunning
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewVariableName(e.target.value)
@@ -162,37 +166,54 @@ export const VariableWindow = (props: Props) => {
 
   return (
     <Window borderless>
-      <div className="flex flex-row items-center px-2 mt-2 gap-2 border-b-2 border-b-solid border-b-[var(--background-color)] pb-2 justify-center h-10">
-        <Input
-          className={`focus:ring-2 focus:ring-[var(--accent-color)] focus:border-transparent h-full`}
-          onChange={onInputChange}
-          value={newVariableName}
-          placeholder="New variable"
-        />
-        <Button
-          className="h-full w-8 border border-[var(--dark-3)] bg-ds-neutral rounded-sm"
-          variant="secondary"
-          onClick={createNewVariable}
-        >
-          +
-        </Button>
-      </div>
-      <div className="mb-5">
-        {variables
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map(variable => {
-            return (
-              <Variable
-                key={variable.id}
-                variable={variable}
-                deleteAllVariableNodes={() => {
-                  deleteAllVariableNodes(variable)
-                }}
-                updateVariable={saveVariable}
-                deleteVariable={deleteVariable}
+      <div className="relative h-full">
+        {readOnly ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-50 bg-[#363d42]">
+            <div className="text-white text-lg">Read-Only Mode</div>
+            <div className="text-white text-md mt-2">
+              Run your spell to modify your Agent
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-row items-center px-2 mt-2 gap-2 border-b-2 border-b-solid border-b-[var(--background-color)] pb-2 justify-center h-10">
+              <Input
+                className={`focus:ring-2 focus:ring-[var(--accent-color)] focus:border-transparent h-full ${
+                  readOnly ? 'opacity-50 pointer-events-none' : ''
+                }`}
+                onChange={onInputChange}
+                value={newVariableName}
+                placeholder="New variable"
               />
-            )
-          })}
+              <Button
+                className={`h-full w-8 border border-[var(--dark-3)] bg-ds-neutral rounded-sm ${
+                  readOnly ? 'opacity-50 pointer-events-none' : ''
+                }`}
+                variant="secondary"
+                onClick={createNewVariable}
+              >
+                +
+              </Button>
+            </div>
+            <div className="mb-5">
+              {variables
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(variable => {
+                  return (
+                    <Variable
+                      key={variable.id}
+                      variable={variable}
+                      deleteAllVariableNodes={() => {
+                        deleteAllVariableNodes(variable)
+                      }}
+                      updateVariable={saveVariable}
+                      deleteVariable={deleteVariable}
+                    />
+                  )
+                })}
+            </div>
+          </>
+        )}
       </div>
     </Window>
   )
