@@ -21,6 +21,9 @@ import {
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
 import { debounce } from 'lodash'
+import { usePubSub } from '@magickml/providers'
+import { useSelector } from 'react-redux'
+import { RootState } from 'client/state'
 
 export type InputSocketProps = {
   connected: boolean
@@ -29,25 +32,10 @@ export type InputSocketProps = {
   lastEventInput: any
   specJSON: NodeSpecJSON[]
   hideValue?: boolean
-  isActive: boolean
   textEditorState: string
   valueTypeName?: string
   nodeId: string
   hide?: boolean
-  activeInput: {
-    nodeId: string
-    name: string
-    value: any
-    inputType: string
-  } | null
-  setActiveInput: (
-    input: {
-      nodeId: string
-      name: string
-      value: any
-      inputType: string
-    } | null
-  ) => void
 } & InputSocketSpecJSON
 
 const InputFieldForValue = ({
@@ -59,10 +47,7 @@ const InputFieldForValue = ({
   valueType,
   connected,
   hideValue = false,
-  isActive,
   nodeId,
-  activeInput,
-  setActiveInput,
 }: Pick<
   InputSocketProps,
   | 'choices'
@@ -73,16 +58,14 @@ const InputFieldForValue = ({
   | 'valueType'
   | 'connected'
   | 'hideValue'
-  | 'isActive'
   | 'nodeId'
-  | 'activeInput'
-  | 'setActiveInput'
 >) => {
-  // const activeInput = useSelector(selectActiveInput)
   const showChoices = choices?.length && choices.length > 0
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
-  const [isFocused, setIsFocused] = useState(false)
+  // const [isFocused, setIsFocused] = useState(false)
   const hideValueInput = hideValue || connected
+  const { subscribe, publish, events } = usePubSub()
+  const { currentTab } = useSelector((state: RootState) => state.tabLayout)
 
   const inputClass = cx('h-5 text-sm')
 
@@ -94,7 +77,14 @@ const InputFieldForValue = ({
   const debouncedChangeHandler = useCallback(
     debounce((key, value) => {
       onChange(key, value)
-      setActiveInput({ name, inputType: valueType, value, nodeId })
+      if (currentTab?.id && valueType === 'string') {
+        publish(events.$INPUT_TO_CHAT(currentTab.id), {
+          value: value,
+          nodeId,
+          name,
+          inputType: valueType,
+        })
+      }
     }, 1000),
     [onChange]
   )
@@ -105,25 +95,45 @@ const InputFieldForValue = ({
   }
 
   const onFocus = (x: string) => {
-    if (valueType === 'string') {
-      setIsFocused(true)
+    console.log('Active tab id', currentTab?.id)
+    if (valueType === 'string' && currentTab?.id) {
+      publish(events.$INPUT_TO_CHAT(currentTab.id), {
+        value: x,
+        nodeId,
+        name,
+        inputType: valueType,
+      })
+      // setIsFocused(true)
       onChange(name, x)
-      setActiveInput({ name: name, inputType: valueType, value: x, nodeId })
 
       return
     }
-    setActiveInput(null)
   }
 
   const onBlur = () => {
-    setIsFocused(false)
+    // setIsFocused(false)
   }
 
   useEffect(() => {
-    if (!isActive || !activeInput?.name || isFocused) return
-    onChange(activeInput?.name, activeInput?.value)
-    setInputVal(activeInput?.value || '')
-  }, [isActive, activeInput])
+    if (!currentTab) return
+    const unsubscribe = subscribe(
+      events.$CHAT_TO_INPUT(currentTab.id),
+      (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
+        console.log('SOCKET INCOMING NODE ID', {
+          incomingNodeId,
+          value,
+          nodeId,
+        })
+        if (nodeId !== incomingNodeId) return
+        onChange(name, value)
+        setInputVal(value || '')
+      }
+    )
+
+    return () => {
+      unsubscribe()
+    }
+  }, [currentTab, name, setInputVal])
 
   return (
     <div className={containerClass}>
@@ -207,7 +217,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
   connected,
   specJSON,
   lastEventInput,
-  isActive,
+  // isActive,
   textEditorState,
   nodeId,
   hide,
@@ -250,7 +260,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
           {...rest}
           connected={connected}
           hideValue={isArraySocket || isObjectSocket}
-          isActive={isActive}
+          // isActive={isActive}
           valueType={valueType}
           nodeId={nodeId}
         />
