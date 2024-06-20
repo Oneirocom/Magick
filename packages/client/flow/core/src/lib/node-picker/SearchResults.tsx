@@ -21,13 +21,11 @@ export const SearchResults = ({
   instance: MagickReactFlowInstance
 }) => {
   const resultsRef = useRef<HTMLDivElement>(null)
+  const focusedItemRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const resultItem = resultsRef.current?.querySelector(
-      `[data-index="${focusedIndex}"]`
-    )
-    if (resultItem) {
-      resultItem.scrollIntoView({ block: 'nearest' })
+    if (focusedItemRef.current) {
+      focusedItemRef.current.scrollIntoView({ block: 'nearest' })
     }
   }, [focusedIndex])
 
@@ -40,7 +38,7 @@ export const SearchResults = ({
         {filteredNodes.map(({ type }, index) => (
           <div
             key={type}
-            data-index={index}
+            ref={index === focusedIndex ? focusedItemRef : null}
             className={`p-2 cursor-pointer border-b border-[var(--secondary-3)] ${
               index === focusedIndex ? 'bg-[#282d33]' : 'hover:bg-[#282d33]'
             }`}
