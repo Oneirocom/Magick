@@ -385,6 +385,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tslib": "^2.3.0",
     "typechat": "^0.0.10",
+    "unbuild": "^2.0.0",
     "unified": "^10.1.2",
     "unique-names-generator": "4.7.1",
     "unirest": "0.6.0",
@@ -606,5 +607,6 @@
   "nx": {
     "includedScripts": []
   },
-  "generators": "./generators.json"
+  "generators": "./generators.json",
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
