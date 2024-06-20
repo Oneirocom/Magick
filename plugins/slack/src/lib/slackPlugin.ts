@@ -11,11 +11,10 @@ import {
 } from './nodes'
 import { WebSocketPlugin } from 'server/plugin'
 import { type CorePluginEvents } from 'plugin/core'
-import {
+import Bolt, {
   type AllMiddlewareArgs,
   type MessageEvent,
   type SlackEventMiddlewareArgs,
-  App,
 } from '@slack/bolt'
 
 import {
@@ -59,7 +58,7 @@ export class SlackPlugin extends WebSocketPlugin<
     sendSlackAudio,
   ]
   values = []
-  slack: App | null = null
+  slack: Bolt.App | null = null
   credentials = slackPluginCredentials
 
   constructor({
@@ -94,7 +93,7 @@ export class SlackPlugin extends WebSocketPlugin<
   }
 
   async login(credentials: SlackCredentials) {
-    this.slack = new App({
+    this.slack = new Bolt.App({
       token: credentials['slack-token'],
       signingSecret: credentials['slack-signing-secret'],
       socketMode: true,

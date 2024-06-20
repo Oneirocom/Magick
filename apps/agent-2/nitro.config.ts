@@ -30,9 +30,8 @@ export default defineNitroConfig({
   srcDir: 'src/agent',
   //   compatibilityDate: '2024-06-17', // for v3 we will need this
   modules: [AgentModule],
-
   runtimeConfig: {
-    agentId: '123',
+    agentId: '56fc9cf8-0dd0-491a-9493-9cd145760a58',
   },
   alias: {
     ...getMonorepoTsConfigPaths('../../tsconfig.base.json'),

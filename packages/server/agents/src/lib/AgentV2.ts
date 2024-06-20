@@ -1,5 +1,4 @@
 import pino from 'pino'
-import * as plugins from './../../../../../plugins'
 import {
   AGENT_ERROR,
   AGENT_WARN,
@@ -22,7 +21,7 @@ import { SeraphManager } from '@magickml/seraph-manager'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 
-export type AgentEventPayload<
+export type AgentEventPayloadV2<
   Data = Record<string, unknown>,
   Y = Record<string, unknown>
 > = Partial<
@@ -33,7 +32,7 @@ export type AgentEventPayload<
 > &
   Pick<EventPayload<Data, Y>, 'content' | 'sender' | 'eventName' | 'skipSave'>
 
-type AgentEvents = {
+type AgentEventsV2 = {
   message: (event: EventPayload) => void
   messageReceived: (event: ActionPayload) => void
   messageStream: (event: ActionPayload) => void
@@ -41,12 +40,18 @@ type AgentEvents = {
   error: (error: ActionPayload) => void
 }
 
+export type AgentConfig = {
+  pubsub: RedisPubSub
+  app: Application
+  useInternalPlugins: boolean
+}
+
 /**
  * Agent class represents an agent instance.
  * It contains the agent's data, methods to update the agent, and methods to handle events.
  */
-export class Agent
-  extends (EventEmitter as new () => TypedEmitter<AgentEvents>)
+export class AgentV2
+  extends (EventEmitter as new () => TypedEmitter<AgentEventsV2>)
   implements AgentInterface
 {
   name = ''
@@ -67,19 +72,18 @@ export class Agent
   outputTypes: any[] = []
   heartbeatInterval: NodeJS.Timer
   seraphManager: SeraphManager
+  config: AgentConfig
 
   /**
    * Agent constructor initializes properties and sets intervals for updating agents
    * @param agentData {AgentData} - The instance's data.
    */
-  constructor(
-    agentData: AgentInterface,
-    pubsub: RedisPubSub,
-    app: Application
-  ) {
+  constructor(agentData: AgentInterface, config: AgentConfig) {
     super()
+    const { pubsub, app } = config
     this.id = agentData.id
     this.app = app
+    this.config = config
 
     this.update(agentData)
     this.logger.info('Creating new agent named: %s | %s', this.name, this.id)
@@ -127,19 +131,23 @@ export class Agent
     this.ready = true
   }
 
-  initialize() {
+  async initialize() {
     // initialize the core commands
     // These are used to remotely control the agent
     this.initializeCoreCommands()
 
-    this.pluginManager.loadRawPlugins(plugins)
+    if (this.config.useInternalPlugins) {
+      // dynamic import of the plugins golder
+      const plugins = await import('./../../../../../plugins')
+      this.pluginManager.loadRawPlugins(plugins)
+    }
 
     // initialzie spellbook
     this.initializeSpellbook()
   }
 
   formatEvent<Data = Record<string, unknown>, Y = Record<string, unknown>>(
-    partialEvent: AgentEventPayload<Data, Y>
+    partialEvent: AgentEventPayloadV2<Data, Y>
   ): EventPayload<Data, Y> {
     return {
       channel: 'agent',
@@ -322,11 +330,11 @@ export class Agent
   }
 }
 
-export interface AgentUpdateJob {
+export interface AgentV2UpdateJob {
   agentId: string
 }
 
-export type AgentJob = AgentUpdateJob
+export type AgentV2Job = AgentV2UpdateJob
 
 // Exporting Agent class as default
-export default Agent
+export default AgentV2

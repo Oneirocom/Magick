@@ -2,6 +2,7 @@ import { app } from 'server/core'
 import { AgentCommander } from './lib/AgentCommander'
 
 export * from './lib/Agent'
+export * from './lib/AgentV2'
 export * from './lib/AgentCommander'
 export * from './lib/AgentLogger'
 
