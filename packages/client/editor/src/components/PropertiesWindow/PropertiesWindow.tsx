@@ -1,7 +1,11 @@
 import cx from 'classnames'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { Tab, useConfig } from '@magickml/providers'
-import { selectEngineRunning, useGetSpellByNameQuery } from 'client/state'
+import {
+  selectEngineRunning,
+  setActiveInput,
+  useGetSpellByNameQuery,
+} from 'client/state'
 import { Window } from 'client/core'
 import { SocketConfig } from './SocketConfig'
 import { GraphSocketJSON, NodeSpecJSON } from '@magickml/behave-graph'
@@ -29,7 +33,7 @@ import { SelectSpell } from './SelectSpell'
 
 import { PackSchema } from '@magickml/embedder/schema'
 import { z } from 'zod'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 type Pack = z.infer<typeof PackSchema> & {
   loaders: {
@@ -83,6 +87,7 @@ export const PropertiesWindow = (props: Props) => {
     any
   > | null>(null)
   const engineRunning = useSelector(selectEngineRunning)
+  const dispatch = useDispatch()
 
   const readOnly = engineRunning
   /* KNOWLEDGE PACK STUFF */
@@ -196,7 +201,10 @@ export const PropertiesWindow = (props: Props) => {
   if (!configuration || !spec || !selectedNode) {
     return (
       <Window borderless>
-        <div className="relative h-full">
+        <div
+          className="relative h-full"
+          onClick={() => dispatch(setActiveInput(null))}
+        >
           {readOnly ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center z-50 bg-[#363d42]">
               <div className="text-white text-lg">Read-Only Mode</div>

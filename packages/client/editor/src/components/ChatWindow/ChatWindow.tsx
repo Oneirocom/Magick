@@ -8,6 +8,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Tab, useConfig, usePubSub } from '@magickml/providers'
 import {
   RootState,
+  setActiveInput,
   useGetSpellByNameQuery,
   useSelectAgentsEvent,
 } from 'client/state'
@@ -18,7 +19,7 @@ import posthog from 'posthog-js'
 import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMarkdownProcessor } from 'chat-window'
 import useEditorSession from '../../hooks/useEditorSession'
 
@@ -46,7 +47,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   const { currentAgentId, engineRunning } = globalConfig
   const { publish, events } = usePubSub()
   const editorSession = useEditorSession()
-
+  const dispatch = useDispatch()
   const readOnly = !engineRunning
 
   const {
@@ -194,7 +195,10 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   return (
     <Window toolbar={toolbar}>
       <>
-        <div className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center">
+        <div
+          className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center"
+          onClick={() => dispatch(setActiveInput(null))}
+        >
           {/* Data editor section */}
           <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
             <Scrollbars ref={scrollbars} onScroll={handleScroll}>
