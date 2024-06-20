@@ -41,6 +41,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   const { lastItem: lastEvent } = useSelectAgentsEvent()
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
+  const [userScrolled, setUserScrolled] = useState<boolean>(false)
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId, engineRunning } = globalConfig
   const { publish, events } = usePubSub()
@@ -56,7 +57,8 @@ const ChatWindow = ({ tab, spellName }: Props) => {
     printToConsole,
     onClear,
     setHistory,
-  } = useMessageHistory({})
+    handleScroll,
+  } = useMessageHistory({ userScrolled, setUserScrolled })
 
   const { streamToConsole } = useMessageQueue({
     setHistory,
@@ -195,7 +197,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
         <div className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center">
           {/* Data editor section */}
           <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
-            <Scrollbars ref={scrollbars}>
+            <Scrollbars ref={scrollbars} onScroll={handleScroll}>
               {/* Feedback overlay */}
 
               <Editor
@@ -231,7 +233,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
             </div>
           )}
           <div className="flex-1 overflow-hidden bg-[var(--background-color)] relative">
-            <Scrollbars ref={scrollbars}>
+            <Scrollbars ref={scrollbars} onScroll={handleScroll}>
               <ul className="list-none m-0 p-2">
                 {history.map((message: Message, index) => {
                   if (message.sender === 'user') {
