@@ -556,7 +556,7 @@
     "typed-emitter": "^2.1.0",
     "typescript": "5.4.5",
     "url-loader": "^4.1.1",
-    "verdaccio": "^5.0.4",
+    "verdaccio": "^5.3.1",
     "vite": "5.0.12",
     "vite-plugin-dts": "~3.8.1",
     "vite-plugin-eslint": "1.8.1",
