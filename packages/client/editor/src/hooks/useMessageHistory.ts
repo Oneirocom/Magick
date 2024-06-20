@@ -24,13 +24,6 @@ export const useMessageHistory = ({
     if (!scrollbarsRef.current) return true
     const { scrollTop, scrollHeight, clientHeight } =
       scrollbarsRef.current.getValues()
-    // Consider "at bottom" if within 1px of the bottom
-    console.log(
-      scrollHeight,
-      scrollTop,
-      clientHeight,
-      Math.abs(scrollHeight - scrollTop - clientHeight)
-    )
     return Math.abs(scrollHeight - scrollTop - clientHeight) <= 1
   }, [scrollbarsRef.current])
 
