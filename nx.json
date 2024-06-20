@@ -150,11 +150,7 @@
   "useInferencePlugins": true,
   "defaultBase": "main",
   "release": {
-    "projects": [
-      "embedder-db-prisma",
-      "embedder-client-react",
-      "sdk-providers"
-    ],
+    "projects": ["agent-module"],
     "version": {
       "preVersionCommand": "npx nx build embedder-db-prisma"
     }
