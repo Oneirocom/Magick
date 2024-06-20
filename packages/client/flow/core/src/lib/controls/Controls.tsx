@@ -1,15 +1,18 @@
 'use client'
 
 import { GraphJSON, NodeSpecJSON } from '@magickml/behave-graph'
-import { faSitemap } from '@fortawesome/free-solid-svg-icons'
+import { faSitemap, faBug } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import React from 'react'
 import { ControlButton, Controls } from '@xyflow/react'
 
 import { ClearModal } from './modals/ClearModal'
+import { Button } from 'client/core'
 
 export type CustomControlsProps = {
+  toggleDebug: () => void
+  isDebug: boolean
   setBehaviorGraph: (value: GraphJSON) => void
   specJson: NodeSpecJSON[] | undefined
   miniMapOpen: boolean
@@ -17,7 +20,9 @@ export type CustomControlsProps = {
 }
 
 export const CustomControls: React.FC<CustomControlsProps> = ({
+  isDebug,
   toggleMiniMap,
+  toggleDebug,
 }) => {
   const [clearModalOpen, setClearModalOpen] = useState(false)
 
@@ -27,6 +32,17 @@ export const CustomControls: React.FC<CustomControlsProps> = ({
         <ControlButton title="Minimap" onClick={toggleMiniMap}>
           <FontAwesomeIcon icon={faSitemap} />
         </ControlButton>
+        <Button onClick={toggleDebug} className="bg-[--background-color]">
+          <FontAwesomeIcon
+            icon={faBug}
+            className={`${
+              isDebug
+                ? 'text-[#3acd44] hover:text-[#21f343]'
+                : 'text-white hover:text-[#3acd44]'
+            }`}
+            size="xs"
+          />
+        </Button>
         {/* <ControlButton title="Load" onClick={() => setLoadModalOpen(true)}>
           <FontAwesomeIcon icon={faUpload} />
         </ControlButton> */}
