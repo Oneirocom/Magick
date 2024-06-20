@@ -123,7 +123,7 @@ const Modal = ({
           </div>
         </div>
         <div className="p-4 flex justify-end gap-4">
-          <Button variant="outline" onClick={handleModalBackgroundClick}>
+          <Button variant="portal-neutral" onClick={handleModalBackgroundClick}>
             Close
           </Button>
           {renderOptions()}
