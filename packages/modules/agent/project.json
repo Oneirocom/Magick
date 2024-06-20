@@ -14,20 +14,20 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "commands": [
-          "mkdir -p ./dist/packages/modules/agent",
-          "touch ./dist/packages/modules/agent/.gitkeep",
-          "cd packages/modules/agent && pwd && npx unbuild",
-          "cp -r ./packages/modules/agent/* ./dist/packages/modules/agent"
-        ],
-        "parallel": false
+        "outputPath": "dist/packages/modules/agent",
+        "tsConfig": "packages/modules/agent/tsconfig.lib.json",
+        "packageJson": "packages/modules/agent/package.json",
+        "main": "packages/modules/agent/src/index.ts",
+        "assets": ["packages/modules/agent/*.md"],
+        "external": ["server/schemas"]
       }
     },
     "nx-release-publish": {
       "options": {
-        "packageRoot": "packages/modules/agent"
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {
