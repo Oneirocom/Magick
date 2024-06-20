@@ -15,19 +15,19 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "cd packages/modules/agent && npx unbuild",
-        "outputPath": "dist/packages/modules/agent",
-        "tsConfig": "packages/modules/agent/tsconfig.lib.json",
-        "packageJson": "packages/modules/agent/package.json",
-        "main": "packages/modules/agent/src/index.ts",
-        "assets": ["packages/modules/agent/*.md"]
+        "commands": [
+          "mkdir -p ./dist/packages/modules/agent",
+          "touch ./dist/packages/modules/agent/.gitkeep",
+          "cd packages/modules/agent && pwd && npx unbuild",
+          "cp -r ./packages/modules/agent/* ./dist/packages/modules/agent"
+        ],
+        "parallel": false
       }
     },
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist/{projectRoot}"
+        "packageRoot": "packages/modules/agent"
       }
     },
     "test": {

@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/grimoire/agent",
+  "name": "@magickml/agent-module",
   "version": "0.0.1",
   "exports": {
     ".": {
