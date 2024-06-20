@@ -1,10 +1,8 @@
 'use client'
 
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useConfig, usePubSub } from '@magickml/providers'
-import { faBug } from '@fortawesome/free-solid-svg-icons'
 import useEditorSession from '../hooks/useEditorSession'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@magickml/client-ui'
@@ -19,7 +17,6 @@ import {
 } from '@magickml/client-ui'
 import {
   useLazyGetAgentByIdQuery,
-  useSelectAgentsState,
   selectEngineRunning,
   setEngineRunning,
   RootState,
@@ -42,13 +39,8 @@ const TopBar: React.FC<TopBarProps> = ({
     state => state.globalConfig
   ) as any
 
-  const { lastItem: lastStateEvent } = useSelectAgentsState()
-  const { currentTab } = useSelector((state: RootState) => state.tabLayout)
-
   const [getAgentById, { data: agent, isLoading, isError }] =
     useLazyGetAgentByIdQuery()
-
-  const [isDebug, setIsDebug] = useState(false)
 
   const { publish, events } = usePubSub()
   const dispatch = useDispatch()
@@ -64,14 +56,6 @@ const TopBar: React.FC<TopBarProps> = ({
       toast.error('Error fetching agent')
     }
   }, [isError])
-
-  useEffect(() => {
-    if (!currentTab?.id || !lastStateEvent) return
-    if (lastStateEvent.spellId !== currentTab.id) return
-    if (!lastStateEvent.state) return
-
-    setIsDebug(lastStateEvent.state.debug)
-  }, [lastStateEvent])
 
   const toggleFileDrawer = () => {
     publish(events.TOGGLE_FILE_DRAWER)
@@ -122,24 +106,6 @@ const TopBar: React.FC<TopBarProps> = ({
       dispatch(setEngineRunning(true))
     }
   }
-
-  const toggleDebug = useCallback(() => {
-    console.log({ publish, events, currentAgentId, agentId: currentTab?.id })
-    if (!publish || !events || !currentAgentId || !currentTab?.id) return
-    const newState = !isDebug
-    console.log('toggleDebug', newState)
-    publish(events.SEND_COMMAND, {
-      projectId: config.projectId,
-      agentId: currentAgentId,
-      command: 'agent:spellbook:toggleDebug',
-      data: {
-        spellId: currentTab?.id,
-        debug: newState,
-      },
-    })
-
-    setIsDebug(newState)
-  }, [isDebug, publish, events, currentAgentId, currentTab?.id])
 
   const onKill = () => {
     publish(events.SEND_COMMAND, {
@@ -243,28 +209,6 @@ const TopBar: React.FC<TopBarProps> = ({
           </Tooltip>
         </div>
         <div className="flex items-center space-x-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                className={`h-[26px] w-[28px] bg-transparent shadow-sm 0`}
-                size="sm"
-                onClick={toggleDebug}
-              >
-                <FontAwesomeIcon
-                  icon={faBug}
-                  className={`${
-                    isDebug
-                      ? 'text-[#3acd44] hover:text-[#21f343]'
-                      : 'text-white hover:text-[#3acd44]'
-                  }`}
-                  size="lg"
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top" sideOffset={8} className="z-50">
-              Toggle debug mode
-            </TooltipContent>
-          </Tooltip>
           {rightTopBarItems?.map((item, index) => (
             <React.Fragment key={index}>{item}</React.Fragment>
           ))}
