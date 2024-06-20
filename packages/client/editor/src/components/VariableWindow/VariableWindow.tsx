@@ -148,19 +148,20 @@ export const VariableWindow = (props: Props) => {
     }
 
     const graph = spell.graph
-    const newGraph = { ...graph, variables: [...graph.variables, newVariable] }
+    const newGraph = { ...graph, variables: [newVariable, ...graph.variables] }
     const newSpell = { ...spell, graph: newGraph }
 
     return saveSpellMutation({ projectId, spell: newSpell })
       .then(() => {
         enqueueSnackbar('Variable created', { variant: 'success' })
-        setNewVariableName('') // Assuming this state is managed in this component
+        setNewVariableName('')
+        setVariables(prevVariables => [newVariable, ...prevVariables])
       })
       .catch(err => {
         console.error(err)
         enqueueSnackbar('Error creating variable', { variant: 'error' })
       })
-  }, [spell, projectId, enqueueSnackbar, newVariableName, graphJson]) // dependencies
+  }, [spell, projectId, enqueueSnackbar, newVariableName, graphJson])
 
   if (!spell?.graph) return null
 
@@ -196,21 +197,19 @@ export const VariableWindow = (props: Props) => {
               </Button>
             </div>
             <div className="mb-5">
-              {variables
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map(variable => {
-                  return (
-                    <Variable
-                      key={variable.id}
-                      variable={variable}
-                      deleteAllVariableNodes={() => {
-                        deleteAllVariableNodes(variable)
-                      }}
-                      updateVariable={saveVariable}
-                      deleteVariable={deleteVariable}
-                    />
-                  )
-                })}
+              {variables.reverse().map(variable => {
+                return (
+                  <Variable
+                    key={variable.id}
+                    variable={variable}
+                    deleteAllVariableNodes={() => {
+                      deleteAllVariableNodes(variable)
+                    }}
+                    updateVariable={saveVariable}
+                    deleteVariable={deleteVariable}
+                  />
+                )
+              })}
             </div>
           </>
         )}
