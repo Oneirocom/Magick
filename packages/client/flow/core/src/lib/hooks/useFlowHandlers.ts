@@ -34,6 +34,7 @@ import { Tab, useTabLayout } from '@magickml/providers'
 import {
   onConnect as onConnectState,
   selectLayoutChangeEvent,
+  setActiveInput,
   setEdges,
   setLayoutChangeEvent,
   setNodes,
@@ -646,6 +647,7 @@ export const useFlowHandlers = ({
       if (blockClose) return
 
       closeNodePicker()
+      dispatch(setActiveInput(null))
     },
     [closeNodePicker, currentKeyPressed, blockClose]
   )

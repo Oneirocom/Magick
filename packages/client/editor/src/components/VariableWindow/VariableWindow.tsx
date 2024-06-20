@@ -8,6 +8,7 @@ import { Window } from 'client/core'
 import {
   selectEngineRunning,
   selectGraphJson,
+  setActiveInput,
   useGetSpellByNameQuery,
   useSaveSpellMutation,
 } from 'client/state'
@@ -16,7 +17,7 @@ import { IDockviewPanelProps } from 'dockview'
 import { useCallback, useEffect, useState } from 'react'
 import { enqueueSnackbar } from 'notistack'
 import { Variable } from './Variable'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, Input } from '@magickml/client-ui'
 import { useReactFlow } from '@xyflow/react'
 
@@ -47,7 +48,7 @@ export const VariableWindow = (props: Props) => {
   const { projectId } = useConfig()
   const [saveSpellMutation] = useSaveSpellMutation()
   const engineRunning = useSelector(selectEngineRunning)
-
+  const dispatch = useDispatch()
   const readOnly = engineRunning
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,7 +168,10 @@ export const VariableWindow = (props: Props) => {
 
   return (
     <Window borderless>
-      <div className="relative h-full">
+      <div
+        className="relative h-full"
+        onClick={() => dispatch(setActiveInput(null))}
+      >
         {readOnly ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center z-50 bg-[#363d42]">
             <div className="text-white text-lg">Read-Only Mode</div>
