@@ -1,0 +1,33 @@
+{
+  "name": "nitroModule",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/nitroModule/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
+      }
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/nitroModule",
+        "tsConfig": "packages/server/nitroModule/tsconfig.lib.json",
+        "packageJson": "packages/server/nitroModule/package.json",
+        "main": "packages/server/nitroModule/src/index.ts",
+        "assets": ["packages/server/nitroModule/*.md"]
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}

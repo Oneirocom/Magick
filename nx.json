@@ -153,7 +153,8 @@
     "projects": [
       "embedder-db-prisma",
       "embedder-client-react",
-      "sdk-providers"
+      "sdk-providers",
+      "nitroModule"
     ],
     "version": {
       "preVersionCommand": "npx nx build embedder-db-prisma"
