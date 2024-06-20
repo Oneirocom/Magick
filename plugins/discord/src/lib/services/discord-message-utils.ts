@@ -1,10 +1,10 @@
 import { EventPayload } from 'server/plugin'
 import { DiscordAgentContext, type DiscordEventPayload } from '../configx'
-import { SentenceTokenizer } from 'natural'
+import Natural from 'natural'
 
 export class DiscordMessageUtils {
   private agentId: string
-  tokenizer = new SentenceTokenizer()
+  tokenizer = new Natural.SentenceTokenizer()
 
   constructor(agentId: string) {
     this.agentId = agentId

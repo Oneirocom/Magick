@@ -6,11 +6,10 @@ import { IRegistry } from '@magickml/behave-graph'
 import pino from 'pino'
 import { getLogger } from 'server/logger'
 import Redis from 'ioredis'
-import * as plugins from './../../../../../plugins'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
 import { CommandHub } from 'server/command-hub'
-import { Agent } from 'server/agents'
+import { Agent, AgentV2 } from 'server/agents'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
@@ -91,7 +90,7 @@ export class PluginManager extends EventEmitter {
    * @type {Agent}
    * @memberof PluginManager
    */
-  agent: Agent
+  agent: Agent | AgentV2
 
   /**
    * Creates an instance of PluginManager.
@@ -119,7 +118,7 @@ export class PluginManager extends EventEmitter {
   }: {
     pluginDirectory: string
     connection: Redis
-    agent: Agent
+    agent: Agent | AgentV2
     pubSub: RedisPubSub
     projectId: string
     commandHub: CommandHub
@@ -149,20 +148,20 @@ export class PluginManager extends EventEmitter {
    * @memberof PluginManager
    */
   initialize(): void {
-    this.loadPlugins()
+    // this.loadPlugins()
   }
 
   /**
    * Loads plugins from the plugin directory and registers them.
    *
    */
-  async loadPlugins(): Promise<void> {
+  async loadRawPlugins(plugins: any): Promise<void> {
     if (this.pluginsLoaded) return
     this.pluginsLoaded = true
 
     for await (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
-      const PluginClass = pluginGetter
+      const PluginClass = pluginGetter as new () => BasePlugin
 
       // Check if PluginClass extends BasePlugin
       // This check assumes BasePlugin is the base class for all your plugins
@@ -181,6 +180,24 @@ export class PluginManager extends EventEmitter {
         })
         await this.registerPlugin(pluginInstance)
       }
+    }
+
+    this.emit('pluginsLoaded', this.getPlugins())
+  }
+
+  async loadPlugins(plugins: (new (args: any) => BasePlugin)[]): Promise<void> {
+    if (this.pluginsLoaded) return
+    this.pluginsLoaded = true
+
+    for await (const Plugin of plugins) {
+      const pluginInstance = new Plugin({
+        agent: this.agent,
+        connection: this.connection,
+        pubSub: this.pubSub,
+        projectId: this.projectId,
+      })
+
+      await this.registerPlugin(pluginInstance)
     }
 
     this.emit('pluginsLoaded', this.getPlugins())

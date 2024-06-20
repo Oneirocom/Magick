@@ -1,9 +1,9 @@
 import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
-import type { Agent } from 'server/agents'
+import type { Agent, AgentV2 } from 'server/agents'
 
 export interface CommandListener<T> {
-  callback: (data: T, agent: Agent) => void
+  callback: (data: T, agent: Agent | AgentV2) => void
 }
 
 /**
@@ -13,8 +13,8 @@ export class CommandHub {
   /**
    * The agent instance.
    */
-  private agent: Agent
-  /**
+  private agent: Agent | AgentV2
+  /**z
    * The event map that stores the listeners for each event type.
    */
   private eventMap: { [key: string]: CommandListener<any>[] } = {}
@@ -28,7 +28,7 @@ export class CommandHub {
    * @param agent - The agent instance.
    * @param worker - The worker instance.
    */
-  constructor(agent: Agent, pubsub: RedisPubSub) {
+  constructor(agent: Agent | AgentV2, pubsub: RedisPubSub) {
     this.agent = agent
 
     // Generate queue name

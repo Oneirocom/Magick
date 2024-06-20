@@ -24,7 +24,7 @@ import { PluginManager } from 'server/pluginManager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
-import { debounce } from 'lodash'
+import lodash from 'lodash'
 import { Agent } from 'server/agents'
 
 export type SocketData = {
@@ -291,7 +291,7 @@ export class SpellCaster extends (EventEmitter as new () => TypedEmitter<SpellCa
     options: any = {}
   ) {
     if (!this.debounceMap.has(event)) {
-      const debouncedFunction = debounce(
+      const debouncedFunction = lodash.debounce(
         () => {
           callback()
         },
