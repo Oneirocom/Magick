@@ -3,35 +3,29 @@ storage: ../tmp/local-registry/storage
 
 # a list of other known repositories we can talk to
 uplinks:
-  gcr:
-    url: https://us-west1-npm.pkg.dev/magick-387817/magickml///us-west1-npm.pkg.dev/magick-387817/magickml/:always-auth=true
-    maxage: 60m
   npmjs:
     url: https://registry.npmjs.org/
-    maxage: 60m
-
 packages:
-  '@magickmlgc/**':
-    # scoped packages
+  '@*/*':
     access: $all
     publish: $all
-    proxy: gcr
-    
-  '**':
-    # give all users (including non-authenticated users) full access
-    # because it is a local registry
-    access: $all
-    publish: $all
-    unpublish: $all
-
-    # if package is not available locally, proxy requests to gcr registry
     proxy: npmjs
-
-# log settings
+  '**':
+    access: $all
+    publish: $all
+    proxy: npmjs
+  '@magickml/*':
+    access: $all
+    publish: $all
+    proxy: npmjs
 log:
   type: stdout
   format: pretty
-  level: warn
+  level: http
 
 publish:
   allow_offline: true # set offline to true to allow publish offline
+
+middlewares:
+  audit:
+    enabled: false
