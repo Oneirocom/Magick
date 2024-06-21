@@ -201,7 +201,7 @@ export const Variable = ({
 
   return (
     <div
-      className="z-10"
+      className="z-10 border-b-1"
       onDragStart={event => onDragStart(event, getVariableNodeType(variable))}
       draggable="true"
     >
