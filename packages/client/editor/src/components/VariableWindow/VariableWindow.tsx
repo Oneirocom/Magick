@@ -318,7 +318,7 @@ export const VariableWindow: React.FC<Props> = props => {
   return (
     <Window borderless>
       <div
-        className="relative h-full overflow-hidden flex flex-col"
+        className="relative h-full  flex flex-col"
         onClick={() => dispatch(setActiveInput(null))}
       >
         {readOnly ? (
@@ -360,11 +360,12 @@ export const VariableWindow: React.FC<Props> = props => {
                 items={variables}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="variable-list flex-grow overflow-y-auto">
+                <div className="variable-list overflow-y-auto">
                   {variables.map(variable => (
                     <SortableItem key={variable.id} id={variable.id}>
-                      <div className="variable-item border-b-4 border-gray-600 bg-gray-800 hover:border-[#1cc5eb]">
+                      <div className="variable-item border-black border-b  bg-gray-800">
                         <Variable
+                          key={variable.id}
                           variable={variable}
                           deleteAllVariableNodes={() => {
                             deleteAllVariableNodes(variable)
@@ -379,7 +380,7 @@ export const VariableWindow: React.FC<Props> = props => {
               </SortableContext>
               <DragOverlay>
                 {activeId ? (
-                  <div className="variable-item border-b-4 border-gray-600 bg-gray-800 opacity-50">
+                  <div className="variable-item bg-gray-800">
                     <Variable
                       variable={
                         variables.find(v => v.id === activeId) as VariableJSON
