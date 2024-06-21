@@ -363,7 +363,7 @@ export const VariableWindow: React.FC<Props> = props => {
                 <div className="variable-list overflow-y-auto">
                   {variables.map(variable => (
                     <SortableItem key={variable.id} id={variable.id}>
-                      <div className="variable-item border-black border-b  bg-gray-800">
+                      <div className="variable-item border-black border-b-none bg-gray-800">
                         <Variable
                           key={variable.id}
                           variable={variable}
