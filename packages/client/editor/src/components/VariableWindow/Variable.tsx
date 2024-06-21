@@ -16,7 +16,7 @@ import {
 } from '@magickml/client-ui'
 import { cx } from 'class-variance-authority'
 import { debounce } from 'lodash'
-import { DragEvent, useEffect, useRef, useState } from 'react'
+import { DragEvent, useEffect, useState } from 'react'
 
 const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 
@@ -166,7 +166,6 @@ export const Variable = ({
   deleteVariable,
   deleteAllVariableNodes,
 }: VariableProps) => {
-  const dragImageRef = useRef<HTMLDivElement>(null)
   const updateProperty = (property: keyof VariableJSON) => {
     return debounce((value: keyof typeof initialValueMap) => {
       if (property === 'valueTypeName') {
@@ -190,11 +189,8 @@ export const Variable = ({
     console.log('dragging', nodeType)
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
-
-    if (dragImageRef.current) {
-      event.dataTransfer.setDragImage(dragImageRef.current, 0, 0)
-    }
-    event.stopPropagation()
+    // Remove the custom drag image
+    event.dataTransfer.setDragImage(new Image(), 0, 0)
   }
 
   const getVariableNodeType = (variable: VariableJSON) => {
@@ -203,22 +199,11 @@ export const Variable = ({
 
   return (
     <div
-      className="z-10"
+      className="z-10 border-0"
       onDragStart={event => onDragStart(event, getVariableNodeType(variable))}
       draggable="true"
     >
-      {/* Drag image reference */}
-      <div
-        ref={dragImageRef}
-        style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}
-      >
-        Dragging {variable.name}
-      </div>
-      <Accordion
-        type="single"
-        collapsible
-        className="border-b-2 border-b-solid border-b-[var(--background-color)] mb-2"
-      >
+      <Accordion type="single" collapsible className="">
         <AccordionItem value={variable.id}>
           <AccordionTrigger className="flex items-center justify-between w-full p-2 pl-4">
             <p>
