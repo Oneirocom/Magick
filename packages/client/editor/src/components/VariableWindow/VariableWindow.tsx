@@ -1,3 +1,32 @@
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
+import { enqueueSnackbar } from 'notistack'
+import { useReactFlow, ReactFlowInstance } from '@xyflow/react'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+  DragStartEvent,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable'
+import {
+  restrictToVerticalAxis,
+  restrictToWindowEdges,
+} from '@dnd-kit/modifiers'
+import { CSS } from '@dnd-kit/utilities'
+
 import {
   NodeJSON,
   Variable as VariableType,
@@ -12,24 +41,63 @@ import {
   useGetSpellByNameQuery,
   useSaveSpellMutation,
 } from 'client/state'
-import { v4 as uuidv4 } from 'uuid'
-import { IDockviewPanelProps } from 'dockview'
-import { useCallback, useEffect, useState } from 'react'
-import { enqueueSnackbar } from 'notistack'
-import { Variable } from './Variable'
-import { useDispatch, useSelector } from 'react-redux'
 import { Button, Input } from '@magickml/client-ui'
-import { useReactFlow } from '@xyflow/react'
+import { IDockviewPanelProps } from 'dockview'
+import { Variable } from './Variable'
 
-type Props = IDockviewPanelProps<{
-  tab: Tab
-  spellId: string
-  spellName: string
-}>
+interface Props
+  extends IDockviewPanelProps<{
+    tab: Tab
+    spellId: string
+    spellName: string
+  }> {}
 
-export const VariableWindow = (props: Props) => {
+interface SortableItemProps {
+  children: React.ReactNode
+  id: string
+}
+
+const persistVariablesOrder = (variables: VariableJSON[]): void => {
+  localStorage.setItem('variablesOrder', JSON.stringify(variables))
+}
+
+const getPersistedVariablesOrder = (): VariableJSON[] | null => {
+  const order = localStorage.getItem('variablesOrder')
+  return order ? JSON.parse(order) : null
+}
+
+function SortableItem({ children, id }: SortableItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 1 : 0,
+    opacity: isDragging ? 0.5 : 1,
+    position: 'relative',
+    height: 'auto',
+    minHeight: '38px',
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      {children}
+    </div>
+  )
+}
+
+export const VariableWindow: React.FC<Props> = props => {
   const { tab, spellName } = props.params
   const [variables, setVariables] = useState<VariableJSON[]>([])
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const [newVariableName, setNewVariableName] = useState<string>('')
 
   const { spell } = useGetSpellByNameQuery(
     { spellName },
@@ -41,9 +109,7 @@ export const VariableWindow = (props: Props) => {
     }
   )
 
-  const instance = useReactFlow()
-
-  const [newVariableName, setNewVariableName] = useState<string>('')
+  const instance: ReactFlowInstance = useReactFlow()
   const graphJson = useSelector(selectGraphJson(tab.id))
   const { projectId } = useConfig()
   const [saveSpellMutation] = useSaveSpellMutation()
@@ -51,96 +117,134 @@ export const VariableWindow = (props: Props) => {
   const dispatch = useDispatch()
   const readOnly = engineRunning
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  useEffect(() => {
+    if (spell?.graph) {
+      const persistedOrder = getPersistedVariablesOrder()
+      const orderedVariables = persistedOrder
+        ? persistedOrder
+        : spell.graph.variables
+      setVariables([...orderedVariables])
+    }
+  }, [spell])
+
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewVariableName(e.target.value)
   }
 
-  useEffect(() => {
-    if (spell?.graph) {
-      setVariables([...spell.graph.variables])
-    }
-  }, [spell])
+  const deleteAllVariableNodes = useCallback(
+    (variable: VariableJSON) => {
+      const regex = new RegExp(`variables/(set|get|on)/${variable.name}`)
+      const nodes = instance.getNodes()
+      const edges = instance.getEdges()
 
-  const deleteAllVariableNodes = useCallback((variable: VariableJSON) => {
-    // Create a regex to match 'variables/set/variableName' and 'variables/get/variableName' and 'variables/on/variableName'
-    const regex = new RegExp(`variables/(set|get|on)/${variable.name}`)
-    const nodes = instance.getNodes()
-    const edges = instance.getEdges()
+      const newNodes = nodes.filter(node => node.type && !regex.test(node.type))
+      const removedNodes = nodes
+        .filter(node => node.type && regex.test(node.type))
+        .map(node => node.id)
+      const newEdges = edges.filter(
+        edge =>
+          !removedNodes.includes(edge.source) &&
+          !removedNodes.includes(edge.target)
+      )
 
-    // Filter nodes to get the new list without the matched nodes
-    const newNodes = nodes.filter(node => node.type && !regex.test(node.type))
-
-    // Get the ids of nodes that match the regex
-    const removedNodes = nodes
-      .filter(node => node.type && regex.test(node.type))
-      .map(node => node.id)
-
-    // Filter edges to remove any that are connected to the removed nodes
-    const newEdges = edges.filter(
-      edge =>
-        !removedNodes.includes(edge.source) &&
-        !removedNodes.includes(edge.target)
-    )
-
-    // Uncomment these lines if you want to update state
-    instance.setNodes(newNodes)
-    instance.setEdges(newEdges)
-  }, [])
+      instance.setNodes(newNodes)
+      instance.setEdges(newEdges)
+    },
+    [instance]
+  )
 
   const saveVariable = useCallback(
     (variable: VariableJSON) => {
+      if (!spell || !spell.graph) {
+        return Promise.reject(new Error('Spell or graph is undefined'))
+      }
       const graph = spell.graph
-      const variables = graph.variables.map((v: VariableType) =>
+      const updatedVariables = graph.variables.map((v: VariableType) =>
         v.id === variable.id ? variable : v
       )
 
-      const newGraph = { ...graph, variables }
+      const newGraph = { ...graph, variables: updatedVariables }
       const newSpell = { ...spell, graph: newGraph }
 
       return saveSpellMutation({ projectId, spell: newSpell })
-        .then(() => enqueueSnackbar('Variable saved', { variant: 'success' }))
+        .unwrap()
+        .then(() => {
+          enqueueSnackbar('Variable saved', { variant: 'success' })
+          setVariables(updatedVariables)
+          persistVariablesOrder(updatedVariables)
+        })
         .catch(err => {
           console.error(err)
           enqueueSnackbar('Error saving variable', { variant: 'error' })
         })
     },
-    [spell, projectId, enqueueSnackbar, graphJson]
-  ) // dependencies
+    [spell, projectId, saveSpellMutation, enqueueSnackbar, graphJson]
+  )
 
   const deleteVariable = useCallback(
     (variableId: string) => {
+      if (!spell || !spell.graph) {
+        return Promise.reject(new Error('Spell or graph is undefined'))
+      }
       const graph = spell.graph
       const variable = graph.variables.find(
         (v: VariableType) => v.id === variableId
       )
+      if (!variable) {
+        return Promise.reject(new Error('Variable not found'))
+      }
+      const newVariables = graph.variables.filter(
+        (v: VariableType) => v.id !== variableId
+      )
       const newGraph = {
         ...graph,
-        variables: graph.variables.filter(
-          (v: VariableType) => v.id !== variableId
-        ),
-      }
-      const updatedGraph = {
-        ...newGraph,
+        variables: newVariables,
         nodes: graph.nodes.filter(
           (node: NodeJSON) => !node.type.includes(variable.name)
         ),
       }
 
-      const newSpell = { ...spell, graph: updatedGraph }
+      const newSpell = { ...spell, graph: newGraph }
 
       deleteAllVariableNodes(variable)
 
       return saveSpellMutation({ projectId, spell: newSpell })
-        .then(() => enqueueSnackbar('Variable deleted', { variant: 'success' }))
+        .unwrap()
+        .then(() => {
+          enqueueSnackbar('Variable deleted', { variant: 'success' })
+          setVariables(newVariables)
+          persistVariablesOrder(newVariables)
+        })
         .catch(err => {
           console.error(err)
           enqueueSnackbar('Error deleting variable', { variant: 'error' })
         })
     },
-    [spell, projectId, enqueueSnackbar, graphJson]
-  ) // dependencies
+    [
+      spell,
+      projectId,
+      saveSpellMutation,
+      enqueueSnackbar,
+      deleteAllVariableNodes,
+      graphJson,
+    ]
+  )
 
   const createNewVariable = useCallback(() => {
+    if (!spell || !spell.graph) {
+      return Promise.reject(new Error('Spell or graph is undefined'))
+    }
     const newVariable: VariableJSON = {
       name: newVariableName,
       id: uuidv4(),
@@ -149,27 +253,72 @@ export const VariableWindow = (props: Props) => {
     }
 
     const graph = spell.graph
-    const newGraph = { ...graph, variables: [newVariable, ...graph.variables] }
+    const newVariables = [newVariable, ...graph.variables]
+    const newGraph = { ...graph, variables: newVariables }
     const newSpell = { ...spell, graph: newGraph }
 
     return saveSpellMutation({ projectId, spell: newSpell })
+      .unwrap()
       .then(() => {
         enqueueSnackbar('Variable created', { variant: 'success' })
         setNewVariableName('')
-        setVariables(prevVariables => [newVariable, ...prevVariables])
+        setVariables(newVariables)
+        persistVariablesOrder(newVariables)
       })
       .catch(err => {
         console.error(err)
         enqueueSnackbar('Error creating variable', { variant: 'error' })
       })
-  }, [spell, projectId, enqueueSnackbar, newVariableName, graphJson])
+  }, [
+    spell,
+    projectId,
+    saveSpellMutation,
+    enqueueSnackbar,
+    newVariableName,
+    graphJson,
+  ])
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event
+    setActiveId(active.id.toString())
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    setActiveId(null)
+
+    if (over && active.id !== over.id) {
+      setVariables(items => {
+        const oldIndex = items.findIndex(item => item.id === active.id)
+        const newIndex = items.findIndex(item => item.id === over.id)
+        const newOrder = arrayMove(items, oldIndex, newIndex)
+        persistVariablesOrder(newOrder)
+
+        // Update the spell with the new order
+        if (spell && spell.graph) {
+          const newGraph = { ...spell.graph, variables: newOrder }
+          const newSpell = { ...spell, graph: newGraph }
+          saveSpellMutation({ projectId, spell: newSpell })
+            .unwrap()
+            .catch(err => {
+              console.error(err)
+              enqueueSnackbar('Error updating variable order', {
+                variant: 'error',
+              })
+            })
+        }
+
+        return newOrder
+      })
+    }
+  }
 
   if (!spell?.graph) return null
 
   return (
     <Window borderless>
       <div
-        className="relative h-full"
+        className="relative h-full overflow-hidden flex flex-col"
         onClick={() => dispatch(setActiveInput(null))}
       >
         {readOnly ? (
@@ -200,21 +349,49 @@ export const VariableWindow = (props: Props) => {
                 +
               </Button>
             </div>
-            <div className="mb-5">
-              {variables.reverse().map(variable => {
-                return (
-                  <Variable
-                    key={variable.id}
-                    variable={variable}
-                    deleteAllVariableNodes={() => {
-                      deleteAllVariableNodes(variable)
-                    }}
-                    updateVariable={saveVariable}
-                    deleteVariable={deleteVariable}
-                  />
-                )
-              })}
-            </div>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
+            >
+              <SortableContext
+                items={variables}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="variable-list flex-grow overflow-y-auto">
+                  {variables.map(variable => (
+                    <SortableItem key={variable.id} id={variable.id}>
+                      <div className="variable-item border-b-4 border-gray-600 bg-gray-800 hover:border-[#1cc5eb]">
+                        <Variable
+                          variable={variable}
+                          deleteAllVariableNodes={() => {
+                            deleteAllVariableNodes(variable)
+                          }}
+                          updateVariable={saveVariable}
+                          deleteVariable={deleteVariable}
+                        />
+                      </div>
+                    </SortableItem>
+                  ))}
+                </div>
+              </SortableContext>
+              <DragOverlay>
+                {activeId ? (
+                  <div className="variable-item border-b-4 border-gray-600 bg-gray-800 opacity-50">
+                    <Variable
+                      variable={
+                        variables.find(v => v.id === activeId) as VariableJSON
+                      }
+                      deleteAllVariableNodes={() => {}}
+                      updateVariable={() => Promise.resolve()}
+                      deleteVariable={() => Promise.resolve()}
+                    />
+                  </div>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
           </>
         )}
       </div>
