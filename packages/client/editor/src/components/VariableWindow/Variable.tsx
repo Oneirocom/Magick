@@ -1,5 +1,7 @@
 import { VariableJSON } from '@magickml/behave-graph'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import {
   Accordion,
   AccordionContent,
@@ -17,6 +19,7 @@ import {
 import { cx } from 'class-variance-authority'
 import { debounce } from 'lodash'
 import { DragEvent, useEffect, useState } from 'react'
+import { faSort } from '@fortawesome/free-solid-svg-icons'
 
 const inputClass = cx('w-full py-1 px-2 nodrag text-md justify-start flex')
 
@@ -186,7 +189,6 @@ export const Variable = ({
   }
 
   const onDragStart = (event: DragEvent<HTMLDivElement>, nodeType: string) => {
-    console.log('dragging', nodeType)
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
     // Remove the custom drag image
@@ -207,6 +209,10 @@ export const Variable = ({
         <AccordionItem value={variable.id}>
           <AccordionTrigger className="flex items-center justify-between w-full p-2 pl-4">
             <p>
+              <FontAwesomeIcon
+                icon={faSort}
+                className="mr-4 text-[#94a3b869]"
+              />
               {variable.name} -{' '}
               <span className="text-stone-500">{variable.valueTypeName}</span>
             </p>
