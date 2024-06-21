@@ -117,22 +117,40 @@ const InputFieldForValue = ({
   const onBlur = () => {
     // setIsFocused(false)
   }
-
   useEffect(() => {
-    if (!currentTab || !isActive) return
-    const unsubscribe = subscribe(
-      events.$CHAT_TO_INPUT(currentTab.id),
-      (eventName, { value, nodeId: incomingNodeId, name: incomingName }) => {
-        if (nodeId !== incomingNodeId) return
-        onChange(name, value)
-        setInputVal(value || '')
-      }
-    )
+    if (!currentTab) return
+    // Subscription function
+    const subscribeToEvents = () => {
+      return subscribe(
+        events.$CHAT_TO_INPUT(currentTab.id),
+        (eventName, { value, nodeId: incomingNodeId, name: incomingName }) => {
+          if (nodeId !== incomingNodeId) return
+          onChange(name, value)
+          setInputVal(value || '')
+        }
+      )
+    }
 
+    // Initial subscription
+    let unsubscribe: () => void
+    if (isActive) {
+      unsubscribe = subscribeToEvents()
+    }
+
+    // Effect cleanup and conditional resubscription
     return () => {
-      unsubscribe()
+      if (unsubscribe) {
+        unsubscribe()
+      }
+
+      // If isActive changes to false, unsubscribe
+      if (isActive) {
+        unsubscribe = subscribeToEvents()
+      }
     }
   }, [currentTab, name, isActive, nodeId])
+
+  useEffect(() => {}, [isActive])
 
   return (
     <div className={containerClass}>
