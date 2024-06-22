@@ -1,4 +1,4 @@
-import { ICoreLLMService, UserResponse } from 'servicesShared'
+import { ICoreLLMService, ISharedAgent, UserResponse } from 'servicesShared'
 import { CoreUserService } from '../userService/coreUserService'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { LLMCredential } from 'servicesShared'
@@ -7,7 +7,6 @@ import pino from 'pino'
 import { streamText } from 'ai'
 import { createOpenAI } from '@magickml/vercel-sdk-core'
 import { clerkClient } from '@clerk/clerk-sdk-node'
-import { Agent } from 'server/agents'
 import { PRODUCTION } from 'shared/config'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -15,14 +14,14 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 type ConstructorParams = {
   projectId: string
   agentId?: string
-  agent: Agent
+  agent: ISharedAgent
 }
 
 export class CoreLLMService implements ICoreLLMService {
   protected credentials: LLMCredential[] = []
   protected projectId: string
   protected agentId: string
-  protected agent: Agent
+  protected agent: ISharedAgent
   protected userService: CoreUserService
   protected logger: pino.Logger<pino.LoggerOptions> | undefined
   protected userData: UserResponse | undefined

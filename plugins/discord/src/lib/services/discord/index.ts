@@ -76,6 +76,7 @@ export class DiscordClient {
       (...args) => {
         // have to cast here because of the way discord.js typings are set up
         // they have a whole seperate library of the correct types returned from each event
+        // @ts-ignore
         const payload = args[0] as DiscordEventPayload[typeof eventName]
 
         if (this.checkIfBotMessage(payload)) {

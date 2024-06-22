@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/embedder/loaders/core",
+  "name": "@magickml/embedder/auth/token",
   "version": "2.0.0",
   "dependencies": {
     "@magickml/embedder/config": "12.0.0",

@@ -20,6 +20,13 @@ import { SeraphManager } from '@magickml/seraph-manager'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 
+import * as CorePlugin from 'plugins/core'
+import * as KnowledgePlugin from '@magickml/plugin-knowledge'
+import * as DiscordPlugin from 'plugins/discord'
+import * as SlackPlugin from 'plugins/slack'
+
+const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]
+
 export type AgentEventPayloadV2<
   Data = Record<string, unknown>,
   Y = Record<string, unknown>
@@ -137,8 +144,7 @@ export class AgentV2
 
     if (this.config.useInternalPlugins) {
       // dynamic import of the plugins golder
-      // const plugins = await import('../../../../../plugins')
-      // this.pluginManager.loadRawPlugins(plugins)
+      this.pluginManager.loadRawPlugins(plugins)
     }
 
     // initialzie spellbook

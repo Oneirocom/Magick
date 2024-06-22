@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'plugin/discord',
+  displayName: 'plugins/discord',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

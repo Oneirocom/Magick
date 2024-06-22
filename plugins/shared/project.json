@@ -1,5 +1,5 @@
 {
-  "name": "plugin/shared",
+  "name": "plugins/shared",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/shared/src",
   "projectType": "library",
@@ -8,9 +8,9 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/plugin/shared",
-        "tsConfig": "plugin/shared/tsconfig.lib.json",
-        "main": "plugin/shared/src/index.ts"
+        "outputPath": "dist/plugins/shared",
+        "tsConfig": "plugins/shared/tsconfig.lib.json",
+        "main": "plugins/shared/src/index.ts"
       }
     },
     "lint": {

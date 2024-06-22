@@ -4,8 +4,7 @@ import {
   NodeCategory,
 } from '@magickml/behave-graph'
 import { IEventStore, makeMagickEventNodeDefinition } from 'server/grimoire'
-import { CORE_DEP_KEYS } from 'servicesShared'
-import { Agent } from 'server/agents'
+import { CORE_DEP_KEYS, ISharedAgent } from 'servicesShared'
 
 type State = {
   onTickEvent?: (() => void) | undefined
@@ -35,7 +34,7 @@ export const LifecycleOnTick = makeMagickEventNodeDefinition(
         'ILifecycleEventEmitter'
       )
 
-      const agent = graph.getDependency<Agent>(CORE_DEP_KEYS.AGENT)
+      const agent = graph.getDependency<ISharedAgent>(CORE_DEP_KEYS.AGENT)
       const eventStore = graph.getDependency<IEventStore>(
         CORE_DEP_KEYS.EVENT_STORE
       )
@@ -46,7 +45,7 @@ export const LifecycleOnTick = makeMagickEventNodeDefinition(
       let lastTickTime = Date.now()
 
       const onTickEvent = () => {
-        const event = agent?.formatEvent<{}>({
+        const event = (agent as any)?.formatEvent({
           ...initialEvent,
           content: '',
           eventName: 'tick',
