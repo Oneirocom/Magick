@@ -163,7 +163,8 @@
       "nitroModule",
       "nitroModule2",
       "@magickml/agent-commander",
-      "knowledge"
+      "knowledge",
+      "agent-module"
     ],
     "version": {
       "preVersionCommand": "npx nx build embedder-db-prisma"

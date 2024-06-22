@@ -1,7 +1,11 @@
 import cx from 'classnames'
 import { getNodeSpec } from 'shared/nodeSpec'
 import { Tab, useConfig } from '@magickml/providers'
-import { useGetSpellByNameQuery } from 'client/state'
+import {
+  selectEngineRunning,
+  setActiveInput,
+  useGetSpellByNameQuery,
+} from 'client/state'
 import { Window } from 'client/core'
 import { SocketConfig } from './SocketConfig'
 import { GraphSocketJSON, NodeSpecJSON } from '@magickml/behave-graph'
@@ -29,6 +33,7 @@ import { SelectSpell } from './SelectSpell'
 
 import { PackSchema } from '@magickml/embedder/schema'
 import { z } from 'zod'
+import { useDispatch, useSelector } from 'react-redux'
 
 type Pack = z.infer<typeof PackSchema> & {
   loaders: {
@@ -81,7 +86,10 @@ export const PropertiesWindow = (props: Props) => {
     string,
     any
   > | null>(null)
+  const engineRunning = useSelector(selectEngineRunning)
+  const dispatch = useDispatch()
 
+  const readOnly = engineRunning
   /* KNOWLEDGE PACK STUFF */
   // TODO: Move this to a separate component
 
@@ -193,53 +201,68 @@ export const PropertiesWindow = (props: Props) => {
   if (!configuration || !spec || !selectedNode) {
     return (
       <Window borderless>
-        <SubspellSocketConfig
-          getSockets={sockets =>
-            sockets.filter(socket => socket.valueType === 'flow')
-          }
-          type="input"
-          socketValues={['flow']}
-          sockets={inputSockets}
-          setSockets={setInputSockets}
-          graph={spell.graph}
-          tab={props.tab}
-          title="Flow Inputs"
-        />
-        <SubspellSocketConfig
-          getSockets={sockets =>
-            sockets.filter(socket => socket.valueType === 'flow')
-          }
-          type="output"
-          sockets={outputSockets}
-          setSockets={setOutputSockets}
-          socketValues={['flow']}
-          graph={spell.graph}
-          tab={props.tab}
-          title="Flow Outputs"
-        />
-        <SubspellSocketConfig
-          getSockets={sockets =>
-            sockets.filter(socket => socket.valueType !== 'flow')
-          }
-          type="input"
-          sockets={inputSockets}
-          setSockets={setInputSockets}
-          graph={spell.graph}
-          tab={props.tab}
-          title="Data Inputs"
-        />
-
-        <SubspellSocketConfig
-          getSockets={sockets =>
-            sockets.filter(socket => socket.valueType !== 'flow')
-          }
-          type="output"
-          sockets={outputSockets}
-          setSockets={setOutputSockets}
-          graph={spell.graph}
-          tab={props.tab}
-          title="Data Outputs"
-        />
+        <div
+          className="relative h-full"
+          onClick={() => dispatch(setActiveInput(null))}
+        >
+          {readOnly ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center z-50 bg-[#363d42]">
+              <div className="text-white text-lg">Read-Only Mode</div>
+              <div className="text-white text-md mt-2">
+                Run your spell to modify your Agent
+              </div>
+            </div>
+          ) : (
+            <>
+              <SubspellSocketConfig
+                getSockets={sockets =>
+                  sockets.filter(socket => socket.valueType === 'flow')
+                }
+                type="input"
+                socketValues={['flow']}
+                sockets={inputSockets}
+                setSockets={setInputSockets}
+                graph={spell.graph}
+                tab={props.tab}
+                title="Flow Inputs"
+              />
+              <SubspellSocketConfig
+                getSockets={sockets =>
+                  sockets.filter(socket => socket.valueType === 'flow')
+                }
+                type="output"
+                sockets={outputSockets}
+                setSockets={setOutputSockets}
+                socketValues={['flow']}
+                graph={spell.graph}
+                tab={props.tab}
+                title="Flow Outputs"
+              />
+              <SubspellSocketConfig
+                getSockets={sockets =>
+                  sockets.filter(socket => socket.valueType !== 'flow')
+                }
+                type="input"
+                sockets={inputSockets}
+                setSockets={setInputSockets}
+                graph={spell.graph}
+                tab={props.tab}
+                title="Data Inputs"
+              />
+              <SubspellSocketConfig
+                getSockets={sockets =>
+                  sockets.filter(socket => socket.valueType !== 'flow')
+                }
+                type="output"
+                sockets={outputSockets}
+                setSockets={setOutputSockets}
+                graph={spell.graph}
+                tab={props.tab}
+                title="Data Outputs"
+              />
+            </>
+          )}
+        </div>
       </Window>
     )
   }

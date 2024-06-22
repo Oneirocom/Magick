@@ -7,12 +7,12 @@ import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit'
 import { SaveDiffData } from 'packages/client/feathers-client/src/lib/FeathersClient'
 import { RootState } from './store'
 
-// type ActiveInputType = {
-//   name: string
-//   inputType: string
-//   value: string
-//   nodeId: string
-// }
+type ActiveInputType = {
+  name: string
+  inputType: string
+  value: string
+  nodeId: string
+}
 
 /**
  * Interface that defines the Global Config type.
@@ -26,7 +26,7 @@ export interface GlobalConfig {
   theme: string
   dockviewTheme: string
   textEditorState: string
-  // activeInput: ActiveInputType
+  activeInput: ActiveInputType
   pastState: SaveDiffData[]
   futureState: SaveDiffData[]
   layoutChangeEvent: boolean
@@ -48,12 +48,12 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     textEditorState: '',
     pastState: [] as SaveDiffData[],
     futureState: [] as SaveDiffData[],
-    // activeInput: {
-    //   name: '',
-    //   inputType: '',
-    //   value: '',
-    //   nodeId: '',
-    // },
+    activeInput: {
+      name: '',
+      inputType: '',
+      value: '',
+      nodeId: '',
+    },
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
     layoutChangeEvent: false as boolean,
@@ -159,12 +159,12 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     ): void => {
       state.dockviewTheme = action.payload
     },
-    // setActiveInput: (
-    //   state: GlobalConfig,
-    //   action: PayloadAction<ActiveInputType>
-    // ): void => {
-    //   state.activeInput = action.payload
-    // },
+    setActiveInput: (
+      state: GlobalConfig,
+      action: PayloadAction<ActiveInputType>
+    ): void => {
+      state.activeInput = action.payload
+    },
     setLayoutChangeEvent: (
       state: GlobalConfig,
       action: PayloadAction<boolean>
@@ -189,7 +189,7 @@ export const {
   setDockviewTheme,
   setCurrentSpellReleaseId,
   setTextEditorState,
-  // setActiveInput,
+  setActiveInput,
   setLayoutChangeEvent,
   applyState,
   undoState,
@@ -202,13 +202,13 @@ export const {
  */
 export default globalConfigSlice.reducer
 
-// export const selectActiveInput = (state: RootState) =>
-// state.globalConfig.activeInput as {
-//   name: string
-//   inputType: string
-//   value: string
-//   nodeId: string
-// }
+export const selectActiveInput = (state: RootState) =>
+  state.globalConfig.activeInput as {
+    name: string
+    inputType: string
+    value: string
+    nodeId: string
+  }
 
 export const selectPastState = (state: RootState) =>
   state.globalConfig.pastState

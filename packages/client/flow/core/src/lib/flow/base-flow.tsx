@@ -1,6 +1,5 @@
 'use client'
-
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import {
   Background,
   BackgroundVariant,
@@ -22,9 +21,6 @@ import { CommentNode } from '../nodeTypes/comment'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 import { NodeGrouping } from '../components/nodeGroups'
 import { GroupNodeComponent } from '../nodeTypes/group'
-import { useSelector } from 'react-redux'
-import * as Frigade from '@frigade/react'
-import { Provider as FrigadeProvider } from '@frigade/react'
 
 export type MagickReactFlowInstance = ReactFlowInstance<
   MagickNodeType,
@@ -82,6 +78,7 @@ type BaseFlowProps = {
   flowHandlers: BaseFlowHandlers
   pubSub?: ReturnType<typeof usePubSub> // should split this into separate handler props
   globalConfig?: RootState['globalConfig'] | undefined // could split this into projectId and currentAgentId
+  lastStateEvent?: any
 }
 
 const edgeTypes = {
@@ -107,6 +104,9 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
   readOnly = false,
   behaveGraphFlow,
   flowHandlers,
+  pubSub,
+  globalConfig,
+  lastStateEvent,
 }) => {
   const {
     setGraphJson,
@@ -116,10 +116,6 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     nodes,
     edges,
   } = behaveGraphFlow
-
-  const globalConfig = useSelector((state: RootState) => state.globalConfig)
-
-  const { engineRunning } = globalConfig
 
   // memoize node types
   const nodeTypes = useMemo(() => {
@@ -131,7 +127,16 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     }
   }, [behaveNodeTypes])
 
+  const { projectId, currentAgentId } = globalConfig || {}
+  const { publish, events } = pubSub || {}
+  const [isDebug, setIsDebug] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(false)
+
+  useEffect(() => {
+    if (!lastStateEvent || lastStateEvent.spellId !== spell.id) return
+    if (!lastStateEvent.state) return
+    setIsDebug(lastStateEvent.state.debug)
+  }, [lastStateEvent])
 
   const {
     handleOnConnect,
@@ -160,11 +165,29 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     handleNodeDragStop,
   } = flowHandlers
 
+  const toggleDebug = useCallback(() => {
+    console.log({ publish, events, currentAgentId, agentId: currentAgentId })
+
+    if (!publish || !events || !currentAgentId) return
+    const newState = !isDebug
+
+    publish(events.SEND_COMMAND, {
+      projectId,
+      agentId: currentAgentId,
+      command: 'agent:spellbook:toggleDebug',
+      data: {
+        spellId: spell.id,
+        debug: newState,
+      },
+    })
+
+    setIsDebug(newState)
+  }, [isDebug, publish, events, currentAgentId])
+
   if (!nodeTypes || isEmptyObject(nodeTypes)) return null
 
   return (
     <ReactFlow<MagickNodeType, MagickEdgeType>
-      className="relative"
       proOptions={proOptions}
       nodeTypes={nodeTypes}
       nodes={nodes}
@@ -195,26 +218,13 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       onPaneContextMenu={handlePaneContextMenu}
       onNodeContextMenu={handleNodeContextMenu}
     >
-      <FrigadeProvider
-        apiKey={process.env.NEXT_PUBLIC_FRIGADE_KEY || ''}
-        userId={undefined}
-      >
-        <Frigade.Announcement
-          flowId="flow_7mVcV55F"
-          dismissible={true}
-          className="z-10"
-        />
-      </FrigadeProvider>
-      {engineRunning && (
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-[#ec1048] text- px-2 py-1 rounded-md text-sm font-bold z-50 mt-4 text-white">
-          Read-Only Mode
-        </div>
-      )}
       <CustomControls
         setBehaviorGraph={setGraphJson}
         specJson={specJSON}
         miniMapOpen={miniMapOpen}
         toggleMiniMap={() => setMiniMapOpen(!miniMapOpen)}
+        toggleDebug={toggleDebug}
+        isDebug={isDebug}
       />
       <Background
         variant={BackgroundVariant.Lines}

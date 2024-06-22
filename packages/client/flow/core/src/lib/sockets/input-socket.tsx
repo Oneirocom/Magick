@@ -4,7 +4,7 @@ import { InputSocketSpecJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import cx from 'classnames'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Handle, Position } from '@xyflow/react'
 import { colors, valueTypeColorMap } from '../utils/colors'
 import {
@@ -20,10 +20,9 @@ import {
   Switch,
 } from '@magickml/client-ui'
 import ReactJson from 'react-json-view'
-import { debounce } from 'lodash'
 import { usePubSub } from '@magickml/providers'
-import { useSelector } from 'react-redux'
-import { RootState } from 'client/state'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, setActiveInput } from 'client/state'
 
 export type InputSocketProps = {
   connected: boolean
@@ -36,6 +35,7 @@ export type InputSocketProps = {
   valueTypeName?: string
   nodeId: string
   hide?: boolean
+  isActive?: boolean
 } & InputSocketSpecJSON
 
 const InputFieldForValue = ({
@@ -48,6 +48,7 @@ const InputFieldForValue = ({
   connected,
   hideValue = false,
   nodeId,
+  isActive,
 }: Pick<
   InputSocketProps,
   | 'choices'
@@ -59,13 +60,14 @@ const InputFieldForValue = ({
   | 'connected'
   | 'hideValue'
   | 'nodeId'
+  | 'isActive'
 >) => {
   const showChoices = choices?.length && choices.length > 0
   const [inputVal, setInputVal] = useState(value ? value : defaultValue ?? '')
-  // const [isFocused, setIsFocused] = useState(false)
   const hideValueInput = hideValue || connected
   const { subscribe, publish, events } = usePubSub()
   const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+  const dispatch = useDispatch()
 
   const inputClass = cx('h-5 text-sm')
 
@@ -74,66 +76,81 @@ const InputFieldForValue = ({
     !hideValueInput && 'bg-[var(--foreground-color)]'
   )
 
-  const debouncedChangeHandler = useCallback(
-    debounce((key, value) => {
-      onChange(key, value)
-      if (currentTab?.id && valueType === 'string') {
-        publish(events.$INPUT_TO_CHAT(currentTab.id), {
-          value: value,
-          nodeId,
-          name,
-          inputType: valueType,
-        })
-      }
-    }, 1000),
-    [onChange]
-  )
-
   const handleChange = ({ key, value }: { key: string; value: any }) => {
     setInputVal(value)
-    debouncedChangeHandler(key, value)
-  }
-
-  const onFocus = (x: string) => {
-    console.log('Active tab id', currentTab?.id)
-    if (valueType === 'string' && currentTab?.id) {
+    onChange(key, value)
+    if (currentTab?.id && valueType === 'string') {
       publish(events.$INPUT_TO_CHAT(currentTab.id), {
-        value: x,
+        value: value,
         nodeId,
         name,
         inputType: valueType,
       })
-      // setIsFocused(true)
-      onChange(name, x)
-
-      return
     }
+  }
+
+  const onFocus = (x: string) => {
+    if (valueType === 'string' && currentTab?.id) {
+      // Note: Seems to be a race condition with the node selected event firing after the input is focused which breaks the text editor connection.
+      setTimeout(() => {
+        dispatch(
+          setActiveInput({
+            nodeId,
+            name,
+            inputType: valueType,
+            value,
+          })
+        )
+
+        publish(events.$INPUT_TO_CHAT(currentTab.id), {
+          value: x,
+          nodeId,
+          name,
+          inputType: valueType,
+        })
+        return
+      }, 100)
+    }
+    setActiveInput(null)
   }
 
   const onBlur = () => {
     // setIsFocused(false)
   }
-
   useEffect(() => {
     if (!currentTab) return
-    const unsubscribe = subscribe(
-      events.$CHAT_TO_INPUT(currentTab.id),
-      (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
-        console.log('SOCKET INCOMING NODE ID', {
-          incomingNodeId,
-          value,
-          nodeId,
-        })
-        if (nodeId !== incomingNodeId) return
-        onChange(name, value)
-        setInputVal(value || '')
-      }
-    )
-
-    return () => {
-      unsubscribe()
+    // Subscription function
+    const subscribeToEvents = () => {
+      return subscribe(
+        events.$CHAT_TO_INPUT(currentTab.id),
+        (eventName, { value, nodeId: incomingNodeId, name: incomingName }) => {
+          if (nodeId !== incomingNodeId) return
+          onChange(name, value)
+          setInputVal(value || '')
+        }
+      )
     }
-  }, [currentTab, name, setInputVal])
+
+    // Initial subscription
+    let unsubscribe: () => void
+    if (isActive) {
+      unsubscribe = subscribeToEvents()
+    }
+
+    // Effect cleanup and conditional resubscription
+    return () => {
+      if (unsubscribe) {
+        unsubscribe()
+      }
+
+      // If isActive changes to false, unsubscribe
+      if (isActive) {
+        unsubscribe = subscribeToEvents()
+      }
+    }
+  }, [currentTab, name, isActive, nodeId])
+
+  useEffect(() => {}, [isActive])
 
   return (
     <div className={containerClass}>
@@ -168,8 +185,8 @@ const InputFieldForValue = ({
               }}
               onBlur={onBlur}
               // @ts-ignore
-              onFocus={() => {
-                onFocus(value)
+              onFocus={e => {
+                onFocus(e.currentTarget.value)
               }} //TODO: REBASE_CHECK
               className="m-1 h-6"
             />
@@ -181,7 +198,6 @@ const InputFieldForValue = ({
               className={inputClass}
               value={Number(value)}
               onChange={e => onChange(name, e.currentTarget.value)}
-              // onFocus={() => onFocus(value)}
             />
           )}
           {valueType === 'integer' && !showChoices && (
@@ -192,7 +208,6 @@ const InputFieldForValue = ({
               onChange={e => {
                 onChange(name, Number(e.currentTarget.value))
               }}
-              // onFocus={() => onFocus(value)}
             />
           )}
           {valueType === 'boolean' && !showChoices && (
@@ -203,7 +218,6 @@ const InputFieldForValue = ({
                 onCheckedChange={value => {
                   onChange(name, value)
                 }}
-                // onFocus={() => onFocus(value)}
               />
             </div>
           )}
@@ -217,7 +231,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
   connected,
   specJSON,
   lastEventInput,
-  // isActive,
+  isActive,
   textEditorState,
   nodeId,
   hide,
@@ -260,7 +274,7 @@ const InputSocket: React.FC<InputSocketProps> = ({
           {...rest}
           connected={connected}
           hideValue={isArraySocket || isObjectSocket}
-          // isActive={isActive}
+          isActive={isActive}
           valueType={valueType}
           nodeId={nodeId}
         />

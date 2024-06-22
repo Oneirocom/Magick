@@ -54,11 +54,7 @@ export const Modal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions classes={{ root: styles.actions }}>
-        <Button
-          onClick={onClose}
-          variant="outline"
-          className={styles.btnCancel}
-        >
+        <Button onClick={onClose} variant="portal-neutral">
           Cancel
         </Button>
         {handleAction !== undefined && showSaveBtn === true && (
