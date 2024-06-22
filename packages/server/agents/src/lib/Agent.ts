@@ -22,10 +22,11 @@ import TypedEmitter from 'typed-emitter'
 import { Spellbook } from 'server/grimoire'
 import { AgentLoggingService } from './AgentLogger'
 
-import * as CorePlugin from 'plugins/core'
-import * as KnowledgePlugin from '@magickml/plugin-knowledge'
-import * as DiscordPlugin from 'plugins/discord'
-import * as SlackPlugin from 'plugins/slack'
+import CorePlugin from 'plugins/core'
+import KnowledgePlugin from '@magickml/plugin-knowledge'
+import DiscordPlugin from 'plugins/discord'
+import SlackPlugin from 'plugins/slack'
+import { v4 } from 'uuid'
 
 export type RequestPayload = {
   projectId: string
@@ -33,7 +34,6 @@ export type RequestPayload = {
   requestData: string
   responseData: string
   model: string
-  startTime: number
   status: string
   statusCode: number
   parameters: string
@@ -41,7 +41,6 @@ export type RequestPayload = {
   type: string
   hidden: boolean
   processed: boolean
-  totalTokens?: number
   spell: SpellInterface
   nodeId: number | null
   customModel?: string
@@ -377,7 +376,6 @@ export class Agent
 
     // Save and create the request object in Feathers app.
     return (this.app.service('request') as any).create({
-      // @ts-ignore
       id: v4(),
       ...request,
       spell: typeof spell === 'string' ? spell : JSON.stringify(spell),

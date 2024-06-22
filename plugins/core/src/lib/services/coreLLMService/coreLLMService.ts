@@ -58,8 +58,6 @@ export class CoreLLMService implements ICoreLLMService {
     let attempts = 0
     const chunks: any[] = []
 
-    const startTime = Date.now()
-
     const actualMaxRetries = Math.max(1, maxRetries)
 
     let useWallet = this.userData?.user.useWallet
@@ -124,7 +122,7 @@ export class CoreLLMService implements ICoreLLMService {
         }
 
         const chatCompletion = chunks.join('')
-        const totalTokens = (await usage).totalTokens
+        // const totalTokens = (await usage).totalTokens
 
         this.agent.saveRequest({
           projectId: this.projectId,
@@ -132,7 +130,6 @@ export class CoreLLMService implements ICoreLLMService {
           requestData: JSON.stringify(request.options),
           responseData: JSON.stringify(chatCompletion),
           model: request.model,
-          startTime: startTime,
           status: '',
           statusCode: 200,
           parameters: JSON.stringify(request.options),
@@ -141,7 +138,7 @@ export class CoreLLMService implements ICoreLLMService {
           cost: -0,
           hidden: false,
           processed: false,
-          totalTokens: totalTokens,
+          // totalTokens: totalTokens,
           spell: { id: spellId } as any,
           nodeId: null,
         })
