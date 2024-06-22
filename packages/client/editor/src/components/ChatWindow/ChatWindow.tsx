@@ -8,6 +8,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Tab, useConfig, usePubSub } from '@magickml/providers'
 import {
   RootState,
+  setActiveInput,
   useGetSpellByNameQuery,
   useSelectAgentsEvent,
 } from 'client/state'
@@ -18,7 +19,7 @@ import posthog from 'posthog-js'
 import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMarkdownProcessor } from 'chat-window'
 import useEditorSession from '../../hooks/useEditorSession'
 
@@ -41,11 +42,12 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   const { lastItem: lastEvent } = useSelectAgentsEvent()
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
+  const [userScrolled, setUserScrolled] = useState<boolean>(false)
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId, engineRunning } = globalConfig
   const { publish, events } = usePubSub()
   const editorSession = useEditorSession()
-
+  const dispatch = useDispatch()
   const readOnly = !engineRunning
 
   const {
@@ -56,7 +58,8 @@ const ChatWindow = ({ tab, spellName }: Props) => {
     printToConsole,
     onClear,
     setHistory,
-  } = useMessageHistory({})
+    handleScroll,
+  } = useMessageHistory({ userScrolled, setUserScrolled })
 
   const { streamToConsole } = useMessageQueue({
     setHistory,
@@ -192,10 +195,13 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   return (
     <Window toolbar={toolbar}>
       <>
-        <div className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center">
+        <div
+          className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center"
+          onClick={() => dispatch(setActiveInput(null))}
+        >
           {/* Data editor section */}
           <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
-            <Scrollbars ref={scrollbars}>
+            <Scrollbars ref={scrollbars} onScroll={handleScroll}>
               {/* Feedback overlay */}
 
               <Editor
@@ -223,12 +229,15 @@ const ChatWindow = ({ tab, spellName }: Props) => {
 
           {/* Chat history section */}
           {readOnly && (
-            <div className="relative inset-0 flex items-center justify-center z-50 h-full">
+            <div className="relative inset-0 flex flex-col items-center justify-center z-50 h-full">
               <div className="text-white text-lg">Read-Only Mode</div>
+              <div className="text-white text-md mt-2">
+                Run your spell to test your Agent
+              </div>
             </div>
           )}
           <div className="flex-1 overflow-hidden bg-[var(--background-color)] relative">
-            <Scrollbars ref={scrollbars}>
+            <Scrollbars ref={scrollbars} onScroll={handleScroll}>
               <ul className="list-none m-0 p-2">
                 {history.map((message: Message, index) => {
                   if (message.sender === 'user') {

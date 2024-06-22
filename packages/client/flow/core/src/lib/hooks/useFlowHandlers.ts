@@ -15,7 +15,6 @@ import {
   useStore,
   NodeChange,
   useReactFlow,
-  Edge,
   updateEdge,
   Connection,
   OnConnectStart,
@@ -23,6 +22,10 @@ import {
   useOnViewportChange,
   IsValidConnection,
   ReactFlowProps,
+  NodeAddChange,
+  NodeSelectionChange,
+  EdgeAddChange,
+  EdgeChange,
 } from '@xyflow/react'
 import { v4 as uuidv4, v4 } from 'uuid'
 
@@ -34,6 +37,7 @@ import { Tab, useTabLayout } from '@magickml/providers'
 import {
   onConnect as onConnectState,
   selectLayoutChangeEvent,
+  setActiveInput,
   setEdges,
   setLayoutChangeEvent,
   setNodes,
@@ -426,19 +430,92 @@ export const useFlowHandlers = ({
     setTargetNodes(undefined)
   }
 
-  const cloneNode = () => {
+  const cloneNode = useCallback(() => {
     if (!targetNodes?.length) return
-    const newNodes: NodeChange[] = targetNodes.map(node => {
+    takeSnapshot()
+
+    const newNodes: NodeAddChange<MagickNodeType>[] = targetNodes.map(node => {
       const id = uuidv4()
       const x = node.position.x + 10
       const y = node.position.y + 10
 
-      return { item: { ...node, id, position: { x, y } }, type: 'add' }
+      return {
+        type: 'add',
+        item: {
+          ...node,
+          id,
+          position: { x, y },
+          positionAbsolute: { x, y },
+          selected: true,
+          data: {
+            ...node.data,
+            configuration: node.data.configuration
+              ? { ...node.data.configuration }
+              : {},
+          },
+        },
+      }
     })
 
-    onNodesChange(tab.id)(newNodes)
+    // Deselect all existing nodes
+    const deselectNodes: NodeSelectionChange[] = getNodes().map(node => ({
+      id: node.id,
+      type: 'select',
+      selected: false,
+    }))
+
+    // Clone edges connected to the cloned nodes
+    const newEdges: EdgeAddChange<MagickEdgeType>[] = []
+    targetNodes.forEach(sourceNode => {
+      const nodeEdges = edges.filter(
+        edge => edge.source === sourceNode.id || edge.target === sourceNode.id
+      )
+      nodeEdges.forEach(edge => {
+        const newEdge: EdgeAddChange<MagickEdgeType> = {
+          type: 'add',
+          item: {
+            ...edge,
+            id: uuidv4(),
+            source:
+              edge.source === sourceNode.id
+                ? newNodes.find(
+                    n =>
+                      n.item.data.configuration ===
+                      sourceNode.data.configuration
+                  )?.item.id || edge.source
+                : edge.source,
+            target:
+              edge.target === sourceNode.id
+                ? newNodes.find(
+                    n =>
+                      n.item.data.configuration ===
+                      sourceNode.data.configuration
+                  )?.item.id || edge.target
+                : edge.target,
+          },
+        }
+        newEdges.push(newEdge)
+      })
+    })
+
+    // Apply node changes: deselect all existing nodes and add new nodes
+    onNodesChange(tab.id)([...deselectNodes, ...newNodes])
+
+    // Add new edges
+    if (newEdges.length > 0) {
+      onEdgesChange(tab.id)(newEdges)
+    }
+
     setTargetNodes(undefined)
-  }
+  }, [
+    targetNodes,
+    getNodes,
+    onNodesChange,
+    onEdgesChange,
+    tab.id,
+    edges,
+    takeSnapshot,
+  ])
 
   const copy = useCallback(() => {
     const selectedNodes = getNodes().filter(node => node.selected)
@@ -449,15 +526,29 @@ export const useFlowHandlers = ({
     )
 
     if (!selectedNodes.length) return
+
+    // Create a deep copy of the nodes and reset their connection states
+    const nodesToCopy = selectedNodes.map(node => ({
+      ...node,
+      selected: false,
+      data: {
+        ...node.data,
+        connections: {
+          inputs: {},
+          outputs: {},
+        },
+      },
+    }))
+
     localStorage.setItem(
       'copiedNodes',
       JSON.stringify({
-        nodes: selectedNodes,
+        nodes: nodesToCopy,
         edges: selectedEdges,
       })
     )
     setTargetNodes(undefined)
-  }, [nodes])
+  }, [getNodes, edges])
 
   const handleStartConnect: OnConnectStart = useCallback(
     (e, params) => {
@@ -467,45 +558,70 @@ export const useFlowHandlers = ({
   )
 
   const paste = useCallback(() => {
-    const copiedNodes = localStorage.getItem('copiedNodes')
-    if (!copiedNodes) return
+    const copiedData = localStorage.getItem('copiedNodes')
+    if (!copiedData) return
 
-    const { nodes, edges } = JSON.parse(copiedNodes)
+    const { nodes: copiedNodes, edges: copiedEdges } = JSON.parse(copiedData)
     const { x: pasteX, y: pasteY } = screenToFlowPosition({
       x: mousePosRef.current.x,
       y: mousePosRef.current.y,
     })
 
-    const bufferedNodes = nodes as Node[]
-    const minX = Math.min(...bufferedNodes.map(node => node.position.x))
-    const minY = Math.min(...bufferedNodes.map(node => node.position.y))
+    const minX = Math.min(...copiedNodes.map((node: any) => node.position.x))
+    const minY = Math.min(...copiedNodes.map((node: any) => node.position.y))
 
     const oldToNewIdMap: Record<string, string> = {}
 
-    const newNodes: NodeChange[] = bufferedNodes.map(node => {
+    const newNodes: NodeChange[] = copiedNodes.map((node: any) => {
       const id = uuidv4()
+      oldToNewIdMap[node.id] = id
       const x = pasteX + (node.position.x - minX)
       const y = pasteY + (node.position.y - minY)
-      oldToNewIdMap[node.id] = id
       return {
-        item: { ...node, id, position: { x, y } },
         type: 'add',
+        item: {
+          ...node,
+          id,
+          position: { x, y },
+          positionAbsolute: { x, y },
+          selected: true,
+          data: {
+            ...node.data,
+            connections: {
+              inputs: {},
+              outputs: {},
+            },
+          },
+        },
       }
     })
 
-    const newEdges = edges.map((edge: Edge) => ({
-      type: 'add',
-      item: {
-        ...edge,
-        id: uuidv4(),
-        source: oldToNewIdMap[edge.source],
-        target: oldToNewIdMap[edge.target],
-      },
+    const newEdges: EdgeChange[] = copiedEdges
+      .filter(
+        (edge: any) => oldToNewIdMap[edge.source] && oldToNewIdMap[edge.target]
+      )
+      .map((edge: any) => ({
+        type: 'add',
+        item: {
+          ...edge,
+          id: uuidv4(),
+          source: oldToNewIdMap[edge.source],
+          target: oldToNewIdMap[edge.target],
+        },
+      }))
+
+    // Deselect all existing nodes
+    const deselectNodes: NodeChange[] = getNodes().map(node => ({
+      id: node.id,
+      type: 'select',
+      selected: false,
     }))
 
-    onNodesChange(tab.id)(newNodes)
-    onEdgesChange(tab.id)(newEdges)
-  }, [screenToFlowPosition, onNodesChange, tab])
+    onNodesChange(tab.id)([...deselectNodes, ...newNodes])
+    if (newEdges.length > 0) {
+      onEdgesChange(tab.id)(newEdges)
+    }
+  }, [screenToFlowPosition, onNodesChange, onEdgesChange, tab.id, getNodes])
 
   const nodeMenuActions = [
     { label: 'Delete', onClick: handleRemoveNode },
@@ -515,31 +631,37 @@ export const useFlowHandlers = ({
   ]
 
   const handleStopConnect: OnConnectEnd = useCallback(
-    e => {
+    event => {
       setBlockClose(true)
-      e.preventDefault()
-      const element = e.target as HTMLElement
-      if (element.classList.contains('react-flow__pane')) {
+      event.preventDefault()
+      const element = event.target as HTMLElement
+
+      // Check if the connection ended on a valid target (another node)
+      const isValidTarget =
+        element.classList.contains('react-flow__handle') ||
+        element.classList.contains('react-flow__node') ||
+        element.closest('.react-flow__node') !== null
+
+      if (!isValidTarget && element.classList.contains('react-flow__pane')) {
         const bounds = parentRef?.current?.getBoundingClientRect()
 
         if (!bounds) return
 
         let clientX, clientY
 
-        if (e instanceof MouseEvent) {
-          clientX = e.clientX
-          clientY = e.clientY
-        } else if (e instanceof TouchEvent && e.touches.length > 0) {
-          clientX = e.touches[0].clientX
-          clientY = e.touches[0].clientY
+        if (event instanceof MouseEvent) {
+          clientX = event.clientX
+          clientY = event.clientY
+        } else if (event instanceof TouchEvent && event.touches.length > 0) {
+          clientX = event.touches[0].clientX
+          clientY = event.touches[0].clientY
         }
+
+        if (!clientX || !clientY) return
 
         const nodePickerWidth = 320
         const nodePickerHeight = 251
 
-        if (!clientX || !clientY) return
-
-        // Calculate initial positions, ensuring the node picker doesn't open off-screen initially
         let xNodePickerPosition = clientX - bounds.left
         let yNodePickerPosition = clientY - bounds.top
 
@@ -548,12 +670,10 @@ export const useFlowHandlers = ({
           y: clientY,
         })
 
-        // Adjust if the context menu would open off the right side of the viewport
         if (xNodePickerPosition + nodePickerWidth > bounds.width) {
           xNodePickerPosition = bounds.width - nodePickerWidth * 1.05
         }
 
-        // Adjust if the context menu would open off the bottom of the viewport
         if (yNodePickerPosition + nodePickerHeight > bounds.height) {
           yNodePickerPosition = bounds.height - nodePickerHeight * 1.05
         }
@@ -565,8 +685,8 @@ export const useFlowHandlers = ({
 
         if (!currentKeyPressed) {
           setNodePickerPosition({
-            x: Math.max(0, xNodePickerPosition + bounds.left), // Use Math.max to ensure we don't position off-screen
-            y: Math.max(0, yNodePickerPosition + bounds.top), // Use Math.max to ensure we don't position off-screen
+            x: Math.max(0, xNodePickerPosition + bounds.left),
+            y: Math.max(0, yNodePickerPosition + bounds.top),
           })
         }
 
@@ -577,7 +697,7 @@ export const useFlowHandlers = ({
         setLastConnectStart(undefined)
       }
     },
-    [parentRef, currentKeyPressed]
+    [parentRef, currentKeyPressed, screenToFlowPosition]
   )
 
   const nodeCreator = (
@@ -646,6 +766,7 @@ export const useFlowHandlers = ({
       if (blockClose) return
 
       closeNodePicker()
+      dispatch(setActiveInput(null))
     },
     [closeNodePicker, currentKeyPressed, blockClose]
   )

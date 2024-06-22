@@ -77,6 +77,7 @@
         "packages/client/feathers-redux-toolkit/src/index.ts"
       ],
       "@magickml/flow-core": ["packages/client/flow/core/src/index.ts"],
+      "@magickml/agent-module": ["packages/modules/agent/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
       "@magickml/nitro": ["packages/server/nitroModule/src/index.ts"],
