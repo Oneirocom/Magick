@@ -14,7 +14,7 @@ import { queryPack } from './nodes/query'
 import { sourceNodes } from './nodes/source'
 import { waitForEmbedderJob } from './nodes/waitForEmbedderJob'
 
-export const KnowledgePluginClass = createSimplePluginClass({
+const KnowledgePluginClass = createSimplePluginClass({
   name: 'knowledge',
   nodes: [
     getContext,
@@ -39,3 +39,5 @@ export const KnowledgePluginClass = createSimplePluginClass({
     }
   },
 })
+
+export default KnowledgePluginClass

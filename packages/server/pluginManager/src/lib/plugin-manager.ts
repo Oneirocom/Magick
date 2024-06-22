@@ -170,6 +170,7 @@ export class PluginManager<A extends AgentLike> extends EventEmitter {
         PluginClass.prototype instanceof BasePlugin
       ) {
         // Create an instance of the plugin
+        this.logger.info('Loading plugin %s', PluginClass.name)
         // @ts-ignore
         const pluginInstance = new PluginClass({
           agent: this.agent,
