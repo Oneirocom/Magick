@@ -4,6 +4,15 @@
   "sourceRoot": "packages/server/grimoire/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/grimoire",
+        "tsConfig": "packages/server/grimoire/tsconfig.lib.json",
+        "main": "packages/server/grimoire/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

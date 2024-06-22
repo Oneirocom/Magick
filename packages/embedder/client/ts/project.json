@@ -1,5 +1,5 @@
 {
-  "name": "embedder-client-ts",
+  "name": "@magickml/embedder/client/ts",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/client/ts/src",
   "projectType": "library",

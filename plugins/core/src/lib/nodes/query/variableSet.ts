@@ -5,7 +5,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 
 export const variableSet = makeFlowNodeDefinition({
   typeName: 'variables/set',

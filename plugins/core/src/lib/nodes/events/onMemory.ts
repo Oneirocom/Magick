@@ -1,6 +1,6 @@
 import { Assert, NodeCategory } from '@magickml/behave-graph'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 import { Memory, MemoryStreamService } from '../../services/memoryStreamService'
 
 type State = {

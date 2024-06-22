@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'server-redis-pubsub',
+  displayName: 'server/redis-pubsub',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

@@ -1,10 +1,9 @@
 import Keyv from 'keyv'
 import { EventStore, SpellCaster } from 'server/grimoire'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
-import { CORE_DEP_KEYS } from '../config'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
-import { EventPayload } from 'server/plugin'
+import { EventPayload, CORE_DEP_KEYS } from 'servicesShared'
 
 type Payload = {
   name: string
@@ -33,10 +32,14 @@ export class VariableService
   implements IVariableService
 {
   private keyv: Keyv
-  private spellCaster: SpellCaster
+  private spellCaster: SpellCaster<any>
   private agentId: string
 
-  constructor(postgresUrl: string, agentId: string, spellCaster: SpellCaster) {
+  constructor(
+    postgresUrl: string,
+    agentId: string,
+    spellCaster: SpellCaster<any>
+  ) {
     super()
     this.keyv = new Keyv(postgresUrl, {
       namespace: agentId,

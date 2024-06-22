@@ -1,5 +1,5 @@
 import { SlackEvent as BoltEvents } from '@slack/bolt'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import type { App, EventFromType } from '@slack/bolt'
 import { PLUGIN_SETTINGS } from 'shared/config'
 import type { CreateCredentialsRecord, PluginStateType } from 'server/plugin'

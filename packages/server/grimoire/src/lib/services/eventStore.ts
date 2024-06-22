@@ -1,10 +1,10 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
 import TypedEmitter from 'typed-emitter'
-import { Application, saveGraphEvent } from 'server/core'
-import { ActionPayload, EventPayload } from 'server/plugin'
+import { ActionPayload, EventPayload, ISharedAgent } from 'servicesShared'
 import { getEventProperties } from '../utils'
 import { EventTypes, SEND_MESSAGE } from 'communication'
 import EventEmitter from 'events'
+import { Application } from '@feathersjs/feathers'
 
 type EventProperties =
   | 'sender'
@@ -75,15 +75,21 @@ export class EventStore
   private graphNodes!: GraphNodes
   private app: Application
   private agentId: string
+  private agent: ISharedAgent
 
-  constructor(stateService: IStateService, app: Application, agentId: string) {
+  constructor(
+    stateService: IStateService,
+    app: Application,
+    agent: ISharedAgent
+  ) {
     super()
     this.stateService = stateService
     this._currentEvent = null
     this._initialEvent = null
     this.status = StatusEnum.INIT
     this.app = app
-    this.agentId = agentId
+    this.agent = agent
+    this.agentId = agent.id
   }
 
   public init(graphNodes: GraphNodes) {
@@ -131,7 +137,7 @@ export class EventStore
   }
 
   public async saveAgentEvent(data: ActionPayload) {
-    await saveGraphEvent({
+    await this.agent.saveGraphEvent({
       sender: this.agentId,
       // we are assuming here that the observer of this action is the
       //  original sender.  We may be wrong.
@@ -146,7 +152,7 @@ export class EventStore
   }
 
   public async saveUserEvent(data: ActionPayload) {
-    await saveGraphEvent({
+    await this.agent.saveGraphEvent({
       sender: data.event.sender,
       observer: this.agentId,
       agentId: this.agentId,

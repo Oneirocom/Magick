@@ -1,5 +1,5 @@
 import { createActionNode } from 'plugins/shared'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import {
   type DiscordEventPayload,
   DISCORD_DEPENDENCIES,

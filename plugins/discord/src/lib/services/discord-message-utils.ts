@@ -1,4 +1,4 @@
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import { DiscordAgentContext, type DiscordEventPayload } from '../configx'
 import Natural from 'natural'
 

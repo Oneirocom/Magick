@@ -3,7 +3,7 @@ import { InputData, SpellCaster } from '../../spellCaster'
 import { makeMagickEventNodeDefinition } from '../../factories/magickEventNode'
 import { BASE_DEP_KEYS, INPUT_EVENT } from '../../constants'
 import { IEventStore } from '../../services/eventStore'
-import { CORE_DEP_KEYS } from 'plugin/core'
+import { CORE_DEP_KEYS } from 'servicesShared'
 
 type State = {
   onSpellCasterEvent?: ((data: InputData) => void) | undefined
@@ -26,7 +26,7 @@ export const SubspellInput = makeMagickEventNodeDefinition(
       },
     },
     out: (_, graph) => {
-      const spellCaster = graph.getDependency<SpellCaster>(
+      const spellCaster = graph.getDependency<SpellCaster<any>>(
         BASE_DEP_KEYS.I_SPELLCASTER
       )
 
@@ -46,7 +46,7 @@ export const SubspellInput = makeMagickEventNodeDefinition(
     init: ({ state, commit, write, graph, handleState }) => {
       Assert.mustBeTrue(state.onSpellCasterEvent === undefined)
 
-      const spellCaster = graph.getDependency<SpellCaster>(
+      const spellCaster = graph.getDependency<SpellCaster<any>>(
         BASE_DEP_KEYS.I_SPELLCASTER
       )
 
@@ -77,7 +77,7 @@ export const SubspellInput = makeMagickEventNodeDefinition(
       }
     },
     dispose: ({ graph, state }) => {
-      const spellCaster = graph.getDependency<SpellCaster>(
+      const spellCaster = graph.getDependency<SpellCaster<any>>(
         BASE_DEP_KEYS.I_SPELLCASTER
       )
 

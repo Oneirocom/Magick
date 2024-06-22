@@ -1,5 +1,5 @@
 console.log('HELLO WORLD')
-import { CorePlugin } from 'plugin/core'
+import { CorePlugin } from 'plugins/core'
 import { defineMagickPlugin } from '../../modules/agent-module/runtimes/utils/defineMagickPlugin'
 
 // test

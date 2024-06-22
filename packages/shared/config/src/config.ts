@@ -1,7 +1,8 @@
 // DOCUMENTED
 import { config } from 'dotenv-flow'
-import { importMetaEnv } from '../../../client/config/src/lib/import-meta-env'
+// import { importMetaEnv } from '../../../client/config/src/lib/import-meta-env'
 import { v4 } from 'uuid'
+import { importMetaEnv } from './import-meta-env'
 
 // Load environment variables
 config({

@@ -15,8 +15,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
-import { ActionPayload, EventPayload } from 'server/plugin'
-import { ISeraphEvent } from 'servicesShared'
+import { ActionPayload, EventPayload, ISeraphEvent } from 'servicesShared'
 import { SeraphManager } from '@magickml/seraph-manager'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
@@ -62,13 +61,13 @@ export class AgentV2
   data!: AgentInterface
   projectId!: string
   logger: pino.Logger = getLogger()
-  commandHub: CommandHub
+  commandHub: CommandHub<this>
   version!: string
   pubsub: RedisPubSub
   ready = false
-  app: Application
-  spellbook: Spellbook<Application>
-  pluginManager: PluginManager
+  app: any
+  spellbook: Spellbook<Application, this>
+  pluginManager: PluginManager<this>
   outputTypes: any[] = []
   heartbeatInterval: NodeJS.Timer
   seraphManager: SeraphManager
@@ -138,8 +137,8 @@ export class AgentV2
 
     if (this.config.useInternalPlugins) {
       // dynamic import of the plugins golder
-      const plugins = await import('./../../../../../plugins')
-      this.pluginManager.loadRawPlugins(plugins)
+      // const plugins = await import('../../../../../plugins')
+      // this.pluginManager.loadRawPlugins(plugins)
     }
 
     // initialzie spellbook
@@ -195,7 +194,7 @@ export class AgentV2
         this.currentSpellReleaseId || 'draft-agent'
       }`
     )
-    const spellsData = await this.app.service('spells').find({
+    const spellsData = await (this.app.service('spells') as any).find({
       query: {
         projectId: this.projectId,
         type: 'behave',

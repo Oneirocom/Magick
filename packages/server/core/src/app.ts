@@ -14,8 +14,9 @@ import {
 import socketio from '@feathersjs/socketio'
 import pino from 'pino'
 import Redis from 'ioredis'
-import { RedisPubSub } from 'server/redis-pubsub'
+import Keyv from 'keyv'
 
+import { RedisPubSub } from 'server/redis-pubsub'
 import {
   REDIS_URL,
   API_ACCESS_KEY,
@@ -24,19 +25,20 @@ import {
   DATABASE_URL,
 } from 'shared/config'
 import { createPosthogClient } from 'server/event-tracker'
+import { getLogger } from 'server/logger'
+import { CredentialsManager } from 'server/credentials'
+import { stringify } from 'shared/utils'
+import { AgentCommander } from '@magickml/agent-commander'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
-import type { AgentCommander } from 'server/agents'
 import { logError } from './hooks'
 import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
 
-import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
-import { CredentialsManager } from 'server/credentials'
 import {
   MemoryRetrieval,
   MemoryStorageMiddleware,
@@ -44,8 +46,6 @@ import {
   importPrivatePrompts,
 } from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
-import { stringify } from 'shared/utils'
-import Keyv from 'keyv'
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {

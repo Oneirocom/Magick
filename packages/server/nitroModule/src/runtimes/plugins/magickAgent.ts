@@ -2,15 +2,13 @@ import { defineNitroPlugin } from 'nitropack/dist/runtime/plugin'
 // @ts-ignore
 import magickPlugins from '#magick/plugins'
 import { initApp } from 'server/core'
-import { AgentV2 as Agent, AgentConfig } from 'server/agents'
 import { useRuntimeConfig } from 'nitropack/runtime'
+import { AgentV2 as Agent, AgentConfig } from 'server/agents'
 
 export default defineNitroPlugin(async nitroApp => {
-  const app = await initApp()
+  const app = (await initApp()) as any
 
   const runtimeConfig = useRuntimeConfig()
-
-  console.log('runtimeConfig', runtimeConfig)
 
   nitroApp.agentServer = app
 

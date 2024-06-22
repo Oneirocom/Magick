@@ -3,16 +3,15 @@ import {
   NodeCategory,
   SocketsList,
 } from '@magickml/behave-graph'
-import { CORE_DEP_KEYS } from 'plugin/core'
-import { Agent } from 'server/agents'
 import { IEventStore } from '../../services/eventStore'
 import { INPUT_EVENT, OUTPUT_EVENT } from '../../constants'
 import { makeMagickAsyncNodeDefinition } from '../../factories/magickAsyncNode'
 import { OutputData, SocketData, SpellCaster } from '../../spellCaster'
+import { ISharedAgent, CORE_DEP_KEYS } from 'servicesShared'
 
 type InitialState = {
   handler: ((result: OutputData) => void) | undefined
-  spellCaster: SpellCaster | undefined
+  spellCaster: SpellCaster<any> | undefined
 }
 
 const getInitialState = (): InitialState => ({
@@ -100,7 +99,7 @@ export const runSubspell = makeMagickAsyncNodeDefinition({
       throw new Error('No spellId provided')
     }
 
-    const agent = getDependency<Agent>(CORE_DEP_KEYS.AGENT)
+    const agent = getDependency<ISharedAgent>(CORE_DEP_KEYS.AGENT)
 
     if (!agent) {
       throw new Error('No agent found')

@@ -4,6 +4,15 @@
   "sourceRoot": "plugins/slack/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/plugin/slack",
+        "tsConfig": "plugin/slack/tsconfig.lib.json",
+        "main": "plugin/slack/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

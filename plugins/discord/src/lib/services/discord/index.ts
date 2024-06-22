@@ -1,5 +1,5 @@
 import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import { Logger } from 'pino'
 import natural from 'natural'
 import {

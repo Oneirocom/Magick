@@ -9,7 +9,7 @@ import { initLogger, getLogger } from 'server/logger'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import 'regenerator-runtime/runtime'
-import { initAgentCommander } from 'server/agents'
+import { initAgentCommander } from '@magickml/agent-commander'
 
 initLogger({ name: 'cloud-agent-worker' })
 const logger = getLogger()
@@ -35,7 +35,7 @@ process.on(
  */
 async function init() {
   await initApp('server')
-  await initAgentCommander()
+  await initAgentCommander(app)
 
   // generic error handling for any errors that may occur
   app.use(async (ctx: Context, next: () => Promise<any>) => {

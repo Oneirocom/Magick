@@ -1,5 +1,5 @@
 import Redis from 'ioredis'
-import { ActionPayload, EventPayload } from 'server/plugin'
+import { ActionPayload, EventPayload, ISharedAgent } from 'servicesShared'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 
@@ -10,7 +10,7 @@ import {
   sendSlackAudio,
 } from './nodes'
 import { WebSocketPlugin } from 'server/plugin'
-import { type CorePluginEvents } from 'plugin/core'
+import { type CorePluginEvents } from 'plugins/core'
 import Bolt, {
   type AllMiddlewareArgs,
   type MessageEvent,
@@ -34,7 +34,6 @@ import {
   SlackBaseMessageEvent,
   SendSlackMessage,
 } from './configx'
-import { Agent } from 'server/agents'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 export class SlackPlugin extends WebSocketPlugin<
@@ -68,7 +67,7 @@ export class SlackPlugin extends WebSocketPlugin<
     projectId,
   }: {
     connection: Redis
-    agent: Agent
+    agent: ISharedAgent
     pubSub: RedisPubSub
     projectId: string
   }) {

@@ -1,11 +1,9 @@
 {
-  "name": "utils",
+  "name": "shared/utils",
   "version": "0.0.1",
   "dependencies": {
     "@feathersjs/feathers": "5.0.25",
-    "@magickml/behave-graph": "^0.14.1"
-  },
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "typings": "./index.d.ts"
+    "@magickml/behave-graph": "^0.14.1",
+    "tslib": "^2.3.0"
+  }
 }

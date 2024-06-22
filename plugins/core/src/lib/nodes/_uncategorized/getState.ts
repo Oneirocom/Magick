@@ -1,6 +1,6 @@
 import { makeFlowNodeDefinition, NodeCategory } from '@magickml/behave-graph'
 import { type BasePlugin } from 'server/plugin'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 
 // plan is to not hardcode this and generate it dynamically by what plugins are enabled
 export enum PluginStateChoice {
@@ -35,9 +35,9 @@ export const getStateNode = makeFlowNodeDefinition({
       throw new Error(`Invalid plugin in getStateNode: ${plugin}`)
     }
 
-    const getState = getDependency<BasePlugin['stateManager']['getGlobalState']>(
-      CORE_DEP_KEYS.GET_STATE
-    )
+    const getState = getDependency<
+      BasePlugin['stateManager']['getGlobalState']
+    >(CORE_DEP_KEYS.GET_STATE)
 
     if (!getState) {
       throw new Error(`getState dependency not found`)

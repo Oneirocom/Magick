@@ -1,6 +1,3 @@
-// import { Agent } from 'server/agents'
-// import { CompletionProvider } from 'shared/core'
-
 type Agent = any
 
 export type CompletionProvider = {

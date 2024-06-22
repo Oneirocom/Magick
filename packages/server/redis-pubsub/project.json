@@ -1,9 +1,18 @@
 {
-  "name": "server-redis-pubsub",
+  "name": "server/redis-pubsub",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/redis-pubsub/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/redis-pubsub",
+        "tsConfig": "packages/server/redis-pubsub/tsconfig.lib.json",
+        "main": "packages/server/redis-pubsub/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
