@@ -1,5 +1,5 @@
 {
-  "name": "plugin/slack",
+  "name": "plugins/slack",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/slack/src",
   "projectType": "library",
@@ -8,9 +8,9 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/plugin/slack",
-        "tsConfig": "plugin/slack/tsconfig.lib.json",
-        "main": "plugin/slack/src/index.ts"
+        "outputPath": "dist/plugins/slack",
+        "tsConfig": "plugins/slack/tsconfig.lib.json",
+        "main": "plugins/slack/src/index.ts"
       }
     },
     "lint": {

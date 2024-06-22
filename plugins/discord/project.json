@@ -1,5 +1,5 @@
 {
-  "name": "plugin/discord",
+  "name": "plugins/discord",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/discord/src",
   "projectType": "library",
@@ -8,9 +8,9 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/plugin/discord",
-        "tsConfig": "plugin/discord/tsconfig.lib.json",
-        "main": "plugin/discord/src/index.ts"
+        "outputPath": "dist/plugins/discord",
+        "tsConfig": "plugins/discord/tsconfig.lib.json",
+        "main": "plugins/discord/src/index.ts"
       }
     },
     "lint": {

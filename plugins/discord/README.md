@@ -1,11 +1,11 @@
-# plugin/discord
+# plugins/discord
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Building
 
-Run `nx build plugin/discord` to build the library.
+Run `nx build plugins/discord` to build the library.
 
 ## Running unit tests
 
-Run `nx test plugin/discord` to execute the unit tests via [Jest](https://jestjs.io).
+Run `nx test plugins/discord` to execute the unit tests via [Jest](https://jestjs.io).

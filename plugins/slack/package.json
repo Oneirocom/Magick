@@ -1,7 +1,18 @@
 {
-  "name": "plugin/slack",
+  "name": "plugins/slack",
   "version": "0.0.1",
   "dependencies": {
+    "@slack/bolt": "^3.17.0",
+    "shared/config": "0.0.1",
+    "server/plugin": "0.0.1",
+    "plugins/shared": "0.0.1",
+    "typed-emitter": "^2.1.0",
+    "@magickml/behave-graph": "^0.14.14",
+    "server/grimoire": "0.0.1",
+    "pino": "8.14.1",
+    "server/logger": "0.0.1",
+    "ioredis": "^5.3.2",
+    "plugins/core": "0.0.1",
     "tslib": "^2.3.0"
   },
   "type": "commonjs",

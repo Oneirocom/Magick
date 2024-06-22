@@ -1,5 +1,4 @@
 import pino from 'pino'
-// import * as plugins from '../../../../../plugins'
 import {
   AGENT_ERROR,
   AGENT_WARN,
@@ -22,6 +21,11 @@ import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 import { Spellbook } from 'server/grimoire'
 import { AgentLoggingService } from './AgentLogger'
+
+import * as CorePlugin from 'plugins/core'
+import * as KnowledgePlugin from '@magickml/plugin-knowledge'
+import * as DiscordPlugin from 'plugins/discord'
+import * as SlackPlugin from 'plugins/slack'
 
 export type RequestPayload = {
   projectId: string
@@ -73,6 +77,8 @@ type AgentEvents = {
   eventComplete: (event: EventPayload | null) => void
   error: (error: ActionPayload) => void
 }
+
+const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]
 
 /**
  * Agent class represents an agent instance.
@@ -165,7 +171,7 @@ export class Agent
     // These are used to remotely control the agent
     this.initializeCoreCommands()
 
-    // this.pluginManager.loadRawPlugins(plugins)
+    this.pluginManager.loadRawPlugins(plugins)
 
     // initialzie spellbook
     this.initializeSpellbook()
