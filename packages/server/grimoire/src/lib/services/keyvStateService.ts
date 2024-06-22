@@ -4,7 +4,7 @@ import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 
 import { IEventStore } from './eventStore'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 
 /**
  * @class KeyvStateService

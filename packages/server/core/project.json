@@ -5,6 +5,15 @@
   "projectType": "library",
   "implicitDependencies": [],
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/core",
+        "main": "packages/server/core/src/index.ts",
+        "tsConfig": "packages/server/core/tsconfig.lib.json"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

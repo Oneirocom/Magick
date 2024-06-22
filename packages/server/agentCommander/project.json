@@ -1,0 +1,20 @@
+{
+  "name": "@magickml/agent-commander",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/agentCommander/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/agentCommander",
+        "tsConfig": "packages/server/agentCommander/tsconfig.lib.json",
+        "packageJson": "packages/server/agentCommander/package.json",
+        "main": "packages/server/agentCommander/src/index.ts",
+        "assets": ["packages/server/agentCommander/*.md"]
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 import { EventEmitter } from 'events'
 import { v4 as uuidv4 } from 'uuid'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import { prismaCore } from '@magickml/server-db'
 import { EventStore, SpellCaster } from 'server/grimoire'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 
 export type Memory = {
   id: string
@@ -18,7 +18,7 @@ export type Memory = {
 
 export class MemoryStreamService extends EventEmitter {
   private agentId: string
-  private spellCaster: SpellCaster
+  private spellCaster: SpellCaster<any>
   private prisma: typeof prismaCore
   // private vectorStore: PrismaVectorStore<
   //   Memory,
@@ -30,7 +30,7 @@ export class MemoryStreamService extends EventEmitter {
   //   PrismaSqlFilter<Memory>
   // >
 
-  constructor(agentId: string, spellCaster: SpellCaster) {
+  constructor(agentId: string, spellCaster: SpellCaster<any>) {
     super()
     this.agentId = agentId
     this.spellCaster = spellCaster

@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import TypedEmitter from 'typed-emitter'
 
 type MessageEvents = {

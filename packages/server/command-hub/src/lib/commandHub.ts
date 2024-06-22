@@ -1,23 +1,36 @@
 import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'communication'
 import { RedisPubSub } from 'server/redis-pubsub'
-import type { Agent, AgentV2 } from 'server/agents'
 
-export interface CommandListener<T> {
-  callback: (data: T, agent: Agent | AgentV2) => void
+// Define a minimal interface for what we expect from an agent
+export interface AgentLike {
+  id: string
+  projectId: string
+  logger: {
+    debug: (message: string) => void
+    error: (message: string) => void
+    info: (message: string) => void
+  }
+  error: (message: string, data?: any) => void
+  log: (message: string, data?: any) => void
+  publishEvent: (event: string, data: any) => void
+}
+
+export interface CommandListener<T, A extends AgentLike> {
+  callback: (data: T, agent: A) => void
 }
 
 /**
  * CommandHub class that handles incoming commands and publishes events to listeners.
  */
-export class CommandHub {
+export class CommandHub<A extends AgentLike> {
   /**
    * The agent instance.
    */
-  private agent: Agent | AgentV2
+  private agent: A
   /**z
    * The event map that stores the listeners for each event type.
    */
-  private eventMap: { [key: string]: CommandListener<any>[] } = {}
+  private eventMap: { [key: string]: CommandListener<any, A>[] } = {}
   /**
    * The worker instance.
    */
@@ -28,7 +41,7 @@ export class CommandHub {
    * @param agent - The agent instance.
    * @param worker - The worker instance.
    */
-  constructor(agent: Agent | AgentV2, pubsub: RedisPubSub) {
+  constructor(agent: A, pubsub: RedisPubSub) {
     this.agent = agent
 
     // Generate queue name
@@ -133,7 +146,7 @@ export class CommandHub {
    * @param eventType - The event type to listen for.
    * @param listener - The listener to add.
    */
-  on<T>(eventType: string, listener: CommandListener<T>) {
+  on<T>(eventType: string, listener: CommandListener<T, A>) {
     if (!this.eventMap[eventType]) {
       this.eventMap[eventType] = []
     }
@@ -145,7 +158,7 @@ export class CommandHub {
    * @param eventType - The event type to remove the listener from.
    * @param listener - The listener to remove.
    */
-  off(eventType: string, listener: CommandListener<any>) {
+  off(eventType: string, listener: CommandListener<any, A>) {
     const listeners = this.eventMap[eventType]
     if (listeners) {
       const index = listeners.indexOf(listener)

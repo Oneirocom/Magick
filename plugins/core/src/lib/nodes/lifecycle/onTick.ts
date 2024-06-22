@@ -4,7 +4,7 @@ import {
   NodeCategory,
 } from '@magickml/behave-graph'
 import { IEventStore, makeMagickEventNodeDefinition } from 'server/grimoire'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 import { Agent } from 'server/agents'
 
 type State = {

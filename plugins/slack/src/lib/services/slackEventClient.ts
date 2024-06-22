@@ -1,6 +1,6 @@
 import pino from 'pino'
 import { getLogger } from 'server/logger'
-import { type ActionPayload, type EventPayload } from 'server/plugin'
+import { EventPayload, ActionPayload } from 'servicesShared'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { SLACK_EVENTS } from '../configx'
 

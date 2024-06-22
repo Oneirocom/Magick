@@ -1,5 +1,5 @@
 import pino from 'pino'
-import * as plugins from './../../../../../plugins'
+// import * as plugins from '../../../../../plugins'
 import {
   AGENT_ERROR,
   AGENT_WARN,
@@ -7,20 +7,53 @@ import {
   AGENT_LOG,
   AGENT_SERAPH_EVENT,
 } from 'communication'
-import { Application } from 'server/core'
+import type { Application } from 'server/core'
 import { getLogger } from 'server/logger'
 import { EventMetadata } from 'server/event-tracker'
-import { Spellbook } from 'server/grimoire'
-import { AgentInterface } from 'server/schemas'
+import { AgentInterface, SpellInterface } from 'server/schemas'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { PluginManager } from 'server/pluginManager'
 import { CommandHub } from 'server/command-hub'
 import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
-import { ActionPayload, EventPayload } from 'server/plugin'
-import { ISeraphEvent } from 'servicesShared'
+import { ActionPayload, EventPayload, ISeraphEvent } from 'servicesShared'
 import { SeraphManager } from '@magickml/seraph-manager'
+
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
+import { Spellbook } from 'server/grimoire'
+import { AgentLoggingService } from './AgentLogger'
+
+export type RequestPayload = {
+  projectId: string
+  agentId: string
+  requestData: string
+  responseData: string
+  model: string
+  startTime: number
+  status: string
+  statusCode: number
+  parameters: string
+  provider: string
+  type: string
+  hidden: boolean
+  processed: boolean
+  totalTokens?: number
+  spell: SpellInterface
+  nodeId: number | null
+  customModel?: string
+  cost: number
+}
+
+export type GraphEventPayload = {
+  sender: string
+  agentId: string
+  connector: string
+  connectorData: string
+  observer: string
+  content: string
+  eventType: string
+  event: EventPayload
+}
 
 export type AgentEventPayload<
   Data = Record<string, unknown>,
@@ -57,15 +90,15 @@ export class Agent
   data!: AgentInterface
   projectId!: string
   logger: pino.Logger = getLogger()
-  commandHub: CommandHub
+  commandHub: CommandHub<this>
   version!: string
   pubsub: RedisPubSub
-  ready = false
-  app: Application
-  spellbook: Spellbook<Application>
-  pluginManager: PluginManager
-  outputTypes: any[] = []
-  heartbeatInterval: NodeJS.Timer
+  app: any
+  // app: Application
+  spellbook: Spellbook<Application, this>
+  pluginManager: PluginManager<this>
+  private heartbeatInterval: NodeJS.Timer
+  loggingService: AgentLoggingService<this>
   seraphManager: SeraphManager
 
   /**
@@ -78,6 +111,7 @@ export class Agent
     app: Application
   ) {
     super()
+    this.loggingService = new AgentLoggingService(this)
     this.id = agentData.id
     this.app = app
 
@@ -88,7 +122,7 @@ export class Agent
 
     this.pubsub = pubsub
 
-    this.commandHub = new CommandHub(this, this.pubsub)
+    this.commandHub = new CommandHub<this>(this, this.pubsub)
 
     this.seraphManager = new SeraphManager({
       seraphOptions: {
@@ -102,7 +136,7 @@ export class Agent
       app: this.app,
     })
 
-    this.pluginManager = new PluginManager({
+    this.pluginManager = new PluginManager<this>({
       pluginDirectory: process.env.PLUGIN_DIRECTORY || './plugins',
       connection: this.app.get('redis'),
       agent: this,
@@ -124,7 +158,6 @@ export class Agent
     this.heartbeatInterval = this.startHeartbeat()
 
     this.logger.info('New agent created: %s | %s', this.name, this.id)
-    this.ready = true
   }
 
   initialize() {
@@ -132,7 +165,7 @@ export class Agent
     // These are used to remotely control the agent
     this.initializeCoreCommands()
 
-    this.pluginManager.loadRawPlugins(plugins)
+    // this.pluginManager.loadRawPlugins(plugins)
 
     // initialzie spellbook
     this.initializeSpellbook()
@@ -187,7 +220,7 @@ export class Agent
         this.currentSpellReleaseId || 'draft-agent'
       }`
     )
-    const spellsData = await this.app.service('spells').find({
+    const spellsData = await (this.app.service('spells') as any).find({
       query: {
         projectId: this.projectId,
         type: 'behave',
@@ -319,6 +352,60 @@ export class Agent
     clearInterval(this.heartbeatInterval as any)
 
     this.log('destroyed agent', { id: this.id })
+  }
+
+  async saveRequest(request: RequestPayload) {
+    // Calculate the request cost based on total tokens and model.
+    // const cost =
+    //   totalTokens !== undefined && totalTokens > 0
+    //     ? calculateCompletionCost({
+    //         totalTokens: totalTokens as number,
+    //         model: model as any,
+    //       })
+    //     : 0
+
+    // Calculate the request duration.
+    const end = Date.now()
+    const duration = end - Date.now()
+    const spell = request.spell
+
+    // Save and create the request object in Feathers app.
+    return (this.app.service('request') as any).create({
+      // @ts-ignore
+      id: v4(),
+      ...request,
+      spell: typeof spell === 'string' ? spell : JSON.stringify(spell),
+      duration,
+    })
+  }
+
+  async saveGraphEvent(event: GraphEventPayload) {
+    const {
+      sender,
+      agentId,
+      connector,
+      connectorData,
+      observer,
+      content,
+      eventType,
+    } = event
+
+    if (!content) {
+      return
+    }
+
+    this.app.get('posthog').track(eventType, event, agentId)
+
+    return (this.app.service('graphEvents') as any).create({
+      sender,
+      agentId,
+      connector,
+      connectorData,
+      content,
+      observer,
+      eventType,
+      event,
+    })
   }
 }
 

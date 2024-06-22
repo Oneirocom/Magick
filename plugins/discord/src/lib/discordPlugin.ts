@@ -1,9 +1,6 @@
-import {
-  type ActionPayload,
-  type BasePluginInit,
-  type EventPayload,
-} from 'server/plugin'
-import { type CorePluginEvents } from 'plugin/core'
+import { type BasePluginInit } from 'server/plugin'
+import { type CorePluginEvents } from 'plugins/core'
+import { EventPayload, ActionPayload } from 'servicesShared'
 import {
   ChannelType,
   Client,

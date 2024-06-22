@@ -1,5 +1,5 @@
 {
-  "name": "embedder-api-loaders",
+  "name": "@magickml/embedder/api/loaders",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/api/loaders/src",
   "projectType": "library",

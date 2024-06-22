@@ -21,7 +21,8 @@
         "tsConfig": "packages/server/nitroModule/tsconfig.lib.json",
         "packageJson": "packages/server/nitroModule/package.json",
         "main": "packages/server/nitroModule/src/index.ts",
-        "assets": ["packages/server/nitroModule/*.md"]
+        "assets": ["packages/server/nitroModule/*.md"],
+        "external": "none"
       }
     },
     "nx-release-publish": {

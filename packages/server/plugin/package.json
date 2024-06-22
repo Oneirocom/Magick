@@ -1,8 +1,24 @@
 {
   "name": "server/plugin",
   "version": "0.0.1",
-  "dependencies": {},
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "typings": "./index.d.ts"
+  "dependencies": {
+    "@magickml/behave-graph": "^0.14.14",
+    "zod": "^3.22.4",
+    "@zodios/core": "^10.9.6",
+    "@anatine/zod-mock": "^3.13.4",
+    "server/logger": "0.0.1",
+    "typed-emitter": "^2.1.0",
+    "ioredis": "^5.3.2",
+    "shared/config": "0.0.1",
+    "communication": "0.0.1",
+    "@magickml/server-db": "0.0.1",
+    "uuid": "^9.0.0",
+    "@google-cloud/storage": "^7.11.0",
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@aws-sdk/s3-request-presigner": "^3.525.0",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
 }

@@ -10,9 +10,9 @@ import {
   StateReturn,
   makeCommonProps,
 } from '@magickml/behave-graph'
-import { BaseEmitter, EventPayload } from 'server/plugin'
+import { BaseEmitter } from 'server/plugin'
+import { EventPayload, CORE_DEP_KEYS } from 'servicesShared'
 import { IEventStore } from '../services/eventStore'
-import { CORE_DEP_KEYS } from 'plugin/core'
 import { getEventStateKey } from '../utils'
 
 type OmitFactoryAndType<T extends INodeDefinition> = Omit<

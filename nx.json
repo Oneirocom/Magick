@@ -44,6 +44,12 @@
       "options": {
         "targetName": "playwright:e2e"
       }
+    },
+    {
+      "plugin": "@nx/rollup/plugin",
+      "options": {
+        "buildTargetName": "build"
+      }
     }
   ],
   "pluginsConfig": {
@@ -154,7 +160,10 @@
       "embedder-db-prisma",
       "embedder-client-react",
       "sdk-providers",
-      "nitroModule"
+      "nitroModule",
+      "nitroModule2",
+      "@magickml/agent-commander",
+      "knowledge"
     ],
     "version": {
       "preVersionCommand": "npx nx build embedder-db-prisma"

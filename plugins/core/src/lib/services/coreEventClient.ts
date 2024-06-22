@@ -1,8 +1,7 @@
 import { AGENT_ERROR, AGENT_EVENT, EventTypes } from 'communication'
 import pino from 'pino'
-import { Agent } from 'server/agents'
 import { getLogger } from 'server/logger'
-import { ActionPayload, EventPayload } from 'server/plugin'
+import { ActionPayload, EventPayload, ISharedAgent } from 'servicesShared'
 import { RedisPubSub } from 'server/redis-pubsub'
 
 /**
@@ -33,7 +32,7 @@ import { RedisPubSub } from 'server/redis-pubsub'
 class CoreEventClient {
   private logger: pino.Logger = getLogger()
   private pubSub: RedisPubSub
-  private agent: Agent
+  private agent: ISharedAgent
   private agentId: string
   private eventHandlers: Map<string, ((message: EventPayload) => void)[]>
 
@@ -42,7 +41,7 @@ class CoreEventClient {
    * @param redisConnection The Redis connection to use for subscribing to channels.
    * @param agentId The agent ID to use for subscribing to channels.
    */
-  constructor({ pubSub, agent }: { pubSub: RedisPubSub; agent: Agent }) {
+  constructor({ pubSub, agent }: { pubSub: RedisPubSub; agent: ISharedAgent }) {
     this.pubSub = pubSub
     this.agent = agent
     this.agentId = agent?.id || ''
@@ -72,7 +71,7 @@ class CoreEventClient {
 
   private subscribeToAgentEvents(): void {
     if (!this.agent) return
-    this.agent.on('message', event => {
+    this.agent.on('message', (event: EventPayload) => {
       this.triggerEvent(EventTypes.ON_MESSAGE, event)
     })
   }

@@ -9,11 +9,9 @@ import {
   type ValueTypeMap,
 } from '@magickml/behave-graph'
 import { getLogger } from 'server/logger'
-import { SpellCaster } from 'server/grimoire'
 import { BaseEmitter } from './baseEmitter'
-import { type PluginCredential } from 'server/credentials'
-import { saveGraphEvent } from 'server/core'
-import { type BasePluginConfig } from './types'
+import type { PluginCredential } from 'server/credentials'
+import type { BasePluginConfig } from './types'
 
 // MANAGERS
 import {
@@ -31,12 +29,8 @@ import {
   type PluginCommandManager,
   type PluginCommand,
 } from './commands/command-manager'
-import { BaseActionManager, type ActionPayload } from './actions/action-manager'
-import {
-  type EventDefinition,
-  type EventFormat,
-  type EventPayload,
-} from './events/event-manager'
+import { BaseActionManager } from './actions/action-manager'
+import { type EventDefinition } from './events/event-manager'
 import { PluginStorageManager, S3PluginStorageManager } from './storage'
 
 import {
@@ -45,7 +39,12 @@ import {
   AWS_REGION,
   AWS_BUCKET_NAME,
 } from 'shared/config'
-import { Agent } from 'server/agents'
+// nx-ignore-next-line
+import { ActionPayload, EventFormat, EventPayload } from 'servicesShared'
+// import type { Agent, SpellCaster } from 'packages/server/grimoire/src'
+
+type Agent = any
+type SpellCaster = any
 
 type ValueOf<T> = T[keyof T]
 
@@ -85,29 +84,29 @@ export abstract class BasePlugin<
   Metadata = Record<string, unknown>,
   State extends object = Record<string, unknown>
 > extends Plugin {
-  protected config: BasePluginConfig<Events, Actions, Dependencies, Commands>
-  protected events: EventDefinition[]
-  protected commands: PluginCommand[] = []
-  protected centralEventBus!: EventEmitter
-  abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
+  config: BasePluginConfig<Events, Actions, Dependencies, Commands>
+  events: EventDefinition[]
+  commands: PluginCommand[] = []
+  centralEventBus!: EventEmitter
 
-  abstract nodes?: NodeDefinition[]
-  abstract values?: ValueType[]
-  protected agent: Agent
-  protected agentId: string
-  protected projectId: string
-  abstract defaultState: PluginStateType<State>
-
+  agent: Agent
+  agentId: string
+  projectId: string
   public connection: Redis
   public logger = getLogger()
   public eventEmitter: EventEmitter
-  private updateDependencyHandler?: (key: string, dependency: any) => void
+  updateDependencyHandler?: (key: string, dependency: any) => void
 
-  protected stateManager: PluginStateManager<State>
-  protected credentialsManager: PluginCredentialsManager<Credentials>
-  protected commandManager: PluginCommandManager
-  protected actionsManager: BaseActionManager
-  protected storageManager: PluginStorageManager
+  stateManager: PluginStateManager<State>
+  credentialsManager: PluginCredentialsManager<Credentials>
+  commandManager: PluginCommandManager
+  actionsManager: BaseActionManager
+  storageManager: PluginStorageManager
+
+  abstract nodes?: NodeDefinition[]
+  abstract values?: ValueType[]
+  abstract credentials: ReadonlyArray<Readonly<PluginCredential>>
+  abstract defaultState: PluginStateType<State>
 
   /**
    * Returns the name of the BullMQ queue for the plugin.
@@ -159,7 +158,7 @@ export abstract class BasePlugin<
 
     this.commandManager = new BaseCommandManager()
 
-    this.actionsManager = new BaseActionManager(this.agentId)
+    this.actionsManager = new BaseActionManager(this.agent)
 
     this.storageManager = new S3PluginStorageManager(
       this.agentId,
@@ -295,7 +294,7 @@ export abstract class BasePlugin<
 
   // ACTIONS
 
-  protected initializeActionHandlers() {
+  initializeActionHandlers() {
     this.actionsManager.getActions().forEach(action => {
       const eventName = `${this.name}:${action.actionName}`
       this.centralEventBus.on(eventName, action.handler)
@@ -440,7 +439,7 @@ export abstract class BasePlugin<
 
         if (payload.skipSave) return
 
-        saveGraphEvent({
+        this.agent.saveGraphEvent({
           sender: payload.sender,
           observer: this.agent.id,
           agentId: payload.agentId,
@@ -458,7 +457,7 @@ export abstract class BasePlugin<
    * Returns a dictionary of the behave values this plugin may provide
    * @returns A dictionary of the behave values
    */
-  protected getPluginValues = memo<ValueTypeMap>(() => {
+  getPluginValues = memo<ValueTypeMap>(() => {
     const valueTypes = this.values
 
     if (!valueTypes) return {}
@@ -472,7 +471,7 @@ export abstract class BasePlugin<
    * Returns a dictionary of the behave nodes this plugin may provide
    * @returns A dictionary of the behave nodes
    */
-  protected getPluginNodes = memo<Record<string, NodeDefinition>>(() => {
+  getPluginNodes = memo<Record<string, NodeDefinition>>(() => {
     const nodeDefinitions = this.nodes
 
     if (!nodeDefinitions) return {}
@@ -492,7 +491,7 @@ export abstract class BasePlugin<
    * @example
    * this.emitEvent('myEvent', { data: 'example' });
    */
-  protected emitEvent(eventName: string, payload: EventPayload) {
+  emitEvent(eventName: string, payload: EventPayload) {
     if (!this.stateManager.getState()?.enabled) {
       console.log(`Plugin ${this.name} is not enabled.  Not emitting event.`)
       return

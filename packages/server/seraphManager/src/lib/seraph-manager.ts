@@ -30,7 +30,7 @@ export class SeraphManager extends EventEmitter {
   private projectId: string
   private pubSub: RedisPubSub
   private logger: pino.Logger = getLogger()
-  private commandHub: CommandHub
+  private commandHub: CommandHub<any>
   private app: Application
 
   constructor({
@@ -45,7 +45,7 @@ export class SeraphManager extends EventEmitter {
     agentId: string
     projectId: string
     pubSub: RedisPubSub
-    commandHub: CommandHub
+    commandHub: CommandHub<any>
     app: Application
   }) {
     super()
@@ -132,6 +132,7 @@ export class SeraphManager extends EventEmitter {
     const { data, type, agentId, spellId } = eventData
     const { message } = data.request || {}
 
+    // @ts-ignore
     const spell = await this.app.service('spells').get(spellId as string, {})
 
     this.logger.debug(

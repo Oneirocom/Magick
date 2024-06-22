@@ -4,6 +4,15 @@
   "sourceRoot": "packages/server/pluginManager/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/pluginManager",
+        "tsConfig": "packages/server/pluginManager/tsconfig.lib.json",
+        "main": "packages/server/pluginManager/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

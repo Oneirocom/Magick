@@ -1,5 +1,5 @@
 {
-  "name": "embedder-queue",
+  "name": "@magickml/embedder/queue",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/queue/src",
   "projectType": "library",

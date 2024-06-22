@@ -5,8 +5,8 @@ import {
 import { initLogger, getLogger } from 'server/logger'
 import { app, initApp } from 'server/core'
 import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
-import { initAgentCommander } from 'server/agents'
 import { BullQueue } from 'server/communication'
+import { initAgentCommander } from '@magickml/agent-commander'
 
 initLogger({ name: 'cloud-agent-manager' })
 const logger = getLogger()
@@ -37,7 +37,7 @@ logger.info('Initializing app...')
 await initApp()
 
 logger.info('Initializing agent commander...')
-await initAgentCommander()
+await initAgentCommander(app)
 
 logger.info('Initializing cloud agent manager...')
 start()

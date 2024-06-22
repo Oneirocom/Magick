@@ -8,13 +8,13 @@ import { app } from '../../app'
 import md5 from 'md5'
 import type { Application } from '../../declarations'
 import type { Agent, AgentData, AgentPatch, AgentQuery } from './agents.schema'
-import type { AgentCommandData } from 'server/agents'
 import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
-import { EventPayload } from 'server/plugin'
-import { AgentInterface } from 'server/schemas'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
-import { ISeraphEvent } from 'servicesShared'
+
+import { EventPayload, ISeraphEvent } from 'servicesShared'
+import { AgentCommandData } from '@magickml/agent-commander'
+import { AgentInterface } from 'server/schemas'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>

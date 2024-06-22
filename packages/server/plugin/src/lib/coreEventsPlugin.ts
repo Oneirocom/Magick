@@ -3,8 +3,11 @@ import { BasePlugin } from './basePlugin'
 import EventEmitter from 'events'
 import { EventTypes } from 'communication'
 import { type PluginStateType } from 'plugin-state'
-import { type EventPayload } from './events/event-manager'
-import { Agent } from 'server/agents'
+// nx-ignore-next-line
+import { EventPayload } from 'servicesShared'
+// import type { Agent } from 'packages/server/grimoire/src/lib/agent'
+
+type Agent = any
 
 /**
  * CorePlugin is the base class for all plugins that are used to

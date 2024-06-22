@@ -1,4 +1,4 @@
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 
 const DEFAULT_EVENT_STATE_PROPERTY = 'channel'
 

@@ -4,6 +4,15 @@
   "sourceRoot": "plugins/discord/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/plugin/discord",
+        "tsConfig": "plugin/discord/tsconfig.lib.json",
+        "main": "plugin/discord/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

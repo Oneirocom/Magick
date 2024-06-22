@@ -4,8 +4,7 @@ import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 
 import { EventStore, IEventStore } from './eventStore'
-import { EventPayload } from 'server/plugin'
-import { CORE_DEP_KEYS } from 'plugin/core'
+import { EventPayload, CORE_DEP_KEYS } from 'servicesShared'
 
 export class DefaultStateService implements IStateService {
   private stateStore: Record<string, any>

@@ -1,6 +1,6 @@
 import pino from 'pino'
 import { getLogger } from 'server/logger'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 import { RedisPubSub } from 'server/redis-pubsub'
 import { DISCORD_EVENTS } from '../configx'
 

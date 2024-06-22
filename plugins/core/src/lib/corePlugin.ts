@@ -1,10 +1,13 @@
+import { CoreEventsPlugin } from 'server/plugin'
+import { RedisPubSub } from 'server/redis-pubsub'
+import { SpellCaster } from 'server/grimoire'
+import { DATABASE_URL } from 'shared/config'
+
 import { CoreLLMService } from './services/coreLLMService/coreLLMService'
-import { ActionPayload, CoreEventsPlugin, EventPayload } from 'server/plugin'
 import { messageEvent } from './nodes/events/messageEvent'
 import Redis from 'ioredis'
 import { ILogger, IRegistry, registerCoreProfile } from '@magickml/behave-graph'
 import CoreEventClient from './services/coreEventClient'
-import { RedisPubSub } from 'server/redis-pubsub'
 import { CoreActionService } from './services/coreActionService'
 import { generateText } from './nodes/actions/generateText'
 import { sendMessage } from './nodes/actions/sendMessage'
@@ -16,7 +19,6 @@ import { VariableService } from './services/variableService'
 import { variableSet } from './nodes/query/variableSet'
 import { arrayPush } from './values/Array/Push'
 import { jsonStringify } from './nodes/actions/jsonStringify'
-import { SpellCaster } from 'server/grimoire'
 import { forEach } from './values/Array/ForEach'
 import { arrayLength } from './values/Array/Length'
 import { arrayClear } from './values/Array/Clear'
@@ -33,7 +35,6 @@ import { queryKnowledge } from './nodes/actions/queryKnowledge'
 import { searchKnowledge } from './nodes/actions/searchKnowledge'
 import { searchManyKnowledge } from './nodes/actions/searchManyKnowledge'
 import {
-  CORE_DEP_KEYS,
   coreDefaultState,
   corePluginCredentials,
   corePluginName,
@@ -60,8 +61,6 @@ import {
 } from './configx'
 import { getMessageHistory } from './nodes/actions/messageHistory'
 import { objectDestructure } from './nodes/functions/destructure'
-import { DATABASE_URL } from 'shared/config'
-import { Agent } from 'server/agents'
 import { IsDefined } from './nodes/logic/strings/isDefined'
 import { jsonParse } from './nodes/actions/jsonParse'
 import { clearMessageHistory } from './nodes/actions/clearMessageHistory'
@@ -81,25 +80,16 @@ import { parseCommand } from './nodes/logic/strings/parseCommand'
 import { DoOnceAsync } from './nodes/flow/doOnceAsync'
 import { arrayIncludes } from './values/Array/Includes'
 import { getManyVariables } from './nodes/query/getManyVariables'
-import { LLMProviderKeys } from 'servicesShared'
+import {
+  ActionPayload,
+  CORE_DEP_KEYS,
+  EventPayload,
+  LLMProviderKeys,
+} from 'servicesShared'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'
-import {
-  createPack,
-  getManyPacks,
-  getPack,
-  getChunks,
-  deletePack,
-} from './nodes/knowledge'
-import { sourceNodes } from './nodes/knowledge/source'
-import { queryPack } from './nodes/knowledge/query'
-import { getContext } from './nodes/knowledge/context'
-import { makeEmbedderClient } from '@magickml/embedder/client/ts'
-import { generateToken } from '@magickml/embedder/auth/token'
 import { stringReplace } from './nodes/functions/stringReplace'
-import { waitForEmbedderJob } from './nodes/knowledge/waitForEmbedderJob'
-
 /**
  * CorePlugin handles all generic events and has its own nodes, dependencies, and values.
  */
@@ -118,7 +108,6 @@ export class CorePlugin extends CoreEventsPlugin<
   override defaultState = coreDefaultState
   client: CoreEventClient
   nodes = [
-    ...sourceNodes,
     addKnowledge,
     addMemory,
     addMessage,
@@ -135,22 +124,17 @@ export class CorePlugin extends CoreEventsPlugin<
     arrayRemoveLast,
     clearMemories,
     clearMessageHistory,
-    createPack,
     delay,
-    deletePack,
+
     DoOnceAsync,
     FetchNode,
     flowSplit,
     flowSwitch,
     forEach,
     generateText,
-    getChunks,
-    getContext,
-    getManyPacks,
     getManyVariables,
     getMemories,
     getMessageHistory,
-    getPack,
     getSecretNode,
     getStateNode,
     IsDefined,
@@ -164,7 +148,6 @@ export class CorePlugin extends CoreEventsPlugin<
     parseCommand,
     queryEventHistory,
     queryKnowledge,
-    queryPack,
     regex,
     searchKnowledge,
     searchManyKnowledge,
@@ -178,7 +161,6 @@ export class CorePlugin extends CoreEventsPlugin<
     variableSet,
     variablesReset,
     wait,
-    waitForEmbedderJob,
     webhookEventNode,
     whileLoop,
   ]
@@ -195,7 +177,7 @@ export class CorePlugin extends CoreEventsPlugin<
     projectId,
   }: {
     connection: Redis
-    agent: Agent
+    agent: any
     pubSub: RedisPubSub
     projectId: string
   }) {
@@ -205,6 +187,7 @@ export class CorePlugin extends CoreEventsPlugin<
     this.coreLLMService = new CoreLLMService({
       projectId,
       agentId: this.agentId,
+      agent,
     })
 
     this.userService = new CoreUserService({ projectId })
@@ -285,7 +268,7 @@ export class CorePlugin extends CoreEventsPlugin<
   /**
    * Defines the dependencies that the plugin will use. Creates a new set of dependencies every time.
    */
-  async getDependencies(spellCaster: SpellCaster) {
+  async getDependencies(spellCaster: SpellCaster<any>) {
     try {
       await this.coreLLMService.initialize()
       // await this.coreBudgetManagerService.initialize()
@@ -316,12 +299,6 @@ export class CorePlugin extends CoreEventsPlugin<
       [CORE_DEP_KEYS.GET_STATE]: this.stateManager.getGlobalState.bind(this),
       [CORE_DEP_KEYS.GET_SECRET]:
         this.credentialsManager.getCustomCredential.bind(this),
-      [CORE_DEP_KEYS.EMBEDDER_CLIENT]: makeEmbedderClient(
-        generateToken({
-          owner: this.projectId,
-          entity: this.projectId,
-        })
-      ),
     }
   }
 

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { ActionPayload, EventPayload } from 'server/plugin'
+import { EventPayload, ActionPayload } from 'servicesShared'
 import { getLogger } from 'server/logger'
 import { ON_ERROR, SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 

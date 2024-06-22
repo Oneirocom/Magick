@@ -8,7 +8,7 @@ export const SubspellOutput = makeFlowNodeDefinition({
   category: NodeCategory.Event,
   in: (_, graph) => {
     // Input sockets are dynamically generated
-    const spellCaster = graph.getDependency<SpellCaster>(
+    const spellCaster = graph.getDependency<SpellCaster<any>>(
       BASE_DEP_KEYS.I_SPELLCASTER
     )
     if (!spellCaster) {
@@ -23,7 +23,7 @@ export const SubspellOutput = makeFlowNodeDefinition({
   out: {}, // No fixed output sockets
   initialState: undefined,
   triggered: async ({ triggeringSocketName, graph, read }) => {
-    const spellCaster = graph.getDependency<SpellCaster>(
+    const spellCaster = graph.getDependency<SpellCaster<any>>(
       BASE_DEP_KEYS.I_SPELLCASTER
     )
 

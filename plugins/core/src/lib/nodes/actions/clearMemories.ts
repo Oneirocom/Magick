@@ -1,6 +1,6 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { Memory, MemoryStreamService } from '../../services/memoryStreamService'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 
 export const clearMemories = makeFlowNodeDefinition({
   typeName: 'action/memory/clearMemories',

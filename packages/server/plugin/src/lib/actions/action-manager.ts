@@ -1,14 +1,9 @@
-import { type EventPayload } from '../events/event-manager'
+// import type { Agent } from 'packages/server/grimoire/src/lib/agent'
 import { getLogger } from 'server/logger'
-import { saveGraphEvent } from 'server/core'
+// nx-ignore-next-line
+import { ActionPayload, EventPayload } from 'servicesShared'
 
-export interface ActionPayload<T = unknown, Y = unknown> {
-  actionName: string
-  event: EventPayload<T, Y>
-  skipSave?: boolean
-  data: any
-}
-
+type Agent = any
 /**
  * Interface for defining an action.
  * @property actionName - The unique name of the action, typically namespaced.
@@ -27,10 +22,12 @@ export type ActionDefinitionInfo = Omit<ActionDefinition, 'handler'>
 export class BaseActionManager {
   protected logger = getLogger()
   protected agentId: string
+  protected agent: Agent
   protected actions: ActionDefinition[] = []
 
-  constructor(agentId: string) {
-    this.agentId = agentId
+  constructor(agent: Agent) {
+    this.agent = agent
+    this.agentId = agent.id
   }
 
   registerAction(action: ActionDefinition) {
@@ -59,7 +56,7 @@ export class BaseActionManager {
     // const { actionName, event } = data
     if (data.skipSave || data.event.skipSave) return
 
-    saveGraphEvent({
+    this.agent.saveGraphEvent({
       sender: this.agentId,
       // we are assuming here that the observer of this action is the
       //  original sender.  We may be wrong.

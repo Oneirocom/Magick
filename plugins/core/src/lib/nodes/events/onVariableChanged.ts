@@ -5,12 +5,12 @@ import {
   SocketsList,
 } from '@magickml/behave-graph'
 import { makeMagickEventNodeDefinition } from 'server/grimoire'
-import { CORE_DEP_KEYS } from '../../config'
+import { CORE_DEP_KEYS } from 'servicesShared'
 import {
   VariableService,
   VariableServiceEvents,
 } from '../../services/variableService'
-import { EventPayload } from 'server/plugin'
+import { EventPayload } from 'servicesShared'
 
 type State = {
   onVariableChangedEvent?: VariableServiceEvents['variableChanged'] | undefined

@@ -1,5 +1,6 @@
-import { EventPayload, WebhookPayload } from 'server/plugin'
+import { type WebhookPayload } from 'server/plugin'
 import { corePluginName } from './constants'
+import { EventPayload } from 'servicesShared'
 
 type ValidPayload = {
   body: {

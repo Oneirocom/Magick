@@ -1,10 +1,20 @@
 {
-  "name": "server-agents",
+  "name": "server/agents",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [],
   "sourceRoot": "packages/server/agents/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/agents",
+        "tsConfig": "packages/server/agents/tsconfig.lib.json",
+        "main": "packages/server/agents/src/index.ts"
+      }
+    },
+
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

@@ -5,8 +5,9 @@ import { fileURLToPath } from 'node:url'
 import consola from 'consola'
 
 import { getMagickNodes, getMagickPlugins } from './helpers/scan'
-import { AgentV2 } from 'server/agents'
+
 import { Application } from 'server/core'
+import { AgentV2 } from 'server/agents'
 
 declare module 'nitropack' {
   interface NitroOptions {

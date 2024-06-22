@@ -8,11 +8,9 @@ import {
 } from 'discord.js'
 import { PLUGIN_SETTINGS } from 'shared/config'
 import { APIMessage, APIReaction } from 'discord-api-types/v10'
-import {
-  CreateCredentialsRecord,
-  EventPayload,
-  PluginStateType,
-} from 'server/plugin'
+import { CreateCredentialsRecord, PluginStateType } from 'server/plugin'
+
+import { EventPayload } from 'servicesShared'
 import { PluginCredential } from 'server/credentials'
 import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
 

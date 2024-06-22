@@ -1,11 +1,11 @@
 import { Application as FeathersApplication } from '@feathersjs/koa'
 import { IRegistry } from '@magickml/behave-graph'
-import type { BasePlugin, EventPayload } from 'server/plugin'
+import type { BasePlugin } from 'server/plugin'
+import { EventPayload, ISharedAgent } from 'servicesShared'
 import { SpellInterface } from 'server/schemas'
 import { SpellCaster } from './spellCaster'
 import { getLogger } from 'server/logger'
 import { PluginManager } from 'server/pluginManager'
-import { Agent } from 'server/agents'
 import { type CommandHub } from 'server/command-hub'
 import { AGENT_SPELL_STATE } from 'communication'
 import { PrismaClient } from '@magickml/server-db'
@@ -48,15 +48,18 @@ export type SpellState = {
  *
 
  */
-export class Spellbook<Application extends IApplication> {
+export class Spellbook<
+  Application extends IApplication,
+  A extends ISharedAgent
+> {
   /**
    * Map of spell runners for each spell id stored by event channel
    * We use this to scale spell runners and to keep track of them.
    */
-  private eventMap: Map<string, Map<string, SpellCaster>> = new Map()
+  private eventMap: Map<string, Map<string, SpellCaster<A>>> = new Map()
   private spells: Map<string, SpellInterface> = new Map()
 
-  private commandHub: CommandHub
+  private commandHub: CommandHub<A>
 
   private prisma: PrismaClient
 
@@ -70,7 +73,7 @@ export class Spellbook<Application extends IApplication> {
   /**
    * Agent instance.
    */
-  private agent: Agent
+  private agent: A
 
   /**
    * The main plugin manager.  This loads up all plugins in the plugin folder and provides
@@ -82,7 +85,7 @@ export class Spellbook<Application extends IApplication> {
    *   this.agent.id
    * );
    */
-  private pluginManager: PluginManager
+  private pluginManager: PluginManager<A>
 
   /**
    * Flag to enable/disable watching spells.  We use this to keep the spells in sync with the server.
@@ -147,8 +150,8 @@ export class Spellbook<Application extends IApplication> {
   }: {
     app: Application
     agent: any
-    pluginManager: PluginManager
-    commandHub: CommandHub
+    pluginManager: PluginManager<A>
+    commandHub: CommandHub<A>
   }) {
     this.pluginManager = pluginManager
     this.commandHub = commandHub
@@ -449,7 +452,7 @@ export class Spellbook<Application extends IApplication> {
     })
     const loadedSpells = await Promise.all(spellPromises)
     const validSpellCasters = loadedSpells.filter(
-      (spellCaster): spellCaster is SpellCaster => !!spellCaster
+      (spellCaster): spellCaster is SpellCaster<A> => !!spellCaster
     )
     const spellMap = new Map(
       validSpellCasters.map(spellCaster => [spellCaster.spell.id, spellCaster])
@@ -559,7 +562,7 @@ export class Spellbook<Application extends IApplication> {
    * @example
    * const spellCaster= await spellbook.loadById(spellId);
    */
-  async loadById(spellId: string): Promise<SpellCaster | null> {
+  async loadById(spellId: string): Promise<SpellCaster<A> | null> {
     this.logger.debug(`Loading spell ${spellId}`)
     try {
       const spell = await this.app.service('spells').get(spellId)
@@ -603,7 +606,7 @@ export class Spellbook<Application extends IApplication> {
   async loadSpell(
     spell: SpellInterface,
     _initialState?: SpellState
-  ): Promise<SpellCaster | null> {
+  ): Promise<SpellCaster<A> | null> {
     if (!spell) {
       this.agent?.error('No spell provided')
       console.error('No spell provided')
@@ -674,7 +677,7 @@ export class Spellbook<Application extends IApplication> {
     return false
   }
 
-  replaceSpellCaster(spellId: string, spellCaster: SpellCaster) {
+  replaceSpellCaster(spellId: string, spellCaster: SpellCaster<A>) {
     for (const spellCasters of this.eventMap.values()) {
       if (spellCasters.has(spellId)) {
         const oldSpellCaster = spellCasters.get(spellId)

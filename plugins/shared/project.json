@@ -4,6 +4,15 @@
   "sourceRoot": "plugins/shared/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/plugin/shared",
+        "tsConfig": "plugin/shared/tsconfig.lib.json",
+        "main": "plugin/shared/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

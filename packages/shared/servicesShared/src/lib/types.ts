@@ -1,3 +1,4 @@
+import { RedisPubSub } from 'server/redis-pubsub'
 import {
   CompletionResponse,
   CompletionRequest,
@@ -5,6 +6,8 @@ import {
   Message,
 } from './coreLLMService/types/liteLLMTypes'
 import { Model } from './coreLLMService/types/models'
+import pino from 'pino'
+import Redis from 'ioredis'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
@@ -160,3 +163,90 @@ export interface ISeraphEvent {
   data: SeraphEventTypes
   createdAt: string
 }
+
+export type EventFormat<
+  Data = Record<string, unknown>,
+  Y = Record<string, unknown>
+> = {
+  plugin?: string
+  content: string
+  sender: string
+  channel: string
+  entities?: any[]
+  rawData: unknown
+  channelType: string
+  observer: string
+  client: string
+  isPlaytest?: boolean
+  spellId?: string
+  data: Data
+  metadata?: Y
+  status?: 'success' | 'error' | 'pending' | 'unknown'
+}
+
+export type EventPayload<T = any, Y = any> = {
+  connector: string
+  eventName: string
+  status: 'success' | 'error' | 'pending' | 'unknown'
+  content: string
+  sender: string
+  observer: string
+  client: string
+  channel: string
+  plugin: string
+  agentId: string
+  isPlaytest?: boolean
+  spellId?: string
+  skipSave?: boolean
+  // entities: any[]
+  channelType: string
+  rawData: string
+  timestamp: string
+  stateKey?: string
+  runInfo?: {
+    spellId: string
+  }
+  data: T
+  metadata: Y
+}
+
+export interface ActionPayload<T = unknown, Y = unknown> {
+  actionName: string
+  event: EventPayload<T, Y>
+  skipSave?: boolean
+  data: any
+}
+
+export interface ISharedAgent {
+  id: string
+  projectId: string
+  pubsub: RedisPubSub
+  logger: pino.Logger
+  pluginManager: any // Use 'any' for now, we'll refine this later
+  error: (message: string, data?: any) => void
+  log: (message: string, data?: any) => void
+  publishEvent: (event: any, data: any) => void
+  emit: (event: any, data: any) => void
+  on: (event: any, listener: (data: any) => void) => void
+  app: any // Consider defining a more specific type for 'app' if possible
+  [key: string]: any // Allow for additional properties
+}
+
+export const CORE_DEP_KEYS = {
+  ACTION_SERVICE: 'coreActionService',
+  AGENT: 'agent',
+  BUDGET_MANAGER_SERVICE: 'coreBudgetManagerService',
+  DOWNLOAD_FILE: 'downloadFile',
+  EVENT_STORE: 'IEventStore',
+  GET_SECRET: 'getSecret',
+  GET_STATE: 'getState',
+  I_VARIABLE_SERVICE: 'IVariableService',
+  IMAGE_SERVICE: 'coreImageService',
+  LLM_SERVICE: 'coreLLMService',
+  LOGGER: 'ILogger',
+  MEMORY_SERVICE: 'coreMemoryService',
+  MEMORY_STREAM_SERVICE: 'memoryStreamService',
+  STATE_SERVICE: 'IStateService',
+  EMBEDDER_CLIENT: 'embedderClient',
+  UPLOAD_FILE: 'uploadFile',
+} as const

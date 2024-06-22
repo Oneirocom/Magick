@@ -2,7 +2,6 @@
 import { request } from './requests/requests'
 import { spell } from './spells/spells'
 import { agent } from './agents/agents'
-import { knowledge } from './knowledge/knowledge'
 import { projects } from './projects/projects'
 import { agentImage } from './agentImage/agentImage'
 import { spellReleases } from './spellReleases/spellReleases'
@@ -38,7 +37,6 @@ export const services = async (app: Application): Promise<void> => {
   app.configure(graphEvents)
   app.configure(credentials)
   app.configure(users)
-  app.configure(knowledge)
   app.configure(webhook)
   app.configure(health)
   app.configure(pluginState)

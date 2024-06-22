@@ -2,30 +2,33 @@ import { ICoreLLMService, UserResponse } from 'servicesShared'
 import { CoreUserService } from '../userService/coreUserService'
 import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { LLMCredential } from 'servicesShared'
-import { saveRequest } from 'server/core'
 import { getLogger } from 'server/logger'
 import pino from 'pino'
-import { PRODUCTION } from 'clientConfig'
 import { streamText } from 'ai'
 import { createOpenAI } from '@magickml/vercel-sdk-core'
 import { clerkClient } from '@clerk/clerk-sdk-node'
+import { Agent } from 'server/agents'
+import { PRODUCTION } from 'shared/config'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 type ConstructorParams = {
   projectId: string
   agentId?: string
+  agent: Agent
 }
 
 export class CoreLLMService implements ICoreLLMService {
   protected credentials: LLMCredential[] = []
   protected projectId: string
   protected agentId: string
+  protected agent: Agent
   protected userService: CoreUserService
   protected logger: pino.Logger<pino.LoggerOptions> | undefined
   protected userData: UserResponse | undefined
 
-  constructor({ projectId, agentId }: ConstructorParams) {
+  constructor({ projectId, agentId, agent }: ConstructorParams) {
+    this.agent = agent
     this.projectId = projectId
     this.agentId = agentId || ''
     this.userService = new CoreUserService({ projectId })
@@ -124,7 +127,7 @@ export class CoreLLMService implements ICoreLLMService {
         const chatCompletion = chunks.join('')
         const totalTokens = (await usage).totalTokens
 
-        saveRequest({
+        this.agent.saveRequest({
           projectId: this.projectId,
           agentId: this.agentId,
           requestData: JSON.stringify(request.options),
@@ -136,6 +139,7 @@ export class CoreLLMService implements ICoreLLMService {
           parameters: JSON.stringify(request.options),
           provider: request.provider,
           type: 'completion',
+          cost: -0,
           hidden: false,
           processed: false,
           totalTokens: totalTokens,

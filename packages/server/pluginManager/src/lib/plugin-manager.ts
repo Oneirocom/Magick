@@ -7,14 +7,13 @@ import pino from 'pino'
 import { getLogger } from 'server/logger'
 import Redis from 'ioredis'
 import { RedisPubSub } from 'server/redis-pubsub'
-import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
-import { CommandHub } from 'server/command-hub'
-import { Agent, AgentV2 } from 'server/agents'
+import { AgentLike, CommandHub } from 'server/command-hub'
+import { EventPayload } from 'servicesShared'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
  */
-export class PluginManager extends EventEmitter {
+export class PluginManager<A extends AgentLike> extends EventEmitter {
   /**
    * pluginsLoaded - A boolean indicating whether the plugins have been loaded.
    * @type {boolean}
@@ -83,14 +82,14 @@ export class PluginManager extends EventEmitter {
    * The command hub for the plugin manager.
    * Handles responding to incomign commands.
    */
-  commandHub: CommandHub
+  commandHub: CommandHub<A>
 
   /**
    * The Agent class instance.
    * @type {Agent}
    * @memberof PluginManager
    */
-  agent: Agent | AgentV2
+  agent: A
 
   /**
    * Creates an instance of PluginManager.
@@ -118,10 +117,10 @@ export class PluginManager extends EventEmitter {
   }: {
     pluginDirectory: string
     connection: Redis
-    agent: Agent | AgentV2
+    agent: A
     pubSub: RedisPubSub
     projectId: string
-    commandHub: CommandHub
+    commandHub: CommandHub<A>
   }) {
     super()
     this.agent = agent
@@ -262,7 +261,7 @@ export class PluginManager extends EventEmitter {
    * @param plugin The plugin from which to forward events.
    */
   private setupPluginEventForwarding(plugin: BasePlugin): void {
-    plugin.eventEmitter.on('event', eventData => {
+    plugin.eventEmitter.on('event', (eventData: EventPayload) => {
       this.emit('pluginEvent', plugin.name, eventData)
     })
   }
@@ -272,7 +271,7 @@ export class PluginManager extends EventEmitter {
    * @returns A unified registry object.
    */
   async getRegistry(
-    spellCaster: SpellCaster,
+    spellCaster: any,
     baseRegistry?: IRegistry
   ): Promise<IRegistry> {
     const unifiedRegistry: IRegistry = baseRegistry || {

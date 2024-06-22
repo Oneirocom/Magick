@@ -1,6 +1,8 @@
 {
   "name": "server/core",
   "version": "0.1.0",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
   "feathers": {
     "language": "ts",
     "packager": "npm",
