@@ -112,7 +112,7 @@ export class CoreLLMService implements ICoreLLMService {
 
         console.log('BODY', _body)
 
-        const { textStream, usage } = await streamText(_body)
+        const { textStream } = await streamText(_body)
 
         yield { choices: [{ delta: { content: '<START>' } }] }
 

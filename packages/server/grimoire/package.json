@@ -2,7 +2,21 @@
   "name": "server/grimoire",
   "version": "0.0.1",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@magickml/behave-graph": "^0.14.14",
+    "ioredis": "^5.3.2",
+    "typed-emitter": "^2.1.0",
+    "server/plugin": "0.0.1",
+    "keyv": "^4.5.4",
+    "@keyv/redis": "^2.8.0",
+    "communication": "0.0.1",
+    "@feathersjs/feathers": "5.0.25",
+    "pino": "8.14.1",
+    "uuid": "^9.0.0",
+    "server/logger": "0.0.1",
+    "lodash": "4.17.21",
+    "@feathersjs/koa": "5.0.25",
+    "@magickml/server-db": "0.0.1"
   },
   "type": "commonjs",
   "main": "./src/index.js",

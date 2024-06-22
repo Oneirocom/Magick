@@ -7,7 +7,6 @@ import {
 } from './coreLLMService/types/liteLLMTypes'
 import { Model } from './coreLLMService/types/models'
 import pino from 'pino'
-import Redis from 'ioredis'
 
 export interface IBudgetManagerService {
   // Creates a budget for a user
