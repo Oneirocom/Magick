@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "outDir": "../../../dist/out-tsc",
     "declaration": true,
     "types": ["node"]
