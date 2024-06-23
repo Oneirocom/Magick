@@ -62,6 +62,16 @@ export default <NitroModule>{
       consola.info('Added utils to imports', nitro.options.imports.dirs)
     }
 
+    // Make sure runtime is transpiled
+    nitro.options.externals = nitro.options.externals || {}
+    nitro.options.externals.inline = nitro.options.externals.inline || []
+    nitro.options.externals.inline.push(
+      fileURLToPath(new URL('runtime/', import.meta.url))
+    )
+
+    // load out plugins
+    nitro.options.plugins.push(resolve('runtimes/plugins/magickAgent'))
+
     // Load the plugins into a virtual file to make them accessible from the plugin
     nitro.options.virtual['#magick/plugins'] = async () => {
       const plugins = await getMagickPlugins(nitro)
@@ -94,8 +104,5 @@ const magickPlugins = [${exportArray}];
 export default magickPlugins;
       `.trim()
     }
-
-    // load out plugins
-    nitro.options.plugins.push(resolve('runtimes/plugins/magickAgent.ts'))
   },
 }

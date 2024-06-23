@@ -1,14 +1,30 @@
 {
-  "name": "nitroModule",
+  "name": "@magickml/nitro",
   "version": "0.0.1",
+  "type": "module",
+  "types": "./src/index.d.ts",
+  "main": "./src/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./runtime/*": {
+      "types": "./src/runtime/*.d.ts",
+      "default": "./src/runtime/*.js"
+    }
+  },
   "dependencies": {
     "@magickml/behave-graph": "^0.14.14",
     "consola": "^3.2.3",
     "globby": "^14.0.1",
-    "nitropack": "^2.9.6",
     "pathe": "1.1.2",
+    "tslib": "^2.3.0",
     "server/agents": "0.0.1",
-    "server/core": "0.1.0",
-    "tslib": "^2.3.0"
+    "nitropack": "^2.9.6",
+    "server/core": "0.1.0"
   }
 }

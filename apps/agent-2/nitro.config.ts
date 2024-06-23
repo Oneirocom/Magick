@@ -1,4 +1,4 @@
-import AgentModule from './src/modules/agent-module'
+import magickNitro from 'nitroModule'
 import { join } from 'path'
 import { workspaceRoot } from '@nx/devkit'
 import { fileURLToPath } from 'node:url'
@@ -29,7 +29,7 @@ function getMonorepoTsConfigPaths(tsConfigPath: string) {
 export default defineNitroConfig({
   srcDir: 'src/agent',
   //   compatibilityDate: '2024-06-17', // for v3 we will need this
-  modules: [AgentModule],
+  // modules: [AgentModule],
   runtimeConfig: {
     agentId: '56fc9cf8-0dd0-491a-9493-9cd145760a58',
   },
@@ -38,10 +38,11 @@ export default defineNitroConfig({
   },
   typescript: {
     tsConfig: {
-      extends: fileURLToPath(
-        // @ts-ignore
-        new URL('../../tsconfig.base.json', import.meta.url)
-      ),
+      compilerOptions: {
+        paths: {
+          nitroModule: ['../../packages/server/nitroModule'],
+        },
+      },
     },
   },
 })
