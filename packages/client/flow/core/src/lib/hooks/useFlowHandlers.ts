@@ -24,8 +24,6 @@ import {
   ReactFlowProps,
   NodeAddChange,
   NodeSelectionChange,
-  EdgeAddChange,
-  EdgeChange,
 } from '@xyflow/react'
 import { v4 as uuidv4, v4 } from 'uuid'
 
@@ -464,92 +462,39 @@ export const useFlowHandlers = ({
       selected: false,
     }))
 
-    // Clone edges connected to the cloned nodes
-    const newEdges: EdgeAddChange<MagickEdgeType>[] = []
-    targetNodes.forEach(sourceNode => {
-      const nodeEdges = edges.filter(
-        edge => edge.source === sourceNode.id || edge.target === sourceNode.id
-      )
-      nodeEdges.forEach(edge => {
-        const newEdge: EdgeAddChange<MagickEdgeType> = {
-          type: 'add',
-          item: {
-            ...edge,
-            id: uuidv4(),
-            source:
-              edge.source === sourceNode.id
-                ? newNodes.find(
-                    n =>
-                      n.item.data.configuration ===
-                      sourceNode.data.configuration
-                  )?.item.id || edge.source
-                : edge.source,
-            target:
-              edge.target === sourceNode.id
-                ? newNodes.find(
-                    n =>
-                      n.item.data.configuration ===
-                      sourceNode.data.configuration
-                  )?.item.id || edge.target
-                : edge.target,
-          },
-        }
-        newEdges.push(newEdge)
-      })
-    })
-
     // Apply node changes: deselect all existing nodes and add new nodes
     onNodesChange(tab.id)([...deselectNodes, ...newNodes])
 
-    // Add new edges
-    if (newEdges.length > 0) {
-      onEdgesChange(tab.id)(newEdges)
-    }
-
     setTargetNodes(undefined)
-  }, [
-    targetNodes,
-    getNodes,
-    onNodesChange,
-    onEdgesChange,
-    tab.id,
-    edges,
-    takeSnapshot,
-  ])
+  }, [targetNodes, getNodes, onNodesChange, tab.id, takeSnapshot])
 
   const copy = useCallback(() => {
     const selectedNodes = getNodes().filter(node => node.selected)
-    const selectedEdges = edges.filter(edge =>
-      selectedNodes.some(
-        node => node.id === edge.source || node.id === edge.target
-      )
-    )
 
     if (!selectedNodes.length) return
 
-    // Create a deep copy of the nodes and reset their connection states
+    // Create a deep copy of the nodes without any connection information
     const nodesToCopy = selectedNodes.map(node => ({
       ...node,
-      selected: false,
+      id: node.id,
+      position: { ...node.position },
       data: {
         ...node.data,
-        connections: {
-          inputs: {},
-          outputs: {},
-        },
+        configuration: node.data.configuration
+          ? { ...node.data.configuration }
+          : {},
       },
+      selected: false,
     }))
 
     localStorage.setItem(
       'copiedNodes',
       JSON.stringify({
         nodes: nodesToCopy,
-        edges: selectedEdges,
       })
     )
     setTargetNodes(undefined)
-  }, [getNodes, edges])
-
+  }, [getNodes])
   const handleStartConnect: OnConnectStart = useCallback(
     (e, params) => {
       setLastConnectStart(params)
@@ -561,7 +506,7 @@ export const useFlowHandlers = ({
     const copiedData = localStorage.getItem('copiedNodes')
     if (!copiedData) return
 
-    const { nodes: copiedNodes, edges: copiedEdges } = JSON.parse(copiedData)
+    const { nodes: copiedNodes } = JSON.parse(copiedData)
     const { x: pasteX, y: pasteY } = screenToFlowPosition({
       x: mousePosRef.current.x,
       y: mousePosRef.current.y,
@@ -570,11 +515,8 @@ export const useFlowHandlers = ({
     const minX = Math.min(...copiedNodes.map((node: any) => node.position.x))
     const minY = Math.min(...copiedNodes.map((node: any) => node.position.y))
 
-    const oldToNewIdMap: Record<string, string> = {}
-
     const newNodes: NodeChange[] = copiedNodes.map((node: any) => {
       const id = uuidv4()
-      oldToNewIdMap[node.id] = id
       const x = pasteX + (node.position.x - minX)
       const y = pasteY + (node.position.y - minY)
       return {
@@ -587,28 +529,13 @@ export const useFlowHandlers = ({
           selected: true,
           data: {
             ...node.data,
-            connections: {
-              inputs: {},
-              outputs: {},
-            },
+            configuration: node.data.configuration
+              ? { ...node.data.configuration }
+              : {},
           },
         },
       }
     })
-
-    const newEdges: EdgeChange[] = copiedEdges
-      .filter(
-        (edge: any) => oldToNewIdMap[edge.source] && oldToNewIdMap[edge.target]
-      )
-      .map((edge: any) => ({
-        type: 'add',
-        item: {
-          ...edge,
-          id: uuidv4(),
-          source: oldToNewIdMap[edge.source],
-          target: oldToNewIdMap[edge.target],
-        },
-      }))
 
     // Deselect all existing nodes
     const deselectNodes: NodeChange[] = getNodes().map(node => ({
@@ -618,10 +545,7 @@ export const useFlowHandlers = ({
     }))
 
     onNodesChange(tab.id)([...deselectNodes, ...newNodes])
-    if (newEdges.length > 0) {
-      onEdgesChange(tab.id)(newEdges)
-    }
-  }, [screenToFlowPosition, onNodesChange, onEdgesChange, tab.id, getNodes])
+  }, [screenToFlowPosition, onNodesChange, tab.id, getNodes])
 
   const nodeMenuActions = [
     { label: 'Delete', onClick: handleRemoveNode },
