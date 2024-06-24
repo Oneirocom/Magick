@@ -199,6 +199,7 @@ export type EventPayload<T = any, Y = any> = {
   skipSave?: boolean
   // entities: any[]
   channelType: string
+  skipPersist?: boolean
   rawData: string
   timestamp: string
   stateKey?: string
