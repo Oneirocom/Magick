@@ -387,7 +387,7 @@ export class Spellbook<
 
   async createOrGetAgentChannel(eventKey: string, event: EventPayload) {
     // don't persist playtest channel events
-    if (event.isPlaytest) return
+    if (event.isPlaytest || event.skipPersist) return
     const agentId = this.agent.id
     const agentChannel = await this.prisma.agent_channels
       .findFirst({
