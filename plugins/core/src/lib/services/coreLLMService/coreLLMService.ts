@@ -7,7 +7,6 @@ import pino from 'pino'
 import { streamText } from 'ai'
 import { createOpenAI } from '@magickml/vercel-sdk-core'
 import { clerkClient } from '@clerk/clerk-sdk-node'
-import { PRODUCTION } from 'shared/config'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -83,13 +82,10 @@ export class CoreLLMService implements ICoreLLMService {
           baseURL: process.env['KEYWORDS_API_URL'],
           apiKey: process.env['KEYWORDS_API_KEY'],
           extraMetaData: {
-            ...(!PRODUCTION
-              ? {
-                  customer_identifier: useWallet
-                    ? walletUser?.customer_identifier
-                    : mpUser?.customer_identifier,
-                }
-              : {}),
+            customer_identifier: useWallet
+              ? walletUser?.customer_identifier
+              : mpUser?.customer_identifier,
+
             ...(credential
               ? {
                   customer_credentials: {
