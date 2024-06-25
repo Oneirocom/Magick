@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ZodTypeAny } from 'zod'
 import {
   FileIcon,
   FileSpreadsheetIcon,
@@ -10,8 +9,6 @@ import {
   WebcamIcon,
   YoutubeIcon,
   PresentationIcon,
-  // ConeIcon,
-  // FileJsonIcon,
 } from 'lucide-react'
 import {
   type LoaderType,
@@ -25,8 +22,6 @@ import {
   DocxLoaderSchema,
   ExcelLoaderSchema,
   PptLoaderSchema,
-  // ConfluenceLoaderSchema,
-  // JsonLoaderSchema,
   LoaderTypeSchema,
 } from '@magickml/embedder/schema'
 import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
@@ -34,14 +29,18 @@ import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtomValue } from 'jotai'
 import { activePackIdAtom } from '../_pkg/state'
 import toast from 'react-hot-toast'
+import FileDropper from './fileDropper'
+import useFileUpload from '../../../../../../client/editor/src/hooks/useFileUpload'
+import { ZodTypeAny } from 'zod'
 
 const loaderTypeProperties: Record<
   LoaderType,
-  { icon: React.ElementType; description: string }
+  { icon: React.ElementType; description: string; showFileDropper?: boolean }
 > = {
   text: {
     icon: TextIcon,
     description: 'Load and process text data with ease.',
+    showFileDropper: true,
   },
   youtube: {
     icon: YoutubeIcon,
@@ -60,21 +59,26 @@ const loaderTypeProperties: Record<
     description: 'Load and process data from websites.',
   },
   sitemap: { icon: MapIcon, description: 'Load and process website sitemaps.' },
-  pdf: { icon: FileIcon, description: 'Load and process PDF documents.' },
-  docx: { icon: FileIcon, description: 'Load and process Word documents.' },
+  pdf: {
+    icon: FileIcon,
+    description: 'Load and process PDF documents.',
+    showFileDropper: true,
+  },
+  docx: {
+    icon: FileIcon,
+    description: 'Load and process Word documents.',
+    showFileDropper: true,
+  },
   excel: {
     icon: FileSpreadsheetIcon,
     description: 'Load and process Excel spreadsheets.',
+    showFileDropper: true,
   },
   ppt: {
     icon: PresentationIcon,
     description: 'Load and process PowerPoint presentations.',
+    showFileDropper: true,
   },
-  // confluence: {
-  //   icon: ConeIcon,
-  //   description: 'Load and process Confluence data.',
-  // },
-  // json: { icon: FileJsonIcon, description: 'Load and process JSON data.' },
 }
 
 const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
@@ -88,8 +92,6 @@ const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
   docx: DocxLoaderSchema,
   excel: ExcelLoaderSchema,
   ppt: PptLoaderSchema,
-  // confluence: ConfluenceLoaderSchema,
-  // json: JsonLoaderSchema,
 }
 
 type Props = {
@@ -103,6 +105,22 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [config, setConfig] = useState<Record<string, any>>({})
+  const {
+    loading,
+    newKnowledge,
+    setKnowledge,
+    handleDataTypesChange,
+    handleFileUpload,
+    triggerFileUpload,
+  } = useFileUpload({
+    initialState: {
+      name: '',
+      sourceUrl: '',
+      dataType: '',
+      files: [] as File[],
+      tag: '',
+    },
+  })
 
   const { invalidate } = client.useFindPack(
     {
@@ -158,6 +176,19 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
     setSelectedType(null)
   }
 
+  const fileTypesMapping: Record<LoaderType, string> = {
+    text: '.txt',
+    youtube: '',
+    youtube_channel: '',
+    youtube_search: '',
+    web: '',
+    sitemap: '.xml',
+    pdf: '.pdf',
+    docx: '.docx',
+    excel: '.xlsx',
+    ppt: '.pptx',
+  }
+
   return (
     <div className="w-full flex gap-4 flex-wrap mx-auto items-center">
       {!selectedType ? (
@@ -184,6 +215,17 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
           <h2 className="text-xl font-semibold">
             {selectedType.replace(/_/g, ' ')}
           </h2>
+          {loaderTypeProperties[selectedType].showFileDropper && (
+            <FileDropper
+              handleFileUpload={handleFileUpload}
+              type={selectedType}
+              accept={{
+                [fileTypesMapping[selectedType]]: [],
+              }}
+              className="max-w-2xl w-full"
+              fileTypes={[fileTypesMapping[selectedType]]}
+            />
+          )}
           <p>{loaderTypeProperties[selectedType].description}</p>
           <form
             className="flex flex-col gap-4 max-w-2xl w-full"
@@ -200,13 +242,12 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
             <TextareaWithLabel
               id="description"
               label="Description"
-              placeholder="Desctiption for the loader."
+              placeholder="Description for the loader."
               onChange={e => setDescription(e.target.value)}
               value={description}
               className="w-full"
             />
-            {/* @ts-expect-error */}
-            {Object.keys(loaderSchemas[selectedType].shape).map(key => {
+            {Object.keys(loaderSchemas[selectedType]._def.shape()).map(key => {
               if (key === 'type') return null
               return (
                 <InputWithLabel
