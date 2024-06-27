@@ -52,7 +52,9 @@
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/client-types": ["packages/client/client-types/src/index.ts"],
       "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
+      "@magickml/core-plugin": ["packages/plugins/core/src/index.ts"],
       "@magickml/credentials": ["packages/server/credentials/src/index.ts"],
+      "@magickml/discord-plugin": ["packages/plugins/discord/src/index.ts"],
       "@magickml/embedder-api-jobs": [
         "packages/embedder/api/jobs/src/index.ts"
       ],
@@ -99,6 +101,7 @@
       "@magickml/grimoire": ["packages/server/grimoire/src/index.ts"],
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
+      "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
       "@magickml/nitro-module": ["packages/server/nitroModule/src/index.ts"],
       "@magickml/node-spec": ["packages/shared/nodeSpec/src/index.ts"],
       "@magickml/pages-agents": ["portal/cloud/next/pages/agents/src/index.ts"],
@@ -195,9 +198,11 @@
         "packages/server/event-tracker/src/index.ts"
       ],
       "@magickml/server-logger": ["packages/server/logger/src/index.ts"],
+      "@magickml/shared-plugins": ["packages/plugins/shared/src/index.ts"],
       "@magickml/shared-services": [
         "packages/shared/servicesShared/src/index.ts"
       ],
+      "@magickml/slack-plugin": ["packages/plugins/slack/src/index.ts"],
       "@magickml/storage": ["packages/server/storage/src/index.ts"],
       "@magickml/token-validation": [
         "packages/server/token-validation/src/index.ts"
@@ -220,11 +225,6 @@
       "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
       "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
-      "@magickml/core-plugin": ["packages/plugins/core/src/index.ts"],
-      "@magickml/discord-plugin": ["packages/plugins/discord/src/index.ts"],
-      "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
-      "@magickml/shared-plugins": ["packages/plugins/shared/src/index.ts"],
-      "@magickml/slack-plugin": ["packages/plugins/slack/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
       ],

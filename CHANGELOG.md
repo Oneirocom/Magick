@@ -1,3 +1,17 @@
+## 0.0.10-3 (2024-06-27)
+
+
+### 🚀 Features
+
+- Add restrictedTypes prop to KnowledgeUploadContent component ([a7a73aef3](https://github.com/Oneirocom/Magick/commit/a7a73aef3))
+- Add restrictedTypes prop to KnowledgeUploadInput component ([2dc2780da](https://github.com/Oneirocom/Magick/commit/2dc2780da))
+- Add optional properties for file upload in LoaderWithoutConfigSchema ([e2f83b852](https://github.com/Oneirocom/Magick/commit/e2f83b852))
+- Update @dnd-kit/utilities to version 3.2.2 ([f5dd2a15f](https://github.com/Oneirocom/Magick/commit/f5dd2a15f))
+
+### ❤️  Thank You
+
+- Jakob
+
 ## 0.0.10-2 (2024-06-27)
 
 
