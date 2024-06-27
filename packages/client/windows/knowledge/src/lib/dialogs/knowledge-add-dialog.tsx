@@ -11,7 +11,7 @@ import { useCreateKnowledgeMutation } from 'client/state'
 import { useConfig } from '@magickml/providers'
 import { AddKnowledge } from '@magickml/shared-services'
 import { KnowledgeURLContent } from './add/knowledge-url-content'
-import { LoaderType } from '@magickml/embedder/schema'
+import { LoaderType } from '@magickml/embedder-schemas'
 
 export const ACCEPT =
   '.eml, .html, .json, .md, .msg, .rst, .rtf, .txt, .xml, .jpeg, .jpg, .png, .csv, .doc, .docx, .epub, .odt, .pdf, .ppt, .pptx, .tsv, .xlsx'

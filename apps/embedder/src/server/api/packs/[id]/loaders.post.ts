@@ -9,6 +9,7 @@ import { eq, and } from 'drizzle-orm'
 import { useBullMQ, createJob } from '@magickml/embedder-queue'
 import { randomUUID } from 'crypto'
 import { Storage } from '@google-cloud/storage'
+import { createError, defineEventHandler, readBody } from 'h3'
 
 const storage = new Storage({
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
