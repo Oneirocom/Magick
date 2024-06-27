@@ -39,7 +39,8 @@
     "ot-json0": "1.1.0",
     "@feathersjs/transport-commons": "5.0.25",
     "tslib": "^2.3.0",
-    "jose": "4.14.4"
+    "jose": "4.14.4",
+    "@magickml/utils": "0.0.4"
   },
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",

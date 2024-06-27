@@ -6,7 +6,7 @@
     "h3": "^1.11.1",
     "zod": "^3.22.4",
     "nitropack": "^2.9.6",
-    "@magickml/embedder-config": "file:../../config",
+    "@magickml/embedder-config": "0.0.4",
     "tslib": "^2.3.0"
   }
 }

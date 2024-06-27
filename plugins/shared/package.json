@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/plugins-shared",
+  "name": "@magickml/shared-plugins",
   "version": "0.0.4",
   "dependencies": {
     "tslib": "^2.3.0",

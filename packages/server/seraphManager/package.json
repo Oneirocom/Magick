@@ -1,11 +1,11 @@
 {
-  "name": "@magickml/agent-seraph-manager",
+  "name": "@magickml/seraph-manager",
   "version": "0.0.4",
   "dependencies": {
     "@magickml/agent-command-hub": "0.0.4",
-    "@magickml/agent-communication": "file:../../../shared/communication",
+    "@magickml/agent-communication": "0.0.4",
     "@magickml/agent-server": "0.1.3",
-    "@magickml/node-spec": "file:../../../shared/nodeSpec",
+    "@magickml/node-spec": "0.0.4",
     "@magickml/redis-pubsub": "0.0.4",
     "@magickml/seraph": "0.0.4",
     "@magickml/server-logger": "0.0.4",
