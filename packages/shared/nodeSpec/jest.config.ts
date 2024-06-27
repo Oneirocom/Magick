@@ -7,5 +7,5 @@ export default {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/packages/'@magickml/node-spec',
+  coverageDirectory: '../../../coverage/packages/@magickml/node-spec',
 }

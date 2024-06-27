@@ -29,7 +29,7 @@ import { AgentLoggingService } from './AgentLogger'
 
 import CorePlugin from '@magickml/core-plugin'
 import KnowledgePlugin from '@magickml/knowledge-plugin'
-import DiscordPlugin from 'plugins/discord'
+import DiscordPlugin from '@magickml/discord-plugin'
 import SlackPlugin from '@magickml/slack-plugin'
 
 export type RequestPayload = {
@@ -404,16 +404,16 @@ export class Agent
 
     this.app.get('posthog').track(eventType, event, agentId)
 
-    // return (this.app.service('graphEvents') as any).create({
-    //   sender,
-    //   agentId,
-    //   connector,
-    //   connectorData,
-    //   content,
-    //   observer,
-    //   eventType,
-    //   event,
-    // })
+    return (this.app.service('graphEvents') as any).create({
+      sender,
+      agentId,
+      connector,
+      connectorData,
+      content,
+      observer,
+      eventType,
+      event,
+    })
   }
 }
 

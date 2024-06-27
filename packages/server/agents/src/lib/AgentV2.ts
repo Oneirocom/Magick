@@ -26,7 +26,7 @@ import TypedEmitter from 'typed-emitter'
 
 import CorePlugin from '@magickml/core-plugin'
 import KnowledgePlugin from '@magickml/knowledge-plugin'
-import DiscordPlugin from 'plugins/discord'
+import DiscordPlugin from '@magickml/discord-plugin'
 import SlackPlugin from '@magickml/slack-plugin'
 
 const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]

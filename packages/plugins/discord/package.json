@@ -1,5 +1,5 @@
 {
-  "name": "plugins/discord",
+  "name": "@magickml/discord-plugin",
   "version": "0.0.10-1",
   "dependencies": {
     "@magickml/agent-communication": "0.0.10-1",
