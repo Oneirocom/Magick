@@ -4,9 +4,6 @@
   "type": "module",
   "types": "./src/index.d.ts",
   "main": "./src/index.js",
-  "files": [
-    "dist"
-  ],
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
