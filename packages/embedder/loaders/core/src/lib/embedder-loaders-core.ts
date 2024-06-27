@@ -14,7 +14,7 @@ import {
   YoutubeSearchLoader,
 } from '@llm-tools/embedjs'
 import { info } from '@magickml/embedder-config'
-import { LoaderConfigSchema } from '@magickml/embedder-schema'
+import { LoaderConfigSchema } from '@magickml/embedder-schemas'
 
 type Loader = any //TODO: post db package setup
 

@@ -3,7 +3,7 @@ import { RAGApplicationBuilder } from '@llm-tools/embedjs'
 import { embedderDb, Pack } from '@magickml/embedder-db-pg'
 import { usePineconeDb } from '@magickml/embedder-db-pinecone'
 import { eq, and } from 'drizzle-orm'
-import { authParse, PackQueryRequestSchema } from '@magickml/embedder-schema'
+import { authParse, PackQueryRequestSchema } from '@magickml/embedder-schemas'
 import { createError } from 'h3'
 import consola from 'consola'
 

@@ -91,7 +91,7 @@
         "packages/embedder/loaders/core/src/index.ts"
       ],
       "@magickml/embedder-queue": ["packages/embedder/queue/src/index.ts"],
-      "@magickml/embedder-schema": ["packages/embedder/schema/src/index.ts"],
+      "@magickml/embedder-schemas": ["packages/embedder/schema/src/index.ts"],
       "@magickml/embedder-worker": ["packages/embedder/worker/src/index.ts"],
       "@magickml/embedder/db/sql/generated/*": [
         "packages/embedder/db/sql/src/lib/prisma/client-embedder/*"

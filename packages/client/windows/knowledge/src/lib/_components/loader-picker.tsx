@@ -23,7 +23,7 @@ import {
   ExcelLoaderSchema,
   PptLoaderSchema,
   LoaderTypeSchema,
-} from '@magickml/embedder-schema'
+} from '@magickml/embedder-schemas'
 import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtomValue } from 'jotai'

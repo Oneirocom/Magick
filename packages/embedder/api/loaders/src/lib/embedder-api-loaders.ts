@@ -4,7 +4,7 @@ import {
   idSchema,
   AddLoaderSchema,
   AddLoaderResponseSchema,
-} from '@magickml/embedder-schema'
+} from '@magickml/embedder-schemas'
 
 export const loaderEndpoints = makeApi([
   {

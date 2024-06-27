@@ -8,7 +8,7 @@ import { JsonValue } from 'type-fest'
 import { embedderDb, Job, Loader } from '@magickml/embedder-db-pg'
 import { usePineconeDb } from '@magickml/embedder-db-pinecone'
 import { createLoader } from '@magickml/embedder-loaders-core'
-import { JobStatusType } from '@magickml/embedder-schema'
+import { JobStatusType } from '@magickml/embedder-schemas'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 

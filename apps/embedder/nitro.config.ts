@@ -63,7 +63,7 @@ export default defineNitroConfig({
       __dirname,
       '../../packages/embedder/loaders/core/src/index.ts'
     ),
-    '@magickml/embedder-schema': resolve(
+    '@magickml/embedder-schemas': resolve(
       __dirname,
       '../../packages/embedder/schema/src/index.ts'
     ),

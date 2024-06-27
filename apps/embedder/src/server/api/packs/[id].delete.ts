@@ -1,4 +1,4 @@
-import { idParse } from '@magickml/embedder-schema'
+import { idParse } from '@magickml/embedder-schemas'
 import { embedderDb, Pack } from '@magickml/embedder-db-pg'
 import { eq } from 'drizzle-orm'
 

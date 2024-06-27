@@ -3,7 +3,7 @@ import {
   AddLoaderSchema,
   authParse,
   idParse,
-} from '@magickml/embedder-schema'
+} from '@magickml/embedder-schemas'
 import { embedderDb, Loader, Pack } from '@magickml/embedder-db-pg'
 import { eq, and } from 'drizzle-orm'
 import { useBullMQ, createJob } from '@magickml/embedder-queue'
