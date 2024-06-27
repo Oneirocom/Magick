@@ -9,6 +9,5 @@
   },
   "type": "commonjs",
   "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
-  "private": true
+  "typings": "./src/index.d.ts"
 }

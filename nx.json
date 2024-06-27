@@ -120,6 +120,11 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["default", "^default"]
+    },
+    "publish": {
+      "options": {
+        "access": "public"
+      }
     }
   },
   "generators": {
@@ -165,15 +170,20 @@
       "packages/server/*",
       "plugins/*",
       "packages/embedder/*",
-      "packages/shared/*"
+      "packages/shared/*",
+      "!packages/server/cloud-agent-manager",
+      "!packages/server/cloud-agent-worker",
+      "!packages/server/communication",
+      "!packages/server/meter",
+      "!portal/cloud/packages/ideClient"
     ],
     "version": {
       "exclude": [
         "server-cloud-agent-manager",
         "server-cloud-agent-worker",
         "server/communication",
-        "portal-client",
-        "server/meter"
+        "server/meter",
+        "ideClient"
       ]
     }
   }
