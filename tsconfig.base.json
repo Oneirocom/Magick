@@ -27,7 +27,6 @@
       "portal/cloud/packages/types/src/lib/next-auth"
     ],
     "paths": {
-      "@magickml/agent": ["apps/agent/src/index.ts"],
       "@magickml/agent-command-hub": [
         "packages/server/command-hub/src/index.ts"
       ],
@@ -56,7 +55,6 @@
       "@magickml/core-plugin": ["plugins/core/src/index.ts"],
       "@magickml/credentials": ["packages/server/credentials/src/index.ts"],
       "@magickml/discord-plugin": ["plugins/discord/src/index.ts"],
-      "@magickml/docs": ["apps/docs/src/index.ts"],
       "@magickml/embedder-api-jobs": [
         "packages/embedder/api/jobs/src/index.ts"
       ],

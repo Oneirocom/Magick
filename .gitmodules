@@ -1,9 +1,3 @@
-[submodule "pythonPackages/liteLLM"]
-	path = pythonPackages/liteLLM
-	url = https://github.com/HaruHunab1320/litellm
-[submodule "pythonPackages/embedchain"]
-	path = pythonPackages/embedchain
-	url = git@github.com:Oneirocom/embedchain.git
 [submodule "portal/cloud"]
 	path = portal/cloud
 	url = https://github.com/oneirocom/portal
