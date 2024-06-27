@@ -125,6 +125,11 @@
       "options": {
         "access": "public"
       }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/packages/{projectName}"
+      }
     }
   },
   "generators": {
@@ -166,6 +171,7 @@
         "createRelease": "github"
       }
     },
+
     "projects": [
       "packages/server/*",
       "plugins/*",
@@ -178,6 +184,9 @@
       "!portal/cloud/packages/ideClient"
     ],
     "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/packages/{projectName}"
+      },
       "exclude": [
         "server-cloud-agent-manager",
         "server-cloud-agent-worker",

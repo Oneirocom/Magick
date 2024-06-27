@@ -1,3 +1,4 @@
+//@ts-nocheck
 import type { HelperOptions } from 'handlebars'
 import { create } from 'handlebars'
 
