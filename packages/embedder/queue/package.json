@@ -7,12 +7,12 @@
     "bullmq": "4.6.0",
     "consola": "^3.2.3",
     "type-fest": "2.19.0",
-    "@magickml/embedder-db-pg": "file:../db/pg",
-    "@magickml/embedder-db-pinecone": "file:../db/pinecone",
-    "@magickml/embedder-loaders-core": "file:../loaders/core",
+    "@magickml/embedder-db-pg": "0.0.4",
+    "@magickml/embedder-db-pinecone": "0.0.4",
+    "@magickml/embedder-loaders-core": "0.0.4",
     "drizzle-orm": "^0.30.10",
     "ioredis": "^5.3.2",
     "tslib": "^2.3.0",
-    "@magickml/embedder-schemas": "file:../schemas"
+    "@magickml/embedder-schemas": "0.0.4"
   }
 }

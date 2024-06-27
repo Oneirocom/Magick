@@ -1,8 +1,13 @@
 {
   "name": "@magickml/embedder-client-ts",
-  "version": "2.0.0",
+  "version": "0.0.4",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@zodios/core": "^10.9.6",
+    "@magickml/embedder-api-packs": "0.0.4",
+    "@magickml/embedder-api-loaders": "0.0.4",
+    "@magickml/embedder-api-jobs": "0.0.4",
+    "zod": "^3.22.4"
   },
   "type": "commonjs",
   "main": "./src/index.js",

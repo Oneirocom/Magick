@@ -6,7 +6,7 @@
     "@feathersjs/koa": "5.0.25",
     "@keyv/redis": "^2.8.0",
     "@magickml/agent-command-hub": "0.0.4",
-    "@magickml/agent-communication": "file:../../../shared/communucation",
+    "@magickml/agent-communication": "0.0.4",
     "@magickml/agent-plugin": "0.0.4",
     "@magickml/agent-server-schemas": "0.0.4",
     "@magickml/behave-graph": "^0.14.14",
@@ -20,7 +20,8 @@
     "pino": "8.14.1",
     "tslib": "^2.3.0",
     "typed-emitter": "^2.1.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "@magickml/agent-plugin-manager": "0.0.4"
   },
   "type": "commonjs",
   "main": "./src/index.js",
