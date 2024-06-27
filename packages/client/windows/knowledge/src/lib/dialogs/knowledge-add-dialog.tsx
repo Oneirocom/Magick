@@ -11,17 +11,21 @@ import { useCreateKnowledgeMutation } from 'client/state'
 import { useConfig } from '@magickml/providers'
 import { AddKnowledge } from '@magickml/shared-services'
 import { KnowledgeURLContent } from './add/knowledge-url-content'
+import { LoaderType } from '@magickml/embedder/schema'
 
 export const ACCEPT =
   '.eml, .html, .json, .md, .msg, .rst, .rtf, .txt, .xml, .jpeg, .jpg, .png, .csv, .doc, .docx, .epub, .odt, .pdf, .ppt, .pptx, .tsv, .xlsx'
 
 type AddKnowledgeDialogProps = {
   openState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+  fileTypes?: string
 }
 
-export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
-  openState,
-}) => {
+export const AddKnowledgeDialog: React.FC<
+  AddKnowledgeDialogProps & {
+    restrictedTypes?: LoaderType[]
+  }
+> = ({ openState, restrictedTypes }) => {
   /* State */
   const [tabState, setTabState] = useState<KnowledgeDialogTab>(
     KnowledgeDialogTab.URL
@@ -115,7 +119,10 @@ export const AddKnowledgeDialog: React.FC<AddKnowledgeDialogProps> = ({
         <KnowledgeURLContent disabledState={urlDisabled} />
 
         {/* Upload Tab */}
-        <KnowledgeUploadContent disabledState={uploadDisabled} />
+        <KnowledgeUploadContent
+          disabledState={uploadDisabled}
+          restrictedTypes={restrictedTypes}
+        />
       </Tabs>
     </PortalDialog>
   )
