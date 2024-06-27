@@ -12,6 +12,9 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 
+// Flag to enable/disable metric collection
+const ENABLE_METRICS = true
+
 // Metrics tracking
 const agentMetrics = new Map()
 
@@ -104,6 +107,7 @@ function createTextStreamGenerator(): TextStreamGenerator {
 }
 
 function saveMetrics(metricKey: string, metrics: any) {
+  if (!ENABLE_METRICS) return
   const fileName = `metrics-${metricKey}.json`
   const directoryPath = path.join(__dirname, './metrics')
   const filePath = path.join(directoryPath, fileName)
@@ -127,6 +131,7 @@ function saveMetrics(metricKey: string, metrics: any) {
 }
 
 function collectMetrics(metricKey: string) {
+  if (!ENABLE_METRICS) return
   const currentMemory = getMemoryUsage()
   const currentCPU = process.cpuUsage()
   const timestamp = Date.now()
@@ -183,6 +188,7 @@ function collectMetrics(metricKey: string) {
 }
 
 function clearMetricsFiles() {
+  if (!ENABLE_METRICS) return
   const directoryPath = path.join(__dirname, './metrics') // Correct path to the directory
 
   // Check if the directory exists, if not create it
@@ -199,15 +205,17 @@ function clearMetricsFiles() {
 
 // Function to save all metrics
 function saveAllMetrics() {
+  if (!ENABLE_METRICS) return
   for (const [key, metrics] of agentMetrics.entries()) {
     saveMetrics(key, metrics)
   }
 }
 
-setInterval(saveAllMetrics, 30000) // Save all metrics every 30 seconds
-
-// clear all previous metrics
-clearMetricsFiles()
+if (ENABLE_METRICS) {
+  setInterval(saveAllMetrics, 30000) // Save all metrics every 30 seconds
+  // clear all previous metrics
+  clearMetricsFiles()
+}
 
 const agentApp = await initApp()
 
@@ -238,13 +246,47 @@ export async function app(fastify: FastifyInstance) {
         return
       }
 
+      let metricInterval: NodeJS.Timeout | null = null
       // Initialize metrics for this agent
       const metricKey = `${agentId}-${channelId}`
 
-      agentMetrics.set(metricKey, {
-        messageCount: 0,
-        metricsOverTime: [],
-      })
+      if (ENABLE_METRICS) {
+        agentMetrics.set(metricKey, {
+          messageCount: 0,
+          metricsOverTime: [],
+        })
+
+        // Record initial metrics
+        const initialMetrics = collectMetrics(metricKey)
+
+        agentMetrics.get(metricKey).metricsOverTime = [initialMetrics]
+
+        // Optionally, you can log the initial metrics
+        console.log('Initial metrics recorded:', initialMetrics)
+
+        // Then, update your metricInterval:
+        metricInterval = setInterval(() => {
+          if (!ENABLE_METRICS) return
+          const currentMetrics = agentMetrics.get(metricKey)
+
+          // Collect new metrics
+          const newMetrics = collectMetrics(metricKey)
+
+          if (!newMetrics) return
+
+          // Add to metricsOverTime array
+          currentMetrics.metricsOverTime.push(newMetrics)
+
+          // Update message count
+          currentMetrics.messageCount = newMetrics.messageCount
+
+          // Save metrics every 10 seconds
+          if (Date.now() - currentMetrics.lastSaveTime > 10000) {
+            saveMetrics(metricKey, currentMetrics)
+            currentMetrics.lastSaveTime = Date.now()
+          }
+        }, 1000) // Collect metrics every second
+      }
 
       // Initialize connection management
       const pingInterval = setInterval(() => {
@@ -269,34 +311,6 @@ export async function app(fastify: FastifyInstance) {
       socket.send(JSON.stringify(info))
 
       const agent = new Agent(agentData, agentApp.get('pubsub'), agentApp)
-
-      // Record initial metrics
-      const initialMetrics = collectMetrics(metricKey)
-
-      agentMetrics.get(metricKey).metricsOverTime = [initialMetrics]
-
-      // Optionally, you can log the initial metrics
-      console.log('Initial metrics recorded:', initialMetrics)
-
-      // Then, update your metricInterval:
-      const metricInterval = setInterval(() => {
-        const currentMetrics = agentMetrics.get(metricKey)
-
-        // Collect new metrics
-        const newMetrics = collectMetrics(metricKey)
-
-        // Add to metricsOverTime array
-        currentMetrics.metricsOverTime.push(newMetrics)
-
-        // Update message count
-        currentMetrics.messageCount = newMetrics.messageCount
-
-        // Save metrics every 10 seconds
-        if (Date.now() - currentMetrics.lastSaveTime > 10000) {
-          saveMetrics(metricKey, currentMetrics)
-          currentMetrics.lastSaveTime = Date.now()
-        }
-      }, 1000) // Collect metrics every second
 
       let currentSpeechStream: AsyncIterable<Uint8Array> | null = null
       let isSpeechStreamRunning = false // Flag to track if a stream is in progress
@@ -360,7 +374,7 @@ export async function app(fastify: FastifyInstance) {
         const { type } = data
 
         if (type === 'message') {
-          agentMetrics.get(metricKey).messageCount++
+          if (ENABLE_METRICS) agentMetrics.get(metricKey).messageCount++
           socket.send(
             JSON.stringify({
               id: new Date().toISOString(),
@@ -493,22 +507,27 @@ export async function app(fastify: FastifyInstance) {
       socket.on('close', () => {
         agent.removeAllListeners()
         agent.onDestroy()
-        clearInterval(pingInterval) // Clear the interval on connection close
-        clearInterval(metricInterval) // Clear the interval on connection close
-        // Save metrics to file
-        saveMetrics(metricKey, agentMetrics.get(metricKey))
+        if (pingInterval) clearInterval(pingInterval)
+        if (metricInterval) clearInterval(metricInterval)
 
-        agentMetrics.delete(metricKey)
+        if (ENABLE_METRICS) {
+          saveMetrics(metricKey, agentMetrics.get(metricKey))
+
+          agentMetrics.delete(metricKey)
+        }
       })
 
       socket.on('error', () => {
         agent.removeAllListeners()
         agent.onDestroy()
-        clearInterval(pingInterval) // Clear the interval on connection close
-        clearInterval(metricInterval) // Clear the interval on connection close
-        // Save metrics to file
-        saveMetrics(metricKey, agentMetrics.get(metricKey))
-        agentMetrics.delete(metricKey)
+        if (pingInterval) clearInterval(pingInterval)
+        if (metricInterval) clearInterval(metricInterval)
+
+        if (ENABLE_METRICS) {
+          saveMetrics(metricKey, agentMetrics.get(metricKey))
+
+          agentMetrics.delete(metricKey)
+        }
       })
     }
   )
