@@ -1,3 +1,14 @@
+## 0.0.10-4 (2024-06-27)
+
+
+### 🩹 Fixes
+
+- Fix agent serve rbuilding config for proper import ([f3152671f](https://github.com/Oneirocom/Magick/commit/f3152671f))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.10-3 (2024-06-27)
 
 
