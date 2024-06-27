@@ -169,7 +169,7 @@
     "projects": [
       "packages/server/*",
       "plugins/*",
-      "packages/embedder/*",
+      "packages/embedder/**/*",
       "packages/shared/*",
       "!packages/server/cloud-agent-manager",
       "!packages/server/cloud-agent-worker",
