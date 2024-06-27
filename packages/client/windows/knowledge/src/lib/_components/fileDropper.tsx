@@ -2,7 +2,9 @@ import React, { useCallback } from 'react'
 import { useDropzone, Accept } from 'react-dropzone'
 
 type FileDropperProps = {
-  handleFileUpload: (files: File[], type?: string) => void
+  handleFileUpload: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => Promise<void>
   accept?: Accept
   maxSize?: number
   maxFiles?: number
@@ -47,9 +49,16 @@ const FileDropper: React.FC<FileDropperProps> = ({
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      handleFileUpload(acceptedFiles, type)
+      // Create a synthetic event
+      const syntheticEvent = {
+        target: {
+          files: acceptedFiles,
+        },
+      } as unknown as React.ChangeEvent<HTMLInputElement>
+
+      handleFileUpload(syntheticEvent)
     },
-    [handleFileUpload, type]
+    [handleFileUpload]
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -98,7 +107,7 @@ const FileDropper: React.FC<FileDropperProps> = ({
             )}
           </p>
           <p className="text-xs text-secondary-highlight">
-            {fileTypes.join(', ')}
+            {type ? type : fileTypes.join(', ')}
           </p>
         </div>
       </div>
