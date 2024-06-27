@@ -184,6 +184,7 @@
       "!portal/cloud/packages/ideClient"
     ],
     "version": {
+      "preVersionCommand": "npm run build-release",
       "generatorOptions": {
         "packageRoot": "dist/packages/{projectName}"
       },
