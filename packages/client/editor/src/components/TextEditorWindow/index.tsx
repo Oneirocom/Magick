@@ -168,14 +168,21 @@ const TextEditor = () => {
 
   useEffect(() => {
     if (!currentTab || !activeInput) return
-    const unsubscribe = subscribe(
-      events.$INPUT_TO_CHAT(currentTab.id),
-      (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
-        setCode(value)
-      }
-    )
+
+    const subscribeToEvents = () => {
+      return subscribe(
+        events.$INPUT_TO_CHAT(currentTab.id),
+        (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
+          setCode(value)
+        }
+      )
+    }
+    const unsubscribe = subscribeToEvents()
+
     return () => {
-      unsubscribe()
+      if (unsubscribe) {
+        unsubscribe()
+      }
     }
   }, [currentTab, activeInput])
 

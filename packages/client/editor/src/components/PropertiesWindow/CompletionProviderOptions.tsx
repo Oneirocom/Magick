@@ -114,12 +114,10 @@ export const CompletionProviderOptions: React.FC<
     const providerId = providerData[provider].models[0].provider.provider_id
     const model = providerData[provider]?.models[0]?.model_name
 
-    console.log('model', model)
     setSelectedProvider(provider)
 
     setSelectedModel(model)
     setActiveModels(providerData[provider]?.models)
-
     props.updateConfigKeys({
       modelProvider: providerId,
       model: model,
