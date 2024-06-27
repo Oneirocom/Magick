@@ -1,3 +1,14 @@
+## 0.0.9-0 (2024-06-27)
+
+
+### 🩹 Fixes
+
+- fixes for knowledge plugin ([92888862e](https://github.com/Oneirocom/Magick/commit/92888862e))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.8-0 (2024-06-27)
 
 This was a version bump only, there were no code changes.
