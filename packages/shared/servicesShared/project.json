@@ -1,5 +1,5 @@
 {
-  "name": "servicesShared",
+  "name": "shared/servicesShared",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shared/servicesShared/src",
   "projectType": "library",

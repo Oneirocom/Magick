@@ -1,5 +1,5 @@
 {
-  "name": "server-storage",
+  "name": "server/storage",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/storage/src",
   "projectType": "library",
