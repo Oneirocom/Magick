@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/pluginManager/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -24,6 +25,5 @@
         "jestConfig": "packages/server/pluginManager/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

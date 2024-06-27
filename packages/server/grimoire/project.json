@@ -1,6 +1,7 @@
 {
   "name": "server/grimoire",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "tags": ["release"],
   "sourceRoot": "packages/server/grimoire/src",
   "projectType": "library",
   "targets": {
@@ -24,6 +25,5 @@
         "jestConfig": "packages/server/grimoire/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

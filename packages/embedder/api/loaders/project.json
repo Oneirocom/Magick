@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/api/loaders/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

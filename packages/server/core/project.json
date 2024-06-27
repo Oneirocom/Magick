@@ -4,6 +4,7 @@
   "sourceRoot": "packages/server/core/src",
   "projectType": "library",
   "implicitDependencies": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -25,6 +26,5 @@
         "jestConfig": "packages/server/core/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

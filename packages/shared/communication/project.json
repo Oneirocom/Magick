@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shared/communication/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -25,6 +26,5 @@
         "jestConfig": "packages/shared/communication/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }
