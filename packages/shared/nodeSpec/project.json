@@ -4,6 +4,7 @@
   "implicitDependencies": [],
   "sourceRoot": "packages/shared/nodeSpec/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -25,6 +26,5 @@
         "jestConfig": "packages/shared/nodeSpec/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/discord/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -24,6 +25,5 @@
         "jestConfig": "plugins/discord/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

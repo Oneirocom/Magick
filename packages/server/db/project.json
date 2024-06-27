@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/db/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -65,6 +66,5 @@
         "cwd": "packages/server/db"
       }
     }
-  },
-  "tags": []
+  }
 }
