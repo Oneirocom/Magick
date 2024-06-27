@@ -1,7 +1,8 @@
 {
-  "name": "@magickml/server-db",
-  "dependencies": {},
+  "name": "@magickml/cloud-agent-worker",
   "version": "0.0.2",
+  "dependencies": {},
+  "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts"
 }
