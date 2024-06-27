@@ -1,5 +1,5 @@
 {
-  "name": "agent-commander",
+  "name": "server/agent-commander",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/agentCommander/src",
   "projectType": "library",

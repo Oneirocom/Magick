@@ -1,5 +1,5 @@
 {
-  "name": "vercel-sdk-core",
+  "name": "server/vercel/core",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/vercel/core/src",
   "projectType": "library",
