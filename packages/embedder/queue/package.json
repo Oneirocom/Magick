@@ -1,9 +1,9 @@
 {
   "name": "@magickml/embedder-queue",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "dependencies": {
-    "@magickml/embedder-config": "0.0.5",
+    "@magickml/embedder-config": "0.0.6",
     "bullmq": "4.6.0",
     "consola": "^3.2.3",
     "type-fest": "2.19.0",
@@ -13,6 +13,6 @@
     "drizzle-orm": "^0.30.10",
     "ioredis": "^5.3.2",
     "tslib": "^2.3.0",
-    "@magickml/embedder-schemas": "0.0.5"
+    "@magickml/embedder-schemas": "0.0.6"
   }
 }
