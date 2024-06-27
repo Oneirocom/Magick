@@ -1,9 +1,9 @@
 {
   "name": "@magickml/node-spec",
-  "version": "0.0.7",
+  "version": "0.0.8-0",
   "dependencies": {
     "@magickml/behave-graph": "^0.14.14",
-    "@magickml/agent-server-schemas": "0.0.7",
+    "@magickml/agent-server-schemas": "0.0.8-0",
     "tslib": "^2.3.0"
   },
   "main": "./src/index.js",
