@@ -2,7 +2,7 @@ import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { CORE_DEP_KEYS } from '@magickml/shared-services'
 import type { EmbedderClient } from '@magickml/embedder-client-ts'
 import { validatePackId } from './shared'
-import { PackQueryContextSchema } from '@magickml/embedder-schema'
+import { PackQueryContextSchema } from '@magickml/embedder-schemas'
 
 export const getContext = makeFlowNodeDefinition({
   typeName: 'knowledge/embedder/getContext',

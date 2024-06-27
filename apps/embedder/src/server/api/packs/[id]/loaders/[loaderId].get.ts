@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { embedderDb, Loader } from '@magickml/embedder-db-pg'
 import { and, eq } from 'drizzle-orm'
 import { createLoader } from '@magickml/embedder-loaders-core'
-import { LoaderWithChunks } from '@magickml/embedder-schema'
+import { LoaderWithChunks } from '@magickml/embedder-schemas'
 
 export default defineEventHandler(async event => {
   const packId = z.string().parse(event.context.params?.id)

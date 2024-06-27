@@ -7,7 +7,7 @@ import {
   authParse,
   PackQueryRequestSchema,
   PackQueryContextSchema,
-} from '@magickml/embedder-schema'
+} from '@magickml/embedder-schemas'
 import { createError } from 'h3'
 
 export default defineEventHandler(async event => {

@@ -8,7 +8,7 @@ import {
   DeletePackResponseSchema,
   PackQueryContextSchema,
   PackQueryRequestSchema,
-} from '@magickml/embedder-schema'
+} from '@magickml/embedder-schemas'
 
 export const packEndpoints = makeApi([
   {

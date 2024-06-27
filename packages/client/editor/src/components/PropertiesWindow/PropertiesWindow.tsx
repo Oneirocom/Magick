@@ -31,7 +31,7 @@ import toast from 'react-hot-toast'
 import { SubspellSocketConfig } from './SubspellSocketConfig'
 import { SelectSpell } from './SelectSpell'
 
-import { PackSchema } from '@magickml/embedder-schema'
+import { PackSchema } from '@magickml/embedder-schemas'
 import { z } from 'zod'
 import { useDispatch, useSelector } from 'react-redux'
 

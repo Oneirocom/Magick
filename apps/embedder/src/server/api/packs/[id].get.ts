@@ -1,4 +1,4 @@
-import { FindPackResponseSchema, idParse } from '@magickml/embedder-schema'
+import { FindPackResponseSchema, idParse } from '@magickml/embedder-schemas'
 import { embedderDb } from '@magickml/embedder-db-pg'
 
 export default defineEventHandler(async event => {
