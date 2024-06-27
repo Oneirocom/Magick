@@ -1,6 +1,6 @@
 {
   "name": "@magickml/server-config",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "type": "commonjs",
   "dependencies": {
     "dotenv-flow": "3.2.0",

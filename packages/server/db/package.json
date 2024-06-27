@@ -1,7 +1,7 @@
 {
   "name": "@magickml/server-db",
   "dependencies": {},
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts"
 }

@@ -1,8 +1,8 @@
 {
   "name": "@magickml/embedder-client-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
-    "@magickml/embedder-client-ts": "0.0.4",
+    "@magickml/embedder-client-ts": "0.0.5",
     "@zodios/core": "^10.9.6",
     "@zodios/react": "^10.4.5",
     "vite": "5.0.12",

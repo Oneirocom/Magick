@@ -1,6 +1,6 @@
 {
   "name": "@magickml/embedder-loaders-core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dependencies": {
     "@magickml/embedder-config": "0.0.4",
     "@magickml/embedder-schemas": "0.0.4",
