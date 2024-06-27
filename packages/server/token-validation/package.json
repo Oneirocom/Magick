@@ -1,6 +1,6 @@
 {
   "name": "@magickml/token-validation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "tslib": "^2.3.0"
   },
