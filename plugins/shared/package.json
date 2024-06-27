@@ -1,11 +1,11 @@
 {
   "name": "@magickml/plugins-shared",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "tslib": "^2.3.0",
     "typed-emitter": "^2.1.0",
     "@magickml/behave-graph": "^0.14.14",
-    "@magickml/shared-services": "file:../../packages/shared/servicesShared"
+    "@magickml/shared-services": "0.0.2"
   },
   "type": "commonjs",
   "main": "./src/index.js",

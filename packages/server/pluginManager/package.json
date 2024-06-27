@@ -1,13 +1,13 @@
 {
   "name": "@magickml/agent-plugin-manager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
-    "@magickml/agent-command-hub": "file:../command-hub",
-    "@magickml/agent-plugin": "file:../plugin",
+    "@magickml/agent-command-hub": "0.0.2",
+    "@magickml/agent-plugin": "0.0.2",
     "@magickml/behave-graph": "^0.14.14",
-    "@magickml/redis-pubsub": "file:../redis-pubsub",
-    "@magickml/server-logger": "file:../logger",
-    "@magickml/shared-services": "file:../../shared/servicesShared",
+    "@magickml/redis-pubsub": "0.0.2",
+    "@magickml/server-logger": "0.0.2",
+    "@magickml/shared-services": "0.0.2",
     "ioredis": "^5.3.2",
     "pino": "8.14.1",
     "tslib": "^2.3.0"

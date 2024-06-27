@@ -1,7 +1,8 @@
 {
-  "name": "@magickml/server-db",
-  "dependencies": {},
+  "name": "@magickml/meter",
   "version": "0.0.2",
+  "dependencies": {},
   "main": "./src/index.js",
+  "module": "./src/index.mjs",
   "typings": "./src/index.d.ts"
 }

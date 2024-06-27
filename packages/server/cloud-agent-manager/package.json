@@ -1,9 +1,7 @@
 {
-  "name": "@magickml/agent-communication",
+  "name": "@magickml/cloud-agent-manager",
   "version": "0.0.2",
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
+  "dependencies": {},
   "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts"
