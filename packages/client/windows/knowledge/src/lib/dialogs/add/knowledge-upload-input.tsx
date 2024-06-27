@@ -9,11 +9,13 @@ type KnowledgeUploadInputProps = {
 const allowedTypes = [
   '.eml, .txt, .html, .json, .md, .msg, .rst, .rtf, .txt, .xml, .jpeg, .jpg, .png, .csv, .doc, .docx, .epub, .odt, .pdf, .ppt, .pptx, .tsv, .xlsx',
 ]
-export const KnowledgeUploadInput: React.FC<KnowledgeUploadInputProps> = ({
-  inputProps,
-}) => {
+export const KnowledgeUploadInput: React.FC<
+  KnowledgeUploadInputProps & {
+    restrictedTypes?: string[]
+  }
+> = ({ inputProps, restrictedTypes }) => {
   const { disabled, ...rest } = inputProps
-
+  const showRestrictedTypes = restrictedTypes && restrictedTypes.length > 0
   return (
     <div>
       <label
@@ -35,7 +37,11 @@ export const KnowledgeUploadInput: React.FC<KnowledgeUploadInputProps> = ({
             <span className="font-semibold">Click to upload</span> or{' '}
             <span className="font-semibold">drag and drop</span>
           </p>
-          <p className="text-xs mx-8 text-center">{allowedTypes.join(', ')}</p>
+          <p className="text-xs mx-8 text-center">
+            {showRestrictedTypes
+              ? restrictedTypes.join(', ')
+              : allowedTypes.join(', ')}
+          </p>
         </div>
         <input
           id="dropzone-file"
