@@ -1,6 +1,6 @@
 {
   "name": "@magickml/embedder-schemas",
-  "version": "0.0.7",
+  "version": "0.0.8-0",
   "dependencies": {
     "tslib": "^2.3.0",
     "zod": "^3.22.4",

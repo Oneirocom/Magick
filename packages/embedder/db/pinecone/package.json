@@ -1,6 +1,6 @@
 {
   "name": "@magickml/embedder-db-pinecone",
-  "version": "0.0.7",
+  "version": "0.0.8-0",
   "type": "module",
   "dependencies": {
     "tslib": "^2.3.0",
