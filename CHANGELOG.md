@@ -1,3 +1,15 @@
+## 0.0.10-2 (2024-06-27)
+
+
+### 🩹 Fixes
+
+- cleanup old packages and lint errors ([257ff5dc1](https://github.com/Oneirocom/Magick/commit/257ff5dc1))
+- linting errors for global build command ([7c143e9df](https://github.com/Oneirocom/Magick/commit/7c143e9df))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.10-1 (2024-06-27)
 
 
