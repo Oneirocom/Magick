@@ -85,9 +85,11 @@ export const LoaderWithoutConfigSchema = z.object({
   packId: z.string().uuid(),
   type: LoaderTypeSchema,
   status: StatusSchema,
+  isUpload: z.boolean().optional(),
+  path: z.string().optional(),
 })
 
-const schemas = [
+export const LoaderConfigSchema = z.discriminatedUnion('type', [
   TextLoaderSchema,
   YoutubeLoaderSchema,
   YoutubeChannelLoaderSchema,
@@ -98,11 +100,7 @@ const schemas = [
   DocxLoaderSchema,
   ExcelLoaderSchema,
   PptLoaderSchema,
-  // ConfluenceLoaderSchema,
-  // JsonLoaderSchema,
-] as const
-
-export const LoaderConfigSchema = z.union(schemas)
+])
 
 export const LoaderSchema = LoaderWithoutConfigSchema.extend({
   config: LoaderConfigSchema,
