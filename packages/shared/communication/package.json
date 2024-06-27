@@ -1,6 +1,6 @@
 {
   "name": "@magickml/agent-communication",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dependencies": {
     "tslib": "^2.3.0"
   },
