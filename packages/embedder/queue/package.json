@@ -1,9 +1,9 @@
 {
   "name": "@magickml/embedder-queue",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "dependencies": {
-    "@magickml/embedder-config": "0.0.3",
+    "@magickml/embedder-config": "0.0.4",
     "bullmq": "4.6.0",
     "consola": "^3.2.3",
     "type-fest": "2.19.0",
