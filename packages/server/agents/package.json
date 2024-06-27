@@ -9,7 +9,6 @@
     "@magickml/agent-server": "0.0.10-1",
     "@magickml/behave-graph": "^0.14.14",
     "@magickml/core-plugin": "0.0.10-1",
-    "@magickml/discord-plugin": "0.0.10-1",
     "@magickml/grimoire": "0.0.10-1",
     "@magickml/knowledge-plugin": "0.0.10-1",
     "@magickml/redis-pubsub": "0.0.10-1",
@@ -22,7 +21,8 @@
     "tslib": "^2.3.0",
     "typed-emitter": "^2.1.0",
     "uuid": "^9.0.0",
-    "@magickml/seraph-manager": "0.0.10-1"
+    "@magickml/seraph-manager": "0.0.10-1",
+    "@magickml/discord-plugin": "0.0.10-1"
   },
   "type": "commonjs",
   "main": "./src/index.js",

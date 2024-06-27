@@ -10,7 +10,8 @@
     "client/layouts": "*",
     "@minoru/react-dnd-treeview": "^3.4.4",
     "react-redux": "8.0.5",
-    "client/feathers-client": "*"
+    "client/feathers-client": "*",
+    "@magickml/shared-services": "0.0.10-1"
   },
   "main": "./index.js",
   "module": "./index.mjs",

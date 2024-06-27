@@ -7,5 +7,25 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
+  },
+  "dependencies": {
+    "@magickml/providers": "0.0.1",
+    "@magickml/server-config": "0.0.10-1",
+    "@nx/devkit": "19.2.1",
+    "@nx/playwright": "19.2.1",
+    "@nx/react": "19.2.1",
+    "@nx/vite": "19.2.1",
+    "@playwright/test": "^1.36.0",
+    "@vitejs/plugin-react": "4.2.1",
+    "@xyflow/react": "^12.0.0-next.18",
+    "client/editor": "0.1.0",
+    "clientConfig": "0.0.1",
+    "dockview": "^1.13.0",
+    "posthog-js": "^1.131.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "stylesheets": "0.0.1",
+    "tailwindcss-animate": "^1.0.7",
+    "vite": "5.0.12"
   }
 }

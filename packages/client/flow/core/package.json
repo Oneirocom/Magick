@@ -8,5 +8,36 @@
       "import": "./index.mjs",
       "require": "./index.js"
     }
+  },
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@magickml/agent-server-schemas": "0.0.10-1",
+    "@magickml/behave-graph": "^0.14.14",
+    "@magickml/client-types": "0.0.1",
+    "@magickml/client-ui": "0.0.1",
+    "@magickml/icons": "0.0.1",
+    "@magickml/node-spec": "0.0.10-1",
+    "@magickml/providers": "0.0.1",
+    "@mui/material": "5.13.2",
+    "@nx/vite": "19.2.1",
+    "@radix-ui/react-collapsible": "1.0.3",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@vitejs/plugin-react": "4.2.1",
+    "@xyflow/react": "^12.0.0-next.18",
+    "class-variance-authority": "^0.7.0",
+    "classnames": "^2.3.2",
+    "client/core": "0.1.0",
+    "lodash": "4.17.21",
+    "notistack": "3.0.1",
+    "posthog-js": "^1.131.4",
+    "react": "18.2.0",
+    "react-hotkeys-hook": "4.4.0",
+    "react-json-view": "1.21.3",
+    "react-redux": "8.0.5",
+    "use-debounce": "^10.0.0",
+    "uuid": "^9.0.0",
+    "vite": "5.0.12",
+    "vite-plugin-dts": "~3.8.1"
   }
 }

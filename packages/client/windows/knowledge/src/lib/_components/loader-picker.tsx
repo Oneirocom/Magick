@@ -105,14 +105,7 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [config, setConfig] = useState<Record<string, any>>({})
-  const {
-    loading,
-    newKnowledge,
-    setKnowledge,
-    handleDataTypesChange,
-    handleFileUpload,
-    triggerFileUpload,
-  } = useFileUpload({
+  const { handleFileUpload } = useFileUpload({
     initialState: {
       name: '',
       sourceUrl: '',

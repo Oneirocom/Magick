@@ -221,7 +221,7 @@
       "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
       "@magickml/core-plugin": ["packages/plugins/core/src/index.ts"],
-      "plugins/discord": ["packages/plugins/discord/src/index.ts"],
+      "@magickml/discord-plugin": ["packages/plugins/discord/src/index.ts"],
       "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
       "@magickml/shared-plugins": ["packages/plugins/shared/src/index.ts"],
       "@magickml/slack-plugin": ["packages/plugins/slack/src/index.ts"],

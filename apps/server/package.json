@@ -29,6 +29,16 @@
     "migrate:list": "knex migrate:list"
   },
   "dependencies": {
-    "knex": "^2.4.2"
+    "knex": "^2.4.2",
+    "dotenv-flow": "3.2.0",
+    "@koa/cors": "4.0.0",
+    "@magickml/agent-server": "0.0.10-1",
+    "@magickml/server-logger": "0.0.10-1",
+    "koa": "2.14.2",
+    "koa-body": "^6.0.1",
+    "regenerator-runtime": "0.13.11",
+    "@magickml/agent-commander": "0.0.10-1",
+    "webpack-merge": "5.9.0",
+    "@nx/webpack": "19.2.1"
   }
 }
