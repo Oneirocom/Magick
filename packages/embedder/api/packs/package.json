@@ -1,11 +1,11 @@
 {
   "name": "@magickml/embedder-api-packs",
-  "version": "0.0.9-0",
+  "version": "0.0.9-1",
   "dependencies": {
     "@zodios/core": "^10.9.6",
     "tslib": "^2.3.0",
     "zod": "^3.22.4",
-    "@magickml/embedder-schemas": "0.0.9-0"
+    "@magickml/embedder-schemas": "0.0.9-1"
   },
   "type": "commonjs",
   "main": "./src/index.js",
