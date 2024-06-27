@@ -11,12 +11,12 @@
     "@magickml/agent-plugin": "0.0.7",
     "@magickml/credentials": "0.0.7",
     "@magickml/grimoire": "0.0.7",
-    "@magickml/plugins-shared": "0.0.4",
     "@magickml/redis-pubsub": "0.0.7",
     "@magickml/server-config": "0.0.7",
     "@magickml/server-logger": "0.0.7",
     "@magickml/shared-services": "0.0.7",
-    "@magickml/core-plugin": "0.0.7"
+    "@magickml/core-plugin": "0.0.7",
+    "@magickml/shared-plugins": "0.0.7"
   },
   "type": "commonjs",
   "main": "./src/index.js",
