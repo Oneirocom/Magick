@@ -1,6 +1,6 @@
 {
   "name": "@magickml/embedder-api-packs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dependencies": {
     "@zodios/core": "^10.9.6",
     "tslib": "^2.3.0",

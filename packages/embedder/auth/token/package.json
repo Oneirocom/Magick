@@ -1,6 +1,6 @@
 {
   "name": "@magickml/embedder-auth-token",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dependencies": {
     "@magickml/embedder-config": "0.0.4",
     "h3": "^1.11.1",

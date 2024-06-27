@@ -1,6 +1,6 @@
 {
   "name": "@magickml/embedder-auth-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "jsonwebtoken": "9.0.2",
     "h3": "^1.11.1",
