@@ -1,7 +1,7 @@
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import nodeSpec from './nodeSpec.json'
 import pluginCredentials from './credentials.json'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import {
   generateVariableNodeSpecs,
   sortNodeSpecsByType,

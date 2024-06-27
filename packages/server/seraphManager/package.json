@@ -1,0 +1,20 @@
+{
+  "name": "@magickml/agent-seraph-manager",
+  "version": "0.0.1",
+  "dependencies": {
+    "@magickml/agent-command-hub": "file:../command-hub",
+    "@magickml/agent-communication": "file:../../../shared/communication",
+    "@magickml/agent-server": "file:../core",
+    "@magickml/node-spec": "file:../../../shared/nodeSpec",
+    "@magickml/redis-pubsub": "file:../redis-pubsub",
+    "@magickml/seraph": "file:../seraph",
+    "@magickml/server-logger": "file:../logger",
+    "@magickml/shared-services": "file:../../shared/servicesShared",
+    "pino": "8.14.1",
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

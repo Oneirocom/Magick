@@ -1,13 +1,17 @@
 import pino from 'pino'
 import { diff, unique } from 'radash'
 import type { Reporter } from './Reporters'
-import { getLogger } from 'server/logger'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import { MessageQueue } from 'server/communication'
-import { app } from 'server/core'
-import { AgentInterface } from 'server/schemas'
-import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
-import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from 'shared/config'
+import { app } from '@magickml/agent-server'
+import { AgentInterface } from '@magickml/agent-server-schemas'
+import {
+  AGENT_DELETE,
+  AGENT_DELETE_JOB,
+  AGENT_UPDATE_JOB,
+} from '@magickml/agent-communication'
+import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from '@magickml/server-config'
 // import { HEARTBEAT_MSEC, MANAGER_WARM_UP_MSEC } from '@magickml/config'
 
 interface CloudAgentManagerConstructor {

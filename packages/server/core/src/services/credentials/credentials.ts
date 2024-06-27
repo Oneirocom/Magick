@@ -1,9 +1,9 @@
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 import type { Application } from '../../declarations'
 import { CredentialsService } from './credentials.class'
 import { Params } from '@feathersjs/feathers'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { REDIS_URL } from 'shared/config'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { REDIS_URL } from '@magickml/server-config'
 
 export * from './credentials.class'
 

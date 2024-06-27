@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 import TypedEmitter from 'typed-emitter'
 
 type MessageEvents = {

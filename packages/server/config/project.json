@@ -1,28 +1,28 @@
 {
-  "name": "shared-config",
+  "name": "server/config",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shared/config/src",
+  "sourceRoot": "packages/server/config/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/shared/config"
+        "outputPath": "dist/packages/server/config"
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/packages/shared/config"],
+      "outputs": ["{workspaceRoot}/coverage/packages/server/config"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/packages/shared/config"
+        "reportsDirectory": "../../../coverage/packages/server/config"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": []
+  }
 }

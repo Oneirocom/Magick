@@ -1,4 +1,17 @@
 {
-  "name": "@magickml/plugin-knowledge",
-  "version": "0.0.1"
+  "name": "@magickml/knowledge-plugin",
+  "version": "0.0.1",
+  "dependencies": {
+    "@magickml/behave-graph": "^0.14.14",
+    "@magickml/shared-services": "file:../../packages/shared/servicesShared",
+    "tslib": "^2.3.0",
+    "zod": "^3.22.4",
+    "@magickml/embedder-auth-token": "file:../../packages/embedder/auth/token",
+    "@magickml/embedder-client-ts": "file:../../packages/embedder/client/ts",
+    "@magickml/agent-plugin": "file:../../packages/server/plugin",
+    "@magickml/embedder-schema": "file:../../packages/embedder/schema"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
 }

@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/storage",
+  "version": "0.0.1",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@google-cloud/storage": "^7.11.0",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

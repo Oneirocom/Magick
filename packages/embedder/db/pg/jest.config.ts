@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'embedder-db-pg',
+  displayName: '@magickml/embedder-db-pg',
   preset: '../../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

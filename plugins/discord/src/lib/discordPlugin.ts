@@ -1,6 +1,6 @@
-import { type BasePluginInit } from 'server/plugin'
-import { type CorePluginEvents } from 'plugins/core'
-import { EventPayload, ActionPayload } from 'servicesShared'
+import { type BasePluginInit } from '@magickml/agent-plugin'
+import { type CorePluginEvents } from '@magickml/core-plugin'
+import { EventPayload, ActionPayload } from '@magickml/shared-services'
 import {
   ChannelType,
   Client,
@@ -11,9 +11,9 @@ import {
 import { DiscordEmitter } from './dependencies/discordEmitter'
 import { sendDiscordMessage } from './nodes/actions/sendDiscordMessage'
 import { onDiscordMessageNodes } from './nodes/events/onDiscordMessage'
-import { WebSocketPlugin } from 'server/plugin'
+import { WebSocketPlugin } from '@magickml/agent-plugin'
 import { DiscordMessageUtils } from './services/discord-message-utils'
-import { isDiscordToken } from 'token-validation'
+import { isDiscordToken } from '@magickml/token-validation'
 
 import {
   discordPluginCredentials,
@@ -32,7 +32,7 @@ import {
   EDITS_PER_SECOND,
   EMBED_MAX_LENGTH,
 } from './configx'
-import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { SEND_MESSAGE, STREAM_MESSAGE } from '@magickml/agent-communication'
 // import { streamDiscordMessage } from './nodes/actions/streamDiscordMessage'
 
 export class DiscordPlugin extends WebSocketPlugin<

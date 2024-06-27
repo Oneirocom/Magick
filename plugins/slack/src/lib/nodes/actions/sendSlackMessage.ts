@@ -4,8 +4,8 @@ import {
   SendSlackMessage,
 } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
-import { IEventStore } from 'server/grimoire'
-import { createActionNode } from 'plugins/shared'
+import { IEventStore } from '@magickml/grimoire'
+import { createActionNode } from '@magickml/shared-plugins'
 
 type Inputs = {
   flow: SocketDefinition

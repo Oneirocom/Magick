@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'plugins/slack',
+  displayName: '@magickml/slack-plugin',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

@@ -1,5 +1,5 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { makeMagickAsyncNodeDefinition } from 'server/grimoire'
+import { makeMagickAsyncNodeDefinition } from '@magickml/grimoire'
 
 // based on Unreal Engine Blueprint DoN node
 

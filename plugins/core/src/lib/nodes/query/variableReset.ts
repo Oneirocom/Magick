@@ -1,6 +1,6 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 export const variablesReset = makeFlowNodeDefinition({
   typeName: 'variables/reset',

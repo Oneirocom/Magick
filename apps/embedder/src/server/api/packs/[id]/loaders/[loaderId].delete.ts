@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { embedderDb, Loader } from 'embedder-db-pg'
+import { embedderDb, Loader } from '@magickml/embedder-db-pg'
 import { eq } from 'drizzle-orm'
-import { useBullMQ } from '@magickml/embedder/queue'
+import { useBullMQ } from '@magickml/embedder-queue'
 
 export default defineEventHandler(async event => {
   const packId = z.string().parse(event.context.params?.id)

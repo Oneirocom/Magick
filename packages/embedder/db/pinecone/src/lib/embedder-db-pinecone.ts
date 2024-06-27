@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 // const PineconeDb = require('@llm-tools/embedjs/vectorDb/pinecone').PineconeDb
 
 // @ts-ignore

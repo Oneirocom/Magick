@@ -1,9 +1,9 @@
 import Keyv from 'keyv'
-import { EventStore, SpellCaster } from 'server/grimoire'
+import { EventStore, SpellCaster } from '@magickml/grimoire'
 import { ArrayVariable, ArrayVariableData } from '../values/Array/ArrayVariable'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
-import { EventPayload, CORE_DEP_KEYS } from 'servicesShared'
+import { EventPayload, CORE_DEP_KEYS } from '@magickml/shared-services'
 
 type Payload = {
   name: string

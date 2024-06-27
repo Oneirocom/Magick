@@ -1,4 +1,4 @@
-import { PluginCredential } from 'server/credentials'
+import { PluginCredential } from '@magickml/credentials'
 
 export type PluginCredentialsType<
   T extends object = Record<string, string | undefined>

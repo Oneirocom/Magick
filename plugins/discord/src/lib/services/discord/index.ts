@@ -1,5 +1,5 @@
 import { ChannelType, Client, GatewayIntentBits, TextChannel } from 'discord.js'
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 import { Logger } from 'pino'
 import natural from 'natural'
 import {

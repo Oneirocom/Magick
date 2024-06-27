@@ -1,7 +1,11 @@
 import { EventEmitter } from 'events'
-import { EventPayload, ActionPayload } from 'servicesShared'
-import { getLogger } from 'server/logger'
-import { ON_ERROR, SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { EventPayload, ActionPayload } from '@magickml/shared-services'
+import { getLogger } from '@magickml/server-logger'
+import {
+  ON_ERROR,
+  SEND_MESSAGE,
+  STREAM_MESSAGE,
+} from '@magickml/agent-communication'
 
 export class CoreActionService {
   protected actionQueueName: string

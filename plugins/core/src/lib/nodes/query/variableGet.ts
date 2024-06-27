@@ -5,7 +5,7 @@ import {
   makeFunctionNodeDefinition,
 } from '@magickml/behave-graph'
 import { IVariableService } from '../../services/variableService'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 // import { ArrayVariable } from '../../values/Array/ArrayVariable'
 
 export const variableGet = makeFunctionNodeDefinition({

@@ -4,8 +4,8 @@ import {
   discordPluginName,
   type DiscordEventPayload,
 } from '../../configx'
-import { EventPayload } from 'servicesShared'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { EventPayload } from '@magickml/shared-services'
+import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
 import { NodeCategory } from '@magickml/behave-graph'
 
 type State = {

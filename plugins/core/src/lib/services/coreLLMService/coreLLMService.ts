@@ -1,13 +1,17 @@
-import { ICoreLLMService, ISharedAgent, UserResponse } from 'servicesShared'
+import {
+  ICoreLLMService,
+  ISharedAgent,
+  PortalSubscriptions,
+  UserResponse,
+} from '@magickml/shared-services'
 import { CoreUserService } from '../userService/coreUserService'
-import { PortalSubscriptions } from '@magickml/portal-utils-shared'
-import { LLMCredential } from 'servicesShared'
-import { getLogger } from 'server/logger'
+import { LLMCredential } from '@magickml/shared-services'
+import { getLogger } from '@magickml/server-logger'
 import pino from 'pino'
 import { streamText } from 'ai'
 import { createOpenAI } from '@magickml/vercel-sdk-core'
 import { clerkClient } from '@clerk/clerk-sdk-node'
-import { PRODUCTION } from 'shared/config'
+import { PRODUCTION } from '@magickml/server-config'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -219,6 +223,7 @@ export class CoreLLMService implements ICoreLLMService {
 
     if (userData.user.hasSubscription) {
       const userSubscriptionName = userData.user.subscriptionName.trim()
+      // TODO definitely remove these hardcoded portal things
       if (userSubscriptionName === PortalSubscriptions.WIZARD) {
         credential = null
       } else if (userSubscriptionName === PortalSubscriptions.APPRENTICE) {

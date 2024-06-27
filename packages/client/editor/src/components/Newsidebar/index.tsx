@@ -20,7 +20,7 @@ import { useModal } from '../../contexts/ModalProvider'
 
 import { MPBalanceBar } from './MPBalanceBar'
 import { Button } from '@magickml/client-ui'
-import { AgentInterface } from 'server/schemas'
+import { AgentInterface } from '@magickml/agent-server-schemas'
 
 /**
  * The main Drawer component that wraps around the application content.

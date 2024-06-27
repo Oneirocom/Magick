@@ -13,7 +13,7 @@ import {
   Textarea,
 } from '@magickml/client-ui'
 import { useCreateCredentialMutation } from 'client/state'
-import { getPluginCredentials } from 'shared/nodeSpec'
+import { getPluginCredentials } from '@magickml/node-spec'
 import { ServiceSelector } from './ServiceSelector'
 
 const pluginCredentials = getPluginCredentials()

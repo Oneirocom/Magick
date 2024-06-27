@@ -1,6 +1,6 @@
 import { Params, ServiceMethods, HookContext } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import { getUniquePluginNames } from 'shared/nodeSpec'
+import { getUniquePluginNames } from '@magickml/node-spec'
 import { AgentCommandData } from '@magickml/agent-commander'
 
 type WebhookBody = Record<string, any>

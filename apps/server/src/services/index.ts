@@ -4,7 +4,7 @@
  * For more information about this file, visit https://dove.feathersjs.com/guides/cli/application.html#configure-functions.
  */
 
-// import type { Application } from 'server/core'
+// import type { Application } from '@magickml/agent-server'
 // import { api } from './api/api'
 
 /**

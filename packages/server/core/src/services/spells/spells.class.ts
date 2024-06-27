@@ -11,7 +11,7 @@ import type { Application } from '../../declarations'
 import type { Paginated, Params } from '@feathersjs/feathers'
 import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
 import type { SpellData, SpellPatch, SpellQuery } from './spells.schema'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import { app } from '../../app'
 
 /**

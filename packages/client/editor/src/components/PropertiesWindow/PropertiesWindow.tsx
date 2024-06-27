@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { getNodeSpec } from 'shared/nodeSpec'
+import { getNodeSpec } from '@magickml/node-spec'
 import { Tab, useConfig } from '@magickml/providers'
 import {
   selectEngineRunning,
@@ -12,7 +12,7 @@ import { GraphSocketJSON, NodeSpecJSON } from '@magickml/behave-graph'
 import { Node, useOnSelectionChange } from '@xyflow/react'
 import { useChangeNodeData } from '@magickml/flow-core'
 import { EventStateProperties } from './EventStateProperties'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import { VariableNames } from './variableNames'
 import { ValueType } from './ValueType'
 import { DefaultConfig } from './DefaultConfig'
@@ -26,12 +26,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@magickml/client-ui'
-import { makeEmbedderClient } from '@magickml/embedder/client/ts'
+import { makeEmbedderClient } from '@magickml/embedder-client-ts'
 import toast from 'react-hot-toast'
 import { SubspellSocketConfig } from './SubspellSocketConfig'
 import { SelectSpell } from './SelectSpell'
 
-import { PackSchema } from '@magickml/embedder/schema'
+import { PackSchema } from '@magickml/embedder-schema'
 import { z } from 'zod'
 import { useDispatch, useSelector } from 'react-redux'
 

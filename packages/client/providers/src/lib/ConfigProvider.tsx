@@ -2,7 +2,7 @@
 // Import required dependencies
 import { DEFAULT_PROJECT_ID } from 'clientConfig'
 import { createContext, useContext, useState } from 'react'
-import { ProviderData } from 'servicesShared'
+import { ProviderData } from '@magickml/shared-services'
 
 // Define AppConfig type
 export type AppConfig = {

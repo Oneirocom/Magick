@@ -3,10 +3,10 @@ import {
   AddLoaderSchema,
   authParse,
   idParse,
-} from '@magickml/embedder/schema'
-import { embedderDb, Loader, Pack } from 'embedder-db-pg'
+} from '@magickml/embedder-schema'
+import { embedderDb, Loader, Pack } from '@magickml/embedder-db-pg'
 import { eq, and } from 'drizzle-orm'
-import { useBullMQ, createJob } from '@magickml/embedder/queue'
+import { useBullMQ, createJob } from '@magickml/embedder-queue'
 import { randomUUID } from 'crypto'
 
 export default defineEventHandler(async event => {

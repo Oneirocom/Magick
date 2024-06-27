@@ -2,8 +2,8 @@ import { RawData, WebSocket } from 'ws'
 import express, { Request } from 'express'
 import expressWsConfig from 'express-ws'
 import { LLMDummyMock, RetellRequest, RetellResponse } from './RetellClient'
-import { initApp } from 'server/core'
-import { Agent } from 'server/agents'
+import { initApp } from '@magickml/agent-server'
+import { Agent } from '@magickml/agents'
 
 const app = express()
 

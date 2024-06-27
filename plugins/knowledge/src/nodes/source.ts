@@ -1,7 +1,7 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import { CORE_DEP_KEYS } from 'servicesShared'
-import type { EmbedderClient } from '@magickml/embedder/client/ts'
-import { loaderSchemaMap, LoaderType } from '@magickml/embedder/schema'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
+import type { EmbedderClient } from '@magickml/embedder-client-ts'
+import { loaderSchemaMap, LoaderType } from '@magickml/embedder-schema'
 import { validatePackId } from './shared'
 
 const makeKnowledgeSourceNode = (type: LoaderType) => {

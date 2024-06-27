@@ -1,4 +1,4 @@
-import { RedisPubSub } from 'server/redis-pubsub'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import {
   CompletionResponse,
   CompletionRequest,

@@ -1,0 +1,15 @@
+{
+  "name": "@magickml/shared-services",
+  "version": "0.0.1",
+  "dependencies": {
+    "openai": "^4.29.1",
+    "@magickml/credentials": "file:../../server/credentials",
+    "@magickml/redis-pubsub": "file:../../server/redis-pubsub",
+    "pino": "8.14.1",
+    "tslib": "^2.3.0",
+    "zod": "^3.22.4"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

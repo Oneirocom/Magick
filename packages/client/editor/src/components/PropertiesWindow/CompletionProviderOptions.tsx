@@ -7,7 +7,7 @@ import {
   Model,
   getProvidersWithUserKeys,
   getProviderIdMapping,
-} from 'servicesShared'
+} from '@magickml/shared-services'
 import {
   Select,
   SelectContent,

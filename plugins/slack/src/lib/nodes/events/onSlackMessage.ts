@@ -4,7 +4,7 @@ import {
   type SlackEventPayload,
   type SlackEvents,
 } from '../../configx'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
+import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
 import { NodeCategory } from '@magickml/behave-graph'
 
 type State = {

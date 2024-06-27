@@ -1,5 +1,5 @@
-import { FindPackResponseSchema, idParse } from '@magickml/embedder/schema'
-import { embedderDb } from 'embedder-db-pg'
+import { FindPackResponseSchema, idParse } from '@magickml/embedder-schema'
+import { embedderDb } from '@magickml/embedder-db-pg'
 
 export default defineEventHandler(async event => {
   const packId = idParse(event.context.params?.id)

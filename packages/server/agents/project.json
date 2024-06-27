@@ -1,7 +1,6 @@
 {
   "name": "server/agents",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": [],
   "sourceRoot": "packages/server/agents/src",
   "projectType": "library",
   "targets": {

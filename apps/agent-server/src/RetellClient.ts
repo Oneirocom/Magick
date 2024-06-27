@@ -1,4 +1,4 @@
-import { Agent } from 'server/agents'
+import { Agent } from '@magickml/agents'
 import { WebSocket } from 'ws'
 
 interface Utterance {

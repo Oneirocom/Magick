@@ -3,8 +3,8 @@ import {
   ILifecycleEventEmitter,
   NodeCategory,
 } from '@magickml/behave-graph'
-import { IEventStore, makeMagickEventNodeDefinition } from 'server/grimoire'
-import { CORE_DEP_KEYS, ISharedAgent } from 'servicesShared'
+import { IEventStore, makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { CORE_DEP_KEYS, ISharedAgent } from '@magickml/shared-services'
 
 type State = {
   onTickEvent?: (() => void) | undefined

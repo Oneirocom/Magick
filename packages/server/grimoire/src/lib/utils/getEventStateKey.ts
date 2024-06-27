@@ -1,4 +1,4 @@
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 
 const DEFAULT_EVENT_STATE_PROPERTY = 'channel'
 

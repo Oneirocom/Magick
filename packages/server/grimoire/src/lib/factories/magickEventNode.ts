@@ -10,8 +10,8 @@ import {
   StateReturn,
   makeCommonProps,
 } from '@magickml/behave-graph'
-import { BaseEmitter } from 'server/plugin'
-import { EventPayload, CORE_DEP_KEYS } from 'servicesShared'
+import { BaseEmitter } from '@magickml/agent-plugin'
+import { EventPayload, CORE_DEP_KEYS } from '@magickml/shared-services'
 import { IEventStore } from '../services/eventStore'
 import { getEventStateKey } from '../utils'
 

@@ -1,10 +1,13 @@
 import { SlackEvent as BoltEvents } from '@slack/bolt'
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 import type { App, EventFromType } from '@slack/bolt'
-import { PLUGIN_SETTINGS } from 'shared/config'
-import type { CreateCredentialsRecord, PluginStateType } from 'server/plugin'
-import { PluginCredential } from 'server/credentials'
-import { createEventsEnum } from 'plugins/shared'
+import { PLUGIN_SETTINGS } from '@magickml/server-config'
+import type {
+  CreateCredentialsRecord,
+  PluginStateType,
+} from '@magickml/agent-plugin'
+import { PluginCredential } from '@magickml/credentials'
+import { createEventsEnum } from '@magickml/shared-plugins'
 
 // BASE
 export const slackPluginName = 'slack' as const

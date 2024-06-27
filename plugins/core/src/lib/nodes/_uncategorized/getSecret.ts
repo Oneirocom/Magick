@@ -1,6 +1,6 @@
 import { makeFlowNodeDefinition, NodeCategory } from '@magickml/behave-graph'
-import { type PluginCredentialsManager } from 'server/plugin'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { type PluginCredentialsManager } from '@magickml/agent-plugin'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 export const getSecretNode = makeFlowNodeDefinition({
   typeName: 'agent/getSecret',

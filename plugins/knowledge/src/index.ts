@@ -1,7 +1,7 @@
-import { generateToken } from '@magickml/embedder/auth/token'
-import { makeEmbedderClient } from '@magickml/embedder/client/ts'
-import { BasePlugin, createSimplePluginClass } from 'server/plugin'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { generateToken } from '@magickml/embedder-auth-token'
+import { makeEmbedderClient } from '@magickml/embedder-client-ts'
+import { BasePlugin, createSimplePluginClass } from '@magickml/agent-plugin'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 import { getContext } from './nodes/context'
 import {
   createPack,

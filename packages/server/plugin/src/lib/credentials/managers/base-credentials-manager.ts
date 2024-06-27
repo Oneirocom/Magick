@@ -1,6 +1,6 @@
 import { prismaCore } from '@magickml/server-db'
-import { decrypt } from 'server/credentials'
-import { CREDENTIALS_ENCRYPTION_KEY } from 'shared/config'
+import { decrypt } from '@magickml/credentials'
+import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
 import {
   PluginCredentialsManager,
   PluginCredentialsType,

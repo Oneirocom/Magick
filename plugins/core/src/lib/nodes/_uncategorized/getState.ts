@@ -1,6 +1,6 @@
 import { makeFlowNodeDefinition, NodeCategory } from '@magickml/behave-graph'
-import { type BasePlugin } from 'server/plugin'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { type BasePlugin } from '@magickml/agent-plugin'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 // plan is to not hardcode this and generate it dynamically by what plugins are enabled
 export enum PluginStateChoice {

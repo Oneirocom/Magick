@@ -1,8 +1,8 @@
 import { Zodios, type ZodiosOptions } from '@zodios/core'
 
-import { packEndpoints } from '@magickml/embedder/api/packs'
-import { loaderEndpoints } from '@magickml/embedder/api/loaders'
-import { jobEndpoints } from '@magickml/embedder/api/jobs'
+import { packEndpoints } from '@magickml/embedder-api-packs'
+import { loaderEndpoints } from '@magickml/embedder-api-loaders'
+import { jobEndpoints } from '@magickml/embedder-api-jobs'
 
 export function createEmbedderClient(baseUrl: string, options?: ZodiosOptions) {
   return new Zodios(

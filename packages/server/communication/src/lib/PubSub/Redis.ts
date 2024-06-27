@@ -1,4 +1,4 @@
-import { RedisPubSub } from 'server/redis-pubsub'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import { PubSub } from './PubSub'
 
 export class RedisPubSubWrapper extends PubSub {

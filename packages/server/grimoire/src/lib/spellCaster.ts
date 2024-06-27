@@ -15,17 +15,21 @@ import {
   makeGraphApi,
   IStateService,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
-import { SpellInterface } from 'server/schemas'
-import { CORE_DEP_KEYS, EventPayload, ISharedAgent } from 'servicesShared'
-import { getLogger } from 'server/logger'
-import { AGENT_SPELL, AGENT_SPELL_STATE } from 'communication'
-import { PluginManager } from 'server/pluginManager'
+import { SpellInterface } from '@magickml/agent-server-schemas'
+import {
+  CORE_DEP_KEYS,
+  EventPayload,
+  ISharedAgent,
+} from '@magickml/shared-services'
+import { getLogger } from '@magickml/server-logger'
+import { AGENT_SPELL, AGENT_SPELL_STATE } from '@magickml/agent-communication'
+import { PluginManager } from '@magickml/agent-plugin-manager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
 import lodash from 'lodash'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { AgentLike } from 'server/command-hub'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { AgentLike } from '@magickml/agent-command-hub'
 
 export type SocketData = {
   socketName: string

@@ -11,7 +11,7 @@ import useFilteredAndGroupedNodes from './useFilteredAndGroupedNodes'
 import { autoCompleteSearchTerm } from './autoCompleteSearchTerm'
 import { NodePickerProps } from './types'
 import { Input } from '@magickml/client-ui'
-import { getNodeSpec } from 'shared/nodeSpec'
+import { getNodeSpec } from '@magickml/node-spec'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 import { NodeSpecJSON } from '@magickml/behave-graph'
 

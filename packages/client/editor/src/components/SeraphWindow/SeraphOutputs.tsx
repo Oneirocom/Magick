@@ -5,7 +5,7 @@ import {
   Ouroboros,
 } from '@magickml/icons'
 
-import { SeraphFunction } from 'servicesShared'
+import { SeraphFunction } from '@magickml/shared-services'
 
 export const Info = (message: string): JSX.Element => {
   return (

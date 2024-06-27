@@ -1,14 +1,14 @@
 import React from 'react'
 import { NodeLock } from '@magickml/icons'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { AgentInterface } from 'server/schemas'
+import { AgentInterface } from '@magickml/agent-server-schemas'
 import {
   Avatar,
   AvatarImage,
   Checkbox,
   DropdownMenuItem,
 } from '@magickml/client-ui'
-import { defaultImage } from 'shared/utils'
+import { defaultImage } from '@magickml/utils'
 
 const AgentListItem = ({
   agent,

@@ -1,6 +1,6 @@
 import { UploadIcon } from '@radix-ui/react-icons'
 import { cn } from '@magickml/client-ui'
-import { getAcceptAttribute } from 'servicesShared'
+import { getAcceptAttribute } from '@magickml/shared-services'
 
 type KnowledgeUploadInputProps = {
   inputProps: React.ComponentProps<'input'>

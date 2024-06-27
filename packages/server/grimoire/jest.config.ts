@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'server/grimoire',
+  displayName: '@magickml/grimoire',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

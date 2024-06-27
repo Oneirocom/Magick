@@ -3,7 +3,7 @@ import { InputData, SpellCaster } from '../../spellCaster'
 import { makeMagickEventNodeDefinition } from '../../factories/magickEventNode'
 import { BASE_DEP_KEYS, INPUT_EVENT } from '../../constants'
 import { IEventStore } from '../../services/eventStore'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 type State = {
   onSpellCasterEvent?: ((data: InputData) => void) | undefined

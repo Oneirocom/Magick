@@ -1,13 +1,17 @@
 import { EventEmitter } from 'events'
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
-import { getLogger } from 'server/logger'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import { SeraphCore, SeraphOptions } from '@magickml/seraph'
-import { ISeraphEvent, SeraphEventTypes, SeraphEvents } from 'servicesShared'
-import { AGENT_SERAPH_EVENT } from 'communication'
-import { CommandHub } from 'server/command-hub'
-import { Application } from 'server/core'
+import {
+  ISeraphEvent,
+  SeraphEventTypes,
+  SeraphEvents,
+} from '@magickml/shared-services'
+import { AGENT_SERAPH_EVENT } from '@magickml/agent-communication'
+import { CommandHub } from '@magickml/agent-command-hub'
+import { Application } from '@magickml/agent-server'
 import { GetNodeSpec } from './cognitiveFunctions/getNodeSpec'
 
 const initialPrompt = `You are an artificial intelligence named Seraph inside of an environment called Magick. Magick is a visual programming environment which builds graphs. These graphs run on agents and utilize the Magick Engine. Agents are event processing entities which consume events via plugins and trigger graphs to execute via a spellcaster. Spells are graphs in Magick.

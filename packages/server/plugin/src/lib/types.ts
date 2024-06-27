@@ -1,4 +1,4 @@
-import { PluginCredential } from 'server/credentials'
+import { PluginCredential } from '@magickml/credentials'
 import { PluginCommandInfo } from './commands/command-manager'
 
 /**

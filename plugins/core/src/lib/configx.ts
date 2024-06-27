@@ -2,11 +2,11 @@ import { z } from 'zod'
 import {
   type ExtractPluginCredentialNames,
   type PluginStateType,
-} from 'server/plugin'
-import { EventPayload } from 'servicesShared'
-import { PluginCredential } from 'server/credentials'
-import { createEventsEnum } from 'plugins/shared'
-import { EventTypes } from 'communication'
+} from '@magickml/agent-plugin'
+import { EventPayload } from '@magickml/shared-services'
+import { PluginCredential } from '@magickml/credentials'
+import { createEventsEnum } from '@magickml/shared-plugins'
+import { EventTypes } from '@magickml/agent-communication'
 
 // BASE
 export const corePluginName = 'core' as const

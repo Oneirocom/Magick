@@ -1,7 +1,7 @@
-import { CoreEventsPlugin } from 'server/plugin'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { SpellCaster } from 'server/grimoire'
-import { DATABASE_URL } from 'shared/config'
+import { CoreEventsPlugin } from '@magickml/agent-plugin'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { SpellCaster } from '@magickml/grimoire'
+import { DATABASE_URL } from '@magickml/server-config'
 
 import { CoreLLMService } from './services/coreLLMService/coreLLMService'
 import { messageEvent } from './nodes/events/messageEvent'
@@ -45,7 +45,7 @@ import {
   type CorePluginState,
   type CoreWebhookPayload,
 } from './config'
-import { EventTypes } from 'communication'
+import { EventTypes } from '@magickml/agent-communication'
 import { delay } from './nodes/time/delay'
 import { queryEventHistory } from './nodes/events/eventHistory'
 import { webhookEventNode } from './nodes/events/onWebhook'
@@ -85,7 +85,7 @@ import {
   CORE_DEP_KEYS,
   EventPayload,
   LLMProviderKeys,
-} from 'servicesShared'
+} from '@magickml/shared-services'
 import { arrayAccess } from './values/Array/Access'
 import { flowSplit } from './nodes/flow/split'
 import { onVariableChanged } from './nodes/events/onVariableChanged'

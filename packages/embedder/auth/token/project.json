@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/embedder/auth/token",
+  "name": "embedder/auth/token",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/auth/token/src",
   "projectType": "library",

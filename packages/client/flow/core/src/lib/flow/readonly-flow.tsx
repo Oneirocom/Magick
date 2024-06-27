@@ -2,10 +2,10 @@
 
 import React, { useMemo } from 'react'
 import { type Tab } from '@magickml/providers'
-import { SpellInterfaceWithGraph } from 'server/schemas'
+import { SpellInterfaceWithGraph } from '@magickml/agent-server-schemas'
 import { BaseFlow } from './base-flow'
 import { useCustomNodeTypes } from '../hooks'
-import { getNodeSpec } from 'shared/nodeSpec'
+import { getNodeSpec } from '@magickml/node-spec'
 import { behaveToFlow } from '../utils/transformers/behaveToFlow'
 
 type ReadOnlyFlowProps = {

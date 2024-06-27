@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import { BasePluginInit } from '../basePlugin'
-import { PluginStateType } from 'plugin-state'
-import { EventPayload } from 'servicesShared'
+import { PluginStateType } from '@magickml/agent-plugin-state'
+import { EventPayload } from '@magickml/shared-services'
 import { PluginCredentialsType } from '../credentials'
 import { CoreEventsPlugin } from '../coreEventsPlugin'
 

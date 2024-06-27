@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 import { EventEmitter } from 'events'
-import { BasePlugin } from 'server/plugin'
+import { BasePlugin } from '@magickml/agent-plugin'
 import { IRegistry } from '@magickml/behave-graph'
 import pino from 'pino'
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 import Redis from 'ioredis'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { AgentLike, CommandHub } from 'server/command-hub'
-import { EventPayload } from 'servicesShared'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { AgentLike, CommandHub } from '@magickml/agent-command-hub'
+import { EventPayload } from '@magickml/shared-services'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.

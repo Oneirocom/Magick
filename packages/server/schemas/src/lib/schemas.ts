@@ -1,6 +1,6 @@
 // DOCUMENTED
 import { Static, Type } from '@feathersjs/typebox'
-import { SeraphEvents } from 'servicesShared'
+import { SeraphEvents } from '@magickml/shared-services'
 import type {
   GraphJSON,
   NodeJSON,

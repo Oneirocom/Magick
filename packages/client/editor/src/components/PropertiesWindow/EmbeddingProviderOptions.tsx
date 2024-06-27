@@ -7,7 +7,7 @@ import {
   getProvidersWithUserKeys,
   groupModelsByProvider,
   isModelAvailableToUser,
-} from 'servicesShared'
+} from '@magickml/shared-services'
 import {
   Select,
   SelectContent,

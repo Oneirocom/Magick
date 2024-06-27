@@ -7,7 +7,7 @@ import { IEventStore } from '../../services/eventStore'
 import { INPUT_EVENT, OUTPUT_EVENT } from '../../constants'
 import { makeMagickAsyncNodeDefinition } from '../../factories/magickAsyncNode'
 import { OutputData, SocketData, SpellCaster } from '../../spellCaster'
-import { ISharedAgent, CORE_DEP_KEYS } from 'servicesShared'
+import { ISharedAgent, CORE_DEP_KEYS } from '@magickml/shared-services'
 
 type InitialState = {
   handler: ((result: OutputData) => void) | undefined

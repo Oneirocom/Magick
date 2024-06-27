@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'plugins/shared',
+  displayName: '@magickml/shared-plugins',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

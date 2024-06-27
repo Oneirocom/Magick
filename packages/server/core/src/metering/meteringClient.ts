@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { OPENMETER } from 'shared/config'
-import { getLogger } from 'server/logger'
+import { OPENMETER } from '@magickml/server-config'
+import { getLogger } from '@magickml/server-logger'
 import { v4 as uuidv4 } from 'uuid'
 
 /**

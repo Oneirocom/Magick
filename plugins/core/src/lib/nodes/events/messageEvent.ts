@@ -1,7 +1,7 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { EventPayload } from 'servicesShared'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
-import { EventTypes } from 'communication'
+import { EventPayload } from '@magickml/shared-services'
+import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { EventTypes } from '@magickml/agent-communication'
 import { corePluginName } from '../../config'
 
 type State = {

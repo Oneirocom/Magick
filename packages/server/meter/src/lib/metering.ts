@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import { getLogger } from 'server/logger'
-import { OPENMETER } from 'shared/config'
+import { getLogger } from '@magickml/server-logger'
+import { OPENMETER } from '@magickml/server-config'
 import { Event } from '@openmeter/sdk'
 
 export type MeterData = Record<

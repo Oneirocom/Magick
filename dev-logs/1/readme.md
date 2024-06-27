@@ -9,8 +9,8 @@ We have some base ones setup, but each plugin can register its own specific ones
 
 ```typescript
 // config/commands.ts
-import { type PluginCommandInfo } from 'server/plugin'
-import { basePluginCommands } from 'server/plugin'
+import { type PluginCommandInfo } from '@magickml/agent-plugin'
+import { basePluginCommands } from '@magickml/agent-plugin'
 
 const customCommand: PluginCommandInfo = {
   commandName: 'customCommand',
@@ -97,7 +97,7 @@ model pluginState {
 
 ```typescript
 // in config/state.ts
-import type { PluginStateType } from 'plugin-state'
+import type { PluginStateType } from '@magickml/agent-plugin-state'
 
 // setup context with username from platofrm (ex: discord bot' username)
 export type MyAgentContext = {
@@ -288,7 +288,7 @@ Validation and handling of the payload (ex: signing-secrets) is to be implemente
 The baseCommands have been updated to include the webhook, but should be extended with the correct type. Here is how you would want your plugins webhook.ts to look like:
 
 ```typescript
-import { EventPayload, WebhookPayload } from 'server/plugin'
+import { EventPayload, WebhookPayload } from '@magickml/agent-plugin'
 import { corePluginName } from './constants'
 
 type ValidPayload = {
@@ -315,6 +315,7 @@ curl -
 "content":"hello"}
 
 ```
+
 If your plugin was a integrating a third party via webhooks you would then use CoreWebhookEventPayload anywhere you would use EventPayload.
 
 I think abstacting some of this handling into BasePlugin would be a good idea, but for now you can see the implementation in the core plugin.
@@ -322,6 +323,7 @@ I think abstacting some of this handling into BasePlugin would be a good idea, b
 ![onWebhook node](./onWebhookNode.png)
 
 ## New Plugin Abstraction
+
 Named `WebSocketPlugin` at the moment, is a abstraction over CoreEventsPlugin that standardizes/simplifies the logic of discord/slack like plugins. I'm not going to go into much detail, because the file itself is well documented so take a look!
 It abstracts away much of:
 
@@ -333,7 +335,8 @@ It abstracts away much of:
 
 Which turns the actual Slack and Discord plugins into mostly config, type definitions and the actual nodes.
 
+##
 
-##  
-##  
+##
+
 Note: I haven't fully integrated all of these features into the core plugin yet beyond updating what needed to be and setting up its creds/state/commands files. I've spent the least amount of time in the core plugin, so you guys would know best but i believe there's a lot of things here it can take advantage from via usage/more abstraction. For example we can simplify and outright remove much of the credentials logic from there now, etc.

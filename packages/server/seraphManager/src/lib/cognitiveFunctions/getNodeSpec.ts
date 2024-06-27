@@ -1,5 +1,5 @@
 import { BaseCognitiveFunction } from '@magickml/seraph'
-import { getNodeSpec } from 'shared/nodeSpec'
+import { getNodeSpec } from '@magickml/node-spec'
 
 const functionDefinition = {
   name: 'getNodeSpec',

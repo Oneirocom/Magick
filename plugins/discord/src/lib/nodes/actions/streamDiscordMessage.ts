@@ -1,12 +1,12 @@
-import { createActionNode } from 'plugins/shared'
-import { EventPayload } from 'servicesShared'
+import { createActionNode } from '@magickml/shared-plugins'
+import { EventPayload } from '@magickml/shared-services'
 import {
   type DiscordEventPayload,
   DISCORD_DEPENDENCIES,
   type SendMessage,
 } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
-import { IEventStore } from 'server/grimoire'
+import { IEventStore } from '@magickml/grimoire'
 import { Client } from 'discord.js'
 
 type Inputs = {

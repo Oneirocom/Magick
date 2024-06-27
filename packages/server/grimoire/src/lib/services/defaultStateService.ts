@@ -4,7 +4,7 @@ import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 
 import { EventStore, IEventStore } from './eventStore'
-import { EventPayload, CORE_DEP_KEYS } from 'servicesShared'
+import { EventPayload, CORE_DEP_KEYS } from '@magickml/shared-services'
 
 export class DefaultStateService implements IStateService {
   private stateStore: Record<string, any>

@@ -1,4 +1,4 @@
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 import { DiscordAgentContext, type DiscordEventPayload } from '../configx'
 import Natural from 'natural'
 

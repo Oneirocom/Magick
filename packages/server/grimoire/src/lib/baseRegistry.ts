@@ -10,7 +10,7 @@ import {
 import Redis from 'ioredis'
 import { EventStore } from './services/eventStore'
 import { KeyvStateService } from './services/keyvStateService'
-import { EventPayload, ISharedAgent } from 'servicesShared'
+import { EventPayload, ISharedAgent } from '@magickml/shared-services'
 import { ISpellcasterAgent, SpellCaster } from './spellCaster'
 import { runSubspell } from './nodes/subspells/subspell'
 import { BASE_DEP_KEYS } from './constants'

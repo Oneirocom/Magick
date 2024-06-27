@@ -1,5 +1,5 @@
 {
-  "name": "embedder-db-pg",
+  "name": "embedder/db/pg",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/db/pg/src",
   "projectType": "library",

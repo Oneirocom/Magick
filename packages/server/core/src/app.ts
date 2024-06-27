@@ -16,18 +16,19 @@ import pino from 'pino'
 import Redis from 'ioredis'
 import Keyv from 'keyv'
 
-import { RedisPubSub } from 'server/redis-pubsub'
+import { prismaCore } from '@magickml/server-db'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import {
   REDIS_URL,
   API_ACCESS_KEY,
   PAGINATE_MAX,
   PAGINATE_DEFAULT,
   DATABASE_URL,
-} from 'shared/config'
-import { createPosthogClient } from 'server/event-tracker'
-import { getLogger } from 'server/logger'
-import { CredentialsManager } from 'server/credentials'
-import { stringify } from 'shared/utils'
+} from '@magickml/server-config'
+import { createPosthogClient } from '@magickml/server-event-tracker'
+import { getLogger } from '@magickml/server-logger'
+import { CredentialsManager } from '@magickml/credentials'
+import { stringify } from '@magickml/utils'
 import { AgentCommander } from '@magickml/agent-commander'
 
 import { dbClient } from './dbClient'
@@ -43,7 +44,6 @@ import {
   MemoryRetrieval,
   MemoryStorageMiddleware,
   SeraphCore,
-  importPrivatePrompts,
 } from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
 
@@ -68,6 +68,7 @@ declare module './declarations' {
     posthog: ReturnType<typeof createPosthogClient>
     credentialsManager: CredentialsManager
     seraphCore: SeraphCore
+    prisma: typeof prismaCore
     keyv: Keyv
   }
 }
@@ -80,8 +81,7 @@ export async function initApp(environment: Environment = 'default') {
   const credentialsManager = new CredentialsManager()
   app.set('credentialsManager', credentialsManager)
 
-  const prompt =
-    (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
+  const prompt = 'You are seraph, a helpful AI angel.'
 
   const seraph = new SeraphCore({
     prompt,
@@ -137,6 +137,8 @@ export async function initApp(environment: Environment = 'default') {
       deserialize: JSON.parse,
     })
   )
+
+  app.set('prisma', prismaCore)
 
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub(REDIS_URL as string)

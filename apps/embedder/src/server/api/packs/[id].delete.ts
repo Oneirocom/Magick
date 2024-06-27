@@ -1,5 +1,5 @@
-import { idParse } from '@magickml/embedder/schema'
-import { embedderDb, Pack } from 'embedder-db-pg'
+import { idParse } from '@magickml/embedder-schema'
+import { embedderDb, Pack } from '@magickml/embedder-db-pg'
 import { eq } from 'drizzle-orm'
 
 export default defineEventHandler(async event => {

@@ -8,9 +8,9 @@ import {
   type ValueType,
   type ValueTypeMap,
 } from '@magickml/behave-graph'
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 import { BaseEmitter } from './baseEmitter'
-import type { PluginCredential } from 'server/credentials'
+import type { PluginCredential } from '@magickml/credentials'
 import type { BasePluginConfig } from './types'
 
 // MANAGERS
@@ -38,9 +38,13 @@ import {
   AWS_ACCESS_KEY,
   AWS_REGION,
   AWS_BUCKET_NAME,
-} from 'shared/config'
+} from '@magickml/server-config'
 // nx-ignore-next-line
-import { ActionPayload, EventFormat, EventPayload } from 'servicesShared'
+import {
+  ActionPayload,
+  EventFormat,
+  EventPayload,
+} from '@magickml/shared-services'
 // import type { Agent, SpellCaster } from 'packages/server/grimoire/src'
 
 type Agent = any

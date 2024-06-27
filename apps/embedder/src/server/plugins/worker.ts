@@ -1,4 +1,4 @@
 //@ts-expect-error
-import { embedderWorkerPlugin } from '@magickml/embedder/worker'
+import { embedderWorkerPlugin } from '@magickml/embedder-worker'
 
 export default embedderWorkerPlugin

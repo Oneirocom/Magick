@@ -1,4 +1,13 @@
 {
-  "name": "@magickmlgc/embedder-client-react",
-  "version": "6.0.0"
+  "name": "@magickml/embedder-client-react",
+  "version": "0.0.1",
+  "dependencies": {
+    "@magickml/embedder-client-ts": "file:../ts",
+    "@zodios/core": "^10.9.6",
+    "@zodios/react": "^10.4.5",
+    "vite": "5.0.12",
+    "@vitejs/plugin-react": "4.2.1",
+    "vite-plugin-dts": "~3.8.1",
+    "@nx/vite": "19.2.1"
+  }
 }

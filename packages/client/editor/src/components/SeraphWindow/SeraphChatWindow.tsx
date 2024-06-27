@@ -18,7 +18,11 @@ import { SeraphChatInput } from './SeraphChatInput'
 import { SeraphChatHistory } from './SeraphChatHistory'
 import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
-import { ISeraphEvent, SeraphEvents, SeraphRequest } from 'servicesShared'
+import {
+  ISeraphEvent,
+  SeraphEvents,
+  SeraphRequest,
+} from '@magickml/shared-services'
 import SeraphTopBar from './SeraphTopBar'
 
 const SeraphChatWindow = props => {

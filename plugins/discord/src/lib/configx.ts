@@ -1,4 +1,4 @@
-import { createEventsEnum } from 'plugins/shared'
+import { createEventsEnum } from '@magickml/shared-plugins'
 import {
   ClientEvents,
   ColorResolvable,
@@ -6,13 +6,16 @@ import {
   GatewayIntentBits,
   User,
 } from 'discord.js'
-import { PLUGIN_SETTINGS } from 'shared/config'
+import { PLUGIN_SETTINGS } from '@magickml/server-config'
 import { APIMessage, APIReaction } from 'discord-api-types/v10'
-import { CreateCredentialsRecord, PluginStateType } from 'server/plugin'
+import {
+  CreateCredentialsRecord,
+  PluginStateType,
+} from '@magickml/agent-plugin'
 
-import { EventPayload } from 'servicesShared'
-import { PluginCredential } from 'server/credentials'
-import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { EventPayload } from '@magickml/shared-services'
+import { PluginCredential } from '@magickml/credentials'
+import { SEND_MESSAGE, STREAM_MESSAGE } from '@magickml/agent-communication'
 
 // BASE
 export const discordPluginName = 'discord' as const

@@ -4,13 +4,13 @@ import {
   NodeCategory,
   SocketsList,
 } from '@magickml/behave-graph'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 import {
   VariableService,
   VariableServiceEvents,
 } from '../../services/variableService'
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 
 type State = {
   onVariableChangedEvent?: VariableServiceEvents['variableChanged'] | undefined

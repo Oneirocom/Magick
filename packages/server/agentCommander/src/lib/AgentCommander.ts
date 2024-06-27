@@ -4,10 +4,10 @@ import {
   AGENT_COMMAND,
   AGENT_COMMAND_PROJECT,
   AGENT_MESSAGE,
-} from 'communication'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { getLogger } from 'server/logger'
-import { EventPayload, ISeraphEvent } from 'servicesShared'
+} from '@magickml/agent-communication'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
+import { EventPayload, ISeraphEvent } from '@magickml/shared-services'
 
 import { v4 as uuidv4 } from 'uuid'
 import type pino from 'pino'
