@@ -1,8 +1,8 @@
 {
   "name": "@magickml/agent-plugin-state",
-  "version": "0.0.10-0",
+  "version": "0.0.10-1",
   "dependencies": {
-    "@magickml/server-db": "0.0.10-0",
+    "@magickml/server-db": "0.0.10-1",
     "uuid": "^9.0.0",
     "tslib": "^2.3.0"
   },
