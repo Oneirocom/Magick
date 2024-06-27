@@ -1,6 +1,6 @@
 {
   "name": "@magickml/slack-plugin",
-  "version": "0.0.8-0",
+  "version": "0.0.9-0",
   "dependencies": {
     "@slack/bolt": "^3.17.0",
     "typed-emitter": "^2.1.0",
@@ -8,15 +8,15 @@
     "pino": "8.14.1",
     "ioredis": "^5.3.2",
     "tslib": "^2.3.0",
-    "@magickml/agent-plugin": "0.0.8-0",
-    "@magickml/credentials": "0.0.8-0",
-    "@magickml/grimoire": "0.0.8-0",
-    "@magickml/redis-pubsub": "0.0.8-0",
-    "@magickml/server-config": "0.0.8-0",
-    "@magickml/server-logger": "0.0.8-0",
-    "@magickml/shared-services": "0.0.8-0",
-    "@magickml/core-plugin": "0.0.8-0",
-    "@magickml/shared-plugins": "0.0.8-0"
+    "@magickml/agent-plugin": "0.0.9-0",
+    "@magickml/credentials": "0.0.9-0",
+    "@magickml/grimoire": "0.0.9-0",
+    "@magickml/redis-pubsub": "0.0.9-0",
+    "@magickml/server-config": "0.0.9-0",
+    "@magickml/server-logger": "0.0.9-0",
+    "@magickml/shared-services": "0.0.9-0",
+    "@magickml/core-plugin": "0.0.9-0",
+    "@magickml/shared-plugins": "0.0.9-0"
   },
   "type": "commonjs",
   "main": "./src/index.js",
