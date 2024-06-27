@@ -1,6 +1,6 @@
 {
   "name": "@magickml/portal-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "tslib": "^2.3.0",
     "@magickml/portal-server-router": "0.0.1",

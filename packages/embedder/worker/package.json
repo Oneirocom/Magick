@@ -1,9 +1,9 @@
 {
   "name": "@magickml/embedder-worker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
-    "@magickml/embedder-config": "0.0.2",
-    "@magickml/embedder-queue": "0.0.2",
+    "@magickml/embedder-config": "0.0.3",
+    "@magickml/embedder-queue": "0.0.3",
     "bullmq": "4.6.0",
     "nitropack": "^2.9.6",
     "tslib": "^2.3.0"
