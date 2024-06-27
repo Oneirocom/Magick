@@ -1,5 +1,5 @@
 import { type BasePluginInit } from '@magickml/agent-plugin'
-import { type CorePluginEvents } from 'plugins/core'
+import { type CorePluginEvents } from '@magickml/core-plugin'
 import { EventPayload, ActionPayload } from '@magickml/shared-services'
 import {
   ChannelType,

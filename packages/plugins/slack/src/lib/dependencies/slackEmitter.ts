@@ -1,4 +1,4 @@
-import { EmitterFactory, CreateMessageEvents } from 'plugins/shared'
+import { EmitterFactory, CreateMessageEvents } from '@magickml/shared-plugins'
 import TypedEmitter from 'typed-emitter'
 import { SLACK_EVENTS } from '../configx'
 

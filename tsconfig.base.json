@@ -220,11 +220,11 @@
       "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
       "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
-      "plugins/core": ["packages/plugins/core/src/index.ts"],
+      "@magickml/core-plugin": ["packages/plugins/core/src/index.ts"],
       "plugins/discord": ["packages/plugins/discord/src/index.ts"],
-      "plugins/knowledge": ["packages/plugins/knowledge/src/index.ts"],
-      "plugins/shared": ["packages/plugins/shared/src/index.ts"],
-      "plugins/slack": ["packages/plugins/slack/src/index.ts"],
+      "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
+      "@magickml/shared-plugins": ["packages/plugins/shared/src/index.ts"],
+      "@magickml/slack-plugin": ["packages/plugins/slack/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
       ],

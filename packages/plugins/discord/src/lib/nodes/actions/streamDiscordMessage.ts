@@ -1,4 +1,4 @@
-import { createActionNode } from 'plugins/shared'
+import { createActionNode } from '@magickml/shared-plugins'
 import { EventPayload } from '@magickml/shared-services'
 import {
   type DiscordEventPayload,
