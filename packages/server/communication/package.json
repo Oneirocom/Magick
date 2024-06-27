@@ -1,6 +1,6 @@
 {
   "name": "@magickml/server-communication",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {},
   "type": "commonjs",
   "main": "./src/index.js",

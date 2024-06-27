@@ -1,9 +1,9 @@
 {
   "name": "@magickml/agent-command-hub",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "@magickml/agent-communication": "file:../../shared/communcation",
-    "@magickml/redis-pubsub": "0.0.2",
+    "@magickml/redis-pubsub": "0.0.3",
     "tslib": "^2.3.0"
   },
   "type": "commonjs",

@@ -1,6 +1,6 @@
 {
   "name": "@magickml/utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "@feathersjs/feathers": "5.0.25",
     "@magickml/behave-graph": "^0.14.1",
