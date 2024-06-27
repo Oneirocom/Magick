@@ -1,12 +1,12 @@
 {
   "name": "@magickml/embedder-auth-plugin",
-  "version": "0.0.9-1",
+  "version": "0.0.10-0",
   "dependencies": {
     "jsonwebtoken": "9.0.2",
     "h3": "^1.11.1",
     "zod": "^3.22.4",
     "nitropack": "^2.9.6",
-    "@magickml/embedder-config": "0.0.9-1",
+    "@magickml/embedder-config": "0.0.10-0",
     "tslib": "^2.3.0"
   }
 }
