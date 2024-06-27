@@ -10,7 +10,7 @@ import { useAtom } from 'jotai'
 import { addKnowledgeDialogAtom, addKnowledgeFormAtom } from './state'
 import toast from 'react-hot-toast'
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
-import { LoaderType } from '@magickml/embedder/schema'
+import { LoaderType } from '@magickml/embedder-schemas'
 
 type KnowledgeUploadContentProps = {
   disabledState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
