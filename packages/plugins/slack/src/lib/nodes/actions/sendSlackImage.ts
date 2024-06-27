@@ -1,4 +1,4 @@
-import { createActionNode } from 'plugins/shared'
+import { createActionNode } from '@magickml/shared-plugins'
 import { type SlackEventPayload, SLACK_DEPENDENCIES } from '../../configx'
 import { SocketDefinition } from '@magickml/behave-graph'
 import { IEventStore } from '@magickml/grimoire'

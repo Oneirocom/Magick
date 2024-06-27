@@ -14,7 +14,7 @@ import {
   sendSlackAudio,
 } from './nodes'
 import { WebSocketPlugin } from '@magickml/agent-plugin'
-import { type CorePluginEvents } from 'plugins/core'
+import { type CorePluginEvents } from '@magickml/core-plugin'
 import Bolt, {
   type AllMiddlewareArgs,
   type MessageEvent,

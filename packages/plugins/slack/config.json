@@ -1,5 +1,5 @@
 {
   "name": "slack",
-  "packageName": "plugins/slack",
+  "packageName": "@magickml/slack-plugin",
   "main": "./src/lib/slackPlugin.ts"
 }

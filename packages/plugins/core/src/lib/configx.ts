@@ -5,7 +5,7 @@ import {
 } from '@magickml/agent-plugin'
 import { EventPayload } from '@magickml/shared-services'
 import { PluginCredential } from '@magickml/credentials'
-import { createEventsEnum } from 'plugins/shared'
+import { createEventsEnum } from '@magickml/shared-plugins'
 import { EventTypes } from '@magickml/agent-communication'
 
 // BASE

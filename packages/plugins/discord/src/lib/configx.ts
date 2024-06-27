@@ -1,4 +1,4 @@
-import { createEventsEnum } from 'plugins/shared'
+import { createEventsEnum } from '@magickml/shared-plugins'
 import {
   ClientEvents,
   ColorResolvable,

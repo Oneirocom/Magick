@@ -1,5 +1,5 @@
 {
-  "name": "plugins/core",
+  "name": "@magickml/core-plugin",
   "version": "0.0.10-1",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.7",
@@ -29,7 +29,6 @@
     "langchain": "^0.2.0",
     "pino": "8.14.1",
     "rambdax": "^10.1.0",
-    "tslib": "^2.3.0",
     "typed-emitter": "^2.1.0",
     "uuid": "^9.0.0",
     "zod": "^3.22.4",

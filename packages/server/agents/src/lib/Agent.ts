@@ -27,10 +27,10 @@ import TypedEmitter from 'typed-emitter'
 import { Spellbook } from '@magickml/grimoire'
 import { AgentLoggingService } from './AgentLogger'
 
-import CorePlugin from 'plugins/core'
-import KnowledgePlugin from 'plugins/knowledge'
+import CorePlugin from '@magickml/core-plugin'
+import KnowledgePlugin from '@magickml/knowledge-plugin'
 import DiscordPlugin from 'plugins/discord'
-import SlackPlugin from 'plugins/slack'
+import SlackPlugin from '@magickml/slack-plugin'
 
 export type RequestPayload = {
   projectId: string

@@ -1,5 +1,5 @@
 {
-  "name": "plugins/slack",
+  "name": "@magickml/slack-plugin",
   "version": "0.0.10-1",
   "dependencies": {
     "@slack/bolt": "^3.17.0",

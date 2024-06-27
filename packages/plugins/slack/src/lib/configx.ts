@@ -7,7 +7,7 @@ import type {
   PluginStateType,
 } from '@magickml/agent-plugin'
 import { PluginCredential } from '@magickml/credentials'
-import { createEventsEnum } from 'plugins/shared'
+import { createEventsEnum } from '@magickml/shared-plugins'
 
 // BASE
 export const slackPluginName = 'slack' as const
