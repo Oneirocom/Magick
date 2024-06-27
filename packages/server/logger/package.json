@@ -1,6 +1,6 @@
 {
   "name": "@magickml/server-logger",
-  "version": "0.0.9-0",
+  "version": "0.0.9-1",
   "dependencies": {
     "pino": "8.14.1",
     "pino-pretty": "10.0.0",
