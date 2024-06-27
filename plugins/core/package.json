@@ -10,7 +10,7 @@
     "@magickml/agent-plugin": "0.0.7",
     "@magickml/behave-graph": "^0.14.14",
     "@magickml/credentials": "0.0.7",
-    "@magickml/embedder-client-ts": "0.0.5",
+    "@magickml/embedder-client-ts": "0.0.7",
     "@magickml/grimoire": "0.0.7",
     "@magickml/redis-pubsub": "0.0.7",
     "@magickml/server-config": "0.0.7",
