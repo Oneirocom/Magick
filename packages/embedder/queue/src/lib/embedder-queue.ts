@@ -114,7 +114,7 @@ export async function processEmbedJob(jobId: string) {
       .build()
 
     for (const loader of loaders) {
-      const { type, ...rest } = loader
+      const { type } = loader
       consola.info(
         `[processEmbedJob] type: ${type}, loader: ${JSON.stringify(
           loader,
@@ -122,7 +122,6 @@ export async function processEmbedJob(jobId: string) {
           2
         )}`
       )
-
       const res = await app.addLoader(createLoader(loader))
 
       consola.success(
