@@ -227,7 +227,6 @@
       "hailmary": ["portal/cloud/packages/hailmary/src/index.ts"],
       "hailmary/server": ["portal/cloud/packages/hailmary/src/server.ts"],
       "ideClient": ["portal/cloud/packages/ideClient/src/index.ts"],
-      "portal-client": ["packages/server/portal-client/src/index.ts"],
       "server/cloud-agent-manager": [
         "packages/server/cloud-agent-manager/src/index.ts"
       ],
