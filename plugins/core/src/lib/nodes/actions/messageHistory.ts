@@ -1,5 +1,5 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import { IEventStore } from 'server/grimoire'
+import { IEventStore } from '@magickml/grimoire'
 
 export const getMessageHistory = makeFlowNodeDefinition({
   typeName: 'queries/messages/getMessageHistory',

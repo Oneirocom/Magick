@@ -1,0 +1,13 @@
+{
+  "name": "@magickml/agent-server-schemas",
+  "version": "0.0.1",
+  "dependencies": {
+    "@feathersjs/typebox": "5.0.25",
+    "@magickml/behave-graph": "^0.14.14",
+    "@magickml/shared-services": "file:../../shared/servicesShared",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

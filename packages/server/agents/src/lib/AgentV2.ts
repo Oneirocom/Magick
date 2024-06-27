@@ -5,25 +5,29 @@ import {
   AGENT_PONG,
   AGENT_LOG,
   AGENT_SERAPH_EVENT,
-} from 'communication'
-import { Application } from 'server/core'
-import { getLogger } from 'server/logger'
-import { EventMetadata } from 'server/event-tracker'
-import { Spellbook } from 'server/grimoire'
-import { AgentInterface } from 'server/schemas'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { PluginManager } from 'server/pluginManager'
-import { CommandHub } from 'server/command-hub'
-import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
-import { ActionPayload, EventPayload, ISeraphEvent } from 'servicesShared'
+} from '@magickml/agent-communication'
+import { Application } from '@magickml/agent-server'
+import { getLogger } from '@magickml/server-logger'
+import { EventMetadata } from '@magickml/server-event-tracker'
+import { Spellbook } from '@magickml/grimoire'
+import { AgentInterface } from '@magickml/agent-server-schemas'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { PluginManager } from '@magickml/agent-plugin-manager'
+import { CommandHub } from '@magickml/agent-command-hub'
+import { AGENT_HEARTBEAT_INTERVAL_MSEC } from '@magickml/server-config'
+import {
+  ActionPayload,
+  EventPayload,
+  ISeraphEvent,
+} from '@magickml/shared-services'
 import { SeraphManager } from '@magickml/seraph-manager'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 
-import CorePlugin from 'plugins/core'
-import KnowledgePlugin from '@magickml/plugin-knowledge'
-import DiscordPlugin from 'plugins/discord'
-import SlackPlugin from 'plugins/slack'
+import CorePlugin from '@magickml/core-plugin'
+import KnowledgePlugin from '@magickml/knowledge-plugin'
+import DiscordPlugin from '@magickml/discord-plugin'
+import SlackPlugin from '@magickml/slack-plugin'
 
 const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]
 

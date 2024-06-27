@@ -1,5 +1,9 @@
 import Redis from 'ioredis'
-import { ActionPayload, EventPayload, ISharedAgent } from 'servicesShared'
+import {
+  ActionPayload,
+  EventPayload,
+  ISharedAgent,
+} from '@magickml/shared-services'
 import { SlackEmitter } from './dependencies/slackEmitter'
 import SlackEventClient from './services/slackEventClient'
 
@@ -9,8 +13,8 @@ import {
   onSlackMessageNodes,
   sendSlackAudio,
 } from './nodes'
-import { WebSocketPlugin } from 'server/plugin'
-import { type CorePluginEvents } from 'plugins/core'
+import { WebSocketPlugin } from '@magickml/agent-plugin'
+import { type CorePluginEvents } from '@magickml/core-plugin'
 import Bolt, {
   type AllMiddlewareArgs,
   type MessageEvent,
@@ -34,7 +38,7 @@ import {
   SlackBaseMessageEvent,
   SendSlackMessage,
 } from './configx'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 
 export class SlackPlugin extends WebSocketPlugin<
   typeof SLACK_EVENTS,

@@ -1,6 +1,6 @@
-import { type WebhookPayload } from 'server/plugin'
+import { type WebhookPayload } from '@magickml/agent-plugin'
 import { corePluginName } from './constants'
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 
 type ValidPayload = {
   body: {

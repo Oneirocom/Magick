@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { ICoreUserService, UserResponse } from 'servicesShared'
-import { PORTAL_AGENT_KEY, PORTAL_URL } from 'shared/config'
+import { ICoreUserService, UserResponse } from '@magickml/shared-services'
+import { PORTAL_AGENT_KEY, PORTAL_URL } from '@magickml/server-config'
 
 type ConstructorParams = {
   projectId: string

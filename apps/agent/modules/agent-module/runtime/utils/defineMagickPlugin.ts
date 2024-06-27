@@ -1,4 +1,4 @@
-import { BasePlugin } from 'server/plugin'
+import { BasePlugin } from '@magickml/agent-plugin'
 
 export function defineAgentPlugin(name: string, constructor: BasePlugin) {
   return {

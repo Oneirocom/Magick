@@ -1,7 +1,7 @@
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
-import { initLogger, getLogger } from 'server/logger'
-import { initApp } from 'server/core'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
+import { initLogger, getLogger } from '@magickml/server-logger'
+import { initApp } from '@magickml/agent-server'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/server-config'
 import { initAgentCommander } from '@magickml/agent-commander'
 
 initLogger({ name: 'cloud-agent-worker' })

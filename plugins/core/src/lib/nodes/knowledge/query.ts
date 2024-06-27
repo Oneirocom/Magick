@@ -1,6 +1,6 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
-import { CORE_DEP_KEYS } from 'servicesShared'
-import type { EmbedderClient } from '@magickml/embedder/client/ts'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
+import type { EmbedderClient } from '@magickml/embedder-client-ts'
 import { validatePackId } from './shared'
 import { z } from 'zod'
 

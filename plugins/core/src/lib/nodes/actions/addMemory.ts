@@ -4,7 +4,7 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { MemoryStreamService } from '../../services/memoryStreamService'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 export const addMemory = makeFlowNodeDefinition({
   typeName: 'action/memory/addMemory',

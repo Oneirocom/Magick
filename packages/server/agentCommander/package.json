@@ -1,4 +1,12 @@
 {
   "name": "@magickml/agent-commander",
-  "version": "0.0.1"
+  "dependencies": {
+    "pino": "8.14.1",
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.0",
+    "@magickml/redis-pubsub": "file:../redis-pubsub",
+    "@magickml/shared-services": "file:../../shared/servicesShared",
+    "@magickml/agent-communication": "file:../../shared/communication",
+    "@magickml/server-logger": "file:../logger"
+  }
 }

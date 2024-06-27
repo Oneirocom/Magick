@@ -6,8 +6,8 @@ import consola from 'consola'
 
 import { getMagickNodes, getMagickPlugins } from './helpers/scan'
 
-import { Application } from 'server/core'
-import { AgentV2 } from 'server/agents'
+import { Application } from '@magickml/agent-server'
+import { AgentV2 } from '@magickml/agents'
 
 declare module 'nitropack' {
   interface NitroOptions {
@@ -66,11 +66,8 @@ export default <NitroModule>{
     nitro.options.externals = nitro.options.externals || {}
     nitro.options.externals.inline = nitro.options.externals.inline || []
     nitro.options.externals.inline.push(
-      fileURLToPath(new URL('runtime/', import.meta.url))
+      fileURLToPath(new URL('runtimes/', import.meta.url))
     )
-
-    // load out plugins
-    nitro.options.plugins.push(resolve('runtimes/plugins/magickAgent'))
 
     // Load the plugins into a virtual file to make them accessible from the plugin
     nitro.options.virtual['#magick/plugins'] = async () => {
@@ -104,5 +101,11 @@ const magickPlugins = [${exportArray}];
 export default magickPlugins;
       `.trim()
     }
+
+    nitro.options.externals.inline.push('#magick/plugins')
+    nitro.options.externals.inline.push(resolve('runtimes/plugins/magickAgent'))
+
+    // // load out plugins
+    nitro.options.plugins.push(resolve('runtimes/plugins/magickAgent'))
   },
 }

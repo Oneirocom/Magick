@@ -1,6 +1,13 @@
-import { PortalSubscriptions } from '@magickml/portal-utils-shared'
 import { UserResponse } from '../userService/types'
 import { Model } from './types/models'
+
+// this is a hack that should be removed when we have a proper solution
+// This was in the private portal submodule
+export enum PortalSubscriptions {
+  NEOPHYTE = 'NEOPHYTE',
+  APPRENTICE = 'APPRENTICE',
+  WIZARD = 'WIZARD',
+}
 
 export const legacyProviderIdMapping = {
   openai: 'openai',

@@ -1,9 +1,9 @@
 {
-  "name": "@magickml/embedder/api/packs",
+  "name": "@magickml/embedder-api-packs",
   "dependencies": {
     "@zodios/core": "^10.9.6",
     "tslib": "^2.3.0",
     "zod": "^3.22.4",
-    "@magickml/embedder/schema": "12.0.0"
+    "@magickml/embedder-schema": "file:../../schema"
   }
 }

@@ -2,12 +2,12 @@ import { OpenAIEmbeddings, OpenAI } from '@langchain/openai'
 import { PineconeStore } from '@langchain/pinecone'
 import { Pinecone as PineconeClient } from '@pinecone-database/pinecone'
 import { VectorDBQAChain } from 'langchain/chains'
-import { DataType, type LLMCredential } from 'servicesShared'
+import { DataType, type LLMCredential } from '@magickml/shared-services'
 import {
   PRODUCTION,
   PINECONE_INDEX_NAME,
   PINECONE_API_KEY,
-} from 'shared/config'
+} from '@magickml/server-config'
 
 type SearchArgs = {
   query: string

@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'server/credentials',
+  displayName: '@magickml/credentials',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

@@ -1,5 +1,5 @@
-import { type ExtractPluginCredentialNames } from 'server/plugin'
-import { PluginCredential } from 'server/credentials'
+import { type ExtractPluginCredentialNames } from '@magickml/agent-plugin'
+import { PluginCredential } from '@magickml/credentials'
 
 import { corePluginName } from './constants'
 

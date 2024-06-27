@@ -1,4 +1,4 @@
-import { CREDENTIALS_ENCRYPTION_KEY } from 'shared/config'
+import { CREDENTIALS_ENCRYPTION_KEY } from '@magickml/server-config'
 import { encrypt, decrypt } from './shared'
 import { prismaCore, type Prisma } from '@magickml/server-db'
 

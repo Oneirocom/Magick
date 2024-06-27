@@ -1,4 +1,4 @@
-import type { PluginStateType } from 'plugin-state'
+import type { PluginStateType } from '@magickml/agent-plugin-state'
 import { z } from 'zod'
 
 export type CoreAgentContext = {

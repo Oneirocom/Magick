@@ -8,7 +8,7 @@ import { KnowledgeDialogTab } from './types'
 import { useAtom } from 'jotai'
 import { addKnowledgeFormAtom } from './state'
 
-import { DataType } from 'servicesShared'
+import { DataType } from '@magickml/shared-services'
 
 type KnowledgeURLContentProps = {
   disabledState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]

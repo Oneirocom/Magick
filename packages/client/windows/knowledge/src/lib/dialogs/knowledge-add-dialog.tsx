@@ -9,7 +9,7 @@ import { useResetAtom } from 'jotai/utils'
 import toast from 'react-hot-toast'
 import { useCreateKnowledgeMutation } from 'client/state'
 import { useConfig } from '@magickml/providers'
-import { AddKnowledge } from 'servicesShared'
+import { AddKnowledge } from '@magickml/shared-services'
 import { KnowledgeURLContent } from './add/knowledge-url-content'
 
 export const ACCEPT =

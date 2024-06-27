@@ -1,0 +1,44 @@
+config:
+  target: 'ws://localhost:3000' # Update with your server's address
+  phases:
+    - duration: 2m
+      arrivalRate: 1 # New users per second
+      maxUsers: 20 # Maximum number of virtual users
+  ws:
+    # Subprotocols if needed
+    subprotocols:
+      - 'protocol1'
+      - 'protocol2'
+
+scenarios:
+  - name: 'Simulate user interaction'
+    engine: 'ws'
+    flow:
+      - connect: 'ws://localhost:3000/ws/29fff5e7-bcf0-4f48-802b-ff9c723b3764/{{ $randomNumber(1000, 9999) }}'
+      - think: 2
+      - loop:
+          - send: '{"id": "{{ $uuid }}", "text": "Test message {{ $loopCount }}", "sender": "client", "type": "message"}'
+          - think: 1
+        # count: 100 # Send 100 messages per user
+# config:
+#   target: 'ws://localhost:3000' # Update with your server's address
+#   phases:
+#     - duration: 60
+#       arrivalRate: 1 # New users per second
+#       maxVusers: 10 # Maximum number of virtual users
+#   ws:
+#     # Subprotocols if needed
+#     subprotocols:
+#       - 'protocol1'
+#       - 'protocol2'
+
+# scenarios:
+#   - name: 'Simulate user interaction'
+#     engine: 'ws'
+#     flow:
+#       - connect: 'ws://localhost:3000/ws/29fff5e7-bcf0-4f48-802b-ff9c723b3764/{{ $randomNumber(1000, 9999) }}'
+#       - think: 2
+#       - loop:
+#           - send: '{"id": "{{ $uuid }}", "text": "Test message {{ $loopCount }}", "sender": "client", "type": "message"}'
+#           - think: 1
+#         # count: 100 # Send 100 messages per user

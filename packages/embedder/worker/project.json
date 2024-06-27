@@ -1,5 +1,5 @@
 {
-  "name": "@magickml/embedder/worker",
+  "name": "embedder/worker",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/worker/src",
   "projectType": "library",

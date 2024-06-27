@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'plugins/discord',
+  displayName: '@magickml/discord-plugin',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

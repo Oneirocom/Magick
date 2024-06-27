@@ -1,7 +1,7 @@
 import { NodeCategory, makeFlowNodeDefinition } from '@magickml/behave-graph'
 import { CoreActionService } from '../../services/coreActionService'
-import { IEventStore } from 'server/grimoire'
-import { CORE_DEP_KEYS } from 'servicesShared'
+import { IEventStore } from '@magickml/grimoire'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
 
 export const addMessage = makeFlowNodeDefinition({
   typeName: 'magick/addMessage',

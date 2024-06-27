@@ -1,6 +1,6 @@
 import { Reporter } from '.'
 import createSubscriber, { Subscriber } from 'pg-listen'
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 
 export class PgNotifyReporter implements Reporter {
   logger = getLogger()

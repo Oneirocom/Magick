@@ -1,7 +1,7 @@
 import pino from 'pino'
-import { getLogger } from 'server/logger'
-import { EventPayload, ActionPayload } from 'servicesShared'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
+import { EventPayload, ActionPayload } from '@magickml/shared-services'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import { SLACK_EVENTS } from '../configx'
 
 class SlackEventClient {

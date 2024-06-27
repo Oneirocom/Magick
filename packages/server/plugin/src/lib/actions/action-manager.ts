@@ -1,7 +1,7 @@
 // import type { Agent } from 'packages/server/grimoire/src/lib/agent'
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 // nx-ignore-next-line
-import { ActionPayload, EventPayload } from 'servicesShared'
+import { ActionPayload, EventPayload } from '@magickml/shared-services'
 
 type Agent = any
 /**

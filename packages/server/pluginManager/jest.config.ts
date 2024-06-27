@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'server/pluginManager',
+  displayName: '@magickml/agent-plugin-manager',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

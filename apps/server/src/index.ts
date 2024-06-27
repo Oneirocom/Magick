@@ -4,8 +4,8 @@
  **/
 
 import cors from '@koa/cors'
-import { initApp, app } from 'server/core'
-import { initLogger, getLogger } from 'server/logger'
+import { initApp, app } from '@magickml/agent-server'
+import { initLogger, getLogger } from '@magickml/server-logger'
 import { Context } from 'koa'
 import koaBody from 'koa-body'
 import 'regenerator-runtime/runtime'

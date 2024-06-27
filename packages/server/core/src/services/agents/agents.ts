@@ -22,7 +22,7 @@ import { AgentParams, AgentService, getOptions } from './agents.class'
 import { jsonResolver } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
 import { checkPermissions } from '../../lib/feathersPermissions'
-import { ISeraphEvent } from 'servicesShared'
+import { ISeraphEvent } from '@magickml/shared-services'
 
 // Re-export agents.class and agents.schema
 export * from './agents.class'

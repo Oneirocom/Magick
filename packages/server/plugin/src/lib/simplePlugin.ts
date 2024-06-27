@@ -1,4 +1,4 @@
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 import BasePlugin, { BasePluginInit } from './basePlugin'
 import { NodeDefinition, ValueType } from '@magickml/behave-graph'
 

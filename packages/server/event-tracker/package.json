@@ -1,0 +1,15 @@
+{
+  "name": "@magickml/server-event-tracker",
+  "version": "0.0.1",
+  "dependencies": {
+    "@feathersjs/feathers": "5.0.25",
+    "@magickml/server-config": "file:../config",
+    "posthog-node": "^4.0.1",
+    "@clerk/nextjs": "^5.0.12",
+    "axios": "1.6.8",
+    "tslib": "^2.3.0"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}

@@ -1,5 +1,8 @@
-import { AGENT_COMMAND, AGENT_COMMAND_PROJECT } from 'communication'
-import { RedisPubSub } from 'server/redis-pubsub'
+import {
+  AGENT_COMMAND,
+  AGENT_COMMAND_PROJECT,
+} from '@magickml/agent-communication'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 
 // Define a minimal interface for what we expect from an agent
 export interface AgentLike {

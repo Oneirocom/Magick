@@ -2,12 +2,12 @@
 
 import React, { useMemo } from 'react'
 import { Tab, usePubSub } from '@magickml/providers'
-import { SpellInterfaceWithGraph } from 'server/schemas'
+import { SpellInterfaceWithGraph } from '@magickml/agent-server-schemas'
 import { useSelector } from 'react-redux'
 import { RootState } from 'client/state'
 import { BaseFlow } from './base-flow'
 import { useBehaveGraphFlow, useFlowHandlers } from '../hooks'
-import { getNodeSpec } from 'shared/nodeSpec'
+import { getNodeSpec } from '@magickml/node-spec'
 
 type FlowProps = {
   spell: SpellInterfaceWithGraph

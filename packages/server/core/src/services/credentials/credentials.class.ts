@@ -3,7 +3,7 @@ import {
   AgentCredentialsPayload,
   CredentialsManager,
   CredentialsPayload,
-} from 'server/credentials'
+} from '@magickml/credentials'
 import type { Params } from '@feathersjs/feathers'
 import { AgentCommandData } from '@magickml/agent-commander'
 

@@ -1,7 +1,7 @@
 import pino from 'pino'
-import { getLogger } from 'server/logger'
-import { EventPayload } from 'servicesShared'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
+import { EventPayload } from '@magickml/shared-services'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import { DISCORD_EVENTS } from '../configx'
 
 class DiscordEventClient {

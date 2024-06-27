@@ -1,4 +1,4 @@
-import { fetchAllPages } from 'shared/utils'
+import { fetchAllPages } from '@magickml/utils'
 // DOCUMENTED
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
 import type { Params } from '@feathersjs/feathers'
@@ -12,9 +12,9 @@ import { SpellData } from '../spells/spells.schema'
 import { v4 as uuidv4 } from 'uuid'
 import { BadRequest, NotAuthenticated, NotFound } from '@feathersjs/errors'
 
-import { EventPayload, ISeraphEvent } from 'servicesShared'
+import { EventPayload, ISeraphEvent } from '@magickml/shared-services'
 import { AgentCommandData } from '@magickml/agent-commander'
-import { AgentInterface } from 'server/schemas'
+import { AgentInterface } from '@magickml/agent-server-schemas'
 
 // Define AgentParams type based on KnexAdapterParams with AgentQuery
 export type AgentParams = KnexAdapterParams<AgentQuery>

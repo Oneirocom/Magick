@@ -4,9 +4,9 @@ import {
   makeFlowNodeDefinition,
 } from '@magickml/behave-graph'
 import { CoreLLMService } from '../../services/coreLLMService/coreLLMService'
-import { CORE_DEP_KEYS } from 'servicesShared'
-import { IEventStore } from 'server/grimoire'
-import { getProviderIdMapping } from 'servicesShared'
+import { CORE_DEP_KEYS } from '@magickml/shared-services'
+import { IEventStore } from '@magickml/grimoire'
+import { getProviderIdMapping } from '@magickml/shared-services'
 
 type Message = {
   role: string

@@ -5,7 +5,7 @@ import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { queryValidator } from '../../config/validators'
-import { userSchema } from 'server/schemas'
+import { userSchema } from '@magickml/agent-server-schemas'
 import { Params } from '@feathersjs/feathers'
 
 export type UserParams = Params<UserQuery>

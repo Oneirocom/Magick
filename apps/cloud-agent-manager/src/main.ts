@@ -2,9 +2,9 @@ import {
   CloudAgentManagerV2,
   FeathersSyncReporter,
 } from 'server/cloud-agent-manager'
-import { initLogger, getLogger } from 'server/logger'
-import { app, initApp } from 'server/core'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
+import { initLogger, getLogger } from '@magickml/server-logger'
+import { app, initApp } from '@magickml/agent-server'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/server-config'
 import { BullQueue } from 'server/communication'
 import { initAgentCommander } from '@magickml/agent-commander'
 

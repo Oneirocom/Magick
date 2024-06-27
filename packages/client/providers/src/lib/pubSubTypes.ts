@@ -1,4 +1,4 @@
-import { ISeraphEvent } from 'servicesShared'
+import { ISeraphEvent } from '@magickml/shared-services'
 
 export type PubSubEvents = {
   ADD_SUBSPELL: string

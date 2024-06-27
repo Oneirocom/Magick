@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Tooltip from '@mui/material/Tooltip'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { SpellReleaseInterface } from 'server/schemas'
+import { SpellReleaseInterface } from '@magickml/agent-server-schemas'
 import {
   Select,
   SelectItem,

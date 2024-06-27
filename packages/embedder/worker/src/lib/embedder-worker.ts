@@ -1,5 +1,5 @@
-import { err, info } from '@magickml/embedder/config'
-import { processEmbedJob } from '@magickml/embedder/queue'
+import { err, info } from '@magickml/embedder-config'
+import { processEmbedJob } from '@magickml/embedder-queue'
 import { Worker } from 'bullmq'
 import { defineNitroPlugin } from 'nitropack/runtime'
 import { ConnectionOptions } from 'bullmq'

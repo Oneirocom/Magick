@@ -1,14 +1,14 @@
 import { Application as FeathersApplication } from '@feathersjs/koa'
 import { IRegistry } from '@magickml/behave-graph'
-import type { BasePlugin } from 'server/plugin'
-import { EventPayload, ISharedAgent } from 'servicesShared'
-import { SpellInterface } from 'server/schemas'
+import type { BasePlugin } from '@magickml/agent-plugin'
+import { EventPayload, ISharedAgent } from '@magickml/shared-services'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import { SpellCaster } from './spellCaster'
-import { getLogger } from 'server/logger'
-import { PluginManager } from 'server/pluginManager'
-import { type CommandHub } from 'server/command-hub'
-import { AGENT_SPELL_STATE } from 'communication'
-import { PrismaClient } from '@magickml/server-db'
+import { getLogger } from '@magickml/server-logger'
+import { PluginManager } from '@magickml/agent-plugin-manager'
+import { type CommandHub } from '@magickml/agent-command-hub'
+import { AGENT_SPELL_STATE } from '@magickml/agent-communication'
+import { PrismaClient, prismaCore } from '@magickml/server-db'
 
 interface IApplication extends FeathersApplication {
   service: any
@@ -157,7 +157,7 @@ export class Spellbook<
     this.commandHub = commandHub
     this.app = app
     this.agent = agent
-    this.prisma = new PrismaClient()
+    this.prisma = prismaCore
     this.init()
     this.pluginManager.on('pluginsLoaded', () => {
       this.initializePlugins()

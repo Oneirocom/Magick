@@ -1,7 +1,7 @@
 import { makeApi, Zodios } from '@zodios/core'
 import { z } from 'zod'
 
-import { idSchema, JobSchema, JobStatusSchema } from '@magickml/embedder/schema'
+import { idSchema, JobSchema, JobStatusSchema } from '@magickml/embedder-schema'
 
 export const jobEndpoints = makeApi([
   {

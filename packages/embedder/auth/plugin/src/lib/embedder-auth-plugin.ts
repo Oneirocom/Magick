@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { createError, getHeader, type H3Event } from 'h3'
 import { z } from 'zod'
 import { defineNitroPlugin } from 'nitropack/runtime'
-import { err, warn } from '@magickml/embedder/config'
+import { err, warn } from '@magickml/embedder-config'
 
 const secret = process.env['EMBEDDER_JWT_SECRET']
 const exp = process.env['EMBEDDER_JWT_EXPIRES_IN']

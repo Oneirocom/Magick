@@ -4,7 +4,7 @@ import KeyvRedis from '@keyv/redis'
 import Redis from 'ioredis'
 
 import { IEventStore } from './eventStore'
-import { EventPayload } from 'servicesShared'
+import { EventPayload } from '@magickml/shared-services'
 
 /**
  * @class KeyvStateService

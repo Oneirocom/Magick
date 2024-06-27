@@ -1,8 +1,12 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
 import TypedEmitter from 'typed-emitter'
-import { ActionPayload, EventPayload, ISharedAgent } from 'servicesShared'
+import {
+  ActionPayload,
+  EventPayload,
+  ISharedAgent,
+} from '@magickml/shared-services'
 import { getEventProperties } from '../utils'
-import { EventTypes, SEND_MESSAGE } from 'communication'
+import { EventTypes, SEND_MESSAGE } from '@magickml/agent-communication'
 import EventEmitter from 'events'
 import { Application } from '@feathersjs/feathers'
 

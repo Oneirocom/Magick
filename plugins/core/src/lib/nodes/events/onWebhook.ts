@@ -1,6 +1,6 @@
 import { NodeCategory } from '@magickml/behave-graph'
-import { makeMagickEventNodeDefinition } from 'server/grimoire'
-import { EventTypes } from 'communication'
+import { makeMagickEventNodeDefinition } from '@magickml/grimoire'
+import { EventTypes } from '@magickml/agent-communication'
 import { type CoreWebhookEventPayload, corePluginName } from '../../config'
 
 type State = {

@@ -1,8 +1,16 @@
-import { AGENT_ERROR, AGENT_EVENT, EventTypes } from 'communication'
+import {
+  AGENT_ERROR,
+  AGENT_EVENT,
+  EventTypes,
+} from '@magickml/agent-communication'
 import pino from 'pino'
-import { getLogger } from 'server/logger'
-import { ActionPayload, EventPayload, ISharedAgent } from 'servicesShared'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
+import {
+  ActionPayload,
+  EventPayload,
+  ISharedAgent,
+} from '@magickml/shared-services'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 
 /**
  * CoreEventClient manages the subscription to specific Redis pub/sub channels

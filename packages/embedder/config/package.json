@@ -1,4 +1,8 @@
 {
-  "name": "@magickml/embedder/config",
-  "version": "12.0.0"
+  "name": "@magickml/embedder-config",
+  "version": "0.0.1",
+  "dependencies": {
+    "consola": "^3.2.3",
+    "tslib": "^2.3.0"
+  }
 }

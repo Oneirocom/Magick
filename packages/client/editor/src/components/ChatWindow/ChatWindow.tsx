@@ -12,7 +12,7 @@ import {
   useGetSpellByNameQuery,
   useSelectAgentsEvent,
 } from 'client/state'
-import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { SEND_MESSAGE, STREAM_MESSAGE } from '@magickml/agent-communication'
 import { ChatInput } from './ChatInput'
 import { Button, Checkbox, Label } from '@magickml/client-ui'
 import posthog from 'posthog-js'

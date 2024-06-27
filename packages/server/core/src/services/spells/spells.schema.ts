@@ -9,7 +9,7 @@ import {
 } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../config/validators'
 import type { HookContext } from '../../declarations'
-import { SpellInterface, spellSchema } from 'server/schemas'
+import { SpellInterface, spellSchema } from '@magickml/agent-server-schemas'
 
 // Resolvers for SpellInterface
 export const spellResolver = resolve<SpellInterface, HookContext>({})

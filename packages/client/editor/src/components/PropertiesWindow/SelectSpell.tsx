@@ -1,6 +1,6 @@
 import { useGetSpellsQuery } from 'client/state'
 import { useEffect, useState } from 'react'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import { ConfigurationComponentProps } from './PropertiesWindow'
 import {
   Select,

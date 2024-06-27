@@ -156,18 +156,13 @@
   "useInferencePlugins": true,
   "defaultBase": "main",
   "release": {
-    "projects": [
-      "embedder-db-prisma",
-      "embedder-client-react",
-      "sdk-providers",
-      "nitroModule",
-      "nitroModule2",
-      "@magickml/agent-commander",
-      "knowledge",
-      "agent-module"
-    ],
+    "projects": ["packages/*"],
     "version": {
-      "preVersionCommand": "npx nx build embedder-db-prisma"
+      "conventionalCommits": true,
+      "preVersionCommand": "npx nx build embedder-db-prisma",
+      "generatorOptions": {
+        "currentVersionResolver": "git-tag"
+      }
     }
   }
 }

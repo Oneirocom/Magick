@@ -3,7 +3,7 @@
 import type { Knex } from 'knex'
 import knex from 'knex'
 import type { Application } from './declarations'
-import { DATABASE_URL } from 'shared/config'
+import { DATABASE_URL } from '@magickml/server-config'
 
 // Extend Configuration interface to include dbClient
 
@@ -74,7 +74,7 @@ const getDatabaseConfig = (): Knex.Config<any> => {
   return {
     client: 'pg',
     connection: dbURL,
-    pool: { min: 0, max: 100, acquireTimeoutMillis: 60 * 1000 },
+    pool: { min: 0, max: 300, acquireTimeoutMillis: 60 * 1000 },
   }
 }
 

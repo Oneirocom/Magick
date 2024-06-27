@@ -7,7 +7,7 @@ import {
   POSTHOG_API_KEY,
   POSTHOG_ENABLED,
   STANDALONE,
-} from 'shared/config'
+} from '@magickml/server-config'
 import { PostHogProvider } from 'posthog-js/react'
 
 import { AppConfig } from '@magickml/providers'

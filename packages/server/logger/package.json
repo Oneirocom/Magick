@@ -1,5 +1,5 @@
 {
-  "name": "server/logger",
+  "name": "@magickml/server-logger",
   "version": "0.0.1",
   "dependencies": {
     "pino": "8.14.1",
