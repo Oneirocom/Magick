@@ -13,7 +13,7 @@ import path from 'path'
 import os from 'os'
 
 // Flag to enable/disable metric collection
-const ENABLE_METRICS = true
+const ENABLE_METRICS = false
 
 // Metrics tracking
 const agentMetrics = new Map()
