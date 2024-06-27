@@ -2,7 +2,7 @@ const dotenv = require('dotenv-flow')
 dotenv.config('../')
 const fs = require('fs')
 const path = require('path')
-import * as pluginModules from '../plugins'
+import * as pluginModules from '../packages/plugins'
 import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
 import Redis from 'ioredis'
 import { PluginCredential } from 'packages/server/credentials/src'

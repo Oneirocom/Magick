@@ -4,7 +4,7 @@
   "sourceRoot": "apps/server/src",
   "projectType": "application",
   "implicitDependencies": [
-    "server-core"
+    "server/core"
   ],
   "targets": {
     "build": {

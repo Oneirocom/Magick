@@ -24,10 +24,10 @@ import { SeraphManager } from '@magickml/seraph-manager'
 import EventEmitter from 'events'
 import TypedEmitter from 'typed-emitter'
 
-import CorePlugin from '@magickml/core-plugin'
-import KnowledgePlugin from '@magickml/knowledge-plugin'
-import DiscordPlugin from '@magickml/discord-plugin'
-import SlackPlugin from '@magickml/slack-plugin'
+import CorePlugin from 'plugins/core'
+import KnowledgePlugin from 'plugins/knowledge'
+import DiscordPlugin from 'plugins/discord'
+import SlackPlugin from 'plugins/slack'
 
 const plugins = [CorePlugin, KnowledgePlugin, DiscordPlugin, SlackPlugin]
 

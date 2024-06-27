@@ -6,6 +6,7 @@ import {
   AGENT_LOG,
   AGENT_SERAPH_EVENT,
 } from '@magickml/agent-communication'
+import { v4 } from 'uuid'
 import type { Application } from '@magickml/agent-server'
 import { getLogger } from '@magickml/server-logger'
 import { EventMetadata } from '@magickml/server-event-tracker'
@@ -26,11 +27,10 @@ import TypedEmitter from 'typed-emitter'
 import { Spellbook } from '@magickml/grimoire'
 import { AgentLoggingService } from './AgentLogger'
 
-import CorePlugin from '@magickml/core-plugin'
-import KnowledgePlugin from '@magickml/knowledge-plugin'
-import DiscordPlugin from '@magickml/discord-plugin'
-import SlackPlugin from '@magickml/slack-plugin'
-import { v4 } from 'uuid'
+import CorePlugin from 'plugins/core'
+import KnowledgePlugin from 'plugins/knowledge'
+import DiscordPlugin from 'plugins/discord'
+import SlackPlugin from 'plugins/slack'
 
 export type RequestPayload = {
   projectId: string
