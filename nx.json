@@ -156,13 +156,25 @@
   "useInferencePlugins": true,
   "defaultBase": "main",
   "release": {
-    "projects": ["packages/*"],
-    "version": {
-      "conventionalCommits": true,
-      "preVersionCommand": "npx nx build embedder-db-prisma",
-      "generatorOptions": {
-        "currentVersionResolver": "git-tag"
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
       }
+    },
+    "projects": [
+      "packages/server/*",
+      "plugins/*",
+      "packages/embedder/*",
+      "packages/shared/*"
+    ],
+    "version": {
+      "exclude": [
+        "server-cloud-agent-manager",
+        "server-cloud-agent-worker",
+        "server/communication",
+        "portal-client",
+        "server/meter"
+      ]
     }
   }
 }
