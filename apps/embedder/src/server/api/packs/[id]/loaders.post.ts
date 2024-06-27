@@ -8,6 +8,28 @@ import { embedderDb, Loader, Pack } from '@magickml/embedder-db-pg'
 import { eq, and } from 'drizzle-orm'
 import { useBullMQ, createJob } from '@magickml/embedder-queue'
 import { randomUUID } from 'crypto'
+import { Storage } from '@google-cloud/storage'
+
+const storage = new Storage({
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  credentials: {
+    client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  },
+})
+
+async function generateV4ReadSignedUrl(bucketName: string, fileName: string) {
+  // Get a v4 signed URL for reading the file
+  const [url] = await storage
+    .bucket(bucketName)
+    .file(fileName)
+    .getSignedUrl({
+      version: 'v4',
+      action: 'read',
+      expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+    })
+  return url
+}
 
 export default defineEventHandler(async event => {
   // validate
@@ -17,6 +39,33 @@ export default defineEventHandler(async event => {
       statusCode: 400,
       message: 'Invalid request body',
     })
+  }
+
+  let url
+  if (parse.data.isUpload) {
+    if (!parse.data.path) {
+      throw createError({
+        statusCode: 400,
+        message: 'Missing path for upload',
+      })
+    }
+
+    url = await generateV4ReadSignedUrl(
+      process.env.GOOGLE_PRIVATE_BUCKET_NAME || '',
+      parse.data.path
+    )
+
+    // set the loaders filePathOrUrl to the signed URL
+    if ('filePathOrUrl' in parse.data.config) {
+      parse.data.config.filePathOrUrl = url
+    } else {
+      // 'filePathOrUrl' should cover all cases
+      // if we get here its probably a youtube/etc/etc loader
+      throw createError({
+        statusCode: 400,
+        message: 'Invalid loader type with isUpload',
+      })
+    }
   }
 
   const { entity, owner } = authParse(event.context)
@@ -36,6 +85,9 @@ export default defineEventHandler(async event => {
       message: 'Pack not found',
     })
   }
+  // remove isUpload and path from the loader config
+  delete parse.data.isUpload
+  delete parse.data.path
 
   // Serialize loader into DB
   const loader = await embedderDb
