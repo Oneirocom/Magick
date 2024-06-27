@@ -1,3 +1,14 @@
+## 0.0.10-1 (2024-06-27)
+
+
+### 🩹 Fixes
+
+- get nitr module src included in build ([1bf5b662b](https://github.com/Oneirocom/Magick/commit/1bf5b662b))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.10-0 (2024-06-27)
 
 This was a version bump only, there were no code changes.

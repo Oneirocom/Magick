@@ -1,9 +1,9 @@
 {
   "name": "@magickml/embedder-loaders-core",
-  "version": "0.0.10-0",
+  "version": "0.0.10-1",
   "dependencies": {
-    "@magickml/embedder-config": "0.0.10-0",
-    "@magickml/embedder-schemas": "0.0.10-0",
+    "@magickml/embedder-config": "0.0.10-1",
+    "@magickml/embedder-schemas": "0.0.10-1",
     "tslib": "^2.3.0"
   }
 }

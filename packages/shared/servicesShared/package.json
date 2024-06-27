@@ -1,10 +1,10 @@
 {
   "name": "@magickml/shared-services",
-  "version": "0.0.10-0",
+  "version": "0.0.10-1",
   "dependencies": {
     "openai": "^4.29.1",
-    "@magickml/credentials": "0.0.10-0",
-    "@magickml/redis-pubsub": "0.0.10-0",
+    "@magickml/credentials": "0.0.10-1",
+    "@magickml/redis-pubsub": "0.0.10-1",
     "pino": "8.14.1",
     "tslib": "^2.3.0",
     "zod": "^3.22.4"
