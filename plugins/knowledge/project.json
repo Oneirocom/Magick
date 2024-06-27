@@ -1,5 +1,5 @@
 {
-  "name": "knowledge",
+  "name": "plugins/knowledge",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "plugins/knowledge/src",
   "projectType": "library",
