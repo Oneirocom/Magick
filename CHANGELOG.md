@@ -1,3 +1,14 @@
+## 0.0.10 (2024-06-28)
+
+
+### 🩹 Fixes
+
+- Change db from alias to relative path ([c01da97ec](https://github.com/Oneirocom/Magick/commit/c01da97ec))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.10-4 (2024-06-27)
 
 
