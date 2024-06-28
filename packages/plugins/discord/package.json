@@ -12,7 +12,7 @@
     "@magickml/server-logger": "0.0.1",
     "@magickml/shared-services": "0.0.1",
     "@magickml/core-plugin": "0.0.1",
-    "@magickml/token-validation": "0.0.10-1",
+    "@magickml/token-validation": "0.0.1",
     "discord-api-types": "^0.37.67",
     "discord.js": "^14.14.1",
     "natural": "^6.12.0",
