@@ -1,9 +1,9 @@
 {
   "name": "@magickml/server-event-tracker",
-  "version": "0.0.10-1",
+  "version": "0.0.11-2",
   "dependencies": {
     "@feathersjs/feathers": "5.0.25",
-    "@magickml/server-config": "0.0.10-1",
+    "@magickml/server-config": "0.0.11-2",
     "posthog-node": "^4.0.1",
     "@clerk/nextjs": "^5.0.12",
     "axios": "1.6.8",

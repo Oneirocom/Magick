@@ -1,6 +1,6 @@
 {
   "name": "@magickml/seraph",
-  "version": "0.0.10-1",
+  "version": "0.0.11-2",
   "scripts": {
     "cli": "tsx ./src/lib/cli.ts"
   },

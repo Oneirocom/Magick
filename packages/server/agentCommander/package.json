@@ -1,14 +1,14 @@
 {
   "name": "@magickml/agent-commander",
-  "version": "0.0.10-1",
+  "version": "0.0.11-2",
   "dependencies": {
     "pino": "8.14.1",
     "tslib": "^2.3.0",
     "uuid": "^9.0.0",
-    "@magickml/redis-pubsub": "0.0.10-1",
-    "@magickml/shared-services": "0.0.10-1",
-    "@magickml/agent-communication": "0.0.10-1",
-    "@magickml/server-logger": "0.0.10-1"
+    "@magickml/redis-pubsub": "0.0.11-2",
+    "@magickml/shared-services": "0.0.11-2",
+    "@magickml/agent-communication": "0.0.11-2",
+    "@magickml/server-logger": "0.0.11-2"
   },
   "type": "commonjs",
   "main": "./src/index.js",
