@@ -18,6 +18,10 @@ function stringify(obj: Record<string, any>) {
   return str
 }
 
+export type PubsubOptions = {
+  debug?: boolean
+}
+
 /**
  * A class for managing Redis Publish/Subscribe operations.
  *
@@ -52,6 +56,7 @@ export class RedisPubSub extends EventEmitter {
   private redisCloudUrl: string
   private publisher!: Redis
   private subscriber!: Redis
+  private options: PubsubOptions
 
   private channelRefCount = new Map<string, number>()
   private patternRefCount = new Map<string, number>()
@@ -123,9 +128,10 @@ export class RedisPubSub extends EventEmitter {
     })
   }
 
-  constructor(redisCloudUrl: string) {
+  constructor(redisCloudUrl: string, options: PubsubOptions = {}) {
     super()
     this.redisCloudUrl = redisCloudUrl
+    this.options = options
   }
 
   /**
@@ -158,8 +164,6 @@ export class RedisPubSub extends EventEmitter {
     //   numberOfKeys: -1,
     //   lua: 'return redis.call("del", unpack(KEYS))',
     // })
-
-    console.log('Connecting to redis pubsub')
     // await this.client.connect()
     // await this.subscriber.connect()
     this.connectEventListeners(this.publisher, 'publisher')
@@ -175,42 +179,45 @@ export class RedisPubSub extends EventEmitter {
 
     // "wait" | "reconnecting" | "connecting" | "connect" | "ready" | "close" | "end";
 
-    client.on('connecting', () => {
-      console.log(`Connecting to Redis ${clientType}...`)
-    })
+    if (this.options.debug) {
+      client.on('connecting', () => {
+        console.log(`Connecting to Redis ${clientType}...`)
+      })
 
-    client.on('connect', () => {
-      console.log(`Redis ${clientType} connected successfully.`)
-    })
+      client.on('connect', () => {
+        console.log(`Redis ${clientType} connected successfully.`)
+      })
 
-    client.on('close', () => {
-      console.log(`Redis ${clientType} connection closed.`)
-    })
+      client.on('close', () => {
+        console.log(`Redis ${clientType} connection closed.`)
+      })
 
-    client.on('reconnecting', () => {
-      console.warn(`Reconnecting to Redis ${clientType}...`)
-    })
+      client.on('reconnecting', () => {
+        console.warn(`Reconnecting to Redis ${clientType}...`)
+      })
 
-    client.on('end', () => {
-      console.log(`Redis ${clientType} connection ended.`)
-    })
+      client.on('end', () => {
+        console.log(`Redis ${clientType} connection ended.`)
+      })
 
-    client.on('ready', () => {
-      console.log(`Redis ${clientType} is ready.`)
-    })
+      client.on('ready', () => {
+        console.log(`Redis ${clientType} is ready.`)
+      })
 
-    client.on('reconnecting', () => {
-      console.log(`Redis ${clientType} reconnecing.`)
-    })
+      client.on('reconnecting', () => {
+        console.log(`Redis ${clientType} reconnecing.`)
+      })
 
-    client.on('wait', (time: string) => {
-      console.log(`Redis ${clientType} is waiting:`, time)
-    })
+      client.on('wait', (time: string) => {
+        console.log(`Redis ${clientType} is waiting:`, time)
+      })
+    }
 
     // handle subscriber reconnection
 
     if (clientType === 'subscriber') {
-      console.log('Setting up subscriber event listeners...')
+      if (this.options.debug)
+        console.log('Setting up subscriber event listeners...')
       client.on('message', (channel, message) => {
         this.emit(channel, message)
       })
