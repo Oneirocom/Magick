@@ -1,3 +1,14 @@
+## 0.0.11-7 (2024-06-28)
+
+
+### 🩹 Fixes
+
+- Version mixup with token validator ([d19e6efd6](https://github.com/Oneirocom/Magick/commit/d19e6efd6))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.11-6 (2024-06-28)
 
 
