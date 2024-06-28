@@ -10,6 +10,6 @@
     "vite-plugin-dts": "~3.8.1",
     "@nx/devkit": "19.2.1"
   },
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts"
+  "main": "./index.js",
+  "typings": "./index.d.ts"
 }
