@@ -1,3 +1,15 @@
+## 0.0.11-6 (2024-06-28)
+
+
+### 🩹 Fixes
+
+- remove seraph reliance on import.meta ([e088ac158](https://github.com/Oneirocom/Magick/commit/e088ac158))
+- don't pull in seraph additions to core app ([f2e0b0532](https://github.com/Oneirocom/Magick/commit/f2e0b0532))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.11-5 (2024-06-28)
 
 
