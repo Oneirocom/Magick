@@ -1,8 +1,8 @@
 // Aliased for the sack of proper builds
-import { PrismaClient } from '@magickml/server-db/prisma/client-core'
+import { PrismaClient } from './prisma/client-core'
 
 // Aliased for the sack of proper builds
-export * from '@magickml/server-db/prisma/client-core'
+export * from './prisma/client-core'
 
 export type * from './prisma/client-core/index.d.ts'
 
