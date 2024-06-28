@@ -1,3 +1,14 @@
+## 0.0.11-5 (2024-06-28)
+
+
+### 🩹 Fixes
+
+- patch seraph memory middleware ([ff5c289ca](https://github.com/Oneirocom/Magick/commit/ff5c289ca))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.11-4 (2024-06-28)
 
 
