@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@magickml/providers": "0.0.1",
-    "@magickml/server-config": "0.0.10-1",
+    "@magickml/server-config": "0.0.1",
     "@nx/devkit": "19.2.1",
     "@nx/playwright": "19.2.1",
     "@nx/react": "19.2.1",
