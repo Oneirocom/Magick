@@ -1,6 +1,6 @@
 {
   "name": "@magickml/nitro-module",
-  "version": "0.0.10-1",
+  "version": "0.0.11-2",
   "type": "module",
   "types": "./src/index.d.ts",
   "main": "./src/index.js",
@@ -15,13 +15,13 @@
     }
   },
   "dependencies": {
-    "@magickml/agent-server": "0.0.10-1",
+    "@magickml/agent-server": "0.0.11-2",
     "@magickml/behave-graph": "^0.14.14",
     "consola": "^3.2.3",
     "globby": "^14.0.1",
     "nitropack": "^2.9.6",
     "pathe": "1.1.2",
     "tslib": "^2.3.0",
-    "@magickml/agents": "0.0.10-1"
+    "@magickml/agents": "0.0.11-2"
   }
 }

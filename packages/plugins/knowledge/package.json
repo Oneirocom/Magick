@@ -1,14 +1,14 @@
 {
   "name": "@magickml/knowledge-plugin",
-  "version": "0.0.10-1",
+  "version": "0.0.11-2",
   "dependencies": {
     "@magickml/behave-graph": "^0.14.14",
-    "@magickml/shared-services": "0.0.10-1",
+    "@magickml/shared-services": "0.0.11-2",
     "zod": "^3.22.4",
-    "@magickml/embedder-auth-token": "0.0.10-1",
-    "@magickml/embedder-client-ts": "0.0.10-1",
-    "@magickml/agent-plugin": "0.0.10-1",
-    "@magickml/embedder-schemas": "0.0.10-1"
+    "@magickml/embedder-auth-token": "0.0.11-2",
+    "@magickml/embedder-client-ts": "0.0.11-2",
+    "@magickml/agent-plugin": "0.0.11-2",
+    "@magickml/embedder-schemas": "0.0.11-2"
   },
   "type": "commonjs",
   "main": "./src/index.js",
