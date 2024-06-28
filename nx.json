@@ -173,7 +173,7 @@
     },
 
     "projects": [
-      "packages/server/*",
+      "packages/server/**/*",
       "plugins/*",
       "packages/embedder/**/*",
       "packages/shared/*",
