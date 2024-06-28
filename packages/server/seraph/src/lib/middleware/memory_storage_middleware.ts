@@ -2,14 +2,10 @@
 import { IndexItem, LocalIndex } from 'vectra'
 import { OpenAI } from 'openai'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { IMiddleware } from '../middlewareManager'
 import { metadataManager } from '../cognitive_functions/memory'
 import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
-
-// @ts-ignore
-const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'
@@ -25,7 +21,13 @@ class MemoryStorageMiddleware implements IMiddleware {
     this.seraph = seraph
 
     this.index = new LocalIndex(
-      path.join(dirname, '..', 'cognitive_functions', 'memory', 'memory_index')
+      path.join(
+        __dirname,
+        '..',
+        'cognitive_functions',
+        'memory',
+        'memory_index'
+      )
     )
   }
 
