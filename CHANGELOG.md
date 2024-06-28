@@ -1,3 +1,7 @@
+## 0.0.11-3 (2024-06-28)
+
+This was a version bump only, there were no code changes.
+
 ## 0.0.11-2 (2024-06-28)
 
 This was a version bump only, there were no code changes.
