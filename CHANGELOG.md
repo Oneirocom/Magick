@@ -1,3 +1,14 @@
+## 0.0.11-4 (2024-06-28)
+
+
+### 🩹 Fixes
+
+- reset all package versions to 0.0.1.  Fix module type for serpah. ([98c9e40d3](https://github.com/Oneirocom/Magick/commit/98c9e40d3))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.11-3 (2024-06-28)
 
 This was a version bump only, there were no code changes.
