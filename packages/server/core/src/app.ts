@@ -40,11 +40,7 @@ import { services } from './services'
 import handleSockets from './sockets/sockets'
 
 import { authenticateApiKey } from './hooks/authenticateApiKey'
-import {
-  MemoryRetrieval,
-  MemoryStorageMiddleware,
-  SeraphCore,
-} from '@magickml/seraph'
+import { SeraphCore } from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
 
 // @ts-ignore
@@ -89,9 +85,9 @@ export async function initApp(environment: Environment = 'default') {
     anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
   })
 
-  seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
+  // seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
   // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
-  seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
+  // seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
 
   app.set('seraphCore', seraph)
 
