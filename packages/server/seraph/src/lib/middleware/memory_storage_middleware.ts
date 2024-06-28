@@ -9,8 +9,7 @@ import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
 
 // @ts-ignore
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'
@@ -26,13 +25,7 @@ class MemoryStorageMiddleware implements IMiddleware {
     this.seraph = seraph
 
     this.index = new LocalIndex(
-      path.join(
-        __dirname,
-        '..',
-        'cognitive_functions',
-        'memory',
-        'memory_index'
-      )
+      path.join(dirname, '..', 'cognitive_functions', 'memory', 'memory_index')
     )
   }
 
