@@ -1,3 +1,14 @@
+## 0.0.11-8 (2024-06-28)
+
+
+### 🩹 Fixes
+
+- publish vercel package properly ([f5bffb006](https://github.com/Oneirocom/Magick/commit/f5bffb006))
+
+### ❤️  Thank You
+
+- Michael
+
 ## 0.0.11-7 (2024-06-28)
 
 
