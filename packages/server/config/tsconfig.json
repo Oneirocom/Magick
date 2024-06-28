@@ -1,14 +1,7 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": false,
-    "noPropertyAccessFromIndexSignature": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs",
     "types": ["vitest"]
   },
   "files": [],
