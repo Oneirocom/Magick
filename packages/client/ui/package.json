@@ -47,6 +47,7 @@
     "tailwind-merge": "^1.14.0",
     "vaul": "^0.9.1",
     "vite": "5.0.12",
-    "vite-plugin-dts": "~3.8.1"
+    "vite-plugin-dts": "~3.8.1",
+    "@magickml/embedder-schemas": "0.0.1"
   }
 }
