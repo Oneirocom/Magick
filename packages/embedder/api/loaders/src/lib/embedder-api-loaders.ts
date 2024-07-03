@@ -61,6 +61,35 @@ export const loaderEndpoints = makeApi([
       },
     ],
   },
+  {
+    method: 'delete',
+    path: '/packs/:id/loaders/delete',
+    alias: 'deleteLoader',
+    description: 'Delete a loader from a pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'id',
+        type: 'Path',
+        schema: idSchema,
+      },
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({
+          loaderId: idSchema,
+        }),
+      },
+    ],
+    response: z.any(),
+    errors: [
+      {
+        status: 404,
+        description: 'Loader not found',
+        schema: z.any(),
+      },
+    ],
+  },
 ])
 
 export const loaderApi = new Zodios(loaderEndpoints)
