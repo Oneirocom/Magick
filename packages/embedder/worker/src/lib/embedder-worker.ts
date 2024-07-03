@@ -1,5 +1,8 @@
 import { err, info } from '@magickml/embedder-config'
-import { processEmbedJob } from '@magickml/embedder-queue'
+import {
+  processEmbedJob,
+  processDeleteLoaderJob,
+} from '@magickml/embedder-queue'
 import { Worker } from 'bullmq'
 import { defineNitroPlugin } from 'nitropack/runtime'
 import { ConnectionOptions } from 'bullmq'
@@ -17,20 +20,32 @@ const connection: ConnectionOptions = {
 export const embedderWorkerPlugin = defineNitroPlugin(() => {
   const queueName = 'embedJobs'
 
+  type ProcessJobData = { jobId: string }
+  type DeleteLoaderData = { loaderId: string }
+
   const worker = new Worker<
-    {
-      jobId: string
-    },
+    ProcessJobData | DeleteLoaderData,
     void,
-    'processJob'
+    'processJob' | 'deleteLoader'
   >(
     queueName,
     async job => {
-      console.log(`Processing job ${job.id}`)
-      try {
-        await processEmbedJob(job.data.jobId)
-      } catch (error) {
-        err(`Error processing job ${job.id}`)
+      if (job.name === 'processJob') {
+        const { jobId } = job.data as ProcessJobData
+        console.log(`Processing job ${job.id}`)
+        try {
+          await processEmbedJob(jobId)
+        } catch (error) {
+          err(`Error processing job ${job.id}`, error)
+        }
+      } else if (job.name === 'deleteLoader') {
+        const { loaderId } = job.data as DeleteLoaderData
+        console.log(`Deleting loader ${loaderId}`)
+        try {
+          await processDeleteLoaderJob(loaderId)
+        } catch (error) {
+          err(`Error deleting loader ${loaderId}`, error)
+        }
       }
     },
     { connection }
