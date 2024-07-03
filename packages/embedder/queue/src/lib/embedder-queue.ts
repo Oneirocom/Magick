@@ -84,6 +84,23 @@ export async function createJob(job: {
   return createdJob[0]
 }
 
+export async function processDeleteLoaderJob(loaderId: string) {
+  try {
+    // Delete the loader from the database
+    await embedderDb.delete(Loader).where(eq(Loader.id, loaderId)).execute()
+
+    consola.info(`Loader ${loaderId} deleted successfully`)
+  } catch (error) {
+    consola.error(`Error deleting loader ${loaderId}:`, error)
+    throw error
+  }
+}
+
+export async function createDeleteLoaderJob(loaderId: string) {
+  await useBullMQ('embedJobs').add('deleteLoader', { loaderId })
+  consola.info(`Delete loader job created for loader ${loaderId}`)
+}
+
 export async function processEmbedJob(jobId: string) {
   // tood: just pass job in instead of db call
   const job = await embedderDb
