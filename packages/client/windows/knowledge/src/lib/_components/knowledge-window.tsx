@@ -8,6 +8,7 @@ import {
   DataTable,
   Checkbox,
   Badge,
+  DropdownMenuItem,
 } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtom } from 'jotai'
@@ -17,16 +18,18 @@ import KnowledgePackCard from '../_pkg/knowledge-pack-card'
 import { CreateKnowledgePackDialog } from '../_pkg/create-pack'
 import { activePackIdAtom } from '../_pkg/state'
 import { Loader } from '@magickml/embedder-schemas'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row } from '@tanstack/react-table'
 import { useState } from 'react'
 import { useConfig } from '@magickml/providers'
 import { ChunksDialog } from '../_pkg/chunks-dialog'
+import toast from 'react-hot-toast'
 
 type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const token = useConfig().embedderToken
   const createDialogState = useState(false)
   const chunksDialogState = useState(false)
+  const [rowSelection, setRowSelection] = useState<Record<string, any>>({})
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
@@ -47,7 +50,13 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const [activePackId, setActivePackId] = useAtom(activePackIdAtom)
   const [activeLoaderId, setActiveLoaderId] = useState<string | null>(null)
 
-  const { data: activePack } = client.useFindPack(
+  const { mutateAsync: deleteLoader } = client.useDeleteLoader({
+    params: {
+      id: activePackId || '',
+    },
+  })
+
+  const { data: activePack, refetch: refetchActivePack } = client.useFindPack(
     {
       params: {
         id: activePackId || '',
@@ -57,6 +66,42 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       enabled: !!activePackId,
     }
   )
+
+  const handleDeleteSelected = async (selectedRows: Loader[]) => {
+    try {
+      await Promise.all(
+        selectedRows.map(loader => {
+          deleteLoader({ loaderId: loader.id })
+          setRowSelection(prev => {
+            const newRowSelection = { ...prev }
+            delete newRowSelection[loader.id]
+            return newRowSelection
+          })
+          return refetchActivePack()
+        })
+      )
+      toast.success('Selected loaders deleted successfully.')
+      setRowSelection({})
+      await refetchActivePack()
+    } catch (error) {
+      toast.error('Failed to delete selected loaders.')
+    }
+  }
+
+  const handleDeleteSingle = async (loaderId: string) => {
+    try {
+      await deleteLoader({ loaderId })
+      setRowSelection(prev => {
+        const newRowSelection = { ...prev }
+        delete newRowSelection[loaderId]
+        return newRowSelection
+      })
+      await refetchActivePack()
+      toast.success('Loader deleted successfully.')
+    } catch (error) {
+      toast.error('Failed to delete loader.')
+    }
+  }
 
   const columns: ColumnDef<Loader, unknown>[] = [
     {
@@ -89,23 +134,15 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       cell: ({ row }) => <span className="text-xs">{row.original.type}</span>,
     },
 
-    // {
-    //   accessorKey: 'sourceUrl',
-    //   header: 'Source URL',
-    //   size: 48,
-    //   maxSize: 48,
-    //   cell: ({ row }) => (
-    //     <span className="text-xs">
-    //       {row.original.sourceUrl ? row.original.sourceUrl : 'N/A'}
-    //     </span>
-    //   ),
-    // },
-
     {
       accessorKey: 'config',
       header: 'Source',
       cell: ({ row }) => (
-        <span className="text-xs">{JSON.stringify(row.original.config)}</span>
+        <div className="max-w-[800px] overflow-x-auto">
+          <div className="whitespace-nowrap">
+            {JSON.stringify(row.original.config)}
+          </div>
+        </div>
       ),
     },
 
@@ -146,6 +183,15 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       ),
     },
   ]
+
+  const renderRowActionMenu = (row: Row<Loader>) => (
+    <DropdownMenuItem
+      onClick={handleDeleteSingle.bind(null, row.original.id)}
+      className="text-gray-700 hover:text-red-600 hover:bg-red-500  focus:bg-red-500 transition-colors duration-200"
+    >
+      Delete
+    </DropdownMenuItem>
+  )
 
   return (
     <WindowContainer>
@@ -206,13 +252,17 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
 
               <TabsContent value="view">
                 <DataTable<Loader, unknown>
+                  // onDelete={handleDeleteSelected}
+                  rowSelection={rowSelection}
+                  setRowSelection={setRowSelection}
+                  handleDeleteSelected={handleDeleteSelected}
+                  renderRowActionMenu={renderRowActionMenu}
                   columns={columns}
                   data={activePack?.loaders ?? []}
                   filterInputPlaceholder="Search knowledge by id"
                   columnVisibilityButtonProps={{
                     children: 'Columns',
                   }}
-                  renderRowActionMenu={() => null}
                   paginationDivProps={{
                     className: 'flex items-center justify-end space-x-2 py-4',
                   }}
