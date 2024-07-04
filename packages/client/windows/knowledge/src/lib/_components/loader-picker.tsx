@@ -104,9 +104,13 @@ const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
 
 type Props = {
   client: ReturnType<typeof createEmbedderReactClient>
+  setAwaitingUploadUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const LoaderPicker: React.FC<Props> = ({ client }) => {
+export const LoaderPicker: React.FC<Props> = ({
+  client,
+  setAwaitingUploadUpdate,
+}) => {
   const [selectedType, setSelectedType] = useState<LoaderType | null>(null)
   const activePackId = useAtomValue(activePackIdAtom)
 
@@ -268,6 +272,7 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
       isUpload: true,
       path: config.filePathOrUrl,
     })
+    setAwaitingUploadUpdate(true)
   }
 
   const handleCancel = (e: React.MouseEvent) => {
