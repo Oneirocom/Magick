@@ -7,8 +7,9 @@ import { createError } from 'h3'
 export default defineEventHandler(async event => {
   const deleteLoaderSchema = z.object({
     loaderId: z.string(),
+    filePath: z.string(),
   })
-  const { loaderId } = await readBody(event).then(body =>
+  const { loaderId, filePath } = await readBody(event).then(body =>
     deleteLoaderSchema.parse(body)
   )
 
@@ -28,7 +29,7 @@ export default defineEventHandler(async event => {
     }
 
     // Enqueue a deletion job
-    await createDeleteLoaderJob(loaderId)
+    await createDeleteLoaderJob(loaderId, filePath)
 
     return { success: true }
   } catch (error: any) {
