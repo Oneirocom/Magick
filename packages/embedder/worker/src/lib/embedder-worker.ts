@@ -21,7 +21,7 @@ export const embedderWorkerPlugin = defineNitroPlugin(() => {
   const queueName = 'embedJobs'
 
   type ProcessJobData = { jobId: string }
-  type DeleteLoaderData = { loaderId: string }
+  type DeleteLoaderData = { loaderId: string; path: string }
 
   const worker = new Worker<
     ProcessJobData | DeleteLoaderData,
@@ -39,10 +39,10 @@ export const embedderWorkerPlugin = defineNitroPlugin(() => {
           err(`Error processing job ${job.id}`, error)
         }
       } else if (job.name === 'deleteLoader') {
-        const { loaderId } = job.data as DeleteLoaderData
+        const { loaderId, path } = job.data as DeleteLoaderData
         console.log(`Deleting loader ${loaderId}`)
         try {
-          await processDeleteLoaderJob(loaderId)
+          await processDeleteLoaderJob(loaderId, path)
         } catch (error) {
           err(`Error deleting loader ${loaderId}`, error)
         }
