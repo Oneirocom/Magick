@@ -11,6 +11,7 @@ import { createLoader } from '@magickml/embedder-loaders-core'
 import { JobStatusType } from '@magickml/embedder-schemas'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
+import { Storage } from '@google-cloud/storage'
 
 const useTLS = process.env['EMBEDDER_REDIS_TLS'] === 'true'
 
@@ -20,6 +21,46 @@ const connection: ConnectionOptions = {
   username: process.env['EMBEDDER_REDIS_USERNAME'],
   password: process.env['EMBEDDER_REDIS_PASSWORD'],
   tls: useTLS ? {} : undefined,
+}
+
+const storage = new Storage({
+  projectId: process.env['GOOGLE_CLOUD_PROJECT_ID'],
+  credentials: {
+    client_email: process.env['GOOGLE_CLOUD_CLIENT_EMAIL'],
+    private_key: process.env['GOOGLE_CLOUD_PRIVATE_KEY']?.replace(/\\n/g, '\n'),
+  },
+})
+
+async function deleteFileFromStorage(bucketName: string, fileName: string) {
+  try {
+    consola.log(
+      `Attempting to delete file from bucket: ${bucketName}, file: ${fileName}`
+    )
+    const [metadata] = await storage
+      .bucket(bucketName)
+      .file(fileName)
+      .getMetadata()
+
+    consola.log(`File metadata retrieved: ${JSON.stringify(metadata)}`)
+
+    const generation = metadata.generation
+    await storage.bucket(bucketName).file(fileName).delete({
+      ifGenerationMatch: generation,
+    })
+
+    consola.success(`File ${fileName} deleted successfully from Cloud Storage.`)
+  } catch (error: any) {
+    if (error?.code === 412) {
+      consola.error(
+        `File ${fileName} has been modified since last read. Deletion aborted.`
+      )
+    } else {
+      consola.error(
+        `Failed to delete file ${fileName} from Cloud Storage:`,
+        error
+      )
+    }
+  }
 }
 
 export function useBullMQ(queueName: string) {
@@ -84,20 +125,43 @@ export async function createJob(job: {
   return createdJob[0]
 }
 
-export async function processDeleteLoaderJob(loaderId: string) {
+function extractRelevantPathAndFileName(url: string) {
+  const urlRegex = /https:\/\/storage\.googleapis\.com\/[^/]+\/(.+)\?/
+  const match = url.match(urlRegex)
+
+  if (match) {
+    const relevantPath = decodeURIComponent(match[1])
+    const fileName = relevantPath.split('/').pop() || ''
+    return { relevantPath, fileName }
+  }
+
+  return { relevantPath: null, fileName: null }
+}
+
+export async function processDeleteLoaderJob(
+  loaderId: string,
+  filePath: string
+) {
   try {
+    const { relevantPath: relevantPath, fileName: fileName } =
+      extractRelevantPathAndFileName(filePath)
+
     // Delete the loader from the database
     await embedderDb.delete(Loader).where(eq(Loader.id, loaderId)).execute()
-
     consola.info(`Loader ${loaderId} deleted successfully`)
+    // Delete the loader's file from Cloud Storage
+    await deleteFileFromStorage(
+      process.env['GOOGLE_PRIVATE_BUCKET_NAME'] || '',
+      relevantPath || ''
+    )
+    consola.info(`Cloud Storage file ${fileName} deleted successfully`)
   } catch (error) {
     consola.error(`Error deleting loader ${loaderId}:`, error)
-    throw error
   }
 }
 
-export async function createDeleteLoaderJob(loaderId: string) {
-  await useBullMQ('embedJobs').add('deleteLoader', { loaderId })
+export async function createDeleteLoaderJob(loaderId: string, path: string) {
+  await useBullMQ('embedJobs').add('deleteLoader', { loaderId, path })
   consola.info(`Delete loader job created for loader ${loaderId}`)
 }
 
