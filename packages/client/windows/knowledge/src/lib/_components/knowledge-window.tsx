@@ -19,7 +19,7 @@ import { CreateKnowledgePackDialog } from '../_pkg/create-pack'
 import { activePackIdAtom } from '../_pkg/state'
 import { Loader } from '@magickml/embedder-schemas'
 import { ColumnDef, Row } from '@tanstack/react-table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useConfig } from '@magickml/providers'
 import { ChunksDialog } from '../_pkg/chunks-dialog'
 import toast from 'react-hot-toast'
@@ -67,22 +67,52 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
     }
   )
 
-  const handleDeleteSelected = async (selectedRows: Loader[]) => {
+  const [awaitingDeletionUpdate, setAwaitingDeletionUpdate] = useState(false)
+
+  useEffect(() => {
+    if (!awaitingDeletionUpdate) return
+    const currentActivePack = activePack
+    const currentLoaders = currentActivePack?.loaders
+    const delayMs = 1000
+    const pollInterval = setInterval(async () => {
+      await refetchActivePack()
+      if (currentLoaders?.length === currentActivePack?.loaders.length) {
+        clearInterval(pollInterval)
+        setAwaitingDeletionUpdate(false)
+      }
+    }, delayMs)
+  }, [awaitingDeletionUpdate])
+
+  const [awaitingUploadUpdate, setAwaitingUploadUpdate] = useState(false)
+
+  useEffect(() => {
+    if (!awaitingUploadUpdate) return
+    const pollInterval = setInterval(async () => {
+      await refetchActivePack()
+      const hasPendingUpload = activePack?.loaders.some(
+        (loader: any) => loader.status !== 'completed'
+      )
+      if (!hasPendingUpload) {
+        clearInterval(pollInterval)
+        setAwaitingUploadUpdate(false)
+      }
+    }, 1000)
+    return () => clearInterval(pollInterval)
+  }, [awaitingUploadUpdate, activePack, refetchActivePack])
+
+  const handleDeleteSelected = async (selectedRows: Record<string, any>[]) => {
     try {
       await Promise.all(
-        selectedRows.map(loader => {
-          deleteLoader({ loaderId: loader.id })
-          setRowSelection(prev => {
-            const newRowSelection = { ...prev }
-            delete newRowSelection[loader.id]
-            return newRowSelection
+        selectedRows.map(row => {
+          return deleteLoader({
+            loaderId: row.id,
+            filePath: row.config.filePathOrUrl || '',
           })
-          return refetchActivePack()
         })
       )
-      toast.success('Selected loaders deleted successfully.')
       setRowSelection({})
-      await refetchActivePack()
+      setAwaitingDeletionUpdate(true)
+      toast.success('Selected loaders deleted successfully.')
     } catch (error) {
       toast.error('Failed to delete selected loaders.')
     }
@@ -90,14 +120,21 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
 
   const handleDeleteSingle = async (loaderId: string) => {
     try {
-      await deleteLoader({ loaderId })
+      const pack =
+        activePack?.loaders.find((l: Loader) => l.id === loaderId) || {}
+
+      await deleteLoader({
+        loaderId,
+        filePath: pack.config.filePathOrUrl || '',
+      })
+
       setRowSelection(prev => {
         const newRowSelection = { ...prev }
         delete newRowSelection[loaderId]
         return newRowSelection
       })
-      await refetchActivePack()
-      toast.success('Loader deleted successfully.')
+
+      setAwaitingDeletionUpdate(true)
     } catch (error) {
       toast.error('Failed to delete loader.')
     }
@@ -300,7 +337,10 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
               </TabsContent>
 
               <TabsContent value="add">
-                <LoaderPicker client={client} />
+                <LoaderPicker
+                  client={client}
+                  setAwaitingUploadUpdate={setAwaitingUploadUpdate}
+                />
               </TabsContent>
             </Tabs>
           )}
