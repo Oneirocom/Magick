@@ -78,6 +78,7 @@ export const loaderEndpoints = makeApi([
         type: 'Body',
         schema: z.object({
           loaderId: idSchema,
+          filePath: z.string(),
         }),
       },
     ],
