@@ -88,7 +88,6 @@ export default defineEventHandler(async event => {
   }
   // remove isUpload and path from the loader config
   delete parse.data.isUpload
-  delete parse.data.path
 
   // Serialize loader into DB
   const loader = await embedderDb
