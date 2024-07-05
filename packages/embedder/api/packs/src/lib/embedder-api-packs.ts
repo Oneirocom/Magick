@@ -68,7 +68,7 @@ export const packEndpoints = makeApi([
         schema: idSchema,
       },
     ],
-    response: FindPackResponseSchema,
+    response: DeletePackResponseSchema,
     errors: [
       {
         status: 400,
@@ -92,7 +92,9 @@ export const packEndpoints = makeApi([
         }),
       },
     ],
-    response: DeletePackResponseSchema,
+    response: z.object({
+      success: z.boolean(),
+    }),
     errors: [
       {
         status: 400,
