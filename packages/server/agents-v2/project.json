@@ -1,0 +1,40 @@
+{
+  "name": "agents-v2",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/server/agents-v2/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
+      }
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/agents-v2",
+        "tsConfig": "packages/server/agents-v2/tsconfig.lib.json",
+        "packageJson": "packages/server/agents-v2/package.json",
+        "main": "packages/server/agents-v2/src/index.ts",
+        "assets": ["packages/server/agents-v2/*.md"]
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/server/agents-v2/jest.config.ts"
+      }
+    }
+  }
+}

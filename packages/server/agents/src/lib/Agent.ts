@@ -154,7 +154,6 @@ export class Agent
       commandHub: this.commandHub,
     })
 
-    // @ts-ignore
     this.spellbook = new Spellbook({
       agent: this,
       app,
