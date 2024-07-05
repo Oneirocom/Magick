@@ -5,7 +5,7 @@ import { RAGApplicationBuilder } from '@llm-tools/embedjs'
 
 import consola from 'consola'
 import { JsonValue } from 'type-fest'
-import { embedderDb, Job, Loader } from '@magickml/embedder-db-pg'
+import { embedderDb, Job, Loader, Pack } from '@magickml/embedder-db-pg'
 import { usePineconeDb } from '@magickml/embedder-db-pinecone'
 import { createLoader } from '@magickml/embedder-loaders-core'
 import { JobStatusType } from '@magickml/embedder-schemas'
@@ -125,6 +125,16 @@ export async function createJob(job: {
   return createdJob[0]
 }
 
+export async function createDeleteLoaderJob(loaderId: string, path: string) {
+  await useBullMQ('embedJobs').add('deleteLoader', { loaderId, path })
+  consola.info(`Delete loader job created for loader ${loaderId}`)
+}
+
+export async function createDeletePackJob(packId: string) {
+  await useBullMQ('embedJobs').add('deletePack', { packId })
+  consola.info(`Delete pack job created for pack ${packId}`)
+}
+
 function extractRelevantPathAndFileName(url: string) {
   const urlRegex = /https:\/\/storage\.googleapis\.com\/[^/]+\/(.+)\?/
   const match = url.match(urlRegex)
@@ -160,11 +170,36 @@ export async function processDeleteLoaderJob(
   }
 }
 
-export async function createDeleteLoaderJob(loaderId: string, path: string) {
-  await useBullMQ('embedJobs').add('deleteLoader', { loaderId, path })
-  consola.info(`Delete loader job created for loader ${loaderId}`)
-}
+export async function processDeletePackJob(packId: string) {
+  try {
+    // Fetch all loaders associated with the pack
+    const loaders = await embedderDb
+      .select()
+      .from(Loader)
+      .where(eq(Loader.packId, packId))
+      .execute()
 
+    // Delete each loader and its file
+    for (const loader of loaders) {
+      const { filePathOrUrl } = loader.config as any // Adjust the property name as needed
+      if (filePathOrUrl) {
+        const { relevantPath } = extractRelevantPathAndFileName(filePathOrUrl)
+        await deleteFileFromStorage(
+          process.env['GOOGLE_PRIVATE_BUCKET_NAME'] || '',
+          relevantPath || ''
+        )
+      }
+      await embedderDb.delete(Loader).where(eq(Loader.id, loader.id)).execute()
+      consola.info(`Loader ${loader.id} deleted successfully`)
+    }
+
+    // Delete the pack from the database
+    await embedderDb.delete(Pack).where(eq(Pack.id, packId)).execute()
+    consola.info(`Pack ${packId} deleted successfully`)
+  } catch (error) {
+    consola.error(`Error deleting pack ${packId}:`, error)
+  }
+}
 export async function processEmbedJob(jobId: string) {
   // tood: just pass job in instead of db call
   const job = await embedderDb
