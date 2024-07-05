@@ -68,6 +68,30 @@ export const packEndpoints = makeApi([
         schema: idSchema,
       },
     ],
+    response: FindPackResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: 'Invalid Request',
+        schema: z.any(),
+      },
+    ],
+  },
+  {
+    method: 'delete',
+    path: '/packs/delete',
+    alias: 'deletePackWithBody',
+    description: 'Delete a pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({
+          packId: idSchema,
+        }),
+      },
+    ],
     response: DeletePackResponseSchema,
     errors: [
       {
