@@ -45,7 +45,8 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
     },
   })
 
-  const { data: knowledgePacks } = client.useGetPacksByEntityAndOwner()
+  const { data: knowledgePacks, refetch: refetchKnowlegePacks } =
+    client.useGetPacksByEntityAndOwner()
 
   const [activePackId, setActivePackId] = useAtom(activePackIdAtom)
   const [activeLoaderId, setActiveLoaderId] = useState<string | null>(null)
@@ -67,6 +68,8 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
     }
   )
 
+  const { mutateAsync: deletePack } = client.useDeletePackWithBody()
+
   const [awaitingDeletionUpdate, setAwaitingDeletionUpdate] = useState(false)
 
   useEffect(() => {
@@ -74,31 +77,67 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
     const currentActivePack = activePack
     const currentLoaders = currentActivePack?.loaders
     const delayMs = 1000
+    const maxPolls = 10
+    let polls = 0
     const pollInterval = setInterval(async () => {
       await refetchActivePack()
-      if (currentLoaders?.length === currentActivePack?.loaders.length) {
+      polls++
+      if (
+        currentLoaders?.length !== currentActivePack?.loaders.length ||
+        polls > maxPolls
+      ) {
         clearInterval(pollInterval)
         setAwaitingDeletionUpdate(false)
+        polls = 0
       }
     }, delayMs)
-  }, [awaitingDeletionUpdate])
+  }, [awaitingDeletionUpdate, activePack, refetchActivePack])
 
   const [awaitingUploadUpdate, setAwaitingUploadUpdate] = useState(false)
 
   useEffect(() => {
     if (!awaitingUploadUpdate) return
+    const delayMs = 1000
+    const maxPolls = 10
+    let polls = 0
     const pollInterval = setInterval(async () => {
       await refetchActivePack()
+      polls++
       const hasPendingUpload = activePack?.loaders.some(
         (loader: any) => loader.status !== 'completed'
       )
-      if (!hasPendingUpload) {
+      if (!hasPendingUpload || polls > maxPolls) {
         clearInterval(pollInterval)
         setAwaitingUploadUpdate(false)
+        polls = 0
       }
-    }, 1000)
+    }, delayMs)
     return () => clearInterval(pollInterval)
   }, [awaitingUploadUpdate, activePack, refetchActivePack])
+
+  const [awaitingPackDeletion, setAwaitingPackDeletion] = useState(false)
+
+  useEffect(() => {
+    if (!awaitingPackDeletion) return
+    const currentActivePack = activePack
+    const delayMs = 1000
+    const maxPolls = 10
+    let polls = 0
+    const pollInterval = setInterval(async () => {
+      await refetchKnowlegePacks()
+      polls++
+
+      if (
+        currentActivePack?.loaders.length !== activePack?.loaders.length ||
+        !activePackId ||
+        polls > maxPolls
+      ) {
+        clearInterval(pollInterval)
+        setAwaitingPackDeletion(false)
+        polls = 0
+      }
+    }, delayMs)
+  }, [awaitingPackDeletion, activePack, refetchActivePack])
 
   const handleDeleteSelected = async (selectedRows: Record<string, any>[]) => {
     try {
@@ -137,6 +176,17 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       setAwaitingDeletionUpdate(true)
     } catch (error) {
       toast.error('Failed to delete loader.')
+    }
+  }
+
+  const handleDeletePack = async (packId: string) => {
+    try {
+      await deletePack({ packId })
+      setAwaitingPackDeletion(true)
+      setActivePackId(null)
+      toast.success('Knowledge pack deleted successfully.')
+    } catch (error) {
+      toast.error('Failed to delete knowledge pack.')
     }
   }
 
@@ -275,6 +325,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
                       created={pack.createdAt.toString()}
                       updated={pack.createdAt.toString()}
                       documents={10}
+                      handleDeletePack={handleDeletePack}
                     />
                   ))}
                 </div>
