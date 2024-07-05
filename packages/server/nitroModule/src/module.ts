@@ -103,9 +103,11 @@ export default magickPlugins;
     }
 
     nitro.options.externals.inline.push('#magick/plugins')
-    nitro.options.externals.inline.push(resolve('runtimes/plugins/magickAgent'))
+    nitro.options.externals.inline.push(
+      resolve('runtimes/plugins/initializeAgent')
+    )
 
     // // load out plugins
-    nitro.options.plugins.push(resolve('runtimes/plugins/magickAgent'))
+    nitro.options.plugins.push(resolve('runtimes/plugins/initializeAgent'))
   },
 }
