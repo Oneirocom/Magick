@@ -30,6 +30,7 @@ export const ChunksDialog: React.FC<ChunksDialogProps> = ({
 
   // 🧟
   const frankenstein = (data: any) => {
+    console.log(data)
     return data.map((chunk: any) => chunk).join()
   }
 
@@ -43,11 +44,12 @@ export const ChunksDialog: React.FC<ChunksDialogProps> = ({
       }}
       title="Chunks"
       description=""
-      footerText="Create"
+      footerText="Close"
       footerButton={{
         onClick: () => setOpen(false),
         variant: 'portal-primary',
         className: 'w-full',
+        value: 'Close',
       }}
       triggerButton={{
         className: 'hidden',
