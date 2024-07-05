@@ -88,11 +88,7 @@ export const PortalDialog = ({
 
         {children}
         <DialogFooter {...base.footer}>
-          <Button
-            {...footerButton}
-            {...(footerButton?.isLoading && { disabled: true },
-            { isLoading: undefined })}
-          >
+          <Button {...footerButton} disabled={footerButton?.isLoading}>
             {footerButton?.isLoading && <Loading />}
             {footerText}
           </Button>

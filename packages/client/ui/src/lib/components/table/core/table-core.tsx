@@ -25,6 +25,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
   InputProps,
@@ -36,6 +37,8 @@ import {
   TableRow,
 } from '../../../core/ui'
 import { FancyInput } from '../../../fancy'
+import { SetStateAction } from 'react'
+import { Loader } from '@magickml/embedder-schemas'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -55,12 +58,18 @@ interface DataTableProps<TData, TValue> {
   pageCountDivProps?: React.HTMLAttributes<HTMLDivElement>
   paginationDivProps?: React.HTMLAttributes<HTMLDivElement>
   renderRowActionMenu?: (row: Row<TData>) => React.ReactNode
+  handleDeleteSelected?: (selectedRows: Loader[]) => Promise<void>
+  rowSelection?: Record<string, boolean>
+  setRowSelection?: React.Dispatch<SetStateAction<{}>>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onDelete,
+  handleDeleteSelected,
+  rowSelection,
+  setRowSelection,
   tableProps,
   tableHeaderProps,
   tableBodyProps,
@@ -82,7 +91,7 @@ export function DataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+
   const [{ pageIndex, pageSize }, setPagination] = React.useState<{
     pageIndex: number
     pageSize: number
@@ -113,31 +122,44 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
-    manualPagination: true,
+    // manualPagination: true,
     pageCount: Math.ceil(data.length / pageSize),
   })
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    setPagination(prev => ({
+      pageIndex: 0, // Reset to first page when changing page size
+      pageSize: newPageSize,
+    }))
+  }
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        {onDelete && (
-          <Button
-            variant="outline"
-            className="mr-2"
-            onClick={() => {
-              const selectedRows = table.getFilteredSelectedRowModel().rows
-              const data = table
-                .getFilteredSelectedRowModel()
-                .rows.map(r => r.original)
-              onDelete(data)
-              table.getRowModel().rows = table
-                .getRowModel()
-                .rows.filter(row => !selectedRows.includes(row))
-            }}
-          >
-            Delete Selected
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          className="h-8 w-8 p-0"
+          onClick={() => {
+            if (
+              table.getFilteredSelectedRowModel().rows.length > 0 &&
+              handleDeleteSelected
+            ) {
+              handleDeleteSelected(
+                table
+                  .getFilteredSelectedRowModel()
+                  .rows.map(row => row.original as Loader)
+              )
+            }
+          }}
+        >
+          <TrashIcon
+            className={`h-6 w-6 ${
+              table.getFilteredSelectedRowModel().rows.length > 0
+                ? 'text-red-600'
+                : 'text-gray-30'
+            }`}
+          />
+        </Button>
         <FancyInput
           placeholder={filterInputPlaceholder}
           value={
@@ -153,35 +175,56 @@ export function DataTable<TData, TValue>({
           className="max-w-sm h-8"
           {...filterInputProps}
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="portal-neutral"
-              size="sm"
-              className="ml-auto"
-              {...columnVisibilityButtonProps}
-            >
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter(column => column.getCanHide())
-              .map(column => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={value => column.toggleVisibility(!!value)}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="ml-auto flex items-center space-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="portal-neutral" size="sm" className="ml-auto">
+                Show {pageSize} <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {[10, 20, 30, 40, 50].map(size => (
+                <DropdownMenuItem
+                  key={size}
+                  onSelect={() => handlePageSizeChange(size)}
+                >
+                  Show {size}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="portal-neutral"
+                size="sm"
+                className="ml-auto"
+                {...columnVisibilityButtonProps}
+              >
+                Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter(column => column.getCanHide())
+                .map(column => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={value =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  )
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table {...tableProps}>
@@ -273,8 +316,13 @@ export function DataTable<TData, TValue>({
           className="flex-1 text-sm text-muted-foreground"
           {...pageCountDivProps}
         >
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length > 0
+            ? `${table.getFilteredSelectedRowModel().rows.length} of ${
+                table.getFilteredRowModel().rows.length
+              } row(s) selected.`
+            : `Page ${
+                table.getState().pagination.pageIndex + 1
+              } of ${table.getPageCount()}`}
         </div>
         <div className="space-x-2">
           <Button
