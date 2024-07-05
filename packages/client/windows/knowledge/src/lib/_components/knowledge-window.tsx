@@ -8,6 +8,7 @@ import {
   DataTable,
   Checkbox,
   Badge,
+  DropdownMenuItem,
 } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtom } from 'jotai'
@@ -17,16 +18,18 @@ import KnowledgePackCard from '../_pkg/knowledge-pack-card'
 import { CreateKnowledgePackDialog } from '../_pkg/create-pack'
 import { activePackIdAtom } from '../_pkg/state'
 import { Loader } from '@magickml/embedder-schemas'
-import { ColumnDef } from '@tanstack/react-table'
-import { useState } from 'react'
+import { ColumnDef, Row } from '@tanstack/react-table'
+import { useEffect, useState } from 'react'
 import { useConfig } from '@magickml/providers'
 import { ChunksDialog } from '../_pkg/chunks-dialog'
+import toast from 'react-hot-toast'
 
 type KnowledgeWindowProps = {}
 export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
   const token = useConfig().embedderToken
   const createDialogState = useState(false)
   const chunksDialogState = useState(false)
+  const [rowSelection, setRowSelection] = useState<Record<string, any>>({})
   const client = createEmbedderReactClient({
     tsqPrefix: 'embedder',
     baseUrl:
@@ -42,12 +45,19 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
     },
   })
 
-  const { data: knowledgePacks } = client.useGetPacksByEntityAndOwner()
+  const { data: knowledgePacks, refetch: refetchKnowlegePacks } =
+    client.useGetPacksByEntityAndOwner()
 
   const [activePackId, setActivePackId] = useAtom(activePackIdAtom)
   const [activeLoaderId, setActiveLoaderId] = useState<string | null>(null)
 
-  const { data: activePack } = client.useFindPack(
+  const { mutateAsync: deleteLoader } = client.useDeleteLoader({
+    params: {
+      id: activePackId || '',
+    },
+  })
+
+  const { data: activePack, refetch: refetchActivePack } = client.useFindPack(
     {
       params: {
         id: activePackId || '',
@@ -57,6 +67,128 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       enabled: !!activePackId,
     }
   )
+
+  const { mutateAsync: deletePack } = client.useDeletePackWithBody()
+
+  const [awaitingDeletionUpdate, setAwaitingDeletionUpdate] = useState(false)
+
+  useEffect(() => {
+    if (!awaitingDeletionUpdate) return
+    const currentActivePack = activePack
+    const currentLoaders = currentActivePack?.loaders
+    const delayMs = 1000
+    const maxPolls = 10
+    let polls = 0
+    const pollInterval = setInterval(async () => {
+      await refetchActivePack()
+      polls++
+      if (
+        currentLoaders?.length !== currentActivePack?.loaders.length ||
+        polls > maxPolls
+      ) {
+        clearInterval(pollInterval)
+        setAwaitingDeletionUpdate(false)
+        polls = 0
+      }
+    }, delayMs)
+  }, [awaitingDeletionUpdate, activePack, refetchActivePack])
+
+  const [awaitingUploadUpdate, setAwaitingUploadUpdate] = useState(false)
+
+  useEffect(() => {
+    if (!awaitingUploadUpdate) return
+    const delayMs = 1000
+    const maxPolls = 10
+    let polls = 0
+    const pollInterval = setInterval(async () => {
+      await refetchActivePack()
+      polls++
+      const hasPendingUpload = activePack?.loaders.some(
+        (loader: any) => loader.status !== 'completed'
+      )
+      if (!hasPendingUpload || polls > maxPolls) {
+        clearInterval(pollInterval)
+        setAwaitingUploadUpdate(false)
+        polls = 0
+      }
+    }, delayMs)
+    return () => clearInterval(pollInterval)
+  }, [awaitingUploadUpdate, activePack, refetchActivePack])
+
+  const [awaitingPackDeletion, setAwaitingPackDeletion] = useState(false)
+
+  useEffect(() => {
+    if (!awaitingPackDeletion) return
+    const currentActivePack = activePack
+    const delayMs = 1000
+    const maxPolls = 10
+    let polls = 0
+    const pollInterval = setInterval(async () => {
+      await refetchKnowlegePacks()
+      polls++
+
+      if (
+        currentActivePack?.loaders.length !== activePack?.loaders.length ||
+        !activePackId ||
+        polls > maxPolls
+      ) {
+        clearInterval(pollInterval)
+        setAwaitingPackDeletion(false)
+        polls = 0
+      }
+    }, delayMs)
+  }, [awaitingPackDeletion, activePack, refetchActivePack])
+
+  const handleDeleteSelected = async (selectedRows: Record<string, any>[]) => {
+    try {
+      await Promise.all(
+        selectedRows.map(row => {
+          return deleteLoader({
+            loaderId: row.id,
+            filePath: row.config.filePathOrUrl || '',
+          })
+        })
+      )
+      setRowSelection({})
+      setAwaitingDeletionUpdate(true)
+      toast.success('Selected loaders deleted successfully.')
+    } catch (error) {
+      toast.error('Failed to delete selected loaders.')
+    }
+  }
+
+  const handleDeleteSingle = async (loaderId: string) => {
+    try {
+      const pack =
+        activePack?.loaders.find((l: Loader) => l.id === loaderId) || {}
+
+      await deleteLoader({
+        loaderId,
+        filePath: pack.config.filePathOrUrl || '',
+      })
+
+      setRowSelection(prev => {
+        const newRowSelection = { ...prev }
+        delete newRowSelection[loaderId]
+        return newRowSelection
+      })
+
+      setAwaitingDeletionUpdate(true)
+    } catch (error) {
+      toast.error('Failed to delete loader.')
+    }
+  }
+
+  const handleDeletePack = async (packId: string) => {
+    try {
+      await deletePack({ packId })
+      setAwaitingPackDeletion(true)
+      setActivePackId(null)
+      toast.success('Knowledge pack deleted successfully.')
+    } catch (error) {
+      toast.error('Failed to delete knowledge pack.')
+    }
+  }
 
   const columns: ColumnDef<Loader, unknown>[] = [
     {
@@ -89,23 +221,15 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       cell: ({ row }) => <span className="text-xs">{row.original.type}</span>,
     },
 
-    // {
-    //   accessorKey: 'sourceUrl',
-    //   header: 'Source URL',
-    //   size: 48,
-    //   maxSize: 48,
-    //   cell: ({ row }) => (
-    //     <span className="text-xs">
-    //       {row.original.sourceUrl ? row.original.sourceUrl : 'N/A'}
-    //     </span>
-    //   ),
-    // },
-
     {
       accessorKey: 'config',
       header: 'Source',
       cell: ({ row }) => (
-        <span className="text-xs">{JSON.stringify(row.original.config)}</span>
+        <div className="max-w-[800px] overflow-x-auto">
+          <div className="whitespace-nowrap">
+            {JSON.stringify(row.original.config)}
+          </div>
+        </div>
       ),
     },
 
@@ -146,6 +270,15 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
       ),
     },
   ]
+
+  const renderRowActionMenu = (row: Row<Loader>) => (
+    <DropdownMenuItem
+      onClick={handleDeleteSingle.bind(null, row.original.id)}
+      className="text-gray-700 hover:text-red-600 hover:bg-red-500  focus:bg-red-500 transition-colors duration-200"
+    >
+      Delete
+    </DropdownMenuItem>
+  )
 
   return (
     <WindowContainer>
@@ -192,6 +325,7 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
                       created={pack.createdAt.toString()}
                       updated={pack.createdAt.toString()}
                       documents={10}
+                      handleDeletePack={handleDeletePack}
                     />
                   ))}
                 </div>
@@ -206,13 +340,17 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
 
               <TabsContent value="view">
                 <DataTable<Loader, unknown>
+                  // onDelete={handleDeleteSelected}
+                  rowSelection={rowSelection}
+                  setRowSelection={setRowSelection}
+                  handleDeleteSelected={handleDeleteSelected}
+                  renderRowActionMenu={renderRowActionMenu}
                   columns={columns}
                   data={activePack?.loaders ?? []}
                   filterInputPlaceholder="Search knowledge by id"
                   columnVisibilityButtonProps={{
                     children: 'Columns',
                   }}
-                  renderRowActionMenu={() => null}
                   paginationDivProps={{
                     className: 'flex items-center justify-end space-x-2 py-4',
                   }}
@@ -250,7 +388,10 @@ export const KnowledgeWindow: React.FC<KnowledgeWindowProps> = () => {
               </TabsContent>
 
               <TabsContent value="add">
-                <LoaderPicker client={client} />
+                <LoaderPicker
+                  client={client}
+                  setAwaitingUploadUpdate={setAwaitingUploadUpdate}
+                />
               </TabsContent>
             </Tabs>
           )}

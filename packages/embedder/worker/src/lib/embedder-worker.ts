@@ -1,5 +1,9 @@
 import { err, info } from '@magickml/embedder-config'
-import { processEmbedJob } from '@magickml/embedder-queue'
+import {
+  processEmbedJob,
+  processDeleteLoaderJob,
+  processDeletePackJob,
+} from '@magickml/embedder-queue'
 import { Worker } from 'bullmq'
 import { defineNitroPlugin } from 'nitropack/runtime'
 import { ConnectionOptions } from 'bullmq'
@@ -17,20 +21,41 @@ const connection: ConnectionOptions = {
 export const embedderWorkerPlugin = defineNitroPlugin(() => {
   const queueName = 'embedJobs'
 
+  type ProcessJobData = { jobId: string }
+  type DeleteLoaderData = { loaderId: string; path: string }
+  type DeletePackData = { packId: string }
+
   const worker = new Worker<
-    {
-      jobId: string
-    },
+    ProcessJobData | DeleteLoaderData | DeletePackData,
     void,
-    'processJob'
+    'processJob' | 'deleteLoader' | 'deletePack'
   >(
     queueName,
     async job => {
-      console.log(`Processing job ${job.id}`)
-      try {
-        await processEmbedJob(job.data.jobId)
-      } catch (error) {
-        err(`Error processing job ${job.id}`)
+      if (job.name === 'processJob') {
+        const { jobId } = job.data as ProcessJobData
+        console.log(`Processing job ${job.id}`)
+        try {
+          await processEmbedJob(jobId)
+        } catch (error) {
+          err(`Error processing job ${job.id}`, error)
+        }
+      } else if (job.name === 'deleteLoader') {
+        const { loaderId, path } = job.data as DeleteLoaderData
+        console.log(`Deleting loader ${loaderId}`)
+        try {
+          await processDeleteLoaderJob(loaderId, path)
+        } catch (error) {
+          err(`Error deleting loader ${loaderId}`, error)
+        }
+      } else if (job.name === 'deletePack') {
+        const { packId } = job.data as DeletePackData
+        console.log(`Deleting pack ${packId}`)
+        try {
+          await processDeletePackJob(packId)
+        } catch (error) {
+          err(`Error deleting pack ${packId}`, error)
+        }
       }
     },
     { connection }
