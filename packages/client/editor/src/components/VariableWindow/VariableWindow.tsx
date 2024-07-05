@@ -57,15 +57,6 @@ interface SortableItemProps {
   id: string
 }
 
-const persistVariablesOrder = (variables: VariableJSON[]): void => {
-  localStorage.setItem('variablesOrder', JSON.stringify(variables))
-}
-
-const getPersistedVariablesOrder = (): VariableJSON[] | null => {
-  const order = localStorage.getItem('variablesOrder')
-  return order ? JSON.parse(order) : null
-}
-
 function SortableItem({ children, id }: SortableItemProps) {
   const {
     attributes,
@@ -140,6 +131,18 @@ export const VariableWindow: React.FC<Props> = props => {
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewVariableName(e.target.value)
+  }
+
+  const persistVariablesOrder = (variables: VariableJSON[]): void => {
+    localStorage.setItem(
+      `${spell.id}:variablesOrder`,
+      JSON.stringify(variables)
+    )
+  }
+
+  const getPersistedVariablesOrder = (): VariableJSON[] | null => {
+    const order = localStorage.getItem(`${spell.id}:variablesOrder`)
+    return order ? JSON.parse(order) : null
   }
 
   const deleteAllVariableNodes = useCallback(
