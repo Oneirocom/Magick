@@ -153,18 +153,15 @@ export async function processDeleteLoaderJob(
   filePath: string
 ) {
   try {
-    const { relevantPath: relevantPath, fileName: fileName } =
-      extractRelevantPathAndFileName(filePath)
-
     // Delete the loader from the database
     await embedderDb.delete(Loader).where(eq(Loader.id, loaderId)).execute()
     consola.info(`Loader ${loaderId} deleted successfully`)
     // Delete the loader's file from Cloud Storage
     await deleteFileFromStorage(
       process.env['GOOGLE_PRIVATE_BUCKET_NAME'] || '',
-      relevantPath || ''
+      filePath || ''
     )
-    consola.info(`Cloud Storage file ${fileName} deleted successfully`)
+    consola.info(`Cloud Storage file ${filePath} deleted successfully`)
   } catch (error) {
     consola.error(`Error deleting loader ${loaderId}:`, error)
   }
@@ -183,10 +180,9 @@ export async function processDeletePackJob(packId: string) {
     for (const loader of loaders) {
       const { filePathOrUrl } = loader.config as any // Adjust the property name as needed
       if (filePathOrUrl) {
-        const { relevantPath } = extractRelevantPathAndFileName(filePathOrUrl)
         await deleteFileFromStorage(
           process.env['GOOGLE_PRIVATE_BUCKET_NAME'] || '',
-          relevantPath || ''
+          filePathOrUrl || ''
         )
       }
       await embedderDb.delete(Loader).where(eq(Loader.id, loader.id)).execute()
@@ -244,10 +240,18 @@ export async function processEmbedJob(jobId: string) {
         `[processEmbedJob] Loader added: ${JSON.stringify(res.raw, null, 2)}`
       )
 
+      const { relevantPath } = extractRelevantPathAndFileName(
+        loader.config.filePathOrUrl
+      )
+
       // update the loader status
       await embedderDb
         .update(Loader)
-        .set({ status: 'completed', raw: JSON.stringify(res.raw) })
+        .set({
+          status: 'completed',
+          raw: JSON.stringify(res.raw),
+          config: { ...loader.config, filePathOrUrl: relevantPath },
+        })
         .where(eq(Loader.id, loader.id))
         .execute()
 
@@ -256,7 +260,12 @@ export async function processEmbedJob(jobId: string) {
         .update(Job)
         .set({
           loaders: loaders.map((l: Loader) =>
-            l.id === loader.id ? { ...l, status: 'completed' } : l
+            l.id === loader.id
+              ? {
+                  ...l,
+                  status: 'completed',
+                }
+              : l
           ),
         })
         .where(eq(Job.id, jobId))
