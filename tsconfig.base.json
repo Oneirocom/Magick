@@ -49,6 +49,7 @@
         "packages/server/schemas/src/index.ts"
       ],
       "@magickml/agents": ["packages/server/agents/src/index.ts"],
+      "@magickml/agents-v2": ["packages/server/agents-v2/src/index.ts"],
       "@magickml/client": ["apps/client/src/index.ts"],
       "@magickml/client-types": ["packages/client/client-types/src/index.ts"],
       "@magickml/client-ui": ["packages/client/ui/src/index.ts"],
