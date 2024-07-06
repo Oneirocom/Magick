@@ -3,6 +3,7 @@ import { Plugin } from '../core/plugin'
 import { Agent } from '../Agent'
 import TypedEmitter from 'typed-emitter'
 import { TYPES } from '../interfaces/types'
+import { injectable } from 'inversify'
 
 // Plugin Manager
 export class PluginManager {
@@ -25,9 +26,7 @@ export class PluginManager {
     return Array.from(this.plugins.values())
   }
 
-  getRegistry() {
-    return new Map([[TYPES.PluginManagerService, this]])
-  }
+  getRegistry() {}
 }
 
 // modify the agents types to include functions and events added by the plugin manager
@@ -48,12 +47,9 @@ declare module '../Agent' {
 }
 
 // Main Plugin Manager Middleware
-@Service()
 export class PluginManagerService implements Service {
   apply(agent: Agent): void {
-    const pluginManager = agent.resolve<PluginManager>(
-      TYPES.PluginManagerService
-    )
+    const pluginManager = agent.resolve<PluginManager>(TYPES.PluginManager)
     agent.pluginManager = pluginManager
 
     agent.registerPlugin = plugin => {
@@ -78,9 +74,5 @@ export class PluginManagerService implements Service {
 
     agent.getPlugin = (name: string) => pluginManager.getPlugin(name)
     agent.getAllPlugins = () => pluginManager.getAllPlugins()
-  }
-
-  getDependencies() {
-    return new Map([[TYPES.PluginManagerService, new PluginManager()]])
   }
 }

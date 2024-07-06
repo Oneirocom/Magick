@@ -2,7 +2,14 @@ import { TypedEmitter } from 'tiny-typed-emitter'
 import { Service, ServiceManager } from './core/service'
 import { DIContainer } from './core/DIContainer'
 import { AgentConfig } from './interfaces/agentConfig'
-import { Container } from 'inversify'
+import { Container, interfaces } from 'inversify'
+import {
+  CONFIG_TO_SERVICE_MAP,
+  ConfigToDependencyMap,
+  DependencyInterfaces,
+  TYPES,
+} from './interfaces/types'
+import { IEventStore } from './interfaces/eventStore'
 
 // Define the base event types for the Agent
 export interface BaseAgentEvents {
@@ -13,43 +20,58 @@ export interface BaseAgentEvents {
 export interface AgentConfigOptions {}
 
 export class Agent extends TypedEmitter<BaseAgentEvents> {
-  private container: Container
-  di: DIContainer
+  container: Container
   config: AgentConfig<AgentConfigOptions>
-  private serviceManager: ServiceManager
 
-  constructor(
-    public readonly id: string,
-    config: AgentConfig<AgentConfigOptions>
-  ) {
+  constructor(public readonly id: string, config: AgentConfig) {
     super()
-    this.di = new DIContainer()
     this.container = new Container()
-    this.serviceManager = new ServiceManager(this)
     this.config = config
 
-    this.registerCoreServices()
+    // Lets register core services
+    this.container.bind<Agent>(TYPES.Agent).toConstantValue(this)
+    this.container
+      .bind<AgentConfigOptions>(TYPES.Options)
+      .toConstantValue(this.config.options)
+
+    this.registerCoreDependencies()
+    this.registerFactories()
   }
 
-  registerCoreServices(): this {
-    for (const serviceClass of Object.values(this.config.coreServices)) {
-      this.serviceManager.use(serviceClass)
+  private registerCoreDependencies(): void {
+    // autoload depedencies
+    for (const configKey in this.config.dependencies) {
+      const { useSingleton, service } =
+        CONFIG_TO_SERVICE_MAP[configKey as keyof typeof CONFIG_TO_SERVICE_MAP]
+
+      const type = service as keyof typeof DependencyInterfaces
+      const serviceClass =
+        this.config.dependencies[
+          configKey as keyof typeof CONFIG_TO_SERVICE_MAP
+        ]
+
+      const binding = this.container.bind(type).to(serviceClass)
+
+      if (useSingleton) {
+        binding.inSingletonScope()
+      }
     }
-    return this
   }
 
-  register(serviceClass: new () => Service): this {
-    this.serviceManager.use(serviceClass)
-    return this
-  }
-
-  resolve<T>(key: string): T {
-    return this.di.resolve<T>(key)
+  private registerFactories(): void {
+    // register the event store factory
+    this.container
+      .bind<interfaces.Factory<IEventStore>>(TYPES['Factory<EventStore>'])
+      .toFactory<IEventStore>((context: interfaces.Context) => {
+        return () => {
+          return context.container.get<IEventStore>(TYPES.EventStore)
+        }
+      })
   }
 
   async initialize(): Promise<void> {
     try {
-      await this.serviceManager.initialize()
+      // await this.serviceManager.initialize()
       this.emit('initialized')
     } catch (error: any) {
       this.emit('error', error)

@@ -1,6 +1,5 @@
 import { Agent } from '../Agent'
 import { AgentConfigBuilder } from '../core/agentConfigBuilder'
-import { PluginManagerService } from '../services/pluginManagerService'
 import { GraphStateService } from '../services/stateService'
 
 async function createAgent(id: string): Promise<Agent> {
@@ -13,8 +12,6 @@ async function createAgent(id: string): Promise<Agent> {
     .build()
 
   const agent = new Agent(id, config)
-
-  agent.register(PluginManagerService)
 
   await agent.initialize()
 

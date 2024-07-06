@@ -1,7 +1,7 @@
+import 'reflect-metadata'
+import { inject, injectable } from 'inversify'
 import Redis from 'ioredis'
-import { Agent } from '../Agent'
-import { Service } from '../core/service'
-import { TYPES } from '../interfaces/types'
+import { AgentConfigOptions } from '../Agent'
 
 declare module '../Agent' {
   interface AgentConfigOptions {
@@ -9,19 +9,17 @@ declare module '../Agent' {
   }
 }
 
-export type RedisServiceType = Redis
+@injectable()
+export class RedisClientWrapper {
+  private redis: Redis
 
-@Service()
-export class RedisService implements Service {
-  apply() {}
-
-  getDependencies(agent: Agent): Map<string, any> {
-    const redisUrl = agent.config.options.redisUrl
-
-    const redis = new Redis(redisUrl as string, {
+  constructor(@inject('AgentConfigOptions') configOptions: AgentConfigOptions) {
+    this.redis = new Redis(configOptions.redisUrl, {
       maxRetriesPerRequest: null,
     })
+  }
 
-    return new Map([[TYPES.RedisService, redis]])
+  getClient(): Redis {
+    return this.redis
   }
 }

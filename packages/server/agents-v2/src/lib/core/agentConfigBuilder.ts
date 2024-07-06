@@ -1,113 +1,81 @@
 import { IStateService } from '@magickml/behave-graph'
 import { AgentConfigOptions } from '../Agent'
-import { AgentConfig } from '../interfaces/agentConfig'
-// import { IDatabaseService } from '../interfaces/database'
-import { Service } from './service'
+import { AgentConfig, BaseConfig } from '../interfaces/agentConfig'
 import {
   ConfigServiceType,
-  DEFAULT_SERVICES,
+  DEFAULT_DEPENDENCIES,
   ServiceInterface,
 } from '../interfaces/types'
 
-export interface ILLMService {
-  log(level: string, message: string): void
-}
-
-export class AgentConfigBuilder<T = AgentConfigOptions> {
-  private config: Partial<AgentConfig<T>> = {
-    coreServices: {} as AgentConfig<T>['coreServices'],
-    additionalServices: new Map(),
+export class AgentConfigBuilder<
+  T extends Record<string, any> = AgentConfigOptions
+> {
+  private config: AgentConfig<T> = {
     options: {} as T,
+    dependencies: {} as BaseConfig,
   }
 
-  private requiredDependencies: Partial<Record<ConfigServiceType, boolean>> = {}
+  private requiredDependencies: Set<ConfigServiceType> = new Set(
+    Object.keys(DEFAULT_DEPENDENCIES) as ConfigServiceType[]
+  )
 
-  withStateService(ServiceClass: new () => Service<IStateService>): this {
-    if (!this.config.coreServices) {
-      this.config.coreServices = {} as AgentConfig<T>['coreServices']
-    }
-    this.config.coreServices['stateService'] = ServiceClass
-    this.requiredDependencies['stateService'] = true
+  withStateService(ServiceClass: new () => IStateService): this {
+    this.config.dependencies.stateService = ServiceClass
+    this.requiredDependencies.delete('stateService')
     return this
   }
 
-  // withDatabaseService(ServiceClass: new () => Service<IDatabaseService>): this {
-  //   if (!this.config.coreServices) {
-  //     this.config.coreServices = {} as AgentConfig<T>['coreServices']
-  //   }
-  //   this.config.coreServices['database'] = ServiceClass
-  //   this.requiredDependencies['database'] = true
-  //   return this
-  // }
-
-  withRedisService(
-    ServiceClass: new () => Service<ServiceInterface<'RedisService'>>
-  ): this {
-    if (!this.config.coreServices) {
-      this.config.coreServices = {} as AgentConfig<T>['coreServices']
-    }
-    this.config.coreServices['redis'] = ServiceClass
-    this.requiredDependencies['redis'] = true
+  withRedisService(ServiceClass: new () => ServiceInterface<'Redis'>): this {
+    this.config.dependencies.redis = ServiceClass
+    this.requiredDependencies.delete('redis')
     return this
   }
 
   withPluginManagerService(
-    ServiceClass: new () => Service<ServiceInterface<'PluginManagerService'>>
+    ServiceClass: new () => ServiceInterface<'PluginManager'>
   ): this {
-    if (!this.config.coreServices) {
-      this.config.coreServices = {} as AgentConfig<T>['coreServices']
-    }
-    this.config.coreServices['pluginManager'] = ServiceClass
-    this.requiredDependencies['pluginManager'] = true
+    this.config.dependencies.pluginManager = ServiceClass
+    this.requiredDependencies.delete('pluginManager')
     return this
   }
 
-  withOptions(options: T): this {
+  withDatabaseService(
+    ServiceClass: new () => ServiceInterface<'Database'>
+  ): this {
+    this.config.dependencies.database = ServiceClass
+    this.requiredDependencies.delete('database')
+    return this
+  }
+
+  withEventStoreService(
+    ServiceClass: new () => ServiceInterface<'EventStore'>
+  ): this {
+    this.config.dependencies.eventStore = ServiceClass
+    this.requiredDependencies.delete('eventStore')
+    return this
+  }
+
+  withOptions(options: T & Partial<BaseConfig>): this {
     this.config.options = options
     return this
   }
 
-  // withDatabase(factory: () => Service<IDatabaseService>): this {
-  //   this.config.database = factory
-  //   this.requiredDependencies['database'] = true
-  //   return this
-  // }
-
-  // withLLMProvider(factory: () => Service<ILLMService>): this {
-  //   this.config.llmProvider = factory
-  //   this.requiredDependencies['llmProvider'] = true
-  //   return this
-  // }
-
-  // Add other configuration methods as needed...
-
   build(): AgentConfig<T> {
-    const missingServices: ConfigServiceType[] = []
-
-    ;(Object.keys(this.requiredDependencies) as ConfigServiceType[]).forEach(
-      key => {
-        if (!this.requiredDependencies[key]) {
-          if (key in DEFAULT_SERVICES) {
-            console.warn(
-              `Service ${key} not provided, using default implementation.`
-            )
-            // @ts-ignore - This is safe because we checked for the key in DEFAULT_SERVICES
-            this.config.coreServices![key] = DEFAULT_SERVICES[key]!
-          } else {
-            missingServices.push(key)
-          }
-        }
-      }
-    )
-
-    if (missingServices.length > 0) {
-      throw new Error(
-        `Missing required services without defaults: ${missingServices.join(
-          ', '
-        )}`
+    // Add default dependencies for any missing required services
+    for (const dependency of this.requiredDependencies) {
+      console.warn(
+        `Service ${dependency} not provided, using default implementation.`
       )
+
+      if (!DEFAULT_DEPENDENCIES[dependency]) {
+        throw new Error(`No default implementation found for ${dependency}`)
+      }
+
+      // @ts-ignore - This is safe because we've checked for the key above
+      this.config[dependency] = DEFAULT_DEPENDENCIES[dependency]
     }
 
+    // Type assertion to ensure all required properties are present
     return this.config as AgentConfig<T>
   }
 }

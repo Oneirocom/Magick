@@ -18,6 +18,7 @@
     "esModuleInterop": true,
     "inlineSources": true,
     "noPropertyAccessFromIndexSignature": false,
+    "types": ["reflect-metadata"],
     "strict": true,
     "typeRoots": [
       "packages/@types",
