@@ -20,6 +20,7 @@ function stringify(obj: Record<string, any>) {
 
 export type PubsubOptions = {
   debug?: boolean
+  connection?: Redis
 }
 
 /**
@@ -53,7 +54,7 @@ export type PubsubOptions = {
  * resource leaks.
  */
 export class RedisPubSub extends EventEmitter {
-  private redisCloudUrl: string
+  private redisCloudUrl: string | undefined
   private publisher!: Redis
   private subscriber!: Redis
   private options: PubsubOptions
@@ -62,6 +63,66 @@ export class RedisPubSub extends EventEmitter {
   private patternRefCount = new Map<string, number>()
   private channelCallbacks = new Map<string, Array<Function>>()
   private patternCallbacks = new Map<string, Array<Function>>()
+
+  constructor(redisCloudUrl: string | undefined, options: PubsubOptions = {}) {
+    super()
+
+    if (!redisCloudUrl && !options.connection) {
+      throw new Error('Redis URL or connection is required.')
+    }
+
+    this.redisCloudUrl = redisCloudUrl
+    this.options = options
+  }
+
+  async createConnection(redisUrl: string) {
+    return new Redis(redisUrl, {
+      maxRetriesPerRequest: null,
+    })
+  }
+
+  /**
+   * Initializes the Redis clients for publishing and subscribing.
+   * This method should be called before attempting any publish/subscribe operations.
+   *
+   * @param _options - The Redis client options, including the URL and socket configurations.
+   *
+   * Example:
+   * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
+   */
+  async initialize(): Promise<void> {
+    if (this.options.connection) {
+      this.publisher = this.options.connection
+      this.subscriber = this.options.connection.duplicate()
+    } else {
+      // we can guarantee that redisCloudUrl is defined here if there is no
+      // connection. So we can use ! to assert it
+      this.publisher = await this.createConnection(this.redisCloudUrl!)
+      this.subscriber = await this.createConnection(this.redisCloudUrl!)
+    }
+
+    // Define the expire command
+    this.publisher.defineCommand('expire', {
+      numberOfKeys: 1,
+      lua: 'return redis.call("expire", KEYS[1], ARGV[1])',
+    })
+
+    // Define the setnx command
+    this.publisher.defineCommand('setnx', {
+      numberOfKeys: 1,
+      lua: 'return redis.call("setnx", KEYS[1], ARGV[1])',
+    })
+
+    // Define the del command
+    // this.publisher.defineCommand('del', {
+    //   numberOfKeys: -1,
+    //   lua: 'return redis.call("del", unpack(KEYS))',
+    // })
+    // await this.client.connect()
+    // await this.subscriber.connect()
+    this.connectEventListeners(this.publisher, 'publisher')
+    this.connectEventListeners(this.subscriber, 'subscriber')
+  }
 
   // Improved handling of reconnection attempts
   async reconnectRedisClient(
@@ -85,7 +146,11 @@ export class RedisPubSub extends EventEmitter {
           console.warn(`Error quitting the ${clientType} client: ${quitError}`)
         }
 
-        const client = await this.createConnection(this.redisCloudUrl)
+        const client = this.options.connection
+          ? clientType === 'publisher'
+            ? this.options.connection
+            : this.options.connection.duplicate()
+          : await this.createConnection(this.redisCloudUrl!)
 
         this[clientType] = client
 
@@ -120,54 +185,6 @@ export class RedisPubSub extends EventEmitter {
       }
     }
     reconnect()
-  }
-
-  async createConnection(redusUrl: string) {
-    return new Redis(redusUrl, {
-      maxRetriesPerRequest: null,
-    })
-  }
-
-  constructor(redisCloudUrl: string, options: PubsubOptions = {}) {
-    super()
-    this.redisCloudUrl = redisCloudUrl
-    this.options = options
-  }
-
-  /**
-   * Initializes the Redis clients for publishing and subscribing.
-   * This method should be called before attempting any publish/subscribe operations.
-   *
-   * @param _options - The Redis client options, including the URL and socket configurations.
-   *
-   * Example:
-   * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
-   */
-  async initialize(): Promise<void> {
-    this.publisher = await this.createConnection(this.redisCloudUrl)
-    this.subscriber = await this.createConnection(this.redisCloudUrl)
-
-    // Define the expire command
-    this.publisher.defineCommand('expire', {
-      numberOfKeys: 1,
-      lua: 'return redis.call("expire", KEYS[1], ARGV[1])',
-    })
-
-    // Define the setnx command
-    this.publisher.defineCommand('setnx', {
-      numberOfKeys: 1,
-      lua: 'return redis.call("setnx", KEYS[1], ARGV[1])',
-    })
-
-    // Define the del command
-    // this.publisher.defineCommand('del', {
-    //   numberOfKeys: -1,
-    //   lua: 'return redis.call("del", unpack(KEYS))',
-    // })
-    // await this.client.connect()
-    // await this.subscriber.connect()
-    this.connectEventListeners(this.publisher, 'publisher')
-    this.connectEventListeners(this.subscriber, 'subscriber')
   }
 
   connectEventListeners(client: Redis, clientType: 'subscriber' | 'publisher') {
