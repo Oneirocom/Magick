@@ -1,11 +1,8 @@
 import { TypedEmitter } from 'tiny-typed-emitter'
-import { Service, ServiceManager } from './core/service'
-import { DIContainer } from './core/DIContainer'
 import { AgentConfig } from './interfaces/agentConfig'
 import { Container, interfaces } from 'inversify'
 import {
   CONFIG_TO_SERVICE_MAP,
-  ConfigToDependencyMap,
   DependencyInterfaces,
   TYPES,
 } from './interfaces/types'

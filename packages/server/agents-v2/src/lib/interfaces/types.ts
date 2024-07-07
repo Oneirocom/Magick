@@ -1,15 +1,16 @@
 import { IStateService } from '@magickml/behave-graph'
 import { PluginManagerService } from '../services/pluginManagerService'
 // import { IDatabaseService } from './database';
-import { GraphStateService } from '../services/stateService'
 import { IDatabaseService } from './database'
-import { DatabaseService } from '../services/databaseService/databaseService'
 import { IEventStore } from './eventStore'
 import { ISpellbook } from './spellbook'
 import { Agent, AgentConfigOptions } from '../Agent'
 import { EventStore } from '../services/eventStore'
 import { IRedis } from './IRedis'
 import { RedisClientWrapper } from '../services/redisService'
+import { KeyvStateService } from '../services/keyvStateService'
+import { IPubSub } from './IPubSub'
+import { RedisPubSub } from '../services/redisPubSub'
 
 /**
  * This is the central source of truth for all dependencies that are available.
@@ -25,6 +26,7 @@ export const DependencyInterfaces = {
   Spellbook: {} as ISpellbook,
   Agent: {} as Agent,
   Options: {} as AgentConfigOptions,
+  PubSub: {} as IPubSub,
   // ... other services
 } as const
 
@@ -45,8 +47,9 @@ export const TYPES: Record<ServiceType, ServiceType> = Object.keys(
 export const CONFIG_TO_SERVICE_MAP = {
   stateService: { useSingleton: true, service: 'GraphStateService' },
   redis: { useSingleton: true, service: 'Redis' },
+  pubSub: { useSingleton: true, service: 'PubSub' },
   pluginManager: { useSingleton: true, service: 'PluginManager' },
-  database: { useSingleton: true, service: 'Database' },
+  // database: { useSingleton: true, service: 'Database' },
   eventStore: { useSingleton: false, service: 'EventStore' },
   // ... other mappings
 } as const
@@ -70,8 +73,9 @@ type DefaultDependenciesType = {
 export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
   redis: RedisClientWrapper,
   pluginManager: PluginManagerService,
-  stateService: GraphStateService,
-  database: DatabaseService,
+  stateService: KeyvStateService,
+  pubSub: RedisPubSub,
+  // database: DatabaseService,
   eventStore: EventStore,
 }
 

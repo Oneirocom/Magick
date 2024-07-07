@@ -39,13 +39,13 @@ export class AgentConfigBuilder<
     return this
   }
 
-  withDatabaseService(
-    ServiceClass: new () => ServiceInterface<'Database'>
-  ): this {
-    this.config.dependencies.database = ServiceClass
-    this.requiredDependencies.delete('database')
-    return this
-  }
+  // withDatabaseService(
+  //   ServiceClass: new () => ServiceInterface<'Database'>
+  // ): this {
+  //   this.config.dependencies.database = ServiceClass
+  //   this.requiredDependencies.delete('database')
+  //   return this
+  // }
 
   withEventStoreService(
     ServiceClass: new () => ServiceInterface<'EventStore'>
