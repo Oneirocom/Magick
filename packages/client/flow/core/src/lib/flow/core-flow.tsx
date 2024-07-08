@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Tab, usePubSub } from '@magickml/providers'
 import { SpellInterfaceWithGraph } from '@magickml/agent-server-schemas'
 import { useSelector } from 'react-redux'
@@ -28,6 +28,11 @@ export const CoreFlow: React.FC<FlowProps> = ({
   const pubSub = usePubSub()
 
   const specJSON = useMemo(() => getNodeSpec(), [])
+
+  useEffect(() => {
+    if (!specJSON) return
+    console.log('Total nodes specs:', specJSON.length)
+  }, [specJSON])
 
   const behaveGraphFlow = useBehaveGraphFlow({
     spell,
