@@ -1,5 +1,5 @@
 import { ActionPayload, EventPayload } from '@magickml/shared-services'
-import { EventProperties } from './database'
+import { EventProperties } from './IDatabase'
 import { GraphNodes } from '@magickml/behave-graph'
 
 export enum StatusEnum {

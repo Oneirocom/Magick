@@ -1,6 +1,6 @@
 import { EventPayload } from './IEvent'
 import { ISpell } from './spell'
-import { ISpellCaster } from './spellcaster'
+import { ISpellCaster } from './ISpellcaster'
 
 export interface ISpellbook {
   getSpells(): Map<string, ISpell>

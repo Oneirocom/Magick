@@ -1,33 +1,46 @@
+import { inject, injectable } from 'inversify'
 import { Agent, BaseAgentEvents } from '../Agent'
-import { CommandListener } from '../interfaces/ICommandHub'
+import {
+  CommandListener,
+  ICommandHub,
+  commandJob,
+} from '../interfaces/ICommandHub'
 import { IPubSub } from '../interfaces/IPubSub'
+import { TYPES } from '../interfaces/IDependencies'
 
-export class CommandHub<A extends Agent = Agent> {
-  private eventMap: { [key: string]: CommandListener<any, A>[] } = {}
+@injectable()
+export class CommandHub implements ICommandHub {
+  private eventMap: { [key: string]: CommandListener<any, Agent>[] } = {}
 
-  constructor(private agent: A, private pubsub: IPubSub) {
+  constructor(
+    @inject<Agent>(TYPES.Agent) private agent: Agent,
+    @inject(TYPES.PubSub) private pubsub: IPubSub
+  ) {
     this.initialize()
   }
 
-  private initialize() {
+  initialize() {
     // Subscribe to all events
-    this.pubsub.subscribe('*', this.handleIncomingCommand.bind(this))
+    this.pubsub.subscribe<commandJob>(
+      '*',
+      this.handleIncomingCommand.bind(this)
+    )
 
     // Listen for all events on the agent
     this.agent.onAny(this.handleAgentEvent.bind(this))
   }
 
-  private async handleIncomingCommand(event: keyof BaseAgentEvents, data: any) {
-    if (!this.validateEventType(event)) {
-      this.agent.emit(
-        'error',
-        new Error(`Invalid event type received: ${event}`)
-      )
+  async handleIncomingCommand(
+    data: commandJob,
+    channel: keyof BaseAgentEvents
+  ) {
+    // check of this is a valid event
+    if (!this.validateEventType(channel)) {
       return
     }
 
     // Emit the event through the agent
-    this.agent.emit(event, data)
+    this.agent.emit(channel, data as any)
   }
 
   private handleAgentEvent(eventName: string, ...args: any[]) {
@@ -64,14 +77,14 @@ export class CommandHub<A extends Agent = Agent> {
     }
   }
 
-  on<T>(eventType: string, listener: CommandListener<T, A>) {
+  on<T>(eventType: string, listener: CommandListener<T, Agent>) {
     if (!this.eventMap[eventType]) {
       this.eventMap[eventType] = []
     }
     this.eventMap[eventType].push(listener)
   }
 
-  off(eventType: string, listener: CommandListener<any, A>) {
+  off(eventType: string, listener: CommandListener<any, Agent>) {
     const listeners = this.eventMap[eventType]
     if (listeners) {
       const index = listeners.indexOf(listener)
@@ -81,7 +94,7 @@ export class CommandHub<A extends Agent = Agent> {
     }
   }
 
-  private publish(eventType: string, data: any) {
+  publish(eventType: string, data: any) {
     const listeners = this.eventMap[eventType]
     if (listeners) {
       listeners.forEach(listener => listener.callback(data, this.agent))
@@ -89,16 +102,16 @@ export class CommandHub<A extends Agent = Agent> {
   }
 
   async onDestroy(): Promise<void> {
-    try {
-      await this.pubsub.unsubscribe('*')
-      this.agent.logger.debug(
-        `CommandHub: Unsubscribed from PubSub for agent ${this.agent.id}`
-      )
-    } catch (error) {
-      this.agent.logger.error(
-        `CommandHub: Error unsubscribing from PubSub: ${error}`
-      )
-    }
+    // try {
+    await this.pubsub.unsubscribe('*')
+    //   this.agent.logger.debug(
+    //     `CommandHub: Unsubscribed from PubSub for agent ${this.agent.id}`
+    //   )
+    // } catch (error) {
+    //   this.agent.logger.error(
+    //     `CommandHub: Error unsubscribing from PubSub: ${error}`
+    //   )
+    // }
 
     // Clear local event listeners
     this.eventMap = {}
@@ -106,8 +119,8 @@ export class CommandHub<A extends Agent = Agent> {
     // Remove the 'any' event listener from the agent
     this.agent.offAny(this.handleAgentEvent)
 
-    this.agent.logger.info(
-      `CommandHub: CommandHub instance for agent ${this.agent.id} destroyed`
-    )
+    // this.agent.logger.info(
+    //   `CommandHub: CommandHub instance for agent ${this.agent.id} destroyed`
+    // )
   }
 }

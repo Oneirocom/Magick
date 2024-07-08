@@ -12,7 +12,6 @@ import {
   IGraph,
   makeGraphApi,
   IStateService,
-  GraphNodes,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
 import { EventPayload } from '@magickml/shared-services'
 import { ISpell, SpellState } from '../interfaces/spell'

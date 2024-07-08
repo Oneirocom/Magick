@@ -1,10 +1,10 @@
 import { GraphNodes, IStateService } from '@magickml/behave-graph'
 import Keyv from 'keyv'
 import KeyvRedis from '@keyv/redis'
-import { IEventStore } from '../interfaces/eventStore'
+import { IEventStore } from '../interfaces/IEventStore'
 import { EventPayload } from '../interfaces/IEvent'
 import { inject, injectable } from 'inversify'
-import { TYPES } from '../interfaces/types'
+import { TYPES } from '../interfaces/IDependencies'
 import { IRedis } from '../interfaces/IRedis'
 
 /**

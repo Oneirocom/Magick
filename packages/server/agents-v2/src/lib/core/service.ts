@@ -1,5 +1,5 @@
 import { Agent } from '../Agent'
-import { ServiceType } from '../interfaces/types'
+import { ServiceType } from '../interfaces/IDependencies'
 import { Constructor } from './DIContainer'
 
 interface Service {

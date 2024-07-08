@@ -1,18 +1,18 @@
 import { IStateService } from '@magickml/behave-graph'
-import { PluginManagerService } from '../services/pluginManagerService'
+import { PluginManagerService } from '../dependencies/pluginManagerService'
 // import { IDatabaseService } from './database';
-import { IDatabaseService } from './database'
-import { IEventStore } from './eventStore'
-import { ISpellbook } from './spellbook'
 import { Agent, AgentConfigOptions } from '../Agent'
-import { EventStore } from '../services/eventStore'
-import { IRedis } from './IRedis'
-import { RedisClientWrapper } from '../services/redisService'
-import { KeyvStateService } from '../services/keyvStateService'
-import { IPubSub } from './IPubSub'
-import { RedisPubSub } from '../services/redisPubSub'
+import { EventStore } from '../dependencies/eventStore'
+import { RedisClientWrapper } from '../dependencies/redisService'
+import { KeyvStateService } from '../dependencies/keyvStateService'
+import { RedisPubSub } from '../dependencies/redisPubSub'
 import { TypedEmitter } from 'tiny-typed-emitter'
-import { IEventEmitter } from './IEventEmitter'
+import { IRedis } from '../interfaces/IRedis'
+import { IDatabaseService } from '../interfaces/IDatabase'
+import { IEventStore } from '../interfaces/IEventStore'
+import { ISpellbook } from '../interfaces/ISpellbook'
+import { IPubSub } from '../interfaces/IPubSub'
+import { IEventEmitter } from '../interfaces/IEventEmitter'
 
 /**
  * This is the central source of truth for all dependencies that are available.
@@ -36,16 +36,6 @@ export const DependencyInterfaces = {
 } as const
 
 /**
- * This types object is used across the agent to retrieve the dependencies.
- */
-export const TYPES: Record<ServiceType, ServiceType> = Object.keys(
-  DependencyInterfaces
-).reduce((acc, key) => {
-  acc[key as ServiceType] = key as ServiceType
-  return acc
-}, {} as Record<ServiceType, ServiceType>)
-
-/**
  * Mapping of configuration keys to service types. If you want to make a service configurable
  * via the config options, add it here.
  */
@@ -60,6 +50,27 @@ export const CONFIG_TO_SERVICE_MAP = {
   // ... other mappings
 } as const
 
+// Default implementations for the services
+export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
+  redis: RedisClientWrapper,
+  pluginManager: PluginManagerService,
+  stateService: KeyvStateService,
+  pubSub: RedisPubSub,
+  eventEmitter: TypedEmitter,
+  // database: DatabaseService,
+  eventStore: EventStore,
+}
+
+/**
+ * This types object is used across the agent to retrieve the dependencies.
+ */
+export const TYPES: Record<ServiceType, ServiceType> = Object.keys(
+  DependencyInterfaces
+).reduce((acc, key) => {
+  acc[key as ServiceType] = key as ServiceType
+  return acc
+}, {} as Record<ServiceType, ServiceType>)
+
 /**
  * Verify that all services are mapped. This will throw a compile-time error if a service is not mapped.
  */
@@ -73,17 +84,6 @@ type DefaultDependenciesType = {
   [K in keyof typeof CONFIG_TO_SERVICE_MAP]: Constructor<
     (typeof DependencyInterfaces)[(typeof CONFIG_TO_SERVICE_MAP)[K]['service']]
   >
-}
-
-// Default implementations for the services
-export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
-  redis: RedisClientWrapper,
-  pluginManager: PluginManagerService,
-  stateService: KeyvStateService,
-  pubSub: RedisPubSub,
-  eventEmitter: TypedEmitter,
-  // database: DatabaseService,
-  eventStore: EventStore,
 }
 
 /**
