@@ -1,9 +1,19 @@
 {
-  "name": "plugin",
+  "name": "server/plugin",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/plugin/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/plugin",
+        "tsConfig": "packages/server/plugin/tsconfig.lib.json",
+        "main": "packages/server/plugin/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
@@ -15,6 +25,5 @@
         "jestConfig": "packages/server/pluginManager/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

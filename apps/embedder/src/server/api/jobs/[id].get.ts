@@ -1,5 +1,5 @@
-import { JobSchema } from '@magickml/embedder/schema'
-import { embedderDb } from 'embedder-db-pg'
+import { JobSchema } from '@magickml/embedder-schemas'
+import { embedderDb } from '@magickml/embedder-db-pg'
 
 export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')

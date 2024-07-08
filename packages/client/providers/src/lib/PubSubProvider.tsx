@@ -27,6 +27,7 @@ export const events: PubSubEvents = {
   SEND_COMMAND: 'sendCommand',
   MESSAGE_AGENT: 'messageAgent',
   TOGGLE_FILE_DRAWER: 'toggleFileDrawer',
+  TOGGLE_RIGHT_PANEL: 'toggleRightPanel',
   RESET_NODE_STATE: 'resetNodeState',
   $SUBSPELL_UPDATED: spellId => `subspellUpdated:${spellId}`,
   $TRIGGER: (tabId, nodeId) => `triggerNode:${tabId}:${nodeId ?? 'default'}`,
@@ -63,6 +64,8 @@ export const events: PubSubEvents = {
   $REFRESH_EVENT_TABLE: tabId => `refreshEventTable:${tabId}`,
   $RELOAD_GRAPH: tabId => `reloadGraph:${tabId}`,
   $SERAPH_EVENT: tabId => `seraphEvent:${tabId}`,
+  $INPUT_TO_CHAT: tabId => `inputToChat:${tabId}`,
+  $CHAT_TO_INPUT: tabId => `chatToInput:${tabId}`,
 }
 
 // Create the PubSubProvider component

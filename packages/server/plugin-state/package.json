@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/agent-plugin-state",
+  "version": "0.0.1",
+  "dependencies": {
+    "@magickml/server-db": "0.0.1",
+    "uuid": "^9.0.0",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

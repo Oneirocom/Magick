@@ -1,9 +1,9 @@
 {
-  "name": "embedder-loaders-core",
+  "name": "embedder/loaders/core",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/loaders/core/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

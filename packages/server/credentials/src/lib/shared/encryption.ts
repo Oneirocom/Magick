@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { CREDENTIALS_ALGORITHM } from 'shared/config'
+import { CREDENTIALS_ALGORITHM } from '@magickml/server-config'
 
 /**
  * Generates a key from a given secret key using SHA-256.

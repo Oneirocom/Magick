@@ -1,29 +1,38 @@
 'use client'
-// import { debounce } from 'lodash'
+
 import Editor, { Monaco } from '@monaco-editor/react'
 import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
-import { useDispatch, useSelector } from 'react-redux'
 import { Window } from 'client/core'
-import { selectActiveInput, setActiveInput } from 'client/state'
 import { useChangeNodeData } from '@magickml/flow-core'
 import WindowMessage from '../WindowMessage/WindowMessage'
 import { InputSocketSpecJSON } from '@magickml/behave-graph'
 import { useOnSelectionChange } from '@xyflow/react'
 import { MagickNodeType } from '@magickml/client-types'
+import { usePubSub } from '@magickml/providers'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from 'client/state'
 
 const TextEditor = () => {
-  const dispatch = useDispatch()
   const [code, setCode] = useState<string | undefined>(undefined)
   const [selectedNode, setSelectedNode] = useState<MagickNodeType | null>(null)
+  const { subscribe, publish, events } = usePubSub()
+  const dispatch = useDispatch()
+
+  const { currentTab } = useSelector((state: RootState) => state.tabLayout)
+  const activeInput = useSelector(
+    (state: RootState) => state.globalConfig.activeInput
+  )
 
   useOnSelectionChange({
     onChange: ({ nodes }) => {
-      if (nodes.length > 1) {
+      if (nodes.length > 1 || nodes[0] === undefined) {
         setSelectedNode(null)
+        dispatch
         return
+      } else {
+        setSelectedNode(nodes[0])
       }
-      setSelectedNode(nodes[0])
     },
   })
 
@@ -42,7 +51,6 @@ const TextEditor = () => {
     if (!selectedNode) return
     updateNodeData(key, value)
   }
-  const activeInput = useSelector(selectActiveInput)
 
   const handleEditorWillMount = (monaco: Monaco) => {
     monaco.editor.defineTheme('sds-dark', {
@@ -124,15 +132,22 @@ const TextEditor = () => {
 
   // Handle updating the nodes input socket value
   useEffect(() => {
-    if (code === undefined || !selectedNode || !activeInput) return
+    if (
+      code === undefined ||
+      !selectedNode ||
+      !currentTab ||
+      activeInput?.nodeId !== selectedNode?.id
+    )
+      return
 
     const formattedCode = code.replace('\r\n', '\n')
-    if (formattedCode === activeInput.value) return
-
-    if (activeInput) {
-      dispatch(setActiveInput({ ...activeInput, value: formattedCode }))
-    }
-  }, [debouncedCode])
+    publish(events.$CHAT_TO_INPUT(currentTab.id), {
+      value: formattedCode,
+      nodeId: selectedNode.id,
+      name: activeInput?.name || '',
+      inputType: 'string',
+    })
+  }, [code, selectedNode, currentTab, activeInput])
 
   // Handles loading the code from selected node if a text editor data node
   useEffect(() => {
@@ -145,17 +160,37 @@ const TextEditor = () => {
     setCode(textEditorData)
   }, [selectedNode?.id])
 
-  // Handles setting the code from the active input
   useEffect(() => {
     if (activeInput?.value === code) return
     if (activeInput?.inputType !== 'string') return
     setCode(activeInput.value)
   }, [activeInput])
 
+  useEffect(() => {
+    if (!currentTab || !activeInput) return
+
+    const subscribeToEvents = () => {
+      return subscribe(
+        events.$INPUT_TO_CHAT(currentTab.id),
+        (eventName, { value, nodeId: incomingNodeId, name, inputType }) => {
+          setCode(value)
+        }
+      )
+    }
+    const unsubscribe = subscribeToEvents()
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe()
+      }
+    }
+  }, [currentTab, activeInput])
+
   if (!selectedNode || !selectedNode?.data?.configuration) return null
 
   const { configuration } = selectedNode.data
   const { textEditorOptions, textEditorData } = configuration
+
   if (
     textEditorData === undefined &&
     (!activeInput || activeInput?.inputType !== 'string')

@@ -2,11 +2,11 @@ import {
   CloudAgentManagerV2,
   FeathersSyncReporter,
 } from 'server/cloud-agent-manager'
-import { initLogger, getLogger } from 'server/logger'
-import { app, initApp } from 'server/core'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
-import { initAgentCommander } from 'server/agents'
+import { initLogger, getLogger } from '@magickml/server-logger'
+import { app, initApp } from '@magickml/agent-server'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/server-config'
 import { BullQueue } from 'server/communication'
+import { initAgentCommander } from '@magickml/agent-commander'
 
 initLogger({ name: 'cloud-agent-manager' })
 const logger = getLogger()
@@ -37,7 +37,7 @@ logger.info('Initializing app...')
 await initApp()
 
 logger.info('Initializing agent commander...')
-await initAgentCommander()
+await initAgentCommander(app)
 
 logger.info('Initializing cloud agent manager...')
 start()

@@ -91,7 +91,7 @@ export const FeathersProvider = ({
         }, 1000)
       })
 
-      client.io.on('error', (error): void => {
+      client.io.on('error', (error: any): void => {
         dispatch(setConnected(false))
         console.info(`Connection error: ${error} \n trying to reconnect...`)
         setTimeout((): void => {
@@ -148,13 +148,6 @@ export const FeathersProvider = ({
     const handler = (data: { isLive: any }): void => {
       pongReceivedRef.current = true
       if (data.isLive) dispatch(setConnected(true))
-
-      // if watching ever fails we should reconnect here.
-      if (!data.isLive) {
-        console.error('Agent is not live')
-        client.service('agents').subscribe(currentAgentIdRef.current)
-        dispatch(setConnected(false))
-      }
     }
 
     client.service('agents').on('pong', handler)

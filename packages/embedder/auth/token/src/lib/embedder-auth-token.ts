@@ -1,4 +1,4 @@
-import { err } from '@magickml/embedder/config'
+import { err } from '@magickml/embedder-config'
 import { createError } from 'h3'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'

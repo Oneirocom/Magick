@@ -14,38 +14,34 @@ import {
 import socketio from '@feathersjs/socketio'
 import pino from 'pino'
 import Redis from 'ioredis'
-import { RedisPubSub } from 'server/redis-pubsub'
+import Keyv from 'keyv'
 
+import { prismaCore } from '@magickml/server-db'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 import {
   REDIS_URL,
   API_ACCESS_KEY,
   PAGINATE_MAX,
   PAGINATE_DEFAULT,
   DATABASE_URL,
-} from 'shared/config'
-import { createPosthogClient } from 'server/event-tracker'
+} from '@magickml/server-config'
+import { createPosthogClient } from '@magickml/server-event-tracker'
+import { getLogger } from '@magickml/server-logger'
+import { CredentialsManager } from '@magickml/credentials'
+import { stringify } from '@magickml/utils'
+import { AgentCommander } from '@magickml/agent-commander'
 
 import { dbClient } from './dbClient'
 import type { Application } from './declarations'
-import type { AgentCommander } from 'server/agents'
 import { logError } from './hooks'
 import channels from './sockets/channels'
 import { authentication } from './auth/authentication'
 import { services } from './services'
 import handleSockets from './sockets/sockets'
 
-import { getLogger } from 'server/logger'
 import { authenticateApiKey } from './hooks/authenticateApiKey'
-import { CredentialsManager } from 'server/credentials'
-import {
-  MemoryRetrieval,
-  MemoryStorageMiddleware,
-  SeraphCore,
-  importPrivatePrompts,
-} from '@magickml/seraph'
+import { SeraphCore } from '@magickml/seraph'
 import feathersSync from './lib/feathersSync'
-import { stringify } from 'shared/utils'
-import Keyv from 'keyv'
 
 // @ts-ignore
 BigInt.prototype.toJSON = function () {
@@ -68,6 +64,7 @@ declare module './declarations' {
     posthog: ReturnType<typeof createPosthogClient>
     credentialsManager: CredentialsManager
     seraphCore: SeraphCore
+    prisma: typeof prismaCore
     keyv: Keyv
   }
 }
@@ -80,8 +77,7 @@ export async function initApp(environment: Environment = 'default') {
   const credentialsManager = new CredentialsManager()
   app.set('credentialsManager', credentialsManager)
 
-  const prompt =
-    (await importPrivatePrompts()) || 'You are seraph, a helpful AI angel.'
+  const prompt = 'You are seraph, a helpful AI angel.'
 
   const seraph = new SeraphCore({
     prompt,
@@ -89,9 +85,9 @@ export async function initApp(environment: Environment = 'default') {
     anthropicApiKey: process.env['ANTHROPIC_API_KEY'] as string,
   })
 
-  seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
+  // seraph.registerMiddleware(new MemoryStorageMiddleware(seraph))
   // seraph.registerCognitiveFunction(new MemoryStorage(seraph))
-  seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
+  // seraph.registerCognitiveFunction(new MemoryRetrieval(seraph))
 
   app.set('seraphCore', seraph)
 
@@ -137,6 +133,8 @@ export async function initApp(environment: Environment = 'default') {
       deserialize: JSON.parse,
     })
   )
+
+  app.set('prisma', prismaCore)
 
   // Initialize pubsub redis client
   const pubsub = new RedisPubSub(REDIS_URL as string)

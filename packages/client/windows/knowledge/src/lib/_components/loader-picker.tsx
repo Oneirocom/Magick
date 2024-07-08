@@ -1,7 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
-import { ZodTypeAny } from 'zod'
+import React, { useEffect, useState } from 'react'
 import {
   FileIcon,
   FileSpreadsheetIcon,
@@ -10,8 +9,6 @@ import {
   WebcamIcon,
   YoutubeIcon,
   PresentationIcon,
-  // ConeIcon,
-  // FileJsonIcon,
 } from 'lucide-react'
 import {
   type LoaderType,
@@ -25,23 +22,33 @@ import {
   DocxLoaderSchema,
   ExcelLoaderSchema,
   PptLoaderSchema,
-  // ConfluenceLoaderSchema,
-  // JsonLoaderSchema,
   LoaderTypeSchema,
-} from '@magickml/embedder/schema'
+} from '@magickml/embedder-schemas'
 import { TextareaWithLabel, InputWithLabel, Button } from '@magickml/client-ui'
 import { createEmbedderReactClient } from '@magickml/embedder-client-react'
 import { useAtomValue } from 'jotai'
 import { activePackIdAtom } from '../_pkg/state'
 import toast from 'react-hot-toast'
+import FileDropper from './fileDropper'
+import { ZodTypeAny } from 'zod'
+import {
+  UploadImageProps,
+  uploadImage,
+} from '../dialogs/add/knowledge-upload-content'
+import { AddKnowledge } from '@magickml/shared-services'
+import {
+  ClientProjectPresignType,
+  useGetPresignedUrlMutation,
+} from 'client/state'
 
 const loaderTypeProperties: Record<
   LoaderType,
-  { icon: React.ElementType; description: string }
+  { icon: React.ElementType; description: string; showFileDropper?: boolean }
 > = {
   text: {
     icon: TextIcon,
     description: 'Load and process text data with ease.',
+    showFileDropper: true,
   },
   youtube: {
     icon: YoutubeIcon,
@@ -60,21 +67,26 @@ const loaderTypeProperties: Record<
     description: 'Load and process data from websites.',
   },
   sitemap: { icon: MapIcon, description: 'Load and process website sitemaps.' },
-  pdf: { icon: FileIcon, description: 'Load and process PDF documents.' },
-  docx: { icon: FileIcon, description: 'Load and process Word documents.' },
+  pdf: {
+    icon: FileIcon,
+    description: 'Load and process PDF documents.',
+    showFileDropper: true,
+  },
+  docx: {
+    icon: FileIcon,
+    description: 'Load and process Word documents.',
+    showFileDropper: true,
+  },
   excel: {
     icon: FileSpreadsheetIcon,
     description: 'Load and process Excel spreadsheets.',
+    showFileDropper: true,
   },
   ppt: {
     icon: PresentationIcon,
     description: 'Load and process PowerPoint presentations.',
+    showFileDropper: true,
   },
-  // confluence: {
-  //   icon: ConeIcon,
-  //   description: 'Load and process Confluence data.',
-  // },
-  // json: { icon: FileJsonIcon, description: 'Load and process JSON data.' },
 }
 
 const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
@@ -88,21 +100,126 @@ const loaderSchemas: Record<LoaderType, ZodTypeAny> = {
   docx: DocxLoaderSchema,
   excel: ExcelLoaderSchema,
   ppt: PptLoaderSchema,
-  // confluence: ConfluenceLoaderSchema,
-  // json: JsonLoaderSchema,
 }
 
 type Props = {
   client: ReturnType<typeof createEmbedderReactClient>
+  setAwaitingUploadUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const LoaderPicker: React.FC<Props> = ({ client }) => {
+export const LoaderPicker: React.FC<Props> = ({
+  client,
+  setAwaitingUploadUpdate,
+}) => {
   const [selectedType, setSelectedType] = useState<LoaderType | null>(null)
   const activePackId = useAtomValue(activePackIdAtom)
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [config, setConfig] = useState<Record<string, any>>({})
+  const [newKnowledge, setNewKnowledge] = useState<AddKnowledge[]>([])
+
+  const [getPresignedUrl, getPresignedUrlState] = useGetPresignedUrlMutation()
+  const [userEditedFilePathOrUrl, setUserEditedFilePathOrUrl] = useState('')
+  const isLoading = getPresignedUrlState.isLoading
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files
+
+    if (files) {
+      const filePromises = Array.from(files).map(async file => {
+        const fileType = file.name.split('.').pop()
+
+        const newFile = {
+          tag: 'tag',
+          name: file.name,
+          sourceUrl: '',
+          dataType: file.type,
+          status: 'uploading',
+        }
+        setNewKnowledge([...newKnowledge, newFile])
+
+        const response = await getPresignedUrl({
+          //
+          id: file.name,
+          projectId: config?.projectId || '',
+          fileName: file.name,
+          type: fileType as ClientProjectPresignType,
+        })
+
+        if ('data' in response && response.data) {
+          const upload: UploadImageProps = {
+            presignedUrl: {
+              url: response.data.url,
+              key: response.data.key,
+            },
+            imageFile: file,
+          }
+
+          const key = await uploadImage(upload)
+
+          // Update the file status to 'uploaded' after successful upload
+          setNewKnowledge(prevKnowledge =>
+            prevKnowledge.map(knowledge =>
+              knowledge.name === file.name
+                ? { ...knowledge, status: 'uploaded', sourceUrl: key }
+                : knowledge
+            )
+          )
+
+          return {
+            tag: 'tag',
+            name: file.name,
+            sourceUrl: key,
+            dataType: file.type,
+            status: 'uploaded',
+          }
+        } else if ('error' in response) {
+          toast.error('Error generating URL for upload')
+
+          // Update the file status to 'error' if URL generation fails
+          setNewKnowledge(prevKnowledge =>
+            prevKnowledge.map(knowledge =>
+              knowledge.name === file.name
+                ? { ...knowledge, status: 'error' }
+                : knowledge
+            )
+          )
+
+          return {
+            tag: 'tag',
+            name: file.name,
+            sourceUrl: '',
+            dataType: file.type,
+            status: 'error',
+          }
+        } else {
+          toast.error('Error uploading file. Please try again.')
+
+          // Update the file status to 'error' if upload fails
+          setNewKnowledge(prevKnowledge =>
+            prevKnowledge.map(knowledge =>
+              knowledge.name === file.name
+                ? { ...knowledge, status: 'error' }
+                : knowledge
+            )
+          )
+
+          return {
+            tag: 'tag',
+            name: file.name,
+            sourceUrl: '',
+            dataType: file.type,
+            status: 'error',
+          }
+        }
+      })
+
+      await Promise.all(filePromises)
+    }
+  }
 
   const { invalidate } = client.useFindPack(
     {
@@ -139,6 +256,11 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
   const handleCreateLoader = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedType) return
+    if (!config.filePathOrUrl) {
+      toast.error('File path or URL is required loaders')
+      return
+    }
+
     await createLoader({
       type: selectedType,
       name,
@@ -147,7 +269,10 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
         ...config,
         type: selectedType,
       } as any,
+      isUpload: true,
+      path: config.filePathOrUrl,
     })
+    setAwaitingUploadUpdate(true)
   }
 
   const handleCancel = (e: React.MouseEvent) => {
@@ -156,6 +281,53 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
     setDescription('')
     setConfig({})
     setSelectedType(null)
+  }
+
+  const fileTypesMapping: Record<LoaderType, string> = {
+    text: '.txt',
+    youtube: '',
+    youtube_channel: '',
+    youtube_search: '',
+    web: '',
+    sitemap: '.xml',
+    pdf: '.pdf',
+    docx: '.docx',
+    excel: '.xlsx',
+    ppt: '.pptx',
+  }
+
+  useEffect(() => {
+    const { sourceUrl, name } = getLatestUploadedFile()
+    if (sourceUrl) {
+      setConfig(prevConfig => ({
+        ...prevConfig,
+        source: sourceUrl,
+        filePathOrUrl: sourceUrl,
+      }))
+      setUserEditedFilePathOrUrl(sourceUrl)
+    }
+    if (name) {
+      setName(name)
+    }
+  }, [newKnowledge])
+
+  function splitCamelCase(str: string) {
+    return (
+      str
+        // Insert a space before any uppercase letter that follows a lowercase letter or number
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        // Insert a space before any uppercase letter that follows another uppercase letter but is followed by a lowercase letter
+        .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+        // Capitalize the first letter of each word
+        .replace(/\b\w/g, c => c.toUpperCase())
+    )
+  }
+
+  const getLatestUploadedFile = () => {
+    const uploadedKnowledge = newKnowledge.find(k => k.status === 'uploaded')
+    return uploadedKnowledge
+      ? { sourceUrl: uploadedKnowledge.sourceUrl, name: uploadedKnowledge.name }
+      : { sourceUrl: '', name: '' }
   }
 
   return (
@@ -184,6 +356,14 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
           <h2 className="text-xl font-semibold">
             {selectedType.replace(/_/g, ' ')}
           </h2>
+          {loaderTypeProperties[selectedType].showFileDropper && (
+            <FileDropper
+              handleFileUpload={handleFileUpload}
+              type={selectedType}
+              accept={{ [fileTypesMapping[selectedType]]: [] }}
+              className="max-w-2xl w-full"
+            />
+          )}
           <p>{loaderTypeProperties[selectedType].description}</p>
           <form
             className="flex flex-col gap-4 max-w-2xl w-full"
@@ -200,31 +380,44 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
             <TextareaWithLabel
               id="description"
               label="Description"
-              placeholder="Desctiption for the loader."
+              placeholder="Description for the loader."
               onChange={e => setDescription(e.target.value)}
               value={description}
               className="w-full"
             />
-            {/* @ts-expect-error */}
-            {Object.keys(loaderSchemas[selectedType].shape).map(key => {
+            {Object.keys(loaderSchemas[selectedType]._def.shape()).map(key => {
               if (key === 'type') return null
+              const splitKey = splitCamelCase(key)
+
               return (
                 <InputWithLabel
-                  key={key}
+                  key={splitKey}
                   id={key}
-                  label={key.charAt(0).toUpperCase() + key.slice(1)}
-                  name={key.charAt(0).toUpperCase() + key.slice(1)}
+                  label={splitKey}
+                  name={splitKey}
                   className="w-full"
-                  onChange={e =>
-                    setConfig({
-                      ...config,
-                      [key]: e.target.value,
-                    })
+                  onChange={e => {
+                    const value = e.target.value
+                    const safeValue = key === 'filePathOrUrl' ? value : value
+                    setConfig(prevConfig => ({
+                      ...prevConfig,
+                      [key]: safeValue,
+                    }))
+
+                    // If the key is 'filePathOrUrl', update the userEditedFilePathOrUrl state
+                    if (key === 'filePathOrUrl') {
+                      setUserEditedFilePathOrUrl(safeValue)
+                    }
+                  }}
+                  value={
+                    key === 'filePathOrUrl'
+                      ? userEditedFilePathOrUrl
+                      : config[key]
                   }
-                  value={config[key]}
                 />
               )
             })}
+
             <div className="inline-flex gap-x-4">
               <Button
                 size="sm"
@@ -240,6 +433,7 @@ export const LoaderPicker: React.FC<Props> = ({ client }) => {
                 variant="portal-primary"
                 className="w-full"
                 type="submit"
+                disabled={isLoading}
               >
                 Add Loader
               </Button>

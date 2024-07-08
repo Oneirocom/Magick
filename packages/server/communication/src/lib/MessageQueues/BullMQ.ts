@@ -2,7 +2,7 @@ import { Queue } from 'bullmq'
 import pino from 'pino'
 import Redis from 'ioredis'
 
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 
 import { MessageQueue } from './MessageQueue'
 

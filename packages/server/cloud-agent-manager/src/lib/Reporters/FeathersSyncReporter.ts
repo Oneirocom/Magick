@@ -1,6 +1,6 @@
-import { AGENT_DELETE } from 'communication'
-import { getLogger } from 'server/logger'
-import { app } from 'server/core'
+import { AGENT_DELETE } from '@magickml/agent-communication'
+import { getLogger } from '@magickml/server-logger'
+import { app } from '@magickml/agent-server'
 import { Reporter } from '.'
 import { EventEmitter } from 'events'
 

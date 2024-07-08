@@ -95,7 +95,7 @@ export const getDataTypeFromAcceptValue = (acceptValue: string) => {
   return v as ZIndirectDataType
 }
 
-/* This is the base schema for both file and url knowledge uploads 
+/* This is the base schema for both file and url knowledge uploads
 /* We send an array of these to the server regardless of source */
 export const AddKnowledgeSchema = z.object({
   tag: z.string(),
@@ -103,6 +103,7 @@ export const AddKnowledgeSchema = z.object({
   sourceUrl: z.string(),
   dataType: z.string(), // TODO: use z.enum in shared package e2e. not doing now because of circular dependency
   external: z.boolean().optional(), // EZ way to tell if the knowledge is external url. Better handling in future
+  status: z.string().optional(),
 })
 
 export type AddKnowledge = z.infer<typeof AddKnowledgeSchema>

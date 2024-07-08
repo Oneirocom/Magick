@@ -1,8 +1,27 @@
 {
-  "name": "server/plugin",
+  "name": "@magickml/agent-plugin",
   "version": "0.0.1",
-  "dependencies": {},
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "typings": "./index.d.ts"
+  "dependencies": {
+    "@anatine/zod-mock": "^3.13.4",
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@aws-sdk/s3-request-presigner": "^3.525.0",
+    "@google-cloud/storage": "^7.11.0",
+    "@magickml/agent-communication": "0.0.1",
+    "@magickml/agent-plugin-state": "0.0.1",
+    "@magickml/behave-graph": "^0.14.14",
+    "@magickml/credentials": "0.0.1",
+    "@magickml/server-config": "0.0.1",
+    "@magickml/server-db": "0.0.1",
+    "@magickml/server-logger": "0.0.1",
+    "@magickml/shared-services": "0.0.1",
+    "@zodios/core": "^10.9.6",
+    "ioredis": "^5.3.2",
+    "tslib": "^2.3.0",
+    "typed-emitter": "^2.1.0",
+    "uuid": "^9.0.0",
+    "zod": "^3.22.4"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
 }

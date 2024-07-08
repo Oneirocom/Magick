@@ -1,0 +1,16 @@
+{
+  "name": "@magickml/agent-module",
+  "version": "0.0.1",
+  "exports": {
+    ".": {
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "nitropack": "latest"
+  }
+}

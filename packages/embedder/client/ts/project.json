@@ -1,9 +1,9 @@
 {
-  "name": "embedder-client-ts",
+  "name": "embedder/client/ts",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/client/ts/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

@@ -4,6 +4,15 @@
   "sourceRoot": "packages/server/communication/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/communication",
+        "tsConfig": "packages/server/communication/tsconfig.lib.json",
+        "main": "packages/server/communication/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]

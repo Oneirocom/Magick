@@ -1,3 +1,0 @@
-# Image
-
-Image Variable

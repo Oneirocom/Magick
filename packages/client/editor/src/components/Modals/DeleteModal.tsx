@@ -48,9 +48,9 @@ const DeleteModal = ({ closeModal, handledelete, id }: DeleteModalProps) => {
 
   const options = [
     {
-      className: css['delete-btn'],
       label: 'Delete',
       onClick: onSubmit,
+      variant: 'portal-neutral',
     },
   ]
 

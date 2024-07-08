@@ -1,4 +1,4 @@
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 
 export interface Spells {
   data: SpellInterface[]

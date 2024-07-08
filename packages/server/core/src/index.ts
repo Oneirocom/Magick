@@ -9,7 +9,6 @@ export * from './app'
 
 // Configuration-related exports
 export * from './config/configuration'
-export * from './config/types'
 export * from './config/validators'
 
 // Declaration of types
@@ -35,5 +34,3 @@ export * from './metering'
 
 export * from './lib/feathersPermissions'
 export * from './types'
-
-export * from './utils'

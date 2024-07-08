@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
-import { Agent } from 'server/agents'
-import { initApp } from 'server/core'
+import { Agent } from '@magickml/agents'
+import { initApp } from '@magickml/agent-server'
 import { z } from 'zod'
 import { fastifyCors } from '@fastify/cors'
 import { fastifyWebsocket } from '@fastify/websocket'
@@ -8,6 +8,25 @@ import { streamSpeech, elevenlabs, generateSpeech } from 'modelfusion'
 import { v4 } from 'uuid'
 import WebSocket from 'ws'
 import axios from 'axios'
+import fs from 'fs'
+import path from 'path'
+import os from 'os'
+
+// Flag to enable/disable metric collection
+const ENABLE_METRICS = false
+
+// Metrics tracking
+const agentMetrics = new Map()
+
+function getMemoryUsage() {
+  const memoryUsage = process.memoryUsage()
+  return {
+    rss: Math.round((memoryUsage.rss / 1024 / 1024) * 100) / 100,
+    heapTotal: Math.round((memoryUsage.heapTotal / 1024 / 1024) * 100) / 100,
+    heapUsed: Math.round((memoryUsage.heapUsed / 1024 / 1024) * 100) / 100,
+    external: Math.round((memoryUsage.external / 1024 / 1024) * 100) / 100,
+  }
+}
 
 const numId = () => {
   return Math.floor(Math.random() * 1000000)
@@ -87,14 +106,125 @@ function createTextStreamGenerator(): TextStreamGenerator {
   return textGenerator
 }
 
+function saveMetrics(metricKey: string, metrics: any) {
+  if (!ENABLE_METRICS) return
+  const fileName = `metrics-${metricKey}.json`
+  const directoryPath = path.join(__dirname, './metrics')
+  const filePath = path.join(directoryPath, fileName)
+
+  if (!fs.existsSync(directoryPath)) {
+    fs.mkdirSync(directoryPath, { recursive: true })
+  }
+
+  fs.writeFileSync(
+    filePath,
+    JSON.stringify(
+      {
+        messageCount: metrics.messageCount,
+        startTime: metrics.startTime,
+        metricsOverTime: metrics.metricsOverTime,
+      },
+      null,
+      2
+    )
+  )
+}
+
+function collectMetrics(metricKey: string) {
+  if (!ENABLE_METRICS) return
+  const currentMemory = getMemoryUsage()
+  const currentCPU = process.cpuUsage()
+  const timestamp = Date.now()
+
+  const metrics = agentMetrics.get(metricKey) || {
+    messageCount: 0,
+    previousCPU: currentCPU,
+    previousTimestamp: timestamp,
+    startTimestamp: timestamp,
+  }
+
+  const elapsedTime = (timestamp - metrics.previousTimestamp) / 1000
+
+  let cpuUsage = { user: 0, system: 0 }
+  if (elapsedTime > 0) {
+    cpuUsage = {
+      user:
+        (currentCPU.user - metrics.previousCPU.user) / 1000000 / elapsedTime,
+      system:
+        (currentCPU.system - metrics.previousCPU.system) /
+        1000000 /
+        elapsedTime,
+    }
+  }
+
+  // Calculate CPU usage as percentage (assuming single core)
+  const numCores = os.cpus().length
+  const cpuPercentage = Math.min(
+    100,
+    ((cpuUsage.user + cpuUsage.system) * 100) / numCores
+  )
+
+  const memoryUsage = {
+    rss: currentMemory.rss,
+    heapTotal: currentMemory.heapTotal,
+    heapUsed: currentMemory.heapUsed,
+    external: currentMemory.external,
+  }
+
+  // Update metrics for next run
+  agentMetrics.set(metricKey, {
+    ...metrics,
+    previousCPU: currentCPU,
+    previousTimestamp: timestamp,
+  })
+
+  return {
+    timestamp,
+    elapsedTime: (timestamp - metrics.startTimestamp) / 1000, // Total elapsed time in seconds
+    messageCount: metrics.messageCount,
+    memoryUsage,
+    cpuPercentage,
+  }
+}
+
+function clearMetricsFiles() {
+  if (!ENABLE_METRICS) return
+  const directoryPath = path.join(__dirname, './metrics') // Correct path to the directory
+
+  // Check if the directory exists, if not create it
+  if (!fs.existsSync(directoryPath)) {
+    return
+  }
+
+  const files = fs.readdirSync(directoryPath)
+
+  for (const file of files) {
+    fs.unlinkSync(path.join(directoryPath, file))
+  }
+}
+
+// Function to save all metrics
+function saveAllMetrics() {
+  if (!ENABLE_METRICS) return
+  for (const [key, metrics] of agentMetrics.entries()) {
+    saveMetrics(key, metrics)
+  }
+}
+
+if (ENABLE_METRICS) {
+  setInterval(saveAllMetrics, 30000) // Save all metrics every 30 seconds
+  // clear all previous metrics
+  clearMetricsFiles()
+}
+
+const agentApp = await initApp()
+
 type AgentInfo = z.infer<typeof agentInfoSchema>
 
 /* eslint-disable-next-line */
 export interface AppOptions {}
 
 export async function app(fastify: FastifyInstance) {
-  const agentApp = await initApp()
-
   await fastify.register(fastifyWebsocket)
 
   await fastify.register(fastifyCors, {
@@ -114,6 +244,48 @@ export async function app(fastify: FastifyInstance) {
       if (!agentId) {
         socket.close()
         return
+      }
+
+      let metricInterval: NodeJS.Timeout | null = null
+      // Initialize metrics for this agent
+      const metricKey = `${agentId}-${channelId}`
+
+      if (ENABLE_METRICS) {
+        agentMetrics.set(metricKey, {
+          messageCount: 0,
+          metricsOverTime: [],
+        })
+
+        // Record initial metrics
+        const initialMetrics = collectMetrics(metricKey)
+
+        agentMetrics.get(metricKey).metricsOverTime = [initialMetrics]
+
+        // Optionally, you can log the initial metrics
+        console.log('Initial metrics recorded:', initialMetrics)
+
+        // Then, update your metricInterval:
+        metricInterval = setInterval(() => {
+          if (!ENABLE_METRICS) return
+          const currentMetrics = agentMetrics.get(metricKey)
+
+          // Collect new metrics
+          const newMetrics = collectMetrics(metricKey)
+
+          if (!newMetrics) return
+
+          // Add to metricsOverTime array
+          currentMetrics.metricsOverTime.push(newMetrics)
+
+          // Update message count
+          currentMetrics.messageCount = newMetrics.messageCount
+
+          // Save metrics every 10 seconds
+          if (Date.now() - currentMetrics.lastSaveTime > 10000) {
+            saveMetrics(metricKey, currentMetrics)
+            currentMetrics.lastSaveTime = Date.now()
+          }
+        }, 1000) // Collect metrics every second
       }
 
       // Initialize connection management
@@ -194,11 +366,15 @@ export async function app(fastify: FastifyInstance) {
 
       /* USER INPUT STREAM */
       socket.on('message', async message => {
+        console.log('Message received', message)
+        console.log('Message to string', message.toString())
+        console.log('Message parsed', JSON.parse(message.toString()))
         const data = messageSchema.parse(JSON.parse(message.toString()))
         console.log('socket.on message', data)
         const { type } = data
 
         if (type === 'message') {
+          if (ENABLE_METRICS) agentMetrics.get(metricKey).messageCount++
           socket.send(
             JSON.stringify({
               id: new Date().toISOString(),
@@ -215,6 +391,7 @@ export async function app(fastify: FastifyInstance) {
               sender: 'client',
               channel: channelId,
               eventName: 'message',
+              skipPersist: true,
               data: {
                 responseId: numId(),
               },
@@ -330,13 +507,27 @@ export async function app(fastify: FastifyInstance) {
       socket.on('close', () => {
         agent.removeAllListeners()
         agent.onDestroy()
-        clearInterval(pingInterval) // Clear the interval on connection close
+        if (pingInterval) clearInterval(pingInterval)
+        if (metricInterval) clearInterval(metricInterval)
+
+        if (ENABLE_METRICS) {
+          saveMetrics(metricKey, agentMetrics.get(metricKey))
+
+          agentMetrics.delete(metricKey)
+        }
       })
 
       socket.on('error', () => {
         agent.removeAllListeners()
         agent.onDestroy()
-        clearInterval(pingInterval) // Clear the interval on connection close
+        if (pingInterval) clearInterval(pingInterval)
+        if (metricInterval) clearInterval(metricInterval)
+
+        if (ENABLE_METRICS) {
+          saveMetrics(metricKey, agentMetrics.get(metricKey))
+
+          agentMetrics.delete(metricKey)
+        }
       })
     }
   )
@@ -360,3 +551,9 @@ export async function app(fastify: FastifyInstance) {
     }
   })
 }
+
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received. Shutting down gracefully...')
+  saveAllMetrics()
+  process.exit(0)
+})

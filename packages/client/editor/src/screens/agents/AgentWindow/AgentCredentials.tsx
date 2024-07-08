@@ -35,7 +35,7 @@ import {
   getProvidersWithUserKeys,
   groupModelsByProvider,
   isModelAvailableToUser,
-} from 'servicesShared'
+} from '@magickml/shared-services'
 
 import { Dropdown } from '@magickml/client-ui'
 import posthog from 'posthog-js'

@@ -1,4 +1,4 @@
-import { ISeraphEvent } from 'servicesShared'
+import { ISeraphEvent } from '@magickml/shared-services'
 import { rootApi } from './api'
 
 export const agentApi = rootApi.injectEndpoints({

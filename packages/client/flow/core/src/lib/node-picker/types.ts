@@ -1,6 +1,6 @@
 import { NodeCategory, NodeSpecJSON } from '@magickml/behave-graph'
 import { XYPosition } from '@xyflow/react'
-import { SpellInterfaceWithGraph } from 'server/schemas'
+import { SpellInterfaceWithGraph } from '@magickml/agent-server-schemas'
 
 export type NodePickerFilters = {
   handleType: 'source' | 'target'

@@ -1,6 +1,27 @@
 import Redis from 'ioredis'
 import { EventEmitter } from 'events'
-import { stringify } from 'shared/utils'
+
+function stringify(obj: Record<string, any>) {
+  let cache = [] as any[]
+  const str = JSON.stringify(obj, function (key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.indexOf(value) !== -1) {
+        // Circular reference found, discard key
+        return
+      }
+      // Store value in our collection
+      cache.push(value)
+    }
+    return value
+  })
+  cache = [] // reset the cache
+  return str
+}
+
+export type PubsubOptions = {
+  debug?: boolean
+  connection?: Redis
+}
 
 /**
  * A class for managing Redis Publish/Subscribe operations.
@@ -32,15 +53,79 @@ import { stringify } from 'shared/utils'
  * Note: Always ensure to call `close()` when the instance is no longer needed to prevent
  * resource leaks.
  */
+
+type ChannelCallback<D = any> = (message: D, channel: string) => void
+
 export class RedisPubSub extends EventEmitter {
-  private redisCloudUrl: string
+  private redisCloudUrl: string | undefined
   private publisher!: Redis
   private subscriber!: Redis
+  private options: PubsubOptions
 
   private channelRefCount = new Map<string, number>()
   private patternRefCount = new Map<string, number>()
-  private channelCallbacks = new Map<string, Array<Function>>()
+  private channelCallbacks = new Map<string, Array<ChannelCallback>>()
   private patternCallbacks = new Map<string, Array<Function>>()
+
+  constructor(redisCloudUrl: string | undefined, options: PubsubOptions = {}) {
+    super()
+
+    if (!redisCloudUrl && !options.connection) {
+      throw new Error('Redis URL or connection is required.')
+    }
+
+    this.redisCloudUrl = redisCloudUrl
+    this.options = options
+  }
+
+  async createConnection(redisUrl: string) {
+    return new Redis(redisUrl, {
+      maxRetriesPerRequest: null,
+    })
+  }
+
+  /**
+   * Initializes the Redis clients for publishing and subscribing.
+   * This method should be called before attempting any publish/subscribe operations.
+   *
+   * @param _options - The Redis client options, including the URL and socket configurations.
+   *
+   * Example:
+   * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
+   */
+  async initialize(): Promise<void> {
+    if (this.options.connection) {
+      this.publisher = this.options.connection
+      this.subscriber = this.options.connection.duplicate()
+    } else {
+      // we can guarantee that redisCloudUrl is defined here if there is no
+      // connection. So we can use ! to assert it
+      this.publisher = await this.createConnection(this.redisCloudUrl!)
+      this.subscriber = await this.createConnection(this.redisCloudUrl!)
+    }
+
+    // Define the expire command
+    this.publisher.defineCommand('expire', {
+      numberOfKeys: 1,
+      lua: 'return redis.call("expire", KEYS[1], ARGV[1])',
+    })
+
+    // Define the setnx command
+    this.publisher.defineCommand('setnx', {
+      numberOfKeys: 1,
+      lua: 'return redis.call("setnx", KEYS[1], ARGV[1])',
+    })
+
+    // Define the del command
+    // this.publisher.defineCommand('del', {
+    //   numberOfKeys: -1,
+    //   lua: 'return redis.call("del", unpack(KEYS))',
+    // })
+    // await this.client.connect()
+    // await this.subscriber.connect()
+    this.connectEventListeners(this.publisher, 'publisher')
+    this.connectEventListeners(this.subscriber, 'subscriber')
+  }
 
   // Improved handling of reconnection attempts
   async reconnectRedisClient(
@@ -64,7 +149,11 @@ export class RedisPubSub extends EventEmitter {
           console.warn(`Error quitting the ${clientType} client: ${quitError}`)
         }
 
-        const client = await this.createConnection(this.redisCloudUrl)
+        const client = this.options.connection
+          ? clientType === 'publisher'
+            ? this.options.connection
+            : this.options.connection.duplicate()
+          : await this.createConnection(this.redisCloudUrl!)
 
         this[clientType] = client
 
@@ -101,55 +190,6 @@ export class RedisPubSub extends EventEmitter {
     reconnect()
   }
 
-  async createConnection(redusUrl: string) {
-    return new Redis(redusUrl, {
-      maxRetriesPerRequest: null,
-    })
-  }
-
-  constructor(redisCloudUrl: string) {
-    super()
-    this.redisCloudUrl = redisCloudUrl
-  }
-
-  /**
-   * Initializes the Redis clients for publishing and subscribing.
-   * This method should be called before attempting any publish/subscribe operations.
-   *
-   * @param _options - The Redis client options, including the URL and socket configurations.
-   *
-   * Example:
-   * await redisPubSub.initialize({ /* RedisClientOptions *\/ });
-   */
-  async initialize(): Promise<void> {
-    this.publisher = await this.createConnection(this.redisCloudUrl)
-    this.subscriber = await this.createConnection(this.redisCloudUrl)
-
-    // Define the expire command
-    this.publisher.defineCommand('expire', {
-      numberOfKeys: 1,
-      lua: 'return redis.call("expire", KEYS[1], ARGV[1])',
-    })
-
-    // Define the setnx command
-    this.publisher.defineCommand('setnx', {
-      numberOfKeys: 1,
-      lua: 'return redis.call("setnx", KEYS[1], ARGV[1])',
-    })
-
-    // Define the del command
-    // this.publisher.defineCommand('del', {
-    //   numberOfKeys: -1,
-    //   lua: 'return redis.call("del", unpack(KEYS))',
-    // })
-
-    console.log('Connecting to redis pubsub')
-    // await this.client.connect()
-    // await this.subscriber.connect()
-    this.connectEventListeners(this.publisher, 'publisher')
-    this.connectEventListeners(this.subscriber, 'subscriber')
-  }
-
   connectEventListeners(client: Redis, clientType: 'subscriber' | 'publisher') {
     client.on('error', async error => {
       console.error(`Redis ${clientType} error:`, error)
@@ -159,42 +199,45 @@ export class RedisPubSub extends EventEmitter {
 
     // "wait" | "reconnecting" | "connecting" | "connect" | "ready" | "close" | "end";
 
-    client.on('connecting', () => {
-      console.log(`Connecting to Redis ${clientType}...`)
-    })
+    if (this.options.debug) {
+      client.on('connecting', () => {
+        console.log(`Connecting to Redis ${clientType}...`)
+      })
 
-    client.on('connect', () => {
-      console.log(`Redis ${clientType} connected successfully.`)
-    })
+      client.on('connect', () => {
+        console.log(`Redis ${clientType} connected successfully.`)
+      })
 
-    client.on('close', () => {
-      console.log(`Redis ${clientType} connection closed.`)
-    })
+      client.on('close', () => {
+        console.log(`Redis ${clientType} connection closed.`)
+      })
 
-    client.on('reconnecting', () => {
-      console.warn(`Reconnecting to Redis ${clientType}...`)
-    })
+      client.on('reconnecting', () => {
+        console.warn(`Reconnecting to Redis ${clientType}...`)
+      })
 
-    client.on('end', () => {
-      console.log(`Redis ${clientType} connection ended.`)
-    })
+      client.on('end', () => {
+        console.log(`Redis ${clientType} connection ended.`)
+      })
 
-    client.on('ready', () => {
-      console.log(`Redis ${clientType} is ready.`)
-    })
+      client.on('ready', () => {
+        console.log(`Redis ${clientType} is ready.`)
+      })
 
-    client.on('reconnecting', () => {
-      console.log(`Redis ${clientType} reconnecing.`)
-    })
+      client.on('reconnecting', () => {
+        console.log(`Redis ${clientType} reconnecing.`)
+      })
 
-    client.on('wait', (time: string) => {
-      console.log(`Redis ${clientType} is waiting:`, time)
-    })
+      client.on('wait', (time: string) => {
+        console.log(`Redis ${clientType} is waiting:`, time)
+      })
+    }
 
     // handle subscriber reconnection
 
     if (clientType === 'subscriber') {
-      console.log('Setting up subscriber event listeners...')
+      if (this.options.debug)
+        console.log('Setting up subscriber event listeners...')
       client.on('message', (channel, message) => {
         this.emit(channel, message)
       })
@@ -339,7 +382,10 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * redisPubSub.subscribe('myChannel', message => console.log(message));
    */
-  async subscribe(channel: string, callback: Function) {
+  async subscribe<D = any>(
+    channel: string,
+    callback: (message: D, channel: string) => void
+  ) {
     this.channelRefCount.set(
       channel,
       (this.channelRefCount.get(channel) || 0) + 1
@@ -355,7 +401,7 @@ export class RedisPubSub extends EventEmitter {
       let deserializedMessage
       try {
         deserializedMessage = JSON.parse(message)
-        callback(deserializedMessage)
+        callback(deserializedMessage, channel)
       } catch (err) {
         console.error('Failed to deserialize message:', err)
         throw err

@@ -1,4 +1,4 @@
-import { PluginCredential } from 'server/credentials'
+import { PluginCredential } from '@magickml/credentials'
 
 export enum LLMProviderKeys {
   OpenAI = 'OPENAI_API_KEY',

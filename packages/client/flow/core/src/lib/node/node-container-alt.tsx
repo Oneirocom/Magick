@@ -8,7 +8,7 @@ import {
 } from '@magickml/behave-graph'
 import React, { PropsWithChildren } from 'react'
 import { categoryColorMap, colors, valueTypeColorMap } from '../utils/colors'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import {
   BackgroundGradient,
   successGradient,

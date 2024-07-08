@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { enqueueSnackbar } from 'notistack'
 import { usePubSub } from '@magickml/providers'
 import {
+  useSelectAgentsSpell,
   selectActiveInput,
   setActiveInput,
-  useSelectAgentsSpell,
 } from 'client/state'
 import { BaseNode } from './base-node'
 
@@ -33,6 +33,7 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
     const unsubscribe = subscribe(events.RESET_NODE_STATE, () => {
       setTimeout(() => {
         onResetNodeState()
+        dispatch(setActiveInput(null))
       }, 1000)
     })
 
@@ -44,8 +45,6 @@ export const CoreNode: React.FC<CoreNodeProps> = props => {
   const onResetNodeState = () => {
     // Reset node state logic
     setResetNodeState(true)
-    dispatch(setActiveInput(null))
-
     setTimeout(() => {
       setResetNodeState(false)
     }, 100)

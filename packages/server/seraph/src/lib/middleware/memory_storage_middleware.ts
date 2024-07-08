@@ -2,15 +2,10 @@
 import { IndexItem, LocalIndex } from 'vectra'
 import { OpenAI } from 'openai'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { IMiddleware } from '../middlewareManager'
 import { metadataManager } from '../cognitive_functions/memory'
 import { SeraphCore } from '../seraphCore'
 import { z } from 'zod'
-
-// @ts-ignore
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 class MemoryStorageMiddleware implements IMiddleware {
   name = 'memoryStorage'

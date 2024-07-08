@@ -1,0 +1,8 @@
+{
+  "name": "@magickml/cloud-agent-manager",
+  "version": "0.0.3",
+  "dependencies": {},
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}

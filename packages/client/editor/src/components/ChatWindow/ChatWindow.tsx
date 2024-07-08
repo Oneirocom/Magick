@@ -8,18 +8,20 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { Tab, useConfig, usePubSub } from '@magickml/providers'
 import {
   RootState,
+  setActiveInput,
   useGetSpellByNameQuery,
   useSelectAgentsEvent,
 } from 'client/state'
-import { SEND_MESSAGE, STREAM_MESSAGE } from 'communication'
+import { SEND_MESSAGE, STREAM_MESSAGE } from '@magickml/agent-communication'
 import { ChatInput } from './ChatInput'
 import { Button, Checkbox, Label } from '@magickml/client-ui'
 import posthog from 'posthog-js'
 import { Message, useMessageHistory } from '../../hooks/useMessageHistory'
 import { useMessageQueue } from '../../hooks/useMessageQueue'
 import { usePlaytestData } from '../../hooks/usePlaytestData'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMarkdownProcessor } from 'chat-window'
+import useEditorSession from '../../hooks/useEditorSession'
 
 type Props = {
   tab: Tab
@@ -40,9 +42,13 @@ const ChatWindow = ({ tab, spellName }: Props) => {
   const { lastItem: lastEvent } = useSelectAgentsEvent()
   const [value, setValue] = useState('')
   const [openData, setOpenData] = useState<boolean>(false)
+  const [userScrolled, setUserScrolled] = useState<boolean>(false)
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
-  const { currentAgentId } = globalConfig
+  const { currentAgentId, engineRunning } = globalConfig
   const { publish, events } = usePubSub()
+  const editorSession = useEditorSession()
+  const dispatch = useDispatch()
+  const readOnly = !engineRunning
 
   const {
     history,
@@ -52,7 +58,8 @@ const ChatWindow = ({ tab, spellName }: Props) => {
     printToConsole,
     onClear,
     setHistory,
-  } = useMessageHistory({})
+    handleScroll,
+  } = useMessageHistory({ userScrolled, setUserScrolled })
 
   const { streamToConsole } = useMessageQueue({
     setHistory,
@@ -69,8 +76,7 @@ const ChatWindow = ({ tab, spellName }: Props) => {
     const { data, event, actionName } = lastEvent
     const { content } = data
 
-    if (event?.runInfo?.spellId !== spell.id || event.channel !== spell.id)
-      return
+    if (event?.runInfo?.spellId !== spell.id) return
 
     if (actionName === SEND_MESSAGE) {
       printToConsole(content)
@@ -111,9 +117,8 @@ const ChatWindow = ({ tab, spellName }: Props) => {
       content: value,
       sender: data.sender || 'user',
       observer: data.observer || 'assistant',
-      client: 'cloud.magickml.com',
-      // TODO this should be a sessiON ID for this IDE session
-      channel: spell.id,
+      client: 'editor',
+      channel: editorSession,
       projectId: config.projectId,
       channelType: 'spell playtest',
       rawData: value,
@@ -189,61 +194,76 @@ const ChatWindow = ({ tab, spellName }: Props) => {
 
   return (
     <Window toolbar={toolbar}>
-      {/* Chat window layout */}
-      <div className="flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto">
-        {/* Data editor section */}
-        <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
-          <Scrollbars ref={scrollbars}>
-            <Editor
-              theme="sds-dark"
-              language="json"
-              value={localState?.playtestData}
-              options={{
-                minimap: { enabled: false },
-                wordWrap: 'bounded',
-                fontSize: 14,
-              }}
-              defaultValue={
-                localState?.playtestData ||
-                JSON.stringify({ sender: 'user', observer: 'assistant' })
-              }
-              onChange={onDataChange}
-              beforeMount={handleEditorWillMount}
-            />
-          </Scrollbars>
-        </div>
+      <>
         <div
-          className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
-        ></div>
+          className="relative flex flex-col h-full bg-[var(--background-color-light)] w-[96%] m-auto justify-center"
+          onClick={() => dispatch(setActiveInput(null))}
+        >
+          {/* Data editor section */}
+          <div className={`${openData ? 'block' : 'hidden'} flex-1`}>
+            <Scrollbars ref={scrollbars} onScroll={handleScroll}>
+              {/* Feedback overlay */}
 
-        {/* Chat history section */}
-        <div className="flex-1 overflow-hidden bg-[var(--background-color)]">
-          <Scrollbars ref={scrollbars}>
-            <ul className="list-none m-0 p-2">
-              {history.map((message: Message, index) => {
-                if (message.sender === 'user') {
-                  return (
-                    <li key={index}>
-                      <UserMessage message={message.content} />
-                    </li>
-                  )
-                } else if (message.sender === 'agent') {
-                  return (
-                    <li key={index}>
-                      <AgentMessage message={message.content} />
-                    </li>
-                  )
-                } else {
-                  return null
+              <Editor
+                theme="sds-dark"
+                language="json"
+                value={localState?.playtestData}
+                options={{
+                  minimap: { enabled: false },
+                  wordWrap: 'bounded',
+                  fontSize: 14,
+                  readOnly: readOnly,
+                }}
+                defaultValue={
+                  localState?.playtestData ||
+                  JSON.stringify({ sender: 'user', observer: 'assistant' })
                 }
-              })}
-            </ul>
-          </Scrollbars>
-        </div>
+                onChange={onDataChange}
+                beforeMount={handleEditorWillMount}
+              />
+            </Scrollbars>
+          </div>
+          <div
+            className={`${openData ? 'block' : 'hidden'} h-6 bg-gray-700`}
+          ></div>
 
-        {/* Input section */}
-        <ChatInput onChange={onChange} value={value} onSend={onSend} />
-      </div>
+          {/* Chat history section */}
+          {readOnly && (
+            <div className="relative inset-0 flex flex-col items-center justify-center z-50 h-full">
+              <div className="text-white text-lg">Read-Only Mode</div>
+              <div className="text-white text-md mt-2">
+                Run your spell to test your Agent
+              </div>
+            </div>
+          )}
+          <div className="flex-1 overflow-hidden bg-[var(--background-color)] relative">
+            <Scrollbars ref={scrollbars} onScroll={handleScroll}>
+              <ul className="list-none m-0 p-2">
+                {history.map((message: Message, index) => {
+                  if (message.sender === 'user') {
+                    return (
+                      <li key={index}>
+                        <UserMessage message={message.content} />
+                      </li>
+                    )
+                  } else if (message.sender === 'agent') {
+                    return (
+                      <li key={index}>
+                        <AgentMessage message={message.content} />
+                      </li>
+                    )
+                  } else {
+                    return null
+                  }
+                })}
+              </ul>
+            </Scrollbars>
+          </div>
+
+          {/* Input section */}
+          <ChatInput onChange={onChange} value={value} onSend={onSend} />
+        </div>
+      </>
     </Window>
   )
 }

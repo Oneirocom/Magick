@@ -1,4 +1,4 @@
-import { ISeraphEvent } from 'servicesShared'
+import { ISeraphEvent } from '@magickml/shared-services'
 
 export type PubSubEvents = {
   ADD_SUBSPELL: string
@@ -9,6 +9,7 @@ export type PubSubEvents = {
   RUN_AGENT: string
   SEND_COMMAND: string
   TOGGLE_FILE_DRAWER: string
+  TOGGLE_RIGHT_PANEL: string
   MESSAGE_AGENT: string
   RESET_NODE_STATE: string
   $SUBSPELL_UPDATED: (spellName: string) => string
@@ -44,6 +45,8 @@ export type PubSubEvents = {
   $RUN_AGENT: (tabId: string) => string
   $RELOAD_GRAPH: (tabId: string) => string
   $SERAPH_EVENT: (tabId: string) => string
+  $INPUT_TO_CHAT: (tabId: string) => string
+  $CHAT_TO_INPUT: (tabId: string) => string
 }
 
 export interface PubSubContext {

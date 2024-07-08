@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/node-spec",
+  "version": "0.0.1",
+  "dependencies": {
+    "@magickml/behave-graph": "^0.14.14",
+    "@magickml/agent-server-schemas": "0.0.1",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

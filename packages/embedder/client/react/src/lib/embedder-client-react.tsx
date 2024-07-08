@@ -1,4 +1,4 @@
-import { createEmbedderClient } from '@magickml/embedder/client/ts'
+import { createEmbedderClient } from '@magickml/embedder-client-ts'
 import { ZodiosOptions } from '@zodios/core'
 
 import { ZodiosHooks } from '@zodios/react'

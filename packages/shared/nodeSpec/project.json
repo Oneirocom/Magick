@@ -1,10 +1,20 @@
 {
   "name": "shared/nodeSpec",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["plugin*"],
+  "implicitDependencies": [],
   "sourceRoot": "packages/shared/nodeSpec/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shared/nodeSpec",
+        "tsConfig": "packages/shared/nodeSpec/tsconfig.lib.json",
+        "main": "packages/shared/nodeSpec/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
@@ -16,6 +26,5 @@
         "jestConfig": "packages/shared/nodeSpec/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

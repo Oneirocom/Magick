@@ -1,7 +1,7 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import { z } from 'zod'
-import { AgentCommandData } from 'server/agents'
+import { AgentCommandData } from '@magickml/agent-commander'
 
 const PluginCommandBody = z.object({
   agentId: z.string(),

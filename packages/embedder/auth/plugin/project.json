@@ -1,9 +1,9 @@
 {
-  "name": "embedder-auth-plugin",
+  "name": "embedder/auth/plugin",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/auth/plugin/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

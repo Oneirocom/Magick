@@ -1,21 +1,19 @@
 import fs from 'fs'
 import path from 'path'
 import { EventEmitter } from 'events'
-import { BasePlugin } from 'server/plugin'
+import { BasePlugin } from '@magickml/agent-plugin'
 import { IRegistry } from '@magickml/behave-graph'
 import pino from 'pino'
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 import Redis from 'ioredis'
-import * as plugins from './../../../../../plugins'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { SpellCaster } from 'packages/server/grimoire/src/lib/spellCaster'
-import { CommandHub } from 'server/command-hub'
-import { Agent } from 'server/agents'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { AgentLike, CommandHub } from '@magickml/agent-command-hub'
+import { EventPayload } from '@magickml/shared-services'
 
 /**
  * Manages the lifecycle of plugins, their events, and maintains a unified registry.
  */
-export class PluginManager extends EventEmitter {
+export class PluginManager<A extends AgentLike> extends EventEmitter {
   /**
    * pluginsLoaded - A boolean indicating whether the plugins have been loaded.
    * @type {boolean}
@@ -84,14 +82,14 @@ export class PluginManager extends EventEmitter {
    * The command hub for the plugin manager.
    * Handles responding to incomign commands.
    */
-  commandHub: CommandHub
+  commandHub: CommandHub<A>
 
   /**
    * The Agent class instance.
    * @type {Agent}
    * @memberof PluginManager
    */
-  agent: Agent
+  agent: A
 
   /**
    * Creates an instance of PluginManager.
@@ -119,10 +117,10 @@ export class PluginManager extends EventEmitter {
   }: {
     pluginDirectory: string
     connection: Redis
-    agent: Agent
+    agent: A
     pubSub: RedisPubSub
     projectId: string
-    commandHub: CommandHub
+    commandHub: CommandHub<A>
   }) {
     super()
     this.agent = agent
@@ -149,20 +147,20 @@ export class PluginManager extends EventEmitter {
    * @memberof PluginManager
    */
   initialize(): void {
-    this.loadPlugins()
+    // this.loadPlugins()
   }
 
   /**
    * Loads plugins from the plugin directory and registers them.
    *
    */
-  async loadPlugins(): Promise<void> {
+  async loadRawPlugins(plugins: any): Promise<void> {
     if (this.pluginsLoaded) return
     this.pluginsLoaded = true
 
     for await (const [, pluginGetter] of Object.entries(plugins)) {
       // Get the actual class from the getter
-      const PluginClass = pluginGetter
+      const PluginClass = pluginGetter as new () => BasePlugin
 
       // Check if PluginClass extends BasePlugin
       // This check assumes BasePlugin is the base class for all your plugins
@@ -172,6 +170,7 @@ export class PluginManager extends EventEmitter {
         PluginClass.prototype instanceof BasePlugin
       ) {
         // Create an instance of the plugin
+        this.logger.info('Loading plugin %s', PluginClass.name)
         // @ts-ignore
         const pluginInstance = new PluginClass({
           agent: this.agent,
@@ -181,6 +180,24 @@ export class PluginManager extends EventEmitter {
         })
         await this.registerPlugin(pluginInstance)
       }
+    }
+
+    this.emit('pluginsLoaded', this.getPlugins())
+  }
+
+  async loadPlugins(plugins: (new (args: any) => BasePlugin)[]): Promise<void> {
+    if (this.pluginsLoaded) return
+    this.pluginsLoaded = true
+
+    for await (const Plugin of plugins) {
+      const pluginInstance = new Plugin({
+        agent: this.agent,
+        connection: this.connection,
+        pubSub: this.pubSub,
+        projectId: this.projectId,
+      })
+
+      await this.registerPlugin(pluginInstance)
     }
 
     this.emit('pluginsLoaded', this.getPlugins())
@@ -245,7 +262,7 @@ export class PluginManager extends EventEmitter {
    * @param plugin The plugin from which to forward events.
    */
   private setupPluginEventForwarding(plugin: BasePlugin): void {
-    plugin.eventEmitter.on('event', eventData => {
+    plugin.eventEmitter.on('event', (eventData: EventPayload) => {
       this.emit('pluginEvent', plugin.name, eventData)
     })
   }
@@ -255,7 +272,7 @@ export class PluginManager extends EventEmitter {
    * @returns A unified registry object.
    */
   async getRegistry(
-    spellCaster: SpellCaster,
+    spellCaster: any,
     baseRegistry?: IRegistry
   ): Promise<IRegistry> {
     const unifiedRegistry: IRegistry = baseRegistry || {

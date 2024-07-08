@@ -4,7 +4,6 @@ node_modules
 .vscode
 bruno-requests
 tmp
-apps/docs
 apps/client
 packages/client
 portal

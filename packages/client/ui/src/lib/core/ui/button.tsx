@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
@@ -26,10 +26,8 @@ const buttonVariants = cva(
         agent:
           'bg-transparent font-sans lg:dark:bg-[#262b2e] text-base gap-x-2 rounded-lg lg:bg-[#e9edf1] hover:bg-secondary-highlight/80 dark:hover:bg-[#3C3F41] text-black dark:text-white font-sans',
 
-        'portal-primary':
-          'bg-ds-primary text-ds-black font-semibold font-sans',
-        'portal-neutral':
-          'bg-ds-neutral text-ds-white font-medium font-sans',
+        'portal-primary': 'bg-ds-primary text-ds-black font-semibold font-sans',
+        'portal-neutral': 'bg-ds-neutral text-ds-white font-medium font-sans',
         clear: '',
       },
       size: {

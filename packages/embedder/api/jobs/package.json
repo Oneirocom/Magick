@@ -1,11 +1,13 @@
 {
-  "name": "@magickml/embedder/api/jobs",
-  "version": "2.0.0",
+  "name": "@magickml/embedder-api-jobs",
+  "version": "0.0.1",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@zodios/core": "^10.9.6",
+    "zod": "^3.22.4",
+    "@magickml/embedder-schemas": "0.0.1"
   },
   "type": "commonjs",
   "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
-  "private": true
+  "typings": "./src/index.d.ts"
 }

@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/event-tracker/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
@@ -27,6 +28,5 @@
         "jestConfig": "packages/server/pluginManager/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

@@ -44,6 +44,12 @@
       "options": {
         "targetName": "playwright:e2e"
       }
+    },
+    {
+      "plugin": "@nx/rollup/plugin",
+      "options": {
+        "buildTargetName": "build"
+      }
     }
   ],
   "pluginsConfig": {
@@ -114,6 +120,16 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["default", "^default"]
+    },
+    "publish": {
+      "options": {
+        "access": "public"
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/packages/{projectName}"
+      }
     }
   },
   "generators": {
@@ -150,13 +166,35 @@
   "useInferencePlugins": true,
   "defaultBase": "main",
   "release": {
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
+    },
     "projects": [
-      "embedder-db-prisma",
-      "embedder-client-react",
-      "sdk-providers"
+      "packages/server/**/*",
+      "plugins/*",
+      "packages/embedder/**/*",
+      "packages/shared/*",
+      "!packages/server/cloud-agent-manager",
+      "!packages/server/cloud-agent-worker",
+      "!packages/server/communication",
+      "!packages/server/meter",
+      "!portal/cloud/packages/ideClient"
     ],
     "version": {
-      "preVersionCommand": "npx nx build embedder-db-prisma"
+      "preVersionCommand": "npm run build-release",
+      "generatorOptions": {
+        "packageRoot": "dist/packages/{projectName}",
+        "currentVersionResolver": "registry"
+      },
+      "exclude": [
+        "server-cloud-agent-manager",
+        "server-cloud-agent-worker",
+        "server/communication",
+        "server/meter",
+        "ideClient"
+      ]
     }
   }
 }

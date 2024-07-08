@@ -3,7 +3,8 @@ const dotenv = require('dotenv-flow')
 dotenv.config('../')
 const fs = require('fs')
 const path = require('path')
-import * as pluginModules from '../plugins'
+import { EventEmitter } from 'events'
+import * as pluginModules from '../packages/plugins'
 import { writeNodeSpecsToJSON } from '@magickml/behave-graph'
 import Redis from 'ioredis'
 import { PluginCredential } from 'packages/server/credentials/src'
@@ -52,9 +53,12 @@ const loadPlugins = async () => {
     // Check if PluginClass is a subclass of CorePlugin
     if (checkIfCorePlugin(PluginClass)) {
       // Create an instance of the plugin
+      const agent = new EventEmitter() as any
+      agent.id = '000000000'
       // @ts-ignore
       const pluginInstance = new PluginClass({
         connection,
+        agent,
         agentId: '000000000',
         pubSub,
         projectId: '000000000',

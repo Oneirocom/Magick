@@ -1,6 +1,6 @@
-import { embedderDb, Pack } from 'embedder-db-pg'
+import { embedderDb, Pack } from '@magickml/embedder-db-pg'
 import { eq, and } from 'drizzle-orm'
-import { authParse } from '@magickml/embedder/schema'
+import { authParse } from '@magickml/embedder-schemas'
 
 export default defineEventHandler(async event => {
   const { entity, owner } = authParse(event.context)

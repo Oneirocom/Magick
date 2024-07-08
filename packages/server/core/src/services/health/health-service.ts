@@ -1,6 +1,6 @@
 import { ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import { getRawNodeSpec } from 'shared/nodeSpec'
+import { getRawNodeSpec } from '@magickml/node-spec'
 
 export type HealthSeviceMethods = Pick<ServiceMethods<any>, 'find'>
 

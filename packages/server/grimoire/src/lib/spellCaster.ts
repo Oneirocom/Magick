@@ -15,17 +15,21 @@ import {
   makeGraphApi,
   IStateService,
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
-import { SpellInterface } from 'server/schemas'
-import { type EventPayload } from 'server/plugin'
-import { getLogger } from 'server/logger'
-import { CORE_DEP_KEYS } from 'plugin/core'
-import { AGENT_SPELL, AGENT_SPELL_STATE } from 'communication'
-import { PluginManager } from 'server/pluginManager'
+import { SpellInterface } from '@magickml/agent-server-schemas'
+import {
+  CORE_DEP_KEYS,
+  EventPayload,
+  ISharedAgent,
+} from '@magickml/shared-services'
+import { getLogger } from '@magickml/server-logger'
+import { AGENT_SPELL, AGENT_SPELL_STATE } from '@magickml/agent-communication'
+import { PluginManager } from '@magickml/agent-plugin-manager'
 import { IEventStore, StatusEnum } from './services/eventStore'
 import { BaseRegistry } from './baseRegistry'
 import { SpellState } from './spellbook'
-import { debounce } from 'lodash'
-import { Agent } from 'server/agents'
+import lodash from 'lodash'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { AgentLike } from '@magickml/agent-command-hub'
 
 export type SocketData = {
   socketName: string
@@ -47,6 +51,15 @@ export interface SpellCasterEvents {
   inputs: (data: InputData) => void
   outputs: (data: OutputData) => void
   [key: string]: (...args: any[]) => void
+}
+
+export interface ISpellcasterAgent extends AgentLike {
+  id: string
+  pubsub: RedisPubSub
+  logger: pino.Logger & AgentLike['logger']
+  pluginManager: PluginManager<this>
+  connection: Redis
+  [key: string]: any
 }
 
 /**
@@ -100,18 +113,20 @@ export interface SpellCasterEvents {
  *     // Handle initialization errors
  *   });
  */
-export class SpellCaster extends (EventEmitter as new () => TypedEmitter<SpellCasterEvents>) {
+export class SpellCaster<
+  A extends ISharedAgent
+> extends (EventEmitter as new () => TypedEmitter<SpellCasterEvents>) {
   id: string = uuidv4()
   registry!: IRegistry
   engine!: Engine
   graph!: IGraph
   spell!: SpellInterface
   executeGraph = false
-  pluginManager: PluginManager
+  pluginManager: PluginManager<A>
   busy: boolean = true
   isLive: boolean = false
   private debug = true
-  private agent: Agent
+  private agent: A
   private logger: pino.Logger
   private loopDelay: number
   private limitInSeconds: number
@@ -133,8 +148,8 @@ export class SpellCaster extends (EventEmitter as new () => TypedEmitter<SpellCa
     loopDelay?: number
     limitInSeconds?: number
     limitInSteps?: number
-    agent: Agent
-    pluginManager: PluginManager
+    agent: A
+    pluginManager: PluginManager<A>
     initialState?: SpellState
   }) {
     super()
@@ -291,7 +306,7 @@ export class SpellCaster extends (EventEmitter as new () => TypedEmitter<SpellCa
     options: any = {}
   ) {
     if (!this.debounceMap.has(event)) {
-      const debouncedFunction = debounce(
+      const debouncedFunction = lodash.debounce(
         () => {
           callback()
         },

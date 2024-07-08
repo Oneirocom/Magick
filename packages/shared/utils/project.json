@@ -3,12 +3,15 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shared/utils/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
-      "executor": "@nx/vite:build",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/shared/utils"
+        "outputPath": "dist/packages/shared/utils",
+        "tsConfig": "packages/shared/utils/tsconfig.lib.json",
+        "main": "packages/shared/utils/src/index.ts"
       }
     },
     "test": {
@@ -23,6 +26,5 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": []
+  }
 }

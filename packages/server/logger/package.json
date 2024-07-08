@@ -1,8 +1,14 @@
 {
-  "name": "server/logger",
+  "name": "@magickml/server-logger",
   "version": "0.0.1",
-  "dependencies": {},
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "typings": "./index.d.ts"
+  "dependencies": {
+    "pino": "8.14.1",
+    "pino-pretty": "10.0.0",
+    "dotenv-flow": "3.2.0",
+    "@hyperdx/node-opentelemetry": "^0.4.2",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
 }

@@ -1,0 +1,5 @@
+{
+  "name": "discord",
+  "packageName": "plugins/discord",
+  "main": "./src/lib/discordPlugin.ts"
+}

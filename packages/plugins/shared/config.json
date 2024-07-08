@@ -1,0 +1,5 @@
+{
+  "name": "shared",
+  "packageName": "@magickml/shared-plugins",
+  "main": "./src/index.ts"
+}

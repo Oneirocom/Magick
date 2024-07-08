@@ -1,0 +1,5 @@
+{
+  "name": "Core",
+  "packageName": "@magickml/core-plugin",
+  "main": "./src/lib/coreEventsPlugin.ts"
+}

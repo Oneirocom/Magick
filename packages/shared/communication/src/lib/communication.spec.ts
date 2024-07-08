@@ -1,7 +1,7 @@
 import { communication } from './communication'
 
-describe('communication', () => {
+describe('@magickml/agent-communication', () => {
   it('should work', () => {
-    expect(communication()).toEqual('communication')
+    expect(communication()).toEqual('@magickml/agent-communication')
   })
 })

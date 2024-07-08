@@ -1,0 +1,27 @@
+{
+  "name": "plugins/knowledge",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/plugins/knowledge/src",
+  "projectType": "library",
+  "tags": ["release"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/plugins/knowledge",
+        "tsConfig": "packages/plugins/knowledge/tsconfig.lib.json",
+        "packageJson": "packages/plugins/knowledge/package.json",
+        "main": "packages/plugins/knowledge/src/index.ts",
+        "assets": ["packages/plugins/knowledge/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/plugins/knowledge/jest.config.ts"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'communication',
+  displayName: '@magickml/agent-communication',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
