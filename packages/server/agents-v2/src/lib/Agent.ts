@@ -1,13 +1,15 @@
 import { TypedEmitter } from 'tiny-typed-emitter'
-import { AgentConfig } from './interfaces/agentConfig'
+import { AgentConfig } from './interfaces/IAgentConfig'
 import { Container, interfaces } from 'inversify'
 import {
   CONFIG_TO_SERVICE_MAP,
   DependencyInterfaces,
   TYPES,
-} from './interfaces/types'
-import { IEventStore } from './interfaces/eventStore'
+} from './interfaces/IDependencies'
+import { IEventStore } from './interfaces/IEventStore'
 import { EventEmitterWrapper } from './core/eventEmitterWrapped'
+import { CommandHub } from './dependencies/commandHub'
+import { ICommandHub } from './interfaces/ICommandHub'
 
 // Define the base event types for the Agent
 export interface BaseAgentEvents {
@@ -58,6 +60,13 @@ export class Agent extends EventEmitterWrapper<BaseAgentEvents> {
         binding.inSingletonScope()
       }
     }
+
+    // Register command hub
+    // We may still want to make this a configurable dependency
+    this.container
+      .bind<ICommandHub>(TYPES.CommandHub)
+      .to(CommandHub)
+      .inSingletonScope()
   }
 
   private registerFactories(): void {

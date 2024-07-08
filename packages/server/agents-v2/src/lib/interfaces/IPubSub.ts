@@ -1,7 +1,10 @@
 export interface IPubSub {
   initialize(): Promise<void>
   publish(channel: string, message: string | object): Promise<void>
-  subscribe(channel: string, callback: (message: any) => void): Promise<void>
+  subscribe<D = any>(
+    channel: any,
+    callback: (message: D, channel: any) => void
+  ): Promise<void>
   unsubscribe(channel: string): Promise<void>
   patternSubscribe(
     pattern: string,

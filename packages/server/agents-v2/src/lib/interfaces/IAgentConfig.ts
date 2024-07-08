@@ -1,5 +1,5 @@
 import { AgentConfigOptions } from '../Agent'
-import { ConfigToDependencyMap } from './types'
+import { ConfigToDependencyMap } from './IDependencies'
 
 // Now, let's generate our BaseConfig from this map:
 export type BaseConfig = {

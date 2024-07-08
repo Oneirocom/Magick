@@ -53,6 +53,9 @@ export type PubsubOptions = {
  * Note: Always ensure to call `close()` when the instance is no longer needed to prevent
  * resource leaks.
  */
+
+type ChannelCallback<D = any> = (message: D, channel: string) => void
+
 export class RedisPubSub extends EventEmitter {
   private redisCloudUrl: string | undefined
   private publisher!: Redis
@@ -61,7 +64,7 @@ export class RedisPubSub extends EventEmitter {
 
   private channelRefCount = new Map<string, number>()
   private patternRefCount = new Map<string, number>()
-  private channelCallbacks = new Map<string, Array<Function>>()
+  private channelCallbacks = new Map<string, Array<ChannelCallback>>()
   private patternCallbacks = new Map<string, Array<Function>>()
 
   constructor(redisCloudUrl: string | undefined, options: PubsubOptions = {}) {
@@ -379,7 +382,10 @@ export class RedisPubSub extends EventEmitter {
    * Example:
    * redisPubSub.subscribe('myChannel', message => console.log(message));
    */
-  async subscribe(channel: string, callback: Function) {
+  async subscribe<D = any>(
+    channel: string,
+    callback: (message: D, channel: string) => void
+  ) {
     this.channelRefCount.set(
       channel,
       (this.channelRefCount.get(channel) || 0) + 1
@@ -395,7 +401,7 @@ export class RedisPubSub extends EventEmitter {
       let deserializedMessage
       try {
         deserializedMessage = JSON.parse(message)
-        callback(deserializedMessage)
+        callback(deserializedMessage, channel)
       } catch (err) {
         console.error('Failed to deserialize message:', err)
         throw err

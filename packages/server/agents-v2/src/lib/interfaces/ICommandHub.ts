@@ -12,15 +12,15 @@ export type commandJob = {
 
 export interface ICommandHub {
   initialize(): void
-  handleIncomingCommand(job: commandJob): Promise<void>
+  handleIncomingCommand(job: commandJob, channel: any): Promise<void>
   registerDomain(
     domain: string,
     subdomain: string,
     commands: { [key: string]: (data: any) => void }
   ): void
-  on<T>(eventType: string, listener: CommandListener<T>)
-  off(eventType: string, listener: CommandListener<any>)
-  publish(eventType: string, data: any)
+  on<T>(eventType: string, listener: CommandListener<T>): void
+  off(eventType: string, listener: CommandListener<any>): void
+  publish(eventType: string, data: any): void
   onDestroy(): Promise<void>
   listAllEvents(): string[]
 }

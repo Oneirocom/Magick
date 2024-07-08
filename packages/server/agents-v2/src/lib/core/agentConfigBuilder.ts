@@ -1,11 +1,11 @@
 import { IStateService } from '@magickml/behave-graph'
 import { AgentConfigOptions } from '../Agent'
-import { AgentConfig, BaseConfig } from '../interfaces/agentConfig'
+import { AgentConfig, BaseConfig } from '../interfaces/IAgentConfig'
 import {
   ConfigServiceType,
   DEFAULT_DEPENDENCIES,
   ServiceInterface,
-} from '../interfaces/types'
+} from '../interfaces/IDependencies'
 
 export class AgentConfigBuilder<
   T extends Record<string, any> = AgentConfigOptions

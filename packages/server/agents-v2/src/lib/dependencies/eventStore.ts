@@ -9,12 +9,12 @@ import {
   IEventStore,
   Message,
   StatusEnum,
-} from '../interfaces/eventStore'
-import { EventProperties, IDatabaseService } from '../interfaces/database'
+} from '../interfaces/IEventStore'
+import { EventProperties, IDatabaseService } from '../interfaces/IDatabase'
 import { getEventProperties } from '../utils/eventUtils'
 import { Agent } from '../Agent'
 import { inject, injectable } from 'inversify'
-import { TYPES } from '../interfaces/types'
+import { TYPES } from '../interfaces/IDependencies'
 
 @injectable()
 export class EventStore

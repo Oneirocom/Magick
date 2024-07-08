@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import Redis from 'ioredis'
 import { IPubSub } from '../interfaces/IPubSub'
-import { TYPES } from '../interfaces/types'
+import { TYPES } from '../interfaces/IDependencies'
 import { IRedis } from '../interfaces/IRedis'
 import { RedisPubSub as _RedisPubSub } from '@magickml/redis-pubsub'
 
@@ -26,11 +26,11 @@ export class RedisPubSub implements IPubSub {
     this.pubsub.publish(channel, message)
   }
 
-  async subscribe(
+  async subscribe<D = any>(
     channel: string,
-    callback: (message: any) => void
+    callback: (message: D, channel: string) => void
   ): Promise<void> {
-    this.pubsub.subscribe(channel, callback)
+    this.pubsub.subscribe<D>(channel, callback)
   }
 
   async unsubscribe(channel: string): Promise<void> {
