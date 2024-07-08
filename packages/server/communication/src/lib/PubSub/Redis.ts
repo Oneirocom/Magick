@@ -13,7 +13,10 @@ export class RedisPubSubWrapper extends PubSub {
     return await this.pubsub.publish(channel, message)
   }
 
-  override async subscribe(channel: string, callback: Function): Promise<void> {
+  override async subscribe<D = any>(
+    channel: string,
+    callback: (message: D, channel: string) => void
+  ): Promise<void> {
     return await this.pubsub.subscribe(channel, callback)
   }
 
