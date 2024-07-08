@@ -1,5 +1,6 @@
 export * from './lib/plugin'
 export * from './lib/basePlugin'
+export * from './lib/simplePlugin'
 export * from './lib/coreEventsPlugin'
 export * from './lib/baseEmitter'
 export * from './lib/plugin'

@@ -3,9 +3,9 @@ import {
   AgentCredentialsPayload,
   CredentialsManager,
   CredentialsPayload,
-} from 'server/credentials'
+} from '@magickml/credentials'
 import type { Params } from '@feathersjs/feathers'
-import { type AgentCommandData } from 'server/agents'
+import { AgentCommandData } from '@magickml/agent-commander'
 
 const getProjectId = (params: Params) => {
   return params?.query?.projectId as string

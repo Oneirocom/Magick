@@ -1,10 +1,7 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "allowSyntheticDefaultImports": true,
-  },
+  "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": [".nitro/types/nitro.d.ts"],
+  "include": [],
   "references": [
     {
       "path": "./tsconfig.app.json"
@@ -13,5 +10,7 @@
       "path": "./tsconfig.spec.json"
     }
   ],
-  "extends": ["./.nitro/types/tsconfig.json", "../../tsconfig.base.json"]
+  "compilerOptions": {
+    "esModuleInterop": true
+  }
 }

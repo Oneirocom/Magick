@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   GridviewApi,
@@ -12,33 +12,12 @@ import { useGlobalLayout } from '../contexts/GlobalLayoutProvider'
 import MainPanel from '../layout/mainPanel'
 import FileDrawer from '../layout/fileDrawer'
 import RightSidebar from '../layout/rightSidebar'
-import { useDockviewTheme, useGetUserQuery } from 'client/state'
+import { setActiveInput, useDockviewTheme, useGetUserQuery } from 'client/state'
 import ModalProvider from '../contexts/ModalProvider'
 import { StatusBar } from '../components/StatusBar/statusBar'
 import { useConfig } from '@magickml/providers'
 import posthog from 'posthog-js'
-
-const components = {
-  MainPanel,
-  FileDrawer,
-  RightSidebar,
-  StatusBar: (props: IGridviewPanelProps<{ title: string }>) => {
-    return <StatusBar />
-  },
-  default: (props: IGridviewPanelProps<{ title: string }>) => {
-    return (
-      <div
-        style={{
-          height: '100%',
-          padding: '5px',
-          background: 'var(--background-color)',
-        }}
-      >
-        Status Bar
-      </div>
-    )
-  },
-}
+import { useDispatch } from 'react-redux'
 
 const loadDefaultLayout = (api: GridviewApi) => {
   // Bottom status bar
@@ -100,10 +79,51 @@ const MagickV2 = () => {
   const { data: userData, isLoading } = useGetUserQuery({
     projectId: config.projectId,
   })
+  const dispatch = useDispatch()
 
   if (isLoading) return null
 
   posthog.setPersonPropertiesForFlags({ email: userData?.user?.email })
+
+  const withClickHandler = (WrappedComponent: React.ComponentType<any>) => {
+    return (props: IGridviewPanelProps<{ title: string }>) => {
+      const handleClick = (e: React.MouseEvent) => {
+        dispatch(setActiveInput(null))
+      }
+
+      return (
+        <div onClick={handleClick} style={{ height: '100%', width: '100%' }}>
+          <WrappedComponent {...props} />
+        </div>
+      )
+    }
+  }
+
+  const components = {
+    MainPanel: MainPanel,
+    FileDrawer: withClickHandler(FileDrawer),
+    RightSidebar: withClickHandler(RightSidebar),
+    StatusBar: withClickHandler(
+      (props: IGridviewPanelProps<{ title: string }>) => {
+        return <StatusBar />
+      }
+    ),
+    default: withClickHandler(
+      (props: IGridviewPanelProps<{ title: string }>) => {
+        return (
+          <div
+            style={{
+              height: '100%',
+              padding: '5px',
+              background: 'var(--background-color)',
+            }}
+          >
+            Status Bar
+          </div>
+        )
+      }
+    ),
+  }
 
   const onReady = (event: GridviewReadyEvent) => {
     const layout = getLayout()

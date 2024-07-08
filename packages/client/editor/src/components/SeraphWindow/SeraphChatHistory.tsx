@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { SeraphEvents, SeraphFunction } from 'servicesShared'
+import { SeraphEvents, SeraphFunction } from '@magickml/shared-services'
 import { useState } from 'react'
 
 export const SeraphChatHistory = ({

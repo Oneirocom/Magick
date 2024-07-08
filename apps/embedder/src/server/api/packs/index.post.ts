@@ -2,9 +2,9 @@ import {
   authParse,
   CreatePackRequestSchema,
   CreatePackResponseSchema,
-} from '@magickml/embedder/schema'
+} from '@magickml/embedder-schemas'
 import { randomUUID } from 'crypto'
-import { embedderDb, Pack } from 'embedder-db-pg'
+import { embedderDb, Pack } from '@magickml/embedder-db-pg'
 import { defineEventHandler, readBody } from 'h3'
 
 export default defineEventHandler(async event => {

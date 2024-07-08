@@ -1,8 +1,9 @@
 {
-  "name": "token-validation",
+  "name": "server/token-validation",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/token-validation/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -10,7 +11,6 @@
       "options": {
         "outputPath": "dist/packages/server/token-validation",
         "tsConfig": "packages/server/token-validation/tsconfig.lib.json",
-        "packageJson": "packages/server/token-validation/package.json",
         "main": "packages/server/token-validation/src/index.ts",
         "assets": ["packages/server/token-validation/*.md"]
       }
@@ -19,6 +19,5 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": []
+  }
 }

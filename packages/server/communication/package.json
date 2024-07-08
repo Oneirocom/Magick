@@ -1,0 +1,15 @@
+{
+  "name": "@magickml/server-communication",
+  "version": "0.0.3",
+  "dependencies": {
+    "bullmq": "4.6.0",
+    "pino": "8.14.1",
+    "ioredis": "^5.3.2",
+    "@magickml/server-logger": "0.0.1",
+    "@magickml/redis-pubsub": "0.0.1",
+    "tslib": "^2.3.0"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}

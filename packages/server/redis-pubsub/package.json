@@ -1,0 +1,12 @@
+{
+  "name": "@magickml/redis-pubsub",
+  "version": "0.0.1",
+  "dependencies": {
+    "@feathersjs/koa": "5.0.25",
+    "ioredis": "^5.3.2",
+    "tslib": "^2.3.0"
+  },
+  "main": "./src/index.js",
+  "module": "./src/index.mjs",
+  "typings": "./src/index.d.ts"
+}

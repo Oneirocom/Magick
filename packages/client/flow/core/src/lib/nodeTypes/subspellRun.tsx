@@ -1,7 +1,7 @@
 import { useFeathers, usePubSub } from '@magickml/providers'
 import { CoreNode, CoreNodeProps } from '../node/core-node'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import { useChangeNodeData } from '../hooks'
 import { isEqual } from 'lodash'
 

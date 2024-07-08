@@ -5,9 +5,9 @@ import {
   AWS_REGION,
   AWS_SECRET_KEY,
   AWS_BUCKET_ENDPOINT,
-} from 'shared/config'
+} from '@magickml/server-config'
 
-import { getLogger } from 'server/logger'
+import { getLogger } from '@magickml/server-logger'
 
 type AgentImageData = {
   image: string

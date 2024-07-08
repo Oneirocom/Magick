@@ -2,7 +2,11 @@
 import { Params } from '@feathersjs/feathers'
 import { app } from '../../app'
 import { v4 as uuidv4 } from 'uuid'
-import { AgentInterface, SpellInterface, UserInterface } from 'server/schemas'
+import {
+  AgentInterface,
+  SpellInterface,
+  UserInterface,
+} from '@magickml/agent-server-schemas'
 
 /**
  * Interface for CreateData objects
@@ -162,6 +166,7 @@ export class ProjectsService {
       return true
     } catch (e) {
       console.error(e)
+      return false
     }
   }
 

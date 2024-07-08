@@ -1,9 +1,9 @@
 {
-  "name": "embedder-auth-token",
+  "name": "embedder/auth/token",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/auth/token/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -11,7 +11,6 @@
       "options": {
         "outputPath": "dist/packages/embedder/auth/token",
         "tsConfig": "packages/embedder/auth/token/tsconfig.lib.json",
-        "packageJson": "packages/embedder/auth/token/package.json",
         "main": "packages/embedder/auth/token/src/index.ts",
         "assets": ["packages/embedder/auth/token/*.md"]
       }

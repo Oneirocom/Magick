@@ -8,7 +8,7 @@ import {
   DeletePackResponseSchema,
   PackQueryContextSchema,
   PackQueryRequestSchema,
-} from '@magickml/embedder/schema'
+} from '@magickml/embedder-schemas'
 
 export const packEndpoints = makeApi([
   {
@@ -69,6 +69,32 @@ export const packEndpoints = makeApi([
       },
     ],
     response: DeletePackResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: 'Invalid Request',
+        schema: z.any(),
+      },
+    ],
+  },
+  {
+    method: 'delete',
+    path: '/packs/delete',
+    alias: 'deletePackWithBody',
+    description: 'Delete a pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({
+          packId: idSchema,
+        }),
+      },
+    ],
+    response: z.object({
+      success: z.boolean(),
+    }),
     errors: [
       {
         status: 400,

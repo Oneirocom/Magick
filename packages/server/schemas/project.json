@@ -3,7 +3,17 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/schemas/src",
   "projectType": "library",
+  "tags": ["release"],
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/schemas",
+        "tsConfig": "packages/server/schemas/tsconfig.lib.json",
+        "main": "packages/server/schemas/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
@@ -16,6 +26,5 @@
         "reportsDirectory": "../../../coverage/packages/server/schemas"
       }
     }
-  },
-  "tags": []
+  }
 }

@@ -1,11 +1,11 @@
 'use client'
 
 import type { GraphJSON, Variable } from '@magickml/behave-graph'
-import { getNodeSpec } from 'shared/nodeSpec'
+import { getNodeSpec } from '@magickml/node-spec'
 import { v4 as uuidv4 } from 'uuid'
 import { getConfig } from '../getNodeConfig'
 import { getSocketValueType } from '../configureSockets'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import { MagickEdgeType, MagickNodeType } from '@magickml/client-types'
 
 export type Comment = {

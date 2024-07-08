@@ -1,10 +1,20 @@
 {
-  "name": "server-core",
+  "name": "server/core",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/core/src",
   "projectType": "library",
   "implicitDependencies": [],
+  "tags": ["release"],
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/core",
+        "main": "packages/server/core/src/index.ts",
+        "tsConfig": "packages/server/core/tsconfig.lib.json"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
@@ -16,6 +26,5 @@
         "jestConfig": "packages/server/core/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

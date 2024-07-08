@@ -3,7 +3,6 @@
 /test
 /spec
 apps/client
-apps/docs
 docs
 bruno-requests
 .vscode

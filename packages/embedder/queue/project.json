@@ -1,9 +1,9 @@
 {
-  "name": "embedder-queue",
+  "name": "embedder/queue",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/queue/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

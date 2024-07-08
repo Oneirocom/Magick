@@ -8,5 +8,13 @@
       "import": "./index.mjs",
       "require": "./index.js"
     }
+  },
+  "dependencies": {
+    "@magickml/client-ui": "0.0.1",
+    "@nx/vite": "19.2.1",
+    "@vitejs/plugin-react": "4.2.1",
+    "react": "18.2.0",
+    "vite": "5.0.12",
+    "vite-plugin-dts": "~3.8.1"
   }
 }

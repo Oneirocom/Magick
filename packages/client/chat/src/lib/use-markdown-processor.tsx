@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Root } from 'hast'
 import mermaid from 'mermaid'
 import Link from 'next/link'

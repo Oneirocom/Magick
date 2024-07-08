@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  IGridviewPanelProps,
   IPaneviewPanelProps,
   PaneviewReact,
   PaneviewReadyEvent,
@@ -8,7 +9,7 @@ import {
 import { usePanelControls } from '../hooks/usePanelControls'
 import LogWindow from '../components/LogWindow/logWindow'
 import SeraphWindow from '../components/SeraphWindow/SeraphWindow'
-import { useTabLayout } from '@magickml/providers'
+import { usePubSub, useTabLayout } from '@magickml/providers'
 import { useFeatureFlag, Features } from '../hooks/useFeatureFlag'
 
 const components = {
@@ -56,9 +57,12 @@ const components = {
   },
 }
 
-const RightSidebar = (props: any) => {
+const RightSidebar = (
+  props: IGridviewPanelProps<{ title: string; id: string }>
+) => {
   const tab = useTabLayout()
-  usePanelControls(props, 'none', 'ctrl+l, meta+l')
+  const { events } = usePubSub()
+  usePanelControls(props, events.TOGGLE_RIGHT_PANEL, 'ctrl+l, meta+l')
   const onReady = (event: PaneviewReadyEvent) => {
     event.api.addPanel({
       id: 'Logs',

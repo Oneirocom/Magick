@@ -1,11 +1,11 @@
 {
-  "name": "utils",
+  "name": "@magickml/utils",
   "version": "0.0.1",
   "dependencies": {
     "@feathersjs/feathers": "5.0.25",
-    "@magickml/behave-graph": "^0.14.1"
+    "@magickml/behave-graph": "^0.14.1",
+    "tslib": "^2.3.0"
   },
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "typings": "./index.d.ts"
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
 }

@@ -20,7 +20,7 @@ import {
 } from 'client/state'
 import { useDispatch, useSelector } from 'react-redux'
 import { debounce } from 'lodash'
-import { SpellInterfaceWithGraph } from 'server/schemas'
+import { SpellInterfaceWithGraph } from '@magickml/agent-server-schemas'
 
 /**
  * Hook that returns the nodes and edges for react-flow, and the graphJson for the behave-graph.
@@ -87,7 +87,7 @@ export const useBehaveGraphFlow = ({
   )
 
   useEffect(() => {
-    if (!specJson || !spell) return
+    if (!specJson || !spell || nodes?.length === 0) return
 
     debouncedUpdate(specJson, spell)
 

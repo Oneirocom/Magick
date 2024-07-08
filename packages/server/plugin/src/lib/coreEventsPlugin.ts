@@ -1,10 +1,13 @@
 import Redis from 'ioredis'
 import { BasePlugin } from './basePlugin'
 import EventEmitter from 'events'
-import { EventTypes } from 'communication'
-import { type PluginStateType } from 'plugin-state'
-import { type EventPayload } from './events/event-manager'
-import { Agent } from 'server/agents'
+import { EventTypes } from '@magickml/agent-communication'
+import { type PluginStateType } from '@magickml/agent-plugin-state'
+// nx-ignore-next-line
+import { EventPayload } from '@magickml/shared-services'
+// import type { Agent } from 'packages/server/grimoire/src/lib/agent'
+
+type Agent = any
 
 /**
  * CorePlugin is the base class for all plugins that are used to

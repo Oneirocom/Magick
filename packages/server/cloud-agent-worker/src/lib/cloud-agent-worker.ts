@@ -1,13 +1,17 @@
 import { Worker, Job } from 'bullmq'
-import { getLogger } from 'server/logger'
-import { Application, app } from 'server/core'
+import { getLogger } from '@magickml/server-logger'
+import { Application, app } from '@magickml/agent-server'
 
-import { Agent } from 'server/agents'
-import { AGENT_DELETE, AGENT_DELETE_JOB, AGENT_UPDATE_JOB } from 'communication'
-import { type RedisPubSub } from 'server/redis-pubsub'
+import { Agent } from '@magickml/agents'
+import {
+  AGENT_DELETE,
+  AGENT_DELETE_JOB,
+  AGENT_UPDATE_JOB,
+} from '@magickml/agent-communication'
+import { type RedisPubSub } from '@magickml/redis-pubsub'
 import pino from 'pino'
 import { FeathersSyncReporter } from 'server/cloud-agent-manager'
-import { AgentInterface } from 'server/schemas'
+import { AgentInterface } from '@magickml/agent-server-schemas'
 
 export interface AgentListRecord {
   id: string

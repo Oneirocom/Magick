@@ -12,7 +12,7 @@ import {
 } from '@magickml/client-ui'
 import { useState } from 'react'
 import { EditIcon } from './edit-icon'
-import { defaultImage } from 'shared/utils'
+import { defaultImage } from '@magickml/utils'
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
 import { useUpdateAgentMutation } from 'client/state'
 
@@ -58,7 +58,7 @@ export const ConfigHeader = ({
 
   return (
     <div className="inline-flex w-full justify-start items-center gap-x-2">
-      <Avatar className='ring-1 ring-ds-primary'>
+      <Avatar className="ring-1 ring-ds-primary">
         <AvatarImage src={defaultImage(selectedAgentData.id)} />
         <AvatarFallback>{selectedAgentData?.name[0]}</AvatarFallback>
       </Avatar>
@@ -91,7 +91,7 @@ export const ConfigHeader = ({
               setEditName(false)
             }}
           >
-            <CheckIcon className='text-green-500' />
+            <CheckIcon className="text-green-500" />
           </Button>
           <Button
             variant="ghost"
@@ -100,12 +100,14 @@ export const ConfigHeader = ({
               setEditName(false)
             }}
           >
-            <Cross1Icon className='text-ds-error' />
+            <Cross1Icon className="text-ds-error" />
           </Button>
         </>
       ) : (
         <>
-          <p className="ml-2 font-medium capitalize">{selectedAgentData.name}</p>
+          <p className="ml-2 font-medium capitalize">
+            {selectedAgentData.name}
+          </p>
           <Button
             variant="ghost"
             size="icon"
@@ -130,7 +132,9 @@ export const ConfigHeader = ({
                   })
                 }}
               />
-              <span className='text-sm font-medium text-white/60'>{selectedAgentData.enabled ? 'On' : 'Off'}</span>
+              <span className="text-sm font-medium text-white/60">
+                {selectedAgentData.enabled ? 'On' : 'Off'}
+              </span>
             </>
           </TooltipTrigger>
           <TooltipContent>

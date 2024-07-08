@@ -1,12 +1,12 @@
 import pino from 'pino'
-import { RedisPubSub } from 'server/redis-pubsub'
-import { getLogger } from 'server/logger'
+import { RedisPubSub } from '@magickml/redis-pubsub'
+import { getLogger } from '@magickml/server-logger'
 import { MessageQueue } from 'server/communication'
-import { app } from 'server/core'
-import { AgentInterface } from 'server/schemas'
-import { AGENT_DELETE_JOB } from 'communication'
+import { app } from '@magickml/agent-server'
+import { AgentInterface } from '@magickml/agent-server-schemas'
+import { AGENT_DELETE_JOB } from '@magickml/agent-communication'
 import { Reporter } from './Reporters'
-import { AGENT_HEARTBEAT_INTERVAL_MSEC } from 'shared/config'
+import { AGENT_HEARTBEAT_INTERVAL_MSEC } from '@magickml/server-config'
 
 const CHECK_INTERVAL = 10000 // Check every 10 seconds
 

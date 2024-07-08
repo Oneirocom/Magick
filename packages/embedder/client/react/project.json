@@ -1,9 +1,9 @@
 {
-  "name": "embedder-client-react",
+  "name": "embedder/client/react",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/embedder/client/react/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["release"],
   "targets": {
     "build": {
       "executor": "@nx/vite:build",

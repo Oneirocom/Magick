@@ -9,7 +9,7 @@ import {
   setSyncing,
 } from 'client/state'
 import { useDispatch } from 'react-redux'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 import posthog from 'posthog-js'
 
 type Props = {

@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import { RAGApplicationBuilder } from '@llm-tools/embedjs'
-import { embedderDb, Pack } from 'embedder-db-pg'
-import { usePineconeDb } from '@magickml/embedder/db/pinecone'
+import { embedderDb, Pack } from '@magickml/embedder-db-pg'
+import { usePineconeDb } from '@magickml/embedder-db-pinecone'
 import { eq, and } from 'drizzle-orm'
 import {
   authParse,
   PackQueryRequestSchema,
   PackQueryContextSchema,
-} from '@magickml/embedder/schema'
+} from '@magickml/embedder-schemas'
 import { createError } from 'h3'
 
 export default defineEventHandler(async event => {

@@ -1,8 +1,8 @@
 import { CloudAgentWorker } from 'server/cloud-agent-worker'
-import { initLogger, getLogger } from 'server/logger'
-import { initApp } from 'server/core'
-import { initAgentCommander } from 'server/agents'
-import { DONT_CRASH_ON_ERROR, PRODUCTION } from 'shared/config'
+import { initLogger, getLogger } from '@magickml/server-logger'
+import { initApp } from '@magickml/agent-server'
+import { DONT_CRASH_ON_ERROR, PRODUCTION } from '@magickml/server-config'
+import { initAgentCommander } from '@magickml/agent-commander'
 
 initLogger({ name: 'cloud-agent-worker' })
 
@@ -13,7 +13,7 @@ console.log('INIT APP')
 const app = await initApp()
 
 console.log('INIT AGENT COMMANDER')
-await initAgentCommander()
+await initAgentCommander(app)
 
 if (PRODUCTION || DONT_CRASH_ON_ERROR) {
   process.on('uncaughtException', (e: any) => {

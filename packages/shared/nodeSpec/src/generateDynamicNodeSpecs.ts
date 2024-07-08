@@ -1,5 +1,5 @@
 import { NodeSpecJSON, Variable, VariableJSON } from '@magickml/behave-graph'
-import { SpellInterface } from 'server/schemas'
+import { SpellInterface } from '@magickml/agent-server-schemas'
 
 type ConfigUpdate = {
   variableId: string

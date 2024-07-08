@@ -13,7 +13,7 @@ import {
 import { useModal } from '../../contexts/ModalProvider'
 import AgentListItem from '../../screens/agents/AgentWindow/AgentListItem'
 import { useSnackbar } from 'notistack'
-import { AgentInterface } from 'server/schemas'
+import { AgentInterface } from '@magickml/agent-server-schemas'
 import {
   Button,
   DropdownMenu,
@@ -24,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from '@magickml/client-ui'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
-import { defaultImage } from 'shared/utils'
+import { defaultImage } from '@magickml/utils'
 
 export function AgentMenu({ data }) {
   const { client } = useFeathers()

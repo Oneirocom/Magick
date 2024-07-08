@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useCallback, useEffect, useMemo } from 'react'
 import {
   Background,
@@ -12,7 +11,7 @@ import CustomControls from '../controls/Controls'
 import { NodePicker } from '../node-picker/NodePicker'
 import { type BehaveGraphFlow, useFlowHandlers } from '../hooks'
 import { Tab, usePubSub } from '@magickml/providers'
-import { SpellInterfaceWithGraph } from 'server/schemas'
+import { SpellInterfaceWithGraph } from '@magickml/agent-server-schemas'
 import { RootState } from 'client/state'
 import { nodeColor } from '../utils/nodeColor'
 import { ContextNodeMenu } from '../controls/context-node-menu'
@@ -130,17 +129,12 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
 
   const { projectId, currentAgentId } = globalConfig || {}
   const { publish, events } = pubSub || {}
-
-  const [playing, setPlaying] = React.useState(false)
   const [isDebug, setIsDebug] = React.useState(false)
   const [miniMapOpen, setMiniMapOpen] = React.useState(false)
 
   useEffect(() => {
     if (!lastStateEvent || lastStateEvent.spellId !== spell.id) return
     if (!lastStateEvent.state) return
-
-    // Process only spell state events here
-    setPlaying(lastStateEvent.state.isRunning)
     setIsDebug(lastStateEvent.state.debug)
   }, [lastStateEvent])
 
@@ -171,32 +165,9 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     handleNodeDragStop,
   } = flowHandlers
 
-  const togglePlay = () => {
-    if (!publish || !events || !currentAgentId) return
-    if (playing) {
-      publish(events.SEND_COMMAND, {
-        projectId,
-        agentId: currentAgentId,
-        command: 'agent:spellbook:pauseSpell',
-        data: {
-          spellId: spell.id,
-        },
-      })
-      publish(events.RESET_NODE_STATE)
-    } else {
-      publish(events.SEND_COMMAND, {
-        projectId,
-        agentId: currentAgentId,
-        command: 'agent:spellbook:playSpell',
-        data: {
-          spellId: spell.id,
-        },
-      })
-    }
-    setPlaying(!playing)
-  }
-
   const toggleDebug = useCallback(() => {
+    console.log({ publish, events, currentAgentId, agentId: currentAgentId })
+
     if (!publish || !events || !currentAgentId) return
     const newState = !isDebug
 
@@ -248,14 +219,12 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       onNodeContextMenu={handleNodeContextMenu}
     >
       <CustomControls
-        playing={playing}
-        togglePlay={togglePlay}
-        isDebug={isDebug}
-        toggleDebug={toggleDebug}
         setBehaviorGraph={setGraphJson}
         specJson={specJSON}
         miniMapOpen={miniMapOpen}
         toggleMiniMap={() => setMiniMapOpen(!miniMapOpen)}
+        toggleDebug={toggleDebug}
+        isDebug={isDebug}
       />
       <Background
         variant={BackgroundVariant.Lines}

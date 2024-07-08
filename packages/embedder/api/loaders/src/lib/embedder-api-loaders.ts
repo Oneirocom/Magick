@@ -4,7 +4,7 @@ import {
   idSchema,
   AddLoaderSchema,
   AddLoaderResponseSchema,
-} from '@magickml/embedder/schema'
+} from '@magickml/embedder-schemas'
 
 export const loaderEndpoints = makeApi([
   {
@@ -50,6 +50,36 @@ export const loaderEndpoints = makeApi([
         name: 'loaderId',
         type: 'Path',
         schema: idSchema,
+      },
+    ],
+    response: z.any(),
+    errors: [
+      {
+        status: 404,
+        description: 'Loader not found',
+        schema: z.any(),
+      },
+    ],
+  },
+  {
+    method: 'delete',
+    path: '/packs/:id/loaders/delete',
+    alias: 'deleteLoader',
+    description: 'Delete a loader from a pack',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'id',
+        type: 'Path',
+        schema: idSchema,
+      },
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.object({
+          loaderId: idSchema,
+          filePath: z.string(),
+        }),
       },
     ],
     response: z.any(),

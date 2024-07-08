@@ -1,9 +1,18 @@
 {
-  "name": "server-command-hub",
+  "name": "server/command-hub",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/server/command-hub/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/server/command-hub",
+        "tsConfig": "packages/server/command-hub/tsconfig.lib.json",
+        "main": "packages/server/command-hub/src/index.ts"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
@@ -16,5 +25,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["release"]
 }

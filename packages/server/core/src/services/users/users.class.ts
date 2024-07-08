@@ -1,8 +1,8 @@
 import type { Params } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import { PORTAL_AGENT_KEY, PORTAL_URL } from 'shared/config'
+import { PORTAL_AGENT_KEY, PORTAL_URL } from '@magickml/server-config'
 import { UserQuery } from './users.schema'
-import { UserResponse } from 'servicesShared'
+import { UserResponse } from '@magickml/shared-services'
 
 export type UserParams = Params<UserQuery>
 

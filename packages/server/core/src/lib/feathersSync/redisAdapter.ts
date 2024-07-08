@@ -1,7 +1,7 @@
 // redis.ts
 import debug from 'debug'
 import core, { SYNC } from './core'
-import { RedisPubSub } from 'server/redis-pubsub'
+import { RedisPubSub } from '@magickml/redis-pubsub'
 
 const logger = debug('feathers-sync:redis')
 

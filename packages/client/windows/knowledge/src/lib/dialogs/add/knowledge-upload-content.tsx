@@ -10,6 +10,7 @@ import { useAtom } from 'jotai'
 import { addKnowledgeDialogAtom, addKnowledgeFormAtom } from './state'
 import toast from 'react-hot-toast'
 import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons'
+import { LoaderType } from '@magickml/embedder-schemas'
 
 type KnowledgeUploadContentProps = {
   disabledState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -51,8 +52,8 @@ export const uploadImage = async ({
 }
 
 export const KnowledgeUploadContent: React.FC<
-  KnowledgeUploadContentProps
-> = () => {
+  KnowledgeUploadContentProps & { restrictedTypes?: LoaderType[] }
+> = ({ restrictedTypes }) => {
   const config = useConfig()
   const [newKnowledge, setNewKnowledge] = useAtom(addKnowledgeDialogAtom)
   const [form, setForm] = useAtom(addKnowledgeFormAtom)
@@ -165,6 +166,7 @@ export const KnowledgeUploadContent: React.FC<
             onChange: handleFileUpload,
             disabled: getPresignedUrlState.isLoading,
           }}
+          restrictedTypes={restrictedTypes}
         />
         <span className="text-sm font-semibold">Uploaded Files:</span>
         <div className="flex flex-row-wrap gap-2">
@@ -192,7 +194,9 @@ export const KnowledgeUploadContent: React.FC<
   )
 }
 
-const KnowledgeBadgeStatus: React.FC<{ status: string }> = ({ status }) => {
+export const KnowledgeBadgeStatus: React.FC<{ status: string }> = ({
+  status,
+}) => {
   switch (status) {
     case 'uploaded':
       return <CheckIcon className="w-4 h-4 text-ds-alert" />

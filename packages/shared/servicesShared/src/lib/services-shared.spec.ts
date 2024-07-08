@@ -1,6 +1,6 @@
 import { servicesShared } from './services-shared'
 
-describe('servicesShared', () => {
+describe('@magickml/shared-services', () => {
   it('should work', () => {
     expect(servicesShared()).toEqual('services-shared')
   })

@@ -1,7 +1,7 @@
 import { Params, ServiceMethods } from '@feathersjs/feathers'
 import { Application } from '../../declarations'
 import { z } from 'zod'
-import { getProjectPresigner, ProjectPresignType } from 'server-storage'
+import { getProjectPresigner, ProjectPresignType } from '@magickml/storage'
 import { v4 } from 'uuid'
 
 const PresignedUrlBody = z.object({

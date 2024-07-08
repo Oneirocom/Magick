@@ -30,6 +30,7 @@ export interface GlobalConfig {
   pastState: SaveDiffData[]
   futureState: SaveDiffData[]
   layoutChangeEvent: boolean
+  engineRunning: boolean
 }
 
 /**
@@ -56,6 +57,7 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     dockviewTheme: 'dockview-theme-night',
     theme: 'abyss',
     layoutChangeEvent: false as boolean,
+    engineRunning: false as boolean,
   },
   reducers: {
     /**
@@ -169,6 +171,12 @@ export const globalConfigSlice: Slice<GlobalConfig> = createSlice({
     ): void => {
       state.layoutChangeEvent = action.payload
     },
+    setEngineRunning: (
+      state: GlobalConfig,
+      action: PayloadAction<boolean>
+    ): void => {
+      state.engineRunning = action.payload
+    },
   },
 })
 
@@ -186,6 +194,7 @@ export const {
   applyState,
   undoState,
   redoState,
+  setEngineRunning,
 } = globalConfigSlice.actions
 
 /**
@@ -207,3 +216,5 @@ export const selectFutureState = (state: RootState) =>
   state.globalConfig.futureState
 export const selectLayoutChangeEvent = (state: RootState) =>
   state.globalConfig.layoutChangeEvent
+export const selectEngineRunning = (state: RootState) =>
+  state.globalConfig.engineRunning

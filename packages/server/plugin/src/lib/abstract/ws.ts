@@ -1,8 +1,9 @@
 import { EventEmitter } from 'events'
 import { BasePluginInit } from '../basePlugin'
-import { CoreEventsPlugin, PluginCredentialsType } from 'server/plugin'
-import { PluginStateType } from 'plugin-state'
-import { EventPayload } from '../events/event-manager'
+import { PluginStateType } from '@magickml/agent-plugin-state'
+import { EventPayload } from '@magickml/shared-services'
+import { PluginCredentialsType } from '../credentials'
+import { CoreEventsPlugin } from '../coreEventsPlugin'
 
 export type WebSocketPluginState<T extends object = Record<string, unknown>> =
   T & {
