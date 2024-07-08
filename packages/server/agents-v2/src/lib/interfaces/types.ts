@@ -11,6 +11,8 @@ import { RedisClientWrapper } from '../services/redisService'
 import { KeyvStateService } from '../services/keyvStateService'
 import { IPubSub } from './IPubSub'
 import { RedisPubSub } from '../services/redisPubSub'
+import { TypedEmitter } from 'tiny-typed-emitter'
+import { IEventEmitter } from './IEventEmitter'
 
 /**
  * This is the central source of truth for all dependencies that are available.
@@ -22,11 +24,14 @@ export const DependencyInterfaces = {
   PluginManager: {} as PluginManagerService,
   Database: {} as IDatabaseService,
   EventStore: {} as IEventStore,
-  ['Factory<EventStore>']: {} as unknown,
   Spellbook: {} as ISpellbook,
   Agent: {} as Agent,
   Options: {} as AgentConfigOptions,
   PubSub: {} as IPubSub,
+  EventEmitter: {} as IEventEmitter,
+
+  // We can also just use this to add key:value types for later access
+  ['Factory<EventStore>']: {} as unknown,
   // ... other services
 } as const
 
@@ -51,6 +56,7 @@ export const CONFIG_TO_SERVICE_MAP = {
   pluginManager: { useSingleton: true, service: 'PluginManager' },
   // database: { useSingleton: true, service: 'Database' },
   eventStore: { useSingleton: false, service: 'EventStore' },
+  eventEmitter: { useSingleton: true, service: 'EventEmitter' },
   // ... other mappings
 } as const
 
@@ -75,6 +81,7 @@ export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
   pluginManager: PluginManagerService,
   stateService: KeyvStateService,
   pubSub: RedisPubSub,
+  eventEmitter: TypedEmitter,
   // database: DatabaseService,
   eventStore: EventStore,
 }
