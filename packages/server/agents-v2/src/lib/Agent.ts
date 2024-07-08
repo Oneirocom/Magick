@@ -7,6 +7,7 @@ import {
   TYPES,
 } from './interfaces/types'
 import { IEventStore } from './interfaces/eventStore'
+import { EventEmitterWrapper } from './core/eventEmitterWrapped'
 
 // Define the base event types for the Agent
 export interface BaseAgentEvents {
@@ -16,12 +17,16 @@ export interface BaseAgentEvents {
 
 export interface AgentConfigOptions {}
 
-export class Agent extends TypedEmitter<BaseAgentEvents> {
+export class Agent extends EventEmitterWrapper<BaseAgentEvents> {
   container: Container
   config: AgentConfig<AgentConfigOptions>
 
   constructor(public readonly id: string, config: AgentConfig) {
-    super()
+    // Here we create a new event emitter from a passed in config dependency.
+    // We extended from the EventEmitterWrapper class to enable custom event emitters we extend from.
+    const eventEmitter = new EventEmitterWrapper<BaseAgentEvents>()
+    super(eventEmitter)
+
     this.container = new Container()
     this.config = config
 
