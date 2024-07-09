@@ -20,7 +20,7 @@ export const eventsApi = rootApi.injectEndpoints({
           // we need to validate if the event matches the current project we are on.
           // if it does not we should not update the cache.
 
-          if (event.embedding) delete event.embedding
+          if (event?.embedding) delete event.embedding
 
           updateCachedData(draft => {
             draft.events.push(event)
