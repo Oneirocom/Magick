@@ -147,6 +147,7 @@ export const EventsWindow = () => {
             disabled: events && page >= Math.ceil(events.length / limit),
             children: 'Next',
           }}
+
           // bulkActionsProps={{
           //   deleteSelectedRows: selectedRows =>
           //     handleDeleteMany(selectedRows.map(row => row.original.row.id)),
