@@ -55,6 +55,7 @@ type BaseFlowHandlers = Pick<
   | 'handleDrop'
   | 'onDragOver'
   | 'handleNodeDragStop'
+  | 'onBeforeDelete'
 >
 
 type BaseFlowBehaveGraphFlow = Pick<
@@ -163,6 +164,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
     handleDrop,
     onDragOver,
     handleNodeDragStop,
+    onBeforeDelete,
   } = flowHandlers
 
   const toggleDebug = useCallback(() => {
@@ -203,6 +205,7 @@ export const BaseFlow: React.FC<BaseFlowProps> = ({
       onNodeDrag={handleNodeDrag}
       onDrop={handleDrop}
       onDragOver={onDragOver}
+      onBeforeDelete={onBeforeDelete}
       onSelectionDragStart={handleSelectionDragStart}
       onDelete={handleDelete}
       edgeTypes={edgeTypes}

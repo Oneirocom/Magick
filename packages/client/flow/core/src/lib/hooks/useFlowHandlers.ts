@@ -163,9 +163,11 @@ export const useFlowHandlers = ({
   })
 
   useHotkeys('meta+c, ctrl+c', () => {
+    if (!isTabActive(tab.id)) return
     copy()
   })
   useHotkeys('meta+v, ctrl+v', () => {
+    if (!isTabActive(tab.id)) return
     paste()
   })
 
@@ -226,8 +228,14 @@ export const useFlowHandlers = ({
   }, [takeSnapshot])
 
   const handleDelete = useCallback(() => {
+    console.log('TAB ACTIVE', !isTabActive(tab.id))
+    if (!isTabActive(tab.id)) return
     takeSnapshot()
-  }, [takeSnapshot])
+  }, [takeSnapshot, tab])
+
+  const onBeforeDelete = useCallback<() => Promise<boolean>>(async () => {
+    return isTabActive(tab.id)
+  }, [tab, takeSnapshot])
 
   const closeNodePicker = useCallback(() => {
     setLastConnectStart(undefined)
@@ -904,6 +912,7 @@ export const useFlowHandlers = ({
     handleNodeDrag,
     closeNodePicker,
     nodePickFilters,
+    onBeforeDelete,
     handleNodeContextMenu,
     nodeMenuVisibility,
     setNodeMenuVisibility,
