@@ -104,6 +104,9 @@
       "@magickml/icons": ["packages/client/icons/src/index.ts"],
       "@magickml/keywords": ["packages/cloud/next/keywords/src/index.ts"],
       "@magickml/knowledge-plugin": ["packages/plugins/knowledge/src/index.ts"],
+      "@magickml/llm-service-types": [
+        "packages/shared/llm-service-types/src/index.ts"
+      ],
       "@magickml/nitro-module": ["packages/server/nitroModule/src/index.ts"],
       "@magickml/node-spec": ["packages/shared/nodeSpec/src/index.ts"],
       "@magickml/pages-agents": ["portal/cloud/next/pages/agents/src/index.ts"],
