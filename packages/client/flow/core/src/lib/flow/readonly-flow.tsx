@@ -90,6 +90,7 @@ export const ReadOnlyFlow: React.FC<ReadOnlyFlowProps> = ({
         onEdgeUpdate: () => {},
         handleSelectionDragStart: () => {},
         handleDelete: () => {},
+        onBeforeDelete: async () => false,
       }}
     />
   )
