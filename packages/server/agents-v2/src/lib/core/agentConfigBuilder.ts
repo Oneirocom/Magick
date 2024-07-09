@@ -60,6 +60,11 @@ export class AgentConfigBuilder<
     return this
   }
 
+  withDependencies(dependencies: BaseConfig): this {
+    this.config.dependencies = dependencies
+    return this
+  }
+
   build(): AgentConfig<T> {
     // Add default dependencies for any missing required services
     for (const dependency of this.requiredDependencies) {
