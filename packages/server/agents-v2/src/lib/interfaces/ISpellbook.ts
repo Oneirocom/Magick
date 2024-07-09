@@ -1,11 +1,10 @@
-import { EventPayload } from './IEvent'
+import { ISpellCaster } from './ISpellCaster'
 import { ISpell } from './spell'
-import { ISpellCaster } from './ISpellcaster'
 
 export interface ISpellbook {
-  getSpells(): Map<string, ISpell>
-  loadSpell(spellId: string, spell: any, channel: string): void
-  unloadSpell(spellId: string): void
-  getSpellCaster(spellId: string): ISpellCaster | undefined
-  handleEvent(sourceName: string, event: EventPayload): void
+  initialize(): Promise<void>
+  addSpell(spell: ISpell): Promise<void>
+  removeSpell(spellId: string): Promise<void>
+  handleEvent(eventName: string, data: any): void
+  getSpellCasters(): ISpellCaster[]
 }

@@ -15,7 +15,7 @@ import {
 } from '@magickml/behave-graph' // Assuming BasePlugin is definedsuming SpellInterface is defined Assuming ILifecycleEventEmitter is defined
 import { EventPayload } from '@magickml/shared-services'
 import { ISpell, SpellState } from '../interfaces/spell'
-import { CreateRegistry, RegistryFactory } from '../interfaces/registryFactory'
+import { RegistryFactory } from '../interfaces/registryFactory'
 import lodash from 'lodash'
 
 export type SocketData = {

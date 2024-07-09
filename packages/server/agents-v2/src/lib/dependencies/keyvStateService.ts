@@ -4,7 +4,7 @@ import KeyvRedis from '@keyv/redis'
 import { IEventStore } from '../interfaces/IEventStore'
 import { EventPayload } from '../interfaces/IEvent'
 import { inject, injectable } from 'inversify'
-import { TYPES } from '../interfaces/IDependencies'
+import { TYPES } from './index'
 import { IRedis } from '../interfaces/IRedis'
 
 /**

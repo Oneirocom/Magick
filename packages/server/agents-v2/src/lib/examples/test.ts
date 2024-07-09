@@ -17,6 +17,7 @@ async function createAgent(id: string): Promise<Agent> {
 }
 
 createAgent('agent-1').then(agent => {
+  console.log('Agent initialized!', agent)
   agent.on('pluginInitialized', () => {
     console.log('Test event received')
   })

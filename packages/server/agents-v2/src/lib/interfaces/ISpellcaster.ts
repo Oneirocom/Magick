@@ -1,4 +1,5 @@
 export interface ISpellCaster {
-  handleEvent(event: any): void
+  initialize(): Promise<void>
   dispose(): Promise<void>
+  handleEvent(eventName: string, data: any): void
 }

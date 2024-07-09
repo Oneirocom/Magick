@@ -2,8 +2,7 @@ import { Service } from '../core/service'
 import { Plugin } from '../core/plugin'
 import { Agent } from '../Agent'
 import TypedEmitter from 'typed-emitter'
-import { TYPES } from '../interfaces/IDependencies'
-import { injectable } from 'inversify'
+import { TYPES } from './index'
 
 // Plugin Manager
 export class PluginManager {
