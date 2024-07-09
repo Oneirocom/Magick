@@ -2,7 +2,11 @@
 
 import { NodeSpecJSON } from '@magickml/behave-graph'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { NodeProps as FlowNodeProps, useEdges } from '@xyflow/react'
+import {
+  NodeProps as FlowNodeProps,
+  useEdges,
+  useReactFlow,
+} from '@xyflow/react'
 import InputSocket from '../sockets/input-socket'
 import OutputSocket from '../sockets/output-socket'
 import { useChangeNodeData } from '../hooks/useChangeNodeData'
@@ -54,6 +58,8 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
   const [error, setError] = useState(false)
   const edges = useEdges()
   const handleChange = useChangeNodeData(id)
+
+  const instance = useReactFlow()
 
   useEffect(() => {
     if (typeof data.socketsVisible === 'undefined') {
@@ -125,9 +131,18 @@ export const BaseNode: React.FC<BaseNodeProps> = ({
       setRunning(false)
       setError(spellEvent)
 
-      setTimeout(() => {
-        setError(false)
-      }, 5000)
+      console.log('ERROR EVENT: ', spellEvent)
+
+      const node = instance?.getNode(id)
+
+      instance.setCenter(
+        (node?.position.x || 0) + 100,
+        (node?.position.y || 0) + 100
+      )
+
+      // setTimeout(() => {
+      //   setError(false)
+      // }, 5000)
     }
   }, [spellEvent])
 
