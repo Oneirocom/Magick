@@ -1,8 +1,8 @@
-import { LanguageModelV1CallOptions } from './language-model-v1-call-options';
-import { LanguageModelV1CallWarning } from './language-model-v1-call-warning';
-import { LanguageModelV1FinishReason } from './language-model-v1-finish-reason';
-import { LanguageModelV1FunctionToolCall } from './language-model-v1-function-tool-call';
-import { LanguageModelV1LogProbs } from './language-model-v1-logprobs';
+import { LanguageModelV1CallOptions } from './language-model-v1-call-options'
+import { LanguageModelV1CallWarning } from './language-model-v1-call-warning'
+import { LanguageModelV1FinishReason } from './language-model-v1-finish-reason'
+import { LanguageModelV1FunctionToolCall } from './language-model-v1-function-tool-call'
+import { LanguageModelV1LogProbs } from './language-model-v1-logprobs'
 
 /**
 Specification for a language model that implements the language model interface version 1.
@@ -15,17 +15,17 @@ model interface and retain backwards compatibility. The different
 implementation versions can be handled as a discriminated union
 on our side.
    */
-  readonly specificationVersion: 'v1';
+  readonly specificationVersion: 'v1'
 
   /**
 Name of the provider for logging purposes.
    */
-  readonly provider: string;
+  readonly provider: string
 
   /**
 Provider-specific model ID for logging purposes.
    */
-  readonly modelId: string;
+  readonly modelId: string
 
   /**
 Default object generation mode that should be used with this model when
@@ -35,7 +35,7 @@ model. `undefined` can be returned if object generation is not supported.
 This is needed to generate the best objects possible w/o requiring the
 user to explicitly specify the object generation mode.
    */
-  readonly defaultObjectGenerationMode: 'json' | 'tool' | 'grammar' | undefined;
+  readonly defaultObjectGenerationMode: 'json' | 'tool' | 'grammar' | undefined
 
   /**
 Generates a language model output (non-streaming).
@@ -48,26 +48,26 @@ by the user.
 Text that the model has generated. Can be undefined if the model
 has only generated tool calls.
      */
-    text?: string;
+    text?: string
 
     /**
 Tool calls that the model has generated. Can be undefined if the
 model has only generated text.
      */
-    toolCalls?: Array<LanguageModelV1FunctionToolCall>;
+    toolCalls?: Array<LanguageModelV1FunctionToolCall>
 
     /**
 Finish reason.
      */
-    finishReason: LanguageModelV1FinishReason;
+    finishReason: LanguageModelV1FinishReason
 
     /**
   Usage information.
      */
     usage: {
-      promptTokens: number;
-      completionTokens: number;
-    };
+      promptTokens: number
+      completionTokens: number
+    }
 
     /**
 Raw prompt and setting information for observability provider integration.
@@ -77,14 +77,14 @@ Raw prompt and setting information for observability provider integration.
 Raw prompt after expansion and conversion to the format that the
 provider uses to send the information to their API.
        */
-      rawPrompt: unknown;
+      rawPrompt: unknown
 
       /**
 Raw settings that are used for the API call. Includes provider-specific
 settings.
        */
-      rawSettings: Record<string, unknown>;
-    };
+      rawSettings: Record<string, unknown>
+    }
 
     /**
 Optional raw response information for debugging purposes.
@@ -93,17 +93,17 @@ Optional raw response information for debugging purposes.
       /**
 Response headers.
       */
-      headers?: Record<string, string>;
-    };
+      headers?: Record<string, string>
+    }
 
-    warnings?: LanguageModelV1CallWarning[];
+    warnings?: LanguageModelV1CallWarning[]
 
     /**
   Logprobs for the completion.
   `undefined` if the mode does not support logprobs or if was not enabled
      */
-    logprobs?: LanguageModelV1LogProbs;
-  }>;
+    logprobs?: LanguageModelV1LogProbs
+  }>
 
   /**
 Generates a language model output (streaming).
@@ -114,7 +114,7 @@ by the user.
 @return A stream of higher-level language model output parts.
    */
   doStream(options: LanguageModelV1CallOptions): PromiseLike<{
-    stream: ReadableStream<LanguageModelV1StreamPart>;
+    stream: ReadableStream<LanguageModelV1StreamPart>
 
     /**
 Raw prompt and setting information for observability provider integration.
@@ -124,14 +124,14 @@ Raw prompt and setting information for observability provider integration.
 Raw prompt after expansion and conversion to the format that the
 provider uses to send the information to their API.
        */
-      rawPrompt: unknown;
+      rawPrompt: unknown
 
       /**
 Raw settings that are used for the API call. Includes provider-specific
 settings.
        */
-      rawSettings: Record<string, unknown>;
-    };
+      rawSettings: Record<string, unknown>
+    }
 
     /**
 Optional raw response data.
@@ -140,12 +140,15 @@ Optional raw response data.
       /**
 Response headers.
        */
-      headers?: Record<string, string>;
-    };
+      headers?: Record<string, string>
+    }
 
-    warnings?: LanguageModelV1CallWarning[];
-  }>;
-};
+    warnings?: LanguageModelV1CallWarning[]
+  }>
+}
+
+export type ExtensibleLanguageModel<T extends Record<string, unknown> = {}> =
+  LanguageModelV1 & T
 
 export type LanguageModelV1StreamPart =
   // Basic text deltas:
@@ -157,23 +160,23 @@ export type LanguageModelV1StreamPart =
   // Tool call deltas are only needed for object generation modes.
   // The tool call deltas must be partial JSON strings.
   | {
-      type: 'tool-call-delta';
-      toolCallType: 'function';
-      toolCallId: string;
-      toolName: string;
-      argsTextDelta: string;
+      type: 'tool-call-delta'
+      toolCallType: 'function'
+      toolCallId: string
+      toolName: string
+      argsTextDelta: string
     }
 
   // the usage stats, finish reason and logprobs should be the last part of the
   // stream:
   | {
-      type: 'finish';
-      finishReason: LanguageModelV1FinishReason;
-      logprobs?: LanguageModelV1LogProbs;
-      usage: { promptTokens: number; completionTokens: number };
+      type: 'finish'
+      finishReason: LanguageModelV1FinishReason
+      logprobs?: LanguageModelV1LogProbs
+      usage: { promptTokens: number; completionTokens: number }
     }
 
   // error parts are streamed, allowing for multiple errors
-  | { type: 'error'; error: unknown };
+  | { type: 'error'; error: unknown }
 
-export type LanguageModelV1ResponseMetadata = {};
+export type LanguageModelV1ResponseMetadata = {}
