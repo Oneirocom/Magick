@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify'
 import { Agent } from '../Agent'
 import { ISpellStorage } from '../interfaces/ISpellStorage'
 import { ISpell } from '../interfaces/spell'
-import { TYPES } from './index'
+import { TYPES } from './dependency.config'
 
 @injectable()
 export class SpellManager implements SpellManager {

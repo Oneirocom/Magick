@@ -14,7 +14,7 @@ import { EventProperties, IDatabaseService } from '../interfaces/IDatabase'
 import { getEventProperties } from '../utils/eventUtils'
 import { Agent } from '../Agent'
 import { inject, injectable } from 'inversify'
-import { TYPES } from './index'
+import { TYPES } from './dependency.config'
 
 @injectable()
 export class EventStore

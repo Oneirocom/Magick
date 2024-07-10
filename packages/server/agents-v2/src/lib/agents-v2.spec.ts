@@ -29,14 +29,13 @@ describe('Agent Integration', () => {
   })
 
   it('should receive events', done => {
-    agent.on('pluginInitialized', data => {
+    agent.on('initialized', () => {
       expect(true).toBe(true)
-      expect(data).toBe('test')
       done()
     })
 
     // Simulate the event being emitted
-    agent.emit('pluginInitialized', 'test')
+    agent.emit('initialized')
   })
 
   // Add more tests as needed

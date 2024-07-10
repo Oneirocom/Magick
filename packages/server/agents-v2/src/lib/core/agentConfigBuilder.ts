@@ -3,9 +3,9 @@ import { AgentConfigOptions } from '../Agent'
 import { AgentConfig, BaseConfig } from '../interfaces/IAgentConfig'
 import {
   ConfigServiceType,
-  DEFAULT_DEPENDENCIES,
   ServiceInterface,
 } from '../interfaces/IDependencies'
+import { DEFAULT_DEPENDENCIES } from '../dependencies/defaultDependencies'
 
 export class AgentConfigBuilder<
   T extends Record<string, any> = AgentConfigOptions
@@ -31,13 +31,13 @@ export class AgentConfigBuilder<
     return this
   }
 
-  withPluginManagerService(
-    ServiceClass: new () => ServiceInterface<'PluginManager'>
-  ): this {
-    this.config.dependencies.pluginManager = ServiceClass
-    this.requiredDependencies.delete('pluginManager')
-    return this
-  }
+  // withPluginManagerService(
+  //   ServiceClass: new () => ServiceInterface<'PluginManager'>
+  // ): this {
+  //   this.config.dependencies.pluginManager = ServiceClass
+  //   this.requiredDependencies.delete('pluginManager')
+  //   return this
+  // }
 
   // withDatabaseService(
   //   ServiceClass: new () => ServiceInterface<'Database'>
@@ -77,7 +77,7 @@ export class AgentConfigBuilder<
       }
 
       // @ts-ignore - This is safe because we've checked for the key above
-      this.config[dependency] = DEFAULT_DEPENDENCIES[dependency]
+      this.config.dependencies[dependency] = DEFAULT_DEPENDENCIES[dependency]
     }
 
     // Type assertion to ensure all required properties are present

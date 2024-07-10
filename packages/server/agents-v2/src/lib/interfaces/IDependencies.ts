@@ -1,10 +1,7 @@
-import { PluginManagerService } from '../dependencies/pluginManagerService'
-import { EventStore } from '../dependencies/eventStore'
-import { RedisClientWrapper } from '../dependencies/redisService'
-import { KeyvStateService } from '../dependencies/keyvStateService'
-import { RedisPubSub } from '../dependencies/redisPubSub'
-import { TypedEmitter } from 'tiny-typed-emitter'
-import { CONFIG_TO_SERVICE_MAP, DependencyInterfaces } from '../dependencies'
+import {
+  CONFIG_TO_SERVICE_MAP,
+  DependencyInterfaces,
+} from '../dependencies/dependency.config'
 
 /**
  * Verify that all services are mapped. This will throw a compile-time error if a service is not mapped.
@@ -19,17 +16,6 @@ export type DefaultDependenciesType = {
   [K in keyof typeof CONFIG_TO_SERVICE_MAP]: Constructor<
     (typeof DependencyInterfaces)[(typeof CONFIG_TO_SERVICE_MAP)[K]['service']]
   >
-}
-
-// Default implementations for the services
-export const DEFAULT_DEPENDENCIES: DefaultDependenciesType = {
-  redis: RedisClientWrapper,
-  pluginManager: PluginManagerService,
-  stateService: KeyvStateService,
-  pubSub: RedisPubSub,
-  eventEmitter: TypedEmitter,
-  // database: DatabaseService,
-  eventStore: EventStore,
 }
 
 /**
