@@ -70,6 +70,7 @@ export const waitForEmbedderJob = makeAsyncNodeDefinition({
 
     if (!loaderId) {
       console.error('Job ID not provided')
+      state.isBusy = false
       commit('failed')
       finished()
       return state

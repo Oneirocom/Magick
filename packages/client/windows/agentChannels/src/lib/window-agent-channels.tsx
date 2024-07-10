@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 export const ChannelsWindow = () => {
   const [page, setPage] = useState(1)
   const [limit] = useState(10)
+  const [rowSelection, setRowSelection] = useState<Record<string, any>>({})
 
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
@@ -54,6 +55,7 @@ export const ChannelsWindow = () => {
     for (const channel of channels) {
       try {
         await deleteChannel({ channelId: channel.id }).unwrap()
+        setRowSelection({})
       } catch (err) {
         console.error(err)
         enqueueSnackbar('Error deleting channel', { variant: 'error' })
@@ -132,6 +134,8 @@ export const ChannelsWindow = () => {
           data={channels?.data || []}
           filterInputPlaceholder="Search channels..."
           onDelete={handleDeleteChannel}
+          setRowSelection={setRowSelection}
+          rowSelection={rowSelection}
           columnVisibilityButtonProps={{
             children: 'Columns',
           }}
