@@ -39,6 +39,7 @@ import {
 import { FancyInput } from '../../../fancy'
 import { SetStateAction } from 'react'
 import { Loader } from '@magickml/embedder-schemas'
+import ErrorBoundary from '../../../utils/ErrorBoundary'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -59,16 +60,16 @@ interface DataTableProps<TData, TValue> {
   paginationDivProps?: React.HTMLAttributes<HTMLDivElement>
   renderRowActionMenu?: (row: Row<TData>) => React.ReactNode
   handleDeleteSelected?: (selectedRows: Loader[]) => Promise<void>
-  rowSelection?: Record<string, boolean>
-  setRowSelection?: React.Dispatch<SetStateAction<{}>>
+  rowSelection: Record<string, boolean>
+  setRowSelection: React.Dispatch<SetStateAction<{}>>
 }
 
-export function DataTable<TData, TValue>({
+export function DataTableRaw<TData, TValue>({
   columns,
   data,
   onDelete,
   handleDeleteSelected,
-  rowSelection,
+  rowSelection = {},
   setRowSelection,
   tableProps,
   tableHeaderProps,
@@ -154,6 +155,7 @@ export function DataTable<TData, TValue>({
         >
           <TrashIcon
             className={`h-6 w-6 ${
+              table.getState().rowSelection &&
               table.getFilteredSelectedRowModel().rows.length > 0
                 ? 'text-red-600'
                 : 'text-gray-30'
@@ -316,7 +318,8 @@ export function DataTable<TData, TValue>({
           className="flex-1 text-sm text-muted-foreground"
           {...pageCountDivProps}
         >
-          {table.getFilteredSelectedRowModel().rows.length > 0
+          {table.getState().rowSelection &&
+          table.getFilteredSelectedRowModel().rows.length > 0
             ? `${table.getFilteredSelectedRowModel().rows.length} of ${
                 table.getFilteredRowModel().rows.length
               } row(s) selected.`
@@ -346,5 +349,13 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </div>
+  )
+}
+
+export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
+  return (
+    <ErrorBoundary>
+      <DataTableRaw {...props} />
+    </ErrorBoundary>
   )
 }

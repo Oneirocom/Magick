@@ -46,6 +46,8 @@ const loadPlugins = async () => {
 
   await pubSub.initialize()
 
+  console.log('Plugin modules', pluginModules)
+
   for (const [, pluginGetter] of Object.entries(pluginModules)) {
     // Get the actual class from the getter
     const PluginClass = pluginGetter

@@ -244,6 +244,18 @@ export class SpellCaster<
       return this
     } catch (err: any) {
       console.log('Error initializing spell', err)
+
+      const match = err
+        .toString()
+        .match(
+          /with id ([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/
+        )
+
+      if (match) {
+        const nodeId = match[1]
+        this.emitNodeError({ nodeId, error: err })
+      }
+
       this.error(
         `Error initializing spell ${this.spell.id} ${this.spell.name}`,
         err
@@ -443,6 +455,27 @@ export class SpellCaster<
     }
 
     this.emitAgentSpellEvent(message)
+  }
+
+  emitNodeError({ nodeId, error }: { nodeId: string; error: any }) {
+    const event = `${this.spell.id}-${nodeId}-error`
+    const message = `Node ${nodeId} errored: ${error.toString()}`
+
+    const data = {
+      event,
+      type: 'error',
+      log: true,
+      timestamp: new Date().toISOString(),
+      message,
+      nodeId,
+      data: {
+        nodeId,
+      },
+    }
+
+    console.log('Emtting data', data)
+
+    this.emitAgentSpellEvent(data)
   }
 
   /**

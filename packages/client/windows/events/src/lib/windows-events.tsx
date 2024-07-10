@@ -17,6 +17,8 @@ export const EventsWindow = () => {
   const [page, setPage] = useState(1)
   const [limit] = useState(10)
 
+  const [rowSelection, setRowSelection] = useState<Record<string, any>>({})
+
   const globalConfig = useSelector((state: RootState) => state.globalConfig)
   const { currentAgentId } = globalConfig
   const {
@@ -38,6 +40,7 @@ export const EventsWindow = () => {
     try {
       await deleteEvents({ eventsId }).unwrap()
       enqueueSnackbar('Events deleted', { variant: 'success' })
+      setRowSelection({})
     } catch (error) {
       enqueueSnackbar('Error deleting events', { variant: 'error' })
     }
@@ -119,6 +122,8 @@ export const EventsWindow = () => {
           columns={columns}
           data={events ?? []}
           filterInputPlaceholder="Search events..."
+          setRowSelection={setRowSelection}
+          rowSelection={rowSelection}
           columnVisibilityButtonProps={{
             children: 'Columns',
           }}
