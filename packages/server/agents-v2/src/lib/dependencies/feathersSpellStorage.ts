@@ -2,8 +2,8 @@ import { Application } from '@feathersjs/feathers'
 import { inject, injectable } from 'inversify'
 import { ISpellStorage } from '../interfaces/ISpellStorage'
 import { ISpell } from '../interfaces/spell'
-import { TYPES } from '.'
 import { Agent } from '../Agent'
+import { TYPES } from './dependency.config'
 
 declare module '../Agent' {
   interface BaseAgentEvents {

@@ -6,7 +6,7 @@ import {
   commandJob,
 } from '../interfaces/ICommandHub'
 import { IPubSub } from '../interfaces/IPubSub'
-import { TYPES } from './index'
+import { TYPES } from './dependency.config'
 
 @injectable()
 export class CommandHub implements ICommandHub {

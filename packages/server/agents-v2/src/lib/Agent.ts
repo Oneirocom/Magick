@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { TypedEmitter } from 'tiny-typed-emitter'
 import { AgentConfig } from './interfaces/IAgentConfig'
 import { Container, interfaces } from 'inversify'
@@ -5,11 +7,12 @@ import { IEventStore } from './interfaces/IEventStore'
 import { EventEmitterWrapper } from './core/eventEmitterWrapped'
 import { CommandHub } from './dependencies/commandHub'
 import { ICommandHub } from './interfaces/ICommandHub'
+
 import {
   CONFIG_TO_SERVICE_MAP,
   DependencyInterfaces,
   TYPES,
-} from './dependencies'
+} from './dependencies/dependency.config'
 
 // Define the base event types for the Agent
 export interface BaseAgentEvents {
@@ -31,6 +34,8 @@ export class Agent extends EventEmitterWrapper<AgentEvents> {
   constructor(public readonly id: string, config: AgentConfig) {
     // Here we create a new event emitter from a passed in config dependency.
     // We extended from the EventEmitterWrapper class to enable custom event emitters we extend from.
+
+    console.log('EVENT EMITFER', config)
     const eventEmitter =
       new config.dependencies.eventEmitter() as TypedEmitter<AgentEvents>
     super(eventEmitter)

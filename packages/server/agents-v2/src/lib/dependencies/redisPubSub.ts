@@ -2,9 +2,9 @@ import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import Redis from 'ioredis'
 import { IPubSub } from '../interfaces/IPubSub'
-import { TYPES } from './index'
 import { IRedis } from '../interfaces/IRedis'
 import { RedisPubSub as _RedisPubSub } from '@magickml/redis-pubsub'
+import { TYPES } from './dependency.config'
 
 @injectable()
 export class RedisPubSub implements IPubSub {
