@@ -2,6 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "resolveJsonModule": true,
+    "downlevelIteration": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
