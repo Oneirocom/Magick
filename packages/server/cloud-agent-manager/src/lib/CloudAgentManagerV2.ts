@@ -1,7 +1,7 @@
 import pino from 'pino'
 import { RedisPubSub } from '@magickml/redis-pubsub'
 import { getLogger } from '@magickml/server-logger'
-import { MessageQueue } from 'server/communication'
+import { BullMQJob, MessageQueue } from 'server/communication'
 import { app } from '@magickml/agent-server'
 import { AgentInterface } from '@magickml/agent-server-schemas'
 import { AGENT_DELETE_JOB } from '@magickml/agent-communication'
@@ -146,7 +146,18 @@ export class CloudAgentManagerV2 {
     try {
       const onlineAgents = await this.fetchOnlineAgents()
       if (!onlineAgents.includes(agentId)) {
-        this.logger.info(`Creating agent ${agentId}...`)
+        // check if a job is already waiting
+        const waitingJobs = await this.newQueue.getWaitingJobs<BullMQJob[]>()
+
+        if (waitingJobs.length > 0) {
+          waitingJobs.forEach((job: BullMQJob) => {
+            // don't add the job if it's already in the queue waiting to be picked up by a worker
+            if (job.data.agentId === agentId) {
+              return
+            }
+          })
+        }
+
         this.newQueue.addJob('agent:create', { agentId })
       }
     } finally {

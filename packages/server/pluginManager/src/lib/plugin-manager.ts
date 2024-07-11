@@ -197,7 +197,14 @@ export class PluginManager<A extends AgentLike> extends EventEmitter {
         projectId: this.projectId,
       })
 
-      await this.registerPlugin(pluginInstance)
+      try {
+        await this.registerPlugin(pluginInstance)
+      } catch (err) {
+        this.logger.error(
+          err,
+          `PLUGIN-MANAGER: error loading package ${Plugin.name}`
+        )
+      }
     }
 
     this.emit('pluginsLoaded', this.getPlugins())

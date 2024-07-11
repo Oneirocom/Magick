@@ -152,14 +152,18 @@ export abstract class WebSocketPlugin<
       credentials || ({} as Credentials)
     )
     if (!validated) {
-      throw new Error(`${this.name} plugin has invalid credentials`)
+      // throw new Error(`${this.name} plugin has invalid credentials`)
+      this.logger.error(`${this.name} plugin has invalid credentials`)
+      return
     }
     await this.login(validated)
     if (!(await this.validateLogin())) {
-      throw new Error(`${this.name} plugin failed to login`)
+      // throw new Error(`${this.name} plugin failed to login`)
+      this.logger.error(`${this.name} plugin failed to login`)
     }
     if (!(await this.validatePermissions())) {
-      throw new Error(`${this.name} plugin has insufficient permissions`)
+      // throw new Error(`${this.name} plugin has insufficient permissions`)
+      this.logger.error(`${this.name} plugin has insufficient permissions`)
     }
   }
 

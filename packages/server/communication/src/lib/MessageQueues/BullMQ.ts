@@ -1,10 +1,12 @@
-import { Queue } from 'bullmq'
+import { Job, Queue } from 'bullmq'
 import pino from 'pino'
 import Redis from 'ioredis'
 
 import { getLogger } from '@magickml/server-logger'
 
 import { MessageQueue } from './MessageQueue'
+
+export type BullMQJob = Job<any, any, string>
 
 export class BullQueue implements MessageQueue {
   logger: pino.Logger = getLogger()
@@ -19,6 +21,10 @@ export class BullQueue implements MessageQueue {
     this.queue = new Queue(queueName, {
       connection: this.connection,
     })
+  }
+
+  async getWaitingJobs<J>() {
+    return this.queue.getWaiting() as J
   }
 
   async addJob<AgentJob = any>(jobName: string, job: AgentJob, jobId?: string) {
