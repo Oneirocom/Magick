@@ -68,10 +68,6 @@ export class AgentConfigBuilder<
   build(): AgentConfig<T> {
     // Add default dependencies for any missing required services
     for (const dependency of this.requiredDependencies) {
-      console.warn(
-        `Service ${dependency} not provided, using default implementation.`
-      )
-
       if (!DEFAULT_DEPENDENCIES[dependency]) {
         throw new Error(`No default implementation found for ${dependency}`)
       }
