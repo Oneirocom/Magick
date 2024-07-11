@@ -7,6 +7,7 @@ export interface MessageQueue {
     jobId?: string
   ): Promise<void>
 
+  getWaitingJobs<J>(): Promise<J>
   initialize(queueName: string): void
   close(): Promise<void>
 }
