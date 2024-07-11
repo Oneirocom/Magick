@@ -130,8 +130,12 @@ export class DiscordPlugin extends WebSocketPlugin<
 
   // OTHER ABSTRACTS FROM WS PLUGIN & BASE PLUGIN
   async login(credentials: DiscordCredentials) {
-    await this.discord.login(credentials['discord-token'])
-    this.logger.info('Logged in to Discord')
+    try {
+      await this.discord.login(credentials['discord-token'])
+      this.logger.info('Logged in to Discord')
+    } catch (err) {
+      this.logger.error(err, 'Error logging in to Discord')
+    }
   }
 
   validateLogin() {
