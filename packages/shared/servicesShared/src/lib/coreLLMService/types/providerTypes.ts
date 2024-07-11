@@ -1,5 +1,6 @@
 import { PluginCredential } from '@magickml/credentials'
 
+// note these are keywords api key names
 export enum LLMProviderKeys {
   OpenAI = 'OPENAI_API_KEY',
   CoHere = 'COHERE_API_KEY',
