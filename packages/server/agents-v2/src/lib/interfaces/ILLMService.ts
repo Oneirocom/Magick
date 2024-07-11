@@ -1,51 +1,52 @@
 import {
-  LanguageModelV1CompletionResult,
-  LanguageModelV1CallOptions,
-  LanguageModelV1StreamResult,
-  GenerateObjectOptions,
   GenerateObjectResult,
-  StreamObjectOptions,
-  StreamObjectResult,
   GenerateUIOptions,
   GenerateUIResult,
   StreamUIOptions,
   StreamUIResult,
   ExtensibleLanguageModel,
+  GenerateRequest,
+  CoreTool,
+  StreamTextReturn,
+  GenerateObjectRequest,
+  StreamObjectRequest,
+  StreamObjectReturn,
 } from '@magickml/llm-service-types'
-import { ICredentialManager } from './credentialsManager'
 
-export interface ILLMService<ProviderType extends LanguageModelProviderBase> {
-  getProviders(): Promise<ProviderType[]>
+export interface ILLMService {
+  getProviders(): Promise<ExtensibleLanguageModel<{ apiKey: string }>[]>
   getModels<T extends Record<string, unknown> = {}>(
     provider: string
   ): Promise<ExtensibleLanguageModel<T>[]>
-  generateText(
-    options: LanguageModelV1CallOptions
-  ): Promise<LanguageModelV1CompletionResult>
+  generateText<TOOLS extends Record<string, CoreTool>>(
+    request: GenerateRequest & { tools?: TOOLS },
+    extraMetadata?: Record<string, unknown>
+  ): Promise<string>
   streamText(
-    options: LanguageModelV1CallOptions
-  ): Promise<LanguageModelV1StreamResult>
+    options: GenerateRequest,
+    extraMetadata?: Record<string, unknown>
+  ): StreamTextReturn
   generateObject<T>(
-    options: GenerateObjectOptions<T>
+    request: GenerateObjectRequest<T>,
+    extraMetadata: Record<string, string>
   ): Promise<GenerateObjectResult<T>>
   streamObject<T>(
-    options: StreamObjectOptions<T>
-  ): Promise<StreamObjectResult<T>>
+    request: StreamObjectRequest<T>,
+    extraMetadata?: Record<string, unknown>
+  ): Promise<StreamObjectReturn<T>>
   generateUI(options: GenerateUIOptions): Promise<GenerateUIResult>
   streamUI(options: StreamUIOptions): Promise<StreamUIResult>
 }
 
-export interface ICoreLLMServiceWithCredentials
-  extends ILLMService<LanguageModelProviderWithApiKey> {
-  setCredentialManager(credentialManager: ICredentialManager): void
-}
-
-export interface LanguageModelProviderBase {
+export type LanguageModelProvider = {
   id: string
   name: string
 }
 
-export interface LanguageModelProviderWithApiKey
-  extends LanguageModelProviderBase {
+export type ExtensibleLanguageModelProvider<
+  T extends Record<string, unknown> = {}
+> = LanguageModelProvider & T
+
+export interface LanguageModelProviderWithApiKey extends LanguageModelProvider {
   apiKey: string
 }
