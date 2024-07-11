@@ -13,13 +13,13 @@ import {
   YoutubeLoader,
   YoutubeSearchLoader,
 } from '@llm-tools/embedjs'
-import { info } from '@magickml/embedder-config'
+// import { info } from '@magickml/embedder-config'
 import { LoaderConfigSchema } from '@magickml/embedder-schemas'
 
 type Loader = any //TODO: post db package setup
 
 export function createLoader(loader: Loader): BaseLoader {
-  info(`Creating loader: ${loader.type}: ${JSON.stringify(loader, null, 2)}`)
+  // info(`Creating loader: ${loader.type}: ${JSON.stringify(loader, null, 2)}`)
 
   const config = LoaderConfigSchema.parse({
     id: loader.id,

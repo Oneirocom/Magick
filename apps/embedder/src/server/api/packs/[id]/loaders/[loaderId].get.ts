@@ -3,11 +3,7 @@ import { embedderDb, Loader } from '@magickml/embedder-db-pg'
 import { and, eq } from 'drizzle-orm'
 import { createLoader } from '@magickml/embedder-loaders-core'
 import { Storage } from '@google-cloud/storage'
-import {
-  LoaderWithChunks,
-  LoaderSchema,
-  LoaderConfigSchema,
-} from '@magickml/embedder-schemas'
+import { LoaderWithChunks, LoaderSchema } from '@magickml/embedder-schemas'
 
 const storage = new Storage({
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
@@ -48,34 +44,52 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const url = await generateV4ReadSignedUrl(
-    process.env.GOOGLE_PRIVATE_BUCKET_NAME || '',
-    (loader.config as any).filePathOrUrl || ''
-  )
+  if (loader.status === 'completed') {
+    let url
 
-  const updatedConfig = {
-    ...loader.config,
-    ...(url && { filePathOrUrl: url }),
+    // Generate signed URL for private bucket
+    try {
+      url = await generateV4ReadSignedUrl(
+        process.env.GOOGLE_PRIVATE_BUCKET_NAME || '',
+        (loader.config as any).filePathOrUrl || ''
+      )
+    } catch (error) {
+      console.error('Error getting loader:', error)
+    }
+
+    let config = loader.config
+
+    if (url) {
+      url = (loader.config as any).filePathOrUrl
+
+      config = {
+        ...(loader.config as any),
+        ...(url && { filePathOrUrl: url }),
+      }
+    }
+
+    const chunkGenerator = createLoader({
+      ...loader,
+      config,
+    }).getChunks()
+
+    const chunksArray: string[] = []
+
+    for await (const chunk of chunkGenerator) {
+      chunksArray.push(chunk.pageContent)
+    }
+
+    const response = {
+      ...loader,
+      config,
+      chunks: chunksArray,
+    }
+
+    return LoaderWithChunks.parse(response)
   }
 
-  const validatedConfig = LoaderConfigSchema.parse(updatedConfig)
-
-  const chunkGenerator = createLoader({
+  return LoaderWithChunks.parse({
     ...loader,
-    config: validatedConfig,
-  }).getChunks()
-
-  const chunksArray: string[] = []
-
-  for await (const chunk of chunkGenerator) {
-    chunksArray.push(chunk.pageContent)
-  }
-
-  const response = {
-    ...loader,
-    config: validatedConfig,
-    chunks: chunksArray,
-  }
-
-  return LoaderWithChunks.parse(response)
+    chunks: [],
+  })
 })

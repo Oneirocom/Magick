@@ -145,7 +145,7 @@ function extractRelevantPathAndFileName(url: string) {
     return { relevantPath, fileName }
   }
 
-  return { relevantPath: null, fileName: null }
+  return { relevantPath: url, fileName: null }
 }
 
 export async function processDeleteLoaderJob(
@@ -235,10 +235,6 @@ export async function processEmbedJob(jobId: string) {
         )}`
       )
       const res = await app.addLoader(createLoader(loader))
-
-      consola.success(
-        `[processEmbedJob] Loader added: ${JSON.stringify(res.raw, null, 2)}`
-      )
 
       const { relevantPath } = extractRelevantPathAndFileName(
         loader.config.filePathOrUrl
